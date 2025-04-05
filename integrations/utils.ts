@@ -90,10 +90,10 @@ export function test(
       concurrent: true,
     },
     async (options) => {
-      let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
+      const rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
       await fs.mkdir(rootDir, { recursive: true })
 
-      let root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
+      const root = await fs.mkdtemp(path.join(rootDir, 'tailwind-integrations'))
 
       if (debug) {
         console.log('Running test in debug mode. File system will be written to:')
@@ -101,7 +101,7 @@ export function test(
         console.log()
       }
 
-      let context = {
+      const context = {
         root,
         expect: options.expect,
         async exec(
@@ -109,7 +109,7 @@ export function test(
           childProcessOptions: ChildProcessOptions = {},
           execOptions: ExecOptions = {},
         ) {
-          let cwd = childProcessOptions.cwd ?? root
+          const cwd = childProcessOptions.cwd ?? root
           if (debug && cwd !== root) {
             let relative = path.relative(root, cwd)
             if (relative[0] !== '.') relative = `./${relative}`
@@ -117,7 +117,7 @@ export function test(
           }
           if (debug) console.log(`> ${command}`)
           return new Promise((resolve, reject) => {
-            let child = exec(
+            const child = exec(
               command,
               {
                 cwd,
@@ -148,19 +148,19 @@ export function test(
         async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
           let resolveDisposal: (() => void) | undefined
           let rejectDisposal: ((error: Error) => void) | undefined
-          let disposePromise = new Promise<void>((resolve, reject) => {
+          const disposePromise = new Promise<void>((resolve, reject) => {
             resolveDisposal = resolve
             rejectDisposal = reject
           })
 
-          let cwd = childProcessOptions.cwd ?? root
+          const cwd = childProcessOptions.cwd ?? root
           if (debug && cwd !== root) {
             let relative = path.relative(root, cwd)
             if (relative[0] !== '.') relative = `./${relative}`
             console.log(`> cd ${relative}`)
           }
           if (debug) console.log(`>& ${command}`)
-          let child = spawn(command, {
+          const child = spawn(command, {
             cwd,
             shell: true,
             ...childProcessOptions,
@@ -175,7 +175,7 @@ export function test(
               child.kill('SIGKILL')
             }
 
-            let timer = setTimeout(
+            const timer = setTimeout(
               () =>
                 rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
               ASSERTION_TIMEOUT,
@@ -190,20 +190,20 @@ export function test(
             resolveDisposal?.()
           }
 
-          let stdoutMessages: string[] = []
-          let stderrMessages: string[] = []
+          const stdoutMessages: string[] = []
+          const stderrMessages: string[] = []
 
-          let stdoutActors: SpawnActor[] = []
-          let stderrActors: SpawnActor[] = []
+          const stdoutActors: SpawnActor[] = []
+          const stderrActors: SpawnActor[] = []
 
           function notifyNext(actors: SpawnActor[], messages: string[]) {
             if (actors.length <= 0) return
-            let [next] = actors
+            const [next] = actors
 
-            for (let [idx, message] of messages.entries()) {
+            for (const [idx, message] of messages.entries()) {
               if (next.predicate(message)) {
                 messages.splice(0, idx + 1)
-                let actorIdx = actors.indexOf(next)
+                const actorIdx = actors.indexOf(next)
                 actors.splice(actorIdx, 1)
                 next.resolve()
                 break
@@ -211,22 +211,22 @@ export function test(
             }
           }
 
-          let combined: ['stdout' | 'stderr', string][] = []
+          const combined: ['stdout' | 'stderr', string][] = []
 
           child.stdout.on('data', (result) => {
-            let content = result.toString()
+            const content = result.toString()
             if (debug || only) console.log(content)
             combined.push(['stdout', content])
-            for (let line of content.split('\n')) {
+            for (const line of content.split('\n')) {
               stdoutMessages.push(stripVTControlCharacters(line))
             }
             notifyNext(stdoutActors, stdoutMessages)
           })
           child.stderr.on('data', (result) => {
-            let content = result.toString()
+            const content = result.toString()
             if (debug || only) console.error(content)
             combined.push(['stderr', content])
-            for (let line of content.split('\n')) {
+            for (const line of content.split('\n')) {
               stderrMessages.push(stripVTControlCharacters(line))
             }
             notifyNext(stderrActors, stderrMessages)
@@ -243,7 +243,7 @@ export function test(
             // immediately.
             if (only || debug) return
 
-            for (let [type, message] of combined) {
+            for (const [type, message] of combined) {
               if (type === 'stdout') {
                 console.log(message)
               } else {
@@ -281,8 +281,8 @@ export function test(
             content: string | Uint8Array,
             encoding: BufferEncoding = 'utf8',
           ): Promise<void> {
-            let full = path.join(root, filename)
-            let dir = path.dirname(full)
+            const full = path.join(root, filename)
+            const dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
 
             if (typeof content !== 'string') {
@@ -302,10 +302,10 @@ export function test(
           },
 
           async create(filenames: string[]): Promise<void> {
-            for (let filename of filenames) {
-              let full = path.join(root, filename)
+            for (const filename of filenames) {
+              const full = path.join(root, filename)
 
-              let dir = path.dirname(full)
+              const dir = path.dirname(full)
               await fs.mkdir(dir, { recursive: true })
               await fs.writeFile(full, '')
             }
@@ -322,10 +322,10 @@ export function test(
             return content
           },
           async glob(pattern: string) {
-            let files = await fastGlob(pattern, { cwd: root })
+            const files = await fastGlob(pattern, { cwd: root })
             return Promise.all(
               files.map(async (file) => {
-                let content = await fs.readFile(path.join(root, file), 'utf8')
+                const content = await fs.readFile(path.join(root, file), 'utf8')
                 return [
                   file,
                   // Drop license comment
@@ -335,15 +335,15 @@ export function test(
             )
           },
           async dumpFiles(pattern: string) {
-            let files = await context.fs.glob(pattern)
+            const files = await context.fs.glob(pattern)
             return `\n${files
               .slice()
               .sort((a: [string], z: [string]) => {
-                let aParts = a[0].split('/')
-                let zParts = z[0].split('/')
+                const aParts = a[0].split('/')
+                const zParts = z[0].split('/')
 
-                let aFile = aParts.at(-1)
-                let zFile = zParts.at(-1)
+                const aFile = aParts.at(-1)
+                const zFile = zParts.at(-1)
 
                 // Sort by depth, shallow first
                 if (aParts.length < zParts.length) return -1
@@ -351,7 +351,7 @@ export function test(
 
                 // Sort by folder names, alphabetically
                 for (let i = 0; i < aParts.length - 1; i++) {
-                  let diff = aParts[i].localeCompare(zParts[i])
+                  const diff = aParts[i].localeCompare(zParts[i])
                   if (diff !== 0) return diff
                 }
 
@@ -368,8 +368,8 @@ export function test(
           },
           async expectFileToContain(filePath, contents) {
             return retryAssertion(async () => {
-              let fileContent = await this.read(filePath)
-              for (let content of Array.isArray(contents) ? contents : [contents]) {
+              const fileContent = await this.read(filePath)
+              for (const content of Array.isArray(contents) ? contents : [contents]) {
                 if (content instanceof RegExp) {
                   options.expect(fileContent).toMatch(content)
                 } else {
@@ -380,8 +380,8 @@ export function test(
           },
           async expectFileNotToContain(filePath, contents) {
             return retryAssertion(async () => {
-              let fileContent = await this.read(filePath)
-              for (let content of contents) {
+              const fileContent = await this.read(filePath)
+              for (const content of contents) {
                 options.expect(fileContent).not.toContain(content)
               }
             })
@@ -393,11 +393,11 @@ export function test(
         node_modules/
       `
 
-      for (let [filename, content] of Object.entries(config.fs)) {
+      for (const [filename, content] of Object.entries(config.fs)) {
         await context.fs.write(filename, content)
       }
 
-      let shouldInstallDependencies = config.installDependencies ?? true
+      const shouldInstallDependencies = config.installDependencies ?? true
 
       try {
         // In debug mode, the directory is going to be inside the pnpm workspace
@@ -406,7 +406,7 @@ export function test(
         // a separate workspace). We work around this by using the
         // `--ignore-workspace` flag.
         if (shouldInstallDependencies) {
-          let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
+          const ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
           await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
         }
       } catch (error: any) {
@@ -416,7 +416,7 @@ export function test(
         throw error
       }
 
-      let disposables: (() => Promise<void>)[] = []
+      const disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
         await Promise.all(disposables.map((dispose) => dispose()))
@@ -463,12 +463,17 @@ function pkgToFilename(name: string) {
 }
 
 async function overwriteVersionsInPackageJson(content: string): Promise<string> {
-  let json = JSON.parse(content)
+  const json = JSON.parse(content)
 
   // Resolve all workspace:^ versions to local tarballs
-  for (let key of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
-    let dependencies = json[key] || {}
-    for (let dependency in dependencies) {
+  for (const key of [
+    'dependencies',
+    'devDependencies',
+    'peerDependencies',
+    'optionalDependencies',
+  ]) {
+    const dependencies = json[key] || {}
+    for (const dependency in dependencies) {
       if (dependencies[dependency] === 'workspace:^') {
         dependencies[dependency] = resolveVersion(dependency)
       }
@@ -481,7 +486,7 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
   // version.
   json.pnpm ||= {}
   json.pnpm.overrides ||= {}
-  for (let pkg of PUBLIC_PACKAGES) {
+  for (const pkg of PUBLIC_PACKAGES) {
     if (pkg === 'tailwindcss') {
       // We want to be explicit about the `tailwindcss` package so our tests can
       // also import v3 without conflicting v4 tarballs.
@@ -499,7 +504,7 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
 }
 
 function resolveVersion(dependency: string) {
-  let tarball = path.join(REPO_ROOT, 'dist', pkgToFilename(dependency))
+  const tarball = path.join(REPO_ROOT, 'dist', pkgToFilename(dependency))
   return `file:${tarball}`
 }
 
@@ -518,13 +523,13 @@ export let yaml = dedent
 export let txt = dedent
 
 export function binary(str: string | TemplateStringsArray, ...values: unknown[]): Uint8Array {
-  let base64 = typeof str === 'string' ? str : String.raw(str, ...values)
+  const base64 = typeof str === 'string' ? str : String.raw(str, ...values)
 
   return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
 }
 
 export function candidate(strings: TemplateStringsArray, ...values: any[]) {
-  let output: string[] = []
+  const output: string[] = []
   for (let i = 0; i < strings.length; i++) {
     output.push(strings[i])
     if (i < values.length) {
@@ -539,7 +544,7 @@ export async function retryAssertion<T>(
   fn: () => Promise<T>,
   { timeout = ASSERTION_TIMEOUT, delay = 5 }: { timeout?: number; delay?: number } = {},
 ) {
-  let end = Date.now() + timeout
+  const end = Date.now() + timeout
   let error: any
   while (Date.now() < end) {
     try {
@@ -557,16 +562,16 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
     base = base.slice(0, -1)
   }
 
-  let index = await fetch(`${base}${path}`)
-  let html = await index.text()
+  const index = await fetch(`${base}${path}`)
+  const html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
-  let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
+  const linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  const styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
-  let stylesheets: string[] = []
+  const stylesheets: string[] = []
 
-  let paths: string[] = []
-  for (let match of html.matchAll(linkRegex)) {
+  const paths: string[] = []
+  for (const match of html.matchAll(linkRegex)) {
     let path: string = match[1]
     if (path.startsWith('./')) {
       path = path.slice(1)
@@ -576,7 +581,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   stylesheets.push(
     ...(await Promise.all(
       paths.map(async (path) => {
-        let css = await fetch(`${base}${path}`, {
+        const css = await fetch(`${base}${path}`, {
           headers: {
             Accept: 'text/css',
           },
@@ -586,7 +591,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
     )),
   )
 
-  for (let match of html.matchAll(styleRegex)) {
+  for (const match of html.matchAll(styleRegex)) {
     stylesheets.push(match[1])
   }
 
