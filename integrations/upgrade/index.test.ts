@@ -26,7 +26,7 @@ test(
     },
   },
   async ({ fs, exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade')
+    const output = await exec('npx @tailwindcss/upgrade')
     expect(output).toContain('Cannot find any CSS files that reference Tailwind CSS.')
 
     // Files should not be modified
@@ -143,8 +143,8 @@ test(
       "
     `)
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringMatching(/^\^4/),
     })
@@ -654,8 +654,8 @@ test(
       `,
     )
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringMatching(/^\^4/),
     })
@@ -706,8 +706,8 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
@@ -753,8 +753,8 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.devDependencies).toMatchObject({
       '@tailwindcss/postcss': expect.stringMatching(/^\^4/),
     })
@@ -813,8 +813,8 @@ test(
       `,
     )
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.postcss).toMatchInlineSnapshot(`
       {
         "plugins": {
@@ -888,8 +888,8 @@ test(
       `,
     )
 
-    let jsonConfigContent = await fs.read('.postcssrc.json')
-    let jsonConfig = JSON.parse(jsonConfigContent)
+    const jsonConfigContent = await fs.read('.postcssrc.json')
+    const jsonConfig = JSON.parse(jsonConfigContent)
     expect(jsonConfig).toMatchInlineSnapshot(`
       {
         "plugins": {
@@ -898,8 +898,8 @@ test(
       }
     `)
 
-    let packageJsonContent = await fs.read('package.json')
-    let packageJson = JSON.parse(packageJsonContent)
+    const packageJsonContent = await fs.read('package.json')
+    const packageJson = JSON.parse(packageJsonContent)
     expect(packageJson.dependencies).toMatchObject({
       tailwindcss: expect.stringMatching(/^\^4/),
     })
@@ -1352,7 +1352,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade --force')
+    const output = await exec('npx @tailwindcss/upgrade --force')
 
     expect(output).toMatch(
       /You have one or more stylesheets that are imported into a utility layer and non-utility layer./,
@@ -1701,7 +1701,7 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade --force', {}, { ignoreStdErr: true }).catch(
+    const output = await exec('npx @tailwindcss/upgrade --force', {}, { ignoreStdErr: true }).catch(
       (e) => e.toString(),
     )
 
@@ -2249,7 +2249,7 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
 
-    let pkg = JSON.parse(await fs.read('package.json'))
+    const pkg = JSON.parse(await fs.read('package.json'))
 
     expect(pkg.devDependencies).toMatchObject({
       'prettier-plugin-tailwindcss': expect.any(String),
@@ -2619,7 +2619,7 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
+    const output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
       e.toString(),
     )
 

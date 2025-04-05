@@ -94,12 +94,12 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ fs, exec, expect }) => {
       await exec('pnpm vite build')
 
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
 
       await fs.expectFileToContain(files[0][0], [SIMPLE_IMAGE])
 
-      let images = await fs.glob('dist/**/*.svg')
+      const images = await fs.glob('dist/**/*.svg')
       expect(images).toHaveLength(2)
 
       await fs.expectFileToContain(files[0][0], [/\/assets\/vector-.*?\.svg/])

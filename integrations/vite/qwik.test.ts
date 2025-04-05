@@ -64,19 +64,19 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm vite --mode ssr')
+    const process = await spawn('pnpm vite --mode ssr')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
       console.log(m)
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
     })
 
@@ -92,7 +92,7 @@ test(
         `,
       )
 
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`flex`)
     })

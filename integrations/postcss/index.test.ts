@@ -558,7 +558,7 @@ test(
     },
   },
   async ({ root, fs, spawn }) => {
-    let process = await spawn(
+    const process = await spawn(
       'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
       { cwd: path.join(root, 'project-a') },
     )

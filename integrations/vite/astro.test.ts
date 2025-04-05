@@ -34,12 +34,12 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm astro dev')
+    const process = await spawn('pnpm astro dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local\s*(http.*)\//.exec(m)
+      const match = /Local\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
@@ -47,7 +47,7 @@ test(
     await process.onStdout((m) => m.includes('watching for file changes'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
     })
 
@@ -63,7 +63,7 @@ test(
       `,
       )
 
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`font-bold`)
     })
@@ -123,7 +123,7 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm astro build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`overline`])

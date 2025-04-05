@@ -51,7 +51,7 @@ test(
       'src/App.svelte': html`
         <script>
           import './index.css'
-          let name = 'world'
+          const name = 'world'
         </script>
 
         <h1 class="global local underline">Hello {name}!</h1>
@@ -93,9 +93,9 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    let output = await exec('pnpm vite build')
+    const output = await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [
@@ -161,7 +161,7 @@ test(
       'src/App.svelte': html`
         <script>
           import './index.css'
-          let name = 'world'
+          const name = 'world'
         </script>
 
         <h1 class="local global underline">Hello {name}!</h1>
@@ -204,13 +204,13 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn(`pnpm vite build --watch`)
+    const process = await spawn(`pnpm vite build --watch`)
     await process.onStdout((m) => m.includes('built in'))
 
     await retryAssertion(async () => {
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [, css] = files[0]
+      const [, css] = files[0]
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(
         '.global{color:var(--color-green-500,oklch(72.3% .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',
@@ -233,9 +233,9 @@ test(
     )
 
     await retryAssertion(async () => {
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [, css] = files[0]
+      const [, css] = files[0]
       expect(css).toContain(candidate`font-bold`)
       expect(css).toContain(
         '.global{color:var(--color-green-500,oklch(72.3% .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',

@@ -70,7 +70,7 @@ test(
     fs: WORKSPACE,
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm vinxi dev', {
+    const process = await spawn('pnpm vinxi dev', {
       env: {
         TEST: 'false', // VERY IMPORTANT OTHERWISE YOU WON'T GET OUTPUT
         NODE_ENV: 'development',
@@ -79,13 +79,13 @@ test(
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
     })
 
@@ -100,7 +100,7 @@ test(
         `,
       )
 
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`underline`)
       expect(css).toContain(candidate`font-bold`)
     })

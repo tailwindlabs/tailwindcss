@@ -67,11 +67,11 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(2)
 
-    let root1 = files.find(([filename]) => filename.includes('root1'))
-    let root2 = files.find(([filename]) => filename.includes('root2'))
+    const root1 = files.find(([filename]) => filename.includes('root1'))
+    const root2 = files.find(([filename]) => filename.includes('root2'))
 
     expect(root1).toBeDefined()
     expect(root2).toBeDefined()
@@ -141,12 +141,12 @@ test(
     },
   },
   async ({ spawn, expect }) => {
-    let process = await spawn('pnpm vite dev')
+    const process = await spawn('pnpm vite dev')
     await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)\//.exec(m)
+      const match = /Local:\s*(http.*)\//.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
@@ -154,7 +154,7 @@ test(
     // Candidates are resolved lazily, so the first visit of index.html
     // will only have candidates from this file.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/root1.html')
+      const styles = await fetchStyles(url, '/root1.html')
       expect(styles).toContain(candidate`one:underline`)
       expect(styles).not.toContain(candidate`two:underline`)
     })
@@ -162,7 +162,7 @@ test(
     // Going to about.html will extend the candidate list to include
     // candidates from about.html.
     await retryAssertion(async () => {
-      let styles = await fetchStyles(url, '/root2.html')
+      const styles = await fetchStyles(url, '/root2.html')
       expect(styles).not.toContain(candidate`one:underline`)
       expect(styles).toContain(candidate`two:underline`)
     })

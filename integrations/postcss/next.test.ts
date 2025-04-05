@@ -60,12 +60,12 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm next build')
 
-    let files = await fs.glob('.next/static/css/**/*.css')
+    const files = await fs.glob('.next/static/css/**/*.css')
     expect(files).toHaveLength(2)
 
     let globalCss: string | null = null
     let moduleCss: string | null = null
-    for (let [filename, content] of files) {
+    for (const [filename, content] of files) {
       if (content.includes('@keyframes page_ping')) moduleCss = filename
       else globalCss = filename
     }
@@ -141,11 +141,11 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       },
     },
     async ({ fs, spawn, expect }) => {
-      let process = await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''}`)
+      const process = await spawn(`pnpm next dev ${bundler === 'turbo' ? '--turbo' : ''}`)
 
       let url = ''
       await process.onStdout((m) => {
-        let match = /Local:\s*(http.*)/.exec(m)
+        const match = /Local:\s*(http.*)/.exec(m)
         if (match) url = match[1]
         return Boolean(url)
       })
@@ -153,7 +153,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       await process.onStdout((m) => m.includes('Ready in'))
 
       await retryAssertion(async () => {
-        let css = await fetchStyles(url)
+        const css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain('content: var(--tw-content)')
         expect(css).toContain('@keyframes')
@@ -171,7 +171,7 @@ describe.each(['turbo', 'webpack'])('%s', (bundler) => {
       await process.onStdout((m) => m.includes('Compiled in'))
 
       await retryAssertion(async () => {
-        let css = await fetchStyles(url)
+        const css = await fetchStyles(url)
         expect(css).toContain(candidate`underline`)
         expect(css).toContain(candidate`bg-red-500`)
         expect(css).toContain('--tw-skew-x: skewX(7deg);')
@@ -247,9 +247,9 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm next build')
 
-    let files = await fs.glob('.next/static/css/**/*.css')
+    const files = await fs.glob('.next/static/css/**/*.css')
     expect(files).toHaveLength(1)
-    let [filename] = files[0]
+    const [filename] = files[0]
 
     await fs.expectFileToContain(filename, [
       candidate`content-['[slug]']`,
@@ -319,11 +319,11 @@ test(
     // NOTE: We are writing to an output CSS file which is not being ignored by
     // `.gitignore` nor marked with `@source not`. This should not result in an
     // infinite loop.
-    let process = await spawn(`pnpm next dev`)
+    const process = await spawn(`pnpm next dev`)
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)/.exec(m)
+      const match = /Local:\s*(http.*)/.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
@@ -331,7 +331,7 @@ test(
     await process.onStdout((m) => m.includes('Ready in'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`flex`)
       expect(css).toContain('--color-blue-500:')
       expect(css).not.toContain('--color-red-500:')
@@ -349,7 +349,7 @@ test(
     await process.onStdout((m) => m.includes('Compiled in'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`flex`)
       expect(css).toContain('--color-blue-500:')
       expect(css).toContain('--color-red-500:')
@@ -429,11 +429,11 @@ test(
     },
   },
   async ({ spawn, fs, expect }) => {
-    let process = await spawn('pnpm next dev')
+    const process = await spawn('pnpm next dev')
 
     let url = ''
     await process.onStdout((m) => {
-      let match = /Local:\s*(http.*)/.exec(m)
+      const match = /Local:\s*(http.*)/.exec(m)
       if (match) url = match[1]
       return Boolean(url)
     })
@@ -441,7 +441,7 @@ test(
     await process.onStdout((m) => m.includes('Ready in'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`flex`)
       expect(css).not.toContain(candidate`underline`)
     })
@@ -457,7 +457,7 @@ test(
     await process.onStdout((m) => m.includes('Compiled in'))
 
     await retryAssertion(async () => {
-      let css = await fetchStyles(url)
+      const css = await fetchStyles(url)
       expect(css).toContain(candidate`flex`)
       expect(css).toContain(candidate`underline`)
     })
@@ -473,7 +473,7 @@ test(
     // files to disk.
     //
     // Ensure there are no more changes in stdout (signaling no infinite loop)
-    let result = await Promise.race([
+    const result = await Promise.race([
       // If this succeeds, it means that it saw another change which indicates
       // an infinite loop.
       process.onStdout((m) => m.includes('Compiled in')).then(() => 'infinite loop detected'),

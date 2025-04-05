@@ -62,9 +62,9 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ fs, exec, expect }) => {
       await exec('pnpm vite build')
 
-      let files = await fs.glob('dist/**/*.css')
+      const files = await fs.glob('dist/**/*.css')
       expect(files).toHaveLength(1)
-      let [filename] = files[0]
+      const [filename] = files[0]
 
       await fs.expectFileToContain(filename, [candidate`underline`, candidate`custom-underline`])
     },
@@ -128,18 +128,18 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
       },
     },
     async ({ spawn, expect }) => {
-      let process = await spawn('pnpm vite dev')
+      const process = await spawn('pnpm vite dev')
       await process.onStdout((m) => m.includes('ready in'))
 
       let url = ''
       await process.onStdout((m) => {
-        let match = /Local:\s*(http.*)\//.exec(m)
+        const match = /Local:\s*(http.*)\//.exec(m)
         if (match) url = match[1]
         return Boolean(url)
       })
 
       await retryAssertion(async () => {
-        let styles = await fetchStyles(url, '/index.html')
+        const styles = await fetchStyles(url, '/index.html')
         expect(styles).toContain(candidate`underline`)
         expect(styles).toContain(candidate`custom-underline`)
       })

@@ -64,7 +64,7 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
+    const files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`foo`])
