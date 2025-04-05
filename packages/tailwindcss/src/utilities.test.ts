@@ -10566,9 +10566,9 @@ const prefixes = [
   'border-l',
 ]
 
-for (let prefix of prefixes) {
+for (const prefix of prefixes) {
   test(`${prefix}-*`, async () => {
-    let classes = []
+    const classes = []
 
     // Width
     classes.push(prefix)
@@ -25851,14 +25851,14 @@ test('@container', async () => {
 
 describe('spacing utilities', () => {
   test('`--spacing: initial` disables the spacing multiplier', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @theme {
         --spacing: initial;
         --spacing-4: 1rem;
       }
       @tailwind utilities;
     `)
-    let compiled = build(['px-1', 'px-4'])
+    const compiled = build(['px-1', 'px-4'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
@@ -25872,14 +25872,14 @@ describe('spacing utilities', () => {
   })
 
   test('`--spacing-*: initial` disables the spacing multiplier', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @theme {
         --spacing-*: initial;
         --spacing-4: 1rem;
       }
       @tailwind utilities;
     `)
-    let compiled = build(['px-1', 'px-4'])
+    const compiled = build(['px-1', 'px-4'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
@@ -25893,13 +25893,13 @@ describe('spacing utilities', () => {
   })
 
   test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @theme {
         --spacing: 4px;
       }
       @tailwind utilities;
     `)
-    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
+    const compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
@@ -25921,26 +25921,26 @@ describe('spacing utilities', () => {
   })
 
   test('spacing utilities must have a value', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @theme reference {
         --spacing: 4px;
       }
       @tailwind utilities;
     `)
-    let compiled = build(['px'])
+    const compiled = build(['px'])
 
     expect(optimizeCss(compiled).trim()).toEqual('')
   })
 
   test('--spacing-* variables take precedence over --container-* variables', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @theme {
         --spacing-sm: 8px;
         --container-sm: 256px;
       }
       @tailwind utilities;
     `)
-    let compiled = build(['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'])
+    const compiled = build(['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
@@ -25968,7 +25968,7 @@ describe('spacing utilities', () => {
 
 describe('custom utilities', () => {
   test('custom static utility', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -25982,7 +25982,7 @@ describe('custom utilities', () => {
         text-box-edge: cap alphabetic;
       }
     `)
-    let compiled = build(['text-trim', 'lg:text-trim'])
+    const compiled = build(['text-trim', 'lg:text-trim'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26002,7 +26002,7 @@ describe('custom utilities', () => {
   })
 
   test('custom static utility emit CSS variables if the utility is used', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26036,7 +26036,7 @@ describe('custom utilities', () => {
   })
 
   test('custom static utility (negative)', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26045,7 +26045,7 @@ describe('custom utilities', () => {
         value: -1;
       }
     `)
-    let compiled = build(['-example', 'lg:-example'])
+    const compiled = build(['-example', 'lg:-example'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26057,7 +26057,7 @@ describe('custom utilities', () => {
   })
 
   test('Multiple static utilities are merged', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26071,7 +26071,7 @@ describe('custom utilities', () => {
         border-radius: 30rem;
       }
     `)
-    let compiled = build(['really-round'])
+    const compiled = build(['really-round'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26084,7 +26084,7 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities support some special characters', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26097,7 +26097,7 @@ describe('custom utilities', () => {
         right: 50%;
       }
     `)
-    let compiled = build(['push-1/2', 'push-50%'])
+    const compiled = build(['push-1/2', 'push-50%'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26109,7 +26109,7 @@ describe('custom utilities', () => {
   })
 
   test('can override specific versions of a functional utility with a static utility', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26125,7 +26125,7 @@ describe('custom utilities', () => {
         text-rendering: optimizeLegibility;
       }
     `)
-    let compiled = build(['text-sm'])
+    const compiled = build(['text-sm'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26141,7 +26141,7 @@ describe('custom utilities', () => {
   })
 
   test('can override the default value of a functional utility', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26154,7 +26154,7 @@ describe('custom utilities', () => {
         border-radius: 50rem;
       }
     `)
-    let compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
+    const compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26174,7 +26174,7 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities are sorted by used properties', async () => {
-    let { build } = await compile(css`
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -26183,7 +26183,7 @@ describe('custom utilities', () => {
         right: 100%;
       }
     `)
-    let compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
+    const compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -26391,7 +26391,7 @@ describe('custom utilities', () => {
 
   describe('functional utilities', () => {
     test('resolving values from `@theme`', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --tab-size-1: 1;
           --tab-size-2: 2;
@@ -26428,7 +26428,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
-      let input =
+      const input =
         // Explicitly not using the css tagged template literal so that
         // Prettier doesn't format the `value(--tab-size-*)` as
         // `value(--tab-size- *)`
@@ -26469,7 +26469,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --tab-size-1: 1;
           --tab-size-2: 2;
@@ -26506,7 +26506,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving bare values', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value(integer);
         }
@@ -26531,8 +26531,8 @@ describe('custom utilities', () => {
     })
 
     test('bare values with unsupported data types should result in a warning', async () => {
-      let spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      let input = css`
+      const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const input = css`
         @utility paint-* {
           paint: --value([color], color);
         }
@@ -26559,7 +26559,7 @@ describe('custom utilities', () => {
     })
 
     test('resolve literal values', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value('revert');
         }
@@ -26576,7 +26576,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
-      let input = css`
+      const input = css`
         @utility example-* {
           --value-as-number: --value(number);
           --value-as-percentage: --value(percentage);
@@ -26616,7 +26616,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving unsupported bare values', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value(color);
         }
@@ -26628,7 +26628,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving arbitrary values', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value([integer]);
         }
@@ -26674,7 +26674,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving any arbitrary values', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value([ *]);
         }
@@ -26714,7 +26714,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving any arbitrary values (without space)', async () => {
-      let input = `
+      const input = `
         @utility tab-* {
           tab-size: --value([*]);
         }
@@ -26754,7 +26754,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving any arbitrary values (with escaped `*`)', async () => {
-      let input = css`
+      const input = css`
         @utility tab-* {
           tab-size: --value([\*]);
         }
@@ -26794,7 +26794,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving theme, bare and arbitrary values all at once', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --tab-size-github: 8;
         }
@@ -26825,7 +26825,7 @@ describe('custom utilities', () => {
     })
 
     test('in combination with calc to produce different data types of values', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --example-full: 100%;
         }
@@ -26857,7 +26857,7 @@ describe('custom utilities', () => {
     })
 
     test('shorthand if resulting values are of the same type', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --tab-size-github: 8;
           --example-full: 100%;
@@ -26915,7 +26915,7 @@ describe('custom utilities', () => {
     })
 
     test('negative values', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --example-full: 100%;
         }
@@ -26969,7 +26969,7 @@ describe('custom utilities', () => {
     })
 
     test('using the same value multiple times', async () => {
-      let input = css`
+      const input = css`
         @utility example-* {
           --value: calc(var(--spacing) * --value(number)) calc(var(--spacing) * --value(number));
         }
@@ -26985,7 +26985,7 @@ describe('custom utilities', () => {
     })
 
     test('using `--spacing(…)` shorthand', async () => {
-      let input = css`
+      const input = css`
         @theme {
           --spacing: 4px;
         }
@@ -27009,7 +27009,7 @@ describe('custom utilities', () => {
     })
 
     test('using `--spacing(…)` shorthand (inline theme)', async () => {
-      let input = css`
+      const input = css`
         @theme inline reference {
           --spacing: 4px;
         }
@@ -27029,7 +27029,7 @@ describe('custom utilities', () => {
     })
 
     test('modifiers', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --value-sm: 14px;
           --modifier-7: 28px;
@@ -27096,7 +27096,7 @@ describe('custom utilities', () => {
     })
 
     test('fractions', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --example-video: 16 / 9;
         }
@@ -27126,7 +27126,7 @@ describe('custom utilities', () => {
     })
 
     test('resolve theme values with sub-namespace (--text- * --line-height)', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -27157,7 +27157,7 @@ describe('custom utilities', () => {
     })
 
     test('resolve theme values with sub-namespace (--text-\\* --line-height)', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -27188,7 +27188,7 @@ describe('custom utilities', () => {
     })
 
     test('resolve theme values with sub-namespace (--value(--text --line-height))', async () => {
-      let input = css`
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -27219,7 +27219,7 @@ describe('custom utilities', () => {
     })
 
     test('resolve theme values with sub-namespace (--value(--text-*--line-height))', async () => {
-      let input = `
+      const input = `
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -27250,7 +27250,7 @@ describe('custom utilities', () => {
     })
 
     test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
-      let input = css`
+      const input = css`
         @theme {
           --example-foo: red;
           --color-red-500: #f00;
@@ -27272,7 +27272,7 @@ describe('custom utilities', () => {
     })
 
     test('variables used in `@utility` will be emitted if the utility is used', async () => {
-      let input = css`
+      const input = css`
         @theme {
           --example-foo: red;
           --color-red-500: #f00;
@@ -27307,7 +27307,7 @@ describe('custom utilities', () => {
     //
     // This test now ensures that we only remove/replace a declaration once.
     test('declaration nodes are only replaced/removed once', async () => {
-      let input = css`
+      const input = css`
         @utility mask-r-* {
           --mask-right: linear-gradient(to left, transparent, black --value(percentage));
           --mask-right: linear-gradient(
@@ -27333,7 +27333,7 @@ describe('custom utilities', () => {
   })
 
   test('resolve value based on `@theme`', async () => {
-    let input = css`
+    const input = css`
       @theme {
         --tab-size-github: 8;
       }
@@ -27357,7 +27357,7 @@ describe('custom utilities', () => {
   })
 
   test('resolve value based on `@theme reference`', async () => {
-    let input = css`
+    const input = css`
       @theme reference {
         --tab-size-github: 8;
       }
@@ -27377,7 +27377,7 @@ describe('custom utilities', () => {
   })
 
   test('resolve value based on `@theme inline`', async () => {
-    let input = css`
+    const input = css`
       @theme inline {
         --tab-size-github: 8;
       }
@@ -27397,7 +27397,7 @@ describe('custom utilities', () => {
   })
 
   test('resolve value based on `@theme inline reference`', async () => {
-    let input = css`
+    const input = css`
       @theme inline reference {
         --tab-size-github: 8;
       }
@@ -27417,7 +27417,7 @@ describe('custom utilities', () => {
   })
 
   test('sub namespaces can live in different @theme blocks (1)', async () => {
-    let input = `
+    const input = `
       @theme reference {
         --text-xs: 0.75rem;
       }
@@ -27443,7 +27443,7 @@ describe('custom utilities', () => {
   })
 
   test('sub namespaces can live in different @theme blocks (2)', async () => {
-    let input = `
+    const input = `
       @theme inline reference {
         --text-xs: 0.75rem;
       }

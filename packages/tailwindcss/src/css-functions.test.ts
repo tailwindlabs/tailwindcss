@@ -763,7 +763,7 @@ describe('theme(…)', () => {
         })
 
         test('theme(fontFamily.sans) (config)', async () => {
-          let compiled = await compile(
+          const compiled = await compile(
             css`
               @config "./my-config.js";
               .fam {
@@ -984,18 +984,18 @@ describe('theme(…)', () => {
         ['lineHeight.tight', '1.25'],
         ['backgroundColor.red.500', 'oklch(63.7% .237 25.331)'],
       ])('theme(%s) → %s', async (value, result) => {
-        let defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
-        let compiled = await compileCss(css`
+        const defaultTheme = await fs.readFile(path.join(__dirname, '..', 'theme.css'), 'utf8')
+        const compiled = await compileCss(css`
           ${defaultTheme}
           .custom {
             --custom-value: theme(${value});
           }
         `)
 
-        let startOfCustomClass = compiled.indexOf('.custom {\n')
-        let endOfCustomClass = compiled.indexOf('}', startOfCustomClass)
+        const startOfCustomClass = compiled.indexOf('.custom {\n')
+        const endOfCustomClass = compiled.indexOf('}', startOfCustomClass)
 
-        let customClassRule = compiled
+        const customClassRule = compiled
           .slice(startOfCustomClass + '.custom {\n'.length, endOfCustomClass)
           .replace('--custom-value:', '')
           .trim()
@@ -1179,7 +1179,7 @@ describe('theme(…)', () => {
 
 describe('in plugins', () => {
   test('CSS theme functions in plugins are properly evaluated', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @layer base, utilities;
         @plugin "my-plugin";
@@ -1239,7 +1239,7 @@ describe('in plugins', () => {
 
 describe('in JS config files', () => {
   test('CSS theme functions in config files are properly evaluated', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @layer base, utilities;
         @config "./my-config.js";

@@ -5,11 +5,11 @@ import plugin from './plugin'
 const css = String.raw
 
 test('plugin', async () => {
-  let input = css`
+  const input = css`
     @plugin "my-plugin";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: plugin(function ({ addBase }) {
         addBase({
@@ -33,11 +33,11 @@ test('plugin', async () => {
 })
 
 test('plugin.withOptions', async () => {
-  let input = css`
+  const input = css`
     @plugin "my-plugin";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: plugin.withOptions(function (opts = { foo: '1px' }) {
         return function ({ addBase }) {

@@ -44,7 +44,7 @@ describe('decoding arbitrary values', () => {
 })
 
 describe('adds spaces around math operators', () => {
-  let table = [
+  const table = [
     // math functions like calc(…) get spaces around operators
     ['calc(1+2)', 'calc(1 + 2)'],
     ['calc(100%+1rem)', 'calc(100% + 1rem)'],

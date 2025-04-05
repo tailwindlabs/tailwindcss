@@ -4,7 +4,7 @@ import { compile } from '..'
 const css = String.raw
 
 test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -19,7 +19,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -88,7 +88,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
 })
 
 test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-xs: 39rem;
       --breakpoint-md: 49rem;
@@ -100,7 +100,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -190,12 +190,12 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
 })
 
 test('JS config `screens` only setup, even if those match the default-theme export', async () => {
-  let input = css`
+  const input = css`
     @config "./config.js";
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -262,7 +262,7 @@ test('JS config `screens` only setup, even if those match the default-theme expo
 })
 
 test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -274,7 +274,7 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -370,12 +370,12 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
 })
 
 test('JS config with `theme: { extends }` should not include the `default-config` values', async () => {
-  let input = css`
+  const input = css`
     @config "./config.js";
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -448,12 +448,12 @@ test('JS config with `theme: { extends }` should not include the `default-config
 
 describe('complex screen configs', () => {
   test('generates utilities', async () => {
-    let input = css`
+    const input = css`
       @config "./config.js";
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -531,7 +531,7 @@ describe('complex screen configs', () => {
   })
 
   test("don't interfere with `min-*` and `max-*` variants of non-complex screen configs", async () => {
-    let input = css`
+    const input = css`
       @theme default {
         --breakpoint-sm: 39rem;
         --breakpoint-md: 48rem;
@@ -540,7 +540,7 @@ describe('complex screen configs', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -604,7 +604,7 @@ describe('complex screen configs', () => {
 })
 
 test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -616,7 +616,7 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {

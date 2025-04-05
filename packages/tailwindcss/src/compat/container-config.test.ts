@@ -4,7 +4,7 @@ import { compile } from '..'
 const css = String.raw
 
 test('creates a custom utility to extend the built-in container', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -16,7 +16,7 @@ test('creates a custom utility to extend the built-in container', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -58,7 +58,7 @@ test('creates a custom utility to extend the built-in container', async () => {
 })
 
 test('allows padding to be defined at custom breakpoints', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -70,7 +70,7 @@ test('allows padding to be defined at custom breakpoints', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -121,7 +121,7 @@ test('allows padding to be defined at custom breakpoints', async () => {
 })
 
 test('allows breakpoints to be overwritten', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -133,7 +133,7 @@ test('allows breakpoints to be overwritten', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -184,7 +184,7 @@ test('allows breakpoints to be overwritten', async () => {
 })
 
 test('padding applies to custom `container` screens', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -196,7 +196,7 @@ test('padding applies to custom `container` screens', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -248,7 +248,7 @@ test('padding applies to custom `container` screens', async () => {
 })
 
 test("an empty `screen` config will undo all custom media screens and won't apply any breakpoint-specific padding", async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -260,7 +260,7 @@ test("an empty `screen` config will undo all custom media screens and won't appl
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -308,7 +308,7 @@ test("an empty `screen` config will undo all custom media screens and won't appl
 })
 
 test('legacy container component does not interfere with new --container variables', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --container-3xs: 16rem;
       --container-2xs: 18rem;
@@ -329,7 +329,7 @@ test('legacy container component does not interfere with new --container variabl
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -355,7 +355,7 @@ test('legacy container component does not interfere with new --container variabl
 })
 
 test('combines custom padding and screen overwrites', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -367,7 +367,7 @@ test('combines custom padding and screen overwrites', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -465,7 +465,7 @@ test('combines custom padding and screen overwrites', async () => {
 })
 
 test('filters out complex breakpoints', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -477,7 +477,7 @@ test('filters out complex breakpoints', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {

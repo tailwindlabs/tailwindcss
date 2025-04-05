@@ -82,14 +82,14 @@ it('allows the placement of context nodes', () => {
 })
 
 it('should stop walking when returning `WalkAction.Stop`', () => {
-  let ast = [
+  const ast = [
     styleRule('.foo', [styleRule('.nested', [styleRule('.bail', [decl('color', 'red')])])]),
     styleRule('.bar'),
     styleRule('.baz'),
     styleRule('.qux'),
   ]
 
-  let seen = new Set()
+  const seen = new Set()
 
   walk(ast, (node) => {
     if (node.kind === 'rule') {
@@ -112,7 +112,7 @@ it('should stop walking when returning `WalkAction.Stop`', () => {
 })
 
 it('should not emit empty rules once optimized', () => {
-  let ast = CSS.parse(css`
+  const ast = CSS.parse(css`
     /* Empty rule */
     .foo {
     }
@@ -203,9 +203,9 @@ it('should not emit empty rules once optimized', () => {
 })
 
 it('should only visit children once when calling `replaceWith` with single element array', () => {
-  let visited = new Set()
+  const visited = new Set()
 
-  let ast = [
+  const ast = [
     atRule('@media', '', [styleRule('.foo', [decl('color', 'blue')])]),
     styleRule('.bar', [decl('color', 'blue')]),
   ]
@@ -221,9 +221,9 @@ it('should only visit children once when calling `replaceWith` with single eleme
 })
 
 it('should only visit children once when calling `replaceWith` with multi-element array', () => {
-  let visited = new Set()
+  const visited = new Set()
 
-  let ast = [
+  const ast = [
     atRule('@media', '', [
       context({}, [
         styleRule('.foo', [decl('color', 'red')]),
@@ -234,7 +234,7 @@ it('should only visit children once when calling `replaceWith` with multi-elemen
   ]
 
   walk(ast, (node, { replaceWith }) => {
-    let key = id(node)
+    const key = id(node)
     if (visited.has(key)) {
       throw new Error('Visited node twice')
     }
@@ -257,11 +257,11 @@ it('should only visit children once when calling `replaceWith` with multi-elemen
 })
 
 it('should never visit children when calling `replaceWith` with `WalkAction.Skip`', () => {
-  let visited = new Set()
+  const visited = new Set()
 
-  let inner = styleRule('.foo', [decl('color', 'blue')])
+  const inner = styleRule('.foo', [decl('color', 'blue')])
 
-  let ast = [atRule('@media', '', [inner]), styleRule('.bar', [decl('color', 'blue')])]
+  const ast = [atRule('@media', '', [inner]), styleRule('.bar', [decl('color', 'blue')])]
 
   walk(ast, (node, { replaceWith }) => {
     visited.add(node)
@@ -318,14 +318,14 @@ it('should never visit children when calling `replaceWith` with `WalkAction.Skip
 
 it('should skip the correct number of children based on the the replaced children nodes', () => {
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
@@ -346,14 +346,14 @@ it('should skip the correct number of children based on the the replaced childre
   }
 
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
@@ -374,14 +374,14 @@ it('should skip the correct number of children based on the the replaced childre
   }
 
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
@@ -402,14 +402,14 @@ it('should skip the correct number of children based on the the replaced childre
   }
 
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
@@ -431,14 +431,14 @@ it('should skip the correct number of children based on the the replaced childre
   }
 
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
@@ -459,14 +459,14 @@ it('should skip the correct number of children based on the the replaced childre
   }
 
   {
-    let ast = [
+    const ast = [
       decl('--index', '0'),
       decl('--index', '1'),
       decl('--index', '2'),
       decl('--index', '3'),
       decl('--index', '4'),
     ]
-    let visited: string[] = []
+    const visited: string[] = []
     walk(ast, (node, { replaceWith }) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {

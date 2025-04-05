@@ -135,13 +135,13 @@ it('sort is stable', () => {
   // Heap's algorithm for permutations
   function* permutations<T>(input: T[]) {
     let pos = 1
-    let stack = input.map(() => 0)
+    const stack = input.map(() => 0)
 
     yield input.slice()
 
     while (pos < input.length) {
       if (stack[pos] < pos) {
-        let k = pos % 2 == 0 ? 0 : stack[pos]
+        const k = pos % 2 == 0 ? 0 : stack[pos]
         ;[input[k], input[pos]] = [input[pos], input[k]]
         yield input.slice()
         ++stack[pos]
@@ -153,10 +153,16 @@ it('sort is stable', () => {
     }
   }
 
-  let classes = ['duration-initial', 'duration-75', 'duration-150', 'duration-700', 'duration-1000']
+  const classes = [
+    'duration-initial',
+    'duration-75',
+    'duration-150',
+    'duration-700',
+    'duration-1000',
+  ]
 
-  for (let permutation of permutations(classes)) {
-    let sorted = [...permutation].sort(compare)
+  for (const permutation of permutations(classes)) {
+    const sorted = [...permutation].sort(compare)
     expect(sorted).toEqual([
       'duration-75',
       'duration-150',

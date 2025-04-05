@@ -7,7 +7,7 @@ import { Theme, ThemeOptions } from './theme'
 const css = String.raw
 
 function loadDesignSystem() {
-  let theme = new Theme()
+  const theme = new Theme()
   theme.add('--spacing', '0.25rem')
   theme.add('--colors-red-500', 'red')
   theme.add('--colors-blue-500', 'blue')
@@ -29,9 +29,9 @@ function loadDesignSystem() {
 }
 
 test('getClassList', () => {
-  let design = loadDesignSystem()
-  let classList = design.getClassList()
-  let classNames = classList.flatMap(([name, meta]) => [
+  const design = loadDesignSystem()
+  const classList = design.getClassList()
+  const classNames = classList.flatMap(([name, meta]) => [
     name,
     ...meta.modifiers.map((m) => `${name}/${m}`),
   ])
@@ -40,13 +40,13 @@ test('getClassList', () => {
 })
 
 test('Spacing utilities do not suggest bare values when not using the multiplier-based spacing scale', () => {
-  let design = loadDesignSystem()
+  const design = loadDesignSystem()
 
   // Remove spacing scale
   design.theme.clearNamespace('--spacing', ThemeOptions.NONE)
 
-  let classList = design.getClassList()
-  let classNames = classList.flatMap(([name, meta]) => [
+  const classList = design.getClassList()
+  const classNames = classList.flatMap(([name, meta]) => [
     name,
     ...meta.modifiers.map((m) => `${name}/${m}`),
   ])
@@ -59,25 +59,25 @@ test('Spacing utilities do not suggest bare values when not using the multiplier
 })
 
 test('Theme values with underscores are converted back to decimal points', () => {
-  let design = loadDesignSystem()
-  let classes = design.getClassList()
+  const design = loadDesignSystem()
+  const classes = design.getClassList()
 
   expect(classes).toContainEqual(['inset-0.5', { modifiers: [] }])
 })
 
 test('getVariants', () => {
-  let design = loadDesignSystem()
-  let variants = design.getVariants()
+  const design = loadDesignSystem()
+  const variants = design.getVariants()
 
   expect(variants).toMatchSnapshot()
 })
 
 test('getVariants compound', () => {
-  let design = loadDesignSystem()
-  let variants = design.getVariants()
-  let group = variants.find((v) => v.name === 'group')!
+  const design = loadDesignSystem()
+  const variants = design.getVariants()
+  const group = variants.find((v) => v.name === 'group')!
 
-  let list = [
+  const list = [
     // A selector-based variant
     group.selectors({ value: 'hover' }),
 
@@ -104,7 +104,7 @@ test('getVariants compound', () => {
 })
 
 test('variant selectors are in the correct order', async () => {
-  let input = css`
+  const input = css`
     @custom-variant overactive {
       &:hover {
         @media (hover: hover) {
@@ -118,9 +118,9 @@ test('variant selectors are in the correct order', async () => {
     }
   `
 
-  let design = await __unstable__loadDesignSystem(input)
-  let variants = design.getVariants()
-  let overactive = variants.find((v) => v.name === 'overactive')!
+  const design = await __unstable__loadDesignSystem(input)
+  const variants = design.getVariants()
+  const overactive = variants.find((v) => v.name === 'overactive')!
 
   expect(overactive).toBeTruthy()
   expect(overactive.selectors({})).toMatchInlineSnapshot(`
@@ -131,15 +131,15 @@ test('variant selectors are in the correct order', async () => {
 })
 
 test('The variant `has-force` does not crash', () => {
-  let design = loadDesignSystem()
-  let variants = design.getVariants()
-  let has = variants.find((v) => v.name === 'has')!
+  const design = loadDesignSystem()
+  const variants = design.getVariants()
+  const has = variants.find((v) => v.name === 'has')!
 
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
 })
 
 test('Can produce CSS per candidate using `candidatesToCss`', () => {
-  let design = loadDesignSystem()
+  const design = loadDesignSystem()
   design.invalidCandidates = new Set(['bg-[#fff]'])
 
   expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]', 'text-xs']))
@@ -165,12 +165,12 @@ test('Can produce CSS per candidate using `candidatesToCss`', () => {
 })
 
 test('Utilities do not show wrapping selector in intellisense', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
     @config './config.js';
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
@@ -202,11 +202,11 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
 })
 
 test('Utilities, when marked as important, show as important in intellisense', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities' important;
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
@@ -232,12 +232,12 @@ test('Utilities, when marked as important, show as important in intellisense', a
 })
 
 test('Static utilities from plugins are listed in hovers and completions', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
     @plugin "./plugin.js"l;
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
@@ -267,12 +267,12 @@ test('Static utilities from plugins are listed in hovers and completions', async
 })
 
 test('Functional utilities from plugins are listed in hovers and completions', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
     @plugin "./plugin.js"l;
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
@@ -375,8 +375,8 @@ test('Functional utilities from plugins are listed in hovers and completions', a
     ]
   `)
 
-  let classMap = new Map(design.getClassList())
-  let classNames = Array.from(classMap.keys())
+  const classMap = new Map(design.getClassList())
+  const classNames = Array.from(classMap.keys())
 
   // matchUtilities without modifiers
   expect(classNames).toContain('custom-1-red')
@@ -407,7 +407,7 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 })
 
 test('Custom at-rule variants do not show up as a value under `group`', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
     @custom-variant variant-1 (@media foo);
     @custom-variant variant-2 {
@@ -418,7 +418,7 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
     @plugin "./plugin.js";
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
@@ -432,13 +432,13 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
     }),
   })
 
-  let variants = design.getVariants()
-  let v1 = variants.find((v) => v.name === 'variant-1')!
-  let v2 = variants.find((v) => v.name === 'variant-2')!
-  let v3 = variants.find((v) => v.name === 'variant-3')!
-  let v4 = variants.find((v) => v.name === 'variant-4')!
-  let group = variants.find((v) => v.name === 'group')!
-  let not = variants.find((v) => v.name === 'not')!
+  const variants = design.getVariants()
+  const v1 = variants.find((v) => v.name === 'variant-1')!
+  const v2 = variants.find((v) => v.name === 'variant-2')!
+  const v3 = variants.find((v) => v.name === 'variant-3')!
+  const v4 = variants.find((v) => v.name === 'variant-4')!
+  const group = variants.find((v) => v.name === 'group')!
+  const not = variants.find((v) => v.name === 'not')!
 
   // All the variants should exist
   expect(v1).not.toBeUndefined()
@@ -462,7 +462,7 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
 })
 
 test('Custom functional @utility', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
 
     @theme reference {
@@ -508,15 +508,15 @@ test('Custom functional @utility', async () => {
     }
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
     }),
   })
 
-  let classMap = new Map(design.getClassList())
-  let classNames = Array.from(classMap.keys())
+  const classMap = new Map(design.getClassList())
+  const classNames = Array.from(classMap.keys())
 
   expect(classNames).toContain('tab-1')
   expect(classNames).toContain('tab-2')
@@ -563,7 +563,7 @@ test('Custom functional @utility', async () => {
 })
 
 test('Theme keys with underscores are suggested with underscores', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities';
 
     @theme {
@@ -581,14 +581,14 @@ test('Theme keys with underscores are suggested with underscores', async () => {
     }
   `
 
-  let design = await __unstable__loadDesignSystem(input, {
+  const design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
       base,
       content: '@tailwind utilities;',
     }),
   })
 
-  let entries = design.getClassList().filter(([name]) => name.startsWith('p-'))
+  const entries = design.getClassList().filter(([name]) => name.startsWith('p-'))
 
   expect(entries).toContainEqual(['p-1.5', { modifiers: [] }])
   expect(entries).toContainEqual(['p-2.5', { modifiers: [] }])

@@ -40,12 +40,12 @@ test.each(table)('sorts classes: "%s" -> "%s"', async (input, expected) => {
 })
 
 test.skip('group, peer, and dark have their own order', async () => {
-  let input = shuffle(['group', 'peer', 'dark']).join(' ')
+  const input = shuffle(['group', 'peer', 'dark']).join(' ')
   expect(sortClasses(input, await loadDesign())).toEqual('dark group peer')
 })
 
 test('can sort classes deterministically across multiple class lists', async () => {
-  let classes = [
+  const classes = [
     [
       'a-class px-3 p-1 b-class py-3 bg-red-500 bg-blue-500',
       'a-class b-class bg-blue-500 bg-red-500 p-1 px-3 py-3',
@@ -57,7 +57,7 @@ test('can sort classes deterministically across multiple class lists', async () 
   ]
 
   // Shared design
-  let design = await loadDesign()
+  const design = await loadDesign()
   for (const [input, output] of classes) {
     expect(sortClasses(input, design)).toEqual(output)
   }
@@ -69,13 +69,13 @@ test('can sort classes deterministically across multiple class lists', async () 
 })
 
 test('sorts arbitrary values across one or more class lists consistently', async () => {
-  let classes = [
+  const classes = [
     ['[--fg:#fff]', '[--fg:#fff]'],
     ['[--bg:#111] [--bg_hover:#000] [--fg:#fff]', '[--bg:#111] [--bg_hover:#000] [--fg:#fff]'],
   ]
 
   // Shared design
-  let design = await loadDesign()
+  const design = await loadDesign()
   for (const [input, output] of classes) {
     expect(sortClasses(input, design)).toEqual(output)
   }
@@ -121,7 +121,7 @@ function bigSign(value: bigint) {
 
 function shuffle<T>(arr: T[]): T[] {
   for (let i = arr.length - 1; i > 0; i--) {
-    let j = Math.round(Math.random() * i)
+    const j = Math.round(Math.random() * i)
     ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
 

@@ -5,7 +5,7 @@ import plugin from './plugin'
 const css = String.raw
 
 test('utilities must be prefixed', async () => {
-  let input = css`
+  const input = css`
     @theme reference prefix(tw);
     @tailwind utilities;
 
@@ -63,7 +63,7 @@ test('utilities must be prefixed', async () => {
 })
 
 test('utilities used in @apply must be prefixed', async () => {
-  let compiler = await compile(css`
+  const compiler = await compile(css`
     @theme reference prefix(tw);
 
     .my-underline {
@@ -94,7 +94,7 @@ test('utilities used in @apply must be prefixed', async () => {
 })
 
 test('CSS variables output by the theme are prefixed', async () => {
-  let compiler = await compile(css`
+  const compiler = await compile(css`
     @theme prefix(tw) {
       --color-red: #f00;
       --color-green: #0f0;
@@ -154,7 +154,7 @@ test('CSS theme functions do not use the prefix', async () => {
 })
 
 test('JS theme functions do not use the prefix', async () => {
-  let compiler = await compile(
+  const compiler = await compile(
     css`
       @theme prefix(tw) {
         --color-red: #f00;
@@ -194,7 +194,7 @@ test('JS theme functions do not use the prefix', async () => {
 })
 
 test('a prefix can be configured via @import theme(…)', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss/theme' theme(reference prefix(tw));
     @tailwind utilities;
 
@@ -264,7 +264,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
-  let input = css`
+  const input = css`
     @import 'tailwindcss' prefix(tw);
 
     @utility custom {
@@ -329,7 +329,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
 })
 
 test('a prefix must be letters only', async () => {
-  let input = css`
+  const input = css`
     @theme reference prefix(__);
   `
 
@@ -339,12 +339,12 @@ test('a prefix must be letters only', async () => {
 })
 
 test('a candidate matching the prefix does not crash', async () => {
-  let input = css`
+  const input = css`
     @theme reference prefix(tomato);
     @tailwind utilities;
   `
 
-  let compiler = await compile(input)
+  const compiler = await compile(input)
 
   expect(compiler.build(['tomato', 'tomato:flex'])).toMatchInlineSnapshot(`
     ".tomato\\:flex {

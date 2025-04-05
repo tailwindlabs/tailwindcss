@@ -306,7 +306,7 @@ describe('findStaticPlugins', () => {
 
 describe('extractStaticImportMap', () => {
   test('extracts different kind of imports from an ESM file', () => {
-    let extracted = extractStaticImportMap(js`
+    const extracted = extractStaticImportMap(js`
       import plugin1 from './plugin1'
       import * as plugin2 from './plugin2'
       import plugin6, { plugin3, plugin4, default as plugin5 } from './plugin3'
@@ -326,7 +326,7 @@ describe('extractStaticImportMap', () => {
   })
 
   test('extracts different kind of imports from an CJS file', () => {
-    let extracted = extractStaticImportMap(js`
+    const extracted = extractStaticImportMap(js`
       const plugin1 = require('./plugin1')
       let plugin2 = require('./plugin2')
       var plugin3 = require('./plugin3')

@@ -15,7 +15,7 @@ function run(
   utilities ??= new Utilities()
   variants ??= new Variants()
 
-  let designSystem = buildDesignSystem(new Theme())
+  const designSystem = buildDesignSystem(new Theme())
   designSystem.theme.prefix = prefix ?? null
 
   designSystem.utilities = utilities
@@ -33,7 +33,7 @@ it('should skip unknown variants', () => {
 })
 
 it('should parse a simple utility', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('flex', { utilities })).toMatchInlineSnapshot(`
@@ -50,7 +50,7 @@ it('should parse a simple utility', () => {
 })
 
 it('should parse a simple utility that should be important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('flex!', { utilities })).toMatchInlineSnapshot(`
@@ -67,7 +67,7 @@ it('should parse a simple utility that should be important', () => {
 })
 
 it('should parse a simple utility that can be negative', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('-translate-x', () => [])
 
   expect(run('-translate-x-4', { utilities })).toMatchInlineSnapshot(`
@@ -90,10 +90,10 @@ it('should parse a simple utility that can be negative', () => {
 })
 
 it('should parse a simple utility with a variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
 
   expect(run('hover:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -115,10 +115,10 @@ it('should parse a simple utility with a variant', () => {
 })
 
 it('should parse a simple utility with stacked variants', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
   variants.static('focus', () => {})
 
@@ -145,7 +145,7 @@ it('should parse a simple utility with stacked variants', () => {
 })
 
 it('should parse a simple utility with an arbitrary variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('[&_p]:flex', { utilities })).toMatchInlineSnapshot(`
@@ -168,9 +168,9 @@ it('should parse a simple utility with an arbitrary variant', () => {
 })
 
 it('should parse an arbitrary variant using the automatic var shorthand', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('supports', () => {})
 
   expect(run('supports-(--test):flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -197,10 +197,10 @@ it('should parse an arbitrary variant using the automatic var shorthand', () => 
 })
 
 it('should parse a simple utility with a parameterized variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('data', () => {})
 
   expect(run('data-[disabled]:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -227,10 +227,10 @@ it('should parse a simple utility with a parameterized variant', () => {
 })
 
 it('should parse compound variants with an arbitrary value as an arbitrary variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run('group-[&_p]/parent-name:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -261,10 +261,10 @@ it('should parse compound variants with an arbitrary value as an arbitrary varia
 })
 
 it('should parse a simple utility with a parameterized variant and a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.compound('group', Compounds.StyleRules, () => {})
   variants.functional('aria', () => {})
 
@@ -301,10 +301,10 @@ it('should parse a simple utility with a parameterized variant and a modifier', 
 })
 
 it('should parse compound group with itself group-group-*', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
   variants.compound('group', Compounds.StyleRules, () => {})
 
@@ -346,7 +346,7 @@ it('should parse compound group with itself group-group-*', () => {
 })
 
 it('should parse a simple utility with an arbitrary media variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('[@media(width>=123px)]:flex', { utilities })).toMatchInlineSnapshot(`
@@ -369,14 +369,14 @@ it('should parse a simple utility with an arbitrary media variant', () => {
 })
 
 it('should skip arbitrary variants where @media and other arbitrary variants are combined', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('[@media(width>=123px){&:hover}]:flex', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/50', { utilities })).toMatchInlineSnapshot(`
@@ -402,7 +402,7 @@ it('should parse a utility with a modifier', () => {
 })
 
 it('should parse a utility with an arbitrary modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[50%]', { utilities })).toMatchInlineSnapshot(`
@@ -428,7 +428,7 @@ it('should parse a utility with an arbitrary modifier', () => {
 })
 
 it('should parse a utility with a modifier that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/50!', { utilities })).toMatchInlineSnapshot(`
@@ -454,10 +454,10 @@ it('should parse a utility with a modifier that is important', () => {
 })
 
 it('should parse a utility with a modifier and a variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
 
   expect(run('hover:bg-red-500/50', { utilities, variants })).toMatchInlineSnapshot(`
@@ -488,7 +488,7 @@ it('should parse a utility with a modifier and a variant', () => {
 })
 
 it('should not parse a partial utility', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
   utilities.functional('bg', () => [])
 
@@ -497,28 +497,28 @@ it('should not parse a partial utility', () => {
 })
 
 it('should not parse static utilities with a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('flex/foo', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should not parse static utilities with multiple modifiers', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
   expect(run('flex/foo/bar', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should not parse functional utilities with multiple modifiers', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-1/2/3', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]', { utilities })).toMatchInlineSnapshot(`
@@ -541,14 +541,14 @@ it('should parse a utility with an arbitrary value', () => {
 })
 
 it('should not parse a utility with an incomplete arbitrary value', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value with parens', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-(--my-color)', { utilities })).toMatchInlineSnapshot(`
@@ -571,14 +571,14 @@ it('should parse a utility with an arbitrary value with parens', () => {
 })
 
 it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-(my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value including a typehint', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[color:var(--value)]', { utilities })).toMatchInlineSnapshot(`
@@ -601,7 +601,7 @@ it('should parse a utility with an arbitrary value including a typehint', () => 
 })
 
 it('should parse a utility with an arbitrary value with parens including a typehint', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-(color:--my-color)', { utilities })).toMatchInlineSnapshot(`
@@ -624,14 +624,14 @@ it('should parse a utility with an arbitrary value with parens including a typeh
 })
 
 it('should not parse a utility with an arbitrary value with parens including a typehint that does not start with --', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-(color:my-color)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value with parens and a fallback', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-(color:--my-color,#0088cc)', { utilities })).toMatchInlineSnapshot(`
@@ -654,7 +654,7 @@ it('should parse a utility with an arbitrary value with parens and a fallback', 
 })
 
 it('should parse a utility with an arbitrary value with a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]/50', { utilities })).toMatchInlineSnapshot(`
@@ -680,7 +680,7 @@ it('should parse a utility with an arbitrary value with a modifier', () => {
 })
 
 it('should parse a utility with an arbitrary value with an arbitrary modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]/[50%]', { utilities })).toMatchInlineSnapshot(`
@@ -706,7 +706,7 @@ it('should parse a utility with an arbitrary value with an arbitrary modifier', 
 })
 
 it('should parse a utility with an arbitrary value that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[#0088cc]!', { utilities })).toMatchInlineSnapshot(`
@@ -729,7 +729,7 @@ it('should parse a utility with an arbitrary value that is important', () => {
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
@@ -752,7 +752,7 @@ it('should parse a utility with an implicit variable as the arbitrary value', ()
 })
 
 it('should parse a utility with an implicit variable as the arbitrary value that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
@@ -775,7 +775,7 @@ it('should parse a utility with an implicit variable as the arbitrary value that
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
@@ -798,7 +798,7 @@ it('should parse a utility with an explicit variable as the arbitrary value', ()
 })
 
 it('should parse a utility with an explicit variable as the arbitrary value that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
@@ -821,10 +821,10 @@ it('should parse a utility with an explicit variable as the arbitrary value that
 })
 
 it('should not parse invalid arbitrary values', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  for (let candidate of [
+  for (const candidate of [
     'bg-red-[#0088cc]',
     'bg-red[#0088cc]',
 
@@ -851,13 +851,13 @@ it('should not parse invalid arbitrary values', () => {
 })
 
 it('should not parse invalid arbitrary values in variants', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('data', () => {})
 
-  for (let candidate of [
+  for (const candidate of [
     'data-foo-[#0088cc]:flex',
     'data-foo[#0088cc]:flex',
 
@@ -910,7 +910,7 @@ it('should not parse invalid arbitrary values in variants', () => {
 })
 
 it('should parse a utility with an implicit variable as the modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
@@ -936,9 +936,9 @@ it('should parse a utility with an implicit variable as the modifier', () => {
 })
 
 it('should properly decode escaped underscores but not convert underscores to spaces for CSS variables in arbitrary positions', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('flex', () => [])
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('supports', () => {})
 
   expect(run('flex-(--\\_foo)', { utilities, variants })).toMatchInlineSnapshot(`
@@ -1084,7 +1084,7 @@ it('should properly decode escaped underscores but not convert underscores to sp
 })
 
 it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/(--value)', { utilities })).toMatchInlineSnapshot(`
@@ -1110,14 +1110,14 @@ it('should parse a utility with an implicit variable as the modifier using the s
 })
 
 it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/(value)', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an implicit variable as the modifier that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
@@ -1143,7 +1143,7 @@ it('should parse a utility with an implicit variable as the modifier that is imp
 })
 
 it('should parse a utility with an explicit variable as the modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
@@ -1169,7 +1169,7 @@ it('should parse a utility with an explicit variable as the modifier', () => {
 })
 
 it('should parse a utility with an explicit variable as the modifier that is important', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
@@ -1195,10 +1195,10 @@ it('should parse a utility with an explicit variable as the modifier that is imp
 })
 
 it('should not parse a partial variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('open', () => {})
   variants.functional('data', () => {})
 
@@ -1207,10 +1207,10 @@ it('should not parse a partial variant', () => {
 })
 
 it('should parse a static variant starting with @', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('@lg', () => {})
 
   expect(run('@lg:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -1232,10 +1232,10 @@ it('should parse a static variant starting with @', () => {
 })
 
 it('should parse a functional variant with a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('foo', () => {})
 
   expect(run('foo-bar/50:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -1265,10 +1265,10 @@ it('should parse a functional variant with a modifier', () => {
 })
 
 it('should parse a functional variant starting with @', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('@', () => {})
 
   expect(run('@lg:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -1295,10 +1295,10 @@ it('should parse a functional variant starting with @', () => {
 })
 
 it('should parse a functional variant starting with @ and a modifier', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('@', () => {})
 
   expect(run('@lg/name:flex', { utilities, variants })).toMatchInlineSnapshot(`
@@ -1328,7 +1328,7 @@ it('should parse a functional variant starting with @ and a modifier', () => {
 })
 
 it('should replace `_` with ` `', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('content', () => [])
 
   expect(run('content-["hello_world"]', { utilities })).toMatchInlineSnapshot(`
@@ -1351,7 +1351,7 @@ it('should replace `_` with ` `', () => {
 })
 
 it('should not replace `\\_` with ` ` (when it is escaped)', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('content', () => [])
 
   expect(run('content-["hello\\_world"]', { utilities })).toMatchInlineSnapshot(`
@@ -1374,7 +1374,7 @@ it('should not replace `\\_` with ` ` (when it is escaped)', () => {
 })
 
 it('should not replace `_` inside of `url()`', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('bg', () => [])
 
   expect(run('bg-[no-repeat_url(https://example.com/some_page)]', { utilities }))
@@ -1398,7 +1398,7 @@ it('should not replace `_` inside of `url()`', () => {
 })
 
 it('should not replace `_` in the first argument to `var()`', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('ml', () => [])
 
   expect(run('ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]', { utilities }))
@@ -1422,7 +1422,7 @@ it('should not replace `_` in the first argument to `var()`', () => {
 })
 
 it('should not replace `_` in the first argument to `theme()`', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.functional('ml', () => [])
 
   expect(run('ml-[theme(--spacing-1_5,_theme(--spacing-2_5,_1rem))]', { utilities }))
@@ -1505,7 +1505,7 @@ it('should parse arbitrary properties that are important', () => {
 })
 
 it('should parse arbitrary properties with a variant', () => {
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
 
   expect(run('hover:[color:red]', { variants })).toMatchInlineSnapshot(`
@@ -1529,7 +1529,7 @@ it('should parse arbitrary properties with a variant', () => {
 })
 
 it('should parse arbitrary properties with stacked variants', () => {
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
   variants.static('focus', () => {})
 
@@ -1585,20 +1585,20 @@ it('should parse arbitrary properties that are important and using stacked arbit
 })
 
 it('should not parse compound group with a non-compoundable variant', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a variant containing an arbitrary string with unbalanced parens, brackets, curlies and other quotes', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('string', () => {})
 
   expect(run(`string-['}[("\\'']:flex`, { utilities, variants })).toMatchInlineSnapshot(`
@@ -1625,10 +1625,10 @@ it('should parse a variant containing an arbitrary string with unbalanced parens
 })
 
 it('should parse candidates with a prefix', () => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.static('hover', () => {})
 
   // A prefix is required
@@ -1780,11 +1780,11 @@ it.each([
   'group-data-[_]/(_):flex',
   'group-data-(_)/(_):flex',
 ])('should not parse invalid empty arbitrary values: %s', (rawCandidate) => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
   utilities.functional('bg', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('data', () => {})
   variants.compound('group', Compounds.StyleRules, () => {})
 
@@ -1808,11 +1808,11 @@ it.each([
   // Arbitrary variant values that end the block
   'data-[a]{color:red}foo[a]:flex',
 ])('should not parse invalid arbitrary values: %s', (rawCandidate) => {
-  let utilities = new Utilities()
+  const utilities = new Utilities()
   utilities.static('flex', () => [])
   utilities.functional('bg', () => [])
 
-  let variants = new Variants()
+  const variants = new Variants()
   variants.functional('data', () => {})
   variants.compound('group', Compounds.StyleRules, () => {})
 

@@ -9,12 +9,12 @@ const css = String.raw
 
 describe('theme', async () => {
   test('plugin theme can contain objects', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -72,12 +72,12 @@ describe('theme', async () => {
   })
 
   test('keyframes added via addUtilities are appended to the AST', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -105,7 +105,7 @@ describe('theme', async () => {
   })
 
   test('plugin theme can extend colors', async () => {
-    let input = css`
+    const input = css`
       @theme reference {
         --color-red-500: #ef4444;
       }
@@ -113,7 +113,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -156,12 +156,12 @@ describe('theme', async () => {
   test('plugin theme values can reference legacy theme keys that have been replaced with bare value support', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -203,12 +203,12 @@ describe('theme', async () => {
   test('plugin theme values that support bare values are merged with other values for that theme key', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -254,7 +254,7 @@ describe('theme', async () => {
   })
 
   test('plugin theme can have opacity modifiers', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @theme {
         --color-red-500: #ef4444;
@@ -262,7 +262,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -301,7 +301,7 @@ describe('theme', async () => {
   })
 
   test('plugin theme colors can use <alpha-value>', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @theme {
         /* This should not work */
@@ -310,7 +310,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -390,12 +390,12 @@ describe('theme', async () => {
   })
 
   test('theme value functions are resolved correctly regardless of order', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -444,12 +444,12 @@ describe('theme', async () => {
   })
 
   test('plugins can override the default key', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -487,7 +487,7 @@ describe('theme', async () => {
   })
 
   test('plugins can read CSS theme keys using the old theme key notation', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
@@ -496,7 +496,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -545,7 +545,7 @@ describe('theme', async () => {
   })
 
   test('CSS theme values are merged with JS theme values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
@@ -554,7 +554,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -599,7 +599,7 @@ describe('theme', async () => {
   })
 
   test('CSS theme defaults take precedence over JS theme defaults', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
@@ -608,7 +608,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -646,7 +646,7 @@ describe('theme', async () => {
   })
 
   test('CSS theme values take precedence even over non-object JS values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme reference {
@@ -655,7 +655,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    const fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -687,12 +687,12 @@ describe('theme', async () => {
   })
 
   test('all necessary theme keys support bare values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    const { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -751,7 +751,7 @@ describe('theme', async () => {
       },
     })
 
-    let output = build([
+    const output = build([
       'my-aspect-2/5',
       'my-backdrop-brightness-1',
       'my-backdrop-contrast-1',
@@ -928,7 +928,7 @@ describe('theme', async () => {
   })
 
   test('theme keys can derive from other theme keys', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
@@ -937,7 +937,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    const fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -970,7 +970,7 @@ describe('theme', async () => {
   test("`theme('*.DEFAULT')` resolves to `undefined` when all theme keys in that namespace have a suffix", async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
@@ -979,7 +979,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    const fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -1000,7 +1000,7 @@ describe('theme', async () => {
   })
 
   test('nested theme key lookups work even for flattened keys', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
       @theme {
@@ -1010,7 +1010,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    const fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -1033,12 +1033,12 @@ describe('theme', async () => {
   test('keys that do not exist return the default value (or undefined if none)', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let fn = vi.fn()
+    const fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -1061,12 +1061,12 @@ describe('theme', async () => {
   })
 
   test('Candidates can match multiple utility definitions', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    const { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -1116,12 +1116,12 @@ describe('theme', async () => {
   })
 
   test('spreading `tailwindcss/defaultTheme` exports keeps bare values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let { build } = await compile(input, {
+    const { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -1184,7 +1184,7 @@ describe('theme', async () => {
       },
     })
 
-    let output = build([
+    const output = build([
       'my-aspect-2/5',
       // 'my-backdrop-brightness-1',
       // 'my-backdrop-contrast-1',
@@ -1334,12 +1334,12 @@ describe('theme', async () => {
   })
 
   test('can use escaped JS variables in theme values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -1384,7 +1384,7 @@ describe('theme', async () => {
   })
 
   test('can use escaped CSS variables in theme values', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
 
@@ -1397,7 +1397,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -1430,7 +1430,7 @@ describe('theme', async () => {
   })
 
   test('can use escaped CSS variables in referenced theme namespace', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "my-plugin";
 
@@ -1443,7 +1443,7 @@ describe('theme', async () => {
       }
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
           base,
@@ -1483,13 +1483,13 @@ describe('theme', async () => {
 
 describe('addBase', () => {
   test('does not create rules when imported via `@import "…" reference`', async () => {
-    let input = css`
+    const input = css`
       @tailwind utilities;
       @plugin "outside";
       @import './inside.css' reference;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id, base) => {
         if (id === 'inside') {
           return {
@@ -1527,11 +1527,11 @@ describe('addBase', () => {
   })
 
   test('does not modify CSS variables', async () => {
-    let input = css`
+    const input = css`
       @plugin "my-plugin";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: plugin(function ({ addBase }) {
           addBase({
@@ -1561,7 +1561,7 @@ describe('addBase', () => {
 
 describe('addVariant', () => {
   test('addVariant with string selector', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1579,7 +1579,7 @@ describe('addVariant', () => {
         },
       },
     )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+    const compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1595,7 +1595,7 @@ describe('addVariant', () => {
   })
 
   test('addVariant with array of selectors', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1614,7 +1614,7 @@ describe('addVariant', () => {
       },
     )
 
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+    const compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1630,7 +1630,7 @@ describe('addVariant', () => {
   })
 
   test('addVariant with object syntax and @slot', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1651,7 +1651,7 @@ describe('addVariant', () => {
         },
       },
     )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+    const compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1667,7 +1667,7 @@ describe('addVariant', () => {
   })
 
   test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1690,7 +1690,7 @@ describe('addVariant', () => {
         },
       },
     )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
+    const compiled = build(['hocus:underline', 'group-hocus:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1718,7 +1718,7 @@ describe('addVariant', () => {
   })
 
   test('addVariant with at-rules and placeholder', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1739,7 +1739,7 @@ describe('addVariant', () => {
         },
       },
     )
-    let compiled = build(['potato:underline', 'potato:flex'])
+    const compiled = build(['potato:underline', 'potato:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1759,7 +1759,7 @@ describe('addVariant', () => {
   })
 
   test('@slot is preserved when used as a custom property value', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1783,7 +1783,7 @@ describe('addVariant', () => {
         },
       },
     )
-    let compiled = build(['hocus:underline'])
+    const compiled = build(['hocus:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1801,7 +1801,7 @@ describe('addVariant', () => {
 
 describe('matchVariant', () => {
   test('partial arbitrary variants', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1819,7 +1819,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+    const compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1835,7 +1835,7 @@ describe('matchVariant', () => {
   })
 
   test('partial arbitrary variants with at-rules', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1853,7 +1853,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+    const compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1873,7 +1873,7 @@ describe('matchVariant', () => {
   })
 
   test('partial arbitrary variants with at-rules and placeholder', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1895,7 +1895,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
+    const compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1919,7 +1919,7 @@ describe('matchVariant', () => {
   })
 
   test('partial arbitrary variants with default values', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1942,7 +1942,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['tooltip-bottom:underline', 'tooltip-top:flex'])
+    const compiled = build(['tooltip-bottom:underline', 'tooltip-top:flex'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -1958,7 +1958,7 @@ describe('matchVariant', () => {
   })
 
   test('matched variant values maintain the sort order they are registered in', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -1983,7 +1983,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'alphabet-c:underline',
       'alphabet-a:underline',
       'alphabet-d:underline',
@@ -2000,7 +2000,7 @@ describe('matchVariant', () => {
   })
 
   test('matchVariant can return an array of format strings from the function', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2020,7 +2020,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['test-[a,b,c]:underline'])
+    const compiled = build(['test-[a,b,c]:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -2032,7 +2032,7 @@ describe('matchVariant', () => {
   })
 
   test('should be possible to sort variants', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2054,7 +2054,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmin-[600px]:flex',
       'testmin-[500px]:underline',
       'testmin-[700px]:italic',
@@ -2084,7 +2084,7 @@ describe('matchVariant', () => {
   })
 
   test('should be possible to compare arbitrary variants and hardcoded variants', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2109,7 +2109,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmin-[700px]:italic',
       'testmin-example:italic',
       'testmin-[500px]:italic',
@@ -2139,7 +2139,7 @@ describe('matchVariant', () => {
   })
 
   test('should be possible to sort stacked arbitrary variants correctly', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2168,7 +2168,7 @@ describe('matchVariant', () => {
       },
     )
 
-    let compiled = build([
+    const compiled = build([
       'testmin-[150px]:testmax-[400px]:order-2',
       'testmin-[100px]:testmax-[350px]:order-3',
       'testmin-[100px]:testmax-[300px]:order-4',
@@ -2211,7 +2211,7 @@ describe('matchVariant', () => {
   })
 
   test('should maintain sort from other variants, if sort functions of arbitrary variants return 0', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2239,7 +2239,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmin-[100px]:testmax-[200px]:focus:underline',
       'testmin-[100px]:testmax-[200px]:hover:underline',
     ])
@@ -2265,7 +2265,7 @@ describe('matchVariant', () => {
   })
 
   test('should sort arbitrary variants left to right (1)', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2292,7 +2292,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmin-[200px]:testmax-[400px]:order-2',
       'testmin-[200px]:testmax-[300px]:order-4',
       'testmin-[100px]:testmax-[400px]:order-1',
@@ -2337,7 +2337,7 @@ describe('matchVariant', () => {
   })
 
   test('should sort arbitrary variants left to right (2)', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2364,7 +2364,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmax-[400px]:testmin-[200px]:underline',
       'testmax-[300px]:testmin-[200px]:underline',
       'testmax-[400px]:testmin-[100px]:underline',
@@ -2405,7 +2405,7 @@ describe('matchVariant', () => {
   })
 
   test('should guarantee that we are not passing values from other variants to the wrong function', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2419,7 +2419,7 @@ describe('matchVariant', () => {
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
                 sort(a, z) {
-                  let lookup = ['100px', '200px']
+                  const lookup = ['100px', '200px']
                   if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
                     throw new Error('We are seeing values that should not be there!')
                   }
@@ -2428,7 +2428,7 @@ describe('matchVariant', () => {
               })
               matchVariant('testmax', (value) => `@media (max-width: ${value})`, {
                 sort(a, z) {
-                  let lookup = ['300px', '400px']
+                  const lookup = ['300px', '400px']
                   if (lookup.indexOf(a.value) === -1 || lookup.indexOf(z.value) === -1) {
                     throw new Error('We are seeing values that should not be there!')
                   }
@@ -2440,7 +2440,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'testmin-[200px]:testmax-[400px]:order-2',
       'testmin-[200px]:testmax-[300px]:order-4',
       'testmin-[100px]:testmax-[400px]:order-1',
@@ -2485,7 +2485,7 @@ describe('matchVariant', () => {
   })
 
   test('should default to the DEFAULT value for variants', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2507,7 +2507,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['foo:underline'])
+    const compiled = build(['foo:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -2519,7 +2519,7 @@ describe('matchVariant', () => {
   })
 
   test('should not generate anything if the matchVariant does not have a DEFAULT value configured', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2537,13 +2537,13 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['foo:underline'])
+    const compiled = build(['foo:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
   })
 
   test('should be possible to use `null` as a DEFAULT value', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2563,7 +2563,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['foo:underline'])
+    const compiled = build(['foo:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -2575,7 +2575,7 @@ describe('matchVariant', () => {
   })
 
   test('should be possible to use `undefined` as a DEFAULT value', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2595,7 +2595,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build(['foo:underline'])
+    const compiled = build(['foo:underline'])
 
     expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
@@ -2607,7 +2607,7 @@ describe('matchVariant', () => {
   })
 
   test('should be called with eventual modifiers', async () => {
-    let { build } = await compile(
+    const { build } = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -2633,7 +2633,7 @@ describe('matchVariant', () => {
         },
       },
     )
-    let compiled = build([
+    const compiled = build([
       'my-container-[250px]:underline',
       'my-container-[250px]/placement:underline',
     ])
@@ -2655,7 +2655,7 @@ describe('matchVariant', () => {
 
 describe('addUtilities()', () => {
   test('custom static utility', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2702,7 +2702,7 @@ describe('addUtilities()', () => {
   })
 
   test('return multiple rule objects from a custom utility', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -2735,7 +2735,7 @@ describe('addUtilities()', () => {
   })
 
   test('define multiple utilities with array syntax', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -2774,7 +2774,7 @@ describe('addUtilities()', () => {
   })
 
   test('utilities can use arrays for fallback declaration values', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -2806,7 +2806,7 @@ describe('addUtilities()', () => {
   })
 
   test('camel case properties are converted to kebab-case', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2843,7 +2843,7 @@ describe('addUtilities()', () => {
   })
 
   test('custom static utilities support `@apply`', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -2930,7 +2930,7 @@ describe('addUtilities()', () => {
   })
 
   test('supports multiple selector names', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -2973,7 +2973,7 @@ describe('addUtilities()', () => {
   })
 
   test('supports pseudo classes and pseudo elements', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -3016,7 +3016,7 @@ describe('addUtilities()', () => {
   })
 
   test('nests complex utility names', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -3110,7 +3110,7 @@ describe('addUtilities()', () => {
   })
 
   test('prefixes nested class names with the configured theme prefix', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -3164,7 +3164,7 @@ describe('addUtilities()', () => {
   })
 
   test('replaces the class name with variants in nested selectors', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @theme {
@@ -3226,7 +3226,7 @@ describe('addUtilities()', () => {
 describe('matchUtilities()', () => {
   test('custom functional utility', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3311,7 +3311,7 @@ describe('matchUtilities()', () => {
 
   test('custom functional utilities can start with @', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
           @tailwind utilities;
@@ -3353,7 +3353,7 @@ describe('matchUtilities()', () => {
   })
 
   test('custom functional utilities can return an array of rules', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -3396,7 +3396,7 @@ describe('matchUtilities()', () => {
 
   test('custom functional utility with any modifier', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3466,7 +3466,7 @@ describe('matchUtilities()', () => {
 
   test('custom functional utility with known modifier', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3545,7 +3545,7 @@ describe('matchUtilities()', () => {
   describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
     test('implicit color modifier', async () => {
       async function run(candidates: string[]) {
-        let compiled = await compile(
+        const compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
@@ -3600,7 +3600,7 @@ describe('matchUtilities()', () => {
 
     test('no modifiers are supported by the plugins', async () => {
       async function run(candidates: string[]) {
-        let compiled = await compile(
+        const compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
@@ -3638,7 +3638,7 @@ describe('matchUtilities()', () => {
 
     test('invalid named modifier', async () => {
       async function run(candidates: string[]) {
-        let compiled = await compile(
+        const compiled = await compile(
           css`
             @tailwind utilities;
             @plugin "my-plugin";
@@ -3677,7 +3677,7 @@ describe('matchUtilities()', () => {
 
   test('custom functional utilities with different types', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3804,7 +3804,7 @@ describe('matchUtilities()', () => {
 
   test('functional utilities with `type: color` automatically support opacity', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3888,7 +3888,7 @@ describe('matchUtilities()', () => {
 
   test('functional utilities with explicit modifiers', async () => {
     async function run(candidates: string[]) {
-      let compiled = await compile(
+      const compiled = await compile(
         css`
           @plugin "my-plugin";
 
@@ -3947,7 +3947,7 @@ describe('matchUtilities()', () => {
   })
 
   test('functional utilities support `@apply`', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @layer utilities {
@@ -4045,7 +4045,7 @@ describe('matchUtilities()', () => {
   })
 
   test('replaces the class name with variants in nested selectors', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @theme {
@@ -4114,7 +4114,7 @@ describe('matchUtilities()', () => {
 
 describe('addComponents()', () => {
   test('is an alias for addUtilities', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -4182,7 +4182,7 @@ describe('addComponents()', () => {
 
 describe('matchComponents()', () => {
   test('is an alias for matchUtilities', async () => {
-    let compiled = await compile(
+    const compiled = await compile(
       css`
         @plugin "my-plugin";
         @tailwind utilities;
@@ -4227,7 +4227,7 @@ describe('matchComponents()', () => {
 
 describe('prefix()', () => {
   test('is an identity function', async () => {
-    let fn = vi.fn()
+    const fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4250,7 +4250,7 @@ describe('prefix()', () => {
 
 describe('config()', () => {
   test('can return the resolved config when passed no arguments', async () => {
-    let fn = vi.fn()
+    const fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4277,7 +4277,7 @@ describe('config()', () => {
   })
 
   test('can return part of the config', async () => {
-    let fn = vi.fn()
+    const fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4302,7 +4302,7 @@ describe('config()', () => {
   })
 
   test('falls back to default value if requested path does not exist', async () => {
-    let fn = vi.fn()
+    const fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";

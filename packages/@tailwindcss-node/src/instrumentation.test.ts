@@ -3,7 +3,7 @@ import { expect, it } from 'vitest'
 import { Instrumentation } from './instrumentation'
 
 it('should add instrumentation', () => {
-  let I = new Instrumentation()
+  const I = new Instrumentation()
 
   I.start('Foo')
   let x = 1
@@ -36,7 +36,7 @@ it('should add instrumentation', () => {
 })
 
 it('should auto end pending timers when reporting', () => {
-  let I = new Instrumentation()
+  const I = new Instrumentation()
 
   I.start('Foo')
   let x = 1

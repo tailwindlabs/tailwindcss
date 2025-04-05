@@ -113,7 +113,7 @@ async function createServer() {
   }
 
   async function render({ page, htmlClasses, head, body }: PageOptions) {
-    let content = html`
+    const content = html`
       <!doctype html>
       <html lang="en" class="${htmlClasses ?? ''}">
         <head>
@@ -155,9 +155,9 @@ async function createServer() {
 
   app.use(router)
 
-  let workerIndex = Number(process.env.TEST_WORKER_INDEX ?? 0)
+  const workerIndex = Number(process.env.TEST_WORKER_INDEX ?? 0)
 
-  let listener = await listen(toNodeListener(app), {
+  const listener = await listen(toNodeListener(app), {
     port: 3000 + workerIndex,
     showURL: false,
     open: false,

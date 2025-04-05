@@ -24,8 +24,8 @@ async function migrate(
     stylesheet = await Stylesheet.fromRoot(data.root)
 
     if (data.layers) {
-      let meta = { layers: data.layers }
-      let parent = await Stylesheet.fromString('.placeholder {}')
+      const meta = { layers: data.layers }
+      const parent = await Stylesheet.fromString('.placeholder {}')
 
       stylesheet.parents.add({ item: parent, meta })
       parent.children.add({ item: stylesheet, meta })

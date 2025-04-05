@@ -6,12 +6,12 @@ import flattenColorPalette from './flatten-color-palette'
 const css = String.raw
 
 test('Config files can add content', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root' }),
   })
 
@@ -19,12 +19,12 @@ test('Config files can add content', async () => {
 })
 
 test('Config files can change dark mode (media)', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root' }),
   })
 
@@ -39,12 +39,12 @@ test('Config files can change dark mode (media)', async () => {
 })
 
 test('Config files can change dark mode (selector)', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root' }),
   })
 
@@ -59,12 +59,12 @@ test('Config files can change dark mode (selector)', async () => {
 })
 
 test('Config files can change dark mode (variant)', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: { darkMode: ['variant', '&:where(:not(.light))'] },
       base: '/root',
@@ -82,12 +82,12 @@ test('Config files can change dark mode (variant)', async () => {
 })
 
 test('Config files can add plugins', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         plugins: [
@@ -113,12 +113,12 @@ test('Config files can add plugins', async () => {
 })
 
 test('Plugins loaded from config files can contribute to the config', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         plugins: [
@@ -142,12 +142,12 @@ test('Plugins loaded from config files can contribute to the config', async () =
 })
 
 test('Config file presets can contribute to the config', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         presets: [
@@ -171,12 +171,12 @@ test('Config file presets can contribute to the config', async () => {
 })
 
 test('Config files can affect the theme', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -213,14 +213,14 @@ test('Config files can affect the theme', async () => {
 })
 
 test('Variants in CSS overwrite variants from plugins', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
     @custom-variant dark (&:is(.my-dark));
     @custom-variant light (&:is(.my-light));
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         darkMode: ['variant', '&:is(.dark)'],
@@ -253,7 +253,7 @@ describe('theme callbacks', () => {
   test('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --text-base: 0rem;
         --text-base--line-height: 1rem;
@@ -270,7 +270,7 @@ describe('theme callbacks', () => {
       @config "./config.js";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -367,7 +367,7 @@ describe('theme callbacks', () => {
 
 describe('theme overrides order', () => {
   test('user theme > js config > default theme', async () => {
-    let input = css`
+    const input = css`
       @theme default {
         --color-red: red;
       }
@@ -378,7 +378,7 @@ describe('theme overrides order', () => {
       @config "./config.js";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -409,7 +409,7 @@ describe('theme overrides order', () => {
   })
 
   test('user theme > js config > default theme (with nested object)', async () => {
-    let input = css`
+    const input = css`
       @theme default {
         --color-slate-100: #000100;
         --color-slate-200: #000200;
@@ -424,7 +424,7 @@ describe('theme overrides order', () => {
       @plugin "./plugin.js";
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async (id) => {
         if (id.includes('config.js')) {
           return {
@@ -542,7 +542,7 @@ describe('theme overrides order', () => {
 
 describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans` sets `--default-font-family`', async () => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -552,7 +552,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -576,7 +576,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans[1].fontFeatureSettings` sets `--default-font-feature-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -586,7 +586,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -611,7 +611,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans[1].fontVariationSettings` sets `--default-font-variation-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -621,7 +621,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -646,7 +646,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFeatureSettings` and `fontVariationSettings` for `fontFamily.sans` sets `--default-font-feature-settings` and `--default-font-variation-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -656,7 +656,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -685,7 +685,7 @@ describe('default font family compatibility', () => {
   test('overriding `--font-family-sans` in `@theme` without `default` preserves the original `--default-font-*` values', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -698,7 +698,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -725,7 +725,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans` in a config file with an array sets `--default-font-family`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -735,7 +735,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -759,7 +759,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans` in a config file with an unexpected type is ignored', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-font-family: var(--font-family-sans);
         --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
@@ -769,7 +769,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -786,7 +786,7 @@ describe('default font family compatibility', () => {
   })
 
   test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
@@ -796,7 +796,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -820,7 +820,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.mono[1].fontFeatureSettings` sets `--default-mono-font-feature-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
@@ -830,7 +830,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -855,7 +855,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.mono[1].fontVariationSettings` sets `--default-mono-font-variation-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
@@ -865,7 +865,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -890,7 +890,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFeatureSettings` and `fontVariationSettings` for `fontFamily.mono` sets `--default-mono-font-feature-settings` and `--default-mono-font-variation-settings`', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-mono);
         --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
@@ -900,7 +900,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -929,7 +929,7 @@ describe('default font family compatibility', () => {
   test('overriding `--font-family-mono` in `@theme` without `default` preserves the original `--default-mono-font-*` values', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-mono);
         --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
@@ -942,7 +942,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -969,7 +969,7 @@ describe('default font family compatibility', () => {
   test('overriding `fontFamily.mono` in a config file with an unexpected type is ignored', async ({
     expect,
   }) => {
-    let input = css`
+    const input = css`
       @theme default {
         --default-mono-font-family: var(--font-family-mono);
         --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
@@ -979,7 +979,7 @@ describe('default font family compatibility', () => {
       @tailwind utilities;
     `
 
-    let compiler = await compile(input, {
+    const compiler = await compile(input, {
       loadModule: async () => ({
         module: {
           theme: {
@@ -997,12 +997,12 @@ describe('default font family compatibility', () => {
 })
 
 test('creates variants for `data`, `supports`, and `aria` theme options at the same level as the core utility ', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -1086,7 +1086,7 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
 })
 
 test('merges css breakpoints with js config screens', async () => {
-  let input = css`
+  const input = css`
     @theme default {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -1101,7 +1101,7 @@ test('merges css breakpoints with js config screens', async () => {
     @tailwind utilities;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async () => ({
       module: {
         theme: {
@@ -1145,7 +1145,7 @@ test('merges css breakpoints with js config screens', async () => {
 })
 
 test('utilities must be prefixed', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
 
@@ -1192,7 +1192,7 @@ test('utilities must be prefixed', async () => {
 })
 
 test('utilities used in @apply must be prefixed', async () => {
-  let compiler = await compile(
+  const compiler = await compile(
     css`
       @config "./config.js";
 
@@ -1239,7 +1239,7 @@ test('utilities used in @apply must be prefixed', async () => {
 })
 
 test('Prefixes configured in CSS take precedence over those defined in JS configs', async () => {
-  let compiler = await compile(
+  const compiler = await compile(
     css`
       @theme prefix(wat) {
         --color-red: #f00;
@@ -1294,7 +1294,7 @@ test('a prefix must be letters only', async () => {
 })
 
 test('important: `#app`', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
 
@@ -1303,7 +1303,7 @@ test('important: `#app`', async () => {
     }
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async (_, base) => ({
       base,
       module: { important: '#app' },
@@ -1331,7 +1331,7 @@ test('important: `#app`', async () => {
 })
 
 test('important: true', async () => {
-  let input = css`
+  const input = css`
     @tailwind utilities;
     @config "./config.js";
 
@@ -1340,7 +1340,7 @@ test('important: true', async () => {
     }
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadModule: async (_, base) => ({
       base,
       module: { important: true },
@@ -1366,7 +1366,7 @@ test('important: true', async () => {
 })
 
 test('blocklisted candidates are not generated', async () => {
-  let compiler = await compile(
+  const compiler = await compile(
     css`
       @theme reference {
         --color-white: #fff;
@@ -1435,7 +1435,7 @@ test('blocklisted candidates cannot be used with `@apply`', async () => {
 })
 
 test('old theme values are merged with their renamed counterparts in the CSS theme', async () => {
-  let didCallPluginFn = vi.fn()
+  const didCallPluginFn = vi.fn()
 
   await compile(
     css`
@@ -1558,7 +1558,7 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 })
 
 test('handles setting theme keys to null', async () => {
-  let compiler = await compile(
+  const compiler = await compile(
     css`
       @theme default {
         --color-red-50: oklch(0.971 0.013 17.38);

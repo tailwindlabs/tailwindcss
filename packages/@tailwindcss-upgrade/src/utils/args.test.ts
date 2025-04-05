@@ -86,7 +86,7 @@ it('should convert the incoming value to the correct type', () => {
 })
 
 it('should be possible to provide multiple types, and convert the value to that type', () => {
-  let options = {
+  const options = {
     '--retries': { type: 'boolean | number | string', description: 'Retries' },
   } satisfies Arg
 

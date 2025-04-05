@@ -4,9 +4,9 @@ import { rewriteUrls } from './urls'
 const css = String.raw
 
 test('URLs can be rewritten', async () => {
-  let root = '/root'
+  const root = '/root'
 
-  let result = await rewriteUrls({
+  const result = await rewriteUrls({
     root,
     base: '/root/foo/bar',
     // prettier-ignore

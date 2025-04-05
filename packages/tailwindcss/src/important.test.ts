@@ -6,13 +6,13 @@ const css = String.raw
 
 test('Utilities can be wrapped in a selector', async () => {
   // This is the v4 equivalent of `important: "#app"` from v3
-  let input = css`
+  const input = css`
     #app {
       @tailwind utilities;
     }
   `
 
-  let compiler = await compile(input)
+  const compiler = await compile(input)
 
   expect(compiler.build(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     "#app {
@@ -33,11 +33,11 @@ test('Utilities can be wrapped in a selector', async () => {
 
 test('Utilities can be marked with important', async () => {
   // This is the v4 equivalent of `important: true` from v3
-  let input = css`
+  const input = css`
     @import 'tailwindcss/utilities' important;
   `
 
-  let compiler = await compile(input, {
+  const compiler = await compile(input, {
     loadStylesheet: async (id: string, base: string) => ({
       base,
       content: '@tailwind utilities;',
@@ -62,7 +62,7 @@ test('Utilities can be marked with important', async () => {
 test('Utilities can be wrapped with a selector and marked as important', async () => {
   // This does not have a direct equivalent in v3 but works as a consequence of
   // the new APIs
-  let input = css`
+  const input = css`
     @media important {
       #app {
         @tailwind utilities;
@@ -70,7 +70,7 @@ test('Utilities can be wrapped with a selector and marked as important', async (
     }
   `
 
-  let compiler = await compile(input)
+  const compiler = await compile(input)
 
   expect(compiler.build(['underline', 'hover:line-through'])).toMatchInlineSnapshot(`
     "#app {

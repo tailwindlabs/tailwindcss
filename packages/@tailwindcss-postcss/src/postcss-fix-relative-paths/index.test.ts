@@ -7,12 +7,12 @@ import fixRelativePathsPlugin from '.'
 
 describe('fixRelativePathsPlugin', () => {
   test('rewrites @source and @plugin to be relative to the initial css file', async () => {
-    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'index.css')
-    let css = fs.readFileSync(cssPath, 'utf-8')
+    const cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'index.css')
+    const css = fs.readFileSync(cssPath, 'utf-8')
 
-    let processor = postcss([atImport(), fixRelativePathsPlugin()])
+    const processor = postcss([atImport(), fixRelativePathsPlugin()])
 
-    let result = await processor.process(css, { from: cssPath })
+    const result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@source "../../example-project/src/**/*.ts";
@@ -23,12 +23,12 @@ describe('fixRelativePathsPlugin', () => {
   })
 
   test('should not rewrite non-relative paths', async () => {
-    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'invalid.css')
-    let css = fs.readFileSync(cssPath, 'utf-8')
+    const cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'invalid.css')
+    const css = fs.readFileSync(cssPath, 'utf-8')
 
-    let processor = postcss([atImport(), fixRelativePathsPlugin()])
+    const processor = postcss([atImport(), fixRelativePathsPlugin()])
 
-    let result = await processor.process(css, { from: cssPath })
+    const result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@plugin "/absolute/paths";
@@ -39,12 +39,18 @@ describe('fixRelativePathsPlugin', () => {
   })
 
   test('should return relative paths even if the file is resolved in the same basedir as the root stylesheet', async () => {
-    let cssPath = path.join(__dirname, 'fixtures', 'external-import', 'src', 'plugins-in-root.css')
-    let css = fs.readFileSync(cssPath, 'utf-8')
+    const cssPath = path.join(
+      __dirname,
+      'fixtures',
+      'external-import',
+      'src',
+      'plugins-in-root.css',
+    )
+    const css = fs.readFileSync(cssPath, 'utf-8')
 
-    let processor = postcss([atImport(), fixRelativePathsPlugin()])
+    const processor = postcss([atImport(), fixRelativePathsPlugin()])
 
-    let result = await processor.process(css, { from: cssPath })
+    const result = await processor.process(css, { from: cssPath })
 
     expect(result.css.trim()).toMatchInlineSnapshot(`
       "@plugin './plugin-in-sibling.ts';
