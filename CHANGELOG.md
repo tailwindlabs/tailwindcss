@@ -9,9 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Show warning when using unsupported bare value data type in `--value(…)` ([#17464](https://github.com/tailwindlabs/tailwindcss/pull/17464))
 - Ensure `color-mix(…)` polyfills do not cause used CSS variables to be removed ([#17555](https://github.com/tailwindlabs/tailwindcss/pull/17555))
+
+## [4.1.3] - 2025-04-04
+
+### Fixed
+
+- Show warning when using unsupported bare value data type in `--value(…)` ([#17464](https://github.com/tailwindlabs/tailwindcss/pull/17464))
 - PostCSS: Resolve an issue where changes to the input CSS file showed outdated content when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
+- PostCSS: Ensure changes to the input CSS file don't generate stale output when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
+- Ensure classes are detected in Ruby's `%w` syntax in Slim templates ([#17557](https://github.com/tailwindlabs/tailwindcss/pull/17557))
 
 ## [4.1.2] - 2025-04-03
 
@@ -3636,7 +3643,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...HEAD
+[4.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...v4.1.3
 [4.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.17...v4.1.0
