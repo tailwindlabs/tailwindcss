@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Show warning when using unsupported bare value data type in `--value(…)` ([#17464](https://github.com/tailwindlabs/tailwindcss/pull/17464))
-- PostCSS: Resolve an issue where changes to the input CSS file showed outdated content when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
 - PostCSS: Ensure changes to the input CSS file don't generate stale output when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
 - Ensure classes are detected in Ruby's `%w` syntax in Slim templates ([#17557](https://github.com/tailwindlabs/tailwindcss/pull/17557))
 
