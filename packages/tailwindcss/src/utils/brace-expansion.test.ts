@@ -62,7 +62,7 @@ describe('expand(…)', () => {
 
     // Should not try to expand ranges with decimals
     ['{1.1..2.2}', ['1.1..2.2']],
-  ])('should expand %s', (input, expected) => {
+  ])('should expand %s (%#)', (input, expected) => {
     expect(expand(input).sort()).toEqual(expected.sort())
   })
 
