@@ -15,7 +15,9 @@ pub static RULES: sync::LazyLock<Gitignore> = sync::LazyLock::new(|| {
 
     builder.add_line(None, &IGNORED_CONTENT_DIRS_GLOB).unwrap();
     builder.add_line(None, &IGNORED_EXTENSIONS_GLOB).unwrap();
-    builder.add_line(None, &BINARY_EXTENSIONS_GLOB).unwrap();
+    for glob in BINARY_EXTENSIONS_GLOB.clone() {
+        builder.add_line(None, &glob).unwrap();
+    }
     builder.add_line(None, &IGNORED_FILES_GLOB).unwrap();
 
     builder.build().unwrap()
@@ -42,15 +44,27 @@ static IGNORED_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| 
     )
 });
 
-pub static BINARY_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
-    format!(
-        "*.{{{}}}",
-        include_str!("fixtures/binary-extensions.txt")
-            .trim()
-            .lines()
-            .collect::<Vec<&str>>()
-            .join(",")
-    )
+pub static BINARY_EXTENSIONS_GLOB: sync::LazyLock<Vec<String>> = sync::LazyLock::new(|| {
+    vec![
+        // Ignore the extensions
+        format!(
+            "*.{{{}}}",
+            include_str!("fixtures/binary-extensions.txt")
+                .trim()
+                .lines()
+                .collect::<Vec<&str>>()
+                .join(","),
+        ),
+        // Do not ignore folders that happen to end with a binary extension
+        format!(
+            "!*.{{{}}}/",
+            include_str!("fixtures/binary-extensions.txt")
+                .trim()
+                .lines()
+                .collect::<Vec<&str>>()
+                .join(","),
+        ),
+    ]
 });
 
 static IGNORED_FILES_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {

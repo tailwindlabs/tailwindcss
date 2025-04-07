@@ -564,10 +564,9 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
                     .insert(format!("!{}", "/**/*"));
 
                 // External sources should still disallow binary extensions:
-                ignores
-                    .entry(base)
-                    .or_default()
-                    .insert(BINARY_EXTENSIONS_GLOB.clone());
+                for glob in BINARY_EXTENSIONS_GLOB.clone() {
+                    ignores.entry(base).or_default().insert(glob);
+                }
             }
         }
     }
