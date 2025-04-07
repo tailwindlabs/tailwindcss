@@ -266,14 +266,8 @@ export function optimizeAst(
 ) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
-  let cssThemeVariables = new DefaultMap<
-    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
-    Set<Declaration>
-  >(() => new Set())
-  let colorMixDeclarations = new DefaultMap<
-    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
-    Set<Declaration>
-  >(() => new Set())
+  let cssThemeVariables = new DefaultMap<AstNode[], Set<Declaration>>(() => new Set())
+  let colorMixDeclarations = new DefaultMap<AstNode[], Set<Declaration>>(() => new Set())
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
 
@@ -284,7 +278,7 @@ export function optimizeAst(
 
   function transform(
     node: AstNode,
-    parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    parent: AstNode[],
     context: Record<string, string | boolean> = {},
     depth = 0,
   ) {
