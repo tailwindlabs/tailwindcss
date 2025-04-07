@@ -311,6 +311,21 @@ mod scanner {
         assert_eq!(normalized_sources, vec!["**/*"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/17569
+    #[test]
+    fn it_should_not_ignore_folders_that_end_with_a_binary_extension() {
+        let ScanResult {
+            files,
+            globs,
+            normalized_sources,
+            ..
+        } = scan(&[("some.pages/index.html", "content-['some.pages/index.html']")]);
+
+        assert_eq!(files, vec!["some.pages/index.html"]);
+        assert_eq!(globs, vec!["*", "some.pages/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
+        assert_eq!(normalized_sources, vec!["**/*"]);
+    }
+
     #[test]
     fn it_should_ignore_known_extensions() {
         let ScanResult {
