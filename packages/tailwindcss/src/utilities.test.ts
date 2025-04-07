@@ -1319,26 +1319,26 @@ test('row-start', async () => {
   expect(
     await run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']),
   ).toMatchInlineSnapshot(`
-      ".-row-start-4 {
-        grid-row-start: calc(4 * -1);
-      }
+    ".-row-start-4 {
+      grid-row-start: calc(4 * -1);
+    }
 
-      .row-start-4 {
-        grid-row-start: 4;
-      }
+    .row-start-4 {
+      grid-row-start: 4;
+    }
 
-      .row-start-99 {
-        grid-row-start: 99;
-      }
+    .row-start-99 {
+      grid-row-start: 99;
+    }
 
-      .row-start-\\[123\\] {
-        grid-row-start: 123;
-      }
+    .row-start-\\[123\\] {
+      grid-row-start: 123;
+    }
 
-      .row-start-auto {
-        grid-row-start: auto;
-      }"
-    `)
+    .row-start-auto {
+      grid-row-start: auto;
+    }"
+  `)
   expect(
     await run([
       'row-start',
@@ -4437,22 +4437,22 @@ test('translate-3d', async () => {
 test('rotate', async () => {
   expect(await run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
     .toMatchInlineSnapshot(`
-    ".-rotate-45 {
-      rotate: -45deg;
-    }
+      ".-rotate-45 {
+        rotate: -45deg;
+      }
 
-    .rotate-45 {
-      rotate: 45deg;
-    }
+      .rotate-45 {
+        rotate: 45deg;
+      }
 
-    .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
-      rotate: .3 .7 1 45deg;
-    }
+      .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
+        rotate: .3 .7 1 45deg;
+      }
 
-    .rotate-\\[123deg\\] {
-      rotate: 123deg;
-    }"
-  `)
+      .rotate-\\[123deg\\] {
+        rotate: 123deg;
+      }"
+    `)
   expect(
     await run([
       'rotate',
@@ -5316,42 +5316,42 @@ test('transform', async () => {
       'backface-hidden',
     ]),
   ).toMatchInlineSnapshot(`
-      ".backface-hidden {
-        backface-visibility: hidden;
-      }
+    ".backface-hidden {
+      backface-visibility: hidden;
+    }
 
-      .backface-visible {
-        backface-visibility: visible;
-      }
+    .backface-visible {
+      backface-visibility: visible;
+    }
 
-      .transform-3d {
-        transform-style: preserve-3d;
-      }
+    .transform-3d {
+      transform-style: preserve-3d;
+    }
 
-      .transform-border {
-        transform-box: border-box;
-      }
+    .transform-border {
+      transform-box: border-box;
+    }
 
-      .transform-content {
-        transform-box: content-box;
-      }
+    .transform-content {
+      transform-box: content-box;
+    }
 
-      .transform-fill {
-        transform-box: fill-box;
-      }
+    .transform-fill {
+      transform-box: fill-box;
+    }
 
-      .transform-flat {
-        transform-style: flat;
-      }
+    .transform-flat {
+      transform-style: flat;
+    }
 
-      .transform-stroke {
-        transform-box: stroke-box;
-      }
+    .transform-stroke {
+      transform-box: stroke-box;
+    }
 
-      .transform-view {
-        transform-box: view-box;
-      }"
-    `)
+    .transform-view {
+      transform-box: view-box;
+    }"
+  `)
   expect(
     await run([
       '-transform',
@@ -5862,26 +5862,26 @@ test('touch-pinch-zoom', async () => {
 test('select', async () => {
   expect(await run(['select-none', 'select-text', 'select-all', 'select-auto']))
     .toMatchInlineSnapshot(`
-    ".select-all {
-      -webkit-user-select: all;
-      user-select: all;
-    }
+      ".select-all {
+        -webkit-user-select: all;
+        user-select: all;
+      }
 
-    .select-auto {
-      -webkit-user-select: auto;
-      user-select: auto;
-    }
+      .select-auto {
+        -webkit-user-select: auto;
+        user-select: auto;
+      }
 
-    .select-none {
-      -webkit-user-select: none;
-      user-select: none;
-    }
+      .select-none {
+        -webkit-user-select: none;
+        user-select: none;
+      }
 
-    .select-text {
-      -webkit-user-select: text;
-      user-select: text;
-    }"
-  `)
+      .select-text {
+        -webkit-user-select: text;
+        user-select: text;
+      }"
+    `)
   expect(
     await run([
       '-select-none',
@@ -6006,22 +6006,22 @@ test('--tw-scroll-snap-strictness', async () => {
 test('scroll-snap-align', async () => {
   expect(await run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center']))
     .toMatchInlineSnapshot(`
-    ".snap-align-none {
-      scroll-snap-align: none;
-    }
+      ".snap-align-none {
+        scroll-snap-align: none;
+      }
 
-    .snap-center {
-      scroll-snap-align: center;
-    }
+      .snap-center {
+        scroll-snap-align: center;
+      }
 
-    .snap-end {
-      scroll-snap-align: end;
-    }
+      .snap-end {
+        scroll-snap-align: end;
+      }
 
-    .snap-start {
-      scroll-snap-align: start;
-    }"
-  `)
+      .snap-start {
+        scroll-snap-align: start;
+      }"
+    `)
   expect(
     await run([
       '-snap-align-none',
@@ -7375,22 +7375,22 @@ test('grid-rows', async () => {
 test('flex-direction', async () => {
   expect(await run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
     .toMatchInlineSnapshot(`
-    ".flex-col {
-      flex-direction: column;
-    }
+      ".flex-col {
+        flex-direction: column;
+      }
 
-    .flex-col-reverse {
-      flex-direction: column-reverse;
-    }
+      .flex-col-reverse {
+        flex-direction: column-reverse;
+      }
 
-    .flex-row {
-      flex-direction: row;
-    }
+      .flex-row {
+        flex-direction: row;
+      }
 
-    .flex-row-reverse {
-      flex-direction: row-reverse;
-    }"
-  `)
+      .flex-row-reverse {
+        flex-direction: row-reverse;
+      }"
+    `)
   expect(
     await run([
       '-flex-row',
@@ -8363,31 +8363,31 @@ test('divide-style', async () => {
   expect(
     await run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']),
   ).toMatchInlineSnapshot(`
-      ":where(.divide-dashed > :not(:last-child)) {
-        --tw-border-style: dashed;
-        border-style: dashed;
-      }
+    ":where(.divide-dashed > :not(:last-child)) {
+      --tw-border-style: dashed;
+      border-style: dashed;
+    }
 
-      :where(.divide-dotted > :not(:last-child)) {
-        --tw-border-style: dotted;
-        border-style: dotted;
-      }
+    :where(.divide-dotted > :not(:last-child)) {
+      --tw-border-style: dotted;
+      border-style: dotted;
+    }
 
-      :where(.divide-double > :not(:last-child)) {
-        --tw-border-style: double;
-        border-style: double;
-      }
+    :where(.divide-double > :not(:last-child)) {
+      --tw-border-style: double;
+      border-style: double;
+    }
 
-      :where(.divide-none > :not(:last-child)) {
-        --tw-border-style: none;
-        border-style: none;
-      }
+    :where(.divide-none > :not(:last-child)) {
+      --tw-border-style: none;
+      border-style: none;
+    }
 
-      :where(.divide-solid > :not(:last-child)) {
-        --tw-border-style: solid;
-        border-style: solid;
-      }"
-    `)
+    :where(.divide-solid > :not(:last-child)) {
+      --tw-border-style: solid;
+      border-style: solid;
+    }"
+  `)
   expect(
     await run([
       'divide',
@@ -9274,18 +9274,18 @@ test('overflow-y', async () => {
 test('overscroll', async () => {
   expect(await run(['overscroll-auto', 'overscroll-contain', 'overscroll-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-auto {
-      overscroll-behavior: auto;
-    }
+      ".overscroll-auto {
+        overscroll-behavior: auto;
+      }
 
-    .overscroll-contain {
-      overscroll-behavior: contain;
-    }
+      .overscroll-contain {
+        overscroll-behavior: contain;
+      }
 
-    .overscroll-none {
-      overscroll-behavior: none;
-    }"
-  `)
+      .overscroll-none {
+        overscroll-behavior: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll',
@@ -9302,18 +9302,18 @@ test('overscroll', async () => {
 test('overscroll-x', async () => {
   expect(await run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-x-auto {
-      overscroll-behavior-x: auto;
-    }
+      ".overscroll-x-auto {
+        overscroll-behavior-x: auto;
+      }
 
-    .overscroll-x-contain {
-      overscroll-behavior-x: contain;
-    }
+      .overscroll-x-contain {
+        overscroll-behavior-x: contain;
+      }
 
-    .overscroll-x-none {
-      overscroll-behavior-x: none;
-    }"
-  `)
+      .overscroll-x-none {
+        overscroll-behavior-x: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll-x',
@@ -9330,18 +9330,18 @@ test('overscroll-x', async () => {
 test('overscroll-y', async () => {
   expect(await run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
     .toMatchInlineSnapshot(`
-    ".overscroll-y-auto {
-      overscroll-behavior-y: auto;
-    }
+      ".overscroll-y-auto {
+        overscroll-behavior-y: auto;
+      }
 
-    .overscroll-y-contain {
-      overscroll-behavior-y: contain;
-    }
+      .overscroll-y-contain {
+        overscroll-behavior-y: contain;
+      }
 
-    .overscroll-y-none {
-      overscroll-behavior-y: none;
-    }"
-  `)
+      .overscroll-y-none {
+        overscroll-behavior-y: none;
+      }"
+    `)
   expect(
     await run([
       'overscroll-y',
@@ -9483,22 +9483,22 @@ test('whitespace', async () => {
 test('text-wrap', async () => {
   expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
     .toMatchInlineSnapshot(`
-    ".text-balance {
-      text-wrap: balance;
-    }
+      ".text-balance {
+        text-wrap: balance;
+      }
 
-    .text-nowrap {
-      text-wrap: nowrap;
-    }
+      .text-nowrap {
+        text-wrap: nowrap;
+      }
 
-    .text-pretty {
-      text-wrap: pretty;
-    }
+      .text-pretty {
+        text-wrap: pretty;
+      }
 
-    .text-wrap {
-      text-wrap: wrap;
-    }"
-  `)
+      .text-wrap {
+        text-wrap: wrap;
+      }"
+    `)
   expect(
     await run([
       '-text-wrap',
@@ -18604,18 +18604,18 @@ test('bg-clip', async () => {
 test('bg-origin', async () => {
   expect(await run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
     .toMatchInlineSnapshot(`
-    ".bg-origin-border {
-      background-origin: border-box;
-    }
+      ".bg-origin-border {
+        background-origin: border-box;
+      }
 
-    .bg-origin-content {
-      background-origin: content-box;
-    }
+      .bg-origin-content {
+        background-origin: content-box;
+      }
 
-    .bg-origin-padding {
-      background-origin: padding-box;
-    }"
-  `)
+      .bg-origin-padding {
+        background-origin: padding-box;
+      }"
+    `)
   expect(
     await run([
       'bg-origin',
@@ -20307,22 +20307,22 @@ test('font-stretch', async () => {
 test('text-decoration-line', async () => {
   expect(await run(['underline', 'overline', 'line-through', 'no-underline']))
     .toMatchInlineSnapshot(`
-    ".line-through {
-      text-decoration-line: line-through;
-    }
+      ".line-through {
+        text-decoration-line: line-through;
+      }
 
-    .no-underline {
-      text-decoration-line: none;
-    }
+      .no-underline {
+        text-decoration-line: none;
+      }
 
-    .overline {
-      text-decoration-line: overline;
-    }
+      .overline {
+        text-decoration-line: overline;
+      }
 
-    .underline {
-      text-decoration-line: underline;
-    }"
-  `)
+      .underline {
+        text-decoration-line: underline;
+      }"
+    `)
   expect(
     await run([
       '-underline',
@@ -22158,14 +22158,14 @@ test('content', async () => {
 test('forced-color-adjust', async () => {
   expect(await run(['forced-color-adjust-none', 'forced-color-adjust-auto']))
     .toMatchInlineSnapshot(`
-    ".forced-color-adjust-auto {
-      forced-color-adjust: auto;
-    }
+      ".forced-color-adjust-auto {
+        forced-color-adjust: auto;
+      }
 
-    .forced-color-adjust-none {
-      forced-color-adjust: none;
-    }"
-  `)
+      .forced-color-adjust-none {
+        forced-color-adjust: none;
+      }"
+    `)
   expect(
     await run([
       'forced',
@@ -26588,22 +26588,22 @@ describe('custom utilities', () => {
 
       expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
         .toMatchInlineSnapshot(`
-        ".example-0\\.5 {
-          --value-as-number: .5;
-        }
+          ".example-0\\.5 {
+            --value-as-number: .5;
+          }
 
-        .example-1 {
-          --value-as-number: 1;
-        }
+          .example-1 {
+            --value-as-number: 1;
+          }
 
-        .example-2\\/3 {
-          --value-as-ratio: 2 / 3;
-        }
+          .example-2\\/3 {
+            --value-as-ratio: 2 / 3;
+          }
 
-        .example-20\\% {
-          --value-as-percentage: 20%;
-        }"
-      `)
+          .example-20\\% {
+            --value-as-percentage: 20%;
+          }"
+        `)
       expect(
         await compileCss(input, [
           'example-1.23',

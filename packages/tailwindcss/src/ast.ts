@@ -266,10 +266,8 @@ export function optimizeAst(
 ) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
-  let cssThemeVariables = new DefaultMap<
-    Extract<AstNode, { nodes: AstNode[] }>['nodes'],
-    Set<Declaration>
-  >(() => new Set())
+  let cssThemeVariables = new DefaultMap<AstNode[], Set<Declaration>>(() => new Set())
+  let colorMixDeclarations = new DefaultMap<AstNode[], Set<Declaration>>(() => new Set())
   let keyframes = new Set<AtRule>()
   let usedKeyframeNames = new Set()
 
@@ -280,7 +278,7 @@ export function optimizeAst(
 
   function transform(
     node: AstNode,
-    parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
+    parent: AstNode[],
     context: Record<string, string | boolean> = {},
     depth = 0,
   ) {
@@ -326,71 +324,7 @@ export function optimizeAst(
       // Create fallback values for usages of the `color-mix(…)` function that reference variables
       // found in the theme config.
       if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
-        let ast = ValueParser.parse(node.value)
-
-        let requiresPolyfill = false
-        ValueParser.walk(ast, (node, { replaceWith }) => {
-          if (node.kind !== 'function' || node.value !== 'color-mix') return
-
-          let containsUnresolvableVars = false
-          let containsCurrentcolor = false
-          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
-            if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
-              containsCurrentcolor = true
-              requiresPolyfill = true
-              return
-            }
-            if (node.kind !== 'function' || node.value !== 'var') return
-            let firstChild = node.nodes[0]
-            if (!firstChild || firstChild.kind !== 'word') return
-
-            requiresPolyfill = true
-
-            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
-            if (!inlinedColor) {
-              containsUnresolvableVars = true
-              return
-            }
-
-            replaceWith({ kind: 'word', value: inlinedColor })
-          })
-
-          if (containsUnresolvableVars || containsCurrentcolor) {
-            let separatorIndex = node.nodes.findIndex(
-              (node) => node.kind === 'separator' && node.value.trim().includes(','),
-            )
-            if (separatorIndex === -1) return
-            let firstColorValue =
-              node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
-            if (!firstColorValue) return
-            replaceWith(firstColorValue)
-          } else if (requiresPolyfill) {
-            // Change the colorspace to `srgb` since the fallback values should not be represented as
-            // `oklab(…)` functions again as their support in Safari <16 is very limited.
-            let colorspace = node.nodes[2]
-            if (
-              colorspace.kind === 'word' &&
-              (colorspace.value === 'oklab' ||
-                colorspace.value === 'oklch' ||
-                colorspace.value === 'lab' ||
-                colorspace.value === 'lch')
-            ) {
-              colorspace.value = 'srgb'
-            }
-          }
-        })
-
-        if (requiresPolyfill) {
-          let fallback = {
-            ...node,
-            value: ValueParser.toCss(ast),
-          }
-          let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [node])
-
-          parent.push(fallback, colorMixQuery)
-
-          return
-        }
+        colorMixDeclarations.get(parent).add(node)
       }
 
       parent.push(node)
@@ -595,6 +529,74 @@ export function optimizeAst(
   newAst = newAst.concat(atRoots)
 
   // Fallbacks
+  // Create fallback values for usages of the `color-mix(…)` function that reference variables
+  // found in the theme config.
+  if (polyfills & Polyfills.ColorMix) {
+    for (let [parent, declarations] of colorMixDeclarations) {
+      for (let declaration of declarations) {
+        let idx = parent.indexOf(declaration)
+        // If the declaration is no longer present, we don't need to create a polyfill anymore
+        if (idx === -1 || declaration.value == null) continue
+
+        let ast = ValueParser.parse(declaration.value)
+        let requiresPolyfill = false
+        ValueParser.walk(ast, (node, { replaceWith }) => {
+          if (node.kind !== 'function' || node.value !== 'color-mix') return
+          let containsUnresolvableVars = false
+          let containsCurrentcolor = false
+          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+            if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
+              containsCurrentcolor = true
+              requiresPolyfill = true
+              return
+            }
+            if (node.kind !== 'function' || node.value !== 'var') return
+            let firstChild = node.nodes[0]
+            if (!firstChild || firstChild.kind !== 'word') return
+            requiresPolyfill = true
+            let inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+            if (!inlinedColor) {
+              containsUnresolvableVars = true
+              return
+            }
+            replaceWith({ kind: 'word', value: inlinedColor })
+          })
+          if (containsUnresolvableVars || containsCurrentcolor) {
+            let separatorIndex = node.nodes.findIndex(
+              (node) => node.kind === 'separator' && node.value.trim().includes(','),
+            )
+            if (separatorIndex === -1) return
+            let firstColorValue =
+              node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
+            if (!firstColorValue) return
+            replaceWith(firstColorValue)
+          } else if (requiresPolyfill) {
+            // Change the colorspace to `srgb` since the fallback values should not be represented as
+            // `oklab(…)` functions again as their support in Safari <16 is very limited.
+            let colorspace = node.nodes[2]
+            if (
+              colorspace.kind === 'word' &&
+              (colorspace.value === 'oklab' ||
+                colorspace.value === 'oklch' ||
+                colorspace.value === 'lab' ||
+                colorspace.value === 'lch')
+            ) {
+              colorspace.value = 'srgb'
+            }
+          }
+        })
+        if (!requiresPolyfill) continue
+
+        let fallback = {
+          ...declaration,
+          value: ValueParser.toCss(ast),
+        }
+        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [declaration])
+        parent.splice(idx, 1, fallback, colorMixQuery)
+      }
+    }
+  }
+
   if (polyfills & Polyfills.AtProperty) {
     let fallbackAst = []
 

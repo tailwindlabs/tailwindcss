@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure `color-mix(…)` polyfills do not cause used CSS variables to be removed ([#17555](https://github.com/tailwindlabs/tailwindcss/pull/17555))
 
 ## [4.1.3] - 2025-04-04
 
