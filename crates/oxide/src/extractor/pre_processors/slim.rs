@@ -56,6 +56,28 @@ impl PreProcessor for Slim {
                     }
                 }
 
+                // Handle Ruby syntax with `%w[]` arrays embedded in Slim directly.
+                //
+                // E.g.:
+                //
+                // ```
+                // div [
+                //   class=%w[bg-blue-500 w-10 h-10]
+                // ]
+                // ```
+                b'%' if matches!(cursor.next, b'w' | b'W')
+                    && matches!(cursor.input.get(cursor.pos + 2), Some(b'[' | b'(' | b'{')) =>
+                {
+                    result[cursor.pos] = b' '; // Replace `%`
+                    cursor.advance();
+                    result[cursor.pos] = b' '; // Replace `w`
+                    cursor.advance();
+                    result[cursor.pos] = b' '; // Replace `[` or `(` or `{`
+                    bracket_stack.push(cursor.curr);
+                    cursor.advance(); // Move past the bracket
+                    continue;
+                }
+
                 // Any `[` preceded by an alphanumeric value will not be part of a candidate.
                 //
                 // E.g.:
@@ -280,5 +302,30 @@ mod tests {
               .flex.items-center
         "#;
         Slim::test_extract_contains(input, vec!["flex", "items-center"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17542
+    #[test]
+    fn test_embedded_ruby_percent_w_extraction() {
+        let input = r#"
+            div[
+              class=%w[bg-blue-500 w-10 h-10]
+            ]
+            div[
+              class=%w[w-10 bg-green-500 h-10]
+            ]
+        "#;
+
+        let expected = r#"
+            div 
+              class=   bg-blue-500 w-10 h-10]
+            ]
+            div 
+              class=   w-10 bg-green-500 h-10]
+            ]
+        "#;
+
+        Slim::test(input, expected);
+        Slim::test_extract_contains(input, vec!["bg-blue-500", "bg-green-500", "w-10", "h-10"]);
     }
 }

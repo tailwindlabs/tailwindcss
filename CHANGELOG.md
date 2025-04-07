@@ -7,12 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.3] - 2025-04-04
+
 ### Fixed
 
-- Don't rely on `@layer base` for the `@property` polyfills ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
-- Fix multi-value inset shadow ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
-- Fix `drop-shadow` utility ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
-- Fix `drop-shadow-*` utilities that use multiple shadows in `@theme inline` ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
+- Show warning when using unsupported bare value data type in `--value(…)` ([#17464](https://github.com/tailwindlabs/tailwindcss/pull/17464))
+- PostCSS: Ensure changes to the input CSS file don't generate stale output when using Turbopack ([#17554](https://github.com/tailwindlabs/tailwindcss/pull/17554))
+- Ensure classes are detected in Ruby's `%w` syntax in Slim templates ([#17557](https://github.com/tailwindlabs/tailwindcss/pull/17557))
+
+## [4.1.2] - 2025-04-03
+
+### Fixed
+
+- Don't rely on the presence of `@layer base` to polyfill `@property` ([#17506](https://github.com/tailwindlabs/tailwindcss/pull/17506))
+- Support setting multiple inset shadows as arbitrary values ([#17523](https://github.com/tailwindlabs/tailwindcss/pull/17523))
+- Fix `drop-shadow-*` utilities that are defined with multiple shadows ([#17515](https://github.com/tailwindlabs/tailwindcss/pull/17515))
+- PostCSS: Fix race condition when two changes are queued concurrently ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
+- PostCSS: Ensure files containing `@tailwind utilities` are processed ([#17514](https://github.com/tailwindlabs/tailwindcss/pull/17514))
+- Ensure the `color-mix(…)` polyfill creates fallbacks even when using colors that cannot be statically analyzed ([#17513](https://github.com/tailwindlabs/tailwindcss/pull/17513))
+- Fix slow incremental builds with `@tailwindcss/vite` and `@tailwindcss/postscss` (especially on Windows) ([#17511](https://github.com/tailwindlabs/tailwindcss/pull/17511))
+- Vite: Fix missing CSS file in Qwik setups ([#17533](https://github.com/tailwindlabs/tailwindcss/pull/17533))
 
 ## [4.1.1] - 2025-04-02
 
@@ -3624,7 +3640,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...HEAD
+[4.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...v4.1.3
+[4.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.17...v4.1.0
 [4.0.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.16...v4.0.17

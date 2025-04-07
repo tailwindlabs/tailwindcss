@@ -93,7 +93,7 @@ pub struct Scanner {
     dirs: Vec<PathBuf>,
 
     /// All generated globs, used for setting up watchers
-    globs: Vec<GlobEntry>,
+    globs: Option<Vec<GlobEntry>>,
 
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
@@ -296,16 +296,24 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     pub fn get_globs(&mut self) -> Vec<GlobEntry> {
+        if let Some(globs) = &self.globs {
+            return globs.clone();
+        }
+
         self.scan_sources();
 
+        let mut globs = vec![];
         for source in self.sources.iter() {
             match source {
                 SourceEntry::Auto { base } | SourceEntry::External { base } => {
-                    let globs = resolve_globs((base).to_path_buf(), &self.dirs, &self.extensions);
-                    self.globs.extend(globs);
+                    globs.extend(resolve_globs(
+                        base.to_path_buf(),
+                        &self.dirs,
+                        &self.extensions,
+                    ));
                 }
                 SourceEntry::Pattern { base, pattern } => {
-                    self.globs.push(GlobEntry {
+                    globs.push(GlobEntry {
                         base: base.to_string_lossy().to_string(),
                         pattern: pattern.to_string(),
                     });
@@ -315,13 +323,16 @@ impl Scanner {
         }
 
         // Re-optimize the globs to reduce the number of patterns we have to scan.
-        self.globs = optimize_patterns(&self.globs);
+        globs = optimize_patterns(&globs);
 
-        self.globs.clone()
+        // Track the globs for subsequent calls
+        self.globs = Some(globs.clone());
+
+        globs
     }
 
     #[tracing::instrument(skip_all)]
-    pub fn get_normalized_sources(&mut self) -> Vec<GlobEntry> {
+    pub fn get_normalized_sources(&self) -> Vec<GlobEntry> {
         self.sources
             .iter()
             .filter_map(|source| match source {

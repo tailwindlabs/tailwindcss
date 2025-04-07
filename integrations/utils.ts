@@ -15,6 +15,7 @@ const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((na
 
 interface SpawnedProcess {
   dispose: () => void
+  flush: () => void
   onStdout: (predicate: (message: string) => boolean) => Promise<void>
   onStderr: (predicate: (message: string) => boolean) => Promise<void>
 }
@@ -253,6 +254,13 @@ export function test(
 
           return {
             dispose,
+            flush() {
+              stdoutActors.splice(0)
+              stderrActors.splice(0)
+
+              stdoutMessages.splice(0)
+              stderrMessages.splice(0)
+            },
             onStdout(predicate: (message: string) => boolean) {
               return new Promise<void>((resolve) => {
                 stdoutActors.push({ predicate, resolve })
@@ -504,6 +512,7 @@ export let css = dedent
 export let html = dedent
 export let ts = dedent
 export let js = dedent
+export let jsx = dedent
 export let json = dedent
 export let yaml = dedent
 export let txt = dedent
@@ -589,6 +598,8 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
 async function gracefullyRemove(dir: string) {
   // Skip removing the directory in CI because it can stall on Windows
   if (!process.env.CI) {
-    await fs.rm(dir, { recursive: true, force: true })
+    await fs.rm(dir, { recursive: true, force: true }).catch((error) => {
+      console.log(`Failed to remove ${dir}`, error)
+    })
   }
 }

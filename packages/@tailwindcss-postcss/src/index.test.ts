@@ -1,5 +1,5 @@
 import dedent from 'dedent'
-import { mkdir, mkdtemp, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'path'
 import postcss from 'postcss'
@@ -356,4 +356,89 @@ test('runs `Once` plugins in the right order', async () => {
       color: red;
     }"
   `)
+})
+
+describe('concurrent builds', () => {
+  let dir: string
+  beforeEach(async () => {
+    dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
+    await writeFile(path.join(dir, 'index.html'), `<div class="underline"></div>`)
+    await writeFile(
+      path.join(dir, 'index.css'),
+      css`
+        @import './dependency.css';
+      `,
+    )
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+      `,
+    )
+  })
+  afterEach(() => rm(dir, { recursive: true, force: true }))
+
+  test('does experience a race-condition when calling the plugin two times for the same change', async () => {
+    const spy = vi.spyOn(process, 'cwd')
+    spy.mockReturnValue(dir)
+
+    let from = path.join(dir, 'index.css')
+    let input = (await readFile(path.join(dir, 'index.css'))).toString()
+
+    let plugin = tailwindcss({ optimize: { minify: false } })
+
+    async function run(input: string): Promise<string> {
+      let ast = postcss.parse(input)
+      for (let runner of (plugin as any).plugins) {
+        if (runner.Once) {
+          await runner.Once(ast, { result: { opts: { from }, messages: [] } })
+        }
+      }
+      return ast.toString()
+    }
+
+    let result = await run(input)
+
+    expect(result).toContain('.underline')
+
+    // Ensure that the mtime is updated
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+        .red {
+          color: red;
+        }
+      `,
+    )
+
+    let promise1 = run(input)
+    let promise2 = run(input)
+
+    expect(await promise1).toContain('.red')
+    expect(await promise2).toContain('.red')
+  })
+})
+
+test('does not register the input file as a dependency, even if it is passed in as relative path', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(`@tailwind utilities`, { from: './input.css' })
+
+  expect(result.css.trim()).toMatchInlineSnapshot(`
+    ".underline {
+      text-decoration-line: underline;
+    }"
+  `)
+
+  // Check for dependency messages
+  expect(result.messages).not.toContainEqual({
+    type: 'dependency',
+    file: expect.stringMatching(/input.css$/g),
+    parent: expect.any(String),
+    plugin: expect.any(String),
+  })
 })
