@@ -1164,21 +1164,21 @@ test('utilities must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
     .toMatchInlineSnapshot(`
-    ".tw\\:custom {
-      color: red;
-    }
-    .tw\\:underline {
-      text-decoration-line: underline;
-    }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
+      ".tw\\:custom {
+        color: red;
+      }
+      .tw\\:underline {
+        text-decoration-line: underline;
+      }
+      .tw\\:hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
         }
       }
-    }
-    "
-  `)
+      "
+    `)
 
   // Non-prefixed utilities are ignored
   compiler = await compile(input, {
