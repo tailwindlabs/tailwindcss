@@ -14,11 +14,10 @@ describe('expand(…)', () => {
     ['a/{0..5}/b', ['a/0/b', 'a/1/b', 'a/2/b', 'a/3/b', 'a/4/b', 'a/5/b']],
     ['a/{-5..0}/b', ['a/-5/b', 'a/-4/b', 'a/-3/b', 'a/-2/b', 'a/-1/b', 'a/0/b']],
     ['a/{0..-5}/b', ['a/0/b', 'a/-1/b', 'a/-2/b', 'a/-3/b', 'a/-4/b', 'a/-5/b']],
-    [
-      'a/{0..10..5}/b',
-      ['a/0/b', 'a/5/b', 'a/10/b'],
-      ['a/{10..0..5}/b', ['a/10/b', 'a/5/b', 'a/0/b']],
-    ],
+    ['a/{0..10..5}/b', ['a/0/b', 'a/5/b', 'a/10/b']],
+    ['a/{0..10..-5}/b', ['a/10/b', 'a/5/b', 'a/0/b']],
+    ['a/{10..0..5}/b', ['a/10/b', 'a/5/b', 'a/0/b']],
+    ['a/{10..0..-5}/b', ['a/0/b', 'a/5/b', 'a/10/b']],
 
     // Numeric range with padding (we do not support padding)
     ['a/{00..05}/b', ['a/0/b', 'a/1/b', 'a/2/b', 'a/3/b', 'a/4/b', 'a/5/b']],
@@ -64,7 +63,7 @@ describe('expand(…)', () => {
 
     // Should not try to expand ranges with decimals
     ['{1.1..2.2}', ['1.1..2.2']],
-  ])('should expand %s', (input, expected) => {
+  ])('should expand %s (%#)', (input, expected) => {
     expect(expand(input).sort()).toEqual(expected.sort())
   })
 

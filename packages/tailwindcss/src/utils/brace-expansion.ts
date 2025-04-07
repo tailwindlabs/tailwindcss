@@ -78,16 +78,13 @@ function expandSequence(seq: string): string[] {
     if (step === 0) {
       throw new Error('Step cannot be zero in sequence expansion.')
     }
-    if (step > 0) {
-      for (let i = startNum; i <= endNum; i += step) {
-        let numStr = i.toString()
-        result.push(numStr)
-      }
-    } else {
-      for (let i = startNum; i >= endNum; i += step) {
-        let numStr = i.toString()
-        result.push(numStr)
-      }
+
+    let increasing = startNum < endNum
+    if (increasing && step < 0) step = -step
+    if (!increasing && step > 0) step = -step
+
+    for (let i = startNum; increasing ? i <= endNum : i >= endNum; i += step) {
+      result.push(i.toString())
     }
   }
   return result
