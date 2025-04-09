@@ -3,6 +3,7 @@ name: Release Insiders
 on:
   push:
     branches: [main]
+  pull_request:
 
 permissions:
   contents: read
@@ -67,7 +68,7 @@ jobs:
             container:
               image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
 
-    name: Build ${{ matrix.target }} (OXIDE)
+    name: Build ${{ matrix.target }} (oxide)
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
     timeout-minutes: 15
@@ -121,7 +122,7 @@ jobs:
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
 
       - name: Build release
-        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform -- --target=${{ matrix.target }}
         env:
           RUST_TARGET: ${{ matrix.target }}
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
@@ -160,7 +161,7 @@ jobs:
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
-            curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
+            curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/${{ env.RUST_TARGET }} /rustup-init --output rustup-init
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
             source "$HOME/.cargo/env"
@@ -171,7 +172,7 @@ jobs:
             echo "~~~~ pnpm --version ~~~~"
             pnpm --version
             pnpm install --ignore-scripts --filter=!./playgrounds/* || true
-            pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+            pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform -- --target=${{ env.RUST_TARGET }}
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
       - name: Upload artifacts
@@ -212,6 +213,9 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -272,19 +276,25 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Publish
-        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Trigger Tailwind Play update
-        uses: actions/github-script@v7
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: 'tailwindlabs',
-              repo: 'play.tailwindcss.com',
-              ref: 'master',
-              workflow_id: 'upgrade-tailwindcss.yml'
-            })
+          name: tarballs
+          path: dist/*.tgz
+
+      # - name: Publish
+      #   run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # - name: Trigger Tailwind Play update
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+      #     script: |
+      #       await github.rest.actions.createWorkflowDispatch({
+      #         owner: 'tailwindlabs',
+      #         repo: 'play.tailwindcss.com',
+      #         ref: 'master',
+      #         workflow_id: 'upgrade-tailwindcss.yml'
+      #       })

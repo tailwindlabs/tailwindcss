@@ -51,9 +51,10 @@
   "scripts": {
     "artifacts": "napi artifacts",
     "build": "pnpm run build:platform && pnpm run build:wasm",
-    "postbuild": "node ./scripts/move-artifacts.mjs",
     "build:platform": "napi build --platform --release --no-const-enum",
-    "build:wasm": "napi build --release --target wasm32-wasip1-threads",
+    "postbuild:platform": "node ./scripts/move-artifacts.mjs",
+    "build:wasm": "napi build --release --target wasm32-wasip1-threads --no-const-enum",
+    "postbuild:wasm": "node ./scripts/move-artifacts.mjs",
     "dev": "cargo watch --quiet --shell 'npm run build'",
     "build:debug": "napi build --platform --no-const-enum",
     "version": "napi version"
