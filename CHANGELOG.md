@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `color-mix(…)` polyfills do not cause used CSS variables to be removed ([#17555](https://github.com/tailwindlabs/tailwindcss/pull/17555))
 - Ensure the `color-mix(…)` polyfill creates fallbacks for theme variables that reference other theme variables ([#17562](https://github.com/tailwindlabs/tailwindcss/pull/17562))
 - Fix brace expansion in `@source inline('z-{10..0}')` with range going down ([#17591](https://github.com/tailwindlabs/tailwindcss/pull/17591))
+- Work around a Chrome rendering bug when using the `skew-*` utilities ([#17627](https://github.com/tailwindlabs/tailwindcss/pull/17627))
 
 ## [4.1.3] - 2025-04-04
 
