@@ -777,4 +777,10 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
 
     idx = input.lastIndexOf('-', idx - 1)
   } while (idx > 0)
+
+  // Try '@' variant after permutations. This allows things like `@max` of `@max-foo-bar`
+  // to match before looking for `@`.
+  if (input[0] === '@' && exists('@')) {
+    yield ['@', input.slice(1)]
+  }
 }
