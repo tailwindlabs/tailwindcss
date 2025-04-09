@@ -319,7 +319,17 @@ mod scanner {
             globs,
             normalized_sources,
             ..
-        } = scan(&[("some.pages/index.html", "content-['some.pages/index.html']")]);
+        } = scan(&[
+            // Looks like `.pages` binary extension, but it's a folder
+            ("some.pages/index.html", "content-['some.pages/index.html']"),
+            // Ignore a specific folder. This is to ensure that this still "wins" from the internal
+            // solution of dealing with binary extensions for files only.
+            (".gitignore", "other.pages"),
+            (
+                "other.pages/index.html",
+                "content-['other.pages/index.html']",
+            ),
+        ]);
 
         assert_eq!(files, vec!["some.pages/index.html"]);
         assert_eq!(globs, vec!["*", "some.pages/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}"]);
