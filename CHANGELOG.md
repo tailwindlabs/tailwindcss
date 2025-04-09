@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `@tailwindcss/oxide-wasm32-wasi` target ([#17558](https://github.com/tailwindlabs/tailwindcss/pull/17558))
+
 ### Fixed
 
 - Ensure `color-mix(…)` polyfills do not cause used CSS variables to be removed ([#17555](https://github.com/tailwindlabs/tailwindcss/pull/17555))
