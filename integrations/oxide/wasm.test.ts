@@ -18,14 +18,14 @@ test(
       `,
       'index.mjs': js`
         import { Scanner } from '@tailwindcss/oxide-wasm32-wasi'
-        import { join } from 'node:path'
+        import { join, resolve } from 'node:path'
 
         let scanner = new Scanner({
           sources: [
             {
               // Note: There is currently a known-problem that the Node WASI preview implementation
               // does not properly handle FS reads on macOS. This forces us to scan a folder that
-              // does not contain files required to load the WASM module.
+              // does not contain a lot of files.
               //
               // https://github.com/nodejs/node/issues/47193
               base: join(process.cwd(), 'src'),
@@ -40,7 +40,8 @@ test(
     },
   },
   async ({ expect, exec }) => {
-    let output = await exec(`node index.mjs`)
+    let output = await exec(`node index.mjs`, { env: { DEBUG: '*' } })
+    console.log(output)
     expect(JSON.parse(output)).toMatchInlineSnapshot(`
       [
         "className",

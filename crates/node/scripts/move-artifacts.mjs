@@ -14,6 +14,7 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
       path.join(tailwindcssOxideRoot, file),
       path.join(tailwindcssOxideRoot, 'npm', target, file),
     )
+    console.log(`Moved ${file} to npm/${target}`)
   }
 }
 
@@ -32,4 +33,5 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
     path.join(tailwindcssOxideRoot, file),
     path.join(tailwindcssOxideRoot, 'npm', 'wasm32-wasi', wasmArtifacts[file]),
   )
+  console.log(`Moved ${file} to npm/wasm32-wasi`)
 }

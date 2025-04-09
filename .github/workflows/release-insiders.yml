@@ -82,6 +82,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
+      - name: Install gcc-arm-linux-gnueabihf
+        if: ${{ matrix.target == 'armv7-unknown-linux-gnueabihf' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
+
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
         uses: actions/cache@v4
@@ -122,7 +128,7 @@ jobs:
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
 
       - name: Build release
-        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform -- --target=${{ matrix.target }}
+        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=${{ matrix.target }}
         env:
           RUST_TARGET: ${{ matrix.target }}
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
