@@ -11,13 +11,13 @@
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
     "@vitejs/plugin-react": "^4.3.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
     "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
+    "@types/react-dom": "^19.1.1",
     "bun": "^1.2.8",
     "vite": "catalog:"
   }
