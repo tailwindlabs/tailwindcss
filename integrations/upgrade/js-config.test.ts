@@ -37,6 +37,7 @@ test(
               xs: ['0.75rem', { lineHeight: '1rem' }],
               sm: ['0.875rem', { lineHeight: '1.5rem' }],
               base: ['1rem', { lineHeight: '2rem' }],
+              lg: ['1.125rem', '2.5rem'],
             },
             width: {
               px: '1px',
@@ -188,6 +189,8 @@ test(
         --text-sm--line-height: 1.5rem;
         --text-base: 1rem;
         --text-base--line-height: 2rem;
+        --text-lg: 1.125rem;
+        --text-lg--line-height: 2.5rem;
 
         --width-*: initial;
         --width-0: 0%;
