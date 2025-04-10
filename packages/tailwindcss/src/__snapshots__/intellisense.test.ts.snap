@@ -3591,6 +3591,7 @@ exports[`getClassList 1`] = `
   "break-after-left",
   "break-after-page",
   "break-after-right",
+  "break-word",
   "break-all",
   "break-before-all",
   "break-before-auto",
