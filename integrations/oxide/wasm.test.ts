@@ -28,7 +28,7 @@ test(
               // does not contain a lot of files.
               //
               // https://github.com/nodejs/node/issues/47193
-              base: join(process.cwd(), 'src'),
+              base: join(process.cwd(), 'src').replaceAll(/\\/g, '/').replace("D:/", "/D/"),
               pattern: '**/*',
               negated: false,
             },

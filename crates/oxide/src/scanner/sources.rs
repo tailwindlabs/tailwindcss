@@ -102,12 +102,15 @@ impl PublicSourceEntry {
     /// resolved path.
     pub fn optimize(&mut self) {
         // Resolve base path immediately
+        dbg!("A");
         dbg!(&self.base);
         let Ok(base) = dunce::canonicalize(&self.base) else {
+            dbg!("Failed to resolve base");
             event!(Level::ERROR, "Failed to resolve base: {:?}", self.base);
             return;
         };
         self.base = base.to_string_lossy().to_string();
+        dbg!("B");
         dbg!(&self.base);
 
         // No dynamic part, figure out if we are dealing with a file or a directory.
