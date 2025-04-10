@@ -745,14 +745,6 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
   let idx = input.lastIndexOf('-')
-  if (idx === -1) {
-    // Variants starting with `@` are special because they don't need a `-`
-    // after the `@` (E.g.: `@-lg` should be written as `@lg`).
-    if (input[0] === '@' && exists('@')) {
-      yield ['@', input.slice(1)]
-    }
-    return
-  }
 
   // Determine the root and value by testing permutations of the incoming input.
   //
@@ -761,7 +753,7 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
   // `bg-red-500` -> No match
   // `bg-red`     -> No match
   // `bg`         -> Match
-  do {
+  while (idx > 0) {
     let maybeRoot = input.slice(0, idx)
 
     if (exists(maybeRoot)) {
@@ -776,7 +768,7 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
     }
 
     idx = input.lastIndexOf('-', idx - 1)
-  } while (idx > 0)
+  }
 
   // Try '@' variant after permutations. This allows things like `@max` of `@max-foo-bar`
   // to match before looking for `@`.
