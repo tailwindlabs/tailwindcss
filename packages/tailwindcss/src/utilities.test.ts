@@ -4472,58 +4472,53 @@ test('rotate-x', async () => {
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
     }
 
     .-rotate-x-45 {
       --tw-rotate-x: rotateX(calc(45deg * -1));
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .rotate-x-45 {
       --tw-rotate-x: rotateX(45deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .rotate-x-\\[123deg\\] {
       --tw-rotate-x: rotateX(123deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateX(0);
+      inherits: false
     }
 
     @property --tw-rotate-y {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateY(0);
+      inherits: false
     }
 
     @property --tw-rotate-z {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateZ(0);
+      inherits: false
     }
 
     @property --tw-skew-x {
       syntax: "*";
-      inherits: false;
-      initial-value: skewX(0);
+      inherits: false
     }
 
     @property --tw-skew-y {
       syntax: "*";
-      inherits: false;
-      initial-value: skewY(0);
+      inherits: false
     }"
   `)
   expect(
@@ -4545,63 +4540,58 @@ test('rotate-y', async () => {
       "@layer properties {
         @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
-            --tw-rotate-x: rotateX(0);
-            --tw-rotate-y: rotateY(0);
-            --tw-rotate-z: rotateZ(0);
-            --tw-skew-x: skewX(0);
-            --tw-skew-y: skewY(0);
+            --tw-rotate-x: initial;
+            --tw-rotate-y: initial;
+            --tw-rotate-z: initial;
+            --tw-skew-x: initial;
+            --tw-skew-y: initial;
           }
         }
       }
 
       .-rotate-y-45 {
         --tw-rotate-y: rotateY(calc(45deg * -1));
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .-rotate-y-\\[123deg\\] {
         --tw-rotate-y: rotateY(calc(123deg * -1));
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .rotate-y-45 {
         --tw-rotate-y: rotateY(45deg);
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .rotate-y-\\[123deg\\] {
         --tw-rotate-y: rotateY(123deg);
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       @property --tw-rotate-x {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateX(0);
+        inherits: false
       }
 
       @property --tw-rotate-y {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateY(0);
+        inherits: false
       }
 
       @property --tw-rotate-z {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateZ(0);
+        inherits: false
       }
 
       @property --tw-skew-x {
         syntax: "*";
-        inherits: false;
-        initial-value: skewX(0);
+        inherits: false
       }
 
       @property --tw-skew-y {
         syntax: "*";
-        inherits: false;
-        initial-value: skewY(0);
+        inherits: false
       }"
     `)
   expect(
@@ -4623,63 +4613,58 @@ test('rotate-z', async () => {
       "@layer properties {
         @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
-            --tw-rotate-x: rotateX(0);
-            --tw-rotate-y: rotateY(0);
-            --tw-rotate-z: rotateZ(0);
-            --tw-skew-x: skewX(0);
-            --tw-skew-y: skewY(0);
+            --tw-rotate-x: initial;
+            --tw-rotate-y: initial;
+            --tw-rotate-z: initial;
+            --tw-skew-x: initial;
+            --tw-skew-y: initial;
           }
         }
       }
 
       .-rotate-z-45 {
         --tw-rotate-z: rotateZ(calc(45deg * -1));
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .-rotate-z-\\[123deg\\] {
         --tw-rotate-z: rotateZ(calc(123deg * -1));
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .rotate-z-45 {
         --tw-rotate-z: rotateZ(45deg);
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       .rotate-z-\\[123deg\\] {
         --tw-rotate-z: rotateZ(123deg);
-        transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
       }
 
       @property --tw-rotate-x {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateX(0);
+        inherits: false
       }
 
       @property --tw-rotate-y {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateY(0);
+        inherits: false
       }
 
       @property --tw-rotate-z {
         syntax: "*";
-        inherits: false;
-        initial-value: rotateZ(0);
+        inherits: false
       }
 
       @property --tw-skew-x {
         syntax: "*";
-        inherits: false;
-        initial-value: skewX(0);
+        inherits: false
       }
 
       @property --tw-skew-y {
         syntax: "*";
-        inherits: false;
-        initial-value: skewY(0);
+        inherits: false
       }"
     `)
   expect(
@@ -4700,11 +4685,11 @@ test('skew', async () => {
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
     }
@@ -4712,49 +4697,44 @@ test('skew', async () => {
     .-skew-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
       --tw-skew-y: skewY(calc(6deg * -1));
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-6 {
       --tw-skew-x: skewX(6deg);
       --tw-skew-y: skewY(6deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-\\[123deg\\] {
       --tw-skew-x: skewX(123deg);
       --tw-skew-y: skewY(123deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateX(0);
+      inherits: false
     }
 
     @property --tw-rotate-y {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateY(0);
+      inherits: false
     }
 
     @property --tw-rotate-z {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateZ(0);
+      inherits: false
     }
 
     @property --tw-skew-x {
       syntax: "*";
-      inherits: false;
-      initial-value: skewX(0);
+      inherits: false
     }
 
     @property --tw-skew-y {
       syntax: "*";
-      inherits: false;
-      initial-value: skewY(0);
+      inherits: false
     }"
   `)
   expect(
@@ -4774,58 +4754,53 @@ test('skew-x', async () => {
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
     }
 
     .-skew-x-6 {
       --tw-skew-x: skewX(calc(6deg * -1));
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-x-6 {
       --tw-skew-x: skewX(6deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-x-\\[123deg\\] {
       --tw-skew-x: skewX(123deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateX(0);
+      inherits: false
     }
 
     @property --tw-rotate-y {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateY(0);
+      inherits: false
     }
 
     @property --tw-rotate-z {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateZ(0);
+      inherits: false
     }
 
     @property --tw-skew-x {
       syntax: "*";
-      inherits: false;
-      initial-value: skewX(0);
+      inherits: false
     }
 
     @property --tw-skew-y {
       syntax: "*";
-      inherits: false;
-      initial-value: skewY(0);
+      inherits: false
     }"
   `)
   expect(
@@ -4845,58 +4820,53 @@ test('skew-y', async () => {
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
     }
 
     .-skew-y-6 {
       --tw-skew-y: skewY(calc(6deg * -1));
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-y-6 {
       --tw-skew-y: skewY(6deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .skew-y-\\[123deg\\] {
       --tw-skew-y: skewY(123deg);
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     @property --tw-rotate-x {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateX(0);
+      inherits: false
     }
 
     @property --tw-rotate-y {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateY(0);
+      inherits: false
     }
 
     @property --tw-rotate-z {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateZ(0);
+      inherits: false
     }
 
     @property --tw-skew-x {
       syntax: "*";
-      inherits: false;
-      initial-value: skewX(0);
+      inherits: false
     }
 
     @property --tw-skew-y {
       syntax: "*";
-      inherits: false;
-      initial-value: skewY(0);
+      inherits: false
     }"
   `)
   expect(
@@ -5244,17 +5214,17 @@ test('transform', async () => {
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
-          --tw-rotate-x: rotateX(0);
-          --tw-rotate-y: rotateY(0);
-          --tw-rotate-z: rotateZ(0);
-          --tw-skew-x: skewX(0);
-          --tw-skew-y: skewY(0);
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
     }
 
     .transform {
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
@@ -5262,11 +5232,11 @@ test('transform', async () => {
     }
 
     .transform-cpu {
-      transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-gpu {
-      transform: translateZ(0) var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
+      transform: translateZ(0) var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
     .transform-none {
@@ -5275,32 +5245,27 @@ test('transform', async () => {
 
     @property --tw-rotate-x {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateX(0);
+      inherits: false
     }
 
     @property --tw-rotate-y {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateY(0);
+      inherits: false
     }
 
     @property --tw-rotate-z {
       syntax: "*";
-      inherits: false;
-      initial-value: rotateZ(0);
+      inherits: false
     }
 
     @property --tw-skew-x {
       syntax: "*";
-      inherits: false;
-      initial-value: skewX(0);
+      inherits: false
     }
 
     @property --tw-skew-y {
       syntax: "*";
-      inherits: false;
-      initial-value: skewY(0);
+      inherits: false
     }"
   `)
   expect(

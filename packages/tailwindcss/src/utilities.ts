@@ -1397,20 +1397,20 @@ export function createUtilities(theme: Theme) {
 
   {
     let transformValue = [
-      'var(--tw-rotate-x)',
-      'var(--tw-rotate-y)',
-      'var(--tw-rotate-z)',
-      'var(--tw-skew-x)',
-      'var(--tw-skew-y)',
+      'var(--tw-rotate-x,)',
+      'var(--tw-rotate-y,)',
+      'var(--tw-rotate-z,)',
+      'var(--tw-skew-x,)',
+      'var(--tw-skew-y,)',
     ].join(' ')
 
     let transformProperties = () =>
       atRoot([
-        property('--tw-rotate-x', 'rotateX(0)'),
-        property('--tw-rotate-y', 'rotateY(0)'),
-        property('--tw-rotate-z', 'rotateZ(0)'),
-        property('--tw-skew-x', 'skewX(0)'),
-        property('--tw-skew-y', 'skewY(0)'),
+        property('--tw-rotate-x'),
+        property('--tw-rotate-y'),
+        property('--tw-rotate-z'),
+        property('--tw-skew-x'),
+        property('--tw-skew-y'),
       ])
 
     for (let axis of ['x', 'y', 'z']) {
