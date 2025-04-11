@@ -1,7 +1,7 @@
 use crate::glob::split_pattern;
 use crate::GlobEntry;
 use bexpand::Expression;
-use std::{fs, path::PathBuf};
+use std::path::PathBuf;
 use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
@@ -101,23 +101,12 @@ impl PublicSourceEntry {
     /// In addition, we will canonicalize the base path so we always work with the correctly
     /// resolved path.
     pub fn optimize(&mut self) {
-        dbg!("Contents of ");
-        dbg!(&self.base);
-        let paths = fs::read_dir(&self.base).unwrap();
-        for path in paths {
-            dbg!(&path);
-        }
-
         // Resolve base path immediately
-        dbg!("A");
         let Ok(base) = dunce::canonicalize(&self.base) else {
-            dbg!("Failed to resolve base");
             event!(Level::ERROR, "Failed to resolve base: {:?}", self.base);
             return;
         };
         self.base = base.to_string_lossy().to_string();
-        dbg!("B");
-        dbg!(&self.base);
 
         // No dynamic part, figure out if we are dealing with a file or a directory.
         if !self.pattern.contains('*') {
