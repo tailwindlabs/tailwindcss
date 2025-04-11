@@ -300,7 +300,7 @@ jobs:
           echo "$RELEASE_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Upload Standalone artifacts
+      - name: Upload standalone artifacts
         uses: actions/upload-artifact@v4
         with:
           name: tailwindcss-standalone
