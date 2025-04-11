@@ -132,7 +132,10 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
     if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
       if (path[0] === 'fontSize') {
         toAdd.push([path, value[0]])
-        toAdd.push([[...path, '-line-height'], value[1]])
+
+        if (value.length >= 2) {
+          toAdd.push([[...path, '-line-height'], value[1]])
+        }
       } else {
         toAdd.push([path, value.join(', ')])
       }

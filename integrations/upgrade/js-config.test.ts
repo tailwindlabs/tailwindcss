@@ -38,6 +38,8 @@ test(
               sm: ['0.875rem', { lineHeight: '1.5rem' }],
               base: ['1rem', { lineHeight: '2rem' }],
               lg: ['1.125rem', '2.5rem'],
+              xl: ['1.5rem', '3rem', 'invalid'],
+              '2xl': ['2rem'],
             },
             width: {
               px: '1px',
@@ -191,6 +193,9 @@ test(
         --text-base--line-height: 2rem;
         --text-lg: 1.125rem;
         --text-lg--line-height: 2.5rem;
+        --text-xl: 1.5rem;
+        --text-xl--line-height: 3rem;
+        --text-2xl: 2rem;
 
         --width-*: initial;
         --width-0: 0%;
