@@ -23568,12 +23568,6 @@ test('text-shadow', async () => {
       --tw-text-shadow-color: inherit;
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-inherit {
-        --tw-text-shadow-color: color-mix(in oklab, inherit var(--tw-text-shadow-alpha), transparent);
-      }
-    }
-
     .text-shadow-none {
       text-shadow: none;
     }
@@ -24439,12 +24433,6 @@ test('inset-shadow', async () => {
 
     .inset-shadow-inherit {
       --tw-inset-shadow-color: inherit;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-inherit {
-        --tw-inset-shadow-color: color-mix(in oklab, inherit var(--tw-inset-shadow-alpha), transparent);
-      }
     }
 
     .inset-shadow-red-500 {

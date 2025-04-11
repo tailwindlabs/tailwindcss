@@ -5127,6 +5127,13 @@ export function createUtilities(theme: Theme) {
       case 'none':
         if (candidate.modifier) return
         return [textShadowProperties(), decl('text-shadow', 'none')]
+
+      case 'inherit':
+        if (candidate.modifier) return
+        return [
+          textShadowProperties(),
+          decl('--tw-text-shadow-color', 'inherit'),
+        ]
     }
 
     // Shadow size
@@ -5403,6 +5410,13 @@ export function createUtilities(theme: Theme) {
             boxShadowProperties(),
             decl('--tw-inset-shadow', nullShadow),
             decl('box-shadow', cssBoxShadowValue),
+          ]
+
+        case 'inherit':
+          if (candidate.modifier) return
+          return [
+            boxShadowProperties(),
+            decl('--tw-inset-shadow-color', 'inherit'),
           ]
       }
 
