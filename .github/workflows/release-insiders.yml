@@ -3,7 +3,6 @@ name: Release Insiders
 on:
   push:
     branches: [main]
-  pull_request:
 
 permissions:
   contents: read
@@ -285,22 +284,22 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tarballs
+          name: npm-package-tarballs
           path: dist/*.tgz
 
-      # - name: Publish
-      #   run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Trigger Tailwind Play update
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
-      #     script: |
-      #       await github.rest.actions.createWorkflowDispatch({
-      #         owner: 'tailwindlabs',
-      #         repo: 'play.tailwindcss.com',
-      #         ref: 'master',
-      #         workflow_id: 'upgrade-tailwindcss.yml'
-      #       })
+      - name: Trigger Tailwind Play update
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: 'tailwindlabs',
+              repo: 'play.tailwindcss.com',
+              ref: 'master',
+              workflow_id: 'upgrade-tailwindcss.yml'
+            })
