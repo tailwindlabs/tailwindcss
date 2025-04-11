@@ -8411,6 +8411,7 @@ test('accent', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --accent-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -8422,6 +8423,7 @@ test('accent', async () => {
         'accent-red-500/2.75',
         'accent-red-500/[0.5]',
         'accent-red-500/[50%]',
+        'accent-blue-500',
         'accent-current',
         'accent-current/50',
         'accent-current/[0.5]',
@@ -8437,6 +8439,7 @@ test('accent', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --accent-color-blue-500: #3b82f6;
     }
 
     .accent-\\[\\#0088cc\\] {
@@ -8445,6 +8448,10 @@ test('accent', async () => {
 
     .accent-\\[\\#0088cc\\]\\/50, .accent-\\[\\#0088cc\\]\\/\\[0\\.5\\], .accent-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       accent-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    .accent-blue-500 {
+      accent-color: var(--accent-color-blue-500);
     }
 
     .accent-current, .accent-current\\/50 {
@@ -8592,6 +8599,7 @@ test('caret', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --caret-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -8603,6 +8611,7 @@ test('caret', async () => {
         'caret-red-500/2.75',
         'caret-red-500/[0.5]',
         'caret-red-500/[50%]',
+        'caret-blue-500',
         'caret-current',
         'caret-current/50',
         'caret-current/[0.5]',
@@ -8618,6 +8627,7 @@ test('caret', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --caret-color-blue-500: #3b82f6;
     }
 
     .caret-\\[\\#0088cc\\] {
@@ -8626,6 +8636,10 @@ test('caret', async () => {
 
     .caret-\\[\\#0088cc\\]\\/50, .caret-\\[\\#0088cc\\]\\/\\[0\\.5\\], .caret-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       caret-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    .caret-blue-500 {
+      caret-color: var(--caret-color-blue-500);
     }
 
     .caret-current, .caret-current\\/50 {
@@ -10595,6 +10609,7 @@ for (let prefix of prefixes) {
     classes.push(`${prefix}-red-500/2.25`)
     classes.push(`${prefix}-red-500/2.5`)
     classes.push(`${prefix}-red-500/2.75`)
+    classes.push(`${prefix}-blue-500`)
     classes.push(`${prefix}-[#0088cc]`)
     classes.push(`${prefix}-[#0088cc]/50`)
     classes.push(`${prefix}-current`)
@@ -10616,6 +10631,7 @@ for (let prefix of prefixes) {
             --radius-full: 9999px;
             --radius-sm: 0.125rem;
             --color-red-500: #ef4444;
+            --border-color-blue-500: #3b82f6;
           }
           @tailwind utilities;
         `,
@@ -10683,6 +10699,7 @@ test('bg', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --background-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -10695,6 +10712,7 @@ test('bg', async () => {
         'bg-red-500/2.75',
         'bg-red-500/[0.5]',
         'bg-red-500/[50%]',
+        'bg-blue-500',
         'bg-current',
         'bg-current/50',
         'bg-current/[0.5]',
@@ -10828,6 +10846,7 @@ test('bg', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --background-color-blue-500: #3b82f6;
     }
 
     .bg-\\[\\#0088cc\\] {
@@ -10896,6 +10915,10 @@ test('bg', async () => {
       .bg-\\[var\\(--some-var\\)\\]\\/\\[50\\%\\] {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
+    }
+
+    .bg-blue-500 {
+      background-color: var(--background-color-blue-500);
     }
 
     .bg-current, .bg-current\\/50 {
@@ -19024,6 +19047,7 @@ test('fill', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --fill-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -19035,6 +19059,7 @@ test('fill', async () => {
         'fill-red-500/2.75',
         'fill-red-500/[0.5]',
         'fill-red-500/[50%]',
+        'fill-blue-500',
         'fill-current',
         'fill-current/50',
         'fill-current/[0.5]',
@@ -19050,6 +19075,7 @@ test('fill', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --fill-blue-500: #3b82f6;
     }
 
     .fill-\\[\\#0088cc\\] {
@@ -19058,6 +19084,10 @@ test('fill', async () => {
 
     .fill-\\[\\#0088cc\\]\\/50, .fill-\\[\\#0088cc\\]\\/\\[0\\.5\\], .fill-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       fill: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    .fill-blue-500 {
+      fill: var(--fill-blue-500);
     }
 
     .fill-current, .fill-current\\/50 {
@@ -19190,6 +19220,7 @@ test('stroke', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --stroke-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -19202,6 +19233,7 @@ test('stroke', async () => {
         'stroke-red-500/2.75',
         'stroke-red-500/[0.5]',
         'stroke-red-500/[50%]',
+        'stroke-blue-500',
         'stroke-current',
         'stroke-current/50',
         'stroke-current/[0.5]',
@@ -19237,6 +19269,7 @@ test('stroke', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --stroke-blue-500: #3b82f6;
     }
 
     .stroke-\\[\\#0088cc\\] {
@@ -19305,6 +19338,10 @@ test('stroke', async () => {
       .stroke-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .stroke-blue-500 {
+      stroke: var(--stroke-blue-500);
     }
 
     .stroke-current, .stroke-current\\/50 {
@@ -20508,6 +20545,7 @@ test('decoration', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --text-decoration-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -20517,6 +20555,7 @@ test('decoration', async () => {
         'decoration-red-500/50',
         'decoration-red-500/[0.5]',
         'decoration-red-500/[50%]',
+        'decoration-blue-500',
         'decoration-current',
         'decoration-current/50',
         'decoration-current/[0.5]',
@@ -20560,6 +20599,7 @@ test('decoration', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --text-decoration-color-blue-500: #3b82f6;
     }
 
     .decoration-\\[\\#0088cc\\] {
@@ -20652,6 +20692,12 @@ test('decoration', async () => {
         -webkit-text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .decoration-blue-500 {
+      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
+      -webkit-text-decoration-color: var(--text-decoration-color-blue-500);
+      text-decoration-color: var(--text-decoration-color-blue-500);
     }
 
     .decoration-current, .decoration-current\\/50 {
@@ -20943,6 +20989,8 @@ test('filter', async () => {
         'drop-shadow-[0_0_red]',
         'drop-shadow-red-500',
         'drop-shadow-red-500/50',
+        'drop-shadow-none',
+        'drop-shadow-inherit',
         'saturate-0',
         'saturate-[1.75]',
         'saturate-[var(--value)]',
@@ -21044,6 +21092,16 @@ test('filter', async () => {
       --tw-drop-shadow-size: drop-shadow(0 9px 7px var(--tw-drop-shadow-color, #0000001a));
       --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-none {
+      --tw-drop-shadow: ;
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-inherit {
+      --tw-drop-shadow-color: inherit;
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
 
     .drop-shadow-red-500 {
@@ -22447,6 +22505,7 @@ test('outline', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --outline-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -22466,6 +22525,7 @@ test('outline', async () => {
         'outline-red-500/50',
         'outline-red-500/[0.5]',
         'outline-red-500/[50%]',
+        'outline-blue-500',
         'outline-current',
         'outline-current/50',
         'outline-current/[0.5]',
@@ -22510,6 +22570,7 @@ test('outline', async () => {
 
     :root, :host {
       --color-red-500: #ef4444;
+      --outline-color-blue-500: #3b82f6;
     }
 
     .outline-hidden {
@@ -22636,6 +22697,10 @@ test('outline', async () => {
       .outline-\\[var\\(--value\\)\\]\\/\\[50\\%\\] {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
+    }
+
+    .outline-blue-500 {
+      outline-color: var(--outline-color-blue-500);
     }
 
     .outline-current, .outline-current\\/50 {
@@ -22965,6 +23030,7 @@ test('text', async () => {
         @theme {
           --spacing: 0.25rem;
           --color-red-500: #ef4444;
+          --text-color-blue-500: #3b82f6;
           --text-sm: 0.875rem;
           --text-sm--line-height: 1.25rem;
           --leading-snug: 1.375;
@@ -22980,6 +23046,7 @@ test('text', async () => {
         'text-red-500/2.75',
         'text-red-500/[0.5]',
         'text-red-500/[50%]',
+        'text-blue-500',
         'text-current',
         'text-current/50',
         'text-current/[0.5]',
@@ -23028,6 +23095,7 @@ test('text', async () => {
     ":root, :host {
       --spacing: .25rem;
       --color-red-500: #ef4444;
+      --text-color-blue-500: #3b82f6;
       --text-sm: .875rem;
       --text-sm--line-height: 1.25rem;
       --leading-snug: 1.375;
@@ -23186,6 +23254,10 @@ test('text', async () => {
       .text-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .text-blue-500 {
+      color: var(--text-color-blue-500);
     }
 
     .text-current, .text-current\\/50 {
@@ -23568,12 +23640,6 @@ test('text-shadow', async () => {
       --tw-text-shadow-color: inherit;
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-inherit {
-        --tw-text-shadow-color: color-mix(in oklab, inherit var(--tw-text-shadow-alpha), transparent);
-      }
-    }
-
     .text-shadow-none {
       text-shadow: none;
     }
@@ -23702,6 +23768,7 @@ test('shadow', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --box-shadow-color-blue-500: #3b82f6;
           --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
           --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
@@ -23731,6 +23798,7 @@ test('shadow', async () => {
         'shadow-red-500/2.75',
         'shadow-red-500/[0.5]',
         'shadow-red-500/[50%]',
+        'shadow-blue-500',
         'shadow-current',
         'shadow-current/50',
         'shadow-current/[0.5]',
@@ -23771,6 +23839,7 @@ test('shadow', async () => {
 
     :root, :host {
       --color-red-500: #ef4444;
+      --box-shadow-color-blue-500: #3b82f6;
     }
 
     .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
@@ -23924,6 +23993,16 @@ test('shadow', async () => {
       }
     }
 
+    .shadow-blue-500 {
+      --tw-shadow-color: #3b82f6;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .shadow-blue-500 {
+        --tw-shadow-color: color-mix(in oklab, var(--box-shadow-color-blue-500) var(--tw-shadow-alpha), transparent);
+      }
+    }
+
     .shadow-current {
       --tw-shadow-color: currentcolor;
     }
@@ -23966,12 +24045,6 @@ test('shadow', async () => {
 
     .shadow-inherit {
       --tw-shadow-color: inherit;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-inherit {
-        --tw-shadow-color: color-mix(in oklab, inherit var(--tw-shadow-alpha), transparent);
-      }
     }
 
     .shadow-red-500 {
@@ -24447,12 +24520,6 @@ test('inset-shadow', async () => {
       --tw-inset-shadow-color: inherit;
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-inherit {
-        --tw-inset-shadow-color: color-mix(in oklab, inherit var(--tw-inset-shadow-alpha), transparent);
-      }
-    }
-
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: #ef4444;
     }
@@ -24641,6 +24708,7 @@ test('ring', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --ring-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -24654,6 +24722,7 @@ test('ring', async () => {
         'ring-red-500/2.75',
         'ring-red-500/[0.5]',
         'ring-red-500/[50%]',
+        'ring-blue-500',
         'ring-current',
         'ring-current/50',
         'ring-current/[0.5]',
@@ -24707,6 +24776,7 @@ test('ring', async () => {
 
     :root, :host {
       --color-red-500: #ef4444;
+      --ring-color-blue-500: #3b82f6;
     }
 
     .ring {
@@ -24810,6 +24880,10 @@ test('ring', async () => {
       .ring-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .ring-blue-500 {
+      --tw-ring-color: var(--ring-color-blue-500);
     }
 
     .ring-current, .ring-current\\/50 {
@@ -25551,6 +25625,7 @@ test('ring-offset', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --ring-offset-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -25561,6 +25636,7 @@ test('ring-offset', async () => {
         'ring-offset-red-500/50',
         'ring-offset-red-500/[0.5]',
         'ring-offset-red-500/[50%]',
+        'ring-offset-blue-500',
         'ring-offset-current',
         'ring-offset-current/50',
         'ring-offset-current/[0.5]',
@@ -25593,6 +25669,7 @@ test('ring-offset', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --ring-offset-color-blue-500: #3b82f6;
     }
 
     .ring-offset-0 {
@@ -25691,6 +25768,10 @@ test('ring-offset', async () => {
       .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
+    }
+
+    .ring-offset-blue-500 {
+      --tw-ring-offset-color: var(--ring-offset-color-blue-500);
     }
 
     .ring-offset-current, .ring-offset-current\\/50 {

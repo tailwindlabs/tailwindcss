@@ -52,6 +52,9 @@ test('config values can be merged into the theme', () => {
                 lineHeight: '1.5',
               },
             ],
+            lg: ['1.125rem', '2'],
+            xl: ['1.5rem', '3rem', 'invalid'],
+            '2xl': ['2rem'],
           },
 
           letterSpacing: {
@@ -101,6 +104,21 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolveWith('base', ['--text'], ['--line-height'])).toEqual([
     '1rem',
     { '--line-height': '1.5' },
+  ])
+  expect(theme.resolve('lg', ['--text'])).toEqual('1.125rem')
+  expect(theme.resolveWith('lg', ['--text'], ['--line-height'])).toEqual([
+    '1.125rem',
+    { '--line-height': '2' },
+  ])
+  expect(theme.resolve('xl', ['--text'])).toEqual('1.5rem')
+  expect(theme.resolveWith('xl', ['--text'], ['--line-height'])).toEqual([
+    '1.5rem',
+    { '--line-height': '3rem' },
+  ])
+  expect(theme.resolve('2xl', ['--text'])).toEqual('2rem')
+  expect(theme.resolveWith('2xl', ['--text'], ['--line-height'])).toEqual([
+    '2rem',
+    {},
   ])
   expect(theme.resolve('super-wide', ['--tracking'])).toEqual('0.25em')
   expect(theme.resolve('super-loose', ['--leading'])).toEqual('3')
