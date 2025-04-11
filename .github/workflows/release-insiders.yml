@@ -104,10 +104,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ./oxide/target/
             ./crates/node/*.node
-            ./crates/node/index.js
+            ./crates/node/*.wasm
             ./crates/node/index.d.ts
+            ./crates/node/index.js
+            ./crates/node/browser.js
+            ./crates/node/tailwindcss-oxide.wasi-browser.js
+            ./crates/node/tailwindcss-oxide.wasi.cjs
+            ./crates/node/wasi-worker-browser.mjs
+            ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install Node.JS
@@ -219,9 +224,6 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Setup WASM target
-        run: rustup target add wasm32-wasip1-threads
-
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
         uses: actions/cache@v4
@@ -239,11 +241,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ./oxide/target/
             ./crates/node/*.node
-            ./crates/node/index.js
+            ./crates/node/*.wasm
             ./crates/node/index.d.ts
+            ./crates/node/index.js
+            ./crates/node/browser.js
+            ./crates/node/tailwindcss-oxide.wasi-browser.js
+            ./crates/node/tailwindcss-oxide.wasi.cjs
+            ./crates/node/wasi-worker-browser.mjs
+            ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
         run: pnpm --filter=!./playgrounds/* install
@@ -281,7 +291,7 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Upload artifacts
+      - name: Upload npm package tarballs
         uses: actions/upload-artifact@v4
         with:
           name: npm-package-tarballs

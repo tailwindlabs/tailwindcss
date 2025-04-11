@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `@tailwindcss/oxide-wasm32-wasi` target ([#17558](https://github.com/tailwindlabs/tailwindcss/pull/17558))
+- Add experimental `@tailwindcss/oxide-wasm32-wasi` target ([#17558](https://github.com/tailwindlabs/tailwindcss/pull/17558))
 
 ### Fixed
 

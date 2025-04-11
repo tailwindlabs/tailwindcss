@@ -194,12 +194,11 @@ Cargo.lock
 !.yarn/sdks
 !.yarn/versions
 
-*.node
-
 # Generated
+*.node
+*.wasm
 index.d.ts
 index.js
-*.wasm
 browser.js
 tailwindcss-oxide.wasi-browser.js
 tailwindcss-oxide.wasi.cjs
