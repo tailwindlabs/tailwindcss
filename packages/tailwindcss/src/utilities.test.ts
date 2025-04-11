@@ -20943,6 +20943,8 @@ test('filter', async () => {
         'drop-shadow-[0_0_red]',
         'drop-shadow-red-500',
         'drop-shadow-red-500/50',
+        'drop-shadow-none',
+        'drop-shadow-inherit',
         'saturate-0',
         'saturate-[1.75]',
         'saturate-[var(--value)]',
@@ -21044,6 +21046,16 @@ test('filter', async () => {
       --tw-drop-shadow-size: drop-shadow(0 9px 7px var(--tw-drop-shadow-color, #0000001a));
       --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-none {
+      --tw-drop-shadow: ;
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-inherit {
+      --tw-drop-shadow-color: inherit;
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
 
     .drop-shadow-red-500 {
@@ -23568,12 +23580,6 @@ test('text-shadow', async () => {
       --tw-text-shadow-color: inherit;
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-inherit {
-        --tw-text-shadow-color: color-mix(in oklab, inherit var(--tw-text-shadow-alpha), transparent);
-      }
-    }
-
     .text-shadow-none {
       text-shadow: none;
     }
@@ -23966,12 +23972,6 @@ test('shadow', async () => {
 
     .shadow-inherit {
       --tw-shadow-color: inherit;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-inherit {
-        --tw-shadow-color: color-mix(in oklab, inherit var(--tw-shadow-alpha), transparent);
-      }
     }
 
     .shadow-red-500 {
@@ -24445,12 +24445,6 @@ test('inset-shadow', async () => {
 
     .inset-shadow-inherit {
       --tw-inset-shadow-color: inherit;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-inherit {
-        --tw-inset-shadow-color: color-mix(in oklab, inherit var(--tw-inset-shadow-alpha), transparent);
-      }
     }
 
     .inset-shadow-red-500 {

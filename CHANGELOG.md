@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure the `color-mix(…)` polyfill creates fallbacks for theme variables that reference other theme variables ([#17562](https://github.com/tailwindlabs/tailwindcss/pull/17562))
 - Fix brace expansion in `@source inline('z-{10..0}')` with range going down ([#17591](https://github.com/tailwindlabs/tailwindcss/pull/17591))
 - Ensure container query variant names can contain hyphens ([#17628](https://github.com/tailwindlabs/tailwindcss/pull/17628))
+- Ensure `shadow-inherit`, `inset-shadow-inherit`, `drop-shadow-inherit`, and `text-shadow-inherit` inherits the shadow color ([#17647](https://github.com/tailwindlabs/tailwindcss/pull/17647))
 - Ensure compatibility with array tuples used in `fontSize` JS theme keys ([#17630](https://github.com/tailwindlabs/tailwindcss/pull/17630))
 - Upgrade: Convert `fontSize` array tuple syntax to CSS theme variables ([#17630](https://github.com/tailwindlabs/tailwindcss/pull/17630))
 
