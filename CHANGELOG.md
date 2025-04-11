@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix brace expansion in `@source inline('z-{10..0}')` with range going down ([#17591](https://github.com/tailwindlabs/tailwindcss/pull/17591))
 - Ensure container query variant names can contain hyphens ([#17628](https://github.com/tailwindlabs/tailwindcss/pull/17628))
 - Fix `fontSize` plain array tuple upgrade ([#17630](https://github.com/tailwindlabs/tailwindcss/pull/17630))
+- Ensure compatibility with array tuples used in `fontSize` JS theme keys ([#17630](https://github.com/tailwindlabs/tailwindcss/pull/17630))
 
 ## [4.1.3] - 2025-04-04
 
