@@ -23968,12 +23968,6 @@ test('shadow', async () => {
       --tw-shadow-color: inherit;
     }
 
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-inherit {
-        --tw-shadow-color: color-mix(in oklab, inherit var(--tw-shadow-alpha), transparent);
-      }
-    }
-
     .shadow-red-500 {
       --tw-shadow-color: #ef4444;
     }

@@ -5275,6 +5275,13 @@ export function createUtilities(theme: Theme) {
             decl('--tw-shadow', nullShadow),
             decl('box-shadow', cssBoxShadowValue),
           ]
+
+        case 'inherit':
+          if (candidate.modifier) return
+          return [
+            boxShadowProperties(),
+            decl('--tw-shadow-color', 'inherit'),
+          ]
       }
 
       // Shadow size
