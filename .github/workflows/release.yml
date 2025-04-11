@@ -67,7 +67,7 @@ jobs:
             container:
               image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
 
-    name: Build ${{ matrix.target }} (OXIDE)
+    name: Build ${{ matrix.target }} (oxide)
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
     timeout-minutes: 15
@@ -80,6 +80,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
+
+      - name: Install gcc-arm-linux-gnueabihf
+        if: ${{ matrix.target == 'armv7-unknown-linux-gnueabihf' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -98,10 +104,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ./oxide/target/
             ./crates/node/*.node
-            ./crates/node/index.js
+            ./crates/node/*.wasm
             ./crates/node/index.d.ts
+            ./crates/node/index.js
+            ./crates/node/browser.js
+            ./crates/node/tailwindcss-oxide.wasi-browser.js
+            ./crates/node/tailwindcss-oxide.wasi.cjs
+            ./crates/node/wasi-worker-browser.mjs
+            ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install Node.JS
@@ -121,7 +132,7 @@ jobs:
         run: pnpm install --ignore-scripts --filter=!./playgrounds/*
 
       - name: Build release
-        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=${{ matrix.target }}
         env:
           RUST_TARGET: ${{ matrix.target }}
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
@@ -171,7 +182,7 @@ jobs:
             echo "~~~~ pnpm --version ~~~~"
             pnpm --version
             pnpm install --ignore-scripts --filter=!./playgrounds/* || true
-            pnpm run --filter ${{ env.OXIDE_LOCATION }} build
+            pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
       - name: Upload artifacts
@@ -225,11 +236,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ./oxide/target/
             ./crates/node/*.node
-            ./crates/node/index.js
+            ./crates/node/*.wasm
             ./crates/node/index.d.ts
+            ./crates/node/index.js
+            ./crates/node/browser.js
+            ./crates/node/tailwindcss-oxide.wasi-browser.js
+            ./crates/node/tailwindcss-oxide.wasi.cjs
+            ./crates/node/wasi-worker-browser.mjs
+            ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
         run: pnpm --filter=!./playgrounds/* install
@@ -272,7 +291,10 @@ jobs:
           echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./packages/tailwindcss/package.json`).version);')" >> $GITHUB_ENV
 
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+        run: |
+          pnpm --recursive --filter="\!@tailwindcss/oxide-wasm32-wasi" publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+          # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
+          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks; popd;
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

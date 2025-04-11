@@ -121,7 +121,7 @@ dist
 .AppleDouble
 .LSOverride
 
-# Icon must end with two 
+# Icon must end with two
 Icon
 
 
@@ -194,8 +194,13 @@ Cargo.lock
 !.yarn/sdks
 !.yarn/versions
 
-*.node
-
 # Generated
+*.node
+*.wasm
 index.d.ts
 index.js
+browser.js
+tailwindcss-oxide.wasi-browser.js
+tailwindcss-oxide.wasi.cjs
+wasi-worker-browser.mjs
+wasi-worker.mjs

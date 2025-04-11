@@ -30,7 +30,7 @@ jobs:
           - vite
           - cli
           - postcss
-          - workers
+          - oxide
           - webpack
 
         # Exclude windows and macos from being built on feature branches
@@ -76,11 +76,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ./target/
             ./crates/node/*.node
-            ./crates/node/index.js
+            ./crates/node/*.wasm
             ./crates/node/index.d.ts
+            ./crates/node/index.js
+            ./crates/node/browser.js
+            ./crates/node/tailwindcss-oxide.wasi-browser.js
+            ./crates/node/tailwindcss-oxide.wasi.cjs
+            ./crates/node/wasi-worker-browser.mjs
+            ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
+
+      - name: Setup WASM target
+        run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
         run: pnpm install
