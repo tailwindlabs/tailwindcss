@@ -1294,6 +1294,36 @@ it('should parse a functional variant starting with @', () => {
   `)
 })
 
+it('should parse a functional variant starting with @ that has a hyphen', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.functional('@', () => {})
+
+  expect(run('@foo-bar:flex', { utilities, variants })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "static",
+        "raw": "@foo-bar:flex",
+        "root": "flex",
+        "variants": [
+          {
+            "kind": "functional",
+            "modifier": null,
+            "root": "@",
+            "value": {
+              "kind": "named",
+              "value": "foo-bar",
+            },
+          },
+        ],
+      },
+    ]
+  `)
+})
+
 it('should parse a functional variant starting with @ and a modifier', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
