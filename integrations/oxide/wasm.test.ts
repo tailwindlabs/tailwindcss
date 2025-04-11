@@ -1,6 +1,17 @@
 import { css, js, json, test } from '../utils'
 
-test(
+// This test runs the the wasm build using the `node:wasi` runtine.
+//
+// There are currently a known problems that the Node WASI preview implementation does not properly
+// handle FS reads on macOS and it does not implement all APIs on Windows. Beacuse of that, this
+// test is only run on Linux for now.
+//
+// https://github.com/nodejs/node/issues/47193
+// https://github.com/nodejs/uvwasi/issues/11
+
+let testFn = process.platform === 'linux' ? test : test.skip
+
+testFn(
   '@tailwindcss/oxide-wasm32-wasi can be loaded into a Node.js process',
   {
     fs: {
@@ -23,12 +34,7 @@ test(
         let scanner = new Scanner({
           sources: [
             {
-              // Note: There is currently a known-problem that the Node WASI preview implementation
-              // does not properly handle FS reads on macOS. This forces us to scan a folder that
-              // does not contain a lot of files.
-              //
-              // https://github.com/nodejs/node/issues/47193
-              base: join(process.cwd(), 'src').replaceAll(/\\/g, '/').replace("D:/", "/D/"),
+              base: join(process.cwd(), 'src'),
               pattern: '**/*',
               negated: false,
             },
@@ -40,8 +46,7 @@ test(
     },
   },
   async ({ expect, exec }) => {
-    let output = await exec(`node index.mjs`, { env: { DEBUG: '*' } })
-    console.log(output)
+    let output = await exec(`node index.mjs`)
     expect(JSON.parse(output)).toMatchInlineSnapshot(`
       [
         "className",
