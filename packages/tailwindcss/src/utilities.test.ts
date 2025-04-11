@@ -20943,6 +20943,8 @@ test('filter', async () => {
         'drop-shadow-[0_0_red]',
         'drop-shadow-red-500',
         'drop-shadow-red-500/50',
+        'drop-shadow-none',
+        'drop-shadow-inherit',
         'saturate-0',
         'saturate-[1.75]',
         'saturate-[var(--value)]',
@@ -21044,6 +21046,16 @@ test('filter', async () => {
       --tw-drop-shadow-size: drop-shadow(0 9px 7px var(--tw-drop-shadow-color, #0000001a));
       --tw-drop-shadow: drop-shadow(var(--drop-shadow-xl));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-none {
+      --tw-drop-shadow: ;
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-inherit {
+      --tw-drop-shadow-color: inherit;
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
 
     .drop-shadow-red-500 {

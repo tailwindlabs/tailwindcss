@@ -4399,6 +4399,14 @@ export function createUtilities(theme: Theme) {
       {
         let value = resolveThemeColor(candidate, theme, ['--drop-shadow-color', '--color'])
         if (value) {
+          if (value === 'inherit') {
+            return [
+              filterProperties(),
+              decl('--tw-drop-shadow-color', 'inherit'),
+              decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+            ]
+          }
+
           return [
             filterProperties(),
             decl('--tw-drop-shadow-color', withAlpha(value, 'var(--tw-drop-shadow-alpha)')),
@@ -5130,10 +5138,7 @@ export function createUtilities(theme: Theme) {
 
       case 'inherit':
         if (candidate.modifier) return
-        return [
-          textShadowProperties(),
-          decl('--tw-text-shadow-color', 'inherit'),
-        ]
+        return [textShadowProperties(), decl('--tw-text-shadow-color', 'inherit')]
     }
 
     // Shadow size
@@ -5285,10 +5290,7 @@ export function createUtilities(theme: Theme) {
 
         case 'inherit':
           if (candidate.modifier) return
-          return [
-            boxShadowProperties(),
-            decl('--tw-shadow-color', 'inherit'),
-          ]
+          return [boxShadowProperties(), decl('--tw-shadow-color', 'inherit')]
       }
 
       // Shadow size
@@ -5414,10 +5416,7 @@ export function createUtilities(theme: Theme) {
 
         case 'inherit':
           if (candidate.modifier) return
-          return [
-            boxShadowProperties(),
-            decl('--tw-inset-shadow-color', 'inherit'),
-          ]
+          return [boxShadowProperties(), decl('--tw-inset-shadow-color', 'inherit')]
       }
 
       // Shadow size
