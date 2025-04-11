@@ -298,7 +298,10 @@ jobs:
           path: dist/*.tgz
 
       - name: Publish
-        run: pnpm --recursive publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+        run: |
+          pnpm --recursive --filter="\!@tailwindcss/oxide-wasm32-wasi" publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+          # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
+          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks; popd;
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
