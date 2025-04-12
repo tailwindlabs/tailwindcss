@@ -630,7 +630,9 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
     }
 
     // Setup auto source detection rules
-    builder.add_gitignore(auto_source_detection::RULES.clone());
+    for ignore in auto_source_detection::RULES.iter() {
+        builder.add_gitignore(ignore.clone());
+    }
 
     // Setup ignores based on `@source` definitions
     for (base, patterns) in ignores {
