@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/postcss",
-  "version": "4.1.3",
+  "version": "4.1.4",
   "description": "PostCSS plugin for Tailwind CSS, a utility-first CSS framework for rapidly building custom user interfaces",
   "license": "MIT",
   "repository": {

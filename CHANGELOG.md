@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.4] - 2025-04-14
+
 ### Added
 
 - Add experimental `@tailwindcss/oxide-wasm32-wasi` target ([#17558](https://github.com/tailwindlabs/tailwindcss/pull/17558))
@@ -14,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure `color-mix(…)` polyfills do not cause used CSS variables to be removed ([#17555](https://github.com/tailwindlabs/tailwindcss/pull/17555))
-- Ensure the `color-mix(…)` polyfill creates fallbacks for theme variables that reference other theme variables ([#17562](https://github.com/tailwindlabs/tailwindcss/pull/17562))
+- Ensure `color-mix(…)` polyfills create fallbacks for theme variables that reference other theme variables ([#17562](https://github.com/tailwindlabs/tailwindcss/pull/17562))
 - Fix brace expansion in `@source inline('z-{10..0}')` with range going down ([#17591](https://github.com/tailwindlabs/tailwindcss/pull/17591))
 - Work around a Chrome rendering bug when using the `skew-*` utilities ([#17627](https://github.com/tailwindlabs/tailwindcss/pull/17627))
 - Ensure container query variant names can contain hyphens ([#17628](https://github.com/tailwindlabs/tailwindcss/pull/17628))
@@ -3654,7 +3658,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.4...HEAD
+[4.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...v4.1.4
 [4.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...v4.1.3
 [4.1.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.0...v4.1.1
