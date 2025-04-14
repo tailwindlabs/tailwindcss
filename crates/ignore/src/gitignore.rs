@@ -85,6 +85,8 @@ pub struct Gitignore {
     num_ignores: u64,
     num_whitelists: u64,
     matches: Option<Arc<Pool<Vec<usize>>>>,
+    // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+    only_on_files: bool,
 }
 
 impl Gitignore {
@@ -140,6 +142,8 @@ impl Gitignore {
             num_ignores: 0,
             num_whitelists: 0,
             matches: None,
+            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            only_on_files: false,
         }
     }
 
@@ -240,6 +244,10 @@ impl Gitignore {
         if self.is_empty() {
             return Match::None;
         }
+        // CHANGED: Rules marked as only_on_files can not match against directories.
+        if self.only_on_files && is_dir {
+            return Match::None;
+        }
         let path = path.as_ref();
         let mut matches = self.matches.as_ref().unwrap().get();
         let candidate = Candidate::new(path);
@@ -295,6 +303,8 @@ pub struct GitignoreBuilder {
     root: PathBuf,
     globs: Vec<Glob>,
     case_insensitive: bool,
+    // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+    only_on_files: bool,
 }
 
 impl GitignoreBuilder {
@@ -311,6 +321,8 @@ impl GitignoreBuilder {
             root: strip_prefix("./", root).unwrap_or(root).to_path_buf(),
             globs: vec![],
             case_insensitive: false,
+            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            only_on_files: false,
         }
     }
 
@@ -331,6 +343,8 @@ impl GitignoreBuilder {
             num_ignores: nignore as u64,
             num_whitelists: nwhite as u64,
             matches: Some(Arc::new(Pool::new(|| vec![]))),
+            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            only_on_files: self.only_on_files,
         })
     }
 
@@ -513,6 +527,16 @@ impl GitignoreBuilder {
         // release.
         self.case_insensitive = yes;
         Ok(self)
+    }
+
+    /// CHANGED: Add a flag to have Gitignore rules that apply only to files.
+    ///
+    /// If this is set, then the globs will only be matched against file paths.
+    /// This will ensure that ignore rules like `*.pages` will _only_ ignore
+    /// files ending in `.pages` and not folders ending in `.pages`.
+    pub fn only_on_files(&mut self, yes: bool) -> &mut GitignoreBuilder {
+        self.only_on_files = yes;
+        self
     }
 }
 

@@ -10,15 +10,21 @@ use std::sync;
 /// - Ignoring common binary file extensions like `.png` and `.jpg`
 /// - Ignoring common files like `yarn.lock` and `package-lock.json`
 ///
-pub static RULES: sync::LazyLock<Gitignore> = sync::LazyLock::new(|| {
+pub static RULES: sync::LazyLock<Vec<Gitignore>> = sync::LazyLock::new(|| {
     let mut builder = GitignoreBuilder::new("");
 
     builder.add_line(None, &IGNORED_CONTENT_DIRS_GLOB).unwrap();
     builder.add_line(None, &IGNORED_EXTENSIONS_GLOB).unwrap();
-    builder.add_line(None, &BINARY_EXTENSIONS_GLOB).unwrap();
     builder.add_line(None, &IGNORED_FILES_GLOB).unwrap();
 
-    builder.build().unwrap()
+    // Ensure these rules do not match on folder names
+    let mut file_only_builder = GitignoreBuilder::new("");
+    file_only_builder
+        .only_on_files(true)
+        .add_line(None, &BINARY_EXTENSIONS_GLOB)
+        .unwrap();
+
+    vec![builder.build().unwrap(), file_only_builder.build().unwrap()]
 });
 
 pub static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> = sync::LazyLock::new(|| {
