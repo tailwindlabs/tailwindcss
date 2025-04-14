@@ -20,16 +20,18 @@ export type ClassEntry = [string, ClassMetadata]
 const IS_FRACTION = /^\d+\/\d+$/
 
 export function getClassList(design: DesignSystem): ClassEntry[] {
-  let list: ClassItem[] = []
+  let items = new DefaultMap<string, ClassItem>((utility) => ({
+    name: utility,
+    utility,
+    fraction: false,
+    modifiers: [],
+  }))
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
-    list.push({
-      name: utility,
-      utility,
-      fraction: false,
-      modifiers: [],
-    })
+    let item = items.get(utility)
+    item.fraction = false
+    item.modifiers = []
   }
 
   // Functional utilities have their own list of completions
@@ -42,28 +44,25 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
 
         let name = value === null ? utility : `${utility}-${value}`
 
-        list.push({
-          name,
-          utility,
-          fraction,
-          modifiers: group.modifiers,
-        })
+        let item = items.get(name)
+        item.utility = utility
+        item.fraction ||= fraction
+        item.modifiers.push(...group.modifiers)
 
         if (group.supportsNegative) {
-          list.push({
-            name: `-${name}`,
-            utility: `-${utility}`,
-            fraction,
-            modifiers: group.modifiers,
-          })
+          let item = items.get(`-${name}`)
+          item.utility = `-${utility}`
+          item.fraction ||= fraction
+          item.modifiers.push(...group.modifiers)
         }
       }
     }
   }
 
-  if (list.length === 0) return []
+  if (items.size === 0) return []
 
   // Sort utilities by their class name
+  let list = Array.from(items.values())
   list.sort((a, b) => compare(a.name, b.name))
 
   let entries = sortFractionsLast(list)
