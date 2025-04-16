@@ -533,7 +533,7 @@ async function parseCss(
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(unescape(child.property), child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions, child.src)
           return
         }
 
@@ -551,6 +551,7 @@ async function parseCss(
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule) {
         firstThemeRule = styleRule(':root, :host', [])
+        firstThemeRule.src = node.src
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -599,6 +600,7 @@ async function parseCss(
     for (let [key, value] of designSystem.theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
       let node = decl(escape(key), value.value)
+      node.src = value.src
       nodes.push(node)
     }
 
