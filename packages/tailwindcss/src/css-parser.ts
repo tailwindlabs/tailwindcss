@@ -9,6 +9,7 @@ import {
   type Declaration,
   type Rule,
 } from './ast'
+import type { Source } from './source-maps/source'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -31,7 +32,13 @@ const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 
-export function parse(input: string) {
+export interface ParseOptions {
+  from?: string
+}
+
+export function parse(input: string, opts?: ParseOptions) {
+  let source: Source | null = opts?.from ? { file: opts.from, code: input } : null
+
   // Note: it is important that any transformations of the input string
   // *before* processing do NOT change the length of the string. This
   // would invalidate the mechanism used to track source locations.
@@ -47,6 +54,9 @@ export function parse(input: string) {
 
   let buffer = ''
   let closingBracketStack = ''
+
+  // The start of the first non-whitespace character in the buffer
+  let bufferStart = 0
 
   let peekChar
 
@@ -72,6 +82,7 @@ export function parse(input: string) {
     // ```
     //
     if (currentChar === BACKSLASH) {
+      if (buffer === '') bufferStart = i
       buffer += input.slice(i, i + 2)
       i += 1
     }
@@ -117,6 +128,11 @@ export function parse(input: string) {
       if (commentString.charCodeAt(2) === EXCLAMATION_MARK) {
         let node = comment(commentString.slice(2, -2))
         licenseComments.push(node)
+
+        if (source) {
+          node.src = [source, start, i + 1]
+          node.dst = [source, start, i + 1]
+        }
       }
     }
 
@@ -313,6 +329,11 @@ export function parse(input: string) {
       let declaration = parseDeclaration(buffer, colonIdx)
       if (!declaration) throw new Error(`Invalid custom property, expected a value`)
 
+      if (source) {
+        declaration.src = [source, start, i]
+        declaration.dst = [source, start, i]
+      }
+
       if (parent) {
         parent.nodes.push(declaration)
       } else {
@@ -332,6 +353,11 @@ export function parse(input: string) {
     // ```
     else if (currentChar === SEMICOLON && buffer.charCodeAt(0) === AT_SIGN) {
       node = parseAtRule(buffer)
+
+      if (source) {
+        node.src = [source, bufferStart, i]
+        node.dst = [source, bufferStart, i]
+      }
 
       // At-rule is nested inside of a rule, attach it to the parent.
       if (parent) {
@@ -369,6 +395,11 @@ export function parse(input: string) {
         throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
       }
 
+      if (source) {
+        declaration.src = [source, bufferStart, i]
+        declaration.dst = [source, bufferStart, i]
+      }
+
       if (parent) {
         parent.nodes.push(declaration)
       } else {
@@ -387,6 +418,12 @@ export function parse(input: string) {
 
       // At this point `buffer` should resemble a selector or an at-rule.
       node = rule(buffer.trim())
+
+      // Track the source location for source maps
+      if (source) {
+        node.src = [source, bufferStart, i]
+        node.dst = [source, bufferStart, i]
+      }
 
       // Attach the rule to the parent in case it's nested.
       if (parent) {
@@ -434,6 +471,12 @@ export function parse(input: string) {
         if (buffer.charCodeAt(0) === AT_SIGN) {
           node = parseAtRule(buffer)
 
+          // Track the source location for source maps
+          if (source) {
+            node.src = [source, bufferStart, i]
+            node.dst = [source, bufferStart, i]
+          }
+
           // At-rule is nested inside of a rule, attach it to the parent.
           if (parent) {
             parent.nodes.push(node)
@@ -469,6 +512,11 @@ export function parse(input: string) {
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
             if (!node) throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+
+            if (source) {
+              node.src = [source, bufferStart, i]
+              node.dst = [source, bufferStart, i]
+            }
 
             parent.nodes.push(node)
           }
@@ -519,6 +567,8 @@ export function parse(input: string) {
         continue
       }
 
+      if (buffer === '') bufferStart = i
+
       buffer += String.fromCharCode(currentChar)
     }
   }
@@ -528,6 +578,12 @@ export function parse(input: string) {
   // the end of the input.
   if (buffer.charCodeAt(0) === AT_SIGN) {
     let node = parseAtRule(buffer)
+
+    // Track the source location for source maps
+    if (source) {
+      node.src = [source, bufferStart, input.length]
+      node.dst = [source, bufferStart, input.length]
+    }
 
     ast.push(node)
   }

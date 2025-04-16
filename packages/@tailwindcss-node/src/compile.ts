@@ -21,6 +21,7 @@ export type Resolver = (id: string, base: string) => Promise<string | false | un
 
 export interface CompileOptions {
   base: string
+  from?: string
   onDependency: (path: string) => void
   shouldRewriteUrls?: boolean
   polyfills?: Polyfills
@@ -31,6 +32,7 @@ export interface CompileOptions {
 
 function createCompileOptions({
   base,
+  from,
   polyfills,
   onDependency,
   shouldRewriteUrls,
@@ -41,6 +43,7 @@ function createCompileOptions({
   return {
     base,
     polyfills,
+    from,
     async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },

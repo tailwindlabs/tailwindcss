@@ -10,3 +10,7 @@ const cssFile = readFileSync(currentFolder + './preflight.css', 'utf-8')
 bench('css-parser on preflight.css', () => {
   CSS.parse(cssFile)
 })
+
+bench('CSS with sourcemaps', () => {
+  CSS.parse(cssFile, { from: 'input.css' })
+})
