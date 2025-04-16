@@ -51,6 +51,7 @@ export const enum Polyfills {
 
 type CompileOptions = {
   base?: string
+  from?: string
   polyfills?: Polyfills
   loadModule?: (
     id: string,
@@ -136,6 +137,7 @@ async function parseCss(
   ast: AstNode[],
   {
     base = '',
+    from,
     loadModule = throwOnLoadModule,
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
@@ -786,7 +788,7 @@ export async function compile(
   features: Features
   build(candidates: string[]): string
 }> {
-  let ast = CSS.parse(css)
+  let ast = CSS.parse(css, { from: opts.from })
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
