@@ -25,3 +25,13 @@ export interface Source {
  * - A location in the output CSS where this node resides
  */
 export type SourceLocation = [source: Source, start: number, end: number]
+
+/**
+ * The file and offsets within it that this node covers
+ */
+export function createInputSource(file: string, code: string): Source {
+  return {
+    file,
+    code,
+  }
+}
