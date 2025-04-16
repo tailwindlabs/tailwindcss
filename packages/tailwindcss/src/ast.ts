@@ -398,6 +398,7 @@ export function optimizeAst(
         }
 
         let fallback = decl(property, initialValue ?? 'initial')
+        fallback.src = node.src
 
         if (inherits) {
           propertyFallbacksRoot.push(fallback)
@@ -644,6 +645,7 @@ export function optimizeAst(
           value: ValueParser.toCss(ast),
         }
         let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [declaration])
+        colorMixQuery.src = declaration.src
         parent.splice(idx, 1, fallback, colorMixQuery)
       }
     }
@@ -654,11 +656,13 @@ export function optimizeAst(
 
     if (propertyFallbacksRoot.length > 0) {
       let wrapper = rule(':root, :host', propertyFallbacksRoot)
+      wrapper.src = propertyFallbacksRoot[0].src
       fallbackAst.push(wrapper)
     }
 
     if (propertyFallbacksUniversal.length > 0) {
       let wrapper = rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal)
+      wrapper.src = propertyFallbacksUniversal[0].src
       fallbackAst.push(wrapper)
     }
 
@@ -682,6 +686,7 @@ export function optimizeAst(
       })
 
       let layerPropertiesStatement = atRule('@layer', 'properties', [])
+      layerPropertiesStatement.src = fallbackAst[0].src
 
       newAst.splice(
         firstValidNodeIndex < 0 ? newAst.length : firstValidNodeIndex,
@@ -698,6 +703,9 @@ export function optimizeAst(
           fallbackAst,
         ),
       ])
+
+      block.src = fallbackAst[0].src
+      block.nodes[0].src = fallbackAst[0].src
 
       newAst.push(block)
     }
