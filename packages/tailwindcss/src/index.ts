@@ -809,7 +809,7 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst)
+      compiledCss = toCss(newAst, !!opts.from)
       compiledAst = newAst
 
       return compiledCss
