@@ -755,6 +755,19 @@ export async function compileAst(
         onInvalidCandidate,
       }).astNodes
 
+      if (opts.from) {
+        walk(newNodes, (node) => {
+          // NOTE: Doing this conditionally *should* be fine
+          //
+          // We do this to preserve source locations from both `@utility` and
+          // `@custom-variant` but generated nodes are cached.
+          //
+          // However, `utilitiesNode.src` should not be able to change without
+          // a full rebuild which destroys the cache.
+          node.src ??= utilitiesNode.src
+        })
+      }
+
       // If no new ast nodes were generated, then we can return the original
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
