@@ -77,6 +77,7 @@ fpx
 fst
 fvt
 g3
+geojson
 gh
 gif
 graffle
