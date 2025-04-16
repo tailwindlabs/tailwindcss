@@ -1,6 +1,7 @@
 import { Polyfills } from '.'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
+import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
@@ -12,6 +13,9 @@ export type StyleRule = {
   kind: 'rule'
   selector: string
   nodes: AstNode[]
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type AtRule = {
@@ -19,6 +23,9 @@ export type AtRule = {
   name: string
   params: string
   nodes: AstNode[]
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Declaration = {
@@ -26,22 +33,34 @@ export type Declaration = {
   property: string
   value: string | undefined
   important: boolean
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Comment = {
   kind: 'comment'
   value: string
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Context = {
   kind: 'context'
   context: Record<string, string | boolean>
   nodes: AstNode[]
+
+  src?: undefined
+  dst?: undefined
 }
 
 export type AtRoot = {
   kind: 'at-root'
   nodes: AstNode[]
+
+  src?: undefined
+  dst?: undefined
 }
 
 export type Rule = StyleRule | AtRule
