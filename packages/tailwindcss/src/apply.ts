@@ -171,7 +171,12 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           },
         })
 
+        let src = node.src
         let candidateAst = compiled.astNodes
+
+        walk(candidateAst, (node) => {
+          node.src = src
+        })
 
         // Collect the nodes to insert in place of the `@apply` rule. When a rule
         // was used, we want to insert its children instead of the rule because we
