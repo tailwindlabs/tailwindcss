@@ -148,41 +148,6 @@ async function run() {
       }
     }
 
-    // Migrate source files
-    if (configBySheet.size > 0) {
-      info('Migrating templates…')
-    }
-    {
-      // Template migrations
-      for (let config of configBySheet.values()) {
-        let set = new Set<string>()
-        for (let globEntry of config.sources.flatMap((entry) => hoistStaticGlobParts(entry))) {
-          let files = await globby([globEntry.pattern], {
-            absolute: true,
-            gitignore: true,
-            cwd: globEntry.base,
-          })
-
-          for (let file of files) {
-            set.add(file)
-          }
-        }
-
-        let files = Array.from(set)
-        files.sort()
-
-        // Migrate each file
-        await Promise.allSettled(
-          files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
-        )
-
-        success(
-          `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
-          { prefix: '↳ ' },
-        )
-      }
-    }
-
     // Migrate each CSS file
     if (stylesheets.length > 0) {
       info('Migrating stylesheets…')
@@ -257,6 +222,41 @@ async function run() {
 
       if (sheet.isTailwindRoot) {
         success(`Migrated stylesheet: ${highlight(relative(sheet.file, base))}`, { prefix: '↳ ' })
+      }
+    }
+
+    // Migrate source files
+    if (configBySheet.size > 0) {
+      info('Migrating templates…')
+    }
+    {
+      // Template migrations
+      for (let config of configBySheet.values()) {
+        let set = new Set<string>()
+        for (let globEntry of config.sources.flatMap((entry) => hoistStaticGlobParts(entry))) {
+          let files = await globby([globEntry.pattern], {
+            absolute: true,
+            gitignore: true,
+            cwd: globEntry.base,
+          })
+
+          for (let file of files) {
+            set.add(file)
+          }
+        }
+
+        let files = Array.from(set)
+        files.sort()
+
+        // Migrate each file
+        await Promise.allSettled(
+          files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
+        )
+
+        success(
+          `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+          { prefix: '↳ ' },
+        )
       }
     }
   }
