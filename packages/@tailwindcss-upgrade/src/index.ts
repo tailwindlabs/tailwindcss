@@ -155,7 +155,7 @@ async function run() {
     await Promise.all(
       stylesheets.map(async (sheet) => {
         try {
-          let config = configBySheet.get(sheet)!
+          let config = configBySheet.get(sheet)
           let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)
 
           if (!config) {
@@ -167,6 +167,8 @@ async function run() {
               }
             }
           }
+
+          if (!config) return
 
           await migrateStylesheet(sheet, {
             ...config,
