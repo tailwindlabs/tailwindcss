@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { Scanner } from '@tailwindcss/oxide'
 import { globby } from 'globby'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -19,7 +20,6 @@ import { help } from './commands/help'
 import { Stylesheet } from './stylesheet'
 import { args, type Arg } from './utils/args'
 import { isRepoDirty } from './utils/git'
-import { hoistStaticGlobParts } from './utils/hoist-static-glob-parts'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
 import * as version from './utils/version'
@@ -227,38 +227,67 @@ async function run() {
       }
     }
 
+    let tailwindRootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot && sheet.file)
+
     // Migrate source files
-    if (configBySheet.size > 0) {
+    if (tailwindRootStylesheets.length > 0) {
       info('Migrating templates…')
     }
     {
+      let seenFiles = new Set()
+
       // Template migrations
-      for (let config of configBySheet.values()) {
-        let set = new Set<string>()
-        for (let globEntry of config.sources.flatMap((entry) => hoistStaticGlobParts(entry))) {
-          let files = await globby([globEntry.pattern], {
-            absolute: true,
-            gitignore: true,
-            cwd: globEntry.base,
-          })
+      for (let sheet of tailwindRootStylesheets) {
+        let compiler = await sheet.compiler()
+        if (!compiler) continue
+        let designSystem = await sheet.designSystem()
+        if (!designSystem) continue
 
-          for (let file of files) {
-            set.add(file)
+        // Figure out the source files to migrate
+        let sources = (() => {
+          // Disable auto source detection
+          if (compiler.root === 'none') {
+            return []
           }
-        }
 
-        let files = Array.from(set)
-        files.sort()
+          // No root specified, use the base directory
+          if (compiler.root === null) {
+            return [{ base, pattern: '**/*', negated: false }]
+          }
+
+          // Use the specified root
+          return [{ ...compiler.root, negated: false }]
+        })().concat(compiler.sources)
+
+        let config = configBySheet.get(sheet)
+        let scanner = new Scanner({ sources })
+        let filesToMigrate = []
+        for (let file of scanner.files) {
+          if (seenFiles.has(file)) continue
+          seenFiles.add(file)
+          filesToMigrate.push(file)
+        }
 
         // Migrate each file
         await Promise.allSettled(
-          files.map((file) => migrateTemplate(config.designSystem, config.userConfig, file)),
+          filesToMigrate.map((file) =>
+            migrateTemplate(designSystem, config?.userConfig ?? null, file),
+          ),
         )
 
-        success(
-          `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
-          { prefix: '↳ ' },
-        )
+        if (config?.configFilePath) {
+          success(
+            `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+            { prefix: '↳ ' },
+          )
+        } else {
+          success(
+            `Migrated templates for: ${highlight(relative(sheet.file ?? '<unknown>', base))}`,
+            {
+              prefix: '↳ ',
+            },
+          )
+        }
       }
     }
   }

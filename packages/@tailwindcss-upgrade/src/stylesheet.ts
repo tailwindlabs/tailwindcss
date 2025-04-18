@@ -1,8 +1,10 @@
+import { __unstable__loadDesignSystem, compileAst } from '@tailwindcss/node'
 import * as fsSync from 'node:fs'
 import * as fs from 'node:fs/promises'
 import * as path from 'node:path'
 import * as util from 'node:util'
 import * as postcss from 'postcss'
+import { postCssAstToCssAst } from '../../@tailwindcss-postcss/src/ast'
 
 export type StylesheetId = string
 
@@ -261,6 +263,25 @@ export class Stylesheet {
     }
 
     return false
+  }
+
+  async compiler(): Promise<Awaited<ReturnType<typeof compileAst>> | null> {
+    if (!this.isTailwindRoot) return null
+    if (!this.file) return null
+
+    return compileAst(postCssAstToCssAst(this.root), {
+      base: path.dirname(this.file),
+      onDependency() {},
+    })
+  }
+
+  async designSystem(): Promise<Awaited<ReturnType<typeof __unstable__loadDesignSystem>> | null> {
+    if (!this.isTailwindRoot) return null
+    if (!this.file) return null
+
+    return __unstable__loadDesignSystem(this.root.toString(), {
+      base: path.dirname(this.file),
+    })
   }
 
   [util.inspect.custom]() {
