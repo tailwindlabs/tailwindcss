@@ -125,6 +125,7 @@ export async function loadModule(
 
     let module = await importModule(pathToFileURL(resolvedPath).href)
     return {
+      path: resolvedPath,
       base: path.dirname(resolvedPath),
       module: module.default ?? module,
     }
@@ -144,6 +145,7 @@ export async function loadModule(
     onDependency(file)
   }
   return {
+    path: resolvedPath,
     base: path.dirname(resolvedPath),
     module: module.default ?? module,
   }
@@ -164,6 +166,7 @@ async function loadStylesheet(
     let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
     if (file) {
       return {
+        path: resolvedPath,
         base: path.dirname(resolvedPath),
         content: file,
       }
@@ -172,6 +175,7 @@ async function loadStylesheet(
 
   let file = await fsPromises.readFile(resolvedPath, 'utf-8')
   return {
+    path: resolvedPath,
     base: path.dirname(resolvedPath),
     content: file,
   }

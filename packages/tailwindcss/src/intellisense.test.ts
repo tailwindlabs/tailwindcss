@@ -172,10 +172,12 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
     loadModule: async () => ({
+      path: '',
       base: '',
       module: {
         important: '#app',
@@ -208,6 +210,7 @@ test('Utilities, when marked as important, show as important in intellisense', a
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
@@ -239,10 +242,12 @@ test('Static utilities from plugins are listed in hovers and completions', async
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
     loadModule: async () => ({
+      path: '',
       base: '',
       module: plugin(({ addUtilities }) => {
         addUtilities({
@@ -274,10 +279,12 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
     loadModule: async () => ({
+      path: '',
       base: '',
       module: plugin(({ matchUtilities }) => {
         matchUtilities(
@@ -420,10 +427,12 @@ test('Custom at-rule variants do not show up as a value under `group`', async ()
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
     loadModule: async () => ({
+      path: '',
       base: '',
       module: plugin(({ addVariant }) => {
         addVariant('variant-3', '@media baz')
@@ -510,6 +519,7 @@ test('Custom functional @utility', async () => {
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),
@@ -587,6 +597,7 @@ test('Theme keys with underscores are suggested with underscores', async () => {
 
   let design = await __unstable__loadDesignSystem(input, {
     loadStylesheet: async (_, base) => ({
+      path: '',
       base,
       content: '@tailwind utilities;',
     }),

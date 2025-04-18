@@ -31,6 +31,7 @@ export async function applyCompatibilityHooks({
     base: string,
     resourceHint: 'plugin' | 'config',
   ) => Promise<{
+    path: string
     base: string
     module: any
   }>
