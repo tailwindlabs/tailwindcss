@@ -22,6 +22,7 @@ import { isRepoDirty } from './utils/git'
 import { hoistStaticGlobParts } from './utils/hoist-static-glob-parts'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
+import * as version from './utils/version'
 
 const options = {
   '--config': { type: 'string', description: 'Path to the configuration file', alias: '-c' },
@@ -98,14 +99,17 @@ async function run() {
       error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }
 
-    // Ensure stylesheets are linked to configs
-    try {
-      await linkConfigsToStylesheets(stylesheets, {
-        configPath: flags['--config'],
-        base,
-      })
-    } catch (e: any) {
-      error(`${e?.message ?? e}`, { prefix: '↳ ' })
+    // Ensure stylesheets are linked to configs. But this is only necessary when
+    // migrating from v3 to v4.
+    if (version.isMajor(3)) {
+      try {
+        await linkConfigsToStylesheets(stylesheets, {
+          configPath: flags['--config'],
+          base,
+        })
+      } catch (e: any) {
+        error(`${e?.message ?? e}`, { prefix: '↳ ' })
+      }
     }
 
     // Migrate js config files, linked to stylesheets
