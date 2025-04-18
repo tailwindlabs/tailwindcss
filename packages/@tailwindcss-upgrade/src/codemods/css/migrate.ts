@@ -18,7 +18,7 @@ export interface MigrateOptions {
   newPrefix: string | null
   designSystem: DesignSystem
   userConfig: Config | null
-  configFilePath: string
+  configFilePath: string | null
   jsConfigMigration: JSConfigMigration | null
 }
 
