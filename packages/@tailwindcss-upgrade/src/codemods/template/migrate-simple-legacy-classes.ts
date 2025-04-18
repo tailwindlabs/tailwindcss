@@ -15,6 +15,16 @@ const LEGACY_CLASS_MAP: Record<string, string> = {
 
   'decoration-clone': 'box-decoration-clone',
   'decoration-slice': 'box-decoration-slice',
+
+  // Since v4.1.0
+  'bg-left-top': 'bg-top-left',
+  'bg-left-bottom': 'bg-bottom-left',
+  'bg-right-top': 'bg-top-right',
+  'bg-right-bottom': 'bg-bottom-right',
+  'object-left-top': 'object-top-left',
+  'object-left-bottom': 'object-bottom-left',
+  'object-right-top': 'object-top-right',
+  'object-right-bottom': 'object-bottom-right',
 }
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
