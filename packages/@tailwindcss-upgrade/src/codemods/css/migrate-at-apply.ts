@@ -8,7 +8,7 @@ export function migrateAtApply({
   designSystem,
   userConfig,
 }: {
-  designSystem: DesignSystem
+  designSystem: DesignSystem | null
   userConfig: Config | null
 }): Plugin {
   function migrate(atRule: AtRule) {
@@ -35,6 +35,8 @@ export function migrateAtApply({
     })
 
     return async () => {
+      if (!designSystem) return
+
       // If we have a valid designSystem and config setup, we can run all
       // candidate migrations on each utility
       params = await Promise.all(
