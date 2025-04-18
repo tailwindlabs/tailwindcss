@@ -7,7 +7,7 @@ import { printCandidate } from './candidates'
 
 export function migrateVariantOrder(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   // This migration is only needed for Tailwind CSS v3

@@ -68,7 +68,7 @@ const DESIGN_SYSTEMS = new DefaultMap((base) => {
 
 export async function migrateLegacyClasses(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
   location?: {
     contents: string

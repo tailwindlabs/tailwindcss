@@ -18,7 +18,7 @@ import { isSafeMigration } from './is-safe-migration'
 //   flex! md:block!
 export function migrateImportant(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
   location?: {
     contents: string

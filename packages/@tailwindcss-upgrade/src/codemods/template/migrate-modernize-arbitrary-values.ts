@@ -15,7 +15,7 @@ function memcpy<T extends object, U extends object | null>(target: T, source: U)
 
 export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {

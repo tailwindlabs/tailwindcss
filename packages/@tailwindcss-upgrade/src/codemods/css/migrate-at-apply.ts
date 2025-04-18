@@ -9,7 +9,7 @@ export function migrateAtApply({
   userConfig,
 }: {
   designSystem: DesignSystem
-  userConfig: Config
+  userConfig: Config | null
 }): Plugin {
   function migrate(atRule: AtRule) {
     let utilities = atRule.params.split(/(\s+)/)

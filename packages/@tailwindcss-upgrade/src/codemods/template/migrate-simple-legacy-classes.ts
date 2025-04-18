@@ -30,7 +30,7 @@ let seenDesignSystems = new WeakSet<DesignSystem>()
 
 export function migrateSimpleLegacyClasses(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   // Prepare design system with the unknown legacy classes
