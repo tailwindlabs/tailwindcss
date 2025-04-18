@@ -242,6 +242,8 @@ export function migrateModernizeArbitraryValues(
             else if (value === ':required') return 'required'
             else if (value === ':valid') return 'valid'
             else if (value === ':invalid') return 'invalid'
+            else if (value === ':user-valid') return 'user-valid'
+            else if (value === ':user-invalid') return 'user-invalid'
             else if (value === ':in-range') return 'in-range'
             else if (value === ':out-of-range') return 'out-of-range'
             else if (value === ':read-only') return 'read-only'
