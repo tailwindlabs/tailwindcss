@@ -1,6 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migratePrefix } from './migrate-prefix'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 describe('for projects with configured prefix', () => {
   test.each([

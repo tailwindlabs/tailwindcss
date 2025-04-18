@@ -1,8 +1,10 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { migratePrefix } from './migrate-prefix'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 test.each([
   // Arbitrary variants
