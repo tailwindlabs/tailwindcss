@@ -37,6 +37,7 @@ cpio
 cr2
 cur
 dat
+db
 dcm
 deb
 dex
