@@ -19,7 +19,7 @@ export interface MigrateOptions {
   designSystem: DesignSystem
   userConfig: Config
   configFilePath: string
-  jsConfigMigration: JSConfigMigration
+  jsConfigMigration: JSConfigMigration | null
 }
 
 export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {
