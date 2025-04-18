@@ -2,6 +2,7 @@ import { walk, type AstNode } from '../../../../tailwindcss/src/ast'
 import { type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as version from '../../utils/version'
 import { printCandidate } from './candidates'
 
 export function migrateVariantOrder(
@@ -9,6 +10,15 @@ export function migrateVariantOrder(
   _userConfig: Config,
   rawCandidate: string,
 ): string {
+  // This migration is only needed for Tailwind CSS v3
+  //
+  // Changing the variant order when migrating from v3 to v4 is fine, but
+  // migrating v4 to v4 would make it unsafe because the variant order would
+  // flip-flop every time you run the migration.
+  if (!version.isMajor(3)) {
+    return rawCandidate
+  }
+
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.variants.length <= 1) {
       continue
