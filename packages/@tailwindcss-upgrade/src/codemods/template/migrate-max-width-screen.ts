@@ -4,7 +4,7 @@ import { printCandidate } from './candidates'
 
 export function migrateMaxWidthScreen(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {

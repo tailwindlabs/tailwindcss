@@ -20,7 +20,7 @@ import { migrateVariantOrder } from './migrate-variant-order'
 
 export type Migration = (
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   rawCandidate: string,
   location?: {
     contents: string
@@ -47,7 +47,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
 
 export async function migrateCandidate(
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   rawCandidate: string,
   // Location is only set when migrating a candidate from a source file
   location?: {
@@ -64,7 +64,7 @@ export async function migrateCandidate(
 
 export default async function migrateContents(
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   contents: string,
   extension: string,
 ): Promise<string> {
@@ -93,7 +93,7 @@ export default async function migrateContents(
   return spliceChangesIntoString(contents, changes)
 }
 
-export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {
+export async function migrate(designSystem: DesignSystem, userConfig: Config | null, file: string) {
   let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 

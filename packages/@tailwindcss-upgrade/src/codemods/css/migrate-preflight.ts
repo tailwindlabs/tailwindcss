@@ -35,7 +35,7 @@ export function migratePreflight({
   userConfig,
 }: {
   designSystem: DesignSystem
-  userConfig?: Config
+  userConfig?: Config | null
 }): Plugin {
   // @ts-expect-error
   let defaultBorderColor = userConfig?.theme?.borderColor?.DEFAULT

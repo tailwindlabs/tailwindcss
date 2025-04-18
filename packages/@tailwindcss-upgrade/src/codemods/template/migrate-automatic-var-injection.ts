@@ -6,7 +6,7 @@ import { printCandidate } from './candidates'
 
 export function migrateAutomaticVarInjection(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {

@@ -17,7 +17,7 @@ import { migrateVariantsDirective } from './migrate-variants-directive'
 export interface MigrateOptions {
   newPrefix: string | null
   designSystem: DesignSystem
-  userConfig: Config
+  userConfig: Config | null
   configFilePath: string
   jsConfigMigration: JSConfigMigration | null
 }

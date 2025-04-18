@@ -6,7 +6,7 @@ import { printCandidate } from './candidates'
 
 export function migrateLegacyArbitraryValues(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {

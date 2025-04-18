@@ -3,7 +3,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 
 export function migrateEmptyArbitraryValues(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   // We can parse the candidate, nothing to do
