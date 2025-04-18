@@ -2893,6 +2893,68 @@ test(
   },
 )
 
+test(
+  'upgrades run on v4 projects',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+        <div class="ring rounded outline"></div>
+
+        <!-- Variant order is also unsafe to change in v4 projects -->
+        <div class="file:hover:flex *:hover:flex"></div>
+        <div class="hover:file:flex hover:*:flex"></div>
+
+        <!-- These are safe to migrate: -->
+        <div class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex"></div>
+      `,
+      'src/input.css': css`
+        @import 'tailwindcss';
+
+        .foo {
+          @apply !bg-[var(--my-color)];
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+      <div class="ring rounded outline"></div>
+
+      <!-- Variant order is also unsafe to change in v4 projects -->
+      <div class="file:hover:flex *:hover:flex"></div>
+      <div class="hover:file:flex hover:*:flex"></div>
+
+      <!-- These are safe to migrate: -->
+      <div class="flex! bg-red-500/(--my-opacity) pointer-fine:flex"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      .foo {
+        @apply bg-(--my-color)!;
+      }
+      "
+    `)
+  },
+)
+
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
