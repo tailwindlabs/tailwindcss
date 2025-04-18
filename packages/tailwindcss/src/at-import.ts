@@ -57,6 +57,7 @@ export async function substituteAtImports(
           await substituteAtImports(ast, loaded.base, loadStylesheet, recurseCount + 1, track)
 
           contextNode.nodes = buildImportNodes(
+            node,
             [context({ base: loaded.base }, ast)],
             layer,
             media,
@@ -148,6 +149,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
 }
 
 function buildImportNodes(
+  importNode: AstNode,
   importedAst: AstNode[],
   layer: string | null,
   media: string | null,
@@ -157,16 +159,19 @@ function buildImportNodes(
 
   if (layer !== null) {
     let node = atRule('@layer', layer, root)
+    node.src = importNode.src
     root = [node]
   }
 
   if (media !== null) {
     let node = atRule('@media', media, root)
+    node.src = importNode.src
     root = [node]
   }
 
   if (supports !== null) {
     let node = atRule('@supports', supports[0] === '(' ? supports : `(${supports})`, root)
+    node.src = importNode.src
     root = [node]
   }
 
