@@ -83,6 +83,7 @@ test.each([
   // Media queries
   ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
   ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+  ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
 
   // Compound arbitrary variants
   ['has-[[data-visible]]:flex', 'has-data-visible:flex'],

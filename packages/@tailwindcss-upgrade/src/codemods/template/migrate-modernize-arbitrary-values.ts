@@ -179,6 +179,12 @@ export function migrateModernizeArbitraryValues(
             }
           })
 
+          let not = false
+          if (parsed[0]?.kind === 'word' && parsed[0].value === 'not') {
+            not = true
+            parsed.shift()
+          }
+
           if (
             parsed.length === 1 &&
             parsed[0].kind === 'function' && // `(` and `)` are considered a function
@@ -218,7 +224,7 @@ export function migrateModernizeArbitraryValues(
 
             if (replacement) {
               changed = true
-              memcpy(variant, designSystem.parseVariant(replacement))
+              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
             }
           }
           continue
