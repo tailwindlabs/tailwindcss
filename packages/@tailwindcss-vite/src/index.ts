@@ -111,6 +111,7 @@ export default function tailwindcss(): Plugin[] {
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
         result = optimize(result.code, {
           minify,
+          map: result.map,
         })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 

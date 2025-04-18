@@ -159,14 +159,17 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     if (args['--minify'] || args['--optimize']) {
       if (css !== previous.css) {
         DEBUG && I.start('Optimize CSS')
-        let optimizedCss = optimize(css, {
+        let optimized = optimize(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
+          map: map?.raw ?? undefined,
         })
         DEBUG && I.end('Optimize CSS')
         previous.css = css
-        previous.optimizedCss = optimizedCss
-        output = optimizedCss
+        previous.optimizedCss = optimized.code
+        // TODO
+        map = { raw: optimized.map, inline: optimized.map }
+        output = optimized.code
       } else {
         output = previous.optimizedCss
       }

@@ -1,15 +1,26 @@
 import { Features, transform } from 'lightningcss'
+import MagicString from 'magic-string'
+
+const decoder = new TextDecoder()
 
 export function optimize(
   input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-): string {
-  function optimize(code: Buffer | Uint8Array) {
+  {
+    file = 'input.css',
+    minify = false,
+    map,
+  }: { file?: string; minify?: boolean; map?: string } = {},
+): {
+  code: string
+  map: string
+} {
+  function optimize(code: Buffer | Uint8Array, map?: string) {
     return transform({
       filename: file,
       code: code as any,
       minify,
-      sourceMap: false,
+      sourceMap: typeof map !== 'undefined',
+      inputSourceMap: map,
       drafts: {
         customMedia: true,
       },
@@ -25,16 +36,22 @@ export function optimize(
         chrome: 111 << 16,
       },
       errorRecovery: true,
-    }).code
+    })
   }
 
   // Running Lightning CSS twice to ensure that adjacent rules are merged after
   // nesting is applied. This creates a more optimized output.
-  let out = optimize(optimize(Buffer.from(input))).toString()
+  let result = optimize(Buffer.from(input), map)
+  map = result.map ? decoder.decode(result.map) : undefined
+  result = optimize(result.code, map)
 
   // Work around an issue where the media query range syntax transpilation
   // generates code that is invalid with `@media` queries level 3.
+  let out = new MagicString(result.toString())
   out = out.replaceAll('@media not (', '@media not all and (')
 
-  return out
+  return {
+    code: out.toString(),
+    map: out.generateMap().toString(),
+  }
 }
