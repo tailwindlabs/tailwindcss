@@ -116,10 +116,7 @@ test('config values can be merged into the theme', () => {
     { '--line-height': '3rem' },
   ])
   expect(theme.resolve('2xl', ['--text'])).toEqual('2rem')
-  expect(theme.resolveWith('2xl', ['--text'], ['--line-height'])).toEqual([
-    '2rem',
-    {},
-  ])
+  expect(theme.resolveWith('2xl', ['--text'], ['--line-height'])).toEqual(['2rem', {}])
   expect(theme.resolve('super-wide', ['--tracking'])).toEqual('0.25em')
   expect(theme.resolve('super-loose', ['--leading'])).toEqual('3')
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
