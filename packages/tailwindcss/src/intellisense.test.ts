@@ -598,3 +598,25 @@ test('Theme keys with underscores are suggested with underscores', async () => {
   expect(entries).not.toContainEqual(['p-2_5', { modifiers: [] }])
   expect(entries).not.toContainEqual(['p-logo.margin', { modifiers: [] }])
 })
+
+test('Custom @utility and existing utility with names matching theme keys dont give duplicate results', async () => {
+  let input = css`
+    @theme reference {
+      --leading-sm: 0.25rem;
+      --text-header: 1.5rem;
+    }
+
+    @utility text-header {
+      text-transform: uppercase;
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+
+  let classList = design.getClassList()
+  let classMap = new Map(classList)
+  let matches = classList.filter(([className]) => className === 'text-header')
+
+  expect(matches).toHaveLength(1)
+  expect(classMap.get('text-header')?.modifiers).toEqual(['sm'])
+})
