@@ -412,6 +412,7 @@ describe('--theme(…)', () => {
         [],
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: () => {},
           }),
@@ -772,6 +773,7 @@ describe('theme(…)', () => {
             `,
             {
               loadModule: async () => ({
+                path: '',
                 base: '/root',
                 module: {},
               }),
@@ -1199,6 +1201,7 @@ describe('in plugins', () => {
       {
         async loadModule() {
           return {
+            path: '',
             base: '/root',
             module: plugin(({ addBase, addUtilities }) => {
               addBase({
@@ -1256,6 +1259,7 @@ describe('in JS config files', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: {
             theme: {
@@ -1317,6 +1321,7 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
       {
         async loadStylesheet() {
           return {
+            path: '',
             base: '/bar.css',
             content: css`
               .red {

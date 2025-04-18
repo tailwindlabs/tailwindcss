@@ -126,6 +126,7 @@ describe('compiling CSS', () => {
         {
           async loadStylesheet(id) {
             return {
+              path: '',
               base: '',
               content: fs.readFileSync(
                 path.resolve(__dirname, '..', id === 'tailwindcss' ? 'index.css' : id),
@@ -401,6 +402,7 @@ describe('@apply', () => {
         {
           async loadStylesheet() {
             return {
+              path: '',
               base: '/bar.css',
               content: css`
                 .foo {
@@ -2398,6 +2400,7 @@ describe('Parsing theme values from CSS', () => {
         {
           async loadStylesheet() {
             return {
+              path: '',
               base: '',
               content: css`
                 @theme {
@@ -2485,6 +2488,7 @@ describe('Parsing theme values from CSS', () => {
         {
           async loadStylesheet() {
             return {
+              path: '',
               base: '',
               content: css`
                 @theme {
@@ -2782,6 +2786,7 @@ describe('Parsing theme values from CSS', () => {
       {
         loadModule: async () => {
           return {
+            path: '',
             base: '/root',
             module: plugin(({}) => {}, {
               theme: {
@@ -2828,6 +2833,7 @@ describe('Parsing theme values from CSS', () => {
       {
         loadModule: async () => {
           return {
+            path: '',
             base: '/root',
             module: {
               theme: {
@@ -2917,6 +2923,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
@@ -2935,6 +2942,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
@@ -2955,6 +2963,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
@@ -2977,6 +2986,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: plugin.withOptions((options) => {
             expect(options).toEqual({
@@ -3029,6 +3039,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: plugin.withOptions((options) => {
             expect(options).toEqual({
@@ -3069,6 +3080,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: plugin.withOptions((options) => {
               return ({ addUtilities }) => {
@@ -3107,6 +3119,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: plugin(({ addUtilities }) => {
               addUtilities({
@@ -3133,6 +3146,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: plugin(() => {}),
           }),
@@ -3157,6 +3171,7 @@ describe('plugins', () => {
         `,
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: plugin(() => {}),
           }),
@@ -3183,6 +3198,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', '&:hover, &:focus')
@@ -3215,6 +3231,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', ['&:hover', '&:focus'])
@@ -3248,6 +3265,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
@@ -3283,6 +3301,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
@@ -3332,6 +3351,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('hocus', {
@@ -3370,6 +3390,7 @@ describe('plugins', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
           base: '/root',
           module: ({ addVariant }: PluginAPI) => {
             addVariant('dark', '&:is([data-theme=dark] *)')
@@ -4226,6 +4247,7 @@ test('addBase', async () => {
     `,
     {
       loadModule: async () => ({
+        path: '',
         base: '/root',
         module: ({ addBase }: PluginAPI) => {
           addBase({
@@ -4265,6 +4287,7 @@ it("should error when `layer(…)` is used, but it's not the first param", async
       {
         async loadStylesheet() {
           return {
+            path: '',
             base: '/bar.css',
             content: css`
               .foo {
@@ -4285,6 +4308,7 @@ describe('`@reference "…" imports`', () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
         return {
+          path: '',
           base: '/root/foo',
           content: css`
             .foo {
@@ -4301,6 +4325,7 @@ describe('`@reference "…" imports`', () => {
         }
       }
       return {
+        path: '',
         base: '/root/foo',
         content: css`
           @import './foo/baz.css';
@@ -4333,6 +4358,7 @@ describe('`@reference "…" imports`', () => {
     let loadStylesheet = async (id: string, base: string) => {
       if (id === './foo/baz.css') {
         return {
+          path: '',
           base: '/root/foo',
           content: css`
             @layer utilities {
@@ -4342,6 +4368,7 @@ describe('`@reference "…" imports`', () => {
         }
       }
       return {
+        path: '',
         base: '/root/foo',
         content: css`
           @import './foo/baz.css';
@@ -4395,6 +4422,7 @@ describe('`@reference "…" imports`', () => {
         ['animate-spin', 'match-utility-initial', 'match-components-initial'],
         {
           loadModule: async () => ({
+            path: '',
             base: '/root',
             module: ({
               addBase,
@@ -4450,6 +4478,7 @@ describe('`@reference "…" imports`', () => {
       switch (id) {
         case './one.css': {
           return {
+            path: '',
             base: '/root',
             content: css`
               @import './two.css' layer(two);
@@ -4458,6 +4487,7 @@ describe('`@reference "…" imports`', () => {
         }
         case './two.css': {
           return {
+            path: '',
             base: '/root',
             content: css`
               @import './three.css' layer(three);
@@ -4466,6 +4496,7 @@ describe('`@reference "…" imports`', () => {
         }
         case './three.css': {
           return {
+            path: '',
             base: '/root',
             content: css`
               .foo {
@@ -4524,6 +4555,7 @@ describe('`@reference "…" imports`', () => {
   test('supports `@import "…" reference` syntax', async () => {
     let loadStylesheet = async () => {
       return {
+        path: '',
         base: '/root/foo',
         content: css`
           .foo {

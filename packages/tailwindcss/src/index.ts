@@ -57,6 +57,7 @@ type CompileOptions = {
     base: string,
     resourceHint: 'plugin' | 'config',
   ) => Promise<{
+    path: string
     base: string
     module: Plugin | Config
   }>
@@ -64,6 +65,7 @@ type CompileOptions = {
     id: string,
     base: string,
   ) => Promise<{
+    path: string
     base: string
     content: string
   }>
