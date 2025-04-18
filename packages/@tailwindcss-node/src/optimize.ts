@@ -47,7 +47,7 @@ export function optimize(
 
   // Work around an issue where the media query range syntax transpilation
   // generates code that is invalid with `@media` queries level 3.
-  let out = new MagicString(result.toString())
+  let out = new MagicString(result.code.toString())
   out = out.replaceAll('@media not (', '@media not all and (')
 
   return {
