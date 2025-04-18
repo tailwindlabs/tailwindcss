@@ -7,6 +7,7 @@ type LoadStylesheet = (
   id: string,
   basedir: string,
 ) => Promise<{
+  path: string
   base: string
   content: string
 }>

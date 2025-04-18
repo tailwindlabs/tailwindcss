@@ -116,6 +116,7 @@ async function loadStylesheet(id: string, base: string) {
   function load() {
     if (id === 'tailwindcss') {
       return {
+        path: 'virtual:tailwindcss/index.css',
         base,
         content: assets.css.index,
       }
@@ -125,6 +126,7 @@ async function loadStylesheet(id: string, base: string) {
       id === './preflight.css'
     ) {
       return {
+        path: 'virtual:tailwindcss/preflight.css',
         base,
         content: assets.css.preflight,
       }
@@ -134,6 +136,7 @@ async function loadStylesheet(id: string, base: string) {
       id === './theme.css'
     ) {
       return {
+        path: 'virtual:tailwindcss/theme.css',
         base,
         content: assets.css.theme,
       }
@@ -143,6 +146,7 @@ async function loadStylesheet(id: string, base: string) {
       id === './utilities.css'
     ) {
       return {
+        path: 'virtual:tailwindcss/utilities.css',
         base,
         content: assets.css.utilities,
       }

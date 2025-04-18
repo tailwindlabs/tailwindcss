@@ -2528,6 +2528,7 @@ test('matchVariant sorts deterministically', async () => {
     let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
       async loadModule(id: string) {
         return {
+          path: '',
           base: '/',
           module: createPlugin(({ matchVariant }) => {
             matchVariant('is-data', (value) => `&:is([data-${value}])`, {

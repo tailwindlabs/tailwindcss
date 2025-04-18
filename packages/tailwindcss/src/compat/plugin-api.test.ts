@@ -17,6 +17,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ addBase, theme }) {
@@ -80,6 +81,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ addUtilities, theme }) {
             addUtilities({
@@ -116,6 +118,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -164,6 +167,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -211,6 +215,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -265,6 +270,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ addUtilities, theme }) {
             addUtilities({
@@ -313,6 +319,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ addUtilities, theme }) {
@@ -398,6 +405,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -452,6 +460,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -499,6 +508,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ matchUtilities, theme }) {
             matchUtilities(
@@ -557,6 +567,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -611,6 +622,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -660,6 +672,7 @@ describe('theme', async () => {
     await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ theme }) {
@@ -695,6 +708,7 @@ describe('theme', async () => {
     let { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ matchUtilities, theme }) {
             function utility(name: string, themeKey: string) {
@@ -942,6 +956,7 @@ describe('theme', async () => {
     await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             ({ theme }) => {
@@ -984,6 +999,7 @@ describe('theme', async () => {
     await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(({ theme }) => {
             fn(theme('transitionTimingFunction.DEFAULT'))
@@ -1015,6 +1031,7 @@ describe('theme', async () => {
     await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(({ theme }) => {
             fn(theme('color.red.100'))
@@ -1043,6 +1060,7 @@ describe('theme', async () => {
     await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(({ theme }) => {
             fn(theme('i.do.not.exist'))
@@ -1069,6 +1087,7 @@ describe('theme', async () => {
     let { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(({ addUtilities, matchUtilities }) => {
             addUtilities({
@@ -1124,6 +1143,7 @@ describe('theme', async () => {
     let { build } = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ matchUtilities }) {
             function utility(name: string, themeKey: string) {
@@ -1342,6 +1362,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -1400,6 +1421,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(function ({ matchUtilities, theme }) {
             matchUtilities(
@@ -1446,6 +1468,7 @@ describe('theme', async () => {
     let compiler = await compile(input, {
       loadModule: async (id, base) => {
         return {
+          path: '',
           base,
           module: plugin(
             function ({ matchUtilities, theme }) {
@@ -1493,6 +1516,7 @@ describe('addBase', () => {
       loadModule: async (id, base) => {
         if (id === 'inside') {
           return {
+            path: '',
             base,
             module: plugin(function ({ addBase }) {
               addBase({ inside: { color: 'red' } })
@@ -1500,6 +1524,7 @@ describe('addBase', () => {
           }
         }
         return {
+          path: '',
           base,
           module: plugin(function ({ addBase }) {
             addBase({ outside: { color: 'red' } })
@@ -1508,6 +1533,7 @@ describe('addBase', () => {
       },
       async loadStylesheet() {
         return {
+          path: '',
           base: '',
           content: css`
             @plugin "inside";
@@ -1533,6 +1559,7 @@ describe('addBase', () => {
 
     let compiler = await compile(input, {
       loadModule: async () => ({
+        path: '',
         base: '/root',
         module: plugin(function ({ addBase }) {
           addBase({
@@ -1571,6 +1598,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', '&:hover, &:focus')
@@ -1605,6 +1633,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', ['&:hover', '&:focus'])
@@ -1640,6 +1669,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', {
@@ -1677,6 +1707,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', {
@@ -1728,6 +1759,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant(
@@ -1769,6 +1801,7 @@ describe('addVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ addVariant }: PluginAPI) => {
               addVariant('hocus', {
@@ -1811,6 +1844,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('potato', (flavor) => `.potato-${flavor} &`)
@@ -1845,6 +1879,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('potato', (flavor) => `@media (potato: ${flavor})`)
@@ -1883,6 +1918,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant(
@@ -1929,6 +1965,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('tooltip', (side) => `&${side}`, {
@@ -1968,6 +2005,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('alphabet', (side) => `&${side}`, {
@@ -2010,6 +2048,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('test', (selector) =>
@@ -2042,6 +2081,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2094,6 +2134,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2149,6 +2190,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2221,6 +2263,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2275,6 +2318,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2347,6 +2391,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2415,6 +2460,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('testmin', (value) => `@media (min-width: ${value})`, {
@@ -2495,6 +2541,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('foo', (value) => `.foo${value} &`, {
@@ -2529,6 +2576,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('foo', (value) => `.foo${value} &`)
@@ -2553,6 +2601,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('foo', (value) => `.foo${value === null ? '-good' : '-bad'} &`, {
@@ -2585,6 +2634,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('foo', (value) => `.foo${value === undefined ? '-good' : '-bad'} &`, {
@@ -2615,6 +2665,7 @@ describe('matchVariant', () => {
       {
         loadModule: async (id, base) => {
           return {
+            path: '',
             base,
             module: ({ matchVariant }: PluginAPI) => {
               matchVariant('my-container', (value, { modifier }) => {
@@ -2669,6 +2720,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -2710,6 +2762,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities([
@@ -2743,6 +2796,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities([
@@ -2782,6 +2836,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities([
@@ -2816,6 +2871,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -2857,6 +2913,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -2913,6 +2970,7 @@ describe('addUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ addUtilities }: PluginAPI) => {
                 addUtilities({
@@ -2942,6 +3000,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -2985,6 +3044,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -3026,6 +3086,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -3122,6 +3183,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -3175,6 +3237,7 @@ describe('addUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addUtilities }: PluginAPI) => {
               addUtilities({
@@ -3240,6 +3303,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3320,6 +3384,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3361,6 +3426,7 @@ describe('matchUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
@@ -3410,6 +3476,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3480,6 +3547,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3554,6 +3622,7 @@ describe('matchUtilities()', () => {
           {
             async loadModule(id, base) {
               return {
+                path: '',
                 base,
                 module: ({ matchUtilities }: PluginAPI) => {
                   matchUtilities(
@@ -3609,6 +3678,7 @@ describe('matchUtilities()', () => {
           {
             async loadModule(id, base) {
               return {
+                path: '',
                 base,
                 module: ({ matchUtilities }: PluginAPI) => {
                   matchUtilities(
@@ -3647,6 +3717,7 @@ describe('matchUtilities()', () => {
           {
             async loadModule(id, base) {
               return {
+                path: '',
                 base,
                 module: ({ matchUtilities }: PluginAPI) => {
                   matchUtilities(
@@ -3691,6 +3762,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3818,6 +3890,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3903,6 +3976,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities(
@@ -3961,6 +4035,7 @@ describe('matchUtilities()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
@@ -4028,6 +4103,7 @@ describe('matchUtilities()', () => {
         {
           async loadModule(id, base) {
             return {
+              path: '',
               base,
               module: ({ matchUtilities }: PluginAPI) => {
                 matchUtilities({
@@ -4056,6 +4132,7 @@ describe('matchUtilities()', () => {
       {
         async loadModule(base) {
           return {
+            path: '',
             base,
             module: ({ matchUtilities }: PluginAPI) => {
               matchUtilities(
@@ -4122,6 +4199,7 @@ describe('addComponents()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ addComponents }: PluginAPI) => {
               addComponents({
@@ -4190,6 +4268,7 @@ describe('matchComponents()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ matchComponents }: PluginAPI) => {
               matchComponents(
@@ -4235,6 +4314,7 @@ describe('prefix()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ prefix }: PluginAPI) => {
               fn(prefix('btn'))
@@ -4258,6 +4338,7 @@ describe('config()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ config }: PluginAPI) => {
               fn(config())
@@ -4285,6 +4366,7 @@ describe('config()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ config }: PluginAPI) => {
               fn(config('theme'))
@@ -4310,6 +4392,7 @@ describe('config()', () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: ({ config }: PluginAPI) => {
               fn(config('somekey', 'defaultvalue'))

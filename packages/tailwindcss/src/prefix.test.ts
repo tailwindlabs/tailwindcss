@@ -169,6 +169,7 @@ test('JS theme functions do not use the prefix', async () => {
     {
       async loadModule(id, base) {
         return {
+          path: '',
           base,
           module: plugin(({ addUtilities, theme }) => {
             addUtilities({
@@ -206,6 +207,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
   let compiler = await compile(input, {
     async loadStylesheet(id, base) {
       return {
+        path: '',
         base,
         content: css`
           @theme {
@@ -250,6 +252,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
   compiler = await compile(input, {
     async loadStylesheet(id, base) {
       return {
+        path: '',
         base,
         content: css`
           @theme {
@@ -275,6 +278,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   let compiler = await compile(input, {
     async loadStylesheet(id, base) {
       return {
+        path: '',
         base,
         content: css`
           @theme {
@@ -314,6 +318,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   compiler = await compile(input, {
     async loadStylesheet(id, base) {
       return {
+        path: '',
         base,
         content: css`
           @theme {

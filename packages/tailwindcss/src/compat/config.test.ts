@@ -1156,6 +1156,7 @@ test('utilities must be prefixed', async () => {
 
   let compiler = await compile(input, {
     loadModule: async (id, base) => ({
+      path: '',
       base,
       module: { prefix: 'tw' },
     }),
@@ -1183,6 +1184,7 @@ test('utilities must be prefixed', async () => {
   // Non-prefixed utilities are ignored
   compiler = await compile(input, {
     loadModule: async (id, base) => ({
+      path: '',
       base,
       module: { prefix: 'tw' },
     }),
@@ -1202,6 +1204,7 @@ test('utilities used in @apply must be prefixed', async () => {
     `,
     {
       loadModule: async (id, base) => ({
+        path: '',
         base,
         module: { prefix: 'tw' },
       }),
@@ -1228,6 +1231,7 @@ test('utilities used in @apply must be prefixed', async () => {
       `,
       {
         loadModule: async (id, base) => ({
+          path: '',
           base,
           module: { prefix: 'tw' },
         }),
@@ -1258,6 +1262,7 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
     {
       async loadModule(id, base) {
         return {
+          path: '',
           base,
           module: { prefix: 'tw' },
         }
@@ -1282,6 +1287,7 @@ test('a prefix must be letters only', async () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: { prefix: '__' },
           }
@@ -1305,6 +1311,7 @@ test('important: `#app`', async () => {
 
   let compiler = await compile(input, {
     loadModule: async (_, base) => ({
+      path: '',
       base,
       module: { important: '#app' },
     }),
@@ -1342,6 +1349,7 @@ test('important: true', async () => {
 
   let compiler = await compile(input, {
     loadModule: async (_, base) => ({
+      path: '',
       base,
       module: { important: true },
     }),
@@ -1378,6 +1386,7 @@ test('blocklisted candidates are not generated', async () => {
     {
       async loadModule(id, base) {
         return {
+          path: '',
           base,
           module: {
             blocklist: ['bg-white'],
@@ -1421,6 +1430,7 @@ test('blocklisted candidates cannot be used with `@apply`', async () => {
       {
         async loadModule(id, base) {
           return {
+            path: '',
             base,
             module: {
               blocklist: ['bg-white'],
@@ -1473,6 +1483,7 @@ test('old theme values are merged with their renamed counterparts in the CSS the
     {
       async loadModule(id, base) {
         return {
+          path: '',
           base,
           module: plugin(function ({ theme }) {
             didCallPluginFn()
