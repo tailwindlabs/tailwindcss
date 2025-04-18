@@ -1,9 +1,10 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
+import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
-import { extractRawCandidates } from './candidates'
+import { extractRawCandidates, printCandidate } from './candidates'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
@@ -56,9 +57,22 @@ export async function migrateCandidate(
     end: number
   },
 ): Promise<string> {
+  let original = rawCandidate
   for (let migration of DEFAULT_MIGRATIONS) {
     rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
   }
+
+  // If nothing changed, let's parse it again and re-print it. This will migrate
+  // pretty print candidates to the new format. If it did change, we already had
+  // to re-print it.
+  //
+  // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
+  if (rawCandidate === original) {
+    for (let candidate of parseCandidate(rawCandidate, designSystem)) {
+      return printCandidate(designSystem, candidate)
+    }
+  }
+
   return rawCandidate
 }
 
