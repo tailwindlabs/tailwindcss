@@ -17,15 +17,6 @@ const LEGACY_CLASS_MAP: Record<string, string> = {
   'decoration-slice': 'box-decoration-slice',
 }
 
-// `outline-none` in v3 has the same meaning as `outline-hidden` in v4. However,
-// `outline-none` in v4 _also_ exists but has a different meaning.
-//
-// We can only migrate `outline-none` to `outline-hidden` if we are migrating a
-// v3 project to v4.
-if (version.isMajor(3)) {
-  LEGACY_CLASS_MAP['outline-none'] = 'outline-hidden'
-}
-
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
 export function migrateSimpleLegacyClasses(
@@ -33,6 +24,15 @@ export function migrateSimpleLegacyClasses(
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
+  // `outline-none` in v3 has the same meaning as `outline-hidden` in v4. However,
+  // `outline-none` in v4 _also_ exists but has a different meaning.
+  //
+  // We can only migrate `outline-none` to `outline-hidden` if we are migrating a
+  // v3 project to v4.
+  if (version.isMajor(3)) {
+    LEGACY_CLASS_MAP['outline-none'] = 'outline-hidden'
+  }
+
   // Prepare design system with the unknown legacy classes
   if (!seenDesignSystems.has(designSystem)) {
     for (let old in LEGACY_CLASS_MAP) {

@@ -1,6 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 test.each([
   ['overflow-ellipsis', 'text-ellipsis'],
