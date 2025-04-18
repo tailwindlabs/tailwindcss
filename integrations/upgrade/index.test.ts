@@ -2776,6 +2776,123 @@ test(
   },
 )
 
+test(
+  'upgrades are idempotent, and can run on v4 projects',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="ring"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        .foo {
+          @apply !bg-[var(--my-color)] rounded;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    let before = await fs.dumpFiles('./src/**/*.{css,html}')
+    expect(before).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="ring-3"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      .foo {
+        @apply bg-(--my-color)! rounded-sm;
+      }
+      "
+    `)
+
+    // Commit the changes
+    await exec('git add .')
+    await exec('git commit -m "upgrade"')
+
+    // Run the upgrade again
+    let output = await exec('npx @tailwindcss/upgrade')
+    expect(output).toContain('No changes were made to your repository')
+
+    let after = await fs.dumpFiles('./src/**/*.{css,html}')
+    expect(after).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="ring-3"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      .foo {
+        @apply bg-(--my-color)! rounded-sm;
+      }
+      "
+    `)
+
+    // Ensure the file system is in the same state
+    expect(before).toEqual(after)
+  },
+)
+
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
