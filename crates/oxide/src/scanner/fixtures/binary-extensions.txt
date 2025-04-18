@@ -201,8 +201,6 @@ snap
 snk
 so
 sqlite
-sqlite
-sqlite3
 sqlite3
 stl
 storedata
