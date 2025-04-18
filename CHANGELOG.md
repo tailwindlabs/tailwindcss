@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Don't scan `.geojson` files for classes by default ([#17700](https://github.com/tailwindlabs/tailwindcss/pull/17700))
 
 ## [4.1.4] - 2025-04-14
 
