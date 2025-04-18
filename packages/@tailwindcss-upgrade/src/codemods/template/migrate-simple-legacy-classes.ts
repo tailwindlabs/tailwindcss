@@ -1,10 +1,11 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as version from '../../utils/version'
 import { printCandidate } from './candidates'
 
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
 // CSS v4 anymore.
-const LEGACY_CLASS_MAP = {
+const LEGACY_CLASS_MAP: Record<string, string> = {
   'overflow-ellipsis': 'text-ellipsis',
 
   'flex-grow': 'grow',
@@ -14,8 +15,15 @@ const LEGACY_CLASS_MAP = {
 
   'decoration-clone': 'box-decoration-clone',
   'decoration-slice': 'box-decoration-slice',
+}
 
-  'outline-none': 'outline-hidden',
+// `outline-none` in v3 has the same meaning as `outline-hidden` in v4. However,
+// `outline-none` in v4 _also_ exists but has a different meaning.
+//
+// We can only migrate `outline-none` to `outline-hidden` if we are migrating a
+// v3 project to v4.
+if (version.isMajor(3)) {
+  LEGACY_CLASS_MAP['outline-none'] = 'outline-hidden'
 }
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
