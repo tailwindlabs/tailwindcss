@@ -156,23 +156,33 @@ async function run() {
       stylesheets.map(async (sheet) => {
         try {
           let config = configBySheet.get(sheet)
-          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)
+          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet) ?? null
 
           if (!config) {
             for (let parent of sheet.ancestors()) {
               if (parent.isTailwindRoot) {
                 config ??= configBySheet.get(parent)!
-                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)
+                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent) ?? null
                 break
               }
             }
           }
 
-          if (!config) return
+          let designSystem = config?.designSystem ?? (await sheet.designSystem())
+          if (!designSystem) {
+            return
+          }
+
+          let newPrefix = config?.newPrefix ?? null
+          let userConfig = config?.userConfig ?? null
+          let configFilePath = config?.configFilePath ?? null
 
           await migrateStylesheet(sheet, {
-            ...config,
-            jsConfigMigration: jsConfigMigration ?? null,
+            newPrefix,
+            designSystem,
+            userConfig,
+            configFilePath,
+            jsConfigMigration,
           })
         } catch (e: any) {
           error(`${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`, { prefix: '↳ ' })
