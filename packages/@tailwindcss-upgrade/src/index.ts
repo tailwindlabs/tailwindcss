@@ -210,31 +210,33 @@ async function run() {
     )
 
     // Split up stylesheets (as needed)
-    try {
-      await splitStylesheets(stylesheets)
-    } catch (e: any) {
-      error(`${e?.message ?? e}`, { prefix: '↳ ' })
-    }
+    if (version.isMajor(3)) {
+      try {
+        await splitStylesheets(stylesheets)
+      } catch (e: any) {
+        error(`${e?.message ?? e}`, { prefix: '↳ ' })
+      }
 
-    // Cleanup `@import "…" layer(utilities)`
-    for (let sheet of stylesheets) {
-      for (let importRule of sheet.importRules) {
-        if (!importRule.raws.tailwind_injected_layer) continue
-        let importedSheet = stylesheets.find(
-          (sheet) => sheet.id === importRule.raws.tailwind_destination_sheet_id,
-        )
-        if (!importedSheet) continue
+      // Cleanup `@import "…" layer(utilities)`
+      for (let sheet of stylesheets) {
+        for (let importRule of sheet.importRules) {
+          if (!importRule.raws.tailwind_injected_layer) continue
+          let importedSheet = stylesheets.find(
+            (sheet) => sheet.id === importRule.raws.tailwind_destination_sheet_id,
+          )
+          if (!importedSheet) continue
 
-        // Only remove the `layer(…)` next to the import if any of the children
-        // contain `@utility`. Otherwise `@utility` will not be top-level.
-        if (
-          !importedSheet.containsRule((node) => node.type === 'atrule' && node.name === 'utility')
-        ) {
-          continue
+          // Only remove the `layer(…)` next to the import if any of the children
+          // contain `@utility`. Otherwise `@utility` will not be top-level.
+          if (
+            !importedSheet.containsRule((node) => node.type === 'atrule' && node.name === 'utility')
+          ) {
+            continue
+          }
+
+          // Make sure to remove the `layer(…)` from the `@import` at-rule
+          importRule.params = importRule.params.replace(/ layer\([^)]+\)/, '').trim()
         }
-
-        // Make sure to remove the `layer(…)` from the `@import` at-rule
-        importRule.params = importRule.params.replace(/ layer\([^)]+\)/, '').trim()
       }
     }
 
