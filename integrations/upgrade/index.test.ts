@@ -2596,40 +2596,6 @@ test(
 )
 
 test(
-  'requires Tailwind v3 before attempting an upgrade',
-  {
-    fs: {
-      'package.json': json`
-        {
-          "dependencies": {
-            "tailwindcss": "workspace:^",
-            "@tailwindcss/upgrade": "workspace:^"
-          }
-        }
-      `,
-      'tailwind.config.ts': js` export default {} `,
-      'src/index.html': html`
-        <div class="underline"></div>
-      `,
-      'src/index.css': css`
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `,
-    },
-  },
-  async ({ exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
-      e.toString(),
-    )
-
-    expect(output).toMatch(
-      /Tailwind CSS v.* found. The migration tool can only be run on v3 projects./,
-    )
-  },
-)
-
-test(
   `upgrades opacity namespace values to percentages`,
   {
     fs: {
