@@ -185,6 +185,23 @@ export function migrateModernizeArbitraryValues(
             parsed.shift()
           }
 
+          // Single keyword at-rules.
+          //
+          // E.g.: `[@media_print]:` -< `@media print` -> `print:`
+          if (parsed.length === 1 && parsed[0].kind === 'word') {
+            let key = parsed[0].value
+            let replacement: string | null = null
+            if (key === 'print') replacement = 'print'
+
+            if (replacement) {
+              changed = true
+              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
+            }
+          }
+
+          // Key/value at-rules.
+          //
+          // E.g.: `[@media(scripting:none)]:` -> `scripting:`
           if (
             parsed.length === 1 &&
             parsed[0].kind === 'function' && // `(` and `)` are considered a function
