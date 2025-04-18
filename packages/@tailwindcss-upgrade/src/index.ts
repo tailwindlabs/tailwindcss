@@ -237,6 +237,13 @@ async function run() {
       }
     }
 
+    info('Updating dependencies…')
+    try {
+      // Upgrade Tailwind CSS
+      await pkg(base).add(['tailwindcss@latest'])
+      success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
+    } catch {}
+
     let tailwindRootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot && sheet.file)
 
     // Migrate source files
@@ -312,12 +319,6 @@ async function run() {
     // Migrate the prettier plugin to the latest version
     await migratePrettierPlugin(base)
   }
-
-  try {
-    // Upgrade Tailwind CSS
-    await pkg(base).add(['tailwindcss@latest'])
-    success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
-  } catch {}
 
   // Run all cleanup functions because we completed the migration
   await Promise.allSettled(cleanup.map((fn) => fn()))
