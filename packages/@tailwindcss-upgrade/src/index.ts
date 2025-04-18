@@ -257,7 +257,7 @@ async function run() {
     }
   }
 
-  {
+  if (version.isMajor(3)) {
     // PostCSS config migration
     await migratePostCSSConfig(base)
   }
