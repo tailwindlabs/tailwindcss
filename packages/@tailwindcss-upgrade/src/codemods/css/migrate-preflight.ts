@@ -35,13 +35,14 @@ export function migratePreflight({
   designSystem,
   userConfig,
 }: {
-  designSystem: DesignSystem
+  designSystem: DesignSystem | null
   userConfig?: Config | null
 }): Plugin {
   // @ts-expect-error
   let defaultBorderColor = userConfig?.theme?.borderColor?.DEFAULT
 
   function canResolveThemeValue(path: string) {
+    if (!designSystem) return false
     let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
     return Boolean(designSystem.theme.get([variable]))
   }

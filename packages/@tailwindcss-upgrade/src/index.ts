@@ -123,7 +123,7 @@ async function run() {
     >()
     for (let sheet of stylesheets) {
       if (!sheet.isTailwindRoot) continue
-      if (!sheet.linkedConfigPath) continue
+      if (!version.isMajor(3) && !sheet.linkedConfigPath) continue
 
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
@@ -168,20 +168,11 @@ async function run() {
             }
           }
 
-          let designSystem = config?.designSystem ?? (await sheet.designSystem())
-          if (!designSystem) {
-            return
-          }
-
-          let newPrefix = config?.newPrefix ?? null
-          let userConfig = config?.userConfig ?? null
-          let configFilePath = config?.configFilePath ?? null
-
           await migrateStylesheet(sheet, {
-            newPrefix,
-            designSystem,
-            userConfig,
-            configFilePath,
+            newPrefix: config?.newPrefix ?? null,
+            designSystem: config?.designSystem ?? (await sheet.designSystem()),
+            userConfig: config?.userConfig ?? null,
+            configFilePath: config?.configFilePath ?? null,
             jsConfigMigration,
           })
         } catch (e: any) {
