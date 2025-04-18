@@ -80,6 +80,10 @@ test.each([
   // Attribute selector wrapped in `&:is(…)`
   ['[&:is([data-visible])]:flex', 'data-visible:flex'],
 
+  // Media queries
+  ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
+  ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+
   // Compound arbitrary variants
   ['has-[[data-visible]]:flex', 'has-data-visible:flex'],
   ['has-[&:is([data-visible])]:flex', 'has-data-visible:flex'],
