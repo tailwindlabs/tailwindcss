@@ -113,7 +113,7 @@ async function run() {
     }
 
     // Migrate js config files, linked to stylesheets
-    if (stylesheets.some((sheet) => sheet.isTailwindRoot)) {
+    if (stylesheets.some((sheet) => sheet.isTailwindRoot && sheet.linkedConfigPath)) {
       info('Migrating JavaScript configuration files…')
     }
     let configBySheet = new Map<Stylesheet, Awaited<ReturnType<typeof prepareConfig>>>()
