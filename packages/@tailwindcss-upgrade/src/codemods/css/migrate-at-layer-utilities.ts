@@ -2,10 +2,16 @@ import { type AtRule, type Comment, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { Stylesheet } from '../../stylesheet'
+import * as version from '../../utils/version'
 import { walk, WalkAction, walkDepth } from '../../utils/walk'
 
 export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
   function migrate(atRule: AtRule) {
+    // Migrating `@layer utilities` to `@utility` is only supported in Tailwind
+    // CSS v3 projects. Tailwind CSS v4 projects could also have `@layer
+    // utilities` but those aren't actual utilities.
+    if (!version.isMajor(3)) return
+
     // Only migrate `@layer utilities` and `@layer components`.
     if (atRule.params !== 'utilities' && atRule.params !== 'components') return
 

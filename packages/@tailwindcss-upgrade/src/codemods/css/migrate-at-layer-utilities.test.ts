@@ -1,10 +1,12 @@
 import dedent from 'dedent'
 import postcss from 'postcss'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { Stylesheet } from '../../stylesheet'
+import * as versions from '../../utils/version'
 import { formatNodes } from './format-nodes'
 import { migrateAtLayerUtilities } from './migrate-at-layer-utilities'
 import { sortBuckets } from './sort-buckets'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 const css = dedent
 
