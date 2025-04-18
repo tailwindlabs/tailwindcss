@@ -11,7 +11,7 @@ export function migrateConfig(
   {
     configFilePath,
     jsConfigMigration,
-  }: { configFilePath: string; jsConfigMigration: JSConfigMigration },
+  }: { configFilePath: string; jsConfigMigration: JSConfigMigration | null },
 ): Plugin {
   function migrate() {
     if (!sheet.isTailwindRoot) return

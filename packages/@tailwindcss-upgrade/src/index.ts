@@ -123,6 +123,7 @@ async function run() {
     >()
     for (let sheet of stylesheets) {
       if (!sheet.isTailwindRoot) continue
+      if (!sheet.linkedConfigPath) continue
 
       let config = await prepareConfig(sheet.linkedConfigPath, { base })
       configBySheet.set(sheet, config)
@@ -147,7 +148,7 @@ async function run() {
       }
     }
 
-    // Migrate source files, linked to config files
+    // Migrate source files
     if (configBySheet.size > 0) {
       info('Migrating templates…')
     }
@@ -190,19 +191,22 @@ async function run() {
       stylesheets.map(async (sheet) => {
         try {
           let config = configBySheet.get(sheet)!
-          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)!
+          let jsConfigMigration = jsConfigMigrationBySheet.get(sheet)
 
           if (!config) {
             for (let parent of sheet.ancestors()) {
               if (parent.isTailwindRoot) {
                 config ??= configBySheet.get(parent)!
-                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)!
+                jsConfigMigration ??= jsConfigMigrationBySheet.get(parent)
                 break
               }
             }
           }
 
-          await migrateStylesheet(sheet, { ...config, jsConfigMigration })
+          await migrateStylesheet(sheet, {
+            ...config,
+            jsConfigMigration: jsConfigMigration ?? null,
+          })
         } catch (e: any) {
           error(`${e?.message ?? e} in ${highlight(relative(sheet.file!, base))}`, { prefix: '↳ ' })
         }
