@@ -1,4 +1,12 @@
-import { compile, env, Features, Instrumentation, normalizePath, optimize } from '@tailwindcss/node'
+import {
+  compile,
+  env,
+  Features,
+  Instrumentation,
+  normalizePath,
+  optimize,
+  toSourceMap,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
@@ -186,6 +194,7 @@ class Root {
   ): Promise<
     | {
         code: string
+        map: string
       }
     | false
   > {
@@ -321,8 +330,13 @@ class Root {
     let code = this.compiler.build([...this.candidates])
     DEBUG && I.end('Build CSS')
 
+    DEBUG && I.start('Build Source Map')
+    let map = toSourceMap(this.compiler.buildSourceMap()).raw
+    DEBUG && I.end('Build Source Map')
+
     return {
       code,
+      map,
     }
   }
 
