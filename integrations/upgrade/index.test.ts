@@ -1,3 +1,4 @@
+import { isRepoDirty } from '../../packages/@tailwindcss-upgrade/src/utils/git'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
@@ -2848,8 +2849,10 @@ test(
     `)
 
     // Commit the changes
-    await exec('git add .')
-    await exec('git commit -m "upgrade"')
+    if (isRepoDirty()) {
+      await exec('git add .')
+      await exec('git commit -m "upgrade"')
+    }
 
     // Run the upgrade again
     let output = await exec('npx @tailwindcss/upgrade')
