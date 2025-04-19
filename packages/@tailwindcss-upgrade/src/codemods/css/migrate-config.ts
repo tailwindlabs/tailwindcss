@@ -11,10 +11,11 @@ export function migrateConfig(
   {
     configFilePath,
     jsConfigMigration,
-  }: { configFilePath: string; jsConfigMigration: JSConfigMigration },
+  }: { configFilePath: string | null; jsConfigMigration: JSConfigMigration | null },
 ): Plugin {
   function migrate() {
     if (!sheet.isTailwindRoot) return
+    if (!configFilePath) return
 
     let alreadyInjected = ALREADY_INJECTED.get(sheet)
     if (alreadyInjected && alreadyInjected.includes(configFilePath)) {

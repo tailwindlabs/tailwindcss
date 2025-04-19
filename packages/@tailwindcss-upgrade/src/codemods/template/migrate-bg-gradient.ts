@@ -6,7 +6,7 @@ const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
 
 export function migrateBgGradient(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {

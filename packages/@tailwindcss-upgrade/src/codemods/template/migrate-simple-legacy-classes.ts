@@ -1,10 +1,11 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as version from '../../utils/version'
 import { printCandidate } from './candidates'
 
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
 // CSS v4 anymore.
-const LEGACY_CLASS_MAP = {
+const LEGACY_CLASS_MAP: Record<string, string> = {
   'overflow-ellipsis': 'text-ellipsis',
 
   'flex-grow': 'grow',
@@ -15,16 +16,33 @@ const LEGACY_CLASS_MAP = {
   'decoration-clone': 'box-decoration-clone',
   'decoration-slice': 'box-decoration-slice',
 
-  'outline-none': 'outline-hidden',
+  // Since v4.1.0
+  'bg-left-top': 'bg-top-left',
+  'bg-left-bottom': 'bg-bottom-left',
+  'bg-right-top': 'bg-top-right',
+  'bg-right-bottom': 'bg-bottom-right',
+  'object-left-top': 'object-top-left',
+  'object-left-bottom': 'object-bottom-left',
+  'object-right-top': 'object-top-right',
+  'object-right-bottom': 'object-bottom-right',
 }
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
 export function migrateSimpleLegacyClasses(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
+  // `outline-none` in v3 has the same meaning as `outline-hidden` in v4. However,
+  // `outline-none` in v4 _also_ exists but has a different meaning.
+  //
+  // We can only migrate `outline-none` to `outline-hidden` if we are migrating a
+  // v3 project to v4.
+  if (version.isMajor(3)) {
+    LEGACY_CLASS_MAP['outline-none'] = 'outline-hidden'
+  }
+
   // Prepare design system with the unknown legacy classes
   if (!seenDesignSystems.has(designSystem)) {
     for (let old in LEGACY_CLASS_MAP) {

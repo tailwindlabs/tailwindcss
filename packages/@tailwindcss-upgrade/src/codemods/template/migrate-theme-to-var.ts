@@ -21,7 +21,7 @@ export const enum Convert {
 
 export function migrateThemeToVar(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   let convert = createConverter(designSystem)

@@ -1,8 +1,10 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { migratePrefix } from './migrate-prefix'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 test.each([
   // Arbitrary variants
@@ -77,6 +79,13 @@ test.each([
 
   // Attribute selector wrapped in `&:is(…)`
   ['[&:is([data-visible])]:flex', 'data-visible:flex'],
+
+  // Media queries
+  ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
+  ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+  ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
+  ['[@media_print]:flex', 'print:flex'],
+  ['[@media_not_print]:flex', 'not-print:flex'],
 
   // Compound arbitrary variants
   ['has-[[data-visible]]:flex', 'has-data-visible:flex'],

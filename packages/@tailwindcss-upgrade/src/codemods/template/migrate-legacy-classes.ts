@@ -5,6 +5,7 @@ import type { Candidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import * as version from '../../utils/version'
 import { printCandidate } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
 
@@ -67,7 +68,7 @@ const DESIGN_SYSTEMS = new DefaultMap((base) => {
 
 export async function migrateLegacyClasses(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
   location?: {
     contents: string
@@ -75,6 +76,15 @@ export async function migrateLegacyClasses(
     end: number
   },
 ): Promise<string> {
+  // These migrations are only safe when migrating from v3 to v4.
+  //
+  // Migrating from `rounded` to `rounded-sm` once is fine (v3 -> v4). But if we
+  // migrate again (v4 -> v4), then `rounded-sm` would be migrated to
+  // `rounded-xs` which is incorrect because we already migrated this.
+  if (!version.isMajor(3)) {
+    return rawCandidate
+  }
+
   let defaultDesignSystem = await DESIGN_SYSTEMS.get(__dirname)
 
   function* migrate(rawCandidate: string) {

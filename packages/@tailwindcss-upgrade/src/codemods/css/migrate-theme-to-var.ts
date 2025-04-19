@@ -5,7 +5,7 @@ import { Convert, createConverter } from '../template/migrate-theme-to-var'
 export function migrateThemeToVar({
   designSystem,
 }: {
-  designSystem?: DesignSystem
+  designSystem?: DesignSystem | null
 } = {}): Plugin {
   return {
     postcssPlugin: '@tailwindcss/upgrade/migrate-theme-to-var',
