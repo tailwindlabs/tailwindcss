@@ -6060,7 +6060,11 @@ export function createCssUtility(node: AtRule) {
 
           // Suggest theme values. E.g.: `--value(--color-*)`
           for (let value of designSystem.theme.keysInNamespaces(themeKeys)) {
-            target.push(value)
+            target.push(
+              value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
+                return `${a}.${b}`
+              }),
+            )
           }
         }
 
