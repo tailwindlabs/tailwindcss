@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Don't scan `.geojson` files for classes by default ([#17700](https://github.com/tailwindlabs/tailwindcss/pull/17700))
+- Don't scan `.db` files for classes by default ([#17711](https://github.com/tailwindlabs/tailwindcss/pull/17711))
 - Hide default shadow suggestions when missing theme keys ([#17743](https://github.com/tailwindlabs/tailwindcss/pull/17743))
 - Replace `_` with `.` in theme suggestions for `@utility` if surrounded by digits ([#17743](https://github.com/tailwindlabs/tailwindcss/pull/17743))
 
