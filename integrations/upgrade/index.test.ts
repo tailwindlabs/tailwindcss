@@ -2920,7 +2920,9 @@ test(
         <div class="hover:file:flex hover:*:flex"></div>
 
         <!-- These are safe to migrate: -->
-        <div class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex"></div>
+        <div
+          class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex bg-right-bottom object-left-top"
+        ></div>
       `,
       'src/input.css': css`
         @import 'tailwindcss';
@@ -2945,7 +2947,9 @@ test(
       <div class="hover:file:flex hover:*:flex"></div>
 
       <!-- These are safe to migrate: -->
-      <div class="flex! bg-red-500/(--my-opacity) pointer-fine:flex"></div>
+      <div
+        class="flex! bg-red-500/(--my-opacity) pointer-fine:flex bg-bottom-right object-top-left"
+      ></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
