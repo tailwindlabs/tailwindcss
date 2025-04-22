@@ -475,11 +475,11 @@ importers:
         specifier: 'catalog:'
         version: 20.14.13
       '@types/react':
-        specifier: ^19.0.12
-        version: 19.0.12
+        specifier: ^19.1.2
+        version: 19.1.2
       '@types/react-dom':
         specifier: ^19.1.1
-        version: 19.1.1(@types/react@19.0.12)
+        version: 19.1.1(@types/react@19.1.2)
       eslint:
         specifier: ^9.24.0
         version: 9.24.0(jiti@2.4.2)
@@ -509,11 +509,11 @@ importers:
         specifier: ^20.14.8
         version: 20.14.13
       '@types/react':
-        specifier: ^19.0.12
-        version: 19.0.12
+        specifier: ^19.1.2
+        version: 19.1.2
       '@types/react-dom':
         specifier: ^19.1.1
-        version: 19.1.1(@types/react@19.0.12)
+        version: 19.1.1(@types/react@19.1.2)
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.4.47)
@@ -546,11 +546,11 @@ importers:
         version: link:../../packages/tailwindcss
     devDependencies:
       '@types/react':
-        specifier: ^19.0.12
-        version: 19.0.12
+        specifier: ^19.1.2
+        version: 19.1.2
       '@types/react-dom':
         specifier: ^19.1.1
-        version: 19.1.1(@types/react@19.0.12)
+        version: 19.1.1(@types/react@19.1.2)
       bun:
         specifier: ^1.2.8
         version: 1.2.8
@@ -2381,8 +2381,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.0.12':
-    resolution: {integrity: sha512-V6Ar115dBDrjbtXSrS+/Oruobc+qVbbUxDFC1RSbRqLt5SYvxxyIDrSC85RWml54g+jfNeEMZhEj7wW07ONQhA==}
+  '@types/react@19.1.2':
+    resolution: {integrity: sha512-oxLPMytKchWGbnQM9O7D67uPa9paTNxO7jVoNMXgkkErULBPhPARCfkKL9ytcIJJRGjbsVwW4ugJzyFFvm/Tiw==}
 
   '@types/semver@7.7.0':
     resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
@@ -5966,11 +5966,11 @@ snapshots:
     dependencies:
       postcss: 8.4.41
 
-  '@types/react-dom@19.1.1(@types/react@19.0.12)':
+  '@types/react-dom@19.1.1(@types/react@19.1.2)':
     dependencies:
-      '@types/react': 19.0.12
+      '@types/react': 19.1.2
 
-  '@types/react@19.0.12':
+  '@types/react@19.1.2':
     dependencies:
       csstype: 3.1.3
 
