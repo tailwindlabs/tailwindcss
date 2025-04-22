@@ -151,7 +151,8 @@ export function migrateModernizeArbitraryValues(
         //
         // E.g.: `[@media(scripting:none)]:` -> `noscript:`
         if (
-          // Only top-level, so `in-[@media(scripting:none)]` is not supported
+          // Only top-level, so something like `in-[@media(scripting:none)]`
+          // (which is not valid anyway) is not supported
           parent === null &&
           // [@media(scripting:none)]:flex
           //  ^^^^^^^^^^^^^^^^^^^^^^
