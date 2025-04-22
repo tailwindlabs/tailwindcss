@@ -1,9 +1,11 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
 import postcss from 'postcss'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
+import * as versions from '../../utils/version'
 import { migrateAtApply } from './migrate-at-apply'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 const css = dedent
 

@@ -16,10 +16,10 @@ import { migrateVariantsDirective } from './migrate-variants-directive'
 
 export interface MigrateOptions {
   newPrefix: string | null
-  designSystem: DesignSystem
-  userConfig: Config
-  configFilePath: string
-  jsConfigMigration: JSConfigMigration
+  designSystem: DesignSystem | null
+  userConfig: Config | null
+  configFilePath: string | null
+  jsConfigMigration: JSConfigMigration | null
 }
 
 export async function migrate(stylesheet: Stylesheet, options: MigrateOptions) {

@@ -5,6 +5,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import * as version from '../../utils/version'
 
 // Defaults in v4
 const DEFAULT_BORDER_COLOR = 'currentcolor'
@@ -34,18 +35,23 @@ export function migratePreflight({
   designSystem,
   userConfig,
 }: {
-  designSystem: DesignSystem
-  userConfig?: Config
+  designSystem: DesignSystem | null
+  userConfig?: Config | null
 }): Plugin {
   // @ts-expect-error
   let defaultBorderColor = userConfig?.theme?.borderColor?.DEFAULT
 
   function canResolveThemeValue(path: string) {
+    if (!designSystem) return false
     let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
     return Boolean(designSystem.theme.get([variable]))
   }
 
   function migrate(root: Root) {
+    // CSS for backwards compatibility with v3 should only injected in v3
+    // projects and not v4 projects.
+    if (!version.isMajor(3)) return
+
     let isTailwindRoot = false
     root.walkAtRules('import', (node) => {
       if (

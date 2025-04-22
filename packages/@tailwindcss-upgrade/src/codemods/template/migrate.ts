@@ -1,9 +1,10 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
+import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
-import { extractRawCandidates } from './candidates'
+import { extractRawCandidates, printCandidate } from './candidates'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
@@ -20,7 +21,7 @@ import { migrateVariantOrder } from './migrate-variant-order'
 
 export type Migration = (
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   rawCandidate: string,
   location?: {
     contents: string
@@ -47,7 +48,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
 
 export async function migrateCandidate(
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   rawCandidate: string,
   // Location is only set when migrating a candidate from a source file
   location?: {
@@ -56,15 +57,28 @@ export async function migrateCandidate(
     end: number
   },
 ): Promise<string> {
+  let original = rawCandidate
   for (let migration of DEFAULT_MIGRATIONS) {
     rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
   }
+
+  // If nothing changed, let's parse it again and re-print it. This will migrate
+  // pretty print candidates to the new format. If it did change, we already had
+  // to re-print it.
+  //
+  // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
+  if (rawCandidate === original) {
+    for (let candidate of parseCandidate(rawCandidate, designSystem)) {
+      return printCandidate(designSystem, candidate)
+    }
+  }
+
   return rawCandidate
 }
 
 export default async function migrateContents(
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   contents: string,
   extension: string,
 ): Promise<string> {
@@ -93,7 +107,7 @@ export default async function migrateContents(
   return spliceChangesIntoString(contents, changes)
 }
 
-export async function migrate(designSystem: DesignSystem, userConfig: Config, file: string) {
+export async function migrate(designSystem: DesignSystem, userConfig: Config | null, file: string) {
   let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 

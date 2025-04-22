@@ -1,7 +1,9 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import dedent from 'dedent'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migrateVariantOrder } from './migrate-variant-order'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 let css = dedent
 

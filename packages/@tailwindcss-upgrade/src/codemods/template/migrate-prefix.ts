@@ -2,16 +2,19 @@ import { parseCandidate, type Candidate } from '../../../../tailwindcss/src/cand
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
+import * as version from '../../utils/version'
 import { printCandidate } from './candidates'
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
 export function migratePrefix(
   designSystem: DesignSystem,
-  userConfig: Config,
+  userConfig: Config | null,
   rawCandidate: string,
 ): string {
   if (!designSystem.theme.prefix) return rawCandidate
+  if (!userConfig) return rawCandidate
+  if (!version.isMajor(3)) return rawCandidate
 
   if (!seenDesignSystems.has(designSystem)) {
     designSystem.utilities.functional('group', () => null)

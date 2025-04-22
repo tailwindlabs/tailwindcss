@@ -9,8 +9,8 @@ export function migrateMediaScreen({
   designSystem,
   userConfig,
 }: {
-  designSystem?: DesignSystem
-  userConfig?: Config
+  designSystem?: DesignSystem | null
+  userConfig?: Config | null
 } = {}): Plugin {
   function migrate(root: Root) {
     if (!designSystem || !userConfig) return

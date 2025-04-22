@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Ensure `@tailwindcss/upgrade` runs on Tailwind CSS v4 projects ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
+
 ### Fixed
 
 - Don't scan `.geojson` files for classes by default ([#17700](https://github.com/tailwindlabs/tailwindcss/pull/17700))

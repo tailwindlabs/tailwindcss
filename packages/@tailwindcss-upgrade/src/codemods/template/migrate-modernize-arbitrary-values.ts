@@ -3,6 +3,7 @@ import { parseCandidate, type Candidate, type Variant } from '../../../../tailwi
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { printCandidate } from './candidates'
 
 function memcpy<T extends object, U extends object | null>(target: T, source: U): U {
@@ -15,7 +16,7 @@ function memcpy<T extends object, U extends object | null>(target: T, source: U)
 
 export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,
-  _userConfig: Config,
+  _userConfig: Config | null,
   rawCandidate: string,
 ): string {
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
@@ -146,6 +147,107 @@ export function migrateModernizeArbitraryValues(
           continue
         }
 
+        // Migrate `@media` variants
+        //
+        // E.g.: `[@media(scripting:none)]:` -> `noscript:`
+        if (
+          // Only top-level, so something like `in-[@media(scripting:none)]`
+          // (which is not valid anyway) is not supported
+          parent === null &&
+          // [@media(scripting:none)]:flex
+          //  ^^^^^^^^^^^^^^^^^^^^^^
+          ast.nodes[0].nodes[0].type === 'tag' &&
+          ast.nodes[0].nodes[0].value.startsWith('@media')
+        ) {
+          // Replace all whitespace such that `@media (scripting: none)` and
+          // `@media(scripting:none)` are equivalent.
+          //
+          // As arbitrary variants that means that these are equivalent:
+          // - `[@media_(scripting:_none)]:`
+          // - `[@media(scripting:none)]:`
+          let parsed = ValueParser.parse(ast.nodes[0].toString().trim().replace('@media', ''))
+
+          // Drop whitespace
+          ValueParser.walk(parsed, (node, { replaceWith }) => {
+            // Drop whitespace nodes
+            if (node.kind === 'separator' && !node.value.trim()) {
+              replaceWith([])
+            }
+
+            // Trim whitespace
+            else {
+              node.value = node.value.trim()
+            }
+          })
+
+          let not = false
+          if (parsed[0]?.kind === 'word' && parsed[0].value === 'not') {
+            not = true
+            parsed.shift()
+          }
+
+          // Single keyword at-rules.
+          //
+          // E.g.: `[@media_print]:` -< `@media print` -> `print:`
+          if (parsed.length === 1 && parsed[0].kind === 'word') {
+            let key = parsed[0].value
+            let replacement: string | null = null
+            if (key === 'print') replacement = 'print'
+
+            if (replacement) {
+              changed = true
+              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
+            }
+          }
+
+          // Key/value at-rules.
+          //
+          // E.g.: `[@media(scripting:none)]:` -> `scripting:`
+          if (
+            parsed.length === 1 &&
+            parsed[0].kind === 'function' && // `(` and `)` are considered a function
+            parsed[0].nodes.length === 3 &&
+            parsed[0].nodes[0].kind === 'word' &&
+            parsed[0].nodes[1].kind === 'separator' &&
+            parsed[0].nodes[1].value === ':' &&
+            parsed[0].nodes[2].kind === 'word'
+          ) {
+            let key = parsed[0].nodes[0].value
+            let value = parsed[0].nodes[2].value
+            let replacement: string | null = null
+
+            if (key === 'prefers-reduced-motion' && value === 'no-preference')
+              replacement = 'motion-safe'
+            if (key === 'prefers-reduced-motion' && value === 'reduce')
+              replacement = 'motion-reduce'
+
+            if (key === 'prefers-contrast' && value === 'more') replacement = 'contrast-more'
+            if (key === 'prefers-contrast' && value === 'less') replacement = 'contrast-less'
+
+            if (key === 'orientation' && value === 'portrait') replacement = 'portrait'
+            if (key === 'orientation' && value === 'landscape') replacement = 'landscape'
+
+            if (key === 'forced-colors' && value === 'active') replacement = 'forced-colors'
+
+            if (key === 'inverted-colors' && value === 'inverted') replacement = 'inverted-colors'
+
+            if (key === 'pointer' && value === 'none') replacement = 'pointer-none'
+            if (key === 'pointer' && value === 'coarse') replacement = 'pointer-coarse'
+            if (key === 'pointer' && value === 'fine') replacement = 'pointer-fine'
+            if (key === 'any-pointer' && value === 'none') replacement = 'any-pointer-none'
+            if (key === 'any-pointer' && value === 'coarse') replacement = 'any-pointer-coarse'
+            if (key === 'any-pointer' && value === 'fine') replacement = 'any-pointer-fine'
+
+            if (key === 'scripting' && value === 'none') replacement = 'noscript'
+
+            if (replacement) {
+              changed = true
+              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
+            }
+          }
+          continue
+        }
+
         let prefixedVariant: Variant | null = null
 
         // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
@@ -242,6 +344,8 @@ export function migrateModernizeArbitraryValues(
             else if (value === ':required') return 'required'
             else if (value === ':valid') return 'valid'
             else if (value === ':invalid') return 'invalid'
+            else if (value === ':user-valid') return 'user-valid'
+            else if (value === ':user-invalid') return 'user-invalid'
             else if (value === ':in-range') return 'in-range'
             else if (value === ':out-of-range') return 'out-of-range'
             else if (value === ':read-only') return 'read-only'

@@ -1,3 +1,4 @@
+import { isRepoDirty } from '../../packages/@tailwindcss-upgrade/src/utils/git'
 import { candidate, css, html, js, json, test, ts } from '../utils'
 
 test(
@@ -2596,40 +2597,6 @@ test(
 )
 
 test(
-  'requires Tailwind v3 before attempting an upgrade',
-  {
-    fs: {
-      'package.json': json`
-        {
-          "dependencies": {
-            "tailwindcss": "workspace:^",
-            "@tailwindcss/upgrade": "workspace:^"
-          }
-        }
-      `,
-      'tailwind.config.ts': js` export default {} `,
-      'src/index.html': html`
-        <div class="underline"></div>
-      `,
-      'src/index.css': css`
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-      `,
-    },
-  },
-  async ({ exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) =>
-      e.toString(),
-    )
-
-    expect(output).toMatch(
-      /Tailwind CSS v.* found. The migration tool can only be run on v3 projects./,
-    )
-  },
-)
-
-test(
   `upgrades opacity namespace values to percentages`,
   {
     fs: {
@@ -2804,6 +2771,191 @@ test(
         ::file-selector-button {
           border-color: var(--color-gray-200, currentcolor);
         }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'upgrades are idempotent, and can run on v4 projects',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="ring"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        .foo {
+          @apply !bg-[var(--my-color)] rounded;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    let before = await fs.dumpFiles('./src/**/*.{css,html}')
+    expect(before).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="ring-3"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      .foo {
+        @apply bg-(--my-color)! rounded-sm;
+      }
+      "
+    `)
+
+    // Commit the changes
+    if (isRepoDirty()) {
+      await exec('git add .')
+      await exec('git commit -m "upgrade"')
+    }
+
+    // Run the upgrade again
+    let output = await exec('npx @tailwindcss/upgrade')
+    expect(output).toContain('No changes were made to your repository')
+
+    let after = await fs.dumpFiles('./src/**/*.{css,html}')
+    expect(after).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="ring-3"></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      .foo {
+        @apply bg-(--my-color)! rounded-sm;
+      }
+      "
+    `)
+
+    // Ensure the file system is in the same state
+    expect(before).toEqual(after)
+  },
+)
+
+test(
+  'upgrades run on v4 projects',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          },
+          "devDependencies": {
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+        <div class="ring rounded outline"></div>
+
+        <!-- Variant order is also unsafe to change in v4 projects -->
+        <div class="file:hover:flex *:hover:flex"></div>
+        <div class="hover:file:flex hover:*:flex"></div>
+
+        <!-- These are safe to migrate: -->
+        <div
+          class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex bg-right-bottom object-left-top"
+        ></div>
+      `,
+      'src/input.css': css`
+        @import 'tailwindcss';
+
+        .foo {
+          @apply !bg-[var(--my-color)];
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+      <div class="ring rounded outline"></div>
+
+      <!-- Variant order is also unsafe to change in v4 projects -->
+      <div class="file:hover:flex *:hover:flex"></div>
+      <div class="hover:file:flex hover:*:flex"></div>
+
+      <!-- These are safe to migrate: -->
+      <div
+        class="flex! bg-red-500/(--my-opacity) pointer-fine:flex bg-bottom-right object-top-left"
+      ></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      .foo {
+        @apply bg-(--my-color)!;
       }
       "
     `)
