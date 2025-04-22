@@ -579,6 +579,10 @@ test('Theme keys with underscores are suggested with underscores', async () => {
       /* This will get suggeted with an underscore */
       --spacing-logo_margin: 0.875rem;
     }
+
+    @utility ex-* {
+      width: --value(--spacing- *);
+    }
   `
 
   let design = await __unstable__loadDesignSystem(input, {
@@ -588,15 +592,25 @@ test('Theme keys with underscores are suggested with underscores', async () => {
     }),
   })
 
-  let entries = design.getClassList().filter(([name]) => name.startsWith('p-'))
+  let entries = design
+    .getClassList()
+    .filter(([name]) => name.startsWith('p-') || name.startsWith('ex-'))
 
   expect(entries).toContainEqual(['p-1.5', { modifiers: [] }])
   expect(entries).toContainEqual(['p-2.5', { modifiers: [] }])
   expect(entries).toContainEqual(['p-logo_margin', { modifiers: [] }])
 
+  expect(entries).toContainEqual(['ex-1.5', { modifiers: [] }])
+  expect(entries).toContainEqual(['ex-2.5', { modifiers: [] }])
+  expect(entries).toContainEqual(['ex-logo_margin', { modifiers: [] }])
+
   expect(entries).not.toContainEqual(['p-1_5', { modifiers: [] }])
   expect(entries).not.toContainEqual(['p-2_5', { modifiers: [] }])
   expect(entries).not.toContainEqual(['p-logo.margin', { modifiers: [] }])
+
+  expect(entries).not.toContainEqual(['ex-1_5', { modifiers: [] }])
+  expect(entries).not.toContainEqual(['ex-2_5', { modifiers: [] }])
+  expect(entries).not.toContainEqual(['ex-logo.margin', { modifiers: [] }])
 })
 
 test('shadow utility default suggestions', async () => {
