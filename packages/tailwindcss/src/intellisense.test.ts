@@ -598,3 +598,33 @@ test('Theme keys with underscores are suggested with underscores', async () => {
   expect(entries).not.toContainEqual(['p-2_5', { modifiers: [] }])
   expect(entries).not.toContainEqual(['p-logo.margin', { modifiers: [] }])
 })
+
+test('shadow utility default suggestions', async () => {
+  let input = css`
+    @theme {
+      /* nothing */
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input)
+  let classNames = design.getClassList().map(([name]) => name)
+
+  expect(classNames).not.toContain('shadow')
+  expect(classNames).not.toContain('inset-shadow')
+  expect(classNames).not.toContain('text-shadow')
+
+  input = css`
+    @theme {
+      --shadow: 0 0 0 solid black;
+      --text-shadow: 0 0 0 solid black;
+      --inset-shadow: 0 0 0 solid black;
+    }
+  `
+
+  design = await __unstable__loadDesignSystem(input)
+  classNames = design.getClassList().map(([name]) => name)
+
+  expect(classNames).toContain('shadow')
+  expect(classNames).toContain('inset-shadow')
+  expect(classNames).toContain('text-shadow')
+})
