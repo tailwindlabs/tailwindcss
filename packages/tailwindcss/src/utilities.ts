@@ -5182,7 +5182,7 @@ export function createUtilities(theme: Theme) {
     {
       valueThemeKeys: ['--text-shadow'],
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-      hasDefaultValue: true,
+      hasDefaultValue: theme.get(['--text-shadow']) !== null,
     },
   ])
 
@@ -5335,7 +5335,7 @@ export function createUtilities(theme: Theme) {
       {
         valueThemeKeys: ['--shadow'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        hasDefaultValue: true,
+        hasDefaultValue: theme.get(['--shadow']) !== null,
       },
     ])
 
@@ -5462,7 +5462,7 @@ export function createUtilities(theme: Theme) {
       {
         valueThemeKeys: ['--inset-shadow'],
         modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
-        hasDefaultValue: true,
+        hasDefaultValue: theme.get(['--inset-shadow']) !== null,
       },
     ])
 
