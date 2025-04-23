@@ -7,7 +7,6 @@ import path from 'node:path'
 import postcss from 'postcss'
 import { migrateJsConfig } from './codemods/config/migrate-js-config'
 import { migratePostCSSConfig } from './codemods/config/migrate-postcss'
-import { migratePrettierPlugin } from './codemods/config/migrate-prettier'
 import { analyze as analyzeStylesheets } from './codemods/css/analyze'
 import { formatNodes } from './codemods/css/format-nodes'
 import { linkConfigs as linkConfigsToStylesheets } from './codemods/css/link'
@@ -229,11 +228,22 @@ async function run() {
     }
 
     info('Updating dependencies…')
-    try {
-      // Upgrade Tailwind CSS
-      await pkg(base).add(['tailwindcss@latest'])
-      success(`Updated package: ${highlight('tailwindcss')}`, { prefix: '↳ ' })
-    } catch {}
+    for (let dependency of [
+      'tailwindcss',
+      '@tailwindcss/cli',
+      '@tailwindcss/postcss',
+      '@tailwindcss/vite',
+      '@tailwindcss/node',
+      '@tailwindcss/oxide',
+      'prettier-plugin-tailwindcss',
+    ]) {
+      try {
+        if (await pkg(base).has(dependency)) {
+          await pkg(base).add([`${dependency}@latest`])
+          success(`Updated package: ${highlight(dependency)}`, { prefix: '↳ ' })
+        }
+      } catch {}
+    }
 
     let tailwindRootStylesheets = stylesheets.filter((sheet) => sheet.isTailwindRoot && sheet.file)
 
@@ -303,12 +313,6 @@ async function run() {
   if (version.isMajor(3)) {
     // PostCSS config migration
     await migratePostCSSConfig(base)
-  }
-
-  info('Updating dependencies…')
-  {
-    // Migrate the prettier plugin to the latest version
-    await migratePrettierPlugin(base)
   }
 
   // Run all cleanup functions because we completed the migration

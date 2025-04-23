@@ -31,6 +31,14 @@ export function pkg(base: string) {
         throw e
       }
     },
+    async has(name: string) {
+      try {
+        let packageJsonPath = resolve(base, 'package.json')
+        let packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8')
+        return packageJsonContent.includes(`"${name}":`)
+      } catch {}
+      return false
+    },
     async remove(packages: string[]) {
       let packageManager = await packageManagerForBase.get(base)
       let command = `${packageManager} remove ${packages.join(' ')}`
