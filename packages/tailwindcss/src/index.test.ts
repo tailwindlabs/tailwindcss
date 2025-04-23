@@ -454,9 +454,9 @@ describe('@apply', () => {
     `)
   })
 
-  it('should error when using @apply with a utility that does not exist', () => {
-    return expect(
-      compileCss(css`
+  it('should error when using @apply with a utility that does not exist', async () => {
+    await expect(
+      compile(css`
         @tailwind utilities;
 
         .foo {
@@ -468,9 +468,9 @@ describe('@apply', () => {
     )
   })
 
-  it('should error when using @apply with a variant that does not exist', () => {
-    return expect(
-      compileCss(css`
+  it('should error when using @apply with a variant that does not exist', async () => {
+    await expect(
+      compile(css`
         @tailwind utilities;
 
         .foo {
