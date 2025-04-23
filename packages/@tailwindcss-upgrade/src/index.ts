@@ -238,7 +238,7 @@ async function run() {
       'prettier-plugin-tailwindcss',
     ]) {
       try {
-        if (await pkg(base).has(dependency)) {
+        if (dependency === 'tailwindcss' || (await pkg(base).has(dependency))) {
           await pkg(base).add([`${dependency}@latest`])
           success(`Updated package: ${highlight(dependency)}`, { prefix: '↳ ' })
         }
