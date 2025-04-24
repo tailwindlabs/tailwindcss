@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't scan `.db` files for classes by default ([#17711](https://github.com/tailwindlabs/tailwindcss/pull/17711))
 - Hide default shadow suggestions when missing theme keys ([#17743](https://github.com/tailwindlabs/tailwindcss/pull/17743))
 - Replace `_` with `.` in theme suggestions for `@utility` if surrounded by digits ([#17743](https://github.com/tailwindlabs/tailwindcss/pull/17743))
+- Upgrade: Bump all Tailwind CSS related dependencies during upgrade ([#17763](https://github.com/tailwindlabs/tailwindcss/pull/17763))
 
 ## [4.1.4] - 2025-04-14
 
