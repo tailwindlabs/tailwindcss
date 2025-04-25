@@ -976,6 +976,11 @@ export function createUtilities(theme: Theme) {
   staticUtility(`h-auto`, [['height', 'auto']])
   staticUtility(`min-w-auto`, [['min-width', 'auto']])
   staticUtility(`min-h-auto`, [['min-height', 'auto']])
+
+  staticUtility(`h-lh`, [['height', '1lh']])
+  staticUtility(`min-h-lh`, [['min-height', '1lh']])
+  staticUtility(`max-h-lh`, [['max-height', '1lh']])
+
   staticUtility(`w-screen`, [['width', '100vw']])
   staticUtility(`min-w-screen`, [['min-width', '100vw']])
   staticUtility(`max-w-screen`, [['max-width', '100vw']])

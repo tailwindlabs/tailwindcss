@@ -2917,6 +2917,7 @@ test('height', async () => {
         'h-lvh',
         'h-dvh',
         'h-min',
+        'h-lh',
         'h-max',
         'h-fit',
         'h-4',
@@ -2957,6 +2958,10 @@ test('height', async () => {
       height: 100%;
     }
 
+    .h-lh {
+      height: 1lh;
+    }
+
     .h-lvh {
       height: 100lvh;
     }
@@ -2993,6 +2998,7 @@ test('height', async () => {
       'h-svh/foo',
       'h-lvh/foo',
       'h-dvh/foo',
+      'h-lh/foo',
       'h-min/foo',
       'h-max/foo',
       'h-fit/foo',
@@ -3020,6 +3026,7 @@ test('min-height', async () => {
         'min-h-lvh',
         'min-h-dvh',
         'min-h-min',
+        'min-h-lh',
         'min-h-max',
         'min-h-fit',
         'min-h-4',
@@ -3055,6 +3062,10 @@ test('min-height', async () => {
       min-height: 100%;
     }
 
+    .min-h-lh {
+      min-height: 1lh;
+    }
+
     .min-h-lvh {
       min-height: 100lvh;
     }
@@ -3086,6 +3097,7 @@ test('min-height', async () => {
       'min-h-svh/foo',
       'min-h-lvh/foo',
       'min-h-dvh/foo',
+      'min-h-lh/foo',
       'min-h-min/foo',
       'min-h-max/foo',
       'min-h-fit/foo',
@@ -3111,6 +3123,7 @@ test('max-height', async () => {
         'max-h-svh',
         'max-h-lvh',
         'max-h-dvh',
+        'max-h-lh',
         'max-h-min',
         'max-h-max',
         'max-h-fit',
@@ -3141,6 +3154,10 @@ test('max-height', async () => {
 
     .max-h-full {
       max-height: 100%;
+    }
+
+    .max-h-lh {
+      max-height: 1lh;
     }
 
     .max-h-lvh {
@@ -3179,6 +3196,7 @@ test('max-height', async () => {
       'max-h-svh/foo',
       'max-h-lvh/foo',
       'max-h-dvh/foo',
+      'max-h-lh/foo',
       'max-h-min/foo',
       'max-h-max/foo',
       'max-h-fit/foo',
