@@ -1217,7 +1217,7 @@ test('utilities used in @apply must be prefixed', async () => {
   `)
 
   // Non-prefixed utilities cause an error
-  expect(() =>
+  await expect(
     compile(
       css`
         @config "./config.js";
@@ -1405,7 +1405,7 @@ test('blocklisted candidates are not generated', async () => {
 })
 
 test('blocklisted candidates cannot be used with `@apply`', async () => {
-  await expect(() =>
+  await expect(
     compile(
       css`
         @theme reference {

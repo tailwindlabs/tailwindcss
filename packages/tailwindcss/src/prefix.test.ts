@@ -80,7 +80,7 @@ test('utilities used in @apply must be prefixed', async () => {
   `)
 
   // Non-prefixed utilities cause an error
-  expect(() =>
+  await expect(
     compile(css`
       @theme reference prefix(tw);
 
