@@ -671,7 +671,7 @@ test(
     let process = await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose')
 
     await process.onStderr((message) =>
-      message.includes('Package path ./does-not-exist is not exported from package'),
+      message.includes('does-not-exist is not exported from package'),
     )
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
@@ -711,7 +711,7 @@ test(
       `,
     )
     await process.onStderr((message) =>
-      message.includes('Package path ./does-not-exist is not exported from package'),
+      message.includes('does-not-exist is not exported from package'),
     )
     await process.onStderr((message) => message.includes('Finished src/index.css'))
 
