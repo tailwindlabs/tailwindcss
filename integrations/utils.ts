@@ -362,7 +362,10 @@ export function test(
                 // Sort by filename, alphabetically
                 return a[0].localeCompare(z[0])
               })
-              .map(([file, content]) => `--- ${file} ---\n${content || '<EMPTY>'}`)
+              .map(
+                ([file, content]) =>
+                  `--- ${file} ---\n${content.trim() === '' ? '<EMPTY>' : content}`,
+              )
               .join('\n\n')
               .trim()}\n`
           },
