@@ -943,7 +943,6 @@ export function createUtilities(theme: Theme) {
    * @css `max-height`
    */
   for (let [key, value] of [
-    ['auto', 'auto'],
     ['full', '100%'],
     ['svw', '100svw'],
     ['lvw', '100lvw'],
@@ -964,12 +963,19 @@ export function createUtilities(theme: Theme) {
     staticUtility(`h-${key}`, [['height', value]])
     staticUtility(`min-w-${key}`, [['min-width', value]])
     staticUtility(`min-h-${key}`, [['min-height', value]])
-    if (key !== 'auto') {
-      staticUtility(`max-w-${key}`, [['max-width', value]])
-      staticUtility(`max-h-${key}`, [['max-height', value]])
-    }
+    staticUtility(`max-w-${key}`, [['max-width', value]])
+    staticUtility(`max-h-${key}`, [['max-height', value]])
   }
 
+  staticUtility(`size-auto`, [
+    ['--tw-sort', 'size'],
+    ['width', 'auto'],
+    ['height', 'auto'],
+  ])
+  staticUtility(`w-auto`, [['width', 'auto']])
+  staticUtility(`h-auto`, [['height', 'auto']])
+  staticUtility(`min-w-auto`, [['min-width', 'auto']])
+  staticUtility(`min-h-auto`, [['min-height', 'auto']])
   staticUtility(`w-screen`, [['width', '100vw']])
   staticUtility(`min-w-screen`, [['min-width', '100vw']])
   staticUtility(`max-w-screen`, [['max-width', '100vw']])
