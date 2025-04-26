@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Ensure `@tailwindcss/upgrade` runs on Tailwind CSS v4 projects ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
+- Add `h-lh` / `min-h-lh` / `max-h-lh` utilities to match an elements line height ([#17790](https://github.com/tailwindlabs/tailwindcss/pull/17790))
 
 ### Fixed
 
