@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade: Bump all Tailwind CSS related dependencies during upgrade ([#17763](https://github.com/tailwindlabs/tailwindcss/pull/17763))
 - PostCSS: Ensure that errors in stylesheet dependencies are recoverable ([#17754](https://github.com/tailwindlabs/tailwindcss/pull/17754))
 - Upgrade: Correctly print variants starting with `@` ([#17814](https://github.com/tailwindlabs/tailwindcss/pull/17814))
+- Skip `color-mix(…)` when opacity is `100%` ([#17815](https://github.com/tailwindlabs/tailwindcss/pull/17815))
 
 ## [4.1.4] - 2025-04-14
 

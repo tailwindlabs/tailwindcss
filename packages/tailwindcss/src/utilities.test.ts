@@ -10695,6 +10695,8 @@ test('bg', async () => {
         'bg-red-500/2.75',
         'bg-red-500/[0.5]',
         'bg-red-500/[50%]',
+        'bg-red-500/100',
+        'bg-red-500/[100%]',
         'bg-blue-500',
         'bg-current',
         'bg-current/50',
@@ -10992,6 +10994,10 @@ test('bg', async () => {
       }
     }
 
+    .bg-red-500\\/100 {
+      background-color: var(--color-red-500);
+    }
+
     .bg-red-500\\/\\[0\\.5\\] {
       background-color: #ef444480;
     }
@@ -11010,6 +11016,10 @@ test('bg', async () => {
       .bg-red-500\\/\\[50\\%\\] {
         background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
+    }
+
+    .bg-red-500\\/\\[100\\%\\] {
+      background-color: var(--color-red-500);
     }
 
     .bg-transparent {
