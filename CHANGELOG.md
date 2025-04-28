@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace `_` with `.` in theme suggestions for `@utility` if surrounded by digits ([#17743](https://github.com/tailwindlabs/tailwindcss/pull/17743))
 - Upgrade: Bump all Tailwind CSS related dependencies during upgrade ([#17763](https://github.com/tailwindlabs/tailwindcss/pull/17763))
 - PostCSS: Ensure that errors in stylesheet dependencies are recoverable ([#17754](https://github.com/tailwindlabs/tailwindcss/pull/17754))
+- Skip `color-mix(…)` when opacity is `100%` ([#17815](https://github.com/tailwindlabs/tailwindcss/pull/17815))
 
 ## [4.1.4] - 2025-04-14
 
