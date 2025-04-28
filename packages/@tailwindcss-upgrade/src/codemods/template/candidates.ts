@@ -105,15 +105,18 @@ function printVariant(variant: Variant) {
   // Handle functional variants
   if (variant.kind === 'functional') {
     base += variant.root
+    // `@` is a special case for functional variants. We want to print: `@lg`
+    // instead of `@-lg`
+    let hasDash = variant.root !== '@'
     if (variant.value) {
       if (variant.value.kind === 'arbitrary') {
         let isVarValue = isVar(variant.value.value)
         let value = isVarValue ? variant.value.value.slice(4, -1) : variant.value.value
         let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
 
-        base += `-${open}${printArbitraryValue(value)}${close}`
+        base += `${hasDash ? '-' : ''}${open}${printArbitraryValue(value)}${close}`
       } else if (variant.value.kind === 'named') {
-        base += `-${variant.value.value}`
+        base += `${hasDash ? '-' : ''}${variant.value.value}`
       }
     }
   }
