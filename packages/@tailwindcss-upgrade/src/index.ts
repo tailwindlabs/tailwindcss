@@ -90,6 +90,7 @@ async function run() {
     let stylesheets = loadResults
       .filter((result) => result.status === 'fulfilled')
       .map((result) => result.value)
+    let originals = new Map(stylesheets.map((sheet) => [sheet, sheet.root.toString()]))
 
     // Analyze the stylesheets
     try {
@@ -213,6 +214,7 @@ async function run() {
 
     // Format nodes
     for (let sheet of stylesheets) {
+      if (originals.get(sheet) === sheet.root.toString()) continue
       await postcss([sortBuckets(), formatNodes()]).process(sheet.root!, { from: sheet.file! })
     }
 
