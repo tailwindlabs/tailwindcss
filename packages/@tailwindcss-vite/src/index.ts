@@ -1,4 +1,12 @@
-import { compile, env, Features, Instrumentation, normalizePath, optimize } from '@tailwindcss/node'
+import {
+  compile,
+  env,
+  Features,
+  Instrumentation,
+  normalizePath,
+  optimize,
+  toSourceMap,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
@@ -37,6 +45,9 @@ export default function tailwindcss(): Plugin[] {
     return new Root(
       id,
       config!.root,
+      // Currently, Vite only supports CSS source maps in development and they
+      // are off by default. Check to see if we need them or not.
+      config?.css.devSourcemap ?? false,
       customCssResolver,
       customJsResolver,
     )
@@ -108,6 +119,7 @@ export default function tailwindcss(): Plugin[] {
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
         result = optimize(result.code, {
           minify,
+          map: result.map,
         })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 
@@ -180,6 +192,7 @@ class Root {
     private id: string,
     private base: string,
 
+    private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
     private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
   ) {}
@@ -193,6 +206,7 @@ class Root {
   ): Promise<
     | {
         code: string
+        map: string | undefined
       }
     | false
   > {
@@ -227,6 +241,7 @@ class Root {
       DEBUG && I.start('Setup compiler')
       let addBuildDependenciesPromises: Promise<void>[] = []
       this.compiler = await compile(content, {
+        from: this.enableSourceMaps ? this.id : undefined,
         base: inputBase,
         shouldRewriteUrls: true,
         onDependency: (path) => {
@@ -328,8 +343,13 @@ class Root {
     let code = this.compiler.build([...this.candidates])
     DEBUG && I.end('Build CSS')
 
+    DEBUG && I.start('Build Source Map')
+    let map = this.enableSourceMaps ? toSourceMap(this.compiler.buildSourceMap()).raw : undefined
+    DEBUG && I.end('Build Source Map')
+
     return {
       code,
+      map,
     }
   }
 
