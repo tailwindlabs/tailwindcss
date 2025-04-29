@@ -36,7 +36,6 @@ export function parse(input: string) {
   // *before* processing do NOT change the length of the string. This
   // would invalidate the mechanism used to track source locations.
   if (input[0] === '\uFEFF') input = ' ' + input.slice(1)
-  input = input.replaceAll('\r\n', ' \n')
 
   let ast: AstNode[] = []
   let licenseComments: Comment[] = []
