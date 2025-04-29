@@ -674,7 +674,7 @@ test(
       message.includes('does-not-exist is not exported from package'),
     )
 
-    retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
 
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
@@ -710,6 +710,6 @@ test(
     )
     await process.onStderr((message) => message.includes('Finished src/index.css'))
 
-    retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
   },
 )
