@@ -1,13 +1,29 @@
 import { Features, transform } from 'lightningcss'
 
+export interface OptimizeOptions {
+  /**
+   * The file being transformed
+   */
+  file?: string
+
+  /**
+   * Enabled minified output
+   */
+  minify?: boolean
+}
+
+export interface TransformResult {
+  code: string
+}
+
 export function optimize(
   input: string,
-  { file = 'input.css', minify = false }: { file?: string; minify?: boolean } = {},
-): string {
+  { file = 'input.css', minify = false }: OptimizeOptions = {},
+): TransformResult {
   function optimize(code: Buffer | Uint8Array) {
     return transform({
       filename: file,
-      code: code as any,
+      code,
       minify,
       sourceMap: false,
       drafts: {
@@ -25,16 +41,18 @@ export function optimize(
         chrome: 111 << 16,
       },
       errorRecovery: true,
-    }).code
+    })
   }
 
   // Running Lightning CSS twice to ensure that adjacent rules are merged after
   // nesting is applied. This creates a more optimized output.
-  let out = optimize(optimize(Buffer.from(input))).toString()
+  let result = optimize(Buffer.from(input))
+  result = optimize(result.code)
 
-  // Work around an issue where the media query range syntax transpilation
-  // generates code that is invalid with `@media` queries level 3.
-  out = out.replaceAll('@media not (', '@media not all and (')
+  let code = result.code.toString()
+  code = code.replaceAll('@media not (', '@media not all and (')
 
-  return out
+  return {
+    code,
+  }
 }
