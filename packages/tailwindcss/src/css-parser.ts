@@ -18,6 +18,7 @@ const SINGLE_QUOTE = 0x27
 const COLON = 0x3a
 const SEMICOLON = 0x3b
 const LINE_BREAK = 0x0a
+const CARRIAGE_RETURN = 0xd
 const SPACE = 0x20
 const TAB = 0x09
 const OPEN_CURLY = 0x7b
@@ -52,6 +53,14 @@ export function parse(input: string) {
 
   for (let i = 0; i < input.length; i++) {
     let currentChar = input.charCodeAt(i)
+
+    // Skip over the CR in CRLF. This allows code below to only check for a line
+    // break even if we're looking at a Windows newline. Peeking the input still
+    // has to check for CRLF but that happens less often.
+    if (currentChar === CARRIAGE_RETURN) {
+      peekChar = input.charCodeAt(i + 1)
+      if (peekChar === LINE_BREAK) continue
+    }
 
     // Current character is a `\` therefore the next character is escaped,
     // consume it together with the next character and continue.
