@@ -5,6 +5,7 @@ export * from './compile'
 export * from './instrumentation'
 export * from './normalize-path'
 export * from './optimize'
+export * from './source-maps'
 export { env }
 
 // In Bun, ESM modules will also populate `require.cache`, so the module hook is

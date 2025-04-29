@@ -40,6 +40,7 @@
     "enhanced-resolve": "^5.18.1",
     "jiti": "^2.4.2",
     "lightningcss": "catalog:",
+    "source-map-js": "^1.2.1",
     "tailwindcss": "workspace:*"
   }
 }

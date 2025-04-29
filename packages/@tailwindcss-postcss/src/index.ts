@@ -282,13 +282,13 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 DEBUG && I.end('AST -> CSS')
 
                 DEBUG && I.start('Lightning CSS')
-                let ast = optimizeCss(css, {
+                let optimized = optimizeCss(css, {
                   minify: typeof optimize === 'object' ? optimize.minify : true,
                 })
                 DEBUG && I.end('Lightning CSS')
 
                 DEBUG && I.start('CSS -> PostCSS AST')
-                context.optimizedPostCssAst = postcss.parse(ast, result.opts)
+                context.optimizedPostCssAst = postcss.parse(optimized.code, result.opts)
                 DEBUG && I.end('CSS -> PostCSS AST')
 
                 DEBUG && I.end('Optimization')
