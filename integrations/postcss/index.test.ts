@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { candidate, css, html, IS_WINDOWS, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
 
 test(
   'production build (string)',
@@ -636,67 +636,59 @@ test(
   },
 )
 
-if (!IS_WINDOWS) {
-  test(
-    'rebuild error recovery',
-    {
-      fs: {
-        'package.json': json`
-          {
-            "devDependencies": {
-              "postcss": "^8",
-              "postcss-cli": "^10",
-              "tailwindcss": "workspace:^",
-              "@tailwindcss/postcss": "workspace:^"
-            }
+test(
+  'rebuild error recovery',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "devDependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
           }
-        `,
-        'postcss.config.js': js`
-          module.exports = {
-            plugins: {
-              '@tailwindcss/postcss': {},
-            },
-          }
-        `,
-        'src/index.html': html`
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'src/index.html': html`
         <div class="underline"></div>
       `,
-        'src/index.css': css` @import './tailwind.css'; `,
-        'src/tailwind.css': css`
-          @reference 'tailwindcss/does-not-exist';
-          @import 'tailwindcss/utilities';
-        `,
-      },
+      'src/index.css': css` @import './tailwind.css'; `,
+      'src/tailwind.css': css`
+        @reference 'tailwindcss/does-not-exist';
+        @import 'tailwindcss/utilities';
+      `,
     },
-    async ({ fs, expect, spawn }) => {
-      let process = await spawn(
-        'pnpm postcss src/index.css --output dist/out.css --watch --verbose',
-      )
+  },
+  async ({ fs, expect, spawn }) => {
+    let process = await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose')
 
-      await process.onStderr((message) =>
-        message.includes('does-not-exist is not exported from package'),
-      )
+    await process.onStderr((message) =>
+      message.includes('does-not-exist is not exported from package'),
+    )
 
-      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
-      "
-      --- dist/out.css ---
-      <EMPTY>
-      "
-    `)
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
 
-      await process.onStderr((message) => message.includes('Waiting for file changes...'))
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
-      // Fix the CSS file
-      await fs.write(
-        'src/tailwind.css',
-        css`
-          @reference 'tailwindcss/theme';
-          @import 'tailwindcss/utilities';
-        `,
-      )
-      await process.onStderr((message) => message.includes('Finished src/index.css'))
+    // Fix the CSS file
+    await fs.write(
+      'src/tailwind.css',
+      css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    )
+    await process.onStderr((message) => message.includes('Finished'))
 
-      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
       --- dist/out.css ---
       .underline {
@@ -705,25 +697,18 @@ if (!IS_WINDOWS) {
       "
     `)
 
-      // Now break the CSS file again
-      await fs.write(
-        'src/tailwind.css',
-        css`
-          @reference 'tailwindcss/does-not-exist';
-          @import 'tailwindcss/utilities';
-        `,
-      )
-      await process.onStderr((message) =>
-        message.includes('does-not-exist is not exported from package'),
-      )
-      await process.onStderr((message) => message.includes('Finished src/index.css'))
+    // Now break the CSS file again
+    await fs.write(
+      'src/tailwind.css',
+      css`
+        @reference 'tailwindcss/does-not-exist';
+        @import 'tailwindcss/utilities';
+      `,
+    )
+    await process.onStderr((message) =>
+      message.includes('does-not-exist is not exported from package'),
+    )
 
-      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
-      "
-      --- dist/out.css ---
-      <EMPTY>
-      "
-    `)
-    },
-  )
-}
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+  },
+)
