@@ -1266,7 +1266,6 @@ test(
 
       --- ./src/c.1.css ---
       @import './c.2.css' layer(utilities);
-
       .baz-from-c {
         color: green;
       }
