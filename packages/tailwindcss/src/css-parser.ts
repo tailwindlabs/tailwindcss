@@ -159,7 +159,11 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (peekChar === SEMICOLON && input.charCodeAt(j + 1) === LINE_BREAK) {
+        else if (
+          peekChar === SEMICOLON &&
+          (input.charCodeAt(j + 1) === LINE_BREAK ||
+            (input.charCodeAt(j + 1) === CARRIAGE_RETURN && input.charCodeAt(j + 2) === LINE_BREAK))
+        ) {
           throw new Error(
             `Unterminated string: ${input.slice(start, j + 1) + String.fromCharCode(currentChar)}`,
           )
@@ -175,7 +179,10 @@ export function parse(input: string) {
         //                                    ^ Missing "
         // }
         // ```
-        else if (peekChar === LINE_BREAK) {
+        else if (
+          peekChar === LINE_BREAK ||
+          (peekChar === CARRIAGE_RETURN && input.charCodeAt(j + 1) === LINE_BREAK)
+        ) {
           throw new Error(
             `Unterminated string: ${input.slice(start, j) + String.fromCharCode(currentChar)}`,
           )
