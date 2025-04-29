@@ -37,9 +37,11 @@
     }
   },
   "dependencies": {
+    "@ampproject/remapping": "^2.3.0",
     "enhanced-resolve": "^5.18.1",
     "jiti": "^2.4.2",
     "lightningcss": "catalog:",
+    "magic-string": "^0.30.17",
     "source-map-js": "^1.2.1",
     "tailwindcss": "workspace:*"
   }
