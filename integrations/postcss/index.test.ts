@@ -1,5 +1,16 @@
 import path from 'node:path'
-import { candidate, css, html, IS_WINDOWS, js, json, test, ts, yaml } from '../utils'
+import {
+  candidate,
+  css,
+  html,
+  IS_WINDOWS,
+  js,
+  json,
+  retryAssertion,
+  test,
+  ts,
+  yaml,
+} from '../utils'
 
 test(
   'production build (string)',
@@ -677,12 +688,7 @@ if (!IS_WINDOWS) {
         message.includes('does-not-exist is not exported from package'),
       )
 
-      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
-      "
-      --- dist/out.css ---
-      <EMPTY>
-      "
-    `)
+      retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
 
       await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
@@ -718,12 +724,7 @@ if (!IS_WINDOWS) {
       )
       await process.onStderr((message) => message.includes('Finished src/index.css'))
 
-      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
-      "
-      --- dist/out.css ---
-      <EMPTY>
-      "
-    `)
+      retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
     },
   )
 }
