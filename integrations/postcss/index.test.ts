@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
 
 test(
   'production build (string)',
@@ -674,6 +674,8 @@ test(
       message.includes('does-not-exist is not exported from package'),
     )
 
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     // Fix the CSS file
@@ -684,7 +686,7 @@ test(
         @import 'tailwindcss/utilities';
       `,
     )
-    await process.onStderr((message) => message.includes('Finished src/index.css'))
+    await process.onStderr((message) => message.includes('Finished'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -706,6 +708,7 @@ test(
     await process.onStderr((message) =>
       message.includes('does-not-exist is not exported from package'),
     )
-    await process.onStderr((message) => message.includes('Finished src/index.css'))
+
+    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
   },
 )
