@@ -23,7 +23,7 @@ describe.each([
     'Standalone CLI',
     path.resolve(__dirname, `../../packages/@tailwindcss-standalone/dist/${STANDALONE_BINARY}`),
   ],
-])('%s', (_, command) => {
+])('%s', (kind, command) => {
   test(
     'production build',
     {
@@ -626,6 +626,198 @@ describe.each([
         candidate`content-['ignore-1.html']`,
         candidate`content-['ignore-2.html']`,
       ])
+    },
+  )
+
+  test(
+    'production build + inline source maps',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'ssrc/index.html': html`
+          <div class="flex"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          /*  */
+        `,
+      },
+    },
+    async ({ exec, expect, fs, parseSourceMap }) => {
+      await exec(`${command} --input src/index.css --output dist/out.css --map`)
+
+      console.log(await fs.read('dist/out.css'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+      // Make sure we can find a source map
+      let map = parseSourceMap(await fs.read('dist/out.css'))
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+    },
+  )
+
+  test(
+    'production build + separate source maps',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'ssrc/index.html': html`
+          <div class="flex"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          /*  */
+        `,
+      },
+    },
+    async ({ exec, expect, fs, parseSourceMap }) => {
+      await exec(`${command} --input src/index.css --output dist/out.css --map dist/out.css.map`)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+      // Make sure we can find a source map
+      let map = parseSourceMap({
+        map: await fs.read('dist/out.css.map'),
+        content: await fs.read('dist/out.css'),
+      })
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+    },
+  )
+
+  // Skipped because Lightning CSS has a bug with source maps containing
+  // license comments and it breaks stuff.
+  test.skip(
+    'production build + minify + source maps',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'ssrc/index.html': html`
+          <div class="flex"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          /*  */
+        `,
+      },
+    },
+    async ({ exec, expect, fs, parseSourceMap }) => {
+      await exec(`${command} --input src/index.css --output dist/out.css --minify --map`)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+      console.log(await fs.read('dist/out.css'))
+
+      // Make sure we can find a source map
+      let map = parseSourceMap(await fs.read('dist/out.css'))
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
     },
   )
 })

@@ -1,5 +1,12 @@
 import watcher from '@parcel/watcher'
-import { compile, env, Instrumentation, optimize } from '@tailwindcss/node'
+import {
+  compile,
+  env,
+  Instrumentation,
+  optimize,
+  toSourceMap,
+  type SourceMap,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
 import { existsSync, type Stats } from 'node:fs'
@@ -51,6 +58,11 @@ export function options() {
       type: 'string',
       description: 'The current working directory',
       default: '.',
+    },
+    '--map': {
+      type: 'boolean | string',
+      description: 'Generate a source map',
+      default: false,
     },
   } satisfies Arg
 }
@@ -104,6 +116,21 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     process.exit(1)
   }
 
+  // If the user passes `{bin} build --map -` then this likely means they want to output the map inline
+  // this is the default behavior of `{bin build} --map` to inform the user of that
+  if (args['--map'] === '-') {
+    eprintln(header())
+    eprintln()
+    eprintln(`Use --map without a value to inline the source map`)
+    process.exit(1)
+  }
+
+  // Resolve the map as an absolute path. If the output is true then we
+  // don't need to resolve it because it'll be an inline source map
+  if (args['--map'] && args['--map'] !== true) {
+    args['--map'] = path.resolve(base, args['--map'])
+  }
+
   let start = process.hrtime.bigint()
 
   let input = args['--input']
@@ -119,7 +146,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     optimizedCss: '',
   }
 
-  async function write(css: string, args: Result<ReturnType<typeof options>>, I: Instrumentation) {
+  async function write(
+    css: string,
+    map: SourceMap | null,
+    args: Result<ReturnType<typeof options>>,
+    I: Instrumentation,
+  ) {
     let output = css
 
     // Optimize the output
@@ -129,10 +161,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         let optimized = optimize(css, {
           file: args['--input'] ?? 'input.css',
           minify: args['--minify'] ?? false,
+          map: map?.raw ?? undefined,
         })
         DEBUG && I.end('Optimize CSS')
         previous.css = css
         previous.optimizedCss = optimized.code
+        if (optimized.map) {
+          map = toSourceMap(optimized.map)
+        }
         output = optimized.code
       } else {
         output = previous.optimizedCss
@@ -140,6 +176,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     }
 
     // Write the output
+    if (map) {
+      // Inline the source map
+      if (args['--map'] === true) {
+        output += `\n`
+        output += map.inline
+      } else if (typeof args['--map'] === 'string') {
+        DEBUG && I.start('Write source map')
+        await outputFile(args['--map'], map.raw)
+        DEBUG && I.end('Write source map')
+      }
+    }
+
     DEBUG && I.start('Write output')
     if (args['--output'] && args['--output'] !== '-') {
       await outputFile(args['--output'], output)
@@ -159,6 +207,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   async function createCompiler(css: string, I: Instrumentation) {
     DEBUG && I.start('Setup compiler')
     let compiler = await compile(css, {
+      from: args['--output'] ? (inputFilePath ?? 'stdin.css') : undefined,
       base: inputBasePath,
       onDependency(path) {
         fullRebuildPaths.push(path)
@@ -230,6 +279,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Track the compiled CSS
           let compiledCss = ''
+          let compiledMap: SourceMap | null = null
 
           // Scan the entire `base` directory for full rebuilds.
           if (rebuildStrategy === 'full') {
@@ -268,6 +318,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(candidates)
             DEBUG && I.end('Build CSS')
+
+            if (args['--map']) {
+              DEBUG && I.start('Build Source Map')
+              compiledMap = compiler.buildSourceMap() as any
+              DEBUG && I.end('Build Source Map')
+            }
           }
 
           // Scan changed files only for incremental rebuilds.
@@ -287,9 +343,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             DEBUG && I.start('Build CSS')
             compiledCss = compiler.build(newCandidates)
             DEBUG && I.end('Build CSS')
+
+            if (args['--map']) {
+              DEBUG && I.start('Build Source Map')
+              compiledMap = compiler.buildSourceMap() as any
+              DEBUG && I.end('Build Source Map')
+            }
           }
 
-          await write(compiledCss, args, I)
+          await write(compiledCss, compiledMap, args, I)
 
           let end = process.hrtime.bigint()
           eprintln(`Done in ${formatDuration(end - start)}`)
@@ -324,7 +386,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   DEBUG && I.start('Build CSS')
   let output = await handleError(() => compiler.build(candidates))
   DEBUG && I.end('Build CSS')
-  await write(output, args, I)
+
+  let map: SourceMap | null = null
+
+  if (args['--map']) {
+    DEBUG && I.start('Build Source Map')
+    map = await handleError(() => toSourceMap(compiler.buildSourceMap()))
+    DEBUG && I.end('Build Source Map')
+  }
+
+  await write(output, map, args, I)
 
   let end = process.hrtime.bigint()
   eprintln(`Done in ${formatDuration(end - start)}`)
