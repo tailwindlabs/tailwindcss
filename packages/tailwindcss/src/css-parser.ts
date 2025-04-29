@@ -191,7 +191,12 @@ export function parse(input: string) {
     else if (
       (currentChar === SPACE || currentChar === LINE_BREAK || currentChar === TAB) &&
       (peekChar = input.charCodeAt(i + 1)) &&
-      (peekChar === SPACE || peekChar === LINE_BREAK || peekChar === TAB)
+      (peekChar === SPACE ||
+        peekChar === LINE_BREAK ||
+        peekChar === TAB ||
+        (peekChar === CARRIAGE_RETURN &&
+          (peekChar = input.charCodeAt(i + 2)) &&
+          peekChar == LINE_BREAK))
     ) {
       continue
     }
