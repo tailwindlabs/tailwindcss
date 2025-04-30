@@ -1,6 +1,12 @@
 import { Scanner } from '@tailwindcss/oxide'
-import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
+import type {
+  ArbitraryModifier,
+  Candidate,
+  NamedModifier,
+  Variant,
+} from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 export async function extractRawCandidates(
@@ -66,17 +72,7 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
 
   // Handle modifier
   if (candidate.kind === 'arbitrary' || candidate.kind === 'functional') {
-    if (candidate.modifier) {
-      let isVarValue = isVar(candidate.modifier.value)
-      let value = isVarValue ? candidate.modifier.value.slice(4, -1) : candidate.modifier.value
-      let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
-
-      if (candidate.modifier.kind === 'arbitrary') {
-        base += `/${open}${printArbitraryValue(value)}${close}`
-      } else if (candidate.modifier.kind === 'named') {
-        base += `/${candidate.modifier.value}`
-      }
-    }
+    base += printModifier(candidate.modifier)
   }
 
   // Handle important
@@ -89,7 +85,23 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
   return parts.join(':')
 }
 
-function printVariant(variant: Variant) {
+export function printModifier(modifier: ArbitraryModifier | NamedModifier | null) {
+  if (modifier === null) return ''
+
+  let isVarValue = isVar(modifier.value)
+  let value = isVarValue ? modifier.value.slice(4, -1) : modifier.value
+  let [open, close] = isVarValue ? ['(', ')'] : ['[', ']']
+
+  if (modifier.kind === 'arbitrary') {
+    return `/${open}${printArbitraryValue(value)}${close}`
+  } else if (modifier.kind === 'named') {
+    return `/${modifier.value}`
+  } else {
+    modifier satisfies never
+  }
+}
+
+export function printVariant(variant: Variant) {
   // Handle static variants
   if (variant.kind === 'static') {
     return variant.root
@@ -130,19 +142,13 @@ function printVariant(variant: Variant) {
 
   // Handle modifiers
   if (variant.kind === 'functional' || variant.kind === 'compound') {
-    if (variant.modifier) {
-      if (variant.modifier.kind === 'arbitrary') {
-        base += `/[${printArbitraryValue(variant.modifier.value)}]`
-      } else if (variant.modifier.kind === 'named') {
-        base += `/${variant.modifier.value}`
-      }
-    }
+    base += printModifier(variant.modifier)
   }
 
   return base
 }
 
-function printArbitraryValue(input: string) {
+const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
   let ast = ValueParser.parse(input)
 
   let drop = new Set<ValueParser.ValueAstNode>()
@@ -204,9 +210,12 @@ function printArbitraryValue(input: string) {
   recursivelyEscapeUnderscores(ast)
 
   return ValueParser.toCss(ast)
+})
+export function printArbitraryValue(input: string) {
+  return printArbitraryValueCache.get(input)
 }
 
-function simplifyArbitraryVariant(input: string) {
+const simplifyArbitraryVariantCache = new DefaultMap<string, string>((input) => {
   let ast = ValueParser.parse(input)
 
   // &:is(…)
@@ -226,6 +235,9 @@ function simplifyArbitraryVariant(input: string) {
   }
 
   return input
+})
+function simplifyArbitraryVariant(input: string) {
+  return simplifyArbitraryVariantCache.get(input)
 }
 
 function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
@@ -272,9 +284,12 @@ function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
   }
 }
 
-function isVar(value: string) {
+const isVarCache = new DefaultMap<string, boolean>((value) => {
   let ast = ValueParser.parse(value)
   return ast.length === 1 && ast[0].kind === 'function' && ast[0].value === 'var'
+})
+function isVar(value: string) {
+  return isVarCache.get(value)
 }
 
 function never(value: never): never {
