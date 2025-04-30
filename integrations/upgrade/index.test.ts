@@ -209,7 +209,7 @@ test(
       "
       --- ./src/index.html ---
       <div
-        class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:[color:red] tw:in-[.tw\\:group]:flex"
+        class="tw:flex! tw:sm:block! tw:bg-linear-to-t flex tw:text-[red] tw:in-[.tw\\:group]:flex"
       ></div>
       <div
         class="tw:group tw:group/foo tw:peer tw:peer/foo tw:group-hover:flex tw:group-hover/foo:flex tw:peer-hover:flex tw:peer-hover/foo:flex"
