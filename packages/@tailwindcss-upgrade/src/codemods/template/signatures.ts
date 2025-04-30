@@ -111,6 +111,7 @@ export const computeUtilitySignature = new DefaultMap<
           if (node.value.includes('var(')) {
             let valueAst = ValueParser.parse(node.value)
 
+            let seen = new Set<string>()
             ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
               if (valueNode.kind !== 'function') return
               if (valueNode.value !== 'var') return
@@ -131,6 +132,10 @@ export const computeUtilitySignature = new DefaultMap<
                 variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
               }
               let variableValue = designSystem.resolveThemeValue(variable)
+              // Prevent infinite recursion when the variable value contains the
+              // variable itself.
+              if (seen.has(variable)) return
+              seen.add(variable)
               if (variableValue === undefined) return // Couldn't resolve the variable
 
               // Inject variable fallbacks when no fallback is present yet.
