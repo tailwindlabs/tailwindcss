@@ -222,13 +222,12 @@ export function migrateArbitraryUtilities(
     else if (replacements.length === 0) {
       // An arbitrary property will only set a single property, we can use that
       // to find functional utilities that also set this property.
-      if (candidate.kind === 'arbitrary') {
+      let value =
+        candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
+      if (value !== null) {
         for (let root of designSystem.utilities.keys('functional')) {
           // Try as arbitrary value
-          for (let replacementCandidate of parseCandidate(
-            designSystem,
-            `${root}-[${candidate.value}]`,
-          )) {
+          for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
             yield replacementCandidate
           }
 
@@ -236,17 +235,14 @@ export function migrateArbitraryUtilities(
           if (candidate.modifier) {
             for (let replacementCandidate of parseCandidate(
               designSystem,
-              `${root}-[${candidate.value}]${printModifier(candidate.modifier)}`,
+              `${root}-[${value}]${printModifier(candidate.modifier)}`,
             )) {
               yield replacementCandidate
             }
           }
 
           // Try as bare value
-          for (let replacementCandidate of parseCandidate(
-            designSystem,
-            `${root}-${candidate.value}`,
-          )) {
+          for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
             yield replacementCandidate
           }
 
@@ -254,7 +250,7 @@ export function migrateArbitraryUtilities(
           if (candidate.modifier) {
             for (let replacementCandidate of parseCandidate(
               designSystem,
-              `${root}-${candidate.value}${candidate.modifier}`,
+              `${root}-${value}${candidate.modifier}`,
             )) {
               yield replacementCandidate
             }
