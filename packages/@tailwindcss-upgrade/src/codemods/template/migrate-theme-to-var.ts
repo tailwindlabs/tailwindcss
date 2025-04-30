@@ -1,9 +1,4 @@
-import {
-  parseCandidate,
-  type Candidate,
-  type CandidateModifier,
-  type Variant,
-} from '../../../../tailwindcss/src/candidate'
+import { parseCandidate, type CandidateModifier } from '../../../../tailwindcss/src/candidate'
 import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
@@ -11,6 +6,7 @@ import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infe
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { walkVariants } from '../../utils/walk-variants'
 import { printCandidate } from './candidates'
 
 export const enum Convert {
@@ -59,7 +55,7 @@ export function migrateThemeToVar(
     }
 
     // Handle variants
-    for (let variant of variants(clone)) {
+    for (let [variant] of walkVariants(clone)) {
       if (variant.kind === 'arbitrary') {
         let [newValue] = convert(variant.selector, Convert.MigrateThemeOnly)
         if (newValue !== variant.selector) {
@@ -331,17 +327,4 @@ function eventuallyUnquote(value: string) {
   }
 
   return unquoted
-}
-
-function* variants(candidate: Candidate) {
-  function* inner(variant: Variant): Iterable<Variant> {
-    yield variant
-    if (variant.kind === 'compound') {
-      yield* inner(variant.variant)
-    }
-  }
-
-  for (let variant of candidate.variants) {
-    yield* inner(variant)
-  }
 }

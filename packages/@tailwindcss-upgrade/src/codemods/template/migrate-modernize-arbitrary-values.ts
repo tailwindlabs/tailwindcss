@@ -1,10 +1,11 @@
 import SelectorParser from 'postcss-selector-parser'
-import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
+import { parseCandidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { memcpy } from '../../utils/memcpy'
+import { walkVariants } from '../../utils/walk-variants'
 import { printCandidate } from './candidates'
 
 export function migrateModernizeArbitraryValues(
@@ -16,7 +17,7 @@ export function migrateModernizeArbitraryValues(
     let clone = structuredClone(candidate)
     let changed = false
 
-    for (let [variant, parent] of variants(clone)) {
+    for (let [variant, parent] of walkVariants(clone)) {
       // Forward modifier from the root to the compound variant
       if (
         variant.kind === 'compound' &&
@@ -479,21 +480,4 @@ export function migrateModernizeArbitraryValues(
   }
 
   return rawCandidate
-}
-
-function* variants(candidate: Candidate) {
-  function* inner(
-    variant: Variant,
-    parent: Extract<Variant, { kind: 'compound' }> | null = null,
-  ): Iterable<[Variant, Extract<Variant, { kind: 'compound' }> | null]> {
-    yield [variant, parent]
-
-    if (variant.kind === 'compound') {
-      yield* inner(variant.variant, variant)
-    }
-  }
-
-  for (let variant of candidate.variants) {
-    yield* inner(variant, null)
-  }
 }

@@ -1,9 +1,9 @@
-import type { Candidate, Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { memcpy } from '../../utils/memcpy'
 import type { Writable } from '../../utils/types'
+import { walkVariants } from '../../utils/walk-variants'
 import { printCandidate, printVariant } from './candidates'
 import { computeVariantSignature } from './signatures'
 
@@ -38,7 +38,7 @@ export function migrateArbitraryVariants(
     // DesignSystem are cached, we can't mutate them directly.
     let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
 
-    for (let variant of variants(candidate)) {
+    for (let [variant] of walkVariants(candidate)) {
       if (variant.kind === 'compound') continue
 
       let targetString = printVariant(variant)
@@ -59,17 +59,4 @@ export function migrateArbitraryVariants(
   }
 
   return rawCandidate
-}
-
-function* variants(candidate: Candidate) {
-  function* inner(variant: Variant): Iterable<Variant> {
-    yield variant
-    if (variant.kind === 'compound') {
-      yield* inner(variant.variant)
-    }
-  }
-
-  for (let variant of candidate.variants) {
-    yield* inner(variant)
-  }
 }

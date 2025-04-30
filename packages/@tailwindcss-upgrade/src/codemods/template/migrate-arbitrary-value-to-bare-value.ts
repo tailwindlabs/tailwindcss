@@ -2,7 +2,6 @@ import {
   parseCandidate,
   type Candidate,
   type NamedUtilityValue,
-  type Variant,
 } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
@@ -11,6 +10,7 @@ import {
   isValidSpacingMultiplier,
 } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
+import { walkVariants } from '../../utils/walk-variants'
 import { printCandidate } from './candidates'
 import { computeUtilitySignature } from './signatures'
 
@@ -40,7 +40,7 @@ export function migrateArbitraryValueToBareValue(
       }
     }
 
-    for (let variant of variants(clone)) {
+    for (let [variant] of walkVariants(clone)) {
       // Convert `data-[selected]` to `data-selected`
       if (
         variant.kind === 'functional' &&
@@ -106,19 +106,6 @@ export function migrateArbitraryValueToBareValue(
   }
 
   return rawCandidate
-}
-
-function* variants(candidate: Candidate) {
-  function* inner(variant: Variant): Iterable<Variant> {
-    yield variant
-    if (variant.kind === 'compound') {
-      yield* inner(variant.variant)
-    }
-  }
-
-  for (let variant of candidate.variants) {
-    yield* inner(variant)
-  }
 }
 
 // Convert functional utilities with arbitrary values to bare values if we can.
