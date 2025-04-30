@@ -34,7 +34,6 @@ test.each([
 
   // Leading is special, because `leading-[123]` is the direct value of 123, but
   // `leading-123` maps to `calc(--spacing(123))`.
-  ['leading-[1]', 'leading-none'],
   ['leading-[123]', 'leading-[123]'],
 
   ['data-[selected]:flex', 'data-selected:flex'],

@@ -57,6 +57,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['[display:_flex]', 'flex'],
     ['[display:flex_]', 'flex'],
 
+    // Arbitrary property to static utility
+    // Map number to keyword-like value
+    ['leading-[1]', 'leading-none'],
+
     // Arbitrary property to named functional utility
     ['[color:var(--color-red-500)]', 'text-red-500'],
     ['[background-color:var(--color-red-500)]', 'bg-red-500'],
