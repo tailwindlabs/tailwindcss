@@ -5,15 +5,19 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates, printCandidate } from './candidates'
+import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
+import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
+import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateImportant } from './migrate-important'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
+import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
@@ -42,8 +46,12 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateVariantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
+  migrateArbitraryUtilities,
+  migrateArbitraryVariants,
+  migrateDropUnnecessaryDataTypes,
   migrateArbitraryValueToBareValue,
   migrateModernizeArbitraryValues,
+  migrateOptimizeModifier,
 ]
 
 export async function migrateCandidate(
