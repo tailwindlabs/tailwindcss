@@ -224,17 +224,64 @@ export const computeVariantSignature = new DefaultMap<
 
       // Canonicalize selectors to their minimal form
       walk(ast, (node) => {
+        // At-rules
         if (node.kind === 'at-rule' && node.params.includes(' ')) {
           node.params = node.params.replaceAll(' ', '')
-        } else if (node.kind === 'rule') {
+        }
+
+        // Style rules
+        else if (node.kind === 'rule') {
           let selectorAst = SelectorParser.parse(node.selector)
           let changed = false
-          SelectorParser.walk(selectorAst, (node) => {
+          SelectorParser.walk(selectorAst, (node, { replaceWith }) => {
             if (node.kind === 'separator' && node.value !== ' ') {
               node.value = node.value.trim()
               changed = true
             }
+
+            // Remove unnecessary `:is(…)` selectors
+            else if (node.kind === 'function' && node.value === ':is') {
+              // A single selector inside of `:is(…)` can be replaced with the
+              // selector itself.
+              //
+              // E.g.: `:is(.foo)` → `.foo`
+              if (node.nodes.length === 1) {
+                changed = true
+                replaceWith(node.nodes)
+              }
+
+              // A selector with the universal selector `*` followed by a pseudo
+              // class, can be replaced with the pseudo class itself.
+              else if (
+                node.nodes.length === 2 &&
+                node.nodes[0].kind === 'selector' &&
+                node.nodes[0].value === '*' &&
+                node.nodes[1].kind === 'selector' &&
+                node.nodes[1].value[0] === ':'
+              ) {
+                changed = true
+                replaceWith(node.nodes[1])
+              }
+            }
+
+            // Ensure `*` exists before pseudo selectors inside of `:not(…)`,
+            // `:where(…)`, …
+            //
+            // E.g.:
+            //
+            // `:not(:first-child)` → `:not(*:first-child)`
+            //
+            else if (
+              node.kind === 'function' &&
+              node.value[0] === ':' &&
+              node.nodes[0]?.kind === 'selector' &&
+              node.nodes[0]?.value[0] === ':'
+            ) {
+              changed = true
+              node.nodes.unshift({ kind: 'selector', value: '*' })
+            }
           })
+
           if (changed) {
             node.selector = SelectorParser.toCss(selectorAst)
           }
