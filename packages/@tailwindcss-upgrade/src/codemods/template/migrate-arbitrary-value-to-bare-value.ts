@@ -1,122 +1,41 @@
-import { parseCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
+import {
+  parseCandidate,
+  type Candidate,
+  type NamedUtilityValue,
+  type Variant,
+} from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
+import {
+  isPositiveInteger,
+  isValidSpacingMultiplier,
+} from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { printCandidate } from './candidates'
+import { computeUtilitySignature } from './signatures'
 
 export function migrateArbitraryValueToBareValue(
   designSystem: DesignSystem,
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
+  let signatures = computeUtilitySignature.get(designSystem)
+
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
 
-    // Convert [subgrid] to subgrid
-    if (
-      clone.kind === 'functional' &&
-      clone.value?.kind === 'arbitrary' &&
-      clone.value.value === 'subgrid' &&
-      (clone.root === 'grid-cols' || clone.root == 'grid-rows')
-    ) {
-      changed = true
-      clone.value = {
-        kind: 'named',
-        value: 'subgrid',
-        fraction: null,
-      }
-    }
-
-    // Convert utilities that accept bare values ending in %
-    if (
-      clone.kind === 'functional' &&
-      clone.value?.kind === 'arbitrary' &&
-      clone.value.dataType === null &&
-      (clone.root === 'from' ||
-        clone.root === 'via' ||
-        clone.root === 'to' ||
-        clone.root === 'font-stretch')
-    ) {
-      if (clone.value.value.endsWith('%') && isPositiveInteger(clone.value.value.slice(0, -1))) {
-        let percentage = parseInt(clone.value.value)
-        if (
-          clone.root === 'from' ||
-          clone.root === 'via' ||
-          clone.root === 'to' ||
-          (clone.root === 'font-stretch' && percentage >= 50 && percentage <= 200)
-        ) {
-          changed = true
-          clone.value = {
-            kind: 'named',
-            value: clone.value.value,
-            fraction: null,
+    // Migrate arbitrary values to bare values
+    if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
+      let expectedSignature = signatures.get(rawCandidate)
+      if (expectedSignature !== null) {
+        for (let value of tryValueReplacements(clone)) {
+          let newSignature = signatures.get(printCandidate(designSystem, { ...clone, value }))
+          if (newSignature === expectedSignature) {
+            changed = true
+            clone.value = value
+            break
           }
-        }
-      }
-    }
-
-    // Convert arbitrary values with positive integers to bare values
-    // Convert arbitrary values with fractions to bare values
-    else if (
-      clone.kind === 'functional' &&
-      clone.value?.kind === 'arbitrary' &&
-      clone.value.dataType === null
-    ) {
-      if (clone.root === 'leading') {
-        // leading-[1] -> leading-none
-        if (clone.value.value === '1') {
-          changed = true
-          clone.value = {
-            kind: 'named',
-            value: 'none',
-            fraction: null,
-          }
-        }
-
-        // Keep leading-[<number>] as leading-[<number>]
-        else {
-          continue
-        }
-      }
-
-      let parts = segment(clone.value.value, '/')
-      if (parts.every((part) => isPositiveInteger(part))) {
-        changed = true
-
-        let currentValue = clone.value
-        let currentModifier = clone.modifier
-
-        // E.g.: `col-start-[12]`
-        //                   ^^
-        if (parts.length === 1) {
-          clone.value = {
-            kind: 'named',
-            value: clone.value.value,
-            fraction: null,
-          }
-        }
-
-        // E.g.: `aspect-[12/34]`
-        //                ^^ ^^
-        else {
-          clone.value = {
-            kind: 'named',
-            value: parts[0],
-            fraction: clone.value.value,
-          }
-          clone.modifier = {
-            kind: 'named',
-            value: parts[1],
-          }
-        }
-
-        // Double check that the new value compiles correctly
-        if (designSystem.compileAstNodes(clone).length === 0) {
-          clone.value = currentValue
-          clone.modifier = currentModifier
-          changed = false
         }
       }
     }
@@ -199,5 +118,77 @@ function* variants(candidate: Candidate) {
 
   for (let variant of candidate.variants) {
     yield* inner(variant)
+  }
+}
+
+// Convert functional utilities with arbitrary values to bare values if we can.
+// We know that bare values can only be:
+//
+// 1. A number (with increments of .25)
+// 2. A percentage (with increments of .25 followed by a `%`)
+// 3. A ratio with whole numbers
+//
+// Not a bare value per se, but if we are dealing with a keyword, that could
+// potentially also look like a bare value (aka no `[` or `]`). E.g.:
+// ```diff
+// grid-cols-[subgrid]
+// grid-cols-subgrid
+// ```
+function* tryValueReplacements(
+  candidate: Extract<Candidate, { kind: 'functional' }>,
+  value: string = candidate.value?.value ?? '',
+  seen: Set<string> = new Set(),
+): Generator<NamedUtilityValue> {
+  if (seen.has(value)) return
+  seen.add(value)
+
+  // 0. Just try to drop the square brackets and see if it works
+  // 1. A number (with increments of .25)
+  yield {
+    kind: 'named',
+    value,
+    fraction: null,
+  }
+
+  // 2. A percentage (with increments of .25 followed by a `%`)
+  //    Try to drop the `%` and see if it works
+  if (value.endsWith('%') && isValidSpacingMultiplier(value.slice(0, -1))) {
+    yield {
+      kind: 'named',
+      value: value.slice(0, -1),
+      fraction: null,
+    }
+  }
+
+  // 3. A ratio with whole numbers
+  if (value.includes('/')) {
+    let [numerator, denominator] = value.split('/')
+    if (isPositiveInteger(numerator) && isPositiveInteger(denominator)) {
+      yield {
+        kind: 'named',
+        value: numerator,
+        fraction: `${numerator}/${denominator}`,
+      }
+    }
+  }
+
+  // It could also be that we have `20px`, we can try just `20` and see if it
+  // results in the same signature.
+  let allNumbersAndFractions = new Set<string>()
+
+  // Figure out all numbers and fractions in the value
+  for (let match of value.matchAll(/(\d+\/\d+)|(\d+\.?\d+)/g)) {
+    allNumbersAndFractions.add(match[0].trim())
+  }
+
+  // Sort the numbers and fractions where the smallest length comes first. This
+  // will result in the smallest replacement.
+  let options = Array.from(allNumbersAndFractions).sort((a, z) => {
+    return a.length - z.length
+  })
+
+  // Try all the options
+  for (let option of options) {
+    yield* tryValueReplacements(candidate, option, seen)
   }
 }

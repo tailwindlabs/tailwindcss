@@ -60,7 +60,7 @@ test.each([
     'data-[selected]:aria-[selected="true"]:aspect-[12/34]',
     'data-selected:aria-selected:aspect-12/34',
   ],
-])('%s => %s', async (candidate, result) => {
+])('%s => %s (%#)', async (candidate, result) => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
     base: __dirname,
   })
