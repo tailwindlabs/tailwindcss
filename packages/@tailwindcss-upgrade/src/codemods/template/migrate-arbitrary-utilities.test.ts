@@ -5,6 +5,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
+import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 
 const designSystems = new DefaultMap((base: string) => {
@@ -16,6 +17,7 @@ const designSystems = new DefaultMap((base: string) => {
 function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawCandidate: string) {
   for (let migration of [
     migrateArbitraryUtilities,
+    migrateDropUnnecessaryDataTypes,
     migrateArbitraryValueToBareValue,
     migrateOptimizeModifier,
   ]) {
@@ -87,6 +89,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Arbitrary value to bare value
     ['border-[2px]', 'border-2'],
     ['border-[1234px]', 'border-1234'],
+
+    // Arbitrary value with data type, to more specific arbitrary value
+    ['bg-[position:123px]', 'bg-position-[123px]'],
+    ['bg-[size:123px]', 'bg-size-[123px]'],
+
+    // Arbitrary value with inferred data type, to more specific arbitrary value
+    ['bg-[123px]', 'bg-position-[123px]'],
 
     // Complex arbitrary property to arbitrary value
     [
