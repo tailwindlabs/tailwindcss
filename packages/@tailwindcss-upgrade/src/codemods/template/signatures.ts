@@ -9,8 +9,8 @@ import { printArbitraryValue } from './candidates'
 
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or
-// null if the utility is not valid. The class in the selector will be replaced
-// with the `.x` selector.
+// a unique symbol if the utility is not valid. The class in the selector will
+// be replaced with the `.x` selector.
 //
 // This function should only be passed the base utility so `flex`, `hover:flex`
 // and `focus:flex` will all use just `flex`. Variants are handled separately.
@@ -25,9 +25,9 @@ import { printArbitraryValue } from './candidates'
 // These produce the same signature, therefore they represent the same utility.
 export const computeUtilitySignature = new DefaultMap<
   DesignSystem,
-  DefaultMap<string, string | null>
+  DefaultMap<string, string | Symbol>
 >((designSystem) => {
-  return new DefaultMap<string, string | null>((utility) => {
+  return new DefaultMap<string, string | Symbol>((utility) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
       utility =
@@ -181,15 +181,17 @@ export const computeUtilitySignature = new DefaultMap<
       let signature = toCss(ast)
       return signature
     } catch {
-      return null
+      // A unique symbol is returned to ensure that 2 signatures resulting in
+      // `null` are not considered equal.
+      return Symbol()
     }
   })
 })
 
 // Given a variant, compute a signature that represents the variant. The
 // signature will be a normalised form of the generated CSS for the variant, or
-// null if the variant is not valid. The class in the selector will be replaced
-// with `.x`.
+// a unique symbol if the variant is not valid. The class in the selector will
+// be replaced with `.x`.
 //
 // E.g.:
 //
@@ -201,9 +203,9 @@ export const computeUtilitySignature = new DefaultMap<
 // These produce the same signature, therefore they represent the same variant.
 export const computeVariantSignature = new DefaultMap<
   DesignSystem,
-  DefaultMap<string, string | null>
+  DefaultMap<string, string | Symbol>
 >((designSystem) => {
-  return new DefaultMap<string, string | null>((variant) => {
+  return new DefaultMap<string, string | Symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
       variant =
@@ -238,7 +240,9 @@ export const computeVariantSignature = new DefaultMap<
       let signature = toCss(ast)
       return signature
     } catch {
-      return null
+      // A unique symbol is returned to ensure that 2 signatures resulting in
+      // `null` are not considered equal.
+      return Symbol()
     }
   })
 })

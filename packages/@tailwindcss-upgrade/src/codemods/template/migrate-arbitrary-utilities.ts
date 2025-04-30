@@ -22,7 +22,7 @@ const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, str
   // Actual static utilities
   for (let root of ds.utilities.keys('static')) {
     let signature = signatures.get(root)
-    if (signature === null) continue
+    if (typeof signature !== 'string') continue
     lookup.get(signature).push(root)
   }
 
@@ -36,12 +36,12 @@ const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, str
       for (let value of values) {
         let candidateString = value === null ? root : `${root}-${value}`
         let signature = signatures.get(candidateString)
-        if (signature !== null) lookup.get(signature).push(candidateString)
+        if (typeof signature === 'string') lookup.get(signature).push(candidateString)
 
         if (supportsNegative) {
           let negativeCandidateString = `-${candidateString}`
           let signature = signatures.get(negativeCandidateString)
-          if (signature !== null) lookup.get(signature).push(negativeCandidateString)
+          if (typeof signature === 'string') lookup.get(signature).push(negativeCandidateString)
         }
       }
 
@@ -57,12 +57,12 @@ const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, str
           let candidateString =
             value === null ? `${root}/${modifier}` : `${root}-${value}/${modifier}`
           let signature = signatures.get(candidateString)
-          if (signature !== null) lookup.get(signature).push(candidateString)
+          if (typeof signature === 'string') lookup.get(signature).push(candidateString)
 
           if (supportsNegative) {
             let negativeCandidateString = `-${candidateString}`
             let signature = signatures.get(negativeCandidateString)
-            if (signature !== null) lookup.get(signature).push(negativeCandidateString)
+            if (typeof signature === 'string') lookup.get(signature).push(negativeCandidateString)
           }
         }
       }
@@ -142,7 +142,7 @@ export function migrateArbitraryUtilities(
 
     // Compute the signature for the target candidate
     let targetSignature = signatures.get(targetCandidateString)
-    if (targetSignature === null) continue
+    if (typeof targetSignature !== 'string') continue
 
     // Try a few options to find a suitable replacement utility
     for (let replacementCandidate of tryReplacements(targetSignature, targetCandidate)) {
@@ -200,7 +200,7 @@ export function migrateArbitraryUtilities(
       let targetSignatureWithoutModifier = signatures.get(
         printCandidate(designSystem, candidateWithoutModifier),
       )
-      if (targetSignatureWithoutModifier !== null) {
+      if (typeof targetSignatureWithoutModifier === 'string') {
         for (let replacementCandidate of tryReplacements(
           targetSignatureWithoutModifier,
           candidateWithoutModifier,

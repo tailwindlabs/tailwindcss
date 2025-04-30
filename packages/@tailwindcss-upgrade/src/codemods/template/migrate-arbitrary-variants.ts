@@ -16,7 +16,7 @@ const variantsLookup = new DefaultMap<DesignSystem, DefaultMap<string, string[]>
     for (let [root, variant] of designSystem.variants.entries()) {
       if (variant.kind === 'static') {
         let signature = signatures.get(root)
-        if (signature === null) continue
+        if (typeof signature !== 'string') continue
         lookup.get(signature).push(root)
       }
     }
@@ -30,6 +30,9 @@ export function migrateArbitraryVariants(
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
+  let signatures = computeVariantSignature.get(designSystem)
+  let variants = variantsLookup.get(designSystem)
+
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
     // We are only interested in the variants
     if (readonlyCandidate.variants.length <= 0) return rawCandidate
@@ -42,10 +45,10 @@ export function migrateArbitraryVariants(
       if (variant.kind === 'compound') continue
 
       let targetString = printVariant(variant)
-      let targetSignature = computeVariantSignature.get(designSystem).get(targetString)
-      if (!targetSignature) continue
+      let targetSignature = signatures.get(targetString)
+      if (typeof targetSignature !== 'string') continue
 
-      let foundVariants = variantsLookup.get(designSystem).get(targetSignature)
+      let foundVariants = variants.get(targetSignature)
       if (foundVariants.length !== 1) continue
 
       let foundVariant = foundVariants[0]

@@ -40,6 +40,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Drop unnecessary modifiers
     ['bg-red-500/[100%]', 'bg-red-500'],
     ['bg-red-500/100', 'bg-red-500'],
+
+    // Keep modifiers on classes that don't _really_ exist
+    ['group/name', 'group/name'],
   ])(testName, async (candidate, expected) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`
