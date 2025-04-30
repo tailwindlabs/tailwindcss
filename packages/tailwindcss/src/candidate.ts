@@ -8,7 +8,7 @@ const DASH = 0x2d
 const LOWER_A = 0x61
 const LOWER_Z = 0x7a
 
-type ArbitraryUtilityValue = {
+export type ArbitraryUtilityValue = {
   kind: 'arbitrary'
 
   /**
@@ -60,7 +60,7 @@ export type NamedUtilityValue = {
   fraction: string | null
 }
 
-type ArbitraryModifier = {
+export type ArbitraryModifier = {
   kind: 'arbitrary'
 
   /**
@@ -72,7 +72,7 @@ type ArbitraryModifier = {
   value: string
 }
 
-type NamedModifier = {
+export type NamedModifier = {
   kind: 'named'
 
   /**
