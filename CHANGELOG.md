@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure `@tailwindcss/upgrade` runs on Tailwind CSS v4 projects ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
 - Add `h-lh` / `min-h-lh` / `max-h-lh` utilities to match an elements line height ([#17790](https://github.com/tailwindlabs/tailwindcss/pull/17790))
-- Add `display`, `visibility`, `content-visibility`, `overlay`, and `pointer-events` to the list of properties when using `transition` ([#17812](https://github.com/tailwindlabs/tailwindcss/pull/17812))
+- Include `display`, `visibility`, `content-visibility`, `overlay`, and `pointer-events` when using `transition` to simplify `@starting-style` usage ([#17812](https://github.com/tailwindlabs/tailwindcss/pull/17812))
 
 ### Fixed
 
