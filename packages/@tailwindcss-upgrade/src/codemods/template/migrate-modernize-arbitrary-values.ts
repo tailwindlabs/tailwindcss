@@ -4,15 +4,8 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { memcpy } from '../../utils/memcpy'
 import { printCandidate } from './candidates'
-
-function memcpy<T extends object, U extends object | null>(target: T, source: U): U {
-  // Clear out the target object, otherwise inspecting the final object will
-  // look very confusing.
-  for (let key in target) delete target[key]
-
-  return Object.assign(target, source)
-}
 
 export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,
