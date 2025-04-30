@@ -226,21 +226,6 @@ export function migrateArbitraryUtilities(
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
       if (value !== null) {
         for (let root of designSystem.utilities.keys('functional')) {
-          // Try as arbitrary value
-          for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
-            yield replacementCandidate
-          }
-
-          // Try as arbitrary value with modifier
-          if (candidate.modifier) {
-            for (let replacementCandidate of parseCandidate(
-              designSystem,
-              `${root}-[${value}]${printModifier(candidate.modifier)}`,
-            )) {
-              yield replacementCandidate
-            }
-          }
-
           // Try as bare value
           for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
             yield replacementCandidate
@@ -251,6 +236,21 @@ export function migrateArbitraryUtilities(
             for (let replacementCandidate of parseCandidate(
               designSystem,
               `${root}-${value}${candidate.modifier}`,
+            )) {
+              yield replacementCandidate
+            }
+          }
+
+          // Try as arbitrary value
+          for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
+            yield replacementCandidate
+          }
+
+          // Try as arbitrary value with modifier
+          if (candidate.modifier) {
+            for (let replacementCandidate of parseCandidate(
+              designSystem,
+              `${root}-[${value}]${printModifier(candidate.modifier)}`,
             )) {
               yield replacementCandidate
             }
