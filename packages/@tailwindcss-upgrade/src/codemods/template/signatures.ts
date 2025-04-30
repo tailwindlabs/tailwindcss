@@ -50,7 +50,7 @@ export const computeUtilitySignature = new DefaultMap<
       walk(ast, (node, { replaceWith }) => {
         // Optimize declarations
         if (node.kind === 'declaration') {
-          if (node.value === undefined || node.value === '--tw-sort') {
+          if (node.value === undefined || node.property === '--tw-sort') {
             replaceWith([])
           }
         }
