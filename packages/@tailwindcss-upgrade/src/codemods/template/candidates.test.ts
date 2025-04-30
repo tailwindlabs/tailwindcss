@@ -166,6 +166,10 @@ const variants = [
   ['[&:is(_p_)]:', '[p]:'],
   ['has-[&:is(p)]:', 'has-[p]:'],
   ['has-[&:is(_p_)]:', 'has-[p]:'],
+
+  // Handle special `@` variants. These shouldn't be printed as `@-`
+  ['@xl:', '@xl:'],
+  ['@[123px]:', '@[123px]:'],
 ]
 
 let combinations: [string, string][] = []

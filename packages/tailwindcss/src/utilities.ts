@@ -173,6 +173,11 @@ export function withAlpha(value: string, alpha: string): string {
     alpha = `${alphaAsNumber * 100}%`
   }
 
+  // No need for `color-mix` if the alpha is `100%`
+  if (alpha === '100%') {
+    return value
+  }
+
   return `color-mix(in oklab, ${value} ${alpha}, transparent)`
 }
 
