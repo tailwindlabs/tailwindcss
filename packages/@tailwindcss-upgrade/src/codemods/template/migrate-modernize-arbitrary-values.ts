@@ -6,13 +6,16 @@ import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { memcpy } from '../../utils/memcpy'
 import { walkVariants } from '../../utils/walk-variants'
-import { printCandidate } from './candidates'
+import { printCandidate, printVariant } from './candidates'
+import { computeVariantSignature } from './signatures'
 
 export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
+  let signatures = computeVariantSignature.get(designSystem)
+
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
     let changed = false
@@ -141,105 +144,49 @@ export function migrateModernizeArbitraryValues(
           continue
         }
 
-        // Migrate `@media` variants
+        // Hoist `not` modifier for `@media` or `@supports` variants
         //
-        // E.g.: `[@media(scripting:none)]:` -> `noscript:`
+        // E.g.: `[@media_not_(scripting:none)]:` -> `not-[@media_(scripting:none)]:`
         if (
           // Only top-level, so something like `in-[@media(scripting:none)]`
           // (which is not valid anyway) is not supported
           parent === null &&
-          // [@media(scripting:none)]:flex
-          //  ^^^^^^^^^^^^^^^^^^^^^^
+          // [@media_not(scripting:none)]:flex
+          //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
           ast.nodes[0].nodes[0].type === 'tag' &&
-          ast.nodes[0].nodes[0].value.startsWith('@media')
+          (ast.nodes[0].nodes[0].value.startsWith('@media') ||
+            ast.nodes[0].nodes[0].value.startsWith('@supports'))
         ) {
-          // Replace all whitespace such that `@media (scripting: none)` and
-          // `@media(scripting:none)` are equivalent.
-          //
-          // As arbitrary variants that means that these are equivalent:
-          // - `[@media_(scripting:_none)]:`
-          // - `[@media(scripting:none)]:`
-          let parsed = ValueParser.parse(ast.nodes[0].toString().trim().replace('@media', ''))
-
-          // Drop whitespace
+          let targetSignature = signatures.get(printVariant(variant))
+          let parsed = ValueParser.parse(ast.nodes[0].toString().trim())
+          let containsNot = false
           ValueParser.walk(parsed, (node, { replaceWith }) => {
-            // Drop whitespace nodes
-            if (node.kind === 'separator' && !node.value.trim()) {
+            if (node.kind === 'word' && node.value === 'not') {
+              containsNot = true
               replaceWith([])
-            }
-
-            // Trim whitespace
-            else {
-              node.value = node.value.trim()
             }
           })
 
-          let not = false
-          if (parsed[0]?.kind === 'word' && parsed[0].value === 'not') {
-            not = true
-            parsed.shift()
-          }
+          // Remove unnecessary whitespace
+          parsed = ValueParser.parse(ValueParser.toCss(parsed))
+          ValueParser.walk(parsed, (node) => {
+            if (node.kind === 'separator' && node.value !== ' ' && node.value.trim() === '') {
+              // node.value contains at least 2 spaces. Normalize it to a single
+              // space.
+              node.value = ' '
+            }
+          })
 
-          // Single keyword at-rules.
-          //
-          // E.g.: `[@media_print]:` -< `@media print` -> `print:`
-          if (parsed.length === 1 && parsed[0].kind === 'word') {
-            let key = parsed[0].value
-            let replacement: string | null = null
-            if (key === 'print') replacement = 'print'
-
-            if (replacement) {
+          if (containsNot) {
+            let hoistedNot = designSystem.parseVariant(`not-[${ValueParser.toCss(parsed)}]`)
+            if (hoistedNot === null) continue
+            let hoistedNotSignature = signatures.get(printVariant(hoistedNot))
+            if (targetSignature === hoistedNotSignature) {
               changed = true
-              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
+              memcpy(variant, hoistedNot)
+              continue
             }
           }
-
-          // Key/value at-rules.
-          //
-          // E.g.: `[@media(scripting:none)]:` -> `scripting:`
-          if (
-            parsed.length === 1 &&
-            parsed[0].kind === 'function' && // `(` and `)` are considered a function
-            parsed[0].nodes.length === 3 &&
-            parsed[0].nodes[0].kind === 'word' &&
-            parsed[0].nodes[1].kind === 'separator' &&
-            parsed[0].nodes[1].value === ':' &&
-            parsed[0].nodes[2].kind === 'word'
-          ) {
-            let key = parsed[0].nodes[0].value
-            let value = parsed[0].nodes[2].value
-            let replacement: string | null = null
-
-            if (key === 'prefers-reduced-motion' && value === 'no-preference')
-              replacement = 'motion-safe'
-            if (key === 'prefers-reduced-motion' && value === 'reduce')
-              replacement = 'motion-reduce'
-
-            if (key === 'prefers-contrast' && value === 'more') replacement = 'contrast-more'
-            if (key === 'prefers-contrast' && value === 'less') replacement = 'contrast-less'
-
-            if (key === 'orientation' && value === 'portrait') replacement = 'portrait'
-            if (key === 'orientation' && value === 'landscape') replacement = 'landscape'
-
-            if (key === 'forced-colors' && value === 'active') replacement = 'forced-colors'
-
-            if (key === 'inverted-colors' && value === 'inverted') replacement = 'inverted-colors'
-
-            if (key === 'pointer' && value === 'none') replacement = 'pointer-none'
-            if (key === 'pointer' && value === 'coarse') replacement = 'pointer-coarse'
-            if (key === 'pointer' && value === 'fine') replacement = 'pointer-fine'
-            if (key === 'any-pointer' && value === 'none') replacement = 'any-pointer-none'
-            if (key === 'any-pointer' && value === 'coarse') replacement = 'any-pointer-coarse'
-            if (key === 'any-pointer' && value === 'fine') replacement = 'any-pointer-fine'
-
-            if (key === 'scripting' && value === 'none') replacement = 'noscript'
-
-            if (replacement) {
-              changed = true
-              memcpy(variant, designSystem.parseVariant(`${not ? 'not-' : ''}${replacement}`))
-            }
-          }
-          continue
         }
 
         let prefixedVariant: Variant | null = null
@@ -311,48 +258,6 @@ export function migrateModernizeArbitraryValues(
           }
 
           let newVariant = ((value) => {
-            //
-            if (value === ':first-letter') return 'first-letter'
-            else if (value === ':first-line') return 'first-line'
-            //
-            else if (value === ':file-selector-button') return 'file'
-            else if (value === ':placeholder') return 'placeholder'
-            else if (value === ':backdrop') return 'backdrop'
-            // Positional
-            else if (value === ':first-child') return 'first'
-            else if (value === ':last-child') return 'last'
-            else if (value === ':only-child') return 'only'
-            else if (value === ':first-of-type') return 'first-of-type'
-            else if (value === ':last-of-type') return 'last-of-type'
-            else if (value === ':only-of-type') return 'only-of-type'
-            // State
-            else if (value === ':visited') return 'visited'
-            else if (value === ':target') return 'target'
-            // Forms
-            else if (value === ':default') return 'default'
-            else if (value === ':checked') return 'checked'
-            else if (value === ':indeterminate') return 'indeterminate'
-            else if (value === ':placeholder-shown') return 'placeholder-shown'
-            else if (value === ':autofill') return 'autofill'
-            else if (value === ':optional') return 'optional'
-            else if (value === ':required') return 'required'
-            else if (value === ':valid') return 'valid'
-            else if (value === ':invalid') return 'invalid'
-            else if (value === ':user-valid') return 'user-valid'
-            else if (value === ':user-invalid') return 'user-invalid'
-            else if (value === ':in-range') return 'in-range'
-            else if (value === ':out-of-range') return 'out-of-range'
-            else if (value === ':read-only') return 'read-only'
-            // Content
-            else if (value === ':empty') return 'empty'
-            // Interactive
-            else if (value === ':focus-within') return 'focus-within'
-            else if (value === ':focus') return 'focus'
-            else if (value === ':focus-visible') return 'focus-visible'
-            else if (value === ':active') return 'active'
-            else if (value === ':enabled') return 'enabled'
-            else if (value === ':disabled') return 'disabled'
-            //
             if (
               value === ':nth-child' &&
               targetNode.nodes.length === 1 &&
@@ -399,6 +304,15 @@ export function migrateModernizeArbitraryValues(
               }
             }
 
+            // Hoist `not` modifier
+            if (compoundNot) {
+              let targetSignature = signatures.get(printVariant(variant))
+              let replacementSignature = signatures.get(`not-[${value}]`)
+              if (targetSignature === replacementSignature) {
+                return `[&${value}]`
+              }
+            }
+
             return null
           })(targetNode.value)
 
@@ -412,7 +326,7 @@ export function migrateModernizeArbitraryValues(
 
           // Update original variant
           changed = true
-          memcpy(variant, parsed)
+          memcpy(variant, structuredClone(parsed))
         }
 
         // Expecting an attribute selector

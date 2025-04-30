@@ -1,10 +1,25 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test, vi } from 'vitest'
+import type { UserConfig } from '../../../../tailwindcss/src/compat/config/types'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import * as versions from '../../utils/version'
+import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
 import { migratePrefix } from './migrate-prefix'
 vi.spyOn(versions, 'isMajor').mockReturnValue(true)
+
+function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawCandidate: string) {
+  for (let migration of [
+    migrateEmptyArbitraryValues,
+    migratePrefix,
+    migrateModernizeArbitraryValues,
+    migrateArbitraryVariants,
+  ]) {
+    rawCandidate = migration(designSystem, userConfig, rawCandidate)
+  }
+  return rawCandidate
+}
 
 test.each([
   // Arbitrary variants
@@ -72,6 +87,9 @@ test.each([
   // Keep multiple attribute selectors as-is
   ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],
 
+  // Keep `:where(…)` as is
+  ['[:where([data-visible])]:flex', '[:where([data-visible])]:flex'],
+
   // Complex attribute selectors with operators, quotes and insensitivity flags
   ['[[data-url*="example"]]:flex', 'data-[url*="example"]:flex'],
   ['[[data-url$=".com"_i]]:flex', 'data-[url$=".com"_i]:flex'],
@@ -86,6 +104,13 @@ test.each([
   ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
   ['[@media_print]:flex', 'print:flex'],
   ['[@media_not_print]:flex', 'not-print:flex'],
+
+  // Hoist the `:not` part to a compound variant
+  ['[@media_not_(prefers-color-scheme:dark)]:flex', 'not-dark:flex'],
+  [
+    '[@media_not_(prefers-color-scheme:unknown)]:flex',
+    'not-[@media_(prefers-color-scheme:unknown)]:flex',
+  ],
 
   // Compound arbitrary variants
   ['has-[[data-visible]]:flex', 'has-data-visible:flex'],
@@ -104,12 +129,7 @@ test.each([
     base: __dirname,
   })
 
-  expect(
-    [migrateEmptyArbitraryValues, migrateModernizeArbitraryValues].reduce(
-      (acc, step) => step(designSystem, {}, acc),
-      candidate,
-    ),
-  ).toEqual(result)
+  expect(migrate(designSystem, {}, candidate)).toEqual(result)
 })
 
 test.each([
@@ -138,10 +158,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(
-    [migrateEmptyArbitraryValues, migratePrefix, migrateModernizeArbitraryValues].reduce(
-      (acc, step) => step(designSystem, { prefix: 'tw-' }, acc),
-      candidate,
-    ),
-  ).toEqual(result)
+  expect(migrate(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
 })

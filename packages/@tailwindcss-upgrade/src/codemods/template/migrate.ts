@@ -47,10 +47,10 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
   migrateArbitraryUtilities,
+  migrateModernizeArbitraryValues,
   migrateArbitraryVariants,
   migrateDropUnnecessaryDataTypes,
   migrateArbitraryValueToBareValue,
-  migrateModernizeArbitraryValues,
   migrateOptimizeModifier,
 ]
 
