@@ -5,6 +5,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { ThemeOptions } from '../../../../tailwindcss/src/theme'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { dimensions } from '../../utils/dimension'
 import { printArbitraryValue } from './candidates'
 
 // Given a utility, compute a signature that represents the utility. The
@@ -198,14 +199,10 @@ export const computeUtilitySignature = new DefaultMap<
               if (valueNode.nodes.length !== 5) return
               if (valueNode.nodes[2].kind !== 'word' && valueNode.nodes[2].value !== '*') return
 
-              let match = /^(?<value>-?(\d*)?\.?\d+)(?<unit>.*)$/.exec(valueNode.nodes[0].value)
-              if (match === null) return
+              let parsed = dimensions.get(valueNode.nodes[0].value)
+              if (parsed === null) return
 
-              let value = Number(match.groups?.value)
-              if (Number.isNaN(value)) return
-
-              let unit = match.groups?.unit ?? null
-              if (unit === null) return
+              let [value, unit] = parsed
 
               let multiplier = Number(valueNode.nodes[4].value)
               if (Number.isNaN(multiplier)) return

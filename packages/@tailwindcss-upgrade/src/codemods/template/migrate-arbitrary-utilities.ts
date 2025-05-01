@@ -4,6 +4,7 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { dimensions } from '../../utils/dimension'
 import type { Writable } from '../../utils/types'
 import { printCandidate, printModifier } from './candidates'
 import { computeUtilitySignature } from './signatures'
@@ -76,28 +77,20 @@ const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate
   () => new Map<string, Candidate>(),
 )
 
-const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null>>((ds) => {
+const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> | null>((ds) => {
   let spacingMultiplier = ds.resolveThemeValue('--spacing')
-  let value: number | null = null
-  let unit: string | null = null
+  if (spacingMultiplier === undefined) return null
 
-  if (typeof spacingMultiplier === 'string') {
-    let match = /(?<value>(\d*)?\.?\d+)(?<unit>.*)/.exec(spacingMultiplier)
-    if (match) {
-      value = Number(match.groups?.value)
-      unit = match.groups?.unit ?? null
-    }
-  }
+  let parsed = dimensions.get(spacingMultiplier)
+  if (!parsed) return null
+
+  let [value, unit] = parsed
 
   return new DefaultMap<string, number | null>((input) => {
-    if (value === null || unit === null) return null
+    let parsed = dimensions.get(input)
+    if (!parsed) return null
 
-    let match = /(?<value>(\d*)?\.?\d+)(?<unit>.*)/.exec(input)
-    if (match === null) return null
-
-    let myValue = Number(match.groups?.value)
-    let myUnit = match.groups?.unit ?? null
-
+    let [myValue, myUnit] = parsed
     if (myUnit !== unit) return null
 
     return myValue / value
@@ -254,7 +247,7 @@ export function migrateArbitraryUtilities(
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
 
       if (value !== null) {
-        let bareValue = spacing.get(designSystem).get(value)
+        let bareValue = spacing.get(designSystem)?.get(value)
 
         for (let root of designSystem.utilities.keys('functional')) {
           // Try as bare value
