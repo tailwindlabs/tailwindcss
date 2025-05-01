@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
-import { compile, Polyfills } from '.'
+import { compile, Features, Polyfills } from '.'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -5371,5 +5371,132 @@ describe('`@property` polyfill', async () => {
         initial-value: red;
       }"
     `)
+  })
+})
+
+describe('feature detection', () => {
+  test('using `@tailwind utilities`', async () => {
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(compiler.features & Features.Utilities).toBeTruthy()
+  })
+
+  test('using `@apply`', async () => {
+    let compiler = await compile(css`
+      .foo {
+        @apply underline;
+      }
+    `)
+
+    expect(compiler.features & Features.AtApply).toBeTruthy()
+  })
+
+  test('using `@import`', async () => {
+    let compiler = await compile(
+      css`
+        @import 'tailwindcss/preflight';
+      `,
+      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+    )
+
+    expect(compiler.features & Features.AtImport).toBeTruthy()
+  })
+
+  test('using `@reference`', async () => {
+    let compiler = await compile(
+      css`
+        @import 'tailwindcss/preflight';
+      `,
+      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+    )
+
+    // There's little difference between `@reference` and `@import` on a feature
+    // level as it's just like an import but with side-effect behavior.
+    //
+    // It's really just shorthand for `@import "…" reference;`
+    expect(compiler.features & Features.AtImport).toBeTruthy()
+  })
+
+  test('using `theme(…)`', async () => {
+    let compiler = await compile(
+      css`
+        @theme {
+          --color-red: #f00;
+        }
+
+        .foo {
+          color: theme(--color-red);
+        }
+      `,
+      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+    )
+
+    expect(compiler.features & Features.ThemeFunction).toBeTruthy()
+  })
+
+  test('using `@plugin`', async () => {
+    let compiler = await compile(
+      css`
+        @plugin "./some-plugin.js";
+      `,
+      { loadModule: async (_, base) => ({ base, module: () => {} }) },
+    )
+
+    expect(compiler.features & Features.JsPluginCompat).toBeTruthy()
+  })
+
+  test('using `@config`', async () => {
+    let compiler = await compile(
+      css`
+        @config "./some-config.js";
+      `,
+      { loadModule: async (_, base) => ({ base, module: {} }) },
+    )
+
+    expect(compiler.features & Features.JsPluginCompat).toBeTruthy()
+  })
+
+  test('using `@variant`', async () => {
+    let compiler = await compile(css`
+      .foo {
+        @variant dark {
+          color: red;
+        }
+      }
+    `)
+
+    expect(compiler.features & Features.Variants).toBeTruthy()
+  })
+
+  test('legacy `@variant` syntax does not trigger the variant feature', async () => {
+    let compiler = await compile(css`
+      @variant dark (&:is(.dark, .dark *));
+    `)
+
+    expect(compiler.features & Features.Variants).toBeFalsy()
+  })
+
+  test('`@tailwind utilities` is discovered inside `@reference`', async () => {
+    let compiler = await compile(
+      css`
+        @reference "tailwindcss/utilities";
+      `,
+      {
+        async loadStylesheet(id, base) {
+          return {
+            base,
+            content: css`
+              @tailwind utilities;
+            `,
+          }
+        },
+      },
+    )
+
+    // We see @tailwind utilities but because of @reference it is ignored
+    expect(compiler.features & Features.AtImport).toBeTruthy()
+    expect(compiler.features & Features.Utilities).toBeTruthy()
   })
 })
