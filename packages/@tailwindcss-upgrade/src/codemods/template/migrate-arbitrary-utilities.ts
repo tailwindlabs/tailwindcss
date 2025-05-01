@@ -247,7 +247,7 @@ export function migrateArbitraryUtilities(
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
 
       if (value !== null) {
-        let bareValue = spacing.get(designSystem)?.get(value)
+        let spacingMultiplier = spacing.get(designSystem)?.get(value)
 
         for (let root of designSystem.utilities.keys('functional')) {
           // Try as bare value
@@ -265,19 +265,22 @@ export function migrateArbitraryUtilities(
             }
           }
 
-          // Try spacing scale. E.g.:
+          // Try bare value based on the `--spacing` value. E.g.:
           //
           // - `w-[64rem]` → `w-256`
-          if (bareValue !== null) {
-            for (let replacementCandidate of parseCandidate(designSystem, `${root}-${bareValue}`)) {
+          if (spacingMultiplier !== null) {
+            for (let replacementCandidate of parseCandidate(
+              designSystem,
+              `${root}-${spacingMultiplier}`,
+            )) {
               yield replacementCandidate
             }
 
-            // Try spacing scale with modifier
+            // Try bare value based on the `--spacing` value, but with a modifier
             if (candidate.modifier) {
               for (let replacementCandidate of parseCandidate(
                 designSystem,
-                `${root}-${bareValue}${candidate.modifier}`,
+                `${root}-${spacingMultiplier}${candidate.modifier}`,
               )) {
                 yield replacementCandidate
               }
