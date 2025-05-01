@@ -5478,7 +5478,7 @@ describe('feature detection', () => {
     expect(compiler.features & Features.Variants).toBeFalsy()
   })
 
-  test('`@tailwind utilities` is discovered inside `@reference`', async () => {
+  test('`@tailwind utilities` is ignored inside `@reference`', async () => {
     let compiler = await compile(
       css`
         @reference "tailwindcss/utilities";
@@ -5497,6 +5497,6 @@ describe('feature detection', () => {
 
     // We see @tailwind utilities but because of @reference it is ignored
     expect(compiler.features & Features.AtImport).toBeTruthy()
-    expect(compiler.features & Features.Utilities).toBeTruthy()
+    expect(compiler.features & Features.Utilities).toBeFalsy()
   })
 })
