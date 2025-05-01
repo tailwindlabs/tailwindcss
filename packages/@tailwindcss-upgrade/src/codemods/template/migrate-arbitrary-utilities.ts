@@ -76,6 +76,34 @@ const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate
   () => new Map<string, Candidate>(),
 )
 
+const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null>>((ds) => {
+  let spacingMultiplier = ds.resolveThemeValue('--spacing')
+  let value: number | null = null
+  let unit: string | null = null
+
+  if (typeof spacingMultiplier === 'string') {
+    let match = /(?<value>(\d*)?\.?\d+)(?<unit>.*)/.exec(spacingMultiplier)
+    if (match) {
+      value = Number(match.groups?.value)
+      unit = match.groups?.unit ?? null
+    }
+  }
+
+  return new DefaultMap<string, number | null>((input) => {
+    if (value === null || unit === null) return null
+
+    let match = /(?<value>(\d*)?\.?\d+)(?<unit>.*)/.exec(input)
+    if (match === null) return null
+
+    let myValue = Number(match.groups?.value)
+    let myUnit = match.groups?.unit ?? null
+
+    if (myUnit !== unit) return null
+
+    return myValue / value
+  })
+})
+
 export function migrateArbitraryUtilities(
   designSystem: DesignSystem,
   _userConfig: Config | null,
@@ -224,7 +252,10 @@ export function migrateArbitraryUtilities(
       // to find functional utilities that also set this property.
       let value =
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
+
       if (value !== null) {
+        let bareValue = spacing.get(designSystem).get(value)
+
         for (let root of designSystem.utilities.keys('functional')) {
           // Try as bare value
           for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
@@ -238,6 +269,25 @@ export function migrateArbitraryUtilities(
               `${root}-${value}${candidate.modifier}`,
             )) {
               yield replacementCandidate
+            }
+          }
+
+          // Try spacing scale. E.g.:
+          //
+          // - `w-[64rem]` → `w-256`
+          if (bareValue !== null) {
+            for (let replacementCandidate of parseCandidate(designSystem, `${root}-${bareValue}`)) {
+              yield replacementCandidate
+            }
+
+            // Try spacing scale with modifier
+            if (candidate.modifier) {
+              for (let replacementCandidate of parseCandidate(
+                designSystem,
+                `${root}-${bareValue}${candidate.modifier}`,
+              )) {
+                yield replacementCandidate
+              }
             }
           }
 

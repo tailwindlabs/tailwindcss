@@ -97,6 +97,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Arbitrary value with inferred data type, to more specific arbitrary value
     ['bg-[123px]', 'bg-position-[123px]'],
 
+    // Arbitrary value with spacing mul
+    ['w-[64rem]', 'w-256'],
+
     // Complex arbitrary property to arbitrary value
     [
       '[grid-template-columns:repeat(2,minmax(100px,1fr))]',
@@ -290,4 +293,57 @@ test('migrate a arbitrary property without spaces, to a theme value with spaces 
 
   let migrated = migrate(designSystem, {}, candidate)
   expect(migrated).toEqual(expected)
+})
+
+describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', (strategy) => {
+  let testName = '%s => %s (%#)'
+  if (strategy === 'with-variant') {
+    testName = testName.replaceAll('%s', 'focus:%s')
+  } else if (strategy === 'important') {
+    testName = testName.replaceAll('%s', '%s!')
+  } else if (strategy === 'prefix') {
+    testName = testName.replaceAll('%s', 'tw:%s')
+  }
+  test.each([
+    // Default spacing scale
+    ['w-[64rem]', 'w-256', '0.25rem'],
+
+    // Keep arbitrary value if units are different
+    ['w-[124px]', 'w-[124px]', '0.25rem'],
+
+    // Keep arbitrary value if bare value doesn't fit in steps of .25
+    ['w-[0.123rem]', 'w-[0.123rem]', '0.25rem'],
+
+    // Custom pixel based spacing scale
+    ['w-[123px]', 'w-123', '1px'],
+    ['w-[256px]', 'w-128', '2px'],
+  ])(testName, async (candidate, expected, spacing) => {
+    if (strategy === 'with-variant') {
+      candidate = `focus:${candidate}`
+      expected = `focus:${expected}`
+    } else if (strategy === 'important') {
+      candidate = `${candidate}!`
+      expected = `${expected}!`
+    } else if (strategy === 'prefix') {
+      // Not only do we need to prefix the candidate, we also have to make
+      // sure that we prefix all CSS variables.
+      candidate = `tw:${candidate.replaceAll('var(--', 'var(--tw-')}`
+      expected = `tw:${expected.replaceAll('var(--', 'var(--tw-')}`
+    }
+
+    let input = css`
+      @import 'tailwindcss' ${strategy === 'prefix' ? 'prefix(tw)' : ''};
+
+      @theme {
+        --*: initial;
+        --spacing: ${spacing};
+      }
+    `
+    let designSystem = await __unstable__loadDesignSystem(input, {
+      base: __dirname,
+    })
+
+    let migrated = migrate(designSystem, {}, candidate)
+    expect(migrated).toEqual(expected)
+  })
 })

@@ -173,6 +173,52 @@ export const computeUtilitySignature = new DefaultMap<
             node.value = ValueParser.toCss(valueAst)
           }
 
+          // Very basic `calc(…)` constant folding to handle the spacing scale
+          // multiplier:
+          //
+          // Input:  `--spacing(4)`
+          //       → `calc(var(--spacing, 0.25rem) * 4)`
+          //       → `calc(0.25rem * 4)`       ← this is the case we will see
+          //                                     after inlining the variable
+          //       → `1rem`
+          if (node.value.includes('calc')) {
+            let folded = false
+            let valueAst = ValueParser.parse(node.value)
+            ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
+              if (valueNode.kind !== 'function') return
+              if (valueNode.value !== 'calc') return
+
+              // [
+              //   { kind: 'word', value: '0.25rem' },            0
+              //   { kind: 'separator', value: ' ' },             1
+              //   { kind: 'word', value: '*' },                  2
+              //   { kind: 'separator', value: ' ' },             3
+              //   { kind: 'word', value: '256' }                 4
+              // ]
+              if (valueNode.nodes.length !== 5) return
+              if (valueNode.nodes[2].kind !== 'word' && valueNode.nodes[2].value !== '*') return
+
+              let match = /^(?<value>-?(\d*)?\.?\d+)(?<unit>.*)$/.exec(valueNode.nodes[0].value)
+              if (match === null) return
+
+              let value = Number(match.groups?.value)
+              if (Number.isNaN(value)) return
+
+              let unit = match.groups?.unit ?? null
+              if (unit === null) return
+
+              let multiplier = Number(valueNode.nodes[4].value)
+              if (Number.isNaN(multiplier)) return
+
+              folded = true
+              replaceWith(ValueParser.parse(`${value * multiplier}${unit}`))
+            })
+
+            if (folded) {
+              node.value = ValueParser.toCss(valueAst)
+            }
+          }
+
           // We will normalize the `node.value`, this is the same kind of logic
           // we use when printing arbitrary values. It will remove unnecessary
           // whitespace.
