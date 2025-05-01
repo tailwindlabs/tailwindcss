@@ -7,7 +7,6 @@ import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { walkVariants } from '../../utils/walk-variants'
-import { printCandidate } from './candidates'
 
 export const enum Convert {
   All = 0,
@@ -71,7 +70,7 @@ export function migrateThemeToVar(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? designSystem.printCandidate(clone) : rawCandidate
   }
 
   return rawCandidate

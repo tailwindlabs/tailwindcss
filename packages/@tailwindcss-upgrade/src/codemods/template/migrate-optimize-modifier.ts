@@ -2,7 +2,6 @@ import type { NamedUtilityValue } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import type { Writable } from '../../utils/types'
-import { printCandidate } from './candidates'
 import { computeUtilitySignature } from './signatures'
 
 // Optimize the modifier
@@ -33,7 +32,7 @@ export function migrateOptimizeModifier(
       // 1. Try to drop the modifier entirely
       if (
         targetSignature ===
-        signatures.get(printCandidate(designSystem, { ...candidate, modifier: null }))
+        signatures.get(designSystem.printCandidate({ ...candidate, modifier: null }))
       ) {
         changed = true
         candidate.modifier = null
@@ -49,14 +48,14 @@ export function migrateOptimizeModifier(
 
         if (
           targetSignature ===
-          signatures.get(printCandidate(designSystem, { ...candidate, modifier: newModifier }))
+          signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
         ) {
           changed = true
           candidate.modifier = newModifier
         }
       }
 
-      return changed ? printCandidate(designSystem, candidate) : rawCandidate
+      return changed ? designSystem.printCandidate(candidate) : rawCandidate
     }
   }
 

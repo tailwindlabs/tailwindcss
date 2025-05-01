@@ -1,6 +1,5 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { printCandidate } from './candidates'
 import { computeUtilitySignature } from './signatures'
 
 export function migrateDropUnnecessaryDataTypes(
@@ -16,7 +15,7 @@ export function migrateDropUnnecessaryDataTypes(
       candidate.value?.kind === 'arbitrary' &&
       candidate.value.dataType !== null
     ) {
-      let replacement = printCandidate(designSystem, {
+      let replacement = designSystem.printCandidate({
         ...candidate,
         value: { ...candidate.value, dataType: null },
       })

@@ -1,12 +1,12 @@
 import { substituteAtApply } from '../../../../tailwindcss/src/apply'
 import { atRule, styleRule, toCss, walk, type AstNode } from '../../../../tailwindcss/src/ast'
+import { printArbitraryValue } from '../../../../tailwindcss/src/candidate'
 import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-parser'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { ThemeOptions } from '../../../../tailwindcss/src/theme'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
-import { printArbitraryValue } from './candidates'
 
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or

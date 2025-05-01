@@ -11,7 +11,6 @@ import {
 } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { walkVariants } from '../../utils/walk-variants'
-import { printCandidate } from './candidates'
 import { computeUtilitySignature } from './signatures'
 
 export function migrateArbitraryValueToBareValue(
@@ -30,7 +29,7 @@ export function migrateArbitraryValueToBareValue(
       let expectedSignature = signatures.get(rawCandidate)
       if (expectedSignature !== null) {
         for (let value of tryValueReplacements(clone)) {
-          let newSignature = signatures.get(printCandidate(designSystem, { ...clone, value }))
+          let newSignature = signatures.get(designSystem.printCandidate({ ...clone, value }))
           if (newSignature === expectedSignature) {
             changed = true
             clone.value = value
@@ -102,7 +101,7 @@ export function migrateArbitraryValueToBareValue(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? designSystem.printCandidate(clone) : rawCandidate
   }
 
   return rawCandidate

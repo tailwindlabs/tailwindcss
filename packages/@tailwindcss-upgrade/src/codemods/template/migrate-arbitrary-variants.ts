@@ -4,7 +4,6 @@ import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { memcpy } from '../../utils/memcpy'
 import type { Writable } from '../../utils/types'
 import { walkVariants } from '../../utils/walk-variants'
-import { printCandidate, printVariant } from './candidates'
 import { computeVariantSignature } from './signatures'
 
 const variantsLookup = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>(
@@ -44,7 +43,7 @@ export function migrateArbitraryVariants(
     for (let [variant] of walkVariants(candidate)) {
       if (variant.kind === 'compound') continue
 
-      let targetString = printVariant(variant)
+      let targetString = designSystem.printVariant(variant)
       let targetSignature = signatures.get(targetString)
       if (typeof targetSignature !== 'string') continue
 
@@ -58,7 +57,7 @@ export function migrateArbitraryVariants(
       memcpy(variant, parsedVariant)
     }
 
-    return printCandidate(designSystem, candidate)
+    return designSystem.printCandidate(candidate)
   }
 
   return rawCandidate

@@ -1,7 +1,6 @@
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { printCandidate } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
 
 // In v3 the important modifier `!` sits in front of the utility itself, not
@@ -41,7 +40,7 @@ export function migrateImportant(
       // The printCandidate function will already put the exclamation mark in
       // the right place, so we just need to mark this candidate as requiring a
       // migration.
-      return printCandidate(designSystem, candidate)
+      return designSystem.printCandidate(candidate)
     }
   }
 

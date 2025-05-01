@@ -1,4 +1,4 @@
-import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import { printModifier, type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
@@ -6,7 +6,6 @@ import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infe
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
 import type { Writable } from '../../utils/types'
-import { printCandidate, printModifier } from './candidates'
 import { computeUtilitySignature } from './signatures'
 
 // For all static utilities in the system, compute a lookup table that maps the
@@ -102,7 +101,7 @@ export function migrateArbitraryUtilities(
     // [display:flex]   => [display:flex]
     // ```
     //
-    let canonicalizedCandidate = printCandidate(designSystem, readonlyCandidate)
+    let canonicalizedCandidate = designSystem.printCandidate(readonlyCandidate)
     if (canonicalizedCandidate !== rawCandidate) {
       return migrateArbitraryUtilities(designSystem, _userConfig, canonicalizedCandidate)
     }
@@ -119,7 +118,7 @@ export function migrateArbitraryUtilities(
     targetCandidate.important = false
     targetCandidate.variants = []
 
-    let targetCandidateString = printCandidate(designSystem, targetCandidate)
+    let targetCandidateString = designSystem.printCandidate(targetCandidate)
     if (baseReplacementsCache.get(designSystem).has(targetCandidateString)) {
       let target = structuredClone(
         baseReplacementsCache.get(designSystem).get(targetCandidateString)!,
@@ -128,7 +127,7 @@ export function migrateArbitraryUtilities(
       target.variants = candidate.variants
       target.important = candidate.important
 
-      return printCandidate(designSystem, target)
+      return designSystem.printCandidate(target)
     }
 
     // Compute the signature for the target candidate
@@ -137,7 +136,7 @@ export function migrateArbitraryUtilities(
 
     // Try a few options to find a suitable replacement utility
     for (let replacementCandidate of tryReplacements(targetSignature, targetCandidate)) {
-      let replacementString = printCandidate(designSystem, replacementCandidate)
+      let replacementString = designSystem.printCandidate(replacementCandidate)
       let replacementSignature = signatures.get(replacementString)
       if (replacementSignature !== targetSignature) {
         continue
@@ -161,7 +160,7 @@ export function migrateArbitraryUtilities(
       Object.assign(candidate, replacementCandidate)
 
       // We will re-print the candidate to get the migrated candidate out
-      return printCandidate(designSystem, candidate)
+      return designSystem.printCandidate(candidate)
     }
   }
 
@@ -189,7 +188,7 @@ export function migrateArbitraryUtilities(
     if (replacements.length === 0 && candidate.modifier) {
       let candidateWithoutModifier = { ...candidate, modifier: null }
       let targetSignatureWithoutModifier = signatures.get(
-        printCandidate(designSystem, candidateWithoutModifier),
+        designSystem.printCandidate(candidateWithoutModifier),
       )
       if (typeof targetSignatureWithoutModifier === 'string') {
         for (let replacementCandidate of tryReplacements(
@@ -316,7 +315,7 @@ function allVariablesAreUsed(
   }
 
   let replacementAsCss = designSystem
-    .candidatesToCss([printCandidate(designSystem, replacement)])
+    .candidatesToCss([designSystem.printCandidate(replacement)])
     .join('\n')
 
   let isSafeMigration = true

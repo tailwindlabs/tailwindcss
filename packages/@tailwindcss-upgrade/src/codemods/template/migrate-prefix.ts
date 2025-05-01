@@ -3,7 +3,6 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import * as version from '../../utils/version'
-import { printCandidate } from './candidates'
 
 let seenDesignSystems = new WeakSet<DesignSystem>()
 
@@ -48,7 +47,7 @@ export function migratePrefix(
 
   if (!candidate) return rawCandidate
 
-  return printCandidate(designSystem, candidate)
+  return designSystem.printCandidate(candidate)
 }
 
 // Parses a raw candidate with v3 compatible prefix syntax. This won't match if

@@ -1,6 +1,5 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { printCandidate } from './candidates'
 
 const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
 
@@ -17,7 +16,7 @@ export function migrateBgGradient(
         continue
       }
 
-      return printCandidate(designSystem, {
+      return designSystem.printCandidate({
         ...candidate,
         root: `bg-linear-to-${direction}`,
       })

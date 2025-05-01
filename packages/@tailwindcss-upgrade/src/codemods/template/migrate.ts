@@ -4,7 +4,7 @@ import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
-import { extractRawCandidates, printCandidate } from './candidates'
+import { extractRawCandidates } from './candidates'
 import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
@@ -77,7 +77,7 @@ export async function migrateCandidate(
   // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
   if (rawCandidate === original) {
     for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-      return printCandidate(designSystem, candidate)
+      return designSystem.printCandidate(candidate)
     }
   }
 

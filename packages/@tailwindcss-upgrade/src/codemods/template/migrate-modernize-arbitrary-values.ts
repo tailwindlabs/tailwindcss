@@ -6,7 +6,6 @@ import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { memcpy } from '../../utils/memcpy'
 import { walkVariants } from '../../utils/walk-variants'
-import { printCandidate, printVariant } from './candidates'
 import { computeVariantSignature } from './signatures'
 
 export function migrateModernizeArbitraryValues(
@@ -157,7 +156,7 @@ export function migrateModernizeArbitraryValues(
           (ast.nodes[0].nodes[0].value.startsWith('@media') ||
             ast.nodes[0].nodes[0].value.startsWith('@supports'))
         ) {
-          let targetSignature = signatures.get(printVariant(variant))
+          let targetSignature = signatures.get(designSystem.printVariant(variant))
           let parsed = ValueParser.parse(ast.nodes[0].toString().trim())
           let containsNot = false
           ValueParser.walk(parsed, (node, { replaceWith }) => {
@@ -180,7 +179,7 @@ export function migrateModernizeArbitraryValues(
           if (containsNot) {
             let hoistedNot = designSystem.parseVariant(`not-[${ValueParser.toCss(parsed)}]`)
             if (hoistedNot === null) continue
-            let hoistedNotSignature = signatures.get(printVariant(hoistedNot))
+            let hoistedNotSignature = signatures.get(designSystem.printVariant(hoistedNot))
             if (targetSignature === hoistedNotSignature) {
               changed = true
               memcpy(variant, hoistedNot)
@@ -306,7 +305,7 @@ export function migrateModernizeArbitraryValues(
 
             // Hoist `not` modifier
             if (compoundNot) {
-              let targetSignature = signatures.get(printVariant(variant))
+              let targetSignature = signatures.get(designSystem.printVariant(variant))
               let replacementSignature = signatures.get(`not-[${value}]`)
               if (targetSignature === replacementSignature) {
                 return `[&${value}]`
@@ -390,7 +389,7 @@ export function migrateModernizeArbitraryValues(
       }
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? designSystem.printCandidate(clone) : rawCandidate
   }
 
   return rawCandidate
