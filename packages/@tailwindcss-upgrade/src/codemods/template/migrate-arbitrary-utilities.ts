@@ -20,53 +20,23 @@ const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, str
   let signatures = computeUtilitySignature.get(ds)
   let lookup = new DefaultMap<string, string[]>(() => [])
 
-  // Actual static utilities
-  for (let root of ds.utilities.keys('static')) {
-    let signature = signatures.get(root)
+  for (let [className, meta] of ds.getClassList()) {
+    let signature = signatures.get(className)
     if (typeof signature !== 'string') continue
-    lookup.get(signature).push(root)
-  }
+    lookup.get(signature).push(className)
 
-  // Consider functional utilities _with_ known named values as static
-  // utilities. Aka pre-computed values.
-  for (let root of ds.utilities.keys('functional')) {
-    let suggestions = ds.utilities.getCompletions(root)
-    if (suggestions.length === 0) continue
-
-    for (let { supportsNegative, values, modifiers } of suggestions) {
-      for (let value of values) {
-        let candidateString = value === null ? root : `${root}-${value}`
-        let signature = signatures.get(candidateString)
-        if (typeof signature === 'string') lookup.get(signature).push(candidateString)
-
-        if (supportsNegative) {
-          let negativeCandidateString = `-${candidateString}`
-          let signature = signatures.get(negativeCandidateString)
-          if (typeof signature === 'string') lookup.get(signature).push(negativeCandidateString)
-        }
+    for (let modifier of meta.modifiers) {
+      // Modifiers representing numbers can be computed and don't need to be
+      // pre-computed. Doing the math and at the time of writing this, this
+      // would save you 250k additionally pre-computed utilities...
+      if (isValidSpacingMultiplier(modifier)) {
+        continue
       }
 
-      for (let modifier of modifiers) {
-        // Modifiers representing numbers can be computed and don't need to be
-        // pre-computed. Doing the math and at the time of writing this, this
-        // would save you 250k additionally pre-computed utilities...
-        if (isValidSpacingMultiplier(modifier)) {
-          continue
-        }
-
-        for (let value of values) {
-          let candidateString =
-            value === null ? `${root}/${modifier}` : `${root}-${value}/${modifier}`
-          let signature = signatures.get(candidateString)
-          if (typeof signature === 'string') lookup.get(signature).push(candidateString)
-
-          if (supportsNegative) {
-            let negativeCandidateString = `-${candidateString}`
-            let signature = signatures.get(negativeCandidateString)
-            if (typeof signature === 'string') lookup.get(signature).push(negativeCandidateString)
-          }
-        }
-      }
+      let classNameWithModifier = `${className}/${modifier}`
+      let signature = signatures.get(classNameWithModifier)
+      if (typeof signature !== 'string') continue
+      lookup.get(signature).push(classNameWithModifier)
     }
   }
 
