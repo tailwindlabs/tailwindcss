@@ -214,61 +214,60 @@ export function migrateArbitraryUtilities(
       // to find functional utilities that also set this property.
       let value =
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
+      if (value === null) return
 
-      if (value !== null) {
-        let spacingMultiplier = spacing.get(designSystem)?.get(value)
+      let spacingMultiplier = spacing.get(designSystem)?.get(value)
 
-        for (let root of designSystem.utilities.keys('functional')) {
-          // Try as bare value
-          for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
+      for (let root of designSystem.utilities.keys('functional')) {
+        // Try as bare value
+        for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
+          yield replacementCandidate
+        }
+
+        // Try as bare value with modifier
+        if (candidate.modifier) {
+          for (let replacementCandidate of parseCandidate(
+            designSystem,
+            `${root}-${value}${candidate.modifier}`,
+          )) {
+            yield replacementCandidate
+          }
+        }
+
+        // Try bare value based on the `--spacing` value. E.g.:
+        //
+        // - `w-[64rem]` → `w-256`
+        if (spacingMultiplier !== null) {
+          for (let replacementCandidate of parseCandidate(
+            designSystem,
+            `${root}-${spacingMultiplier}`,
+          )) {
             yield replacementCandidate
           }
 
-          // Try as bare value with modifier
+          // Try bare value based on the `--spacing` value, but with a modifier
           if (candidate.modifier) {
             for (let replacementCandidate of parseCandidate(
               designSystem,
-              `${root}-${value}${candidate.modifier}`,
+              `${root}-${spacingMultiplier}${candidate.modifier}`,
             )) {
               yield replacementCandidate
             }
           }
+        }
 
-          // Try bare value based on the `--spacing` value. E.g.:
-          //
-          // - `w-[64rem]` → `w-256`
-          if (spacingMultiplier !== null) {
-            for (let replacementCandidate of parseCandidate(
-              designSystem,
-              `${root}-${spacingMultiplier}`,
-            )) {
-              yield replacementCandidate
-            }
+        // Try as arbitrary value
+        for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
+          yield replacementCandidate
+        }
 
-            // Try bare value based on the `--spacing` value, but with a modifier
-            if (candidate.modifier) {
-              for (let replacementCandidate of parseCandidate(
-                designSystem,
-                `${root}-${spacingMultiplier}${candidate.modifier}`,
-              )) {
-                yield replacementCandidate
-              }
-            }
-          }
-
-          // Try as arbitrary value
-          for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
+        // Try as arbitrary value with modifier
+        if (candidate.modifier) {
+          for (let replacementCandidate of parseCandidate(
+            designSystem,
+            `${root}-[${value}]${printModifier(candidate.modifier)}`,
+          )) {
             yield replacementCandidate
-          }
-
-          // Try as arbitrary value with modifier
-          if (candidate.modifier) {
-            for (let replacementCandidate of parseCandidate(
-              designSystem,
-              `${root}-[${value}]${printModifier(candidate.modifier)}`,
-            )) {
-              yield replacementCandidate
-            }
           }
         }
       }
