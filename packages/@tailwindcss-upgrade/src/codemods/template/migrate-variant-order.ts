@@ -3,7 +3,6 @@ import { type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import * as version from '../../utils/version'
-import { printCandidate } from './candidates'
 
 export function migrateVariantOrder(
   designSystem: DesignSystem,
@@ -56,7 +55,7 @@ export function migrateVariantOrder(
       continue
     }
 
-    return printCandidate(designSystem, { ...candidate, variants: newOrder })
+    return designSystem.printCandidate({ ...candidate, variants: newOrder })
   }
   return rawCandidate
 }

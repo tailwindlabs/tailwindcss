@@ -1,6 +1,5 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { printCandidate } from './candidates'
 
 export function migrateMaxWidthScreen(
   designSystem: DesignSystem,
@@ -13,7 +12,7 @@ export function migrateMaxWidthScreen(
       candidate.root === 'max-w' &&
       candidate.value?.value.startsWith('screen-')
     ) {
-      return printCandidate(designSystem, {
+      return designSystem.printCandidate({
         ...candidate,
         value: {
           ...candidate.value,

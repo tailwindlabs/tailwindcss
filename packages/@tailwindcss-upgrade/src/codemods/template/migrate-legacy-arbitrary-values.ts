@@ -2,7 +2,6 @@ import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
-import { printCandidate } from './candidates'
 
 export function migrateLegacyArbitraryValues(
   designSystem: DesignSystem,
@@ -23,7 +22,7 @@ export function migrateLegacyArbitraryValues(
       clone.value.value = segment(clone.value.value, ',').join(' ')
     }
 
-    return changed ? printCandidate(designSystem, clone) : rawCandidate
+    return changed ? designSystem.printCandidate(clone) : rawCandidate
   }
 
   return rawCandidate

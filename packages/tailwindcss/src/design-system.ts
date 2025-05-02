@@ -1,6 +1,13 @@
 import { Polyfills } from '.'
 import { optimizeAst, toCss } from './ast'
-import { parseCandidate, parseVariant, type Candidate, type Variant } from './candidate'
+import {
+  parseCandidate,
+  parseVariant,
+  printCandidate,
+  printVariant,
+  type Candidate,
+  type Variant,
+} from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
@@ -28,6 +35,9 @@ export type DesignSystem = {
   parseCandidate(candidate: string): Readonly<Candidate>[]
   parseVariant(variant: string): Readonly<Variant> | null
   compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
+
+  printCandidate(candidate: Candidate): string
+  printVariant(variant: Variant): string
 
   getVariantOrder(): Map<Variant, number>
   resolveThemeValue(path: string, forceInline?: boolean): string | undefined
@@ -127,6 +137,14 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     compileAstNodes(candidate: Candidate) {
       return compiledAstNodes.get(candidate)
     },
+
+    printCandidate(candidate: Candidate) {
+      return printCandidate(designSystem, candidate)
+    },
+    printVariant(variant: Variant) {
+      return printVariant(variant)
+    },
+
     getVariantOrder() {
       let variants = Array.from(parsedVariants.values())
       variants.sort((a, z) => this.variants.compare(a, z))

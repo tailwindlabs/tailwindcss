@@ -2,7 +2,6 @@ import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
 import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { printCandidate } from './candidates'
 
 export function migrateAutomaticVarInjection(
   designSystem: DesignSystem,
@@ -66,7 +65,7 @@ export function migrateAutomaticVarInjection(
     }
 
     if (didChange) {
-      return printCandidate(designSystem, candidate)
+      return designSystem.printCandidate(candidate)
     }
   }
   return rawCandidate

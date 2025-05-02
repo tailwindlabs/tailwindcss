@@ -113,7 +113,7 @@ it('should apply all candidate migration when migrating with a config', async ()
     `),
   ).toMatchInlineSnapshot(`
     ".foo {
-      @apply tw:flex! tw:[color:var(--my-color)] tw:bg-linear-to-t;
+      @apply tw:flex! tw:text-(--my-color) tw:bg-linear-to-t;
     }"
   `)
 })

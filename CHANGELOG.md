@@ -7,13 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Added
+
+- Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831))
+
+### Fixed
+
+- Ensure negative arbitrary `scale` values generate negative values ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831))
 
 ## [4.1.5] - 2025-04-30
 
 ### Added
 
-- Support using `@tailwindcss/upgrade` to upgrade between versions of v4.* ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
+- Support using `@tailwindcss/upgrade` to upgrade between versions of v4.\* ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
 - Add `h-lh` / `min-h-lh` / `max-h-lh` utilities ([#17790](https://github.com/tailwindlabs/tailwindcss/pull/17790))
 - Transition `display`, `visibility`, `content-visibility`, `overlay`, and `pointer-events` when using `transition` to simplify `@starting-style` usage ([#17812](https://github.com/tailwindlabs/tailwindcss/pull/17812))
 

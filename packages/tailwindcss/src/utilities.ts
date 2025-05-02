@@ -1300,6 +1300,7 @@ export function createUtilities(theme: Theme) {
       let value
       if (candidate.value.kind === 'arbitrary') {
         value = candidate.value.value
+        value = negative ? `calc(${value} * -1)` : value
         return [decl('scale', value)]
       } else {
         value = theme.resolve(candidate.value.value, ['--scale'])

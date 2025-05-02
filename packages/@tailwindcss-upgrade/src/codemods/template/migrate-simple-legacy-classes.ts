@@ -1,7 +1,6 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import * as version from '../../utils/version'
-import { printCandidate } from './candidates'
 
 // Classes that used to exist in Tailwind CSS v3, but do not exist in Tailwind
 // CSS v4 anymore.
@@ -53,7 +52,7 @@ export function migrateSimpleLegacyClasses(
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.kind === 'static' && Object.hasOwn(LEGACY_CLASS_MAP, candidate.root)) {
-      return printCandidate(designSystem, {
+      return designSystem.printCandidate({
         ...candidate,
         root: LEGACY_CLASS_MAP[candidate.root as keyof typeof LEGACY_CLASS_MAP],
       })

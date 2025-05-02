@@ -1329,12 +1329,12 @@ describe('border compatibility', () => {
         "
         --- src/index.html ---
         <div
-          class="[width:--spacing(2)]
-            [width:--spacing(4.5)]
-            [width:var(--spacing-5_5)]
-            [width:--spacing(13)]
-            [width:var(--spacing-100)]
-            [width:var(--spacing-miami)]"
+          class="w-2
+            w-4.5
+            w-5.5
+            w-13
+            w-100
+            w-miami"
         ></div>
 
         --- src/input.css ---
@@ -1439,12 +1439,12 @@ describe('border compatibility', () => {
         "
         --- src/index.html ---
         <div
-          class="[width:var(--spacing-2)]
-            [width:var(--spacing-4_5)]
-            [width:var(--spacing-5_5)]
-            [width:var(--spacing-13)]
-            [width:var(--spacing-100)]
-            [width:var(--spacing-miami)]"
+          class="w-2
+            w-4.5
+            w-5.5
+            w-13
+            w-100
+            w-miami"
         ></div>
 
         --- src/input.css ---
