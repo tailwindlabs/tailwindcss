@@ -29,7 +29,7 @@
     "@tailwindcss/cli": "workspace:*",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
-    "detect-libc": "1.0.3",
+    "detect-libc": "2.0.4",
     "enhanced-resolve": "^5.18.1",
     "tailwindcss": "workspace:*"
   },
