@@ -1,7 +1,7 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
-import { memcpy } from '../../utils/memcpy'
+import { replaceObject } from '../../utils/replace-object'
 import type { Writable } from '../../utils/types'
 import { walkVariants } from '../../utils/walk-variants'
 import { computeVariantSignature } from './signatures'
@@ -54,7 +54,7 @@ export function migrateArbitraryVariants(
       let parsedVariant = designSystem.parseVariant(foundVariant)
       if (parsedVariant === null) continue
 
-      memcpy(variant, parsedVariant)
+      replaceObject(variant, parsedVariant)
     }
 
     return designSystem.printCandidate(candidate)

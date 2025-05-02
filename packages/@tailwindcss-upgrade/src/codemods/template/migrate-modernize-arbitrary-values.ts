@@ -4,7 +4,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
-import { memcpy } from '../../utils/memcpy'
+import { replaceObject } from '../../utils/replace-object'
 import { walkVariants } from '../../utils/walk-variants'
 import { computeVariantSignature } from './signatures'
 
@@ -45,7 +45,7 @@ export function migrateModernizeArbitraryValues(
         // `group-[]`
         if (variant.modifier === null) {
           changed = true
-          memcpy(
+          replaceObject(
             variant,
             designSystem.parseVariant(
               designSystem.theme.prefix
@@ -58,7 +58,7 @@ export function migrateModernizeArbitraryValues(
         // `group-[]/name`
         else if (variant.modifier.kind === 'named') {
           changed = true
-          memcpy(
+          replaceObject(
             variant,
             designSystem.parseVariant(
               designSystem.theme.prefix
@@ -94,7 +94,7 @@ export function migrateModernizeArbitraryValues(
           ast.nodes[0].nodes[2].type === 'universal'
         ) {
           changed = true
-          memcpy(variant, designSystem.parseVariant('*'))
+          replaceObject(variant, designSystem.parseVariant('*'))
           continue
         }
 
@@ -112,7 +112,7 @@ export function migrateModernizeArbitraryValues(
           ast.nodes[0].nodes[2].type === 'universal'
         ) {
           changed = true
-          memcpy(variant, designSystem.parseVariant('**'))
+          replaceObject(variant, designSystem.parseVariant('**'))
           continue
         }
 
@@ -139,7 +139,7 @@ export function migrateModernizeArbitraryValues(
           // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
           //
           // Later this gets converted to `in-data-visible`.
-          memcpy(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
+          replaceObject(variant, designSystem.parseVariant(`in-[${ast.toString()}]`))
           continue
         }
 
@@ -182,7 +182,7 @@ export function migrateModernizeArbitraryValues(
             let hoistedNotSignature = signatures.get(designSystem.printVariant(hoistedNot))
             if (targetSignature === hoistedNotSignature) {
               changed = true
-              memcpy(variant, hoistedNot)
+              replaceObject(variant, hoistedNot)
               continue
             }
           }
@@ -325,7 +325,7 @@ export function migrateModernizeArbitraryValues(
 
           // Update original variant
           changed = true
-          memcpy(variant, structuredClone(parsed))
+          replaceObject(variant, structuredClone(parsed))
         }
 
         // Expecting an attribute selector
@@ -350,7 +350,7 @@ export function migrateModernizeArbitraryValues(
           if (attributeKey.startsWith('data-')) {
             changed = true
             attributeKey = attributeKey.slice(5) // Remove `data-`
-            memcpy(variant, {
+            replaceObject(variant, {
               kind: 'functional',
               root: 'data',
               modifier: null,
@@ -365,7 +365,7 @@ export function migrateModernizeArbitraryValues(
           else if (attributeKey.startsWith('aria-')) {
             changed = true
             attributeKey = attributeKey.slice(5) // Remove `aria-`
-            memcpy(variant, {
+            replaceObject(variant, {
               kind: 'functional',
               root: 'aria',
               modifier: null,
