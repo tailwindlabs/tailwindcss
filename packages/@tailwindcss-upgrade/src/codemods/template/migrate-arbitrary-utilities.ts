@@ -249,7 +249,7 @@ export function migrateArbitraryUtilities(
           if (candidate.modifier) {
             for (let replacementCandidate of parseCandidate(
               designSystem,
-              `${root}-${spacingMultiplier}${candidate.modifier}`,
+              `${root}-${spacingMultiplier}${printModifier(candidate.modifier)}`,
             )) {
               yield replacementCandidate
             }
