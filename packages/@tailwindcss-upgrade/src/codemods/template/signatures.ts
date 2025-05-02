@@ -388,17 +388,17 @@ function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => 
     return value
   }
 
-  // Run the callback with the `@theme inline` feature disabled
-  let result = cb()
+  try {
+    // Run the callback with the `@theme inline` feature disabled
+    return cb()
+  } finally {
+    // Restore the `@theme inline` to the original value
+    // @ts-expect-error We are monkey-patching a method that's private
+    designSystem.theme.values.get = originalGet
 
-  // Restore the `@theme inline` to the original value
-  // @ts-expect-error We are monkey-patching a method that's private
-  designSystem.theme.values.get = originalGet
-
-  // Re-add the `inline` option, in case future lookups are done
-  for (let value of restorableInlineOptions) {
-    value.options |= ThemeOptions.INLINE
+    // Re-add the `inline` option, in case future lookups are done
+    for (let value of restorableInlineOptions) {
+      value.options |= ThemeOptions.INLINE
+    }
   }
-
-  return result
 }
