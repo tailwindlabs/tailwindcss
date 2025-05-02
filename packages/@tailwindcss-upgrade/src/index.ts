@@ -283,6 +283,7 @@ async function run() {
         let scanner = new Scanner({ sources })
         let filesToMigrate = []
         for (let file of scanner.files) {
+          if (file.endsWith('.css')) continue
           if (seenFiles.has(file)) continue
           seenFiles.add(file)
           filesToMigrate.push(file)
