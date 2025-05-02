@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831))
+- Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831), [#17854](https://github.com/tailwindlabs/tailwindcss/pull/17854))
 
 ### Fixed
 
