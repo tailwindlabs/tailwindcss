@@ -3,6 +3,8 @@ use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
 use crate::extractor::variant_machine::VariantMachine;
+use crate::scanner::pre_process_input;
+use bstr::ByteVec;
 
 #[derive(Debug, Default)]
 pub struct Haml;
@@ -14,8 +16,153 @@ impl PreProcessor for Haml {
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = BracketStack::default();
 
+        // Haml Comments: -#
+        // https://haml.info/docs/yardoc/file.REFERENCE.html#ruby-evaluation
+        //
+        // > The hyphen followed immediately by the pound sign signifies a silent comment. Any text
+        // > following this isn’t rendered in the resulting document at all.
+        //
+        // ```haml
+        // %p foo
+        // -# This is a comment
+        // %p bar
+        // ```
+        //
+        // > You can also nest text beneath a silent comment. None of this text will be rendered.
+        //
+        // ```haml
+        // %p foo
+        // -#
+        //   This won't be displayed
+        //     Nor will this
+        //                    Nor will this.
+        // %p bar
+        // ```
+        //
+        // Ruby Evaluation
+        // https://haml.info/docs/yardoc/file.REFERENCE.html#ruby-evaluation
+        //
+        // When any of the following characters are the first non-whitespace character on the line,
+        // then the line is treated as Ruby code:
+        //
+        // - Inserting Ruby: =
+        //   https://haml.info/docs/yardoc/file.REFERENCE.html#inserting_ruby
+        //
+        //   ```haml
+        //   %p
+        //     = ['hi', 'there', 'reader!'].join " "
+        //     = "yo"
+        //   ```
+        //
+        // - Running Ruby: -
+        //   https://haml.info/docs/yardoc/file.REFERENCE.html#running-ruby--
+        //
+        //   ```haml
+        //   - foo = "hello"
+        //   - foo << " there"
+        //   - foo << " you!"
+        //   %p= foo
+        //   ```
+        //
+        // - Whitespace Preservation: ~
+        //   https://haml.info/docs/yardoc/file.REFERENCE.html#tilde
+        //
+        //   > ~ works just like =, except that it runs Haml::Helpers.preserve on its input.
+        //
+        //   ```haml
+        //   ~ "Foo\n<pre>Bar\nBaz</pre>"
+        //   ```
+        //
+        // Important note:
+        //
+        // > A line of Ruby code can be stretched over multiple lines as long as each line but the
+        // > last ends with a comma.
+        //
+        // ```haml
+        // - links = {:home => "/",
+        //   :docs => "/docs",
+        //   :about => "/about"}
+        // ```
+        //
+        // Ruby Blocks:
+        // https://haml.info/docs/yardoc/file.REFERENCE.html#ruby-blocks
+        //
+        // > Ruby blocks, like XHTML tags, don’t need to be explicitly closed in Haml. Rather,
+        // > they’re automatically closed, based on indentation. A block begins whenever the
+        // > indentation is increased after a Ruby evaluation command. It ends when the indentation
+        // > decreases (as long as it’s not an else clause or something similar).
+        //
+        // ```haml
+        // - (42...47).each do |i|
+        //   %p= i
+        // %p See, I can count!
+        // ```
+        //
+        let mut last_newline_position = 0;
+
         while cursor.pos < len {
             match cursor.curr {
+                // Escape the next character
+                b'\\' => {
+                    cursor.advance_twice();
+                    continue;
+                }
+
+                // Track the last newline position
+                b'\n' => {
+                    last_newline_position = cursor.pos;
+                    cursor.advance();
+                    continue;
+                }
+
+                // Skip HAML comments. `-#`
+                b'-' if cursor.input[last_newline_position..cursor.pos]
+                    .iter()
+                    .all(u8::is_ascii_whitespace)
+                    && matches!(cursor.next, b'#') =>
+                {
+                    // Just consume the comment
+                    let updated_last_newline_position =
+                        self.skip_indented_block(&mut cursor, last_newline_position);
+
+                    // Override the last known newline position
+                    last_newline_position = updated_last_newline_position;
+                }
+
+                // Skip HTML comments. `/`
+                b'/' if cursor.input[last_newline_position..cursor.pos]
+                    .iter()
+                    .all(u8::is_ascii_whitespace) =>
+                {
+                    // Just consume the comment
+                    let updated_last_newline_position =
+                        self.skip_indented_block(&mut cursor, last_newline_position);
+
+                    // Override the last known newline position
+                    last_newline_position = updated_last_newline_position;
+                }
+
+                // Ruby evaluation
+                b'-' | b'=' | b'~'
+                    if cursor.input[last_newline_position..cursor.pos]
+                        .iter()
+                        .all(u8::is_ascii_whitespace) =>
+                {
+                    let mut start = cursor.pos;
+                    let end = self.skip_indented_block(&mut cursor, last_newline_position);
+
+                    // Increment start with 1 character to skip the `=` or `-` character
+                    start += 1;
+
+                    let ruby_code = &cursor.input[start..end];
+
+                    // Override the last known newline position
+                    last_newline_position = end;
+
+                    let replaced = pre_process_input(ruby_code, "rb");
+                    result.replace_range(start..end, replaced);
+                }
+
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
                 // ```diff
@@ -86,6 +233,107 @@ impl PreProcessor for Haml {
         }
 
         result
+    }
+}
+
+impl Haml {
+    fn skip_indented_block(
+        &self,
+        cursor: &mut cursor::Cursor,
+        last_known_newline_position: usize,
+    ) -> usize {
+        let len = cursor.input.len();
+
+        // Special case: if the first character of the block is `=`, then newlines are only allowed
+        // _if_ the last character of the previous line is a comma `,`.
+        //
+        // https://haml.info/docs/yardoc/file.REFERENCE.html#inserting_ruby
+        //
+        // > A line of Ruby code can be stretched over multiple lines as long as each line but the
+        // > last ends with a comma. For example:
+        //
+        // ```haml
+        // = link_to_remote "Add to cart",
+        //     :url => { :action => "add", :id => product.id },
+        //     :update => { :success => "cart", :failure => "error" }
+        // ```
+        let evaluation_type = cursor.curr;
+
+        let block_indentation_level = cursor
+            .pos
+            .saturating_sub(last_known_newline_position)
+            .saturating_sub(1); /* The newline itself */
+
+        let mut last_newline_position = last_known_newline_position;
+
+        // Consume until the end of the line first
+        while cursor.pos < len && cursor.curr != b'\n' {
+            cursor.advance();
+        }
+
+        // Block is already done, aka just a line
+        if evaluation_type == b'=' && cursor.prev != b',' {
+            return cursor.pos;
+        }
+
+        'outer: while cursor.pos < len {
+            match cursor.curr {
+                // Escape the next character
+                b'\\' => {
+                    cursor.advance_twice();
+                    continue;
+                }
+
+                // Track the last newline position
+                b'\n' => {
+                    last_newline_position = cursor.pos;
+
+                    // We are done with this block
+                    if evaluation_type == b'=' && cursor.prev != b',' {
+                        break;
+                    }
+
+                    cursor.advance();
+                    continue;
+                }
+
+                // Skip whitespace and compute the indentation level
+                x if x.is_ascii_whitespace() => {
+                    // Find first non-whitespace character
+                    while cursor.pos < len && cursor.curr.is_ascii_whitespace() {
+                        if cursor.curr == b'\n' {
+                            last_newline_position = cursor.pos;
+
+                            if evaluation_type == b'=' && cursor.prev != b',' {
+                                // We are done with this block
+                                break 'outer;
+                            }
+                        }
+
+                        cursor.advance();
+                    }
+
+                    let indentation = cursor
+                        .pos
+                        .saturating_sub(last_newline_position)
+                        .saturating_sub(1); /* The newline itself */
+                    if indentation < block_indentation_level {
+                        // We are done with this block
+                        break;
+                    }
+                }
+
+                // Not whitespace, end of block
+                _ => break,
+            };
+
+            cursor.advance();
+        }
+
+        // Move the cursor to the last newline position
+        cursor.move_to(last_newline_position);
+
+        last_newline_position
     }
 }
 
