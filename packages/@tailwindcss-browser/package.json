@@ -30,7 +30,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "h3": "^1.15.1",
+    "h3": "^1.15.3",
     "listhen": "^1.9.0",
     "tailwindcss": "workspace:*"
   }
