@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure negative arbitrary `scale` values generate negative values ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831))
 - Fix HAML extraction with embedded Ruby ([#17846](https://github.com/tailwindlabs/tailwindcss/pull/17846))
+- Don't scan files for utilities when using `@reference` ([#17836](https://github.com/tailwindlabs/tailwindcss/pull/17836))
 
 ## [4.1.5] - 2025-04-30
 
