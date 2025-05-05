@@ -425,7 +425,7 @@ mod tests {
         let actual = Haml::extract_annotated(include_bytes!("./test-fixtures/haml/src-17051.haml"));
         let expected = include_str!("./test-fixtures/haml/dst-17051.haml");
 
-        assert_eq!(actual, expected);
+        assert_eq!(actual.replace("\r\n", "\n"), expected.replace("\r\n", "\n"));
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/17813
@@ -434,7 +434,7 @@ mod tests {
         let actual = Haml::extract_annotated(include_bytes!("./test-fixtures/haml/src-17813.haml"));
         let expected = include_str!("./test-fixtures/haml/dst-17813.haml");
 
-        assert_eq!(actual, expected);
+        assert_eq!(actual.replace("\r\n", "\n"), expected.replace("\r\n", "\n"));
     }
 
     #[test]
