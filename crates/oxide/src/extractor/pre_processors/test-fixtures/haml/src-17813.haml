@@ -1,0 +1,19 @@
+:ruby
+  - devices_classes = 'size-5 mr-2px'
+  - icon_classes = 'w-[12px] h-[12px]'
+!!!
+%html{ lang: 'en' }
+  %head
+    %title Tailwind v4.1.4 + HAML bug
+
+  -# This is a comment
+
+    A multi-line comment
+      With more indentation
+
+    Which can dedent again just fine
+
+  %body
+  - icon_classes = 'self-center w-[16px] h-[16px]'
+    .flex{ class: icon_classes }
+    .flex{ class: devices_classes }
