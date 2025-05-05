@@ -1,7 +1,6 @@
 / https://github.com/tailwindlabs/tailwindcss/pull/17051#issuecomment-2711181352
-                                                         ^^^^^^^^^^^^^^^^^^^^^^^
 - star_styles = "size-[800px] mask mask-star bg-gradient-to-r from-secondary via-cyan-400 to-lime-400"
-  ^^^^^^^^^^^                 ^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+  ^^^^^^^^^^^    ^^^^^^^^^^^^ ^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 - crazy_text_styles = "italic font-black bg-gradient-to-r via-60% to-90% from-orange-500 via-secondary to-primary text-transparent bg-clip-text inline-block py-2"
   ^^^^^^^^^^^^^^^^^    ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^
 
@@ -67,7 +66,7 @@
           = succeed ',' do
             ^^^^^^^     ^^
             = daisy_link("ViewComponent", "https://viewcomponent.org", target: "_blank")
-              ^^^^^^^^^^                                         ^^^   ^^^^^^
+                                                                 ^^^   ^^^^^^
           = succeed ', and' do
             ^^^^^^^    ^^^  ^^
             = daisy_link "DaisyUI", "https://daisyui.com/", target: "_blank"
@@ -80,13 +79,13 @@
           ^^^    ^^^^^^^     ^^      ^^
 
       = doc_example(css: "mt-8 lg:mt-0 lg:basis-3/5 h-44") do
-        ^^^^^^^^^^^ ^^^   ^^^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^   ^^
+                    ^^^   ^^^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^   ^^
         .flex.flex-col.sm:flex-row.items-center.gap-4
          ^^^^ ^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^
           = daisy_button "Accent Button", css: "btn-accent"
             ^^^^^^^^^^^^                  ^^^   ^^^^^^^^^^
           = daisy_tip("Click to Swap") do
-            ^^^^^^^^^        ^^        ^^
+                             ^^        ^^
             = daisy_swap off: "🌚", on: "🌞", css: "swap-rotate text-4xl"
               ^^^^^^^^^^ ^^^        ^^        ^^^   ^^^^^^^^^^^ ^^^^^^^^
           = daisy_badge "Large Badge", css: "badge-secondary badge-lg"
@@ -105,7 +104,7 @@
            ^^^^
           Utlize
           = daisy_link("HAML", "https://haml.info/", target: "_blank")
-            ^^^^^^^^^^                               ^^^^^^
+                                                     ^^^^^^
           so your views are simple, concise, and easy to understand.
           ^^ ^^^^ ^^^^^ ^^^                  ^^^ ^^^^ ^^ ^^^^^^^^^^
 
@@ -131,7 +130,7 @@
         .flex.flex-col.xl:flex.xl:flex-row.w-full
          ^^^^ ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^ ^^^^^^
           = doc_code(css: "grow", code_css: "xl:pl-2 xl:pr-0 xl:rounded-r-none", language: "erb") do
-            ^^^^^^^^ ^^^   ^^^^   ^^^^^^^^   ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^   ^^^   ^^
+                     ^^^   ^^^^   ^^^^^^^^   ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^   ^^^   ^^
             :escaped
               <% # Ruby %>
 
@@ -151,14 +150,14 @@
                  ^^^
 
           = doc_code(css: "grow mt-8 xl:mt-0", pre_css: "xl:h-full", code_css: "xl:pl-0 xl:pr-2 xl:h-full xl:rounded-l-none") do
-            ^^^^^^^^ ^^^   ^^^^ ^^^^ ^^^^^^^   ^^^^^^^   ^^^^^^^^^   ^^^^^^^^   ^^^^^^^ ^^^^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^   ^^
+                     ^^^   ^^^^ ^^^^ ^^^^^^^   ^^^^^^^   ^^^^^^^^^   ^^^^^^^^   ^^^^^^^ ^^^^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^   ^^
             :escaped
               - # HAML
 
               - 5.times do |i|
                   ^^^^^ ^^
                 - if i.even?
-                  ^^ ^
+                  ^^
                   %p.odd Number \#{i}
                      ^^^           ^
                 - else
@@ -182,7 +181,7 @@
      ^^^^ ^^^^^^^ ^^^^^^^^^^^^
       %div
         = doc_code(language: "ruby") do
-          ^^^^^^^^ ^^^^^^^^   ^^^^   ^^
+                   ^^^^^^^^   ^^^^   ^^
           :escaped
             # app/components/application_component.rb
                                                    ^^
@@ -194,25 +193,23 @@
             ^^^
 
         = doc_code(language: "haml", css: "mt-8") do
-          ^^^^^^^^ ^^^^^^^^   ^^^^   ^^^   ^^^^   ^^
+                   ^^^^^^^^   ^^^^   ^^^   ^^^^   ^^
           :escaped
             - # app/components/character_component.html.haml
-                                                   ^^^^ ^^^^
+                                                        ^^^^
             = part(:component) do
-              ^^^^             ^^
+                               ^^
               = part(:head)
-                ^^^^
               = part(:body) do
-                ^^^^        ^^
+                            ^^
                 = content
                   ^^^^^^^
               = part(:legs)
-                ^^^^
 
       %div.mt-8.xl:mt-0
            ^^^^ ^^^^^^^
         = doc_code(language: "ruby") do
-          ^^^^^^^^ ^^^^^^^^   ^^^^   ^^
+                   ^^^^^^^^   ^^^^   ^^
           :escaped
             # app/components/character_component.rb
                                                  ^^
