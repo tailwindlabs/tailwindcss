@@ -162,6 +162,14 @@ async function parseCss(
         return
       }
 
+      // When inside `@reference` we should treat `@tailwind utilities` as if
+      // it wasn't there in the first place. This should also let `build()`
+      // return the cached static AST.
+      if (context.reference) {
+        replaceWith([])
+        return
+      }
+
       let params = segment(node.params, ' ')
       for (let param of params) {
         if (param.startsWith('source(')) {
