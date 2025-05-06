@@ -740,7 +740,11 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
 
             match (current_time, previous_time) {
                 (Some(current), Some(prev)) if prev == current => false,
-                _ => true,
+                _ => {
+                    event!(tracing::Level::INFO, "Discovering {:?}", path);
+
+                    true
+                }
             }
         }
     });
