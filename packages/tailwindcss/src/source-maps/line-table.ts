@@ -62,8 +62,8 @@ export function createLineTable(source: string): LineTable {
     let line = 0
     let count = table.length
     while (count > 0) {
-      // `| 0` causes integer division
-      let mid = (count / 2) | 0
+      // `| 0` forces integer bytecode generation
+      let mid = (count | 0) >> 1
       let i = line + mid
       if (table[i] <= offset) {
         line = i + 1
