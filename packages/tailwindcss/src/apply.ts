@@ -197,7 +197,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
 
           let candidateSrc: SourceLocation = [src[0], src[1], src[2]]
 
-          candidateSrc[1] += 7 + candidateOffset
+          candidateSrc[1] += 7 /* '@apply '.length */ + candidateOffset
           candidateSrc[2] = candidateSrc[1] + candidate.length
 
           // While the original nodes may have come from an `@utility` we still
