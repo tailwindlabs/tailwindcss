@@ -653,8 +653,6 @@ describe.each([
     async ({ exec, expect, fs, parseSourceMap }) => {
       await exec(`${command} --input src/index.css --output dist/out.css --map`)
 
-      console.log(await fs.read('dist/out.css'))
-
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
 
       // Make sure we can find a source map
@@ -783,8 +781,6 @@ describe.each([
       await exec(`${command} --input src/index.css --output dist/out.css --minify --map`)
 
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
-
-      console.log(await fs.read('dist/out.css'))
 
       // Make sure we can find a source map
       let map = parseSourceMap(await fs.read('dist/out.css'))
