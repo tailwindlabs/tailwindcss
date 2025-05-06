@@ -523,7 +523,7 @@ function parseModifier(modifier: string): CandidateModifier | null {
   }
 
   if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
-    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+    let arbitraryValue = modifier.slice(1, -1)
 
     // Values can't contain `;` or `}` characters at the top-level.
     if (!isValidArbitrary(arbitraryValue)) return null
