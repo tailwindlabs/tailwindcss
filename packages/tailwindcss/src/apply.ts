@@ -182,14 +182,21 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
 
         let src = child.src
 
-        let details = compiled.astNodes.map((node) => {
+        let candidateAst = compiled.astNodes.map((node) => {
           let candidate = compiled.nodeSorting.get(node)?.candidate
           let candidateOffset = candidate ? candidateOffsets[candidate] : undefined
 
           node = structuredClone(node)
 
           if (!src || !candidate || candidateOffset === undefined) {
-            return { node, src }
+            // While the original nodes may have come from an `@utility` we still
+            // want to replace the source because the `@apply` is ultimately the
+            // reason the node was emitted into the AST.
+            walk([node], (node) => {
+              node.src = src
+            })
+
+            return node
           }
 
           let candidateSrc: SourceLocation = [src[0], src[1], src[2]]
@@ -197,19 +204,15 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           candidateSrc[1] += 7 + candidateOffset
           candidateSrc[2] = candidateSrc[1] + candidate.length
 
-          return { node, src: candidateSrc }
-        })
-
-        for (let { node, src } of details) {
           // While the original nodes may have come from an `@utility` we still
           // want to replace the source because the `@apply` is ultimately the
           // reason the node was emitted into the AST.
           walk([node], (node) => {
-            node.src = src
+            node.src = candidateSrc
           })
-        }
 
-        let candidateAst = details.map((d) => d.node)
+          return node
+        })
 
         // Collect the nodes to insert in place of the `@apply` rule. When a rule
         // was used, we want to insert its children instead of the rule because we
