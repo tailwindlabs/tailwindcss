@@ -16,10 +16,13 @@ use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
+use std::fs::OpenOptions;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::sync::{self, Arc, Mutex};
 use std::time::SystemTime;
 use tracing::event;
+use tracing_subscriber::fmt::writer::BoxMakeWriter;
 
 // @source "some/folder";               // This is auto source detection
 // @source "some/folder/**/*";          // This is auto source detection
@@ -40,11 +43,39 @@ fn init_tracing() {
         return;
     }
 
+    let file = format!("tailwindcss-{}.log", std::process::id());
+    let file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(&file)
+        .unwrap_or_else(|_| panic!("Failed to open {file}"));
+
+    let file = Arc::new(Mutex::new(file));
+
+    let writer: BoxMakeWriter = BoxMakeWriter::new({
+        let file = file.clone();
+        move || Box::new(MutexWriter(file.clone())) as Box<dyn Write + Send>
+    });
+
     _ = tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
+        .with_writer(writer)
+        .with_ansi(false)
         .compact()
         .try_init();
+}
+
+struct MutexWriter(Arc<Mutex<std::fs::File>>);
+
+impl Write for MutexWriter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.0.lock().unwrap().write(buf)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.0.lock().unwrap().flush()
+    }
 }
 
 #[derive(Debug, Clone)]
