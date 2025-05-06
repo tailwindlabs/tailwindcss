@@ -413,6 +413,9 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // represents a CSS variable.
     if (value[0] !== '-' || value[1] !== '-') return
 
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(value)) return
+
     roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
   }
 
