@@ -1130,6 +1130,53 @@ it('should parse a utility with an implicit variable as the modifier using the s
       },
     ]
   `)
+
+  // Should remove underscores in fallback values
+  expect(run('bg-red-500/(--with_underscore,fallback_value)', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": {
+            "kind": "arbitrary",
+            "value": "var(--with_underscore,fallback value)",
+          },
+          "raw": "bg-red-500/(--with_underscore,fallback_value)",
+          "root": "bg",
+          "value": {
+            "fraction": null,
+            "kind": "named",
+            "value": "red-500",
+          },
+          "variants": [],
+        },
+      ]
+    `)
+
+  // Should keep underscores in the CSS variable itself, but remove underscores
+  // in fallback values
+  expect(run('bg-(--a_b,c_d_var(--e_f,g_h))/(--i_j,k_l_var(--m_n,o_p))', { utilities }))
+    .toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--i_j,k l var(--m_n,o p))",
+        },
+        "raw": "bg-(--a_b,c_d_var(--e_f,g_h))/(--i_j,k_l_var(--m_n,o_p))",
+        "root": "bg",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--a_b,c d var(--e_f,g h))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
 })
 
 it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
