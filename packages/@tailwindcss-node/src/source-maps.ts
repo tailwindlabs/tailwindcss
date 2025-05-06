@@ -20,7 +20,7 @@ function serializeSourceMap(map: DecodedSourceMap): string {
     }
   >((src) => {
     return {
-      url: src?.url ?? `<unknown ${id}>`,
+      url: src?.url ?? `<unknown ${id++}>`,
       content: src?.content ?? '<none>',
     }
   })
