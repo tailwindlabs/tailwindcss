@@ -411,7 +411,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
     // An arbitrary value with `(…)` should always start with `--` since it
     // represents a CSS variable.
-    if (value[0] !== '-' && value[1] !== '-') return
+    if (value[0] !== '-' || value[1] !== '-') return
 
     roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
   }
@@ -528,7 +528,7 @@ function parseModifier(modifier: string): CandidateModifier | null {
 
     // A modifier with `(…)` should always start with `--` since it
     // represents a CSS variable.
-    if (modifier[0] !== '-' && modifier[1] !== '-') return null
+    if (modifier[0] !== '-' || modifier[1] !== '-') return null
 
     // Trim the modifier to remove any leading or trailing whitespace
     modifier = modifier.trim()
@@ -690,7 +690,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
             // Arbitrary values must start with `--` since it represents a CSS variable.
-            if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+            if (arbitraryValue[0] !== '-' || arbitraryValue[1] !== '-') return null
 
             return {
               kind: 'functional',
@@ -1041,7 +1041,7 @@ function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
       case 'word': {
         // Dashed idents and variables `var(--my-var)` and `--my-var` should not
         // have underscores escaped
-        if (node.value[0] !== '-' && node.value[1] !== '-') {
+        if (node.value[0] !== '-' || node.value[1] !== '-') {
           node.value = escapeUnderscore(node.value)
         }
         break
