@@ -1179,6 +1179,48 @@ it('should parse a utility with an implicit variable as the modifier using the s
   `)
 })
 
+it('should not parse an invalid arbitrary shorthand modifier', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // Completely empty
+  expect(run('bg-red-500/()', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-red-500/(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-red-500/(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to top-level `;` or `}` characters
+  expect(run('bg-red-500/(--x;--y)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(--x:{foo:bar})', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Valid, but ensuring that we didn't make an off-by-one error
+  expect(run('bg-red-500/(--x)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--x)",
+        },
+        "raw": "bg-red-500/(--x)",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
 it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
