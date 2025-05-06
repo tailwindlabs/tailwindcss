@@ -411,7 +411,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
     // An arbitrary value with `(…)` should always start with `--` since it
     // represents a CSS variable.
-    if (value[0] !== '-' && value[1] !== '-') return
+    if (value[0] !== '-' || value[1] !== '-') return
+
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(value)) return
 
     roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
   }
@@ -523,21 +526,24 @@ function parseModifier(modifier: string): CandidateModifier | null {
   }
 
   if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
-    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+    // Drop the `(` and `)` characters
+    modifier = modifier.slice(1, -1)
+
+    // A modifier with `(…)` should always start with `--` since it
+    // represents a CSS variable.
+    if (modifier[0] !== '-' || modifier[1] !== '-') return null
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(arbitraryValue)) return null
+    if (!isValidArbitrary(modifier)) return null
 
-    // Empty arbitrary values are invalid. E.g.: `data-():`
-    //                                                 ^^
-    if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
+    // Wrap the value in `var(…)` to ensure that it is a valid CSS variable.
+    modifier = `var(${modifier})`
 
-    // Arbitrary values must start with `--` since it represents a CSS variable.
-    if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+    let arbitraryValue = decodeArbitraryValue(modifier)
 
     return {
       kind: 'arbitrary',
-      value: `var(${arbitraryValue})`,
+      value: arbitraryValue,
     }
   }
 
@@ -679,7 +685,7 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
             // Arbitrary values must start with `--` since it represents a CSS variable.
-            if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
+            if (arbitraryValue[0] !== '-' || arbitraryValue[1] !== '-') return null
 
             return {
               kind: 'functional',
@@ -1030,7 +1036,7 @@ function recursivelyEscapeUnderscores(ast: ValueParser.ValueAstNode[]) {
       case 'word': {
         // Dashed idents and variables `var(--my-var)` and `--my-var` should not
         // have underscores escaped
-        if (node.value[0] !== '-' && node.value[1] !== '-') {
+        if (node.value[0] !== '-' || node.value[1] !== '-') {
           node.value = escapeUnderscore(node.value)
         }
         break

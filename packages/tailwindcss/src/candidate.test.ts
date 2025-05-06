@@ -1087,6 +1087,7 @@ it('should parse a utility with an implicit variable as the modifier using the s
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
+  // Standard case (no underscores)
   expect(run('bg-red-500/(--value)', { utilities })).toMatchInlineSnapshot(`
     [
       {
@@ -1102,6 +1103,156 @@ it('should parse a utility with an implicit variable as the modifier using the s
           "fraction": null,
           "kind": "named",
           "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  // Should preserve underscores
+  expect(run('bg-red-500/(--with_underscore)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--with_underscore)",
+        },
+        "raw": "bg-red-500/(--with_underscore)",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  // Should remove underscores in fallback values
+  expect(run('bg-red-500/(--with_underscore,fallback_value)', { utilities }))
+    .toMatchInlineSnapshot(`
+      [
+        {
+          "important": false,
+          "kind": "functional",
+          "modifier": {
+            "kind": "arbitrary",
+            "value": "var(--with_underscore,fallback value)",
+          },
+          "raw": "bg-red-500/(--with_underscore,fallback_value)",
+          "root": "bg",
+          "value": {
+            "fraction": null,
+            "kind": "named",
+            "value": "red-500",
+          },
+          "variants": [],
+        },
+      ]
+    `)
+
+  // Should keep underscores in the CSS variable itself, but remove underscores
+  // in fallback values
+  expect(run('bg-(--a_b,c_d_var(--e_f,g_h))/(--i_j,k_l_var(--m_n,o_p))', { utilities }))
+    .toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--i_j,k l var(--m_n,o p))",
+        },
+        "raw": "bg-(--a_b,c_d_var(--e_f,g_h))/(--i_j,k_l_var(--m_n,o_p))",
+        "root": "bg",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--a_b,c d var(--e_f,g h))",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should not parse an invalid arbitrary shorthand modifier', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // Completely empty
+  expect(run('bg-red-500/()', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-red-500/(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-red-500/(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to top-level `;` or `}` characters
+  expect(run('bg-red-500/(--x;--y)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/(--x:{foo:bar})', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Valid, but ensuring that we didn't make an off-by-one error
+  expect(run('bg-red-500/(--x)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--x)",
+        },
+        "raw": "bg-red-500/(--x)",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it('should not parse an invalid arbitrary shorthand value', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // Completely empty
+  expect(run('bg-()', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to top-level `;` or `}` characters
+  expect(run('bg-(--x;--y)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(--x:{foo:bar})', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Valid, but ensuring that we didn't make an off-by-one error
+  expect(run('bg-(--x)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "bg-(--x)",
+        "root": "bg",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--x)",
         },
         "variants": [],
       },
