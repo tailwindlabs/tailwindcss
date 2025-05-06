@@ -197,7 +197,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           candidateSrc[1] += 7 + candidateOffset
           candidateSrc[2] = candidateSrc[1] + candidate.length
 
-          return { node: structuredClone(node), src: candidateSrc }
+          return { node, src: candidateSrc }
         })
 
         for (let { node, src } of details) {
