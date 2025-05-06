@@ -1087,6 +1087,7 @@ it('should parse a utility with an implicit variable as the modifier using the s
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
+  // Standard case (no underscores)
   expect(run('bg-red-500/(--value)', { utilities })).toMatchInlineSnapshot(`
     [
       {
@@ -1097,6 +1098,28 @@ it('should parse a utility with an implicit variable as the modifier using the s
           "value": "var(--value)",
         },
         "raw": "bg-red-500/(--value)",
+        "root": "bg",
+        "value": {
+          "fraction": null,
+          "kind": "named",
+          "value": "red-500",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+
+  // Should preserve underscores
+  expect(run('bg-red-500/(--with_underscore)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": {
+          "kind": "arbitrary",
+          "value": "var(--with_underscore)",
+        },
+        "raw": "bg-red-500/(--with_underscore)",
         "root": "bg",
         "value": {
           "fraction": null,
