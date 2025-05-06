@@ -230,18 +230,31 @@ async function run() {
     }
 
     info('Updating dependencies…')
-    for (let dependency of [
-      'tailwindcss',
-      '@tailwindcss/cli',
-      '@tailwindcss/postcss',
-      '@tailwindcss/vite',
-      '@tailwindcss/node',
-      '@tailwindcss/oxide',
-      'prettier-plugin-tailwindcss',
-    ]) {
+    {
+      let dependencies = (
+        await Promise.all(
+          [
+            'tailwindcss',
+            '@tailwindcss/cli',
+            '@tailwindcss/postcss',
+            '@tailwindcss/vite',
+            '@tailwindcss/node',
+            '@tailwindcss/oxide',
+            'prettier-plugin-tailwindcss',
+          ].map(async (dependency) => {
+            if (dependency === 'tailwindcss') {
+              return dependency
+            } else if (await pkg(base).has(dependency)) {
+              return dependency
+            }
+            return []
+          }),
+        )
+      ).flat()
+
       try {
-        if (dependency === 'tailwindcss' || (await pkg(base).has(dependency))) {
-          await pkg(base).add([`${dependency}@latest`])
+        await pkg(base).add(dependencies.map((dependency) => `${dependency}@latest`))
+        for (let dependency of dependencies) {
           success(`Updated package: ${highlight(dependency)}`, { prefix: '↳ ' })
         }
       } catch {}
