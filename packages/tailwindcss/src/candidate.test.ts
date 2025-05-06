@@ -1221,6 +1221,45 @@ it('should not parse an invalid arbitrary shorthand modifier', () => {
   `)
 })
 
+it('should not parse an invalid arbitrary shorthand value', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // Completely empty
+  expect(run('bg-()', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to leading spaces
+  expect(run('bg-(_--)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(_--x)', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Invalid due to top-level `;` or `}` characters
+  expect(run('bg-(--x;--y)', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-(--x:{foo:bar})', { utilities })).toMatchInlineSnapshot(`[]`)
+
+  // Valid, but ensuring that we didn't make an off-by-one error
+  expect(run('bg-(--x)', { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "bg-(--x)",
+        "root": "bg",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "var(--x)",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
 it('should not parse a utility with an implicit invalid variable as the modifier using the shorthand', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
