@@ -173,7 +173,12 @@ export function createTranslationMap({
   let originalTable = createLineTable(original)
   let generatedTable = createLineTable(generated)
 
-  type Translation = [Position, Position, Position | null, Position | null]
+  type Translation = [
+    originalStart: Position,
+    originalEnd: Position,
+    generatedStart: Position | null,
+    generatedEnd: Position | null,
+  ]
 
   return (node: AstNode) => {
     if (!node.src) return []
