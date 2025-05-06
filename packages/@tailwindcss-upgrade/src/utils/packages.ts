@@ -1,4 +1,5 @@
 import { exec as execCb } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { promisify } from 'node:util'
@@ -11,6 +12,15 @@ const SAVE_DEV: Record<string, string> = {
   default: '-D',
   bun: '-d',
 }
+
+const manifests = new DefaultMap((base) => {
+  try {
+    let packageJsonPath = resolve(base, 'package.json')
+    return readFileSync(packageJsonPath, 'utf-8')
+  } catch {
+    return ''
+  }
+})
 
 export function pkg(base: string) {
   return {
@@ -29,15 +39,12 @@ export function pkg(base: string) {
           prefix: '↳ ',
         })
         throw e
+      } finally {
+        manifests.delete(base)
       }
     },
-    async has(name: string) {
-      try {
-        let packageJsonPath = resolve(base, 'package.json')
-        let packageJsonContent = await fs.readFile(packageJsonPath, 'utf-8')
-        return packageJsonContent.includes(`"${name}":`)
-      } catch {}
-      return false
+    has(name: string) {
+      return manifests.get(base).includes(`"${name}":`)
     },
     async remove(packages: string[]) {
       let packageManager = await packageManagerForBase.get(base)
@@ -49,6 +56,8 @@ export function pkg(base: string) {
           prefix: '↳ ',
         })
         throw e
+      } finally {
+        manifests.delete(base)
       }
     },
   }

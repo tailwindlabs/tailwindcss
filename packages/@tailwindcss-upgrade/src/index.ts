@@ -230,18 +230,20 @@ async function run() {
     }
 
     info('Updating dependencies…')
-    for (let dependency of [
-      'tailwindcss',
-      '@tailwindcss/cli',
-      '@tailwindcss/postcss',
-      '@tailwindcss/vite',
-      '@tailwindcss/node',
-      '@tailwindcss/oxide',
-      'prettier-plugin-tailwindcss',
-    ]) {
+    {
+      let pkgManager = pkg(base)
+      let dependencies = [
+        'tailwindcss',
+        '@tailwindcss/cli',
+        '@tailwindcss/postcss',
+        '@tailwindcss/vite',
+        '@tailwindcss/node',
+        '@tailwindcss/oxide',
+        'prettier-plugin-tailwindcss',
+      ].filter((dependency) => dependency === 'tailwindcss' || pkgManager.has(dependency))
       try {
-        if (dependency === 'tailwindcss' || (await pkg(base).has(dependency))) {
-          await pkg(base).add([`${dependency}@latest`])
+        await pkgManager.add(dependencies.map((dependency) => `${dependency}@latest`))
+        for (let dependency of dependencies) {
           success(`Updated package: ${highlight(dependency)}`, { prefix: '↳ ' })
         }
       } catch {}
