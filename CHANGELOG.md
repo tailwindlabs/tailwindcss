@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Support using `@tailwindcss/upgrade` to upgrade between versions of v4.* ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
+- Support using `@tailwindcss/upgrade` to upgrade between versions of v4.\* ([#17717](https://github.com/tailwindlabs/tailwindcss/pull/17717))
 - Add `h-lh` / `min-h-lh` / `max-h-lh` utilities ([#17790](https://github.com/tailwindlabs/tailwindcss/pull/17790))
 - Transition `display`, `visibility`, `content-visibility`, `overlay`, and `pointer-events` when using `transition` to simplify `@starting-style` usage ([#17812](https://github.com/tailwindlabs/tailwindcss/pull/17812))
 
@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade: Bump all Tailwind CSS related dependencies during upgrade ([#17763](https://github.com/tailwindlabs/tailwindcss/pull/17763))
 - Upgrade: Don't add `-` to variants starting with `@` ([#17814](https://github.com/tailwindlabs/tailwindcss/pull/17814))
 - Upgrade: Don't format stylesheets that didn't change when upgrading ([#17824](https://github.com/tailwindlabs/tailwindcss/pull/17824))
+
+### Changed
+
+- Ignore `.hg`, `.svn`, `.venv`, `venv`, `.yarn`, `.next`, `.turbo`, `.parcel-cache`, `__pycache__`, and `.svelte-kit` folders by default (can be overridden by `@source …` rules) ([#17892](https://github.com/tailwindlabs/tailwindcss/pull/17892))
+- `@source` rules that point inside `.hg`, `.svn`, `.venv`, `venv`, `.yarn`, `.next`, `.turbo`, `.parcel-cache`, `__pycache__`, and `.svelte-kit` folders no longer consider your `.gitignore` rules ([#17892](https://github.com/tailwindlabs/tailwindcss/pull/17892))
 
 ## [4.1.4] - 2025-04-14
 
