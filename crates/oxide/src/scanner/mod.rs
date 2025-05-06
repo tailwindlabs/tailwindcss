@@ -425,7 +425,10 @@ impl Scanner {
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
     let (content, extension) = match c {
         ChangedContent::File(file, extension) => match std::fs::read(&file) {
-            Ok(content) => (content, extension),
+            Ok(content) => {
+                event!(tracing::Level::INFO, "Reading {:?}", file);
+                (content, extension)
+            }
             Err(e) => {
                 event!(tracing::Level::ERROR, "Failed to read file: {:?}", e);
                 return None;
