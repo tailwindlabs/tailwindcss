@@ -90,7 +90,7 @@ export function createSourceMap({ ast }: { ast: AstNode[] }) {
   }
 
   // Get all the indexes from the mappings
-  function add(node: AstNode) {
+  walk(ast, (node: AstNode) => {
     if (!node.src || !node.dst) return
 
     let originalSource = sourceTable.get(node.src[0])
@@ -141,9 +141,7 @@ export function createSourceMap({ ast }: { ast: AstNode[] }) {
       },
       generatedPosition: generatedEnd,
     })
-  }
-
-  walk(ast, add)
+  })
 
   // Populate
   for (let source of lineTables.keys()) {
