@@ -530,21 +530,13 @@ function parseModifier(modifier: string): CandidateModifier | null {
     // represents a CSS variable.
     if (modifier[0] !== '-' || modifier[1] !== '-') return null
 
-    // Trim the modifier to remove any leading or trailing whitespace
-    modifier = modifier.trim()
+    // Values can't contain `;` or `}` characters at the top-level.
+    if (!isValidArbitrary(modifier)) return null
 
-    // Empty arbitrary values are invalid. E.g.: `data-(--):`
-    //                                                  ^^
-    // Note: we already validated that the `modifier` starts with `--`
-    if (modifier.length === 2) return null
-
-    // Wrap the value in `var(…)` to ensure that it is a CSS variable.
+    // Wrap the value in `var(…)` to ensure that it is a valid CSS variable.
     modifier = `var(${modifier})`
 
     let arbitraryValue = decodeArbitraryValue(modifier)
-
-    // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(arbitraryValue)) return null
 
     return {
       kind: 'arbitrary',
