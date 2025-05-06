@@ -523,7 +523,17 @@ function parseModifier(modifier: string): CandidateModifier | null {
   }
 
   if (modifier[0] === '(' && modifier[modifier.length - 1] === ')') {
-    let arbitraryValue = modifier.slice(1, -1)
+    // Drop the `(` and `)` characters
+    modifier = modifier.slice(1, -1)
+
+    // A modifier with `(…)` should always start with `--` since it
+    // represents a CSS variable.
+    if (modifier[0] !== '-' && modifier[1] !== '-') return null
+
+    // Wrap the value in `var(…)` to ensure that it is a CSS variable.
+    modifier = `var(${modifier})`
+
+    let arbitraryValue = decodeArbitraryValue(modifier)
 
     // Values can't contain `;` or `}` characters at the top-level.
     if (!isValidArbitrary(arbitraryValue)) return null
@@ -532,12 +542,9 @@ function parseModifier(modifier: string): CandidateModifier | null {
     //                                                 ^^
     if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) return null
 
-    // Arbitrary values must start with `--` since it represents a CSS variable.
-    if (arbitraryValue[0] !== '-' && arbitraryValue[1] !== '-') return null
-
     return {
       kind: 'arbitrary',
-      value: `var(${arbitraryValue})`,
+      value: arbitraryValue,
     }
   }
 
