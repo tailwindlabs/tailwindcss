@@ -16,7 +16,7 @@ export interface OptimizeOptions {
   /**
    * The output source map before optimization
    *
-   * If omitted an resulting source map will not be available
+   * If omitted a resulting source map will not be available
    */
   map?: string
 }
