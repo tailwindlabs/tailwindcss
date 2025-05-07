@@ -26,9 +26,6 @@ test(
           css: {
             devSourcemap: true,
           },
-          build: {
-            sourcemap: true,
-          },
         })
       `,
       'index.html': html`
