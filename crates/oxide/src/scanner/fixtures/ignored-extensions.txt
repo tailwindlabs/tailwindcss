@@ -3,3 +3,4 @@ lock
 sass
 scss
 styl
+log

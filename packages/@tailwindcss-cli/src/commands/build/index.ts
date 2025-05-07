@@ -67,6 +67,9 @@ async function handleError<T>(fn: () => T): Promise<T> {
 }
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
+  eprintln(header())
+  eprintln()
+
   using I = new Instrumentation()
   DEBUG && I.start('[@tailwindcss/cli] (initial build)')
 
@@ -87,8 +90,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
     // Ensure the provided `--input` exists.
     if (!existsSync(args['--input'])) {
-      eprintln(header())
-      eprintln()
       eprintln(`Specified input file ${highlight(relative(args['--input']))} does not exist.`)
       process.exit(1)
     }
@@ -97,8 +98,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // Check if the input and output file paths are identical, otherwise return an
   // error to the user.
   if (args['--input'] === args['--output'] && args['--input'] !== '-') {
-    eprintln(header())
-    eprintln()
     eprintln(
       `Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`,
     )
@@ -328,8 +327,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   await write(output, args, I)
 
   let end = process.hrtime.bigint()
-  eprintln(header())
-  eprintln()
   eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
