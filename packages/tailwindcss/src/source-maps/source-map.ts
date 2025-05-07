@@ -150,11 +150,20 @@ export function createSourceMap({ ast }: { ast: AstNode[] }) {
 
   // Sort the mappings in ascending order
   map.mappings.sort((a, b) => {
+    let aOriginal = a.originalPosition!
+    let aGenerated = a.generatedPosition!
+    let bOriginal = b.originalPosition!
+    let bGenerated = b.generatedPosition!
+
+    let aSource = map.sources.indexOf(aOriginal.source)
+    let bSource = map.sources.indexOf(bOriginal.source)
+
     return (
-      a.generatedPosition.line - b.generatedPosition.line ||
-      a.generatedPosition.column - b.generatedPosition.column ||
-      (a.originalPosition?.line ?? 0) - (b.originalPosition?.line ?? 0) ||
-      (a.originalPosition?.column ?? 0) - (b.originalPosition?.column ?? 0)
+      aGenerated.line - bGenerated.line ||
+      aGenerated.column - bGenerated.column ||
+      aSource - bSource ||
+      aOriginal.line - bOriginal.line ||
+      aOriginal.column - bGenerated.column
     )
   })
 
