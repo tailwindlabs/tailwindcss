@@ -1,5 +1,41 @@
 # Contributing
 
+## Requirements
+
+Before getting started, ensure your system has access to the following tools:
+
+- [Node.js](https://nodejs.org/)
+- [Rustup](https://rustup.rs/)
+- [pnpm](https://pnpm.io/)
+
+## Getting started
+
+```sh
+# Install dependencies
+pnpm install
+
+# Install Rust toolchain and WASM targets
+rustup default stable
+rustup target add wasm32-wasip1-threads
+
+# Build the project
+pnpm build
+```
+
+## Development workflow
+
+During development, you can run tests in watch mode:
+
+```sh
+pnpm tdd
+```
+
+The `playgrounds` directory contains example projects you can use to test your changes. To start the Vite playground, use:
+
+```sh
+pnpm build && pnpm vite
+```
+
 ## Bug fixes
 
 If you've found a bug in Tailwind that you'd like to fix, [submit a pull request](https://github.com/tailwindlabs/tailwindcss/pulls) with your changes. Include a helpful description of the problem and how your changes address it, and provide tests so we can verify the fix works as expected.
@@ -28,10 +64,40 @@ pnpm run format
 
 ## Running tests
 
-You can run the test suite using the following commands:
+You can run the TypeScript and Rust test suites using the following command:
 
 ```sh
-pnpm build && pnpm test
+pnpm test
 ```
 
-Please ensure that the tests are passing when submitting a pull request. If you're adding new features to Tailwind, please include tests.
+To run the integration tests, use:
+
+```sh
+pnpm build && pnpm test:integrations
+```
+
+Additionally, some features require testing in browsers (i.e to ensure CSS variable resolution works as expected). These can be run via:
+
+```sh
+pnpm build && pnpm test:ui
+```
+
+Please ensure that all tests are passing when submitting a pull request. If you're adding new features to Tailwind CSS, always include tests.
+
+After a successful build, you can also use the npm package tarballs created inside the `dist/` folder to install your build in other local projects.
+
+## Pull request process
+
+When submitting a pull request:
+
+- Ensure the pull request title and description explain the changes you made and why you made them.
+- Include a test plan section that outlines how you tested your contributions. We do not accept contributions without tests.
+- Ensure all tests pass. You can add the tag `[ci-all]` in your pull request description to run the test suites across all platforms.
+
+When a pull request is created, Tailwind CSS maintainers will be notified automatically.
+
+## Communication
+
+- **GitHub discussions**: For feature ideas and general questions
+- **GitHub issues**: For bug reports
+- **GitHub pull requests**: For code contributions
