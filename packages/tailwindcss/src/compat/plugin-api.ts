@@ -448,11 +448,35 @@ export function buildPluginApi({
     },
 
     addComponents(components, options) {
-      this.addUtilities(components, options)
+      function wrapRecord(record: Record<string, CssInJs>) {
+        return Object.fromEntries(
+          Object.entries(record).map(([key, value]) => [
+            key,
+            {
+              '@layer components': value,
+            },
+          ]),
+        )
+      }
+
+      this.addUtilities(
+        Array.isArray(components) ? components.map(wrapRecord) : wrapRecord(components),
+        options,
+      )
     },
 
     matchComponents(components, options) {
-      this.matchUtilities(components, options)
+      this.matchUtilities(
+        Object.fromEntries(
+          Object.entries(components).map(([key, fn]) => [
+            key,
+            (value, extra) => ({
+              '@layer components': fn(value, extra),
+            }),
+          ]),
+        ),
+        options,
+      )
     },
 
     theme: createThemeFn(

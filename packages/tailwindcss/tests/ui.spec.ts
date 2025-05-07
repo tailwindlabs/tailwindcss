@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { optimize } from '../../@tailwindcss-node/src/optimize'
 import { compile } from '../src'
+import type { PluginAPI } from '../src/plugin'
 import { segment } from '../src/utils/segment'
 
 const html = String.raw
@@ -2177,33 +2178,97 @@ test('shadow DOM has access to variables', async ({ page }) => {
   expect(gap).toBe('8px')
 })
 
+test('legacy JS plugins will place components into a sub-layer', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="a" class="btn btn-utility hover:btn-round"></div>
+      <div id="b" class="btn p-1 hover:btn-round"></div>
+    `,
+    css`
+      @plugin './fixtures/example-plugin.ts';
+    `,
+    {
+      async loadModule(id, base) {
+        return {
+          base,
+          module: ({ addComponents, addUtilities }: PluginAPI) => {
+            addUtilities({
+              '.btn-utility': {
+                padding: '1rem 2rem',
+
+                // Some additional properties so it would rank higher than the `.btn`
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                lineHeight: '2',
+              },
+            })
+            addComponents({
+              '.btn': {
+                padding: '.5rem 1rem',
+                borderRadius: '.25rem',
+              },
+              '.btn-round': {
+                padding: '3rem',
+                borderRadius: '2rem',
+              },
+            })
+          },
+        }
+      },
+    },
+  )
+
+  expect(await getPropertyValue('#a', 'padding')).toEqual('16px 32px')
+  expect(await getPropertyValue('#a', 'border-radius')).toEqual('4px')
+  expect(await getPropertyValue('#a', 'line-height')).toEqual('48px')
+  await page.locator('#a').hover()
+  expect(await getPropertyValue('#a', 'padding')).toEqual('16px 32px')
+  expect(await getPropertyValue('#a', 'border-radius')).toEqual('32px')
+  expect(await getPropertyValue('#a', 'line-height')).toEqual('48px')
+
+  expect(await getPropertyValue('#b', 'padding')).toEqual('4px')
+  expect(await getPropertyValue('#b', 'border-radius')).toEqual('4px')
+  await page.locator('#b').hover()
+  expect(await getPropertyValue('#b', 'padding')).toEqual('4px')
+  expect(await getPropertyValue('#b', 'border-radius')).toEqual('32px')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
-async function render(page: Page, content: string, extraCss: string = '') {
-  let { build } = await compile(css`
-    @layer theme, base, components, utilities;
-    @layer theme {
-      ${defaultTheme}
+async function render(
+  page: Page,
+  content: string,
+  extraCss: string = '',
+  opts: Parameters<typeof compile>[1] = {},
+) {
+  let { build } = await compile(
+    css`
+      @layer theme, base, components, utilities;
+      @layer theme {
+        ${defaultTheme}
 
-      @theme {
-        --color-red: rgb(255, 0, 0);
-        --color-green: rgb(0, 255, 0);
-        --color-blue: rgb(0, 0, 255);
-        --color-black: black;
-        --color-transparent: transparent;
+        @theme {
+          --color-red: rgb(255, 0, 0);
+          --color-green: rgb(0, 255, 0);
+          --color-blue: rgb(0, 0, 255);
+          --color-black: black;
+          --color-transparent: transparent;
+        }
       }
-    }
-    @layer base {
-      ${preflight}
-    }
-    @layer utilities {
-      @tailwind utilities;
-    }
-    ${extraCss}
-  `)
+      @layer base {
+        ${preflight}
+      }
+      @layer utilities {
+        @tailwind utilities;
+      }
+      ${extraCss}
+    `,
+    opts,
+  )
 
   // We noticed that some of the tests depending on the `hover:` variant were
   // flaky. After some investigation, we found that injected elements had the

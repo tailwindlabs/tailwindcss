@@ -4113,17 +4113,19 @@ describe('matchUtilities()', () => {
 })
 
 describe('addComponents()', () => {
-  test('is an alias for addUtilities', async () => {
+  test('is an alias for addUtilities that wraps the code in \`@layer components\`', async () => {
     let compiled = await compile(
       css`
         @plugin "my-plugin";
-        @tailwind utilities;
+        @layer utilities {
+          @tailwind utilities;
+        }
       `,
       {
         async loadModule(id, base) {
           return {
             base,
-            module: ({ addComponents }: PluginAPI) => {
+            module: ({ addComponents, addUtilities }: PluginAPI) => {
               addComponents({
                 '.btn': {
                   padding: '.5rem 1rem',
@@ -4145,43 +4147,60 @@ describe('addComponents()', () => {
                   },
                 },
               })
+              addUtilities({
+                '.btn-utility': {
+                  padding: '.5rem 1rem',
+                  borderRadius: '.25rem',
+                  fontWeight: '600',
+                },
+              })
             },
           }
         },
       },
     )
 
-    expect(optimizeCss(compiled.build(['btn', 'btn-blue', 'btn-red'])).trim())
+    expect(optimizeCss(compiled.build(['btn', 'btn-blue', 'btn-red', 'btn-utility'])).trim())
       .toMatchInlineSnapshot(`
-        ".btn {
-          border-radius: .25rem;
-          padding: .5rem 1rem;
-          font-weight: 600;
-        }
+        "@layer utilities {
+          @layer components {
+            .btn {
+              border-radius: .25rem;
+              padding: .5rem 1rem;
+              font-weight: 600;
+            }
 
-        .btn-blue {
-          color: #fff;
-          background-color: #3490dc;
-        }
+            .btn-blue {
+              color: #fff;
+              background-color: #3490dc;
+            }
 
-        .btn-blue:hover {
-          background-color: #2779bd;
-        }
+            .btn-blue:hover {
+              background-color: #2779bd;
+            }
 
-        .btn-red {
-          color: #fff;
-          background-color: #e3342f;
-        }
+            .btn-red {
+              color: #fff;
+              background-color: #e3342f;
+            }
 
-        .btn-red:hover {
-          background-color: #cc1f1a;
+            .btn-red:hover {
+              background-color: #cc1f1a;
+            }
+          }
+
+          .btn-utility {
+            border-radius: .25rem;
+            padding: .5rem 1rem;
+            font-weight: 600;
+          }
         }"
       `)
   })
 })
 
 describe('matchComponents()', () => {
-  test('is an alias for matchUtilities', async () => {
+  test('is an alias for matchUtilities that wraps the code in \`@layer components\`', async () => {
     let compiled = await compile(
       css`
         @plugin "my-plugin";
@@ -4191,10 +4210,22 @@ describe('matchComponents()', () => {
         async loadModule(id, base) {
           return {
             base,
-            module: ({ matchComponents }: PluginAPI) => {
+            module: ({ matchComponents, matchUtilities }: PluginAPI) => {
               matchComponents(
                 {
-                  prose: (value) => ({ '--container-size': value }),
+                  'prose-component': (value) => ({ '--container-size': value }),
+                },
+                {
+                  values: {
+                    DEFAULT: 'normal',
+                    sm: 'sm',
+                    lg: 'lg',
+                  },
+                },
+              )
+              matchUtilities(
+                {
+                  'prose-utility': (value) => ({ '--container-size': value }),
                 },
                 {
                   values: {
@@ -4210,18 +4241,40 @@ describe('matchComponents()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
-      .toMatchInlineSnapshot(`
-        ".prose {
+    expect(
+      optimizeCss(
+        compiled.build([
+          'prose-component',
+          'sm:prose-component',
+          'hover:prose-component',
+          'prose-utility',
+          'sm:prose-utility',
+          'hover:prose-utility',
+        ]),
+      ).trim(),
+    ).toMatchInlineSnapshot(`
+      "@layer components {
+        .prose-component {
           --container-size: normal;
         }
+      }
 
-        @media (hover: hover) {
-          .hover\\:prose-lg:hover {
-            --container-size: lg;
+      .prose-utility {
+        --container-size: normal;
+      }
+
+      @media (hover: hover) {
+        @layer components {
+          .hover\\:prose-component:hover {
+            --container-size: normal;
           }
-        }"
-      `)
+        }
+
+        .hover\\:prose-utility:hover {
+          --container-size: normal;
+        }
+      }"
+    `)
   })
 })
 
