@@ -124,6 +124,11 @@ async function downloadAndExtractBinary(packageName) {
 }
 
 async function main() {
+  // Don't run this script in the package source
+  if (fs.existsSync(path.join(__dirname, '..', 'build.rs'))) {
+    return
+  }
+
   const packageName = getPlatformPackageName()
   if (!packageName) return
   if (isPackageAvailable(packageName)) return
