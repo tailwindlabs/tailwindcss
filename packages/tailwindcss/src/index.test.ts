@@ -612,6 +612,84 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/17924
+  it('should correctly apply nested usages of @apply when one @utility applies another', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --color-green-500: green;
+            --color-red-500: red;
+            --color-indigo-500: indigo;
+          }
+
+          @tailwind utilities;
+
+          @utility test2 {
+            @apply test;
+          }
+
+          @utility test {
+            @apply bg-green-500;
+            &:hover {
+              @apply bg-red-500;
+            }
+            &:disabled {
+              @apply bg-indigo-500;
+            }
+          }
+
+          .foo {
+            @apply test2;
+          }
+        `,
+        ['foo', 'test', 'test2'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-green-500: green;
+        --color-red-500: red;
+        --color-indigo-500: indigo;
+      }
+
+      .test {
+        background-color: var(--color-green-500);
+      }
+
+      .test:hover {
+        background-color: var(--color-red-500);
+      }
+
+      .test:disabled {
+        background-color: var(--color-indigo-500);
+      }
+
+      .test2 {
+        background-color: var(--color-green-500);
+      }
+
+      .test2:hover {
+        background-color: var(--color-red-500);
+      }
+
+      .test2:disabled {
+        background-color: var(--color-indigo-500);
+      }
+
+      .foo {
+        background-color: var(--color-green-500);
+      }
+
+      .foo:hover {
+        background-color: var(--color-red-500);
+      }
+
+      .foo:disabled {
+        background-color: var(--color-indigo-500);
+      }"
+    `)
+  })
 })
 
 describe('arbitrary variants', () => {

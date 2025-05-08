@@ -23,7 +23,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let definitions = new DefaultMap(() => new Set<AstNode>())
 
   // Collect all new `@utility` definitions and all `@apply` rules first
-  walk([root], (node, { parent }) => {
+  walk([root], (node, { parent, path }) => {
     if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.
@@ -66,7 +66,12 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
       parents.add(parent)
 
       for (let dependency of resolveApplyDependencies(node, designSystem)) {
-        dependencies.get(parent).add(dependency)
+        // Mark every parent in the path as having a dependency to that utility.
+        for (let parent of path) {
+          if (parent === node) continue
+          if (!parents.has(parent)) continue
+          dependencies.get(parent).add(dependency)
+        }
       }
     }
   })
@@ -151,11 +156,10 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   for (let parent of sorted) {
     if (!('nodes' in parent)) continue
 
-    for (let i = 0; i < parent.nodes.length; i++) {
-      let node = parent.nodes[i]
-      if (node.kind !== 'at-rule' || node.name !== '@apply') continue
+    walk(parent.nodes, (child, { replaceWith }) => {
+      if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-      let candidates = node.params.split(/\s+/g)
+      let candidates = child.params.split(/\s+/g)
 
       // Replace the `@apply` rule with the actual utility classes
       {
@@ -181,10 +185,11 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           }
         }
 
-        parent.nodes.splice(i, 1, ...newNodes)
+        replaceWith(newNodes)
       }
-    }
+    })
   }
+
   return features
 }
 
