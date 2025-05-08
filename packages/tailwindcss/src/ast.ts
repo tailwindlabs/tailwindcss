@@ -1,6 +1,7 @@
 import { Polyfills } from '.'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
+import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
@@ -12,6 +13,9 @@ export type StyleRule = {
   kind: 'rule'
   selector: string
   nodes: AstNode[]
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type AtRule = {
@@ -19,6 +23,9 @@ export type AtRule = {
   name: string
   params: string
   nodes: AstNode[]
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Declaration = {
@@ -26,22 +33,34 @@ export type Declaration = {
   property: string
   value: string | undefined
   important: boolean
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Comment = {
   kind: 'comment'
   value: string
+
+  src?: SourceLocation
+  dst?: SourceLocation
 }
 
 export type Context = {
   kind: 'context'
   context: Record<string, string | boolean>
   nodes: AstNode[]
+
+  src?: undefined
+  dst?: undefined
 }
 
 export type AtRoot = {
   kind: 'at-root'
   nodes: AstNode[]
+
+  src?: undefined
+  dst?: undefined
 }
 
 export type Rule = StyleRule | AtRule
@@ -378,10 +397,13 @@ export function optimizeAst(
           }
         }
 
+        let fallback = decl(property, initialValue ?? 'initial')
+        fallback.src = node.src
+
         if (inherits) {
-          propertyFallbacksRoot.push(decl(property, initialValue ?? 'initial'))
+          propertyFallbacksRoot.push(fallback)
         } else {
-          propertyFallbacksUniversal.push(decl(property, initialValue ?? 'initial'))
+          propertyFallbacksUniversal.push(fallback)
         }
       }
 
@@ -623,6 +645,7 @@ export function optimizeAst(
           value: ValueParser.toCss(ast),
         }
         let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [declaration])
+        colorMixQuery.src = declaration.src
         parent.splice(idx, 1, fallback, colorMixQuery)
       }
     }
@@ -632,11 +655,15 @@ export function optimizeAst(
     let fallbackAst = []
 
     if (propertyFallbacksRoot.length > 0) {
-      fallbackAst.push(rule(':root, :host', propertyFallbacksRoot))
+      let wrapper = rule(':root, :host', propertyFallbacksRoot)
+      wrapper.src = propertyFallbacksRoot[0].src
+      fallbackAst.push(wrapper)
     }
 
     if (propertyFallbacksUniversal.length > 0) {
-      fallbackAst.push(rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal))
+      let wrapper = rule('*, ::before, ::after, ::backdrop', propertyFallbacksUniversal)
+      wrapper.src = propertyFallbacksUniversal[0].src
+      fallbackAst.push(wrapper)
     }
 
     if (fallbackAst.length > 0) {
@@ -658,30 +685,43 @@ export function optimizeAst(
         return true
       })
 
+      let layerPropertiesStatement = atRule('@layer', 'properties', [])
+      layerPropertiesStatement.src = fallbackAst[0].src
+
       newAst.splice(
         firstValidNodeIndex < 0 ? newAst.length : firstValidNodeIndex,
         0,
-        atRule('@layer', 'properties', []),
+        layerPropertiesStatement,
       )
 
-      newAst.push(
-        rule('@layer properties', [
-          atRule(
-            '@supports',
-            // We can't write a supports query for `@property` directly so we have to test for
-            // features that are added around the same time in Mozilla and Safari.
-            '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
-            fallbackAst,
-          ),
-        ]),
-      )
+      let block = rule('@layer properties', [
+        atRule(
+          '@supports',
+          // We can't write a supports query for `@property` directly so we have to test for
+          // features that are added around the same time in Mozilla and Safari.
+          '((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
+          fallbackAst,
+        ),
+      ])
+
+      block.src = fallbackAst[0].src
+      block.nodes[0].src = fallbackAst[0].src
+
+      newAst.push(block)
     }
   }
 
   return newAst
 }
 
-export function toCss(ast: AstNode[]) {
+export function toCss(ast: AstNode[], track?: boolean) {
+  let pos = 0
+
+  let source: Source = {
+    file: null,
+    code: '',
+  }
+
   function stringify(node: AstNode, depth = 0): string {
     let css = ''
     let indent = '  '.repeat(depth)
@@ -689,15 +729,70 @@ export function toCss(ast: AstNode[]) {
     // Declaration
     if (node.kind === 'declaration') {
       css += `${indent}${node.property}: ${node.value}${node.important ? ' !important' : ''};\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // node.property
+        let start = pos
+        pos += node.property.length
+
+        // `: `
+        pos += 2
+
+        // node.value
+        pos += node.value?.length ?? 0
+
+        // !important
+        if (node.important) {
+          pos += 11
+        }
+
+        let end = pos
+
+        // `;\n`
+        pos += 2
+
+        node.dst = [source, start, end]
+      }
     }
 
     // Rule
     else if (node.kind === 'rule') {
       css += `${indent}${node.selector} {\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // node.selector
+        let start = pos
+        pos += node.selector.length
+
+        // ` `
+        pos += 1
+
+        let end = pos
+        node.dst = [source, start, end]
+
+        // `{\n`
+        pos += 2
+      }
+
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
+
       css += `${indent}}\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // `}\n`
+        pos += 2
+      }
     }
 
     // AtRule
@@ -710,22 +805,97 @@ export function toCss(ast: AstNode[]) {
       // @layer base, components, utilities;
       // ```
       if (node.nodes.length === 0) {
-        return `${indent}${node.name} ${node.params};\n`
+        let css = `${indent}${node.name} ${node.params};\n`
+
+        if (track) {
+          // indent
+          pos += indent.length
+
+          // node.name
+          let start = pos
+          pos += node.name.length
+
+          // ` `
+          pos += 1
+
+          // node.params
+          pos += node.params.length
+          let end = pos
+
+          // `;\n`
+          pos += 2
+
+          node.dst = [source, start, end]
+        }
+
+        return css
       }
 
       css += `${indent}${node.name}${node.params ? ` ${node.params} ` : ' '}{\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // node.name
+        let start = pos
+        pos += node.name.length
+
+        if (node.params) {
+          // ` `
+          pos += 1
+
+          // node.params
+          pos += node.params.length
+        }
+
+        // ` `
+        pos += 1
+
+        let end = pos
+        node.dst = [source, start, end]
+
+        // `{\n`
+        pos += 2
+      }
+
       for (let child of node.nodes) {
         css += stringify(child, depth + 1)
       }
+
       css += `${indent}}\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // `}\n`
+        pos += 2
+      }
     }
 
     // Comment
     else if (node.kind === 'comment') {
       css += `${indent}/*${node.value}*/\n`
+
+      if (track) {
+        // indent
+        pos += indent.length
+
+        // The comment itself. We do this instead of just the inside because
+        // it seems more useful to have the entire comment span tracked.
+        let start = pos
+        pos += 2 + node.value.length + 2
+        let end = pos
+
+        node.dst = [source, start, end]
+
+        // `\n`
+        pos += 1
+      }
     }
 
-    // These should've been handled already by `prepareAstForPrinting` which
+    // These should've been handled already by `optimizeAst` which
     // means we can safely ignore them here. We return an empty string
     // immediately to signal that something went wrong.
     else if (node.kind === 'context' || node.kind === 'at-root') {
@@ -743,11 +913,10 @@ export function toCss(ast: AstNode[]) {
   let css = ''
 
   for (let node of ast) {
-    let result = stringify(node)
-    if (result !== '') {
-      css += result
-    }
+    css += stringify(node, 0)
   }
+
+  source.code = css
 
   return css
 }

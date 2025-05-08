@@ -412,8 +412,9 @@ describe('--theme(…)', () => {
         [],
         {
           loadModule: async () => ({
-            module: () => {},
+            path: '',
             base: '/root',
+            module: () => {},
           }),
         },
       ),
@@ -771,7 +772,11 @@ describe('theme(…)', () => {
               }
             `,
             {
-              loadModule: async () => ({ module: {}, base: '/root' }),
+              loadModule: async () => ({
+                path: '',
+                base: '/root',
+                module: {},
+              }),
             },
           )
 
@@ -1196,6 +1201,8 @@ describe('in plugins', () => {
       {
         async loadModule() {
           return {
+            path: '',
+            base: '/root',
             module: plugin(({ addBase, addUtilities }) => {
               addBase({
                 '.my-base-rule': {
@@ -1212,7 +1219,6 @@ describe('in plugins', () => {
                 },
               })
             }),
-            base: '/root',
           }
         },
       },
@@ -1253,6 +1259,8 @@ describe('in JS config files', () => {
       `,
       {
         loadModule: async () => ({
+          path: '',
+          base: '/root',
           module: {
             theme: {
               extend: {
@@ -1279,7 +1287,6 @@ describe('in JS config files', () => {
               }),
             ],
           },
-          base: '/root',
         }),
       },
     )
@@ -1314,6 +1321,7 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
       {
         async loadStylesheet() {
           return {
+            path: '',
             base: '/bar.css',
             content: css`
               .red {

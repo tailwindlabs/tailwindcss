@@ -2216,7 +2216,7 @@ async function render(page: Page, content: string, extraCss: string = '') {
   let scanner = new Scanner({})
   let candidates = scanner.scanFiles([{ content, extension: 'html' }])
 
-  let styles = optimize(build(candidates))
+  let { code: styles } = optimize(build(candidates))
 
   content = `<style type="text/css">${styles}</style>${content}`
   await page.setContent(content)

@@ -5,7 +5,9 @@ import fs from 'node:fs/promises'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { stripVTControlCharacters } from 'node:util'
+import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
+import { createLineTable } from '../packages/tailwindcss/src/source-maps/line-table'
 import { escape } from '../packages/tailwindcss/src/utils/escape'
 
 const REPO_ROOT = path.join(__dirname, '..')
@@ -42,6 +44,7 @@ interface TestContext {
   expect: ExpectStatic
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
+  parseSourceMap(opts: string | SourceMapOptions): SourceMap
   fs: {
     write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
     create(filePaths: string[]): Promise<void>
@@ -104,6 +107,7 @@ export function test(
       let context = {
         root,
         expect: options.expect,
+        parseSourceMap,
         async exec(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
@@ -591,7 +595,9 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   }
 
   return stylesheets.reduce((acc, css) => {
-    return acc + '\n' + css
+    if (acc.length > 0) acc += '\n'
+    acc += css
+    return acc
   }, '')
 }
 
@@ -601,5 +607,84 @@ async function gracefullyRemove(dir: string) {
     await fs.rm(dir, { recursive: true, force: true }).catch((error) => {
       console.log(`Failed to remove ${dir}`, error)
     })
+  }
+}
+
+const SOURCE_MAP_COMMENT = /^\/\*# sourceMappingURL=data:application\/json;base64,(.*) \*\/$/
+
+export interface SourceMap {
+  at(
+    line: number,
+    column: number,
+  ): {
+    source: string | null
+    original: string
+    generated: string
+  }
+}
+
+interface SourceMapOptions {
+  /**
+   * A raw source map
+   *
+   * This may be a string or an object. Strings will be decoded.
+   */
+  map: string | object
+
+  /**
+   * The content of the generated file the source map is for
+   */
+  content: string
+
+  /**
+   * The encoding of the source map
+   *
+   * Can be used to decode a base64 map (e.g. an inline source map URI)
+   */
+  encoding?: BufferEncoding
+}
+
+function parseSourceMap(opts: string | SourceMapOptions): SourceMap {
+  if (typeof opts === 'string') {
+    let lines = opts.trimEnd().split('\n')
+    let comment = lines.at(-1) ?? ''
+    let map = String(comment).match(SOURCE_MAP_COMMENT)?.[1] ?? null
+    if (!map) throw new Error('No source map comment found')
+
+    return parseSourceMap({
+      map,
+      content: lines.slice(0, -1).join('\n'),
+      encoding: 'base64',
+    })
+  }
+
+  let rawMap: RawSourceMap
+  let content = opts.content
+
+  if (typeof opts.map === 'object') {
+    rawMap = opts.map as RawSourceMap
+  } else {
+    rawMap = JSON.parse(Buffer.from(opts.map, opts.encoding ?? 'utf-8').toString())
+  }
+
+  let map = new SourceMapConsumer(rawMap)
+  let generatedTable = createLineTable(content)
+
+  return {
+    at(line: number, column: number) {
+      let pos = map.originalPositionFor({ line, column })
+      let source = pos.source ? map.sourceContentFor(pos.source) : null
+      let originalTable = createLineTable(source ?? '')
+      let originalOffset = originalTable.findOffset(pos)
+      let generatedOffset = generatedTable.findOffset({ line, column })
+
+      return {
+        source: pos.source,
+        original: source
+          ? source.slice(originalOffset, originalOffset + 10).trim() + '...'
+          : '(none)',
+        generated: content.slice(generatedOffset, generatedOffset + 10).trim() + '...',
+      }
+    },
   }
 }

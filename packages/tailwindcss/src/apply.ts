@@ -2,6 +2,7 @@ import { Features } from '.'
 import { rule, toCss, walk, WalkAction, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
+import type { SourceLocation } from './source-maps/source'
 import { DefaultMap } from './utils/default-map'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
@@ -159,17 +160,59 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
     walk(parent.nodes, (child, { replaceWith }) => {
       if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-      let candidates = child.params.split(/\s+/g)
+      let parts = child.params.split(/(\s+)/g)
+      let candidateOffsets: Record<string, number> = {}
+
+      let offset = 0
+      for (let [idx, part] of parts.entries()) {
+        if (idx % 2 === 0) candidateOffsets[part] = offset
+        offset += part.length
+      }
 
       // Replace the `@apply` rule with the actual utility classes
       {
         // Parse the candidates to an AST that we can replace the `@apply` rule
         // with.
-        let candidateAst = compileCandidates(candidates, designSystem, {
+        let candidates = Object.keys(candidateOffsets)
+        let compiled = compileCandidates(candidates, designSystem, {
           onInvalidCandidate: (candidate) => {
             throw new Error(`Cannot apply unknown utility class: ${candidate}`)
           },
-        }).astNodes
+        })
+
+        let src = child.src
+
+        let candidateAst = compiled.astNodes.map((node) => {
+          let candidate = compiled.nodeSorting.get(node)?.candidate
+          let candidateOffset = candidate ? candidateOffsets[candidate] : undefined
+
+          node = structuredClone(node)
+
+          if (!src || !candidate || candidateOffset === undefined) {
+            // While the original nodes may have come from an `@utility` we still
+            // want to replace the source because the `@apply` is ultimately the
+            // reason the node was emitted into the AST.
+            walk([node], (node) => {
+              node.src = src
+            })
+
+            return node
+          }
+
+          let candidateSrc: SourceLocation = [src[0], src[1], src[2]]
+
+          candidateSrc[1] += 7 /* '@apply '.length */ + candidateOffset
+          candidateSrc[2] = candidateSrc[1] + candidate.length
+
+          // While the original nodes may have come from an `@utility` we still
+          // want to replace the source because the `@apply` is ultimately the
+          // reason the node was emitted into the AST.
+          walk([node], (node) => {
+            node.src = candidateSrc
+          })
+
+          return node
+        })
 
         // Collect the nodes to insert in place of the `@apply` rule. When a rule
         // was used, we want to insert its children instead of the rule because we

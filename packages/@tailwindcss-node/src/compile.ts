@@ -2,7 +2,7 @@ import EnhancedResolve from 'enhanced-resolve'
 import { createJiti, type Jiti } from 'jiti'
 import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
-import path, { dirname } from 'node:path'
+import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import {
   __unstable__loadDesignSystem as ___unstable__loadDesignSystem,
@@ -21,6 +21,7 @@ export type Resolver = (id: string, base: string) => Promise<string | false | un
 
 export interface CompileOptions {
   base: string
+  from?: string
   onDependency: (path: string) => void
   shouldRewriteUrls?: boolean
   polyfills?: Polyfills
@@ -31,6 +32,7 @@ export interface CompileOptions {
 
 function createCompileOptions({
   base,
+  from,
   polyfills,
   onDependency,
   shouldRewriteUrls,
@@ -41,6 +43,7 @@ function createCompileOptions({
   return {
     base,
     polyfills,
+    from,
     async loadModule(id: string, base: string) {
       return loadModule(id, base, onDependency, customJsResolver)
     },
@@ -125,7 +128,8 @@ export async function loadModule(
 
     let module = await importModule(pathToFileURL(resolvedPath).href)
     return {
-      base: dirname(resolvedPath),
+      path: resolvedPath,
+      base: path.dirname(resolvedPath),
       module: module.default ?? module,
     }
   }
@@ -144,7 +148,8 @@ export async function loadModule(
     onDependency(file)
   }
   return {
-    base: dirname(resolvedPath),
+    path: resolvedPath,
+    base: path.dirname(resolvedPath),
     module: module.default ?? module,
   }
 }
@@ -164,6 +169,7 @@ async function loadStylesheet(
     let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
     if (file) {
       return {
+        path: resolvedPath,
         base: path.dirname(resolvedPath),
         content: file,
       }
@@ -172,6 +178,7 @@ async function loadStylesheet(
 
   let file = await fsPromises.readFile(resolvedPath, 'utf-8')
   return {
+    path: resolvedPath,
     base: path.dirname(resolvedPath),
     content: file,
   }

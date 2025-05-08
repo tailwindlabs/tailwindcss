@@ -86,7 +86,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           kind: 'comment',
           value: `!
             * License #2
-            `,
+            `.replaceAll(/\r?\n/g, lineEndings === 'Windows' ? '\r\n' : '\n'),
         },
       ])
     })
@@ -368,7 +368,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               background-color: red;
               /* A comment */
               content: 'Hello, world!';
-            }`,
+            }`.replaceAll(/\r?\n/g, lineEndings === 'Windows' ? '\r\n' : '\n'),
             important: false,
           },
         ])
@@ -396,7 +396,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               background-color: red;
               /* A comment ; */
               content: 'Hello, world!';
-            }`,
+            }`.replaceAll(/\r?\n/g, lineEndings === 'Windows' ? '\r\n' : '\n'),
             important: false,
           },
           {
@@ -406,7 +406,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
               background-color: red;
               /* A comment } */
               content: 'Hello, world!';
-            }`,
+            }`.replaceAll(/\r?\n/g, lineEndings === 'Windows' ? '\r\n' : '\n'),
             important: false,
           },
         ])

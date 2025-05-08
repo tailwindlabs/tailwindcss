@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831), [#17854](https://github.com/tailwindlabs/tailwindcss/pull/17854))
 - Write to log file when using `DEBUG=*` ([#17906](https://github.com/tailwindlabs/tailwindcss/pull/17906))
+- Add support for source maps in development ([#17775](https://github.com/tailwindlabs/tailwindcss/pull/17775))
 
 ### Fixed
 

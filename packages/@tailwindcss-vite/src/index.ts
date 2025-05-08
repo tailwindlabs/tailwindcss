@@ -1,4 +1,12 @@
-import { compile, env, Features, Instrumentation, normalizePath, optimize } from '@tailwindcss/node'
+import {
+  compile,
+  env,
+  Features,
+  Instrumentation,
+  normalizePath,
+  optimize,
+  toSourceMap,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
@@ -34,7 +42,15 @@ export default function tailwindcss(): Plugin[] {
     function customJsResolver(id: string, base: string) {
       return jsResolver(id, base, true, isSSR)
     }
-    return new Root(id, config!.root, customCssResolver, customJsResolver)
+    return new Root(
+      id,
+      config!.root,
+      // Currently, Vite only supports CSS source maps in development and they
+      // are off by default. Check to see if we need them or not.
+      config?.css.devSourcemap ?? false,
+      customCssResolver,
+      customJsResolver,
+    )
   })
 
   return [
@@ -68,14 +84,14 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!generated) {
+        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+        if (!result) {
           roots.delete(id)
           return src
         }
 
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
-        return { code: generated }
+        return result
       },
     },
 
@@ -93,18 +109,21 @@ export default function tailwindcss(): Plugin[] {
 
         let root = roots.get(id)
 
-        let generated = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!generated) {
+        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+        if (!result) {
           roots.delete(id)
           return src
         }
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
         DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-        generated = optimize(generated, { minify })
+        result = optimize(result.code, {
+          minify,
+          map: result.map,
+        })
         DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
 
-        return { code: generated }
+        return result
       },
     },
   ] satisfies Plugin[]
@@ -173,6 +192,7 @@ class Root {
     private id: string,
     private base: string,
 
+    private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
     private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
   ) {}
@@ -183,7 +203,13 @@ class Root {
     content: string,
     _addWatchFile: (file: string) => void,
     I: Instrumentation,
-  ): Promise<string | false> {
+  ): Promise<
+    | {
+        code: string
+        map: string | undefined
+      }
+    | false
+  > {
     let inputPath = idToPath(this.id)
 
     function addWatchFile(file: string) {
@@ -215,6 +241,7 @@ class Root {
       DEBUG && I.start('Setup compiler')
       let addBuildDependenciesPromises: Promise<void>[] = []
       this.compiler = await compile(content, {
+        from: this.enableSourceMaps ? this.id : undefined,
         base: inputBase,
         shouldRewriteUrls: true,
         onDependency: (path) => {
@@ -313,10 +340,17 @@ class Root {
     }
 
     DEBUG && I.start('Build CSS')
-    let result = this.compiler.build([...this.candidates])
+    let code = this.compiler.build([...this.candidates])
     DEBUG && I.end('Build CSS')
 
-    return result
+    DEBUG && I.start('Build Source Map')
+    let map = this.enableSourceMaps ? toSourceMap(this.compiler.buildSourceMap()).raw : undefined
+    DEBUG && I.end('Build Source Map')
+
+    return {
+      code,
+      map,
+    }
   }
 
   private async addBuildDependency(path: string) {

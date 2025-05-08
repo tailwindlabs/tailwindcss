@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "dedent": "1.5.3",
-    "fast-glob": "^3.3.3"
+    "fast-glob": "^3.3.3",
+    "source-map-js": "^1.2.1"
   }
 }

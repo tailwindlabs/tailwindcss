@@ -26,6 +26,7 @@ import { applyVariant, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { createSourceMap, type DecodedSourceMap } from './source-maps/source-map'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
@@ -51,13 +52,25 @@ export const enum Polyfills {
 
 type CompileOptions = {
   base?: string
+  from?: string
   polyfills?: Polyfills
   loadModule?: (
     id: string,
     base: string,
     resourceHint: 'plugin' | 'config',
-  ) => Promise<{ module: Plugin | Config; base: string }>
-  loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
+  ) => Promise<{
+    path: string
+    base: string
+    module: Plugin | Config
+  }>
+  loadStylesheet?: (
+    id: string,
+    base: string,
+  ) => Promise<{
+    path: string
+    base: string
+    content: string
+  }>
 }
 
 function throwOnLoadModule(): never {
@@ -125,6 +138,7 @@ async function parseCss(
   ast: AstNode[],
   {
     base = '',
+    from,
     loadModule = throwOnLoadModule,
     loadStylesheet = throwOnLoadStylesheet,
   }: CompileOptions = {},
@@ -132,7 +146,7 @@ async function parseCss(
   let features = Features.None
   ast = [contextNode({ base }, ast)] as AstNode[]
 
-  features |= await substituteAtImports(ast, base, loadStylesheet)
+  features |= await substituteAtImports(ast, base, loadStylesheet, 0, from !== undefined)
 
   let important = null as boolean | null
   let theme = new Theme()
@@ -528,7 +542,7 @@ async function parseCss(
 
         if (child.kind === 'comment') return
         if (child.kind === 'declaration' && child.property.startsWith('--')) {
-          theme.add(unescape(child.property), child.value ?? '', themeOptions)
+          theme.add(unescape(child.property), child.value ?? '', themeOptions, child.src)
           return
         }
 
@@ -546,6 +560,7 @@ async function parseCss(
       // theme later, and delete any other `@theme` rules.
       if (!firstThemeRule) {
         firstThemeRule = styleRule(':root, :host', [])
+        firstThemeRule.src = node.src
         replaceWith([firstThemeRule])
       } else {
         replaceWith([])
@@ -593,8 +608,9 @@ async function parseCss(
 
     for (let [key, value] of designSystem.theme.entries()) {
       if (value.options & ThemeOptions.REFERENCE) continue
-
-      nodes.push(decl(escape(key), value.value))
+      let node = decl(escape(key), value.value)
+      node.src = value.src
+      nodes.push(node)
     }
 
     let keyframesRules = designSystem.theme.getKeyframes()
@@ -748,6 +764,16 @@ export async function compileAst(
         onInvalidCandidate,
       }).astNodes
 
+      if (opts.from) {
+        walk(newNodes, (node) => {
+          // We do this conditionally to preserve source locations from both
+          // `@utility` and `@custom-variant`. Even though generated nodes are
+          // cached this should be fine because `utilitiesNode.src` should not
+          // change without a full rebuild which destroys the cache.
+          node.src ??= utilitiesNode.src
+        })
+      }
+
       // If no new ast nodes were generated, then we can return the original
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
@@ -766,6 +792,8 @@ export async function compileAst(
   }
 }
 
+export type { DecodedSourceMap }
+
 export async function compile(
   css: string,
   opts: CompileOptions = {},
@@ -774,8 +802,9 @@ export async function compile(
   root: Root
   features: Features
   build(candidates: string[]): string
+  buildSourceMap(): DecodedSourceMap
 }> {
-  let ast = CSS.parse(css)
+  let ast = CSS.parse(css, { from: opts.from })
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
@@ -789,10 +818,16 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst)
+      compiledCss = toCss(newAst, !!opts.from)
       compiledAst = newAst
 
       return compiledCss
+    },
+
+    buildSourceMap() {
+      return createSourceMap({
+        ast: compiledAst,
+      })
     },
   }
 }

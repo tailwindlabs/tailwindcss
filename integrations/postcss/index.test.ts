@@ -712,3 +712,68 @@ test(
     await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
   },
 )
+
+test(
+  'dev mode + source maps',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^11",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          map: { inline: true },
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @source not inline("inline");
+        /*  */
+      `,
+    },
+  },
+  async ({ fs, exec, expect, parseSourceMap }) => {
+    await exec('pnpm postcss src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+    let map = parseSourceMap(await fs.read('dist/out.css'))
+
+    expect(map.at(1, 0)).toMatchObject({
+      source: '<no source>',
+      original: '(none)',
+      generated: '/*! tailwi...',
+    })
+
+    expect(map.at(2, 0)).toMatchObject({
+      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      original: '@tailwind...',
+      generated: '.flex {...',
+    })
+
+    expect(map.at(3, 2)).toMatchObject({
+      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      original: '@tailwind...',
+      generated: 'display: f...',
+    })
+
+    expect(map.at(4, 0)).toMatchObject({
+      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      original: ';...',
+      generated: '}...',
+    })
+  },
+)
