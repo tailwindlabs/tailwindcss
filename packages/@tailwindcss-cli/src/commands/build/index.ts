@@ -119,8 +119,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // If the user passes `{bin} build --map -` then this likely means they want to output the map inline
   // this is the default behavior of `{bin build} --map` to inform the user of that
   if (args['--map'] === '-') {
-    eprintln(header())
-    eprintln()
     eprintln(`Use --map without a value to inline the source map`)
     process.exit(1)
   }
