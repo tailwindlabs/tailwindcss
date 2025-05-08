@@ -9,6 +9,7 @@ gts
 # JS
 astro
 cjs
+ejs
 cts
 jade
 js
