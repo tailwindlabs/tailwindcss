@@ -312,7 +312,7 @@ jobs:
           script: |
             await github.rest.actions.createWorkflowDispatch({
               owner: 'tailwindlabs',
-              repo: 'play.tailwindcss.com',
-              ref: 'master',
+              repo: 'upgrades',
+              ref: 'main',
               workflow_id: 'upgrade-tailwindcss.yml'
             })
