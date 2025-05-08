@@ -32,6 +32,10 @@
     }
   },
   "license": "MIT",
+  "dependencies": {
+    "tar": "^7.4.3",
+    "detect-libc": "^2.0.4"
+  },
   "devDependencies": {
     "@napi-rs/cli": "^3.0.0-alpha.78",
     "@napi-rs/wasm-runtime": "^0.2.9",
@@ -42,7 +46,8 @@
   },
   "files": [
     "index.js",
-    "index.d.ts"
+    "index.d.ts",
+    "scripts/install.js"
   ],
   "publishConfig": {
     "provenance": true,
@@ -57,7 +62,8 @@
     "postbuild:wasm": "node ./scripts/move-artifacts.mjs",
     "dev": "cargo watch --quiet --shell 'npm run build'",
     "build:debug": "napi build --platform --no-const-enum",
-    "version": "napi version"
+    "version": "napi version",
+    "postinstall": "node ./scripts/install.js"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-android-arm64": "workspace:*",

@@ -122,7 +122,10 @@ export function test(
               {
                 cwd,
                 ...childProcessOptions,
-                env: childProcessOptions.env,
+                env: {
+                  ...process.env,
+                  ...childProcessOptions.env,
+                },
               },
               (error, stdout, stderr) => {
                 if (error) {
