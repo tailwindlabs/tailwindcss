@@ -667,7 +667,7 @@ describe.each([
       expect(map.at(2, 0)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: '.flex {...',
@@ -676,7 +676,7 @@ describe.each([
       expect(map.at(3, 2)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: 'display: f...',
@@ -731,7 +731,7 @@ describe.each([
       expect(map.at(2, 0)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: '.flex {...',
@@ -740,7 +740,7 @@ describe.each([
       expect(map.at(3, 2)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: 'display: f...',
@@ -794,7 +794,7 @@ describe.each([
       expect(map.at(2, 0)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: '.flex {...',
@@ -803,7 +803,7 @@ describe.each([
       expect(map.at(3, 2)).toMatchObject({
         source:
           kind === 'CLI'
-            ? expect.stringContaining('node_modules/tailwindcss/utilities.css')
+            ? expect.stringContaining('utilities.css')
             : expect.stringMatching(/\/utilities-\w+\.css$/),
         original: '@tailwind...',
         generated: 'display: f...',

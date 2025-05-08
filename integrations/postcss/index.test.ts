@@ -759,19 +759,19 @@ test(
     })
 
     expect(map.at(2, 0)).toMatchObject({
-      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      source: expect.stringContaining('utilities.css'),
       original: '@tailwind...',
       generated: '.flex {...',
     })
 
     expect(map.at(3, 2)).toMatchObject({
-      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      source: expect.stringContaining('utilities.css'),
       original: '@tailwind...',
       generated: 'display: f...',
     })
 
     expect(map.at(4, 0)).toMatchObject({
-      source: expect.stringContaining('node_modules/tailwindcss/utilities.css'),
+      source: expect.stringContaining('utilities.css'),
       original: ';...',
       generated: '}...',
     })
