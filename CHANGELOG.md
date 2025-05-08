@@ -40,6 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade: Don't add `-` to variants starting with `@` ([#17814](https://github.com/tailwindlabs/tailwindcss/pull/17814))
 - Upgrade: Don't format stylesheets that didn't change when upgrading ([#17824](https://github.com/tailwindlabs/tailwindcss/pull/17824))
 
+### Changed
+
+- Ignore `.hg`, `.svn`, `.venv`, `venv`, `.yarn`, `.next`, `.turbo`, `.parcel-cache`, `__pycache__`, and `.svelte-kit` folders by default (can be overridden by `@source …` rules) ([#17892](https://github.com/tailwindlabs/tailwindcss/pull/17892))
+- `@source` rules that point inside `.hg`, `.svn`, `.venv`, `venv`, `.yarn`, `.next`, `.turbo`, `.parcel-cache`, `__pycache__`, and `.svelte-kit` folders no longer consider your `.gitignore` rules ([#17892](https://github.com/tailwindlabs/tailwindcss/pull/17892))
+
 ## [4.1.4] - 2025-04-14
 
 ### Added

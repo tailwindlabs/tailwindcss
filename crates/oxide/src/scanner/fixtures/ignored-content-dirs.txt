@@ -1,2 +1,12 @@
 .git
+.hg
+.svn
 node_modules
+.yarn
+.venv
+venv
+.next
+.turbo
+.parcel-cache
+__pycache__
+.svelte-kit
