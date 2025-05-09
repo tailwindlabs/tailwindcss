@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.6] - 2025-05-09
+
 ### Added
 
 - Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831), [#17854](https://github.com/tailwindlabs/tailwindcss/pull/17854))
@@ -3696,7 +3700,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...HEAD
+[4.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...v4.1.6
 [4.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.4...v4.1.5
 [4.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...v4.1.4
 [4.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...v4.1.3
