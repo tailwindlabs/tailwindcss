@@ -279,7 +279,11 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 Class::Number => {
                     if !matches!(
                         cursor.prev.into(),
-                        Class::Dash | Class::Dot | Class::Number | Class::AlphaLower
+                        Class::Dash
+                            | Class::Underscore
+                            | Class::Dot
+                            | Class::Number
+                            | Class::AlphaLower
                     ) {
                         return self.restart();
                     }
