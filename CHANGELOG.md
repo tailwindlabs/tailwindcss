@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.6] - 2025-05-09
+
 ### Added
 
-- Upgrade: Automatically convert candidates with arbitrary values to their utilities ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831), [#17854](https://github.com/tailwindlabs/tailwindcss/pull/17854))
-- Write to log file when using `DEBUG=*` ([#17906](https://github.com/tailwindlabs/tailwindcss/pull/17906), [#17952](https://github.com/tailwindlabs/tailwindcss/pull/17952))
-- Add support for source maps in development ([#17775](https://github.com/tailwindlabs/tailwindcss/pull/17775))
+- Upgrade: Automatically convert arbitrary values to named values when possible (e.g. `h-[1lh]` to `h-lh`) ([#17831](https://github.com/tailwindlabs/tailwindcss/pull/17831), [#17854](https://github.com/tailwindlabs/tailwindcss/pull/17854))
+- Upgrade: Update dependencies in parallel for improved performance ([#17898](https://github.com/tailwindlabs/tailwindcss/pull/17898))
+- Add detailed logging about `@source` directives, discovered files and scanned files when using `DEBUG=*` ([#17906](https://github.com/tailwindlabs/tailwindcss/pull/17906), [#17952](https://github.com/tailwindlabs/tailwindcss/pull/17952))
+- Add support for generating source maps in development ([#17775](https://github.com/tailwindlabs/tailwindcss/pull/17775))
 
 ### Fixed
 
@@ -19,9 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix HAML extraction with embedded Ruby ([#17846](https://github.com/tailwindlabs/tailwindcss/pull/17846))
 - Don't scan files for utilities when using `@reference` ([#17836](https://github.com/tailwindlabs/tailwindcss/pull/17836))
 - Fix incorrectly replacing `_` with ` ` in arbitrary modifier shorthand `bg-red-500/(--my_opacity)` ([#17889](https://github.com/tailwindlabs/tailwindcss/pull/17889))
-- Upgrade: Bump dependencies in parallel and make the upgrade faster ([#17898](https://github.com/tailwindlabs/tailwindcss/pull/17898))
 - Don't scan `.log` files for classes by default ([#17906](https://github.com/tailwindlabs/tailwindcss/pull/17906))
 - Ensure that custom utilities applying other custom utilities don't swallow nested `@apply` rules ([#17925](https://github.com/tailwindlabs/tailwindcss/pull/17925))
+- Download platform specific package if `optionalDependencies` are skipped ([#17929](https://github.com/tailwindlabs/tailwindcss/pull/17929))
 
 ## [4.1.5] - 2025-04-30
 
@@ -3696,7 +3701,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...HEAD
+[4.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...v4.1.6
 [4.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.4...v4.1.5
 [4.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...v4.1.4
 [4.1.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.2...v4.1.3
