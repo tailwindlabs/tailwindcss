@@ -145,6 +145,14 @@ function legacyTheme(
     )
   }
 
+  // Detect eventual recursive theme function calls.
+  let regex = new RegExp('theme\\(\\s*[\'\"]?' + path)
+  if (typeof resolvedValue === 'string' && resolvedValue.match(regex)) {
+    throw new Error(
+      `Could not resolve value for theme function: \`theme(${path})\`. The resolved value \`${resolvedValue}\` contains a recursive reference to itself.`,
+    )
+  }
+
   return resolvedValue
 }
 

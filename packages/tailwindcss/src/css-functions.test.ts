@@ -433,6 +433,27 @@ describe('--theme(…)', () => {
       }"
     `)
   })
+
+  test('--theme(…) prevents infinite loops with circular references', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --font-sans: 'Inter', --theme(--font-sans);
+        }
+        .font {
+          font-family: var(--font-sans);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --font-sans: "Inter", var(--font-sans);
+      }
+
+      .font {
+        font-family: var(--font-sans);
+      }"
+    `)
+  })
 })
 
 describe('theme(…)', () => {
@@ -902,6 +923,19 @@ describe('theme(…)', () => {
             color: oklab(62.7955% .224 .125 / .25);
           }"
         `)
+      })
+
+      test('theme(…) prevents infinite loops with circular references', async () => {
+        await expect(
+          compileCss(css`
+            @theme {
+              --font-sans: 'Inter', theme(fontFamily.sans);
+            }
+            .font {
+              font-family: var(--font-sans);
+            }
+          `),
+        ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Could not resolve value for theme function: \`theme(fontFamily.sans)\`. The resolved value \`'Inter', theme(fontFamily.sans)\` contains a recursive reference to itself.]`)
       })
     })
 
