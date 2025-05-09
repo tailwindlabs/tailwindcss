@@ -128,15 +128,16 @@ async function main() {
     if (fs.existsSync(path.join(__dirname, '..', 'build.rs'))) {
       return
     }
-  } catch {
+
+    let packageName = getPlatformPackageName()
+    if (!packageName) return
+    if (isPackageAvailable(packageName)) return
+
+    await downloadAndExtractBinary(packageName)
+  } catch (error) {
+    console.error(error)
     return
   }
-
-  let packageName = getPlatformPackageName()
-  if (!packageName) return
-  if (isPackageAvailable(packageName)) return
-
-  await downloadAndExtractBinary(packageName)
 }
 
 main()
