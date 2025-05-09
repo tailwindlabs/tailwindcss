@@ -153,7 +153,23 @@ pub struct Scanner {
 
 impl Scanner {
     pub fn new(sources: Vec<PublicSourceEntry>) -> Self {
+        init_tracing();
+
+        if *SHOULD_TRACE {
+            event!(tracing::Level::INFO, "Provided sources:");
+            for source in &sources {
+                event!(tracing::Level::INFO, "Source: {:?}", source);
+            }
+        }
+
         let sources = Sources::new(public_source_entries_to_private_source_entries(sources));
+
+        if *SHOULD_TRACE {
+            event!(tracing::Level::INFO, "Optimized sources:");
+            for source in sources.iter() {
+                event!(tracing::Level::INFO, "Source: {:?}", source);
+            }
+        }
 
         Self {
             sources: sources.clone(),
@@ -163,7 +179,6 @@ impl Scanner {
     }
 
     pub fn scan(&mut self) -> Vec<String> {
-        init_tracing();
         self.scan_sources();
 
         // TODO: performance improvement, bail early if we don't have any changed content
