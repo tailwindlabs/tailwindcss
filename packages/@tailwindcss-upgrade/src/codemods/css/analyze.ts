@@ -39,7 +39,7 @@ export async function analyze(stylesheets: Stylesheet[]) {
       AtRule: {
         import(node) {
           // Find what the import points to
-          let id = node.params.match(/['"](.*)['"]/)?.[1]
+          let id = node.params.match(/['"](.*?)['"]/)?.[1]
           if (!id) return
 
           let basePath = node.source?.input.file
