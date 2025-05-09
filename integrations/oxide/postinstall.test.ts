@@ -53,10 +53,10 @@ test(
 )
 
 async function removePlatformSpecificExtensions(directory: string) {
-  const entries = await fs.readdir(directory, { withFileTypes: true })
+  let entries = await fs.readdir(directory, { withFileTypes: true })
 
-  for (const entry of entries) {
-    const fullPath = path.join(directory, entry.name)
+  for (let entry of entries) {
+    let fullPath = path.join(directory, entry.name)
 
     if (entry.name.startsWith('oxide-')) {
       if (entry.isSymbolicLink()) {

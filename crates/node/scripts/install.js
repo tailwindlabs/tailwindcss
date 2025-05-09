@@ -17,8 +17,8 @@ const detectLibc = require('detect-libc')
 const version = packageJson.version
 
 function getPlatformPackageName() {
-  const platform = process.platform
-  const arch = process.arch
+  let platform = process.platform
+  let arch = process.arch
 
   let libc = ''
   if (platform === 'linux') {
@@ -129,7 +129,7 @@ async function main() {
     return
   }
 
-  const packageName = getPlatformPackageName()
+  let packageName = getPlatformPackageName()
   if (!packageName) return
   if (isPackageAvailable(packageName)) return
 
