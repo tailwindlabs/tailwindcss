@@ -279,7 +279,11 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 Class::Number => {
                     if !matches!(
                         cursor.prev.into(),
-                        Class::Dash | Class::Dot | Class::Number | Class::AlphaLower
+                        Class::Dash
+                            | Class::Underscore
+                            | Class::Dot
+                            | Class::Number
+                            | Class::AlphaLower
                     ) {
                         return self.restart();
                     }
@@ -415,6 +419,9 @@ mod tests {
             // With numbers
             ("px-5", vec!["px-5"]),
             ("px-2.5", vec!["px-2.5"]),
+            // Underscores followed by numbers
+            ("header_1", vec!["header_1"]),
+            ("header_1_2", vec!["header_1_2"]),
             // With number followed by dash or underscore
             ("text-title1-strong", vec!["text-title1-strong"]),
             ("text-title1_strong", vec!["text-title1_strong"]),
