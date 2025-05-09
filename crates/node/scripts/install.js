@@ -48,7 +48,6 @@ function getPlatformPackageName() {
       break
     case 'freebsd':
       return '@tailwindcss/oxide-freebsd-x64'
-
     case 'android':
       return '@tailwindcss/oxide-android-arm64'
     default:
