@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/postcss-import": "14.0.3",
-    "dedent": "1.5.3",
+    "dedent": "1.6.0",
     "internal-example-plugin": "workspace:*",
     "postcss-import": "^16.1.0"
   }
