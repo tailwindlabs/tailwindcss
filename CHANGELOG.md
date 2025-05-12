@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `_` before numbers during candidate extraction ([#17961](https://github.com/tailwindlabs/tailwindcss/pull/17961))
 - Upgrade: Fix error when using `@import … source(…)` ([#17963](https://github.com/tailwindlabs/tailwindcss/pull/17963))
 - Prevent duplicate suggestions when using `@theme` and `@utility` together ([#17675](https://github.com/tailwindlabs/tailwindcss/pull/17675))
+- Ensure that running the Standalone build does not leave temporary files behind ([#17981](https://github.com/tailwindlabs/tailwindcss/pull/17981))
 
 ## [4.1.6] - 2025-05-09
 
