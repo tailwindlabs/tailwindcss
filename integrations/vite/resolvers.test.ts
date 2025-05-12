@@ -14,7 +14,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
               "tailwindcss": "workspace:^"
             },
             "devDependencies": {
-              ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
               "vite": "^5.3.5"
             }
           }
@@ -82,7 +82,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
               "tailwindcss": "workspace:^"
             },
             "devDependencies": {
-              ${transformer === 'lightningcss' ? `"lightningcss": "^1.26.0",` : ''}
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
               "vite": "^5.3.5"
             }
           }

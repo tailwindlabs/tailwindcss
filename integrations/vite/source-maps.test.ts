@@ -12,7 +12,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "lightningcss": "^1.26.0",
+            "lightningcss": "^1",
             "vite": "^6"
           }
         }

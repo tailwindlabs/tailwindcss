@@ -5278,13 +5278,16 @@ describe('`color-mix(…)` polyfill', () => {
 
       .shadow-xl {
         --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, #ff000040);
-        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
       }
 
       @supports (color: color-mix(in lab, red, red)) {
         .shadow-xl {
           --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
         }
+      }
+
+      .shadow-xl {
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
       }
 
       @property --tw-shadow {
