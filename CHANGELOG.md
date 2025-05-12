@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent duplicate suggestions when using `@theme` and `@utility` together ([#17675](https://github.com/tailwindlabs/tailwindcss/pull/17675))
 - Ensure that media queries within `::before` and `::after` pseudo selectors create valid CSS rules when building a production build ([#17979](https://github.com/tailwindlabs/tailwindcss/pull/17979))
 - `lightningcss` now statically links Visual Studio redistributables ([#17979](https://github.com/tailwindlabs/tailwindcss/pull/17979))
+- Ensure that running the Standalone build does not leave temporary files behind ([#17981](https://github.com/tailwindlabs/tailwindcss/pull/17981))
 
 ## [4.1.6] - 2025-05-09
 
