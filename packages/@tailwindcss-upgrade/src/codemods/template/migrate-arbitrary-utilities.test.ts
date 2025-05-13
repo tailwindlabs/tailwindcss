@@ -43,7 +43,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       --*: initial;
       --spacing: 0.25rem;
       --color-red-500: red;
-      --aspect-video: 16 / 9;
 
       /* Equivalent of blue-500/50 */
       --color-primary: color-mix(in oklab, oklch(62.3% 0.214 259.815) 50%, transparent);
@@ -115,9 +114,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Arbitrary percentage value must be a whole number. Should not migrate to
     // a bare value.
     ['from-[2.5%]', 'from-[2.5%]'],
-
-    // Bare values to named values
-    ['aspect-16/9', 'aspect-video'],
   ])(testName, async (candidate, result) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`
