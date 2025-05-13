@@ -27,6 +27,8 @@ test.each([
 
   ['ring', 'ring-3'],
 
+  ['outline', 'outline-solid'],
+
   ['blur!', 'blur-sm!'],
   ['hover:blur', 'hover:blur-sm'],
   ['hover:blur!', 'hover:blur-sm!'],
