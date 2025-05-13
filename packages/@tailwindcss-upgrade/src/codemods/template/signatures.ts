@@ -5,6 +5,7 @@ import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-par
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { ThemeOptions } from '../../../../tailwindcss/src/theme'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
 
@@ -236,6 +237,42 @@ export const computeUtilitySignature = new DefaultMap<
   })
 })
 
+// For all static utilities in the system, compute a lookup table that maps the
+// utility signature to the utility name. This is used to find the utility name
+// for a given utility signature.
+//
+// For all functional utilities, we can compute static-like utilities by
+// essentially pre-computing the values and modifiers. This is a bit slow, but
+// also only has to happen once per design system.
+export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>(
+  (ds) => {
+    let signatures = computeUtilitySignature.get(ds)
+    let lookup = new DefaultMap<string, string[]>(() => [])
+
+    for (let [className, meta] of ds.getClassList()) {
+      let signature = signatures.get(className)
+      if (typeof signature !== 'string') continue
+      lookup.get(signature).push(className)
+
+      for (let modifier of meta.modifiers) {
+        // Modifiers representing numbers can be computed and don't need to be
+        // pre-computed. Doing the math and at the time of writing this, this
+        // would save you 250k additionally pre-computed utilities...
+        if (isValidSpacingMultiplier(modifier)) {
+          continue
+        }
+
+        let classNameWithModifier = `${className}/${modifier}`
+        let signature = signatures.get(classNameWithModifier)
+        if (typeof signature !== 'string') continue
+        lookup.get(signature).push(classNameWithModifier)
+      }
+    }
+
+    return lookup
+  },
+)
+
 // Given a variant, compute a signature that represents the variant. The
 // signature will be a normalised form of the generated CSS for the variant, or
 // a unique symbol if the variant is not valid. The class in the selector will
@@ -341,6 +378,24 @@ export const computeVariantSignature = new DefaultMap<
     }
   })
 })
+
+export const preComputedVariants = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>(
+  (designSystem) => {
+    let signatures = computeVariantSignature.get(designSystem)
+    let lookup = new DefaultMap<string, string[]>(() => [])
+
+    // Actual static variants
+    for (let [root, variant] of designSystem.variants.entries()) {
+      if (variant.kind === 'static') {
+        let signature = signatures.get(root)
+        if (typeof signature !== 'string') continue
+        lookup.get(signature).push(root)
+      }
+    }
+
+    return lookup
+  },
+)
 
 function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => T): T {
   // Turn off `@theme inline` feature such that `@theme` and `@theme inline` are

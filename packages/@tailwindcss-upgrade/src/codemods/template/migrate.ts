@@ -9,6 +9,7 @@ import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
+import { migrateBareValueUtilities } from './migrate-bare-utilities'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
@@ -47,6 +48,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
   migrateArbitraryUtilities,
+  migrateBareValueUtilities,
   migrateModernizeArbitraryValues,
   migrateArbitraryVariants,
   migrateDropUnnecessaryDataTypes,

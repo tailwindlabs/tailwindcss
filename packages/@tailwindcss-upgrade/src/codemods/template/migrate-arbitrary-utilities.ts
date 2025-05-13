@@ -2,45 +2,11 @@ import { printModifier, type Candidate } from '../../../../tailwindcss/src/candi
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
-import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
 import type { Writable } from '../../utils/types'
-import { computeUtilitySignature } from './signatures'
-
-// For all static utilities in the system, compute a lookup table that maps the
-// utility signature to the utility name. This is used to find the utility name
-// for a given utility signature.
-//
-// For all functional utilities, we can compute static-like utilities by
-// essentially pre-computing the values and modifiers. This is a bit slow, but
-// also only has to happen once per design system.
-const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>((ds) => {
-  let signatures = computeUtilitySignature.get(ds)
-  let lookup = new DefaultMap<string, string[]>(() => [])
-
-  for (let [className, meta] of ds.getClassList()) {
-    let signature = signatures.get(className)
-    if (typeof signature !== 'string') continue
-    lookup.get(signature).push(className)
-
-    for (let modifier of meta.modifiers) {
-      // Modifiers representing numbers can be computed and don't need to be
-      // pre-computed. Doing the math and at the time of writing this, this
-      // would save you 250k additionally pre-computed utilities...
-      if (isValidSpacingMultiplier(modifier)) {
-        continue
-      }
-
-      let classNameWithModifier = `${className}/${modifier}`
-      let signature = signatures.get(classNameWithModifier)
-      if (typeof signature !== 'string') continue
-      lookup.get(signature).push(classNameWithModifier)
-    }
-  }
-
-  return lookup
-})
+import { baseCandidate, parseCandidate } from './candidates'
+import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
 const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
   () => new Map<string, Candidate>(),
@@ -114,9 +80,7 @@ export function migrateArbitraryUtilities(
     // will re-add those later but they are irrelevant for what we are trying to
     // do here (and will increase cache hits because we only have to deal with
     // the base utility, nothing more).
-    let targetCandidate = structuredClone(candidate)
-    targetCandidate.important = false
-    targetCandidate.variants = []
+    let targetCandidate = baseCandidate(candidate)
 
     let targetCandidateString = designSystem.printCandidate(targetCandidate)
     if (baseReplacementsCache.get(designSystem).has(targetCandidateString)) {
@@ -273,14 +237,6 @@ export function migrateArbitraryUtilities(
       }
     }
   }
-}
-
-function parseCandidate(designSystem: DesignSystem, input: string) {
-  return designSystem.parseCandidate(
-    designSystem.theme.prefix && !input.startsWith(`${designSystem.theme.prefix}:`)
-      ? `${designSystem.theme.prefix}:${input}`
-      : input,
-  )
 }
 
 // Let's make sure that all variables used in the value are also all used in the
