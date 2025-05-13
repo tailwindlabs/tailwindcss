@@ -5,7 +5,7 @@ import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
 import type { Writable } from '../../utils/types'
-import { baseCandidate } from './candidates'
+import { baseCandidate, parseCandidate } from './candidates'
 import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
 const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
@@ -237,14 +237,6 @@ export function migrateArbitraryUtilities(
       }
     }
   }
-}
-
-function parseCandidate(designSystem: DesignSystem, input: string) {
-  return designSystem.parseCandidate(
-    designSystem.theme.prefix && !input.startsWith(`${designSystem.theme.prefix}:`)
-      ? `${designSystem.theme.prefix}:${input}`
-      : input,
-  )
 }
 
 // Let's make sure that all variables used in the value are also all used in the

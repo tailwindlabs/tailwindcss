@@ -3,7 +3,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import type { Writable } from '../../utils/types'
-import { baseCandidate } from './candidates'
+import { baseCandidate, parseCandidate } from './candidates'
 import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
 const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
@@ -119,12 +119,4 @@ export function migrateBareValueUtilities(
       }
     }
   }
-}
-
-function parseCandidate(designSystem: DesignSystem, input: string) {
-  return designSystem.parseCandidate(
-    designSystem.theme.prefix && !input.startsWith(`${designSystem.theme.prefix}:`)
-      ? `${designSystem.theme.prefix}:${input}`
-      : input,
-  )
 }

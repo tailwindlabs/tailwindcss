@@ -1,5 +1,6 @@
 import { Scanner } from '@tailwindcss/oxide'
 import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 
 export async function extractRawCandidates(
   content: string,
@@ -23,4 +24,12 @@ export function baseCandidate<T extends Candidate>(candidate: T) {
   base.variants = []
 
   return base
+}
+
+export function parseCandidate(designSystem: DesignSystem, input: string) {
+  return designSystem.parseCandidate(
+    designSystem.theme.prefix && !input.startsWith(`${designSystem.theme.prefix}:`)
+      ? `${designSystem.theme.prefix}:${input}`
+      : input,
+  )
 }
