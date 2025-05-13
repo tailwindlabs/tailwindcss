@@ -6,6 +6,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
+import { baseCandidate } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
 
 const __filename = url.fileURLToPath(import.meta.url)
@@ -92,10 +93,8 @@ export async function migrateLegacyClasses(
     for (let candidate of designSystem.parseCandidate(rawCandidate)) {
       // Create a base candidate string from the candidate.
       // E.g.: `hover:blur!` -> `blur`
-      let baseCandidate = structuredClone(candidate) as Candidate
-      baseCandidate.variants = []
-      baseCandidate.important = false
-      let baseCandidateString = designSystem.printCandidate(baseCandidate)
+      let base = baseCandidate(candidate)
+      let baseCandidateString = designSystem.printCandidate(base)
 
       // Find the new base candidate string. `blur` -> `blur-sm`
       let newBaseCandidateString = LEGACY_CLASS_MAP.get(baseCandidateString)

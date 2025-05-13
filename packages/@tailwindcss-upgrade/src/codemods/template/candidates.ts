@@ -1,4 +1,5 @@
 import { Scanner } from '@tailwindcss/oxide'
+import type { Candidate } from '../../../../tailwindcss/src/candidate'
 
 export async function extractRawCandidates(
   content: string,
@@ -12,4 +13,14 @@ export async function extractRawCandidates(
     candidates.push({ rawCandidate, start, end: start + rawCandidate.length })
   }
   return candidates
+}
+
+// Create a basic stripped candidate without variants or important flag
+export function baseCandidate<T extends Candidate>(candidate: T) {
+  let base = structuredClone(candidate)
+
+  base.important = false
+  base.variants = []
+
+  return base
 }

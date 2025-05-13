@@ -5,6 +5,7 @@ import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { dimensions } from '../../utils/dimension'
 import type { Writable } from '../../utils/types'
+import { baseCandidate } from './candidates'
 import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
 const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
@@ -79,9 +80,7 @@ export function migrateArbitraryUtilities(
     // will re-add those later but they are irrelevant for what we are trying to
     // do here (and will increase cache hits because we only have to deal with
     // the base utility, nothing more).
-    let targetCandidate = structuredClone(candidate)
-    targetCandidate.important = false
-    targetCandidate.variants = []
+    let targetCandidate = baseCandidate(candidate)
 
     let targetCandidateString = designSystem.printCandidate(targetCandidate)
     if (baseReplacementsCache.get(designSystem).has(targetCandidateString)) {
