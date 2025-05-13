@@ -33,6 +33,8 @@ const LEGACY_CLASS_MAP = new Map([
   ['backdrop-blur-sm', 'backdrop-blur-xs'],
 
   ['ring', 'ring-3'],
+
+  ['outline', 'outline-solid'],
 ])
 
 const THEME_KEYS = new Map([

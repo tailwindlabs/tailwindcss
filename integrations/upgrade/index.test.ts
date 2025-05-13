@@ -81,6 +81,9 @@ test(
 
         <!-- Migrate to -3 -->
         <div class="ring"></div>
+
+        <!-- Migrate to -solid -->
+        <div class="outline"></div>
       `,
       'src/input.css': css`
         @tailwind base;
@@ -116,6 +119,9 @@ test(
 
       <!-- Migrate to -3 -->
       <div class="ring-3"></div>
+
+      <!-- Migrate to -solid -->
+      <div class="outline-solid"></div>
 
       --- ./src/input.css ---
       @import 'tailwindcss';
