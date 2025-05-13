@@ -79,8 +79,8 @@ export function migrateArbitraryUtilities(
     if (
       // Arbitrary property
       readonlyCandidate.kind !== 'arbitrary' &&
-      // Arbitrary value
-      !(readonlyCandidate.kind === 'functional' && readonlyCandidate.value?.kind === 'arbitrary')
+      // Functional utility
+      readonlyCandidate.kind !== 'functional'
     ) {
       continue
     }
