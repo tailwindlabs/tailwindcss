@@ -16,7 +16,6 @@ import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
-import { migrateImportant } from './migrate-important'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
@@ -41,7 +40,6 @@ export type Migration = (
 export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
   migratePrefix,
-  migrateImportant,
   migrateCanonicalizeCandidate,
   migrateBgGradient,
   migrateSimpleLegacyClasses,
