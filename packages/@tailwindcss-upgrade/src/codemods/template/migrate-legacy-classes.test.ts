@@ -58,7 +58,7 @@ test('does not replace classes in invalid positions', async () => {
     }
 
     // Skip this migration if we think that the migration is unsafe
-    if (location && !isSafeMigration(location)) {
+    if (location && !isSafeMigration(candidate, location, designSystem)) {
       return candidate
     }
 

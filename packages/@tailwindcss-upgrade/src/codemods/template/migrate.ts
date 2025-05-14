@@ -99,7 +99,7 @@ export async function migrateCandidate(
   },
 ): Promise<string> {
   // Skip this migration if we think that the migration is unsafe
-  if (location && !isSafeMigration(location)) {
+  if (location && !isSafeMigration(rawCandidate, location, designSystem)) {
     return rawCandidate
   }
 

@@ -33,7 +33,7 @@ export function migrateImportant(
       // with v3 in that it can read `!` in the front of the utility too, we err
       // on the side of caution and only migrate candidates that we are certain
       // are inside of a string.
-      if (location && !isSafeMigration(location)) {
+      if (location && !isSafeMigration(rawCandidate, location, designSystem)) {
         continue nextCandidate
       }
 
