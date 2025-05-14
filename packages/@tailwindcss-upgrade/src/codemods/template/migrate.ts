@@ -30,11 +30,6 @@ export type Migration = (
   designSystem: DesignSystem,
   userConfig: Config | null,
   rawCandidate: string,
-  location?: {
-    contents: string
-    start: number
-    end: number
-  },
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
@@ -66,7 +61,7 @@ let migrateCached = new DefaultMap<
   return new DefaultMap((userConfig) => {
     return new DefaultMap(async (rawCandidate) => {
       for (let migration of DEFAULT_MIGRATIONS) {
-        rawCandidate = await migration(designSystem, userConfig, rawCandidate, undefined)
+        rawCandidate = await migration(designSystem, userConfig, rawCandidate)
       }
       return rawCandidate
     })
