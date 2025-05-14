@@ -3,6 +3,7 @@ import path, { extname } from 'node:path'
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
 import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
@@ -58,6 +59,41 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateOptimizeModifier,
 ]
 
+interface Location {
+  contents: string
+  start: number
+  end: number
+}
+
+let migrateCached = new DefaultMap<
+  DesignSystem,
+  DefaultMap<Config | null, DefaultMap<Location | undefined, DefaultMap<string, Promise<string>>>>
+>((designSystem) => {
+  return new DefaultMap((userConfig) => {
+    return new DefaultMap((location) => {
+      return new DefaultMap(async (rawCandidate) => {
+        let original = rawCandidate
+        for (let migration of DEFAULT_MIGRATIONS) {
+          rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
+        }
+
+        // If nothing changed, let's parse it again and re-print it. This will migrate
+        // pretty print candidates to the new format. If it did change, we already had
+        // to re-print it.
+        //
+        // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
+        if (rawCandidate === original) {
+          for (let candidate of parseCandidate(rawCandidate, designSystem)) {
+            return designSystem.printCandidate(candidate)
+          }
+        }
+
+        return rawCandidate
+      })
+    })
+  })
+})
+
 export async function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config | null,
@@ -69,23 +105,7 @@ export async function migrateCandidate(
     end: number
   },
 ): Promise<string> {
-  let original = rawCandidate
-  for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
-  }
-
-  // If nothing changed, let's parse it again and re-print it. This will migrate
-  // pretty print candidates to the new format. If it did change, we already had
-  // to re-print it.
-  //
-  // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
-  if (rawCandidate === original) {
-    for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-      return designSystem.printCandidate(candidate)
-    }
-  }
-
-  return rawCandidate
+  return migrateCached.get(designSystem).get(userConfig).get(location).get(rawCandidate)
 }
 
 export default async function migrateContents(
