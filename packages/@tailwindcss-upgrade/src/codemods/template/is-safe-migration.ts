@@ -1,5 +1,6 @@
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import * as version from '../../utils/version'
 
 const QUOTES = ['"', "'", '`']
 const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
@@ -23,51 +24,59 @@ export function isSafeMigration(
 ): boolean {
   let [candidate] = Array.from(parseCandidate(rawCandidate, designSystem))
 
-  // If we can't parse the candidate, then it's not a candidate at all.
-  if (!candidate) {
-    return false
-  }
-
-  // When we have variants, we can assume that the candidate is safe to migrate
-  // because that requires colons.
+  // If we can't parse the candidate, then it's not a candidate at all. However,
+  // we could be dealing with legacy classes like `tw__flex` in Tailwind CSS v3
+  // land, which also wouldn't parse.
   //
-  // E.g.: `hover:focus:flex`
-  if (candidate.variants.length > 0) {
+  // So let's only skip if we couldn't parse and we are not in Tailwind CSS v3.
+  //
+  if (!candidate && version.isGreaterThan(3)) {
     return true
   }
 
-  // When we have an arbitrary property, the candidate has such a particular
-  // structure it's very likely to be safe.
-  //
-  // E.g.: `[color:red]`
-  if (candidate.kind === 'arbitrary') {
-    return true
-  }
+  // Parsed a candidate succesfully, verify if it's a valid candidate
+  else if (candidate) {
+    // When we have variants, we can assume that the candidate is safe to migrate
+    // because that requires colons.
+    //
+    // E.g.: `hover:focus:flex`
+    if (candidate.variants.length > 0) {
+      return true
+    }
 
-  // A static candidate is very likely safe if it contains a dash.
-  //
-  // E.g.: `items-center`
-  if (candidate.kind === 'static' && candidate.root.includes('-')) {
-    return true
-  }
+    // When we have an arbitrary property, the candidate has such a particular
+    // structure it's very likely to be safe.
+    //
+    // E.g.: `[color:red]`
+    if (candidate.kind === 'arbitrary') {
+      return true
+    }
 
-  // A functional candidate is very likely safe if it contains a value (which
-  // implies a `-`). Or if the root contains a dash.
-  //
-  // E.g.: `bg-red-500`, `bg-position-20`
-  if (
-    (candidate.kind === 'functional' && candidate.value !== null) ||
-    (candidate.kind === 'functional' && candidate.root.includes('-'))
-  ) {
-    return true
-  }
+    // A static candidate is very likely safe if it contains a dash.
+    //
+    // E.g.: `items-center`
+    if (candidate.kind === 'static' && candidate.root.includes('-')) {
+      return true
+    }
 
-  // If the candidate contains a modifier, it's very likely to be safe because
-  // it implies that it contains a `/`.
-  //
-  // E.g.: `text-sm/7`
-  if (candidate.kind === 'functional' && candidate.modifier) {
-    return true
+    // A functional candidate is very likely safe if it contains a value (which
+    // implies a `-`). Or if the root contains a dash.
+    //
+    // E.g.: `bg-red-500`, `bg-position-20`
+    if (
+      (candidate.kind === 'functional' && candidate.value !== null) ||
+      (candidate.kind === 'functional' && candidate.root.includes('-'))
+    ) {
+      return true
+    }
+
+    // If the candidate contains a modifier, it's very likely to be safe because
+    // it implies that it contains a `/`.
+    //
+    // E.g.: `text-sm/7`
+    if (candidate.kind === 'functional' && candidate.modifier) {
+      return true
+    }
   }
 
   let currentLineBeforeCandidate = ''
