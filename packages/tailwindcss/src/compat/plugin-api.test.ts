@@ -1830,6 +1830,44 @@ describe('addVariant', () => {
       }"
     `)
   })
+
+  test('ignores variants that use :merge(…) and ensures `peer-*` and `group-*` rules work out of the box', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            path: '',
+            base,
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('optional', '&:optional')
+              addVariant('group-optional', { ':merge(.group):optional &': '@slot' })
+              addVariant('peer-optional', { '&': { ':merge(.peer):optional ~ &': '@slot' } })
+            },
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'optional:flex',
+      'group-optional:flex',
+      'peer-optional:flex',
+      'group-optional/foo:flex',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-optional\\:flex:is(:where(.group):optional *), .group-optional\\/foo\\:flex:is(:where(.group\\/foo):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
+          display: flex;
+        }
+      }"
+    `)
+  })
 })
 
 describe('matchVariant', () => {
@@ -2698,6 +2736,44 @@ describe('matchVariant', () => {
       @container placement (min-width: 250px) {
         .my-container-\\[250px\\]\\/placement\\:underline {
           text-decoration-line: underline;
+        }
+      }"
+    `)
+  })
+
+  test('ignores variants that use :merge(…)', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            path: '',
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('optional', (flavor) => `&:optional:has(${flavor}) &`)
+              matchVariant('group-optional', (flavor) => `:merge(.group):optional:has(${flavor}) &`)
+              matchVariant('peer-optional', (flavor) => `:merge(.peer):optional:has(${flavor}) ~ &`)
+            },
+          }
+        },
+      },
+    )
+    let compiled = build([
+      'optional-[test]:flex',
+      'group-optional-[test]:flex',
+      'peer-optional-[test]:flex',
+      'group-optional-[test]/foo:flex',
+    ])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .group-optional-\\[test\\]\\:flex:is(:where(.group):optional:has(test) :where(.group) *), .group-optional-\\[test\\]\\/foo\\:flex:is(:where(.group\\/foo):optional:has(test) :where(.group\\/foo) *), .peer-optional-\\[test\\]\\:flex:is(:where(.peer):optional:has(test) :where(.peer) ~ *), .optional-\\[test\\]\\:flex:optional:has(test) .optional-\\[test\\]\\:flex {
+          display: flex;
         }
       }"
     `)

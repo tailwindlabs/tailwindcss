@@ -115,6 +115,22 @@ export function buildPluginApi({
         )
       }
 
+      // Ignore variants emitting v3 `:merge(…)` rules. In v4, the `group-*` and `peer-*` variants
+      // compound automatically.
+      if (typeof variant === 'string') {
+        if (variant.includes(':merge(')) return
+      } else if (Array.isArray(variant)) {
+        if (variant.some((v) => v.includes(':merge('))) return
+      } else if (typeof variant === 'object') {
+        function keyIncludes(object: Record<string, any>, search: string): boolean {
+          return Object.entries(object).some(
+            ([key, value]) =>
+              key.includes(search) || (typeof value === 'object' && keyIncludes(value, search)),
+          )
+        }
+        if (keyIncludes(variant, ':merge(')) return
+      }
+
       // Single selector or multiple parallel selectors
       if (typeof variant === 'string' || Array.isArray(variant)) {
         designSystem.variants.static(
@@ -142,6 +158,17 @@ export function buildPluginApi({
         let resolved = fn(value, { modifier: modifier?.value ?? null })
         return parseVariantValue(resolved, nodes)
       }
+
+      try {
+        // Sample variant value and ignore variants emitting v3 `:merge` rules. In
+        // v4, the `group-*` and `peer-*` variants compound automatically.
+        let sample = fn('a', { modifier: null })
+        if (typeof sample === 'string' && sample.includes(':merge(')) {
+          return
+        } else if (Array.isArray(sample) && sample.some((r) => r.includes(':merge('))) {
+          return
+        }
+      } catch {}
 
       let defaultOptionKeys = Object.keys(options?.values ?? {})
       designSystem.variants.group(
