@@ -51,27 +51,6 @@ export function migrateArbitraryUtilities(
       continue
     }
 
-    // 1. Canonicalize the value. This might be a bit wasteful because it might
-    //    have been done by other migrations before, but essentially we want to
-    //    canonicalize the arbitrary value to its simplest canonical form. We
-    //    won't be constant folding `calc(…)` expressions (yet?), but we can
-    //    remove unnecessary whitespace (which the `printCandidate` already
-    //    handles for us).
-    //
-    // E.g.:
-    //
-    // ```
-    // [display:_flex_] => [display:flex]
-    // [display:_flex]  => [display:flex]
-    // [display:flex_]  => [display:flex]
-    // [display:flex]   => [display:flex]
-    // ```
-    //
-    let canonicalizedCandidate = designSystem.printCandidate(readonlyCandidate)
-    if (canonicalizedCandidate !== rawCandidate) {
-      return migrateArbitraryUtilities(designSystem, _userConfig, canonicalizedCandidate)
-    }
-
     // The below logic makes use of mutation. Since candidates in the
     // DesignSystem are cached, we can't mutate them directly.
     let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>

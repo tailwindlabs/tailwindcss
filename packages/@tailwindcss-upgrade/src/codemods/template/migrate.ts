@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
-import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
@@ -14,6 +13,7 @@ import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBareValueUtilities } from './migrate-bare-utilities'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
+import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateImportant } from './migrate-important'
@@ -42,6 +42,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
   migratePrefix,
   migrateImportant,
+  migrateCanonicalizeCandidate,
   migrateBgGradient,
   migrateSimpleLegacyClasses,
   migrateCamelcaseInNamedValue,
@@ -66,22 +67,9 @@ let migrateCached = new DefaultMap<
 >((designSystem) => {
   return new DefaultMap((userConfig) => {
     return new DefaultMap(async (rawCandidate) => {
-      let original = rawCandidate
       for (let migration of DEFAULT_MIGRATIONS) {
         rawCandidate = await migration(designSystem, userConfig, rawCandidate, undefined)
       }
-
-      // If nothing changed, let's parse it again and re-print it. This will migrate
-      // pretty print candidates to the new format. If it did change, we already had
-      // to re-print it.
-      //
-      // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
-      if (rawCandidate === original) {
-        for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-          return designSystem.printCandidate(candidate)
-        }
-      }
-
       return rawCandidate
     })
   })
