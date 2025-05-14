@@ -1,6 +1,7 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import { expect, test, vi } from 'vitest'
 import * as versions from '../../utils/version'
+import { isSafeMigration } from './is-safe-migration'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
@@ -50,13 +51,18 @@ test('does not replace classes in invalid positions', async () => {
   })
 
   async function shouldNotReplace(example: string, candidate = 'shadow') {
-    expect(
-      await migrateLegacyClasses(designSystem, {}, candidate, {
-        contents: example,
-        start: example.indexOf(candidate),
-        end: example.indexOf(candidate) + candidate.length,
-      }),
-    ).toEqual(candidate)
+    let location = {
+      contents: example,
+      start: example.indexOf(candidate),
+      end: example.indexOf(candidate) + candidate.length,
+    }
+
+    // Skip this migration if we think that the migration is unsafe
+    if (location && !isSafeMigration(location)) {
+      return candidate
+    }
+
+    expect(await migrateLegacyClasses(designSystem, {}, candidate)).toEqual(candidate)
   }
 
   await shouldNotReplace(`let notShadow = shadow    \n`)
