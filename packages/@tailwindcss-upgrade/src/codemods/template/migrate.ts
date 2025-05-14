@@ -25,6 +25,7 @@ import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
 import { migrateVariantOrder } from './migrate-variant-order'
+import { computeUtilitySignature } from './signatures'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -60,9 +61,18 @@ let migrateCached = new DefaultMap<
 >((designSystem) => {
   return new DefaultMap((userConfig) => {
     return new DefaultMap(async (rawCandidate) => {
+      let original = rawCandidate
+
       for (let migration of DEFAULT_MIGRATIONS) {
         rawCandidate = await migration(designSystem, userConfig, rawCandidate)
       }
+
+      // Verify that the candidate actually makes sense at all. E.g.: `duration`
+      // is not a valid candidate, but it will parse because `duration-<number>`
+      // exists.
+      let signature = computeUtilitySignature.get(designSystem).get(rawCandidate)
+      if (typeof signature !== 'string') return original
+
       return rawCandidate
     })
   })
