@@ -1,6 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
+import * as versions from '../../utils/version'
 import { migrateCandidate } from './migrate'
+vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
 test('does not replace classes in invalid positions', async () => {
   let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
@@ -51,4 +53,9 @@ test('does not replace classes in invalid positions', async () => {
   await shouldNotReplace(`<Image placeholder="blur" src="/image.jpg" />`, 'blur')
   await shouldNotReplace(`<Image placeholder={'blur'} src="/image.jpg" />`, 'blur')
   await shouldNotReplace(`<Image placeholder={blur} src="/image.jpg" />`, 'blur')
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/17974
+  await shouldNotReplace('<div v-if="!duration">', '!duration')
+  await shouldNotReplace('<div :active="!duration">', '!duration')
+  await shouldNotReplace('<div :active="!visible">', '!visible')
 })
