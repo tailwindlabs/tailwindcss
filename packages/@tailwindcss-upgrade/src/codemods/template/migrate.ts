@@ -10,6 +10,7 @@ import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-b
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBgGradient } from './migrate-bg-gradient'
+import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateImportant } from './migrate-important'
@@ -40,6 +41,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateImportant,
   migrateBgGradient,
   migrateSimpleLegacyClasses,
+  migrateCamelcaseInNamedValue,
   migrateLegacyClasses,
   migrateMaxWidthScreen,
   migrateThemeToVar,

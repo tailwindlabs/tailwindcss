@@ -30,6 +30,7 @@ test(
                 400: '#f87171',
                 500: 'red',
               },
+              superRed: '#ff0000',
               steel: 'rgb(70 130 180 / <alpha-value>)',
               smoke: 'rgba(245, 245, 245, var(--smoke-alpha, <alpha-value>))',
             },
@@ -144,9 +145,10 @@ test(
         }
       `,
       'src/index.html': html`
-       <div
+        <div
           class="[letter-spacing:theme(letterSpacing.superWide)] [line-height:theme(lineHeight.superLoose)]"
         ></div>
+        <div class="text-red-superRed leading-superLoose"></div>
       `,
       'node_modules/my-external-lib/src/template.html': html`
         <div class="text-red-500">
@@ -162,8 +164,9 @@ test(
       "
       --- src/index.html ---
       <div
-         class="[letter-spacing:var(--tracking-super-wide)] [line-height:var(--leading-super-loose)]"
-       ></div>
+        class="[letter-spacing:var(--tracking-super-wide)] [line-height:var(--leading-super-loose)]"
+      ></div>
+      <div class="text-red-super-red leading-super-loose"></div>
 
       --- src/input.css ---
       @import 'tailwindcss';
@@ -181,6 +184,7 @@ test(
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
+        --color-super-red: #ff0000;
         --color-steel: rgb(70 130 180);
         --color-smoke: rgba(245, 245, 245, var(--smoke-alpha, 1));
 
