@@ -29,4 +29,26 @@ test('does not replace classes in invalid positions', async () => {
   await shouldNotReplace(`<div v-else-if="!border"></div>\n`)
   await shouldNotReplace(`<div v-show="!border"></div>\n`)
   await shouldNotReplace(`<div x-if="!border"></div>\n`)
+
+  await shouldNotReplace(`let notShadow = shadow    \n`, 'shadow')
+  await shouldNotReplace(`{ "foo": shadow.something + ""}\n`, 'shadow')
+  await shouldNotReplace(`<div v-if="something && shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-else-if="something && shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-show="something && shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-if="shadow || shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-else-if="shadow || shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-show="shadow || shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-if="shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-else-if="shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div v-show="shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(`<div x-if="shadow"></div>\n`, 'shadow')
+  await shouldNotReplace(
+    `<div style={{filter: 'drop-shadow(30px 10px 4px #4444dd)'}}/>\n`,
+    'shadow',
+  )
+
+  // Next.js Image placeholder cases
+  await shouldNotReplace(`<Image placeholder="blur" src="/image.jpg" />`, 'blur')
+  await shouldNotReplace(`<Image placeholder={'blur'} src="/image.jpg" />`, 'blur')
+  await shouldNotReplace(`<Image placeholder={blur} src="/image.jpg" />`, 'blur')
 })
