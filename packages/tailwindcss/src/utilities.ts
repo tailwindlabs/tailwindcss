@@ -1388,7 +1388,7 @@ export function createUtilities(theme: Theme) {
         if (type === 'vector') {
           return [decl('rotate', `${value} var(--tw-rotate)`)]
         } else if (type !== 'angle') {
-          return [decl('rotate', value)]
+          return [decl('rotate', negative ? `calc(${value} * -1)` : value)]
         }
       } else {
         value = theme.resolve(candidate.value.value, ['--rotate'])
