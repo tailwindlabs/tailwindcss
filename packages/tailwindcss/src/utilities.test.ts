@@ -4453,24 +4453,45 @@ test('translate-3d', async () => {
 })
 
 test('rotate', async () => {
-  expect(await run(['rotate-45', '-rotate-45', 'rotate-[123deg]', 'rotate-[0.3_0.7_1_45deg]']))
-    .toMatchInlineSnapshot(`
-      ".-rotate-45 {
-        rotate: -45deg;
-      }
+  expect(
+    await run([
+      'rotate-45',
+      '-rotate-45',
+      'rotate-[123deg]',
+      'rotate-[0.3_0.7_1_45deg]',
+      'rotate-(--var)',
+      '-rotate-[123deg]',
+      '-rotate-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".-rotate-\\(--var\\) {
+      rotate: calc(var(--var) * -1);
+    }
 
-      .rotate-45 {
-        rotate: 45deg;
-      }
+    .-rotate-45 {
+      rotate: -45deg;
+    }
 
-      .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
-        rotate: .3 .7 1 45deg;
-      }
+    .-rotate-\\[123deg\\] {
+      rotate: -123deg;
+    }
 
-      .rotate-\\[123deg\\] {
-        rotate: 123deg;
-      }"
-    `)
+    .rotate-\\(--var\\) {
+      rotate: var(--var);
+    }
+
+    .rotate-45 {
+      rotate: 45deg;
+    }
+
+    .rotate-\\[0\\.3_0\\.7_1_45deg\\] {
+      rotate: .3 .7 1 45deg;
+    }
+
+    .rotate-\\[123deg\\] {
+      rotate: 123deg;
+    }"
+  `)
   expect(
     await run([
       'rotate',
@@ -4486,7 +4507,15 @@ test('rotate', async () => {
 })
 
 test('rotate-x', async () => {
-  expect(await run(['rotate-x-45', '-rotate-x-45', 'rotate-x-[123deg]'])).toMatchInlineSnapshot(`
+  expect(
+    await run([
+      'rotate-x-45',
+      '-rotate-x-45',
+      'rotate-x-[123deg]',
+      'rotate-x-(--var)',
+      '-rotate-x-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4499,8 +4528,18 @@ test('rotate-x', async () => {
       }
     }
 
+    .-rotate-x-\\(--var\\) {
+      --tw-rotate-x: rotateX(calc(var(--var) * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
+
     .-rotate-x-45 {
       --tw-rotate-x: rotateX(calc(45deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
+
+    .rotate-x-\\(--var\\) {
+      --tw-rotate-x: rotateX(var(--var));
       transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
     }
 
@@ -4553,65 +4592,83 @@ test('rotate-x', async () => {
 })
 
 test('rotate-y', async () => {
-  expect(await run(['rotate-y-45', '-rotate-y-45', 'rotate-y-[123deg]', '-rotate-y-[123deg]']))
-    .toMatchInlineSnapshot(`
-      "@layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-rotate-x: initial;
-            --tw-rotate-y: initial;
-            --tw-rotate-z: initial;
-            --tw-skew-x: initial;
-            --tw-skew-y: initial;
-          }
+  expect(
+    await run([
+      'rotate-y-45',
+      'rotate-y-[123deg]',
+      'rotate-y-(--var)',
+      '-rotate-y-45',
+      '-rotate-y-[123deg]',
+      '-rotate-y-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
+    }
 
-      .-rotate-y-45 {
-        --tw-rotate-y: rotateY(calc(45deg * -1));
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-y-\\(--var\\) {
+      --tw-rotate-y: rotateY(calc(var(--var) * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .-rotate-y-\\[123deg\\] {
-        --tw-rotate-y: rotateY(calc(123deg * -1));
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-y-45 {
+      --tw-rotate-y: rotateY(calc(45deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .rotate-y-45 {
-        --tw-rotate-y: rotateY(45deg);
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-y-\\[123deg\\] {
+      --tw-rotate-y: rotateY(calc(123deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .rotate-y-\\[123deg\\] {
-        --tw-rotate-y: rotateY(123deg);
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .rotate-y-\\(--var\\) {
+      --tw-rotate-y: rotateY(var(--var));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-x {
-        syntax: "*";
-        inherits: false
-      }
+    .rotate-y-45 {
+      --tw-rotate-y: rotateY(45deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-y {
-        syntax: "*";
-        inherits: false
-      }
+    .rotate-y-\\[123deg\\] {
+      --tw-rotate-y: rotateY(123deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-z {
-        syntax: "*";
-        inherits: false
-      }
+    @property --tw-rotate-x {
+      syntax: "*";
+      inherits: false
+    }
 
-      @property --tw-skew-x {
-        syntax: "*";
-        inherits: false
-      }
+    @property --tw-rotate-y {
+      syntax: "*";
+      inherits: false
+    }
 
-      @property --tw-skew-y {
-        syntax: "*";
-        inherits: false
-      }"
-    `)
+    @property --tw-rotate-z {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-x {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-y {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
   expect(
     await run([
       'rotate-y',
@@ -4626,65 +4683,83 @@ test('rotate-y', async () => {
 })
 
 test('rotate-z', async () => {
-  expect(await run(['rotate-z-45', '-rotate-z-45', 'rotate-z-[123deg]', '-rotate-z-[123deg]']))
-    .toMatchInlineSnapshot(`
-      "@layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-rotate-x: initial;
-            --tw-rotate-y: initial;
-            --tw-rotate-z: initial;
-            --tw-skew-x: initial;
-            --tw-skew-y: initial;
-          }
+  expect(
+    await run([
+      'rotate-z-45',
+      'rotate-z-[123deg]',
+      'rotate-z-(--var)',
+      '-rotate-z-45',
+      '-rotate-z-[123deg]',
+      '-rotate-z-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-rotate-x: initial;
+          --tw-rotate-y: initial;
+          --tw-rotate-z: initial;
+          --tw-skew-x: initial;
+          --tw-skew-y: initial;
         }
       }
+    }
 
-      .-rotate-z-45 {
-        --tw-rotate-z: rotateZ(calc(45deg * -1));
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-z-\\(--var\\) {
+      --tw-rotate-z: rotateZ(calc(var(--var) * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .-rotate-z-\\[123deg\\] {
-        --tw-rotate-z: rotateZ(calc(123deg * -1));
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-z-45 {
+      --tw-rotate-z: rotateZ(calc(45deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .rotate-z-45 {
-        --tw-rotate-z: rotateZ(45deg);
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .-rotate-z-\\[123deg\\] {
+      --tw-rotate-z: rotateZ(calc(123deg * -1));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      .rotate-z-\\[123deg\\] {
-        --tw-rotate-z: rotateZ(123deg);
-        transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-      }
+    .rotate-z-\\(--var\\) {
+      --tw-rotate-z: rotateZ(var(--var));
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-x {
-        syntax: "*";
-        inherits: false
-      }
+    .rotate-z-45 {
+      --tw-rotate-z: rotateZ(45deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-y {
-        syntax: "*";
-        inherits: false
-      }
+    .rotate-z-\\[123deg\\] {
+      --tw-rotate-z: rotateZ(123deg);
+      transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
+    }
 
-      @property --tw-rotate-z {
-        syntax: "*";
-        inherits: false
-      }
+    @property --tw-rotate-x {
+      syntax: "*";
+      inherits: false
+    }
 
-      @property --tw-skew-x {
-        syntax: "*";
-        inherits: false
-      }
+    @property --tw-rotate-y {
+      syntax: "*";
+      inherits: false
+    }
 
-      @property --tw-skew-y {
-        syntax: "*";
-        inherits: false
-      }"
-    `)
+    @property --tw-rotate-z {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-x {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-skew-y {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
   expect(
     await run([
       'rotate-z',
