@@ -9,7 +9,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /v-else-if=['"]$/,
   /v-if=['"]$/,
   /v-show=['"]$/,
-  /(?<!:class)=['"]$/,
+  /(?<!:?class)=['"]$/,
 
   // Alpine
   /x-if=['"]$/,
