@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure that running the Standalone build does not leave temporary files behind ([#17981](https://github.com/tailwindlabs/tailwindcss/pull/17981))
 - Fix `-rotate-*` utilities with arbitrary values ([#18014](https://github.com/tailwindlabs/tailwindcss/pull/18014))
 - Upgrade: Change casing of utilities with named values to kebab-case to match updated theme variables ([#18017](https://github.com/tailwindlabs/tailwindcss/pull/18017))
-- Ignore custom variants using `:merge(…)` selectors in legacy JS plugins as they would create invalid CSS in v4 ([#18020](https://github.com/tailwindlabs/tailwindcss/pull/18020))
+- Ignore custom variants using `:merge(…)` selectors in legacy JS plugins ([#18020](https://github.com/tailwindlabs/tailwindcss/pull/18020))
 
 ### Added
 
