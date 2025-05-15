@@ -42,6 +42,18 @@ impl PreProcessor for Clojure {
                     }
                 }
 
+                // A `.`  surrounded by digits is a decimal number, so we don't want to replace it.
+                //
+                // E.g.:
+                // ```
+                // gap-1.5
+                //      ^
+                // ``
+                b'.' if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() => {
+
+                    // Keep the `.` as-is
+                }
+
                 b':' | b'.' => {
                     result[cursor.pos] = b' ';
                 }
@@ -155,5 +167,15 @@ mod tests {
         "#;
 
         Clojure::test_extract_contains(input, vec!["hover:flex", "px-1.5"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17760
+    #[test]
+    fn test_extraction_of_classes_with_dots() {
+        let input = r#"
+            ($ :div {:class [:flex :gap-1.5 :p-1]} …)
+        "#;
+
+        Clojure::test_extract_contains(input, vec!["flex", "gap-1.5", "p-1"]);
     }
 }

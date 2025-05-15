@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade: Change casing of utilities with named values to kebab-case to match updated theme variables ([#18017](https://github.com/tailwindlabs/tailwindcss/pull/18017))
 - Upgrade: Fix unsafe migrations in Vue files ([#18025](https://github.com/tailwindlabs/tailwindcss/pull/18025))
 - Ignore custom variants using `:merge(…)` selectors in legacy JS plugins ([#18020](https://github.com/tailwindlabs/tailwindcss/pull/18020))
+- Fix missing extracted classes containing `.` in Clojure ([#18038](https://github.com/tailwindlabs/tailwindcss/pull/18038))
 
 ### Added
 
