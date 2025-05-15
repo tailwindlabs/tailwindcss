@@ -151,7 +151,7 @@ test(
         <div
           class="[letter-spacing:theme(letterSpacing.superWide)] [line-height:theme(lineHeight.superLoose)]"
         ></div>
-        <div class="text-red-superRed/superOpaque leading-superLoose"></div>
+        <div class="text-superRed/superOpaque leading-superLoose"></div>
       `,
       'node_modules/my-external-lib/src/template.html': html`
         <div class="text-red-500">
@@ -169,7 +169,7 @@ test(
       <div
         class="[letter-spacing:var(--tracking-super-wide)] [line-height:var(--leading-super-loose)]"
       ></div>
-      <div class="text-red-super-red/super-opaque leading-super-loose"></div>
+      <div class="text-super-red/super-opaque leading-super-loose"></div>
 
       --- src/input.css ---
       @import 'tailwindcss';
