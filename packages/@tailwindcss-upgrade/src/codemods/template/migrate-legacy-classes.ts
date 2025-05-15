@@ -7,7 +7,6 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
 import { baseCandidate } from './candidates'
-import { isSafeMigration } from './is-safe-migration'
 
 const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -72,11 +71,6 @@ export async function migrateLegacyClasses(
   designSystem: DesignSystem,
   _userConfig: Config | null,
   rawCandidate: string,
-  location?: {
-    contents: string
-    start: number
-    end: number
-  },
 ): Promise<string> {
   // These migrations are only safe when migrating from v3 to v4.
   //
@@ -111,7 +105,6 @@ export async function migrateLegacyClasses(
       newCandidate.important = candidate.important
 
       yield [
-        candidate,
         newCandidate,
         THEME_KEYS.get(baseCandidateString),
         THEME_KEYS.get(newBaseCandidateString),
@@ -119,34 +112,7 @@ export async function migrateLegacyClasses(
     }
   }
 
-  for (let [fromCandidate, toCandidate, fromThemeKey, toThemeKey] of migrate(rawCandidate)) {
-    // Every utility that has a simple representation (e.g.: `blur`, `radius`,
-    // etc.`) without variants or special characters _could_ be a potential
-    // problem during the migration.
-    let isPotentialProblematicClass = (() => {
-      if (fromCandidate.variants.length > 0) {
-        return false
-      }
-
-      if (fromCandidate.kind === 'arbitrary') {
-        return false
-      }
-
-      if (fromCandidate.kind === 'static') {
-        return !fromCandidate.root.includes('-')
-      }
-
-      if (fromCandidate.kind === 'functional') {
-        return fromCandidate.value === null || !fromCandidate.root.includes('-')
-      }
-
-      return false
-    })()
-
-    if (location && isPotentialProblematicClass && !isSafeMigration(location)) {
-      continue
-    }
-
+  for (let [toCandidate, fromThemeKey, toThemeKey] of migrate(rawCandidate)) {
     if (fromThemeKey && toThemeKey) {
       // Migrating something that resolves to a value in the theme.
       let customFrom = designSystem.resolveThemeValue(fromThemeKey, true)

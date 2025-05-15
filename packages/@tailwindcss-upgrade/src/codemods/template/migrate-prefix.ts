@@ -1,3 +1,4 @@
+import { decl } from '../../../../tailwindcss/src/ast'
 import { parseCandidate, type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
@@ -16,8 +17,18 @@ export function migratePrefix(
   if (!version.isMajor(3)) return rawCandidate
 
   if (!seenDesignSystems.has(designSystem)) {
-    designSystem.utilities.functional('group', () => null)
-    designSystem.utilities.functional('peer', () => null)
+    designSystem.utilities.functional('group', (value) => [
+      // To ensure that `@apply group` works when computing a signature
+      decl('--phantom-class', 'group'),
+      // To ensure `group` and `group/foo` are considered different classes
+      decl('--phantom-modifier', value.modifier?.value),
+    ])
+    designSystem.utilities.functional('peer', (value) => [
+      // To ensure that `@apply peer` works when computing a signature
+      decl('--phantom-class', 'peer'),
+      // To ensure `peer` and `peer/foo` are considered different classes
+      decl('--phantom-modifier', value.modifier?.value),
+    ])
     seenDesignSystems.add(designSystem)
   }
 

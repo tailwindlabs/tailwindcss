@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
-import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
+import { isSafeMigration } from './is-safe-migration'
 import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
@@ -12,9 +13,9 @@ import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBareValueUtilities } from './migrate-bare-utilities'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
+import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
-import { migrateImportant } from './migrate-important'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
@@ -24,22 +25,18 @@ import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateThemeToVar } from './migrate-theme-to-var'
 import { migrateVariantOrder } from './migrate-variant-order'
+import { computeUtilitySignature } from './signatures'
 
 export type Migration = (
   designSystem: DesignSystem,
   userConfig: Config | null,
   rawCandidate: string,
-  location?: {
-    contents: string
-    start: number
-    end: number
-  },
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
   migratePrefix,
-  migrateImportant,
+  migrateCanonicalizeCandidate,
   migrateBgGradient,
   migrateSimpleLegacyClasses,
   migrateCamelcaseInNamedValue,
@@ -58,6 +55,29 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateOptimizeModifier,
 ]
 
+let migrateCached = new DefaultMap<
+  DesignSystem,
+  DefaultMap<Config | null, DefaultMap<string, Promise<string>>>
+>((designSystem) => {
+  return new DefaultMap((userConfig) => {
+    return new DefaultMap(async (rawCandidate) => {
+      let original = rawCandidate
+
+      for (let migration of DEFAULT_MIGRATIONS) {
+        rawCandidate = await migration(designSystem, userConfig, rawCandidate)
+      }
+
+      // Verify that the candidate actually makes sense at all. E.g.: `duration`
+      // is not a valid candidate, but it will parse because `duration-<number>`
+      // exists.
+      let signature = computeUtilitySignature.get(designSystem).get(rawCandidate)
+      if (typeof signature !== 'string') return original
+
+      return rawCandidate
+    })
+  })
+})
+
 export async function migrateCandidate(
   designSystem: DesignSystem,
   userConfig: Config | null,
@@ -69,23 +89,12 @@ export async function migrateCandidate(
     end: number
   },
 ): Promise<string> {
-  let original = rawCandidate
-  for (let migration of DEFAULT_MIGRATIONS) {
-    rawCandidate = await migration(designSystem, userConfig, rawCandidate, location)
+  // Skip this migration if we think that the migration is unsafe
+  if (location && !isSafeMigration(rawCandidate, location, designSystem)) {
+    return rawCandidate
   }
 
-  // If nothing changed, let's parse it again and re-print it. This will migrate
-  // pretty print candidates to the new format. If it did change, we already had
-  // to re-print it.
-  //
-  // E.g.: `bg-red-500/[var(--my-opacity)]` -> `bg-red-500/(--my-opacity)`
-  if (rawCandidate === original) {
-    for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-      return designSystem.printCandidate(candidate)
-    }
-  }
-
-  return rawCandidate
+  return migrateCached.get(designSystem).get(userConfig).get(rawCandidate)
 }
 
 export default async function migrateContents(
