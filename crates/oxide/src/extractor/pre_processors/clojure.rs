@@ -156,4 +156,14 @@ mod tests {
 
         Clojure::test_extract_contains(input, vec!["hover:flex", "px-1.5"]);
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17760
+    #[test]
+    fn test_extraction_of_classes_with_dots() {
+        let input = r#"
+            ($ :div {:class [:flex :gap-1.5 :p-1]} …)
+        "#;
+
+        Clojure::test_extract_contains(input, vec!["flex", "gap-1.5", "p-1"]);
+    }
 }
