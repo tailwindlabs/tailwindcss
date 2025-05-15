@@ -7,24 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+- Nothing yet!
 
-- Allow `_` before numbers during candidate extraction ([#17961](https://github.com/tailwindlabs/tailwindcss/pull/17961))
-- Upgrade: Fix error when using `@import … source(…)` ([#17963](https://github.com/tailwindlabs/tailwindcss/pull/17963))
-- Prevent duplicate suggestions when using `@theme` and `@utility` together ([#17675](https://github.com/tailwindlabs/tailwindcss/pull/17675))
-- Ensure that media queries within `::before` and `::after` pseudo selectors create valid CSS rules when building a production build ([#17979](https://github.com/tailwindlabs/tailwindcss/pull/17979))
-- `lightningcss` now statically links Visual Studio redistributables ([#17979](https://github.com/tailwindlabs/tailwindcss/pull/17979))
-- Ensure that running the Standalone build does not leave temporary files behind ([#17981](https://github.com/tailwindlabs/tailwindcss/pull/17981))
-- Fix `-rotate-*` utilities with arbitrary values ([#18014](https://github.com/tailwindlabs/tailwindcss/pull/18014))
-- Upgrade: Change casing of utilities with named values to kebab-case to match updated theme variables ([#18017](https://github.com/tailwindlabs/tailwindcss/pull/18017))
-- Upgrade: Fix unsafe migrations in Vue files ([#18025](https://github.com/tailwindlabs/tailwindcss/pull/18025))
-- Ignore custom variants using `:merge(…)` selectors in legacy JS plugins ([#18020](https://github.com/tailwindlabs/tailwindcss/pull/18020))
-- Fix missing extracted classes containing `.` in Clojure ([#18038](https://github.com/tailwindlabs/tailwindcss/pull/18038))
+## [4.1.7] - 2025-05-15
 
 ### Added
 
 - Upgrade: Migrate bare values to named values ([#18000](https://github.com/tailwindlabs/tailwindcss/pull/18000))
-- Upgrade: Make candidate template migrations faster using caching ([#18025](https://github.com/tailwindlabs/tailwindcss/pull/18025))
+- Upgrade: Added cache to improve template migration performance ([#18025](https://github.com/tailwindlabs/tailwindcss/pull/18025))
+
+### Fixed
+
+- Allow `_` before numbers during candidate extraction ([#17961](https://github.com/tailwindlabs/tailwindcss/pull/17961))
+- Prevent duplicate suggestions when using `@theme` and `@utility` together ([#17675](https://github.com/tailwindlabs/tailwindcss/pull/17675))
+- Ensure that media queries within `::before` and `::after` pseudo selectors create valid CSS rules in production builds ([#17979](https://github.com/tailwindlabs/tailwindcss/pull/17979))
+- Ensure that the standalone CLI does not leave temporary files behind ([#17981](https://github.com/tailwindlabs/tailwindcss/pull/17981))
+- Ensure `-rotate-*` utilities properly negate arbitrary values ([#18014](https://github.com/tailwindlabs/tailwindcss/pull/18014))
+- Ignore custom variants using `:merge(…)` selectors in legacy JS plugins ([#18020](https://github.com/tailwindlabs/tailwindcss/pull/18020))
+- Ensure classes containing `.` are properly extracted from Clojure files ([#18038](https://github.com/tailwindlabs/tailwindcss/pull/18038))
+- Upgrade: Fix error when using `@import … source(…)` ([#17963](https://github.com/tailwindlabs/tailwindcss/pull/17963))
+- Upgrade: Change casing of utilities with named values to kebab-case to match updated theme variables ([#18017](https://github.com/tailwindlabs/tailwindcss/pull/18017))
+- Upgrade: Don't migrate strings that match utility names in Vue attribute bindings other than `class` ([#18025](https://github.com/tailwindlabs/tailwindcss/pull/18025))
 
 ## [4.1.6] - 2025-05-09
 
@@ -3718,7 +3721,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...HEAD
+[4.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...v4.1.7
 [4.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...v4.1.6
 [4.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.4...v4.1.5
 [4.1.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.3...v4.1.4
