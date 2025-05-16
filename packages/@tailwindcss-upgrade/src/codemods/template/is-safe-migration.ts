@@ -1,5 +1,6 @@
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
 
 const QUOTES = ['"', "'", '`']
@@ -168,3 +169,30 @@ export function isSafeMigration(
 
   return true
 }
+
+// Assumptions:
+// - All `<style` tags appear before the next `</style>` tag
+// - All `<style` tags are closed with `</style>`
+// - No nested `<style>` tags
+const styleBlockRanges = new DefaultMap((source: string) => {
+  let ranges: number[] = []
+  let offset = 0
+
+  while (true) {
+    let startTag = source.indexOf('<style', offset)
+    if (startTag === -1) return ranges
+
+    // Ensure the style looks like:
+    // - `<style>`   (closed)
+    // - `<style …>` (with attributes)
+    if (!source[startTag + 6].match(/[>\s]/)) return ranges
+
+    offset = startTag + 1
+
+    let endTag = source.indexOf('</style>', offset)
+    if (endTag === -1) return ranges
+    offset = endTag + 1
+
+    ranges.push(startTag, endTag)
+  }
+})
