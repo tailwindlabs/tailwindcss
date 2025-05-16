@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Upgrade: Do not migrate declarations that look like candidates in `<style>` blocks ([#18057](https://github.com/tailwindlabs/tailwindcss/pull/18057))
+- Upgrade: Do not migrate declarations that look like candidates in `<style>` blocks ([#18057](https://github.com/tailwindlabs/tailwindcss/pull/18057), [18068](https://github.com/tailwindlabs/tailwindcss/pull/18068))
 
 ## [4.1.7] - 2025-05-15
 
