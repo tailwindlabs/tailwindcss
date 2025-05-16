@@ -65,7 +65,7 @@ export function isSafeMigration(
     return false
   }
 
-  // Parsed a candidate succesfully, verify if it's a valid candidate
+  // Parsed a candidate successfully, verify if it's a valid candidate
   else if (candidate) {
     // When we have variants, we can assume that the candidate is safe to migrate
     // because that requires colons.
