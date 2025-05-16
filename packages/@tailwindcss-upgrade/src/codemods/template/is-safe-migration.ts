@@ -62,7 +62,7 @@ export function isSafeMigration(
   // So let's only skip if we couldn't parse and we are not in Tailwind CSS v3.
   //
   if (!candidate && version.isGreaterThan(3)) {
-    return true
+    return false
   }
 
   // Parsed a candidate succesfully, verify if it's a valid candidate
