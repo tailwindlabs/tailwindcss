@@ -3017,7 +3017,29 @@ test(
 
     expect(/Path .*? is not in cwd/.test(stdout)).toBe(false)
 
-    expect(await fs.dumpFiles('./project-a/src/**/*.{css,html}')).toMatchInlineSnapshot()
+    expect(await fs.dumpFiles('./project-a/src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/src/index.html ---
+      <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+      <div class="ring rounded outline"></div>
+
+      <!-- Variant order is also unsafe to change in v4 projects -->
+      <div class="file:hover:flex *:hover:flex"></div>
+      <div class="hover:file:flex hover:*:flex"></div>
+
+      <!-- These are safe to migrate: -->
+      <div
+        class="flex! bg-red-500/(--my-opacity) pointer-fine:flex bg-bottom-right object-top-left"
+      ></div>
+
+      --- ./project-a/src/input.css ---
+      @import 'tailwindcss';
+
+      .foo {
+        @apply bg-(--my-color)!;
+      }
+      "
+    `)
   },
 )
 
