@@ -2967,6 +2967,87 @@ test(
   },
 )
 
+test(
+  'upgrade <style> blocks carefully',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.vue': html`
+        <template
+          <div class="!flex"></div>
+        </template>
+
+        <style>
+        @reference "./input.css";
+
+        .foo {
+          @apply !bg-red-500;
+        }
+
+        .bar {
+          /* Do not upgrade the key: */
+          flex-shrink: 0;
+        }
+        </style>
+      `,
+      'src/input.css': css`
+        @import 'tailwindcss';
+
+        .foo {
+          flex-shrink: 1;
+        }
+
+        .bar {
+          @apply !underline;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/*.{css,vue}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.vue ---
+      <template
+        <div class="flex!"></div>
+      </template>
+
+      <style>
+      @reference "./input.css";
+
+      .foo {
+        @apply !bg-red-500;
+      }
+
+      .bar {
+        /* Do not upgrade the key: */
+        flex-shrink: 0;
+      }
+      </style>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      .foo {
+        flex-shrink: 1;
+      }
+
+      .bar {
+        @apply underline!;
+      }
+      "
+    `)
+  },
+)
+
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }

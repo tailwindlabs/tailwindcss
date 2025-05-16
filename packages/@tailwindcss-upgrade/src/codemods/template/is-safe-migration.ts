@@ -22,6 +22,37 @@ export function isSafeMigration(
   location: { contents: string; start: number; end: number },
   designSystem: DesignSystem,
 ): boolean {
+  // Ensure we are not migrating a candidate in a `<style>` block. The heuristic
+  // would be if the candidate is preceded by a whitespace and followed by a
+  // colon and whitespace.
+  //
+  // E.g.:
+  // ```vue
+  // <template>
+  //   <div class="foo"></div>
+  // </template>
+  //
+  //
+  // <style>
+  // .foo {
+  //   flex-shrink: 0;
+  //  ^           ^^
+  // }
+  // </style>
+  // ```
+  if (
+    // Whitespace before the candidate
+    location.contents[location.start - 1]?.match(/\s/) &&
+    // A colon followed by whitespace after the candidate
+    location.contents.slice(location.end, location.end + 2)?.match(/^:\s/) &&
+    // A `<style` block is present before the candidate
+    location.contents.slice(0, location.start).includes('<style') &&
+    // `</style>` is present after the candidate
+    location.contents.slice(location.end).includes('</style>')
+  ) {
+    return false
+  }
+
   let [candidate] = Array.from(parseCandidate(rawCandidate, designSystem))
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
