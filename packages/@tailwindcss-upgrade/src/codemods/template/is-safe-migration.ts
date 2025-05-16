@@ -61,7 +61,7 @@ export function isSafeMigration(
     }
   }
 
-  let [candidate] = Array.from(parseCandidate(rawCandidate, designSystem))
+  let [candidate] = parseCandidate(rawCandidate, designSystem)
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
   // we could be dealing with legacy classes like `tw__flex` in Tailwind CSS v3
