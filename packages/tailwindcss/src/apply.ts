@@ -1,9 +1,9 @@
-import { Features } from '.'
-import { rule, toCss, walk, WalkAction, type AstNode } from './ast'
-import { compileCandidates } from './compile'
-import type { DesignSystem } from './design-system'
-import type { SourceLocation } from './source-maps/source'
-import { DefaultMap } from './utils/default-map'
+import {Features} from '.'
+import {rule, toCss, walk, WalkAction, type AstNode} from './ast'
+import {compileCandidates} from './compile'
+import type {DesignSystem} from './design-system'
+import type {SourceLocation} from './source-maps/source'
+import {DefaultMap} from './utils/default-map'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
@@ -24,7 +24,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let definitions = new DefaultMap(() => new Set<AstNode>())
 
   // Collect all new `@utility` definitions and all `@apply` rules first
-  walk([root], (node, { parent, path }) => {
+  walk([root], (node, {parent, path}) => {
     if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.
@@ -157,7 +157,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   for (let parent of sorted) {
     if (!('nodes' in parent)) continue
 
-    walk(parent.nodes, (child, { replaceWith }) => {
+    walk(parent.nodes, (child, {replaceWith}) => {
       if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
       let parts = child.params.split(/(\s+)/g)
@@ -176,7 +176,54 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         let candidates = Object.keys(candidateOffsets)
         let compiled = compileCandidates(candidates, designSystem, {
           onInvalidCandidate: (candidate) => {
-            throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+            // When using prefix, make sure prefix is used in candidate
+            if (designSystem.theme.prefix && !candidate.startsWith(designSystem.theme.prefix)) {
+              throw new Error(
+                `Cannot apply unprefixed utility class: \`${candidate}\`, did you mean \`${designSystem.theme.prefix}:${candidate}\`?`,
+              )
+            }
+
+            // When the utility is blocklisted, let the user know
+            //
+            // Note: `@apply` is processed before handling incoming classes from
+            // template files. This means that the `invalidCandidates` set will
+            // only contain explicit classes via:
+            //
+            // - `blocklist` from a JS config
+            // - `@source not inline(…)`
+            if (designSystem.invalidCandidates.has(candidate)) {
+              throw new Error(
+                `Cannot apply \`${candidate}\`, it seems like the utility was explicitly excluded and cannot be applied.\n\nMore info: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes`,
+              )
+            }
+
+            // Verify `@tailwind utilities` or `@reference` is used
+            let hasUtilitiesOrReference = false
+            walk(ast, (node, {context}) => {
+              // Find `@reference`
+              if (context.reference) {
+                hasUtilitiesOrReference = true
+                return WalkAction.Stop
+              }
+
+              // Find `@tailwind utilities`
+              else if (
+                node.kind === 'at-rule' &&
+                node.name === '@tailwind' &&
+                (node.params === 'utilities' || node.params.startsWith('utilities'))
+              ) {
+                hasUtilitiesOrReference = true
+                return WalkAction.Stop
+              }
+            })
+            if (!hasUtilitiesOrReference) {
+              throw new Error(
+                `Cannot apply unknown utility class: \`${candidate}\`.\nIt looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\``,
+              )
+            }
+
+            // Fallback to most generic error message
+            throw new Error(`Cannot apply unknown utility class: \`${candidate}\``)
           },
         })
 
@@ -237,7 +284,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
 }
 
 function* resolveApplyDependencies(
-  node: Extract<AstNode, { kind: 'at-rule' }>,
+  node: Extract<AstNode, {kind: 'at-rule'}>,
   designSystem: DesignSystem,
 ) {
   for (let candidate of node.params.split(/\s+/g)) {
