@@ -3091,7 +3091,29 @@ test(
       'Running this command will add the dependency to the workspace root',
     )
 
-    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot()
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+      <div class="ring rounded outline"></div>
+
+      <!-- Variant order is also unsafe to change in v4 projects -->
+      <div class="file:hover:flex *:hover:flex"></div>
+      <div class="hover:file:flex hover:*:flex"></div>
+
+      <!-- These are safe to migrate: -->
+      <div
+        class="flex! bg-red-500/(--my-opacity) pointer-fine:flex bg-bottom-right object-top-left"
+      ></div>
+
+      --- ./src/input.css ---
+      @import 'tailwindcss';
+
+      .foo {
+        @apply bg-(--my-color)!;
+      }
+      "
+    `)
   },
 )
 
