@@ -31,6 +31,13 @@ export function pkg(base: string) {
         args.push(SAVE_DEV[packageManager] || SAVE_DEV.default)
       }
 
+      // Allow running the `pnpm` command in the workspace root without
+      // erroring. Can't just use `--workspace-root` because that will force
+      // install dependencies in the workspace root.
+      if (packageManager === 'pnpm') {
+        args.push('--ignore-workspace-root-check')
+      }
+
       let command = `${packageManager} add ${args.join(' ')}`
       try {
         return await exec(command, { cwd: base })
