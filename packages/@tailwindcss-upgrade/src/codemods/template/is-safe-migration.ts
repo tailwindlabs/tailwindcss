@@ -45,13 +45,20 @@ export function isSafeMigration(
     // Whitespace before the candidate
     location.contents[location.start - 1]?.match(/\s/) &&
     // A colon followed by whitespace after the candidate
-    location.contents.slice(location.end, location.end + 2)?.match(/^:\s/) &&
-    // A `<style` block is present before the candidate
-    location.contents.slice(0, location.start).includes('<style') &&
-    // `</style>` is present after the candidate
-    location.contents.slice(location.end).includes('</style>')
+    location.contents.slice(location.end, location.end + 2)?.match(/^:\s/)
   ) {
-    return false
+    // Compute all `<style>` ranges once and cache it for the current files
+    let ranges = styleBlockRanges.get(location.contents)
+
+    for (let i = 0; i < ranges.length; i += 2) {
+      let start = ranges[i]
+      let end = ranges[i + 1]
+
+      // Check if the candidate is inside a `<style>` block
+      if (location.start >= start && location.end <= end) {
+        return false
+      }
+    }
   }
 
   let [candidate] = Array.from(parseCandidate(rawCandidate, designSystem))
