@@ -1223,6 +1223,7 @@ test('utilities used in @apply must be prefixed', async () => {
   await expect(
     compile(
       css`
+        @tailwind utilities;
         @config "./config.js";
 
         .my-underline {
@@ -1238,7 +1239,7 @@ test('utilities used in @apply must be prefixed', async () => {
       },
     ),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Cannot apply unknown utility class: underline]`,
+    `[Error: Cannot apply unprefixed utility class: \`underline\`, did you mean \`tw:underline\`?]`,
   )
 })
 
@@ -1440,7 +1441,11 @@ test('blocklisted candidates cannot be used with `@apply`', async () => {
       },
     ),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Cannot apply unknown utility class: bg-white]`,
+    `
+    [Error: Cannot apply \`bg-white\`, it seems like the utility was explicitly excluded and cannot be applied.
+
+    More info: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes]
+  `,
   )
 })
 
