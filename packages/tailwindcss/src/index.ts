@@ -396,6 +396,7 @@ async function parseCss(
             },
             {
               compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleParams]),
+              override: true,
             },
           )
         })
