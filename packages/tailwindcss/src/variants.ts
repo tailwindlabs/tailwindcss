@@ -69,7 +69,11 @@ export class Variants {
   static(
     name: string,
     applyFn: VariantFn<'static'>,
-    { compounds, order }: { compounds?: Compounds; order?: number } = {},
+    {
+      compounds,
+      order,
+      override,
+    }: { compounds?: Compounds; order?: number; override?: boolean } = {},
   ) {
     this.set(name, {
       kind: 'static',
@@ -77,6 +81,7 @@ export class Variants {
       compoundsWith: Compounds.Never,
       compounds: compounds ?? Compounds.StyleRules,
       order,
+      override,
     })
   }
 
@@ -280,26 +285,30 @@ export class Variants {
       compounds,
       compoundsWith,
       order,
+      override,
     }: {
       kind: T
       applyFn: VariantFn<T>
       compoundsWith: Compounds
       compounds: Compounds
       order?: number
+      override?: boolean
     },
   ) {
+    const getNewOrder = () => (this.lastOrder = this.nextOrder())
     let existing = this.variants.get(name)
     if (existing) {
-      Object.assign(existing, { kind, applyFn, compounds })
+      Object.assign(existing, {
+        kind,
+        applyFn,
+        compounds,
+        order: override ? getNewOrder() : existing.order,
+      })
     } else {
-      if (order === undefined) {
-        this.lastOrder = this.nextOrder()
-        order = this.lastOrder
-      }
       this.variants.set(name, {
         kind,
         applyFn,
-        order,
+        order: order ?? getNewOrder(),
         compoundsWith,
         compounds,
       })
