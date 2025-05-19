@@ -40,7 +40,7 @@
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^7.1.0",
     "prettier": "catalog:",
-    "semver": "^7.7.1",
+    "semver": "^7.7.2",
     "tailwindcss": "workspace:*",
     "tree-sitter": "^0.22.4",
     "tree-sitter-typescript": "^0.23.2"
