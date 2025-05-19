@@ -49,6 +49,20 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
     }
   }
 
+  function updateSource(astNode: PostCssChildNode, loc: SourceLocation | undefined) {
+    let source = toSource(loc)
+
+    // The `source` property on PostCSS nodes must be defined if present because
+    // `toJSON()` reads each property and tries to read from source.input if it
+    // sees a `source` property. This means for a missing or otherwise absent
+    // source it must be *missing* from the object rather than just `undefined`
+    if (source) {
+      astNode.source = source
+    } else {
+      delete astNode.source
+    }
+  }
+
   function transform(node: AstNode, parent: PostCssContainerNode) {
     // Declaration
     if (node.kind === 'declaration') {
@@ -57,14 +71,14 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
         value: node.value ?? '',
         important: node.important,
       })
-      astNode.source = toSource(node.src)
+      updateSource(astNode, node.src)
       parent.append(astNode)
     }
 
     // Rule
     else if (node.kind === 'rule') {
       let astNode = postcss.rule({ selector: node.selector })
-      astNode.source = toSource(node.src)
+      updateSource(astNode, node.src)
       astNode.raws.semicolon = true
       parent.append(astNode)
       for (let child of node.nodes) {
@@ -75,7 +89,7 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
     // AtRule
     else if (node.kind === 'at-rule') {
       let astNode = postcss.atRule({ name: node.name.slice(1), params: node.params })
-      astNode.source = toSource(node.src)
+      updateSource(astNode, node.src)
       astNode.raws.semicolon = true
       parent.append(astNode)
       for (let child of node.nodes) {
@@ -90,7 +104,7 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
       // spaces.
       astNode.raws.left = ''
       astNode.raws.right = ''
-      astNode.source = toSource(node.src)
+      updateSource(astNode, node.src)
       parent.append(astNode)
     }
 
