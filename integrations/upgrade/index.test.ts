@@ -2980,21 +2980,21 @@ test(
         }
       `,
       'src/index.vue': html`
-        <template
+        <template>
           <div class="!flex"></div>
         </template>
 
         <style>
-        @reference "./input.css";
+          @reference "./input.css";
 
-        .foo {
-          @apply !bg-red-500;
-        }
+          .foo {
+            @apply !bg-red-500;
+          }
 
-        .bar {
-          /* Do not upgrade the key: */
-          flex-shrink: 0;
-        }
+          .bar {
+            /* Do not upgrade the key: */
+            flex-shrink: 0;
+          }
         </style>
       `,
       'src/input.css': css`
@@ -3016,21 +3016,21 @@ test(
     expect(await fs.dumpFiles('./src/**/*.{css,vue}')).toMatchInlineSnapshot(`
       "
       --- ./src/index.vue ---
-      <template
+      <template>
         <div class="flex!"></div>
       </template>
 
       <style>
-      @reference "./input.css";
+        @reference "./input.css";
 
-      .foo {
-        @apply !bg-red-500;
-      }
+        .foo {
+          @apply !bg-red-500;
+        }
 
-      .bar {
-        /* Do not upgrade the key: */
-        flex-shrink: 0;
-      }
+        .bar {
+          /* Do not upgrade the key: */
+          flex-shrink: 0;
+        }
       </style>
 
       --- ./src/input.css ---
