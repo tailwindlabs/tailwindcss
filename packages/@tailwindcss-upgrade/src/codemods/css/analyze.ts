@@ -12,7 +12,14 @@ export async function analyze(stylesheets: Stylesheet[]) {
   let processingQueue: (() => Promise<Result>)[] = []
   let stylesheetsByFile = new DefaultMap<string, Stylesheet | null>((file) => {
     // We don't want to process ignored files (like node_modules)
-    if (isIgnored(file)) {
+    try {
+      if (isIgnored(file)) {
+        return null
+      }
+    } catch {
+      // If the file is not part of the current working directory (which can
+      // happen if you import `tailwindcss` and it's loading a shared file from
+      // pnpm) then this will throw.
       return null
     }
 
