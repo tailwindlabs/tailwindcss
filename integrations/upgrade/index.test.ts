@@ -1,5 +1,6 @@
+import path from 'node:path'
 import { isRepoDirty } from '../../packages/@tailwindcss-upgrade/src/utils/git'
-import { candidate, css, html, js, json, test, ts } from '../utils'
+import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 test(
   'error when no CSS file with @tailwind is used',
@@ -2964,6 +2965,59 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'upgrades can run in a pnpm workspace',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4"
+          },
+          "devDependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'project-a/src/index.html': html`
+        <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+        <div class="ring rounded outline"></div>
+
+        <!-- Variant order is also unsafe to change in v4 projects -->
+        <div class="file:hover:flex *:hover:flex"></div>
+        <div class="hover:file:flex hover:*:flex"></div>
+
+        <!-- These are safe to migrate: -->
+        <div
+          class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex bg-right-bottom object-left-top"
+        ></div>
+      `,
+      'project-a/src/input.css': css`
+        @import 'tailwindcss';
+
+        .foo {
+          @apply !bg-[var(--my-color)];
+        }
+      `,
+    },
+  },
+  async ({ root, exec, fs, expect }) => {
+    let stdout = await exec('npx @tailwindcss/upgrade', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    expect(/Path .*? is not in cwd/.test(stdout)).toBe(false)
+
+    expect(await fs.dumpFiles('./project-a/src/**/*.{css,html}')).toMatchInlineSnapshot()
   },
 )
 
