@@ -3044,6 +3044,58 @@ test(
 )
 
 test(
+  'upgrades can run in a pnpm workspace root',
+  {
+    fs: {
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - .
+      `,
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4"
+          },
+          "devDependencies": {
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': html`
+        <!-- Migrating 'ring', 'rounded' and 'outline-none' are unsafe in v4 -> v4 migrations -->
+        <div class="ring rounded outline"></div>
+
+        <!-- Variant order is also unsafe to change in v4 projects -->
+        <div class="file:hover:flex *:hover:flex"></div>
+        <div class="hover:file:flex hover:*:flex"></div>
+
+        <!-- These are safe to migrate: -->
+        <div
+          class="!flex bg-red-500/[var(--my-opacity)] [@media(pointer:fine)]:flex bg-right-bottom object-left-top"
+        ></div>
+      `,
+      'src/input.css': css`
+        @import 'tailwindcss';
+
+        .foo {
+          @apply !bg-[var(--my-color)];
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    let stdout = await exec('npx @tailwindcss/upgrade')
+
+    expect(stdout).not.toContain(
+      'Running this command will add the dependency to the workspace root',
+    )
+
+    expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot()
+  },
+)
+
+test(
   'upgrade <style> blocks carefully',
   {
     fs: {
