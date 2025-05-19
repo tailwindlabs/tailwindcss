@@ -189,12 +189,12 @@ const styleBlockRanges = new DefaultMap((source: string) => {
     let startTag = source.indexOf('<style', offset)
     if (startTag === -1) return ranges
 
+    offset = startTag + 1
+
     // Ensure the style looks like:
     // - `<style>`   (closed)
     // - `<style …>` (with attributes)
-    if (!source[startTag + 6].match(/[>\s]/)) return ranges
-
-    offset = startTag + 1
+    if (!source[startTag + 6].match(/[>\s]/)) continue
 
     let endTag = source.indexOf('</style>', offset)
     if (endTag === -1) return ranges
