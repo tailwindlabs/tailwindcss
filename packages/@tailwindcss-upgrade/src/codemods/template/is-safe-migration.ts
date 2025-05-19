@@ -1,5 +1,6 @@
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
 
 const QUOTES = ['"', "'", '`']
@@ -44,16 +45,23 @@ export function isSafeMigration(
     // Whitespace before the candidate
     location.contents[location.start - 1]?.match(/\s/) &&
     // A colon followed by whitespace after the candidate
-    location.contents.slice(location.end, location.end + 2)?.match(/^:\s/) &&
-    // A `<style` block is present before the candidate
-    location.contents.slice(0, location.start).includes('<style') &&
-    // `</style>` is present after the candidate
-    location.contents.slice(location.end).includes('</style>')
+    location.contents.slice(location.end, location.end + 2)?.match(/^:\s/)
   ) {
-    return false
+    // Compute all `<style>` ranges once and cache it for the current files
+    let ranges = styleBlockRanges.get(location.contents)
+
+    for (let i = 0; i < ranges.length; i += 2) {
+      let start = ranges[i]
+      let end = ranges[i + 1]
+
+      // Check if the candidate is inside a `<style>` block
+      if (location.start >= start && location.end <= end) {
+        return false
+      }
+    }
   }
 
-  let [candidate] = Array.from(parseCandidate(rawCandidate, designSystem))
+  let [candidate] = parseCandidate(rawCandidate, designSystem)
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
   // we could be dealing with legacy classes like `tw__flex` in Tailwind CSS v3
@@ -62,10 +70,10 @@ export function isSafeMigration(
   // So let's only skip if we couldn't parse and we are not in Tailwind CSS v3.
   //
   if (!candidate && version.isGreaterThan(3)) {
-    return true
+    return false
   }
 
-  // Parsed a candidate succesfully, verify if it's a valid candidate
+  // Parsed a candidate successfully, verify if it's a valid candidate
   else if (candidate) {
     // When we have variants, we can assume that the candidate is safe to migrate
     // because that requires colons.
@@ -168,3 +176,30 @@ export function isSafeMigration(
 
   return true
 }
+
+// Assumptions:
+// - All `<style` tags appear before the next `</style>` tag
+// - All `<style` tags are closed with `</style>`
+// - No nested `<style>` tags
+const styleBlockRanges = new DefaultMap((source: string) => {
+  let ranges: number[] = []
+  let offset = 0
+
+  while (true) {
+    let startTag = source.indexOf('<style', offset)
+    if (startTag === -1) return ranges
+
+    offset = startTag + 1
+
+    // Ensure the style looks like:
+    // - `<style>`   (closed)
+    // - `<style …>` (with attributes)
+    if (!source[startTag + 6].match(/[>\s]/)) continue
+
+    let endTag = source.indexOf('</style>', offset)
+    if (endTag === -1) return ranges
+    offset = endTag + 1
+
+    ranges.push(startTag, endTag)
+  }
+})
