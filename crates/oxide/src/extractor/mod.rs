@@ -1054,6 +1054,23 @@ mod tests {
         );
     }
 
+    // See: https://github.com/tailwindlabs/tailwindcss/issues/18092
+    #[test]
+    fn test_leptos_rs_view_class_colon_syntax() {
+        for (input, expected) in [
+            (
+                r#"<div class:px-6=true>"#,
+                vec!["class", "px-6"],
+            ),
+            (
+                r#"view! { <div class:px-6=true> }"#,
+                vec!["class", "px-6", "view!"],
+            ),
+        ] {
+            assert_extract_sorted_candidates(&pre_process_input(input, "svelte"), expected);
+        }
+    }
+
     #[test]
     fn test_extract_css_variables() {
         for (input, expected) in [
