@@ -45,6 +45,14 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     // Promote inferred data type to more specific utility if it exists
     ['bg-[123px]', 'bg-position-[123px]'],
+
+    // Do not migrate bare values or arbitrary values to named values that are
+    // deprecated
+    ['order-[0]', 'order-0'],
+    ['order-0', 'order-0'],
+
+    // Migrate deprecated named values to bare values
+    ['order-none', 'order-0'],
   ])(testName, async (candidate, result) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`
@@ -60,6 +68,40 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     }
 
     let designSystem = await designSystems.get(__dirname).get(input)
+    let migrated = await migrate(designSystem, {}, candidate)
+    expect(migrated).toEqual(result)
+  })
+
+  test.each([
+    ['order-[0]', 'order-0'],
+    ['order-0', 'order-0'],
+
+    // Do not migrate away `order-none` if it's customly defined and thus not
+    // safe to migrate to `order-0`
+    ['order-none', 'order-none'],
+  ])(`${testName} with custom implementations`, async (candidate, result) => {
+    if (strategy === 'with-variant') {
+      candidate = `focus:${candidate}`
+      result = `focus:${result}`
+    } else if (strategy === 'important') {
+      candidate = `${candidate}!`
+      result = `${result}!`
+    } else if (strategy === 'prefix') {
+      // Not only do we need to prefix the candidate, we also have to make
+      // sure that we prefix all CSS variables.
+      candidate = `tw:${candidate.replaceAll('var(--', 'var(--tw-')}`
+      result = `tw:${result.replaceAll('var(--', 'var(--tw-')}`
+    }
+
+    let localInput = css`
+      ${input}
+
+      @utility order-none {
+        order: none; /* imagine this exists */
+      }
+    `
+
+    let designSystem = await designSystems.get(__dirname).get(localInput)
     let migrated = await migrate(designSystem, {}, candidate)
     expect(migrated).toEqual(result)
   })
