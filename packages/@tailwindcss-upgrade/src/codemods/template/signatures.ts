@@ -237,6 +237,12 @@ export const computeUtilitySignature = new DefaultMap<
   })
 })
 
+// TODO: Right now this ignores _all_ utilities defined in the set regardless of
+// where they came from. Ideally, we have a deprecated flag on the utility
+// handler itself such that user-defined `@utlity order-none {}` can still be
+// used and not be ignored.
+const deprecatedUtilities = new Set(['order-none'])
+
 // For all static utilities in the system, compute a lookup table that maps the
 // utility signature to the utility name. This is used to find the utility name
 // for a given utility signature.
@@ -250,6 +256,7 @@ export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<stri
     let lookup = new DefaultMap<string, string[]>(() => [])
 
     for (let [className, meta] of ds.getClassList()) {
+      if (deprecatedUtilities.has(className)) continue
       let signature = signatures.get(className)
       if (typeof signature !== 'string') continue
       lookup.get(signature).push(className)
