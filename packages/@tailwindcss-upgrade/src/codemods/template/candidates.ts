@@ -33,3 +33,11 @@ export function parseCandidate(designSystem: DesignSystem, input: string) {
       : input,
   )
 }
+
+export function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candidate) {
+  let candidateString = designSystem.printCandidate(candidate)
+
+  return designSystem.theme.prefix && candidateString.startsWith(`${designSystem.theme.prefix}:`)
+    ? candidateString.slice(designSystem.theme.prefix.length + 1)
+    : candidateString
+}
