@@ -90,4 +90,6 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
       return [decl('flex-grow', candidate.value.value)]
     }
   })
+
+  designSystem.utilities.static('order-none', () => [decl('order', '0')])
 }

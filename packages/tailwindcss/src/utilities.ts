@@ -649,7 +649,6 @@ export function createUtilities(theme: Theme) {
    */
   staticUtility('order-first', [['order', '-9999']])
   staticUtility('order-last', [['order', '9999']])
-  staticUtility('order-none', [['order', '0']])
   functionalUtility('order', {
     supportsNegative: true,
     handleBareValue: ({ value }) => {

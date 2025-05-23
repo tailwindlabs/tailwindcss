@@ -8079,7 +8079,6 @@ exports[`getClassList 1`] = `
   "order-12",
   "order-first",
   "order-last",
-  "order-none",
   "ordinal",
   "origin-bottom",
   "origin-bottom-left",
