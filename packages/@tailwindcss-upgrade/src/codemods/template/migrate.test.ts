@@ -76,8 +76,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['order-[0]', 'order-0'],
     ['order-0', 'order-0'],
 
-    // Do not migrate away `order-none` if it's customly defined and thus not
-    // safe to migrate to `order-0`
+    // Do not migrate `order-none` if defined as a custom utility as it is then
+    // not safe to migrate to `order-0`
     ['order-none', 'order-none'],
   ])(`${testName} with custom implementations`, async (candidate, result) => {
     if (strategy === 'with-variant') {
