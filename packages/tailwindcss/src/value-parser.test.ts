@@ -165,6 +165,22 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('should not error when extra `)` was passed', () => {
+    expect(parse('calc(1 + 2))')).toEqual([
+      {
+        kind: 'function',
+        value: 'calc',
+        nodes: [
+          { kind: 'word', value: '1' },
+          { kind: 'separator', value: ' ' },
+          { kind: 'word', value: '+' },
+          { kind: 'separator', value: ' ' },
+          { kind: 'word', value: '2' },
+        ],
+      },
+    ])
+  })
 })
 
 describe('toCss', () => {
