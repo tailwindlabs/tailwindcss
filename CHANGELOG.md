@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgrade: Do not migrate declarations that look like candidates in `<style>` blocks ([#18057](https://github.com/tailwindlabs/tailwindcss/pull/18057), [18068](https://github.com/tailwindlabs/tailwindcss/pull/18068))
 - Upgrade: Improve `pnpm` workspaces support ([#18065](https://github.com/tailwindlabs/tailwindcss/pull/18065))
+- Upgrade: Migrate deprecated `order-none` to `order-0` ([#18126](https://github.com/tailwindlabs/tailwindcss/pull/18126))
 - Support Leptos `class:` attributes when extracting classes ([#18093](https://github.com/tailwindlabs/tailwindcss/pull/18093))
+- Fix "Cannot read properties of undefined" crash on malformed arbitrary value ([#18133](https://github.com/tailwindlabs/tailwindcss/pull/18133))
 
 ## [4.1.7] - 2025-05-15
 

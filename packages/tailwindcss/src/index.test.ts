@@ -4305,11 +4305,11 @@ it("should error when `layer(…)` is used, but it's not the first param", async
 
 describe('`@reference "…" imports`', () => {
   test('recursively removes styles', async () => {
-    let loadStylesheet = async (id: string, base: string) => {
+    let loadStylesheet = async (id: string, base = '/root/foo') => {
       if (id === './foo/baz.css') {
         return {
+          base,
           path: '',
-          base: '/root/foo',
           content: css`
             .foo {
               color: red;
@@ -4355,11 +4355,11 @@ describe('`@reference "…" imports`', () => {
   })
 
   test('does not generate utilities', async () => {
-    let loadStylesheet = async (id: string, base: string) => {
+    let loadStylesheet = async (id: string, base = '/root/foo') => {
       if (id === './foo/baz.css') {
         return {
+          base,
           path: '',
-          base: '/root/foo',
           content: css`
             @layer utilities {
               @tailwind utilities;
@@ -4442,7 +4442,7 @@ describe('`@reference "…" imports`', () => {
               })
               matchUtilities(
                 {
-                  'match-utility': (value) => ({
+                  'match-utility': (_value) => ({
                     '@keyframes match-utilities': { '100%': { opacity: '0' } },
                   }),
                 },
@@ -4450,7 +4450,7 @@ describe('`@reference "…" imports`', () => {
               )
               matchComponents(
                 {
-                  'match-components': (value) => ({
+                  'match-components': (_value) => ({
                     '@keyframes match-components': { '100%': { opacity: '0' } },
                   }),
                 },
@@ -4474,12 +4474,12 @@ describe('`@reference "…" imports`', () => {
   })
 
   test('emits CSS variable fallback and keyframes defined inside @reference-ed files', async () => {
-    let loadStylesheet = async (id: string, base: string) => {
+    let loadStylesheet = async (id: string, base = '/root') => {
       switch (id) {
         case './one.css': {
           return {
+            base,
             path: '',
-            base: '/root',
             content: css`
               @import './two.css' layer(two);
             `,
@@ -4487,8 +4487,8 @@ describe('`@reference "…" imports`', () => {
         }
         case './two.css': {
           return {
+            base,
             path: '',
-            base: '/root',
             content: css`
               @import './three.css' layer(three);
             `,
@@ -4496,8 +4496,8 @@ describe('`@reference "…" imports`', () => {
         }
         case './three.css': {
           return {
+            base,
             path: '',
-            base: '/root',
             content: css`
               .foo {
                 color: red;
@@ -5519,7 +5519,7 @@ describe('feature detection', () => {
       css`
         @import 'tailwindcss/preflight';
       `,
-      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+      { loadStylesheet: async (_, base) => ({ base, path: '', content: '' }) },
     )
 
     expect(compiler.features & Features.AtImport).toBeTruthy()
@@ -5530,7 +5530,7 @@ describe('feature detection', () => {
       css`
         @import 'tailwindcss/preflight';
       `,
-      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+      { loadStylesheet: async (_, base) => ({ base, path: '', content: '' }) },
     )
 
     // There's little difference between `@reference` and `@import` on a feature
@@ -5551,7 +5551,7 @@ describe('feature detection', () => {
           color: theme(--color-red);
         }
       `,
-      { loadStylesheet: async (_, base) => ({ base, content: '' }) },
+      { loadStylesheet: async (_, base) => ({ base, path: '', content: '' }) },
     )
 
     expect(compiler.features & Features.ThemeFunction).toBeTruthy()
@@ -5562,7 +5562,7 @@ describe('feature detection', () => {
       css`
         @plugin "./some-plugin.js";
       `,
-      { loadModule: async (_, base) => ({ base, module: () => {} }) },
+      { loadModule: async (_, base) => ({ base, path: '', module: () => {} }) },
     )
 
     expect(compiler.features & Features.JsPluginCompat).toBeTruthy()
@@ -5573,7 +5573,7 @@ describe('feature detection', () => {
       css`
         @config "./some-config.js";
       `,
-      { loadModule: async (_, base) => ({ base, module: {} }) },
+      { loadModule: async (_, base) => ({ base, path: '', module: {} }) },
     )
 
     expect(compiler.features & Features.JsPluginCompat).toBeTruthy()
@@ -5605,9 +5605,10 @@ describe('feature detection', () => {
         @reference "tailwindcss/utilities";
       `,
       {
-        async loadStylesheet(id, base) {
+        async loadStylesheet(_id, base) {
           return {
             base,
+            path: '',
             content: css`
               @tailwind utilities;
             `,

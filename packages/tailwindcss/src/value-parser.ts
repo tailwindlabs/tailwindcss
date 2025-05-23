@@ -302,7 +302,7 @@ export function parse(input: string) {
         // Handle everything before the closing paren a word
         if (buffer.length > 0) {
           let node = word(buffer)
-          tail!.nodes.push(node)
+          tail?.nodes.push(node)
           buffer = ''
         }
 

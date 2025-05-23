@@ -14,6 +14,7 @@ import { migrateBareValueUtilities } from './migrate-bare-utilities'
 import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
+import { migrateDeprecatedUtilities } from './migrate-deprecated-utilities'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
@@ -48,6 +49,7 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateLegacyArbitraryValues,
   migrateArbitraryUtilities,
   migrateBareValueUtilities,
+  migrateDeprecatedUtilities,
   migrateModernizeArbitraryValues,
   migrateArbitraryVariants,
   migrateDropUnnecessaryDataTypes,
