@@ -1,3 +1,4 @@
+import { stripVTControlCharacters } from 'node:util'
 import { candidate, html, json, test, ts } from '../utils'
 
 test(
@@ -134,7 +135,9 @@ test(
       await exec('pnpm vite build')
     } catch (error) {
       let [, message] =
-        /error during build:([\s\S]*?)file:/g.exec(error.message.replace(/\r?\n/g, '\n')) ?? []
+        /error during build:([\s\S]*?)file:/g.exec(
+          stripVTControlCharacters(error.message.replace(/\r?\n/g, '\n')),
+        ) ?? []
       expect(message.trim()).toMatchInlineSnapshot(`
         "[@tailwindcss/vite:generate:build] Cannot apply unknown utility class: \`text-red-500\`.
         It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`"
