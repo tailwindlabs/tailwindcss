@@ -161,7 +161,12 @@ export function migrateArbitraryUtilities(
 
       let spacingMultiplier = spacing.get(designSystem)?.get(value)
 
-      for (let root of designSystem.utilities.keys('functional')) {
+      for (let root of Array.from(designSystem.utilities.keys('functional')).sort(
+        // Sort negative roots after positive roots so that we can try
+        // `mt-*` before `-mt-*`. This is especially useful in situations where
+        // `-mt-[0px]` can be translated to `mt-[0px]`.
+        (a, z) => Number(a[0] === '-') - Number(z[0] === '-'),
+      )) {
         // Try as bare value
         for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
           yield replacementCandidate
