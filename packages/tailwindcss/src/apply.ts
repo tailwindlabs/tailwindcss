@@ -197,26 +197,10 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
               )
             }
 
-            // Verify `@tailwind utilities` or `@reference` is used
-            let hasUtilitiesOrReference = false
-            walk(ast, (node, { context }) => {
-              // Find `@reference`
-              if (context.reference) {
-                hasUtilitiesOrReference = true
-                return WalkAction.Stop
-              }
-
-              // Find `@tailwind utilities`
-              else if (
-                node.kind === 'at-rule' &&
-                node.name === '@tailwind' &&
-                (node.params === 'utilities' || node.params.startsWith('utilities'))
-              ) {
-                hasUtilitiesOrReference = true
-                return WalkAction.Stop
-              }
-            })
-            if (!hasUtilitiesOrReference) {
+            // When the theme is empty, it means that no theme was loaded and
+            // `@import "tailwindcss"`, `@reference "app.css"` or similar is
+            // very likely missing.
+            if (designSystem.theme.size === 0) {
               throw new Error(
                 `Cannot apply unknown utility class: \`${candidate}\`.\nIt looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\``,
               )

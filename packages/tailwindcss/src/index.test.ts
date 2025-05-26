@@ -551,7 +551,10 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Cannot apply unknown utility class: \`bg-not-found\`]`,
+      `
+      [Error: Cannot apply unknown utility class: \`bg-not-found\`.
+      It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`]
+    `,
     )
   })
 
@@ -565,7 +568,10 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Cannot apply unknown utility class: \`hocus:bg-red-500\`]`,
+      `
+      [Error: Cannot apply unknown utility class: \`hocus:bg-red-500\`.
+      It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`]
+    `,
     )
   })
 
