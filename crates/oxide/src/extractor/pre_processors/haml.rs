@@ -330,6 +330,11 @@ impl Haml {
             cursor.advance();
         }
 
+        // We didn't find a newline, we reached the end of the input
+        if last_known_newline_position == last_newline_position {
+            return cursor.pos;
+        }
+
         // Move the cursor to the last newline position
         cursor.move_to(last_newline_position);
 
@@ -445,5 +450,17 @@ mod tests {
               .flex.items-center
         "#;
         Haml::test_extract_contains(input, vec!["flex", "items-center"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/17379#issuecomment-2910108646
+    #[test]
+    fn test_crash_missing_newline() {
+        // The empty `""` will introduce a newline
+        let good = ["- index = 0", "- index += 1", ""].join("\n");
+        Haml::test_extract_contains(&good, vec!["index"]);
+
+        // This used to crash before the fix
+        let bad = ["- index = 0", "- index += 1"].join("\n");
+        Haml::test_extract_contains(&bad, vec!["index"]);
     }
 }
