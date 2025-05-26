@@ -4,6 +4,7 @@ import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import type { SourceLocation } from './source-maps/source'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
@@ -195,6 +196,28 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
               throw new Error(
                 `Cannot apply \`${candidate}\`, it seems like the utility was explicitly excluded and cannot be applied.\n\nMore info: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes`,
               )
+            }
+
+            // Verify if variants exist
+            let parts = segment(candidate, ':')
+            if (parts.length > 1) {
+              let utility = parts.pop()!
+
+              // Ensure utility on its own compiles, if not, we will fallback to
+              // the next error
+              if (designSystem.candidatesToCss([utility])[0]) {
+                let compiledVariants = designSystem.candidatesToCss(
+                  parts.map((variant) => `${variant}:[--tw-variant-check:1]`),
+                )
+                let unknownVariants = parts.filter((_, idx) => compiledVariants[idx] === null)
+                if (unknownVariants.length > 0) {
+                  throw new Error(
+                    `Cannot apply unknown utility class: \`${candidate}\`.\nThe following variants are unknown:\n${unknownVariants
+                      .map((variant) => `- \`${variant}\``)
+                      .join('\n')}\n`,
+                  )
+                }
+              }
             }
 
             // When the theme is empty, it means that no theme was loaded and

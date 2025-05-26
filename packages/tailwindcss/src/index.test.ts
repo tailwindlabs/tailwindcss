@@ -562,15 +562,21 @@ describe('@apply', () => {
     await expect(
       compile(css`
         @tailwind utilities;
+        @theme {
+          --color-red-500: red;
+        }
 
         .foo {
-          @apply hocus:bg-red-500;
+          @apply hocus:hover:pocus:bg-red-500;
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `
-      [Error: Cannot apply unknown utility class: \`hocus:bg-red-500\`.
-      It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`]
+      [Error: Cannot apply unknown utility class: \`hocus:hover:pocus:bg-red-500\`.
+      The following variants are unknown:
+      - \`hocus\`
+      - \`pocus\`
+      ]
     `,
     )
   })
