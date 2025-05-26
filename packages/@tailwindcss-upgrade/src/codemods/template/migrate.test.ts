@@ -53,6 +53,17 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     // Migrate deprecated named values to bare values
     ['order-none', 'order-0'],
+
+    // `-0` should not be migrated to `0`.
+    //
+    // This used to be a bug that translate `mt-[0px]` into `-mt-[0px]` because
+    // `-mt-[0px]` translates to `margin-top: calc(0px * -1);` and therefore we
+    // handle the `0px * -1` case which translates to `0px` not `-0px`.
+    //
+    // This translation is actually fine, because now, we will prefer the
+    // non-negative version first so we can replace `-mt-[0px]` with `mt-[0px]`.
+    ['mt-[0px]', 'mt-[0px]'],
+    ['-mt-[0px]', 'mt-[0px]'],
   ])(testName, async (candidate, result) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`
