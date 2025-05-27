@@ -180,7 +180,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
             // When using prefix, make sure prefix is used in candidate
             if (designSystem.theme.prefix && !candidate.startsWith(designSystem.theme.prefix)) {
               throw new Error(
-                `Cannot apply unprefixed utility class: \`${candidate}\`, did you mean \`${designSystem.theme.prefix}:${candidate}\`?`,
+                `Cannot apply unprefixed utility class \`${candidate}\`. Did you mean \`${designSystem.theme.prefix}:${candidate}\`?`,
               )
             }
 
@@ -230,7 +230,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
             }
 
             // Fallback to most generic error message
-            throw new Error(`Cannot apply unknown utility class: \`${candidate}\``)
+            throw new Error(`Cannot apply unknown utility class \`${candidate}\``)
           },
         })
 
