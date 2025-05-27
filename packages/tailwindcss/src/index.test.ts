@@ -286,6 +286,88 @@ describe('@apply', () => {
     )
   })
 
+  it('@apply referencing theme values without `@tailwind utilities` or `@reference` should error', () => {
+    return expect(() =>
+      compileCss(css`
+        .foo {
+          @apply p-2;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Cannot apply unknown utility class \`p-2\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]`,
+    )
+  })
+
+  it('@apply referencing theme values with `@tailwind utilities` should work', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss';
+
+          .foo {
+            @apply p-2;
+          }
+        `,
+        [],
+        {
+          async loadStylesheet() {
+            return {
+              path: '',
+              base: '/',
+              content: css`
+                @theme {
+                  --spacing: 0.25rem;
+                }
+                @tailwind utilities;
+              `,
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --spacing: .25rem;
+      }
+
+      .foo {
+        padding: calc(var(--spacing) * 2);
+      }"
+    `)
+  })
+
+  it('@apply referencing theme values with `@reference` should work', async () => {
+    return expect(
+      await compileCss(
+        css`
+          @reference "style.css";
+
+          .foo {
+            @apply p-2;
+          }
+        `,
+        [],
+        {
+          async loadStylesheet() {
+            return {
+              path: '',
+              base: '/',
+              content: css`
+                @theme {
+                  --spacing: 0.25rem;
+                }
+                @tailwind utilities;
+              `,
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ".foo {
+        padding: calc(var(--spacing, .25rem) * 2);
+      }"
+    `)
+  })
+
   it('should replace @apply with the correct result', async () => {
     expect(
       await compileCss(css`
@@ -466,7 +548,7 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Cannot apply unknown utility class: bg-not-found]`,
+      `[Error: Cannot apply unknown utility class \`bg-not-found\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]`,
     )
   })
 
@@ -474,13 +556,16 @@ describe('@apply', () => {
     await expect(
       compile(css`
         @tailwind utilities;
+        @theme {
+          --color-red-500: red;
+        }
 
         .foo {
-          @apply hocus:bg-red-500;
+          @apply hocus:hover:pocus:bg-red-500;
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Cannot apply unknown utility class: hocus:bg-red-500]`,
+      `[Error: Cannot apply utility class \`hocus:hover:pocus:bg-red-500\` because the \`hocus\` and \`pocus\` variants do not exist.]`,
     )
   })
 

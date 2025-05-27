@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Improve error messages when `@apply` fails ([#18059](https://github.com/tailwindlabs/tailwindcss/pull/18059))
+
 ### Fixed
 
 - Upgrade: Do not migrate declarations that look like candidates in `<style>` blocks ([#18057](https://github.com/tailwindlabs/tailwindcss/pull/18057), [18068](https://github.com/tailwindlabs/tailwindcss/pull/18068))

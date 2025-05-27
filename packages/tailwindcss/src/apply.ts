@@ -4,6 +4,7 @@ import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import type { SourceLocation } from './source-maps/source'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
@@ -176,7 +177,68 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         let candidates = Object.keys(candidateOffsets)
         let compiled = compileCandidates(candidates, designSystem, {
           onInvalidCandidate: (candidate) => {
-            throw new Error(`Cannot apply unknown utility class: ${candidate}`)
+            // When using prefix, make sure prefix is used in candidate
+            if (designSystem.theme.prefix && !candidate.startsWith(designSystem.theme.prefix)) {
+              throw new Error(
+                `Cannot apply unprefixed utility class \`${candidate}\`. Did you mean \`${designSystem.theme.prefix}:${candidate}\`?`,
+              )
+            }
+
+            // When the utility is blocklisted, let the user know
+            //
+            // Note: `@apply` is processed before handling incoming classes from
+            // template files. This means that the `invalidCandidates` set will
+            // only contain explicit classes via:
+            //
+            // - `blocklist` from a JS config
+            // - `@source not inline(…)`
+            if (designSystem.invalidCandidates.has(candidate)) {
+              throw new Error(
+                `Cannot apply utility class \`${candidate}\` because it has been explicitly disabled: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes`,
+              )
+            }
+
+            // Verify if variants exist
+            let parts = segment(candidate, ':')
+            if (parts.length > 1) {
+              let utility = parts.pop()!
+
+              // Ensure utility on its own compiles, if not, we will fallback to
+              // the next error
+              if (designSystem.candidatesToCss([utility])[0]) {
+                let compiledVariants = designSystem.candidatesToCss(
+                  parts.map((variant) => `${variant}:[--tw-variant-check:1]`),
+                )
+                let unknownVariants = parts.filter((_, idx) => compiledVariants[idx] === null)
+                if (unknownVariants.length > 0) {
+                  if (unknownVariants.length === 1) {
+                    throw new Error(
+                      `Cannot apply utility class \`${candidate}\` because the ${unknownVariants.map((variant) => `\`${variant}\``)} variant does not exist.`,
+                    )
+                  } else {
+                    let formatter = new Intl.ListFormat('en', {
+                      style: 'long',
+                      type: 'conjunction',
+                    })
+                    throw new Error(
+                      `Cannot apply utility class \`${candidate}\` because the ${formatter.format(unknownVariants.map((variant) => `\`${variant}\``))} variants do not exist.`,
+                    )
+                  }
+                }
+              }
+            }
+
+            // When the theme is empty, it means that no theme was loaded and
+            // `@import "tailwindcss"`, `@reference "app.css"` or similar is
+            // very likely missing.
+            if (designSystem.theme.size === 0) {
+              throw new Error(
+                `Cannot apply unknown utility class \`${candidate}\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive`,
+              )
+            }
+
+            // Fallback to most generic error message
+            throw new Error(`Cannot apply unknown utility class \`${candidate}\``)
           },
         })
 

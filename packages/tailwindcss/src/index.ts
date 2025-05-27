@@ -624,14 +624,6 @@ async function parseCss(
     firstThemeRule.nodes = [context({ theme: true }, nodes)]
   }
 
-  // Replace the `@tailwind utilities` node with a context since it prints
-  // children directly.
-  if (utilitiesNode) {
-    let node = utilitiesNode as AstNode as Context
-    node.kind = 'context'
-    node.context = {}
-  }
-
   // Replace the `@variant` at-rules with the actual variant rules.
   if (variantNodes.length > 0) {
     for (let variantNode of variantNodes) {
@@ -658,6 +650,14 @@ async function parseCss(
 
   features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
+
+  // Replace the `@tailwind utilities` node with a context since it prints
+  // children directly.
+  if (utilitiesNode) {
+    let node = utilitiesNode as AstNode as Context
+    node.kind = 'context'
+    node.context = {}
+  }
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
