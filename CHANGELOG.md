@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.8] - 2025-05-27
+
 ### Added
 
 - Improve error messages when `@apply` fails ([#18059](https://github.com/tailwindlabs/tailwindcss/pull/18059))
@@ -3734,7 +3738,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...HEAD
+[4.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...v4.1.8
 [4.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...v4.1.7
 [4.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...v4.1.6
 [4.1.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.4...v4.1.5
