@@ -138,10 +138,9 @@ test(
         /error during build:([\s\S]*?)file:/g.exec(
           stripVTControlCharacters(error.message.replace(/\r?\n/g, '\n')),
         ) ?? []
-      expect(message.trim()).toMatchInlineSnapshot(`
-        "[@tailwindcss/vite:generate:build] Cannot apply unknown utility class: \`text-red-500\`.
-        It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`"
-      `)
+      expect(message.trim()).toMatchInlineSnapshot(
+        `"[@tailwindcss/vite:generate:build] Cannot apply unknown utility class \`text-red-500\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive"`,
+      )
     }
   },
 )

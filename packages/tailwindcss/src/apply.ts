@@ -194,7 +194,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
             // - `@source not inline(…)`
             if (designSystem.invalidCandidates.has(candidate)) {
               throw new Error(
-                `Cannot apply \`${candidate}\`, it seems like the utility was explicitly excluded and cannot be applied.\n\nMore info: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes`,
+                `Cannot apply utility class \`${candidate}\` because it has been explicitly disabled: https://tailwindcss.com/docs/detecting-classes-in-source-files#explicitly-excluding-classes`,
               )
             }
 
@@ -211,11 +211,19 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
                 )
                 let unknownVariants = parts.filter((_, idx) => compiledVariants[idx] === null)
                 if (unknownVariants.length > 0) {
-                  throw new Error(
-                    `Cannot apply unknown utility class: \`${candidate}\`.\nThe following variants are unknown:\n${unknownVariants
-                      .map((variant) => `- \`${variant}\``)
-                      .join('\n')}\n`,
-                  )
+                  if (unknownVariants.length === 1) {
+                    throw new Error(
+                      `Cannot apply utility class \`${candidate}\` because the ${unknownVariants.map((variant) => `\`${variant}\``)} variant does not exist.`,
+                    )
+                  } else {
+                    let formatter = new Intl.ListFormat('en', {
+                      style: 'long',
+                      type: 'conjunction',
+                    })
+                    throw new Error(
+                      `Cannot apply utility class \`${candidate}\` because the ${formatter.format(unknownVariants.map((variant) => `\`${variant}\``))} variants do not exist.`,
+                    )
+                  }
                 }
               }
             }
@@ -225,7 +233,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
             // very likely missing.
             if (designSystem.theme.size === 0) {
               throw new Error(
-                `Cannot apply unknown utility class: \`${candidate}\`.\nIt looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\``,
+                `Cannot apply unknown utility class \`${candidate}\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive`,
               )
             }
 

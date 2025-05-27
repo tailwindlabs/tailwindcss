@@ -294,10 +294,7 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `
-      [Error: Cannot apply unknown utility class: \`p-2\`.
-      It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`]
-    `,
+      `[Error: Cannot apply unknown utility class \`p-2\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]`,
     )
   })
 
@@ -551,10 +548,7 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `
-      [Error: Cannot apply unknown utility class: \`bg-not-found\`.
-      It looks like you are missing a \`@reference "app.css"\` or \`@import "tailwindcss";\`]
-    `,
+      `[Error: Cannot apply unknown utility class \`bg-not-found\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive]`,
     )
   })
 
@@ -571,13 +565,7 @@ describe('@apply', () => {
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `
-      [Error: Cannot apply unknown utility class: \`hocus:hover:pocus:bg-red-500\`.
-      The following variants are unknown:
-      - \`hocus\`
-      - \`pocus\`
-      ]
-    `,
+      `[Error: Cannot apply utility class \`hocus:hover:pocus:bg-red-500\` because the \`hocus\` and \`pocus\` variants do not exist.]`,
     )
   })
 
