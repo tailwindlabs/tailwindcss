@@ -10,3 +10,4 @@ venv
 .parcel-cache
 __pycache__
 .svelte-kit
+.pnpm-store

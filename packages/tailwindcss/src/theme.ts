@@ -51,6 +51,10 @@ export class Theme {
     private keyframes = new Set<AtRule>([]),
   ) {}
 
+  get size() {
+    return this.values.size
+  }
+
   add(key: string, value: string, options = ThemeOptions.NONE, src?: Declaration['src']): void {
     if (key.endsWith('-*')) {
       if (value !== 'initial') {

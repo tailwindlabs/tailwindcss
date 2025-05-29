@@ -89,7 +89,7 @@ test('utilities used in @apply must be prefixed', async () => {
       }
     `),
   ).rejects.toThrowErrorMatchingInlineSnapshot(
-    `[Error: Cannot apply unknown utility class: underline]`,
+    `[Error: Cannot apply unprefixed utility class \`underline\`. Did you mean \`tw:underline\`?]`,
   )
 })
 
