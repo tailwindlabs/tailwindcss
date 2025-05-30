@@ -37,6 +37,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Use a bare value modifier
     ['bg-red-500/[25%]', 'bg-red-500/25'],
 
+    // Convert 0-1 values to bare values
+    ['bg-[#f00]/[0.16]', 'bg-[#f00]/16'],
+
     // Drop unnecessary modifiers
     ['bg-red-500/[100%]', 'bg-red-500'],
     ['bg-red-500/100', 'bg-red-500'],

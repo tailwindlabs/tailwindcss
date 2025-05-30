@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Upgrade: migrate arbitrary modifiers with values without percentage sign to bare values `/[0.16]` -> `/16` ([#18184](https://github.com/tailwindlabs/tailwindcss/pull/18184))
+- Upgrade: migrate CSS variable shorthand if fallback value contains function call ([#18184](https://github.com/tailwindlabs/tailwindcss/pull/18184))
 
 ## [4.1.8] - 2025-05-27
 

@@ -55,6 +55,23 @@ export function migrateOptimizeModifier(
         }
       }
 
+      // 3. Try to remove the square brackets, but multiply by 100. E.g.: `[0.16]` -> `16`
+      if (!changed) {
+        let newModifier: NamedUtilityValue = {
+          kind: 'named',
+          value: `${parseFloat(modifier.value) * 100}`,
+          fraction: null,
+        }
+
+        if (
+          targetSignature ===
+          signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
+        ) {
+          changed = true
+          candidate.modifier = newModifier
+        }
+      }
+
       return changed ? designSystem.printCandidate(candidate) : rawCandidate
     }
   }

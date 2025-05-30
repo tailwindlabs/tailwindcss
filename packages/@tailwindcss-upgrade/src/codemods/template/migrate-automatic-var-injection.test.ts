@@ -40,6 +40,11 @@ test.each([
   ['w-[--spacing(5)]', 'w-[--spacing(5)]'],
   ['bg-[--theme(--color-red-500)]', 'bg-[--theme(--color-red-500)]'],
 
+  // Fallback values should be included inside the `var(…)` function
+  ['bg-[--my-color,red]', 'bg-(--my-color,red)'],
+  // Fallback values can contain CSS functions
+  ['bg-[--my-color,theme(spacing.1)]', 'bg-(--my-color,theme(spacing.1))'],
+
   // Some properties never had var() injection in v3.
   ['[scroll-timeline-name:--myTimeline]', '[scroll-timeline-name:--myTimeline]'],
   ['[timeline-scope:--myScope]', '[timeline-scope:--myScope]'],
