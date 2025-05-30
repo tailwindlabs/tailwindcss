@@ -64,6 +64,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // non-negative version first so we can replace `-mt-[0px]` with `mt-[0px]`.
     ['mt-[0px]', 'mt-[0px]'],
     ['-mt-[0px]', 'mt-[0px]'],
+
+    // Shorthand CSS Variables should be converted to the new syntax, even if
+    // the fallback contains functions. The fallback should also be migrated to
+    // the newest syntax.
+    ['bg-[--my-color,theme(colors.red.500)]', 'bg-(--my-color,var(--color-red-500))'],
   ])(testName, async (candidate, result) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`

@@ -193,6 +193,10 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
     let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
     if (!designSystem.theme.get([variable])) return null
 
+    if (designSystem.theme.prefix) {
+      return `--${designSystem.theme.prefix}-${variable.slice(2)}`
+    }
+
     return variable
   }
 
