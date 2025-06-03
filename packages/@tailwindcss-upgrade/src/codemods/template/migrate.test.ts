@@ -69,6 +69,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // the fallback contains functions. The fallback should also be migrated to
     // the newest syntax.
     ['bg-[--my-color,theme(colors.red.500)]', 'bg-(--my-color,var(--color-red-500))'],
+
+    // Both the positive and negative versions of arbitrary utilities should be
+    // converted to the bare value version.
+    ['mb-[32rem]', 'mb-128'],
+    ['mb-[-32rem]', '-mb-128'],
   ])(testName, async (candidate, result) => {
     if (strategy === 'with-variant') {
       candidate = `focus:${candidate}`
