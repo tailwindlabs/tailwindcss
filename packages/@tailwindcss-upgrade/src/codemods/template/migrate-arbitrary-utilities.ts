@@ -159,7 +159,12 @@ export function migrateArbitraryUtilities(
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
       if (value === null) return
 
-      let spacingMultiplier = spacing.get(designSystem)?.get(value)
+      let spacingMultiplier = spacing.get(designSystem)?.get(value) ?? null
+      let rootPrefix = ''
+      if (spacingMultiplier !== null && spacingMultiplier < 0) {
+        rootPrefix = '-'
+        spacingMultiplier = Math.abs(spacingMultiplier)
+      }
 
       for (let root of Array.from(designSystem.utilities.keys('functional')).sort(
         // Sort negative roots after positive roots so that we can try
@@ -167,6 +172,8 @@ export function migrateArbitraryUtilities(
         // `-mt-[0px]` can be translated to `mt-[0px]`.
         (a, z) => Number(a[0] === '-') - Number(z[0] === '-'),
       )) {
+        if (rootPrefix) root = `${rootPrefix}${root}`
+
         // Try as bare value
         for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
           yield replacementCandidate
