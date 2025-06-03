@@ -15,6 +15,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Alpine
   /x-if=['"]$/,
   /x-show=['"]$/,
+  /wire:[^\s]*?$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"]$/
 

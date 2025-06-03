@@ -58,4 +58,7 @@ test('does not replace classes in invalid positions', async () => {
   await shouldNotReplace('<div v-if="!duration">', '!duration')
   await shouldNotReplace('<div :active="!duration">', '!duration')
   await shouldNotReplace('<div :active="!visible">', '!visible')
+
+  // Alpine/Livewire wire:…
+  await shouldNotReplace('<x-input.number required="foo" wire:model.blur="coins" />', 'blur')
 })
