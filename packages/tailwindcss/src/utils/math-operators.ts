@@ -124,6 +124,12 @@ export function addWhitespaceAroundMathOperators(input: string) {
         continue
       }
 
+      // If there was a letter both before and after, don't add spaces
+      else if (!/\d/.test(prev + next)) {
+        result += char
+        continue
+      }
+
       // Add spaces only after the operator if we already have spaces before it
       else if (input[i - 1] === ' ') {
         result += `${char} `
