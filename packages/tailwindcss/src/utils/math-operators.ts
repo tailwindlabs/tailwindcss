@@ -111,7 +111,6 @@ export function addWhitespaceAroundMathOperators(input: string) {
     else if ((char === '+' || char === '*' || char === '/' || char === '-') && formattable[0]) {
       let trimmed = result.trimEnd()
       let prev = trimmed[trimmed.length - 1]
-      let rest = input.slice(i + 1) || ''
       let next = input[i + 1] || ''
 
       // If we're preceded by an operator don't add spaces
@@ -127,7 +126,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
       }
 
       // If there's no number before or after it and it's not followed by a math function, don't add spaces.
-      else if (next.length > 0 && !/\d/.test(prev + next) && !MATH_FUNCTIONS.some(fn => rest.startsWith(`${fn}(`))) {
+      else if (next.length > 0 && !/\d/.test(prev + next) && !MATH_FUNCTIONS.some(fn => input.slice(i + 1).startsWith(`${fn}(`))) {
         result += char
         continue
       }
