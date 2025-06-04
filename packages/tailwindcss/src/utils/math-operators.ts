@@ -111,6 +111,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
     else if ((char === '+' || char === '*' || char === '/' || char === '-') && formattable[0]) {
       let trimmed = result.trimEnd()
       let prev = trimmed[trimmed.length - 1]
+      let next = input[trimmed.length]
 
       // If we're preceded by an operator don't add spaces
       if (prev === '+' || prev === '*' || prev === '/' || prev === '-') {
