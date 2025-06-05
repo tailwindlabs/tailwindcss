@@ -6,12 +6,12 @@ import {
   normalizePath,
   optimize,
   toSourceMap,
-} from '@tailwindcss/node'
-import { clearRequireCache } from '@tailwindcss/node/require-cache'
-import { Scanner } from '@tailwindcss/oxide'
-import fs from 'node:fs/promises'
-import path from 'node:path'
-import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+} from '@tailwindcss/node';
+import { clearRequireCache } from '@tailwindcss/node/require-cache';
+import { Scanner } from '@tailwindcss/oxide';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite';
 
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
@@ -47,7 +47,7 @@ export default function tailwindcss(): Plugin[] {
       config!.root,
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
-      config?.css.devSourcemap ?? false,
+      config?.css?.devSourcemap ?? false,
       customCssResolver,
       customJsResolver,
     )
