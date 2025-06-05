@@ -277,7 +277,7 @@ describe.each([['@theme'], ['@theme inline']])('%s', (theme) => {
   })
 })
 
-test('migrate a arbitrary property without spaces, to a theme value with spaces (canonicalization)', async () => {
+test('migrate an arbitrary property without spaces, to a theme value with spaces (canonicalization)', async () => {
   let candidate = 'font-[foo,bar,baz]'
   let expected = 'font-example'
   let input = css`
