@@ -84,6 +84,11 @@ describe('adds spaces around math operators', () => {
     ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
     ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
+    // Preserving CSS keyword tokens like fit-content without splitting around hyphens in complex expressions
+    ['min(fit-content,calc(100dvh-4rem))', 'min(fit-content, calc(100dvh - 4rem))'],
+    ['min(theme(spacing.foo-bar),fit-content,calc(20*calc(40-30)))', 'min(theme(spacing.foo-bar), fit-content, calc(20 * calc(40 - 30)))'],
+    ['min(fit-content,calc(100dvh-4rem)-calc(50dvh-2px))', 'min(fit-content, calc(100dvh - 4rem) - calc(50dvh - 2px))'],
+
     // A negative number immediately after a `,` should not have spaces inserted
     ['clamp(-3px+4px,-3px+4px,-3px+4px)', 'clamp(-3px + 4px, -3px + 4px, -3px + 4px)'],
 
