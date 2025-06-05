@@ -125,7 +125,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
         continue
       }
 
-      // If there's no number before or after it and it's not followed by a math function, don't add spaces.
+      // If there's no number/operator before or after it and it's not followed by a math function, don't add spaces
       else if (!/\d/.test(prev + next) && !/^[a-zA-Z_$][a-zA-Z0-9_$]*\(/.test(input.slice(i + 1)) && next !== '(' && next !== '+' && next !== '-') {
         result += char
         continue
