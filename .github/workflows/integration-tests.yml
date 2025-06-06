@@ -99,8 +99,18 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
-      - name: Test ${{ matrix.integration }}
-        run: pnpm run test:integrations ./integrations/${{ matrix.integration }}
+      - name: Test ${{ matrix.integration }} 1/3
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }} --shard 1/3
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+      - name: Test ${{ matrix.integration }} 2/3
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }} --shard 2/3
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+      - name: Test ${{ matrix.integration }} 3/3
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration }} --shard 3/3
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
