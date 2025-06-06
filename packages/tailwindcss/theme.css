@@ -276,11 +276,14 @@
 
   --spacing: 0.25rem;
 
-  --breakpoint-sm: 40rem;
-  --breakpoint-md: 48rem;
-  --breakpoint-lg: 64rem;
-  --breakpoint-xl: 80rem;
-  --breakpoint-2xl: 96rem;
+  --breakpoint-xs: 20rem;
+  --breakpoint-sm: 26rem;
+  --breakpoint-tab: 32rem;
+  --breakpoint-md: 40rem;
+  --breakpoint-lg: 48rem;
+  --breakpoint-xl: 64rem;
+  --breakpoint-2xl: 90rem;
+  --breakpoint-3xl: 120rem
 
   --container-3xs: 16rem;
   --container-2xs: 18rem;
