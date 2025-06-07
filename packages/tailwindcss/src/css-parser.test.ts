@@ -457,6 +457,21 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           `),
         ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
       })
+
+      it('should parse custom properties with data URL value', () => {
+        expect(
+          parse(css`
+            --foo: 'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ==';
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: "'data:text/plain;base64,SGVsbG8sIFdvcmxkIQ=='",
+            important: false,
+          },
+        ])
+      })
     })
 
     it('should parse multiple declarations', () => {
@@ -1130,6 +1145,17 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       expect(() => parse('.foo { --bar }')).toThrowErrorMatchingInlineSnapshot(
         `[Error: Invalid custom property, expected a value]`,
       )
+    })
+
+    it('should error when an unterminated string is used in a custom property', () => {
+      expect(() =>
+        parse(css`
+          .foo {
+            --bar: "Hello world!
+            /*                  ^ missing " */
+          }
+        `),
+      ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!"]`)
     })
 
     it('should error when a declaration is incomplete', () => {
