@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "eslint": "^9.27.0",
     "eslint-config-next": "^15.3.3",
