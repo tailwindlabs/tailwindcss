@@ -42,7 +42,7 @@
     "prettier": "catalog:",
     "semver": "^7.7.2",
     "tailwindcss": "workspace:*",
-    "tree-sitter": "^0.22.4",
+    "tree-sitter": "^0.25.0",
     "tree-sitter-typescript": "^0.23.2"
   },
   "devDependencies": {
