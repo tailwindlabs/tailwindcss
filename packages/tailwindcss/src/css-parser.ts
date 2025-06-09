@@ -594,9 +594,8 @@ function parseDeclaration(
   )
 }
 
-function parseString(input: string, startQuoteIdx: number, quoteChar: number): number {
-  let peekChar
-  let endQuoteIdx = startQuoteIdx
+function parseString(input: string, startIdx: number, quoteChar: number): number {
+  let peekChar: number
 
   // We need to ensure that the closing quote is the same as the opening
   // quote.
@@ -609,17 +608,17 @@ function parseString(input: string, startQuoteIdx: number, quoteChar: number): n
   //                                     ^     ^         -> These are not the end of the string.
   // }
   // ```
-  for (let j = startQuoteIdx + 1; j < input.length; j++) {
-    peekChar = input.charCodeAt(j)
+  for (let i = startIdx + 1; i < input.length; i++) {
+    peekChar = input.charCodeAt(i)
+
     // Current character is a `\` therefore the next character is escaped.
     if (peekChar === BACKSLASH) {
-      j += 1
+      i += 1
     }
 
     // End of the string.
     else if (peekChar === quoteChar) {
-      endQuoteIdx = j
-      break
+      return i
     }
 
     // End of the line without ending the string but with a `;` at the end.
@@ -634,11 +633,11 @@ function parseString(input: string, startQuoteIdx: number, quoteChar: number): n
     // ```
     else if (
       peekChar === SEMICOLON &&
-      (input.charCodeAt(j + 1) === LINE_BREAK ||
-        (input.charCodeAt(j + 1) === CARRIAGE_RETURN && input.charCodeAt(j + 2) === LINE_BREAK))
+      (input.charCodeAt(i + 1) === LINE_BREAK ||
+        (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
     ) {
       throw new Error(
-        `Unterminated string: ${input.slice(startQuoteIdx, j + 1) + String.fromCharCode(quoteChar)}`,
+        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`,
       )
     }
 
@@ -654,13 +653,13 @@ function parseString(input: string, startQuoteIdx: number, quoteChar: number): n
     // ```
     else if (
       peekChar === LINE_BREAK ||
-      (peekChar === CARRIAGE_RETURN && input.charCodeAt(j + 1) === LINE_BREAK)
+      (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
     ) {
       throw new Error(
-        `Unterminated string: ${input.slice(startQuoteIdx, j) + String.fromCharCode(quoteChar)}`,
+        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`,
       )
     }
   }
 
-  return endQuoteIdx
+  return startIdx
 }
