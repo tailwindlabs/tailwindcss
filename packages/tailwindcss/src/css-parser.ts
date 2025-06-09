@@ -138,11 +138,11 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // Start of a string.
     else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
-      let endStringIdx = findEndStringIdx(input, i, currentChar)
+      let end = parseString(input, i, currentChar)
 
       // Adjust `buffer` to include the string.
-      buffer += input.slice(i, endStringIdx + 1)
-      i = endStringIdx
+      buffer += input.slice(i, end + 1)
+      i = end
     }
 
     // Skip whitespace if the next character is also whitespace. This allows us
@@ -192,7 +192,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
         // Start of a string.
         else if (peekChar === SINGLE_QUOTE || peekChar === DOUBLE_QUOTE) {
-          j = findEndStringIdx(input, j, peekChar)
+          j = parseString(input, j, peekChar)
         }
 
         // Start of a comment.
@@ -594,7 +594,7 @@ function parseDeclaration(
   )
 }
 
-function findEndStringIdx(input: string, startQuoteIdx: number, quoteChar: number): number {
+function parseString(input: string, startQuoteIdx: number, quoteChar: number): number {
   let peekChar
   let endQuoteIdx = startQuoteIdx
 
