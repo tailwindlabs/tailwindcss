@@ -109,6 +109,12 @@ describe('adds spaces around math operators', () => {
     // Prevent formatting inside `env()` functions
     ['calc(env(safe-area-inset-bottom)*2)', 'calc(env(safe-area-inset-bottom) * 2)'],
 
+    // Handle dashed functions that look like known dashed idents
+    [
+      'fit-content(min(max-content,max(min-content,calc(20px+1em))))',
+      'fit-content(min(max-content, max(min-content, calc(20px + 1em))))',
+    ],
+
     // Should format inside `calc()` nested in `env()`
     [
       'env(safe-area-inset-bottom,calc(10px+20px))',
