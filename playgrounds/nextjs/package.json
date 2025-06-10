@@ -11,17 +11,17 @@
   "dependencies": {
     "@tailwindcss/postcss": "workspace:^",
     "fast-glob": "^3.3.3",
-    "next": "15.3.2",
+    "next": "15.3.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "eslint": "^9.27.0",
-    "eslint-config-next": "^15.3.2",
+    "eslint-config-next": "^15.3.3",
     "typescript": "^5.5.4"
   }
 }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Correctly parse custom properties with strings containing semicolons ([#18251](https://github.com/tailwindlabs/tailwindcss/pull/18251))
 - Upgrade: migrate arbitrary modifiers with values without percentage sign to bare values `/[0.16]` -> `/16` ([#18184](https://github.com/tailwindlabs/tailwindcss/pull/18184))
 - Upgrade: migrate CSS variable shorthand if fallback value contains function call ([#18184](https://github.com/tailwindlabs/tailwindcss/pull/18184))
 - Upgrade: Migrate negative arbitrary values to negative bare values, e.g.: `mb-[-32rem]` → `-mb-128` ([#18212](https://github.com/tailwindlabs/tailwindcss/pull/18212))

@@ -138,74 +138,11 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // Start of a string.
     else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
-      let start = i
-
-      // We need to ensure that the closing quote is the same as the opening
-      // quote.
-      //
-      // E.g.:
-      //
-      // ```css
-      // .foo {
-      //   content: "This is a string with a 'quote' in it";
-      //                                     ^     ^         -> These are not the end of the string.
-      // }
-      // ```
-      for (let j = i + 1; j < input.length; j++) {
-        peekChar = input.charCodeAt(j)
-        // Current character is a `\` therefore the next character is escaped.
-        if (peekChar === BACKSLASH) {
-          j += 1
-        }
-
-        // End of the string.
-        else if (peekChar === currentChar) {
-          i = j
-          break
-        }
-
-        // End of the line without ending the string but with a `;` at the end.
-        //
-        // E.g.:
-        //
-        // ```css
-        // .foo {
-        //   content: "This is a string with a;
-        //                                    ^ Missing "
-        // }
-        // ```
-        else if (
-          peekChar === SEMICOLON &&
-          (input.charCodeAt(j + 1) === LINE_BREAK ||
-            (input.charCodeAt(j + 1) === CARRIAGE_RETURN && input.charCodeAt(j + 2) === LINE_BREAK))
-        ) {
-          throw new Error(
-            `Unterminated string: ${input.slice(start, j + 1) + String.fromCharCode(currentChar)}`,
-          )
-        }
-
-        // End of the line without ending the string.
-        //
-        // E.g.:
-        //
-        // ```css
-        // .foo {
-        //   content: "This is a string with a
-        //                                    ^ Missing "
-        // }
-        // ```
-        else if (
-          peekChar === LINE_BREAK ||
-          (peekChar === CARRIAGE_RETURN && input.charCodeAt(j + 1) === LINE_BREAK)
-        ) {
-          throw new Error(
-            `Unterminated string: ${input.slice(start, j) + String.fromCharCode(currentChar)}`,
-          )
-        }
-      }
+      let end = parseString(input, i, currentChar)
 
       // Adjust `buffer` to include the string.
-      buffer += input.slice(start, i + 1)
+      buffer += input.slice(i, end + 1)
+      i = end
     }
 
     // Skip whitespace if the next character is also whitespace. This allows us
@@ -251,6 +188,11 @@ export function parse(input: string, opts?: ParseOptions) {
         // Current character is a `\` therefore the next character is escaped.
         if (peekChar === BACKSLASH) {
           j += 1
+        }
+
+        // Start of a string.
+        else if (peekChar === SINGLE_QUOTE || peekChar === DOUBLE_QUOTE) {
+          j = parseString(input, j, peekChar)
         }
 
         // Start of a comment.
@@ -650,4 +592,74 @@ function parseDeclaration(
     buffer.slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx).trim(),
     importantIdx !== -1,
   )
+}
+
+function parseString(input: string, startIdx: number, quoteChar: number): number {
+  let peekChar: number
+
+  // We need to ensure that the closing quote is the same as the opening
+  // quote.
+  //
+  // E.g.:
+  //
+  // ```css
+  // .foo {
+  //   content: "This is a string with a 'quote' in it";
+  //                                     ^     ^         -> These are not the end of the string.
+  // }
+  // ```
+  for (let i = startIdx + 1; i < input.length; i++) {
+    peekChar = input.charCodeAt(i)
+
+    // Current character is a `\` therefore the next character is escaped.
+    if (peekChar === BACKSLASH) {
+      i += 1
+    }
+
+    // End of the string.
+    else if (peekChar === quoteChar) {
+      return i
+    }
+
+    // End of the line without ending the string but with a `;` at the end.
+    //
+    // E.g.:
+    //
+    // ```css
+    // .foo {
+    //   content: "This is a string with a;
+    //                                    ^ Missing "
+    // }
+    // ```
+    else if (
+      peekChar === SEMICOLON &&
+      (input.charCodeAt(i + 1) === LINE_BREAK ||
+        (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
+    ) {
+      throw new Error(
+        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`,
+      )
+    }
+
+    // End of the line without ending the string.
+    //
+    // E.g.:
+    //
+    // ```css
+    // .foo {
+    //   content: "This is a string with a
+    //                                    ^ Missing "
+    // }
+    // ```
+    else if (
+      peekChar === LINE_BREAK ||
+      (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
+    ) {
+      throw new Error(
+        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`,
+      )
+    }
+  }
+
+  return startIdx
 }
