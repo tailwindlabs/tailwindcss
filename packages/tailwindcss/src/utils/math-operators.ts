@@ -20,13 +20,6 @@ const MATH_FUNCTIONS = [
   'round',
 ]
 
-// List of known keywords that can be used in math functions
-const KNOWN_DASHED_KEYWORDS = ['fit-content', 'min-content', 'max-content', 'to-zero']
-const DASHED_KEYWORDS_REGEX = new RegExp(`(${KNOWN_DASHED_KEYWORDS.join('|')})`, 'g')
-
-const KNOWN_DASHED_FUNCTIONS = ['anchor-size', 'calc-size']
-const DASHED_FUNCTIONS_REGEX = new RegExp(`(${KNOWN_DASHED_FUNCTIONS.join('|')})\\(`, 'g')
-
 export function hasMathFn(input: string) {
   return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
 }
@@ -37,22 +30,33 @@ export function addWhitespaceAroundMathOperators(input: string) {
     return input
   }
 
-  // Replace known functions with a placeholder
-  let hasKnownFunctions = false
-  if (KNOWN_DASHED_FUNCTIONS.some((fn) => input.includes(fn))) {
-    DASHED_FUNCTIONS_REGEX.lastIndex = 0
-    input = input.replace(DASHED_FUNCTIONS_REGEX, (_, fn) => {
-      hasKnownFunctions = true
-      return `$${KNOWN_DASHED_FUNCTIONS.indexOf(fn)}$(`
-    })
-  }
-
   let result = ''
   let formattable: boolean[] = []
-  let resumeAtIdx = 0
+
+  let valuePos = null
+  let lastValuePos = null
 
   for (let i = 0; i < input.length; i++) {
     let char = input[i]
+    let charCode = char.charCodeAt(0)
+
+    // Track if we see a number followed by a unit, then we know for sure that
+    // this is not a function call.
+    if (charCode >= 48 && charCode <= 57) {
+      valuePos = i
+    }
+
+    // If we saw a number before, and we see normal a-z character, then we
+    // assume this is a value such as `123px`
+    else if (valuePos !== null && charCode >= 97 && charCode <= 122) {
+      valuePos = i
+    }
+
+    // Once we see something else, we reset the value position
+    else {
+      lastValuePos = valuePos
+      valuePos = null
+    }
 
     // Determine if we're inside a math function
     if (char === '(') {
@@ -116,7 +120,11 @@ export function addWhitespaceAroundMathOperators(input: string) {
     else if ((char === '+' || char === '*' || char === '/' || char === '-') && formattable[0]) {
       let trimmed = result.trimEnd()
       let prev = trimmed[trimmed.length - 1]
+      let prevCode = prev.charCodeAt(0)
       let prevprevCode = trimmed.charCodeAt(trimmed.length - 2)
+
+      let next = input[i + 1]
+      let nextCode = next?.charCodeAt(0)
 
       // Do not add spaces for scientific notation, e.g.: `-3.4e-2`
       if ((prev === 'e' || prev === 'E') && prevprevCode >= 48 && prevprevCode <= 57) {
@@ -141,65 +149,37 @@ export function addWhitespaceAroundMathOperators(input: string) {
         result += `${char} `
       }
 
-      // Add spaces around the operator
-      else {
+      // Add spaces around the operator, if...
+      else if (
+        // Previous is a digit
+        (prevCode >= 48 && prevCode <= 57) ||
+        // Next is a digit
+        (nextCode >= 48 && nextCode <= 57) ||
+        // Previous is end of a function call (or parenthesized expression)
+        prev === ')' ||
+        // Next is start of a parenthesized expression
+        next === '(' ||
+        // Next is an operator
+        next === '+' ||
+        next === '*' ||
+        next === '/' ||
+        next === '-' ||
+        // Previous position was a value (+ unit)
+        (lastValuePos !== null && lastValuePos === i - 1)
+      ) {
         result += ` ${char} `
       }
-    }
 
-    // Skip over hyphenated keywords when in a math function.
-    //
-    // This is specifically to handle this value in the round(…) function:
-    //
-    // ```
-    // round(to-zero, 1px)
-    //       ^^^^^^^
-    // ```
-    //
-    // Or when using `fit-content`, `min-content` or `max-content` in a math
-    // function:
-    //
-    // ```
-    // min(fit-content, calc(100dvh - 4rem) - calc(50dvh - -2px))
-    //     ^^^^^^^^^^^
-    // ```
-    else if (formattable[0] && i >= resumeAtIdx) {
-      DASHED_KEYWORDS_REGEX.lastIndex = 0
-      let match = DASHED_KEYWORDS_REGEX.exec(input.slice(i))
-      if (match === null) {
-        // No match at all, we can skip this check entirely for the rest of the
-        // string because we known nothing else will match.
-        resumeAtIdx = input.length
+      // Everything else
+      else {
         result += char
-        continue
       }
-
-      // Match must be at the start of the string, otherwise track the index
-      // to resume at.
-      if (match.index !== 0) {
-        resumeAtIdx = i + match.index
-        result += char
-        continue
-      }
-
-      let keyword = match[1]
-      let start = i
-      i += keyword.length
-      result += input.slice(start, i + 1)
-
-      // If the keyword is followed by a `,`, it means we're in a math function.
-      // Adding a space for pretty-printing purposes.
-      if (input[i] === ',') result += ' '
     }
 
     // Handle all other characters
     else {
       result += char
     }
-  }
-
-  if (hasKnownFunctions) {
-    return result.replace(/\$(\d+)\$/g, (fn, idx) => KNOWN_DASHED_FUNCTIONS[idx] ?? fn)
   }
 
   return result
