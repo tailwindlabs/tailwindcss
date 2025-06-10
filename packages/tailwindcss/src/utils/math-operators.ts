@@ -20,7 +20,11 @@ const MATH_FUNCTIONS = [
   'round',
 ]
 
-const KNOWN_DASHED_FUNCTIONS = ['anchor-size']
+// List of known keywords that can be used in math functions
+const KNOWN_DASHED_KEYWORDS = ['fit-content', 'min-content', 'max-content', 'to-zero']
+const DASHED_KEYWORDS_REGEX = new RegExp(`(${KNOWN_DASHED_KEYWORDS.join('|')})`, 'g')
+
+const KNOWN_DASHED_FUNCTIONS = ['anchor-size', 'calc-size']
 const DASHED_FUNCTIONS_REGEX = new RegExp(`(${KNOWN_DASHED_FUNCTIONS.join('|')})\\(`, 'g')
 
 export function hasMathFn(input: string) {
@@ -45,6 +49,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
   let result = ''
   let formattable: boolean[] = []
+  let resumeAtIdx = 0
 
   for (let i = 0; i < input.length; i++) {
     let char = input[i]
@@ -142,7 +147,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
       }
     }
 
-    // Skip over `to-zero` when in a math function.
+    // Skip over hyphenated keywords when in a math function.
     //
     // This is specifically to handle this value in the round(…) function:
     //
@@ -151,12 +156,40 @@ export function addWhitespaceAroundMathOperators(input: string) {
     //       ^^^^^^^
     // ```
     //
-    // This is because the first argument is optionally a keyword and `to-zero`
-    // contains a hyphen and we want to avoid adding spaces inside it.
-    else if (formattable[0] && input.startsWith('to-zero', i)) {
+    // Or when using `fit-content`, `min-content` or `max-content` in a math
+    // function:
+    //
+    // ```
+    // min(fit-content, calc(100dvh - 4rem) - calc(50dvh - -2px))
+    //     ^^^^^^^^^^^
+    // ```
+    else if (formattable[0] && i >= resumeAtIdx) {
+      DASHED_KEYWORDS_REGEX.lastIndex = 0
+      let match = DASHED_KEYWORDS_REGEX.exec(input.slice(i))
+      if (match === null) {
+        // No match at all, we can skip this check entirely for the rest of the
+        // string because we known nothing else will match.
+        resumeAtIdx = input.length
+        result += char
+        continue
+      }
+
+      // Match must be at the start of the string, otherwise track the index
+      // to resume at.
+      if (match.index !== 0) {
+        resumeAtIdx = i + match.index
+        result += char
+        continue
+      }
+
+      let keyword = match[1]
       let start = i
-      i += 7
+      i += keyword.length
       result += input.slice(start, i + 1)
+
+      // If the keyword is followed by a `,`, it means we're in a math function.
+      // Adding a space for pretty-printing purposes.
+      if (input[i] === ',') result += ' '
     }
 
     // Handle all other characters
