@@ -74,7 +74,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
     // Determine if we're inside a math function
     if (char === OPEN_PAREN) {
-      result += String.fromCharCode(char)
+      result += input[i]
 
       // Scan backwards to determine the function name. This assumes math
       // functions are named with lowercase alphanumeric characters.
@@ -115,7 +115,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
     // We've exited the function so format according to the parent function's
     // type.
     else if (char === CLOSE_PAREN) {
-      result += String.fromCharCode(char)
+      result += input[i]
       formattable.shift()
     }
 
@@ -139,25 +139,25 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
       // Do not add spaces for scientific notation, e.g.: `-3.4e-2`
       if ((prev === LOWER_E || prev === UPPER_E) && prevPrev >= ZERO && prevPrev <= NINE) {
-        result += String.fromCharCode(char)
+        result += input[i]
         continue
       }
 
       // If we're preceded by an operator don't add spaces
       else if (prev === ADD || prev === MUL || prev === DIV || prev === SUB) {
-        result += String.fromCharCode(char)
+        result += input[i]
         continue
       }
 
       // If we're at the beginning of an argument don't add spaces
       else if (prev === OPEN_PAREN || prev === COMMA) {
-        result += String.fromCharCode(char)
+        result += input[i]
         continue
       }
 
       // Add spaces only after the operator if we already have spaces before it
       else if (input.charCodeAt(i - 1) === SPACE) {
-        result += `${String.fromCharCode(char)} `
+        result += `${input[i]} `
       }
 
       // Add spaces around the operator, if...
@@ -178,18 +178,18 @@ export function addWhitespaceAroundMathOperators(input: string) {
         // Previous position was a value (+ unit)
         (lastValuePos !== null && lastValuePos === i - 1)
       ) {
-        result += ` ${String.fromCharCode(char)} `
+        result += ` ${input[i]} `
       }
 
       // Everything else
       else {
-        result += String.fromCharCode(char)
+        result += input[i]
       }
     }
 
     // Handle all other characters
     else {
-      result += String.fromCharCode(char)
+      result += input[i]
     }
   }
 
