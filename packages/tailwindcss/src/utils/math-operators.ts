@@ -1,3 +1,18 @@
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
+const LOWER_E = 0x65
+const UPPER_E = 0x45
+const ZERO = 0x30
+const NINE = 0x39
+const ADD = 0x2b
+const SUB = 0x2d
+const MUL = 0x2a
+const DIV = 0x2f
+const OPEN_PAREN = 0x28
+const CLOSE_PAREN = 0x29
+const COMMA = 0x2c
+const SPACE = 0x20
+
 const MATH_FUNCTIONS = [
   'calc',
   'min',
@@ -37,18 +52,17 @@ export function addWhitespaceAroundMathOperators(input: string) {
   let lastValuePos = null
 
   for (let i = 0; i < input.length; i++) {
-    let char = input[i]
-    let charCode = char.charCodeAt(0)
+    let char = input.charCodeAt(i)
 
     // Track if we see a number followed by a unit, then we know for sure that
     // this is not a function call.
-    if (charCode >= 48 && charCode <= 57) {
+    if (char >= ZERO && char <= NINE) {
       valuePos = i
     }
 
     // If we saw a number before, and we see normal a-z character, then we
     // assume this is a value such as `123px`
-    else if (valuePos !== null && charCode >= 97 && charCode <= 122) {
+    else if (valuePos !== null && char >= LOWER_A && char <= LOWER_Z) {
       valuePos = i
     }
 
@@ -59,8 +73,8 @@ export function addWhitespaceAroundMathOperators(input: string) {
     }
 
     // Determine if we're inside a math function
-    if (char === '(') {
-      result += char
+    if (char === OPEN_PAREN) {
+      result += String.fromCharCode(char)
 
       // Scan backwards to determine the function name. This assumes math
       // functions are named with lowercase alphanumeric characters.
@@ -69,9 +83,9 @@ export function addWhitespaceAroundMathOperators(input: string) {
       for (let j = i - 1; j >= 0; j--) {
         let inner = input.charCodeAt(j)
 
-        if (inner >= 48 && inner <= 57) {
+        if (inner >= ZERO && inner <= NINE) {
           start = j // 0-9
-        } else if (inner >= 97 && inner <= 122) {
+        } else if (inner >= LOWER_A && inner <= LOWER_Z) {
           start = j // a-z
         } else {
           break
@@ -100,85 +114,82 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
     // We've exited the function so format according to the parent function's
     // type.
-    else if (char === ')') {
-      result += char
+    else if (char === CLOSE_PAREN) {
+      result += String.fromCharCode(char)
       formattable.shift()
     }
 
     // Add spaces after commas in math functions
-    else if (char === ',' && formattable[0]) {
+    else if (char === COMMA && formattable[0]) {
       result += `, `
       continue
     }
 
     // Skip over consecutive whitespace
-    else if (char === ' ' && formattable[0] && result[result.length - 1] === ' ') {
+    else if (char === SPACE && formattable[0] && result.charCodeAt(result.length - 1) === SPACE) {
       continue
     }
 
     // Add whitespace around operators inside math functions
-    else if ((char === '+' || char === '*' || char === '/' || char === '-') && formattable[0]) {
+    else if ((char === ADD || char === MUL || char === DIV || char === SUB) && formattable[0]) {
       let trimmed = result.trimEnd()
-      let prev = trimmed[trimmed.length - 1]
-      let prevCode = prev.charCodeAt(0)
-      let prevPrevCode = trimmed.charCodeAt(trimmed.length - 2)
-
-      let next = input[i + 1]
-      let nextCode = next?.charCodeAt(0)
+      let prev = trimmed.charCodeAt(trimmed.length - 1)
+      let prevPrev = trimmed.charCodeAt(trimmed.length - 2)
+      let next = input.charCodeAt(i + 1)
 
       // Do not add spaces for scientific notation, e.g.: `-3.4e-2`
-      if ((prev === 'e' || prev === 'E') && prevPrevCode >= 48 && prevPrevCode <= 57) {
-        result += char
+      if ((prev === LOWER_E || prev === UPPER_E) && prevPrev >= ZERO && prevPrev <= NINE) {
+        result += String.fromCharCode(char)
         continue
       }
 
       // If we're preceded by an operator don't add spaces
-      else if (prev === '+' || prev === '*' || prev === '/' || prev === '-') {
-        result += char
+      else if (prev === ADD || prev === MUL || prev === DIV || prev === SUB) {
+        result += String.fromCharCode(char)
         continue
       }
 
       // If we're at the beginning of an argument don't add spaces
-      else if (prev === '(' || prev === ',') {
-        result += char
+      else if (prev === OPEN_PAREN || prev === COMMA) {
+        result += String.fromCharCode(char)
         continue
       }
 
       // Add spaces only after the operator if we already have spaces before it
-      else if (input[i - 1] === ' ') {
-        result += `${char} `
+      else if (input.charCodeAt(i - 1) === SPACE) {
+        result += `${String.fromCharCode(char)} `
       }
 
       // Add spaces around the operator, if...
       else if (
         // Previous is a digit
-        (prevCode >= 48 && prevCode <= 57) ||
+        (prev >= ZERO && prev <= NINE) ||
         // Next is a digit
-        (nextCode >= 48 && nextCode <= 57) ||
+        (next >= ZERO && next <= NINE) ||
         // Previous is end of a function call (or parenthesized expression)
-        prev === ')' ||
+        prev === CLOSE_PAREN ||
         // Next is start of a parenthesized expression
-        next === '(' ||
+        next === OPEN_PAREN ||
         // Next is an operator
-        next === '+' ||
-        next === '*' ||
-        next === '/' ||
-        next === '-' ||
+        next === ADD ||
+        next === MUL ||
+        next === DIV ||
+        next === SUB ||
         // Previous position was a value (+ unit)
         (lastValuePos !== null && lastValuePos === i - 1)
       ) {
-        result += ` ${char} `
+        result += ` ${String.fromCharCode(char)} `
       }
 
       // Everything else
       else {
-        result += char
+        result += String.fromCharCode(char)
       }
     }
 
     // Handle all other characters
     else {
-      result += char
+      result += String.fromCharCode(char)
     }
   }
 
