@@ -121,13 +121,13 @@ export function addWhitespaceAroundMathOperators(input: string) {
       let trimmed = result.trimEnd()
       let prev = trimmed[trimmed.length - 1]
       let prevCode = prev.charCodeAt(0)
-      let prevprevCode = trimmed.charCodeAt(trimmed.length - 2)
+      let prevPrevCode = trimmed.charCodeAt(trimmed.length - 2)
 
       let next = input[i + 1]
       let nextCode = next?.charCodeAt(0)
 
       // Do not add spaces for scientific notation, e.g.: `-3.4e-2`
-      if ((prev === 'e' || prev === 'E') && prevprevCode >= 48 && prevprevCode <= 57) {
+      if ((prev === 'e' || prev === 'E') && prevPrevCode >= 48 && prevPrevCode <= 57) {
         result += char
         continue
       }
