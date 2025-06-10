@@ -84,6 +84,22 @@ describe('adds spaces around math operators', () => {
     ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
     ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
+    // Preserving CSS keyword tokens like fit-content without splitting around hyphens in complex expressions
+    ['min(fit-content,calc(100dvh-4rem))', 'min(fit-content, calc(100dvh - 4rem))'],
+    [
+      'min(theme(spacing.foo-bar),fit-content,calc(20*calc(40-30)))',
+      'min(theme(spacing.foo-bar), fit-content, calc(20 * calc(40 - 30)))',
+    ],
+    [
+      'min(fit-content,calc(100dvh-4rem)-calc(50dvh--2px))',
+      'min(fit-content, calc(100dvh - 4rem) - calc(50dvh - -2px))',
+    ],
+    ['min(-3.4e-2-var(--foo),calc-size(auto))', 'min(-3.4e-2 - var(--foo), calc-size(auto))'],
+    [
+      'clamp(-10e3-var(--foo),calc-size(max-content),var(--foo)+-10e3)',
+      'clamp(-10e3 - var(--foo), calc-size(max-content), var(--foo) + -10e3)',
+    ],
+
     // A negative number immediately after a `,` should not have spaces inserted
     ['clamp(-3px+4px,-3px+4px,-3px+4px)', 'clamp(-3px + 4px, -3px + 4px, -3px + 4px)'],
 
@@ -92,6 +108,12 @@ describe('adds spaces around math operators', () => {
 
     // Prevent formatting inside `env()` functions
     ['calc(env(safe-area-inset-bottom)*2)', 'calc(env(safe-area-inset-bottom) * 2)'],
+
+    // Handle dashed functions that look like known dashed idents
+    [
+      'fit-content(min(max-content,max(min-content,calc(20px+1em))))',
+      'fit-content(min(max-content, max(min-content, calc(20px + 1em))))',
+    ],
 
     // Should format inside `calc()` nested in `env()`
     [
@@ -122,7 +144,7 @@ describe('adds spaces around math operators', () => {
 
     // round(…) function
     ['round(1+2,1+3)', 'round(1 + 2, 1 + 3)'],
-    ['round(to-zero,1+2,1+3)', 'round(to-zero,1 + 2, 1 + 3)'],
+    ['round(to-zero,1+2,1+3)', 'round(to-zero, 1 + 2, 1 + 3)'],
 
     // Nested parens in non-math functions don't format their contents
     ['env((safe-area-inset-bottom))', 'env((safe-area-inset-bottom))'],
