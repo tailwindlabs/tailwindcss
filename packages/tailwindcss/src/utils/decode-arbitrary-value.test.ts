@@ -84,6 +84,9 @@ describe('adds spaces around math operators', () => {
     ['calc(theme(spacing.foo-2))', 'calc(theme(spacing.foo-2))'],
     ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
+    // With percentages
+    ['calc(100%-var(--foo))', 'calc(100% - var(--foo))'],
+
     // Preserving CSS keyword tokens like fit-content without splitting around hyphens in complex expressions
     ['min(fit-content,calc(100dvh-4rem))', 'min(fit-content, calc(100dvh - 4rem))'],
     [
