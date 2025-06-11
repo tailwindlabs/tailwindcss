@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Fix missing space around `-` when using `%` ([#18289](https://github.com/tailwindlabs/tailwindcss/pull/18289))
 
 ## [4.1.9] - 2025-06-11
 
