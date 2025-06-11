@@ -21,6 +21,7 @@
     "provenance": true,
     "access": "public"
   },
+  "main": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
