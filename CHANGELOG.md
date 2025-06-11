@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.10] - 2025-06-11
+
 ### Fixed
 
-- Fix missing space around `-` when using `%` ([#18289](https://github.com/tailwindlabs/tailwindcss/pull/18289))
+- Fix incorrectly generated CSS when using percentages in arbitrary values with calc, e.g.: `w-[calc(100%-var(--offset))]` ([#18289](https://github.com/tailwindlabs/tailwindcss/pull/18289))
 
 ## [4.1.9] - 2025-06-11
 
@@ -3753,7 +3757,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...HEAD
+[4.1.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...v4.1.10
 [4.1.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...v4.1.9
 [4.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...v4.1.8
 [4.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...v4.1.7
