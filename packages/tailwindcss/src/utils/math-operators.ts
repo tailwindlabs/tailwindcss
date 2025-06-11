@@ -12,6 +12,7 @@ const OPEN_PAREN = 0x28
 const CLOSE_PAREN = 0x29
 const COMMA = 0x2c
 const SPACE = 0x20
+const PERCENT = 0x25
 
 const MATH_FUNCTIONS = [
   'calc',
@@ -62,7 +63,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
     // If we saw a number before, and we see normal a-z character, then we
     // assume this is a value such as `123px`
-    else if (valuePos !== null && char >= LOWER_A && char <= LOWER_Z) {
+    else if (valuePos !== null && ((char >= LOWER_A && char <= LOWER_Z) || char === PERCENT)) {
       valuePos = i
     }
 
