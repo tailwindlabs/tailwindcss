@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix incorrectly generated CSS when using percentages in arbitrary values with calc (e.g.: `w-[calc(100%-var(--offset))]`) ([#18289](https://github.com/tailwindlabs/tailwindcss/pull/18289))
+- Fix incorrectly generated CSS when using percentages in arbitrary values with calc (e.g. `w-[calc(100%-var(--offset))]`) ([#18289](https://github.com/tailwindlabs/tailwindcss/pull/18289))
 
 ## [4.1.9] - 2025-06-11
 
