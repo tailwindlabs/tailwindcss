@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.9] - 2025-06-11
+
 ### Fixed
 
 - Correctly parse custom properties with strings containing semicolons ([#18251](https://github.com/tailwindlabs/tailwindcss/pull/18251))
@@ -3747,7 +3751,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...HEAD
+[4.1.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...v4.1.9
 [4.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...v4.1.8
 [4.1.7]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.6...v4.1.7
 [4.1.6]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.5...v4.1.6
