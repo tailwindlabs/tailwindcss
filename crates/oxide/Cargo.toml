@@ -3,13 +3,14 @@ name = "tailwindcss-oxide"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["lib", "cdylib"]
+
 [dependencies]
 bstr = "1.11.3"
 globwalk = "0.9.1"
 log = "0.4.22"
-rayon = "1.10.0"
 fxhash = { package = "rustc-hash", version = "2.1.1" }
-crossbeam = "0.8.4"
 tracing = { version = "0.1.40", features = [] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 walkdir = "2.5.0"
@@ -19,6 +20,16 @@ fast-glob = "0.4.3"
 classification-macros = { path = "../classification-macros" }
 ignore = { path = "../ignore" }
 regex = "1.11.1"
+
+# Threading dependencies - not available on wasm32-unknown-unknown
+[target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
+rayon = "1.10.0"
+crossbeam = "0.8.4"
+
+# WASM-specific dependencies
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
 
 [dev-dependencies]
 tempfile = "3.13.0"
