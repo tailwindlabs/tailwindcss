@@ -53,11 +53,16 @@ export type PluginOptions = {
 
   // Optimize and minify the output CSS.
   optimize?: boolean | { minify?: boolean }
+
+  // Whether or not we should rewrite any encountered urls
+  // default: true
+  rewriteUrls?: boolean
 }
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
+  let shouldRewriteUrls = opts.rewriteUrls ?? true
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -123,7 +128,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             let compiler = await compileAst(ast, {
               from: result.opts.from,
               base: inputBasePath,
-              shouldRewriteUrls: true,
+              shouldRewriteUrls,
               onDependency: (path) => context.fullRebuildPaths.push(path),
               // In CSS Module files, we have to disable the `@property` polyfill since these will
               // emit global `*` rules which are considered to be non-pure and will cause builds
