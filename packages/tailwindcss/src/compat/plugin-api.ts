@@ -105,7 +105,8 @@ export function buildPluginApi({
       if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
-      ast.push(atRule('@layer', 'base', baseNodes))
+      let rule = atRule('@layer', 'base', baseNodes)
+      ast.push(rule)
     },
 
     addVariant(name, variant) {
@@ -255,7 +256,8 @@ export function buildPluginApi({
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
           if (!referenceMode) {
-            ast.push(rule(name, objectToAst(css)))
+            let keyframes = rule(name, objectToAst(css))
+            ast.push(keyframes)
           }
           continue
         }
