@@ -317,7 +317,7 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     return false
   }
 
-  // The file may only contain known-migrateable top-level properties
+  // The file may only contain known-migratable top-level properties
   let knownProperties = [
     'darkMode',
     'content',
