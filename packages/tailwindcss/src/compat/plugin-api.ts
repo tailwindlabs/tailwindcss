@@ -105,7 +105,8 @@ export function buildPluginApi({
       if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
-      ast.push(atRule('@layer', 'base', baseNodes))
+      let rule = atRule('@layer', 'base', baseNodes)
+      ast.push(rule)
     },
 
     addVariant(name, variant) {
