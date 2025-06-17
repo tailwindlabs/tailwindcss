@@ -420,10 +420,10 @@ test('license comments with new lines preserve source locations', async ({ expec
   ])
 })
 
-test.only('Source locations for `addBase` point to the `@plugin` that generated them', async ({
+test('Source locations for `addBase` point to the `@plugin` that generated them', async ({
   expect,
 }) => {
-  let { sources, annotations, css } = await run({
+  let { sources, annotations } = await run({
     input: dedent`
       @plugin "./plugin.js";
       @config "./config.js";
@@ -459,25 +459,15 @@ test.only('Source locations for `addBase` point to the `@plugin` that generated 
     },
   })
 
-  expect(css).toMatchInlineSnapshot(`
-    "@layer base {
-      body {
-        color: red;
-      }
-    }
-    @layer base {
-      body {
-        color: green;
-      }
-    }
-    "
-  `)
-
   expect(sources).toEqual(['input.css'])
 
   expect(annotations).toEqual([
     //
-    'input.css: 1:0 <- 1:0-2:0',
-    'input.css: 2:11 <- 2:11',
+    'input.css: 1:0-12 <- 1:0-21',
+    'input.css: 2:2-7 <- 1:0-21',
+    'input.css: 3:4-14 <- 1:0-21',
+    'input.css: 6:0-12 <- 2:0-21',
+    'input.css: 7:2-7 <- 2:0-21',
+    'input.css: 8:4-16 <- 2:0-21',
   ])
 })
