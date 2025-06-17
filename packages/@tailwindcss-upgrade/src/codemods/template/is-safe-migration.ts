@@ -18,6 +18,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /wire:[^\s]*?$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"]$/
+const VUE_3_EMIT = /\b\$?emit\(['"]$/
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -172,6 +173,11 @@ export function isSafeMigration(
 
   // Heuristic: Disallow Next.js Image `placeholder` prop
   if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
+    return false
+  }
+
+  // Heuristic: Disallow replacements inside `emit('…', …)`
+  if (VUE_3_EMIT.test(currentLineBeforeCandidate)) {
     return false
   }
 
