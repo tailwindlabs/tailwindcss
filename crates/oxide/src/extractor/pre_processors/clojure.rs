@@ -61,7 +61,7 @@ impl PreProcessor for Clojure {
                 // lg:pr-6"
                 //   ^
                 // ``
-                b':' if cursor.prev.is_ascii_alphabetic() && cursor.next.is_ascii_alphabetic() => {
+                b':' if cursor.prev.is_ascii_alphanumeric() && cursor.next.is_ascii_alphanumeric() => {
 
                     // Keep the `:` as-is
                 }
@@ -195,11 +195,11 @@ mod tests {
     #[test]
     fn test_extraction_of_pseudoclasses_from_keywords() {
         let input = r#"
-            ($ :div {:class [:flex :first:lg:pr-6]} …)
+            ($ :div {:class [:flex :first:lg:pr-6 :first:2xl:pl-6 :group-hover/2:2xs:pt-6]} …)
 
             :.hover:bg-white
         "#;
 
-        Clojure::test_extract_contains(input, vec!["flex", "first:lg:pr-6", "hover:bg-white"]);
+        Clojure::test_extract_contains(input, vec!["flex", "first:lg:pr-6", "first:2xl:pl-6", "group-hover/2:2xs:pt-6", "hover:bg-white"]);
     }
 }
