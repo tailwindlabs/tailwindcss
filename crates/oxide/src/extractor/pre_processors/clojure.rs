@@ -54,7 +54,7 @@ impl PreProcessor for Clojure {
                     // Keep the `.` as-is
                 }
 
-                // A `:` surrounded by letters denotes a pseudo-class. Keep as is.
+                // A `:` surrounded by letters denotes a variant. Keep as is.
                 //
                 // E.g.:
                 // ```
