@@ -42,7 +42,7 @@ impl PreProcessor for Clojure {
                     }
                 }
 
-                // A `.`  surrounded by digits is a decimal number, so we don't want to replace it.
+                // A `.` surrounded by digits is a decimal number, so we don't want to replace it.
                 //
                 // E.g.:
                 // ```
@@ -52,6 +52,18 @@ impl PreProcessor for Clojure {
                 b'.' if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() => {
 
                     // Keep the `.` as-is
+                }
+
+                // A `:` surrounded by letters denotes a pseudo-class. Keep as is.
+                //
+                // E.g.:
+                // ```
+                // lg:pr-6"
+                //   ^
+                // ``
+                b':' if cursor.prev.is_ascii_alphabetic() && cursor.next.is_ascii_alphabetic() => {
+
+                    // Keep the `:` as-is
                 }
 
                 b':' | b'.' => {
@@ -177,5 +189,17 @@ mod tests {
         "#;
 
         Clojure::test_extract_contains(input, vec!["flex", "gap-1.5", "p-1"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/18336
+    #[test]
+    fn test_extraction_of_pseudoclasses_from_keywords() {
+        let input = r#"
+            ($ :div {:class [:flex :first:lg:pr-6]} …)
+
+            :.hover:bg-white
+        "#;
+
+        Clojure::test_extract_contains(input, vec!["flex", "first:lg:pr-6", "hover:bg-white"]);
     }
 }
