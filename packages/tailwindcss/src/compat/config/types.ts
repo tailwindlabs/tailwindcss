@@ -52,7 +52,7 @@ type DarkModeStrategy =
   // Use the `class` strategy with a custom class instead of `.dark`.
   | ['class', string]
 
-  // Use the `selector` strategy — same as `class` but uses `:where()` for more predicable behavior
+  // Use the `selector` strategy — same as `class` but uses `:where()` for more predictable behavior
   | 'selector'
 
   // Use the `selector` strategy with a custom selector instead of `.dark`.

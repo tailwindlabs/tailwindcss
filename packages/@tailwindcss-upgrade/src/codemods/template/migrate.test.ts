@@ -37,7 +37,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   `
 
   test.each([
-    // Arbitrary property to named functional utlity
+    // Arbitrary property to named functional utility
     ['[color:red]', 'text-red-500'],
 
     // Promote data types to more specific utility if it exists
