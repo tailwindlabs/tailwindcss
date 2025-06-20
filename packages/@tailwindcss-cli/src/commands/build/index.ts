@@ -42,8 +42,10 @@ export function options() {
     },
     '--watch': {
       type: 'boolean | string',
-      description: 'Watch for changes and rebuild as needed',
+      description:
+        'Watch for changes and rebuild as needed, and use `always` to keep watching when stdin is closed',
       alias: '-w',
+      values: ['always'],
     },
     '--minify': {
       type: 'boolean',
