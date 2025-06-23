@@ -335,7 +335,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             // We found that throwing the error will cause PostCSS to no longer watch for changes
             // in some situations so we instead log the error and continue with an empty stylesheet.
             console.error(error)
-            root.removeAll()
+
+            if (error && typeof error === 'object' && 'message' in error) {
+              throw root.error(`${error.message}`)
+            }
+
+            throw root.error(`${error}`)
           }
         },
       },
