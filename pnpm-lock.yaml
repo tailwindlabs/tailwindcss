@@ -62,8 +62,8 @@ importers:
         specifier: 8.5.4
         version: 8.5.4
       postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.5.4)
+        specifier: ^16.1.1
+        version: 16.1.1(postcss@8.5.4)
       prettier:
         specifier: 'catalog:'
         version: 3.5.0
@@ -290,8 +290,8 @@ importers:
         specifier: workspace:*
         version: link:../internal-example-plugin
       postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.41)
+        specifier: ^16.1.1
+        version: 16.1.1(postcss@8.4.41)
 
   packages/@tailwindcss-standalone:
     dependencies:
@@ -399,8 +399,8 @@ importers:
         specifier: ^8.4.41
         version: 8.4.41
       postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.41)
+        specifier: ^16.1.1
+        version: 16.1.1(postcss@8.4.41)
       postcss-selector-parser:
         specifier: ^7.1.0
         version: 7.1.0
@@ -3352,10 +3352,6 @@ packages:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
 
-  is-core-module@2.15.0:
-    resolution: {integrity: sha512-Dd+Lb2/zvk9SKy1TGCt1wFJFo/MWBPMX5x7KcvLajWTGuomczdQX61PvY5yK6SVACwpoexWo81IfFyoKY2QnTA==}
-    engines: {node: '>= 0.4'}
-
   is-core-module@2.15.1:
     resolution: {integrity: sha512-z0vtXSwucUJtANQWldhbtbt7BnL0vxiFjIdDLAatwhDYty2bad6s+rijD6Ri4YuYJubLzIJLUidCh09e1djEVQ==}
     engines: {node: '>= 0.4'}
@@ -3940,8 +3936,8 @@ packages:
     peerDependencies:
       postcss: ^8.0.0
 
-  postcss-import@16.1.0:
-    resolution: {integrity: sha512-7hsAZ4xGXl4MW+OKEWCnF6T5jqBw80/EE9aXg1r2yyn1RsVEU8EtKXbijEODa+rg7iih4bKf7vlvTGYR4CnPNg==}
+  postcss-import@16.1.1:
+    resolution: {integrity: sha512-2xVS1NCZAfjtVdvXiyegxzJ447GyqCeEI5V7ApgQVOWnros1p5lGNovJNapwPpMombyFBfqDwt7AD3n2l0KOfQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       postcss: ^8.0.0
@@ -7412,10 +7408,6 @@ snapshots:
 
   is-callable@1.2.7: {}
 
-  is-core-module@2.15.0:
-    dependencies:
-      hasown: 2.0.2
-
   is-core-module@2.15.1:
     dependencies:
       hasown: 2.0.2
@@ -7918,14 +7910,14 @@ snapshots:
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-import@16.1.0(postcss@8.4.41):
+  postcss-import@16.1.1(postcss@8.4.41):
     dependencies:
       postcss: 8.4.41
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
 
-  postcss-import@16.1.0(postcss@8.5.4):
+  postcss-import@16.1.1(postcss@8.5.4):
     dependencies:
       postcss: 8.5.4
       postcss-value-parser: 4.2.0
@@ -8077,7 +8069,7 @@ snapshots:
 
   resolve@1.22.8:
     dependencies:
-      is-core-module: 2.15.0
+      is-core-module: 2.15.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
