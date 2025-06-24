@@ -15,7 +15,7 @@ test(
           "devDependencies": {
             "@vitejs/plugin-vue": "^5.1.2",
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,
@@ -87,7 +87,7 @@ test(
           "devDependencies": {
             "@vitejs/plugin-vue": "^5.1.2",
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,

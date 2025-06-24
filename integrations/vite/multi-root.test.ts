@@ -12,7 +12,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,
@@ -96,7 +96,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,

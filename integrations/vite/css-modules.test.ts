@@ -15,7 +15,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
