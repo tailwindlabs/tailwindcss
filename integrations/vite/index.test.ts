@@ -34,7 +34,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -111,7 +111,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -312,7 +312,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -491,7 +491,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -577,7 +577,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -679,7 +679,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             },
             "devDependencies": {
               ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
-              "vite": "^6"
+              "vite": "^7"
             }
           }
         `,
@@ -744,7 +744,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,
@@ -816,7 +816,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,
@@ -879,7 +879,7 @@ test(
             "@tailwindcss/vite": "workspace:^",
             "tailwindcss": "workspace:^",
             "plotly.js": "^3",
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,

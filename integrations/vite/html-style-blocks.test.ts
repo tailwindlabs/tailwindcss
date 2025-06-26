@@ -12,7 +12,7 @@ test(
           },
           "devDependencies": {
             "@tailwindcss/vite": "workspace:^",
-            "vite": "^6"
+            "vite": "^7"
           }
         }
       `,

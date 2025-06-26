@@ -4363,7 +4363,7 @@ test('addBase', async () => {
 })
 
 it("should error when `layer(…)` is used, but it's not the first param", async () => {
-  expect(async () => {
+  await expect(async () => {
     return await compileCss(
       css`
         @import './bar.css' supports(display: grid) layer(utilities);

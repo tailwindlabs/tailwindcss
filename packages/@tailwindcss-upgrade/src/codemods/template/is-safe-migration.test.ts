@@ -61,4 +61,8 @@ test('does not replace classes in invalid positions', async () => {
 
   // Alpine/Livewire wire:…
   await shouldNotReplace('<x-input.number required="foo" wire:model.blur="coins" />', 'blur')
+
+  // Vue 3 events
+  await shouldNotReplace(`emit('blur', props.modelValue)\n`, 'blur')
+  await shouldNotReplace(`$emit('blur', props.modelValue)\n`, 'blur')
 })

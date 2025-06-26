@@ -112,7 +112,11 @@ export function help({
     // `alias` followed by `, ` and followed by the `flag`.
     let maxOptionLength = 0
 
-    for (let [flag, { alias }] of Object.entries(options)) {
+    for (let [flag, { alias, values }] of Object.entries(options)) {
+      if (values?.length) {
+        flag += `[=${values.join(', ')}]`
+      }
+
       // The option string, which is the combination of the alias and the flag
       // but already properly indented based on the other aliases to ensure
       // everything is aligned properly.
