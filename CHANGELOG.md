@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+- Add option to disable url rewriting in `@tailwindcss/postcss` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
 
 ## [4.1.11] - 2025-06-26
 
