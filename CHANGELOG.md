@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.11] - 2025-06-26
+
 - Add heuristic to skip candidate migrations inside `emit(…)` ([#18330](https://github.com/tailwindlabs/tailwindcss/pull/18330))
 - Extract candidates with variants in Clojure/ClojureScript keywords ([#18338](https://github.com/tailwindlabs/tailwindcss/pull/18338))
 - Document `--watch=always` in the CLI's usage ([#18337](https://github.com/tailwindlabs/tailwindcss/pull/18337))
@@ -3760,7 +3764,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...HEAD
+[4.1.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...v4.1.11
 [4.1.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...v4.1.10
 [4.1.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...v4.1.9
 [4.1.8]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.7...v4.1.8
