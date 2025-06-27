@@ -141,9 +141,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     parseVariant(variant: string) {
       return parsedVariants.get(variant)
     },
-    compileAstNodes(candidate: Candidate, flags?: CompileAstFlags) {
-      flags ??= CompileAstFlags.RespectImportant
-
+    compileAstNodes(candidate: Candidate, flags = CompileAstFlags.RespectImportant) {
       return compiledAstNodes.get(flags).get(candidate)
     },
 

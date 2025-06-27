@@ -49,7 +49,7 @@ export function compileCandidates(
 
   let flags = CompileAstFlags.None
 
-  if (respectImportant || respectImportant === undefined) {
+  if (respectImportant ?? true) {
     flags |= CompileAstFlags.RespectImportant
   }
 
@@ -136,7 +136,7 @@ export function compileAstNodes(
   let asts = compileBaseUtility(candidate, designSystem)
   if (asts.length === 0) return []
 
-  let respectImportant = Boolean(flags & CompileAstFlags.RespectImportant)
+  let respectImportant = designSystem.important && Boolean(flags & CompileAstFlags.RespectImportant)
 
   let rules: {
     node: AstNode
@@ -154,7 +154,7 @@ export function compileAstNodes(
     // If the candidate itself is important then we want to always mark
     // the utility as important. However, at a design system level we want
     // to be able to opt-out when using things like `@apply`
-    if (candidate.important || (designSystem.important && respectImportant)) {
+    if (candidate.important || respectImportant) {
       applyImportant(nodes)
     }
 
