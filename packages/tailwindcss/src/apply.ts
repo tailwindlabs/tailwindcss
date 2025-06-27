@@ -176,6 +176,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         // with.
         let candidates = Object.keys(candidateOffsets)
         let compiled = compileCandidates(candidates, designSystem, {
+          respectImportant: false,
           onInvalidCandidate: (candidate) => {
             // When using prefix, make sure prefix is used in candidate
             if (designSystem.theme.prefix && !candidate.startsWith(designSystem.theme.prefix)) {

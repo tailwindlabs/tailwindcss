@@ -666,7 +666,7 @@ describe('@apply', () => {
   })
 
   // https://github.com/tailwindlabs/tailwindcss/issues/16935
-  it('should now swallow @utility declarations when @apply is used in nested rules', async () => {
+  it('should not swallow @utility declarations when @apply is used in nested rules', async () => {
     expect(
       await compileCss(
         css`
@@ -774,6 +774,41 @@ describe('@apply', () => {
 
       .foo:disabled {
         background-color: var(--color-indigo-500);
+      }"
+    `)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/18400
+  it('should ignore the design systems `important` flag when using @apply', async () => {
+    expect(
+      await compileCss(
+        css`
+          @import 'tailwindcss/utilities' important;
+          .flex-explicitly-important {
+            @apply flex!;
+          }
+          .flex-not-important {
+            @apply flex;
+          }
+        `,
+        ['flex'],
+        {
+          async loadStylesheet(_, base) {
+            return {
+              content: '@tailwind utilities;',
+              base,
+              path: '',
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      ".flex, .flex-explicitly-important {
+        display: flex !important;
+      }
+
+      .flex-not-important {
+        display: flex;
       }"
     `)
   })

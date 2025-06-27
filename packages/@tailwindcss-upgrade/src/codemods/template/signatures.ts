@@ -2,7 +2,7 @@ import { substituteAtApply } from '../../../../tailwindcss/src/apply'
 import { atRule, styleRule, toCss, walk, type AstNode } from '../../../../tailwindcss/src/ast'
 import { printArbitraryValue } from '../../../../tailwindcss/src/candidate'
 import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-parser'
-import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { CompileAstFlags, type DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { ThemeOptions } from '../../../../tailwindcss/src/theme'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
@@ -40,7 +40,16 @@ export const computeUtilitySignature = new DefaultMap<
       // Use `@apply` to normalize the selector to `.x`
       let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
 
-      temporarilyDisableThemeInline(designSystem, () => substituteAtApply(ast, designSystem))
+      temporarilyDisableThemeInline(designSystem, () => {
+        // There's separate utility caches for respect important vs not
+        // so we want to compile them both with `@theme inline` disabled
+        for (let candidate of designSystem.parseCandidate(utility)) {
+          designSystem.compileAstNodes(candidate, CompileAstFlags.None)
+          designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
+        }
+
+        substituteAtApply(ast, designSystem)
+      })
 
       // We will be mutating the AST, so we need to clone it first to not affect
       // the original AST

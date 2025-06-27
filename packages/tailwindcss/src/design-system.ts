@@ -18,6 +18,11 @@ import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import { Variants, createVariants } from './variants'
 
+export const enum CompileAstFlags {
+  None = 0,
+  RespectImportant = 1 << 0,
+}
+
 export type DesignSystem = {
   theme: Theme
   utilities: Utilities
@@ -34,7 +39,7 @@ export type DesignSystem = {
 
   parseCandidate(candidate: string): Readonly<Candidate>[]
   parseVariant(variant: string): Readonly<Variant> | null
-  compileAstNodes(candidate: Candidate): ReturnType<typeof compileAstNodes>
+  compileAstNodes(candidate: Candidate, flags?: CompileAstFlags): ReturnType<typeof compileAstNodes>
 
   printCandidate(candidate: Candidate): string
   printVariant(variant: Variant): string
@@ -57,26 +62,28 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     Array.from(parseCandidate(candidate, designSystem)),
   )
 
-  let compiledAstNodes = new DefaultMap<Candidate>((candidate) => {
-    let ast = compileAstNodes(candidate, designSystem)
+  let compiledAstNodes = new DefaultMap<number>((flags) => {
+    return new DefaultMap<Candidate>((candidate) => {
+      let ast = compileAstNodes(candidate, designSystem, flags)
 
-    // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
-    // properties (`[--my-var:theme(--color-red-500)]`) can contain function
-    // calls so we need evaluate any functions we find there that weren't in
-    // the source CSS.
-    try {
-      substituteFunctions(
-        ast.map(({ node }) => node),
-        designSystem,
-      )
-    } catch (err) {
-      // If substitution fails then the candidate likely contains a call to
-      // `theme()` that is invalid which may be because of incorrect usage,
-      // invalid arguments, or a theme key that does not exist.
-      return []
-    }
+      // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+      // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+      // calls so we need evaluate any functions we find there that weren't in
+      // the source CSS.
+      try {
+        substituteFunctions(
+          ast.map(({ node }) => node),
+          designSystem,
+        )
+      } catch (err) {
+        // If substitution fails then the candidate likely contains a call to
+        // `theme()` that is invalid which may be because of incorrect usage,
+        // invalid arguments, or a theme key that does not exist.
+        return []
+      }
 
-    return ast
+      return ast
+    })
   })
 
   let trackUsedVariables = new DefaultMap((raw) => {
@@ -134,8 +141,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     parseVariant(variant: string) {
       return parsedVariants.get(variant)
     },
-    compileAstNodes(candidate: Candidate) {
-      return compiledAstNodes.get(candidate)
+    compileAstNodes(candidate: Candidate, flags = CompileAstFlags.RespectImportant) {
+      return compiledAstNodes.get(flags).get(candidate)
     },
 
     printCandidate(candidate: Candidate) {
