@@ -9,7 +9,7 @@ import {
   type StyleRule,
 } from './ast'
 import { type Candidate, type Variant } from './candidate'
-import { type DesignSystem } from './design-system'
+import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
 import { asColor, type Utility } from './utilities'
 import { compare } from './utils/compare'
@@ -19,7 +19,10 @@ import type { Variants } from './variants'
 export function compileCandidates(
   rawCandidates: Iterable<string>,
   designSystem: DesignSystem,
-  { onInvalidCandidate }: { onInvalidCandidate?: (candidate: string) => void } = {},
+  {
+    onInvalidCandidate,
+    respectImportant,
+  }: { onInvalidCandidate?: (candidate: string) => void; respectImportant?: boolean } = {},
 ) {
   let nodeSorting = new Map<
     AstNode,
@@ -44,6 +47,12 @@ export function compileCandidates(
     matches.set(rawCandidate, candidates)
   }
 
+  let flags = CompileAstFlags.None
+
+  if (respectImportant || respectImportant === undefined) {
+    flags |= CompileAstFlags.RespectImportant
+  }
+
   let variantOrderMap = designSystem.getVariantOrder()
 
   // Create the AST
@@ -51,7 +60,7 @@ export function compileCandidates(
     let found = false
 
     for (let candidate of candidates) {
-      let rules = designSystem.compileAstNodes(candidate)
+      let rules = designSystem.compileAstNodes(candidate, flags)
       if (rules.length === 0) continue
 
       found = true
@@ -119,9 +128,15 @@ export function compileCandidates(
   }
 }
 
-export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem) {
+export function compileAstNodes(
+  candidate: Candidate,
+  designSystem: DesignSystem,
+  flags: CompileAstFlags,
+) {
   let asts = compileBaseUtility(candidate, designSystem)
   if (asts.length === 0) return []
+
+  let respectImportant = Boolean(flags & CompileAstFlags.RespectImportant)
 
   let rules: {
     node: AstNode
@@ -136,7 +151,10 @@ export function compileAstNodes(candidate: Candidate, designSystem: DesignSystem
   for (let nodes of asts) {
     let propertySort = getPropertySort(nodes)
 
-    if (candidate.important || designSystem.important) {
+    // If the candidate itself is important then we want to always mark
+    // the utility as important. However, at a design system level we want
+    // to be able to opt-out when using things like `@apply`
+    if (candidate.important || (designSystem.important && respectImportant)) {
       applyImportant(nodes)
     }
 
