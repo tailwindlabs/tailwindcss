@@ -666,7 +666,7 @@ describe('@apply', () => {
   })
 
   // https://github.com/tailwindlabs/tailwindcss/issues/16935
-  it('should now swallow @utility declarations when @apply is used in nested rules', async () => {
+  it('should not swallow @utility declarations when @apply is used in nested rules', async () => {
     expect(
       await compileCss(
         css`
