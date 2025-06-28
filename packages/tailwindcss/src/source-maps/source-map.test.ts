@@ -419,3 +419,55 @@ test('license comments with new lines preserve source locations', async ({ expec
     'input.css: 2:11 <- 2:11',
   ])
 })
+
+test('Source locations for `addBase` point to the `@plugin` that generated them', async ({
+  expect,
+}) => {
+  let { sources, annotations } = await run({
+    input: dedent`
+      @plugin "./plugin.js";
+      @config "./config.js";
+    `,
+    options: {
+      async loadModule(id, base) {
+        if (id === './plugin.js') {
+          return {
+            module: createPlugin(({ addBase }) => {
+              addBase({ body: { color: 'red' } })
+            }),
+            base,
+            path: '',
+          }
+        }
+
+        if (id === './config.js') {
+          return {
+            module: {
+              plugins: [
+                createPlugin(({ addBase }) => {
+                  addBase({ body: { color: 'green' } })
+                }),
+              ],
+            },
+            base,
+            path: '',
+          }
+        }
+
+        throw new Error(`unknown module ${id}`)
+      },
+    },
+  })
+
+  expect(sources).toEqual(['input.css'])
+
+  expect(annotations).toEqual([
+    //
+    'input.css: 1:0-12 <- 1:0-21',
+    'input.css: 2:2-7 <- 1:0-21',
+    'input.css: 3:4-14 <- 1:0-21',
+    'input.css: 6:0-12 <- 2:0-21',
+    'input.css: 7:2-7 <- 2:0-21',
+    'input.css: 8:4-16 <- 2:0-21',
+  ])
+})
