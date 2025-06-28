@@ -10,3 +10,10 @@ pub use glob::GlobEntry;
 pub use scanner::sources::PublicSourceEntry;
 pub use scanner::ChangedContent;
 pub use scanner::Scanner;
+
+// WASM bindings
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+pub mod wasm;
+
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+pub use wasm::*;
