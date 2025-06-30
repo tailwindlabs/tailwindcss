@@ -391,7 +391,7 @@ describe('concurrent builds', () => {
       let ast = postcss.parse(input)
       for (let runner of (plugin as any).plugins) {
         if (runner.Once) {
-          await runner.Once(ast, { result: { opts: { from }, messages: [] } })
+          await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
         }
       }
       return ast.toString()
