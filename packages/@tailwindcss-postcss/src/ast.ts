@@ -1,7 +1,8 @@
-import postcss, {
-  Input,
+import {
+  type Postcss,
   type ChildNode as PostCssChildNode,
   type Container as PostCssContainerNode,
+  type Input as PostCssInput,
   type Root as PostCssRoot,
   type Source as PostcssSource,
 } from 'postcss'
@@ -12,9 +13,13 @@ import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 
 const EXCLAMATION_MARK = 0x21
 
-export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undefined): PostCssRoot {
-  let inputMap = new DefaultMap<Source, Input>((src) => {
-    return new Input(src.code, {
+export function cssAstToPostCssAst(
+  ast: AstNode[],
+  source: PostcssSource | undefined,
+  postcss: Postcss,
+): PostCssRoot {
+  let inputMap = new DefaultMap<Source, PostCssInput>((src) => {
+    return new postcss.Input(src.code, {
       map: source?.input.map,
       from: src.file ?? undefined,
     })
@@ -126,7 +131,7 @@ export function cssAstToPostCssAst(ast: AstNode[], source: PostcssSource | undef
 }
 
 export function postCssAstToCssAst(root: PostCssRoot): AstNode[] {
-  let inputMap = new DefaultMap<Input, Source>((input) => ({
+  let inputMap = new DefaultMap<PostCssInput, Source>((input) => ({
     file: input.file ?? input.id ?? null,
     code: input.css,
   }))
