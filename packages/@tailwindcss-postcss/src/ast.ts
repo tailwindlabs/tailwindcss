@@ -1,11 +1,4 @@
-import {
-  type Postcss,
-  type ChildNode as PostCssChildNode,
-  type Container as PostCssContainerNode,
-  type Input as PostCssInput,
-  type Root as PostCssRoot,
-  type Source as PostcssSource,
-} from 'postcss'
+import type * as postcss from 'postcss'
 import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src/ast'
 import { createLineTable, type LineTable } from '../../tailwindcss/src/source-maps/line-table'
 import type { Source, SourceLocation } from '../../tailwindcss/src/source-maps/source'
@@ -15,10 +8,10 @@ const EXCLAMATION_MARK = 0x21
 
 export function cssAstToPostCssAst(
   ast: AstNode[],
-  source: PostcssSource | undefined,
-  postcss: Postcss,
-): PostCssRoot {
-  let inputMap = new DefaultMap<Source, PostCssInput>((src) => {
+  source: postcss.Source | undefined,
+  postcss: postcss.Postcss,
+): postcss.Root {
+  let inputMap = new DefaultMap<Source, postcss.Input>((src) => {
     return new postcss.Input(src.code, {
       map: source?.input.map,
       from: src.file ?? undefined,
@@ -30,7 +23,7 @@ export function cssAstToPostCssAst(
   let root = postcss.root()
   root.source = source
 
-  function toSource(loc: SourceLocation | undefined): PostcssSource | undefined {
+  function toSource(loc: SourceLocation | undefined): postcss.Source | undefined {
     // Use the fallback if this node has no location info in the AST
     if (!loc) return
     if (!loc[0]) return
@@ -54,7 +47,7 @@ export function cssAstToPostCssAst(
     }
   }
 
-  function updateSource(astNode: PostCssChildNode, loc: SourceLocation | undefined) {
+  function updateSource(astNode: postcss.ChildNode, loc: SourceLocation | undefined) {
     let source = toSource(loc)
 
     // The `source` property on PostCSS nodes must be defined if present because
@@ -68,7 +61,7 @@ export function cssAstToPostCssAst(
     }
   }
 
-  function transform(node: AstNode, parent: PostCssContainerNode) {
+  function transform(node: AstNode, parent: postcss.Container) {
     // Declaration
     if (node.kind === 'declaration') {
       let astNode = postcss.decl({
@@ -130,13 +123,13 @@ export function cssAstToPostCssAst(
   return root
 }
 
-export function postCssAstToCssAst(root: PostCssRoot): AstNode[] {
-  let inputMap = new DefaultMap<PostCssInput, Source>((input) => ({
+export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
+  let inputMap = new DefaultMap<postcss.Input, Source>((input) => ({
     file: input.file ?? input.id ?? null,
     code: input.css,
   }))
 
-  function toSource(node: PostCssChildNode): SourceLocation | undefined {
+  function toSource(node: postcss.ChildNode): SourceLocation | undefined {
     let source = node.source
     if (!source) return
 
@@ -149,7 +142,7 @@ export function postCssAstToCssAst(root: PostCssRoot): AstNode[] {
   }
 
   function transform(
-    node: PostCssChildNode,
+    node: postcss.ChildNode,
     parent: Extract<AstNode, { nodes: AstNode[] }>['nodes'],
   ) {
     // Declaration
