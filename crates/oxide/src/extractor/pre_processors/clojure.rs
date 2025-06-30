@@ -5,12 +5,21 @@ use bstr::ByteSlice;
 #[derive(Debug, Default)]
 pub struct Clojure;
 
+/// This is meant to be a rough estimate of a valid ClojureScript keyword
+///
+/// This can be approximated by the following regex:
+/// /::?[a-zA-Z0-9!#$%&*+./:<=>?_|-]+/
+///
+/// However, keywords are intended to be detected as utilities. Since the set
+/// of valid characters in a utility (outside of arbitrary values) is smaller,
+/// along with the fact that neither `[]` nor `()` are allowed in keywords we
+/// can simplify this list quite a bit.
 #[inline]
 fn is_keyword_character(byte: u8) -> bool {
-    matches!(
+    return matches!(
         byte,
-        b'+' | b'-' | b'/' | b'*' | b'_' | b'#' | b'.' | b':' | b'?'
-    ) | byte.is_ascii_alphanumeric()
+        b'!' | b'%' | b'*' | b'+' | b'-' | b'.' | b'/' | b':' | b'_'
+    ) | byte.is_ascii_alphanumeric();
 }
 
 impl PreProcessor for Clojure {
