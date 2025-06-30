@@ -18,7 +18,7 @@ pub struct Clojure;
 fn is_keyword_character(byte: u8) -> bool {
     return matches!(
         byte,
-        b'!' | b'%' | b'*' | b'+' | b'-' | b'.' | b'/' | b':' | b'_'
+        b'!' | b'#' | b'%' | b'*' | b'+' | b'-' | b'.' | b'/' | b':' | b'_'
     ) | byte.is_ascii_alphanumeric();
 }
 
