@@ -16,10 +16,10 @@ pub struct Clojure;
 /// can simplify this list quite a bit.
 #[inline]
 fn is_keyword_character(byte: u8) -> bool {
-    return matches!(
+    (matches!(
         byte,
         b'!' | b'#' | b'%' | b'*' | b'+' | b'-' | b'.' | b'/' | b':' | b'_'
-    ) | byte.is_ascii_alphanumeric();
+    ) | byte.is_ascii_alphanumeric())
 }
 
 impl PreProcessor for Clojure {
