@@ -113,6 +113,8 @@ mod tests {
           ~C(c23 c24)
           ~s(c25 c26)
           ~S(c27 c28)
+          ~W"c29 c30"
+          ~W'c31 c32'
         "#;
 
         Elixir::test_extract_contains(
@@ -142,6 +144,10 @@ mod tests {
                 "c26",
                 "c27",
                 "c28",
+                "c29",
+                "c30",
+                "c31",
+                "c32",
             ],
         );
     }
