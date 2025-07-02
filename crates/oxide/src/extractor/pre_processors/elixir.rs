@@ -1,5 +1,3 @@
-use std::str::from_utf8;
-
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
@@ -9,7 +7,7 @@ pub struct Elixir;
 
 impl PreProcessor for Elixir {
     fn process(&self, content: &[u8]) -> Vec<u8> {
-        let mut cursor = cursor::Cursor::new(&content);
+        let mut cursor = cursor::Cursor::new(content);
         let mut result = content.to_vec();
         let mut bracket_stack = BracketStack::default();
 
