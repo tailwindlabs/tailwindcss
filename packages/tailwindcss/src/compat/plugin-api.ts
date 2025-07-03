@@ -5,6 +5,7 @@ import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candida
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
+import type { SourceLocation } from '../source-maps/source'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
 import { escape } from '../utils/escape'
@@ -24,6 +25,7 @@ export type PluginWithConfig = {
 
   /** @internal */
   reference?: boolean
+  src?: SourceLocation | undefined
 }
 export type PluginWithOptions<T> = {
   (options?: T): PluginWithConfig
@@ -93,19 +95,25 @@ export function buildPluginApi({
   resolvedConfig,
   featuresRef,
   referenceMode,
+  src,
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
   resolvedConfig: ResolvedConfig
   featuresRef: { current: Features }
   referenceMode: boolean
+  src: SourceLocation | undefined
 }): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
       if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
-      ast.push(atRule('@layer', 'base', baseNodes))
+      let rule = atRule('@layer', 'base', baseNodes)
+      walk([rule], (node) => {
+        node.src = src
+      })
+      ast.push(rule)
     },
 
     addVariant(name, variant) {
@@ -255,7 +263,11 @@ export function buildPluginApi({
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
           if (!referenceMode) {
-            ast.push(rule(name, objectToAst(css)))
+            let keyframes = rule(name, objectToAst(css))
+            walk([keyframes], (node) => {
+              node.src = src
+            })
+            ast.push(keyframes)
           }
           continue
         }
