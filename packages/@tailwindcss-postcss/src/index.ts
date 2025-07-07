@@ -48,14 +48,23 @@ function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry
 }
 
 export type PluginOptions = {
-  // The base directory to scan for class candidates.
+  /**
+   * The base directory to scan for class candidates.
+   *
+   * Defaults to the current working directory.
+   */
   base?: string
 
-  // Optimize and minify the output CSS.
+  /**
+   * Optimize and minify the output CSS.
+   */
   optimize?: boolean | { minify?: boolean }
 
-  // Whether or not we should rewrite any encountered urls
-  // default: true
+  /**
+   * Enable or disable asset URL rewriting.
+   *
+   * Defaults to `true`.
+   */
   rewriteUrls?: boolean
 }
 
