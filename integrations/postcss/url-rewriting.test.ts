@@ -91,7 +91,7 @@ test(
         module.exports = {
           plugins: {
             '@tailwindcss/postcss': {
-              rewriteUrls: false,
+              transformAssetUrls: false,
             },
           },
         }

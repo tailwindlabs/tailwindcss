@@ -65,13 +65,13 @@ export type PluginOptions = {
    *
    * Defaults to `true`.
    */
-  rewriteUrls?: boolean
+  transformAssetUrls?: boolean
 }
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
-  let shouldRewriteUrls = opts.rewriteUrls ?? true
+  let shouldRewriteUrls = opts.transformAssetUrls ?? true
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
