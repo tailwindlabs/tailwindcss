@@ -1,6 +1,10 @@
 export const DEBUG = resolveDebug(process.env.DEBUG)
 
 function resolveDebug(debug: typeof process.env.DEBUG) {
+  if (typeof debug === 'boolean') {
+    return debug
+  }
+
   if (debug === undefined) {
     return false
   }
