@@ -400,7 +400,7 @@ test('@layer', async () => {
 })
 
 test('supports theme(reference) imports', async () => {
-  expect(
+  await expect(
     run(
       css`
         @tailwind utilities;
@@ -542,7 +542,7 @@ test('it crashes when inside a cycle', async () => {
       base: '/root',
     })
 
-  expect(
+  await expect(
     run(
       css`
         @import 'foo.css';

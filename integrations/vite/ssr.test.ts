@@ -119,3 +119,50 @@ test(
     ])
   },
 )
+
+test(
+  `Vite 7`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            cssMinify: false,
+            ssrEmitAssets: true,
+          },
+          plugins: [tailwindcss()],
+        })
+      `,
+      ...WORKSPACE,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build --ssr server.ts')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [
+      candidate`underline`,
+      candidate`m-2`,
+      candidate`overline`,
+      candidate`m-3`,
+    ])
+  },
+)

@@ -7,6 +7,7 @@ export type Arg = {
     description: string
     alias?: `-${string}`
     default?: Types[keyof Types]
+    values?: string[]
   }
 }
 

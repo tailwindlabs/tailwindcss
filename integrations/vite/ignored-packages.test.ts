@@ -11,7 +11,7 @@ const WORKSPACE = {
         "tailwindcss": "workspace:^"
       },
       "devDependencies": {
-        "vite": "^6"
+        "vite": "^7"
       }
     }
   `,

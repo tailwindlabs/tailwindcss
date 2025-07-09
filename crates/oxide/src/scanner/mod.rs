@@ -585,6 +585,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
 
     match extension {
         "clj" | "cljs" | "cljc" => Clojure.process(content),
+        "heex" | "eex" | "ex" | "exs" => Elixir.process(content),
         "cshtml" | "razor" => Razor.process(content),
         "haml" => Haml.process(content),
         "json" => Json.process(content),

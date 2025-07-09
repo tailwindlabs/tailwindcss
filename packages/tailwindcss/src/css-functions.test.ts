@@ -23,7 +23,7 @@ describe('--alpha(…)', () => {
   })
 
   test('--alpha(…) errors when no arguments are used', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         .foo {
           margin: --alpha();
@@ -35,7 +35,7 @@ describe('--alpha(…)', () => {
   })
 
   test('--alpha(…) errors when alpha value is missing', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         .foo {
           margin: --alpha(red);
@@ -47,7 +47,7 @@ describe('--alpha(…)', () => {
   })
 
   test('--alpha(…) errors multiple arguments are used', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         .foo {
           margin: --alpha(red / 50%, blue);
@@ -101,7 +101,7 @@ describe('--spacing(…)', () => {
   })
 
   test('--spacing(…) relies on `--spacing` to be defined', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         .foo {
           margin: --spacing(4);
@@ -113,7 +113,7 @@ describe('--spacing(…)', () => {
   })
 
   test('--spacing(…) requires a single value', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         @theme {
           --spacing: 0.25rem;
@@ -129,7 +129,7 @@ describe('--spacing(…)', () => {
   })
 
   test('--spacing(…) does not have multiple arguments', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         .foo {
           margin: --spacing(4, 5, 6);
@@ -364,7 +364,7 @@ describe('--theme(…)', () => {
   })
 
   test('--theme(…) can only be used with CSS variables from your @theme', async () => {
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         @theme {
           --color-red-500: #f00;
@@ -377,7 +377,7 @@ describe('--theme(…)', () => {
       `[Error: The --theme(…) function can only be used with CSS variables from your theme.]`,
     )
 
-    expect(() =>
+    await expect(() =>
       compileCss(css`
         @theme {
           --color-red-500: #f00;
@@ -789,7 +789,7 @@ describe('theme(…)', () => {
       })
 
       test('theme(colors.unknown.500)', async () =>
-        expect(() =>
+        await expect(() =>
           compileCss(css`
             .red {
               color: theme(colors.unknown.500);

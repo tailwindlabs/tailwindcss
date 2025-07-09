@@ -1,4 +1,5 @@
 import type { DesignSystem } from '../../design-system'
+import type { SourceLocation } from '../../source-maps/source'
 import colors from '../colors'
 import type { PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
@@ -16,6 +17,7 @@ export interface ConfigFile {
   base: string
   config: UserConfig
   reference: boolean
+  src: SourceLocation | undefined
 }
 
 interface ResolutionContext {
@@ -131,7 +133,7 @@ export type PluginUtils = {
 
 function extractConfigs(
   ctx: ResolutionContext,
-  { config, base, path, reference }: ConfigFile,
+  { config, base, path, reference, src }: ConfigFile,
 ): void {
   let plugins: PluginWithConfig[] = []
 
@@ -140,17 +142,17 @@ function extractConfigs(
     if ('__isOptionsFunction' in plugin) {
       // Happens with `plugin.withOptions()` when no options were passed:
       // e.g. `require("my-plugin")` instead of `require("my-plugin")(options)`
-      plugins.push({ ...plugin(), reference })
+      plugins.push({ ...plugin(), reference, src })
     } else if ('handler' in plugin) {
       // Happens with `plugin(…)`:
       // e.g. `require("my-plugin")`
       //
       // or with `plugin.withOptions()` when the user passed options:
       // e.g. `require("my-plugin")(options)`
-      plugins.push({ ...plugin, reference })
+      plugins.push({ ...plugin, reference, src })
     } else {
       // Just a plain function without using the plugin(…) API
-      plugins.push({ handler: plugin, reference })
+      plugins.push({ handler: plugin, reference, src })
     }
   }
 
@@ -162,7 +164,7 @@ function extractConfigs(
   }
 
   for (let preset of config.presets ?? []) {
-    extractConfigs(ctx, { path, base, config: preset, reference })
+    extractConfigs(ctx, { path, base, config: preset, reference, src })
   }
 
   // Apply configs from plugins
@@ -170,7 +172,13 @@ function extractConfigs(
     ctx.plugins.push(plugin)
 
     if (plugin.config) {
-      extractConfigs(ctx, { path, base, config: plugin.config, reference: !!plugin.reference })
+      extractConfigs(ctx, {
+        path,
+        base,
+        config: plugin.config,
+        reference: !!plugin.reference,
+        src: plugin.src ?? src,
+      })
     }
   }
 

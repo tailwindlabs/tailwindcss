@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/upgrade",
-  "version": "4.1.10",
+  "version": "4.1.11",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -31,13 +31,13 @@
     "@tailwindcss/oxide": "workspace:*",
     "braces": "^3.0.3",
     "dedent": "1.6.0",
-    "enhanced-resolve": "^5.18.1",
+    "enhanced-resolve": "^5.18.2",
     "globby": "^14.1.0",
     "jiti": "^2.0.0-beta.3",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
     "postcss": "^8.4.41",
-    "postcss-import": "^16.1.0",
+    "postcss-import": "^16.1.1",
     "postcss-selector-parser": "^7.1.0",
     "prettier": "catalog:",
     "semver": "^7.7.2",

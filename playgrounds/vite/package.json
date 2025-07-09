@@ -10,15 +10,15 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
-    "@vitejs/plugin-react": "^4.5.0",
+    "@vitejs/plugin-react": "^4.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^19.1.6",
+    "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "bun": "^1.2.15",
+    "bun": "^1.2.17",
     "vite": "catalog:"
   }
 }
