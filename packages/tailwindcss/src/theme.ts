@@ -169,10 +169,12 @@ export class Theme {
         candidateValue !== null ? (`${namespace}-${candidateValue}` as ThemeKey) : namespace
 
       if (!this.values.has(themeKey)) {
-        // If the exact theme key is not found, we might be trying to resolve a key containing a dot
-        // that was registered with an underscore instead:
-        if (candidateValue !== null && candidateValue.includes('.')) {
-          themeKey = `${namespace}-${candidateValue.replaceAll('.', '_')}` as ThemeKey
+        if (candidateValue !== null) {
+          // If the exact theme key is not found, we might be trying to resolve a key:
+          // - containing a dot that was registered with an underscore instead
+          // - containing a lowercase alphabet followed by an uppercase one that was replaced to kebab case
+          themeKey =
+            `${namespace}-${candidateValue.replaceAll('.', '_').replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)}` as ThemeKey
 
           if (!this.values.has(themeKey)) continue
         } else {

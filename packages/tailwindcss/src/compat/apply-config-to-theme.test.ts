@@ -55,6 +55,7 @@ test('config values can be merged into the theme', () => {
             lg: ['1.125rem', '2'],
             xl: ['1.5rem', '3rem', 'invalid'],
             '2xl': ['2rem'],
+            LargeTitle: ['28px', { fontWeight: 700, lineHeight: '36px' }],
           },
 
           letterSpacing: {
@@ -117,6 +118,7 @@ test('config values can be merged into the theme', () => {
   ])
   expect(theme.resolve('2xl', ['--text'])).toEqual('2rem')
   expect(theme.resolveWith('2xl', ['--text'], ['--line-height'])).toEqual(['2rem', {}])
+  expect(theme.resolve('LargeTitle', ['--text'])).toEqual('28px')
   expect(theme.resolve('super-wide', ['--tracking'])).toEqual('0.25em')
   expect(theme.resolve('super-loose', ['--leading'])).toEqual('3')
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
