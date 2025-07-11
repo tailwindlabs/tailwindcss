@@ -354,6 +354,10 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     padding-block: 0;
   }
 
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+
   :-moz-ui-invalid {
     box-shadow: none;
   }
