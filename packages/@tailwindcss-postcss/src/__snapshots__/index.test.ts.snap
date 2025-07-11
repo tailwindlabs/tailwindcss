@@ -240,6 +240,10 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     padding-block: 0;
   }
 
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+
   :-moz-ui-invalid {
     box-shadow: none;
   }
