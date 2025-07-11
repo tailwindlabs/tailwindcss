@@ -14,7 +14,137 @@ use bstr::ByteSlice;
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
+#[cfg(not(all(target_arch = "wasm32", target_os = "unknown")))]
 use rayon::prelude::*;
+
+// Conditional parallel processing helpers
+#[cfg(not(all(target_arch = "wasm32", target_os = "unknown")))]
+mod parallel {
+    use rayon::prelude::*;
+    use fxhash::FxHashSet;
+    
+    pub fn sort_candidates(candidates: &mut Vec<String>) {
+        candidates.par_sort_unstable();
+    }
+    
+    pub fn filter_new_candidates(candidates: Vec<String>, existing: &FxHashSet<String>) -> Vec<String> {
+        candidates.into_par_iter().filter(|c| !existing.contains(c)).collect()
+    }
+    
+    pub fn extend_candidates(target: &mut FxHashSet<String>, new: Vec<String>) {
+        target.par_extend(new);
+    }
+    
+    pub fn map_files(files: &[std::path::PathBuf]) -> Vec<String> {
+        files.par_iter().filter_map(|x| x.clone().into_os_string().into_string().ok()).collect()
+    }
+    
+    pub fn process_changed_content(content: Vec<super::ChangedContent>) -> Vec<Vec<u8>> {
+        content.into_par_iter().filter_map(super::read_changed_content).collect()
+    }
+    
+    pub fn process_extraction_blobs<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
+    where
+        H: Fn(crate::extractor::Extractor) -> Vec<crate::extractor::Extracted> + std::marker::Sync,
+    {
+        let mut result: Vec<_> = blobs
+            .par_iter()
+            .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
+            .filter_map(|blob| {
+                if blob.is_empty() { return None; }
+                let extracted = handle(crate::extractor::Extractor::new(blob));
+                if extracted.is_empty() { return None; }
+                Some(fxhash::FxHashSet::from_iter(extracted.into_iter().map(|x| match x {
+                    crate::extractor::Extracted::Candidate(bytes) => bytes,
+                    crate::extractor::Extracted::CssVariable(bytes) => bytes,
+                })))
+            })
+            .reduce(Default::default, |mut a, b| { a.extend(b); a })
+            .into_iter()
+            .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+            .collect();
+        result.par_sort_unstable();
+        result
+    }
+    
+    pub fn extract_with_positions(extracted: Vec<crate::extractor::Extracted>, offset: usize, original_content: &[u8]) -> Vec<(String, usize)> {
+        extracted.into_par_iter().flat_map(|extracted| match extracted {
+            crate::extractor::Extracted::Candidate(s) => {
+                let i = s.as_ptr() as usize - offset;
+                let original = &original_content[i..i + s.len()];
+                if original.contains_str("-[]") {
+                    return Some(unsafe { (String::from_utf8_unchecked(original.to_vec()), i) });
+                }
+                Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
+            }
+            _ => None,
+        }).collect()
+    }
+}
+
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+mod parallel {
+    use fxhash::FxHashSet;
+    use bstr::ByteSlice;
+    
+    pub fn sort_candidates(candidates: &mut Vec<String>) {
+        candidates.sort_unstable();
+    }
+    
+    pub fn filter_new_candidates(candidates: Vec<String>, existing: &FxHashSet<String>) -> Vec<String> {
+        candidates.into_iter().filter(|c| !existing.contains(c)).collect()
+    }
+    
+    pub fn extend_candidates(target: &mut FxHashSet<String>, new: Vec<String>) {
+        target.extend(new);
+    }
+    
+    pub fn map_files(files: &[std::path::PathBuf]) -> Vec<String> {
+        files.iter().filter_map(|x| x.clone().into_os_string().into_string().ok()).collect()
+    }
+    
+    pub fn process_changed_content(content: Vec<super::ChangedContent>) -> Vec<Vec<u8>> {
+        content.into_iter().filter_map(super::read_changed_content).collect()
+    }
+    
+    pub fn process_extraction_blobs<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
+    where
+        H: Fn(crate::extractor::Extractor) -> Vec<crate::extractor::Extracted>,
+    {
+        let mut result: Vec<_> = blobs
+            .iter()
+            .flat_map(|blob| blob.split(|x| *x == b'\n'))
+            .filter_map(|blob| {
+                if blob.is_empty() { return None; }
+                let extracted = handle(crate::extractor::Extractor::new(blob));
+                if extracted.is_empty() { return None; }
+                Some(fxhash::FxHashSet::from_iter(extracted.into_iter().map(|x| match x {
+                    crate::extractor::Extracted::Candidate(bytes) => bytes,
+                    crate::extractor::Extracted::CssVariable(bytes) => bytes,
+                })))
+            })
+            .fold(fxhash::FxHashSet::default(), |mut a, b| { a.extend(b); a })
+            .into_iter()
+            .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+            .collect();
+        result.sort_unstable();
+        result
+    }
+    
+    pub fn extract_with_positions(extracted: Vec<crate::extractor::Extracted>, offset: usize, original_content: &[u8]) -> Vec<(String, usize)> {
+        extracted.into_iter().flat_map(|extracted| match extracted {
+            crate::extractor::Extracted::Candidate(s) => {
+                let i = s.as_ptr() as usize - offset;
+                let original = &original_content[i..i + s.len()];
+                if original.contains_str("-[]") {
+                    return Some(unsafe { (String::from_utf8_unchecked(original.to_vec()), i) });
+                }
+                Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
+            }
+            _ => None,
+        }).collect()
+    }
+}
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs::OpenOptions;
 use std::io::{self, Write};
@@ -190,7 +320,7 @@ impl Scanner {
 
         // Make sure we have a sorted list of candidates
         let mut candidates = self.candidates.iter().cloned().collect::<Vec<_>>();
-        candidates.par_sort_unstable();
+        parallel::sort_candidates(&mut candidates);
 
         // Return all candidates instead of only the new ones
         candidates
@@ -299,15 +429,12 @@ impl Scanner {
 
         // Only compute the new candidates and ignore the ones we already have. This is for
         // subsequent calls to prevent serializing the entire set of candidates every time.
-        let mut new_candidates = new_candidates
-            .into_par_iter()
-            .filter(|candidate| !self.candidates.contains(candidate))
-            .collect::<Vec<_>>();
+        let mut new_candidates = parallel::filter_new_candidates(new_candidates, &self.candidates);
 
-        new_candidates.par_sort_unstable();
+        parallel::sort_candidates(&mut new_candidates);
 
         // Track new candidates for subsequent calls
-        self.candidates.par_extend(new_candidates.clone());
+        parallel::extend_candidates(&mut self.candidates, new_candidates.clone());
 
         new_candidates
     }
@@ -355,10 +482,7 @@ impl Scanner {
     pub fn get_files(&mut self) -> Vec<String> {
         self.scan_sources();
 
-        self.files
-            .par_iter()
-            .filter_map(|x| x.clone().into_os_string().into_string().ok())
-            .collect()
+        parallel::map_files(&self.files)
     }
 
     #[tracing::instrument(skip_all)]
@@ -433,28 +557,7 @@ impl Scanner {
 
         let mut extractor = Extractor::new(&content[..]);
 
-        extractor
-            .extract()
-            .into_par_iter()
-            .flat_map(|extracted| match extracted {
-                Extracted::Candidate(s) => {
-                    let i = s.as_ptr() as usize - offset;
-                    let original = &original_content[i..i + s.len()];
-                    if original.contains_str("-[]") {
-                        return Some(unsafe {
-                            (String::from_utf8_unchecked(original.to_vec()), i)
-                        });
-                    }
-
-                    // SAFETY: When we parsed the candidates, we already guaranteed that the byte
-                    // slices are valid, therefore we don't have to re-check here when we want to
-                    // convert it back to a string.
-                    Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
-                }
-
-                _ => None,
-            })
-            .collect()
+        parallel::extract_with_positions(extractor.extract(), offset, original_content)
     }
 }
 
@@ -503,10 +606,7 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
         changed_content.len()
     );
 
-    changed_content
-        .into_par_iter()
-        .filter_map(read_changed_content)
-        .collect()
+    parallel::process_changed_content(changed_content)
 }
 
 #[tracing::instrument(skip_all)]
@@ -526,39 +626,7 @@ fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
 where
     H: Fn(Extractor) -> Vec<Extracted> + std::marker::Sync,
 {
-    let mut result: Vec<_> = blobs
-        .par_iter()
-        .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
-        .filter_map(|blob| {
-            if blob.is_empty() {
-                return None;
-            }
-
-            let extracted = handle(crate::extractor::Extractor::new(blob));
-            if extracted.is_empty() {
-                return None;
-            }
-
-            Some(FxHashSet::from_iter(extracted.into_iter().map(
-                |x| match x {
-                    Extracted::Candidate(bytes) => bytes,
-                    Extracted::CssVariable(bytes) => bytes,
-                },
-            )))
-        })
-        .reduce(Default::default, |mut a, b| {
-            a.extend(b);
-            a
-        })
-        .into_iter()
-        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
-        .collect();
-
-    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
-    //         guaranteed to have unique candidates.
-    result.par_sort_unstable();
-
-    result
+    parallel::process_extraction_blobs(blobs, handle)
 }
 
 /// Create a walker for the given sources to detect all the files that we have to scan.
