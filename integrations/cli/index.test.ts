@@ -1924,6 +1924,9 @@ test(
         ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
           padding-block: 0;
         }
+        ::-webkit-calendar-picker-indicator {
+          line-height: 1;
+        }
         :-moz-ui-invalid {
           box-shadow: none;
         }
