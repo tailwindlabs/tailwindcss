@@ -171,8 +171,8 @@ importers:
         specifier: ^1.4.3
         version: 1.4.3
       '@emnapi/wasi-threads':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.0.3
+        version: 1.0.3
       '@napi-rs/wasm-runtime':
         specifier: ^0.2.11
         version: 0.2.11
@@ -683,6 +683,9 @@ packages:
 
   '@emnapi/wasi-threads@1.0.2':
     resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
+
+  '@emnapi/wasi-threads@1.0.3':
+    resolution: {integrity: sha512-8K5IFFsQqF9wQNJptGbS6FNKgUTsSRYnTqNCG1vPP8jFdjSv18n2mQfJpkt2Oibo9iBEzcDnDxNwKTzC7svlJw==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -4796,6 +4799,10 @@ snapshots:
       tslib: 2.8.0
 
   '@emnapi/wasi-threads@1.0.2':
+    dependencies:
+      tslib: 2.8.0
+
+  '@emnapi/wasi-threads@1.0.3':
     dependencies:
       tslib: 2.8.0
 
