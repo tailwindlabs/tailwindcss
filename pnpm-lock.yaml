@@ -134,13 +134,13 @@ importers:
     devDependencies:
       '@napi-rs/cli':
         specifier: ^3.0.0-alpha.78
-        version: 3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))
+        version: 3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.4(node-addon-api@8.3.0))
       '@napi-rs/wasm-runtime':
         specifier: ^0.2.11
         version: 0.2.11
       emnapi:
-        specifier: 1.4.3
-        version: 1.4.3(node-addon-api@8.3.0)
+        specifier: 1.4.4
+        version: 1.4.4(node-addon-api@8.3.0)
 
   crates/node/npm/android-arm-eabi: {}
 
@@ -2869,8 +2869,8 @@ packages:
   electron-to-chromium@1.5.119:
     resolution: {integrity: sha512-Ku4NMzUjz3e3Vweh7PhApPrZSS4fyiCIbcIrG9eKrriYVLmbMepETR/v6SU7xPm98QTqMSYiCwfO89QNjXLkbQ==}
 
-  emnapi@1.4.3:
-    resolution: {integrity: sha512-qeLT07Xt4xNjlDJYtwtO664e44HXDaHnja7vWIy/g3xzZiNOcQh02gNblR6tkqnDzPPhc+dUeSYWbt6PoiYZKQ==}
+  emnapi@1.4.4:
+    resolution: {integrity: sha512-cq7665hIGMLliYusV9SV9JMDuIZ9iVBUcs/OhqawSqrEO/0gB1L5O80PLaEXauCnag4c1tPimCaBwKUYITeZLA==}
     peerDependencies:
       node-addon-api: '>= 6.1.0'
     peerDependenciesMeta:
@@ -5322,7 +5322,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@napi-rs/cli@3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))':
+  '@napi-rs/cli@3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.4(node-addon-api@8.3.0))':
     dependencies:
       '@inquirer/prompts': 7.4.1(@types/node@20.19.1)
       '@napi-rs/cross-toolchain': 0.0.19
@@ -5339,7 +5339,7 @@ snapshots:
       wasm-sjlj: 1.0.6
     optionalDependencies:
       '@emnapi/runtime': 1.4.4
-      emnapi: 1.4.3(node-addon-api@8.3.0)
+      emnapi: 1.4.4(node-addon-api@8.3.0)
     transitivePeerDependencies:
       - '@napi-rs/cross-toolchain-arm64-target-aarch64'
       - '@napi-rs/cross-toolchain-arm64-target-armv7'
@@ -6610,7 +6610,7 @@ snapshots:
 
   electron-to-chromium@1.5.119: {}
 
-  emnapi@1.4.3(node-addon-api@8.3.0):
+  emnapi@1.4.4(node-addon-api@8.3.0):
     optionalDependencies:
       node-addon-api: 8.3.0
 
