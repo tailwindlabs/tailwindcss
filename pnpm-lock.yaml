@@ -134,7 +134,7 @@ importers:
     devDependencies:
       '@napi-rs/cli':
         specifier: ^3.0.0-alpha.78
-        version: 3.0.0-alpha.78(@emnapi/runtime@1.4.3)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))
+        version: 3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))
       '@napi-rs/wasm-runtime':
         specifier: ^0.2.11
         version: 0.2.11
@@ -168,8 +168,8 @@ importers:
         specifier: ^1.4.3
         version: 1.4.3
       '@emnapi/runtime':
-        specifier: ^1.4.3
-        version: 1.4.3
+        specifier: ^1.4.4
+        version: 1.4.4
       '@emnapi/wasi-threads':
         specifier: ^1.0.3
         version: 1.0.3
@@ -680,6 +680,9 @@ packages:
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
+
+  '@emnapi/runtime@1.4.4':
+    resolution: {integrity: sha512-hHyapA4A3gPaDCNfiqyZUStTMqIkKRshqPIuDOXv1hcBnD4U3l8cP0T1HMCfGRxQ6V64TGCcoswChANyOAwbQg==}
 
   '@emnapi/wasi-threads@1.0.2':
     resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
@@ -4798,6 +4801,10 @@ snapshots:
     dependencies:
       tslib: 2.8.0
 
+  '@emnapi/runtime@1.4.4':
+    dependencies:
+      tslib: 2.8.0
+
   '@emnapi/wasi-threads@1.0.2':
     dependencies:
       tslib: 2.8.0
@@ -5148,7 +5155,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.34.1':
     dependencies:
-      '@emnapi/runtime': 1.4.3
+      '@emnapi/runtime': 1.4.4
     optional: true
 
   '@img/sharp-win32-ia32@0.34.1':
@@ -5315,7 +5322,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@napi-rs/cli@3.0.0-alpha.78(@emnapi/runtime@1.4.3)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))':
+  '@napi-rs/cli@3.0.0-alpha.78(@emnapi/runtime@1.4.4)(@types/node@20.19.1)(emnapi@1.4.3(node-addon-api@8.3.0))':
     dependencies:
       '@inquirer/prompts': 7.4.1(@types/node@20.19.1)
       '@napi-rs/cross-toolchain': 0.0.19
@@ -5331,7 +5338,7 @@ snapshots:
       typanion: 3.14.0
       wasm-sjlj: 1.0.6
     optionalDependencies:
-      '@emnapi/runtime': 1.4.3
+      '@emnapi/runtime': 1.4.4
       emnapi: 1.4.3(node-addon-api@8.3.0)
     transitivePeerDependencies:
       - '@napi-rs/cross-toolchain-arm64-target-aarch64'
