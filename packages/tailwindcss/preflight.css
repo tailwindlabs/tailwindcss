@@ -350,7 +350,7 @@ textarea {
 }
 
 /*
-  Center dropdown marker shown on inputs with paired `<datalist>`s in Chrome
+  Center dropdown marker shown on inputs with paired `<datalist>`s in Chrome. (https://github.com/tailwindlabs/tailwindcss/issues/18499)
 */
 
 ::-webkit-calendar-picker-indicator {
