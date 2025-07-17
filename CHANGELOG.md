@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle when `process.env.DEBUG` is a boolean in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
 - Ignore consecutive semicolons in the CSS parser ([#18532](https://github.com/tailwindlabs/tailwindcss/pull/18532))
 - Center the dropdown icon added to an input with a paired datalist ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
+- Extract candidates in Slang templates ([#18565](https://github.com/tailwindlabs/tailwindcss/pull/18565))
 
 ## [4.1.11] - 2025-06-26
 
