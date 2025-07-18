@@ -4354,6 +4354,30 @@ describe('@utility', () => {
       `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
     )
   })
+
+  test('A functional @utility must end in -*', () => {
+    return expect(
+      compileCss(css`
+        @utility foo* {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility foo*\` defines an invalid utility name. A functional utility must end in \`-*\`.]`,
+    )
+  })
+
+  test('Only the last part of a functional @utility can be dynamic', () => {
+    return expect(
+      compileCss(css`
+        @utility my-*-utility {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility my-*-utility\` defines an invalid utility name. The dynamic portion marked by \`-*\` must appear once at the end.]`,
+    )
+  })
 })
 
 test('addBase', async () => {
