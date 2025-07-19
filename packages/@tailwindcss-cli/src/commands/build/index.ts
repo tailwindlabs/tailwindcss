@@ -237,15 +237,20 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
 
+  let lock = false
+
   // Watch for changes
   if (args['--watch']) {
     let cleanupWatchers = await createWatchers(
       watchDirectories(scanner),
       async function handle(files) {
         try {
+          if (lock) return
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
           if (files.length === 1 && files[0] === args['--output']) return
+
+          lock = true
 
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/cli] (watcher)')
@@ -362,6 +367,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             eprintln(err.toString())
           }
         }
+        lock = false
       },
     )
 
