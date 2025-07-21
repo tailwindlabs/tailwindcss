@@ -339,8 +339,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       '@types/bun':
-        specifier: ^1.2.17
-        version: 1.2.17
+        specifier: ^1.2.18
+        version: 1.2.18(@types/react@19.1.8)
       bun:
         specifier: ^1.2.18
         version: 1.2.18
@@ -2365,8 +2365,8 @@ packages:
   '@types/braces@3.0.5':
     resolution: {integrity: sha512-SQFof9H+LXeWNz8wDe7oN5zu7ket0qwMu5vZubW4GCJ8Kkeh6nBWUz87+KTz/G3Kqsrp0j/W253XJb3KMEeg3w==}
 
-  '@types/bun@1.2.17':
-    resolution: {integrity: sha512-l/BYs/JYt+cXA/0+wUhulYJB6a6p//GTPiJ7nV+QHa8iiId4HZmnu/3J/SowP5g0rTiERY2kfGKXEK5Ehltx4Q==}
+  '@types/bun@1.2.18':
+    resolution: {integrity: sha512-Xf6RaWVheyemaThV0kUfaAUvCNokFr+bH8Jxp+tTZfx7dAPA8z9ePnP9S9+Vspzuxxx9JRAXhnyccRj3GyCMdQ==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -2622,8 +2622,10 @@ packages:
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
-  bun-types@1.2.17:
-    resolution: {integrity: sha512-ElC7ItwT3SCQwYZDYoAH+q6KT4Fxjl8DtZ6qDulUFBmXA8YB4xo+l54J9ZJN+k2pphfn9vk7kfubeSd5QfTVJQ==}
+  bun-types@1.2.18:
+    resolution: {integrity: sha512-04+Eha5NP7Z0A9YgDAzMk5PHR16ZuLVa83b26kH5+cp1qZW4F6FmAURngE7INf4tKOvCE69vYvDEwoNl1tGiWw==}
+    peerDependencies:
+      '@types/react': ^19
 
   bun@1.2.18:
     resolution: {integrity: sha512-OR+EpNckoJN4tHMVZPaTPxDj2RgpJgJwLruTIFYbO3bQMguLd0YrmkWKYqsiihcLgm2ehIjF/H1RLfZiRa7+qQ==}
@@ -5988,9 +5990,11 @@ snapshots:
 
   '@types/braces@3.0.5': {}
 
-  '@types/bun@1.2.17':
+  '@types/bun@1.2.18(@types/react@19.1.8)':
     dependencies:
-      bun-types: 1.2.17
+      bun-types: 1.2.18(@types/react@19.1.8)
+    transitivePeerDependencies:
+      - '@types/react'
 
   '@types/estree@1.0.6': {}
 
@@ -6375,9 +6379,10 @@ snapshots:
   buffer-from@1.1.2:
     optional: true
 
-  bun-types@1.2.17:
+  bun-types@1.2.18(@types/react@19.1.8):
     dependencies:
       '@types/node': 20.19.1
+      '@types/react': 19.1.8
 
   bun@1.2.18:
     optionalDependencies:
