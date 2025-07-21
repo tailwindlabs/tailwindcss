@@ -229,6 +229,18 @@ async function parseCss(
 
       let utility = createCssUtility(node)
       if (utility === null) {
+        if (!node.params.endsWith('-*')) {
+          if (node.params.endsWith('*')) {
+            throw new Error(
+              `\`@utility ${node.params}\` defines an invalid utility name. A functional utility must end in \`-*\`.`,
+            )
+          } else if (node.params.includes('*')) {
+            throw new Error(
+              `\`@utility ${node.params}\` defines an invalid utility name. The dynamic portion marked by \`-*\` must appear once at the end.`,
+            )
+          }
+        }
+
         throw new Error(
           `\`@utility ${node.params}\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.`,
         )

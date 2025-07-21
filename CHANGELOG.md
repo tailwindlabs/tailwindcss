@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix trailing `)` from interfering with extraction in Clojure keywords ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
 - Detect classes inside Elixir charlist, word list, and string sigils ([#18432](https://github.com/tailwindlabs/tailwindcss/pull/18432))
 - Track source locations through `@plugin` and `@config` ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
+- Handle when `process.env.DEBUG` is a boolean in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
+- Ignore consecutive semicolons in the CSS parser ([#18532](https://github.com/tailwindlabs/tailwindcss/pull/18532))
+- Center the dropdown icon added to an input with a paired datalist ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
+- Extract candidates in Slang templates ([#18565](https://github.com/tailwindlabs/tailwindcss/pull/18565))
+- Improve error messages when encountering invalid functional utility names ([#18568](https://github.com/tailwindlabs/tailwindcss/pull/18568))
+- Don’t output CSS objects with false or undefined in the AST ([#18571](https://github.com/tailwindlabs/tailwindcss/pull/18571))
 - Add option to disable url rewriting in `@tailwindcss/postcss` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
 
 ## [4.1.11] - 2025-06-26

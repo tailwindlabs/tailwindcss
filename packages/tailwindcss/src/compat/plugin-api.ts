@@ -540,6 +540,13 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let entries = rules.flatMap((rule) => Object.entries(rule))
 
   for (let [name, value] of entries) {
+    if (value === null || value === undefined) continue
+
+    // @ts-expect-error
+    // We do not want `false` present in the types but still need to discard these nodes for
+    // compatibility purposes
+    if (value === false) continue
+
     if (typeof value !== 'object') {
       if (!name.startsWith('--')) {
         if (value === '@slot') {
@@ -561,7 +568,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
           ast.push(rule(name, objectToAst(item)))
         }
       }
-    } else if (value !== null) {
+    } else {
       ast.push(rule(name, objectToAst(value)))
     }
   }
