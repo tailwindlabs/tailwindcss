@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Center the dropdown icon added to an input with a paired datalist ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
 - Extract candidates in Slang templates ([#18565](https://github.com/tailwindlabs/tailwindcss/pull/18565))
 - Improve error messages when encountering invalid functional utility names ([#18568](https://github.com/tailwindlabs/tailwindcss/pull/18568))
+- Don’t output CSS objects with false or undefined in the AST ([#18571](https://github.com/tailwindlabs/tailwindcss/pull/18571))
 
 ## [4.1.11] - 2025-06-26
 
