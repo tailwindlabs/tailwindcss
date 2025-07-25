@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
 
 test(
   'production build (string)',
@@ -662,23 +662,56 @@ test(
       `,
       'src/index.css': css` @import './tailwind.css'; `,
       'src/tailwind.css': css`
-        @reference 'tailwindcss/does-not-exist';
+        @reference 'tailwindcss/theme';
         @import 'tailwindcss/utilities';
       `,
     },
   },
   async ({ fs, expect, spawn }) => {
+    // 1. Start the watcher
+    //
+    // It must have valid CSS for the initial build
     let process = await spawn('pnpm postcss src/index.css --output dist/out.css --watch --verbose')
+
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+
+    expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- dist/out.css ---
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
+
+    // 2. Cause an error
+    await fs.write(
+      'src/tailwind.css',
+      css`
+        @reference 'tailwindcss/does-not-exist';
+        @import 'tailwindcss/utilities';
+      `,
+    )
+
+    // 2.5 Write to a content file
+    await fs.write('src/index.html', html`
+      <div class="flex underline"></div>
+    `)
 
     await process.onStderr((message) =>
       message.includes('does-not-exist is not exported from package'),
     )
 
-    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+    expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- dist/out.css ---
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
 
-    await process.onStderr((message) => message.includes('Waiting for file changes...'))
-
-    // Fix the CSS file
+    // 3. Fix the CSS file
     await fs.write(
       'src/tailwind.css',
       css`
@@ -686,11 +719,15 @@ test(
         @import 'tailwindcss/utilities';
       `,
     )
-    await process.onStderr((message) => message.includes('Finished'))
+
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
       --- dist/out.css ---
+      .flex {
+        display: flex;
+      }
       .underline {
         text-decoration-line: underline;
       }
@@ -705,11 +742,22 @@ test(
         @import 'tailwindcss/utilities';
       `,
     )
+
     await process.onStderr((message) =>
       message.includes('does-not-exist is not exported from package'),
     )
 
-    await retryAssertion(async () => expect(await fs.read('dist/out.css')).toEqual(''))
+    expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- dist/out.css ---
+      .flex {
+        display: flex;
+      }
+      .underline {
+        text-decoration-line: underline;
+      }
+      "
+    `)
   },
 )
 
