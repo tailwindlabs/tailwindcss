@@ -71,8 +71,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0
       prettier-plugin-organize-imports:
-        specifier: ^4.0.0
-        version: 4.0.0(prettier@3.5.0)(typescript@5.5.4)
+        specifier: ^4.2.0
+        version: 4.2.0(prettier@3.5.0)(typescript@5.5.4)
       tsup:
         specifier: ^8.5.0
         version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
@@ -3981,16 +3981,13 @@ packages:
   prettier-plugin-embed@0.5.0:
     resolution: {integrity: sha512-A5nzX8U9x+FJdpOKrDrH9eq86xHZNiGguWpphS6chTME0OK1bDgH1X+WLtZq7qV3kUEMkL/dHkr6C1NLdUA7RQ==}
 
-  prettier-plugin-organize-imports@4.0.0:
-    resolution: {integrity: sha512-vnKSdgv9aOlqKeEFGhf9SCBsTyzDSyScy1k7E0R1Uo4L0cTcOV7c1XQaT7jfXIOc/p08WLBfN2QUQA9zDSZMxA==}
+  prettier-plugin-organize-imports@4.2.0:
+    resolution: {integrity: sha512-Zdy27UhlmyvATZi67BTnLcKTo8fm6Oik59Sz6H64PgZJVs6NJpPD1mT240mmJn62c98/QaL+r3kx9Q3gRpDajg==}
     peerDependencies:
-      '@vue/language-plugin-pug': ^2.0.24
       prettier: '>=2.0'
       typescript: '>=2.9'
-      vue-tsc: ^2.0.24
+      vue-tsc: ^2.1.0 || 3
     peerDependenciesMeta:
-      '@vue/language-plugin-pug':
-        optional: true
       vue-tsc:
         optional: true
 
@@ -7951,7 +7948,7 @@ snapshots:
     transitivePeerDependencies:
       - babel-plugin-macros
 
-  prettier-plugin-organize-imports@4.0.0(prettier@3.5.0)(typescript@5.5.4):
+  prettier-plugin-organize-imports@4.2.0(prettier@3.5.0)(typescript@5.5.4):
     dependencies:
       prettier: 3.5.0
       typescript: 5.5.4
