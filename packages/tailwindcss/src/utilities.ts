@@ -1059,7 +1059,10 @@ export function createUtilities(theme: Theme) {
     }
   })
 
-  suggest('flex', () => [{ supportsFractions: true }])
+  suggest('flex', () => [
+    { supportsFractions: true },
+    { values: Array.from({ length: 12 }, (_, i) => `${i + 1}`) },
+  ])
 
   /**
    * @css `flex-shrink`
