@@ -39,7 +39,7 @@
   "dependencies": {
     "@ampproject/remapping": "^2.3.0",
     "enhanced-resolve": "^5.18.2",
-    "jiti": "^2.4.2",
+    "jiti": "^2.5.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.17",
     "source-map-js": "^1.2.1",
