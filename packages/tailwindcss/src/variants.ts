@@ -704,7 +704,7 @@ export function createVariants(theme: Theme): Variants {
   // Interactive
   staticVariant('focus-within', ['&:focus-within'])
   variants.static('hover', (r) => {
-    r.nodes = [styleRule('&:hover', [atRule('@media', '(hover: hover)', r.nodes)])]
+    r.nodes = [styleRule('&:hover', [atRule('@media', '(hover: hover) and (pointer: fine)', r.nodes)])]
   })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
