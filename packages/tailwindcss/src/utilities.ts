@@ -371,6 +371,7 @@ export function createUtilities(theme: Theme) {
     supportsFractions?: boolean
     themeKeys?: ThemeKey[]
     defaultValue?: string | null
+    fallbacks?: Record<string, AstNode[]>
     handleBareValue?: (value: NamedUtilityValue) => string | null
     handleNegativeBareValue?: (value: NamedUtilityValue) => string | null
     handle: (value: string, dataType: string | null) => AstNode[] | undefined
@@ -426,6 +427,14 @@ export function createUtilities(theme: Theme) {
           if (value === null && desc.handleBareValue) {
             value = desc.handleBareValue(candidate.value)
             if (!value?.includes('/') && candidate.modifier) return
+          }
+
+          if (value === null && desc.fallbacks) {
+            let fallback = desc.fallbacks[candidate.value.value]
+            if (fallback) {
+              if (candidate.modifier) return
+              return fallback
+            }
           }
         }
 
@@ -2121,17 +2130,13 @@ export function createUtilities(theme: Theme) {
       ['rounded-br', ['border-bottom-right-radius']],
       ['rounded-bl', ['border-bottom-left-radius']],
     ] as const) {
-      staticUtility(
-        `${root}-none`,
-        properties.map((property) => [property, '0']),
-      )
-      staticUtility(
-        `${root}-full`,
-        properties.map((property) => [property, 'calc(infinity * 1px)']),
-      )
       functionalUtility(root, {
         themeKeys: ['--radius'],
         handle: (value) => properties.map((property) => decl(property, value)),
+        fallbacks: {
+          none: properties.map((property) => decl(property, '0')),
+          full: properties.map((property) => decl(property, 'calc(infinity * 1px)')),
+        },
       })
     }
   }
