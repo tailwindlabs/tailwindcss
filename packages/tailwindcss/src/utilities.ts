@@ -1005,12 +1005,12 @@ export function createUtilities(theme: Theme) {
   )
 
   for (let [name, namespaces, property] of [
-    ['w', ['--width', '--spacing', '--container'], 'width'],
-    ['min-w', ['--min-width', '--spacing', '--container'], 'min-width'],
-    ['max-w', ['--max-width', '--spacing', '--container'], 'max-width'],
-    ['h', ['--height', '--spacing'], 'height'],
-    ['min-h', ['--min-height', '--height', '--spacing'], 'min-height'],
-    ['max-h', ['--max-height', '--height', '--spacing'], 'max-height'],
+    ['w', ['--width', '--size', '--spacing', '--container'], 'width'],
+    ['min-w', ['--min-width', '--width', '--size', '--spacing', '--container'], 'min-width'],
+    ['max-w', ['--max-width', '--width', '--size', '--spacing', '--container'], 'max-width'],
+    ['h', ['--height', '--size', '--spacing'], 'height'],
+    ['min-h', ['--min-height', '--height', '--size', '--spacing'], 'min-height'],
+    ['max-h', ['--max-height', '--height', '--size', '--spacing'], 'max-height'],
   ] as [string, ThemeKey[], string][]) {
     spacingUtility(name, namespaces, (value) => [decl(property, value)], {
       supportsFractions: true,
