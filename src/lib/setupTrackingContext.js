@@ -54,6 +54,9 @@ function getTailwindConfig(configOrPath) {
 
     // It has changed (based on timestamps), or first run
     for (let file of newDeps) {
+      if (!file || !require.cache || !require.cache[file]) {
+        continue
+      }
       delete require.cache[file]
     }
     let newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
