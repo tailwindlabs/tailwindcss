@@ -2007,7 +2007,7 @@ export function createUtilities(theme: Theme) {
   })
 
   colorUtility('divide', {
-    themeKeys: ['--divide-color', '--color'],
+    themeKeys: ['--divide-color', '--border-color', '--color'],
     handle: (value) => [
       styleRule(':where(& > :not(:last-child))', [
         decl('--tw-sort', 'divide-color'),
