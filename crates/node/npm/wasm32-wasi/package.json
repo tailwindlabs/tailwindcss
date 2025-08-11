@@ -29,7 +29,7 @@
   "dependencies": {
     "@napi-rs/wasm-runtime": "^0.2.12",
     "@emnapi/core": "^1.4.4",
-    "@emnapi/runtime": "^1.4.4",
+    "@emnapi/runtime": "^1.4.5",
     "@tybys/wasm-util": "^0.10.0",
     "@emnapi/wasi-threads": "^1.0.4",
     "tslib": "^2.8.0"
