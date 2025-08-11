@@ -53,6 +53,44 @@ describe('is-safe-migration', async () => {
     // Vue 3 events
     [`emit('blur', props.modelValue)\n`, 'blur'],
     [`$emit('blur', props.modelValue)\n`, 'blur'],
+
+    // JavaScript / TypeScript
+    [`document.addEventListener('blur',handleBlur)`, 'blur'],
+    [`document.addEventListener('blur', handleBlur)`, 'blur'],
+
+    [`function foo({ outline = true })`, 'outline'],
+    [`function foo({ before = false, outline = true })`, 'outline'],
+    [`function foo({before=false,outline=true })`, 'outline'],
+    [`function foo({outline=true })`, 'outline'],
+    // https://github.com/tailwindlabs/tailwindcss/issues/18675
+    [
+      // With default value
+      `function foo({ size = "1.25rem", digit, outline = true, textClass = "", className = "" })`,
+      'outline',
+    ],
+    [
+      // Without default value
+      `function foo({ size = "1.25rem", digit, outline, textClass = "", className = "" })`,
+      'outline',
+    ],
+    [
+      // As the last argument
+      `function foo({ size = "1.25rem", digit, outline })`,
+      'outline',
+    ],
+    [
+      // As the last argument, but there is techinically another `"` on the same line
+      `function foo({ size = "1.25rem", digit, outline }): { return "foo" }`,
+      'outline',
+    ],
+    [
+      // Tricky quote balancing
+      `function foo({ before = "'", outline, after = "'" }): { return "foo" }`,
+      'outline',
+    ],
+
+    [`function foo(blur, foo)`, 'blur'],
+    [`function foo(blur,foo)`, 'blur'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
