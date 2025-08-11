@@ -12,6 +12,9 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /v-show=['"]$/,
   /(?<!:?class)=['"]$/,
 
+  // JavaScript / TypeScript
+  /addEventListener\(['"`]$/,
+
   // Alpine
   /x-if=['"]$/,
   /x-show=['"]$/,
