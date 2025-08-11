@@ -20,8 +20,8 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /x-show=['"]$/,
   /wire:[^\s]*?$/,
 ]
-const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"]$/
-const VUE_3_EMIT = /\b\$?emit\(['"]$/
+const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
+const VUE_3_EMIT = /\b\$?emit\(['"`]$/
 
 export function isSafeMigration(
   rawCandidate: string,
