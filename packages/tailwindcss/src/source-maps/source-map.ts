@@ -57,7 +57,7 @@ export interface DecodedMapping {
  *
  * We then require the use of other tools that can translate one or more
  * "input" source maps into a final output source map. For example,
- * `@ampproject/remapping` can be used to handle this.
+ * `@jridgewell/remapping` can be used to handle this.
  *
  * This also ensures that tools that expect "local" source maps are able to
  * consume the source map we generate.
