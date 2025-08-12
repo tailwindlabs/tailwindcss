@@ -1,4 +1,4 @@
-import remapping from '@ampproject/remapping'
+import remapping from '@jridgewell/remapping'
 import { Features, transform } from 'lightningcss'
 import MagicString from 'magic-string'
 

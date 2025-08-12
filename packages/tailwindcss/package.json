@@ -127,7 +127,7 @@
     "utilities.css"
   ],
   "devDependencies": {
-    "@ampproject/remapping": "^2.3.0",
+    "@jridgewell/remapping": "^2.3.4",
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
     "dedent": "1.6.0",

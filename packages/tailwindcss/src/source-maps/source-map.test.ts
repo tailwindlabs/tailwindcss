@@ -1,4 +1,4 @@
-import remapping from '@ampproject/remapping'
+import remapping from '@jridgewell/remapping'
 import dedent from 'dedent'
 import MagicString from 'magic-string'
 import * as fs from 'node:fs/promises'
