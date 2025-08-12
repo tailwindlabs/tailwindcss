@@ -50,6 +50,11 @@ jobs:
             container:
               image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
           - os: ubuntu-latest
+            target: riscv64-unknown-linux-gnu
+            strip: riscv64-linux-gnu-strip
+            container:
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+          - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             strip: llvm-strip
             container:
@@ -86,6 +91,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
+
+      - name: Install gcc-riscv64-linux-gnu
+        if: ${{ matrix.target == 'riscv64-unknown-linux-gnu' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-riscv64-linux-gnu g++-riscv64-linux-gnu -y
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -269,6 +280,7 @@ jobs:
           cp bindings-armv7-linux-androideabi/* ./npm/android-arm-eabi/
           cp bindings-aarch64-unknown-linux-gnu/* ./npm/linux-arm64-gnu/
           cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
+          cp bindings-riscv64-unknown-linux-gnu/* ./npm/linux-riscv64-gnu/
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
