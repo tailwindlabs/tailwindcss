@@ -8843,6 +8843,7 @@ test('divide-color', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
+          --border-color-best-blue: #6495ED;
         }
         @tailwind utilities;
       `,
@@ -8854,6 +8855,7 @@ test('divide-color', async () => {
         'divide-red-500/2.75',
         'divide-red-500/[0.5]',
         'divide-red-500/[50%]',
+        'divide-best-blue',
         'divide-current',
         'divide-current/50',
         'divide-current/[0.5]',
@@ -8869,6 +8871,7 @@ test('divide-color', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
+      --border-color-best-blue: #6495ed;
     }
 
     :where(.divide-\\[\\#0088cc\\] > :not(:last-child)) {
@@ -8877,6 +8880,10 @@ test('divide-color', async () => {
 
     :where(.divide-\\[\\#0088cc\\]\\/50 > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[0\\.5\\] > :not(:last-child)), :where(.divide-\\[\\#0088cc\\]\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    :where(.divide-best-blue > :not(:last-child)) {
+      border-color: var(--border-color-best-blue);
     }
 
     :where(.divide-current > :not(:last-child)), :where(.divide-current\\/50 > :not(:last-child)) {
