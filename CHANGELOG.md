@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.12] - 2025-08-13
+
 ### Fixed
 
 - Don't consider the global important state in `@apply` ([#18404](https://github.com/tailwindlabs/tailwindcss/pull/18404))
@@ -3783,7 +3787,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.12...HEAD
+[4.1.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...v4.1.12
 [4.1.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...v4.1.11
 [4.1.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...v4.1.10
 [4.1.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...v4.1.9
