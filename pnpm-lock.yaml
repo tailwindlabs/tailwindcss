@@ -223,8 +223,8 @@ importers:
         specifier: workspace:*
         version: link:../../crates/node
       enhanced-resolve:
-        specifier: ^5.18.2
-        version: 5.18.2
+        specifier: ^5.18.3
+        version: 5.18.3
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -241,8 +241,8 @@ importers:
         specifier: ^2.3.4
         version: 2.3.5
       enhanced-resolve:
-        specifier: ^5.18.2
-        version: 5.18.2
+        specifier: ^5.18.3
+        version: 5.18.3
       jiti:
         specifier: ^2.5.1
         version: 2.5.1
@@ -311,8 +311,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       enhanced-resolve:
-        specifier: ^5.18.2
-        version: 5.18.2
+        specifier: ^5.18.3
+        version: 5.18.3
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -381,8 +381,8 @@ importers:
         specifier: 1.6.0
         version: 1.6.0
       enhanced-resolve:
-        specifier: ^5.18.2
-        version: 5.18.2
+        specifier: ^5.18.3
+        version: 5.18.3
       globby:
         specifier: ^14.1.0
         version: 14.1.0
@@ -2902,8 +2902,8 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  enhanced-resolve@5.18.2:
-    resolution: {integrity: sha512-6Jw4sE1maoRJo3q8MsSIn2onJFbLTOjY9hlx4DZXmOKvLRd1Ok2kXmAGXaafL2+ijsJZ1ClYbl/pmqr9+k4iUQ==}
+  enhanced-resolve@5.18.3:
+    resolution: {integrity: sha512-d4lC8xfavMeBjzGr2vECC3fsGXziXZQyJxD868h2M/mBI3PwAuODxAkLkq5HYuvrPYcUtiLzsTo8U3PgX3Ocww==}
     engines: {node: '>=10.13.0'}
 
   es-abstract@1.23.3:
@@ -6652,7 +6652,7 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
-  enhanced-resolve@5.18.2:
+  enhanced-resolve@5.18.3:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
@@ -6887,7 +6887,7 @@ snapshots:
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.0
-      enhanced-resolve: 5.18.2
+      enhanced-resolve: 5.18.3
       eslint: 9.32.0(jiti@2.5.1)
       eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.11.0(eslint@9.32.0(jiti@2.5.1))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.11.0(eslint@9.32.0(jiti@2.5.1))(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0)(eslint@9.32.0(jiti@2.5.1)))(eslint@9.32.0(jiti@2.5.1))
       fast-glob: 3.3.3
@@ -6906,7 +6906,7 @@ snapshots:
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.0
-      enhanced-resolve: 5.18.2
+      enhanced-resolve: 5.18.3
       eslint: 9.32.0(jiti@2.5.1)
       eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.11.0(eslint@9.32.0(jiti@2.5.1))(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.11.0(eslint@9.32.0(jiti@2.5.1))(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0)(eslint@9.32.0(jiti@2.5.1)))(eslint@9.32.0(jiti@2.5.1))
       fast-glob: 3.3.3
