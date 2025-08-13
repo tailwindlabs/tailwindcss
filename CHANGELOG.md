@@ -7,25 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- Add suggestions for `flex-<number>` utilities ([#18642](https://github.com/tailwindlabs/tailwindcss/pull/18642))
-
 ### Fixed
 
 - Don't consider the global important state in `@apply` ([#18404](https://github.com/tailwindlabs/tailwindcss/pull/18404))
+- Add missing suggestions for `flex-<number>` utilities ([#18642](https://github.com/tailwindlabs/tailwindcss/pull/18642))
 - Fix trailing `)` from interfering with extraction in Clojure keywords ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
 - Detect classes inside Elixir charlist, word list, and string sigils ([#18432](https://github.com/tailwindlabs/tailwindcss/pull/18432))
 - Track source locations through `@plugin` and `@config` ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
-- Handle when `process.env.DEBUG` is a boolean in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
+- Allow boolean value of `process.env.DEBUG` in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
 - Ignore consecutive semicolons in the CSS parser ([#18532](https://github.com/tailwindlabs/tailwindcss/pull/18532))
 - Center the dropdown icon added to an input with a paired datalist ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
 - Extract candidates in Slang templates ([#18565](https://github.com/tailwindlabs/tailwindcss/pull/18565))
 - Improve error messages when encountering invalid functional utility names ([#18568](https://github.com/tailwindlabs/tailwindcss/pull/18568))
 - Don’t output CSS objects with false or undefined in the AST ([#18571](https://github.com/tailwindlabs/tailwindcss/pull/18571))
-- Add option to disable url rewriting in `@tailwindcss/postcss` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
+- Allow users to disable URL rebasing in `@tailwindcss/postcss` via `transformAssetUrls: false` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
 - Fix false-positive migrations in `addEventListener` and JavaScript variable names ([#18718](https://github.com/tailwindlabs/tailwindcss/pull/18718))
-- Fix Standalone CLI when run via symlink on Windows ([#18723](https://github.com/tailwindlabs/tailwindcss/pull/18723))
+- Fix Standalone CLI showing default Bun help, when run via symlink on Windows ([#18723](https://github.com/tailwindlabs/tailwindcss/pull/18723))
 - Read from `--border-color-*` theme keys in `divide-*` utilities for backwards compatibility ([#18704](https://github.com/tailwindlabs/tailwindcss/pull/18704/))
 - Prevent scanning `.hdr` and `.exr` files ([#18734](https://github.com/tailwindlabs/tailwindcss/pull/18734))
 
