@@ -66,6 +66,7 @@ eol
 eot
 epub
 exe
+exr
 f4v
 fbs
 fh
