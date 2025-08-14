@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add configuration to ignore CDN warnings ([#18731](https://github.com/tailwindlabs/tailwindcss/issues/18731))
+- Drop warning from browser build ([#18731](https://github.com/tailwindlabs/tailwindcss/issues/18731))
 
 ## [4.1.12] - 2025-08-13
 
