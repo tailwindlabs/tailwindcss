@@ -2,12 +2,6 @@ import * as tailwindcss from 'tailwindcss'
 import * as assets from './assets'
 import { Instrumentation } from './instrumentation'
 
-// Warn users about using the browser build in production as early as possible.
-// It can take time for the script to do its work so this must be at the top.
-console.warn(
-  'The browser build of Tailwind CSS should not be used in production. To use Tailwind CSS in production, use the Tailwind CLI, Vite plugin, or PostCSS plugin: https://tailwindcss.com/docs/installation',
-)
-
 /**
  * The type used by `<style>` tags that contain input CSS.
  */
