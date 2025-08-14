@@ -87,6 +87,7 @@ gzip
 h261
 h263
 h264
+hdr
 icns
 ico
 ief
