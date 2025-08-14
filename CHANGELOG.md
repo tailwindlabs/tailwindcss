@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix false-positive migrations in `addEventListener` and JavaScript variable names ([#18718](https://github.com/tailwindlabs/tailwindcss/pull/18718))
 - Fix Standalone CLI when run via symlink on Windows ([#18723](https://github.com/tailwindlabs/tailwindcss/pull/18723))
 - Read from `--border-color-*` theme keys in `divide-*` utilities for backwards compatibility ([#18704](https://github.com/tailwindlabs/tailwindcss/pull/18704/))
+- Prevent analysing `.hdr` files by marking it as a binary extension ([#18734](https://github.com/tailwindlabs/tailwindcss/pull/18734))
 
 ## [4.1.11] - 2025-06-26
 
