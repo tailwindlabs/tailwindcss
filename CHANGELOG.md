@@ -7,27 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+### Changed
 
 - Add configuration to ignore CDN warnings ([#18731](https://github.com/tailwindlabs/tailwindcss/issues/18731))
-- Add suggestions for `flex-<number>` utilities ([#18642](https://github.com/tailwindlabs/tailwindcss/pull/18642))
+
+## [4.1.12] - 2025-08-13
 
 ### Fixed
 
 - Don't consider the global important state in `@apply` ([#18404](https://github.com/tailwindlabs/tailwindcss/pull/18404))
+- Add missing suggestions for `flex-<number>` utilities ([#18642](https://github.com/tailwindlabs/tailwindcss/pull/18642))
 - Fix trailing `)` from interfering with extraction in Clojure keywords ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
 - Detect classes inside Elixir charlist, word list, and string sigils ([#18432](https://github.com/tailwindlabs/tailwindcss/pull/18432))
 - Track source locations through `@plugin` and `@config` ([#18345](https://github.com/tailwindlabs/tailwindcss/pull/18345))
-- Handle when `process.env.DEBUG` is a boolean in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
+- Allow boolean values of `process.env.DEBUG` in `@tailwindcss/node` ([#18485](https://github.com/tailwindlabs/tailwindcss/pull/18485))
 - Ignore consecutive semicolons in the CSS parser ([#18532](https://github.com/tailwindlabs/tailwindcss/pull/18532))
-- Center the dropdown icon added to an input with a paired datalist ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
+- Center the dropdown icon added to an input with a paired datalist by default ([#18511](https://github.com/tailwindlabs/tailwindcss/pull/18511))
 - Extract candidates in Slang templates ([#18565](https://github.com/tailwindlabs/tailwindcss/pull/18565))
 - Improve error messages when encountering invalid functional utility names ([#18568](https://github.com/tailwindlabs/tailwindcss/pull/18568))
-- Don’t output CSS objects with false or undefined in the AST ([#18571](https://github.com/tailwindlabs/tailwindcss/pull/18571))
-- Add option to disable url rewriting in `@tailwindcss/postcss` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
+- Discard CSS AST objects with `false` or `undefined` properties ([#18571](https://github.com/tailwindlabs/tailwindcss/pull/18571))
+- Allow users to disable URL rebasing in `@tailwindcss/postcss` via `transformAssetUrls: false` ([#18321](https://github.com/tailwindlabs/tailwindcss/pull/18321))
 - Fix false-positive migrations in `addEventListener` and JavaScript variable names ([#18718](https://github.com/tailwindlabs/tailwindcss/pull/18718))
-- Fix Standalone CLI when run via symlink on Windows ([#18723](https://github.com/tailwindlabs/tailwindcss/pull/18723))
+- Fix Standalone CLI showing default Bun help when run via symlink on Windows ([#18723](https://github.com/tailwindlabs/tailwindcss/pull/18723))
 - Read from `--border-color-*` theme keys in `divide-*` utilities for backwards compatibility ([#18704](https://github.com/tailwindlabs/tailwindcss/pull/18704/))
+- Don't scan `.hdr` and `.exr` files for classes by default ([#18734](https://github.com/tailwindlabs/tailwindcss/pull/18734))
 
 ## [4.1.11] - 2025-06-26
 
@@ -3786,7 +3789,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.12...HEAD
+[4.1.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...v4.1.12
 [4.1.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...v4.1.11
 [4.1.10]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.9...v4.1.10
 [4.1.9]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.8...v4.1.9
