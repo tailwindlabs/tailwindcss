@@ -79,14 +79,14 @@ interface SuggestionGroup {
 type SuggestionDefinition =
   | string
   | {
-      supportsNegative?: boolean
-      supportsFractions?: boolean
-      values?: string[]
-      modifiers?: string[]
-      valueThemeKeys?: ThemeKey[]
-      modifierThemeKeys?: ThemeKey[]
-      hasDefaultValue?: boolean
-    }
+    supportsNegative?: boolean
+    supportsFractions?: boolean
+    values?: string[]
+    modifiers?: string[]
+    valueThemeKeys?: ThemeKey[]
+    modifierThemeKeys?: ThemeKey[]
+    hasDefaultValue?: boolean
+  }
 
 export type UtilityOptions = {
   types: string[]
@@ -556,7 +556,7 @@ export function createUtilities(theme: Theme) {
     ['padding', '0'],
     ['margin', '-1px'],
     ['overflow', 'hidden'],
-    ['clip', 'rect(0, 0, 0, 0)'],
+    ['clip-path', 'inset(50%)'],
     ['white-space', 'nowrap'],
     ['border-width', '0'],
   ])
@@ -567,7 +567,7 @@ export function createUtilities(theme: Theme) {
     ['padding', '0'],
     ['margin', '0'],
     ['overflow', 'visible'],
-    ['clip', 'auto'],
+    ['clip-path', 'none'],
     ['white-space', 'normal'],
   ])
 
@@ -6326,9 +6326,9 @@ function alphaReplacedDropShadowProperties(
       decl(
         property,
         prefix +
-          segment(value, ',')
-            .map((value) => `drop-shadow(${replaceShadowColors(value, varInjector)})`)
-            .join(' '),
+        segment(value, ',')
+          .map((value) => `drop-shadow(${replaceShadowColors(value, varInjector)})`)
+          .join(' '),
       ),
       rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
     ]

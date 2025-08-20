@@ -7,7 +7,7 @@ const css = String.raw
 test('sr-only', async () => {
   expect(await run(['sr-only'])).toMatchInlineSnapshot(`
     ".sr-only {
-      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
       white-space: nowrap;
       border-width: 0;
       width: 1px;
@@ -24,7 +24,7 @@ test('sr-only', async () => {
 test('not-sr-only', async () => {
   expect(await run(['not-sr-only'])).toMatchInlineSnapshot(`
     ".not-sr-only {
-      clip: auto;
+      clip-path: none;
       white-space: normal;
       width: auto;
       height: auto;
@@ -26936,7 +26936,7 @@ describe('custom utilities', () => {
     })
 
     test('bare values with unsupported data types should result in a warning', async () => {
-      let spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      let spy = vi.spyOn(console, 'warn').mockImplementation(() => { })
       let input = css`
         @utility paint-* {
           paint: --value([color], color);
