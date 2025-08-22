@@ -24,7 +24,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
@@ -71,7 +71,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .bg-primary {
         --tw-bg-opacity: 1;
         background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
@@ -121,7 +121,7 @@ describe('static build', () => {
       env: { NODE_ENV: 'production' },
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .bg-primary {
         --tw-bg-opacity: 1;
         background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
@@ -142,19 +142,19 @@ describe('watcher', () => {
 
     let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
-    await waitForOutputFileCreation(/index\.\w+\.css$/)
+    await waitForOutputFileCreation(/parcel\.\w+\.css$/)
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await appendToInputFile('index.html', html`<div class="font-normal"></div>`)
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
@@ -163,11 +163,11 @@ describe('watcher', () => {
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await appendToInputFile('index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
@@ -190,19 +190,19 @@ describe('watcher', () => {
 
     let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
-    await waitForOutputFileCreation(/index\.\w+\.css$/)
+    await waitForOutputFileCreation(/parcel\.\w+\.css$/)
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await appendToInputFile('glob/index.html', html`<div class="font-normal"></div>`)
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
@@ -211,11 +211,11 @@ describe('watcher', () => {
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await appendToInputFile('glob/index.html', html`<div class="bg-red-500"></div>`)
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .bg-red-500 {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
@@ -242,9 +242,9 @@ describe('watcher', () => {
 
     let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
-    await waitForOutputFileCreation(/index\.\w+\.css$/)
+    await waitForOutputFileCreation(/parcel\.\w+\.css$/)
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
@@ -255,7 +255,7 @@ describe('watcher', () => {
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await writeInputFile(
         '../tailwind.config.js',
         javascript`
@@ -280,7 +280,7 @@ describe('watcher', () => {
       )
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: bold;
       }
@@ -305,15 +305,15 @@ describe('watcher', () => {
 
     let runningProcess = $('parcel watch ./src/index.html --no-cache')
 
-    await waitForOutputFileCreation(/index\.\w+\.css$/)
+    await waitForOutputFileCreation(/parcel\.\w+\.css$/)
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .font-bold {
         font-weight: 700;
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await writeInputFile(
         'index.css',
         css`
@@ -330,7 +330,7 @@ describe('watcher', () => {
       )
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       /* prettier-ignore */
       .btn {
           border-radius: .25rem;
@@ -341,7 +341,7 @@ describe('watcher', () => {
       }
     `)
 
-    await waitForOutputFileChange(/index\.\w+\.css$/, async () => {
+    await waitForOutputFileChange(/parcel\.\w+\.css$/, async () => {
       await writeInputFile(
         'index.css',
         css`
@@ -358,7 +358,7 @@ describe('watcher', () => {
       )
     })
 
-    expect(await readOutputFile(/index\.\w+\.css$/)).toIncludeCss(css`
+    expect(await readOutputFile(/parcel\.\w+\.css$/)).toIncludeCss(css`
       .btn {
         --tw-bg-opacity: 1;
         background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
