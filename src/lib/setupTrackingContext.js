@@ -54,6 +54,9 @@ function getTailwindConfig(configOrPath) {
 
     // It has changed (based on timestamps), or first run
     for (let file of newDeps) {
+      // When loaded transitively through a TypeScript file `require.cache`
+      // may be undefined. Happens in Node 22.18+.
+      if (!require.cache) continue
       delete require.cache[file]
     }
     let newConfig = validateConfig(resolveConfig(loadConfig(userConfigPath)))
