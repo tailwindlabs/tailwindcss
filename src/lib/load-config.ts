@@ -18,6 +18,11 @@ function lazyJiti() {
     (jiti = jitiFactory(__filename, {
       interopDefault: true,
       transform: (opts) => {
+        // Sucrase can't transform import.meta so we have to use Babel
+        if (opts.source.includes('import.meta')) {
+          return require('jiti/dist/babel.js')(opts)
+        }
+
         return transform(opts.source, {
           transforms: ['typescript', 'imports'],
         })
@@ -28,6 +33,23 @@ function lazyJiti() {
 
 export function loadConfig(path: string): Config {
   let config = (function () {
+    if (!path) return {}
+
+    // Always use jiti for now. There is a a bug that occurs in Node v22.12+
+    // where imported files return invalid results
+    return lazyJiti()(path)
+
+    // Always use jiti for ESM or TS files
+    if (
+      path &&
+      (path.endsWith('.mjs') ||
+        path.endsWith('.ts') ||
+        path.endsWith('.cts') ||
+        path.endsWith('.mts'))
+    ) {
+      return lazyJiti()(path)
+    }
+
     try {
       return path ? require(path) : {}
     } catch {

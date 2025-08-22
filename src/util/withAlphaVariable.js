@@ -21,7 +21,7 @@ export default function withAlphaVariable({ color, property, variable }) {
       [variable]: '1',
       ...Object.fromEntries(
         properties.map((p) => {
-          return [p, color({ opacityVariable: variable, opacityValue: `var(${variable})` })]
+          return [p, color({ opacityVariable: variable, opacityValue: `var(${variable}, 1)` })]
         })
       ),
     }
@@ -42,7 +42,7 @@ export default function withAlphaVariable({ color, property, variable }) {
     [variable]: '1',
     ...Object.fromEntries(
       properties.map((p) => {
-        return [p, formatColor({ ...parsed, alpha: `var(${variable})` })]
+        return [p, formatColor({ ...parsed, alpha: `var(${variable}, 1)` })]
       })
     ),
   }

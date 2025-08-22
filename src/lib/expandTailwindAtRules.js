@@ -130,41 +130,25 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Reading changed files')
 
-    if (__OXIDE__) {
-      // TODO: Pass through or implement `extractor`
-      for (let candidate of require('@tailwindcss/oxide').parseCandidateStringsFromFiles(
-        context.changedContent
-        // Object.assign({}, builtInTransformers, context.tailwindConfig.content.transform)
-      )) {
-        candidates.add(candidate)
-      }
+    /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
+    let regexParserContent = []
 
-      // for (let { file, content, extension } of context.changedContent) {
-      //   let transformer = getTransformer(context.tailwindConfig, extension)
-      //   let extractor = getExtractor(context, extension)
-      //   getClassCandidatesOxide(file, transformer(content), extractor, candidates, seen)
-      // }
-    } else {
-      /** @type {[item: {file?: string, content?: string}, meta: {transformer: any, extractor: any}][]} */
-      let regexParserContent = []
+    for (let item of context.changedContent) {
+      let transformer = getTransformer(context.tailwindConfig, item.extension)
+      let extractor = getExtractor(context, item.extension)
+      regexParserContent.push([item, { transformer, extractor }])
+    }
 
-      for (let item of context.changedContent) {
-        let transformer = getTransformer(context.tailwindConfig, item.extension)
-        let extractor = getExtractor(context, item.extension)
-        regexParserContent.push([item, { transformer, extractor }])
-      }
+    const BATCH_SIZE = 500
 
-      const BATCH_SIZE = 500
-
-      for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
-        let batch = regexParserContent.slice(i, i + BATCH_SIZE)
-        await Promise.all(
-          batch.map(async ([{ file, content }, { transformer, extractor }]) => {
-            content = file ? await fs.promises.readFile(file, 'utf8') : content
-            getClassCandidates(transformer(content), extractor, candidates, seen)
-          })
-        )
-      }
+    for (let i = 0; i < regexParserContent.length; i += BATCH_SIZE) {
+      let batch = regexParserContent.slice(i, i + BATCH_SIZE)
+      await Promise.all(
+        batch.map(async ([{ file, content }, { transformer, extractor }]) => {
+          content = file ? await fs.promises.readFile(file, 'utf8') : content
+          getClassCandidates(transformer(content), extractor, candidates, seen)
+        })
+      )
     }
 
     env.DEBUG && console.timeEnd('Reading changed files')
@@ -176,15 +160,13 @@ export default function expandTailwindAtRules(context) {
 
     env.DEBUG && console.time('Generate rules')
     env.DEBUG && console.time('Sorting candidates')
-    let sortedCandidates = __OXIDE__
-      ? candidates
-      : new Set(
-          [...candidates].sort((a, z) => {
-            if (a === z) return 0
-            if (a < z) return -1
-            return 1
-          })
-        )
+    let sortedCandidates = new Set(
+      [...candidates].sort((a, z) => {
+        if (a === z) return 0
+        if (a < z) return -1
+        return 1
+      })
+    )
     env.DEBUG && console.timeEnd('Sorting candidates')
     generateRules(sortedCandidates, context)
     env.DEBUG && console.timeEnd('Generate rules')
@@ -210,7 +192,7 @@ export default function expandTailwindAtRules(context) {
 
     if (layerNodes.base) {
       layerNodes.base.before(
-        cloneNodes([...baseNodes, ...defaultNodes], layerNodes.base.source, {
+        cloneNodes([...defaultNodes, ...baseNodes], layerNodes.base.source, {
           layer: 'base',
         })
       )

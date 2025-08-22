@@ -6,6 +6,8 @@ const defaultConfigFiles = [
   './tailwind.config.cjs',
   './tailwind.config.mjs',
   './tailwind.config.ts',
+  './tailwind.config.cts',
+  './tailwind.config.mts',
 ]
 
 function isObject(value) {

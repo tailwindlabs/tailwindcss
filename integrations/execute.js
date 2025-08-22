@@ -5,10 +5,10 @@ let resolveToolRoot = require('./resolve-tool-root')
 
 let SHOW_OUTPUT = false
 
-let runningProcessess = []
+let runningProcesses = []
 
 afterEach(() => {
-  runningProcessess.splice(0).forEach((runningProcess) => runningProcess.stop())
+  runningProcesses.splice(0).forEach((runningProcess) => runningProcess.stop())
 })
 
 function debounce(fn, ms) {
@@ -129,7 +129,7 @@ module.exports = function $(command, options = {}) {
     })
   })
 
-  runningProcessess.push(runningProcess)
+  runningProcesses.push(runningProcess)
 
   return Object.assign(runningProcess, {
     stop() {

@@ -23,39 +23,42 @@ function formatPrettier(input) {
 
 function format(input) {
   try {
-    return lightningcss
-      .transform({
-        filename: 'input.css',
-        code: Buffer.from(input),
-        minify: false,
-        targets: { chrome: 106 << 16 },
-        drafts: {
-          nesting: true,
-          customMedia: true,
-        },
-      })
-      .code.toString('utf8')
+    return [
+      lightningcss
+        .transform({
+          filename: 'input.css',
+          code: Buffer.from(input),
+          minify: false,
+          targets: { chrome: 106 << 16 },
+          drafts: {
+            nesting: true,
+            customMedia: true,
+          },
+        })
+        .code.toString('utf8'),
+      null,
+    ]
   } catch (err) {
+    let lines = err.source.split('\n')
+    let e = new Error(
+      [
+        'Error formatting using Lightning CSS:',
+        '',
+        ...[
+          '```css',
+          ...lines.slice(Math.max(err.loc.line - 3, 0), err.loc.line),
+          ' '.repeat(err.loc.column - 1) + '^-- ' + err.toString(),
+          ...lines.slice(err.loc.line, err.loc.line + 2),
+          '```',
+        ],
+      ].join('\n')
+    )
     try {
       // Lightning CSS is pretty strict, so it will fail for `@media screen(md) {}` for example,
       // in that case we can fallback to prettier since it doesn't really care. However if an
       // actual syntax error is made, then we still want to show the proper error.
-      return formatPrettier(input.replace(/\n/g, ''))
+      return [formatPrettier(input.replace(/\n/g, '')), e]
     } catch {
-      let lines = err.source.split('\n')
-      let e = new Error(
-        [
-          'Error formatting using Lightning CSS:',
-          '',
-          ...[
-            '```css',
-            ...lines.slice(Math.max(err.loc.line - 3, 0), err.loc.line),
-            ' '.repeat(err.loc.column - 1) + '^-- ' + err.toString(),
-            ...lines.slice(err.loc.line, err.loc.line + 2),
-            '```',
-          ],
-        ].join('\n')
-      )
       if (Error.captureStackTrace) {
         Error.captureStackTrace(e, toMatchFormattedCss)
       }
@@ -71,8 +74,8 @@ function toMatchFormattedCss(received = '', argument = '') {
     promise: this.promise,
   }
 
-  let formattedReceived = format(received)
-  let formattedArgument = format(argument)
+  let [formattedReceived, formattingReceivedError] = format(received)
+  let [formattedArgument, formattingArgumentError] = format(argument)
 
   let pass = formattedReceived === formattedArgument
 
@@ -99,7 +102,9 @@ function toMatchFormattedCss(received = '', argument = '') {
           (diffString && diffString.includes('- Expect')
             ? `Difference:\n\n${diffString}`
             : `Expected: ${this.utils.printExpected(expected)}\n` +
-              `Received: ${this.utils.printReceived(actual)}`)
+              `Received: ${this.utils.printReceived(actual)}`) +
+          (formattingReceivedError ? '\n\n' + formattingReceivedError : '') +
+          (formattingArgumentError ? '\n\n' + formattingArgumentError : '')
         )
       }
 
@@ -118,7 +123,9 @@ expect.extend({
       promise: this.promise,
     }
 
-    let pass = format(received).includes(format(argument))
+    let [formattedReceived, formattedReceivedError] = format(received)
+    let [formattedArgument, formattedArgumentError] = format(argument)
+    let pass = formattedReceived.includes(formattedArgument)
 
     let message = pass
       ? () => {
@@ -143,7 +150,9 @@ expect.extend({
             (diffString && diffString.includes('- Expect')
               ? `Difference:\n\n${diffString}`
               : `Expected: ${this.utils.printExpected(expected)}\n` +
-                `Received: ${this.utils.printReceived(actual)}`)
+                `Received: ${this.utils.printReceived(actual)}`) +
+            (formattedReceivedError ? '\n\n' + formattedReceivedError : '') +
+            (formattedArgumentError ? '\n\n' + formattedArgumentError : '')
           )
         }
 

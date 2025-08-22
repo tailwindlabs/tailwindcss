@@ -1044,6 +1044,11 @@ function registerPlugins(plugins, context) {
 
   // Generate a list of available variants with meta information of the type of variant.
   context.getVariants = function getVariants() {
+    // We use a unique, random ID for candidate names to avoid conflicts
+    // We can't use characters like `_`, `:`, `@` or `.` because they might
+    // be used as a separator
+    let id = Math.random().toString(36).substring(7).toUpperCase()
+
     let result = []
     for (let [name, options] of context.variantOptions.entries()) {
       if (options.variantInfo === VARIANT_INFO.Base) continue
@@ -1054,7 +1059,7 @@ function registerPlugins(plugins, context) {
         values: Object.keys(options.values ?? {}),
         hasDash: name !== '@',
         selectors({ modifier, value } = {}) {
-          let candidate = '__TAILWIND_PLACEHOLDER__'
+          let candidate = `TAILWINDPLACEHOLDER${id}`
 
           let rule = postcss.rule({ selector: `.${candidate}` })
           let container = postcss.root({ nodes: [rule.clone()] })
