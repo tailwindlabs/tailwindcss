@@ -3094,6 +3094,68 @@ describe('plugins', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` cannot be nested.]`)
   })
 
+  test('@plugin can specify an export name', async () => {
+    let { build } = await compile(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin" myPlugin;
+      `,
+      {
+        loadModule: async () => ({
+          path: '',
+          base: '/root',
+          module: {
+            // TODO: The export name should be passed in instead
+            myPlugin: plugin(({ addUtilities }) => {
+              addUtilities({
+                '.text-primary': {
+                  color: 'red',
+                },
+              })
+            }),
+          },
+        }),
+      },
+    )
+
+    let compiled = build(['text-primary'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      ".text-primary {
+        color: red;
+      }"
+    `)
+  })
+
+  test('@plugin errors when an export does not exist', async () => {
+    return expect(
+      compile(
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin" what;
+        `,
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: {
+              // TODO: The export name should be passed in instead
+              myPlugin: plugin(({ addUtilities }) => {
+                addUtilities({
+                  '.text-primary': {
+                    color: 'red',
+                  },
+                })
+              }),
+            },
+          }),
+        },
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: Plugin \`my-plugin\` does not have an export named \`what\`]`,
+    )
+  })
+
   test('@plugin can accept options', async () => {
     expect.hasAssertions()
 
