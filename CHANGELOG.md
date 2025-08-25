@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Don't transition `visibility` when using `transition` ([#17812](https://github.com/tailwindlabs/tailwindcss/pull/17812))
+- Don't transition `visibility` when using `transition` ([#18795](https://github.com/tailwindlabs/tailwindcss/pull/18795))
 
 ## [4.1.12] - 2025-08-13
 
