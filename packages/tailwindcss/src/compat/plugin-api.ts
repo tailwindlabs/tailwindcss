@@ -247,6 +247,10 @@ export function buildPluginApi({
           return aValue < zValue ? -1 : 1
         },
       )
+
+      designSystem.variants.suggest(name, () =>
+        Object.keys(options?.values ?? {}).filter((v) => v !== 'DEFAULT'),
+      )
     },
 
     addUtilities(utilities) {
