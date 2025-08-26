@@ -203,10 +203,12 @@ export function buildPluginApi({
             } else if (variant.value.kind === 'named' && options?.values) {
               let defaultValue = options.values[variant.value.value]
               if (typeof defaultValue !== 'string') {
-                return
+                return null
               }
 
               ruleNodes.nodes = resolveVariantValue(defaultValue, variant.modifier, ruleNodes.nodes)
+            } else {
+              return null
             }
           })
         },
