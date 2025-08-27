@@ -19,6 +19,7 @@ import { buildCustomContainerUtilityRules } from '../../../../tailwindcss/src/co
 import { darkModePlugin } from '../../../../tailwindcss/src/compat/dark-mode'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { escape } from '../../../../tailwindcss/src/utils/escape'
 import {
   isValidOpacityValue,
@@ -55,8 +56,44 @@ export async function migrateJsConfig(
       `The configuration file at ${highlight(relative(fullConfigPath, base))} could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.`,
       { prefix: '↳ ' },
     )
-    for (let msg of canMigrateConfigResult.errors) {
-      warn(msg, { prefix: '  ↳ ' })
+    for (let [category, messages] of canMigrateConfigResult.errors.entries()) {
+      switch (category) {
+        case 'general': {
+          for (let msg of messages) warn(msg, { prefix: '  ↳ ' })
+          break
+        }
+        case 'top-level': {
+          warn(
+            `Cannot migrate unknown top-level keys:\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join(
+                '\n',
+              )}\n\nThese are non-standard Tailwind CSS options, so we don't know how to migrate them to CSS.`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+        case 'unknown-theme-keys': {
+          warn(
+            `Cannot migrate unknown theme keys:\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join(
+                '\n',
+              )}\n\nThese are non-standard Tailwind CSS theme keys, so we don't know how to migrate them to CSS.`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+        case 'complex-screens': {
+          warn(
+            `Cannot migrate complex screen configuration (min/max/raw):\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join('\n')}`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+      }
     }
     return null
   }
@@ -405,17 +442,19 @@ function stringifyPath(path: (string | number)[]): string {
   return result
 }
 
+// Keep track of issues given a category and a set of messages
+const MIGRATION_ISSUES = new DefaultMap(() => new Set<string>())
+
 // Applies heuristics to determine if we can attempt to migrate the config
 function canMigrateConfig(
   unresolvedConfig: Config,
   source: string,
-): { valid: true } | { valid: false; errors: string[] } {
+): { valid: true } | { valid: false; errors: typeof MIGRATION_ISSUES } {
   let theme = unresolvedConfig.theme
-  let errors: string[] = []
 
   // Migrating presets are not supported
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
-    errors.push('Cannot migrate config files that use presets')
+    MIGRATION_ISSUES.get('general').add('Cannot migrate config files that use presets')
   }
 
   // The file may only contain known-migratable top-level properties
@@ -431,7 +470,7 @@ function canMigrateConfig(
 
   for (let key of Object.keys(unresolvedConfig)) {
     if (!knownProperties.includes(key)) {
-      errors.push(`Cannot migrate unknown top-level key: \`${key}\``)
+      MIGRATION_ISSUES.get('top-level').add(key)
     }
   }
 
@@ -439,18 +478,15 @@ function canMigrateConfig(
   // migrated
   if (theme && typeof theme === 'object') {
     let { extend, ...themeCopy } = theme
-    errors.push(...onlyAllowedThemeValues(themeCopy, ['theme']))
-
-    if (extend) {
-      errors.push(...onlyAllowedThemeValues(extend, ['theme', 'extend']))
-    }
+    onlyAllowedThemeValues(themeCopy, ['theme'])
+    if (extend) onlyAllowedThemeValues(extend, ['theme', 'extend'])
   }
 
   // TODO: findStaticPlugins already logs errors for unsupported plugins, maybe
   // it should return them instead?
   findStaticPlugins(source)
 
-  return errors.length <= 0 ? { valid: true } : { valid: false, errors }
+  return MIGRATION_ISSUES.size <= 0 ? { valid: true } : { valid: false, errors: MIGRATION_ISSUES }
 }
 
 const ALLOWED_THEME_KEYS = [
@@ -458,26 +494,20 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-function onlyAllowedThemeValues(theme: ThemeConfig, path: (string | number)[]): string[] {
-  let errors: string[] = []
-
+function onlyAllowedThemeValues(theme: ThemeConfig, path: (string | number)[]) {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {
-      errors.push(`Cannot migrate theme key: \`${stringifyPath([...path, key])}\``)
+      MIGRATION_ISSUES.get('unknown-theme-keys').add(stringifyPath([...path, key]))
     }
   }
 
   if ('screens' in theme && typeof theme.screens === 'object' && theme.screens !== null) {
     for (let [name, screen] of Object.entries(theme.screens)) {
       if (typeof screen === 'object' && screen !== null && ('max' in screen || 'raw' in screen)) {
-        errors.push(
-          `Cannot migrate complex screen definition: \`${stringifyPath([...path, 'screens', name])}\``,
-        )
+        MIGRATION_ISSUES.get('complex-screens').add(stringifyPath([...path, 'screens', name]))
       }
     }
   }
-
-  return errors
 }
 
 function keyframesToCss(keyframes: Record<string, unknown>): string {
