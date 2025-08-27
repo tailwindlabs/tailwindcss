@@ -357,6 +357,31 @@ export function optimizeAst(
         transform(child, nodes, context, depth + 1)
       }
 
+      // Keep the last decl when there are exact duplicates. Keeping the *first* one might
+      // not be correct when given nested rules where a rule sits between declarations.
+      let seen: Record<string, AstNode[]> = {}
+      let toRemove = new Set<AstNode>()
+
+      // Keep track of all nodes that produce a given declaration
+      for (let child of nodes) {
+        if (child.kind !== 'declaration') continue
+
+        let key = `${child.property}:${child.value}:${child.important}`
+        seen[key] ??= []
+        seen[key].push(child)
+      }
+
+      // And remove all but the last of each
+      for (let key in seen) {
+        for (let i = 0; i < seen[key].length - 1; ++i) {
+          toRemove.add(seen[key][i])
+        }
+      }
+
+      if (toRemove.size > 0) {
+        nodes = nodes.filter((node) => !toRemove.has(node))
+      }
+
       if (nodes.length === 0) return
 
       // Rules with `&` as the selector should be flattened
