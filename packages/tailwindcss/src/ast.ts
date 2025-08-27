@@ -351,26 +351,19 @@ export function optimizeAst(
 
     // Rule
     else if (node.kind === 'rule') {
-      // Rules with `&` as the selector should be flattened
-      if (node.selector === '&') {
-        for (let child of node.nodes) {
-          let nodes: AstNode[] = []
-          transform(child, nodes, context, depth + 1)
-          if (nodes.length > 0) {
-            parent.push(...nodes)
-          }
-        }
+      let nodes: AstNode[] = []
+
+      for (let child of node.nodes) {
+        transform(child, nodes, context, depth + 1)
       }
 
-      //
-      else {
-        let copy = { ...node, nodes: [] }
-        for (let child of node.nodes) {
-          transform(child, copy.nodes, context, depth + 1)
-        }
-        if (copy.nodes.length > 0) {
-          parent.push(copy)
-        }
+      if (nodes.length === 0) return
+
+      // Rules with `&` as the selector should be flattened
+      if (node.selector === '&') {
+        parent.push(...nodes)
+      } else {
+        parent.push({ ...node, nodes })
       }
     }
 
