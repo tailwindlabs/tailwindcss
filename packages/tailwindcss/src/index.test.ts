@@ -527,7 +527,6 @@ describe('@apply', () => {
       .foo, .bar {
         --tw-content: "b";
         content: var(--tw-content);
-        content: var(--tw-content);
       }
 
       @property --tw-content {
