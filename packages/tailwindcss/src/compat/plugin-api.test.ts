@@ -4444,6 +4444,43 @@ describe('addComponents()', () => {
         }"
       `)
   })
+
+  test('throws on custom static utilities with an invalid name', async () => {
+    await expect(() => {
+      return compile(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
+        {
+          async loadModule(id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ addComponents }: PluginAPI) => {
+                addComponents({
+                  ':hover > *': {
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  },
+                })
+              },
+            }
+          },
+        },
+      )
+    }).rejects.toThrowErrorMatchingInlineSnapshot(`
+      [Error: \`addComponents({ ':hover > *': … })\` defines an invalid utility selector. Components must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.
+
+      Note: in Tailwind CSS v4 \`addComponents\` is an alias for \`addUtilities\`.]
+    `)
+  })
 })
 
 describe('matchComponents()', () => {
@@ -4489,6 +4526,37 @@ describe('matchComponents()', () => {
           }
         }"
       `)
+  })
+
+  test('throws on custom utilities with an invalid name', async () => {
+    await expect(() => {
+      return compile(
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+        {
+          async loadModule(id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ matchComponents }: PluginAPI) => {
+                matchComponents({
+                  '.text-trim > *': () => ({
+                    'text-box-trim': 'both',
+                    'text-box-edge': 'cap alphabetic',
+                  }),
+                })
+              },
+            }
+          },
+        },
+      )
+    }).rejects.toThrowErrorMatchingInlineSnapshot(`
+      [Error: \`matchComponents({ '.text-trim > *': … })\` defines an invalid utility name. Components should be alphanumeric and start with a lowercase letter, eg. \`scrollbar\`.
+
+      Note: in Tailwind CSS v4 \`matchComponents\` is an alias for \`matchUtilities\`.]
+    `)
   })
 })
 

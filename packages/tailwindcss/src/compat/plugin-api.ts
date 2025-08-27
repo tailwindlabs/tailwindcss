@@ -307,7 +307,7 @@ export function buildPluginApi({
 
         if (!foundValidUtility) {
           throw new Error(
-            `\`addUtilities({ '${name}' : … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
+            `\`addUtilities({ '${name}': … })\` defines an invalid utility selector. Utilities must be a single class name and start with a lowercase letter, eg. \`.scrollbar-none\`.`,
           )
         }
       }
@@ -347,7 +347,7 @@ export function buildPluginApi({
       for (let [name, fn] of Object.entries(utilities)) {
         if (!IS_VALID_UTILITY_NAME.test(name)) {
           throw new Error(
-            `\`matchUtilities({ '${name}' : … })\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter, eg. \`scrollbar\`.`,
+            `\`matchUtilities({ '${name}': … })\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter, eg. \`scrollbar\`.`,
           )
         }
 
@@ -493,11 +493,31 @@ export function buildPluginApi({
     },
 
     addComponents(components, options) {
-      this.addUtilities(components, options)
+      try {
+        this.addUtilities(components, options)
+      } catch (e) {
+        if (e instanceof Error) {
+          throw new Error(
+            `${e.message.replaceAll('addUtilities', 'addComponents').replaceAll('Utilities', 'Components')}\n\nNote: in Tailwind CSS v4 \`addComponents\` is an alias for \`addUtilities\`.`,
+          )
+        } else {
+          throw e
+        }
+      }
     },
 
     matchComponents(components, options) {
-      this.matchUtilities(components, options)
+      try {
+        this.matchUtilities(components, options)
+      } catch (e) {
+        if (e instanceof Error) {
+          throw new Error(
+            `${e.message.replaceAll('matchUtilities', 'matchComponents').replaceAll('Utilities', 'Components')}\n\nNote: in Tailwind CSS v4 \`matchComponents\` is an alias for \`matchUtilities\`.`,
+          )
+        } else {
+          throw e
+        }
+      }
     },
 
     theme: createThemeFn(
