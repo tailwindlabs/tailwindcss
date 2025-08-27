@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Drop warning from browser build ([#18731](https://github.com/tailwindlabs/tailwindcss/issues/18731))
+- Drop exact duplicate declarations when emitting CSS ([#18809](https://github.com/tailwindlabs/tailwindcss/issues/18809))
 
 ### Fixed
 
