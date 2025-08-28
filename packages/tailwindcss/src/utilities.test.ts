@@ -26936,7 +26936,7 @@ describe('custom utilities', () => {
     })
 
     test('bare values with unsupported data types should result in a warning', async () => {
-      let spy = vi.spyOn(console, 'warn').mockImplementation(() => { })
+      let spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       let input = css`
         @utility paint-* {
           paint: --value([color], color);
