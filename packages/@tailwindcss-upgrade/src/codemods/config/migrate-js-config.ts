@@ -145,7 +145,7 @@ async function migrateTheme(
       for (let [key, value] of Object.entries(resolvedConfig.theme.aria ?? {})) {
         // Will be handled by bare values if the names match.
         // E.g.: `aria-foo:flex` should produce `[aria-foo="true"]`
-        if (new RegExp(`^${key}=['"]true['"]$`).test(`${value}`)) continue
+        if (new RegExp(`^${key}=(['"]?)true\\1$`).test(`${value}`)) continue
 
         // Create custom variant
         variants.set(`aria-${key}`, `&[aria-${value}]`)

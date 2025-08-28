@@ -992,8 +992,12 @@ test(
                 // Automatically handled by bare values
                 foo: 'foo="true"',
 
+                // Quotes are optional in CSS for these kinds of attribute
+                // selectors
+                bar: 'bar=true',
+
                 // Not automatically handled by bare values because names differ
-                bar: 'baz="true"',
+                baz: 'qux="true"',
 
                 // Completely custom
                 asc: 'sort="ascending"',
@@ -1018,7 +1022,7 @@ test(
       --- src/input.css ---
       @import 'tailwindcss';
 
-      @custom-variant aria-bar (&[aria-baz="true"]);
+      @custom-variant aria-baz (&[aria-qux="true"]);
       @custom-variant aria-asc (&[aria-sort="ascending"]);
       @custom-variant aria-desc (&[aria-sort="descending"]);
 
