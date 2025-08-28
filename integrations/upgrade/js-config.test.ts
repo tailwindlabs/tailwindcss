@@ -1048,6 +1048,80 @@ test(
   },
 )
 
+test(
+  'migrate data theme keys to custom variants',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        export default {
+          content: {
+            relative: true,
+            files: ['./src/**/*.html'],
+          },
+          theme: {
+            extend: {
+              data: {
+                // Automatically handled by bare values
+                foo: 'foo',
+
+                // Not automatically handled by bare values because names differ
+                bar: 'baz',
+
+                // Custom
+                checked: 'ui~="checked"',
+              },
+            },
+          },
+        }
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @custom-variant data-bar (&[data-baz]);
+      @custom-variant data-checked (&[data-ui~="checked"]);
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+      "
+    `)
+  },
+)
+
 describe('border compatibility', () => {
   test(
     'migrate border compatibility',
