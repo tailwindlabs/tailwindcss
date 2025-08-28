@@ -118,6 +118,7 @@ async function migrateTheme(
   let prevSectionKey = ''
   let themeSection: string[] = []
   let keyframesCss = ''
+  let variants = new Map<string, string>()
 
   // Special handling of specific theme keys:
   {
@@ -138,6 +139,18 @@ async function migrateTheme(
         css += '}\n' // @tw-bucket
       }
       delete resolvedConfig.theme.container
+    }
+
+    if ('aria' in resolvedConfig.theme) {
+      for (let [key, value] of Object.entries(resolvedConfig.theme.aria ?? {})) {
+        // Will be handled by bare values if the names match.
+        // E.g.: `aria-foo:flex` should produce `[aria-foo="true"]`
+        if (new RegExp(`^${key}=['"]true['"]$`).test(`${value}`)) continue
+
+        // Create custom variant
+        variants.set(`aria-${key}`, `&[aria-${value}]`)
+      }
+      delete resolvedConfig.theme.aria
     }
   }
 
@@ -206,6 +219,14 @@ async function migrateTheme(
     css += themeSection.join('\n') + '\n'
     css += '}\n' // @theme
     css += '}\n' // @tw-bucket
+  }
+
+  if (variants.size > 0) {
+    css += '\n@tw-bucket custom-variant {\n'
+    for (let [name, selector] of variants) {
+      css += `@custom-variant ${name} (${selector});\n`
+    }
+    css += '}\n'
   }
 
   return css
@@ -368,7 +389,7 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-const BLOCKED_THEME_KEYS = ['supports', 'data', 'aria']
+const BLOCKED_THEME_KEYS = ['supports', 'data']
 function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {
