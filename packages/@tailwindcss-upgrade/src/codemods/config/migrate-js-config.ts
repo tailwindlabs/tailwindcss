@@ -97,7 +97,7 @@ async function migrateTheme(
   designSystem: DesignSystem,
   unresolvedConfig: Config,
   base: string,
-): Promise<string | null> {
+): Promise<string> {
   // Resolve the config file without applying plugins and presets, as these are
   // migrated to CSS separately.
   let configToResolve: ConfigFile = {
@@ -114,10 +114,34 @@ async function migrateTheme(
 
   removeUnnecessarySpacingKeys(designSystem, resolvedConfig, replacedThemeKeys)
 
+  let css = ''
   let prevSectionKey = ''
-  let css = '\n@tw-bucket theme {\n'
-  css += `\n@theme {\n`
-  let containsThemeKeys = false
+  let themeSection: string[] = []
+  let keyframesCss = ''
+
+  // Special handling of specific theme keys:
+  {
+    if ('keyframes' in resolvedConfig.theme) {
+      keyframesCss += keyframesToCss(resolvedConfig.theme.keyframes)
+      delete resolvedConfig.theme.keyframes
+    }
+
+    if ('container' in resolvedConfig.theme) {
+      let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
+      if (rules.length > 0) {
+        // Using `theme` instead of `utility` so it sits before the `@layer
+        // base` with compatibility CSS. While this is technically a utility, it
+        // makes a bit more sense to emit this closer to the `@theme` values
+        // since it is needed for backwards compatibility.
+        css += `\n@tw-bucket theme {\n`
+        css += toCss([atRule('@utility', 'container', rules)])
+        css += '}\n' // @tw-bucket
+      }
+      delete resolvedConfig.theme.container
+    }
+  }
+
+  // Convert theme values to CSS custom properties
   for (let [key, value] of themeableValues(resolvedConfig.theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
@@ -152,14 +176,9 @@ async function migrateTheme(
       }
     }
 
-    if (key[0] === 'keyframes') {
-      continue
-    }
-    containsThemeKeys = true
-
     let sectionKey = createSectionKey(key)
     if (sectionKey !== prevSectionKey) {
-      css += `\n`
+      themeSection.push('')
       prevSectionKey = sectionKey
     }
 
@@ -167,35 +186,27 @@ async function migrateTheme(
       resetNamespaces.set(key[0], true)
       let property = keyPathToCssProperty([key[0]])
       if (property !== null) {
-        css += `  ${escape(`--${property}`)}-*: initial;\n`
+        themeSection.push(`  ${escape(`--${property}`)}-*: initial;`)
       }
     }
 
     let property = keyPathToCssProperty(key)
     if (property !== null) {
-      css += `  ${escape(`--${property}`)}: ${value};\n`
+      themeSection.push(`  ${escape(`--${property}`)}: ${value};`)
     }
   }
 
-  if ('keyframes' in resolvedConfig.theme) {
-    containsThemeKeys = true
-    css += '\n' + keyframesToCss(resolvedConfig.theme.keyframes)
+  if (keyframesCss) {
+    themeSection.push('', keyframesCss)
   }
 
-  if (!containsThemeKeys) {
-    return null
+  if (themeSection.length > 0) {
+    css += `\n@tw-bucket theme {\n`
+    css += `\n@theme {\n`
+    css += themeSection.join('\n') + '\n'
+    css += '}\n' // @theme
+    css += '}\n' // @tw-bucket
   }
-
-  css += '}\n' // @theme
-
-  if ('container' in resolvedConfig.theme) {
-    let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
-    if (rules.length > 0) {
-      css += '\n' + toCss([atRule('@utility', 'container', rules)])
-    }
-  }
-
-  css += '}\n' // @tw-bucket
 
   return css
 }
