@@ -235,7 +235,13 @@ async function migrateTheme(
 
   if (variants.size > 0) {
     css += '\n@tw-bucket custom-variant {\n'
+
+    let previousRoot = ''
     for (let [name, selector] of variants) {
+      let root = name.split('-')[0]
+      if (previousRoot !== root) css += '\n'
+      previousRoot = root
+
       css += `@custom-variant ${name} (${selector});\n`
     }
     css += '}\n'
