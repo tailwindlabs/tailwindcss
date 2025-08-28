@@ -675,3 +675,40 @@ test('Custom @utility and existing utility with names matching theme keys dont g
   expect(matches).toHaveLength(1)
   expect(classMap.get('text-header')?.modifiers).toEqual(['sm'])
 })
+
+test('matchVariant', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js";
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      path: '',
+      base: '',
+      module: plugin(({ matchVariant }) => {
+        matchVariant('foo', (val) => `&:is(${val})`, {
+          values: {
+            DEFAULT: '1',
+            a: 'a',
+            b: 'b',
+          },
+        })
+      }),
+    }),
+  })
+
+  let variants = design.getVariants()
+  let v1 = variants.find((v) => v.name === 'foo')!
+  expect(v1).not.toBeUndefined()
+
+  expect(v1.hasDash).toEqual(true)
+  expect(v1.isArbitrary).toEqual(true)
+  expect(v1.name).toEqual('foo')
+  expect(v1.values).toEqual(['a', 'b'])
+})

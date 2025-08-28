@@ -97,13 +97,14 @@ async function migrateTheme(
   designSystem: DesignSystem,
   unresolvedConfig: Config,
   base: string,
-): Promise<string | null> {
+): Promise<string> {
   // Resolve the config file without applying plugins and presets, as these are
   // migrated to CSS separately.
   let configToResolve: ConfigFile = {
     base,
     config: { ...unresolvedConfig, plugins: [], presets: undefined },
     reference: false,
+    src: undefined,
   }
   let { resolvedConfig, replacedThemeKeys } = resolveConfig(designSystem, [configToResolve])
 
@@ -113,10 +114,59 @@ async function migrateTheme(
 
   removeUnnecessarySpacingKeys(designSystem, resolvedConfig, replacedThemeKeys)
 
+  let css = ''
   let prevSectionKey = ''
-  let css = '\n@tw-bucket theme {\n'
-  css += `\n@theme {\n`
-  let containsThemeKeys = false
+  let themeSection: string[] = []
+  let keyframesCss = ''
+  let variants = new Map<string, string>()
+
+  // Special handling of specific theme keys:
+  {
+    if ('keyframes' in resolvedConfig.theme) {
+      keyframesCss += keyframesToCss(resolvedConfig.theme.keyframes)
+      delete resolvedConfig.theme.keyframes
+    }
+
+    if ('container' in resolvedConfig.theme) {
+      let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
+      if (rules.length > 0) {
+        // Using `theme` instead of `utility` so it sits before the `@layer
+        // base` with compatibility CSS. While this is technically a utility, it
+        // makes a bit more sense to emit this closer to the `@theme` values
+        // since it is needed for backwards compatibility.
+        css += `\n@tw-bucket theme {\n`
+        css += toCss([atRule('@utility', 'container', rules)])
+        css += '}\n' // @tw-bucket
+      }
+      delete resolvedConfig.theme.container
+    }
+
+    if ('aria' in resolvedConfig.theme) {
+      for (let [key, value] of Object.entries(resolvedConfig.theme.aria ?? {})) {
+        // Will be handled by bare values if the names match.
+        // E.g.: `aria-foo:flex` should produce `[aria-foo="true"]`
+        if (new RegExp(`^${key}=(['"]?)true\\1$`).test(`${value}`)) continue
+
+        // Create custom variant
+        variants.set(`aria-${key}`, `&[aria-${value}]`)
+      }
+      delete resolvedConfig.theme.aria
+    }
+
+    if ('data' in resolvedConfig.theme) {
+      for (let [key, value] of Object.entries(resolvedConfig.theme.data ?? {})) {
+        // Will be handled by bare values if the names match.
+        // E.g.: `data-foo:flex` should produce `[data-foo]`
+        if (key === value) continue
+
+        // Create custom variant
+        variants.set(`data-${key}`, `&[data-${value}]`)
+      }
+      delete resolvedConfig.theme.data
+    }
+  }
+
+  // Convert theme values to CSS custom properties
   for (let [key, value] of themeableValues(resolvedConfig.theme)) {
     if (typeof value !== 'string' && typeof value !== 'number') {
       continue
@@ -151,14 +201,9 @@ async function migrateTheme(
       }
     }
 
-    if (key[0] === 'keyframes') {
-      continue
-    }
-    containsThemeKeys = true
-
     let sectionKey = createSectionKey(key)
     if (sectionKey !== prevSectionKey) {
-      css += `\n`
+      themeSection.push('')
       prevSectionKey = sectionKey
     }
 
@@ -166,35 +211,41 @@ async function migrateTheme(
       resetNamespaces.set(key[0], true)
       let property = keyPathToCssProperty([key[0]])
       if (property !== null) {
-        css += `  ${escape(`--${property}`)}-*: initial;\n`
+        themeSection.push(`  ${escape(`--${property}`)}-*: initial;`)
       }
     }
 
     let property = keyPathToCssProperty(key)
     if (property !== null) {
-      css += `  ${escape(`--${property}`)}: ${value};\n`
+      themeSection.push(`  ${escape(`--${property}`)}: ${value};`)
     }
   }
 
-  if ('keyframes' in resolvedConfig.theme) {
-    containsThemeKeys = true
-    css += '\n' + keyframesToCss(resolvedConfig.theme.keyframes)
+  if (keyframesCss) {
+    themeSection.push('', keyframesCss)
   }
 
-  if (!containsThemeKeys) {
-    return null
+  if (themeSection.length > 0) {
+    css += `\n@tw-bucket theme {\n`
+    css += `\n@theme {\n`
+    css += themeSection.join('\n') + '\n'
+    css += '}\n' // @theme
+    css += '}\n' // @tw-bucket
   }
 
-  css += '}\n' // @theme
+  if (variants.size > 0) {
+    css += '\n@tw-bucket custom-variant {\n'
 
-  if ('container' in resolvedConfig.theme) {
-    let rules = buildCustomContainerUtilityRules(resolvedConfig.theme.container, designSystem)
-    if (rules.length > 0) {
-      css += '\n' + toCss([atRule('@utility', 'container', rules)])
+    let previousRoot = ''
+    for (let [name, selector] of variants) {
+      let root = name.split('-')[0]
+      if (previousRoot !== root) css += '\n'
+      previousRoot = root
+
+      css += `@custom-variant ${name} (${selector});\n`
     }
+    css += '}\n'
   }
-
-  css += '}\n' // @tw-bucket
 
   return css
 }
@@ -356,7 +407,7 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-const BLOCKED_THEME_KEYS = ['supports', 'data', 'aria']
+const BLOCKED_THEME_KEYS = ['supports']
 function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {

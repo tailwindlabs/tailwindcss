@@ -203,10 +203,12 @@ export function buildPluginApi({
             } else if (variant.value.kind === 'named' && options?.values) {
               let defaultValue = options.values[variant.value.value]
               if (typeof defaultValue !== 'string') {
-                return
+                return null
               }
 
               ruleNodes.nodes = resolveVariantValue(defaultValue, variant.modifier, ruleNodes.nodes)
+            } else {
+              return null
             }
           })
         },
@@ -244,6 +246,10 @@ export function buildPluginApi({
           // variants and different (valid) variants cannot produce the same AST.
           return aValue < zValue ? -1 : 1
         },
+      )
+
+      designSystem.variants.suggest(name, () =>
+        Object.keys(options?.values ?? {}).filter((v) => v !== 'DEFAULT'),
       )
     },
 
