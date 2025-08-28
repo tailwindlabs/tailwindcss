@@ -104,6 +104,7 @@ async function migrateTheme(
     base,
     config: { ...unresolvedConfig, plugins: [], presets: undefined },
     reference: false,
+    src: undefined,
   }
   let { resolvedConfig, replacedThemeKeys } = resolveConfig(designSystem, [configToResolve])
 
