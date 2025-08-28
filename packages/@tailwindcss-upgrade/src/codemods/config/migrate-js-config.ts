@@ -152,6 +152,18 @@ async function migrateTheme(
       }
       delete resolvedConfig.theme.aria
     }
+
+    if ('data' in resolvedConfig.theme) {
+      for (let [key, value] of Object.entries(resolvedConfig.theme.data ?? {})) {
+        // Will be handled by bare values if the names match.
+        // E.g.: `data-foo:flex` should produce `[data-foo]`
+        if (key === value) continue
+
+        // Create custom variant
+        variants.set(`data-${key}`, `&[data-${value}]`)
+      }
+      delete resolvedConfig.theme.data
+    }
   }
 
   // Convert theme values to CSS custom properties
@@ -389,7 +401,7 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-const BLOCKED_THEME_KEYS = ['supports', 'data']
+const BLOCKED_THEME_KEYS = ['supports']
 function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {
