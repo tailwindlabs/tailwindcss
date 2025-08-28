@@ -556,7 +556,7 @@ export function createUtilities(theme: Theme) {
     ['padding', '0'],
     ['margin', '-1px'],
     ['overflow', 'hidden'],
-    ['clip', 'rect(0, 0, 0, 0)'],
+    ['clip-path', 'inset(50%)'],
     ['white-space', 'nowrap'],
     ['border-width', '0'],
   ])
@@ -567,7 +567,7 @@ export function createUtilities(theme: Theme) {
     ['padding', '0'],
     ['margin', '0'],
     ['overflow', 'visible'],
-    ['clip', 'auto'],
+    ['clip-path', 'none'],
     ['white-space', 'normal'],
   ])
 
