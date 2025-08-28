@@ -24,6 +24,7 @@ import {
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from '../../../../tailwindcss/src/utils/infer-data-type'
+import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { findStaticPlugins, type StaticPluginOptions } from '../../utils/extract-static-plugins'
 import { highlight, info, relative } from '../../utils/renderer'
 
@@ -164,6 +165,35 @@ async function migrateTheme(
       }
       delete resolvedConfig.theme.data
     }
+
+    if ('supports' in resolvedConfig.theme) {
+      for (let [key, value] of Object.entries(resolvedConfig.theme.supports ?? {})) {
+        // Will be handled by bare values if the value of the declaration is a
+        // CSS variable.
+        let parsed = ValueParser.parse(`${value}`)
+
+        // Unwrap the parens, e.g.: `(foo: var(--bar))` → `foo: var(--bar)`
+        if (parsed.length === 1 && parsed[0].kind === 'function' && parsed[0].value === '') {
+          parsed = parsed[0].nodes
+        }
+
+        // Verify structure: `foo: var(--bar)`
+        //                    ^^^ ← must match the `key`
+        if (
+          parsed.length === 3 &&
+          parsed[0].kind === 'word' &&
+          parsed[0].value === key &&
+          parsed[2].kind === 'function' &&
+          parsed[2].value === 'var'
+        ) {
+          continue
+        }
+
+        // Create custom variant
+        variants.set(`supports-${key}`, `{@supports(${value}){@slot;}}`)
+      }
+      delete resolvedConfig.theme.supports
+    }
   }
 
   // Convert theme values to CSS custom properties
@@ -242,7 +272,11 @@ async function migrateTheme(
       if (previousRoot !== root) css += '\n'
       previousRoot = root
 
-      css += `@custom-variant ${name} (${selector});\n`
+      if (selector.startsWith('{')) {
+        css += `@custom-variant ${name} ${selector}\n`
+      } else {
+        css += `@custom-variant ${name} (${selector});\n`
+      }
     }
     css += '}\n'
   }
@@ -407,13 +441,9 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-const BLOCKED_THEME_KEYS = ['supports']
 function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {
-      return false
-    }
-    if (BLOCKED_THEME_KEYS.includes(key)) {
       return false
     }
   }
