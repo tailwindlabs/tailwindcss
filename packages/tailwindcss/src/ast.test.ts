@@ -202,6 +202,93 @@ it('should not emit empty rules once optimized', () => {
   `)
 })
 
+it('should not emit exact duplicate declarations in the same rule', () => {
+  let ast = CSS.parse(css`
+    .foo {
+      color: red;
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
+      color: red;
+    }
+    .foo {
+      color: red;
+      & {
+        color: green;
+        & {
+          color: red;
+          color: green;
+          color: blue;
+        }
+        color: red;
+      }
+      background: blue;
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
+      caret-color: orange;
+    }
+  `)
+
+  expect(toCss(ast)).toMatchInlineSnapshot(`
+    ".foo {
+      color: red;
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
+      color: red;
+    }
+    .foo {
+      color: red;
+      & {
+        color: green;
+        & {
+          color: red;
+          color: green;
+          color: blue;
+        }
+        color: red;
+      }
+      background: blue;
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
+      caret-color: orange;
+    }
+    "
+  `)
+
+  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
+    ".foo {
+      .bar {
+        color: blue;
+        color: green;
+      }
+      color: red;
+    }
+    .foo {
+      color: green;
+      color: blue;
+      color: red;
+      background: blue;
+      .bar {
+        color: blue;
+        color: green;
+      }
+      caret-color: orange;
+    }
+    "
+  `)
+})
+
 it('should only visit children once when calling `replaceWith` with single element array', () => {
   let visited = new Set()
 
