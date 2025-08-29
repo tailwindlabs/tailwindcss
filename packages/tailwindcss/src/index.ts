@@ -61,7 +61,9 @@ type CompileOptions = {
   ) => Promise<{
     path: string
     base: string
-    module: Plugin | Config
+    // TODO: This is *wrong* the export name should be passed in and this should
+    // always be `Plugin | Config`
+    module: Plugin | Config | Record<string, Plugin | Config>
   }>
   loadStylesheet?: (
     id: string,
