@@ -472,6 +472,10 @@ export function buildPluginApi({
           // work even with legacy configs and plugins
           valueKeys.delete('__BARE_VALUE__')
 
+          // The `__CSS_VALUES__` key is a special key used by the theme function
+          // to transport `@theme` metadata about values from CSS
+          valueKeys.delete('__CSS_VALUES__')
+
           // The `DEFAULT` key is represented as `null` in the utility API
           if (valueKeys.has('DEFAULT')) {
             valueKeys.delete('DEFAULT')

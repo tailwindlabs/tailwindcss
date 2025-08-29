@@ -712,3 +712,38 @@ test('matchVariant', async () => {
   expect(v1.name).toEqual('foo')
   expect(v1.values).toEqual(['a', 'b'])
 })
+
+test('matchUtilities discards internal only helpers from suggestions when using the theme function', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js";
+
+    @theme {
+      --color-red: red;
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      path: '',
+      base: '',
+      module: plugin(({ matchUtilities, theme }) => {
+        matchUtilities({ foo: (val) => ({ color: val }) }, { values: theme('colors') })
+        matchUtilities({ bar: (val) => ({ color: val }) }, { values: theme('transitionDuration') })
+      }),
+    }),
+  })
+
+  let classNames = design.getClassList().map((e) => e[0])
+
+  expect(classNames).not.toContain('foo-__BARE_VALUE__')
+  expect(classNames).not.toContain('bar-__BARE_VALUE__')
+
+  expect(classNames).not.toContain('foo-__CSS_VALUES__')
+  expect(classNames).not.toContain('bar-__CSS_VALUES__')
+})
