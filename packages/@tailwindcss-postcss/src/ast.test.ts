@@ -84,7 +84,7 @@ it('should convert a Tailwind CSS AST into a PostCSS AST', () => {
   `
 
   let ast = parse(input)
-  let transformedAst = cssAstToPostCssAst(ast)
+  let transformedAst = cssAstToPostCssAst(ast, undefined, postcss)
 
   expect(transformedAst.toString()).toMatchInlineSnapshot(`
     "@charset "UTF-8";
