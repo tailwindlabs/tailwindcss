@@ -5486,6 +5486,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     staticUtility('ring-inset', [boxShadowProperties, ['--tw-ring-inset', 'inset']])
+    staticUtility('ring-initial', [boxShadowProperties, ['--tw-ring-inset', 'initial']])
 
     let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentcolor'
     function ringShadowValue(value: string) {
