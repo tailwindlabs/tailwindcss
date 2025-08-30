@@ -15,6 +15,7 @@ import { highlight, info, relative, success, warn } from '../../utils/renderer'
 //     autoprefixer: {},
 //   }
 // }
+// ```
 export async function migratePostCSSConfig(base: string) {
   let ranMigration = false
   let didMigrate = false
