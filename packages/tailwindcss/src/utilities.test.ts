@@ -8843,7 +8843,7 @@ test('divide-color', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --border-color-best-blue: #6495ED;
+          --border-color-best-blue: #6495ed;
         }
         @tailwind utilities;
       `,

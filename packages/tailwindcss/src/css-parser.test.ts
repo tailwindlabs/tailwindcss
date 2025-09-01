@@ -1183,8 +1183,8 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       expect(() =>
         parse(css`
           .foo {
-            --bar: "Hello world!
-            /*                  ^ missing " */
+            --bar: 'Hello world!
+            /*                  ^ missing ' * /;
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!"]`)
