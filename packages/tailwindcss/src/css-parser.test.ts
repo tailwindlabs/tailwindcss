@@ -1187,7 +1187,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             /*                  ^ missing ' * /;
           }
         `),
-      ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!"]`)
+      ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: 'Hello world!']`)
     })
 
     it('should error when a declaration is incomplete', () => {
