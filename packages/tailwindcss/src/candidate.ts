@@ -385,6 +385,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   //
   // E.g.:
   //
+  // ```
   // bg-(--my-var)
   // ^^            -> Root
   //    ^^^^^^^^^^ -> Arbitrary value
