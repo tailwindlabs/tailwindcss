@@ -104,7 +104,7 @@ function theme(
   let joinedFallback = fallback.join(', ')
   if (joinedFallback === 'initial') return resolvedValue
 
-  // When the resolved value returns `initial`, resolve with the the fallback value
+  // When the resolved value returns `initial`, resolve with the fallback value
   if (resolvedValue === 'initial') return joinedFallback
 
   // Inject the fallback of a `--theme(…)` function into the fallback of a referenced `--theme(…)`

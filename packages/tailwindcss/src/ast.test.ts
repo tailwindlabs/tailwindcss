@@ -403,7 +403,7 @@ it('should never visit children when calling `replaceWith` with `WalkAction.Skip
   `)
 })
 
-it('should skip the correct number of children based on the the replaced children nodes', () => {
+it('should skip the correct number of children based on the replaced children nodes', () => {
   {
     let ast = [
       decl('--index', '0'),
