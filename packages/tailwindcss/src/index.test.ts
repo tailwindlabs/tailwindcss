@@ -3772,6 +3772,26 @@ describe('@custom-variant', () => {
     )
   })
 
+  test('@custom-variant cannot contain dashes on its own', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant - (&.dash);
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant -\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+    )
+  })
+
+  test('@custom-variant cannot contain multiple dashes on their own', () => {
+    return expect(
+      compileCss(css`
+        @custom-variant --- (&.dashed);
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@custom-variant ---\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+    )
+  })
+
   test('@custom-variant must not container special characters', () => {
     return expect(
       compileCss(css`
