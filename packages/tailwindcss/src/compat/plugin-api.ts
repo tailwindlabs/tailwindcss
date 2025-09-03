@@ -119,7 +119,7 @@ export function buildPluginApi({
     addVariant(name, variant) {
       if (!IS_VALID_VARIANT_NAME.test(name)) {
         throw new Error(
-          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.`,
         )
       }
 

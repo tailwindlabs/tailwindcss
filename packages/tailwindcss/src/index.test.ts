@@ -3768,7 +3768,7 @@ describe('@custom-variant', () => {
         @custom-variant foo:bar (&:hover, &:focus);
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant foo:bar\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+      `[Error: \`@custom-variant foo:bar\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
     )
   })
 
@@ -3778,7 +3778,7 @@ describe('@custom-variant', () => {
         @custom-variant - (&.dash);
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant -\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+      `[Error: \`@custom-variant -\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
     )
   })
 
@@ -3788,7 +3788,7 @@ describe('@custom-variant', () => {
         @custom-variant --- (&.dashed);
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant ---\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+      `[Error: \`@custom-variant ---\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
     )
   })
 
