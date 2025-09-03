@@ -2198,6 +2198,39 @@ test('container queries', async () => {
       }
     }"
   `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --container-lg: 1024px;
+          --container-foo-bar: 1440px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        '@-lg:flex',
+        '@-lg/name:flex',
+        '@-[123px]:flex',
+        '@-[456px]/name:flex',
+        '@-foo-bar:flex',
+        '@-foo-bar/name:flex',
+
+        '@-min-lg:flex',
+        '@-min-lg/name:flex',
+        '@-min-[123px]:flex',
+        '@-min-[456px]/name:flex',
+        '@-min-foo-bar:flex',
+        '@-min-foo-bar/name:flex',
+
+        '@-max-lg:flex',
+        '@-max-lg/name:flex',
+        '@-max-[123px]:flex',
+        '@-max-[456px]/name:flex',
+        '@-max-foo-bar:flex',
+        '@-max-foo-bar/name:flex',
+      ],
+    ),
+  ).toEqual('')
 })
 
 test('variant order', async () => {
