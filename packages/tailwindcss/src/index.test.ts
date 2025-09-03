@@ -3772,24 +3772,31 @@ describe('@custom-variant', () => {
     )
   })
 
-  test('@custom-variant cannot contain dashes on its own', () => {
-    return expect(
-      compileCss(css`
-        @custom-variant - (&.dash);
-      `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant -\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
-    )
-  })
+  test.each([
+    // Cannot be a dash on its own
+    [`@custom-variant - (&);`],
+    // Cannot be multiple dashes on their own
+    [`@custom-variant --- (&);`],
+    // Cannot be an underscore on its own
+    [`@custom-variant _ (&);`],
+    // Cannot be multiple underscores on their own
+    [`@custom-variant ___ (&);`],
 
-  test('@custom-variant cannot contain multiple dashes on their own', () => {
-    return expect(
-      compileCss(css`
-        @custom-variant --- (&.dashed);
-      `),
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant ---\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
-    )
+    // Cannot start with a dash
+    [`@custom-variant -foo (&);`],
+    [`@custom-variant --foo (&);`],
+    // Cannot start with an underscore
+    [`@custom-variant _foo (&);`],
+    [`@custom-variant __foo (&);`],
+
+    // Cannot end with a dash
+    [`@custom-variant foo- (&);`],
+    [`@custom-variant foo-- (&);`],
+    // Cannot end with an underscore
+    [`@custom-variant foo_ (&);`],
+    [`@custom-variant foo__ (&);`],
+  ])('@custom-variant must have a valid name', (input) => {
+    return expect(compileCss(input)).rejects.toThrowError()
   })
 
   test('@custom-variant must not container special characters', () => {
