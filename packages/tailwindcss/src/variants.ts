@@ -18,7 +18,7 @@ import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
-export const IS_VALID_VARIANT_NAME = /^@?[a-zA-Z0-9_-]*$/
+export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*$/
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
