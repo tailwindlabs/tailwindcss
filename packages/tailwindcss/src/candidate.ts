@@ -773,6 +773,11 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
       // can skip any further parsing.
       if (root[1] === '') break
 
+      // Edge case: `@-…` is not valid as a variant or a utility so we want to
+      // skip if an `@` is followed by a `-`. Otherwise `@-2xl:flex` and
+      // `@-2xl:flex` would be considered the same.
+      if (root[0] === '@' && exists('@') && input[idx] === '-') break
+
       yield root
     }
 

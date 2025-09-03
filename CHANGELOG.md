@@ -20,10 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show suggestions for known `matchVariant` values ([#18798](https://github.com/tailwindlabs/tailwindcss/pull/18798))
 - Replace deprecated `clip` with `clip-path` in `sr-only` ([#18769](https://github.com/tailwindlabs/tailwindcss/pull/18769))
 - Hide internal fields from completions in `matchUtilities` ([#18820](https://github.com/tailwindlabs/tailwindcss/pull/18820))
+- Ignore `.vercel` folders by default (can be overridden by `@source …` rules) ([#18855](https://github.com/tailwindlabs/tailwindcss/pull/18855))
+- Consider variants starting with `@-` to be invalid (e.g. `@-2xl:flex`) ([#18869](https://github.com/tailwindlabs/tailwindcss/pull/18869))
 - Upgrade: Migrate `aria` theme keys to `@custom-variant` ([#18815](https://github.com/tailwindlabs/tailwindcss/pull/18815))
 - Upgrade: Migrate `data` theme keys to `@custom-variant` ([#18816](https://github.com/tailwindlabs/tailwindcss/pull/18816))
 - Upgrade: Migrate `supports` theme keys to `@custom-variant` ([#18817](https://github.com/tailwindlabs/tailwindcss/pull/18817))
-- Ignore `.vercel` folders by default (can be overridden by `@source …` rules) ([#18855](https://github.com/tailwindlabs/tailwindcss/pull/18855))
 
 ## [4.1.12] - 2025-08-13
 
