@@ -3788,6 +3788,13 @@ describe('@custom-variant', () => {
     // Cannot start with an underscore
     [`@custom-variant _foo (&);`],
     [`@custom-variant __foo (&);`],
+
+    // Cannot end with a dash
+    [`@custom-variant foo- (&);`],
+    [`@custom-variant foo-- (&);`],
+    // Cannot end with an underscore
+    [`@custom-variant foo_ (&);`],
+    [`@custom-variant foo__ (&);`],
   ])('@custom-variant must have a valid name', (input) => {
     return expect(compileCss(input)).rejects.toThrowError()
   })
