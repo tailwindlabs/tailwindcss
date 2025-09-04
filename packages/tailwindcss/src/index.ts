@@ -22,7 +22,7 @@ import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
-import { applyVariant, compileCandidates } from './compile'
+import { compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
@@ -32,7 +32,7 @@ import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
-import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
@@ -636,30 +636,7 @@ async function parseCss(
     firstThemeRule.nodes = [context({ theme: true }, nodes)]
   }
 
-  // Replace the `@variant` at-rules with the actual variant rules.
-  if (variantNodes.length > 0) {
-    for (let variantNode of variantNodes) {
-      // Starting with the `&` rule node
-      let node = styleRule('&', variantNode.nodes)
-
-      let variant = variantNode.params
-
-      let variantAst = designSystem.parseVariant(variant)
-      if (variantAst === null) {
-        throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-      }
-
-      let result = applyVariant(node, variantAst, designSystem.variants)
-      if (result === null) {
-        throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
-      }
-
-      // Update the variant at-rule node, to be the `&` rule node
-      Object.assign(variantNode, node)
-    }
-    features |= Features.Variants
-  }
-
+  features |= substituteAtVariant(ast, designSystem)
   features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
 
