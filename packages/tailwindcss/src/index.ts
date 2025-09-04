@@ -32,6 +32,7 @@ import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
+import { topologicalSort } from './utils/topological-sort'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
 export type Config = UserConfig
 
@@ -150,7 +151,8 @@ async function parseCss(
 
   let important = null as boolean | null
   let theme = new Theme()
-  let customVariants: ((designSystem: DesignSystem) => void)[] = []
+  let customVariants = new Map<string, (designSystem: DesignSystem) => void>()
+  let customVariantDependencies = new Map<string, Set<string>>()
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
@@ -390,7 +392,7 @@ async function parseCss(
           }
         }
 
-        customVariants.push((designSystem) => {
+        customVariants.set(name, (designSystem) => {
           designSystem.variants.static(
             name,
             (r) => {
@@ -411,6 +413,7 @@ async function parseCss(
             },
           )
         })
+        customVariantDependencies.set(name, new Set<string>())
 
         return
       }
@@ -431,9 +434,17 @@ async function parseCss(
       // }
       // ```
       else {
-        customVariants.push((designSystem) => {
-          designSystem.variants.fromAst(name, node.nodes)
+        let dependencies = new Set<string>()
+        walk(node.nodes, (child) => {
+          if (child.kind === 'at-rule' && child.name === '@variant') {
+            dependencies.add(child.params)
+          }
         })
+
+        customVariants.set(name, (designSystem) => {
+          designSystem.variants.fromAst(name, node.nodes, designSystem)
+        })
+        customVariantDependencies.set(name, dependencies)
 
         return
       }
@@ -605,8 +616,27 @@ async function parseCss(
     sources,
   })
 
-  for (let customVariant of customVariants) {
-    customVariant(designSystem)
+  for (let name of customVariants.keys()) {
+    // Pre-register the variant to ensure its position in the variant list is
+    // based on the order we see them in the CSS.
+    designSystem.variants.static(name, () => {})
+  }
+
+  // Register custom variants in order
+  for (let variant of topologicalSort(customVariantDependencies, {
+    onCircularDependency(path, start) {
+      let output = toCss(
+        path.map((name, idx) => {
+          return atRule('@custom-variant', name, [atRule('@variant', path[idx + 1] ?? start, [])])
+        }),
+      )
+        .replaceAll(';', ' { … }')
+        .replace(`@custom-variant ${start} {`, `@custom-variant ${start} { /* ← */`)
+
+      throw new Error(`Circular dependency detected in custom variants:\n\n${output}`)
+    },
+  })) {
+    customVariants.get(variant)?.(designSystem)
   }
 
   for (let customUtility of customUtilities) {
