@@ -1,3 +1,4 @@
+import { Features } from '.'
 import {
   WalkAction,
   atRoot,
@@ -12,6 +13,8 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
+import { applyVariant } from './compile'
+import type { DesignSystem } from './design-system'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -1197,4 +1200,31 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
       return WalkAction.Skip
     }
   })
+}
+
+export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem): Features {
+  let features = Features.None
+  walk(ast, (variantNode, { replaceWith }) => {
+    if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
+
+    // Starting with the `&` rule node
+    let node = styleRule('&', variantNode.nodes)
+
+    let variant = variantNode.params
+
+    let variantAst = designSystem.parseVariant(variant)
+    if (variantAst === null) {
+      throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+    }
+
+    let result = applyVariant(node, variantAst, designSystem.variants)
+    if (result === null) {
+      throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+    }
+
+    // Update the variant at-rule node, to be the `&` rule node
+    replaceWith(node)
+    features |= Features.Variants
+  })
+  return features
 }
