@@ -83,12 +83,15 @@ export class Variants {
     })
   }
 
-  fromAst(name: string, ast: AstNode[]) {
+  fromAst(name: string, ast: AstNode[], designSystem: DesignSystem) {
     let selectors: string[] = []
 
+    let usesAtVariant = false
     walk(ast, (node) => {
       if (node.kind === 'rule') {
         selectors.push(node.selector)
+      } else if (node.kind === 'at-rule' && node.name === '@variant') {
+        usesAtVariant = true
       } else if (node.kind === 'at-rule' && node.name !== '@slot') {
         selectors.push(`${node.name} ${node.params}`)
       }
@@ -98,12 +101,11 @@ export class Variants {
       name,
       (r) => {
         let body = structuredClone(ast)
+        if (usesAtVariant) substituteAtVariant(body, designSystem)
         substituteAtSlot(body, r.nodes)
         r.nodes = body
       },
-      {
-        compounds: compoundsForSelectors(selectors),
-      },
+      { compounds: compoundsForSelectors(selectors) },
     )
   }
 

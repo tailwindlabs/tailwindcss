@@ -154,7 +154,7 @@ export function buildPluginApi({
 
       // CSS-in-JS object
       else if (typeof variant === 'object') {
-        designSystem.variants.fromAst(name, objectToAst(variant))
+        designSystem.variants.fromAst(name, objectToAst(variant), designSystem)
       }
     },
     matchVariant(name, fn, options) {
