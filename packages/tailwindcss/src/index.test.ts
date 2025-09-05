@@ -4343,6 +4343,180 @@ describe('@custom-variant', () => {
       }"
     `)
   })
+
+  test('@custom-variant can reuse existing @variant in the definition', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@media (hover: hover) {
+        .hocus\\:flex:hover:focus {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('@custom-variant can reuse @custom-variant that is defined later', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant custom-hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant custom-hover (&:hover);
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant can reuse existing @variant that is overwritten later', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant hover (&:hover);
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant cannot use @variant that eventually results in a circular dependency', async () => {
+    return expect(() =>
+      compileCss(
+        css`
+          @custom-variant custom-variant {
+            @variant foo {
+              @slot;
+            }
+          }
+
+          @custom-variant foo {
+            @variant hover {
+              @variant bar {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant bar {
+            @variant focus {
+              @variant baz {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant baz {
+            @variant active {
+              @variant foo {
+                @slot;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo:flex'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
+      [Error: Circular dependency detected in custom variants:
+
+      @custom-variant custom-variant {
+        @variant foo { … }
+      }
+      @custom-variant foo { /* ← */
+        @variant bar { … }
+      }
+      @custom-variant bar {
+        @variant baz { … }
+      }
+      @custom-variant baz {
+        @variant foo { … }
+      }
+      ]
+    `)
+  })
+
+  test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant foo {
+            @variant hover {
+              @variant bar {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant bar {
+            @variant focus {
+              @variant baz {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant baz {
+            @variant active {
+              @variant foo {
+                @slot;
+              }
+            }
+          }
+
+          /* Break the circle */
+          @custom-variant foo ([data-broken-circle] &);
+
+          @tailwind utilities;
+        `,
+        ['baz:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "[data-broken-circle] .baz\\:flex:active {
+        display: flex;
+      }"
+    `)
+  })
 })
 
 describe('@utility', () => {

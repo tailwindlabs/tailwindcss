@@ -22,7 +22,7 @@ import { substituteAtImports } from './at-import'
 import { applyCompatibilityHooks } from './compat/apply-compat-hooks'
 import type { UserConfig } from './compat/config/types'
 import { type Plugin } from './compat/plugin-api'
-import { applyVariant, compileCandidates } from './compile'
+import { compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
@@ -32,7 +32,8 @@ import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
 import { escape, unescape } from './utils/escape'
 import { segment } from './utils/segment'
-import { compoundsForSelectors, IS_VALID_VARIANT_NAME } from './variants'
+import { topologicalSort } from './utils/topological-sort'
+import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
 export type Config = UserConfig
 
 const IS_VALID_PREFIX = /^[a-z]+$/
@@ -150,7 +151,8 @@ async function parseCss(
 
   let important = null as boolean | null
   let theme = new Theme()
-  let customVariants: ((designSystem: DesignSystem) => void)[] = []
+  let customVariants = new Map<string, (designSystem: DesignSystem) => void>()
+  let customVariantDependencies = new Map<string, Set<string>>()
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
@@ -390,7 +392,7 @@ async function parseCss(
           }
         }
 
-        customVariants.push((designSystem) => {
+        customVariants.set(name, (designSystem) => {
           designSystem.variants.static(
             name,
             (r) => {
@@ -411,6 +413,7 @@ async function parseCss(
             },
           )
         })
+        customVariantDependencies.set(name, new Set<string>())
 
         return
       }
@@ -431,9 +434,17 @@ async function parseCss(
       // }
       // ```
       else {
-        customVariants.push((designSystem) => {
-          designSystem.variants.fromAst(name, node.nodes)
+        let dependencies = new Set<string>()
+        walk(node.nodes, (child) => {
+          if (child.kind === 'at-rule' && child.name === '@variant') {
+            dependencies.add(child.params)
+          }
         })
+
+        customVariants.set(name, (designSystem) => {
+          designSystem.variants.fromAst(name, node.nodes, designSystem)
+        })
+        customVariantDependencies.set(name, dependencies)
 
         return
       }
@@ -605,8 +616,27 @@ async function parseCss(
     sources,
   })
 
-  for (let customVariant of customVariants) {
-    customVariant(designSystem)
+  for (let name of customVariants.keys()) {
+    // Pre-register the variant to ensure its position in the variant list is
+    // based on the order we see them in the CSS.
+    designSystem.variants.static(name, () => {})
+  }
+
+  // Register custom variants in order
+  for (let variant of topologicalSort(customVariantDependencies, {
+    onCircularDependency(path, start) {
+      let output = toCss(
+        path.map((name, idx) => {
+          return atRule('@custom-variant', name, [atRule('@variant', path[idx + 1] ?? start, [])])
+        }),
+      )
+        .replaceAll(';', ' { … }')
+        .replace(`@custom-variant ${start} {`, `@custom-variant ${start} { /* ← */`)
+
+      throw new Error(`Circular dependency detected in custom variants:\n\n${output}`)
+    },
+  })) {
+    customVariants.get(variant)?.(designSystem)
   }
 
   for (let customUtility of customUtilities) {
@@ -636,30 +666,7 @@ async function parseCss(
     firstThemeRule.nodes = [context({ theme: true }, nodes)]
   }
 
-  // Replace the `@variant` at-rules with the actual variant rules.
-  if (variantNodes.length > 0) {
-    for (let variantNode of variantNodes) {
-      // Starting with the `&` rule node
-      let node = styleRule('&', variantNode.nodes)
-
-      let variant = variantNode.params
-
-      let variantAst = designSystem.parseVariant(variant)
-      if (variantAst === null) {
-        throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-      }
-
-      let result = applyVariant(node, variantAst, designSystem.variants)
-      if (result === null) {
-        throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
-      }
-
-      // Update the variant at-rule node, to be the `&` rule node
-      Object.assign(variantNode, node)
-    }
-    features |= Features.Variants
-  }
-
+  features |= substituteAtVariant(ast, designSystem)
   features |= substituteFunctions(ast, designSystem)
   features |= substituteAtApply(ast, designSystem)
 
