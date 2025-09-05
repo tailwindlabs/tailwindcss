@@ -108,6 +108,75 @@ impl PreProcessor for Clojure {
                     }
                 }
 
+                // Handle quote with a list, e.g.: `'(…)`
+                // and with a vector, e.g.: `'[…]`
+                b'\'' if matches!(cursor.next, b'[' | b'(') => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+                    result[cursor.pos] = b' ';
+                    let end = match cursor.curr {
+                        b'[' => b']',
+                        b'(' => b')',
+                        _ => unreachable!(),
+                    };
+
+                    // Consume until the closing `]`
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            x if x == end => {
+                                result[cursor.pos] = b' ';
+                                break;
+                            }
+
+                            // Consume strings as-is
+                            b'"' => {
+                                result[cursor.pos] = b' ';
+                                cursor.advance();
+
+                                while cursor.pos < len {
+                                    match cursor.curr {
+                                        // Escaped character, skip ahead to the next character
+                                        b'\\' => cursor.advance_twice(),
+
+                                        // End of the string
+                                        b'"' => {
+                                            result[cursor.pos] = b' ';
+                                            break;
+                                        }
+
+                                        // Everything else is valid
+                                        _ => cursor.advance(),
+                                    };
+                                }
+                            }
+                            _ => {}
+                        };
+
+                        cursor.advance();
+                    }
+                }
+
+                // Handle quote with a keyword, e.g.: `'bg-white`
+                b'\'' if !cursor.next.is_ascii_whitespace() => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // End of keyword.
+                            _ if !is_keyword_character(cursor.curr) => {
+                                result[cursor.pos] = b' ';
+                                break;
+                            }
+
+                            // Consume everything else.
+                            _ => {}
+                        };
+
+                        cursor.advance();
+                    }
+                }
+
                 // Aggressively discard everything else, reducing false positives and preventing
                 // characters surrounding keywords from producing false negatives.
                 // E.g.:
@@ -280,5 +349,88 @@ mod tests {
             input,
             vec!["py-5", "flex", "pr-1.5", "bg-white", "bg-black"],
         );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/18882
+    #[test]
+    fn test_extract_from_symbol_list() {
+        let input = r#"
+            [:div {:class '[z-1 z-2
+                            z-3 z-4]}]
+        "#;
+        Clojure::test_extract_contains(input, vec!["z-1", "z-2", "z-3", "z-4"]);
+
+        // https://github.com/tailwindlabs/tailwindcss/pull/18345#issuecomment-3253403847
+        let input = r#"
+            (def hl-class-names '[ring ring-blue-500])
+
+            [:div
+             {:class (cond-> '[input w-full]
+                       textarea? (conj 'textarea)
+                       (seq errors) (concat '[border-red-500 bg-red-100])
+                       highlight? (concat hl-class-names))}]
+        "#;
+        Clojure::test_extract_contains(
+            input,
+            vec![
+                "ring",
+                "ring-blue-500",
+                "input",
+                "w-full",
+                "textarea",
+                "border-red-500",
+                "bg-red-100",
+            ],
+        );
+
+        let input = r#"
+          [:div
+            {:class '[h-100 lg:h-200 max-w-32 mx-auto py-60
+                      flex flex-col justify-end items-center
+                      lg:flex-row lg:justify-between
+                      bg-cover bg-center bg-no-repeat rounded-3xl overflow-hidden
+                      font-semibold text-gray-900]}]
+        "#;
+        Clojure::test_extract_contains(
+            input,
+            vec![
+                "h-100",
+                "lg:h-200",
+                "max-w-32",
+                "mx-auto",
+                "py-60",
+                "flex",
+                "flex-col",
+                "justify-end",
+                "items-center",
+                "lg:flex-row",
+                "lg:justify-between",
+                "bg-cover",
+                "bg-center",
+                "bg-no-repeat",
+                "rounded-3xl",
+                "overflow-hidden",
+                "font-semibold",
+                "text-gray-900",
+            ],
+        );
+
+        // `/` is invalid and requires explicit quoting
+        let input = r#"
+            '[p-32 "text-black/50"]
+        "#;
+        Clojure::test_extract_contains(input, vec!["p-32", "text-black/50"]);
+
+        // `[…]` is invalid and requires explicit quoting
+        let input = r#"
+            (print '[ring ring-blue-500 "bg-[#0088cc]"])
+        "#;
+        Clojure::test_extract_contains(input, vec!["ring", "ring-blue-500", "bg-[#0088cc]"]);
+
+        // `'(…)` looks similar to `[…]` but uses parentheses instead of brackets
+        let input = r#"
+            (print '(ring ring-blue-500 "bg-[#0088cc]"))
+        "#;
+        Clojure::test_extract_contains(input, vec!["ring", "ring-blue-500", "bg-[#0088cc]"]);
     }
 }
