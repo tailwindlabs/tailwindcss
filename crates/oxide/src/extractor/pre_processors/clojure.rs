@@ -108,6 +108,75 @@ impl PreProcessor for Clojure {
                     }
                 }
 
+                // Handle quote with a list, e.g.: `'(…)`
+                // and with a vector, e.g.: `'[…]`
+                b'\'' if matches!(cursor.next, b'[' | b'(') => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+                    result[cursor.pos] = b' ';
+                    let end = match cursor.curr {
+                        b'[' => b']',
+                        b'(' => b')',
+                        _ => unreachable!(),
+                    };
+
+                    // Consume until the closing `]`
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            x if x == end => {
+                                result[cursor.pos] = b' ';
+                                break;
+                            }
+
+                            // Consume strings as-is
+                            b'"' => {
+                                result[cursor.pos] = b' ';
+                                cursor.advance();
+
+                                while cursor.pos < len {
+                                    match cursor.curr {
+                                        // Escaped character, skip ahead to the next character
+                                        b'\\' => cursor.advance_twice(),
+
+                                        // End of the string
+                                        b'"' => {
+                                            result[cursor.pos] = b' ';
+                                            break;
+                                        }
+
+                                        // Everything else is valid
+                                        _ => cursor.advance(),
+                                    };
+                                }
+                            }
+                            _ => {}
+                        };
+
+                        cursor.advance();
+                    }
+                }
+
+                // Handle quote with a keyword, e.g.: `'bg-white`
+                b'\'' if !cursor.next.is_ascii_whitespace() => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // End of keyword.
+                            _ if !is_keyword_character(cursor.curr) => {
+                                result[cursor.pos] = b' ';
+                                break;
+                            }
+
+                            // Consume everything else.
+                            _ => {}
+                        };
+
+                        cursor.advance();
+                    }
+                }
+
                 // Aggressively discard everything else, reducing false positives and preventing
                 // characters surrounding keywords from producing false negatives.
                 // E.g.:
