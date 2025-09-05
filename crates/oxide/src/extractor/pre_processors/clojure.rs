@@ -281,4 +281,87 @@ mod tests {
             vec!["py-5", "flex", "pr-1.5", "bg-white", "bg-black"],
         );
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/18882
+    #[test]
+    fn test_extract_from_symbol_list() {
+        let input = r#"
+            [:div {:class '[z-1 z-2
+                            z-3 z-4]}]
+        "#;
+        Clojure::test_extract_contains(input, vec!["z-1", "z-2", "z-3", "z-4"]);
+
+        // https://github.com/tailwindlabs/tailwindcss/pull/18345#issuecomment-3253403847
+        let input = r#"
+            (def hl-class-names '[ring ring-blue-500])
+
+            [:div
+             {:class (cond-> '[input w-full]
+                       textarea? (conj 'textarea)
+                       (seq errors) (concat '[border-red-500 bg-red-100])
+                       highlight? (concat hl-class-names))}]
+        "#;
+        Clojure::test_extract_contains(
+            input,
+            vec![
+                "ring",
+                "ring-blue-500",
+                "input",
+                "w-full",
+                "textarea",
+                "border-red-500",
+                "bg-red-100",
+            ],
+        );
+
+        let input = r#"
+          [:div
+            {:class '[h-100 lg:h-200 max-w-32 mx-auto py-60
+                      flex flex-col justify-end items-center
+                      lg:flex-row lg:justify-between
+                      bg-cover bg-center bg-no-repeat rounded-3xl overflow-hidden
+                      font-semibold text-gray-900]}]
+        "#;
+        Clojure::test_extract_contains(
+            input,
+            vec![
+                "h-100",
+                "lg:h-200",
+                "max-w-32",
+                "mx-auto",
+                "py-60",
+                "flex",
+                "flex-col",
+                "justify-end",
+                "items-center",
+                "lg:flex-row",
+                "lg:justify-between",
+                "bg-cover",
+                "bg-center",
+                "bg-no-repeat",
+                "rounded-3xl",
+                "overflow-hidden",
+                "font-semibold",
+                "text-gray-900",
+            ],
+        );
+
+        // `/` is invalid and requires explicit quoting
+        let input = r#"
+            '[p-32 "text-black/50"]
+        "#;
+        Clojure::test_extract_contains(input, vec!["p-32", "text-black/50"]);
+
+        // `[…]` is invalid and requires explicit quoting
+        let input = r#"
+            (print '[ring ring-blue-500 "bg-[#0088cc]"])
+        "#;
+        Clojure::test_extract_contains(input, vec!["ring", "ring-blue-500", "bg-[#0088cc]"]);
+
+        // `'(…)` looks similar to `[…]` but uses parentheses instead of brackets
+        let input = r#"
+            (print '(ring ring-blue-500 "bg-[#0088cc]"))
+        "#;
+        Clojure::test_extract_contains(input, vec!["ring", "ring-blue-500", "bg-[#0088cc]"]);
+    }
 }
