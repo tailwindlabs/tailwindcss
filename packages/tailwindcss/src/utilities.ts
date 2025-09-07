@@ -5712,6 +5712,8 @@ export function createUtilities(theme: Theme) {
       value = candidate.value.value
     } else if (candidate.value.kind === 'named' && candidate.value.value === 'normal') {
       value = 'normal'
+    } else if (candidate.value.kind === 'named' && candidate.value.value === 'size') {
+      value = 'size'
     }
 
     if (value === null) return

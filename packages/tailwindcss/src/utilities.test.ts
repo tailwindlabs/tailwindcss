@@ -26214,16 +26214,16 @@ test('@container', async () => {
       '@container-normal',
       '@container/sidebar',
       '@container-normal/sidebar',
-      '@container-[size]',
-      '@container-[size]/sidebar',
+      '@container-size',
+      '@container-size/sidebar',
     ]),
   ).toMatchInlineSnapshot(`
-    ".\\@container-\\[size\\]\\/sidebar {
-      container: sidebar / size;
+    ".\\@container-normal\\/sidebar {
+      container: sidebar;
     }
 
-    .\\@container-normal\\/sidebar {
-      container: sidebar;
+    .\\@container-size\\/sidebar {
+      container: sidebar / size;
     }
 
     .\\@container\\/sidebar {
@@ -26234,12 +26234,12 @@ test('@container', async () => {
       container-type: inline-size;
     }
 
-    .\\@container-\\[size\\] {
-      container-type: size;
-    }
-
     .\\@container-normal {
       container-type: normal;
+    }
+
+    .\\@container-size {
+      container-type: size;
     }"
   `)
   expect(
@@ -26248,8 +26248,8 @@ test('@container', async () => {
       '-@container-normal',
       '-@container/sidebar',
       '-@container-normal/sidebar',
-      '-@container-[size]',
-      '-@container-[size]/sidebar',
+      '-@container-size',
+      '-@container-size/sidebar',
     ]),
   ).toEqual('')
 })
