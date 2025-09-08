@@ -15,6 +15,7 @@ import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { featureFlagVersion } from './utils/feature-flags'
 import {
   inferDataType,
   isPositiveInteger,
@@ -5712,7 +5713,11 @@ export function createUtilities(theme: Theme) {
       value = candidate.value.value
     } else if (candidate.value.kind === 'named' && candidate.value.value === 'normal') {
       value = 'normal'
-    } else if (candidate.value.kind === 'named' && candidate.value.value === 'size') {
+    } else if (
+      featureFlagVersion('4.2.0', '0.0.0-insiders') &&
+      candidate.value.kind === 'named' &&
+      candidate.value.value === 'size'
+    ) {
       value = 'size'
     }
 
