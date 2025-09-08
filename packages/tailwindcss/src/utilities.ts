@@ -124,9 +124,12 @@ export class Utilities {
   }
 
   suggest(name: string, groups: () => SuggestionGroup[]) {
-    // TODO: We are calling this multiple times on purpose but ideally only ever
-    // once per utility root.
-    this.completions.set(name, groups)
+    let existingGroups = this.completions.get(name)
+    if (existingGroups) {
+      this.completions.set(name, () => [...existingGroups?.(), ...groups?.()])
+    } else {
+      this.completions.set(name, groups)
+    }
   }
 
   keys(kind: 'static' | 'functional') {
