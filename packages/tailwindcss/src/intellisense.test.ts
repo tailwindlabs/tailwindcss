@@ -572,6 +572,39 @@ test('Custom functional @utility', async () => {
   expect(classMap.get('example-xs')?.modifiers).toEqual(['normal', 'foo', 'bar'])
 })
 
+test('Custom utilities sharing a root with built-in utilities should merge suggestions', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @theme {
+      --font-sans: sans-serif;
+    }
+
+    @theme {
+      --font-weight-custom: 1234;
+      --font-weight-bold: bold; /* Overlap with existing utility */
+    }
+
+    @utility font-* {
+      --my-font-weight: --value(--font-weight- *);
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  let classMap = new Map(design.getClassList())
+  let classNames = Array.from(classMap.keys())
+
+  expect(classNames).toContain('font-sans') // Existing font-family utility
+  expect(classNames).toContain('font-bold') // Existing font-family utility & custom font-weight utility
+  expect(classNames).toContain('font-custom') // Custom font-weight utility
+})
+
 test('Theme keys with underscores are suggested with underscores', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
