@@ -239,9 +239,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch']) {
-    let cleanupWatchers = await createWatchers(
-      watchDirectories(scanner),
-      async function handle(files) {
+    let cleanupWatchers: (() => Promise<void>)[] = []
+    cleanupWatchers.push(
+      await createWatchers(watchDirectories(scanner), async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
@@ -304,15 +304,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             // Setup new watchers
             DEBUG && I.start('Setup new watchers')
-            let newCleanupWatchers = await createWatchers(watchDirectories(scanner), handle)
+            let newCleanupFunction = await createWatchers(watchDirectories(scanner), handle)
             DEBUG && I.end('Setup new watchers')
 
             // Clear old watchers
             DEBUG && I.start('Cleanup old watchers')
-            await cleanupWatchers()
+            await Promise.all(cleanupWatchers.splice(0).map((cleanup) => cleanup()))
             DEBUG && I.end('Cleanup old watchers')
 
-            cleanupWatchers = newCleanupWatchers
+            cleanupWatchers.push(newCleanupFunction)
 
             // Re-compile the CSS
             DEBUG && I.start('Build CSS')
@@ -362,14 +362,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             eprintln(err.toString())
           }
         }
-      },
+      }),
     )
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        cleanupWatchers().then(
+        Promise.all(cleanupWatchers.map((fn) => fn())).then(
           () => process.exit(0),
           () => process.exit(1),
         )
