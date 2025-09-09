@@ -12,10 +12,10 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
+import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
-import { featureFlagVersion } from './utils/feature-flags'
 import {
   inferDataType,
   isPositiveInteger,
@@ -5714,7 +5714,7 @@ export function createUtilities(theme: Theme) {
     } else if (candidate.value.kind === 'named' && candidate.value.value === 'normal') {
       value = 'normal'
     } else if (
-      featureFlagVersion('4.2.0', '0.0.0-insiders') &&
+      enableContainerSizeUtility &&
       candidate.value.kind === 'named' &&
       candidate.value.value === 'size'
     ) {
