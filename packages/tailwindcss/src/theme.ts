@@ -29,6 +29,7 @@ const ignoredThemeKeyMap = new Map([
     ],
   ],
   ['--grid-column', ['--grid-column-start', '--grid-column-end']],
+  ['--grid-row', ['--grid-row-start', '--grid-row-end']],
 ])
 
 function isIgnoredThemeKey(themeKey: ThemeKey, namespace: ThemeKey) {
