@@ -708,7 +708,7 @@ export function createUtilities(theme: Theme) {
       auto: [decl('grid-column', 'auto')],
     },
   })
-  
+
   functionalUtility('col-span', {
     handleBareValue: ({ value }) => {
       if (!isPositiveInteger(value)) return null
@@ -790,7 +790,7 @@ export function createUtilities(theme: Theme) {
       auto: [decl('grid-row', 'auto')],
     },
   })
-  
+
   functionalUtility('row-span', {
     themeKeys: [],
     handleBareValue: ({ value }) => {
@@ -984,8 +984,6 @@ export function createUtilities(theme: Theme) {
       square: [decl('aspect-ratio', '1 / 1')],
     },
   })
-
-  
 
   /**
    * @css `size`
@@ -1233,8 +1231,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  
-
   functionalUtility('perspective-origin', {
     themeKeys: ['--perspective-origin'],
     handle: (value) => [decl('perspective-origin', value)],
@@ -1251,8 +1247,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  
-
   /**
    * @css `perspective`
    */
@@ -1263,8 +1257,6 @@ export function createUtilities(theme: Theme) {
       none: [decl('perspective', 'none')],
     },
   })
-
-  
 
   let translateProperties = () =>
     atRoot([
@@ -1825,8 +1817,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  
-
   // list-image-*
 
   functionalUtility('list-image', {
@@ -1836,8 +1826,6 @@ export function createUtilities(theme: Theme) {
       none: [decl('list-style-image', 'none')],
     },
   })
-
-  
 
   staticUtility('appearance-none', [['appearance', 'none']])
   staticUtility('appearance-auto', [['appearance', 'auto']])
@@ -1897,8 +1885,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  
-
   functionalUtility('auto-rows', {
     themeKeys: ['--grid-auto-rows'],
     handle: (value) => [decl('grid-auto-rows', value)],
@@ -1909,8 +1895,6 @@ export function createUtilities(theme: Theme) {
       fr: [decl('grid-auto-rows', 'minmax(0, 1fr)')],
     },
   })
-
-  
 
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
@@ -2209,8 +2193,6 @@ export function createUtilities(theme: Theme) {
         },
       })
     }
-
-    
   }
 
   staticUtility('border-solid', [
@@ -3717,9 +3699,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  // Keep keyword object-position values discoverable in IntelliSense
-  
-
   for (let [name, property] of [
     ['p', 'padding'],
     ['px', 'padding-inline'],
@@ -3953,8 +3932,6 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  
-
   {
     let cssFilterValue = [
       'var(--tw-blur,)',
@@ -4065,8 +4042,6 @@ export function createUtilities(theme: Theme) {
       },
     })
 
-    
-
     functionalUtility('backdrop-blur', {
       themeKeys: ['--backdrop-blur', '--blur'],
       handle: (value) => [
@@ -4084,8 +4059,6 @@ export function createUtilities(theme: Theme) {
         ],
       },
     })
-
-    
 
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
@@ -4806,8 +4779,6 @@ export function createUtilities(theme: Theme) {
       },
     },
   )
-
-  
 
   functionalUtility('tracking', {
     supportsNegative: true,
