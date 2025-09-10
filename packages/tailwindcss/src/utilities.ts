@@ -460,6 +460,13 @@ export function createUtilities(theme: Theme) {
         supportsFractions: desc.supportsFractions,
       },
     ])
+
+    // Also suggest any staticValues automatically so callers don't need to
+    // manually add suggestion groups for e.g. `auto`, `none`, `full`, etc.
+    if (desc.staticValues && Object.keys(desc.staticValues).length > 0) {
+      let values = Object.keys(desc.staticValues)
+      suggest(classRoot, () => [{ values }])
+    }
   }
 
   type ColorUtilityDescription = {
