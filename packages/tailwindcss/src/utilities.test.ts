@@ -1180,9 +1180,28 @@ test('col', async () => {
 
 test('col-start', async () => {
   expect(
-    await run(['col-start-auto', 'col-start-4', 'col-start-99', 'col-start-[123]', '-col-start-4']),
+    await compileCss(
+      css`
+        @theme {
+          --grid-column-start-custom: 1 column-start;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'col-start-auto',
+        'col-start-4',
+        'col-start-99',
+        'col-start-[123]',
+        '-col-start-4',
+        'col-start-custom',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
-    ".-col-start-4 {
+    ":root, :host {
+      --grid-column-start-custom: 1 column-start;
+    }
+
+    .-col-start-4 {
       grid-column-start: calc(4 * -1);
     }
 
@@ -1200,6 +1219,10 @@ test('col-start', async () => {
 
     .col-start-auto {
       grid-column-start: auto;
+    }
+
+    .col-start-custom {
+      grid-column-start: var(--grid-column-start-custom);
     }"
   `)
   expect(
@@ -1217,28 +1240,45 @@ test('col-start', async () => {
 })
 
 test('col-end', async () => {
-  expect(await run(['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4']))
-    .toMatchInlineSnapshot(`
-      ".-col-end-4 {
-        grid-column-end: calc(4 * -1);
-      }
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-column-end-custom: 1 column-end;
+        }
+        @tailwind utilities;
+      `,
+      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-column-end-custom: 1 column-end;
+    }
 
-      .col-end-4 {
-        grid-column-end: 4;
-      }
+    .-col-end-4 {
+      grid-column-end: calc(4 * -1);
+    }
 
-      .col-end-99 {
-        grid-column-end: 99;
-      }
+    .col-end-4 {
+      grid-column-end: 4;
+    }
 
-      .col-end-\\[123\\] {
-        grid-column-end: 123;
-      }
+    .col-end-99 {
+      grid-column-end: 99;
+    }
 
-      .col-end-auto {
-        grid-column-end: auto;
-      }"
-    `)
+    .col-end-\\[123\\] {
+      grid-column-end: 123;
+    }
+
+    .col-end-auto {
+      grid-column-end: auto;
+    }
+
+    .col-end-custom {
+      grid-column-end: var(--grid-column-end-custom);
+    }"
+  `)
   expect(
     await run([
       'col-end',
@@ -1317,9 +1357,28 @@ test('row', async () => {
 
 test('row-start', async () => {
   expect(
-    await run(['row-start-auto', 'row-start-4', 'row-start-99', 'row-start-[123]', '-row-start-4']),
+    await compileCss(
+      css`
+        @theme {
+          --grid-row-start-custom: 1 row-start;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'row-start-auto',
+        'row-start-4',
+        'row-start-99',
+        'row-start-[123]',
+        '-row-start-4',
+        'row-start-custom',
+      ],
+    ),
   ).toMatchInlineSnapshot(`
-    ".-row-start-4 {
+    ":root, :host {
+      --grid-row-start-custom: 1 row-start;
+    }
+
+    .-row-start-4 {
       grid-row-start: calc(4 * -1);
     }
 
@@ -1337,6 +1396,10 @@ test('row-start', async () => {
 
     .row-start-auto {
       grid-row-start: auto;
+    }
+
+    .row-start-custom {
+      grid-row-start: var(--grid-row-start-custom);
     }"
   `)
   expect(
@@ -1354,28 +1417,45 @@ test('row-start', async () => {
 })
 
 test('row-end', async () => {
-  expect(await run(['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4']))
-    .toMatchInlineSnapshot(`
-      ".-row-end-4 {
-        grid-row-end: calc(4 * -1);
-      }
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-row-end-custom: 1 row-end;
+        }
+        @tailwind utilities;
+      `,
+      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-row-end-custom: 1 row-end;
+    }
 
-      .row-end-4 {
-        grid-row-end: 4;
-      }
+    .-row-end-4 {
+      grid-row-end: calc(4 * -1);
+    }
 
-      .row-end-99 {
-        grid-row-end: 99;
-      }
+    .row-end-4 {
+      grid-row-end: 4;
+    }
 
-      .row-end-\\[123\\] {
-        grid-row-end: 123;
-      }
+    .row-end-99 {
+      grid-row-end: 99;
+    }
 
-      .row-end-auto {
-        grid-row-end: auto;
-      }"
-    `)
+    .row-end-\\[123\\] {
+      grid-row-end: 123;
+    }
+
+    .row-end-auto {
+      grid-row-end: auto;
+    }
+
+    .row-end-custom {
+      grid-row-end: var(--grid-row-end-custom);
+    }"
+  `)
   expect(
     await run([
       'row-end',
