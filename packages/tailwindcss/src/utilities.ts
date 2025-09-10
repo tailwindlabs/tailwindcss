@@ -708,8 +708,7 @@ export function createUtilities(theme: Theme) {
       auto: [decl('grid-column', 'auto')],
     },
   })
-  // Ensure discoverability for `col-auto` after converting to fallback
-  suggest('col', () => [{ values: ['auto'], valueThemeKeys: ['--grid-column'] }])
+  
   functionalUtility('col-span', {
     handleBareValue: ({ value }) => {
       if (!isPositiveInteger(value)) return null
@@ -755,13 +754,12 @@ export function createUtilities(theme: Theme) {
 
   suggest('col-span', () => [
     {
-      values: ['full', ...Array.from({ length: 12 }, (_, i) => `${i + 1}`)],
+      values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
       valueThemeKeys: [],
     },
   ])
 
   suggest('col-start', () => [
-    { values: ['auto'], valueThemeKeys: ['--grid-column-start'] },
     {
       supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
@@ -770,7 +768,6 @@ export function createUtilities(theme: Theme) {
   ])
 
   suggest('col-end', () => [
-    { values: ['auto'], valueThemeKeys: ['--grid-column-end'] },
     {
       supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
@@ -793,8 +790,7 @@ export function createUtilities(theme: Theme) {
       auto: [decl('grid-row', 'auto')],
     },
   })
-  // Ensure discoverability for `row-auto` after converting to fallback
-  suggest('row', () => [{ values: ['auto'], valueThemeKeys: ['--grid-row'] }])
+  
   functionalUtility('row-span', {
     themeKeys: [],
     handleBareValue: ({ value }) => {
@@ -841,13 +837,12 @@ export function createUtilities(theme: Theme) {
 
   suggest('row-span', () => [
     {
-      values: ['full', ...Array.from({ length: 12 }, (_, i) => `${i + 1}`)],
+      values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
       valueThemeKeys: [],
     },
   ])
 
   suggest('row-start', () => [
-    { values: ['auto'], valueThemeKeys: ['--grid-row-start'] },
     {
       supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
@@ -856,7 +851,6 @@ export function createUtilities(theme: Theme) {
   ])
 
   suggest('row-end', () => [
-    { values: ['auto'], valueThemeKeys: ['--grid-row-end'] },
     {
       supportsNegative: true,
       values: Array.from({ length: 13 }, (_, i) => `${i + 1}`),
@@ -936,7 +930,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('line-clamp', () => [
     {
-      values: ['none', '1', '2', '3', '4', '5', '6'],
+      values: ['1', '2', '3', '4', '5', '6'],
       valueThemeKeys: ['--line-clamp'],
     },
   ])
@@ -991,13 +985,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  // Suggest only the keyword aspect values (no fraction burst)
-  suggest('aspect', () => [
-    {
-      values: ['auto', 'square'],
-      valueThemeKeys: ['--aspect'],
-    },
-  ])
+  
 
   /**
    * @css `size`
@@ -1245,23 +1233,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  // Suggest keyword origin values to match snapshot
-  suggest('origin', () => [
-    {
-      values: [
-        'center',
-        'top',
-        'top-right',
-        'right',
-        'bottom-right',
-        'bottom',
-        'bottom-left',
-        'left',
-        'top-left',
-      ],
-      valueThemeKeys: ['--transform-origin'],
-    },
-  ])
+  
 
   functionalUtility('perspective-origin', {
     themeKeys: ['--perspective-origin'],
@@ -1279,23 +1251,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  // Suggest keyword perspective-origin values to match snapshot
-  suggest('perspective-origin', () => [
-    {
-      values: [
-        'center',
-        'top',
-        'top-right',
-        'right',
-        'bottom-right',
-        'bottom',
-        'bottom-left',
-        'left',
-        'top-left',
-      ],
-      valueThemeKeys: ['--perspective-origin'],
-    },
-  ])
+  
 
   /**
    * @css `perspective`
@@ -1308,13 +1264,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  // Suggest `perspective-none` to match snapshot
-  suggest('perspective', () => [
-    {
-      values: ['none'],
-      valueThemeKeys: ['--perspective'],
-    },
-  ])
+  
 
   let translateProperties = () =>
     atRoot([
@@ -1875,12 +1825,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  suggest('list', () => [
-    {
-      values: ['none', 'disc', 'decimal'],
-      valueThemeKeys: ['--list-style-type'],
-    },
-  ])
+  
 
   // list-image-*
 
@@ -1892,12 +1837,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  suggest('list-image', () => [
-    {
-      values: ['none'],
-      valueThemeKeys: ['--list-style-image'],
-    },
-  ])
+  
 
   staticUtility('appearance-none', [['appearance', 'none']])
   staticUtility('appearance-auto', [['appearance', 'auto']])
@@ -1923,7 +1863,7 @@ export function createUtilities(theme: Theme) {
 
   suggest('columns', () => [
     {
-      values: ['auto', ...Array.from({ length: 12 }, (_, i) => `${i + 1}`)],
+      values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--columns', '--container'],
     },
   ])
@@ -1957,12 +1897,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  suggest('auto-cols', () => [
-    {
-      values: ['auto', 'min', 'max', 'fr'],
-      valueThemeKeys: ['--grid-auto-columns'],
-    },
-  ])
+  
 
   functionalUtility('auto-rows', {
     themeKeys: ['--grid-auto-rows'],
@@ -1975,12 +1910,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  suggest('auto-rows', () => [
-    {
-      values: ['auto', 'min', 'max', 'fr'],
-      valueThemeKeys: ['--grid-auto-rows'],
-    },
-  ])
+  
 
   functionalUtility('grid-cols', {
     themeKeys: ['--grid-template-columns'],
@@ -2010,14 +1940,14 @@ export function createUtilities(theme: Theme) {
 
   suggest('grid-cols', () => [
     {
-      values: ['none', 'subgrid', ...Array.from({ length: 12 }, (_, i) => `${i + 1}`)],
+      values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-template-columns'],
     },
   ])
 
   suggest('grid-rows', () => [
     {
-      values: ['none', 'subgrid', ...Array.from({ length: 12 }, (_, i) => `${i + 1}`)],
+      values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
       valueThemeKeys: ['--grid-template-rows'],
     },
   ])
@@ -2280,31 +2210,7 @@ export function createUtilities(theme: Theme) {
       })
     }
 
-    // Ensure IntelliSense continues to suggest `none` and `full` for all rounded-* roots
-    for (let root of [
-      'rounded',
-      'rounded-s',
-      'rounded-e',
-      'rounded-t',
-      'rounded-r',
-      'rounded-b',
-      'rounded-l',
-      'rounded-ss',
-      'rounded-se',
-      'rounded-ee',
-      'rounded-es',
-      'rounded-tl',
-      'rounded-tr',
-      'rounded-br',
-      'rounded-bl',
-    ]) {
-      suggest(root, () => [
-        {
-          values: ['none', 'full'],
-          valueThemeKeys: ['--radius'],
-        },
-      ])
-    }
+    
   }
 
   staticUtility('border-solid', [
@@ -3812,22 +3718,7 @@ export function createUtilities(theme: Theme) {
   })
 
   // Keep keyword object-position values discoverable in IntelliSense
-  suggest('object', () => [
-    {
-      values: [
-        'top',
-        'top-left',
-        'top-right',
-        'bottom',
-        'bottom-left',
-        'bottom-right',
-        'left',
-        'right',
-        'center',
-      ],
-      valueThemeKeys: ['--object-position'],
-    },
-  ])
+  
 
   for (let [name, property] of [
     ['p', 'padding'],
@@ -4062,12 +3953,7 @@ export function createUtilities(theme: Theme) {
     },
   })
 
-  suggest('animate', () => [
-    {
-      values: ['none'],
-      valueThemeKeys: ['--animate'],
-    },
-  ])
+  
 
   {
     let cssFilterValue = [
@@ -4179,12 +4065,7 @@ export function createUtilities(theme: Theme) {
       },
     })
 
-    suggest('blur', () => [
-      {
-        values: ['none'],
-        valueThemeKeys: ['--blur'],
-      },
-    ])
+    
 
     functionalUtility('backdrop-blur', {
       themeKeys: ['--backdrop-blur', '--blur'],
@@ -4204,12 +4085,7 @@ export function createUtilities(theme: Theme) {
       },
     })
 
-    suggest('backdrop-blur', () => [
-      {
-        values: ['none'],
-        valueThemeKeys: ['--backdrop-blur', '--blur'],
-      },
-    ])
+    
 
     functionalUtility('brightness', {
       themeKeys: ['--brightness'],
@@ -4931,13 +4807,7 @@ export function createUtilities(theme: Theme) {
     },
   )
 
-  // Ensure `leading-none` remains suggested
-  suggest('leading', () => [
-    {
-      values: ['none'],
-      valueThemeKeys: ['--leading', '--spacing'],
-    },
-  ])
+  
 
   functionalUtility('tracking', {
     supportsNegative: true,
@@ -5190,7 +5060,6 @@ export function createUtilities(theme: Theme) {
   })
 
   suggest('underline-offset', () => [
-    { values: ['auto'], valueThemeKeys: ['--text-underline-offset'] },
     {
       supportsNegative: true,
       values: ['0', '1', '2', '4', '8'],
