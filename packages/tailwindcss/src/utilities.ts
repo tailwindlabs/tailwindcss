@@ -433,12 +433,9 @@ export function createUtilities(theme: Theme) {
             if (!value?.includes('/') && candidate.modifier) return
           }
 
-          if (value === null && !negative && desc.staticValues) {
+          if (value === null && !negative && desc.staticValues && !candidate.modifier) {
             let fallback = desc.staticValues[candidate.value.value]
-            if (fallback) {
-              if (candidate.modifier) return
-              return fallback
-            }
+            if (fallback) return fallback
           }
         }
 
