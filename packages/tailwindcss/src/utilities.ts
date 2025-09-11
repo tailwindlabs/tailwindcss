@@ -4761,7 +4761,6 @@ export function createUtilities(theme: Theme) {
           decl('line-height', '1'),
         ],
       },
-      Fv,
     },
   )
 

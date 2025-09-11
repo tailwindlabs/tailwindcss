@@ -1334,7 +1334,6 @@ test('col-start', async () => {
     }
 
     .col-start-auto {
-      grid-column: var(--grid-column-start-auto);
       grid-column-start: var(--grid-column-start-auto);
     }"
   `)
@@ -1409,7 +1408,6 @@ test('col-end', async () => {
     }
 
     .col-end-auto {
-      grid-column: var(--grid-column-end-auto);
       grid-column-end: var(--grid-column-end-auto);
     }"
   `)
@@ -1573,7 +1571,6 @@ test('row-start', async () => {
     }
 
     .row-start-auto {
-      grid-row: var(--grid-row-start-auto);
       grid-row-start: var(--grid-row-start-auto);
     }"
   `)
@@ -1648,7 +1645,6 @@ test('row-end', async () => {
     }
 
     .row-end-auto {
-      grid-row: var(--grid-row-end-auto);
       grid-row-end: var(--grid-row-end-auto);
     }"
   `)
