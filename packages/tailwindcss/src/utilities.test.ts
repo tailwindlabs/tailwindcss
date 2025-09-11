@@ -1054,6 +1054,26 @@ test('z-index', async () => {
       '-z-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --z-index-auto: 42;
+        }
+        @tailwind utilities;
+      `,
+      ['z-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --z-index-auto: 42;
+    }
+
+    .z-auto {
+      z-index: var(--z-index-auto);
+    }"
+  `)
 })
 
 test('order', async () => {
@@ -1114,6 +1134,46 @@ test('order', async () => {
       'order-none/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --order-first: 1;
+        }
+        @tailwind utilities;
+      `,
+      ['order-first'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --order-first: 1;
+    }
+
+    .order-first {
+      order: var(--order-first);
+    }"
+  `)
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --order-last: -1;
+        }
+        @tailwind utilities;
+      `,
+      ['order-last'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --order-last: -1;
+    }
+
+    .order-last {
+      order: var(--order-last);
+    }"
+  `)
 })
 
 test('col', async () => {
@@ -1176,6 +1236,26 @@ test('col', async () => {
       'col-span-[var(--my-variable)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-column-auto: 5;
+        }
+        @tailwind utilities;
+      `,
+      ['col-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-column-auto: 5;
+    }
+
+    .col-auto {
+      grid-column: var(--grid-column-auto);
+    }"
+  `)
 })
 
 test('col-start', async () => {
@@ -1237,6 +1317,26 @@ test('col-start', async () => {
       '-col-start-4/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-column-start-auto: 7;
+        }
+        @tailwind utilities;
+      `,
+      ['col-start-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-column-start-auto: 7;
+    }
+
+    .col-start-auto {
+      grid-column-start: var(--grid-column-start-auto);
+    }"
+  `)
 })
 
 test('col-end', async () => {
@@ -1291,6 +1391,26 @@ test('col-end', async () => {
       '-col-end-4/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-column-end-auto: 3;
+        }
+        @tailwind utilities;
+      `,
+      ['col-end-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-column-end-auto: 3;
+    }
+
+    .col-end-auto {
+      grid-column-end: var(--grid-column-end-auto);
+    }"
+  `)
 })
 
 test('row', async () => {
@@ -1353,6 +1473,26 @@ test('row', async () => {
       'row-span-[var(--my-variable)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-row-auto: 9;
+        }
+        @tailwind utilities;
+      `,
+      ['row-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-row-auto: 9;
+    }
+
+    .row-auto {
+      grid-row: var(--grid-row-auto);
+    }"
+  `)
 })
 
 test('row-start', async () => {
@@ -1414,6 +1554,26 @@ test('row-start', async () => {
       '-row-start-4/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-row-start-auto: 11;
+        }
+        @tailwind utilities;
+      `,
+      ['row-start-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-row-start-auto: 11;
+    }
+
+    .row-start-auto {
+      grid-row-start: var(--grid-row-start-auto);
+    }"
+  `)
 })
 
 test('row-end', async () => {
@@ -1468,6 +1628,26 @@ test('row-end', async () => {
       '-row-end-4/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-row-end-auto: 13;
+        }
+        @tailwind utilities;
+      `,
+      ['row-end-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-row-end-auto: 13;
+    }
+
+    .row-end-auto {
+      grid-row-end: var(--grid-row-end-auto);
+    }"
+  `)
 })
 
 test('float', async () => {
@@ -2422,6 +2602,29 @@ test('line-clamp', async () => {
       'line-clamp-none/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --line-clamp-none: 0;
+        }
+        @tailwind utilities;
+      `,
+      ['line-clamp-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --line-clamp-none: 0;
+    }
+
+    .line-clamp-none {
+      -webkit-line-clamp: var(--line-clamp-none);
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      overflow: hidden;
+    }"
+  `)
 })
 
 test('display', async () => {
@@ -3980,6 +4183,26 @@ test('origin', async () => {
       'origin-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --transform-origin-top: 10px 20px;
+        }
+        @tailwind utilities;
+      `,
+      ['origin-top'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --transform-origin-top: 10px 20px;
+    }
+
+    .origin-top {
+      transform-origin: var(--transform-origin-top);
+    }"
+  `)
 })
 
 test('perspective-origin', async () => {
@@ -4059,6 +4282,27 @@ test('perspective-origin', async () => {
       'perspective-origin-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --perspective-origin-top: 10px 20px;
+        }
+        @tailwind utilities;
+      `,
+      ['perspective-origin-top'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --perspective-origin-top: 10px 20px;
+    }
+
+    .perspective-origin-top {
+      perspective-origin: var(--perspective-origin-top);
+      perspective: var(--perspective-origin-top);
+    }"
+  `)
 })
 
 test('translate', async () => {
@@ -5560,6 +5804,26 @@ test('perspective', async () => {
       'perspective-[456px]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --perspective-none: 400px;
+        }
+        @tailwind utilities;
+      `,
+      ['perspective-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --perspective-none: 400px;
+    }
+
+    .perspective-none {
+      perspective: var(--perspective-none);
+    }"
+  `)
 })
 
 test('cursor', async () => {
@@ -6937,6 +7201,26 @@ test('list', async () => {
       'list-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --list-style-type-none: disc;
+        }
+        @tailwind utilities;
+      `,
+      ['list-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --list-style-type-none: disc;
+    }
+
+    .list-none {
+      list-style-type: var(--list-style-type-none);
+    }"
+  `)
 })
 
 test('list-image', async () => {
@@ -6958,6 +7242,26 @@ test('list-image', async () => {
       'list-image-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --list-style-image-none: url(../foo.png);
+        }
+        @tailwind utilities;
+      `,
+      ['list-image-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --list-style-image-none: url("../foo.png");
+    }
+
+    .list-image-none {
+      list-style-image: var(--list-style-image-none);
+    }"
+  `)
 })
 
 test('appearance', async () => {
@@ -7099,6 +7403,26 @@ test('columns', async () => {
       'columns-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --columns-auto: 3;
+        }
+        @tailwind utilities;
+      `,
+      ['columns-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --columns-auto: 3;
+    }
+
+    .columns-auto {
+      columns: var(--columns-auto);
+    }"
+  `)
 })
 
 test('break-before', async () => {
@@ -7319,6 +7643,26 @@ test('auto-cols', async () => {
       'auto-cols-[2fr]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-auto-columns-auto: 2fr;
+        }
+        @tailwind utilities;
+      `,
+      ['auto-cols-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-auto-columns-auto: 2fr;
+    }
+
+    .auto-cols-auto {
+      grid-auto-columns: var(--grid-auto-columns-auto);
+    }"
+  `)
 })
 
 test('grid-flow', async () => {
@@ -7410,6 +7754,26 @@ test('auto-rows', async () => {
       'auto-rows-[2fr]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-auto-rows-auto: 2fr;
+        }
+        @tailwind utilities;
+      `,
+      ['auto-rows-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-auto-rows-auto: 2fr;
+    }
+
+    .auto-rows-auto {
+      grid-auto-rows: var(--grid-auto-rows-auto);
+    }"
+  `)
 })
 
 test('grid-cols', async () => {
@@ -7459,6 +7823,26 @@ test('grid-cols', async () => {
       'grid-cols-[123]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-template-columns-none: 200px 1fr;
+        }
+        @tailwind utilities;
+      `,
+      ['grid-cols-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-template-columns-none: 200px 1fr;
+    }
+
+    .grid-cols-none {
+      grid-template-columns: var(--grid-template-columns-none);
+    }"
+  `)
 })
 
 test('grid-rows', async () => {
@@ -7508,6 +7892,26 @@ test('grid-rows', async () => {
       'grid-rows-[123]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --grid-template-rows-none: 200px 1fr;
+        }
+        @tailwind utilities;
+      `,
+      ['grid-rows-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --grid-template-rows-none: 200px 1fr;
+    }
+
+    .grid-rows-none {
+      grid-template-rows: var(--grid-template-rows-none);
+    }"
+  `)
 })
 
 test('flex-direction', async () => {
@@ -9771,6 +10175,25 @@ test('rounded', async () => {
     }"
   `)
   expect(
+    await compileCss(
+      css`
+        @theme {
+          --radius-full: 99999px;
+        }
+        @tailwind utilities;
+      `,
+      ['rounded-full'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --radius-full: 99999px;
+    }
+
+    .rounded-full {
+      border-radius: var(--radius-full);
+    }"
+  `)
+  expect(
     await run([
       '-rounded',
       '-rounded-full',
@@ -9945,15 +10368,11 @@ test('rounded-t', async () => {
     }
 
     .rounded-t-full {
-      border-top-left-radius: 3.40282e38px;
-      border-top-right-radius: 3.40282e38px;
       border-top-left-radius: var(--radius-full);
       border-top-right-radius: var(--radius-full);
     }
 
     .rounded-t-none {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
       border-top-left-radius: var(--radius-none);
       border-top-right-radius: var(--radius-none);
     }
@@ -10012,15 +10431,11 @@ test('rounded-r', async () => {
     }
 
     .rounded-r-full {
-      border-top-right-radius: 3.40282e38px;
-      border-bottom-right-radius: 3.40282e38px;
       border-top-right-radius: var(--radius-full);
       border-bottom-right-radius: var(--radius-full);
     }
 
     .rounded-r-none {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
       border-top-right-radius: var(--radius-none);
       border-bottom-right-radius: var(--radius-none);
     }
@@ -10079,15 +10494,11 @@ test('rounded-b', async () => {
     }
 
     .rounded-b-full {
-      border-bottom-right-radius: 3.40282e38px;
-      border-bottom-left-radius: 3.40282e38px;
       border-bottom-right-radius: var(--radius-full);
       border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-b-none {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
       border-bottom-right-radius: var(--radius-none);
       border-bottom-left-radius: var(--radius-none);
     }
@@ -10146,15 +10557,11 @@ test('rounded-l', async () => {
     }
 
     .rounded-l-full {
-      border-top-left-radius: 3.40282e38px;
-      border-bottom-left-radius: 3.40282e38px;
       border-top-left-radius: var(--radius-full);
       border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-l-none {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
       border-top-left-radius: var(--radius-none);
       border-bottom-left-radius: var(--radius-none);
     }
@@ -10443,12 +10850,10 @@ test('rounded-tl', async () => {
     }
 
     .rounded-tl-full {
-      border-top-left-radius: 3.40282e38px;
       border-top-left-radius: var(--radius-full);
     }
 
     .rounded-tl-none {
-      border-top-left-radius: 0;
       border-top-left-radius: var(--radius-none);
     }
 
@@ -10503,12 +10908,10 @@ test('rounded-tr', async () => {
     }
 
     .rounded-tr-full {
-      border-top-right-radius: 3.40282e38px;
       border-top-right-radius: var(--radius-full);
     }
 
     .rounded-tr-none {
-      border-top-right-radius: 0;
       border-top-right-radius: var(--radius-none);
     }
 
@@ -10563,12 +10966,10 @@ test('rounded-br', async () => {
     }
 
     .rounded-br-full {
-      border-bottom-right-radius: 3.40282e38px;
       border-bottom-right-radius: var(--radius-full);
     }
 
     .rounded-br-none {
-      border-bottom-right-radius: 0;
       border-bottom-right-radius: var(--radius-none);
     }
 
@@ -10623,12 +11024,10 @@ test('rounded-bl', async () => {
     }
 
     .rounded-bl-full {
-      border-bottom-left-radius: 3.40282e38px;
       border-bottom-left-radius: var(--radius-full);
     }
 
     .rounded-bl-none {
-      border-bottom-left-radius: 0;
       border-bottom-left-radius: var(--radius-none);
     }
 
@@ -20025,6 +20424,26 @@ test('object', async () => {
       'object-top/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --object-position-center: top left;
+        }
+        @tailwind utilities;
+      `,
+      ['object-center'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --object-position-center: top left;
+    }
+
+    .object-center {
+      object-position: var(--object-position-center);
+    }"
+  `)
 })
 
 test('p', async () => {
@@ -21327,6 +21746,26 @@ test('animate', async () => {
       'animate-not-found/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --animate-none: bounce 1s infinite;
+        }
+        @tailwind utilities;
+      `,
+      ['animate-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --animate-none: bounce 1s infinite;
+    }
+
+    .animate-none {
+      animation: var(--animate-none);
+    }"
+  `)
 })
 
 test('filter', async () => {
@@ -21756,6 +22195,113 @@ test('filter', async () => {
       'sepia-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --blur-none: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['blur-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-blur: initial;
+          --tw-brightness: initial;
+          --tw-contrast: initial;
+          --tw-grayscale: initial;
+          --tw-hue-rotate: initial;
+          --tw-invert: initial;
+          --tw-opacity: initial;
+          --tw-saturate: initial;
+          --tw-sepia: initial;
+          --tw-drop-shadow: initial;
+          --tw-drop-shadow-color: initial;
+          --tw-drop-shadow-alpha: 100%;
+          --tw-drop-shadow-size: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --blur-none: 2px;
+    }
+
+    .blur-none {
+      --tw-blur: blur(var(--blur-none));
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    @property --tw-blur {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-brightness {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-contrast {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-grayscale {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-hue-rotate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-invert {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-opacity {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-saturate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-sepia {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-drop-shadow {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-drop-shadow-color {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-drop-shadow-alpha {
+      syntax: "<percentage>";
+      inherits: false;
+      initial-value: 100%;
+    }
+
+    @property --tw-drop-shadow-size {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
 })
 
 test('backdrop-filter', async () => {
@@ -22136,6 +22682,89 @@ test('backdrop-filter', async () => {
       'backdrop-sepia-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --backdrop-blur-none: 2px;
+        }
+        @tailwind utilities;
+      `,
+      ['backdrop-blur-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-backdrop-blur: initial;
+          --tw-backdrop-brightness: initial;
+          --tw-backdrop-contrast: initial;
+          --tw-backdrop-grayscale: initial;
+          --tw-backdrop-hue-rotate: initial;
+          --tw-backdrop-invert: initial;
+          --tw-backdrop-opacity: initial;
+          --tw-backdrop-saturate: initial;
+          --tw-backdrop-sepia: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --backdrop-blur-none: 2px;
+    }
+
+    .backdrop-blur-none {
+      --tw-backdrop-blur: blur(var(--backdrop-blur-none));
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    @property --tw-backdrop-blur {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-brightness {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-contrast {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-grayscale {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-hue-rotate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-invert {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-opacity {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-saturate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-sepia {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
 })
 
 test('transition', async () => {
@@ -22195,9 +22824,6 @@ test('transition', async () => {
     }
 
     .transition-opacity {
-      transition-property: opacity;
-      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-      transition-duration: var(--tw-duration, var(--default-transition-duration));
       transition-property: var(--transition-property-opacity);
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
@@ -22283,6 +22909,28 @@ test('transition', async () => {
       'transition-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --transition-property-colors: transform;
+        }
+        @tailwind utilities;
+      `,
+      ['transition-colors'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --transition-property-colors: transform;
+    }
+
+    .transition-colors {
+      transition-property: var(--transition-property-colors);
+      transition-timing-function: var(--tw-ease, ease);
+      transition-duration: var(--tw-duration, 0s);
+    }"
+  `)
 })
 
 test('transition-behavior', async () => {
@@ -22426,6 +23074,40 @@ test('ease', async () => {
       'ease-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --ease-linear: steps(4);
+        }
+        @tailwind utilities;
+      `,
+      ['ease-linear'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --ease-linear: steps(4);
+    }
+
+    .ease-linear {
+      --tw-ease: var(--ease-linear);
+      transition-timing-function: var(--ease-linear);
+    }
+
+    @property --tw-ease {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
 })
 
 test('will-change', async () => {
@@ -22683,6 +23365,40 @@ test('leading', async () => {
       'leading-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --leading-none: 2;
+        }
+        @tailwind utilities;
+      `,
+      ['leading-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --leading-none: 2;
+    }
+
+    .leading-none {
+      --tw-leading: var(--leading-none);
+      line-height: var(--leading-none);
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
 })
 
 test('tracking', async () => {
@@ -23410,6 +24126,26 @@ test('underline-offset', async () => {
       '-underline-offset-[var(--value)]/foo',
     ]),
   ).toEqual('')
+
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --text-underline-offset-auto: 4px;
+        }
+        @tailwind utilities;
+      `,
+      ['underline-offset-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --text-underline-offset-auto: 4px;
+    }
+
+    .underline-offset-auto {
+      text-underline-offset: var(--text-underline-offset-auto);
+    }"
+  `)
 })
 
 test('text', async () => {
