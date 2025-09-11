@@ -42,6 +42,7 @@
     "jiti": "^2.5.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.18",
+    "picocolors": "^1.1.1",
     "source-map-js": "^1.2.1",
     "tailwindcss": "workspace:*"
   }

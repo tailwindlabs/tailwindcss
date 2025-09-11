@@ -1,6 +1,7 @@
 import remapping from '@jridgewell/remapping'
 import { Features, transform } from 'lightningcss'
 import MagicString from 'magic-string'
+import pc from 'picocolors'
 
 export interface OptimizeOptions {
   /**
@@ -59,6 +60,49 @@ export function optimize(
   // nesting is applied. This creates a more optimized output.
   let result = optimize(Buffer.from(input), map)
   map = result.map?.toString()
+
+  // Because of `errorRecovery: true`, there could be warnings, so let's let the
+  // user know about them.
+  if (process.env.NODE_ENV !== 'test' && result.warnings.length > 0) {
+    let lines = input.split('\n')
+
+    let output = [
+      `Found ${result.warnings.length} ${result.warnings.length === 1 ? 'warning' : 'warnings'} while optimizing generated CSS:`,
+    ]
+
+    for (let [idx, warning] of result.warnings.entries()) {
+      output.push('')
+      if (result.warnings.length > 1) {
+        output.push(`Issue #${idx + 1}:`)
+      }
+
+      let context = 2
+
+      let start = Math.max(0, warning.loc.line - context - 1)
+      let end = Math.min(lines.length, warning.loc.line + context)
+      let gutterWidth = (warning.loc.line + context).toString().length
+
+      let snippet = lines.slice(start, end).map((line, idx) => {
+        if (start + idx + 1 === warning.loc.line) {
+          return `${pc.dim(`${(start + idx + 1).toString().padStart(gutterWidth, ' ')} \u2502`)} ${line}`
+        } else {
+          return pc.dim(`${(start + idx + 1).toString().padStart(gutterWidth, ' ')} \u2502 ${line}`)
+        }
+      })
+
+      snippet.splice(
+        warning.loc.line - start,
+        0,
+        `${' '.repeat(gutterWidth)} ${pc.dim('\u2506')}${' '.repeat(warning.loc.column - 1)} ${pc.yellow(`${pc.dim('^--')} ${warning.message}`)}`,
+        `${' '.repeat(gutterWidth)} ${pc.dim('\u2506')}`,
+      )
+
+      output.push(...snippet)
+    }
+    output.push('')
+
+    console.warn(output.join('\n'))
+  }
 
   result = optimize(result.code, map)
   map = result.map?.toString()
