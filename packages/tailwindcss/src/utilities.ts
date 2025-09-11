@@ -659,7 +659,6 @@ export function createUtilities(theme: Theme) {
   })
 
   suggest('z', () => [
-    { values: ['auto'], valueThemeKeys: ['--z-index'] },
     {
       supportsNegative: true,
       values: ['0', '10', '20', '30', '40', '50'],
@@ -685,7 +684,6 @@ export function createUtilities(theme: Theme) {
   })
 
   suggest('order', () => [
-    { values: ['first', 'last'], valueThemeKeys: ['--order'] },
     {
       supportsNegative: true,
       values: Array.from({ length: 12 }, (_, i) => `${i + 1}`),
@@ -4579,13 +4577,6 @@ export function createUtilities(theme: Theme) {
       },
     })
 
-    suggest('transition', () => [
-      {
-        values: ['none', 'all', 'colors', 'opacity', 'shadow', 'transform'],
-        valueThemeKeys: ['--transition-property'],
-      },
-    ])
-
     staticUtility('transition-discrete', [['transition-behavior', 'allow-discrete']])
     staticUtility('transition-normal', [['transition-behavior', 'normal']])
 
@@ -4675,13 +4666,6 @@ export function createUtilities(theme: Theme) {
         ],
       },
     })
-
-    suggest('ease', () => [
-      {
-        values: ['initial', 'linear'],
-        valueThemeKeys: ['--ease'],
-      },
-    ])
   }
 
   staticUtility('will-change-auto', [['will-change', 'auto']])
@@ -4777,6 +4761,7 @@ export function createUtilities(theme: Theme) {
           decl('line-height', '1'),
         ],
       },
+      Fv,
     },
   )
 
