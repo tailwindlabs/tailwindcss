@@ -877,6 +877,109 @@ test('custom breakpoint', async () => {
   `)
 })
 
+test('max-breakpoint (desktop-first)', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --max-breakpoint-phone: 501px;
+          --max-breakpoint-tablet: 1001px;
+        }
+        @tailwind utilities;
+      `,
+      ['phone:flex-col', 'tablet:flex-wrap'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@media not all and (min-width: 1001px) {
+      .tablet\\:flex-wrap {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media not all and (min-width: 501px) {
+      .phone\\:flex-col {
+        flex-direction: column;
+      }
+    }"
+  `)
+})
+
+test('max-breakpoint ordering', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          /* Test ordering - larger values should come first in DESC order */
+          --max-breakpoint-mobile: 600px;
+          --max-breakpoint-tablet: 1200px;
+          --max-breakpoint-desktop: 1800px;
+        }
+        @tailwind utilities;
+      `,
+      ['mobile:flex', 'tablet:flex', 'desktop:flex'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@media not all and (min-width: 1800px) {
+      .desktop\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not all and (min-width: 1200px) {
+      .tablet\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not all and (min-width: 600px) {
+      .mobile\\:flex {
+        display: flex;
+      }
+    }"
+  `)
+})
+
+test('mixed breakpoints and max-breakpoints', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --breakpoint-sm: 640px;
+          --breakpoint-md: 768px;
+          --max-breakpoint-phone: 501px;
+          --max-breakpoint-tablet: 1001px;
+        }
+        @tailwind utilities;
+      `,
+      ['sm:flex', 'phone:flex-col', 'md:grid', 'tablet:hidden'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@media (min-width: 640px) {
+      .sm\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .md\\:grid {
+        display: grid;
+      }
+    }
+
+    @media not all and (min-width: 1001px) {
+      .tablet\\:hidden {
+        display: none;
+      }
+    }
+
+    @media not all and (min-width: 501px) {
+      .phone\\:flex-col {
+        flex-direction: column;
+      }
+    }"
+  `)
+})
+
 test('max-*', async () => {
   expect(
     await compileCss(

@@ -1019,6 +1019,55 @@ export function createVariants(theme: Theme): Variants {
       )
     }
 
+    // Max breakpoints (desktop-first)
+    {
+      let maxBreakpoints = theme.namespace('--max-breakpoint')
+      let resolvedMaxBreakpoints = new DefaultMap((variant: Variant) => {
+        switch (variant.kind) {
+          case 'static': {
+            return theme.resolveValue(variant.root, ['--max-breakpoint']) ?? null
+          }
+
+          case 'functional': {
+            if (!variant.value || variant.modifier) return null
+
+            let value: string | null = null
+
+            if (variant.value.kind === 'arbitrary') {
+              value = variant.value.value
+            } else if (variant.value.kind === 'named') {
+              value = theme.resolveValue(variant.value.value, ['--max-breakpoint'])
+            }
+
+            if (!value) return null
+            if (value.includes('var(')) return null
+
+            return value
+          }
+          case 'arbitrary':
+          case 'compound':
+            return null
+        }
+      })
+
+      variants.group(
+        () => {
+          // Registers max-breakpoint variants like `phone`, `tablet`, etc.
+          for (let [key, value] of theme.namespace('--max-breakpoint')) {
+            if (key === null) continue
+            variants.static(
+              key,
+              (ruleNode) => {
+                ruleNode.nodes = [atRule('@media', `(width < ${value})`, ruleNode.nodes)]
+              },
+              { compounds: Compounds.AtRules },
+            )
+          }
+        },
+        (a, z) => compareBreakpointVariants(a, z, 'desc', resolvedMaxBreakpoints),
+      )
+    }
+
     {
       let widths = theme.namespace('--container')
 
