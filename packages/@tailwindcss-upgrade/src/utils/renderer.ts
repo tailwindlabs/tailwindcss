@@ -44,7 +44,7 @@ export function wordWrap(text: string, width: number): string[] {
   // Handle text with newlines by maintaining the newlines, then splitting
   // each line separately.
   if (text.includes('\n')) {
-    return text.split('\n').flatMap((line) => wordWrap(line, width))
+    return text.split('\n').flatMap((line) => (line ? wordWrap(line, width) : ['']))
   }
 
   let words = text.split(' ')
