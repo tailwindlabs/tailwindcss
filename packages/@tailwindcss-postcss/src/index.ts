@@ -11,7 +11,7 @@ import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs'
 import path, { relative } from 'node:path'
-import postcss, { type AcceptedPlugin, type PluginCreator } from 'postcss'
+import type { AcceptedPlugin, PluginCreator, Postcss, Root } from 'postcss'
 import { toCss, type AstNode } from '../../tailwindcss/src/ast'
 import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
@@ -23,13 +23,13 @@ interface CacheEntry {
   compiler: null | ReturnType<typeof compileAst>
   scanner: null | Scanner
   tailwindCssAst: AstNode[]
-  cachedPostCssAst: postcss.Root
-  optimizedPostCssAst: postcss.Root
+  cachedPostCssAst: Root
+  optimizedPostCssAst: Root
   fullRebuildPaths: string[]
 }
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
-function getContextFromCache(inputFile: string, opts: PluginOptions): CacheEntry {
+function getContextFromCache(inputFile: string, opts: PluginOptions, postcss: Postcss): CacheEntry {
   let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
@@ -83,7 +83,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
       {
         postcssPlugin: 'tailwindcss',
-        async Once(root, { result }) {
+        async Once(root, { result, postcss }) {
           using I = new Instrumentation()
 
           let inputFile = result.opts.from ?? ''
@@ -114,7 +114,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.end('Quick bail check')
           }
 
-          let context = getContextFromCache(inputFile, opts)
+          let context = getContextFromCache(inputFile, opts, postcss)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           // Whether this is the first build or not, if it is, then we can
@@ -310,7 +310,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               } else {
                 // Convert our AST to a PostCSS AST
                 DEBUG && I.start('Transform Tailwind CSS AST into PostCSS AST')
-                context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source)
+                context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source, postcss)
                 DEBUG && I.end('Transform Tailwind CSS AST into PostCSS AST')
               }
             }
@@ -349,7 +349,12 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             // We found that throwing the error will cause PostCSS to no longer watch for changes
             // in some situations so we instead log the error and continue with an empty stylesheet.
             console.error(error)
-            root.removeAll()
+
+            if (error && typeof error === 'object' && 'message' in error) {
+              throw root.error(`${error.message}`)
+            }
+
+            throw root.error(`${error}`)
           }
         },
       },
