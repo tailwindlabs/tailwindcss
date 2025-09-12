@@ -80,21 +80,20 @@ export function optimize(
 
       let start = Math.max(0, warning.loc.line - context - 1)
       let end = Math.min(lines.length, warning.loc.line + context)
-      let gutterWidth = (warning.loc.line + context).toString().length
 
       let snippet = lines.slice(start, end).map((line, idx) => {
         if (start + idx + 1 === warning.loc.line) {
-          return `${pc.dim(`${(start + idx + 1).toString().padStart(gutterWidth, ' ')} \u2502`)} ${line}`
+          return `${pc.dim(`\u2502`)} ${line}`
         } else {
-          return pc.dim(`${(start + idx + 1).toString().padStart(gutterWidth, ' ')} \u2502 ${line}`)
+          return pc.dim(`\u2502 ${line}`)
         }
       })
 
       snippet.splice(
         warning.loc.line - start,
         0,
-        `${' '.repeat(gutterWidth)} ${pc.dim('\u2506')}${' '.repeat(warning.loc.column - 1)} ${pc.yellow(`${pc.dim('^--')} ${warning.message}`)}`,
-        `${' '.repeat(gutterWidth)} ${pc.dim('\u2506')}`,
+        `${pc.dim('\u2506')}${' '.repeat(warning.loc.column - 1)} ${pc.yellow(`${pc.dim('^--')} ${warning.message}`)}`,
+        `${pc.dim('\u2506')}`,
       )
 
       output.push(...snippet)
