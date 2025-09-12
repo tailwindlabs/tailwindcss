@@ -91,6 +91,18 @@ describe('is-safe-migration', async () => {
 
     [`function foo(blur, foo)`, 'blur'],
     [`function foo(blur,foo)`, 'blur'],
+
+    // shadcn/ui variants
+    [`<Button variant="outline" />`, 'outline'],
+    [`<Button variant='outline' />`, 'outline'],
+    [`<Button variant={"outline"} />`, 'outline'],
+    [`<Button variant={'outline'} />`, 'outline'],
+    [`function Button({ variant = "outline" }) {}`, 'outline'],
+    [`function Button({ variant = 'outline' }) {}`, 'outline'],
+    [`function Button({ variant="outline" }) {}`, 'outline'],
+    [`function Button({ variant='outline' }) {}`, 'outline'],
+    [`Button({ variant: "outline" })`, 'outline'],
+    [`Button({ variant: 'outline' })`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
