@@ -6,39 +6,9 @@ settings:
 
 catalogs:
   default:
-    '@types/node':
-      specifier: ^20.19.0
-      version: 20.19.1
     lightningcss:
       specifier: 1.30.1
       version: 1.30.1
-    lightningcss-darwin-arm64:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-darwin-x64:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-linux-arm64-gnu:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-linux-arm64-musl:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-linux-x64-gnu:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-linux-x64-musl:
-      specifier: 1.30.1
-      version: 1.30.1
-    lightningcss-win32-x64-msvc:
-      specifier: 1.30.1
-      version: 1.30.1
-    prettier:
-      specifier: 3.5.0
-      version: 3.5.0
-    vite:
-      specifier: ^7.0.0
-      version: 7.0.0
 
 patchedDependencies:
   '@parcel/watcher@2.5.1':
@@ -252,9 +222,6 @@ importers:
       magic-string:
         specifier: ^0.30.18
         version: 0.30.18
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
       source-map-js:
         specifier: ^1.2.1
         version: 1.2.1
@@ -3507,11 +3474,13 @@ packages:
   lightningcss-darwin-arm64@1.30.1:
     resolution: {integrity: sha512-c8JK7hyE65X1MHMN+Viq9n11RRC7hgin3HhYKhrMyaXflk5GVplZ60IxyoVtzILeKr+xAJwg6zK6sjTBJ0FKYQ==}
     engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
     os: [darwin]
 
   lightningcss-darwin-x64@1.30.1:
     resolution: {integrity: sha512-k1EvjakfumAQoTfcXUcHQZhSpLlkAuEkdMBsI/ivWw9hL+7FtilQc0Cy3hrx0AAQrVtQAbMI7YjCgYgvn37PzA==}
     engines: {node: '>= 12.0.0'}
+    cpu: [x64]
     os: [darwin]
 
   lightningcss-freebsd-x64@1.30.1:
@@ -3529,21 +3498,25 @@ packages:
   lightningcss-linux-arm64-gnu@1.30.1:
     resolution: {integrity: sha512-gB72maP8rmrKsnKYy8XUuXi/4OctJiuQjcuqWNlJQ6jZiWqtPvqFziskH3hnajfvKB27ynbVCucKSm2rkQp4Bw==}
     engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-arm64-musl@1.30.1:
     resolution: {integrity: sha512-jmUQVx4331m6LIX+0wUhBbmMX7TCfjF5FoOH6SD1CttzuYlGNVpA7QnrmLxrsub43ClTINfGSYyHe2HWeLl5CQ==}
     engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-x64-gnu@1.30.1:
     resolution: {integrity: sha512-piWx3z4wN8J8z3+O5kO74+yr6ze/dKmPnI7vLqfSqI8bccaTGY5xiSGVIJBDd5K5BHlvVLpUB3S2YCfelyJ1bw==}
     engines: {node: '>= 12.0.0'}
+    cpu: [x64]
     os: [linux]
 
   lightningcss-linux-x64-musl@1.30.1:
     resolution: {integrity: sha512-rRomAK7eIkL+tHY0YPxbc5Dra2gXlI63HL+v1Pdi1a3sC+tJTcFrHX+E86sulgAXeI7rSzDYhPSeHHjqFhqfeQ==}
     engines: {node: '>= 12.0.0'}
+    cpu: [x64]
     os: [linux]
 
   lightningcss-win32-arm64-msvc@1.30.1:
@@ -3555,6 +3528,7 @@ packages:
   lightningcss-win32-x64-msvc@1.30.1:
     resolution: {integrity: sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg==}
     engines: {node: '>= 12.0.0'}
+    cpu: [x64]
     os: [win32]
 
   lightningcss@1.30.1:
