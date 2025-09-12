@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not generate `grid-row` utilities when configuring `grid-row-start` or `grid-row-end` ([#18907](https://github.com/tailwindlabs/tailwindcss/pull/18907))
 - Prevent duplicate CSS when overwriting a static utility with a theme key ([#18056](https://github.com/tailwindlabs/tailwindcss/pull/18056))
 - Do not migrate `variant = 'outline'` during upgrades ([#18922](https://github.com/tailwindlabs/tailwindcss/pull/18922))
+- Show Lightning CSS warnings (if any) when optimizing/minifying ([#18918](https://github.com/tailwindlabs/tailwindcss/pull/18918))
 
 ## [4.1.13] - 2025-09-03
 
