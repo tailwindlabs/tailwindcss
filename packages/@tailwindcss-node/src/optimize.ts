@@ -1,7 +1,6 @@
 import remapping from '@jridgewell/remapping'
 import { Features, transform } from 'lightningcss'
 import MagicString from 'magic-string'
-import pc from 'picocolors'
 
 export interface OptimizeOptions {
   /**
@@ -83,17 +82,17 @@ export function optimize(
 
       let snippet = lines.slice(start, end).map((line, idx) => {
         if (start + idx + 1 === warning.loc.line) {
-          return `${pc.dim(`\u2502`)} ${line}`
+          return `${dim(`\u2502`)} ${line}`
         } else {
-          return pc.dim(`\u2502 ${line}`)
+          return dim(`\u2502 ${line}`)
         }
       })
 
       snippet.splice(
         warning.loc.line - start,
         0,
-        `${pc.dim('\u2506')}${' '.repeat(warning.loc.column - 1)} ${pc.yellow(`${pc.dim('^--')} ${warning.message}`)}`,
-        `${pc.dim('\u2506')}`,
+        `${dim('\u2506')}${' '.repeat(warning.loc.column - 1)} ${yellow(`${dim('^--')} ${warning.message}`)}`,
+        `${dim('\u2506')}`,
       )
 
       output.push(...snippet)
@@ -130,4 +129,12 @@ export function optimize(
     code,
     map,
   }
+}
+
+function dim(str: string) {
+  return `\x1B[2m${str}\x1B[22m`
+}
+
+function yellow(str: string) {
+  return `\x1B[33m${str}\x1B[39m`
 }
