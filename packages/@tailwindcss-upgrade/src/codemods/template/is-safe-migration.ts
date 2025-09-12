@@ -18,6 +18,9 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /x-if=['"]$/,
   /x-show=['"]$/,
   /wire:[^\s]*?$/,
+
+  // shadcn/ui variants
+  /variant\s*[:=]\s*\{?['"`]$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
