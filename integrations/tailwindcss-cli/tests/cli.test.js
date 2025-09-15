@@ -391,6 +391,79 @@ describe('Build command', () => {
     expect(contents).toContain(`/*# sourceMappingURL`)
   })
 
+  test('--postcss supports ESM configs', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      import * as path from 'path'
+      import { createRequire } from 'module'
+      const require = createRequire(import.meta.url)
+
+      export default {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          },
+        ],
+      }
+    `
+
+    await removeFile('./postcss.config.js')
+    await writeInputFile('../postcss.config.mjs', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
+  test('--postcss supports TS configs', async () => {
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = javascript`
+      import * as path from 'path'
+      import { createRequire } from 'module'
+      import type { AcceptedPlugin } from 'postcss'
+      const require = createRequire(import.meta.url)
+
+      export default {
+        map: { inline: true },
+        plugins: [
+          function tailwindcss() {
+            return require(path.resolve('..', '..'))
+          } as AcceptedPlugin,
+        ],
+      }
+    `
+
+    await removeFile('./postcss.config.js')
+    await writeInputFile('../postcss.config.ts', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --postcss`)
+
+    let contents = await readOutputFile('main.css')
+
+    expect(contents).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: 700;
+        }
+      `
+    )
+
+    expect(contents).toContain(`/*# sourceMappingURL`)
+  })
+
   test('postcss-import is supported by default', async () => {
     cleanupFile('src/test.css')
 
