@@ -4,6 +4,7 @@ import type { DesignSystem } from './design-system'
 import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
 
@@ -568,6 +569,10 @@ export function optimizeAst(
 
   newAst = newAst.concat(atRoots)
 
+  // Flatten nested style-rule selectors globally so stringify produces
+  // standards-compliant CSS without nesting.
+  newAst = flattenAst(newAst)
+
   // Fallbacks
   // Create fallback values for usages of the `color-mix(…)` function that reference variables
   // found in the theme config.
@@ -730,6 +735,166 @@ export function optimizeAst(
   }
 
   return newAst
+}
+
+export function flattenAst(ast: AstNode[]): AstNode[] {
+  function splitSelectors(sel: string): string[] {
+    return segment(sel, ',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  }
+
+  function isRelative(child: string): boolean {
+    let s = child.trim()
+    return s.startsWith('>') || s.startsWith('+') || s.startsWith('~')
+  }
+
+  function normalizeSpaces(s: string): string {
+    return s.replace(/\s+/g, ' ').trim()
+  }
+
+  function normalizePseudoElements(s: string): string {
+    // Move known pseudo-elements to the end of the last compound selector
+    let parts = s.split(/(\s*[>+~]\s*)/)
+    let last = parts[parts.length - 1]
+    let pseudos: string[] = []
+    last = last.replace(
+      /:{1,2}(before|after|first-letter|first-line|marker|backdrop|details-content)\b/g,
+      (m) => {
+        pseudos.push(m)
+        return ''
+      },
+    )
+    if (pseudos.length > 0) parts[parts.length - 1] = `${last}${pseudos.join('')}`
+    return parts.join('')
+  }
+
+  function combine(parentList: string[] | null, childList: string[]): string[] {
+    if (!parentList || parentList.length === 0) return childList.map(normalizeSpaces)
+
+    let out: string[] = []
+    for (let p of parentList) {
+      for (let c of childList) {
+        let combined: string
+        if (c.includes('&')) {
+          combined = normalizeSpaces(c.replaceAll('&', p))
+        } else if (isRelative(c)) {
+          combined = normalizeSpaces(`${p} ${c}`)
+        } else {
+          combined = normalizeSpaces(`${p} ${c}`)
+        }
+        out.push(normalizePseudoElements(combined))
+      }
+    }
+    return out
+  }
+
+  function flatten(nodes: AstNode[], parentSelectors: string[] | null): AstNode[] {
+    let result: AstNode[] = []
+
+    for (let node of nodes) {
+      if (node.kind === 'rule') {
+        let selfList = splitSelectors(node.selector)
+        let current = parentSelectors
+          ? combine(parentSelectors, selfList)
+          : selfList.map(normalizeSpaces)
+
+        let decls: AstNode[] = []
+        let nested: AstNode[] = []
+        for (let child of node.nodes) {
+          if (child.kind === 'declaration' || child.kind === 'comment') decls.push(child)
+          else nested.push(child)
+        }
+
+        if (decls.length > 0) {
+          for (let sel of current) {
+            result.push({
+              kind: 'rule',
+              selector: normalizePseudoElements(sel),
+              nodes: decls.slice(),
+            })
+          }
+        }
+
+        for (let child of nested) {
+          if (child.kind === 'rule') {
+            result.push(...flatten([child], current))
+          } else if (child.kind === 'at-rule') {
+            let inner = flatten(child.nodes, current)
+            if (
+              inner.length > 0 ||
+              child.name === '@layer' ||
+              child.name === '@charset' ||
+              child.name === '@custom-media' ||
+              child.name === '@namespace' ||
+              child.name === '@import'
+            ) {
+              result.push({ ...child, nodes: inner })
+            }
+          }
+        }
+      } else if (node.kind === 'at-rule') {
+        let inner = flatten(node.nodes, parentSelectors)
+        if (
+          inner.length > 0 ||
+          node.name === '@layer' ||
+          node.name === '@charset' ||
+          node.name === '@custom-media' ||
+          node.name === '@namespace' ||
+          node.name === '@import'
+        ) {
+          result.push({ ...node, nodes: inner })
+        }
+      } else {
+        result.push(node)
+      }
+    }
+
+    return result
+  }
+
+  function dedupeDecls(nodes: AstNode[]): AstNode[] {
+    let seen = new Set<string>()
+    let out: AstNode[] = []
+    for (let n of nodes) {
+      if (n.kind !== 'declaration') {
+        out.push(n)
+        continue
+      }
+      let key = `${n.property}\u0001${n.value ?? ''}\u0001${n.important ? '!' : ''}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push(n)
+    }
+    return out
+  }
+
+  function mergeRules(nodes: AstNode[]): AstNode[] {
+    let result: AstNode[] = []
+    let bySelector = new Map<string, StyleRule>()
+
+    for (let node of nodes) {
+      if (node.kind === 'rule') {
+        let existing = bySelector.get(node.selector)
+        if (existing) {
+          existing.nodes = dedupeDecls(existing.nodes.concat(node.nodes))
+          continue
+        }
+        let copy: StyleRule = { ...node, nodes: dedupeDecls(node.nodes.slice()) }
+        bySelector.set(copy.selector, copy)
+        result.push(copy)
+      } else if (node.kind === 'at-rule') {
+        let mergedChildren = mergeRules(node.nodes)
+        result.push({ ...node, nodes: mergedChildren })
+      } else {
+        result.push(node)
+      }
+    }
+
+    return result
+  }
+
+  return mergeRules(flatten(ast, null))
 }
 
 export function toCss(ast: AstNode[], track?: boolean) {

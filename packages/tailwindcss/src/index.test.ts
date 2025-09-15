@@ -2,7 +2,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile, Features, Polyfills } from '.'
+import { flattenAst, toCss as toCssAst } from './ast'
 import type { PluginAPI } from './compat/plugin-api'
+import * as CSS from './css-parser'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
 
@@ -5964,5 +5966,151 @@ describe('feature detection', () => {
     // We see @tailwind utilities but because of @reference it is ignored
     expect(compiler.features & Features.AtImport).toBeTruthy()
     expect(compiler.features & Features.Utilities).toBeFalsy()
+  })
+})
+
+describe('CSS flattening', () => {
+  it('pseudo-element last: &::before:hover -> :hover::before', () => {
+    let ast = CSS.parse(css`
+      .btn {
+        &::before:hover {
+          content: '';
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".btn:hover::before {\n  content: '';\n}\n"
+    `)
+  })
+
+  it('selector-list cross product (parent × child)', () => {
+    let ast = CSS.parse(css`
+      .a,
+      .b {
+        &:hover,
+        &:focus {
+          opacity: 0.5;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a:hover {\n  opacity: 0.5;\n}\n.a:focus {\n  opacity: 0.5;\n}\n.b:hover {\n  opacity: 0.5;\n}\n.b:focus {\n  opacity: 0.5;\n}\n"
+    `)
+  })
+
+  it('descendant join when & is omitted', () => {
+    let ast = CSS.parse(css`
+      .a,
+      .b {
+        .child,
+        .c2 {
+          color: blue;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a .child {\n  color: blue;\n}\n.a .c2 {\n  color: blue;\n}\n.b .child {\n  color: blue;\n}\n.b .c2 {\n  color: blue;\n}\n"
+    `)
+  })
+
+  it('relative combinators (>, +, ~)', () => {
+    let ast = CSS.parse(css`
+      .a {
+        > .b,
+        + .c,
+        ~ .d {
+          color: red;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a > .b {\n  color: red;\n}\n.a + .c {\n  color: red;\n}\n.a ~ .d {\n  color: red;\n}\n"
+    `)
+  })
+
+  it('multiple &: & + & over lists', () => {
+    let ast = CSS.parse(css`
+      .a,
+      .b {
+        & + & {
+          color: green;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a + .a {
+        color: green;
+      }
+      .b + .b {
+        color: green;
+      }
+      "
+    `)
+  })
+
+  it('preserves :is/:where groupings', () => {
+    let ast = CSS.parse(css`
+      .a,
+      .b {
+        &:is(:hover, :focus) {
+          opacity: 0.5;
+        }
+        :where(.x, .y) {
+          color: red;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a:is(:hover, :focus) {\n  opacity: 0.5;\n}\n.b:is(:hover, :focus) {\n  opacity: 0.5;\n}\n.a :where(.x, .y) {\n  color: red;\n}\n.b :where(.x, .y) {\n  color: red;\n}\n"
+    `)
+  })
+
+  it('combines duplicate rules and de-dupes declarations', () => {
+    let ast = CSS.parse(css`
+      .a {
+        & {
+          color: red;
+          color: red;
+        }
+        & {
+          background: blue;
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      ".a {\n  color: red;\n  background: blue;\n}\n"
+    `)
+  })
+
+  it('nested @media wrappers preserved', () => {
+    let ast = CSS.parse(css`
+      .a,
+      .b {
+        @media (min-width: 768px) {
+          &:hover {
+            color: red;
+          }
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      "@media (min-width: 768px) {
+        .a:hover {
+          color: red;
+        }
+        .b:hover {
+          color: red;
+        }
+      }
+      "
+    `)
   })
 })
