@@ -34,3 +34,97 @@ For help, discussion about best practices, or feature ideas:
 ## Contributing
 
 If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindcss/tailwindcss/blob/next/.github/CONTRIBUTING.md) **before submitting a pull request**.
+
+---
+
+## `@tailwindcss/postcss` plugin API
+
+### Changing where the plugin searches for source files
+
+You can use the `base` option (defaults to the current working directory) to change the directory in which the plugin searches for source files:
+
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
+    base: path.resolve(__dirname, "./path)
+  })
+ ]
+}
+```
+
+### Enabling or disabling Lightning CSS
+
+By default, this plugin detects whether or not the CSS is being built for production by checking the `NODE_ENV` environment variable. When building for production Lightning CSS will be enabled otherwise it is disabled.
+
+If you want to always enable or disable Lightning CSS the `optimize` option may be used:
+
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
+    // Disables Lightning CSS
+    optimize: false,
+
+    // Disables Lightning CSS
+    optimize: true,
+  })
+ ]
+}
+```
+
+You may also pass options to `optimize` to enable Lighting CSS but prevent minification:
+
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
+    // Enables Lightning CSS but disables minification
+    optimize: { minify: false },
+  })
+ ]
+}
+```
+
+### Enabling or disabling `url(…)` rewriting
+
+Our PostCSS plugin can rewrite `url(…)`s for you since it also handles `@import` (no `postcss-import` is needed). This feature is enabled by default.
+
+In some situations the bundler or framework you're using may provide this feature itself. In this case you can set `transformAssetUrls` to `false` to disable this feature:
+
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
+    // Disable `url(…)` rewriting
+    transformAssetUrls: false,
+
+    // Enable `url(…)` rewriting (the default)
+    transformAssetUrls: true,
+  })
+ ]
+}
+```
+
+You may also pass options to `optimize` to enable Lighting CSS but prevent minification:
+
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
+    // Enables Lightning CSS but disables minification
+    optimize: { minify: false },
+  })
+ ]
+}
+```
