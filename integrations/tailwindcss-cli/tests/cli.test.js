@@ -207,6 +207,52 @@ describe('Build command', () => {
     )
   })
 
+  test('configs support import.meta', async () => {
+    // Skip this test in Node 18 as this only works with
+    // `require(esm)` in Node 20.19+
+    if (process.versions.node.startsWith('18.')) {
+      expect(true).toBe(true)
+      return
+    }
+
+    await writeInputFile('index.html', html`<div class="font-bold"></div>`)
+
+    let customConfig = `
+      console.log(import.meta.url)
+      console.log(import.meta.resolve('./tailwind.config.mjs'))
+      export default ${JSON.stringify(
+        {
+          content: ['./src/index.html'],
+          theme: {
+            extend: {
+              fontWeight: {
+                bold: 'BOLD',
+              },
+            },
+          },
+          corePlugins: {
+            preflight: false,
+          },
+          plugins: [],
+        },
+        null,
+        2
+      )}
+    `
+
+    await writeInputFile('../tailwind.config.mjs', customConfig)
+
+    await $(`${EXECUTABLE} --output ./dist/main.css --config ./tailwind.config.mjs`)
+
+    expect(await readOutputFile('main.css')).toIncludeCss(
+      css`
+        .font-bold {
+          font-weight: BOLD;
+        }
+      `
+    )
+  })
+
   test('--content', async () => {
     await writeInputFile('other.html', html`<div class="font-bold"></div>`)
 
