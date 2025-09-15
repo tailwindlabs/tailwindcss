@@ -31,7 +31,7 @@ jobs:
           - vite
           - webpack-4
           - webpack-5
-        node-version: [18]
+        node-version: [18, 20]
       fail-fast: false
 
     steps:
