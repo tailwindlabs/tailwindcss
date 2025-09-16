@@ -43,10 +43,13 @@ async function loadPostCssPlugins(customPostCssPath) {
           config.plugins = []
         }
 
+        // We have to await these because in v5 and v6 of postcss-load-config
+        // these functions return promises while they don't in v4. Awaiting a
+        // non-promise is basically a no-op so this is safe to do.
         return {
           file,
-          plugins: loadPlugins(config, file),
-          options: loadOptions(config, file),
+          plugins: await loadPlugins(config, file),
+          options: await loadOptions(config, file),
         }
       })()
     : await postcssrc()

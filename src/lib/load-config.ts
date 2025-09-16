@@ -35,23 +35,8 @@ export function loadConfig(path: string): Config {
   let config = (function () {
     if (!path) return {}
 
-    // Always use jiti for now. There is a a bug that occurs in Node v22.12+
-    // where imported files return invalid results
-    return lazyJiti()(path)
-
-    // Always use jiti for ESM or TS files
-    if (
-      path &&
-      (path.endsWith('.mjs') ||
-        path.endsWith('.ts') ||
-        path.endsWith('.cts') ||
-        path.endsWith('.mts'))
-    ) {
-      return lazyJiti()(path)
-    }
-
     try {
-      return path ? require(path) : {}
+      return require(path)
     } catch {
       return lazyJiti()(path)
     }
