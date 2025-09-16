@@ -6361,7 +6361,9 @@ function alphaReplacedShadowProperties(
   if (requiresFallback) {
     return [
       decl(property, applyPrefix(replaceShadowColors(value, varInjector))),
-      rule('@supports (color: lab(from red l a b))', [decl(property, applyPrefix(replacedValue))]),
+      rule('@supports (color: lab(from red l a b))', [
+        rule('&', [decl(property, applyPrefix(replacedValue))]),
+      ]),
     ]
   } else {
     return [decl(property, applyPrefix(replacedValue))]
@@ -6412,7 +6414,9 @@ function alphaReplacedDropShadowProperties(
             .map((value) => `drop-shadow(${replaceShadowColors(value, varInjector)})`)
             .join(' '),
       ),
-      rule('@supports (color: lab(from red l a b))', [decl(property, prefix + replacedValue)]),
+      rule('@supports (color: lab(from red l a b))', [
+        rule('&', [decl(property, prefix + replacedValue)]),
+      ]),
     ]
   } else {
     return [decl(property, prefix + replacedValue)]

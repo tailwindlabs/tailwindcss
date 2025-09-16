@@ -569,10 +569,6 @@ export function optimizeAst(
 
   newAst = newAst.concat(atRoots)
 
-  // Flatten nested style-rule selectors globally so stringify produces
-  // standards-compliant CSS without nesting.
-  newAst = flattenAst(newAst)
-
   // Fallbacks
   // Create fallback values for usages of the `color-mix(…)` function that reference variables
   // found in the theme config.
@@ -667,7 +663,11 @@ export function optimizeAst(
           ...declaration,
           value: ValueParser.toCss(ast),
         }
-        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [declaration])
+        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [
+          // Keep the original declaration behind a `@supports` rule and ensure
+          // it remains scoped to the current selector by wrapping it in `&`.
+          rule('&', [declaration]),
+        ])
         colorMixQuery.src = declaration.src
         parent.splice(idx, 1, fallback, colorMixQuery)
       }
@@ -734,6 +734,12 @@ export function optimizeAst(
     }
   }
 
+  // Flatten nested style-rule selectors globally so stringify produces
+  // standards-compliant CSS without nesting. This must run after we insert
+  // polyfills that depend on the original parent/child arrays created during
+  // transformation, otherwise we would be mutating stale arrays.
+  newAst = flattenAst(newAst)
+
   return newAst
 }
 
@@ -799,28 +805,36 @@ export function flattenAst(ast: AstNode[]): AstNode[] {
           ? combine(parentSelectors, selfList)
           : selfList.map(normalizeSpaces)
 
-        let decls: AstNode[] = []
-        let nested: AstNode[] = []
-        for (let child of node.nodes) {
-          if (child.kind === 'declaration' || child.kind === 'comment') decls.push(child)
-          else nested.push(child)
-        }
-
-        if (decls.length > 0) {
+        let bufferDecls: AstNode[] = []
+        let flush = () => {
+          if (bufferDecls.length === 0) return
           for (let sel of current) {
             result.push({
               kind: 'rule',
               selector: normalizePseudoElements(sel),
-              nodes: decls.slice(),
+              nodes: bufferDecls.slice(),
             })
           }
+          bufferDecls = []
         }
 
-        for (let child of nested) {
+        for (let child of node.nodes) {
+          if (child.kind === 'declaration' || child.kind === 'comment') {
+            bufferDecls.push(child)
+            continue
+          }
+
+          // We hit a nested block; flush accumulated decls first to preserve order
+          flush()
+
           if (child.kind === 'rule') {
             result.push(...flatten([child], current))
           } else if (child.kind === 'at-rule') {
-            let inner = flatten(child.nodes, current)
+            // Ensure declarations inside nested at-rules remain scoped to the
+            // current selector by first wrapping them in a synthetic rule and
+            // then flattening. This prevents emitting invalid CSS like
+            // `@media{ color:red }` without a selector.
+            let inner = flatten([styleRule('&', child.nodes)], current)
             if (
               inner.length > 0 ||
               child.name === '@layer' ||
@@ -833,6 +847,9 @@ export function flattenAst(ast: AstNode[]): AstNode[] {
             }
           }
         }
+
+        // Flush remaining decls after processing nested children
+        flush()
       } else if (node.kind === 'at-rule') {
         let inner = flatten(node.nodes, parentSelectors)
         if (
@@ -871,6 +888,9 @@ export function flattenAst(ast: AstNode[]): AstNode[] {
 
   function mergeRules(nodes: AstNode[]): AstNode[] {
     let result: AstNode[] = []
+    // Only merge rules within contiguous segments so we don't reorder
+    // content across at-rule boundaries (e.g. keep rules before/after
+    // an intervening @supports or @media block separate).
     let bySelector = new Map<string, StyleRule>()
 
     for (let node of nodes) {
@@ -886,6 +906,9 @@ export function flattenAst(ast: AstNode[]): AstNode[] {
       } else if (node.kind === 'at-rule') {
         let mergedChildren = mergeRules(node.nodes)
         result.push({ ...node, nodes: mergedChildren })
+        // Reset the merge cache across at-rule boundaries to preserve
+        // ordering of selectors before/after the block.
+        bySelector = new Map()
       } else {
         result.push(node)
       }
@@ -894,7 +917,84 @@ export function flattenAst(ast: AstNode[]): AstNode[] {
     return result
   }
 
-  return mergeRules(flatten(ast, null))
+  function canRecombine(nodes: AstNode[]): boolean {
+    for (let n of nodes) {
+      if (n.kind !== 'declaration' && n.kind !== 'comment') return false
+    }
+    return true
+  }
+
+  function fingerprint(nodes: AstNode[]): string | null {
+    if (!canRecombine(nodes)) return null
+    let parts: string[] = []
+    for (let n of nodes) {
+      if (n.kind === 'declaration') {
+        parts.push(`d\u0001${n.property}\u0001${n.value ?? ''}\u0001${n.important ? '!' : ''}`)
+      } else if (n.kind === 'comment') {
+        parts.push(`c\u0001${n.value}`)
+      }
+    }
+    return parts.join('\u0002')
+  }
+
+  function recombineAdjacentRules(nodes: AstNode[]): AstNode[] {
+    let out: AstNode[] = []
+    for (let node of nodes) {
+      if (node.kind === 'at-rule') {
+        let mergedChildren = recombineAdjacentRules(node.nodes)
+
+        // Merge adjacent conditional at-rules with identical name/params
+        // to reduce duplication like:
+        //   @media foo { … }
+        //   @media foo { … }
+        // becomes:
+        //   @media foo { … … }
+        function canMergeAtRule(name: string) {
+          return name === '@media' || name === '@supports' || name === '@container'
+        }
+
+        if (
+          out.length > 0 &&
+          out[out.length - 1].kind === 'at-rule' &&
+          (out[out.length - 1] as AtRule).name === node.name &&
+          (out[out.length - 1] as AtRule).params === node.params &&
+          canMergeAtRule(node.name)
+        ) {
+          let prev = out[out.length - 1] as AtRule
+          prev.nodes = recombineAdjacentRules(prev.nodes.concat(mergedChildren))
+          continue
+        }
+
+        out.push({ ...node, nodes: mergedChildren })
+        continue
+      }
+
+      if (node.kind !== 'rule') {
+        out.push(node)
+        continue
+      }
+
+      let fp = fingerprint(node.nodes)
+      if (
+        fp &&
+        out.length > 0 &&
+        out[out.length - 1].kind === 'rule' &&
+        fingerprint((out[out.length - 1] as StyleRule).nodes) === fp
+      ) {
+        let prev = out[out.length - 1] as StyleRule
+        prev.selector = `${prev.selector}, ${node.selector}`
+        continue
+      }
+
+      out.push(node)
+    }
+    return out
+  }
+
+  let flattened = flatten(ast, null)
+  let merged = mergeRules(flattened)
+  let recombined = recombineAdjacentRules(merged)
+  return recombined
 }
 
 export function toCss(ast: AstNode[], track?: boolean) {

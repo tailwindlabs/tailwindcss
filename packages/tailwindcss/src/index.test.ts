@@ -5996,7 +5996,10 @@ describe('CSS flattening', () => {
     `)
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
-      ".a:hover {\n  opacity: 0.5;\n}\n.a:focus {\n  opacity: 0.5;\n}\n.b:hover {\n  opacity: 0.5;\n}\n.b:focus {\n  opacity: 0.5;\n}\n"
+      ".a:hover, .a:focus, .b:hover, .b:focus {
+        opacity: 0.5;
+      }
+      "
     `)
   })
 
@@ -6012,7 +6015,10 @@ describe('CSS flattening', () => {
     `)
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
-      ".a .child {\n  color: blue;\n}\n.a .c2 {\n  color: blue;\n}\n.b .child {\n  color: blue;\n}\n.b .c2 {\n  color: blue;\n}\n"
+      ".a .child, .a .c2, .b .child, .b .c2 {
+        color: blue;
+      }
+      "
     `)
   })
 
@@ -6028,7 +6034,10 @@ describe('CSS flattening', () => {
     `)
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
-      ".a > .b {\n  color: red;\n}\n.a + .c {\n  color: red;\n}\n.a ~ .d {\n  color: red;\n}\n"
+      ".a > .b, .a + .c, .a ~ .d {
+        color: red;
+      }
+      "
     `)
   })
 
@@ -6043,10 +6052,7 @@ describe('CSS flattening', () => {
     `)
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
-      ".a + .a {
-        color: green;
-      }
-      .b + .b {
+      ".a + .a, .b + .b {
         color: green;
       }
       "
@@ -6067,7 +6073,13 @@ describe('CSS flattening', () => {
     `)
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
-      ".a:is(:hover, :focus) {\n  opacity: 0.5;\n}\n.b:is(:hover, :focus) {\n  opacity: 0.5;\n}\n.a :where(.x, .y) {\n  color: red;\n}\n.b :where(.x, .y) {\n  color: red;\n}\n"
+      ".a:is(:hover, :focus), .b:is(:hover, :focus) {
+        opacity: 0.5;
+      }
+      .a :where(.x, .y), .b :where(.x, .y) {
+        color: red;
+      }
+      "
     `)
   })
 
@@ -6103,11 +6115,41 @@ describe('CSS flattening', () => {
     let flat = flattenAst(ast)
     expect(toCssAst(flat)).toMatchInlineSnapshot(`
       "@media (min-width: 768px) {
-        .a:hover {
+        .a:hover, .b:hover {
           color: red;
         }
-        .b:hover {
-          color: red;
+      }
+      "
+    `)
+  })
+
+  it('recombines blocks nested in multiple @media rules', () => {
+    let ast = CSS.parse(css`
+      .x {
+        @media foo {
+          @media bar {
+            color: red;
+          }
+        }
+      }
+      .y {
+        @media foo {
+          @media bar {
+            color: blue;
+          }
+        }
+      }
+    `)
+    let flat = flattenAst(ast)
+    expect(toCssAst(flat)).toMatchInlineSnapshot(`
+      "@media foo {
+        @media bar {
+          .x {
+            color: red;
+          }
+          .y {
+            color: blue;
+          }
         }
       }
       "

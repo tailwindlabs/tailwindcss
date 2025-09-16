@@ -399,7 +399,10 @@ async function parseCss(
               let nodes: AstNode[] = []
 
               if (styleRuleSelectors.length > 0) {
-                nodes.push(styleRule(styleRuleSelectors.join(', '), r.nodes))
+                // Preserve specificity across a selector list by wrapping in :is(…)
+                // so later flattening/combination doesn’t turn this into two
+                // separate rules with potentially differing specificity.
+                nodes.push(styleRule(`:is(${styleRuleSelectors.join(', ')})`, r.nodes))
               }
 
               for (let selector of atRuleParams) {
