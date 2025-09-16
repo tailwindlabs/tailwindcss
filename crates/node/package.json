@@ -37,9 +37,9 @@
     "detect-libc": "^2.0.4"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^3.0.0-alpha.78",
-    "@napi-rs/wasm-runtime": "^0.2.12",
-    "emnapi": "1.4.5"
+    "@napi-rs/cli": "^3.2.0",
+    "@napi-rs/wasm-runtime": "^1.0.5",
+    "emnapi": "1.5.0"
   },
   "engines": {
     "node": ">= 10"
@@ -54,11 +54,11 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
+    "artifacts": "napi artifacts --output-dir artifacts --npm-dir npm --build-output-dir npm/wasm32-wasi",
     "build": "pnpm run build:platform && pnpm run build:wasm",
-    "build:platform": "napi build --platform --release --no-const-enum",
+    "build:platform": "napi build --platform --release --no-const-enum --output-dir artifacts",
     "postbuild:platform": "node ./scripts/move-artifacts.mjs",
-    "build:wasm": "napi build --release --target wasm32-wasip1-threads --no-const-enum",
+    "build:wasm": "napi build --release --target wasm32-wasip1-threads --no-const-enum --output-dir artifacts",
     "postbuild:wasm": "node ./scripts/move-artifacts.mjs",
     "dev": "cargo watch --quiet --shell 'npm run build'",
     "build:debug": "napi build --platform --no-const-enum",

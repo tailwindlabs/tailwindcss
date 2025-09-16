@@ -27,12 +27,12 @@
   },
   "browser": "tailwindcss-oxide.wasi-browser.js",
   "dependencies": {
-    "@napi-rs/wasm-runtime": "^0.2.12",
-    "@emnapi/core": "^1.4.5",
-    "@emnapi/runtime": "^1.4.5",
-    "@tybys/wasm-util": "^0.10.0",
-    "@emnapi/wasi-threads": "^1.0.4",
-    "tslib": "^2.8.0"
+    "@napi-rs/wasm-runtime": "^1.0.5",
+    "@emnapi/core": "^1.5.0",
+    "@emnapi/runtime": "^1.5.0",
+    "@tybys/wasm-util": "^0.10.1",
+    "@emnapi/wasi-threads": "^1.1.0",
+    "tslib": "^2.8.1"
   },
   "bundledDependencies": [
     "@napi-rs/wasm-runtime",
