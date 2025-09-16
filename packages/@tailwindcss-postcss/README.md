@@ -70,21 +70,9 @@ export default {
     // Disables Lightning CSS
     optimize: false,
 
-    // Disables Lightning CSS
+    // Enables Lightning CSS
     optimize: true,
-  })
- ]
-}
-```
 
-You may also pass options to `optimize` to enable Lighting CSS but prevent minification:
-
-```js
-import tailwindcss from "@tailwindcss/postcss"
-
-export default {
- plugins: [
-  tailwindcss({
     // Enables Lightning CSS but disables minification
     optimize: { minify: false },
   })
