@@ -496,7 +496,7 @@ test('Custom functional @utility', async () => {
 
     @utility example-* {
       font-size: --value(--text);
-      line-height: --value(--text- * --line-height);
+      line-height: --value(--text-* --line-height);
       line-height: --modifier(--leading, 'normal');
     }
 
@@ -513,7 +513,7 @@ test('Custom functional @utility', async () => {
     }
 
     @utility -negative-* {
-      margin: --value(--tab-size- *);
+      margin: --value(--tab-size-*);
     }
   `
 
@@ -585,7 +585,7 @@ test('Custom utilities sharing a root with built-in utilities should merge sugge
     }
 
     @utility font-* {
-      --my-font-weight: --value(--font-weight- *);
+      --my-font-weight: --value(--font-weight-*);
     }
   `
 
@@ -624,7 +624,7 @@ test('Theme keys with underscores are suggested with underscores', async () => {
     }
 
     @utility ex-* {
-      width: --value(--spacing- *);
+      width: --value(--spacing-*);
     }
   `
 

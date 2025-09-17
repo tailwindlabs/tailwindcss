@@ -27897,7 +27897,7 @@ describe('custom utilities', () => {
     test('resolving any arbitrary values', async () => {
       let input = css`
         @utility tab-* {
-          tab-size: --value([ *]);
+          tab-size: --value([*]);
         }
 
         @tailwind utilities;
@@ -28355,7 +28355,7 @@ describe('custom utilities', () => {
 
         @utility example-* {
           font-size: --value(--text);
-          line-height: --value(--text- * --line-height);
+          line-height: --value(--text-* --line-height);
           line-height: --modifier(number);
         }
 
