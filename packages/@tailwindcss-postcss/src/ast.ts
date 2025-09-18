@@ -7,9 +7,9 @@ import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 const EXCLAMATION_MARK = 0x21
 
 export function cssAstToPostCssAst(
-  ast: AstNode[],
-  source: postcss.Source | undefined,
   postcss: postcss.Postcss,
+  ast: AstNode[],
+  source?: postcss.Source,
 ): postcss.Root {
   let inputMap = new DefaultMap<Source, postcss.Input>((src) => {
     return new postcss.Input(src.code, {

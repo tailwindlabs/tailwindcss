@@ -29,7 +29,7 @@ interface CacheEntry {
 }
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
-function getContextFromCache(inputFile: string, opts: PluginOptions, postcss: Postcss): CacheEntry {
+function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOptions): CacheEntry {
   let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
@@ -114,7 +114,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.end('Quick bail check')
           }
 
-          let context = getContextFromCache(inputFile, opts, postcss)
+          let context = getContextFromCache(postcss, inputFile, opts)
           let inputBasePath = path.dirname(path.resolve(inputFile))
 
           // Whether this is the first build or not, if it is, then we can
@@ -310,7 +310,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               } else {
                 // Convert our AST to a PostCSS AST
                 DEBUG && I.start('Transform Tailwind CSS AST into PostCSS AST')
-                context.cachedPostCssAst = cssAstToPostCssAst(tailwindCssAst, root.source, postcss)
+                context.cachedPostCssAst = cssAstToPostCssAst(postcss, tailwindCssAst, root.source)
                 DEBUG && I.end('Transform Tailwind CSS AST into PostCSS AST')
               }
             }
