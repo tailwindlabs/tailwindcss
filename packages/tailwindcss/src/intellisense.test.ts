@@ -496,7 +496,7 @@ test('Custom functional @utility', async () => {
 
     @utility example-* {
       font-size: --value(--text);
-      line-height: --value(--text- * --line-height);
+      line-height: --value(--text-* --line-height);
       line-height: --modifier(--leading, 'normal');
     }
 
@@ -513,7 +513,7 @@ test('Custom functional @utility', async () => {
     }
 
     @utility -negative-* {
-      margin: --value(--tab-size- *);
+      margin: --value(--tab-size-*);
     }
   `
 
@@ -572,6 +572,39 @@ test('Custom functional @utility', async () => {
   expect(classMap.get('example-xs')?.modifiers).toEqual(['normal', 'foo', 'bar'])
 })
 
+test('Custom utilities sharing a root with built-in utilities should merge suggestions', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @theme {
+      --font-sans: sans-serif;
+    }
+
+    @theme {
+      --font-weight-custom: 1234;
+      --font-weight-bold: bold; /* Overlap with existing utility */
+    }
+
+    @utility font-* {
+      --my-font-weight: --value(--font-weight-*);
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+  })
+
+  let classMap = new Map(design.getClassList())
+  let classNames = Array.from(classMap.keys())
+
+  expect(classNames).toContain('font-sans') // Existing font-family utility
+  expect(classNames).toContain('font-bold') // Existing font-family utility & custom font-weight utility
+  expect(classNames).toContain('font-custom') // Custom font-weight utility
+})
+
 test('Theme keys with underscores are suggested with underscores', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
@@ -591,7 +624,7 @@ test('Theme keys with underscores are suggested with underscores', async () => {
     }
 
     @utility ex-* {
-      width: --value(--spacing- *);
+      width: --value(--spacing-*);
     }
   `
 
@@ -674,4 +707,76 @@ test('Custom @utility and existing utility with names matching theme keys dont g
 
   expect(matches).toHaveLength(1)
   expect(classMap.get('text-header')?.modifiers).toEqual(['sm'])
+})
+
+test('matchVariant', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js";
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      path: '',
+      base: '',
+      module: plugin(({ matchVariant }) => {
+        matchVariant('foo', (val) => `&:is(${val})`, {
+          values: {
+            DEFAULT: '1',
+            a: 'a',
+            b: 'b',
+          },
+        })
+      }),
+    }),
+  })
+
+  let variants = design.getVariants()
+  let v1 = variants.find((v) => v.name === 'foo')!
+  expect(v1).not.toBeUndefined()
+
+  expect(v1.hasDash).toEqual(true)
+  expect(v1.isArbitrary).toEqual(true)
+  expect(v1.name).toEqual('foo')
+  expect(v1.values).toEqual(['a', 'b'])
+})
+
+test('matchUtilities discards internal only helpers from suggestions when using the theme function', async () => {
+  let input = css`
+    @import 'tailwindcss/utilities';
+    @plugin "./plugin.js";
+
+    @theme {
+      --color-red: red;
+    }
+  `
+
+  let design = await __unstable__loadDesignSystem(input, {
+    loadStylesheet: async (_, base) => ({
+      path: '',
+      base,
+      content: '@tailwind utilities;',
+    }),
+    loadModule: async () => ({
+      path: '',
+      base: '',
+      module: plugin(({ matchUtilities, theme }) => {
+        matchUtilities({ foo: (val) => ({ color: val }) }, { values: theme('colors') })
+        matchUtilities({ bar: (val) => ({ color: val }) }, { values: theme('transitionDuration') })
+      }),
+    }),
+  })
+
+  let classNames = design.getClassList().map((e) => e[0])
+
+  expect(classNames).not.toContain('foo-__BARE_VALUE__')
+  expect(classNames).not.toContain('bar-__BARE_VALUE__')
+
+  expect(classNames).not.toContain('foo-__CSS_VALUES__')
+  expect(classNames).not.toContain('bar-__CSS_VALUES__')
 })

@@ -55,6 +55,9 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
           item.fraction ||= fraction
           item.modifiers.push(...group.modifiers)
         }
+
+        // Deduplicate modifiers
+        item.modifiers = Array.from(new Set(item.modifiers))
       }
     }
   }

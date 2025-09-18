@@ -2778,6 +2778,79 @@ describe('matchVariant', () => {
       }"
     `)
   })
+
+  test('ignores variants that use unknown values', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            path: '',
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (flavor) => `&:is(${flavor})`, {
+                values: {
+                  known: 'known',
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    let compiled = build(['foo-[test]:flex', 'foo-known:flex', 'foo-unknown:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-known\\:flex:is(known), .foo-\\[test\\]\\:flex:is(test) {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('ignores variants that produce non-string values', async () => {
+    let { build } = await compile(
+      css`
+        @plugin "my-plugin";
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      {
+        loadModule: async (id, base) => {
+          return {
+            path: '',
+            base,
+            module: ({ matchVariant }: PluginAPI) => {
+              matchVariant('foo', (flavor) => `&:is(${flavor})`, {
+                values: {
+                  string: 'some string',
+                  object: { some: 'object' },
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    let compiled = build(['foo-[test]:flex', 'foo-string:flex', 'foo-object:flex'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .foo-string\\:flex:is(some string), .foo-\\[test\\]\\:flex:is(test) {
+          display: flex;
+        }
+      }"
+    `)
+  })
 })
 
 describe('addUtilities()', () => {
@@ -3357,6 +3430,45 @@ describe('addUtilities()', () => {
             }
           }
         }
+      }"
+    `)
+  })
+
+  test('values that are `false`, `null`, or `undefined` are discarded from CSS object ASTs', async () => {
+    let compiled = await compile(
+      css`
+        @plugin "my-plugin";
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(id, base) {
+          return {
+            path: '',
+            base,
+            module: ({ addUtilities }: PluginAPI) => {
+              addUtilities({
+                '.foo': {
+                  a: 'red',
+                  // @ts-ignore: While this isn't valid per the types this did work in v3
+                  'z-index': 0,
+                  // @ts-ignore
+                  '.bar': false,
+                  // @ts-ignore
+                  '.baz': null,
+                  // @ts-ignore
+                  '.qux': undefined,
+                },
+              })
+            },
+          }
+        },
+      },
+    )
+
+    expect(compiled.build(['foo']).trim()).toMatchInlineSnapshot(`
+      ".foo {
+        a: red;
+        z-index: 0;
       }"
     `)
   })

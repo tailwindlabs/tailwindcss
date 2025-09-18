@@ -66,6 +66,7 @@ eol
 eot
 epub
 exe
+exr
 f4v
 fbs
 fh
@@ -87,6 +88,7 @@ gzip
 h261
 h263
 h264
+hdr
 icns
 ico
 ief

@@ -3,7 +3,6 @@ import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
 
-const QUOTES = ['"', "'", '`']
 const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
 const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Vue
@@ -12,13 +11,19 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /v-show=['"]$/,
   /(?<!:?class)=['"]$/,
 
+  // JavaScript / TypeScript
+  /addEventListener\(['"`]$/,
+
   // Alpine
   /x-if=['"]$/,
   /x-show=['"]$/,
   /wire:[^\s]*?$/,
+
+  // shadcn/ui variants
+  /variant\s*[:=]\s*\{?['"`]$/,
 ]
-const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"]$/
-const VUE_3_EMIT = /\b\$?emit\(['"]$/
+const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
+const VUE_3_EMIT = /\b\$?emit\(['"`]$/
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -138,8 +143,8 @@ export function isSafeMigration(
   }
 
   // Heuristic: Require the candidate to be inside quotes
-  let isQuoteBeforeCandidate = QUOTES.some((quote) => currentLineBeforeCandidate.includes(quote))
-  let isQuoteAfterCandidate = QUOTES.some((quote) => currentLineAfterCandidate.includes(quote))
+  let isQuoteBeforeCandidate = isMiddleOfString(currentLineBeforeCandidate)
+  let isQuoteAfterCandidate = isMiddleOfString(currentLineAfterCandidate)
   if (!isQuoteBeforeCandidate || !isQuoteAfterCandidate) {
     return false
   }
@@ -210,3 +215,38 @@ const styleBlockRanges = new DefaultMap((source: string) => {
     ranges.push(startTag, endTag)
   }
 })
+
+const BACKSLASH = 0x5c
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
+const BACKTICK = 0x60
+
+function isMiddleOfString(line: string): boolean {
+  let currentQuote: number | null = null
+
+  for (let i = 0; i < line.length; i++) {
+    let char = line.charCodeAt(i)
+    switch (char) {
+      // Escaped character, skip the next character
+      case BACKSLASH:
+        i++
+        break
+
+      case SINGLE_QUOTE:
+      case DOUBLE_QUOTE:
+      case BACKTICK:
+        // Found matching quote, we are outside of a string
+        if (currentQuote === char) {
+          currentQuote = null
+        }
+
+        // Found a quote, we are inside a string
+        else if (currentQuote === null) {
+          currentQuote = char
+        }
+        break
+    }
+  }
+
+  return currentQuote !== null
+}

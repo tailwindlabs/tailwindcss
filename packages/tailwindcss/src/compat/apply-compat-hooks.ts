@@ -1,6 +1,7 @@
 import { Features } from '..'
 import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
+import type { SourceLocation } from '../source-maps/source'
 import { segment } from '../utils/segment'
 import { applyConfigToTheme } from './apply-config-to-theme'
 import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
@@ -38,9 +39,16 @@ export async function applyCompatibilityHooks({
   sources: { base: string; pattern: string; negated: boolean }[]
 }) {
   let features = Features.None
-  let pluginPaths: [{ id: string; base: string; reference: boolean }, CssPluginOptions | null][] =
-    []
-  let configPaths: { id: string; base: string; reference: boolean }[] = []
+  let pluginPaths: [
+    { id: string; base: string; reference: boolean; src: SourceLocation | undefined },
+    CssPluginOptions | null,
+  ][] = []
+  let configPaths: {
+    id: string
+    base: string
+    reference: boolean
+    src: SourceLocation | undefined
+  }[] = []
 
   walk(ast, (node, { parent, replaceWith, context }) => {
     if (node.kind !== 'at-rule') return
@@ -100,7 +108,12 @@ export async function applyCompatibilityHooks({
       }
 
       pluginPaths.push([
-        { id: pluginPath, base: context.base as string, reference: !!context.reference },
+        {
+          id: pluginPath,
+          base: context.base as string,
+          reference: !!context.reference,
+          src: node.src,
+        },
         Object.keys(options).length > 0 ? options : null,
       ])
 
@@ -123,6 +136,7 @@ export async function applyCompatibilityHooks({
         id: node.params.slice(1, -1),
         base: context.base as string,
         reference: !!context.reference,
+        src: node.src,
       })
       replaceWith([])
       features |= Features.JsPluginCompat
@@ -162,18 +176,19 @@ export async function applyCompatibilityHooks({
 
   let [configs, pluginDetails] = await Promise.all([
     Promise.all(
-      configPaths.map(async ({ id, base, reference }) => {
+      configPaths.map(async ({ id, base, reference, src }) => {
         let loaded = await loadModule(id, base, 'config')
         return {
           path: id,
           base: loaded.base,
           config: loaded.module as UserConfig,
           reference,
+          src,
         }
       }),
     ),
     Promise.all(
-      pluginPaths.map(async ([{ id, base, reference }, pluginOptions]) => {
+      pluginPaths.map(async ([{ id, base, reference, src }, pluginOptions]) => {
         let loaded = await loadModule(id, base, 'plugin')
         return {
           path: id,
@@ -181,6 +196,7 @@ export async function applyCompatibilityHooks({
           plugin: loaded.module as Plugin,
           options: pluginOptions,
           reference,
+          src,
         }
       }),
     ),
@@ -215,6 +231,7 @@ function upgradeToFullPluginSupport({
     base: string
     config: UserConfig
     reference: boolean
+    src: SourceLocation | undefined
   }[]
   pluginDetails: {
     path: string
@@ -222,6 +239,7 @@ function upgradeToFullPluginSupport({
     plugin: Plugin
     options: CssPluginOptions | null
     reference: boolean
+    src: SourceLocation | undefined
   }[]
 }) {
   let features = Features.None
@@ -231,6 +249,7 @@ function upgradeToFullPluginSupport({
         config: { plugins: [detail.plugin] },
         base: detail.base,
         reference: detail.reference,
+        src: detail.src,
       }
     }
 
@@ -239,6 +258,7 @@ function upgradeToFullPluginSupport({
         config: { plugins: [detail.plugin(detail.options)] },
         base: detail.base,
         reference: detail.reference,
+        src: detail.src,
       }
     }
 
@@ -248,14 +268,31 @@ function upgradeToFullPluginSupport({
   let userConfig = [...pluginConfigs, ...configs]
 
   let { resolvedConfig } = resolveConfig(designSystem, [
-    { config: createCompatConfig(designSystem.theme), base, reference: true },
+    { config: createCompatConfig(designSystem.theme), base, reference: true, src: undefined },
     ...userConfig,
-    { config: { plugins: [darkModePlugin] }, base, reference: true },
+    { config: { plugins: [darkModePlugin] }, base, reference: true, src: undefined },
   ])
   let { resolvedConfig: resolvedUserConfig, replacedThemeKeys } = resolveConfig(
     designSystem,
     userConfig,
   )
+
+  let pluginApiConfig = {
+    designSystem,
+    ast,
+    resolvedConfig,
+    featuresRef: {
+      set current(value: number) {
+        features |= value
+      },
+    },
+  }
+
+  let sharedPluginApi = buildPluginApi({
+    ...pluginApiConfig,
+    referenceMode: false,
+    src: undefined,
+  })
 
   // Replace `resolveThemeValue` with a version that is backwards compatible
   // with dot-notation but also aware of any JS theme configurations registered
@@ -270,7 +307,7 @@ function upgradeToFullPluginSupport({
       return defaultResolveThemeValue(path, forceInline)
     }
 
-    let resolvedValue = pluginApi.theme(path, undefined)
+    let resolvedValue = sharedPluginApi.theme(path, undefined)
 
     if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
       // When a tuple is returned, return the first element
@@ -285,27 +322,17 @@ function upgradeToFullPluginSupport({
     }
   }
 
-  let pluginApiConfig = {
-    designSystem,
-    ast,
-    resolvedConfig,
-    featuresRef: {
-      set current(value: number) {
-        features |= value
-      },
-    },
-  }
+  for (let { handler, reference, src } of resolvedConfig.plugins) {
+    // Each plugin gets its own instance of the plugin API because nodes added
+    // to the AST may need to point to the `@config` or `@plugin` that they
+    // originated from
+    let api = buildPluginApi({
+      ...pluginApiConfig,
+      referenceMode: reference ?? false,
+      src,
+    })
 
-  let pluginApi = buildPluginApi({ ...pluginApiConfig, referenceMode: false })
-  let referenceModePluginApi = undefined
-
-  for (let { handler, reference } of resolvedConfig.plugins) {
-    if (reference) {
-      referenceModePluginApi ||= buildPluginApi({ ...pluginApiConfig, referenceMode: true })
-      handler(referenceModePluginApi)
-    } else {
-      handler(pluginApi)
-    }
+    handler(api)
   }
 
   // Merge the user-configured theme keys into the design system. The compat

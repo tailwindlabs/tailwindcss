@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/node",
-  "version": "4.1.11",
+  "version": "4.1.13",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -37,11 +37,11 @@
     }
   },
   "dependencies": {
-    "@ampproject/remapping": "^2.3.0",
-    "enhanced-resolve": "^5.18.1",
-    "jiti": "^2.4.2",
+    "@jridgewell/remapping": "^2.3.4",
+    "enhanced-resolve": "^5.18.3",
+    "jiti": "^2.5.1",
     "lightningcss": "catalog:",
-    "magic-string": "^0.30.17",
+    "magic-string": "^0.30.18",
     "source-map-js": "^1.2.1",
     "tailwindcss": "workspace:*"
   }

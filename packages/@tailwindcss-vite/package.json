@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/vite",
-  "version": "4.1.11",
+  "version": "4.1.13",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -24,7 +24,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs"
+      "default": "./dist/index.mjs"
     }
   },
   "dependencies": {

@@ -1078,6 +1078,38 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    it('should ignore consecutive semicolons', () => {
+      expect(parse(';;;')).toEqual([])
+    })
+
+    it('should ignore semicolons after an at-rule with a body', () => {
+      expect(parse('@plugin "foo" {} ;')).toEqual([
+        {
+          kind: 'at-rule',
+          name: '@plugin',
+          params: '"foo"',
+          nodes: [],
+        },
+      ])
+    })
+
+    it('should ignore consecutive semicolons a declaration', () => {
+      expect(parse('.foo { color: red;;; }')).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [
+            {
+              kind: 'declaration',
+              property: 'color',
+              value: 'red',
+              important: false,
+            },
+          ],
+        },
+      ])
+    })
   })
 
   describe('errors', () => {
@@ -1151,32 +1183,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       expect(() =>
         parse(css`
           .foo {
-            --bar: "Hello world!
-            /*                  ^ missing " */
+            --bar: 'Hello world!
+            /*                  ^ missing ' * /;
           }
         `),
-      ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: "Hello world!"]`)
+      ).toThrowErrorMatchingInlineSnapshot(`[Error: Unterminated string: 'Hello world!']`)
     })
 
     it('should error when a declaration is incomplete', () => {
       expect(() => parse('.foo { bar }')).toThrowErrorMatchingInlineSnapshot(
         `[Error: Invalid declaration: \`bar\`]`,
-      )
-    })
-
-    it('should error when a semicolon exists after an at-rule with a body', () => {
-      expect(() => parse('@plugin "foo" {} ;')).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Unexpected semicolon]`,
-      )
-    })
-
-    it('should error when consecutive semicolons exist', () => {
-      expect(() => parse(';;;')).toThrowErrorMatchingInlineSnapshot(`[Error: Unexpected semicolon]`)
-    })
-
-    it('should error when consecutive semicolons exist after a declaration', () => {
-      expect(() => parse('.foo { color: red;;; }')).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Unexpected semicolon]`,
       )
     })
   })

@@ -1,4 +1,5 @@
 pub mod clojure;
+pub mod elixir;
 pub mod haml;
 pub mod json;
 pub mod pre_processor;
@@ -10,6 +11,7 @@ pub mod svelte;
 pub mod vue;
 
 pub use clojure::*;
+pub use elixir::*;
 pub use haml::*;
 pub use json::*;
 pub use pre_processor::*;

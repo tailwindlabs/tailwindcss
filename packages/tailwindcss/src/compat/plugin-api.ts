@@ -5,6 +5,7 @@ import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candida
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
+import type { SourceLocation } from '../source-maps/source'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
 import { escape } from '../utils/escape'
@@ -24,6 +25,7 @@ export type PluginWithConfig = {
 
   /** @internal */
   reference?: boolean
+  src?: SourceLocation | undefined
 }
 export type PluginWithOptions<T> = {
   (options?: T): PluginWithConfig
@@ -93,25 +95,31 @@ export function buildPluginApi({
   resolvedConfig,
   featuresRef,
   referenceMode,
+  src,
 }: {
   designSystem: DesignSystem
   ast: AstNode[]
   resolvedConfig: ResolvedConfig
   featuresRef: { current: Features }
   referenceMode: boolean
+  src: SourceLocation | undefined
 }): PluginAPI {
   let api: PluginAPI = {
     addBase(css) {
       if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
-      ast.push(atRule('@layer', 'base', baseNodes))
+      let rule = atRule('@layer', 'base', baseNodes)
+      walk([rule], (node) => {
+        node.src = src
+      })
+      ast.push(rule)
     },
 
     addVariant(name, variant) {
       if (!IS_VALID_VARIANT_NAME.test(name)) {
         throw new Error(
-          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.`,
+          `\`addVariant('${name}')\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.`,
         )
       }
 
@@ -146,7 +154,7 @@ export function buildPluginApi({
 
       // CSS-in-JS object
       else if (typeof variant === 'object') {
-        designSystem.variants.fromAst(name, objectToAst(variant))
+        designSystem.variants.fromAst(name, objectToAst(variant), designSystem)
       }
     },
     matchVariant(name, fn, options) {
@@ -195,10 +203,12 @@ export function buildPluginApi({
             } else if (variant.value.kind === 'named' && options?.values) {
               let defaultValue = options.values[variant.value.value]
               if (typeof defaultValue !== 'string') {
-                return
+                return null
               }
 
               ruleNodes.nodes = resolveVariantValue(defaultValue, variant.modifier, ruleNodes.nodes)
+            } else {
+              return null
             }
           })
         },
@@ -237,6 +247,10 @@ export function buildPluginApi({
           return aValue < zValue ? -1 : 1
         },
       )
+
+      designSystem.variants.suggest(name, () =>
+        Object.keys(options?.values ?? {}).filter((v) => v !== 'DEFAULT'),
+      )
     },
 
     addUtilities(utilities) {
@@ -255,7 +269,11 @@ export function buildPluginApi({
       for (let [name, css] of entries) {
         if (name.startsWith('@keyframes ')) {
           if (!referenceMode) {
-            ast.push(rule(name, objectToAst(css)))
+            let keyframes = rule(name, objectToAst(css))
+            walk([keyframes], (node) => {
+              node.src = src
+            })
+            ast.push(keyframes)
           }
           continue
         }
@@ -454,6 +472,10 @@ export function buildPluginApi({
           // work even with legacy configs and plugins
           valueKeys.delete('__BARE_VALUE__')
 
+          // The `__CSS_VALUES__` key is a special key used by the theme function
+          // to transport `@theme` metadata about values from CSS
+          valueKeys.delete('__CSS_VALUES__')
+
           // The `DEFAULT` key is represented as `null` in the utility API
           if (valueKeys.has('DEFAULT')) {
             valueKeys.delete('DEFAULT')
@@ -528,6 +550,13 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
   let entries = rules.flatMap((rule) => Object.entries(rule))
 
   for (let [name, value] of entries) {
+    if (value === null || value === undefined) continue
+
+    // @ts-expect-error
+    // We do not want `false` present in the types but still need to discard these nodes for
+    // compatibility purposes
+    if (value === false) continue
+
     if (typeof value !== 'object') {
       if (!name.startsWith('--')) {
         if (value === '@slot') {
@@ -549,7 +578,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
           ast.push(rule(name, objectToAst(item)))
         }
       }
-    } else if (value !== null) {
+    } else {
       ast.push(rule(name, objectToAst(value)))
     }
   }

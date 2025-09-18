@@ -1,4 +1,4 @@
-import remapping from '@ampproject/remapping'
+import remapping from '@jridgewell/remapping'
 import dedent from 'dedent'
 import MagicString from 'magic-string'
 import * as fs from 'node:fs/promises'
@@ -279,17 +279,19 @@ test('source maps trace back to @import location', async ({ expect }) => {
     'preflight.css: 139:4-14 <- 337:2-12',
     'preflight.css: 141:2-329 <- 340:0-348:39',
     'preflight.css: 142:4-20 <- 349:2-18',
-    'preflight.css: 144:2-19 <- 356:0-17',
-    'preflight.css: 145:4-20 <- 357:2-18',
-    'preflight.css: 147:2-96 <- 364:0-366:23',
-    'preflight.css: 148:4-22 <- 367:2-20',
-    'preflight.css: 150:2-59 <- 374:0-375:28',
-    'preflight.css: 151:4-16 <- 376:2-14',
-    'preflight.css: 153:2-47 <- 383:0-45',
-    'preflight.css: 154:4-28 <- 384:2-26',
-    'index.css: 157:0-16 <- 5:0-42',
-    'input.css: 158:0-5 <- 3:0-5',
-    'input.css: 159:2-33 <- 4:9-18',
+    'preflight.css: 144:2-38 <- 356:0-36',
+    'preflight.css: 145:4-18 <- 357:2-16',
+    'preflight.css: 147:2-19 <- 364:0-17',
+    'preflight.css: 148:4-20 <- 365:2-18',
+    'preflight.css: 150:2-96 <- 372:0-374:23',
+    'preflight.css: 151:4-22 <- 375:2-20',
+    'preflight.css: 153:2-59 <- 382:0-383:28',
+    'preflight.css: 154:4-16 <- 384:2-14',
+    'preflight.css: 156:2-47 <- 391:0-45',
+    'preflight.css: 157:4-28 <- 392:2-26',
+    'index.css: 160:0-16 <- 5:0-42',
+    'input.css: 161:0-5 <- 3:0-5',
+    'input.css: 162:2-33 <- 4:9-18',
   ])
 })
 
@@ -417,5 +419,57 @@ test('license comments with new lines preserve source locations', async ({ expec
     //
     'input.css: 1:0 <- 1:0-2:0',
     'input.css: 2:11 <- 2:11',
+  ])
+})
+
+test('Source locations for `addBase` point to the `@plugin` that generated them', async ({
+  expect,
+}) => {
+  let { sources, annotations } = await run({
+    input: dedent`
+      @plugin "./plugin.js";
+      @config "./config.js";
+    `,
+    options: {
+      async loadModule(id, base) {
+        if (id === './plugin.js') {
+          return {
+            module: createPlugin(({ addBase }) => {
+              addBase({ body: { color: 'red' } })
+            }),
+            base,
+            path: '',
+          }
+        }
+
+        if (id === './config.js') {
+          return {
+            module: {
+              plugins: [
+                createPlugin(({ addBase }) => {
+                  addBase({ body: { color: 'green' } })
+                }),
+              ],
+            },
+            base,
+            path: '',
+          }
+        }
+
+        throw new Error(`unknown module ${id}`)
+      },
+    },
+  })
+
+  expect(sources).toEqual(['input.css'])
+
+  expect(annotations).toEqual([
+    //
+    'input.css: 1:0-12 <- 1:0-21',
+    'input.css: 2:2-7 <- 1:0-21',
+    'input.css: 3:4-14 <- 1:0-21',
+    'input.css: 6:0-12 <- 2:0-21',
+    'input.css: 7:2-7 <- 2:0-21',
+    'input.css: 8:4-16 <- 2:0-21',
   ])
 })

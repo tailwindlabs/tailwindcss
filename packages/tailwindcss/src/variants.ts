@@ -1,3 +1,4 @@
+import { Features } from '.'
 import {
   WalkAction,
   atRoot,
@@ -12,13 +13,15 @@ import {
   type StyleRule,
 } from './ast'
 import { type Variant } from './candidate'
+import { applyVariant } from './compile'
+import type { DesignSystem } from './design-system'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 
-export const IS_VALID_VARIANT_NAME = /^@?[a-zA-Z0-9_-]*$/
+export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*(?<![_-])$/
 
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
@@ -80,12 +83,15 @@ export class Variants {
     })
   }
 
-  fromAst(name: string, ast: AstNode[]) {
+  fromAst(name: string, ast: AstNode[], designSystem: DesignSystem) {
     let selectors: string[] = []
 
+    let usesAtVariant = false
     walk(ast, (node) => {
       if (node.kind === 'rule') {
         selectors.push(node.selector)
+      } else if (node.kind === 'at-rule' && node.name === '@variant') {
+        usesAtVariant = true
       } else if (node.kind === 'at-rule' && node.name !== '@slot') {
         selectors.push(`${node.name} ${node.params}`)
       }
@@ -95,12 +101,11 @@ export class Variants {
       name,
       (r) => {
         let body = structuredClone(ast)
+        if (usesAtVariant) substituteAtVariant(body, designSystem)
         substituteAtSlot(body, r.nodes)
         r.nodes = body
       },
-      {
-        compounds: compoundsForSelectors(selectors),
-      },
+      { compounds: compoundsForSelectors(selectors) },
     )
   }
 
@@ -1197,4 +1202,31 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
       return WalkAction.Skip
     }
   })
+}
+
+export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem): Features {
+  let features = Features.None
+  walk(ast, (variantNode, { replaceWith }) => {
+    if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
+
+    // Starting with the `&` rule node
+    let node = styleRule('&', variantNode.nodes)
+
+    let variant = variantNode.params
+
+    let variantAst = designSystem.parseVariant(variant)
+    if (variantAst === null) {
+      throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+    }
+
+    let result = applyVariant(node, variantAst, designSystem.variants)
+    if (result === null) {
+      throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+    }
+
+    // Update the variant at-rule node, to be the `&` rule node
+    replaceWith(node)
+    features |= Features.Variants
+  })
+  return features
 }

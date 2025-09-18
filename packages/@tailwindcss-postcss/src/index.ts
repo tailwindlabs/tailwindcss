@@ -48,16 +48,30 @@ function getContextFromCache(inputFile: string, opts: PluginOptions, postcss: Po
 }
 
 export type PluginOptions = {
-  // The base directory to scan for class candidates.
+  /**
+   * The base directory to scan for class candidates.
+   *
+   * Defaults to the current working directory.
+   */
   base?: string
 
-  // Optimize and minify the output CSS.
+  /**
+   * Optimize and minify the output CSS.
+   */
   optimize?: boolean | { minify?: boolean }
+
+  /**
+   * Enable or disable asset URL rewriting.
+   *
+   * Defaults to `true`.
+   */
+  transformAssetUrls?: boolean
 }
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
+  let shouldRewriteUrls = opts.transformAssetUrls ?? true
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -123,7 +137,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             let compiler = await compileAst(ast, {
               from: result.opts.from,
               base: inputBasePath,
-              shouldRewriteUrls: true,
+              shouldRewriteUrls,
               onDependency: (path) => context.fullRebuildPaths.push(path),
               // In CSS Module files, we have to disable the `@property` polyfill since these will
               // emit global `*` rules which are considered to be non-pure and will cause builds

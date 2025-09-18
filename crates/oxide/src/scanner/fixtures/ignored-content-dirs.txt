@@ -11,3 +11,4 @@ venv
 __pycache__
 .svelte-kit
 .pnpm-store
+.vercel

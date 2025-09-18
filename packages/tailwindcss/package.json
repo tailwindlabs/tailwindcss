@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss",
-  "version": "4.1.11",
+  "version": "4.1.13",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -127,12 +127,12 @@
     "utilities.css"
   ],
   "devDependencies": {
-    "@ampproject/remapping": "^2.3.0",
+    "@jridgewell/remapping": "^2.3.4",
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
     "dedent": "1.6.0",
     "lightningcss": "catalog:",
-    "magic-string": "^0.30.17",
+    "magic-string": "^0.30.18",
     "source-map-js": "^1.2.1"
   }
 }

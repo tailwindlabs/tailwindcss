@@ -527,7 +527,6 @@ describe('@apply', () => {
       .foo, .bar {
         --tw-content: "b";
         content: var(--tw-content);
-        content: var(--tw-content);
       }
 
       @property --tw-content {
@@ -3769,8 +3768,35 @@ describe('@custom-variant', () => {
         @custom-variant foo:bar (&:hover, &:focus);
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: \`@custom-variant foo:bar\` defines an invalid variant name. Variants should only contain alphanumeric, dashes or underscore characters.]`,
+      `[Error: \`@custom-variant foo:bar\` defines an invalid variant name. Variants should only contain alphanumeric, dashes, or underscore characters and start with a lowercase letter or number.]`,
     )
+  })
+
+  test.each([
+    // Cannot be a dash on its own
+    [`@custom-variant - (&);`],
+    // Cannot be multiple dashes on their own
+    [`@custom-variant --- (&);`],
+    // Cannot be an underscore on its own
+    [`@custom-variant _ (&);`],
+    // Cannot be multiple underscores on their own
+    [`@custom-variant ___ (&);`],
+
+    // Cannot start with a dash
+    [`@custom-variant -foo (&);`],
+    [`@custom-variant --foo (&);`],
+    // Cannot start with an underscore
+    [`@custom-variant _foo (&);`],
+    [`@custom-variant __foo (&);`],
+
+    // Cannot end with a dash
+    [`@custom-variant foo- (&);`],
+    [`@custom-variant foo-- (&);`],
+    // Cannot end with an underscore
+    [`@custom-variant foo_ (&);`],
+    [`@custom-variant foo__ (&);`],
+  ])('@custom-variant must have a valid name', (input) => {
+    return expect(compileCss(input)).rejects.toThrowError()
   })
 
   test('@custom-variant must not container special characters', () => {
@@ -4317,6 +4343,180 @@ describe('@custom-variant', () => {
       }"
     `)
   })
+
+  test('@custom-variant can reuse existing @variant in the definition', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "@media (hover: hover) {
+        .hocus\\:flex:hover:focus {
+          display: flex;
+        }
+      }"
+    `)
+  })
+
+  test('@custom-variant can reuse @custom-variant that is defined later', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant custom-hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant custom-hover (&:hover);
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant can reuse existing @variant that is overwritten later', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant hover (&:hover);
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant cannot use @variant that eventually results in a circular dependency', async () => {
+    return expect(() =>
+      compileCss(
+        css`
+          @custom-variant custom-variant {
+            @variant foo {
+              @slot;
+            }
+          }
+
+          @custom-variant foo {
+            @variant hover {
+              @variant bar {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant bar {
+            @variant focus {
+              @variant baz {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant baz {
+            @variant active {
+              @variant foo {
+                @slot;
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['foo:flex'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`
+      [Error: Circular dependency detected in custom variants:
+
+      @custom-variant custom-variant {
+        @variant foo { … }
+      }
+      @custom-variant foo { /* ← */
+        @variant bar { … }
+      }
+      @custom-variant bar {
+        @variant baz { … }
+      }
+      @custom-variant baz {
+        @variant foo { … }
+      }
+      ]
+    `)
+  })
+
+  test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant foo {
+            @variant hover {
+              @variant bar {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant bar {
+            @variant focus {
+              @variant baz {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant baz {
+            @variant active {
+              @variant foo {
+                @slot;
+              }
+            }
+          }
+
+          /* Break the circle */
+          @custom-variant foo ([data-broken-circle] &);
+
+          @tailwind utilities;
+        `,
+        ['baz:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      "[data-broken-circle] .baz\\:flex:active {
+        display: flex;
+      }"
+    `)
+  })
 })
 
 describe('@utility', () => {
@@ -4352,6 +4552,30 @@ describe('@utility', () => {
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
+    )
+  })
+
+  test('A functional @utility must end in -*', () => {
+    return expect(
+      compileCss(css`
+        @utility foo* {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility foo*\` defines an invalid utility name. A functional utility must end in \`-*\`.]`,
+    )
+  })
+
+  test('Only the last part of a functional @utility can be dynamic', () => {
+    return expect(
+      compileCss(css`
+        @utility my-*-utility {
+          color: red;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility my-*-utility\` defines an invalid utility name. The dynamic portion marked by \`-*\` must appear once at the end.]`,
     )
   })
 })
