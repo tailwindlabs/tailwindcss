@@ -34,8 +34,8 @@ catalogs:
       specifier: 1.30.1
       version: 1.30.1
     prettier:
-      specifier: 3.5.0
-      version: 3.5.0
+      specifier: 3.6.2
+      version: 3.6.2
     vite:
       specifier: ^7.0.0
       version: 7.0.0
@@ -66,13 +66,13 @@ importers:
         version: 16.1.1(postcss@8.5.6)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.0
+        version: 3.6.2
       prettier-plugin-embed:
         specifier: ^0.5.0
         version: 0.5.0
       prettier-plugin-organize-imports:
         specifier: ^4.2.0
-        version: 4.2.0(prettier@3.5.0)(typescript@5.5.4)
+        version: 4.2.0(prettier@3.6.2)(typescript@5.5.4)
       tsup:
         specifier: ^8.5.0
         version: 8.5.0(jiti@2.5.1)(postcss@8.5.6)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
@@ -406,7 +406,7 @@ importers:
         version: 7.1.0
       prettier:
         specifier: 'catalog:'
-        version: 3.5.0
+        version: 3.6.2
       semver:
         specifier: ^7.7.2
         version: 7.7.2
@@ -1993,7 +1993,6 @@ packages:
   '@parcel/watcher-darwin-arm64@2.5.1':
     resolution: {integrity: sha512-eAzPv5osDmZyBhou8PoF4i6RQXAfeKL9tjb3QzYuccXFMQU0ruIc/POh30ePnaOyD1UXdlKguHBmsTs53tVoPw==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   '@parcel/watcher-darwin-x64@2.5.0':
@@ -2005,7 +2004,6 @@ packages:
   '@parcel/watcher-darwin-x64@2.5.1':
     resolution: {integrity: sha512-1ZXDthrnNmwv10A0/3AJNZ9JGlzrF82i3gNQcWOzd7nJ8aj+ILyW1MTxVk35Db0u91oD5Nlk9MBiujMlwmeXZg==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   '@parcel/watcher-freebsd-x64@2.5.0':
@@ -2053,7 +2051,6 @@ packages:
   '@parcel/watcher-linux-arm64-glibc@2.5.1':
     resolution: {integrity: sha512-LrGp+f02yU3BN9A+DGuY3v3bmnFUggAITBGriZHUREfNEzZh/GO06FF5u2kx8x+GBEUYfyTGamol4j3m9ANe8w==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-arm64-musl@2.5.0':
@@ -2065,7 +2062,6 @@ packages:
   '@parcel/watcher-linux-arm64-musl@2.5.1':
     resolution: {integrity: sha512-cFOjABi92pMYRXS7AcQv9/M1YuKRw8SZniCDw0ssQb/noPkRzA+HBDkwmyOJYp5wXcsTrhxO0zq1U11cK9jsFg==}
     engines: {node: '>= 10.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-glibc@2.5.0':
@@ -2077,7 +2073,6 @@ packages:
   '@parcel/watcher-linux-x64-glibc@2.5.1':
     resolution: {integrity: sha512-GcESn8NZySmfwlTsIur+49yDqSny2IhPeZfXunQi48DMugKeZ7uy1FX83pO0X22sHntJ4Ub+9k34XQCX+oHt2A==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-linux-x64-musl@2.5.0':
@@ -2089,7 +2084,6 @@ packages:
   '@parcel/watcher-linux-x64-musl@2.5.1':
     resolution: {integrity: sha512-n0E2EQbatQ3bXhcH2D1XIAANAcTZkQICBPVaxMeaCVBtOpBZpWJuf7LwyWPSBDITb7In8mqQgJ7gH8CILCURXg==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [linux]
 
   '@parcel/watcher-wasm@2.5.0':
@@ -2131,7 +2125,6 @@ packages:
   '@parcel/watcher-win32-x64@2.5.1':
     resolution: {integrity: sha512-9lHBdJITeNR++EvSQVUcaZoWupyHfXe1jZvGZ06O/5MflPcuPLtEphScIBL+AiCWBO46tDSHzWyD0uDmmZqsgA==}
     engines: {node: '>= 10.0.0'}
-    cpu: [x64]
     os: [win32]
 
   '@parcel/watcher@2.5.0':
@@ -2659,7 +2652,6 @@ packages:
 
   bun@1.2.20:
     resolution: {integrity: sha512-1ZGQynT+jPOHLY4IfzSubjbWcXsY2Z+irhW5D8RKC0wQ6KG4MvtgniAYQbSFYINGg8Wb2ydx+WgAG2BdhngAfw==}
-    cpu: [arm64, x64, aarch64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -3512,13 +3504,11 @@ packages:
   lightningcss-darwin-arm64@1.30.1:
     resolution: {integrity: sha512-c8JK7hyE65X1MHMN+Viq9n11RRC7hgin3HhYKhrMyaXflk5GVplZ60IxyoVtzILeKr+xAJwg6zK6sjTBJ0FKYQ==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [darwin]
 
   lightningcss-darwin-x64@1.30.1:
     resolution: {integrity: sha512-k1EvjakfumAQoTfcXUcHQZhSpLlkAuEkdMBsI/ivWw9hL+7FtilQc0Cy3hrx0AAQrVtQAbMI7YjCgYgvn37PzA==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [darwin]
 
   lightningcss-freebsd-x64@1.30.1:
@@ -3536,25 +3526,21 @@ packages:
   lightningcss-linux-arm64-gnu@1.30.1:
     resolution: {integrity: sha512-gB72maP8rmrKsnKYy8XUuXi/4OctJiuQjcuqWNlJQ6jZiWqtPvqFziskH3hnajfvKB27ynbVCucKSm2rkQp4Bw==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-arm64-musl@1.30.1:
     resolution: {integrity: sha512-jmUQVx4331m6LIX+0wUhBbmMX7TCfjF5FoOH6SD1CttzuYlGNVpA7QnrmLxrsub43ClTINfGSYyHe2HWeLl5CQ==}
     engines: {node: '>= 12.0.0'}
-    cpu: [arm64]
     os: [linux]
 
   lightningcss-linux-x64-gnu@1.30.1:
     resolution: {integrity: sha512-piWx3z4wN8J8z3+O5kO74+yr6ze/dKmPnI7vLqfSqI8bccaTGY5xiSGVIJBDd5K5BHlvVLpUB3S2YCfelyJ1bw==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
   lightningcss-linux-x64-musl@1.30.1:
     resolution: {integrity: sha512-rRomAK7eIkL+tHY0YPxbc5Dra2gXlI63HL+v1Pdi1a3sC+tJTcFrHX+E86sulgAXeI7rSzDYhPSeHHjqFhqfeQ==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [linux]
 
   lightningcss-win32-arm64-msvc@1.30.1:
@@ -3566,7 +3552,6 @@ packages:
   lightningcss-win32-x64-msvc@1.30.1:
     resolution: {integrity: sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg==}
     engines: {node: '>= 12.0.0'}
-    cpu: [x64]
     os: [win32]
 
   lightningcss@1.30.1:
@@ -4012,8 +3997,8 @@ packages:
       vue-tsc:
         optional: true
 
-  prettier@3.5.0:
-    resolution: {integrity: sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -7984,12 +7969,12 @@ snapshots:
     transitivePeerDependencies:
       - babel-plugin-macros
 
-  prettier-plugin-organize-imports@4.2.0(prettier@3.5.0)(typescript@5.5.4):
+  prettier-plugin-organize-imports@4.2.0(prettier@3.6.2)(typescript@5.5.4):
     dependencies:
-      prettier: 3.5.0
+      prettier: 3.6.2
       typescript: 5.5.4
 
-  prettier@3.5.0: {}
+  prettier@3.6.2: {}
 
   prop-types@15.8.1:
     dependencies:
