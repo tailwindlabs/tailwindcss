@@ -486,6 +486,7 @@ pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
         "cshtml" | "razor" => Razor.process(content),
         "haml" => Haml.process(content),
         "json" => Json.process(content),
+        "md" | "mdx" => Markdown.process(content),
         "pug" => Pug.process(content),
         "rb" | "erb" => Ruby.process(content),
         "slim" | "slang" => Slim.process(content),
