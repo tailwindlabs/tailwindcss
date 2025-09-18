@@ -67,13 +67,21 @@ import tailwindcss from "@tailwindcss/postcss"
 export default {
  plugins: [
   tailwindcss({
-    // Disables Lightning CSS
+    // Enable or disable Lightning CSS
     optimize: false,
+  })
+ ]
+}
+```
 
-    // Enables Lightning CSS
-    optimize: true,
+It's also possible to keep Lightning CSS enabled but disable minification:
 
-    // Enables Lightning CSS but disables minification
+```js
+import tailwindcss from "@tailwindcss/postcss"
+
+export default {
+ plugins: [
+  tailwindcss({
     optimize: { minify: false },
   })
  ]
