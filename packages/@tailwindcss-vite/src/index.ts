@@ -11,7 +11,8 @@ import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+import type { Environment, Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+import * as vite from 'vite'
 
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
@@ -28,28 +29,51 @@ export type PluginOptions = {
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
+  let roots = new Map<string, Root>()
 
   let isSSR = false
   let shouldOptimize = true
   let minify = true
 
-  let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
-    let cssResolver = config!.createResolver({
-      ...config!.resolve,
-      extensions: ['.css'],
-      mainFields: ['style'],
-      conditions: ['style', 'development|production'],
-      tryIndex: false,
-      preferRelative: true,
-    })
-    function customCssResolver(id: string, base: string) {
-      return cssResolver(id, base, true, isSSR)
+  function createRoot(env: Environment | null, id: string) {
+    type ResolveFn = (id: string, base: string) => Promise<string | false | undefined>
+
+    let customCssResolver: ResolveFn
+    let customJsResolver: ResolveFn
+
+    if (!env) {
+      // Older, pre-environment Vite API
+      // TODO: Can we drop this??
+      let cssResolver = config!.createResolver({
+        ...config!.resolve,
+        extensions: ['.css'],
+        mainFields: ['style'],
+        conditions: ['style', 'development|production'],
+        tryIndex: false,
+        preferRelative: true,
+      })
+
+      let jsResolver = config!.createResolver(config!.resolve)
+
+      customCssResolver = (id: string, base: string) => cssResolver(id, base, true, isSSR)
+      customJsResolver = (id: string, base: string) => jsResolver(id, base, true, isSSR)
+    } else {
+      // Newer Vite versions
+      let cssResolver = vite.createIdResolver(env.config, {
+        ...env.config.resolve,
+        extensions: ['.css'],
+        mainFields: ['style'],
+        conditions: ['style', 'development|production'],
+        tryIndex: false,
+        preferRelative: true,
+      })
+
+      let jsResolver = vite.createIdResolver(env.config, env.config.resolve)
+
+      customCssResolver = (id: string, base: string) => cssResolver(env, id, base, true)
+      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, true)
     }
 
-    let jsResolver = config!.createResolver(config!.resolve)
-    function customJsResolver(id: string, base: string) {
-      return jsResolver(id, base, true, isSSR)
-    }
     return new Root(
       id,
       config!.root,
@@ -59,7 +83,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       customCssResolver,
       customJsResolver,
     )
-  })
+  }
 
   return [
     {
@@ -111,6 +135,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
 
           let root = roots.get(id)
+          if (!root) {
+            root ??= createRoot(this.environment ?? null, id)
+            roots.set(id, root)
+          }
 
           let result = await root.generate(src, (file) => this.addWatchFile(file), I)
           if (!result) {
@@ -144,6 +172,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
 
           let root = roots.get(id)
+          if (!root) {
+            root ??= createRoot(this.environment ?? null, id)
+            roots.set(id, root)
+          }
 
           let result = await root.generate(src, (file) => this.addWatchFile(file), I)
           if (!result) {
