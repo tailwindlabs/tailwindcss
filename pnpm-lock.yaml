@@ -180,7 +180,7 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1
       tslib:
-        specifier: ^2.8.1
+        specifier: ^2.4.0
         version: 2.8.1
 
   crates/node/npm/win32-arm64-msvc: {}
