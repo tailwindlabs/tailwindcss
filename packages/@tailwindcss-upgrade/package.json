@@ -49,6 +49,6 @@
     "@types/braces": "^3.0.5",
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3",
-    "@types/semver": "^7.7.0"
+    "@types/semver": "^7.7.1"
   }
 }
