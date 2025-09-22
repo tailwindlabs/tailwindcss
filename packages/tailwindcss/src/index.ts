@@ -133,6 +133,9 @@ export const enum Features {
 
   // `@variant` was used
   Variants = 1 << 5,
+
+  // `@theme` was used
+  AtTheme = 1 << 6,
 }
 
 async function parseCss(
@@ -539,6 +542,8 @@ async function parseCss(
     // Handle `@theme`
     if (node.name === '@theme') {
       let [themeOptions, themePrefix] = parseThemeOptions(node.params)
+
+      features |= Features.AtTheme
 
       if (context.reference) {
         themeOptions |= ThemeOptions.REFERENCE

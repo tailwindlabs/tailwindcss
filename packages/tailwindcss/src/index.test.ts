@@ -5965,4 +5965,14 @@ describe('feature detection', () => {
     expect(compiler.features & Features.AtImport).toBeTruthy()
     expect(compiler.features & Features.Utilities).toBeFalsy()
   })
+
+  test('Compiling a file with only `@theme` should produce no output', async () => {
+    let compiler = await compile(css`
+      @theme {
+        --tracking-narrower: -0.02em;
+      }
+    `)
+
+    expect(compiler.build([])).toEqual('')
+  })
 })
