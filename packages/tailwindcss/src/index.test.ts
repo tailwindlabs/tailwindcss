@@ -5966,13 +5966,17 @@ describe('feature detection', () => {
     expect(compiler.features & Features.Utilities).toBeFalsy()
   })
 
-  test('Compiling a file with only `@theme` should produce no output', async () => {
+  test('using `@theme`', async () => {
     let compiler = await compile(css`
       @theme {
         --tracking-narrower: -0.02em;
       }
     `)
 
+    // We see @theme
+    expect(compiler.features & Features.AtTheme).toBeTruthy()
+
+    // And this produces no output because no other CSS is present
     expect(compiler.build([])).toEqual('')
   })
 })
