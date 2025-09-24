@@ -209,5 +209,8 @@ mod tests {
             }
         "#;
         Rust::test_extract_contains(input, vec!["px-4", "text-black", "px-8", "text-white"]);
+
+        let input = r#"html! { \x.px-4.text-black {  } }"#;
+        Rust::test(input, r#"html! { \x px-4 text-black {  } }"#);
     }
 }
