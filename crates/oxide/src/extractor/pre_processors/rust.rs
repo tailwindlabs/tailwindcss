@@ -34,6 +34,31 @@ impl Rust {
 
         while cursor.pos < len {
             match cursor.curr {
+                // Escaped character, skip ahead to the next character
+                b'\\' => cursor.advance_twice(),
+
+                // Consume strings as-is
+                b'"' => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'"' => {
+                                result[cursor.pos] = b' ';
+                                break;
+                            }
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+                }
+
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
                 // ```diff
@@ -169,5 +194,17 @@ mod tests {
             }
         "#;
         Rust::test_extract_contains(input, vec!["bg-[url(https://example.com)]"]);
+
+        let input = r#"
+            html! {
+                div.px-4.text-black {
+                    "Some text, with unbalanced brackets ]["
+                }
+                div.px-8.text-white {
+                    "Some more text, with unbalanced brackets ]["
+                }
+            }
+        "#;
+        Rust::test_extract_contains(input, vec!["px-4", "text-black", "px-8", "text-white"]);
     }
 }
