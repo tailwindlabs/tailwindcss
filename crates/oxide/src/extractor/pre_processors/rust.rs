@@ -35,7 +35,10 @@ impl Rust {
         while cursor.pos < len {
             match cursor.curr {
                 // Escaped character, skip ahead to the next character
-                b'\\' => cursor.advance_twice(),
+                b'\\' => {
+                    cursor.advance_twice();
+                    continue;
+                }
 
                 // Consume strings as-is
                 b'"' => {
