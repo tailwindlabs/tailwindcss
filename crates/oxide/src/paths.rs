@@ -60,6 +60,6 @@ impl Path {
     }
 
     pub fn canonicalize(&self) -> io::Result<Self> {
-        Ok(dunce::canonicalize(&self.inner)?.into())
+        Ok(fsops::canonicalize(&self.inner)?.into())
     }
 }
