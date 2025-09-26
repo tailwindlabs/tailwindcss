@@ -190,8 +190,8 @@ importers:
   integrations:
     devDependencies:
       dedent:
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: 1.7.0
+        version: 1.7.0
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -284,8 +284,8 @@ importers:
         specifier: 14.0.3
         version: 14.0.3
       dedent:
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: 1.7.0
+        version: 1.7.0
       internal-example-plugin:
         specifier: workspace:*
         version: link:../internal-example-plugin
@@ -378,8 +378,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3
       dedent:
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: 1.7.0
+        version: 1.7.0
       enhanced-resolve:
         specifier: ^5.18.3
         version: 5.18.3
@@ -466,8 +466,8 @@ importers:
         specifier: 'catalog:'
         version: 20.19.1
       dedent:
-        specifier: 1.6.0
-        version: 1.6.0
+        specifier: 1.7.0
+        version: 1.7.0
       lightningcss:
         specifier: 'catalog:'
         version: 1.30.1(patch_hash=tzyxy3asfxcqc7ihrooumyi5fm)
@@ -2870,8 +2870,8 @@ packages:
       supports-color:
         optional: true
 
-  dedent@1.6.0:
-    resolution: {integrity: sha512-F1Z+5UCFpmQUzJa11agbyPVMbpgT/qA3/SKyJ1jyBgm7dUcUEa8v9JwDkerSQXfakBwFljIxhOJqGkjUwZ9FSA==}
+  dedent@1.7.0:
+    resolution: {integrity: sha512-HGFtf8yhuhGhqO07SV79tRp+br4MnbdjeVxotpn1QBl30pcLLCQjX5b2295ll0fv8RKDKsmWYrl05usHM9CewQ==}
     peerDependencies:
       babel-plugin-macros: ^3.1.0
     peerDependenciesMeta:
@@ -6655,7 +6655,7 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  dedent@1.6.0: {}
+  dedent@1.7.0: {}
 
   deep-eql@5.0.2: {}
 
@@ -8032,7 +8032,7 @@ snapshots:
   prettier-plugin-embed@0.5.0:
     dependencies:
       '@types/estree': 1.0.6
-      dedent: 1.6.0
+      dedent: 1.7.0
       micro-memoize: 4.1.3
       package-up: 5.0.0
       tiny-jsonc: 1.0.2
