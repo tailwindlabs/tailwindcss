@@ -23,7 +23,7 @@ pub fn hoist_static_glob_parts(entries: &Vec<GlobEntry>, emit_parent_glob: bool)
             None => base,
         };
 
-        let base = match dunce::canonicalize(&base) {
+        let base = match fsops::canonicalize(&base) {
             Ok(base) => base,
             Err(err) => {
                 event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
@@ -253,7 +253,7 @@ mod tests {
         let optimized_sources = optimize_patterns(&sources);
 
         let parent_dir =
-            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+            format!("{}{}", fsops::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
 
         // Remove the temporary directory from the base
         optimized_sources

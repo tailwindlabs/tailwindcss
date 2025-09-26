@@ -199,6 +199,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8c02a5121d4ea3eb16a80748c74f5549a5665e4c21333c6098f283870fbdea6"
 
 [[package]]
+name = "fsops"
+version = "0.1.0"
+dependencies = [
+ "dunce",
+]
+
+[[package]]
 name = "globset"
 version = "0.4.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -230,6 +237,7 @@ dependencies = [
  "crossbeam-channel",
  "crossbeam-deque",
  "dunce",
+ "fsops",
  "globset",
  "log",
  "memchr",
@@ -598,6 +606,7 @@ dependencies = [
  "crossbeam",
  "dunce",
  "fast-glob",
+ "fsops",
  "globwalk",
  "ignore 0.4.23",
  "log",

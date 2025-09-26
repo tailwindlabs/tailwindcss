@@ -1,0 +1,11 @@
+[package]
+name = "fsops"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "fsops"
+bench = false
+
+[dependencies]
+dunce = "1.0.5"
