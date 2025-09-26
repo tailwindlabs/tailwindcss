@@ -506,8 +506,8 @@ importers:
         specifier: ^19.1.9
         version: 19.1.9
       '@types/react-dom':
-        specifier: ^19.1.7
-        version: 19.1.7(@types/react@19.1.9)
+        specifier: ^19.1.9
+        version: 19.1.9(@types/react@19.1.9)
       eslint:
         specifier: ^9.33.0
         version: 9.33.0(jiti@2.5.1)
@@ -540,8 +540,8 @@ importers:
         specifier: ^19.1.9
         version: 19.1.9
       '@types/react-dom':
-        specifier: ^19.1.7
-        version: 19.1.7(@types/react@19.1.9)
+        specifier: ^19.1.9
+        version: 19.1.9(@types/react@19.1.9)
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.4.47)
@@ -577,8 +577,8 @@ importers:
         specifier: ^19.1.9
         version: 19.1.9
       '@types/react-dom':
-        specifier: ^19.1.7
-        version: 19.1.7(@types/react@19.1.9)
+        specifier: ^19.1.9
+        version: 19.1.9(@types/react@19.1.9)
       bun:
         specifier: ^1.2.20
         version: 1.2.20
@@ -2441,8 +2441,8 @@ packages:
   '@types/postcss-import@14.0.3':
     resolution: {integrity: sha512-raZhRVTf6Vw5+QbmQ7LOHSDML71A5rj4+EqDzAbrZPfxfoGzFxMHRCq16VlddGIZpHELw0BG4G0YE2ANkdZiIQ==}
 
-  '@types/react-dom@19.1.7':
-    resolution: {integrity: sha512-i5ZzwYpqjmrKenzkoLM2Ibzt6mAsM7pxB6BCIouEVVmgiqaMj1TjaK7hnA36hbW5aZv20kx7Lw6hWzPWg0Rurw==}
+  '@types/react-dom@19.1.9':
+    resolution: {integrity: sha512-qXRuZaOsAdXKFyOhRBg6Lqqc0yay13vN7KrIg4L7N4aaHN68ma9OK3NE1BoDFgFOTfM7zg+3/8+2n8rLUH3OKQ==}
     peerDependencies:
       '@types/react': ^19.0.0
 
@@ -6101,7 +6101,7 @@ snapshots:
     dependencies:
       postcss: 8.4.41
 
-  '@types/react-dom@19.1.7(@types/react@19.1.9)':
+  '@types/react-dom@19.1.9(@types/react@19.1.9)':
     dependencies:
       '@types/react': 19.1.9
 
