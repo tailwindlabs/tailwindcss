@@ -250,8 +250,8 @@ importers:
         specifier: 'catalog:'
         version: 1.30.1(patch_hash=tzyxy3asfxcqc7ihrooumyi5fm)
       magic-string:
-        specifier: ^0.30.18
-        version: 0.30.18
+        specifier: ^0.30.19
+        version: 0.30.19
       source-map-js:
         specifier: ^1.2.1
         version: 1.2.1
@@ -472,8 +472,8 @@ importers:
         specifier: 'catalog:'
         version: 1.30.1(patch_hash=tzyxy3asfxcqc7ihrooumyi5fm)
       magic-string:
-        specifier: ^0.30.18
-        version: 0.30.18
+        specifier: ^0.30.19
+        version: 0.30.19
       source-map-js:
         specifier: ^1.2.1
         version: 1.2.1
@@ -3655,8 +3655,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  magic-string@0.30.18:
-    resolution: {integrity: sha512-yi8swmWbO17qHhwIBNeeZxTceJMeBvWJaId6dyvTSOwTipqeHhMhOrz6513r1sOKnpvQ7zkhlG8tPrpilwTxHQ==}
+  magic-string@0.30.19:
+    resolution: {integrity: sha512-2N21sPY9Ws53PZvsEpVtNuSW+ScYbQdp4b9qUaL+9QkHUrGFKo56Lg9Emg5s9V/qrtNBmiR01sYhUOwu3H+VOw==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -5356,7 +5356,7 @@ snapshots:
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
       '@jridgewell/set-array': 1.2.1
-      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/sourcemap-codec': 1.5.5
       '@jridgewell/trace-mapping': 0.3.25
 
   '@jridgewell/remapping@2.3.5':
@@ -5381,7 +5381,7 @@ snapshots:
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.0
+      '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jridgewell/trace-mapping@0.3.29':
     dependencies:
@@ -6292,7 +6292,7 @@ snapshots:
   '@vitest/snapshot@2.0.5':
     dependencies:
       '@vitest/pretty-format': 2.0.5
-      magic-string: 0.30.18
+      magic-string: 0.30.19
       pathe: 1.1.2
 
   '@vitest/spy@2.0.5':
@@ -7227,7 +7227,7 @@ snapshots:
 
   fix-dts-default-cjs-exports@1.0.1:
     dependencies:
-      magic-string: 0.30.18
+      magic-string: 0.30.19
       mlly: 1.7.4
       rollup: 4.44.0
 
@@ -7676,7 +7676,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  magic-string@0.30.18:
+  magic-string@0.30.19:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
@@ -8698,7 +8698,7 @@ snapshots:
       chai: 5.1.1
       debug: 4.3.6
       execa: 8.0.1
-      magic-string: 0.30.18
+      magic-string: 0.30.19
       pathe: 1.1.2
       std-env: 3.7.0
       tinybench: 2.9.0
