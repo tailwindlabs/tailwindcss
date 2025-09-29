@@ -24,6 +24,9 @@ const manifests = new DefaultMap((base) => {
 
 export function pkg(base: string) {
   return {
+    async manager() {
+      return await packageManagerForBase.get(base)
+    },
     async add(packages: string[], location: 'dependencies' | 'devDependencies' = 'dependencies') {
       let packageManager = await packageManagerForBase.get(base)
       let args = packages.slice()

@@ -4,6 +4,7 @@ import { Scanner } from '@tailwindcss/oxide'
 import { globby } from 'globby'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import pc from 'picocolors'
 import postcss from 'postcss'
 import { migrateJsConfig } from './codemods/config/migrate-js-config'
 import { migratePostCSSConfig } from './codemods/config/migrate-postcss'
@@ -61,6 +62,27 @@ async function run() {
   info(`Upgrading from Tailwind CSS ${highlight(`v${version.installedTailwindVersion(base)}`)}`, {
     prefix: '↳ ',
   })
+
+  if (version.installedTailwindVersion(base) !== version.expectedTailwindVersion(base)) {
+    let pkgManager = await pkg(base).manager()
+
+    error(
+      [
+        'Version mismatch',
+        '',
+        pc.dim('```diff'),
+        `${pc.red('-')} ${`${pc.dim('"tailwindcss":')} ${`${pc.dim('"')}${pc.blue(version.expectedTailwindVersion(base))}${pc.dim('"')}`}`} (expected version in package.json / lockfile)`,
+        `${pc.green('+')} ${`${pc.dim('"tailwindcss":')} ${`${pc.dim('"')}${pc.blue(version.installedTailwindVersion(base))}${pc.dim('"')}`}`} (installed version in \`node_modules\`)`,
+        pc.dim('```'),
+        '',
+        `Make sure to run ${highlight(`${pkgManager} install`)}, and try again.`,
+      ].join('\n'),
+      {
+        prefix: '↳ ',
+      },
+    )
+    process.exit(1)
+  }
 
   {
     // Stylesheet migrations
