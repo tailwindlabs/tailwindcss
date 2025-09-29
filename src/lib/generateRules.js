@@ -143,7 +143,14 @@ function applyImportant(matches, classCandidate) {
         className === classCandidate ? `!${className}` : className
       )
 
-      r.selector = ast.toString()
+      let newSelector = ast.toString()
+
+      if (newSelector.trim() === '') {
+        r.remove()
+        return
+      }
+
+      r.selector = newSelector
 
       r.walkDecls((d) => (d.important = true))
     })
