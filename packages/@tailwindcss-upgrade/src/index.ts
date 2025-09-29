@@ -58,6 +58,10 @@ async function run() {
     }
   }
 
+  info(`Upgrading from Tailwind CSS ${highlight(`v${version.installedTailwindVersion(base)}`)}`, {
+    prefix: '↳ ',
+  })
+
   {
     // Stylesheet migrations
 
