@@ -54,8 +54,8 @@ jobs:
       - uses: pnpm/action-setup@v4
 
       - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
