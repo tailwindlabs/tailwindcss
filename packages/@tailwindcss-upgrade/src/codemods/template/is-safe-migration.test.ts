@@ -112,4 +112,21 @@ describe('is-safe-migration', async () => {
       }),
     ).toEqual(candidate)
   })
+
+  test.each([
+    // Vue classes
+    [`<div class="shadow"></div>`, 'shadow', 'shadow-sm'],
+    [`<div :class="{ shadow: true }"></div>`, 'shadow', 'shadow-sm'],
+
+    // React classes
+    [`<div className="shadow"></div>`, 'shadow', 'shadow-sm'],
+  ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
+    expect(
+      await migrateCandidate(designSystem, {}, candidate, {
+        contents: example,
+        start: example.indexOf(candidate),
+        end: example.indexOf(candidate) + candidate.length,
+      }),
+    ).toEqual(expected)
+  })
 })
