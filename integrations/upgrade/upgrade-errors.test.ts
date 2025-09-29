@@ -1,3 +1,4 @@
+import { stripVTControlCharacters } from 'node:util'
 // @ts-expect-error This path does exist
 import { version } from '../../packages/tailwindcss/package.json'
 import { css, html, js, json, test } from '../utils'
@@ -51,7 +52,7 @@ test(
       return exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) => {
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
-        return Promise.reject(e.message.replaceAll(version, '4.0.0'))
+        return Promise.reject(stripVTControlCharacters(e.message.replaceAll(version, '4.0.0')))
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
       "Command failed: npx @tailwindcss/upgrade
@@ -127,7 +128,7 @@ test(
       return exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) => {
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
-        return Promise.reject(e.message.replaceAll(version, '4.0.0'))
+        return Promise.reject(stripVTControlCharacters(e.message.replaceAll(version, '4.0.0')))
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
       "Command failed: npx @tailwindcss/upgrade
@@ -203,7 +204,7 @@ test(
       return exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) => {
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
-        return Promise.reject(e.message.replaceAll(version, '4.0.0'))
+        return Promise.reject(stripVTControlCharacters(e.message.replaceAll(version, '4.0.0')))
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
       "Command failed: npx @tailwindcss/upgrade
