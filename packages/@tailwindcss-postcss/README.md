@@ -62,29 +62,29 @@ By default, this plugin detects whether or not the CSS is being built for produc
 If you want to always enable or disable Lightning CSS the `optimize` option may be used:
 
 ```js
-import tailwindcss from "@tailwindcss/postcss"
+import tailwindcss from '@tailwindcss/postcss'
 
 export default {
- plugins: [
-  tailwindcss({
-    // Enable or disable Lightning CSS
-    optimize: false,
-  })
- ]
+  plugins: [
+    tailwindcss({
+      // Enable or disable Lightning CSS
+      optimize: false,
+    }),
+  ],
 }
 ```
 
 It's also possible to keep Lightning CSS enabled but disable minification:
 
 ```js
-import tailwindcss from "@tailwindcss/postcss"
+import tailwindcss from '@tailwindcss/postcss'
 
 export default {
- plugins: [
-  tailwindcss({
-    optimize: { minify: false },
-  })
- ]
+  plugins: [
+    tailwindcss({
+      optimize: { minify: false },
+    }),
+  ],
 }
 ```
 
@@ -95,32 +95,32 @@ Our PostCSS plugin can rewrite `url(…)`s for you since it also handles `@impor
 In some situations the bundler or framework you're using may provide this feature itself. In this case you can set `transformAssetUrls` to `false` to disable this feature:
 
 ```js
-import tailwindcss from "@tailwindcss/postcss"
+import tailwindcss from '@tailwindcss/postcss'
 
 export default {
- plugins: [
-  tailwindcss({
-    // Disable `url(…)` rewriting
-    transformAssetUrls: false,
+  plugins: [
+    tailwindcss({
+      // Disable `url(…)` rewriting
+      transformAssetUrls: false,
 
-    // Enable `url(…)` rewriting (the default)
-    transformAssetUrls: true,
-  })
- ]
+      // Enable `url(…)` rewriting (the default)
+      transformAssetUrls: true,
+    }),
+  ],
 }
 ```
 
 You may also pass options to `optimize` to enable Lighting CSS but prevent minification:
 
 ```js
-import tailwindcss from "@tailwindcss/postcss"
+import tailwindcss from '@tailwindcss/postcss'
 
 export default {
- plugins: [
-  tailwindcss({
-    // Enables Lightning CSS but disables minification
-    optimize: { minify: false },
-  })
- ]
+  plugins: [
+    tailwindcss({
+      // Enables Lightning CSS but disables minification
+      optimize: { minify: false },
+    }),
+  ],
 }
 ```

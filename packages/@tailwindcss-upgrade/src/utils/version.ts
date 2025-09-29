@@ -26,6 +26,6 @@ let cache = new DefaultMap((base) => {
   return tailwindVersion
 })
 
-function installedTailwindVersion(base = process.cwd()): string {
+export function installedTailwindVersion(base = process.cwd()): string {
   return cache.get(base)
 }

@@ -35,4 +35,3 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
   )
   console.log(`Moved ${file} to npm/wasm32-wasi`)
 }
-
