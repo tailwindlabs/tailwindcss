@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix `require.cache` error when loaded through a TypeScript file in Node 22.18+ ([#18665](https://github.com/tailwindlabs/tailwindcss/pull/18665))
 - Support `import.meta.resolve(…)` in configs for new enough Node.js versions ([#18938](https://github.com/tailwindlabs/tailwindcss/pull/18938))
 - Allow using newer versions of `postcss-load-config` for better ESM and TypeScript PostCSS config support with the CLI ([#18938](https://github.com/tailwindlabs/tailwindcss/pull/18938))
+- Remove irrelevant utility rules when matching important classes ([#19030](https://github.com/tailwindlabs/tailwindcss/pull/19030))
 
 ## [3.4.17] - 2024-12-17
 
