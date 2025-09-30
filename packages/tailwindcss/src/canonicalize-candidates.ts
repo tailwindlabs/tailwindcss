@@ -65,7 +65,7 @@ const enum Convert {
 }
 
 function themeToVar(designSystem: DesignSystem, rawCandidate: string): string {
-  let convert = createConverter(designSystem)
+  let convert = converterCache.get(designSystem)
 
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
     let clone = structuredClone(candidate)
@@ -122,161 +122,164 @@ function themeToVar(designSystem: DesignSystem, rawCandidate: string): string {
   return rawCandidate
 }
 
-function createConverter(designSystem: DesignSystem, { prettyPrint = false } = {}) {
-  function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
-    let ast = ValueParser.parse(input)
+const converterCache = new DefaultMap((ds: DesignSystem) => {
+  return createConverter(ds)
 
-    // In some scenarios (e.g.: variants), we can't migrate to `var(…)` if it
-    // ends up in the `@media (…)` part. In this case we only have to migrate to
-    // the new `theme(…)` notation.
-    if (options & Convert.MigrateThemeOnly) {
-      return [substituteFunctionsInValue(ast, toTheme), null]
-    }
+  function createConverter(designSystem: DesignSystem) {
+    function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
+      let ast = ValueParser.parse(input)
 
-    let themeUsageCount = 0
-    let themeModifierCount = 0
-
-    // Analyze AST
-    ValueParser.walk(ast, (node) => {
-      if (node.kind !== 'function') return
-      if (node.value !== 'theme') return
-
-      // We are only interested in the `theme` function
-      themeUsageCount += 1
-
-      // Figure out if a modifier is used
-      ValueParser.walk(node.nodes, (child) => {
-        // If we see a `,`, it means that we have a fallback value
-        if (child.kind === 'separator' && child.value.includes(',')) {
-          return ValueParser.ValueWalkAction.Stop
-        }
-
-        // If we see a `/`, we have a modifier
-        else if (child.kind === 'separator' && child.value.trim() === '/') {
-          themeModifierCount += 1
-          return ValueParser.ValueWalkAction.Stop
-        }
-
-        return ValueParser.ValueWalkAction.Skip
-      })
-    })
-
-    // No `theme(…)` calls, nothing to do
-    if (themeUsageCount === 0) {
-      return [input, null]
-    }
-
-    // No `theme(…)` with modifiers, we can migrate to `var(…)`
-    if (themeModifierCount === 0) {
-      return [substituteFunctionsInValue(ast, toVar), null]
-    }
-
-    // Multiple modifiers which means that there are multiple `theme(…/…)`
-    // values. In this case, we can't convert the modifier to a candidate
-    // modifier.
-    //
-    // We also can't migrate to `var(…)` because that would lose the modifier.
-    //
-    // Try to convert each `theme(…)` call to the modern syntax.
-    if (themeModifierCount > 1) {
-      return [substituteFunctionsInValue(ast, toTheme), null]
-    }
-
-    // Only a single `theme(…)` with a modifier left, that modifier will be
-    // migrated to a candidate modifier.
-    let modifier: CandidateModifier | null = null
-    let result = substituteFunctionsInValue(ast, (path, fallback) => {
-      let parts = segment(path, '/').map((part) => part.trim())
-
-      // Multiple `/` separators, which makes this an invalid path
-      if (parts.length > 2) return null
-
-      // The path contains a `/`, which means that there is a modifier such as
-      // `theme(colors.red.500/50%)`.
-      //
-      // Currently, we are assuming that this is only being used for colors,
-      // which means that we can typically convert them to a modifier on the
-      // candidate itself.
-      //
-      // If there is more than one node in the AST though, `theme(…)` must not
-      // be the whole value so it's not safe to use a modifier instead.
-      //
-      // E.g.: `inset 0px 1px theme(colors.red.500/50%)` is a shadow, not a color.
-      if (ast.length === 1 && parts.length === 2 && options & Convert.MigrateModifier) {
-        let [pathPart, modifierPart] = parts
-
-        // 50% -> /50
-        if (/^\d+%$/.test(modifierPart)) {
-          modifier = { kind: 'named', value: modifierPart.slice(0, -1) }
-        }
-
-        // .12 -> /12
-        // .12345 -> /[12.345]
-        else if (/^0?\.\d+$/.test(modifierPart)) {
-          let value = Number(modifierPart) * 100
-          modifier = {
-            kind: Number.isInteger(value) ? 'named' : 'arbitrary',
-            value: value.toString(),
-          }
-        }
-
-        // Anything else becomes arbitrary
-        else {
-          modifier = { kind: 'arbitrary', value: modifierPart }
-        }
-
-        // Update path to be the first part
-        path = pathPart
+      // In some scenarios (e.g.: variants), we can't migrate to `var(…)` if it
+      // ends up in the `@media (…)` part. In this case we only have to migrate to
+      // the new `theme(…)` notation.
+      if (options & Convert.MigrateThemeOnly) {
+        return [substituteFunctionsInValue(ast, toTheme), null]
       }
 
-      return toVar(path, fallback) || toTheme(path, fallback)
-    })
+      let themeUsageCount = 0
+      let themeModifierCount = 0
 
-    return [result, modifier]
-  }
+      // Analyze AST
+      ValueParser.walk(ast, (node) => {
+        if (node.kind !== 'function') return
+        if (node.value !== 'theme') return
 
-  function pathToVariableName(path: string) {
-    let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
-    if (!designSystem.theme.get([variable])) return null
+        // We are only interested in the `theme` function
+        themeUsageCount += 1
 
-    if (designSystem.theme.prefix) {
-      return `--${designSystem.theme.prefix}-${variable.slice(2)}`
+        // Figure out if a modifier is used
+        ValueParser.walk(node.nodes, (child) => {
+          // If we see a `,`, it means that we have a fallback value
+          if (child.kind === 'separator' && child.value.includes(',')) {
+            return ValueParser.ValueWalkAction.Stop
+          }
+
+          // If we see a `/`, we have a modifier
+          else if (child.kind === 'separator' && child.value.trim() === '/') {
+            themeModifierCount += 1
+            return ValueParser.ValueWalkAction.Stop
+          }
+
+          return ValueParser.ValueWalkAction.Skip
+        })
+      })
+
+      // No `theme(…)` calls, nothing to do
+      if (themeUsageCount === 0) {
+        return [input, null]
+      }
+
+      // No `theme(…)` with modifiers, we can migrate to `var(…)`
+      if (themeModifierCount === 0) {
+        return [substituteFunctionsInValue(ast, toVar), null]
+      }
+
+      // Multiple modifiers which means that there are multiple `theme(…/…)`
+      // values. In this case, we can't convert the modifier to a candidate
+      // modifier.
+      //
+      // We also can't migrate to `var(…)` because that would lose the modifier.
+      //
+      // Try to convert each `theme(…)` call to the modern syntax.
+      if (themeModifierCount > 1) {
+        return [substituteFunctionsInValue(ast, toTheme), null]
+      }
+
+      // Only a single `theme(…)` with a modifier left, that modifier will be
+      // migrated to a candidate modifier.
+      let modifier: CandidateModifier | null = null
+      let result = substituteFunctionsInValue(ast, (path, fallback) => {
+        let parts = segment(path, '/').map((part) => part.trim())
+
+        // Multiple `/` separators, which makes this an invalid path
+        if (parts.length > 2) return null
+
+        // The path contains a `/`, which means that there is a modifier such as
+        // `theme(colors.red.500/50%)`.
+        //
+        // Currently, we are assuming that this is only being used for colors,
+        // which means that we can typically convert them to a modifier on the
+        // candidate itself.
+        //
+        // If there is more than one node in the AST though, `theme(…)` must not
+        // be the whole value so it's not safe to use a modifier instead.
+        //
+        // E.g.: `inset 0px 1px theme(colors.red.500/50%)` is a shadow, not a color.
+        if (ast.length === 1 && parts.length === 2 && options & Convert.MigrateModifier) {
+          let [pathPart, modifierPart] = parts
+
+          // 50% -> /50
+          if (/^\d+%$/.test(modifierPart)) {
+            modifier = { kind: 'named', value: modifierPart.slice(0, -1) }
+          }
+
+          // .12 -> /12
+          // .12345 -> /[12.345]
+          else if (/^0?\.\d+$/.test(modifierPart)) {
+            let value = Number(modifierPart) * 100
+            modifier = {
+              kind: Number.isInteger(value) ? 'named' : 'arbitrary',
+              value: value.toString(),
+            }
+          }
+
+          // Anything else becomes arbitrary
+          else {
+            modifier = { kind: 'arbitrary', value: modifierPart }
+          }
+
+          // Update path to be the first part
+          path = pathPart
+        }
+
+        return toVar(path, fallback) || toTheme(path, fallback)
+      })
+
+      return [result, modifier]
     }
 
-    return variable
-  }
+    function pathToVariableName(path: string) {
+      let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
+      if (!designSystem.theme.get([variable])) return null
 
-  function toVar(path: string, fallback?: string) {
-    let variable = pathToVariableName(path)
-    if (variable) return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
+      if (designSystem.theme.prefix) {
+        return `--${designSystem.theme.prefix}-${variable.slice(2)}`
+      }
 
-    let keyPath = toKeyPath(path)
-    if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
-      let multiplier = keyPath[1]
-      if (!isValidSpacingMultiplier(multiplier)) return null
-
-      return `--spacing(${multiplier})`
+      return variable
     }
 
-    return null
+    function toVar(path: string, fallback?: string) {
+      let variable = pathToVariableName(path)
+      if (variable) return fallback ? `var(${variable}, ${fallback})` : `var(${variable})`
+
+      let keyPath = toKeyPath(path)
+      if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+        let multiplier = keyPath[1]
+        if (!isValidSpacingMultiplier(multiplier)) return null
+
+        return `--spacing(${multiplier})`
+      }
+
+      return null
+    }
+
+    function toTheme(path: string, fallback?: string) {
+      let parts = segment(path, '/').map((part) => part.trim())
+      path = parts.shift()!
+
+      let variable = pathToVariableName(path)
+      if (!variable) return null
+
+      let modifier = parts.length > 0 ? `/${parts.join('/')}` : ''
+      return fallback
+        ? `--theme(${variable}${modifier}, ${fallback})`
+        : `--theme(${variable}${modifier})`
+    }
+
+    return convert
   }
-
-  function toTheme(path: string, fallback?: string) {
-    let parts = segment(path, '/').map((part) => part.trim())
-    path = parts.shift()!
-
-    let variable = pathToVariableName(path)
-    if (!variable) return null
-
-    let modifier =
-      parts.length > 0 ? (prettyPrint ? ` / ${parts.join(' / ')}` : `/${parts.join('/')}`) : ''
-    return fallback
-      ? `--theme(${variable}${modifier}, ${fallback})`
-      : `--theme(${variable}${modifier})`
-  }
-
-  return convert
-}
+})
 
 function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
