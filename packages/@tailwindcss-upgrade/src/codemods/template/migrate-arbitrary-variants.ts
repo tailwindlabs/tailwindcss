@@ -1,7 +1,7 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import type { Writable } from '../../../../tailwindcss/src/types'
 import { replaceObject } from '../../utils/replace-object'
-import type { Writable } from '../../utils/types'
 import { walkVariants } from '../../utils/walk-variants'
 import { computeVariantSignature, preComputedVariants } from './signatures'
 

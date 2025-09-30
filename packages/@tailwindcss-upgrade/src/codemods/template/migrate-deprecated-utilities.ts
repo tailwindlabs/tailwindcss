@@ -1,6 +1,6 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import type { Writable } from '../../utils/types'
+import type { Writable } from '../../../../tailwindcss/src/types'
 import { baseCandidate, parseCandidate, printUnprefixedCandidate } from './candidates'
 import { computeUtilitySignature } from './signatures'
 

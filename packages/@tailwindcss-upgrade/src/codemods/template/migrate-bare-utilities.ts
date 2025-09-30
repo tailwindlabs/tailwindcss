@@ -1,8 +1,8 @@
 import { type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import type { Writable } from '../../../../tailwindcss/src/types'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
-import type { Writable } from '../../utils/types'
 import { baseCandidate, parseCandidate } from './candidates'
 import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
