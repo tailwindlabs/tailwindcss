@@ -238,11 +238,11 @@ const converterCache = new DefaultMap((ds: DesignSystem) => {
       return [result, modifier]
     }
 
-    function pathToVariableName(path: string) {
+    function pathToVariableName(path: string, shouldPrefix = true) {
       let variable = `--${keyPathToCssProperty(toKeyPath(path))}` as const
       if (!designSystem.theme.get([variable])) return null
 
-      if (designSystem.theme.prefix) {
+      if (shouldPrefix && designSystem.theme.prefix) {
         return `--${designSystem.theme.prefix}-${variable.slice(2)}`
       }
 
@@ -268,7 +268,7 @@ const converterCache = new DefaultMap((ds: DesignSystem) => {
       let parts = segment(path, '/').map((part) => part.trim())
       path = parts.shift()!
 
-      let variable = pathToVariableName(path)
+      let variable = pathToVariableName(path, false)
       if (!variable) return null
 
       let modifier = parts.length > 0 ? `/${parts.join('/')}` : ''
