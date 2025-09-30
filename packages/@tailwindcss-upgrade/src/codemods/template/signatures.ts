@@ -5,9 +5,9 @@ import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-par
 import { CompileAstFlags, type DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { ThemeOptions } from '../../../../tailwindcss/src/theme'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
+import { dimensions } from '../../../../tailwindcss/src/utils/dimensions'
 import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
-import { dimensions } from '../../utils/dimension'
 
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or
