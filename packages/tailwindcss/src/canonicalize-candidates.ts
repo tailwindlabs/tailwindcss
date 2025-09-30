@@ -8,9 +8,11 @@ import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
 
 export function canonicalizeCandidates(ds: DesignSystem, candidates: string[]): string[] {
-  return candidates.map((candidate) => {
-    return canonicalizeCandidateCache.get(ds).get(candidate)
-  })
+  let result = new Set<string>()
+  for (let candidate of candidates) {
+    result.add(canonicalizeCandidateCache.get(ds).get(candidate))
+  }
+  return Array.from(result)
 }
 
 const canonicalizeCandidateCache = new DefaultMap((ds: DesignSystem) => {
