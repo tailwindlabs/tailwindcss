@@ -7,7 +7,6 @@ import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
-import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
 import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
@@ -43,7 +42,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateVariantOrder, // sync, v3 → v4, Has to happen before migrations that modify variants
   migrateAutomaticVarInjection, // sync, v3 → v4
   migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
-  migrateArbitraryUtilities, // sync, v4
   migrateBareValueUtilities, // sync, v4
   migrateDeprecatedUtilities, // sync, v4 (deprecation map, order-none → order-0)
   migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?

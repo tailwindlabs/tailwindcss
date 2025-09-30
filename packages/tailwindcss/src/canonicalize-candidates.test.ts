@@ -97,7 +97,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     /// theme(…) to `var(…)`
     // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
-    ['[color:red]', '[color:red]'],
+    ['[color:red]', 'text-[red]'],
 
     // Handle special cases around `.1` in the `theme(…)`
     ['[--value:theme(spacing.1)]', '[--value:--spacing(1)]'],
@@ -108,10 +108,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
 
     // Convert to `var(…)` if we can resolve the path
-    ['[color:theme(colors.red.500)]', '[color:var(--color-red-500)]'], // Arbitrary property
-    ['[color:theme(colors.red.500)]/50', '[color:var(--color-red-500)]/50'], // Arbitrary property + modifier
-    ['bg-[theme(colors.red.500)]', 'bg-(--color-red-500)'], // Arbitrary value
-    ['bg-[size:theme(spacing.4)]', 'bg-[size:--spacing(4)]'], // Arbitrary value + data type hint
+    ['[color:theme(colors.red.500)]', 'text-red-500'], // Arbitrary property
+    ['[color:theme(colors.red.500)]/50', 'text-red-500/50'], // Arbitrary property + modifier
+    ['bg-[theme(colors.red.500)]', 'bg-red-500'], // Arbitrary value
+    ['bg-[size:theme(spacing.4)]', 'bg-size-[--spacing(4)]'], // Arbitrary value + data type hint
 
     // Pretty print CSS functions preceded by an operator to prevent consecutive
     // operator characters.
@@ -128,10 +128,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     // Keep `theme(…)` if we can't resolve the path, but still try to convert the
     // fallback value.
-    [
-      'bg-[theme(colors.foo.1000,theme(colors.red.500))]',
-      'bg-[theme(colors.foo.1000,var(--color-red-500))]',
-    ],
+    ['bg-[theme(colors.foo.1000,theme(colors.red.500))]', 'bg-red-500'],
 
     // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
     ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--text-xs)*2)]'],
@@ -145,41 +142,41 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     //   to a candidate modifier _if_ all `theme(…)` calls use the same modifier.
     [
       '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]',
-      '[color:--theme(--color-red-500/50,--theme(--color-blue-500/50))]',
+      'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]',
     ],
     [
       '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]/50',
-      '[color:--theme(--color-red-500/50,--theme(--color-blue-500/50))]/50',
+      'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]/50',
     ],
 
     // Convert the `theme(…)`, but try to move the inline modifier (e.g. `50%`),
     // to a candidate modifier.
     // Arbitrary property, with simple percentage modifier
-    ['[color:theme(colors.red.500/75%)]', '[color:var(--color-red-500)]/75'],
+    ['[color:theme(colors.red.500/75%)]', 'text-red-500/75'],
 
     // Arbitrary property, with numbers (0-1) without a unit
-    ['[color:theme(colors.red.500/.12)]', '[color:var(--color-red-500)]/12'],
-    ['[color:theme(colors.red.500/0.12)]', '[color:var(--color-red-500)]/12'],
+    ['[color:theme(colors.red.500/.12)]', 'text-red-500/12'],
+    ['[color:theme(colors.red.500/0.12)]', 'text-red-500/12'],
 
     // Arbitrary property, with more complex modifier (we only allow whole numbers
     // as bare modifiers). Convert the complex numbers to arbitrary values instead.
-    ['[color:theme(colors.red.500/12.34%)]', '[color:var(--color-red-500)]/[12.34%]'],
-    ['[color:theme(colors.red.500/var(--opacity))]', '[color:var(--color-red-500)]/(--opacity)'],
-    ['[color:theme(colors.red.500/.12345)]', '[color:var(--color-red-500)]/[12.345]'],
-    ['[color:theme(colors.red.500/50.25%)]', '[color:var(--color-red-500)]/[50.25%]'],
+    ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
+    ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
+    ['[color:theme(colors.red.500/.12345)]', 'text-red-500/[12.345]'],
+    ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/[50.25%]'],
 
     // Arbitrary value
-    ['bg-[theme(colors.red.500/75%)]', 'bg-(--color-red-500)/75'],
-    ['bg-[theme(colors.red.500/12.34%)]', 'bg-(--color-red-500)/[12.34%]'],
+    ['bg-[theme(colors.red.500/75%)]', 'bg-red-500/75'],
+    ['bg-[theme(colors.red.500/12.34%)]', 'bg-red-500/[12.34%]'],
 
     // Arbitrary property that already contains a modifier
-    ['[color:theme(colors.red.500/50%)]/50', '[color:--theme(--color-red-500/50%)]/50'],
+    ['[color:theme(colors.red.500/50%)]/50', 'text-[--theme(--color-red-500/50%)]/50'],
 
     // Values that don't contain only `theme(…)` calls should not be converted to
     // use a modifier since the color is not the whole value.
     [
       'shadow-[shadow:inset_0px_1px_theme(colors.white/15%)]',
-      'shadow-[shadow:inset_0px_1px_--theme(--color-white/15%)]',
+      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
     ],
 
     // Arbitrary value, where the candidate already contains a modifier
@@ -205,7 +202,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     // Renamed theme keys
     ['max-w-[theme(screens.md)]', 'max-w-(--breakpoint-md)'],
-    ['w-[theme(maxWidth.md)]', 'w-(--container-md)'],
+    ['w-[theme(maxWidth.md)]', 'w-md'],
 
     // Invalid cases
     ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
@@ -228,6 +225,248 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       candidate,
       expected,
     )
+  })
+
+  describe('arbitrary utilities', () => {
+    test.each([
+      // Arbitrary property to static utility
+      ['[text-wrap:balance]', 'text-balance'],
+
+      // Arbitrary property to static utility with slight differences in
+      // whitespace. This will require some canonicalization.
+      ['[display:_flex_]', 'flex'],
+      ['[display:_flex]', 'flex'],
+      ['[display:flex_]', 'flex'],
+
+      // Arbitrary property to static utility
+      // Map number to keyword-like value
+      ['leading-[1]', 'leading-none'],
+
+      // Arbitrary property to named functional utility
+      ['[color:var(--color-red-500)]', 'text-red-500'],
+      ['[background-color:var(--color-red-500)]', 'bg-red-500'],
+
+      // Arbitrary property with modifier to named functional utility with modifier
+      ['[color:var(--color-red-500)]/25', 'text-red-500/25'],
+
+      // Arbitrary property with arbitrary modifier to named functional utility with
+      // arbitrary modifier
+      ['[color:var(--color-red-500)]/[25%]', 'text-red-500/25'],
+      ['[color:var(--color-red-500)]/[100%]', 'text-red-500'],
+      ['[color:var(--color-red-500)]/100', 'text-red-500'],
+      // No need for `/50` because that's already encoded in the `--color-primary`
+      // value
+      ['[color:oklch(62.3%_0.214_259.815)]/50', 'text-primary'],
+
+      // Arbitrary property to arbitrary value
+      ['[max-height:20px]', 'max-h-[20px]'],
+
+      // Arbitrary property to bare value
+      ['[grid-column:2]', 'col-2'],
+      ['[grid-column:1234]', 'col-1234'],
+
+      // Arbitrary value to bare value
+      ['border-[2px]', 'border-2'],
+      ['border-[1234px]', 'border-1234'],
+
+      // Arbitrary value with data type, to more specific arbitrary value
+      ['bg-[position:123px]', 'bg-position-[123px]'],
+      ['bg-[size:123px]', 'bg-size-[123px]'],
+
+      // Arbitrary value with inferred data type, to more specific arbitrary value
+      ['bg-[123px]', 'bg-position-[123px]'],
+
+      // Arbitrary value with spacing mul
+      ['w-[64rem]', 'w-256'],
+
+      // Complex arbitrary property to arbitrary value
+      [
+        '[grid-template-columns:repeat(2,minmax(100px,1fr))]',
+        'grid-cols-[repeat(2,minmax(100px,1fr))]',
+      ],
+      // Complex arbitrary property to bare value
+      ['[grid-template-columns:repeat(2,minmax(0,1fr))]', 'grid-cols-2'],
+
+      // Arbitrary value to bare value with percentage
+      ['from-[25%]', 'from-25%'],
+
+      // Arbitrary percentage value must be a whole number. Should not migrate to
+      // a bare value.
+      ['from-[2.5%]', 'from-[2.5%]'],
+    ])(testName, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+
+        @theme {
+          --*: initial;
+          --spacing: 0.25rem;
+          --color-red-500: red;
+
+          /* Equivalent of blue-500/50 */
+          --color-primary: color-mix(in oklab, oklch(62.3% 0.214 259.815) 50%, transparent);
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('migrate with custom static utility `@utility custom {…}`', async () => {
+      let candidate = '[--key:value]'
+      let expected = 'custom'
+
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @utility custom {
+          --key: value;
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('migrate with custom functional utility `@utility custom-* {…}`', async () => {
+      let candidate = '[--key:value]'
+      let expected = 'custom-value'
+
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @utility custom-* {
+          --key: --value('value');
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('migrate with custom functional utility `@utility custom-* {…}` that supports bare values', async () => {
+      let candidate = '[tab-size:4]'
+      let expected = 'tab-4'
+
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @utility tab-* {
+          tab-size: --value(integer);
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test.each([
+      ['[tab-size:0]', 'tab-0'],
+      ['[tab-size:4]', 'tab-4'],
+      ['[tab-size:8]', 'tab-github'],
+      ['tab-[0]', 'tab-0'],
+      ['tab-[4]', 'tab-4'],
+      ['tab-[8]', 'tab-github'],
+    ])(
+      'migrate custom @utility from arbitrary values to bare values and named values (based on theme)',
+      async (candidate, expected) => {
+        let input = css`
+          @import 'tailwindcss';
+          @theme {
+            --*: initial;
+            --tab-size-github: 8;
+          }
+
+          @utility tab-* {
+            tab-size: --value(--tab-size, integer, [integer]);
+          }
+        `
+
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
+
+    describe.each([['@theme'], ['@theme inline']])('%s', (theme) => {
+      test.each([
+        ['[color:CanvasText]', 'text-canvas'],
+        ['text-[CanvasText]', 'text-canvas'],
+      ])(`migrate arbitrary value to theme value ${testName}`, async (candidate, expected) => {
+        let input = css`
+          @import 'tailwindcss';
+          ${theme} {
+            --*: initial;
+            --color-canvas: CanvasText;
+          }
+        `
+
+        await expectCanonicalization(input, candidate, expected)
+      })
+
+      // Some utilities read from specific namespaces, in this case we do not want
+      // to migrate to a value in that namespace if we reference a variable that
+      // results in the same value, but comes from a different namespace.
+      //
+      // E.g.: `max-w` reads from: ['--max-width', '--spacing', '--container']
+      test.each([
+        // `max-w` does not read from `--breakpoint-md`, but `--breakpoint-md`  and
+        // `--container-3xl` happen to result in the same value. The difference is
+        // the semantics of the value.
+        ['max-w-(--breakpoint-md)', 'max-w-(--breakpoint-md)'],
+        ['max-w-(--container-3xl)', 'max-w-3xl'],
+      ])(`migrate arbitrary value to theme value ${testName}`, async (candidate, expected) => {
+        let input = css`
+          @import 'tailwindcss';
+          ${theme} {
+            --*: initial;
+            --breakpoint-md: 48rem;
+            --container-3xl: 48rem;
+          }
+        `
+
+        await expectCanonicalization(input, candidate, expected)
+      })
+    })
+
+    test('migrate an arbitrary property without spaces, to a theme value with spaces (canonicalization)', async () => {
+      let candidate = 'font-[foo,bar,baz]'
+      let expected = 'font-example'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+          --font-example: foo, bar, baz;
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test.each([
+      // Default spacing scale
+      ['w-[64rem]', 'w-256', '0.25rem'],
+
+      // Keep arbitrary value if units are different
+      ['w-[124px]', 'w-[124px]', '0.25rem'],
+
+      // Keep arbitrary value if bare value doesn't fit in steps of .25
+      ['w-[0.123rem]', 'w-[0.123rem]', '0.25rem'],
+
+      // Custom pixel based spacing scale
+      ['w-[123px]', 'w-123', '1px'],
+      ['w-[256px]', 'w-128', '2px'],
+    ])(`${testName} (spacing = \`%s\`)`, async (candidate, expected, spacing) => {
+      let input = css`
+        @import 'tailwindcss';
+
+        @theme {
+          --*: initial;
+          --spacing: ${spacing};
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
   })
 })
 
