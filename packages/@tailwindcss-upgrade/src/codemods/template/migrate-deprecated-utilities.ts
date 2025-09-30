@@ -6,11 +6,11 @@ import { computeUtilitySignature } from './signatures'
 
 const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
 
-export async function migrateDeprecatedUtilities(
+export function migrateDeprecatedUtilities(
   designSystem: DesignSystem,
   _userConfig: Config | null,
   rawCandidate: string,
-): Promise<string> {
+): string {
   let signatures = computeUtilitySignature.get(designSystem)
 
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
