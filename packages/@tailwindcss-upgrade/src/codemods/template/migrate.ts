@@ -11,7 +11,6 @@ import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-b
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
-import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
@@ -40,7 +39,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateAutomaticVarInjection, // sync, v3 → v4
   migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
   migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?
-  migrateDropUnnecessaryDataTypes, // sync, v4 (I think this can be dropped?)
   migrateArbitraryValueToBareValue, // sync, v4 (optimization)
   migrateOptimizeModifier, // sync, v4 (optimization)
 ]

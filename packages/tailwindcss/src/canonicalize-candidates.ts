@@ -44,6 +44,7 @@ const CANONICALIZATIONS = [
   bareValueUtilities,
   deprecatedUtilities,
   arbitraryVariants,
+  dropUnnecessaryDataTypes,
   print,
 ]
 
@@ -905,6 +906,31 @@ function arbitraryVariants(designSystem: DesignSystem, rawCandidate: string): st
     }
 
     return designSystem.printCandidate(candidate)
+  }
+
+  return rawCandidate
+}
+
+// ----
+
+function dropUnnecessaryDataTypes(designSystem: DesignSystem, rawCandidate: string): string {
+  let signatures = computeUtilitySignature.get(designSystem)
+
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    if (
+      candidate.kind === 'functional' &&
+      candidate.value?.kind === 'arbitrary' &&
+      candidate.value.dataType !== null
+    ) {
+      let replacement = designSystem.printCandidate({
+        ...candidate,
+        value: { ...candidate.value, dataType: null },
+      })
+
+      if (signatures.get(rawCandidate) === signatures.get(replacement)) {
+        return replacement
+      }
+    }
   }
 
   return rawCandidate

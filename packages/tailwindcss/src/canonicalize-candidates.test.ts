@@ -637,6 +637,29 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
   })
+
+  describe('drop unnecessary data types', () => {
+    let input = css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+        --color-red-500: red;
+      }
+    `
+
+    test.each([
+      // A color value can be inferred from the value
+      ['bg-[color:#008cc]', 'bg-[#008cc]'],
+
+      // A color is the default for `bg-*`
+      ['bg-(color:--my-value)', 'bg-(--my-value)'],
+
+      // A color with a known theme variable migrates to the full utility
+      ['bg-(color:--color-red-500)', 'bg-red-500'],
+    ])(testName, async (candidate, expected) => {
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
 })
 
 describe('theme to var', () => {
