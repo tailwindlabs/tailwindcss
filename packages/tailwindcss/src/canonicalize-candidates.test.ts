@@ -162,8 +162,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // as bare modifiers). Convert the complex numbers to arbitrary values instead.
     ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
     ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
-    ['[color:theme(colors.red.500/.12345)]', 'text-red-500/[12.345]'],
-    ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/[50.25%]'],
+    ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
+    ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
 
     // Arbitrary value
     ['bg-[theme(colors.red.500/75%)]', 'bg-red-500/75'],
@@ -723,6 +723,36 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       let input = css`
         @import 'tailwindcss';
       `
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
+
+  describe('optimize modifier', () => {
+    let input = css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+        --color-red-500: red;
+      }
+    `
+
+    test.each([
+      // Keep the modifier as-is, nothing to optimize
+      ['bg-red-500/25', 'bg-red-500/25'],
+
+      // Use a bare value modifier
+      ['bg-red-500/[25%]', 'bg-red-500/25'],
+
+      // Convert 0-1 values to bare values
+      ['bg-[#f00]/[0.16]', 'bg-[#f00]/16'],
+
+      // Drop unnecessary modifiers
+      ['bg-red-500/[100%]', 'bg-red-500'],
+      ['bg-red-500/100', 'bg-red-500'],
+
+      // Keep modifiers on classes that don't _really_ exist
+      ['group/name', 'group/name'],
+    ])(testName, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
   })

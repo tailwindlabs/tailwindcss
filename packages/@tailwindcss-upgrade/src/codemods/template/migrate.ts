@@ -15,7 +15,6 @@ import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
-import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateVariantOrder } from './migrate-variant-order'
@@ -38,7 +37,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateAutomaticVarInjection, // sync, v3 → v4
   migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
   migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?
-  migrateOptimizeModifier, // sync, v4 (optimization)
 ]
 
 let migrateCached = new DefaultMap<
