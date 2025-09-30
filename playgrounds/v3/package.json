@@ -9,7 +9,7 @@
     "upgrade": "node scripts/upgrade.mjs"
   },
   "dependencies": {
-    "next": "15.5.2",
+    "next": "15.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwindcss": "^3"
@@ -20,7 +20,7 @@
     "@types/react-dom": "^19.1.9",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.35.0",
-    "eslint-config-next": "^15.5.2",
+    "eslint-config-next": "^15.5.4",
     "typescript": "^5.5.4"
   }
 }
