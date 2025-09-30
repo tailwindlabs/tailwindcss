@@ -23,7 +23,6 @@ import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-v
 import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
-import { migrateThemeToVar } from './migrate-theme-to-var'
 import { migrateVariantOrder } from './migrate-variant-order'
 import { computeUtilitySignature } from './signatures'
 
@@ -41,7 +40,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateCamelcaseInNamedValue, // sync, v3 → v4
   migrateLegacyClasses, // async, v3 → v4
   migrateMaxWidthScreen, // sync, v3 → v4
-  migrateThemeToVar, // sync, v4 (optimization)
   migrateVariantOrder, // sync, v3 → v4, Has to happen before migrations that modify variants
   migrateAutomaticVarInjection, // sync, v3 → v4
   migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)

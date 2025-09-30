@@ -1,79 +1,15 @@
-import { parseCandidate, type CandidateModifier } from '../../../../tailwindcss/src/candidate'
+import { type CandidateModifier } from '../../../../tailwindcss/src/candidate'
 import { keyPathToCssProperty } from '../../../../tailwindcss/src/compat/apply-config-to-theme'
-import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
-import { walkVariants } from '../../utils/walk-variants'
 
 export const enum Convert {
   All = 0,
   MigrateModifier = 1 << 0,
   MigrateThemeOnly = 1 << 1,
-}
-
-export function migrateThemeToVar(
-  designSystem: DesignSystem,
-  _userConfig: Config | null,
-  rawCandidate: string,
-): string {
-  let convert = createConverter(designSystem)
-
-  for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-    let clone = structuredClone(candidate)
-    let changed = false
-
-    if (clone.kind === 'arbitrary') {
-      let [newValue, modifier] = convert(
-        clone.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
-      )
-      if (newValue !== clone.value) {
-        changed = true
-        clone.value = newValue
-
-        if (modifier !== null) {
-          clone.modifier = modifier
-        }
-      }
-    } else if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
-      let [newValue, modifier] = convert(
-        clone.value.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
-      )
-      if (newValue !== clone.value.value) {
-        changed = true
-        clone.value.value = newValue
-
-        if (modifier !== null) {
-          clone.modifier = modifier
-        }
-      }
-    }
-
-    // Handle variants
-    for (let [variant] of walkVariants(clone)) {
-      if (variant.kind === 'arbitrary') {
-        let [newValue] = convert(variant.selector, Convert.MigrateThemeOnly)
-        if (newValue !== variant.selector) {
-          changed = true
-          variant.selector = newValue
-        }
-      } else if (variant.kind === 'functional' && variant.value?.kind === 'arbitrary') {
-        let [newValue] = convert(variant.value.value, Convert.MigrateThemeOnly)
-        if (newValue !== variant.value.value) {
-          changed = true
-          variant.value.value = newValue
-        }
-      }
-    }
-
-    return changed ? designSystem.printCandidate(clone) : rawCandidate
-  }
-
-  return rawCandidate
 }
 
 export function createConverter(designSystem: DesignSystem, { prettyPrint = false } = {}) {
