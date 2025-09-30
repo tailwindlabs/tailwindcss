@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.1.14] - 2025-10-01
+
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
@@ -3831,7 +3835,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.13...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.14...HEAD
+[4.1.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.13...v4.1.14
 [4.1.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.12...v4.1.13
 [4.1.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...v4.1.12
 [4.1.11]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.10...v4.1.11
