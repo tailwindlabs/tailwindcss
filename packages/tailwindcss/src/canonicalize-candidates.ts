@@ -20,11 +20,30 @@ const canonicalizeCandidateCache = new DefaultMap((ds: DesignSystem) => {
   })
 })
 
-const CANONICALIZATIONS = [print]
+const CANONICALIZATIONS = [bgGradientToLinear, print]
 
 function print(designSystem: DesignSystem, rawCandidate: string): string {
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     return designSystem.printCandidate(candidate)
+  }
+  return rawCandidate
+}
+
+const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
+function bgGradientToLinear(designSystem: DesignSystem, rawCandidate: string): string {
+  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+    if (candidate.kind === 'static' && candidate.root.startsWith('bg-gradient-to-')) {
+      let direction = candidate.root.slice(15)
+
+      if (!DIRECTIONS.includes(direction)) {
+        continue
+      }
+
+      return designSystem.printCandidate({
+        ...candidate,
+        root: `bg-linear-to-${direction}`,
+      })
+    }
   }
   return rawCandidate
 }

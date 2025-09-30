@@ -85,8 +85,15 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   /// ----------------------------------
 
   test.each([
-    //
-    ['[display:_flex_]', '[display:flex]'],
+    // Legacy bg-gradient-* → bg-linear-*
+    ['bg-gradient-to-t', 'bg-linear-to-t'],
+    ['bg-gradient-to-tr', 'bg-linear-to-tr'],
+    ['bg-gradient-to-r', 'bg-linear-to-r'],
+    ['bg-gradient-to-br', 'bg-linear-to-br'],
+    ['bg-gradient-to-b', 'bg-linear-to-b'],
+    ['bg-gradient-to-bl', 'bg-linear-to-bl'],
+    ['bg-gradient-to-l', 'bg-linear-to-l'],
+    ['bg-gradient-to-tl', 'bg-linear-to-tl'],
   ])(testName, async (candidate, expected) => {
     await expectCanonicalization(
       css`

@@ -11,7 +11,6 @@ import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-b
 import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateBareValueUtilities } from './migrate-bare-utilities'
-import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
 import { migrateDeprecatedUtilities } from './migrate-deprecated-utilities'
@@ -38,7 +37,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues, // sync, v3 → v4
   migratePrefix, // sync, v3 → v4
   migrateCanonicalizeCandidate, // sync, v4 (optimization, can probably be removed)
-  migrateBgGradient, // sync, v4 (optimization, can probably be removed)
   migrateSimpleLegacyClasses, // sync, v3 → v4
   migrateCamelcaseInNamedValue, // sync, v3 → v4
   migrateLegacyClasses, // async, v3 → v4
