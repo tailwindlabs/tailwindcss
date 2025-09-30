@@ -1,11 +1,17 @@
 import { printModifier, type Candidate, type CandidateModifier, type Variant } from './candidate'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
 import type { DesignSystem } from './design-system'
-import { computeUtilitySignature, preComputedUtilities } from './signatures'
+import {
+  computeUtilitySignature,
+  computeVariantSignature,
+  preComputedUtilities,
+  preComputedVariants,
+} from './signatures'
 import type { Writable } from './types'
 import { DefaultMap } from './utils/default-map'
 import { dimensions } from './utils/dimensions'
 import { isValidSpacingMultiplier } from './utils/infer-data-type'
+import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
@@ -37,6 +43,7 @@ const CANONICALIZATIONS = [
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
+  arbitraryVariants,
   print,
 ]
 
@@ -861,6 +868,43 @@ function deprecatedUtilities(designSystem: DesignSystem, rawCandidate: string): 
         important: candidate.important,
       }),
     )
+  }
+
+  return rawCandidate
+}
+
+// ----
+
+function arbitraryVariants(designSystem: DesignSystem, rawCandidate: string): string {
+  let signatures = computeVariantSignature.get(designSystem)
+  let variants = preComputedVariants.get(designSystem)
+
+  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
+    // We are only interested in the variants
+    if (readonlyCandidate.variants.length <= 0) return rawCandidate
+
+    // The below logic makes use of mutation. Since candidates in the
+    // DesignSystem are cached, we can't mutate them directly.
+    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+
+    for (let [variant] of walkVariants(candidate)) {
+      if (variant.kind === 'compound') continue
+
+      let targetString = designSystem.printVariant(variant)
+      let targetSignature = signatures.get(targetString)
+      if (typeof targetSignature !== 'string') continue
+
+      let foundVariants = variants.get(targetSignature)
+      if (foundVariants.length !== 1) continue
+
+      let foundVariant = foundVariants[0]
+      let parsedVariant = designSystem.parseVariant(foundVariant)
+      if (parsedVariant === null) continue
+
+      replaceObject(variant, parsedVariant)
+    }
+
+    return designSystem.printCandidate(candidate)
   }
 
   return rawCandidate

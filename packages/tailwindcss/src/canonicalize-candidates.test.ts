@@ -522,6 +522,121 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
   })
+
+  describe('arbitrary variants', () => {
+    let input = css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+      }
+    `
+
+    test.each([
+      // Arbitrary variant to static variant
+      ['[&:focus]:flex', 'focus:flex'],
+
+      // Arbitrary variant to static variant with at-rules
+      ['[@media(scripting:_none)]:flex', 'noscript:flex'],
+
+      // Arbitrary variant to static utility at-rules and with slight differences
+      // in whitespace. This will require some canonicalization.
+      ['[@media(scripting:none)]:flex', 'noscript:flex'],
+      ['[@media(scripting:_none)]:flex', 'noscript:flex'],
+      ['[@media_(scripting:_none)]:flex', 'noscript:flex'],
+
+      // With compound variants
+      ['has-[&:focus]:flex', 'has-focus:flex'],
+      ['not-[&:focus]:flex', 'not-focus:flex'],
+      ['group-[&:focus]:flex', 'group-focus:flex'],
+      ['peer-[&:focus]:flex', 'peer-focus:flex'],
+      ['in-[&:focus]:flex', 'in-focus:flex'],
+    ])(testName, async (candidate, expected) => {
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('unsafe migrations keep the candidate as-is', async () => {
+      // `hover:` also includes an `@media` query in addition to the `&:hover`
+      // state. Migration is not safe because the functionality would be different.
+      let candidate = '[&:hover]:flex'
+      let expected = '[&:hover]:flex'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('make unsafe migration safe (1)', async () => {
+      // Overriding the `hover:` variant to only use a selector will make the
+      // migration safe.
+      let candidate = '[&:hover]:flex'
+      let expected = 'hover:flex'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @variant hover (&:hover);
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('make unsafe migration safe (2)', async () => {
+      // Overriding the `hover:` variant to only use a selector will make the
+      // migration safe. This time with the long-hand `@variant` syntax.
+      let candidate = '[&:hover]:flex'
+      let expected = 'hover:flex'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @variant hover {
+          &:hover {
+            @slot;
+          }
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('custom selector-based variants', async () => {
+      let candidate = '[&.macos]:flex'
+      let expected = 'is-macos:flex'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @variant is-macos (&.macos);
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('custom @media-based variants', async () => {
+      let candidate = '[@media(prefers-reduced-transparency:reduce)]:flex'
+      let expected = 'transparency-safe:flex'
+      let input = css`
+        @import 'tailwindcss';
+        @theme {
+          --*: initial;
+        }
+        @variant transparency-safe {
+          @media (prefers-reduced-transparency: reduce) {
+            @slot;
+          }
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
 })
 
 describe('theme to var', () => {
