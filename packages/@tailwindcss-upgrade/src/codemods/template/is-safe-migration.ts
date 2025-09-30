@@ -9,7 +9,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // including Vue conditions like `v-if="something && shadow"`
   // and Alpine conditions like `x-if="shadow"`,
   // but allow Vue and React classes
-  /(?<!:?class|className)=['"]$/,
+  /(?<!:?class|className)=['"]$/i,
 
   // JavaScript / TypeScript
   /addEventListener\(['"`]$/,

@@ -117,9 +117,15 @@ describe('is-safe-migration', async () => {
     // Vue classes
     [`<div class="shadow"></div>`, 'shadow', 'shadow-sm'],
     [`<div :class="{ shadow: true }"></div>`, 'shadow', 'shadow-sm'],
+    [`<div enter-class="shadow"></div>`, 'shadow', 'shadow-sm'],
+    [`<div :enter-class="{ shadow: true }"></div>`, 'shadow', 'shadow-sm'],
 
     // React classes
     [`<div className="shadow"></div>`, 'shadow', 'shadow-sm'],
+    [`<div enterClassName="shadow"></div>`, 'shadow', 'shadow-sm'],
+
+    // Preact-style
+    [`<div enterClass="shadow"></div>`, 'shadow', 'shadow-sm'],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
