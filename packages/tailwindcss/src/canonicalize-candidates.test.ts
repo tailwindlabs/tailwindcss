@@ -468,6 +468,32 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
   })
+
+  describe('bare values', () => {
+    let input = css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+        --spacing: 0.25rem;
+        --aspect-video: 16 / 9;
+        --tab-size-github: 8;
+      }
+
+      @utility tab-* {
+        tab-size: --value(--tab-size, integer);
+      }
+    `
+
+    test.each([
+      // Built-in utility with bare value fraction
+      ['aspect-16/9', 'aspect-video'],
+
+      // Custom utility with bare value integer
+      ['tab-8', 'tab-github'],
+    ])(testName, async (candidate, expected) => {
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
 })
 
 describe('theme to var', () => {
