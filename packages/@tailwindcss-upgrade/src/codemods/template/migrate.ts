@@ -12,7 +12,6 @@ import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
-import { migrateDeprecatedUtilities } from './migrate-deprecated-utilities'
 import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
@@ -41,7 +40,6 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateVariantOrder, // sync, v3 → v4, Has to happen before migrations that modify variants
   migrateAutomaticVarInjection, // sync, v3 → v4
   migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
-  migrateDeprecatedUtilities, // sync, v4 (deprecation map, order-none → order-0)
   migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?
   migrateArbitraryVariants, // sync, v4
   migrateDropUnnecessaryDataTypes, // sync, v4 (I think this can be dropped?)

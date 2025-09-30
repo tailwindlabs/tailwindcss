@@ -494,6 +494,34 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
   })
+
+  describe('deprecated utilities', () => {
+    test('`order-none` → `order-0`', async () => {
+      let candidate = 'order-none'
+      let expected = 'order-0'
+
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('`order-none` → `order-none` with custom implementation', async () => {
+      let candidate = 'order-none'
+      let expected = 'order-none'
+
+      let input = css`
+        @import 'tailwindcss';
+
+        @utility order-none {
+          order: none; /* imagine this exists */
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
 })
 
 describe('theme to var', () => {
