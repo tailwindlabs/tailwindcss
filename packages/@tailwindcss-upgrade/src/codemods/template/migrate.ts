@@ -69,6 +69,9 @@ let migrateCached = new DefaultMap<
         rawCandidate = await migration(designSystem, userConfig, rawCandidate)
       }
 
+      // Canonicalize the final migrated candidate to its final form
+      rawCandidate = designSystem.canonicalizeCandidates([rawCandidate]).pop()!
+
       // Verify that the candidate actually makes sense at all. E.g.: `duration`
       // is not a valid candidate, but it will parse because `duration-<number>`
       // exists.
