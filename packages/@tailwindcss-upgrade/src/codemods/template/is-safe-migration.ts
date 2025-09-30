@@ -5,18 +5,16 @@ import * as version from '../../utils/version'
 
 const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
 const CONDITIONAL_TEMPLATE_SYNTAX = [
-  // Vue
-  /v-else-if=['"]$/,
-  /v-if=['"]$/,
-  /v-show=['"]$/,
-  /(?<!:?class)=['"]$/,
+  // Skip any generic attributes like `xxx="shadow"`,
+  // including Vue conditions like `v-if="something && shadow"`
+  // and Alpine conditions like `x-if="shadow"`,
+  // but allow Vue and React classes
+  /(?<!:?class|className)=['"]$/i,
 
   // JavaScript / TypeScript
   /addEventListener\(['"`]$/,
 
   // Alpine
-  /x-if=['"]$/,
-  /x-show=['"]$/,
   /wire:[^\s]*?$/,
 
   // shadcn/ui variants
