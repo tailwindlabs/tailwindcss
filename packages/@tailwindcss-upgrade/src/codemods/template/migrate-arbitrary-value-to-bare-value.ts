@@ -5,13 +5,13 @@ import {
 } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import {
   isPositiveInteger,
   isValidSpacingMultiplier,
 } from '../../../../tailwindcss/src/utils/infer-data-type'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { walkVariants } from '../../utils/walk-variants'
-import { computeUtilitySignature } from './signatures'
 
 export function migrateArbitraryValueToBareValue(
   designSystem: DesignSystem,

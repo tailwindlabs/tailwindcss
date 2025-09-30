@@ -1,9 +1,12 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import {
+  computeVariantSignature,
+  preComputedVariants,
+} from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
 import { replaceObject } from '../../utils/replace-object'
 import { walkVariants } from '../../utils/walk-variants'
-import { computeVariantSignature, preComputedVariants } from './signatures'
 
 export function migrateArbitraryVariants(
   designSystem: DesignSystem,

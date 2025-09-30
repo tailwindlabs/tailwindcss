@@ -1,13 +1,13 @@
-import { substituteAtApply } from '../../../../tailwindcss/src/apply'
-import { atRule, styleRule, toCss, walk, type AstNode } from '../../../../tailwindcss/src/ast'
-import { printArbitraryValue } from '../../../../tailwindcss/src/candidate'
-import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-parser'
-import { CompileAstFlags, type DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { ThemeOptions } from '../../../../tailwindcss/src/theme'
-import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
-import { dimensions } from '../../../../tailwindcss/src/utils/dimensions'
-import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
-import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { substituteAtApply } from './apply'
+import { atRule, styleRule, toCss, walk, type AstNode } from './ast'
+import { printArbitraryValue } from './candidate'
+import * as SelectorParser from './compat/selector-parser'
+import { CompileAstFlags, type DesignSystem } from './design-system'
+import { ThemeOptions } from './theme'
+import { DefaultMap } from './utils/default-map'
+import { dimensions } from './utils/dimensions'
+import { isValidSpacingMultiplier } from './utils/infer-data-type'
+import * as ValueParser from './value-parser'
 
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or

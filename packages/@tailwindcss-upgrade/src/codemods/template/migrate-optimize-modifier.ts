@@ -1,8 +1,8 @@
 import type { NamedUtilityValue } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
-import { computeUtilitySignature } from './signatures'
 
 // Optimize the modifier
 //

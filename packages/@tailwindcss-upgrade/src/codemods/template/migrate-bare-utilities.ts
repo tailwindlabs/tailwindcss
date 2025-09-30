@@ -1,10 +1,13 @@
 import { type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import {
+  computeUtilitySignature,
+  preComputedUtilities,
+} from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { baseCandidate, parseCandidate } from './candidates'
-import { computeUtilitySignature, preComputedUtilities } from './signatures'
 
 const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
   () => new Map<string, Candidate>(),

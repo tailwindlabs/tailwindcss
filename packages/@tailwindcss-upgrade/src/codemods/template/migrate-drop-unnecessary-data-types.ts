@@ -1,6 +1,6 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { computeUtilitySignature } from './signatures'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 
 export function migrateDropUnnecessaryDataTypes(
   designSystem: DesignSystem,

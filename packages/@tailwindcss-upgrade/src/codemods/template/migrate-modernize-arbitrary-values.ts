@@ -2,11 +2,11 @@ import SelectorParser from 'postcss-selector-parser'
 import { parseCandidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeVariantSignature } from '../../../../tailwindcss/src/signatures'
 import { isPositiveInteger } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { replaceObject } from '../../utils/replace-object'
 import { walkVariants } from '../../utils/walk-variants'
-import { computeVariantSignature } from './signatures'
 
 export function migrateModernizeArbitraryValues(
   designSystem: DesignSystem,

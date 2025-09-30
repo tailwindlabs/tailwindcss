@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
@@ -24,7 +25,6 @@ import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
 import { migrateVariantOrder } from './migrate-variant-order'
-import { computeUtilitySignature } from './signatures'
 
 export type Migration = (
   designSystem: DesignSystem,

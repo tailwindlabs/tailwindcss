@@ -1,8 +1,8 @@
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
 import { baseCandidate, parseCandidate, printUnprefixedCandidate } from './candidates'
-import { computeUtilitySignature } from './signatures'
 
 const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
 
