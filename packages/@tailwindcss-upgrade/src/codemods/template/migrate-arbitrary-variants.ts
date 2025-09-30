@@ -5,7 +5,7 @@ import {
   preComputedVariants,
 } from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
-import { replaceObject } from '../../utils/replace-object'
+import { replaceObject } from '../../../../tailwindcss/src/utils/replace-object'
 import { walkVariants } from '../../utils/walk-variants'
 
 export function migrateArbitraryVariants(
