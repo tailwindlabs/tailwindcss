@@ -35,26 +35,26 @@ export type Migration = (
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
-  migrateEmptyArbitraryValues,
-  migratePrefix,
-  migrateCanonicalizeCandidate,
-  migrateBgGradient,
-  migrateSimpleLegacyClasses,
-  migrateCamelcaseInNamedValue,
-  migrateLegacyClasses,
-  migrateMaxWidthScreen,
-  migrateThemeToVar,
-  migrateVariantOrder, // Has to happen before migrations that modify variants
-  migrateAutomaticVarInjection,
-  migrateLegacyArbitraryValues,
-  migrateArbitraryUtilities,
-  migrateBareValueUtilities,
-  migrateDeprecatedUtilities,
-  migrateModernizeArbitraryValues,
-  migrateArbitraryVariants,
-  migrateDropUnnecessaryDataTypes,
-  migrateArbitraryValueToBareValue,
-  migrateOptimizeModifier,
+  migrateEmptyArbitraryValues, // sync, v3 → v4
+  migratePrefix, // sync, v3 → v4
+  migrateCanonicalizeCandidate, // sync, v4 (optimization, can probably be removed)
+  migrateBgGradient, // sync, v4 (optimization, can probably be removed)
+  migrateSimpleLegacyClasses, // sync, v3 → v4
+  migrateCamelcaseInNamedValue, // sync, v3 → v4
+  migrateLegacyClasses, // async, v3 → v4
+  migrateMaxWidthScreen, // sync, v3 → v4
+  migrateThemeToVar, // sync, v4 (optimization)
+  migrateVariantOrder, // sync, v3 → v4, Has to happen before migrations that modify variants
+  migrateAutomaticVarInjection, // sync, v3 → v4
+  migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
+  migrateArbitraryUtilities, // sync, v4
+  migrateBareValueUtilities, // sync, v4
+  migrateDeprecatedUtilities, // sync, v4 (deprecation map, order-none → order-0)
+  migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?
+  migrateArbitraryVariants, // sync, v4
+  migrateDropUnnecessaryDataTypes, // sync, v4 (I think this can be dropped?)
+  migrateArbitraryValueToBareValue, // sync, v4 (optimization)
+  migrateOptimizeModifier, // sync, v4 (optimization)
 ]
 
 let migrateCached = new DefaultMap<
