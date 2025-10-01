@@ -34,7 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "tar": "^7.5.1",
-    "detect-libc": "^2.0.4"
+    "detect-libc": "^2.1.1"
   },
   "devDependencies": {
     "@napi-rs/cli": "^3.2.0",

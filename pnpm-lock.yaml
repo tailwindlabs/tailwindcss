@@ -89,8 +89,8 @@ importers:
   crates/node:
     dependencies:
       detect-libc:
-        specifier: ^2.0.4
-        version: 2.0.4
+        specifier: ^2.1.1
+        version: 2.1.1
       tar:
         specifier: ^7.5.1
         version: 7.5.1
@@ -308,8 +308,8 @@ importers:
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@packages+tailwindcss)
       detect-libc:
-        specifier: 1.0.3
-        version: 1.0.3
+        specifier: 2.1.1
+        version: 2.1.1
       enhanced-resolve:
         specifier: ^5.18.3
         version: 5.18.3
@@ -2898,8 +2898,8 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  detect-libc@2.0.4:
-    resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
+  detect-libc@2.1.1:
+    resolution: {integrity: sha512-ecqj/sy1jcK1uWrwpR67UhYrIFQ+5WlGxth34WquCbamhFA6hkkwiu37o6J5xCHdo1oixJRfVRw+ywV+Hq/0Aw==}
     engines: {node: '>=8'}
 
   didyoumean@1.2.2:
@@ -6654,7 +6654,7 @@ snapshots:
 
   detect-libc@1.0.3: {}
 
-  detect-libc@2.0.4: {}
+  detect-libc@2.1.1: {}
 
   didyoumean@1.2.2: {}
 
@@ -7590,7 +7590,7 @@ snapshots:
 
   lightningcss@1.30.1(patch_hash=tzyxy3asfxcqc7ihrooumyi5fm):
     dependencies:
-      detect-libc: 2.0.4
+      detect-libc: 2.1.1
     optionalDependencies:
       lightningcss-darwin-arm64: 1.30.1
       lightningcss-darwin-x64: 1.30.1
@@ -8181,7 +8181,7 @@ snapshots:
   sharp@0.34.3:
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.4
+      detect-libc: 2.1.1
       semver: 7.7.2
     optionalDependencies:
       '@img/sharp-darwin-arm64': 0.34.3
