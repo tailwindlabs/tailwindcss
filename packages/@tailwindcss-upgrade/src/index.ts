@@ -75,7 +75,7 @@ async function run() {
         `${pc.green('+')} ${`${pc.dim('"tailwindcss":')} ${`${pc.dim('"')}${pc.blue(version.installedTailwindVersion(base))}${pc.dim('"')}`}`} (installed version in ${highlight('node_modules')})`,
         pc.dim('```'),
         '',
-        `Make sure to run ${highlight(`${pkgManager} install`)}, and try again.`,
+        `Make sure to run ${highlight(`${pkgManager} install`)} and try again.`,
       ].join('\n'),
       {
         prefix: '↳ ',

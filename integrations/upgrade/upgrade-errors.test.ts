@@ -67,7 +67,7 @@ test(
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
-      │   Make sure to run \`pnpm install\`, and try again. 
+      │   Make sure to run \`pnpm install\` and try again. 
 
       "
     `)
@@ -155,7 +155,7 @@ test(
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
-      │   Make sure to run \`bun install\`, and try again. 
+      │   Make sure to run \`bun install\` and try again. 
 
       "
     `)
@@ -243,7 +243,7 @@ test(
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
-      │   Make sure to run \`npm install\`, and try again. 
+      │   Make sure to run \`npm install\` and try again. 
 
       "
     `)
