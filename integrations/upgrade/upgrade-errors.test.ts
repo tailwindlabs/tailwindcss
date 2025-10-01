@@ -63,7 +63,7 @@ test(
       │ ↳ Version mismatch 
       │    
       │   \`\`\`diff 
-      │   - "tailwindcss": "^3" (expected version in package.json / lockfile) 
+      │   - "tailwindcss": "^3" (expected version in \`package.json\`) 
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
@@ -141,7 +141,7 @@ test(
       │ ↳ Version mismatch 
       │    
       │   \`\`\`diff 
-      │   - "tailwindcss": "^3" (expected version in package.json / lockfile) 
+      │   - "tailwindcss": "^3" (expected version in \`package.json\`) 
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
@@ -184,7 +184,7 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    // Use `bun` to install dependencies
+    // Use `npm` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
     await exec('rm -rf ./node_modules')
     await exec('npm install')
@@ -219,7 +219,7 @@ test(
       │ ↳ Version mismatch 
       │    
       │   \`\`\`diff 
-      │   - "tailwindcss": "^3" (expected version in package.json / lockfile) 
+      │   - "tailwindcss": "^3" (expected version in \`package.json\`) 
       │   + "tailwindcss": "4.0.0" (installed version in \`node_modules\`) 
       │   \`\`\` 
       │    
