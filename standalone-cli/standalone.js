@@ -18,6 +18,11 @@ let localModules = {
   },
   '@tailwindcss/typography': require('@tailwindcss/typography'),
 
+  // This force-loads the v4 version instead of the v6 one at the repo root
+  'postcss-load-config': require('postcss-load-config'),
+  'postcss-load-config/src/options': require('postcss-load-config/src/options'),
+  'postcss-load-config/src/plugins': require('postcss-load-config/src/plugins'),
+
   // These are present to allow them to be specified in the PostCSS config file
   autoprefixer: require('autoprefixer'),
   tailwindcss: require('tailwindcss'),
