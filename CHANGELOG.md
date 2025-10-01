@@ -22,15 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not generate `grid-column` utilities when configuring `grid-column-start` or `grid-column-end` ([#18907](https://github.com/tailwindlabs/tailwindcss/pull/18907))
 - Do not generate `grid-row` utilities when configuring `grid-row-start` or `grid-row-end` ([#18907](https://github.com/tailwindlabs/tailwindcss/pull/18907))
 - Prevent duplicate CSS when overwriting a static utility with a theme key ([#18056](https://github.com/tailwindlabs/tailwindcss/pull/18056))
-- Do not migrate `variant = 'outline'` during upgrades ([#18922](https://github.com/tailwindlabs/tailwindcss/pull/18922))
 - Show Lightning CSS warnings (if any) when optimizing/minifying ([#18918](https://github.com/tailwindlabs/tailwindcss/pull/18918))
 - Use `default` export condition for `@tailwindcss/vite` ([#18948](https://github.com/tailwindlabs/tailwindcss/pull/18948))
 - Re-throw errors from PostCSS nodes ([#18373](https://github.com/tailwindlabs/tailwindcss/pull/18373))
 - Detect classes in markdown inline directives ([#18967](https://github.com/tailwindlabs/tailwindcss/pull/18967))
 - Ensure files with only `@theme` produce no output when built ([#18979](https://github.com/tailwindlabs/tailwindcss/pull/18979))
 - Support Maud templates when extracting classes ([#18988](https://github.com/tailwindlabs/tailwindcss/pull/18988))
-- Show version mismatch (if any) when running upgrade tool ([#19028](https://github.com/tailwindlabs/tailwindcss/pull/19028))
-- Upgrade: Ensure first class inside className in React is migrated ([#19031](https://github.com/tailwindlabs/tailwindcss/pull/19031))
+- Upgrade: Do not migrate `variant = 'outline'` during upgrades ([#18922](https://github.com/tailwindlabs/tailwindcss/pull/18922))
+- Upgrade: Show version mismatch (if any) when running upgrade tool ([#19028](https://github.com/tailwindlabs/tailwindcss/pull/19028))
+- Upgrade: Ensure first class inside `className` is migrated ([#19031](https://github.com/tailwindlabs/tailwindcss/pull/19031))
 - Upgrade: Migrate classes inside `*ClassName` and `*Class` attributes ([#19031](https://github.com/tailwindlabs/tailwindcss/pull/19031))
 
 ## [4.1.13] - 2025-09-03
