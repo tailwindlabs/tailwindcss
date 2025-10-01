@@ -23,6 +23,7 @@
     "jest": "^27.5.1",
     "move-file-cli": "^3.0.0",
     "pkg": "^5.8.1",
+    "postcss-load-config": "^4.0.2",
     "rimraf": "^3.0.2",
     "tailwindcss": "file:.."
   },
