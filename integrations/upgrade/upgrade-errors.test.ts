@@ -109,7 +109,17 @@ test(
   async ({ exec, expect }) => {
     // Use `bun` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
-    await exec('npx bun install')
+    try {
+      await exec('npx bun install', {}, { ignoreStdErr: true })
+    } catch (e) {
+      // When preparing for a release, the version in `package.json` will point
+      // to a non-existent version because it's not published yet.
+      // TODO: Find a better approach to handle this and actually test it even
+      // on release branches. Note: the pnpm version _does_ work because of
+      // overrides in the package.json file.
+      if (`${e}`.includes('No version matching')) return
+      throw e
+    }
 
     // Ensure we are in a git repo
     await exec('git init')
@@ -187,7 +197,17 @@ test(
     // Use `npm` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
     await exec('rm -rf ./node_modules')
-    await exec('npm install')
+    try {
+      await exec('npm install', {}, { ignoreStdErr: true })
+    } catch (e) {
+      // When preparing for a release, the version in `package.json` will point
+      // to a non-existent version because it's not published yet.
+      // TODO: Find a better approach to handle this and actually test it even
+      // on release branches. Note: the pnpm version _does_ work because of
+      // overrides in the package.json file.
+      if (`${e}`.includes('npm error code ETARGET')) return
+      throw e
+    }
 
     // Ensure we are in a git repo
     await exec('git init')
