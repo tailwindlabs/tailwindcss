@@ -1365,6 +1365,16 @@ For a deep-dive into everything that's new, [check out the announcement post](ht
 
 - First 4.0.0-alpha.1 release
 
+## [3.4.18] - 2024-10-01
+
+### Fixed
+
+- Improve support for raw `supports-[…]` queries in arbitrary values ([#13605](https://github.com/tailwindlabs/tailwindcss/pull/13605))
+- Fix `require.cache` error when loaded through a TypeScript file in Node 22.18+ ([#18665](https://github.com/tailwindlabs/tailwindcss/pull/18665))
+- Support `import.meta.resolve(…)` in configs for new enough Node.js versions ([#18938](https://github.com/tailwindlabs/tailwindcss/pull/18938))
+- Allow using newer versions of `postcss-load-config` for better ESM and TypeScript PostCSS config support with the CLI ([#18938](https://github.com/tailwindlabs/tailwindcss/pull/18938))
+- Remove irrelevant utility rules when matching important classes ([#19030](https://github.com/tailwindlabs/tailwindcss/pull/19030))
+
 ## [3.4.17] - 2024-12-17
 
 ### Fixed
@@ -3892,6 +3902,7 @@ No release notes
 [4.0.0-alpha.24]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-alpha.23...v4.0.0-alpha.24
 [4.0.0-alpha.23]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-alpha.22...v4.0.0-alpha.23
 [4.0.0-alpha.22]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...v4.0.0-alpha.22
+[3.4.18]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...v3.4.18
 [3.4.17]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...v3.4.17
 [3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
 [3.4.15]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.14...v3.4.15
