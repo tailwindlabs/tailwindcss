@@ -714,7 +714,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['group-aria-[selected="true"]:flex', 'group-aria-selected:flex'],
       ['group-has-aria-[selected]:flex', 'group-has-aria-[selected]:flex'],
 
-      ['max-lg:hover:data-[selected]:flex!', 'max-lg:hover:data-selected:flex!'],
+      ['max-lg:hover:data-[selected]:flex', 'max-lg:hover:data-selected:flex'],
       [
         'data-[selected]:aria-[selected="true"]:aspect-[12/34]',
         'data-selected:aria-selected:aspect-12/34',
