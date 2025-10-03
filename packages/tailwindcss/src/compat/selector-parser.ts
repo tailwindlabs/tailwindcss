@@ -181,6 +181,8 @@ const SINGLE_QUOTE = 0x27
 const SPACE = 0x20
 const TAB = 0x09
 const TILDE = 0x7e
+const AMPERSAND = 0x26
+const ASTERISK = 0x2a
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -369,7 +371,7 @@ export function parse(input: string) {
             ast.push(node)
           }
         }
-        buffer = String.fromCharCode(currentChar)
+        buffer = input[i]
         break
       }
 
@@ -443,17 +445,40 @@ export function parse(input: string) {
         break
       }
 
+      // Nesting `&` is always a new selector.
+      // Universal `*` is always a new selector.
+      case AMPERSAND:
+      case ASTERISK: {
+        // 1. Handle everything before the combinator as a selector
+        if (buffer.length > 0) {
+          let node = selector(buffer)
+          if (parent) {
+            parent.nodes.push(node)
+          } else {
+            ast.push(node)
+          }
+          buffer = ''
+        }
+
+        // 2. Handle the `&` or `*` as a selector on its own
+        if (parent) {
+          parent.nodes.push(selector(input[i]))
+        } else {
+          ast.push(selector(input[i]))
+        }
+        break
+      }
+
       // Escaped characters.
       case BACKSLASH: {
-        let nextChar = input.charCodeAt(i + 1)
-        buffer += String.fromCharCode(currentChar) + String.fromCharCode(nextChar)
+        buffer += input[i] + input[i + 1]
         i += 1
         break
       }
 
       // Everything else will be collected in the buffer
       default: {
-        buffer += String.fromCharCode(currentChar)
+        buffer += input[i]
       }
     }
   }

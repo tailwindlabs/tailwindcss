@@ -131,6 +131,34 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('parses nesting selector before attribute selector', () => {
+    expect(parse('&[data-foo]')).toEqual([
+      { kind: 'selector', value: '&' },
+      { kind: 'selector', value: '[data-foo]' },
+    ])
+  })
+
+  it('parses nesting selector after an attribute selector', () => {
+    expect(parse('[data-foo]&')).toEqual([
+      { kind: 'selector', value: '[data-foo]' },
+      { kind: 'selector', value: '&' },
+    ])
+  })
+
+  it('parses universal selector before attribute selector', () => {
+    expect(parse('*[data-foo]')).toEqual([
+      { kind: 'selector', value: '*' },
+      { kind: 'selector', value: '[data-foo]' },
+    ])
+  })
+
+  it('parses universal selector after an attribute selector', () => {
+    expect(parse('[data-foo]*')).toEqual([
+      { kind: 'selector', value: '[data-foo]' },
+      { kind: 'selector', value: '*' },
+    ])
+  })
 })
 
 describe('toCss', () => {
