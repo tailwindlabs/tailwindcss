@@ -6,6 +6,7 @@ import {
   type Variant,
 } from './candidate'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
+import * as SelectorParser from './compat/selector-parser'
 import type { DesignSystem } from './design-system'
 import {
   computeUtilitySignature,
@@ -49,9 +50,10 @@ const CANONICALIZATIONS = [
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
-  arbitraryVariants,
   dropUnnecessaryDataTypes,
   arbitraryValueToBareValue,
+  modernizeArbitraryValues,
+  arbitraryVariants,
   optimizeModifier,
   print,
 ]
@@ -1106,6 +1108,516 @@ function* tryValueReplacements(
   for (let option of options) {
     yield* tryValueReplacements(candidate, option, seen)
   }
+}
+
+// ----
+
+function isSingleSelector(ast: SelectorParser.SelectorAstNode[]): boolean {
+  return !ast.some((node) => node.kind === 'separator' && node.value.trim() === ',')
+}
+
+function isAttributeSelector(node: SelectorParser.SelectorAstNode): boolean {
+  let value = node.value.trim()
+  return node.kind === 'selector' && value[0] === '[' && value[value.length - 1] === ']'
+}
+
+function isAsciiWhitespace(char: string) {
+  return char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === '\f'
+}
+
+enum AttributePart {
+  Start,
+  Attribute,
+  Value,
+  Modifier,
+  End,
+}
+
+function parseAttributeSelector(value: string) {
+  let attribute = {
+    key: '',
+    operator: null as '=' | '~=' | '|=' | '^=' | '$=' | '*=' | null,
+    quote: '',
+    value: null as string | null,
+    modifier: null as 'i' | 's' | null,
+  }
+
+  let state = AttributePart.Start
+  outer: for (let i = 0; i < value.length; i++) {
+    // Skip whitespace
+    if (isAsciiWhitespace(value[i])) {
+      if (attribute.quote === '' && state !== AttributePart.Value) {
+        continue
+      }
+    }
+
+    switch (state) {
+      case AttributePart.Start: {
+        if (value[i] === '[') {
+          state = AttributePart.Attribute
+        } else {
+          return null
+        }
+        break
+      }
+
+      case AttributePart.Attribute: {
+        switch (value[i]) {
+          case ']': {
+            return attribute
+          }
+
+          case '=': {
+            attribute.operator = '='
+            state = AttributePart.Value
+            continue outer
+          }
+
+          case '~':
+          case '|':
+          case '^':
+          case '$':
+          case '*': {
+            if (value[i + 1] === '=') {
+              attribute.operator = (value[i] + '=') as '=' | '~=' | '|=' | '^=' | '$=' | '*='
+              i++
+              state = AttributePart.Value
+              continue outer
+            }
+
+            return null
+          }
+        }
+
+        attribute.key += value[i]
+        break
+      }
+
+      case AttributePart.Value: {
+        // End of attribute selector
+        if (value[i] === ']') {
+          return attribute
+        }
+
+        // Quoted value
+        else if (value[i] === "'" || value[i] === '"') {
+          attribute.value ??= ''
+
+          attribute.quote = value[i]
+
+          for (let j = i + 1; j < value.length; j++) {
+            if (value[j] === '\\' && j + 1 < value.length) {
+              // Skip the escaped character
+              j++
+              attribute.value += value[j]
+            } else if (value[j] === attribute.quote) {
+              i = j
+              state = AttributePart.Modifier
+              continue outer
+            } else {
+              attribute.value += value[j]
+            }
+          }
+        }
+
+        // Unquoted value
+        else {
+          if (isAsciiWhitespace(value[i])) {
+            state = AttributePart.Modifier
+          } else {
+            attribute.value ??= ''
+            attribute.value += value[i]
+          }
+        }
+        break
+      }
+
+      case AttributePart.Modifier: {
+        if (value[i] === 'i' || value[i] === 's') {
+          attribute.modifier = value[i] as 'i' | 's'
+          state = AttributePart.End
+        } else if (value[i] == ']') {
+          return attribute
+        }
+        break
+      }
+
+      case AttributePart.End: {
+        if (value[i] === ']') {
+          return attribute
+        }
+        break
+      }
+    }
+  }
+
+  return attribute
+}
+
+function modernizeArbitraryValues(designSystem: DesignSystem, rawCandidate: string): string {
+  let signatures = computeVariantSignature.get(designSystem)
+
+  for (let candidate of parseCandidate(designSystem, rawCandidate)) {
+    let clone = structuredClone(candidate)
+    let changed = false
+
+    for (let [variant, parent] of walkVariants(clone)) {
+      // Forward modifier from the root to the compound variant
+      if (
+        variant.kind === 'compound' &&
+        (variant.root === 'has' || variant.root === 'not' || variant.root === 'in')
+      ) {
+        if (variant.modifier !== null) {
+          if ('modifier' in variant.variant) {
+            variant.variant.modifier = variant.modifier
+            variant.modifier = null
+          }
+        }
+      }
+
+      // Expecting an arbitrary variant
+      if (variant.kind === 'arbitrary') {
+        // Expecting a non-relative arbitrary variant
+        if (variant.relative) continue
+
+        let ast = SelectorParser.parse(variant.selector.trim())
+
+        // Expecting a single selector node
+        if (!isSingleSelector(ast)) continue
+
+        // `[&>*]` can be replaced with `*`
+        if (
+          // Only top-level, so `has-[&>*]` is not supported
+          parent === null &&
+          // [&_>_*]:flex
+          //  ^ ^ ^
+          ast.length === 3 &&
+          ast[0].kind === 'selector' &&
+          ast[0].value === '&' &&
+          ast[1].kind === 'combinator' &&
+          ast[1].value.trim() === '>' &&
+          ast[2].kind === 'selector' &&
+          ast[2].value === '*'
+        ) {
+          changed = true
+          replaceObject(variant, designSystem.parseVariant('*'))
+          continue
+        }
+
+        // `[&_*]` can be replaced with `**`
+        if (
+          // Only top-level, so `has-[&_*]` is not supported
+          parent === null &&
+          // [&_*]:flex
+          //  ^ ^
+          ast.length === 3 &&
+          ast[0].kind === 'selector' &&
+          ast[0].value === '&' &&
+          ast[1].kind === 'combinator' &&
+          ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+          ast[2].kind === 'selector' &&
+          ast[2].value === '*'
+        ) {
+          changed = true
+          replaceObject(variant, designSystem.parseVariant('**'))
+          continue
+        }
+
+        // `in-*` variant. If the selector ends with ` &`, we can convert it to an
+        // `in-*` variant.
+        //
+        // E.g.: `[[data-visible]_&]` => `in-data-visible`
+        if (
+          // Only top-level, so `in-[&_[data-visible]]` is not supported
+          parent === null &&
+          // [[data-visible]___&]:flex
+          //  ^^^^^^^^^^^^^^ ^ ^
+          ast.length === 3 &&
+          ast[1].kind === 'combinator' &&
+          ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
+          ast[2].kind === 'selector' &&
+          ast[2].value === '&'
+        ) {
+          ast.pop() // Remove the nesting node
+          ast.pop() // Remove the combinator
+
+          changed = true
+          // When handling a compound like `in-[[data-visible]]`, we will first
+          // handle `[[data-visible]]`, then the parent `in-*` part. This means
+          // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
+          //
+          // Later this gets converted to `in-data-visible`.
+          replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast)}]`))
+          continue
+        }
+
+        // Hoist `not` modifier for `@media` or `@supports` variants
+        //
+        // E.g.: `[@media_not_(scripting:none)]:` -> `not-[@media_(scripting:none)]:`
+        if (
+          // Only top-level, so something like `in-[@media(scripting:none)]`
+          // (which is not valid anyway) is not supported
+          parent === null &&
+          // [@media_not(scripting:none)]:flex
+          //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          ast[0].kind === 'selector' &&
+          (ast[0].value === '@media' || ast[0].value === '@supports')
+        ) {
+          let targetSignature = signatures.get(designSystem.printVariant(variant))
+
+          let parsed = ValueParser.parse(SelectorParser.toCss(ast))
+          let containsNot = false
+          ValueParser.walk(parsed, (node, { replaceWith }) => {
+            if (node.kind === 'word' && node.value === 'not') {
+              containsNot = true
+              replaceWith([])
+            }
+          })
+
+          // Remove unnecessary whitespace
+          parsed = ValueParser.parse(ValueParser.toCss(parsed))
+          ValueParser.walk(parsed, (node) => {
+            if (node.kind === 'separator' && node.value !== ' ' && node.value.trim() === '') {
+              // node.value contains at least 2 spaces. Normalize it to a single
+              // space.
+              node.value = ' '
+            }
+          })
+
+          if (containsNot) {
+            let hoistedNot = designSystem.parseVariant(`not-[${ValueParser.toCss(parsed)}]`)
+            if (hoistedNot === null) continue
+            let hoistedNotSignature = signatures.get(designSystem.printVariant(hoistedNot))
+            if (targetSignature === hoistedNotSignature) {
+              changed = true
+              replaceObject(variant, hoistedNot)
+              continue
+            }
+          }
+        }
+
+        let prefixedVariant: Variant | null = null
+
+        // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
+        if (
+          // Only top-level, so `has-[&>[data-visible]]` is not supported
+          parent === null &&
+          // [&_>_[data-visible]]:flex
+          //  ^ ^ ^^^^^^^^^^^^^^
+          ast.length === 3 &&
+          ast[0].kind === 'selector' &&
+          ast[0].value.trim() === '&' &&
+          ast[1].kind === 'combinator' &&
+          ast[1].value.trim() === '>' &&
+          ast[2].kind === 'selector' &&
+          isAttributeSelector(ast[2])
+        ) {
+          ast = [ast[2]]
+          prefixedVariant = designSystem.parseVariant('*')
+        }
+
+        // Handling a grand child combinator. E.g.: `[&_[data-visible]]` => `**:data-visible`
+        if (
+          // Only top-level, so `has-[&_[data-visible]]` is not supported
+          parent === null &&
+          // [&_[data-visible]]:flex
+          //  ^ ^^^^^^^^^^^^^^
+          ast.length === 3 &&
+          ast[0].kind === 'selector' &&
+          ast[0].value.trim() === '&' &&
+          ast[1].kind === 'combinator' &&
+          ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+          ast[2].kind === 'selector' &&
+          isAttributeSelector(ast[2])
+        ) {
+          ast = [ast[2]]
+          prefixedVariant = designSystem.parseVariant('**')
+        }
+
+        // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
+        let selectorNodes = ast.filter(
+          (node) => !(node.kind === 'selector' && node.value.trim() === '&'),
+        )
+
+        // Expecting a single selector (normal selector or attribute selector)
+        if (selectorNodes.length !== 1) continue
+
+        let target = selectorNodes[0]
+        if (target.kind === 'function' && target.value === ':is') {
+          // Expecting a single selector node
+          if (
+            !isSingleSelector(target.nodes) ||
+            // [foo][bar] is considered a single selector but has multiple nodes
+            target.nodes.length !== 1
+          )
+            continue
+
+          // Expecting a single attribute selector
+          if (!isAttributeSelector(target.nodes[0])) continue
+
+          // Unwrap the selector from inside `&:is(…)`
+          target = target.nodes[0]
+        }
+
+        // Expecting a pseudo selector (or function)
+        if (
+          (target.kind === 'function' && target.value[0] === ':') ||
+          (target.kind === 'selector' && target.value[0] === ':')
+        ) {
+          let targetNode = target
+          let compoundNot = false
+          if (targetNode.kind === 'function' && targetNode.value === ':not') {
+            compoundNot = true
+            if (targetNode.nodes.length !== 1) continue
+            if (
+              targetNode.nodes[0].kind !== 'selector' &&
+              targetNode.nodes[0].kind !== 'function'
+            ) {
+              continue
+            }
+            if (targetNode.nodes[0].value[0] !== ':') continue
+
+            targetNode = targetNode.nodes[0]
+          }
+
+          let newVariant = ((value) => {
+            if (
+              value === ':nth-child' &&
+              targetNode.kind === 'function' &&
+              targetNode.nodes.length === 1 &&
+              targetNode.nodes[0].kind === 'value' &&
+              targetNode.nodes[0].value === 'odd'
+            ) {
+              if (compoundNot) {
+                compoundNot = false
+                return 'even'
+              }
+              return 'odd'
+            }
+
+            if (
+              value === ':nth-child' &&
+              targetNode.kind === 'function' &&
+              targetNode.nodes.length === 1 &&
+              targetNode.nodes[0].kind === 'value' &&
+              targetNode.nodes[0].value === 'even'
+            ) {
+              if (compoundNot) {
+                compoundNot = false
+                return 'odd'
+              }
+              return 'even'
+            }
+
+            for (let [selector, variantName] of [
+              [':nth-child', 'nth'],
+              [':nth-last-child', 'nth-last'],
+              [':nth-of-type', 'nth-of-type'],
+              [':nth-last-of-type', 'nth-of-last-type'],
+            ]) {
+              if (
+                value === selector &&
+                targetNode.kind === 'function' &&
+                targetNode.nodes.length === 1
+              ) {
+                if (
+                  targetNode.nodes.length === 1 &&
+                  targetNode.nodes[0].kind === 'value' &&
+                  isPositiveInteger(targetNode.nodes[0].value)
+                ) {
+                  return `${variantName}-${targetNode.nodes[0].value}`
+                }
+
+                return `${variantName}-[${SelectorParser.toCss(targetNode.nodes)}]`
+              }
+            }
+
+            // Hoist `not` modifier
+            if (compoundNot) {
+              let targetSignature = signatures.get(designSystem.printVariant(variant))
+              let replacementSignature = signatures.get(`not-[${value}]`)
+              if (targetSignature === replacementSignature) {
+                return `[&${value}]`
+              }
+            }
+
+            return null
+          })(targetNode.value)
+
+          if (newVariant === null) continue
+
+          // Add `not-` prefix
+          if (compoundNot) newVariant = `not-${newVariant}`
+
+          let parsed = designSystem.parseVariant(newVariant)
+          if (parsed === null) continue
+
+          // Update original variant
+          changed = true
+          replaceObject(variant, structuredClone(parsed))
+        }
+
+        // Expecting an attribute selector
+        else if (isAttributeSelector(target)) {
+          let attribute = parseAttributeSelector(target.value)
+          if (attribute === null) continue // Invalid attribute selector
+
+          // Migrate `data-*`
+          if (attribute.key.startsWith('data-')) {
+            changed = true
+            let name = attribute.key.slice(5) // Remove `data-`
+
+            replaceObject(variant, {
+              kind: 'functional',
+              root: 'data',
+              modifier: null,
+              value:
+                attribute.value === null
+                  ? { kind: 'named', value: name }
+                  : {
+                      kind: 'arbitrary',
+                      value: `${name}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                    },
+            } satisfies Variant)
+          }
+
+          // Migrate `aria-*`
+          else if (attribute.key.startsWith('aria-')) {
+            changed = true
+            let name = attribute.key.slice(5) // Remove `aria-`
+            replaceObject(variant, {
+              kind: 'functional',
+              root: 'aria',
+              modifier: null,
+              value:
+                attribute.value === null
+                  ? { kind: 'arbitrary', value: name } // aria-[foo]
+                  : attribute.operator === '=' &&
+                      attribute.value === 'true' &&
+                      attribute.modifier === null
+                    ? { kind: 'named', value: name } // aria-[foo="true"] or aria-[foo='true'] or aria-[foo=true]
+                    : {
+                        kind: 'arbitrary',
+                        value: `${attribute.key}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                      }, // aria-[foo~="true"], aria-[foo|="true"], …
+            } satisfies Variant)
+          }
+        }
+
+        if (prefixedVariant) {
+          let idx = clone.variants.indexOf(variant)
+          if (idx === -1) continue
+
+          // Ensure we inject the prefixed variant
+          clone.variants.splice(idx, 1, variant, prefixedVariant)
+        }
+      }
+    }
+
+    return changed ? designSystem.printCandidate(clone) : rawCandidate
+  }
+
+  return rawCandidate
 }
 
 // ----
