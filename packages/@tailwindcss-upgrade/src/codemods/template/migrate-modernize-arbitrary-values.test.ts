@@ -9,12 +9,17 @@ import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-v
 import { migratePrefix } from './migrate-prefix'
 vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
+const css = String.raw
+
 function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawCandidate: string) {
   for (let migration of [
     migrateEmptyArbitraryValues,
     migratePrefix,
     migrateModernizeArbitraryValues,
     migrateArbitraryVariants,
+    (designSystem: DesignSystem, _, rawCandidate: string) => {
+      return designSystem.canonicalizeCandidates([rawCandidate]).pop() ?? rawCandidate
+    },
   ]) {
     rawCandidate = migration(designSystem, userConfig, rawCandidate)
   }
@@ -37,9 +42,15 @@ test.each([
   ['not-group-[]:flex', 'not-in-[.group]:flex'],
   ['not-group-[]/name:flex', 'not-in-[.group\\/name]:flex'],
 ])('%s => %s (%#)', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+      }
+    `,
+    { base: __dirname },
+  )
 
   expect(migrate(designSystem, {}, candidate)).toEqual(result)
 })
@@ -66,9 +77,15 @@ test.each([
   ['not-group-[]:tw-flex', 'tw:not-in-[.tw\\:group]:flex'],
   ['not-group-[]/name:tw-flex', 'tw:not-in-[.tw\\:group\\/name]:flex'],
 ])('%s => %s (%#)', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss' prefix(tw);
+      @theme {
+        --*: initial;
+      }
+    `,
+    { base: __dirname },
+  )
 
   expect(migrate(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
 })
