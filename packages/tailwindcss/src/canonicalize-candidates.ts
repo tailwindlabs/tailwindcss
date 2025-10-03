@@ -25,65 +25,146 @@ import * as ValueParser from './value-parser'
 
 export function canonicalizeCandidates(ds: DesignSystem, candidates: string[]): string[] {
   let result = new Set<string>()
+  let cache = canonicalizeCandidateCache.get(ds)
   for (let candidate of candidates) {
-    result.add(canonicalizeCandidateCache.get(ds).get(candidate))
+    result.add(cache.get(candidate))
   }
   return Array.from(result)
 }
 
 const canonicalizeCandidateCache = new DefaultMap((ds: DesignSystem) => {
-  return new DefaultMap((candidate: string) => {
-    let result = candidate
-    for (let fn of CANONICALIZATIONS) {
-      let newResult = fn(ds, result)
-      if (newResult !== result) {
-        result = newResult
+  let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
+  let variantCache = canonicalizeVariantCache.get(ds)
+  let utilityCache = canonicalizeUtilityCache.get(ds)
+
+  return new DefaultMap<string, string>((rawCandidate: string, self) => {
+    for (let candidate of ds.parseCandidate(rawCandidate)) {
+      let variants = candidate.variants
+        .slice()
+        .reverse()
+        .flatMap((variant) => variantCache.get(variant))
+      let important = candidate.important
+
+      // Canonicalize the base candidate (utility), and re-attach the variants
+      // and important flag afterwards. This way we can maximize cache hits for
+      // the base candidate and each individual variant.
+      if (important || variants.length > 0) {
+        let canonicalizedUtility = self.get(
+          ds.printCandidate({ ...candidate, variants: [], important: false }),
+        )
+
+        // Rebuild the final candidate
+        let result = canonicalizedUtility
+
+        // Remove the prefix if there are variants, because the variants exist
+        // between the prefix and the base candidate.
+        if (ds.theme.prefix !== null && variants.length > 0) {
+          result = result.slice(prefix.length)
+        }
+
+        // Re-attach the variants
+        if (variants.length > 0) {
+          result = `${variants.map((v) => ds.printVariant(v)).join(':')}:${result}`
+        }
+
+        // Re-attach the important flag
+        if (important) {
+          result += '!'
+        }
+
+        // Re-attach the prefix if there were variants
+        if (ds.theme.prefix !== null && variants.length > 0) {
+          result = `${prefix}${result}`
+        }
+
+        return result
+      }
+
+      // We are guaranteed to have no variants and no important flag, just the
+      // base candidate left to canonicalize.
+      let result = utilityCache.get(rawCandidate)
+      if (result !== rawCandidate) {
+        return result
       }
     }
-    return result
+
+    return rawCandidate
   })
 })
 
-const CANONICALIZATIONS = [
+const VARIANT_CANONICALIZATIONS = [
+  themeToVarVariant,
+  arbitraryValueToBareValueVariant,
+  modernizeArbitraryValuesVariant,
+  arbitraryVariants,
+]
+
+const canonicalizeVariantCache = new DefaultMap((ds: DesignSystem) => {
+  return new DefaultMap((variant: Variant): Variant[] => {
+    let replacement = [variant]
+    for (let fn of VARIANT_CANONICALIZATIONS) {
+      for (let current of replacement.splice(0)) {
+        // A single variant can result in multiple variants, e.g.:
+        // `[&>[data-selected]]:flex` → `*:data-selected:flex`
+        let result = fn(ds, structuredClone(current))
+        if (Array.isArray(result)) {
+          replacement.push(...result)
+          continue
+        } else {
+          replacement.push(result)
+        }
+      }
+    }
+    return replacement
+  })
+})
+
+const UTILITY_CANONICALIZATIONS = [
   bgGradientToLinear,
-  themeToVar,
+  themeToVarUtility,
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
   dropUnnecessaryDataTypes,
-  arbitraryValueToBareValue,
-  modernizeArbitraryValues,
-  arbitraryVariants,
+  arbitraryValueToBareValueUtility,
   optimizeModifier,
-  print,
 ]
 
-function print(designSystem: DesignSystem, rawCandidate: string): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    return designSystem.printCandidate(candidate)
-  }
-  return rawCandidate
-}
+const canonicalizeUtilityCache = new DefaultMap((ds: DesignSystem) => {
+  return new DefaultMap((rawCandidate: string): string => {
+    for (let readonlyCandidate of ds.parseCandidate(rawCandidate)) {
+      let replacement = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+
+      for (let fn of UTILITY_CANONICALIZATIONS) {
+        replacement = fn(ds, replacement)
+      }
+
+      let canonicalizedCandidate = ds.printCandidate(replacement)
+      if (rawCandidate !== canonicalizedCandidate) {
+        return canonicalizedCandidate
+      }
+    }
+
+    return rawCandidate
+  })
+})
 
 // ----
 
 const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
-function bgGradientToLinear(designSystem: DesignSystem, rawCandidate: string): string {
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
-    if (candidate.kind === 'static' && candidate.root.startsWith('bg-gradient-to-')) {
-      let direction = candidate.root.slice(15)
+function bgGradientToLinear(_: DesignSystem, candidate: Candidate) {
+  if (candidate.kind === 'static' && candidate.root.startsWith('bg-gradient-to-')) {
+    let direction = candidate.root.slice(15)
 
-      if (!DIRECTIONS.includes(direction)) {
-        continue
-      }
-
-      return designSystem.printCandidate({
-        ...candidate,
-        root: `bg-linear-to-${direction}`,
-      })
+    if (!DIRECTIONS.includes(direction)) {
+      return candidate
     }
+
+    candidate.root = `bg-linear-to-${direction}`
+    return candidate
   }
-  return rawCandidate
+
+  return candidate
 }
 
 // ----
@@ -94,62 +175,57 @@ const enum Convert {
   MigrateThemeOnly = 1 << 1,
 }
 
-function themeToVar(designSystem: DesignSystem, rawCandidate: string): string {
+function themeToVarUtility(designSystem: DesignSystem, candidate: Candidate): Candidate {
   let convert = converterCache.get(designSystem)
 
-  for (let candidate of parseCandidate(designSystem, rawCandidate)) {
-    let clone = structuredClone(candidate) as Writable<typeof candidate>
-    let changed = false
+  if (candidate.kind === 'arbitrary') {
+    let [newValue, modifier] = convert(
+      candidate.value,
+      candidate.modifier === null ? Convert.MigrateModifier : Convert.All,
+    )
+    if (newValue !== candidate.value) {
+      candidate.value = newValue
 
-    if (clone.kind === 'arbitrary') {
-      let [newValue, modifier] = convert(
-        clone.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
-      )
-      if (newValue !== clone.value) {
-        changed = true
-        clone.value = newValue
-
-        if (modifier !== null) {
-          clone.modifier = modifier
-        }
-      }
-    } else if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
-      let [newValue, modifier] = convert(
-        clone.value.value,
-        clone.modifier === null ? Convert.MigrateModifier : Convert.All,
-      )
-      if (newValue !== clone.value.value) {
-        changed = true
-        clone.value.value = newValue
-
-        if (modifier !== null) {
-          clone.modifier = modifier
-        }
+      if (modifier !== null) {
+        candidate.modifier = modifier
       }
     }
+  } else if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') {
+    let [newValue, modifier] = convert(
+      candidate.value.value,
+      candidate.modifier === null ? Convert.MigrateModifier : Convert.All,
+    )
+    if (newValue !== candidate.value.value) {
+      candidate.value.value = newValue
 
-    // Handle variants
-    for (let [variant] of walkVariants(clone)) {
-      if (variant.kind === 'arbitrary') {
-        let [newValue] = convert(variant.selector, Convert.MigrateThemeOnly)
-        if (newValue !== variant.selector) {
-          changed = true
-          variant.selector = newValue
-        }
-      } else if (variant.kind === 'functional' && variant.value?.kind === 'arbitrary') {
-        let [newValue] = convert(variant.value.value, Convert.MigrateThemeOnly)
-        if (newValue !== variant.value.value) {
-          changed = true
-          variant.value.value = newValue
-        }
+      if (modifier !== null) {
+        candidate.modifier = modifier
       }
     }
-
-    return changed ? designSystem.printCandidate(clone) : rawCandidate
   }
 
-  return rawCandidate
+  return candidate
+}
+
+function themeToVarVariant(designSystem: DesignSystem, variant: Variant): Variant | Variant[] {
+  let convert = converterCache.get(designSystem)
+
+  let iterator = walkVariants(variant)
+  for (let [variant] of iterator) {
+    if (variant.kind === 'arbitrary') {
+      let [newValue] = convert(variant.selector, Convert.MigrateThemeOnly)
+      if (newValue !== variant.selector) {
+        variant.selector = newValue
+      }
+    } else if (variant.kind === 'functional' && variant.value?.kind === 'arbitrary') {
+      let [newValue] = convert(variant.value.value, Convert.MigrateThemeOnly)
+      if (newValue !== variant.value.value) {
+        variant.value.value = newValue
+      }
+    }
+  }
+
+  return variant
 }
 
 const converterCache = new DefaultMap((ds: DesignSystem) => {
@@ -413,7 +489,7 @@ function eventuallyUnquote(value: string) {
 
 // ----
 
-function* walkVariants(candidate: Candidate) {
+function* walkVariants(variant: Variant) {
   function* inner(
     variant: Variant,
     parent: Extract<Variant, { kind: 'compound' }> | null = null,
@@ -425,18 +501,7 @@ function* walkVariants(candidate: Candidate) {
     }
   }
 
-  for (let variant of candidate.variants) {
-    yield* inner(variant, null)
-  }
-}
-
-function baseCandidate<T extends Candidate>(candidate: T) {
-  let base = structuredClone(candidate)
-
-  base.important = false
-  base.variants = []
-
-  return base
+  yield* inner(variant, null)
 }
 
 function parseCandidate(designSystem: DesignSystem, input: string) {
@@ -456,10 +521,6 @@ function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candida
 }
 
 // ----
-
-const baseReplacementsCache = new DefaultMap<DesignSystem, Map<string, Candidate>>(
-  () => new Map<string, Candidate>(),
-)
 
 const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> | null>((ds) => {
   let spacingMultiplier = ds.resolveThemeValue('--spacing')
@@ -481,78 +542,47 @@ const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> |
   })
 })
 
-function arbitraryUtilities(designSystem: DesignSystem, rawCandidate: string): string {
+function arbitraryUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
+  // We are only interested in arbitrary properties and arbitrary values
+  if (
+    // Arbitrary property
+    candidate.kind !== 'arbitrary' &&
+    // Arbitrary value
+    !(candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary')
+  ) {
+    return candidate
+  }
+
   let utilities = preComputedUtilities.get(designSystem)
   let signatures = computeUtilitySignature.get(designSystem)
 
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    // We are only interested in arbitrary properties and arbitrary values
-    if (
-      // Arbitrary property
-      readonlyCandidate.kind !== 'arbitrary' &&
-      // Arbitrary value
-      !(readonlyCandidate.kind === 'functional' && readonlyCandidate.value?.kind === 'arbitrary')
-    ) {
+  let targetCandidateString = designSystem.printCandidate(candidate)
+
+  // Compute the signature for the target candidate
+  let targetSignature = signatures.get(targetCandidateString)
+  if (typeof targetSignature !== 'string') return candidate
+
+  // Try a few options to find a suitable replacement utility
+  for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
+    let replacementString = designSystem.printCandidate(replacementCandidate)
+    let replacementSignature = signatures.get(replacementString)
+    if (replacementSignature !== targetSignature) {
       continue
     }
 
-    // The below logic makes use of mutation. Since candidates in the
-    // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
-
-    // Create a basic stripped candidate without variants or important flag. We
-    // will re-add those later but they are irrelevant for what we are trying to
-    // do here (and will increase cache hits because we only have to deal with
-    // the base utility, nothing more).
-    let targetCandidate = baseCandidate(candidate)
-
-    let targetCandidateString = designSystem.printCandidate(targetCandidate)
-    if (baseReplacementsCache.get(designSystem).has(targetCandidateString)) {
-      let target = structuredClone(
-        baseReplacementsCache.get(designSystem).get(targetCandidateString)!,
-      )
-      // Re-add the variants and important flag from the original candidate
-      target.variants = candidate.variants
-      target.important = candidate.important
-
-      return designSystem.printCandidate(target)
+    // Ensure that if CSS variables were used, that they are still used
+    if (!allVariablesAreUsed(designSystem, candidate, replacementCandidate)) {
+      continue
     }
 
-    // Compute the signature for the target candidate
-    let targetSignature = signatures.get(targetCandidateString)
-    if (typeof targetSignature !== 'string') continue
+    // Update the candidate with the new value
+    replaceObject(candidate, replacementCandidate)
 
-    // Try a few options to find a suitable replacement utility
-    for (let replacementCandidate of tryReplacements(targetSignature, targetCandidate)) {
-      let replacementString = designSystem.printCandidate(replacementCandidate)
-      let replacementSignature = signatures.get(replacementString)
-      if (replacementSignature !== targetSignature) {
-        continue
-      }
-
-      // Ensure that if CSS variables were used, that they are still used
-      if (!allVariablesAreUsed(designSystem, candidate, replacementCandidate)) {
-        continue
-      }
-
-      replacementCandidate = structuredClone(replacementCandidate)
-
-      // Cache the result so we can re-use this work later
-      baseReplacementsCache.get(designSystem).set(targetCandidateString, replacementCandidate)
-
-      // Re-add the variants and important flag from the original candidate
-      replacementCandidate.variants = candidate.variants
-      replacementCandidate.important = candidate.important
-
-      // Update the candidate with the new value
-      Object.assign(candidate, replacementCandidate)
-
-      // We will re-print the candidate to get the migrated candidate out
-      return designSystem.printCandidate(candidate)
-    }
+    // We will re-print the candidate to get the migrated candidate out
+    return candidate
   }
 
-  return rawCandidate
+  return candidate
 
   function* tryReplacements(
     targetSignature: string,
@@ -732,68 +762,37 @@ function allVariablesAreUsed(
 
 // ----
 
-function bareValueUtilities(designSystem: DesignSystem, rawCandidate: string): string {
+function bareValueUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
+  // We are only interested in bare value utilities
+  if (candidate.kind !== 'functional' || candidate.value?.kind !== 'named') {
+    return candidate
+  }
+
   let utilities = preComputedUtilities.get(designSystem)
   let signatures = computeUtilitySignature.get(designSystem)
 
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    // We are only interested in bare value utilities
-    if (readonlyCandidate.kind !== 'functional' || readonlyCandidate.value?.kind !== 'named') {
+  let targetCandidateString = designSystem.printCandidate(candidate)
+
+  // Compute the signature for the target candidate
+  let targetSignature = signatures.get(targetCandidateString)
+  if (typeof targetSignature !== 'string') return candidate
+
+  // Try a few options to find a suitable replacement utility
+  for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
+    let replacementString = designSystem.printCandidate(replacementCandidate)
+    let replacementSignature = signatures.get(replacementString)
+    if (replacementSignature !== targetSignature) {
       continue
     }
 
-    // The below logic makes use of mutation. Since candidates in the
-    // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+    // Update the candidate with the new value
+    replaceObject(candidate, replacementCandidate)
 
-    // Create a basic stripped candidate without variants or important flag. We
-    // will re-add those later but they are irrelevant for what we are trying to
-    // do here (and will increase cache hits because we only have to deal with
-    // the base utility, nothing more).
-    let targetCandidate = baseCandidate(candidate)
-
-    let targetCandidateString = designSystem.printCandidate(targetCandidate)
-    if (baseReplacementsCache.get(designSystem).has(targetCandidateString)) {
-      let target = structuredClone(
-        baseReplacementsCache.get(designSystem).get(targetCandidateString)!,
-      )
-      // Re-add the variants and important flag from the original candidate
-      target.variants = candidate.variants
-      target.important = candidate.important
-
-      return designSystem.printCandidate(target)
-    }
-
-    // Compute the signature for the target candidate
-    let targetSignature = signatures.get(targetCandidateString)
-    if (typeof targetSignature !== 'string') continue
-
-    // Try a few options to find a suitable replacement utility
-    for (let replacementCandidate of tryReplacements(targetSignature, targetCandidate)) {
-      let replacementString = designSystem.printCandidate(replacementCandidate)
-      let replacementSignature = signatures.get(replacementString)
-      if (replacementSignature !== targetSignature) {
-        continue
-      }
-
-      replacementCandidate = structuredClone(replacementCandidate)
-
-      // Cache the result so we can re-use this work later
-      baseReplacementsCache.get(designSystem).set(targetCandidateString, replacementCandidate)
-
-      // Re-add the variants and important flag from the original candidate
-      replacementCandidate.variants = candidate.variants
-      replacementCandidate.important = candidate.important
-
-      // Update the candidate with the new value
-      Object.assign(candidate, replacementCandidate)
-
-      // We will re-print the candidate to get the migrated candidate out
-      return designSystem.printCandidate(candidate)
-    }
+    // We will re-print the candidate to get the migrated candidate out
+    return candidate
   }
 
-  return rawCandidate
+  return candidate
 
   function* tryReplacements(
     targetSignature: string,
@@ -843,199 +842,167 @@ function bareValueUtilities(designSystem: DesignSystem, rawCandidate: string): s
 
 const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
 
-function deprecatedUtilities(designSystem: DesignSystem, rawCandidate: string): string {
+function deprecatedUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
   let signatures = computeUtilitySignature.get(designSystem)
 
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    // The below logic makes use of mutation. Since candidates in the
-    // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+  let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-    // Create a basic stripped candidate without variants or important flag. We
-    // will re-add those later but they are irrelevant for what we are trying to
-    // do here (and will increase cache hits because we only have to deal with
-    // the base utility, nothing more).
-    let targetCandidate = baseCandidate(candidate)
-    let targetCandidateString = printUnprefixedCandidate(designSystem, targetCandidate)
+  let replacementString = DEPRECATION_MAP.get(targetCandidateString) ?? null
+  if (replacementString === null) return candidate
 
-    let replacementString = DEPRECATION_MAP.get(targetCandidateString) ?? null
-    if (replacementString === null) return rawCandidate
+  let legacySignature = signatures.get(targetCandidateString)
+  if (typeof legacySignature !== 'string') return candidate
 
-    let legacySignature = signatures.get(targetCandidateString)
-    if (typeof legacySignature !== 'string') return rawCandidate
+  let replacementSignature = signatures.get(replacementString)
+  if (typeof replacementSignature !== 'string') return candidate
 
-    let replacementSignature = signatures.get(replacementString)
-    if (typeof replacementSignature !== 'string') return rawCandidate
+  // Not the same signature, not safe to migrate
+  if (legacySignature !== replacementSignature) return candidate
 
-    // Not the same signature, not safe to migrate
-    if (legacySignature !== replacementSignature) return rawCandidate
+  let [replacement] = parseCandidate(designSystem, replacementString)
 
-    let [replacement] = parseCandidate(designSystem, replacementString)
-
-    // Re-add the variants and important flag from the original candidate
-    return designSystem.printCandidate(
-      Object.assign(structuredClone(replacement), {
-        variants: candidate.variants,
-        important: candidate.important,
-      }),
-    )
-  }
-
-  return rawCandidate
+  return replaceObject(candidate, replacement)
 }
 
 // ----
 
-function arbitraryVariants(designSystem: DesignSystem, rawCandidate: string): string {
+function arbitraryVariants(designSystem: DesignSystem, variant: Variant): Variant | Variant[] {
   let signatures = computeVariantSignature.get(designSystem)
   let variants = preComputedVariants.get(designSystem)
 
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    // We are only interested in the variants
-    if (readonlyCandidate.variants.length <= 0) return rawCandidate
+  let iterator = walkVariants(variant)
+  for (let [variant] of iterator) {
+    if (variant.kind === 'compound') continue
 
-    // The below logic makes use of mutation. Since candidates in the
-    // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+    let targetString = designSystem.printVariant(variant)
+    let targetSignature = signatures.get(targetString)
+    if (typeof targetSignature !== 'string') continue
 
-    for (let [variant] of walkVariants(candidate)) {
-      if (variant.kind === 'compound') continue
+    let foundVariants = variants.get(targetSignature)
+    if (foundVariants.length !== 1) continue
 
-      let targetString = designSystem.printVariant(variant)
-      let targetSignature = signatures.get(targetString)
-      if (typeof targetSignature !== 'string') continue
+    let foundVariant = foundVariants[0]
+    let parsedVariant = designSystem.parseVariant(foundVariant)
+    if (parsedVariant === null) continue
 
-      let foundVariants = variants.get(targetSignature)
-      if (foundVariants.length !== 1) continue
-
-      let foundVariant = foundVariants[0]
-      let parsedVariant = designSystem.parseVariant(foundVariant)
-      if (parsedVariant === null) continue
-
-      replaceObject(variant, parsedVariant)
-    }
-
-    return designSystem.printCandidate(candidate)
+    replaceObject(variant, parsedVariant)
   }
 
-  return rawCandidate
+  return variant
 }
 
 // ----
 
-function dropUnnecessaryDataTypes(designSystem: DesignSystem, rawCandidate: string): string {
+function dropUnnecessaryDataTypes(designSystem: DesignSystem, candidate: Candidate): Candidate {
   let signatures = computeUtilitySignature.get(designSystem)
 
-  for (let candidate of designSystem.parseCandidate(rawCandidate)) {
+  if (
+    candidate.kind === 'functional' &&
+    candidate.value?.kind === 'arbitrary' &&
+    candidate.value.dataType !== null
+  ) {
+    let replacement = designSystem.printCandidate({
+      ...candidate,
+      value: { ...candidate.value, dataType: null },
+    })
+
+    if (signatures.get(designSystem.printCandidate(candidate)) === signatures.get(replacement)) {
+      candidate.value.dataType = null
+    }
+  }
+
+  return candidate
+}
+
+// ----
+
+function arbitraryValueToBareValueUtility(
+  designSystem: DesignSystem,
+  candidate: Candidate,
+): Candidate {
+  // We are only interested in functional utilities with arbitrary values
+  if (candidate.kind !== 'functional' || candidate.value?.kind !== 'arbitrary') {
+    return candidate
+  }
+
+  let signatures = computeUtilitySignature.get(designSystem)
+
+  let expectedSignature = signatures.get(designSystem.printCandidate(candidate))
+  if (expectedSignature === null) return candidate
+
+  for (let value of tryValueReplacements(candidate)) {
+    let newSignature = signatures.get(designSystem.printCandidate({ ...candidate, value }))
+    if (newSignature === expectedSignature) {
+      candidate.value = value
+      return candidate
+    }
+  }
+
+  return candidate
+}
+
+function arbitraryValueToBareValueVariant(_: DesignSystem, variant: Variant): Variant | Variant[] {
+  let iterator = walkVariants(variant)
+  for (let [variant] of iterator) {
+    // Convert `data-[selected]` to `data-selected`
     if (
-      candidate.kind === 'functional' &&
-      candidate.value?.kind === 'arbitrary' &&
-      candidate.value.dataType !== null
+      variant.kind === 'functional' &&
+      variant.root === 'data' &&
+      variant.value?.kind === 'arbitrary' &&
+      !variant.value.value.includes('=')
     ) {
-      let replacement = designSystem.printCandidate({
-        ...candidate,
-        value: { ...candidate.value, dataType: null },
-      })
-
-      if (signatures.get(rawCandidate) === signatures.get(replacement)) {
-        return replacement
-      }
-    }
-  }
-
-  return rawCandidate
-}
-
-// ----
-
-function arbitraryValueToBareValue(designSystem: DesignSystem, rawCandidate: string): string {
-  let signatures = computeUtilitySignature.get(designSystem)
-
-  for (let candidate of parseCandidate(designSystem, rawCandidate)) {
-    let clone = structuredClone(candidate) as Writable<typeof candidate>
-    let changed = false
-
-    // Migrate arbitrary values to bare values
-    if (clone.kind === 'functional' && clone.value?.kind === 'arbitrary') {
-      let expectedSignature = signatures.get(rawCandidate)
-      if (expectedSignature !== null) {
-        for (let value of tryValueReplacements(clone)) {
-          let newSignature = signatures.get(designSystem.printCandidate({ ...clone, value }))
-          if (newSignature === expectedSignature) {
-            changed = true
-            clone.value = value
-            break
-          }
-        }
+      variant.value = {
+        kind: 'named',
+        value: variant.value.value,
       }
     }
 
-    for (let [variant] of walkVariants(clone)) {
-      // Convert `data-[selected]` to `data-selected`
+    // Convert `aria-[selected="true"]` to `aria-selected`
+    else if (
+      variant.kind === 'functional' &&
+      variant.root === 'aria' &&
+      variant.value?.kind === 'arbitrary' &&
+      (variant.value.value.endsWith('=true') ||
+        variant.value.value.endsWith('="true"') ||
+        variant.value.value.endsWith("='true'"))
+    ) {
+      let [key, _value] = segment(variant.value.value, '=')
       if (
-        variant.kind === 'functional' &&
-        variant.root === 'data' &&
-        variant.value?.kind === 'arbitrary' &&
-        !variant.value.value.includes('=')
+        // aria-[foo~="true"]
+        key[key.length - 1] === '~' ||
+        // aria-[foo|="true"]
+        key[key.length - 1] === '|' ||
+        // aria-[foo^="true"]
+        key[key.length - 1] === '^' ||
+        // aria-[foo$="true"]
+        key[key.length - 1] === '$' ||
+        // aria-[foo*="true"]
+        key[key.length - 1] === '*'
       ) {
-        changed = true
-        variant.value = {
-          kind: 'named',
-          value: variant.value.value,
-        }
+        continue
       }
 
-      // Convert `aria-[selected="true"]` to `aria-selected`
-      else if (
-        variant.kind === 'functional' &&
-        variant.root === 'aria' &&
-        variant.value?.kind === 'arbitrary' &&
-        (variant.value.value.endsWith('=true') ||
-          variant.value.value.endsWith('="true"') ||
-          variant.value.value.endsWith("='true'"))
-      ) {
-        let [key, _value] = segment(variant.value.value, '=')
-        if (
-          // aria-[foo~="true"]
-          key[key.length - 1] === '~' ||
-          // aria-[foo|="true"]
-          key[key.length - 1] === '|' ||
-          // aria-[foo^="true"]
-          key[key.length - 1] === '^' ||
-          // aria-[foo$="true"]
-          key[key.length - 1] === '$' ||
-          // aria-[foo*="true"]
-          key[key.length - 1] === '*'
-        ) {
-          continue
-        }
-
-        changed = true
-        variant.value = {
-          kind: 'named',
-          value: variant.value.value.slice(0, variant.value.value.indexOf('=')),
-        }
-      }
-
-      // Convert `supports-[gap]` to `supports-gap`
-      else if (
-        variant.kind === 'functional' &&
-        variant.root === 'supports' &&
-        variant.value?.kind === 'arbitrary' &&
-        /^[a-z-][a-z0-9-]*$/i.test(variant.value.value)
-      ) {
-        changed = true
-        variant.value = {
-          kind: 'named',
-          value: variant.value.value,
-        }
+      variant.value = {
+        kind: 'named',
+        value: variant.value.value.slice(0, variant.value.value.indexOf('=')),
       }
     }
 
-    return changed ? designSystem.printCandidate(clone) : rawCandidate
+    // Convert `supports-[gap]` to `supports-gap`
+    else if (
+      variant.kind === 'functional' &&
+      variant.root === 'supports' &&
+      variant.value?.kind === 'arbitrary' &&
+      /^[a-z-][a-z0-9-]*$/i.test(variant.value.value)
+    ) {
+      variant.value = {
+        kind: 'named',
+        value: variant.value.value,
+      }
+    }
   }
 
-  return rawCandidate
+  return variant
 }
 
 // Convert functional utilities with arbitrary values to bare values if we can.
@@ -1254,370 +1221,354 @@ function parseAttributeSelector(value: string) {
   return attribute
 }
 
-function modernizeArbitraryValues(designSystem: DesignSystem, rawCandidate: string): string {
+function modernizeArbitraryValuesVariant(
+  designSystem: DesignSystem,
+  variant: Variant,
+): Variant | Variant[] {
+  let result = [variant]
   let signatures = computeVariantSignature.get(designSystem)
 
-  for (let candidate of parseCandidate(designSystem, rawCandidate)) {
-    let clone = structuredClone(candidate)
-    let changed = false
-
-    for (let [variant, parent] of walkVariants(clone)) {
-      // Forward modifier from the root to the compound variant
-      if (
-        variant.kind === 'compound' &&
-        (variant.root === 'has' || variant.root === 'not' || variant.root === 'in')
-      ) {
-        if (variant.modifier !== null) {
-          if ('modifier' in variant.variant) {
-            variant.variant.modifier = variant.modifier
-            variant.modifier = null
-          }
-        }
-      }
-
-      // Expecting an arbitrary variant
-      if (variant.kind === 'arbitrary') {
-        // Expecting a non-relative arbitrary variant
-        if (variant.relative) continue
-
-        let ast = SelectorParser.parse(variant.selector.trim())
-
-        // Expecting a single selector node
-        if (!isSingleSelector(ast)) continue
-
-        // `[&>*]` can be replaced with `*`
-        if (
-          // Only top-level, so `has-[&>*]` is not supported
-          parent === null &&
-          // [&_>_*]:flex
-          //  ^ ^ ^
-          ast.length === 3 &&
-          ast[0].kind === 'selector' &&
-          ast[0].value === '&' &&
-          ast[1].kind === 'combinator' &&
-          ast[1].value.trim() === '>' &&
-          ast[2].kind === 'selector' &&
-          ast[2].value === '*'
-        ) {
-          changed = true
-          replaceObject(variant, designSystem.parseVariant('*'))
-          continue
-        }
-
-        // `[&_*]` can be replaced with `**`
-        if (
-          // Only top-level, so `has-[&_*]` is not supported
-          parent === null &&
-          // [&_*]:flex
-          //  ^ ^
-          ast.length === 3 &&
-          ast[0].kind === 'selector' &&
-          ast[0].value === '&' &&
-          ast[1].kind === 'combinator' &&
-          ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
-          ast[2].kind === 'selector' &&
-          ast[2].value === '*'
-        ) {
-          changed = true
-          replaceObject(variant, designSystem.parseVariant('**'))
-          continue
-        }
-
-        // `in-*` variant. If the selector ends with ` &`, we can convert it to an
-        // `in-*` variant.
-        //
-        // E.g.: `[[data-visible]_&]` => `in-data-visible`
-        if (
-          // Only top-level, so `in-[&_[data-visible]]` is not supported
-          parent === null &&
-          // [[data-visible]___&]:flex
-          //  ^^^^^^^^^^^^^^ ^ ^
-          ast.length === 3 &&
-          ast[1].kind === 'combinator' &&
-          ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
-          ast[2].kind === 'selector' &&
-          ast[2].value === '&'
-        ) {
-          ast.pop() // Remove the nesting node
-          ast.pop() // Remove the combinator
-
-          changed = true
-          // When handling a compound like `in-[[data-visible]]`, we will first
-          // handle `[[data-visible]]`, then the parent `in-*` part. This means
-          // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
-          //
-          // Later this gets converted to `in-data-visible`.
-          replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast)}]`))
-          continue
-        }
-
-        // Hoist `not` modifier for `@media` or `@supports` variants
-        //
-        // E.g.: `[@media_not_(scripting:none)]:` -> `not-[@media_(scripting:none)]:`
-        if (
-          // Only top-level, so something like `in-[@media(scripting:none)]`
-          // (which is not valid anyway) is not supported
-          parent === null &&
-          // [@media_not(scripting:none)]:flex
-          //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          ast[0].kind === 'selector' &&
-          (ast[0].value === '@media' || ast[0].value === '@supports')
-        ) {
-          let targetSignature = signatures.get(designSystem.printVariant(variant))
-
-          let parsed = ValueParser.parse(SelectorParser.toCss(ast))
-          let containsNot = false
-          ValueParser.walk(parsed, (node, { replaceWith }) => {
-            if (node.kind === 'word' && node.value === 'not') {
-              containsNot = true
-              replaceWith([])
-            }
-          })
-
-          // Remove unnecessary whitespace
-          parsed = ValueParser.parse(ValueParser.toCss(parsed))
-          ValueParser.walk(parsed, (node) => {
-            if (node.kind === 'separator' && node.value !== ' ' && node.value.trim() === '') {
-              // node.value contains at least 2 spaces. Normalize it to a single
-              // space.
-              node.value = ' '
-            }
-          })
-
-          if (containsNot) {
-            let hoistedNot = designSystem.parseVariant(`not-[${ValueParser.toCss(parsed)}]`)
-            if (hoistedNot === null) continue
-            let hoistedNotSignature = signatures.get(designSystem.printVariant(hoistedNot))
-            if (targetSignature === hoistedNotSignature) {
-              changed = true
-              replaceObject(variant, hoistedNot)
-              continue
-            }
-          }
-        }
-
-        let prefixedVariant: Variant | null = null
-
-        // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
-        if (
-          // Only top-level, so `has-[&>[data-visible]]` is not supported
-          parent === null &&
-          // [&_>_[data-visible]]:flex
-          //  ^ ^ ^^^^^^^^^^^^^^
-          ast.length === 3 &&
-          ast[0].kind === 'selector' &&
-          ast[0].value.trim() === '&' &&
-          ast[1].kind === 'combinator' &&
-          ast[1].value.trim() === '>' &&
-          ast[2].kind === 'selector' &&
-          isAttributeSelector(ast[2])
-        ) {
-          ast = [ast[2]]
-          prefixedVariant = designSystem.parseVariant('*')
-        }
-
-        // Handling a grand child combinator. E.g.: `[&_[data-visible]]` => `**:data-visible`
-        if (
-          // Only top-level, so `has-[&_[data-visible]]` is not supported
-          parent === null &&
-          // [&_[data-visible]]:flex
-          //  ^ ^^^^^^^^^^^^^^
-          ast.length === 3 &&
-          ast[0].kind === 'selector' &&
-          ast[0].value.trim() === '&' &&
-          ast[1].kind === 'combinator' &&
-          ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
-          ast[2].kind === 'selector' &&
-          isAttributeSelector(ast[2])
-        ) {
-          ast = [ast[2]]
-          prefixedVariant = designSystem.parseVariant('**')
-        }
-
-        // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
-        let selectorNodes = ast.filter(
-          (node) => !(node.kind === 'selector' && node.value.trim() === '&'),
-        )
-
-        // Expecting a single selector (normal selector or attribute selector)
-        if (selectorNodes.length !== 1) continue
-
-        let target = selectorNodes[0]
-        if (target.kind === 'function' && target.value === ':is') {
-          // Expecting a single selector node
-          if (
-            !isSingleSelector(target.nodes) ||
-            // [foo][bar] is considered a single selector but has multiple nodes
-            target.nodes.length !== 1
-          )
-            continue
-
-          // Expecting a single attribute selector
-          if (!isAttributeSelector(target.nodes[0])) continue
-
-          // Unwrap the selector from inside `&:is(…)`
-          target = target.nodes[0]
-        }
-
-        // Expecting a pseudo selector (or function)
-        if (
-          (target.kind === 'function' && target.value[0] === ':') ||
-          (target.kind === 'selector' && target.value[0] === ':')
-        ) {
-          let targetNode = target
-          let compoundNot = false
-          if (targetNode.kind === 'function' && targetNode.value === ':not') {
-            compoundNot = true
-            if (targetNode.nodes.length !== 1) continue
-            if (
-              targetNode.nodes[0].kind !== 'selector' &&
-              targetNode.nodes[0].kind !== 'function'
-            ) {
-              continue
-            }
-            if (targetNode.nodes[0].value[0] !== ':') continue
-
-            targetNode = targetNode.nodes[0]
-          }
-
-          let newVariant = ((value) => {
-            if (
-              value === ':nth-child' &&
-              targetNode.kind === 'function' &&
-              targetNode.nodes.length === 1 &&
-              targetNode.nodes[0].kind === 'value' &&
-              targetNode.nodes[0].value === 'odd'
-            ) {
-              if (compoundNot) {
-                compoundNot = false
-                return 'even'
-              }
-              return 'odd'
-            }
-
-            if (
-              value === ':nth-child' &&
-              targetNode.kind === 'function' &&
-              targetNode.nodes.length === 1 &&
-              targetNode.nodes[0].kind === 'value' &&
-              targetNode.nodes[0].value === 'even'
-            ) {
-              if (compoundNot) {
-                compoundNot = false
-                return 'odd'
-              }
-              return 'even'
-            }
-
-            for (let [selector, variantName] of [
-              [':nth-child', 'nth'],
-              [':nth-last-child', 'nth-last'],
-              [':nth-of-type', 'nth-of-type'],
-              [':nth-last-of-type', 'nth-of-last-type'],
-            ]) {
-              if (
-                value === selector &&
-                targetNode.kind === 'function' &&
-                targetNode.nodes.length === 1
-              ) {
-                if (
-                  targetNode.nodes.length === 1 &&
-                  targetNode.nodes[0].kind === 'value' &&
-                  isPositiveInteger(targetNode.nodes[0].value)
-                ) {
-                  return `${variantName}-${targetNode.nodes[0].value}`
-                }
-
-                return `${variantName}-[${SelectorParser.toCss(targetNode.nodes)}]`
-              }
-            }
-
-            // Hoist `not` modifier
-            if (compoundNot) {
-              let targetSignature = signatures.get(designSystem.printVariant(variant))
-              let replacementSignature = signatures.get(`not-[${value}]`)
-              if (targetSignature === replacementSignature) {
-                return `[&${value}]`
-              }
-            }
-
-            return null
-          })(targetNode.value)
-
-          if (newVariant === null) continue
-
-          // Add `not-` prefix
-          if (compoundNot) newVariant = `not-${newVariant}`
-
-          let parsed = designSystem.parseVariant(newVariant)
-          if (parsed === null) continue
-
-          // Update original variant
-          changed = true
-          replaceObject(variant, structuredClone(parsed))
-        }
-
-        // Expecting an attribute selector
-        else if (isAttributeSelector(target)) {
-          let attribute = parseAttributeSelector(target.value)
-          if (attribute === null) continue // Invalid attribute selector
-
-          // Migrate `data-*`
-          if (attribute.key.startsWith('data-')) {
-            changed = true
-            let name = attribute.key.slice(5) // Remove `data-`
-
-            replaceObject(variant, {
-              kind: 'functional',
-              root: 'data',
-              modifier: null,
-              value:
-                attribute.value === null
-                  ? { kind: 'named', value: name }
-                  : {
-                      kind: 'arbitrary',
-                      value: `${name}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
-                    },
-            } satisfies Variant)
-          }
-
-          // Migrate `aria-*`
-          else if (attribute.key.startsWith('aria-')) {
-            changed = true
-            let name = attribute.key.slice(5) // Remove `aria-`
-            replaceObject(variant, {
-              kind: 'functional',
-              root: 'aria',
-              modifier: null,
-              value:
-                attribute.value === null
-                  ? { kind: 'arbitrary', value: name } // aria-[foo]
-                  : attribute.operator === '=' &&
-                      attribute.value === 'true' &&
-                      attribute.modifier === null
-                    ? { kind: 'named', value: name } // aria-[foo="true"] or aria-[foo='true'] or aria-[foo=true]
-                    : {
-                        kind: 'arbitrary',
-                        value: `${attribute.key}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
-                      }, // aria-[foo~="true"], aria-[foo|="true"], …
-            } satisfies Variant)
-          }
-        }
-
-        if (prefixedVariant) {
-          let idx = clone.variants.indexOf(variant)
-          if (idx === -1) continue
-
-          // Ensure we inject the prefixed variant
-          clone.variants.splice(idx, 1, variant, prefixedVariant)
+  let iterator = walkVariants(variant)
+  for (let [variant, parent] of iterator) {
+    // Forward modifier from the root to the compound variant
+    if (
+      variant.kind === 'compound' &&
+      (variant.root === 'has' || variant.root === 'not' || variant.root === 'in')
+    ) {
+      if (variant.modifier !== null) {
+        if ('modifier' in variant.variant) {
+          variant.variant.modifier = variant.modifier
+          variant.modifier = null
         }
       }
     }
 
-    return changed ? designSystem.printCandidate(clone) : rawCandidate
+    // Expecting an arbitrary variant
+    if (variant.kind === 'arbitrary') {
+      // Expecting a non-relative arbitrary variant
+      if (variant.relative) continue
+
+      let ast = SelectorParser.parse(variant.selector.trim())
+
+      // Expecting a single selector node
+      if (!isSingleSelector(ast)) continue
+
+      // `[&>*]` can be replaced with `*`
+      if (
+        // Only top-level, so `has-[&>*]` is not supported
+        parent === null &&
+        // [&_>_*]:flex
+        //  ^ ^ ^
+        ast.length === 3 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value === '&' &&
+        ast[1].kind === 'combinator' &&
+        ast[1].value.trim() === '>' &&
+        ast[2].kind === 'selector' &&
+        ast[2].value === '*'
+      ) {
+        replaceObject(variant, designSystem.parseVariant('*'))
+        continue
+      }
+
+      // `[&_*]` can be replaced with `**`
+      if (
+        // Only top-level, so `has-[&_*]` is not supported
+        parent === null &&
+        // [&_*]:flex
+        //  ^ ^
+        ast.length === 3 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value === '&' &&
+        ast[1].kind === 'combinator' &&
+        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[2].kind === 'selector' &&
+        ast[2].value === '*'
+      ) {
+        replaceObject(variant, designSystem.parseVariant('**'))
+        continue
+      }
+
+      // `in-*` variant. If the selector ends with ` &`, we can convert it to an
+      // `in-*` variant.
+      //
+      // E.g.: `[[data-visible]_&]` => `in-data-visible`
+      if (
+        // Only top-level, so `in-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [[data-visible]___&]:flex
+        //  ^^^^^^^^^^^^^^ ^ ^
+        ast.length === 3 &&
+        ast[1].kind === 'combinator' &&
+        ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
+        ast[2].kind === 'selector' &&
+        ast[2].value === '&'
+      ) {
+        ast.pop() // Remove the nesting node
+        ast.pop() // Remove the combinator
+
+        // When handling a compound like `in-[[data-visible]]`, we will first
+        // handle `[[data-visible]]`, then the parent `in-*` part. This means
+        // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
+        //
+        // Later this gets converted to `in-data-visible`.
+        replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast)}]`))
+        continue
+      }
+
+      // Hoist `not` modifier for `@media` or `@supports` variants
+      //
+      // E.g.: `[@media_not_(scripting:none)]:` -> `not-[@media_(scripting:none)]:`
+      if (
+        // Only top-level, so something like `in-[@media(scripting:none)]`
+        // (which is not valid anyway) is not supported
+        parent === null &&
+        // [@media_not(scripting:none)]:flex
+        //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ast[0].kind === 'selector' &&
+        (ast[0].value === '@media' || ast[0].value === '@supports')
+      ) {
+        let targetSignature = signatures.get(designSystem.printVariant(variant))
+
+        let parsed = ValueParser.parse(SelectorParser.toCss(ast))
+        let containsNot = false
+        ValueParser.walk(parsed, (node, { replaceWith }) => {
+          if (node.kind === 'word' && node.value === 'not') {
+            containsNot = true
+            replaceWith([])
+          }
+        })
+
+        // Remove unnecessary whitespace
+        parsed = ValueParser.parse(ValueParser.toCss(parsed))
+        ValueParser.walk(parsed, (node) => {
+          if (node.kind === 'separator' && node.value !== ' ' && node.value.trim() === '') {
+            // node.value contains at least 2 spaces. Normalize it to a single
+            // space.
+            node.value = ' '
+          }
+        })
+
+        if (containsNot) {
+          let hoistedNot = designSystem.parseVariant(`not-[${ValueParser.toCss(parsed)}]`)
+          if (hoistedNot === null) continue
+          let hoistedNotSignature = signatures.get(designSystem.printVariant(hoistedNot))
+          if (targetSignature === hoistedNotSignature) {
+            replaceObject(variant, hoistedNot)
+            continue
+          }
+        }
+      }
+
+      let prefixedVariant: Variant | null = null
+
+      // Handling a child combinator. E.g.: `[&>[data-visible]]` => `*:data-visible`
+      if (
+        // Only top-level, so `has-[&>[data-visible]]` is not supported
+        parent === null &&
+        // [&_>_[data-visible]]:flex
+        //  ^ ^ ^^^^^^^^^^^^^^
+        ast.length === 3 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value.trim() === '&' &&
+        ast[1].kind === 'combinator' &&
+        ast[1].value.trim() === '>' &&
+        ast[2].kind === 'selector' &&
+        isAttributeSelector(ast[2])
+      ) {
+        ast = [ast[2]]
+        prefixedVariant = designSystem.parseVariant('*')
+      }
+
+      // Handling a grand child combinator. E.g.: `[&_[data-visible]]` => `**:data-visible`
+      if (
+        // Only top-level, so `has-[&_[data-visible]]` is not supported
+        parent === null &&
+        // [&_[data-visible]]:flex
+        //  ^ ^^^^^^^^^^^^^^
+        ast.length === 3 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value.trim() === '&' &&
+        ast[1].kind === 'combinator' &&
+        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[2].kind === 'selector' &&
+        isAttributeSelector(ast[2])
+      ) {
+        ast = [ast[2]]
+        prefixedVariant = designSystem.parseVariant('**')
+      }
+
+      // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
+      let selectorNodes = ast.filter(
+        (node) => !(node.kind === 'selector' && node.value.trim() === '&'),
+      )
+
+      // Expecting a single selector (normal selector or attribute selector)
+      if (selectorNodes.length !== 1) continue
+
+      let target = selectorNodes[0]
+      if (target.kind === 'function' && target.value === ':is') {
+        // Expecting a single selector node
+        if (
+          !isSingleSelector(target.nodes) ||
+          // [foo][bar] is considered a single selector but has multiple nodes
+          target.nodes.length !== 1
+        )
+          continue
+
+        // Expecting a single attribute selector
+        if (!isAttributeSelector(target.nodes[0])) continue
+
+        // Unwrap the selector from inside `&:is(…)`
+        target = target.nodes[0]
+      }
+
+      // Expecting a pseudo selector (or function)
+      if (
+        (target.kind === 'function' && target.value[0] === ':') ||
+        (target.kind === 'selector' && target.value[0] === ':')
+      ) {
+        let targetNode = target
+        let compoundNot = false
+        if (targetNode.kind === 'function' && targetNode.value === ':not') {
+          compoundNot = true
+          if (targetNode.nodes.length !== 1) continue
+          if (targetNode.nodes[0].kind !== 'selector' && targetNode.nodes[0].kind !== 'function') {
+            continue
+          }
+          if (targetNode.nodes[0].value[0] !== ':') continue
+
+          targetNode = targetNode.nodes[0]
+        }
+
+        let newVariant = ((value) => {
+          if (
+            value === ':nth-child' &&
+            targetNode.kind === 'function' &&
+            targetNode.nodes.length === 1 &&
+            targetNode.nodes[0].kind === 'value' &&
+            targetNode.nodes[0].value === 'odd'
+          ) {
+            if (compoundNot) {
+              compoundNot = false
+              return 'even'
+            }
+            return 'odd'
+          }
+
+          if (
+            value === ':nth-child' &&
+            targetNode.kind === 'function' &&
+            targetNode.nodes.length === 1 &&
+            targetNode.nodes[0].kind === 'value' &&
+            targetNode.nodes[0].value === 'even'
+          ) {
+            if (compoundNot) {
+              compoundNot = false
+              return 'odd'
+            }
+            return 'even'
+          }
+
+          for (let [selector, variantName] of [
+            [':nth-child', 'nth'],
+            [':nth-last-child', 'nth-last'],
+            [':nth-of-type', 'nth-of-type'],
+            [':nth-last-of-type', 'nth-of-last-type'],
+          ]) {
+            if (
+              value === selector &&
+              targetNode.kind === 'function' &&
+              targetNode.nodes.length === 1
+            ) {
+              if (
+                targetNode.nodes.length === 1 &&
+                targetNode.nodes[0].kind === 'value' &&
+                isPositiveInteger(targetNode.nodes[0].value)
+              ) {
+                return `${variantName}-${targetNode.nodes[0].value}`
+              }
+
+              return `${variantName}-[${SelectorParser.toCss(targetNode.nodes)}]`
+            }
+          }
+
+          // Hoist `not` modifier
+          if (compoundNot) {
+            let targetSignature = signatures.get(designSystem.printVariant(variant))
+            let replacementSignature = signatures.get(`not-[${value}]`)
+            if (targetSignature === replacementSignature) {
+              return `[&${value}]`
+            }
+          }
+
+          return null
+        })(targetNode.value)
+
+        if (newVariant === null) continue
+
+        // Add `not-` prefix
+        if (compoundNot) newVariant = `not-${newVariant}`
+
+        let parsed = designSystem.parseVariant(newVariant)
+        if (parsed === null) continue
+
+        // Update original variant
+        replaceObject(variant, parsed)
+      }
+
+      // Expecting an attribute selector
+      else if (isAttributeSelector(target)) {
+        let attribute = parseAttributeSelector(target.value)
+        if (attribute === null) continue // Invalid attribute selector
+
+        // Migrate `data-*`
+        if (attribute.key.startsWith('data-')) {
+          let name = attribute.key.slice(5) // Remove `data-`
+
+          replaceObject(variant, {
+            kind: 'functional',
+            root: 'data',
+            modifier: null,
+            value:
+              attribute.value === null
+                ? { kind: 'named', value: name }
+                : {
+                    kind: 'arbitrary',
+                    value: `${name}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                  },
+          } satisfies Variant)
+        }
+
+        // Migrate `aria-*`
+        else if (attribute.key.startsWith('aria-')) {
+          let name = attribute.key.slice(5) // Remove `aria-`
+          replaceObject(variant, {
+            kind: 'functional',
+            root: 'aria',
+            modifier: null,
+            value:
+              attribute.value === null
+                ? { kind: 'arbitrary', value: name } // aria-[foo]
+                : attribute.operator === '=' &&
+                    attribute.value === 'true' &&
+                    attribute.modifier === null
+                  ? { kind: 'named', value: name } // aria-[foo="true"] or aria-[foo='true'] or aria-[foo=true]
+                  : {
+                      kind: 'arbitrary',
+                      value: `${attribute.key}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                    }, // aria-[foo~="true"], aria-[foo|="true"], …
+          } satisfies Variant)
+        }
+      }
+
+      if (prefixedVariant) {
+        return [prefixedVariant, variant]
+      }
+    }
   }
 
-  return rawCandidate
+  return result
 }
 
 // ----
@@ -1630,65 +1581,62 @@ function modernizeArbitraryValues(designSystem: DesignSystem, rawCandidate: stri
 // - `/[100%]`  → `/100`    → <empty>
 // - `/100`     → <empty>
 //
-function optimizeModifier(designSystem: DesignSystem, rawCandidate: string): string {
+function optimizeModifier(designSystem: DesignSystem, candidate: Candidate): Candidate {
+  // We are only interested in functional or arbitrary utilities with a modifier
+  if (
+    (candidate.kind !== 'functional' && candidate.kind !== 'arbitrary') ||
+    candidate.modifier === null
+  ) {
+    return candidate
+  }
+
   let signatures = computeUtilitySignature.get(designSystem)
 
-  for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+  let targetSignature = signatures.get(designSystem.printCandidate(candidate))
+  let modifier = candidate.modifier
+
+  // 1. Try to drop the modifier entirely
+  if (
+    targetSignature ===
+    signatures.get(designSystem.printCandidate({ ...candidate, modifier: null }))
+  ) {
+    candidate.modifier = null
+    return candidate
+  }
+
+  // 2. Try to remove the square brackets and the `%` sign
+  {
+    let newModifier: NamedUtilityValue = {
+      kind: 'named',
+      value: modifier.value.endsWith('%') ? modifier.value.slice(0, -1) : modifier.value,
+      fraction: null,
+    }
+
     if (
-      (candidate.kind === 'functional' && candidate.modifier !== null) ||
-      (candidate.kind === 'arbitrary' && candidate.modifier !== null)
+      targetSignature ===
+      signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
     ) {
-      let targetSignature = signatures.get(rawCandidate)
-      let modifier = candidate.modifier
-      let changed = false
-
-      // 1. Try to drop the modifier entirely
-      if (
-        targetSignature ===
-        signatures.get(designSystem.printCandidate({ ...candidate, modifier: null }))
-      ) {
-        changed = true
-        candidate.modifier = null
-      }
-
-      // 2. Try to remove the square brackets and the `%` sign
-      if (!changed) {
-        let newModifier: NamedUtilityValue = {
-          kind: 'named',
-          value: modifier.value.endsWith('%') ? modifier.value.slice(0, -1) : modifier.value,
-          fraction: null,
-        }
-
-        if (
-          targetSignature ===
-          signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
-        ) {
-          changed = true
-          candidate.modifier = newModifier
-        }
-      }
-
-      // 3. Try to remove the square brackets, but multiply by 100. E.g.: `[0.16]` -> `16`
-      if (!changed) {
-        let newModifier: NamedUtilityValue = {
-          kind: 'named',
-          value: `${parseFloat(modifier.value) * 100}`,
-          fraction: null,
-        }
-
-        if (
-          targetSignature ===
-          signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
-        ) {
-          changed = true
-          candidate.modifier = newModifier
-        }
-      }
-
-      return changed ? designSystem.printCandidate(candidate) : rawCandidate
+      candidate.modifier = newModifier
+      return candidate
     }
   }
 
-  return rawCandidate
+  // 3. Try to remove the square brackets, but multiply by 100. E.g.: `[0.16]` -> `16`
+  {
+    let newModifier: NamedUtilityValue = {
+      kind: 'named',
+      value: `${parseFloat(modifier.value) * 100}`,
+      fraction: null,
+    }
+
+    if (
+      targetSignature ===
+      signatures.get(designSystem.printCandidate({ ...candidate, modifier: newModifier }))
+    ) {
+      candidate.modifier = newModifier
+      return candidate
+    }
+  }
+
+  return candidate
 }
