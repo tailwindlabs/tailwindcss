@@ -1,4 +1,4 @@
-import { atRule, decl, type AstNode, type AtRule } from '../ast'
+import { atRule, cloneAstNode, decl, type AstNode, type AtRule } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { compareBreakpoints } from '../utils/compare-breakpoints'
 import type { ResolvedConfig } from './config/types'
@@ -16,7 +16,7 @@ export function registerContainerCompat(userConfig: ResolvedConfig, designSystem
     return
   }
 
-  designSystem.utilities.static('container', () => structuredClone(rules))
+  designSystem.utilities.static('container', () => rules.map(cloneAstNode))
 }
 
 export function buildCustomContainerUtilityRules(

@@ -1,6 +1,7 @@
 import {
   atRoot,
   atRule,
+  cloneAstNode,
   decl,
   rule,
   styleRule,
@@ -6008,7 +6009,7 @@ export function createCssUtility(node: AtRule) {
       })
 
       designSystem.utilities.functional(name.slice(0, -2), (candidate) => {
-        let atRule = structuredClone(node)
+        let atRule = cloneAstNode(node)
 
         let value = candidate.value
         let modifier = candidate.modifier
@@ -6176,7 +6177,7 @@ export function createCssUtility(node: AtRule) {
 
   if (IS_VALID_STATIC_UTILITY_NAME.test(name)) {
     return (designSystem: DesignSystem) => {
-      designSystem.utilities.static(name, () => structuredClone(node.nodes))
+      designSystem.utilities.static(name, () => node.nodes.map(cloneAstNode))
     }
   }
 

@@ -1,6 +1,6 @@
 import type { Features } from '..'
 import { substituteAtApply } from '../apply'
-import { atRule, decl, rule, walk, type AstNode } from '../ast'
+import { atRule, cloneAstNode, decl, rule, walk, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -329,7 +329,7 @@ export function buildPluginApi({
         }
 
         designSystem.utilities.static(className, (candidate) => {
-          let clonedAst = structuredClone(ast)
+          let clonedAst = ast.map(cloneAstNode)
           replaceNestedClassNameReferences(clonedAst, className, candidate.raw)
           featuresRef.current |= substituteAtApply(clonedAst, designSystem)
           return clonedAst

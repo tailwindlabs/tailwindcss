@@ -122,6 +122,26 @@ export function atRoot(nodes: AstNode[]): AtRoot {
   }
 }
 
+export function cloneAstNode<T extends AstNode>(node: T): T {
+  switch (node.kind) {
+    case 'rule':
+    case 'at-rule':
+    case 'at-root':
+      return { ...node, nodes: node.nodes.map(cloneAstNode) }
+
+    case 'context':
+      return { ...node, context: { ...node.context }, nodes: node.nodes.map(cloneAstNode) }
+
+    case 'declaration':
+    case 'comment':
+      return { ...node }
+
+    default:
+      node satisfies never
+      throw new Error(`Unknown node kind: ${(node as any).kind}`)
+  }
+}
+
 export const enum WalkAction {
   /** Continue walking, which is the default */
   Continue,
