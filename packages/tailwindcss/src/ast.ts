@@ -125,16 +125,58 @@ export function atRoot(nodes: AstNode[]): AtRoot {
 export function cloneAstNode<T extends AstNode>(node: T): T {
   switch (node.kind) {
     case 'rule':
+      return {
+        kind: node.kind,
+        selector: node.selector,
+        nodes: node.nodes.map(cloneAstNode),
+        src: node.src,
+        dst: node.dst,
+      } satisfies StyleRule as T
+
     case 'at-rule':
+      return {
+        kind: node.kind,
+        name: node.name,
+        params: node.params,
+        nodes: node.nodes.map(cloneAstNode),
+        src: node.src,
+        dst: node.dst,
+      } satisfies AtRule as T
+
     case 'at-root':
-      return { ...node, nodes: node.nodes.map(cloneAstNode) }
+      return {
+        kind: node.kind,
+        nodes: node.nodes.map(cloneAstNode),
+        src: node.src,
+        dst: node.dst,
+      } satisfies AtRoot as T
 
     case 'context':
-      return { ...node, context: { ...node.context }, nodes: node.nodes.map(cloneAstNode) }
+      return {
+        kind: node.kind,
+        context: { ...node.context },
+        nodes: node.nodes.map(cloneAstNode),
+        src: node.src,
+        dst: node.dst,
+      } satisfies Context as T
 
     case 'declaration':
+      return {
+        kind: node.kind,
+        property: node.property,
+        value: node.value,
+        important: node.important,
+        src: node.src,
+        dst: node.dst,
+      } satisfies Declaration as T
+
     case 'comment':
-      return { ...node }
+      return {
+        kind: node.kind,
+        value: node.value,
+        src: node.src,
+        dst: node.dst,
+      } satisfies Comment as T
 
     default:
       node satisfies never
