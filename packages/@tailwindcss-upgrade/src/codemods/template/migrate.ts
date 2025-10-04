@@ -26,17 +26,17 @@ export type Migration = (
 ) => string | Promise<string>
 
 export const DEFAULT_MIGRATIONS: Migration[] = [
-  migrateEmptyArbitraryValues, // sync, v3 → v4
-  migratePrefix, // sync, v3 → v4
-  migrateCanonicalizeCandidate, // sync, v4 (optimization, can probably be removed)
-  migrateSimpleLegacyClasses, // sync, v3 → v4
-  migrateCamelcaseInNamedValue, // sync, v3 → v4
-  migrateLegacyClasses, // async, v3 → v4
-  migrateMaxWidthScreen, // sync, v3 → v4
-  migrateVariantOrder, // sync, v3 → v4, Has to happen before migrations that modify variants
-  migrateAutomaticVarInjection, // sync, v3 → v4
-  migrateLegacyArbitraryValues, // sync, v3 → v4 (could also consider it a v4 optimization)
-  migrateModernizeArbitraryValues, // sync, v3 and v4 optimizations, split up?
+  migrateEmptyArbitraryValues,
+  migratePrefix,
+  migrateCanonicalizeCandidate,
+  migrateSimpleLegacyClasses,
+  migrateCamelcaseInNamedValue,
+  migrateLegacyClasses,
+  migrateMaxWidthScreen,
+  migrateVariantOrder, // Has to happen before migrations that modify variants
+  migrateAutomaticVarInjection,
+  migrateLegacyArbitraryValues,
+  migrateModernizeArbitraryValues,
 ]
 
 let migrateCached = new DefaultMap<
