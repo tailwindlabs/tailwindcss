@@ -1,5 +1,7 @@
 import * as AttributeSelectorParser from './attribute-selector-parser'
 import {
+  cloneCandidate,
+  cloneVariant,
   printModifier,
   type Candidate,
   type CandidateModifier,
@@ -107,7 +109,7 @@ const canonicalizeVariantCache = new DefaultMap((ds: DesignSystem) => {
       for (let current of replacement.splice(0)) {
         // A single variant can result in multiple variants, e.g.:
         // `[&>[data-selected]]:flex` → `*:data-selected:flex`
-        let result = fn(ds, structuredClone(current))
+        let result = fn(ds, cloneVariant(current))
         if (Array.isArray(result)) {
           replacement.push(...result)
           continue
@@ -134,7 +136,7 @@ const UTILITY_CANONICALIZATIONS = [
 const canonicalizeUtilityCache = new DefaultMap((ds: DesignSystem) => {
   return new DefaultMap((rawCandidate: string): string => {
     for (let readonlyCandidate of ds.parseCandidate(rawCandidate)) {
-      let replacement = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+      let replacement = cloneCandidate(readonlyCandidate) as Writable<typeof readonlyCandidate>
 
       for (let fn of UTILITY_CANONICALIZATIONS) {
         replacement = fn(ds, replacement)

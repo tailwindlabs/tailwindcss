@@ -215,6 +215,60 @@ export type Candidate =
       raw: string
     }
 
+export function cloneCandidate(candidate: Candidate): Candidate {
+  switch (candidate.kind) {
+    case 'arbitrary':
+      return {
+        ...candidate,
+        variants: candidate.variants.map(cloneVariant),
+        modifier: candidate.modifier ? { ...candidate.modifier } : null,
+      }
+
+    case 'static':
+      return { ...candidate, variants: candidate.variants.map(cloneVariant) }
+
+    case 'functional':
+      return {
+        ...candidate,
+        variants: candidate.variants.map(cloneVariant),
+        value: candidate.value ? { ...candidate.value } : null,
+        modifier: candidate.modifier ? { ...candidate.modifier } : null,
+      }
+
+    default:
+      candidate satisfies never
+      throw new Error('Unknown candidate kind')
+  }
+}
+
+export function cloneVariant(variant: Variant): Variant {
+  switch (variant.kind) {
+    case 'arbitrary':
+      return { ...variant }
+
+    case 'static':
+      return { ...variant }
+
+    case 'functional':
+      return {
+        ...variant,
+        value: variant.value ? { ...variant.value } : null,
+        modifier: variant.modifier ? { ...variant.modifier } : null,
+      }
+
+    case 'compound':
+      return {
+        ...variant,
+        variant: cloneVariant(variant.variant),
+        modifier: variant.modifier ? { ...variant.modifier } : null,
+      }
+
+    default:
+      variant satisfies never
+      throw new Error('Unknown variant kind')
+  }
+}
+
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
