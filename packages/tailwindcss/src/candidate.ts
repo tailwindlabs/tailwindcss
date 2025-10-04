@@ -215,7 +215,7 @@ export type Candidate =
       raw: string
     }
 
-export function cloneCandidate(candidate: Candidate): Candidate {
+export function cloneCandidate<T extends Candidate>(candidate: T): T {
   switch (candidate.kind) {
     case 'arbitrary':
       return {
@@ -228,7 +228,7 @@ export function cloneCandidate(candidate: Candidate): Candidate {
         variants: candidate.variants.map(cloneVariant),
         important: candidate.important,
         raw: candidate.raw,
-      }
+      } satisfies Extract<Candidate, { kind: 'arbitrary' }> as T
 
     case 'static':
       return {
@@ -237,7 +237,7 @@ export function cloneCandidate(candidate: Candidate): Candidate {
         variants: candidate.variants.map(cloneVariant),
         important: candidate.important,
         raw: candidate.raw,
-      }
+      } satisfies Extract<Candidate, { kind: 'static' }> as T
 
     case 'functional':
       return {
@@ -262,7 +262,7 @@ export function cloneCandidate(candidate: Candidate): Candidate {
         variants: candidate.variants.map(cloneVariant),
         important: candidate.important,
         raw: candidate.raw,
-      }
+      } satisfies Extract<Candidate, { kind: 'functional' }> as T
 
     default:
       candidate satisfies never
@@ -270,13 +270,20 @@ export function cloneCandidate(candidate: Candidate): Candidate {
   }
 }
 
-export function cloneVariant(variant: Variant): Variant {
+export function cloneVariant<T extends Variant>(variant: T): T {
   switch (variant.kind) {
     case 'arbitrary':
-      return { kind: variant.kind, selector: variant.selector, relative: variant.relative }
+      return {
+        kind: variant.kind,
+        selector: variant.selector,
+        relative: variant.relative,
+      } satisfies Extract<Variant, { kind: 'arbitrary' }> as T
 
     case 'static':
-      return { kind: variant.kind, root: variant.root }
+      return { kind: variant.kind, root: variant.root } satisfies Extract<
+        Variant,
+        { kind: 'static' }
+      > as T
 
     case 'functional':
       return {
@@ -286,7 +293,7 @@ export function cloneVariant(variant: Variant): Variant {
         modifier: variant.modifier
           ? { kind: variant.modifier.kind, value: variant.modifier.value }
           : null,
-      }
+      } satisfies Extract<Variant, { kind: 'functional' }> as T
 
     case 'compound':
       return {
@@ -296,7 +303,7 @@ export function cloneVariant(variant: Variant): Variant {
         modifier: variant.modifier
           ? { kind: variant.modifier.kind, value: variant.modifier.value }
           : null,
-      }
+      } satisfies Extract<Variant, { kind: 'compound' }> as T
 
     default:
       variant satisfies never
