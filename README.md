@@ -25,14 +25,6 @@
 
 For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
-### How does `tailwindcss` work?
-
-Check out this interactive walkthrough of the `tailwindcss` codebase on CodeCanvas [here](https://www.code-canvas.com/?session=unauthenticatedGithub&repo=tailwindcss&owner=tailwindlabs&branch=main&OnboardingTutorial=true).
-
-To update the diagram, follow the quick tutorial [here](https://docs.code-canvas.com/updating-diagram).
-
-<img width="1916" alt="CodeCanvas Screenshot" src="https://codecanvas-media-public.s3.amazonaws.com/images/codecanvas-readme-screenshot.png" />
-
 
 ## Community
 
@@ -43,3 +35,9 @@ For help, discussion about best practices, or feature ideas:
 ## Contributing
 
 If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindcss/tailwindcss/blob/next/.github/CONTRIBUTING.md) **before submitting a pull request**.
+
+### How does `tailwindcss` work?
+
+Check out this interactive walkthrough of the `tailwindcss` codebase on CodeCanvas [here](https://www.code-canvas.com/?session=unauthenticatedGithub&repo=tailwindcss&owner=tailwindlabs&branch=main&OnboardingTutorial=true).
+
+<img width="4770" height="1864" alt="image" src="https://github.com/user-attachments/assets/5588e342-51cc-4143-add1-a781d218386f" />
