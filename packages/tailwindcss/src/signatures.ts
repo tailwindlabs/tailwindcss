@@ -115,6 +115,7 @@ export const computeUtilitySignature = new DefaultMap<
         // Handle declarations
         if (node.kind === 'declaration' && node.value !== undefined) {
           if (node.value.includes('var(')) {
+            let changed = false
             let valueAst = ValueParser.parse(node.value)
 
             let seen = new Set<string>()
@@ -157,6 +158,7 @@ export const computeUtilitySignature = new DefaultMap<
                 // More than 1 argument means that a fallback is already present
                 if (valueNode.nodes.length === 1) {
                   // Inject the fallback value into the variable lookup
+                  changed = true
                   valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
                 }
               }
@@ -169,6 +171,7 @@ export const computeUtilitySignature = new DefaultMap<
                   let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
                   let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
                   if (nodeAsString === constructedValue) {
+                    changed = true
                     replaceWith(ValueParser.parse(variableValue))
                   }
                 }
@@ -176,7 +179,7 @@ export const computeUtilitySignature = new DefaultMap<
             })
 
             // Replace the value with the new value
-            node.value = ValueParser.toCss(valueAst)
+            if (changed) node.value = ValueParser.toCss(valueAst)
           }
 
           // Very basic `calc(…)` constant folding to handle the spacing scale
