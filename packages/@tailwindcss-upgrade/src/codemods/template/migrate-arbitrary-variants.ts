@@ -1,3 +1,4 @@
+import { cloneCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import {
@@ -22,7 +23,7 @@ export function migrateArbitraryVariants(
 
     // The below logic makes use of mutation. Since candidates in the
     // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Writable<typeof readonlyCandidate>
+    let candidate = cloneCandidate(readonlyCandidate) as Writable<typeof readonlyCandidate>
 
     for (let [variant] of walkVariants(candidate)) {
       if (variant.kind === 'compound') continue

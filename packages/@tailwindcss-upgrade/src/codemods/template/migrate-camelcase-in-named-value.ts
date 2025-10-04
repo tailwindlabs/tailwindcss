@@ -1,3 +1,4 @@
+import { cloneCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import * as version from '../../utils/version'
@@ -15,7 +16,7 @@ export function migrateCamelcaseInNamedValue(
 
   for (let candidate of designSystem.parseCandidate(rawCandidate)) {
     if (candidate.kind !== 'functional') continue
-    let clone = structuredClone(candidate)
+    let clone = cloneCandidate(candidate)
     let didChange = false
 
     if (
