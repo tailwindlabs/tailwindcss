@@ -44,16 +44,11 @@ export const computeUtilitySignature = new DefaultMap<
         // There's separate utility caches for respect important vs not
         // so we want to compile them both with `@theme inline` disabled
         for (let candidate of designSystem.parseCandidate(utility)) {
-          designSystem.compileAstNodes(candidate, CompileAstFlags.None)
           designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
         }
 
         substituteAtApply(ast, designSystem)
       })
-
-      // We will be mutating the AST, so we need to clone it first to not affect
-      // the original AST
-      ast = structuredClone(ast)
 
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
