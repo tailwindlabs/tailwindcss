@@ -219,20 +219,49 @@ export function cloneCandidate(candidate: Candidate): Candidate {
   switch (candidate.kind) {
     case 'arbitrary':
       return {
-        ...candidate,
+        kind: candidate.kind,
+        property: candidate.property,
+        value: candidate.value,
+        modifier: candidate.modifier
+          ? { kind: candidate.modifier.kind, value: candidate.modifier.value }
+          : null,
         variants: candidate.variants.map(cloneVariant),
-        modifier: candidate.modifier ? { ...candidate.modifier } : null,
+        important: candidate.important,
+        raw: candidate.raw,
       }
 
     case 'static':
-      return { ...candidate, variants: candidate.variants.map(cloneVariant) }
+      return {
+        kind: candidate.kind,
+        root: candidate.root,
+        variants: candidate.variants.map(cloneVariant),
+        important: candidate.important,
+        raw: candidate.raw,
+      }
 
     case 'functional':
       return {
-        ...candidate,
+        kind: candidate.kind,
+        root: candidate.root,
+        value: candidate.value
+          ? candidate.value.kind === 'arbitrary'
+            ? {
+                kind: candidate.value.kind,
+                dataType: candidate.value.dataType,
+                value: candidate.value.value,
+              }
+            : {
+                kind: candidate.value.kind,
+                value: candidate.value.value,
+                fraction: candidate.value.fraction,
+              }
+          : null,
+        modifier: candidate.modifier
+          ? { kind: candidate.modifier.kind, value: candidate.modifier.value }
+          : null,
         variants: candidate.variants.map(cloneVariant),
-        value: candidate.value ? { ...candidate.value } : null,
-        modifier: candidate.modifier ? { ...candidate.modifier } : null,
+        important: candidate.important,
+        raw: candidate.raw,
       }
 
     default:
@@ -244,23 +273,29 @@ export function cloneCandidate(candidate: Candidate): Candidate {
 export function cloneVariant(variant: Variant): Variant {
   switch (variant.kind) {
     case 'arbitrary':
-      return { ...variant }
+      return { kind: variant.kind, selector: variant.selector, relative: variant.relative }
 
     case 'static':
-      return { ...variant }
+      return { kind: variant.kind, root: variant.root }
 
     case 'functional':
       return {
-        ...variant,
-        value: variant.value ? { ...variant.value } : null,
-        modifier: variant.modifier ? { ...variant.modifier } : null,
+        kind: variant.kind,
+        root: variant.root,
+        value: variant.value ? { kind: variant.value.kind, value: variant.value.value } : null,
+        modifier: variant.modifier
+          ? { kind: variant.modifier.kind, value: variant.modifier.value }
+          : null,
       }
 
     case 'compound':
       return {
-        ...variant,
+        kind: variant.kind,
+        root: variant.root,
         variant: cloneVariant(variant.variant),
-        modifier: variant.modifier ? { ...variant.modifier } : null,
+        modifier: variant.modifier
+          ? { kind: variant.modifier.kind, value: variant.modifier.value }
+          : null,
       }
 
     default:
