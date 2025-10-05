@@ -1,3 +1,4 @@
+import * as AttributeSelectorParser from './attribute-selector-parser'
 import {
   printModifier,
   type Candidate,
@@ -1088,139 +1089,6 @@ function isAttributeSelector(node: SelectorParser.SelectorAstNode): boolean {
   return node.kind === 'selector' && value[0] === '[' && value[value.length - 1] === ']'
 }
 
-function isAsciiWhitespace(char: string) {
-  return char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === '\f'
-}
-
-enum AttributePart {
-  Start,
-  Attribute,
-  Value,
-  Modifier,
-  End,
-}
-
-function parseAttributeSelector(value: string) {
-  let attribute = {
-    key: '',
-    operator: null as '=' | '~=' | '|=' | '^=' | '$=' | '*=' | null,
-    quote: '',
-    value: null as string | null,
-    modifier: null as 'i' | 's' | null,
-  }
-
-  let state = AttributePart.Start
-  outer: for (let i = 0; i < value.length; i++) {
-    // Skip whitespace
-    if (isAsciiWhitespace(value[i])) {
-      if (attribute.quote === '' && state !== AttributePart.Value) {
-        continue
-      }
-    }
-
-    switch (state) {
-      case AttributePart.Start: {
-        if (value[i] === '[') {
-          state = AttributePart.Attribute
-        } else {
-          return null
-        }
-        break
-      }
-
-      case AttributePart.Attribute: {
-        switch (value[i]) {
-          case ']': {
-            return attribute
-          }
-
-          case '=': {
-            attribute.operator = '='
-            state = AttributePart.Value
-            continue outer
-          }
-
-          case '~':
-          case '|':
-          case '^':
-          case '$':
-          case '*': {
-            if (value[i + 1] === '=') {
-              attribute.operator = (value[i] + '=') as '=' | '~=' | '|=' | '^=' | '$=' | '*='
-              i++
-              state = AttributePart.Value
-              continue outer
-            }
-
-            return null
-          }
-        }
-
-        attribute.key += value[i]
-        break
-      }
-
-      case AttributePart.Value: {
-        // End of attribute selector
-        if (value[i] === ']') {
-          return attribute
-        }
-
-        // Quoted value
-        else if (value[i] === "'" || value[i] === '"') {
-          attribute.value ??= ''
-
-          attribute.quote = value[i]
-
-          for (let j = i + 1; j < value.length; j++) {
-            if (value[j] === '\\' && j + 1 < value.length) {
-              // Skip the escaped character
-              j++
-              attribute.value += value[j]
-            } else if (value[j] === attribute.quote) {
-              i = j
-              state = AttributePart.Modifier
-              continue outer
-            } else {
-              attribute.value += value[j]
-            }
-          }
-        }
-
-        // Unquoted value
-        else {
-          if (isAsciiWhitespace(value[i])) {
-            state = AttributePart.Modifier
-          } else {
-            attribute.value ??= ''
-            attribute.value += value[i]
-          }
-        }
-        break
-      }
-
-      case AttributePart.Modifier: {
-        if (value[i] === 'i' || value[i] === 's') {
-          attribute.modifier = value[i] as 'i' | 's'
-          state = AttributePart.End
-        } else if (value[i] == ']') {
-          return attribute
-        }
-        break
-      }
-
-      case AttributePart.End: {
-        if (value[i] === ']') {
-          return attribute
-        }
-        break
-      }
-    }
-  }
-
-  return attribute
-}
-
 function modernizeArbitraryValuesVariant(
   designSystem: DesignSystem,
   variant: Variant,
@@ -1519,44 +1387,44 @@ function modernizeArbitraryValuesVariant(
 
       // Expecting an attribute selector
       else if (isAttributeSelector(target)) {
-        let attribute = parseAttributeSelector(target.value)
-        if (attribute === null) continue // Invalid attribute selector
+        let attributeSelector = AttributeSelectorParser.parse(target.value)
+        if (attributeSelector === null) continue // Invalid attribute selector
 
         // Migrate `data-*`
-        if (attribute.key.startsWith('data-')) {
-          let name = attribute.key.slice(5) // Remove `data-`
+        if (attributeSelector.attribute.startsWith('data-')) {
+          let name = attributeSelector.attribute.slice(5) // Remove `data-`
 
           replaceObject(variant, {
             kind: 'functional',
             root: 'data',
             modifier: null,
             value:
-              attribute.value === null
+              attributeSelector.value === null
                 ? { kind: 'named', value: name }
                 : {
                     kind: 'arbitrary',
-                    value: `${name}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                    value: `${name}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
                   },
           } satisfies Variant)
         }
 
         // Migrate `aria-*`
-        else if (attribute.key.startsWith('aria-')) {
-          let name = attribute.key.slice(5) // Remove `aria-`
+        else if (attributeSelector.attribute.startsWith('aria-')) {
+          let name = attributeSelector.attribute.slice(5) // Remove `aria-`
           replaceObject(variant, {
             kind: 'functional',
             root: 'aria',
             modifier: null,
             value:
-              attribute.value === null
+              attributeSelector.value === null
                 ? { kind: 'arbitrary', value: name } // aria-[foo]
-                : attribute.operator === '=' &&
-                    attribute.value === 'true' &&
-                    attribute.modifier === null
+                : attributeSelector.operator === '=' &&
+                    attributeSelector.value === 'true' &&
+                    attributeSelector.sensitivity === null
                   ? { kind: 'named', value: name } // aria-[foo="true"] or aria-[foo='true'] or aria-[foo=true]
                   : {
                       kind: 'arbitrary',
-                      value: `${attribute.key}${attribute.operator}${attribute.quote}${attribute.value}${attribute.quote}${attribute.modifier ? ` ${attribute.modifier}` : ''}`,
+                      value: `${attributeSelector.attribute}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
                     }, // aria-[foo~="true"], aria-[foo|="true"], …
           } satisfies Variant)
         }
