@@ -6,8 +6,8 @@ import {
   type Variant,
 } from './candidate'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
-import * as SelectorParser from './compat/selector-parser'
 import type { DesignSystem } from './design-system'
+import * as SelectorParser from './selector-parser'
 import {
   computeUtilitySignature,
   computeVariantSignature,

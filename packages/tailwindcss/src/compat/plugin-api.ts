@@ -5,6 +5,7 @@ import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candida
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
 import type { DesignSystem } from '../design-system'
+import * as SelectorParser from '../selector-parser'
 import type { SourceLocation } from '../source-maps/source'
 import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
@@ -15,7 +16,6 @@ import { toKeyPath } from '../utils/to-key-path'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
-import * as SelectorParser from './selector-parser'
 
 export type Config = UserConfig
 export type PluginFn = (api: PluginAPI) => void
