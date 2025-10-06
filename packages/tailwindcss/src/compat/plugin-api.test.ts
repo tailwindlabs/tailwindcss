@@ -299,7 +299,9 @@ describe('theme', async () => {
       .variable {
         color: #ef4444;
         @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
+          & {
+            color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
+          }
         }
       }
       "
@@ -377,7 +379,9 @@ describe('theme', async () => {
       .css-variable {
         color: rgba(255 0 0 / <alpha-value>);
         @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+          & {
+            color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
+          }
         }
       }
       .js-fraction {
@@ -389,7 +393,9 @@ describe('theme', async () => {
       .js-variable {
         color: rgb(255 0 0 / 1);
         @supports (color: color-mix(in lab, red, red)) {
-          color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+          & {
+            color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
+          }
         }
       }
       "
