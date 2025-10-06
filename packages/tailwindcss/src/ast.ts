@@ -662,7 +662,9 @@ export function optimizeAst(
           ...declaration,
           value: ValueParser.toCss(ast),
         }
-        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [declaration])
+        let colorMixQuery = rule('@supports (color: color-mix(in lab, red, red))', [
+          rule('&', [declaration]),
+        ])
         colorMixQuery.src = declaration.src
         parent.splice(idx, 1, fallback, colorMixQuery)
       }
