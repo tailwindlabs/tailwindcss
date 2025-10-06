@@ -11,6 +11,11 @@ const SETUP = {
           "nitropack": "2.11.0",
           "tailwindcss": "workspace:^",
           "vue": "latest"
+        },
+        "pnpm": {
+          "overrides": {
+            "nuxi": "3.28.0"
+          }
         }
       }
     `,
