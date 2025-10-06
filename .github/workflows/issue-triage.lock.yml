@@ -3,7 +3,7 @@
 #   gh aw compile
 # For more information: https://github.com/githubnext/gh-aw/blob/main/.github/instructions/github-agentic-workflows.instructions.md
 #
-# Effective stop-time: 2025-10-07 10:36:38
+# Effective stop-time: 2025-10-07 14:19:35
 
 name: "Agentic Triage"
 on:
@@ -266,7 +266,7 @@ jobs:
           WORKFLOW_NAME="Agentic Triage"
           
           # Check stop-time limit
-          STOP_TIME="2025-10-07 10:36:38"
+          STOP_TIME="2025-10-07 14:19:35"
           echo "Checking stop-time limit: $STOP_TIME"
           
           # Convert stop time to epoch seconds
@@ -292,7 +292,11 @@ jobs:
   agent:
     needs: activation
     runs-on: ubuntu-latest
-    permissions: read-all
+    permissions:
+      contents: read
+      discussions: read
+      issues: read
+      pull-requests: read
     env:
       GITHUB_AW_SAFE_OUTPUTS: /tmp/safe-outputs/outputs.jsonl
       GITHUB_AW_SAFE_OUTPUTS_CONFIG: "{\"add-comment\":{\"max\":1},\"add-labels\":{\"max\":5},\"missing-tool\":{}}"

@@ -5,7 +5,11 @@ on:
   stop-after: +1d
   reaction: eyes
 
-permissions: read-all
+permissions:
+  issues: read
+  discussions: read
+  pull-requests: read
+  contents: read
 
 network: defaults
 
