@@ -70,6 +70,11 @@ export const computeUtilitySignature = new DefaultMap<
         else if (node.kind === 'comment') {
           replaceWith([])
         }
+
+        // Remove at-rules that are not needed for the signature
+        else if (node.kind === 'at-rule' && node.name === '@property') {
+          replaceWith([])
+        }
       })
 
       // Resolve theme values to their inlined value.
