@@ -8,10 +8,15 @@ import {
   type Candidate,
   type Variant,
 } from './candidate'
-import { canonicalizeCandidates } from './canonicalize-candidates'
 import { compileAstNodes, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
-import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
+import {
+  canonicalizeCandidates,
+  getClassList,
+  getVariants,
+  type ClassEntry,
+  type VariantEntry,
+} from './intellisense'
 import { getClassOrder } from './sort'
 import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
