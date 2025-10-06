@@ -2,7 +2,7 @@
 on:
   issues:
     types: [opened, reopened]
-  stop-after: +1d # workflow will no longer trigger after 30 days. Remove this and recompile to run indefinitely
+  stop-after: +1d
   reaction: eyes
 
 permissions: read-all
