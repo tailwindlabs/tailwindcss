@@ -13,6 +13,10 @@ safe-outputs:
   add-labels:
     max: 5
   add-comment:
+  allowed-domains:
+    - github.com
+    - tailwindcss.com
+    - play.tailwindcss.com
 
 tools:
   web-fetch:
@@ -83,4 +87,5 @@ You're a triage assistant for Tailwind CSS GitHub issues. Your task is to analyz
     - If appropriate break the issue down to sub-tasks and write a checklist of things to do.
     - Use collapsed-by-default sections in the GitHub markdown to keep the comment tidy. Collapse all sections except the short main summary at the top.
 
-@import? CONTRIBUTING.md
+@import .github/CONTRIBUTING.md
+@import .github/ISSUE_TEMPLATE/bug-report.md
