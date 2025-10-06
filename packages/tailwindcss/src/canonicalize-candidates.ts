@@ -576,11 +576,7 @@ function arbitraryUtilities(designSystem: DesignSystem, candidate: Candidate): C
       continue
     }
 
-    // Update the candidate with the new value
-    replaceObject(candidate, replacementCandidate)
-
-    // We will re-print the candidate to get the migrated candidate out
-    return candidate
+    return replacementCandidate
   }
 
   return candidate
@@ -786,11 +782,7 @@ function bareValueUtilities(designSystem: DesignSystem, candidate: Candidate): C
       continue
     }
 
-    // Update the candidate with the new value
-    replaceObject(candidate, replacementCandidate)
-
-    // We will re-print the candidate to get the migrated candidate out
-    return candidate
+    return replacementCandidate
   }
 
   return candidate
@@ -861,8 +853,7 @@ function deprecatedUtilities(designSystem: DesignSystem, candidate: Candidate): 
   if (legacySignature !== replacementSignature) return candidate
 
   let [replacement] = parseCandidate(designSystem, replacementString)
-
-  return replaceObject(candidate, replacement)
+  return replacement
 }
 
 // ----
