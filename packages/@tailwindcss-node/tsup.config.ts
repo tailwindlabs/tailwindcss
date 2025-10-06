@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup'
 export default defineConfig([
   {
     format: ['cjs'],
+    clean: true,
     minify: true,
     dts: true,
     entry: ['src/index.cts'],
@@ -12,6 +13,7 @@ export default defineConfig([
   },
   {
     format: ['esm'],
+    clean: true,
     minify: true,
     dts: true,
     entry: ['src/index.ts'],
@@ -21,6 +23,7 @@ export default defineConfig([
   },
   {
     format: ['esm'],
+    clean: true,
     minify: true,
     dts: true,
     entry: ['src/esm-cache.loader.mts'],
@@ -30,6 +33,7 @@ export default defineConfig([
   },
   {
     format: ['cjs'],
+    clean: true,
     minify: true,
     dts: true,
     entry: ['src/require-cache.cts'],
