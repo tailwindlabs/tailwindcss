@@ -1901,7 +1901,9 @@ test(
           ::placeholder {
             color: currentcolor;
             @supports (color: color-mix(in lab, red, red)) {
-              color: color-mix(in oklab, currentcolor 50%, transparent);
+              & {
+                color: color-mix(in oklab, currentcolor 50%, transparent);
+              }
             }
           }
         }
@@ -1944,7 +1946,9 @@ test(
         .bg-red-500\\/50 {
           background-color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
           @supports (color: color-mix(in lab, red, red)) {
-            background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+            & {
+              background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+            }
           }
         }
         .shadow-md {
