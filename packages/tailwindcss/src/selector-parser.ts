@@ -376,6 +376,13 @@ export function parse(input: string) {
       }
 
       // Start of an attribute selector.
+      //
+      // NOTE: Right now we don't care about the individual parts of the
+      // attribute selector, we just want to find the matching closing bracket.
+      //
+      // If we need more information from inside the attribute selector in the
+      // future, then we can use the `AttributeSelectorParser` here (and even
+      // inline it if needed)
       case OPEN_BRACKET: {
         // Handle everything before the combinator as a selector
         if (buffer.length > 0) {
