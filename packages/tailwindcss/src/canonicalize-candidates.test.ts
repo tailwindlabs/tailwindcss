@@ -254,6 +254,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[color:var(--color-red-500)]/[25%]', 'text-red-500/25'],
       ['[color:var(--color-red-500)]/[100%]', 'text-red-500'],
       ['[color:var(--color-red-500)]/100', 'text-red-500'],
+      ['[color:var(--color-red-500)]/[10%]', 'text-red-500/10'],
+      ['[color:var(--color-red-500)]/[10.0%]', 'text-red-500/10'],
+      ['[color:var(--color-red-500)]/[.1]', 'text-red-500/10'],
+      ['[color:var(--color-red-500)]/[.10]', 'text-red-500/10'],
       // No need for `/50` because that's already encoded in the `--color-primary`
       // value
       ['[color:oklch(62.3%_0.214_259.815)]/50', 'text-primary'],
