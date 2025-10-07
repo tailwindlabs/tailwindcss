@@ -1,7 +1,8 @@
 import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
-import { type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
+import { cloneCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import type { Writable } from '../../../../tailwindcss/src/types'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 
 export function migrateAutomaticVarInjection(
@@ -12,7 +13,7 @@ export function migrateAutomaticVarInjection(
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
     // The below logic makes extended use of mutation. Since candidates in the
     // DesignSystem are cached, we can't mutate them directly.
-    let candidate = structuredClone(readonlyCandidate) as Candidate
+    let candidate = cloneCandidate(readonlyCandidate) as Writable<Candidate>
 
     let didChange = false
 

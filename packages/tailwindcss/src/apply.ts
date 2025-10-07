@@ -1,5 +1,5 @@
 import { Features } from '.'
-import { rule, toCss, walk, WalkAction, type AstNode } from './ast'
+import { cloneAstNode, rule, toCss, walk, WalkAction, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import type { SourceLocation } from './source-maps/source'
@@ -249,7 +249,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           let candidate = compiled.nodeSorting.get(node)?.candidate
           let candidateOffset = candidate ? candidateOffsets[candidate] : undefined
 
-          node = structuredClone(node)
+          node = cloneAstNode(node)
 
           if (!src || !candidate || candidateOffset === undefined) {
             // While the original nodes may have come from an `@utility` we still

@@ -1,4 +1,4 @@
-import { parseCandidate } from '../../../../tailwindcss/src/candidate'
+import { cloneCandidate, parseCandidate } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { replaceObject } from '../../../../tailwindcss/src/utils/replace-object'
@@ -10,7 +10,7 @@ export function migrateModernizeArbitraryValues(
   rawCandidate: string,
 ): string {
   for (let candidate of parseCandidate(rawCandidate, designSystem)) {
-    let clone = structuredClone(candidate)
+    let clone = cloneCandidate(candidate)
     let changed = false
 
     for (let [variant] of walkVariants(clone)) {

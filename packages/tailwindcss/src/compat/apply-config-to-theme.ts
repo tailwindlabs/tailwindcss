@@ -153,7 +153,7 @@ export function keyPathToCssProperty(path: string[]) {
   // The legacy container component config should not be included in the Theme
   if (path[0] === 'container') return null
 
-  path = structuredClone(path)
+  path = path.slice()
 
   if (path[0] === 'animation') path[0] = 'animate'
   if (path[0] === 'aspectRatio') path[0] = 'aspect'

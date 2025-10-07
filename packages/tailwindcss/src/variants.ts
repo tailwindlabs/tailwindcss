@@ -3,6 +3,7 @@ import {
   WalkAction,
   atRoot,
   atRule,
+  cloneAstNode,
   decl,
   rule,
   styleRule,
@@ -100,7 +101,7 @@ export class Variants {
     this.static(
       name,
       (r) => {
-        let body = structuredClone(ast)
+        let body = ast.map(cloneAstNode)
         if (usesAtVariant) substituteAtVariant(body, designSystem)
         substituteAtSlot(body, r.nodes)
         r.nodes = body

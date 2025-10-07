@@ -215,6 +215,102 @@ export type Candidate =
       raw: string
     }
 
+export function cloneCandidate<T extends Candidate>(candidate: T): T {
+  switch (candidate.kind) {
+    case 'arbitrary':
+      return {
+        kind: candidate.kind,
+        property: candidate.property,
+        value: candidate.value,
+        modifier: candidate.modifier
+          ? { kind: candidate.modifier.kind, value: candidate.modifier.value }
+          : null,
+        variants: candidate.variants.map(cloneVariant),
+        important: candidate.important,
+        raw: candidate.raw,
+      } satisfies Extract<Candidate, { kind: 'arbitrary' }> as T
+
+    case 'static':
+      return {
+        kind: candidate.kind,
+        root: candidate.root,
+        variants: candidate.variants.map(cloneVariant),
+        important: candidate.important,
+        raw: candidate.raw,
+      } satisfies Extract<Candidate, { kind: 'static' }> as T
+
+    case 'functional':
+      return {
+        kind: candidate.kind,
+        root: candidate.root,
+        value: candidate.value
+          ? candidate.value.kind === 'arbitrary'
+            ? {
+                kind: candidate.value.kind,
+                dataType: candidate.value.dataType,
+                value: candidate.value.value,
+              }
+            : {
+                kind: candidate.value.kind,
+                value: candidate.value.value,
+                fraction: candidate.value.fraction,
+              }
+          : null,
+        modifier: candidate.modifier
+          ? { kind: candidate.modifier.kind, value: candidate.modifier.value }
+          : null,
+        variants: candidate.variants.map(cloneVariant),
+        important: candidate.important,
+        raw: candidate.raw,
+      } satisfies Extract<Candidate, { kind: 'functional' }> as T
+
+    default:
+      candidate satisfies never
+      throw new Error('Unknown candidate kind')
+  }
+}
+
+export function cloneVariant<T extends Variant>(variant: T): T {
+  switch (variant.kind) {
+    case 'arbitrary':
+      return {
+        kind: variant.kind,
+        selector: variant.selector,
+        relative: variant.relative,
+      } satisfies Extract<Variant, { kind: 'arbitrary' }> as T
+
+    case 'static':
+      return { kind: variant.kind, root: variant.root } satisfies Extract<
+        Variant,
+        { kind: 'static' }
+      > as T
+
+    case 'functional':
+      return {
+        kind: variant.kind,
+        root: variant.root,
+        value: variant.value ? { kind: variant.value.kind, value: variant.value.value } : null,
+        modifier: variant.modifier
+          ? { kind: variant.modifier.kind, value: variant.modifier.value }
+          : null,
+      } satisfies Extract<Variant, { kind: 'functional' }> as T
+
+    case 'compound':
+      return {
+        kind: variant.kind,
+        root: variant.root,
+        variant: cloneVariant(variant.variant),
+        modifier: variant.modifier
+          ? { kind: variant.modifier.kind, value: variant.modifier.value }
+          : null,
+      } satisfies Extract<Variant, { kind: 'compound' }> as T
+
+    default:
+      variant satisfies never
+      throw new Error('Unknown variant kind')
+  }
+}
+
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants

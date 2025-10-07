@@ -1,5 +1,5 @@
 import { Scanner } from '@tailwindcss/oxide'
-import type { Candidate } from '../../../../tailwindcss/src/candidate'
+import { cloneCandidate, type Candidate } from '../../../../tailwindcss/src/candidate'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 
 export async function extractRawCandidates(
@@ -18,7 +18,7 @@ export async function extractRawCandidates(
 
 // Create a basic stripped candidate without variants or important flag
 export function baseCandidate<T extends Candidate>(candidate: T) {
-  let base = structuredClone(candidate)
+  let base = cloneCandidate(candidate)
 
   base.important = false
   base.variants = []
