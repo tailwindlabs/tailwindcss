@@ -2,31 +2,22 @@ import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
-import { migrateArbitraryUtilities } from './migrate-arbitrary-utilities'
-import { migrateArbitraryValueToBareValue } from './migrate-arbitrary-value-to-bare-value'
-import { migrateArbitraryVariants } from './migrate-arbitrary-variants'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
-import { migrateBareValueUtilities } from './migrate-bare-utilities'
-import { migrateBgGradient } from './migrate-bg-gradient'
 import { migrateCamelcaseInNamedValue } from './migrate-camelcase-in-named-value'
 import { migrateCanonicalizeCandidate } from './migrate-canonicalize-candidate'
-import { migrateDeprecatedUtilities } from './migrate-deprecated-utilities'
-import { migrateDropUnnecessaryDataTypes } from './migrate-drop-unnecessary-data-types'
 import { migrateEmptyArbitraryValues } from './migrate-handle-empty-arbitrary-values'
 import { migrateLegacyArbitraryValues } from './migrate-legacy-arbitrary-values'
 import { migrateLegacyClasses } from './migrate-legacy-classes'
 import { migrateMaxWidthScreen } from './migrate-max-width-screen'
 import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-values'
-import { migrateOptimizeModifier } from './migrate-optimize-modifier'
 import { migratePrefix } from './migrate-prefix'
 import { migrateSimpleLegacyClasses } from './migrate-simple-legacy-classes'
-import { migrateThemeToVar } from './migrate-theme-to-var'
 import { migrateVariantOrder } from './migrate-variant-order'
-import { computeUtilitySignature } from './signatures'
 
 export type Migration = (
   designSystem: DesignSystem,
@@ -38,23 +29,14 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateEmptyArbitraryValues,
   migratePrefix,
   migrateCanonicalizeCandidate,
-  migrateBgGradient,
   migrateSimpleLegacyClasses,
   migrateCamelcaseInNamedValue,
   migrateLegacyClasses,
   migrateMaxWidthScreen,
-  migrateThemeToVar,
   migrateVariantOrder, // Has to happen before migrations that modify variants
   migrateAutomaticVarInjection,
   migrateLegacyArbitraryValues,
-  migrateArbitraryUtilities,
-  migrateBareValueUtilities,
-  migrateDeprecatedUtilities,
   migrateModernizeArbitraryValues,
-  migrateArbitraryVariants,
-  migrateDropUnnecessaryDataTypes,
-  migrateArbitraryValueToBareValue,
-  migrateOptimizeModifier,
 ]
 
 let migrateCached = new DefaultMap<
@@ -68,6 +50,9 @@ let migrateCached = new DefaultMap<
       for (let migration of DEFAULT_MIGRATIONS) {
         rawCandidate = await migration(designSystem, userConfig, rawCandidate)
       }
+
+      // Canonicalize the final migrated candidate to its final form
+      rawCandidate = designSystem.canonicalizeCandidates([rawCandidate]).pop()!
 
       // Verify that the candidate actually makes sense at all. E.g.: `duration`
       // is not a valid candidate, but it will parse because `duration-<number>`

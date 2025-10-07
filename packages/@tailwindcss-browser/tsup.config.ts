@@ -13,4 +13,20 @@ export default defineConfig({
     'process.env.NODE_ENV': '"production"',
     'process.env.FEATURES_ENV': '"stable"',
   },
+  esbuildPlugins: [
+    {
+      name: 'patch-intellisense-apis',
+      setup(build) {
+        build.onLoad({ filter: /intellisense.ts$/ }, () => {
+          return {
+            contents: `
+              export function getClassList() { return [] }
+              export function getVariants() { return [] }
+              export function canonicalizeCandidates() { return [] }
+            `,
+          }
+        })
+      },
+    },
+  ],
 })

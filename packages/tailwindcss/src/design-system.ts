@@ -10,7 +10,13 @@ import {
 } from './candidate'
 import { compileAstNodes, compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
-import { getClassList, getVariants, type ClassEntry, type VariantEntry } from './intellisense'
+import {
+  canonicalizeCandidates,
+  getClassList,
+  getVariants,
+  type ClassEntry,
+  type VariantEntry,
+} from './intellisense'
 import { getClassOrder } from './sort'
 import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
@@ -48,6 +54,7 @@ export type DesignSystem = {
   resolveThemeValue(path: string, forceInline?: boolean): string | undefined
 
   trackUsedVariables(raw: string): void
+  canonicalizeCandidates(candidates: string[]): string[]
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
@@ -201,6 +208,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
 
     trackUsedVariables(raw: string) {
       trackUsedVariables.get(raw)
+    },
+
+    canonicalizeCandidates(candidates: string[]) {
+      return canonicalizeCandidates(this, candidates)
     },
   }
 

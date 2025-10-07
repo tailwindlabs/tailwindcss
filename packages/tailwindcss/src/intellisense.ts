@@ -3,6 +3,7 @@ import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 import { compare } from './utils/compare'
 import { DefaultMap } from './utils/default-map'
+export { canonicalizeCandidates } from './canonicalize-candidates'
 
 interface ClassMetadata {
   modifiers: string[]

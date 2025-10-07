@@ -1,13 +1,13 @@
-import { substituteAtApply } from '../../../../tailwindcss/src/apply'
-import { atRule, styleRule, toCss, walk, type AstNode } from '../../../../tailwindcss/src/ast'
-import { printArbitraryValue } from '../../../../tailwindcss/src/candidate'
-import * as SelectorParser from '../../../../tailwindcss/src/compat/selector-parser'
-import { CompileAstFlags, type DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { ThemeOptions } from '../../../../tailwindcss/src/theme'
-import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
-import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infer-data-type'
-import * as ValueParser from '../../../../tailwindcss/src/value-parser'
-import { dimensions } from '../../utils/dimension'
+import { substituteAtApply } from './apply'
+import { atRule, styleRule, toCss, walk, type AstNode } from './ast'
+import { printArbitraryValue } from './candidate'
+import { CompileAstFlags, type DesignSystem } from './design-system'
+import * as SelectorParser from './selector-parser'
+import { ThemeOptions } from './theme'
+import { DefaultMap } from './utils/default-map'
+import { dimensions } from './utils/dimensions'
+import { isValidSpacingMultiplier } from './utils/infer-data-type'
+import * as ValueParser from './value-parser'
 
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or
@@ -44,16 +44,11 @@ export const computeUtilitySignature = new DefaultMap<
         // There's separate utility caches for respect important vs not
         // so we want to compile them both with `@theme inline` disabled
         for (let candidate of designSystem.parseCandidate(utility)) {
-          designSystem.compileAstNodes(candidate, CompileAstFlags.None)
           designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
         }
 
         substituteAtApply(ast, designSystem)
       })
-
-      // We will be mutating the AST, so we need to clone it first to not affect
-      // the original AST
-      ast = structuredClone(ast)
 
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
@@ -73,6 +68,11 @@ export const computeUtilitySignature = new DefaultMap<
 
         // Remove comments
         else if (node.kind === 'comment') {
+          replaceWith([])
+        }
+
+        // Remove at-rules that are not needed for the signature
+        else if (node.kind === 'at-rule' && node.name === '@property') {
           replaceWith([])
         }
       })
@@ -120,6 +120,7 @@ export const computeUtilitySignature = new DefaultMap<
         // Handle declarations
         if (node.kind === 'declaration' && node.value !== undefined) {
           if (node.value.includes('var(')) {
+            let changed = false
             let valueAst = ValueParser.parse(node.value)
 
             let seen = new Set<string>()
@@ -162,6 +163,7 @@ export const computeUtilitySignature = new DefaultMap<
                 // More than 1 argument means that a fallback is already present
                 if (valueNode.nodes.length === 1) {
                   // Inject the fallback value into the variable lookup
+                  changed = true
                   valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
                 }
               }
@@ -174,6 +176,7 @@ export const computeUtilitySignature = new DefaultMap<
                   let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
                   let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
                   if (nodeAsString === constructedValue) {
+                    changed = true
                     replaceWith(ValueParser.parse(variableValue))
                   }
                 }
@@ -181,7 +184,7 @@ export const computeUtilitySignature = new DefaultMap<
             })
 
             // Replace the value with the new value
-            node.value = ValueParser.toCss(valueAst)
+            if (changed) node.value = ValueParser.toCss(valueAst)
           }
 
           // Very basic `calc(…)` constant folding to handle the spacing scale

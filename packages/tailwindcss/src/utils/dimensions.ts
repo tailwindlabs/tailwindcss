@@ -1,8 +1,10 @@
 import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
 
+const DIMENSION_REGEX = /^(?<value>-?(?:\d*\.)?\d+)(?<unit>[a-z]+|%)$/i
+
 // Parse a dimension such as `64rem` into `[64, 'rem']`.
 export const dimensions = new DefaultMap((input) => {
-  let match = /^(?<value>-?(?:\d*\.)?\d+)(?<unit>[a-z]+|%)$/i.exec(input)
+  let match = DIMENSION_REGEX.exec(input)
   if (!match) return null
 
   let value = match.groups?.value

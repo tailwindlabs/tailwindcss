@@ -9,12 +9,17 @@ import { migrateModernizeArbitraryValues } from './migrate-modernize-arbitrary-v
 import { migratePrefix } from './migrate-prefix'
 vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
+const css = String.raw
+
 function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawCandidate: string) {
   for (let migration of [
     migrateEmptyArbitraryValues,
     migratePrefix,
     migrateModernizeArbitraryValues,
     migrateArbitraryVariants,
+    (designSystem: DesignSystem, _, rawCandidate: string) => {
+      return designSystem.canonicalizeCandidates([rawCandidate]).pop() ?? rawCandidate
+    },
   ]) {
     rawCandidate = migration(designSystem, userConfig, rawCandidate)
   }
@@ -22,29 +27,6 @@ function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawC
 }
 
 test.each([
-  // Arbitrary variants
-  ['[[data-visible]]:flex', 'data-visible:flex'],
-  ['[&[data-visible]]:flex', 'data-visible:flex'],
-  ['[[data-visible]&]:flex', 'data-visible:flex'],
-  ['[&>[data-visible]]:flex', '*:data-visible:flex'],
-  ['[&_>_[data-visible]]:flex', '*:data-visible:flex'],
-  ['[&>*]:flex', '*:flex'],
-  ['[&_>_*]:flex', '*:flex'],
-
-  ['[&_[data-visible]]:flex', '**:data-visible:flex'],
-  ['[&_*]:flex', '**:flex'],
-
-  ['[&:first-child]:flex', 'first:flex'],
-  ['[&:not(:first-child)]:flex', 'not-first:flex'],
-
-  // in-* variants
-  ['[p_&]:flex', 'in-[p]:flex'],
-  ['[.foo_&]:flex', 'in-[.foo]:flex'],
-  ['[[data-visible]_&]:flex', 'in-data-visible:flex'],
-  // Multiple selectors, should stay as-is
-  ['[[data-foo][data-bar]_&]:flex', '[[data-foo][data-bar]_&]:flex'],
-  // Using `>` instead of ` ` should not be transformed:
-  ['[figure>&]:my-0', '[figure>&]:my-0'],
   // Some extreme examples of what happens in the wild:
   ['group-[]:flex', 'in-[.group]:flex'],
   ['group-[]/name:flex', 'in-[.group\\/name]:flex'],
@@ -59,75 +41,16 @@ test.each([
   ['has-group-[]/name:flex', 'has-in-[.group\\/name]:flex'],
   ['not-group-[]:flex', 'not-in-[.group]:flex'],
   ['not-group-[]/name:flex', 'not-in-[.group\\/name]:flex'],
-
-  // nth-child
-  ['[&:nth-child(2)]:flex', 'nth-2:flex'],
-  ['[&:not(:nth-child(2))]:flex', 'not-nth-2:flex'],
-
-  ['[&:nth-child(-n+3)]:flex', 'nth-[-n+3]:flex'],
-  ['[&:not(:nth-child(-n+3))]:flex', 'not-nth-[-n+3]:flex'],
-  ['[&:nth-child(-n_+_3)]:flex', 'nth-[-n+3]:flex'],
-  ['[&:not(:nth-child(-n_+_3))]:flex', 'not-nth-[-n+3]:flex'],
-
-  // nth-last-child
-  ['[&:nth-last-child(2)]:flex', 'nth-last-2:flex'],
-  ['[&:not(:nth-last-child(2))]:flex', 'not-nth-last-2:flex'],
-
-  ['[&:nth-last-child(-n+3)]:flex', 'nth-last-[-n+3]:flex'],
-  ['[&:not(:nth-last-child(-n+3))]:flex', 'not-nth-last-[-n+3]:flex'],
-  ['[&:nth-last-child(-n_+_3)]:flex', 'nth-last-[-n+3]:flex'],
-  ['[&:not(:nth-last-child(-n_+_3))]:flex', 'not-nth-last-[-n+3]:flex'],
-
-  // nth-child odd/even
-  ['[&:nth-child(odd)]:flex', 'odd:flex'],
-  ['[&:not(:nth-child(odd))]:flex', 'even:flex'],
-  ['[&:nth-child(even)]:flex', 'even:flex'],
-  ['[&:not(:nth-child(even))]:flex', 'odd:flex'],
-
-  // Keep multiple attribute selectors as-is
-  ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],
-
-  // Keep `:where(…)` as is
-  ['[:where([data-visible])]:flex', '[:where([data-visible])]:flex'],
-
-  // Complex attribute selectors with operators, quotes and insensitivity flags
-  ['[[data-url*="example"]]:flex', 'data-[url*="example"]:flex'],
-  ['[[data-url$=".com"_i]]:flex', 'data-[url$=".com"_i]:flex'],
-  ['[[data-url$=.com_i]]:flex', 'data-[url$=.com_i]:flex'],
-
-  // Attribute selector wrapped in `&:is(…)`
-  ['[&:is([data-visible])]:flex', 'data-visible:flex'],
-
-  // Media queries
-  ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
-  ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
-  ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
-  ['[@media_print]:flex', 'print:flex'],
-  ['[@media_not_print]:flex', 'not-print:flex'],
-
-  // Hoist the `:not` part to a compound variant
-  ['[@media_not_(prefers-color-scheme:dark)]:flex', 'not-dark:flex'],
-  [
-    '[@media_not_(prefers-color-scheme:unknown)]:flex',
-    'not-[@media_(prefers-color-scheme:unknown)]:flex',
-  ],
-
-  // Compound arbitrary variants
-  ['has-[[data-visible]]:flex', 'has-data-visible:flex'],
-  ['has-[&:is([data-visible])]:flex', 'has-data-visible:flex'],
-  ['has-[&>[data-visible]]:flex', 'has-[&>[data-visible]]:flex'],
-
-  ['has-[[data-slot=description]]:flex', 'has-data-[slot=description]:flex'],
-  ['has-[&:is([data-slot=description])]:flex', 'has-data-[slot=description]:flex'],
-
-  ['has-[[aria-visible="true"]]:flex', 'has-aria-visible:flex'],
-  ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
-
-  ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
 ])('%s => %s (%#)', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+      @theme {
+        --*: initial;
+      }
+    `,
+    { base: __dirname },
+  )
 
   expect(migrate(designSystem, {}, candidate)).toEqual(result)
 })
@@ -154,9 +77,15 @@ test.each([
   ['not-group-[]:tw-flex', 'tw:not-in-[.tw\\:group]:flex'],
   ['not-group-[]/name:tw-flex', 'tw:not-in-[.tw\\:group\\/name]:flex'],
 ])('%s => %s (%#)', async (candidate, result) => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss" prefix(tw);', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss' prefix(tw);
+      @theme {
+        --*: initial;
+      }
+    `,
+    { base: __dirname },
+  )
 
   expect(migrate(designSystem, { prefix: 'tw-' }, candidate)).toEqual(result)
 })
