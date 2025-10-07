@@ -9,6 +9,8 @@ import { dimensions } from './utils/dimensions'
 import { isValidSpacingMultiplier } from './utils/infer-data-type'
 import * as ValueParser from './value-parser'
 
+const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
+
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or
 // a unique symbol if the utility is not valid. The class in the selector will
@@ -58,6 +60,17 @@ export const computeUtilitySignature = new DefaultMap<
         if (node.kind === 'declaration') {
           if (node.value === undefined || node.property === '--tw-sort') {
             replaceWith([])
+          }
+
+          // Normalize percentages by removing unnecessary dots and zeros.
+          //
+          // E.g.: `50.0%` → `50%`
+          else if (node.value.includes('%')) {
+            FLOATING_POINT_PERCENTAGE.lastIndex = 0
+            node.value = node.value.replaceAll(
+              FLOATING_POINT_PERCENTAGE,
+              (match) => `${Number(match.slice(0, -1))}%`,
+            )
           }
         }
 
