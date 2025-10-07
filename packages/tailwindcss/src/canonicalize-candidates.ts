@@ -1469,7 +1469,11 @@ function optimizeModifier(designSystem: DesignSystem, candidate: Candidate): Can
   {
     let newModifier: NamedUtilityValue = {
       kind: 'named',
-      value: modifier.value.endsWith('%') ? modifier.value.slice(0, -1) : modifier.value,
+      value: modifier.value.endsWith('%')
+        ? modifier.value.includes('.')
+          ? `${Number(modifier.value.slice(0, -1))}`
+          : modifier.value.slice(0, -1)
+        : modifier.value,
       fraction: null,
     }
 
