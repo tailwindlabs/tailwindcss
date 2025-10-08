@@ -42,7 +42,7 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
         }
 
         // If we see a `/`, we have a modifier
-        else if (child.kind === 'separator' && child.value.trim() === '/') {
+        else if (child.kind === 'word' && child.value === '/') {
           themeModifierCount += 1
           return ValueParser.ValueWalkAction.Stop
         }

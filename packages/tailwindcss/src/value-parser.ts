@@ -172,6 +172,33 @@ export function parse(input: string) {
         break
       }
 
+      // Typically for math operators they have to have spaces around them. But
+      // therea re situations in `theme(colors.red.500/10)` where we use `/`
+      // without spaces. Let's make srue this is a separate word as well.
+      case SLASH: {
+        // 1. Handle everything before the separator as a word
+        // Handle everything before the closing paren as a word
+        if (buffer.length > 0) {
+          let node = word(buffer)
+          if (parent) {
+            parent.nodes.push(node)
+          } else {
+            ast.push(node)
+          }
+          buffer = ''
+        }
+
+        // 2. Track the `/` as a word on its own
+        let node = word(input[i])
+        if (parent) {
+          parent.nodes.push(node)
+        } else {
+          ast.push(node)
+        }
+
+        break
+      }
+
       // Space and commas are bundled into separators
       //
       // E.g.:
@@ -186,7 +213,6 @@ export function parse(input: string) {
       case GREATER_THAN:
       case LESS_THAN:
       case NEWLINE:
-      case SLASH:
       case SPACE:
       case TAB: {
         // 1. Handle everything before the separator as a word
@@ -213,7 +239,6 @@ export function parse(input: string) {
             peekChar !== GREATER_THAN &&
             peekChar !== LESS_THAN &&
             peekChar !== NEWLINE &&
-            peekChar !== SLASH &&
             peekChar !== SPACE &&
             peekChar !== TAB
           ) {
