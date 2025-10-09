@@ -218,14 +218,14 @@ test('Config files can affect the theme', async () => {
 })
 
 // https://github.com/tailwindlabs/tailwindcss/issues/19091
-test('Accessing (nested) colors via CSS should work as expected', async () => {
+test('Accessing a default color if a sub-color exists via CSS should work as expected', async () => {
   let input = css`
     @tailwind utilities;
     @config "./config.js";
 
     .example {
-      color: theme('colors.foo.foo-bar');
-      border-color: theme('colors.foo.foo');
+      color: theme('colors.foo-bar');
+      border-color: theme('colors.foo');
     }
   `
 
@@ -233,11 +233,15 @@ test('Accessing (nested) colors via CSS should work as expected', async () => {
     loadModule: async () => ({
       module: {
         theme: {
+          // Internally this object gets converted to something like:
+          // ```
+          // {
+          //   foo: { DEFAULT: 'var(--foo-foo)', bar: 'var(--foo-foo-bar)' },
+          // }
+          // ```
           colors: {
-            foo: {
-              foo: 'var(--foo-foo)',
-              'foo-bar': 'var(--foo-foo-bar)',
-            },
+            foo: 'var(--foo-foo)',
+            'foo-bar': 'var(--foo-foo-bar)',
           },
         },
       },
