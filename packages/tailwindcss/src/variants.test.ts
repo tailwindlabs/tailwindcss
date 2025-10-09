@@ -2586,6 +2586,23 @@ test('matchVariant sorts deterministically', async () => {
   }
 })
 
+test('move modifier of compound variant to sub-variant if its also a compound variant', async () => {
+  expect(
+    await run([
+      'not-group-focus/name:flex',
+      'has-group-focus/name:flex',
+
+      // Keep the `name` on the `group`, don't move it to the `peer` because
+      // that would be a breaking change.
+      'group-peer-focus/name:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".not-group-focus\\/name\\:flex:not(:is(:where(.group\\/name):focus *)), .group-peer-focus\\/name\\:flex:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *), .has-group-focus\\/name\\:flex:has(:is(:where(.group\\/name):focus *)) {
+      display: flex;
+    }"
+  `)
+})
+
 test.each([
   // These are style rules
   [['.foo'], Compounds.StyleRules],
