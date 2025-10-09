@@ -23,6 +23,12 @@ it.each([
   ['calc(2rem - 0.5rem)', '1.5rem'],
   ['calc(3rem * 6)', '18rem'],
   ['calc(5rem / 2)', '2.5rem'],
+
+  // Nested partial evaluation
+  ['calc(calc(1 + 2) + 2rem)', 'calc(3 + 2rem)'],
+
+  // Evaluation only handles two operands right now, this can change in the future
+  ['calc(1 + 2 + 3)', 'calc(1 + 2 + 3)'],
 ])('should constant fold `%s` into `%s`', (input, expected) => {
   expect(constantFoldDeclaration(input)).toBe(expected)
 })
