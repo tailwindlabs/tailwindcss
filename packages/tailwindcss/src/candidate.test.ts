@@ -2106,6 +2106,7 @@ const variants = [
   // Compound variants that forward modifiers
   ['not-group-hover/name:', 'not-group-hover/name:'],
   ['has-group-peer-hover/name:', 'has-group-peer-hover/name:'],
+  ['in-group-peer-hover/name:', 'in-group-peer-hover/name:'],
 ]
 
 let combinations: [string, string][] = []
