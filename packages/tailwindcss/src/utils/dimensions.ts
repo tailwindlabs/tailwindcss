@@ -10,11 +10,11 @@ export const dimensions = new DefaultMap((input) => {
   let value = match.groups?.value
   if (value === undefined) return null
 
-  let unit = match.groups?.unit
-  if (unit === undefined) return null
-
   let valueAsNumber = Number(value)
   if (Number.isNaN(valueAsNumber)) return null
+
+  let unit = match.groups?.unit
+  if (unit === undefined) return [valueAsNumber, null] as const
 
   return [valueAsNumber, unit] as const
 })
