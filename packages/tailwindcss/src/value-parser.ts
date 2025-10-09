@@ -17,7 +17,7 @@ export type ValueSeparatorNode = {
 export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
 type ValueParentNode = ValueFunctionNode | null
 
-function word(value: string): ValueWordNode {
+export function word(value: string): ValueWordNode {
   return {
     kind: 'word',
     value,
