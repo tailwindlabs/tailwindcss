@@ -245,6 +245,17 @@ export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<stri
     for (let [className, meta] of ds.getClassList()) {
       let signature = signatures.get(className)
       if (typeof signature !== 'string') continue
+
+      // Skip the utility if `-{utility}-0` has the same signature as
+      // `{utility}-0` (its positive version). This will prefer positive values
+      // over negative values.
+      if (className[0] === '-' && className.endsWith('-0')) {
+        let positiveSignature = signatures.get(className.slice(1))
+        if (typeof positiveSignature === 'string' && signature === positiveSignature) {
+          continue
+        }
+      }
+
       lookup.get(signature).push(className)
 
       for (let modifier of meta.modifiers) {
