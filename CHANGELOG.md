@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix Safari devtools rendering issue due to `color-mix` fallback ([#19069](https://github.com/tailwindlabs/tailwindcss/pull/19069))
+- Suppress Lightning CSS warnings about `:deep`, `:slotted` and `:global` ([#19094](https://github.com/tailwindlabs/tailwindcss/pull/19094))
 
 ## [4.1.14] - 2025-10-01
 
