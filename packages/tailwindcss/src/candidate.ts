@@ -806,22 +806,15 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         case 'compound': {
           if (value === null) return null
 
-          let subVariant = designSystem.parseVariant(value)
-          if (subVariant === null) return null
-
           // Forward the modifier of the `not` and `has` variants to its
           // subVariant. This allows for `not-group-hover/name:flex` to work.
-          if (modifier && (root === 'not' || root === 'has') && 'modifier' in subVariant) {
-            // Forward modifiers to the subVariant
-            let parsedModifier = parseModifier(modifier)
-            if (parsedModifier !== null) {
-              // Can't mutate directly because the `subVariant` is a shared
-              // object and then `group-hover` would be equivalent to
-              // `group-hover/name` which would be incorrect.
-              subVariant = { ...subVariant, modifier: parsedModifier }
-              modifier = null
-            }
+          if (modifier && (root === 'not' || root === 'has')) {
+            value = `${value}/${modifier}`
+            modifier = null
           }
+
+          let subVariant = designSystem.parseVariant(value)
+          if (subVariant === null) return null
 
           // These two variants must be compatible when compounded
           if (!designSystem.variants.compoundsWith(root, subVariant)) return null
