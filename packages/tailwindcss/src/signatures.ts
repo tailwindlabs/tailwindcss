@@ -1,11 +1,11 @@
 import { substituteAtApply } from './apply'
 import { atRule, styleRule, toCss, walk, type AstNode } from './ast'
 import { printArbitraryValue } from './candidate'
+import { constantFoldDeclaration } from './constant-fold-declaration'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
-import { dimensions } from './utils/dimensions'
 import { isValidSpacingMultiplier } from './utils/infer-data-type'
 import * as ValueParser from './value-parser'
 
@@ -208,39 +208,7 @@ export const computeUtilitySignature = new DefaultMap<
           //       → `calc(0.25rem * 4)`       ← this is the case we will see
           //                                     after inlining the variable
           //       → `1rem`
-          if (node.value.includes('calc')) {
-            let folded = false
-            let valueAst = ValueParser.parse(node.value)
-            ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
-              if (valueNode.kind !== 'function') return
-              if (valueNode.value !== 'calc') return
-
-              // [
-              //   { kind: 'word', value: '0.25rem' },            0
-              //   { kind: 'separator', value: ' ' },             1
-              //   { kind: 'word', value: '*' },                  2
-              //   { kind: 'separator', value: ' ' },             3
-              //   { kind: 'word', value: '256' }                 4
-              // ]
-              if (valueNode.nodes.length !== 5) return
-              if (valueNode.nodes[2].kind !== 'word' && valueNode.nodes[2].value !== '*') return
-
-              let parsed = dimensions.get(valueNode.nodes[0].value)
-              if (parsed === null) return
-
-              let [value, unit] = parsed
-
-              let multiplier = Number(valueNode.nodes[4].value)
-              if (Number.isNaN(multiplier)) return
-
-              folded = true
-              replaceWith(ValueParser.parse(`${value * multiplier}${unit}`))
-            })
-
-            if (folded) {
-              node.value = ValueParser.toCss(valueAst)
-            }
-          }
+          node.value = constantFoldDeclaration(node.value)
 
           // We will normalize the `node.value`, this is the same kind of logic
           // we use when printing arbitrary values. It will remove unnecessary
@@ -277,6 +245,17 @@ export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<stri
     for (let [className, meta] of ds.getClassList()) {
       let signature = signatures.get(className)
       if (typeof signature !== 'string') continue
+
+      // Skip the utility if `-{utility}-0` has the same signature as
+      // `{utility}-0` (its positive version). This will prefer positive values
+      // over negative values.
+      if (className[0] === '-' && className.endsWith('-0')) {
+        let positiveSignature = signatures.get(className.slice(1))
+        if (typeof positiveSignature === 'string' && signature === positiveSignature) {
+          continue
+        }
+      }
+
       lookup.get(signature).push(className)
 
       for (let modifier of meta.modifiers) {

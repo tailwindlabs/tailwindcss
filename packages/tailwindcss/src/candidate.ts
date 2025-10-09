@@ -806,6 +806,13 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         case 'compound': {
           if (value === null) return null
 
+          // Forward the modifier of the compound variants to its subVariant.
+          // This allows for `not-group-hover/name:flex` to work.
+          if (modifier && (root === 'not' || root === 'has' || root === 'in')) {
+            value = `${value}/${modifier}`
+            modifier = null
+          }
+
           let subVariant = designSystem.parseVariant(value)
           if (subVariant === null) return null
 
@@ -1040,13 +1047,6 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
       drop.add(previous)
       drop.add(next)
-    }
-
-    // The value parser handles `/` as a separator in some scenarios. E.g.:
-    // `theme(colors.red/50%)`. Because of this, we have to handle this case
-    // separately.
-    else if (node.kind === 'separator' && node.value.trim() === '/') {
-      node.value = '/'
     }
 
     // Leading and trailing whitespace

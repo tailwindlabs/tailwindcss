@@ -309,15 +309,29 @@ function upgradeToFullPluginSupport({
 
     let resolvedValue = sharedPluginApi.theme(path, undefined)
 
+    // When a tuple is returned, return the first element
     if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
-      // When a tuple is returned, return the first element
       return resolvedValue[0]
-    } else if (Array.isArray(resolvedValue)) {
-      // Arrays get serialized into a comma-separated lists
+    }
+
+    // Arrays get serialized into a comma-separated lists
+    else if (Array.isArray(resolvedValue)) {
       return resolvedValue.join(', ')
-    } else if (typeof resolvedValue === 'string') {
-      // Otherwise only allow string values here, objects (and namespace maps)
-      // are treated as non-resolved values for the CSS `theme()` function.
+    }
+
+    // If we're dealing with an object that has the `DEFAULT` key, return the
+    // default value
+    else if (
+      typeof resolvedValue === 'object' &&
+      resolvedValue !== null &&
+      'DEFAULT' in resolvedValue
+    ) {
+      return resolvedValue.DEFAULT
+    }
+
+    // Otherwise only allow string values here, objects (and namespace maps)
+    // are treated as non-resolved values for the CSS `theme()` function.
+    else if (typeof resolvedValue === 'string') {
       return resolvedValue
     }
   }
