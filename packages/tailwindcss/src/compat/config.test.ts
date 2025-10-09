@@ -217,6 +217,44 @@ test('Config files can affect the theme', async () => {
   `)
 })
 
+// https://github.com/tailwindlabs/tailwindcss/issues/19091
+test('Accessing (nested) colors via CSS should work as expected', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    .example {
+      color: theme('colors.foo.foo-bar');
+      border-color: theme('colors.foo.foo');
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          colors: {
+            foo: {
+              foo: 'var(--foo-foo)',
+              'foo-bar': 'var(--foo-foo-bar)',
+            },
+          },
+        },
+      },
+      base: '/root',
+      path: '',
+    }),
+  })
+
+  expect(compiler.build([])).toMatchInlineSnapshot(`
+    ".example {
+      color: var(--foo-foo-bar);
+      border-color: var(--foo-foo);
+    }
+    "
+  `)
+})
+
 test('Variants in CSS overwrite variants from plugins', async () => {
   let input = css`
     @tailwind utilities;
