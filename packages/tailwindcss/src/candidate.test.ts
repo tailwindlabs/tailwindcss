@@ -2102,6 +2102,10 @@ const variants = [
   // Handle special `@` variants. These shouldn't be printed as `@-`
   ['@xl:', '@xl:'],
   ['@[123px]:', '@[123px]:'],
+
+  // Compound variants that forward modifiers
+  ['not-group-hover/name:', 'not-group-hover/name:'],
+  ['has-group-peer-hover/name:', 'has-group-peer-hover/name:'],
 ]
 
 let combinations: [string, string][] = []
