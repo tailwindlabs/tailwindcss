@@ -806,6 +806,13 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
         case 'compound': {
           if (value === null) return null
 
+          // Forward the modifier of the compound variants to its subVariant.
+          // This allows for `not-group-hover/name:flex` to work.
+          if (modifier && (root === 'not' || root === 'has' || root === 'in')) {
+            value = `${value}/${modifier}`
+            modifier = null
+          }
+
           let subVariant = designSystem.parseVariant(value)
           if (subVariant === null) return null
 
