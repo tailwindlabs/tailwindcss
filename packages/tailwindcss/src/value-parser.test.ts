@@ -89,7 +89,7 @@ describe('parse', () => {
         value: 'theme',
         nodes: [
           { kind: 'word', value: 'colors.red.500' },
-          { kind: 'separator', value: '/' },
+          { kind: 'word', value: '/' },
           { kind: 'function', value: 'var', nodes: [{ kind: 'word', value: '--opacity' }] },
         ],
       },

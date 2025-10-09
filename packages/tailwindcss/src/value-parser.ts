@@ -17,7 +17,7 @@ export type ValueSeparatorNode = {
 export type ValueAstNode = ValueWordNode | ValueFunctionNode | ValueSeparatorNode
 type ValueParentNode = ValueFunctionNode | null
 
-function word(value: string): ValueWordNode {
+export function word(value: string): ValueWordNode {
   return {
     kind: 'word',
     value,
@@ -115,6 +115,71 @@ export function walk(
   }
 }
 
+export function walkDepth(
+  ast: ValueAstNode[],
+  visit: (
+    node: ValueAstNode,
+    utils: {
+      parent: ValueParentNode
+      replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
+    },
+  ) => void | ValueWalkAction,
+  parent: ValueParentNode = null,
+) {
+  for (let i = 0; i < ast.length; i++) {
+    let node = ast[i]
+    if (node.kind === 'function') {
+      if (walkDepth(node.nodes, visit, node) === ValueWalkAction.Stop) {
+        return ValueWalkAction.Stop
+      }
+    }
+
+    let replacedNode = false
+    let replacedNodeOffset = 0
+    let status =
+      visit(node, {
+        parent,
+        replaceWith(newNode) {
+          if (replacedNode) return
+          replacedNode = true
+
+          if (Array.isArray(newNode)) {
+            if (newNode.length === 0) {
+              ast.splice(i, 1)
+              replacedNodeOffset = 0
+            } else if (newNode.length === 1) {
+              ast[i] = newNode[0]
+              replacedNodeOffset = 1
+            } else {
+              ast.splice(i, 1, ...newNode)
+              replacedNodeOffset = newNode.length
+            }
+          } else {
+            ast[i] = newNode
+          }
+        },
+      }) ?? ValueWalkAction.Continue
+
+    // We want to visit or skip the newly replaced node(s), which start at the
+    // current index (i). By decrementing the index here, the next loop will
+    // process this position (containing the replaced node) again.
+    if (replacedNode) {
+      if (status === ValueWalkAction.Continue) {
+        i--
+      } else {
+        i += replacedNodeOffset - 1
+      }
+      continue
+    }
+
+    // Stop the walk entirely
+    if (status === ValueWalkAction.Stop) return ValueWalkAction.Stop
+
+    // Skip visiting the children of this node
+    if (status === ValueWalkAction.Skip) continue
+  }
+}
+
 export function toCss(ast: ValueAstNode[]) {
   let css = ''
   for (const node of ast) {
@@ -172,6 +237,33 @@ export function parse(input: string) {
         break
       }
 
+      // Typically for math operators, they have to have spaces around them. But
+      // there are situations in `theme(colors.red.500/10)` where we use `/`
+      // without spaces. Let's make sure this is a separate word as well.
+      case SLASH: {
+        // 1. Handle everything before the separator as a word
+        // Handle everything before the closing paren as a word
+        if (buffer.length > 0) {
+          let node = word(buffer)
+          if (parent) {
+            parent.nodes.push(node)
+          } else {
+            ast.push(node)
+          }
+          buffer = ''
+        }
+
+        // 2. Track the `/` as a word on its own
+        let node = word(input[i])
+        if (parent) {
+          parent.nodes.push(node)
+        } else {
+          ast.push(node)
+        }
+
+        break
+      }
+
       // Space and commas are bundled into separators
       //
       // E.g.:
@@ -186,7 +278,6 @@ export function parse(input: string) {
       case GREATER_THAN:
       case LESS_THAN:
       case NEWLINE:
-      case SLASH:
       case SPACE:
       case TAB: {
         // 1. Handle everything before the separator as a word
@@ -213,7 +304,6 @@ export function parse(input: string) {
             peekChar !== GREATER_THAN &&
             peekChar !== LESS_THAN &&
             peekChar !== NEWLINE &&
-            peekChar !== SLASH &&
             peekChar !== SPACE &&
             peekChar !== TAB
           ) {

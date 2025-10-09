@@ -61,9 +61,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // handle the `0px * -1` case which translates to `0px` not `-0px`.
     //
     // This translation is actually fine, because now, we will prefer the
-    // non-negative version first so we can replace `-mt-[0px]` with `mt-[0px]`.
-    ['mt-[0px]', 'mt-[0px]'],
-    ['-mt-[0px]', 'mt-[0px]'],
+    // non-negative version first so we can replace `-mt-[0px]` with `mt-0`.
+    ['mt-[0px]', 'mt-0'],
+    ['-mt-[0px]', 'mt-0'],
 
     // Shorthand CSS Variables should be converted to the new syntax, even if
     // the fallback contains functions. The fallback should also be migrated to
