@@ -115,6 +115,71 @@ export function walk(
   }
 }
 
+export function walkDepth(
+  ast: ValueAstNode[],
+  visit: (
+    node: ValueAstNode,
+    utils: {
+      parent: ValueParentNode
+      replaceWith(newNode: ValueAstNode | ValueAstNode[]): void
+    },
+  ) => void | ValueWalkAction,
+  parent: ValueParentNode = null,
+) {
+  for (let i = 0; i < ast.length; i++) {
+    let node = ast[i]
+    if (node.kind === 'function') {
+      if (walkDepth(node.nodes, visit, node) === ValueWalkAction.Stop) {
+        return ValueWalkAction.Stop
+      }
+    }
+
+    let replacedNode = false
+    let replacedNodeOffset = 0
+    let status =
+      visit(node, {
+        parent,
+        replaceWith(newNode) {
+          if (replacedNode) return
+          replacedNode = true
+
+          if (Array.isArray(newNode)) {
+            if (newNode.length === 0) {
+              ast.splice(i, 1)
+              replacedNodeOffset = 0
+            } else if (newNode.length === 1) {
+              ast[i] = newNode[0]
+              replacedNodeOffset = 1
+            } else {
+              ast.splice(i, 1, ...newNode)
+              replacedNodeOffset = newNode.length
+            }
+          } else {
+            ast[i] = newNode
+          }
+        },
+      }) ?? ValueWalkAction.Continue
+
+    // We want to visit or skip the newly replaced node(s), which start at the
+    // current index (i). By decrementing the index here, the next loop will
+    // process this position (containing the replaced node) again.
+    if (replacedNode) {
+      if (status === ValueWalkAction.Continue) {
+        i--
+      } else {
+        i += replacedNodeOffset - 1
+      }
+      continue
+    }
+
+    // Stop the walk entirely
+    if (status === ValueWalkAction.Stop) return ValueWalkAction.Stop
+
+    // Skip visiting the children of this node
+    if (status === ValueWalkAction.Skip) continue
+  }
+}
+
 export function toCss(ast: ValueAstNode[]) {
   let css = ''
   for (const node of ast) {
