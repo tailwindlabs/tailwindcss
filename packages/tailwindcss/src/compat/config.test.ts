@@ -12,7 +12,7 @@ test('Config files can add content', async () => {
   `
 
   let compiler = await compile(input, {
-    loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root' }),
+    loadModule: async () => ({ module: { content: ['./file.txt'] }, base: '/root', path: '' }),
   })
 
   expect(compiler.sources).toEqual([{ base: '/root', pattern: './file.txt', negated: false }])
@@ -25,7 +25,7 @@ test('Config files can change dark mode (media)', async () => {
   `
 
   let compiler = await compile(input, {
-    loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root' }),
+    loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root', path: '' }),
   })
 
   expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
@@ -45,7 +45,7 @@ test('Config files can change dark mode (selector)', async () => {
   `
 
   let compiler = await compile(input, {
-    loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root' }),
+    loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root', path: '' }),
   })
 
   expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
@@ -68,6 +68,7 @@ test('Config files can change dark mode (variant)', async () => {
     loadModule: async () => ({
       module: { darkMode: ['variant', '&:where(:not(.light))'] },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -101,6 +102,7 @@ test('Config files can add plugins', async () => {
         ],
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -128,6 +130,7 @@ test('Plugins loaded from config files can contribute to the config', async () =
         ],
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -157,6 +160,7 @@ test('Config file presets can contribute to the config', async () => {
         ],
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -198,6 +202,7 @@ test('Config files can affect the theme', async () => {
         ],
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -207,6 +212,48 @@ test('Config files can affect the theme', async () => {
     }
     .scrollbar-primary {
       scrollbar-color: #c0ffee;
+    }
+    "
+  `)
+})
+
+// https://github.com/tailwindlabs/tailwindcss/issues/19091
+test('Accessing a default color if a sub-color exists via CSS should work as expected', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+
+    .example {
+      color: theme('colors.foo-bar');
+      border-color: theme('colors.foo');
+    }
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          // Internally this object gets converted to something like:
+          // ```
+          // {
+          //   foo: { DEFAULT: 'var(--foo-foo)', bar: 'var(--foo-foo-bar)' },
+          // }
+          // ```
+          colors: {
+            foo: 'var(--foo-foo)',
+            'foo-bar': 'var(--foo-foo-bar)',
+          },
+        },
+      },
+      base: '/root',
+      path: '',
+    }),
+  })
+
+  expect(compiler.build([])).toMatchInlineSnapshot(`
+    ".example {
+      color: var(--foo-foo-bar);
+      border-color: var(--foo-foo);
     }
     "
   `)
@@ -231,6 +278,7 @@ test('Variants in CSS overwrite variants from plugins', async () => {
         ],
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -317,6 +365,7 @@ describe('theme callbacks', () => {
           ],
         } satisfies Config,
         base: '/root',
+        path: '',
       }),
     })
 
@@ -391,6 +440,7 @@ describe('theme overrides order', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -442,6 +492,7 @@ describe('theme overrides order', () => {
               },
             } satisfies Config,
             base: '/root',
+            path: '',
           }
         } else {
           return {
@@ -460,6 +511,7 @@ describe('theme overrides order', () => {
               )
             }),
             base: '/root',
+            path: '',
           }
         }
       },
@@ -562,6 +614,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -596,6 +649,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -631,6 +685,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -669,6 +724,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -708,6 +764,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -745,6 +802,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -779,6 +837,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -806,6 +865,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -840,6 +900,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -875,6 +936,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -913,6 +975,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -952,6 +1015,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -989,6 +1053,7 @@ describe('default font family compatibility', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -1021,6 +1086,7 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -1113,6 +1179,7 @@ test('merges css breakpoints with js config screens', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -1596,6 +1663,7 @@ test('handles setting theme keys to null', async () => {
             },
           },
           base: '/root',
+          path: '',
         }
       },
     },
