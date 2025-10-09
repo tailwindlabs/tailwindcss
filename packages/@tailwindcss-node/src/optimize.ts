@@ -60,6 +60,17 @@ export function optimize(
   let result = optimize(Buffer.from(input), map)
   map = result.map?.toString()
 
+  result.warnings = result.warnings.filter((warning) => {
+    // Ignore warnings about unknown pseudo-classes as they are likely caused
+    // by the use of `:deep()`, `:slotted()`, and `:global()` which are not
+    // standard CSS but are commonly used in frameworks like Vue.
+    if (/'(deep|slotted|global)' is not recognized as a valid pseudo-/.test(warning.message)) {
+      return false
+    }
+
+    return true
+  })
+
   // Because of `errorRecovery: true`, there could be warnings, so let's let the
   // user know about them.
   if (process.env.NODE_ENV !== 'test' && result.warnings.length > 0) {
