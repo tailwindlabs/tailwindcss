@@ -1,6 +1,6 @@
 import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
 
-const DIMENSION_REGEX = /^(?<value>-?(?:\d*\.)?\d+)(?<unit>[a-z]+|%)$/i
+const DIMENSION_REGEX = /^(?<value>[-+]?(?:\d*\.)?\d+)(?<unit>[a-z]+|%)?$/i
 
 // Parse a dimension such as `64rem` into `[64, 'rem']`.
 export const dimensions = new DefaultMap((input) => {
