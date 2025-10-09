@@ -675,6 +675,23 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['grid-cols-[subgrid]', 'grid-cols-subgrid'],
       ['grid-rows-[subgrid]', 'grid-rows-subgrid'],
 
+      // Handle zeroes
+      ['m-[0]', 'm-0'],
+      ['m-[0px]', 'm-0'],
+      ['m-[0rem]', 'm-0'],
+
+      ['-m-[0]', 'm-0'],
+      ['-m-[0px]', 'm-0'],
+      ['-m-[0rem]', 'm-0'],
+
+      ['m-[-0]', 'm-0'],
+      ['m-[-0px]', 'm-0'],
+      ['m-[-0rem]', 'm-0'],
+
+      ['-m-[-0]', 'm-0'],
+      ['-m-[-0px]', 'm-0'],
+      ['-m-[-0rem]', 'm-0'],
+
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       ['font-stretch-[50%]', 'font-stretch-50%'],
