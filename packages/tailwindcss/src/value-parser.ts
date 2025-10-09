@@ -237,9 +237,9 @@ export function parse(input: string) {
         break
       }
 
-      // Typically for math operators they have to have spaces around them. But
-      // therea re situations in `theme(colors.red.500/10)` where we use `/`
-      // without spaces. Let's make srue this is a separate word as well.
+      // Typically for math operators, they have to have spaces around them. But
+      // there are situations in `theme(colors.red.500/10)` where we use `/`
+      // without spaces. Let's make sure this is a separate word as well.
       case SLASH: {
         // 1. Handle everything before the separator as a word
         // Handle everything before the closing paren as a word
