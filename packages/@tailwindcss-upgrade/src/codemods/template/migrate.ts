@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
+import { createSignatureOptions } from '../../../../tailwindcss/src/canonicalize-candidates'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
@@ -39,11 +40,10 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateModernizeArbitraryValues,
 ]
 
-let migrateCached = new DefaultMap<
-  DesignSystem,
-  DefaultMap<Config | null, DefaultMap<string, Promise<string>>>
->((designSystem) => {
-  return new DefaultMap((userConfig) => {
+let migrateCached = new DefaultMap((designSystem: DesignSystem) => {
+  let options = createSignatureOptions(designSystem)
+
+  return new DefaultMap((userConfig: Config | null) => {
     return new DefaultMap(async (rawCandidate) => {
       let original = rawCandidate
 
@@ -57,7 +57,7 @@ let migrateCached = new DefaultMap<
       // Verify that the candidate actually makes sense at all. E.g.: `duration`
       // is not a valid candidate, but it will parse because `duration-<number>`
       // exists.
-      let signature = computeUtilitySignature.get(designSystem).get(rawCandidate)
+      let signature = computeUtilitySignature.get(options).get(rawCandidate)
       if (typeof signature !== 'string') return original
 
       return rawCandidate

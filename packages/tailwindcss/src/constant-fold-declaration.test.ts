@@ -72,18 +72,18 @@ it.each([
 
 it.each([
   ['0deg', '0deg'],
-  ['0rad', '0rad'],
+  ['0rad', '0deg'],
   ['0%', '0%'],
-  ['0turn', '0turn'],
+  ['0turn', '0deg'],
   ['0fr', '0fr'],
-  ['0ms', '0ms'],
+  ['0ms', '0s'],
   ['0s', '0s'],
   ['-0.0deg', '0deg'],
-  ['-0.0rad', '0rad'],
+  ['-0.0rad', '0deg'],
   ['-0.0%', '0%'],
-  ['-0.0turn', '0turn'],
+  ['-0.0turn', '0deg'],
   ['-0.0fr', '0fr'],
-  ['-0.0ms', '0ms'],
+  ['-0.0ms', '0s'],
   ['-0.0s', '0s'],
 ])('should not fold non-foldable units to `0`. Constant fold `%s` into `%s`', (input, expected) => {
   expect(constantFoldDeclaration(input)).toBe(expected)

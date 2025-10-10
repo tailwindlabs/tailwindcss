@@ -1,4 +1,5 @@
 import { cloneCandidate } from '../../../../tailwindcss/src/candidate'
+import { createSignatureOptions } from '../../../../tailwindcss/src/canonicalize-candidates'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import {
@@ -14,8 +15,9 @@ export function migrateArbitraryVariants(
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
-  let signatures = computeVariantSignature.get(designSystem)
-  let variants = preComputedVariants.get(designSystem)
+  let signatureOptions = createSignatureOptions(designSystem)
+  let signatures = computeVariantSignature.get(signatureOptions)
+  let variants = preComputedVariants.get(signatureOptions)
 
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
     // We are only interested in the variants
