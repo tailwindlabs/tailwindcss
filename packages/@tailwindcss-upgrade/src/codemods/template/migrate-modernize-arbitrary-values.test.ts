@@ -17,7 +17,7 @@ function migrate(designSystem: DesignSystem, userConfig: UserConfig | null, rawC
     migratePrefix,
     migrateModernizeArbitraryValues,
     migrateArbitraryVariants,
-    (designSystem: DesignSystem, _, rawCandidate: string) => {
+    (designSystem: DesignSystem, _: UserConfig | null, rawCandidate: string) => {
       return designSystem.canonicalizeCandidates([rawCandidate]).pop() ?? rawCandidate
     },
   ]) {
