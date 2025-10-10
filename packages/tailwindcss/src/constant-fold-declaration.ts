@@ -4,7 +4,7 @@ import * as ValueParser from './value-parser'
 
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
-export function constantFoldDeclaration(input: string): string {
+export function constantFoldDeclaration(input: string, rem: number | null): string {
   let folded = false
   let valueAst = ValueParser.parse(input)
 
@@ -17,7 +17,7 @@ export function constantFoldDeclaration(input: string): string {
       valueNode.kind === 'word' &&
       valueNode.value !== '0' // Already `0`, nothing to do
     ) {
-      let canonical = canonicalizeDimension(valueNode.value)
+      let canonical = canonicalizeDimension(valueNode.value, rem)
       if (canonical === null) return // Couldn't be canonicalized, nothing to do
       if (canonical === valueNode.value) return // Already in canonical form, nothing to do
 
@@ -113,7 +113,7 @@ export function constantFoldDeclaration(input: string): string {
   return folded ? ValueParser.toCss(valueAst) : input
 }
 
-function canonicalizeDimension(input: string, rem?: number): string | null {
+function canonicalizeDimension(input: string, rem: number | null = null): string | null {
   let dimension = dimensions.get(input)
   if (dimension === null) return null // This shouldn't happen
 
@@ -132,7 +132,7 @@ function canonicalizeDimension(input: string, rem?: number): string | null {
     case 'q':   return `${value * 96 / 2.54 / 10 / 4}px`  //  1q  =  0.945px
     case 'pc':  return `${value * 96 / 6}px`              // 1pc  = 16.000px
     case 'pt':  return `${value * 96 / 72}px`             // 1pt  =  1.333px
-    case 'rem': return rem ? `${value * rem}px` : null    // 1rem = 16.000px (Assuming root font-size is 16px)
+    case 'rem': return rem !== null ? `${value * rem}px` : null    // 1rem = 16.000px (Assuming root font-size is 16px)
 
     // <angle> to deg, https://developer.mozilla.org/en-US/docs/Web/CSS/angle
     case 'grad': return `${value * 0.9}deg`               // 1grad =   0.900deg
