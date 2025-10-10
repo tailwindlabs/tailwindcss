@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
+import type { CanonicalizeOptions } from './intellisense'
 import { DefaultMap } from './utils/default-map'
 
 const css = String.raw
@@ -63,7 +64,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     return candidate
   }
 
-  async function expectCanonicalization(input: string, candidate: string, expected: string) {
+  async function expectCanonicalization(
+    input: string,
+    candidate: string,
+    expected: string,
+    options?: CanonicalizeOptions,
+  ) {
     candidate = prepare(candidate)
     expected = prepare(expected)
 
@@ -72,7 +78,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     }
 
     let designSystem = await designSystems.get(__dirname).get(input)
-    let [actual] = designSystem.canonicalizeCandidates([candidate])
+    let [actual] = designSystem.canonicalizeCandidates([candidate], options)
 
     try {
       expect(actual).toBe(expected)
@@ -935,5 +941,24 @@ describe('theme to var', () => {
       '[--value:var(--spacing-2)]',
       '[--value:theme(spacing.3)]',
     ])
+  })
+})
+
+describe('options', () => {
+  test('normalize `rem` units to `px`', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]'])
+    expect(designSystem.canonicalizeCandidates(['m-[16px]'], { rem: 16 })).toEqual(['m-4'])
+    expect(designSystem.canonicalizeCandidates(['m-[16px]'], { rem: 64 })).toEqual(['m-1'])
+    expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]']) // Ensure options don't influence shared state
   })
 })

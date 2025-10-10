@@ -11,6 +11,21 @@ import * as ValueParser from './value-parser'
 
 const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
 
+export interface SignatureOptions {
+  /**
+   * The root font size in pixels. If provided, `rem` values will be normalized
+   * to `px` values.
+   *
+   * E.g.: `mt-[16px]` with `rem: 16` will become `mt-4` (assuming `--spacing: 0.25rem`).
+   */
+  rem: number | null
+
+  /**
+   * The design system to use for computing the signature of candidates.
+   */
+  designSystem: DesignSystem
+}
+
 // Given a utility, compute a signature that represents the utility. The
 // signature will be a normalised form of the generated CSS for the utility, or
 // a unique symbol if the utility is not valid. The class in the selector will
@@ -27,10 +42,9 @@ const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
 // | `flex`           | `.x { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same utility.
-export const computeUtilitySignature = new DefaultMap<
-  DesignSystem,
-  DefaultMap<string, string | Symbol>
->((designSystem) => {
+export const computeUtilitySignature = new DefaultMap((options: SignatureOptions) => {
+  let { rem, designSystem } = options
+
   return new DefaultMap<string, string | Symbol>((utility) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
@@ -208,7 +222,7 @@ export const computeUtilitySignature = new DefaultMap<
           //       → `calc(0.25rem * 4)`       ← this is the case we will see
           //                                     after inlining the variable
           //       → `1rem`
-          node.value = constantFoldDeclaration(node.value)
+          node.value = constantFoldDeclaration(node.value, rem)
 
           // We will normalize the `node.value`, this is the same kind of logic
           // we use when printing arbitrary values. It will remove unnecessary
@@ -237,45 +251,44 @@ export const computeUtilitySignature = new DefaultMap<
 // For all functional utilities, we can compute static-like utilities by
 // essentially pre-computing the values and modifiers. This is a bit slow, but
 // also only has to happen once per design system.
-export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>(
-  (ds) => {
-    let signatures = computeUtilitySignature.get(ds)
-    let lookup = new DefaultMap<string, string[]>(() => [])
+export const preComputedUtilities = new DefaultMap((options: SignatureOptions) => {
+  let { designSystem } = options
+  let signatures = computeUtilitySignature.get(options)
+  let lookup = new DefaultMap<string, string[]>(() => [])
 
-    for (let [className, meta] of ds.getClassList()) {
-      let signature = signatures.get(className)
-      if (typeof signature !== 'string') continue
+  for (let [className, meta] of designSystem.getClassList()) {
+    let signature = signatures.get(className)
+    if (typeof signature !== 'string') continue
 
-      // Skip the utility if `-{utility}-0` has the same signature as
-      // `{utility}-0` (its positive version). This will prefer positive values
-      // over negative values.
-      if (className[0] === '-' && className.endsWith('-0')) {
-        let positiveSignature = signatures.get(className.slice(1))
-        if (typeof positiveSignature === 'string' && signature === positiveSignature) {
-          continue
-        }
-      }
-
-      lookup.get(signature).push(className)
-
-      for (let modifier of meta.modifiers) {
-        // Modifiers representing numbers can be computed and don't need to be
-        // pre-computed. Doing the math and at the time of writing this, this
-        // would save you 250k additionally pre-computed utilities...
-        if (isValidSpacingMultiplier(modifier)) {
-          continue
-        }
-
-        let classNameWithModifier = `${className}/${modifier}`
-        let signature = signatures.get(classNameWithModifier)
-        if (typeof signature !== 'string') continue
-        lookup.get(signature).push(classNameWithModifier)
+    // Skip the utility if `-{utility}-0` has the same signature as
+    // `{utility}-0` (its positive version). This will prefer positive values
+    // over negative values.
+    if (className[0] === '-' && className.endsWith('-0')) {
+      let positiveSignature = signatures.get(className.slice(1))
+      if (typeof positiveSignature === 'string' && signature === positiveSignature) {
+        continue
       }
     }
 
-    return lookup
-  },
-)
+    lookup.get(signature).push(className)
+
+    for (let modifier of meta.modifiers) {
+      // Modifiers representing numbers can be computed and don't need to be
+      // pre-computed. Doing the math and at the time of writing this, this
+      // would save you 250k additionally pre-computed utilities...
+      if (isValidSpacingMultiplier(modifier)) {
+        continue
+      }
+
+      let classNameWithModifier = `${className}/${modifier}`
+      let signature = signatures.get(classNameWithModifier)
+      if (typeof signature !== 'string') continue
+      lookup.get(signature).push(classNameWithModifier)
+    }
+  }
+
+  return lookup
+})
 
 // Given a variant, compute a signature that represents the variant. The
 // signature will be a normalised form of the generated CSS for the variant, or
@@ -290,10 +303,8 @@ export const preComputedUtilities = new DefaultMap<DesignSystem, DefaultMap<stri
 // | `focus:flex`     | `.x:focus { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same variant.
-export const computeVariantSignature = new DefaultMap<
-  DesignSystem,
-  DefaultMap<string, string | Symbol>
->((designSystem) => {
+export const computeVariantSignature = new DefaultMap((options: SignatureOptions) => {
+  let { designSystem } = options
   return new DefaultMap<string, string | Symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
@@ -383,23 +394,22 @@ export const computeVariantSignature = new DefaultMap<
   })
 })
 
-export const preComputedVariants = new DefaultMap<DesignSystem, DefaultMap<string, string[]>>(
-  (designSystem) => {
-    let signatures = computeVariantSignature.get(designSystem)
-    let lookup = new DefaultMap<string, string[]>(() => [])
+export const preComputedVariants = new DefaultMap((options: SignatureOptions) => {
+  let { designSystem } = options
+  let signatures = computeVariantSignature.get(options)
+  let lookup = new DefaultMap<string, string[]>(() => [])
 
-    // Actual static variants
-    for (let [root, variant] of designSystem.variants.entries()) {
-      if (variant.kind === 'static') {
-        let signature = signatures.get(root)
-        if (typeof signature !== 'string') continue
-        lookup.get(signature).push(root)
-      }
+  // Actual static variants
+  for (let [root, variant] of designSystem.variants.entries()) {
+    if (variant.kind === 'static') {
+      let signature = signatures.get(root)
+      if (typeof signature !== 'string') continue
+      lookup.get(signature).push(root)
     }
+  }
 
-    return lookup
-  },
-)
+  return lookup
+})
 
 function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => T): T {
   // Turn off `@theme inline` feature such that `@theme` and `@theme inline` are

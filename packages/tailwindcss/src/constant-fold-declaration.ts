@@ -4,38 +4,26 @@ import * as ValueParser from './value-parser'
 
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
-export function constantFoldDeclaration(input: string): string {
+export function constantFoldDeclaration(input: string, rem: number | null): string {
   let folded = false
   let valueAst = ValueParser.parse(input)
 
   ValueParser.walkDepth(valueAst, (valueNode, { replaceWith }) => {
-    // Convert `-0`, `+0`, `0.0`, … to `0`
-    // Convert `-0px`, `+0em`, `0.0rem`, … to `0`
+    // Canonicalize dimensions to their simplest form. This includes:
+    // - Convert `-0`, `+0`, `0.0`, … to `0`
+    // - Convert `-0px`, `+0em`, `0.0rem`, … to `0`
+    // - Convert units to an equivalent unit
     if (
       valueNode.kind === 'word' &&
-      valueNode.value !== '0' && // Already `0`, nothing to do
-      ((valueNode.value[0] === '-' && valueNode.value[1] === '0') || // `-0…`
-        (valueNode.value[0] === '+' && valueNode.value[1] === '0') || // `+0…`
-        valueNode.value[0] === '0') // `0…`
+      valueNode.value !== '0' // Already `0`, nothing to do
     ) {
-      let dimension = dimensions.get(valueNode.value)
-      if (dimension === null) return // This shouldn't happen
+      let canonical = canonicalizeDimension(valueNode.value, rem)
+      if (canonical === null) return // Couldn't be canonicalized, nothing to do
+      if (canonical === valueNode.value) return // Already in canonical form, nothing to do
 
-      if (dimension[0] !== 0) return // Not a zero value, nothing to do
-
-      // Replace length units with just `0`
-      if (dimension[1] === null || isLength(valueNode.value)) {
-        folded = true
-        replaceWith(ValueParser.word('0'))
-        return
-      }
-
-      // Replace other units with `0<unit>`, e.g. `0%`, `0fr`, `0s`, …
-      else if (valueNode.value !== `0${dimension[1]}`) {
-        folded = true
-        replaceWith(ValueParser.word(`0${dimension[1]}`))
-        return
-      }
+      folded = true
+      replaceWith(ValueParser.word(canonical))
+      return
     }
 
     // Constant fold `calc()` expressions with two operands and one operator
@@ -123,4 +111,40 @@ export function constantFoldDeclaration(input: string): string {
   })
 
   return folded ? ValueParser.toCss(valueAst) : input
+}
+
+function canonicalizeDimension(input: string, rem: number | null = null): string | null {
+  let dimension = dimensions.get(input)
+  if (dimension === null) return null // This shouldn't happen
+
+  let [value, unit] = dimension
+  if (unit === null) return `${value}` // Already unitless, nothing to do
+
+  // Replace `0<length>` units with just `0`
+  if (value === 0 && isLength(input)) return '0'
+
+  // prettier-ignore
+  switch (unit.toLowerCase()) {
+    // <length> to px, https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Values_and_units#lengths
+    case 'in':  return `${value * 96}px`                  // 1in  = 96.000px
+    case 'cm':  return `${value * 96 / 2.54}px`           // 1cm  = 37.795px
+    case 'mm':  return `${value * 96 / 2.54 / 10}px`      // 1mm  =  3.779px
+    case 'q':   return `${value * 96 / 2.54 / 10 / 4}px`  //  1q  =  0.945px
+    case 'pc':  return `${value * 96 / 6}px`              // 1pc  = 16.000px
+    case 'pt':  return `${value * 96 / 72}px`             // 1pt  =  1.333px
+    case 'rem': return rem !== null ? `${value * rem}px` : null    // 1rem = 16.000px (Assuming root font-size is 16px)
+
+    // <angle> to deg, https://developer.mozilla.org/en-US/docs/Web/CSS/angle
+    case 'grad': return `${value * 0.9}deg`               // 1grad =   0.900deg
+    case 'rad':  return `${value * 180 / Math.PI}deg`     //  1rad =  57.296deg
+    case 'turn': return `${value * 360}deg`               // 1turn = 360.000deg
+
+    // <time> to s, https://developer.mozilla.org/en-US/docs/Web/CSS/time
+    case 'ms':   return `${value / 1000}s`                // 1ms = 0.001s
+
+    // <frequency> to hz, https://developer.mozilla.org/en-US/docs/Web/CSS/frequency
+    case 'khz':  return `${value * 1000}hz`               // 1kHz = 1000Hz
+
+    default: return `${value}${unit}` // No canonicalization possible, return as-is
+  }
 }
