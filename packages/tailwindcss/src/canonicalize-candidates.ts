@@ -16,6 +16,7 @@ import {
   computeVariantSignature,
   preComputedUtilities,
   preComputedVariants,
+  type SignatureOptions,
 } from './signatures'
 import type { Writable } from './types'
 import { DefaultMap } from './utils/default-map'
@@ -36,19 +37,37 @@ export interface CanonicalizeOptions {
   rem?: number
 }
 
-export function canonicalizeCandidates(ds: DesignSystem, candidates: string[]): string[] {
+const optionsCache = new DefaultMap((designSystem: DesignSystem) => {
+  return new DefaultMap((rem: number | null = null) => {
+    return { designSystem, rem } satisfies SignatureOptions
+  })
+})
+
+export function createSignatureOptions(
+  designSystem: DesignSystem,
+  options?: CanonicalizeOptions,
+): SignatureOptions {
+  return optionsCache.get(designSystem).get(options?.rem ?? null)
+}
+
+export function canonicalizeCandidates(
+  designSystem: DesignSystem,
+  candidates: string[],
+  options?: CanonicalizeOptions,
+): string[] {
   let result = new Set<string>()
-  let cache = canonicalizeCandidateCache.get(ds)
+  let cache = canonicalizeCandidateCache.get(createSignatureOptions(designSystem, options))
   for (let candidate of candidates) {
     result.add(cache.get(candidate))
   }
   return Array.from(result)
 }
 
-const canonicalizeCandidateCache = new DefaultMap((ds: DesignSystem) => {
+const canonicalizeCandidateCache = new DefaultMap((options: SignatureOptions) => {
+  let ds = options.designSystem
   let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
-  let variantCache = canonicalizeVariantCache.get(ds)
-  let utilityCache = canonicalizeUtilityCache.get(ds)
+  let variantCache = canonicalizeVariantCache.get(options)
+  let utilityCache = canonicalizeUtilityCache.get(options)
 
   return new DefaultMap<string, string>((rawCandidate: string, self) => {
     for (let candidate of ds.parseCandidate(rawCandidate)) {
@@ -105,21 +124,26 @@ const canonicalizeCandidateCache = new DefaultMap((ds: DesignSystem) => {
   })
 })
 
-const VARIANT_CANONICALIZATIONS = [
+type VariantCanonicalizationFunction = (
+  variant: Variant,
+  options: SignatureOptions,
+) => Variant | Variant[]
+
+const VARIANT_CANONICALIZATIONS: VariantCanonicalizationFunction[] = [
   themeToVarVariant,
   arbitraryValueToBareValueVariant,
   modernizeArbitraryValuesVariant,
   arbitraryVariants,
 ]
 
-const canonicalizeVariantCache = new DefaultMap((ds: DesignSystem) => {
+const canonicalizeVariantCache = new DefaultMap((options: SignatureOptions) => {
   return new DefaultMap((variant: Variant): Variant[] => {
     let replacement = [variant]
     for (let fn of VARIANT_CANONICALIZATIONS) {
       for (let current of replacement.splice(0)) {
         // A single variant can result in multiple variants, e.g.:
         // `[&>[data-selected]]:flex` → `*:data-selected:flex`
-        let result = fn(ds, cloneVariant(current))
+        let result = fn(cloneVariant(current), options)
         if (Array.isArray(result)) {
           replacement.push(...result)
           continue
@@ -132,7 +156,12 @@ const canonicalizeVariantCache = new DefaultMap((ds: DesignSystem) => {
   })
 })
 
-const UTILITY_CANONICALIZATIONS = [
+type UtilityCanonicalizationFunction = (
+  candidate: Candidate,
+  options: SignatureOptions,
+) => Candidate
+
+const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   bgGradientToLinear,
   themeToVarUtility,
   arbitraryUtilities,
@@ -143,16 +172,17 @@ const UTILITY_CANONICALIZATIONS = [
   optimizeModifier,
 ]
 
-const canonicalizeUtilityCache = new DefaultMap((ds: DesignSystem) => {
+const canonicalizeUtilityCache = new DefaultMap((options: SignatureOptions) => {
+  let designSystem = options.designSystem
   return new DefaultMap((rawCandidate: string): string => {
-    for (let readonlyCandidate of ds.parseCandidate(rawCandidate)) {
+    for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
       let replacement = cloneCandidate(readonlyCandidate) as Writable<typeof readonlyCandidate>
 
       for (let fn of UTILITY_CANONICALIZATIONS) {
-        replacement = fn(ds, replacement)
+        replacement = fn(replacement, options)
       }
 
-      let canonicalizedCandidate = ds.printCandidate(replacement)
+      let canonicalizedCandidate = designSystem.printCandidate(replacement)
       if (rawCandidate !== canonicalizedCandidate) {
         return canonicalizedCandidate
       }
@@ -165,7 +195,7 @@ const canonicalizeUtilityCache = new DefaultMap((ds: DesignSystem) => {
 // ----
 
 const DIRECTIONS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl']
-function bgGradientToLinear(_: DesignSystem, candidate: Candidate) {
+function bgGradientToLinear(candidate: Candidate) {
   if (candidate.kind === 'static' && candidate.root.startsWith('bg-gradient-to-')) {
     let direction = candidate.root.slice(15)
 
@@ -188,8 +218,8 @@ const enum Convert {
   MigrateThemeOnly = 1 << 1,
 }
 
-function themeToVarUtility(designSystem: DesignSystem, candidate: Candidate): Candidate {
-  let convert = converterCache.get(designSystem)
+function themeToVarUtility(candidate: Candidate, options: SignatureOptions): Candidate {
+  let convert = converterCache.get(options.designSystem)
 
   if (candidate.kind === 'arbitrary') {
     let [newValue, modifier] = convert(
@@ -220,8 +250,8 @@ function themeToVarUtility(designSystem: DesignSystem, candidate: Candidate): Ca
   return candidate
 }
 
-function themeToVarVariant(designSystem: DesignSystem, variant: Variant): Variant | Variant[] {
-  let convert = converterCache.get(designSystem)
+function themeToVarVariant(variant: Variant, options: SignatureOptions): Variant | Variant[] {
+  let convert = converterCache.get(options.designSystem)
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -555,7 +585,7 @@ const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> |
   })
 })
 
-function arbitraryUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
+function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
   // We are only interested in arbitrary properties and arbitrary values
   if (
     // Arbitrary property
@@ -566,8 +596,9 @@ function arbitraryUtilities(designSystem: DesignSystem, candidate: Candidate): C
     return candidate
   }
 
-  let utilities = preComputedUtilities.get(designSystem)
-  let signatures = computeUtilitySignature.get(designSystem)
+  let designSystem = options.designSystem
+  let utilities = preComputedUtilities.get(options)
+  let signatures = computeUtilitySignature.get(options)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -771,14 +802,15 @@ function allVariablesAreUsed(
 
 // ----
 
-function bareValueUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
+function bareValueUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
   // We are only interested in bare value utilities
   if (candidate.kind !== 'functional' || candidate.value?.kind !== 'named') {
     return candidate
   }
 
-  let utilities = preComputedUtilities.get(designSystem)
-  let signatures = computeUtilitySignature.get(designSystem)
+  let designSystem = options.designSystem
+  let utilities = preComputedUtilities.get(options)
+  let signatures = computeUtilitySignature.get(options)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -847,8 +879,9 @@ function bareValueUtilities(designSystem: DesignSystem, candidate: Candidate): C
 
 const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
 
-function deprecatedUtilities(designSystem: DesignSystem, candidate: Candidate): Candidate {
-  let signatures = computeUtilitySignature.get(designSystem)
+function deprecatedUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
+  let designSystem = options.designSystem
+  let signatures = computeUtilitySignature.get(options)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
@@ -870,9 +903,10 @@ function deprecatedUtilities(designSystem: DesignSystem, candidate: Candidate): 
 
 // ----
 
-function arbitraryVariants(designSystem: DesignSystem, variant: Variant): Variant | Variant[] {
-  let signatures = computeVariantSignature.get(designSystem)
-  let variants = preComputedVariants.get(designSystem)
+function arbitraryVariants(variant: Variant, options: SignatureOptions): Variant | Variant[] {
+  let designSystem = options.designSystem
+  let signatures = computeVariantSignature.get(options)
+  let variants = preComputedVariants.get(options)
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -897,8 +931,9 @@ function arbitraryVariants(designSystem: DesignSystem, variant: Variant): Varian
 
 // ----
 
-function dropUnnecessaryDataTypes(designSystem: DesignSystem, candidate: Candidate): Candidate {
-  let signatures = computeUtilitySignature.get(designSystem)
+function dropUnnecessaryDataTypes(candidate: Candidate, options: SignatureOptions): Candidate {
+  let designSystem = options.designSystem
+  let signatures = computeUtilitySignature.get(options)
 
   if (
     candidate.kind === 'functional' &&
@@ -921,15 +956,16 @@ function dropUnnecessaryDataTypes(designSystem: DesignSystem, candidate: Candida
 // ----
 
 function arbitraryValueToBareValueUtility(
-  designSystem: DesignSystem,
   candidate: Candidate,
+  options: SignatureOptions,
 ): Candidate {
   // We are only interested in functional utilities with arbitrary values
   if (candidate.kind !== 'functional' || candidate.value?.kind !== 'arbitrary') {
     return candidate
   }
 
-  let signatures = computeUtilitySignature.get(designSystem)
+  let designSystem = options.designSystem
+  let signatures = computeUtilitySignature.get(options)
 
   let expectedSignature = signatures.get(designSystem.printCandidate(candidate))
   if (expectedSignature === null) return candidate
@@ -945,7 +981,7 @@ function arbitraryValueToBareValueUtility(
   return candidate
 }
 
-function arbitraryValueToBareValueVariant(_: DesignSystem, variant: Variant): Variant | Variant[] {
+function arbitraryValueToBareValueVariant(variant: Variant): Variant | Variant[] {
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
     // Convert `data-[selected]` to `data-selected`
@@ -1093,11 +1129,12 @@ function isAttributeSelector(node: SelectorParser.SelectorAstNode): boolean {
 }
 
 function modernizeArbitraryValuesVariant(
-  designSystem: DesignSystem,
   variant: Variant,
+  options: SignatureOptions,
 ): Variant | Variant[] {
   let result = [variant]
-  let signatures = computeVariantSignature.get(designSystem)
+  let designSystem = options.designSystem
+  let signatures = computeVariantSignature.get(options)
 
   let iterator = walkVariants(variant)
   for (let [variant, parent] of iterator) {
@@ -1452,7 +1489,7 @@ function modernizeArbitraryValuesVariant(
 // - `/[100%]`  → `/100`    → <empty>
 // - `/100`     → <empty>
 //
-function optimizeModifier(designSystem: DesignSystem, candidate: Candidate): Candidate {
+function optimizeModifier(candidate: Candidate, options: SignatureOptions): Candidate {
   // We are only interested in functional or arbitrary utilities with a modifier
   if (
     (candidate.kind !== 'functional' && candidate.kind !== 'arbitrary') ||
@@ -1461,7 +1498,8 @@ function optimizeModifier(designSystem: DesignSystem, candidate: Candidate): Can
     return candidate
   }
 
-  let signatures = computeUtilitySignature.get(designSystem)
+  let designSystem = options.designSystem
+  let signatures = computeUtilitySignature.get(options)
 
   let targetSignature = signatures.get(designSystem.printCandidate(candidate))
   let modifier = candidate.modifier
