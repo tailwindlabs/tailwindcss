@@ -14,6 +14,7 @@ import {
   canonicalizeCandidates,
   getClassList,
   getVariants,
+  type CanonicalizeOptions,
   type ClassEntry,
   type VariantEntry,
 } from './intellisense'
@@ -54,7 +55,7 @@ export type DesignSystem = {
   resolveThemeValue(path: string, forceInline?: boolean): string | undefined
 
   trackUsedVariables(raw: string): void
-  canonicalizeCandidates(candidates: string[]): string[]
+  canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions): string[]
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
@@ -210,8 +211,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
       trackUsedVariables.get(raw)
     },
 
-    canonicalizeCandidates(candidates: string[]) {
-      return canonicalizeCandidates(this, candidates)
+    canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions) {
+      return canonicalizeCandidates(this, candidates, options)
     },
   }
 

@@ -26,6 +26,16 @@ import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
 
+export interface CanonicalizeOptions {
+  /**
+   * The root font size in pixels. If provided, `rem` values will be normalized
+   * to `px` values.
+   *
+   * E.g.: `mt-[16px]` with `rem: 16` will become `mt-4` (assuming `--spacing: 0.25rem`).
+   */
+  rem?: number
+}
+
 export function canonicalizeCandidates(ds: DesignSystem, candidates: string[]): string[] {
   let result = new Set<string>()
   let cache = canonicalizeCandidateCache.get(ds)
