@@ -26,6 +26,7 @@ memchr = "2.6.3"
 same-file = "1.0.6"
 walkdir = "2.4.0"
 dunce = "1.0.5"
+fsops = { path = "../fsops" }
 
 [dependencies.regex-automata]
 version = "0.4.0"

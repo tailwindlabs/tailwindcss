@@ -102,7 +102,7 @@ impl PublicSourceEntry {
     /// resolved path.
     pub fn optimize(&mut self) {
         // Resolve base path immediately
-        let Ok(base) = dunce::canonicalize(&self.base) else {
+        let Ok(base) = fsops::canonicalize(&self.base) else {
             event!(Level::ERROR, "Failed to resolve base: {:?}", self.base);
             return;
         };
@@ -116,7 +116,7 @@ impl PublicSourceEntry {
                 PathBuf::from(&self.base).join(&self.pattern)
             };
 
-            match dunce::canonicalize(combined_path) {
+            match fsops::canonicalize(combined_path) {
                 Ok(resolved_path) if resolved_path.is_dir() => {
                     self.base = resolved_path.to_string_lossy().to_string();
                     self.pattern = "**/*".to_owned();
@@ -144,7 +144,7 @@ impl PublicSourceEntry {
             Some(static_part) => {
                 // TODO: If the base does not exist on disk, try removing the last slash and try
                 // again.
-                match dunce::canonicalize(base.join(static_part)) {
+                match fsops::canonicalize(base.join(static_part)) {
                     Ok(base) => base,
                     Err(err) => {
                         event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
