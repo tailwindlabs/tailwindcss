@@ -85,6 +85,14 @@ jobs:
         run: pnpm install
 
       - name: Build
+        run: pnpm run build --filter=!@tailwindcss/standalone
+        env:
+          CARGO_PROFILE_RELEASE_LTO: 'off'
+          CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
+
+      # Workaround for odd Windows build failure
+      - name: Build Standalone
+        working-directory: packages/@tailwindcss-standalone
         run: pnpm run build
         env:
           CARGO_PROFILE_RELEASE_LTO: 'off'
