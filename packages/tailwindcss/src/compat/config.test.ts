@@ -1687,3 +1687,35 @@ test('handles setting theme keys to null', async () => {
     "
   `)
 })
+
+test('The theme() function does not try indexing into strings', async () => {
+  let compiler = await compile(css`
+    @theme default {
+      --color-what-50: #f00;
+      --color-what-950: #f00;
+    }
+
+    @theme {
+      /*
+       * The value of this theme variable is > 50 chars because colors.what.50 was previously
+       * indexing the string: "light-dark(theme(colors.what.950), theme(colors.what.50))"
+       * because the resolved config contained an object with a "what" key that was that string
+       */
+      --color-what: light-dark(theme(colors.what.950), theme(colors.what.50));
+    }
+
+    @source inline("text-what");
+
+    @tailwind utilities;
+  `)
+
+  expect(compiler.build([])).toMatchInlineSnapshot(`
+    ":root, :host {
+      --color-what: light-dark(#f00, #f00);
+    }
+    .text-what {
+      color: var(--color-what);
+    }
+    "
+  `)
+})

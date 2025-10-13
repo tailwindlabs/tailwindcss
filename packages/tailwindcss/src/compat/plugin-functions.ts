@@ -233,6 +233,11 @@ function get(obj: any, path: string[]) {
       continue
     }
 
+    // We never want to index into strings
+    if (typeof obj === 'string') {
+      return undefined
+    }
+
     obj = obj[key]
   }
 
