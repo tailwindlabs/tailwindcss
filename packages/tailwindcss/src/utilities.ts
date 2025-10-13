@@ -436,7 +436,7 @@ export function createUtilities(theme: Theme) {
 
           if (value === null && !negative && desc.staticValues && !candidate.modifier) {
             let fallback = desc.staticValues[candidate.value.value]
-            if (fallback) return fallback
+            if (fallback) return fallback.map(cloneAstNode)
           }
         }
 

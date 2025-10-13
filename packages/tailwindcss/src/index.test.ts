@@ -537,6 +537,50 @@ describe('@apply', () => {
     `)
   })
 
+  it('@apply does not cache important state', async () => {
+    expect(
+      await compileCss(css`
+        .c1 {
+          @apply leading-none;
+        }
+        .c2 {
+          @apply leading-none!;
+        }
+        .c3 {
+          @apply leading-none;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "@layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *, :before, :after, ::backdrop {
+            --tw-leading: initial;
+          }
+        }
+      }
+
+      .c1 {
+        --tw-leading: 1;
+        line-height: 1;
+      }
+
+      .c2 {
+        --tw-leading: 1 !important;
+        line-height: 1 !important;
+      }
+
+      .c3 {
+        --tw-leading: 1;
+        line-height: 1;
+      }
+
+      @property --tw-leading {
+        syntax: "*";
+        inherits: false
+      }"
+    `)
+  })
+
   it('should error when using @apply with a utility that does not exist', async () => {
     await expect(
       compile(css`
