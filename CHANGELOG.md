@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix resolving theme keys when starting with the name of another theme key in JS configs and plugins ([#19097](https://github.com/tailwindlabs/tailwindcss/pull/19097))
 - Allow named groups in combination with `not-*`, `has-*`, and `in-*` ([#19100](https://github.com/tailwindlabs/tailwindcss/pull/19100))
 - Prevent important utilities from affecting other utilities ([#19110](https://github.com/tailwindlabs/tailwindcss/pull/19110))
+- Don’t index into strings with the `theme(…)` function ([#19111](https://github.com/tailwindlabs/tailwindcss/pull/19111))
 - Upgrade: Canonicalize utilities containing `0` values ([#19095](https://github.com/tailwindlabs/tailwindcss/pull/19095))
 
 ## [4.1.14] - 2025-10-01
