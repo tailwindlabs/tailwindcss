@@ -1,8 +1,9 @@
-import { styleRule, walkDepth } from './ast'
+import { styleRule } from './ast'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
 import { compare } from './utils/compare'
 import { DefaultMap } from './utils/default-map'
+import { walk } from './walk'
 export { canonicalizeCandidates, type CanonicalizeOptions } from './canonicalize-candidates'
 
 interface ClassMetadata {
@@ -180,42 +181,47 @@ export function getVariants(design: DesignSystem) {
 
       // Produce v3-style selector strings in the face of nested rules
       // this is more visible for things like group-*, not-*, etc…
-      walkDepth(node.nodes, (node, { path }) => {
-        if (node.kind !== 'rule' && node.kind !== 'at-rule') return
-        if (node.nodes.length > 0) return
+      walk(node.nodes, {
+        exit(node, ctx) {
+          if (node.kind !== 'rule' && node.kind !== 'at-rule') return
+          if (node.nodes.length > 0) return
 
-        // Sort at-rules before style rules
-        path.sort((a, b) => {
-          let aIsAtRule = a.kind === 'at-rule'
-          let bIsAtRule = b.kind === 'at-rule'
+          let path = ctx.path()
+          path.push(node)
 
-          if (aIsAtRule && !bIsAtRule) return -1
-          if (!aIsAtRule && bIsAtRule) return 1
+          // Sort at-rules before style rules
+          path.sort((a, b) => {
+            let aIsAtRule = a.kind === 'at-rule'
+            let bIsAtRule = b.kind === 'at-rule'
 
-          return 0
-        })
+            if (aIsAtRule && !bIsAtRule) return -1
+            if (!aIsAtRule && bIsAtRule) return 1
 
-        // A list of the selectors / at rules encountered to get to this point
-        let group = path.flatMap((node) => {
-          if (node.kind === 'rule') {
-            return node.selector === '&' ? [] : [node.selector]
+            return 0
+          })
+
+          // A list of the selectors / at rules encountered to get to this point
+          let group = path.flatMap((node) => {
+            if (node.kind === 'rule') {
+              return node.selector === '&' ? [] : [node.selector]
+            }
+
+            if (node.kind === 'at-rule') {
+              return [`${node.name} ${node.params}`]
+            }
+
+            return []
+          })
+
+          // Build a v3-style nested selector
+          let selector = ''
+
+          for (let i = group.length - 1; i >= 0; i--) {
+            selector = selector === '' ? group[i] : `${group[i]} { ${selector} }`
           }
 
-          if (node.kind === 'at-rule') {
-            return [`${node.name} ${node.params}`]
-          }
-
-          return []
-        })
-
-        // Build a v3-style nested selector
-        let selector = ''
-
-        for (let i = group.length - 1; i >= 0; i--) {
-          selector = selector === '' ? group[i] : `${group[i]} { ${selector} }`
-        }
-
-        selectors.push(selector)
+          selectors.push(selector)
+        },
       })
 
       return selectors
