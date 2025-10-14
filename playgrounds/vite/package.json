@@ -16,7 +16,7 @@
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^19.1.13",
+    "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "bun": "^1.2.22",
     "vite": "catalog:"

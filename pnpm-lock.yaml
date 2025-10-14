@@ -340,7 +340,7 @@ importers:
         version: 2.5.1
       '@types/bun':
         specifier: ^1.2.22
-        version: 1.2.22(@types/react@19.1.13)
+        version: 1.2.22(@types/react@19.2.2)
       bun:
         specifier: ^1.2.22
         version: 1.2.22
@@ -503,11 +503,11 @@ importers:
         specifier: 'catalog:'
         version: 20.19.1
       '@types/react':
-        specifier: ^19.1.13
-        version: 19.1.13
+        specifier: ^19.2.2
+        version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.1.13)
+        version: 19.2.1(@types/react@19.2.2)
       eslint:
         specifier: ^9.36.0
         version: 9.36.0(jiti@2.6.0)
@@ -537,11 +537,11 @@ importers:
         specifier: ^20.14.8
         version: 20.14.13
       '@types/react':
-        specifier: ^19.1.13
-        version: 19.1.13
+        specifier: ^19.2.2
+        version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.1.13)
+        version: 19.2.1(@types/react@19.2.2)
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.4.47)
@@ -574,11 +574,11 @@ importers:
         version: link:../../packages/tailwindcss
     devDependencies:
       '@types/react':
-        specifier: ^19.1.13
-        version: 19.1.13
+        specifier: ^19.2.2
+        version: 19.2.2
       '@types/react-dom':
         specifier: ^19.2.1
-        version: 19.2.1(@types/react@19.1.13)
+        version: 19.2.1(@types/react@19.2.2)
       bun:
         specifier: ^1.2.22
         version: 1.2.22
@@ -2443,8 +2443,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.2.0
 
-  '@types/react@19.1.13':
-    resolution: {integrity: sha512-hHkbU/eoO3EG5/MZkuFSKmYqPbSVk5byPFa3e7y/8TybHiLMACgI8seVYlicwk7H5K/rI2px9xrQp/C+AUDTiQ==}
+  '@types/react@19.2.2':
+    resolution: {integrity: sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==}
 
   '@types/semver@7.7.1':
     resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
@@ -6030,9 +6030,9 @@ snapshots:
 
   '@types/braces@3.0.5': {}
 
-  '@types/bun@1.2.22(@types/react@19.1.13)':
+  '@types/bun@1.2.22(@types/react@19.2.2)':
     dependencies:
-      bun-types: 1.2.22(@types/react@19.1.13)
+      bun-types: 1.2.22(@types/react@19.2.2)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -6056,11 +6056,11 @@ snapshots:
     dependencies:
       postcss: 8.4.41
 
-  '@types/react-dom@19.2.1(@types/react@19.1.13)':
+  '@types/react-dom@19.2.1(@types/react@19.2.2)':
     dependencies:
-      '@types/react': 19.1.13
+      '@types/react': 19.2.2
 
-  '@types/react@19.1.13':
+  '@types/react@19.2.2':
     dependencies:
       csstype: 3.1.3
 
@@ -6415,10 +6415,10 @@ snapshots:
   buffer-from@1.1.2:
     optional: true
 
-  bun-types@1.2.22(@types/react@19.1.13):
+  bun-types@1.2.22(@types/react@19.2.2):
     dependencies:
       '@types/node': 20.19.1
-      '@types/react': 19.1.13
+      '@types/react': 19.2.2
 
   bun@1.2.22:
     optionalDependencies:
