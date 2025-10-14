@@ -1,9 +1,9 @@
 import { Features } from '..'
-import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
+import { cssContext, styleRule, toCss, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { SourceLocation } from '../source-maps/source'
 import { segment } from '../utils/segment'
-import { WalkAction } from '../walk'
+import { walk, WalkAction } from '../walk'
 import { applyConfigToTheme } from './apply-config-to-theme'
 import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
@@ -51,8 +51,9 @@ export async function applyCompatibilityHooks({
     src: SourceLocation | undefined
   }[] = []
 
-  walk(ast, (node, ctx) => {
+  walk(ast, (node, _ctx) => {
     if (node.kind !== 'at-rule') return
+    let ctx = cssContext(_ctx)
 
     // Collect paths from `@plugin` at-rules
     if (node.name === '@plugin') {
@@ -385,9 +386,11 @@ function upgradeToFullPluginSupport({
   if (typeof resolvedConfig.important === 'string') {
     let wrappingSelector = resolvedConfig.important
 
-    walk(ast, (node, ctx) => {
+    walk(ast, (node, _ctx) => {
       if (node.kind !== 'at-rule') return
       if (node.name !== '@tailwind' || node.params !== 'utilities') return
+
+      let ctx = cssContext(_ctx)
 
       // The AST node was already manually wrapped so there's nothing to do
       if (ctx.parent?.kind === 'rule' && ctx.parent.selector === wrappingSelector) {

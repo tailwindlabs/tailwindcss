@@ -6,6 +6,7 @@ import {
   comment,
   context,
   context as contextNode,
+  cssContext,
   decl,
   optimizeAst,
   rule,
@@ -165,8 +166,9 @@ async function parseCss(
   let root = null as Root
 
   // Handle at-rules
-  walk(ast, (node, ctx) => {
+  walk(ast, (node, _ctx) => {
     if (node.kind !== 'at-rule') return
+    let ctx = cssContext(_ctx)
 
     // Find `@tailwind utilities` so that we can later replace it with the
     // actual generated utility class CSS.
@@ -460,7 +462,9 @@ async function parseCss(
 
             if (child.name === '@tailwind' && child.params === 'utilities') {
               child.params += ` source(${path})`
-              return WalkAction.ReplaceStop([contextNode({ sourceBase: context.base }, [child])])
+              return WalkAction.ReplaceStop([
+                contextNode({ sourceBase: ctx.context.base }, [child]),
+              ])
             }
           })
         }
@@ -475,6 +479,7 @@ async function parseCss(
           let hasReference = themeParams.includes('reference')
 
           walk(node.nodes, (child) => {
+            if (child.kind === 'context') return
             if (child.kind !== 'at-rule') {
               if (hasReference) {
                 throw new Error(

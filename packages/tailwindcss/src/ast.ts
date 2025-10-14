@@ -6,7 +6,7 @@ import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
-import { walk, WalkAction } from './walk'
+import { walk, WalkAction, type VisitContext } from './walk'
 
 const AT_SIGN = 0x40
 
@@ -182,6 +182,36 @@ export function cloneAstNode<T extends AstNode>(node: T): T {
     default:
       node satisfies never
       throw new Error(`Unknown node kind: ${(node as any).kind}`)
+  }
+}
+
+export function cssContext(
+  ctx: VisitContext<AstNode>,
+): VisitContext<AstNode> & { context: Record<string, string | boolean> } {
+  return {
+    depth: ctx.depth,
+    get context() {
+      let context: Record<string, string | boolean> = {}
+      for (let child of ctx.path()) {
+        if (child.kind === 'context') {
+          Object.assign(context, child.context)
+        }
+      }
+
+      // Once computed, we never need to compute this again
+      Object.defineProperty(this, 'context', { value: context })
+      return context
+    },
+    get parent() {
+      let parent = (this.path().pop() as Extract<AstNode, { nodes: AstNode[] }>) ?? null
+
+      // Once computed, we never need to compute this again
+      Object.defineProperty(this, 'parent', { value: parent })
+      return parent
+    },
+    path() {
+      return ctx.path().filter((n) => n.kind !== 'context')
+    },
   }
 }
 

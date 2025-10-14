@@ -33,7 +33,7 @@ type ExitResult<T> = Exclude<WalkResult<T>, { kind: WalkKind.Skip }>
 
 type Parent<T> = T & { nodes: T[] }
 
-interface VisitContext<T> {
+export interface VisitContext<T> {
   parent: Parent<T> | null
   depth: number
   path: () => T[]
