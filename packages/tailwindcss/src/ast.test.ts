@@ -48,17 +48,17 @@ it('allows the placement of context nodes', () => {
   let blueContext
   let greenContext
 
-  walk(ast, (node, { context }) => {
+  walk(ast, (node, ctx) => {
     if (node.kind !== 'declaration') return
     switch (node.value) {
       case 'red':
-        redContext = context
+        redContext = ctx.context
         break
       case 'blue':
-        blueContext = context
+        blueContext = ctx.context
         break
       case 'green':
-        greenContext = context
+        greenContext = ctx.context
         break
     }
   })
@@ -297,13 +297,13 @@ it('should only visit children once when calling `replaceWith` with single eleme
     styleRule('.bar', [decl('color', 'blue')]),
   ]
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     if (visited.has(node)) {
       throw new Error('Visited node twice')
     }
     visited.add(node)
 
-    if (node.kind === 'at-rule') replaceWith(node.nodes)
+    if (node.kind === 'at-rule') ctx.replaceWith(node.nodes)
   })
 })
 
@@ -320,14 +320,14 @@ it('should only visit children once when calling `replaceWith` with multi-elemen
     styleRule('.bar', [decl('color', 'green')]),
   ]
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     let key = id(node)
     if (visited.has(key)) {
       throw new Error('Visited node twice')
     }
     visited.add(key)
 
-    if (node.kind === 'at-rule') replaceWith(node.nodes)
+    if (node.kind === 'at-rule') ctx.replaceWith(node.nodes)
   })
 
   expect(visited).toMatchInlineSnapshot(`
@@ -350,11 +350,11 @@ it('should never visit children when calling `replaceWith` with `WalkAction.Skip
 
   let ast = [atRule('@media', '', [inner]), styleRule('.bar', [decl('color', 'blue')])]
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     visited.add(node)
 
     if (node.kind === 'at-rule') {
-      replaceWith(node.nodes)
+      ctx.replaceWith(node.nodes)
       return WalkAction.Skip
     }
   })
@@ -413,10 +413,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([])
+        ctx.replaceWith([])
         return WalkAction.Skip
       }
     })
@@ -441,10 +441,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([])
+        ctx.replaceWith([])
         return WalkAction.Continue
       }
     })
@@ -469,10 +469,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([decl('--index', '2.1')])
+        ctx.replaceWith([decl('--index', '2.1')])
         return WalkAction.Skip
       }
     })
@@ -497,10 +497,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([decl('--index', '2.1')])
+        ctx.replaceWith([decl('--index', '2.1')])
         return WalkAction.Continue
       }
     })
@@ -526,10 +526,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([decl('--index', '2.1'), decl('--index', '2.2')])
+        ctx.replaceWith([decl('--index', '2.1'), decl('--index', '2.2')])
         return WalkAction.Skip
       }
     })
@@ -554,10 +554,10 @@ it('should skip the correct number of children based on the replaced children no
       decl('--index', '4'),
     ]
     let visited: string[] = []
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       visited.push(id(node))
       if (node.kind === 'declaration' && node.value === '2') {
-        replaceWith([decl('--index', '2.1'), decl('--index', '2.2')])
+        ctx.replaceWith([decl('--index', '2.1'), decl('--index', '2.2')])
         return WalkAction.Continue
       }
     })

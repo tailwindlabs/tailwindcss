@@ -449,7 +449,7 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
       if (node.nodes.length > 0) return WalkAction.Continue
 
@@ -457,7 +457,7 @@ export function createVariants(theme: Theme): Variants {
       let atRules: AtRule[] = []
       let styleRules: StyleRule[] = []
 
-      for (let parent of path) {
+      for (let parent of ctx.path) {
         if (parent.kind === 'at-rule') {
           atRules.push(parent)
         } else if (parent.kind === 'rule') {
@@ -525,11 +525,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -577,11 +577,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -725,11 +725,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -760,11 +760,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path.slice(0, -1)) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -1191,10 +1191,10 @@ function quoteAttributeValue(input: string) {
 }
 
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     // Replace `@slot` with rule nodes
     if (node.kind === 'at-rule' && node.name === '@slot') {
-      replaceWith(nodes)
+      ctx.replaceWith(nodes)
     }
 
     // Wrap `@keyframes` and `@property` in `AtRoot` nodes
@@ -1207,7 +1207,7 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
 
 export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem): Features {
   let features = Features.None
-  walk(ast, (variantNode, { replaceWith }) => {
+  walk(ast, (variantNode, ctx) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
     // Starting with the `&` rule node
@@ -1226,7 +1226,7 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
     }
 
     // Update the variant at-rule node, to be the `&` rule node
-    replaceWith(node)
+    ctx.replaceWith(node)
     features |= Features.Variants
   })
   return features

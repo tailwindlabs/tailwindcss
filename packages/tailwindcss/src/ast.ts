@@ -642,12 +642,12 @@ export function optimizeAst(
 
         let ast = ValueParser.parse(declaration.value)
         let requiresPolyfill = false
-        ValueParser.walk(ast, (node, { replaceWith }) => {
+        ValueParser.walk(ast, (node, ctx) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
-          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+          ValueParser.walk(node.nodes, (node, ctx) => {
             if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
               containsCurrentcolor = true
               requiresPolyfill = true
@@ -691,7 +691,7 @@ export function optimizeAst(
               }
             } while (varNode)
 
-            replaceWith({ kind: 'word', value: inlinedColor })
+            ctx.replaceWith({ kind: 'word', value: inlinedColor })
           })
 
           if (containsUnresolvableVars || containsCurrentcolor) {
@@ -702,7 +702,7 @@ export function optimizeAst(
             let firstColorValue =
               node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
             if (!firstColorValue) return
-            replaceWith(firstColorValue)
+            ctx.replaceWith(firstColorValue)
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
@@ -1005,9 +1005,9 @@ export function toCss(ast: AstNode[], track?: boolean) {
 
 function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | null {
   let foundPath: AstNode[] = []
-  walk(ast, (node, { path }) => {
+  walk(ast, (node, ctx) => {
     if (fn(node)) {
-      foundPath = [...path]
+      foundPath = [...ctx.path]
       return WalkAction.Stop
     }
   })

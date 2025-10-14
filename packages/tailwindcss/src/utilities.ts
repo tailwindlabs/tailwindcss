@@ -5987,9 +5987,9 @@ export function createCssUtility(node: AtRule) {
               let dataType = node.value
               let copy = structuredClone(fn)
               let sentinelValue = '¶'
-              ValueParser.walk(copy.nodes, (node, { replaceWith }) => {
+              ValueParser.walk(copy.nodes, (node, ctx) => {
                 if (node.kind === 'word' && node.value === dataType) {
-                  replaceWith({ kind: 'word', value: sentinelValue })
+                  ctx.replaceWith({ kind: 'word', value: sentinelValue })
                 }
               })
               let underline = '^'.repeat(ValueParser.toCss([node]).length)
@@ -6048,7 +6048,8 @@ export function createCssUtility(node: AtRule) {
         // Whether `--value(ratio)` was resolved
         let resolvedRatioValue = false
 
-        walk([atRule], (node, { parent, replaceWith: replaceDeclarationWith }) => {
+        walk([atRule], (node, ctx) => {
+          let parent = ctx.parent
           if (parent?.kind !== 'rule' && parent?.kind !== 'at-rule') return
           if (node.kind !== 'declaration') return
           if (!node.value) return
@@ -6076,7 +6077,7 @@ export function createCssUtility(node: AtRule) {
 
                 // Drop the declaration in case we couldn't resolve the value
                 usedValueFn ||= false
-                replaceDeclarationWith([])
+                ctx.replaceWith([])
                 return ValueParser.ValueWalkAction.Stop
               }
 
@@ -6085,7 +6086,7 @@ export function createCssUtility(node: AtRule) {
                 // If there is no modifier present in the candidate, then the
                 // declaration can be removed.
                 if (modifier === null) {
-                  replaceDeclarationWith([])
+                  ctx.replaceWith([])
                   return ValueParser.ValueWalkAction.Stop
                 }
 
@@ -6100,7 +6101,7 @@ export function createCssUtility(node: AtRule) {
 
                 // Drop the declaration in case we couldn't resolve the value
                 usedModifierFn ||= false
-                replaceDeclarationWith([])
+                ctx.replaceWith([])
                 return ValueParser.ValueWalkAction.Stop
               }
             }) ?? ValueParser.ValueWalkAction.Continue

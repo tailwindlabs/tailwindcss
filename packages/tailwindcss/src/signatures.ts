@@ -69,11 +69,11 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
       // values or `--tw-sort` declarations.
-      walk(ast, (node, { replaceWith }) => {
+      walk(ast, (node, ctx) => {
         // Optimize declarations
         if (node.kind === 'declaration') {
           if (node.value === undefined || node.property === '--tw-sort') {
-            replaceWith([])
+            ctx.replaceWith([])
           }
 
           // Normalize percentages by removing unnecessary dots and zeros.
@@ -90,17 +90,17 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
 
         // Replace special nodes with its children
         else if (node.kind === 'context' || node.kind === 'at-root') {
-          replaceWith(node.nodes)
+          ctx.replaceWith(node.nodes)
         }
 
         // Remove comments
         else if (node.kind === 'comment') {
-          replaceWith([])
+          ctx.replaceWith([])
         }
 
         // Remove at-rules that are not needed for the signature
         else if (node.kind === 'at-rule' && node.name === '@property') {
-          replaceWith([])
+          ctx.replaceWith([])
         }
       })
 
@@ -151,7 +151,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
             let valueAst = ValueParser.parse(node.value)
 
             let seen = new Set<string>()
-            ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
+            ValueParser.walk(valueAst, (valueNode, ctx) => {
               if (valueNode.kind !== 'function') return
               if (valueNode.value !== 'var') return
 
@@ -204,7 +204,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
                   let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
                   if (nodeAsString === constructedValue) {
                     changed = true
-                    replaceWith(ValueParser.parse(variableValue))
+                    ctx.replaceWith(ValueParser.parse(variableValue))
                   }
                 }
               }
@@ -328,7 +328,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
         else if (node.kind === 'rule') {
           let selectorAst = SelectorParser.parse(node.selector)
           let changed = false
-          SelectorParser.walk(selectorAst, (node, { replaceWith }) => {
+          SelectorParser.walk(selectorAst, (node, ctx) => {
             if (node.kind === 'separator' && node.value !== ' ') {
               node.value = node.value.trim()
               changed = true
@@ -342,7 +342,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
               // E.g.: `:is(.foo)` → `.foo`
               if (node.nodes.length === 1) {
                 changed = true
-                replaceWith(node.nodes)
+                ctx.replaceWith(node.nodes)
               }
 
               // A selector with the universal selector `*` followed by a pseudo
@@ -355,7 +355,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
                 node.nodes[1].value[0] === ':'
               ) {
                 changed = true
-                replaceWith(node.nodes[1])
+                ctx.replaceWith(node.nodes[1])
               }
             }
 

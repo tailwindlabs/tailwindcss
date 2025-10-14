@@ -434,7 +434,7 @@ function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  ValueParser.walk(ast, (node, { parent, replaceWith }) => {
+  ValueParser.walk(ast, (node, ctx) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
@@ -472,10 +472,10 @@ function substituteFunctionsInValue(
         fallbackValues.length > 0 ? handle(path, ValueParser.toCss(fallbackValues)) : handle(path)
       if (replacement === null) return
 
-      if (parent) {
-        let idx = parent.nodes.indexOf(node) - 1
+      if (ctx.parent) {
+        let idx = ctx.parent.nodes.indexOf(node) - 1
         while (idx !== -1) {
-          let previous = parent.nodes[idx]
+          let previous = ctx.parent.nodes[idx]
           // Skip the space separator
           if (previous.kind === 'separator' && previous.value.trim() === '') {
             idx -= 1
@@ -503,7 +503,7 @@ function substituteFunctionsInValue(
         }
       }
 
-      replaceWith(ValueParser.parse(replacement))
+      ctx.replaceWith(ValueParser.parse(replacement))
     }
   })
 
@@ -1240,10 +1240,10 @@ function modernizeArbitraryValuesVariant(
 
         let parsed = ValueParser.parse(SelectorParser.toCss(ast))
         let containsNot = false
-        ValueParser.walk(parsed, (node, { replaceWith }) => {
+        ValueParser.walk(parsed, (node, ctx) => {
           if (node.kind === 'word' && node.value === 'not') {
             containsNot = true
-            replaceWith([])
+            ctx.replaceWith([])
           }
         })
 

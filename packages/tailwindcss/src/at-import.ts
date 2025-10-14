@@ -22,7 +22,7 @@ export async function substituteAtImports(
   let features = Features.None
   let promises: Promise<void>[] = []
 
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     if (node.kind === 'at-rule' && (node.name === '@import' || node.name === '@reference')) {
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
@@ -66,7 +66,7 @@ export async function substituteAtImports(
         })(),
       )
 
-      replaceWith(contextNode)
+      ctx.replaceWith(contextNode)
 
       // The resolved Stylesheets already have their transitive @imports
       // resolved, so we can skip walking them.

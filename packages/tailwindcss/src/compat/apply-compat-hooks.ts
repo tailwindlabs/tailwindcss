@@ -50,12 +50,12 @@ export async function applyCompatibilityHooks({
     src: SourceLocation | undefined
   }[] = []
 
-  walk(ast, (node, { parent, replaceWith, context }) => {
+  walk(ast, (node, ctx) => {
     if (node.kind !== 'at-rule') return
 
     // Collect paths from `@plugin` at-rules
     if (node.name === '@plugin') {
-      if (parent !== null) {
+      if (ctx.parent !== null) {
         throw new Error('`@plugin` cannot be nested.')
       }
 
@@ -110,14 +110,14 @@ export async function applyCompatibilityHooks({
       pluginPaths.push([
         {
           id: pluginPath,
-          base: context.base as string,
-          reference: !!context.reference,
+          base: ctx.context.base as string,
+          reference: !!ctx.context.reference,
           src: node.src,
         },
         Object.keys(options).length > 0 ? options : null,
       ])
 
-      replaceWith([])
+      ctx.replaceWith([])
       features |= Features.JsPluginCompat
       return
     }
@@ -128,17 +128,17 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot have a body.')
       }
 
-      if (parent !== null) {
+      if (ctx.parent !== null) {
         throw new Error('`@config` cannot be nested.')
       }
 
       configPaths.push({
         id: node.params.slice(1, -1),
-        base: context.base as string,
-        reference: !!context.reference,
+        base: ctx.context.base as string,
+        reference: !!ctx.context.reference,
         src: node.src,
       })
-      replaceWith([])
+      ctx.replaceWith([])
       features |= Features.JsPluginCompat
       return
     }
@@ -386,16 +386,16 @@ function upgradeToFullPluginSupport({
   if (typeof resolvedConfig.important === 'string') {
     let wrappingSelector = resolvedConfig.important
 
-    walk(ast, (node, { replaceWith, parent }) => {
+    walk(ast, (node, ctx) => {
       if (node.kind !== 'at-rule') return
       if (node.name !== '@tailwind' || node.params !== 'utilities') return
 
       // The AST node was already manually wrapped so there's nothing to do
-      if (parent?.kind === 'rule' && parent.selector === wrappingSelector) {
+      if (ctx.parent?.kind === 'rule' && ctx.parent.selector === wrappingSelector) {
         return WalkAction.Stop
       }
 
-      replaceWith(styleRule(wrappingSelector, [node]))
+      ctx.replaceWith(styleRule(wrappingSelector, [node]))
 
       return WalkAction.Stop
     })

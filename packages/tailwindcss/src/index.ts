@@ -166,7 +166,7 @@ async function parseCss(
   let root = null as Root
 
   // Handle at-rules
-  walk(ast, (node, { parent, replaceWith, context }) => {
+  walk(ast, (node, ctx) => {
     if (node.kind !== 'at-rule') return
 
     // Find `@tailwind utilities` so that we can later replace it with the
@@ -177,15 +177,15 @@ async function parseCss(
     ) {
       // Any additional `@tailwind utilities` nodes can be removed
       if (utilitiesNode !== null) {
-        replaceWith([])
+        ctx.replaceWith([])
         return
       }
 
       // When inside `@reference` we should treat `@tailwind utilities` as if
       // it wasn't there in the first place. This should also let `build()`
       // return the cached static AST.
-      if (context.reference) {
-        replaceWith([])
+      if (ctx.context.reference) {
+        ctx.replaceWith([])
         return
       }
 
@@ -210,7 +210,7 @@ async function parseCss(
           }
 
           root = {
-            base: (context.sourceBase as string) ?? (context.base as string),
+            base: (ctx.context.sourceBase as string) ?? (ctx.context.base as string),
             pattern: path.slice(1, -1),
           }
         }
@@ -222,7 +222,7 @@ async function parseCss(
 
     // Collect custom `@utility` at-rules
     if (node.name === '@utility') {
-      if (parent !== null) {
+      if (ctx.parent !== null) {
         throw new Error('`@utility` cannot be nested.')
       }
 
@@ -260,7 +260,7 @@ async function parseCss(
         throw new Error('`@source` cannot have a body.')
       }
 
-      if (parent !== null) {
+      if (ctx.parent !== null) {
         throw new Error('`@source` cannot be nested.')
       }
 
@@ -298,12 +298,12 @@ async function parseCss(
         }
       } else {
         sources.push({
-          base: context.base as string,
+          base: ctx.context.base as string,
           pattern: source,
           negated: not,
         })
       }
-      replaceWith([])
+      ctx.replaceWith([])
       return
     }
 
@@ -311,7 +311,7 @@ async function parseCss(
     if (node.name === '@variant') {
       // Legacy `@variant` at-rules containing `@slot` or without a body should
       // be considered a `@custom-variant` at-rule.
-      if (parent === null) {
+      if (ctx.parent === null) {
         // Body-less `@variant`, e.g.: `@variant foo (…);`
         if (node.nodes.length === 0) {
           node.name = '@custom-variant'
@@ -350,12 +350,12 @@ async function parseCss(
 
     // Register custom variants from `@custom-variant` at-rules
     if (node.name === '@custom-variant') {
-      if (parent !== null) {
+      if (ctx.parent !== null) {
         throw new Error('`@custom-variant` cannot be nested.')
       }
 
       // Remove `@custom-variant` at-rule so it's not included in the compiled CSS
-      replaceWith([])
+      ctx.replaceWith([])
 
       let [name, selector] = segment(node.params, ' ')
 
@@ -462,12 +462,12 @@ async function parseCss(
         if (param.startsWith('source(')) {
           let path = param.slice(7, -1)
 
-          walk(node.nodes, (child, { replaceWith }) => {
+          walk(node.nodes, (child, ctx) => {
             if (child.kind !== 'at-rule') return
 
             if (child.name === '@tailwind' && child.params === 'utilities') {
               child.params += ` source(${path})`
-              replaceWith([contextNode({ sourceBase: context.base }, [child])])
+              ctx.replaceWith([contextNode({ sourceBase: ctx.context.base }, [child])])
               return WalkAction.Stop
             }
           })
@@ -535,7 +535,7 @@ async function parseCss(
       if (unknownParams.length > 0) {
         node.params = unknownParams.join(' ')
       } else if (params.length > 0) {
-        replaceWith(node.nodes)
+        ctx.replaceWith(node.nodes)
       }
     }
 
@@ -545,7 +545,7 @@ async function parseCss(
 
       features |= Features.AtTheme
 
-      if (context.reference) {
+      if (ctx.context.reference) {
         themeOptions |= ThemeOptions.REFERENCE
       }
 
@@ -589,9 +589,9 @@ async function parseCss(
       if (!firstThemeRule) {
         firstThemeRule = styleRule(':root, :host', [])
         firstThemeRule.src = node.src
-        replaceWith([firstThemeRule])
+        ctx.replaceWith([firstThemeRule])
       } else {
-        replaceWith([])
+        ctx.replaceWith([])
       }
       return WalkAction.Skip
     }
@@ -685,11 +685,11 @@ async function parseCss(
 
   // Remove `@utility`, we couldn't replace it before yet because we had to
   // handle the nested `@apply` at-rules first.
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node, ctx) => {
     if (node.kind !== 'at-rule') return
 
     if (node.name === '@utility') {
-      replaceWith([])
+      ctx.replaceWith([])
     }
 
     // The `@utility` has to be top-level, therefore we don't have to traverse

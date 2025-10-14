@@ -207,9 +207,9 @@ describe('walk', () => {
   it('can be used to replace a function call', () => {
     const ast = parse('(min-width: 600px) and (max-width: theme(lg))')
 
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       if (node.kind === 'function' && node.value === 'theme') {
-        replaceWith({ kind: 'word', value: '64rem' })
+        ctx.replaceWith({ kind: 'word', value: '64rem' })
       }
     })
 

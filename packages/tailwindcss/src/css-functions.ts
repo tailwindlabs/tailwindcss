@@ -187,7 +187,7 @@ export function substituteFunctionsInValue(
   designSystem: DesignSystem,
 ): string {
   let ast = ValueParser.parse(value)
-  ValueParser.walk(ast, (node, { replaceWith }) => {
+  ValueParser.walk(ast, (node, ctx) => {
     if (node.kind === 'function' && node.value in CSS_FUNCTIONS) {
       let args = segment(ValueParser.toCss(node.nodes).trim(), ',').map((x) => x.trim())
       let result = CSS_FUNCTIONS[node.value as keyof typeof CSS_FUNCTIONS](
@@ -195,7 +195,7 @@ export function substituteFunctionsInValue(
         source,
         ...args,
       )
-      return replaceWith(ValueParser.parse(result))
+      return ctx.replaceWith(ValueParser.parse(result))
     }
   })
 

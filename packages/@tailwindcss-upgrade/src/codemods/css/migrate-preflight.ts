@@ -117,7 +117,7 @@ function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  ValueParser.walk(ast, (node, { replaceWith }) => {
+  ValueParser.walk(ast, (node, ctx) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
@@ -155,7 +155,7 @@ function substituteFunctionsInValue(
         fallbackValues.length > 0 ? handle(path, ValueParser.toCss(fallbackValues)) : handle(path)
       if (replacement === null) return
 
-      replaceWith(ValueParser.parse(replacement))
+      ctx.replaceWith(ValueParser.parse(replacement))
     }
   })
 

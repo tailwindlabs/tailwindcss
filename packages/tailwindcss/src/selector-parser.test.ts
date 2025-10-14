@@ -194,9 +194,9 @@ describe('toCss', () => {
 describe('walk', () => {
   it('can be used to replace a function call', () => {
     const ast = parse('.foo:hover:not(.bar:focus)')
-    walk(ast, (node, { replaceWith }) => {
+    walk(ast, (node, ctx) => {
       if (node.kind === 'function' && node.value === ':not') {
-        replaceWith({ kind: 'selector', value: '.inverted-bar' })
+        ctx.replaceWith({ kind: 'selector', value: '.inverted-bar' })
       }
     })
     expect(toCss(ast)).toBe('.foo:hover.inverted-bar')
