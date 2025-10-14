@@ -353,7 +353,7 @@ function upgradeToFullPluginSupport({
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
   applyConfigToTheme(designSystem, resolvedUserConfig, replacedThemeKeys)
-  applyKeyframesToTheme(designSystem, resolvedUserConfig, replacedThemeKeys)
+  applyKeyframesToTheme(designSystem, resolvedUserConfig)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)

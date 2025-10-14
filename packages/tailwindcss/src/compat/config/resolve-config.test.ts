@@ -20,6 +20,8 @@ test('top level theme keys are replaced', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -30,6 +32,8 @@ test('top level theme keys are replaced', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -40,6 +44,8 @@ test('top level theme keys are replaced', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
 
@@ -73,6 +79,8 @@ test('theme can be extended', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -85,6 +93,8 @@ test('theme can be extended', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
 
@@ -120,6 +130,8 @@ test('theme keys can reference other theme keys using the theme function regardl
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -133,6 +145,8 @@ test('theme keys can reference other theme keys using the theme function regardl
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -145,6 +159,8 @@ test('theme keys can reference other theme keys using the theme function regardl
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
 
@@ -212,6 +228,8 @@ test('theme keys can read from the CSS theme', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
 
@@ -274,6 +292,7 @@ test('handles null as theme values', () => {
       },
       base: '/root',
       reference: false,
+      src: undefined,
     },
     {
       config: {
@@ -287,6 +306,7 @@ test('handles null as theme values', () => {
       },
       base: '/root',
       reference: false,
+      src: undefined,
     },
   ])
 

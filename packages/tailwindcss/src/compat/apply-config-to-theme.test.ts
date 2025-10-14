@@ -83,6 +83,7 @@ test('config values can be merged into the theme', () => {
       },
       base: '/root',
       reference: false,
+      src: undefined,
     },
   ])
   applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
@@ -160,6 +161,8 @@ test('will reset default theme values with overwriting theme values', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
   applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
@@ -189,6 +192,8 @@ test('invalid keys are not merged into the theme', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
 
@@ -227,6 +232,8 @@ test('converts opacity modifiers from decimal to percentage values', () => {
         },
       },
       base: '/root',
+      reference: false,
+      src: undefined,
     },
   ])
   applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
@@ -261,6 +268,7 @@ test('handles setting theme keys to null', async () => {
       },
       base: '/root',
       reference: false,
+      src: undefined,
     },
   ])
   applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)

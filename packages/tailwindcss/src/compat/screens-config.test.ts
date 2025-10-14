@@ -31,6 +31,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -115,6 +116,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -207,6 +209,7 @@ test('JS config `screens` only setup, even if those match the default-theme expo
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -288,6 +291,7 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -389,6 +393,7 @@ test('JS config with `theme: { extends }` should not include the `default-config
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -473,6 +478,7 @@ describe('complex screen configs', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -553,6 +559,7 @@ describe('complex screen configs', () => {
           },
         },
         base: '/root',
+        path: '',
       }),
     })
 
@@ -628,6 +635,7 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
