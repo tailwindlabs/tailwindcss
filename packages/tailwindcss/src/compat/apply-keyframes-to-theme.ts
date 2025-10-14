@@ -6,7 +6,6 @@ import { objectToAst } from './plugin-api'
 export function applyKeyframesToTheme(
   designSystem: DesignSystem,
   resolvedConfig: Pick<ResolvedConfig, 'theme'>,
-  replacedThemeKeys: Set<string>,
 ) {
   for (let rule of keyframesToRules(resolvedConfig)) {
     designSystem.theme.addKeyframes(rule)

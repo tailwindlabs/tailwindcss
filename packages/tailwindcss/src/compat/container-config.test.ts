@@ -27,6 +27,7 @@ test('creates a custom utility to extend the built-in container', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -85,6 +86,7 @@ test('allows padding to be defined at custom breakpoints', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -146,6 +148,7 @@ test('allows breakpoints to be overwritten', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -212,6 +215,7 @@ test('padding applies to custom `container` screens', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -275,6 +279,7 @@ test("an empty `screen` config will undo all custom media screens and won't appl
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -340,6 +345,7 @@ test('legacy container component does not interfere with new --container variabl
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -386,6 +392,7 @@ test('combines custom padding and screen overwrites', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 
@@ -498,6 +505,7 @@ test('filters out complex breakpoints', async () => {
         },
       },
       base: '/root',
+      path: '',
     }),
   })
 

@@ -19,6 +19,7 @@ test('plugin', async () => {
         })
       }),
       base: '/root',
+      path: '',
     }),
   })
 
@@ -49,6 +50,7 @@ test('plugin.withOptions', async () => {
         }
       }),
       base: '/root',
+      path: '',
     }),
   })
 

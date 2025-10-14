@@ -41,6 +41,7 @@ test('Utilities can be marked with important', async () => {
     loadStylesheet: async (id: string, base: string) => ({
       base,
       content: '@tailwind utilities;',
+      path: '',
     }),
   })
 

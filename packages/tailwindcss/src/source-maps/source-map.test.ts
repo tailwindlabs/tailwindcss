@@ -409,7 +409,7 @@ test('license comments preserve source locations', async ({ expect }) => {
 })
 
 test('license comments with new lines preserve source locations', async ({ expect }) => {
-  let { sources, annotations, css } = await run({
+  let { sources, annotations } = await run({
     input: `/*! some \n comment */`,
   })
 

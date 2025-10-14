@@ -90,7 +90,7 @@ export function createSourceMap({ ast }: { ast: AstNode[] }) {
   }
 
   // Get all the indexes from the mappings
-  walk(ast, (node: AstNode) => {
+  walk(ast, (node) => {
     if (!node.src || !node.dst) return
 
     let originalSource = sourceTable.get(node.src[0])

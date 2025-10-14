@@ -28,7 +28,7 @@ for (let path of paths) {
 await fs.rm(path.join(root, 'dist'), { recursive: true, force: true })
 
 Promise.all(
-  [...workspaces.entries()].map(async ([name, { version, dir }]) => {
+  [...workspaces.entries()].map(async ([name, { dir }]) => {
     function pack() {
       return new Promise((resolve) => {
         exec(

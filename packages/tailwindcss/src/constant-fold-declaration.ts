@@ -4,7 +4,7 @@ import * as ValueParser from './value-parser'
 
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
-export function constantFoldDeclaration(input: string, rem: number | null): string {
+export function constantFoldDeclaration(input: string, rem: number | null = null): string {
   let folded = false
   let valueAst = ValueParser.parse(input)
 

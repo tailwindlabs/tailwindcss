@@ -15,12 +15,15 @@ async function run(
     candidates = [],
     optimize = true,
   }: {
-    loadStylesheet?: (id: string, base: string) => Promise<{ content: string; base: string }>
+    loadStylesheet?: (
+      id: string,
+      base: string,
+    ) => Promise<{ content: string; base: string; path: string }>
     loadModule?: (
       id: string,
       base: string,
       resourceHint: 'plugin' | 'config',
-    ) => Promise<{ module: Config | Plugin; base: string }>
+    ) => Promise<{ module: Config | Plugin; base: string; path: string }>
     candidates?: string[]
     optimize?: boolean
   },
@@ -41,6 +44,7 @@ test('can resolve relative @imports', async () => {
         }
       `,
       base: '/root/foo',
+      path: '',
     }
   }
 
@@ -67,6 +71,7 @@ test('can recursively resolve relative @imports', async () => {
           @import './bar/baz.css';
         `,
         base: '/root/foo',
+        path: '',
       }
     } else if (base === '/root/foo' && id === './bar/baz.css') {
       return {
@@ -76,6 +81,7 @@ test('can recursively resolve relative @imports', async () => {
           }
         `,
         base: '/root/foo/bar',
+        path: '',
       }
     }
 
@@ -107,6 +113,7 @@ let loadStylesheet = async (id: string) => {
   return {
     content: exampleCSS,
     base: '/root',
+    path: '',
   }
 }
 
@@ -415,6 +422,7 @@ test('supports theme(reference) imports', async () => {
               }
             `,
             base: '',
+            path: '',
           }),
         candidates: ['text-red-500'],
       },
@@ -435,8 +443,9 @@ test('updates the base when loading modules inside nested files', async () => {
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
+      path: '',
     })
-  let loadModule = vi.fn().mockResolvedValue({ base: '', module: () => {} })
+  let loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
     (
@@ -464,6 +473,7 @@ test('emits the right base for @source directives inside nested files', async ()
         @source './nested/**/*.css';
       `,
       base: '/root/foo',
+      path: '',
     })
 
   let compiler = await compile(
@@ -488,6 +498,7 @@ test('emits the right base for @source found inside JS configs and plugins from 
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
+      path: '',
     })
   let loadModule = vi.fn().mockImplementation((id: string) => {
     let base = id.includes('nested') ? '/root/foo' : '/root'
@@ -502,12 +513,14 @@ test('emits the right base for @source found inside JS configs and plugins from 
           plugins: [plugin(() => {}, { content: [pluginGlob] })],
         } satisfies Config,
         base: base + '-config',
+        path: '',
       }
     } else {
       let glob = id.includes('nested') ? './nested-plugin/*.html' : './root-plugin/*.html'
       return {
         module: plugin(() => {}, { content: [glob] }),
         base: base + '-plugin',
+        path: '',
       }
     }
   })
@@ -540,6 +553,7 @@ test('it crashes when inside a cycle', async () => {
         @import 'foo.css';
       `,
       base: '/root',
+      path: '',
     })
 
   await expect(
@@ -568,6 +582,7 @@ test('resolves @reference as `@import "…" reference`', async () => {
         }
       `,
       base: '/root/foo',
+      path: '',
     }
   }
 
@@ -600,6 +615,7 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
         }
       `,
       base: '/root/foo',
+      path: '',
     }
   }
 
