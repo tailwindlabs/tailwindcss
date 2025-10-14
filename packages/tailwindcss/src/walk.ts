@@ -39,20 +39,6 @@ export interface VisitContext<T> {
   path: () => T[]
 }
 
-function replace<T>(nodes: T[], index: number, replacements: T[]) {
-  switch (replacements.length) {
-    case 0:
-      nodes.splice(index, 1)
-      break
-    case 1:
-      nodes[index] = replacements[0]
-      break
-    default:
-      nodes.splice(index, 1, ...replacements)
-      break
-  }
-}
-
 export function walk<T extends object>(
   ast: T[],
   hooks:
@@ -137,17 +123,17 @@ function walkEnter<T extends { nodes?: T[] }>(
         // Replace current node, with new nodes. No need to change the offset
         // because we want to re-visit the current index, which now contains the
         // new nodes.
-        replace(nodes, offset, result.nodes)
+        nodes.splice(offset, 1, ...result.nodes)
         continue
       }
 
       case WalkKind.ReplaceStop: {
-        replace(nodes, offset, result.nodes) // Replace current node
+        nodes.splice(offset, 1, ...result.nodes) // Replace current node
         return // Stop immediately
       }
 
       case WalkKind.ReplaceSkip: {
-        replace(nodes, offset, result.nodes) // Replace current node
+        nodes.splice(offset, 1, ...result.nodes) // Replace current node
         stack[depth][1] += result.nodes.length // Advance to next sibling past replacements
         continue
       }
@@ -223,13 +209,13 @@ function walkExit<T extends { nodes?: T[] }>(
           return // Stop immediately
 
         case WalkKind.ReplaceStop: {
-          replace(nodes, offset, result.nodes)
+          nodes.splice(offset, 1, ...result.nodes)
           return // Stop immediately
         }
 
         case WalkKind.Replace:
         case WalkKind.ReplaceSkip: {
-          replace(nodes, offset, result.nodes)
+          nodes.splice(offset, 1, ...result.nodes)
           stack[depth][1] += result.nodes.length
           continue
         }
@@ -260,13 +246,13 @@ function walkExit<T extends { nodes?: T[] }>(
         return // Stop immediately
 
       case WalkKind.ReplaceStop: {
-        replace(nodes, index, result.nodes)
+        nodes.splice(index, 1, ...result.nodes)
         return // Stop immediately
       }
 
       case WalkKind.Replace:
       case WalkKind.ReplaceSkip: {
-        replace(nodes, index, result.nodes)
+        nodes.splice(index, 1, ...result.nodes)
         stack[depth][1] = index + result.nodes.length // Advance to next sibling past replacements
         continue
       }
@@ -346,12 +332,12 @@ function walkEnterExit<T extends { nodes?: T[] }>(
                 return // Stop immediately
 
               case WalkKind.ReplaceStop:
-                replace(nodes, offset, result.nodes)
+                nodes.splice(offset, 1, ...result.nodes)
                 return // Stop immediately
 
               case WalkKind.Replace:
               case WalkKind.ReplaceSkip:
-                replace(nodes, offset, result.nodes)
+                nodes.splice(offset, 1, ...result.nodes)
                 stack[depth][1] += result.nodes.length // Advance to next sibling past replacements
                 continue
 
@@ -382,16 +368,16 @@ function walkEnterExit<T extends { nodes?: T[] }>(
               return // Stop immediately
 
             case WalkKind.Replace:
-              replace(nodes, offset, result.nodes)
+              nodes.splice(offset, 1, ...result.nodes)
               stack[depth][1] += result.nodes.length // don't visit replacements' exits
               continue
 
             case WalkKind.ReplaceStop:
-              replace(nodes, offset, result.nodes)
+              nodes.splice(offset, 1, ...result.nodes)
               return // Stop immediately
 
             case WalkKind.ReplaceSkip:
-              replace(nodes, offset, result.nodes)
+              nodes.splice(offset, 1, ...result.nodes)
               stack[depth][1] += result.nodes.length // don't visit replacements' exits
               continue
 
@@ -407,17 +393,17 @@ function walkEnterExit<T extends { nodes?: T[] }>(
 
         case WalkKind.Replace: {
           // Replace current node; re-visit current index (enter on first replacement)
-          replace(nodes, offset, result.nodes)
+          nodes.splice(offset, 1, ...result.nodes)
           continue
         }
 
         case WalkKind.ReplaceStop: {
-          replace(nodes, offset, result.nodes)
+          nodes.splice(offset, 1, ...result.nodes)
           return // Stop immediately
         }
 
         case WalkKind.ReplaceSkip: {
-          replace(nodes, offset, result.nodes)
+          nodes.splice(offset, 1, ...result.nodes)
           stack[depth][1] += result.nodes.length // Advance to next sibling past replacements
           continue
         }
@@ -448,18 +434,18 @@ function walkEnterExit<T extends { nodes?: T[] }>(
         return // Stop immediately
 
       case WalkKind.Replace: {
-        replace(nodes, index, result.nodes)
+        nodes.splice(index, 1, ...result.nodes)
         stack[depth][1] = index + result.nodes.length // Advance to next sibling past replacements
         continue
       }
 
       case WalkKind.ReplaceStop: {
-        replace(nodes, index, result.nodes)
+        nodes.splice(index, 1, ...result.nodes)
         return // Stop immediately
       }
 
       case WalkKind.ReplaceSkip: {
-        replace(nodes, index, result.nodes)
+        nodes.splice(index, 1, ...result.nodes)
         stack[depth][1] = index + result.nodes.length // Advance to next sibling past replacements
         continue
       }
