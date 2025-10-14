@@ -26,6 +26,7 @@ import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 export interface CanonicalizeOptions {
   /**
@@ -289,7 +290,7 @@ const converterCache = new DefaultMap((ds: DesignSystem) => {
       let themeModifierCount = 0
 
       // Analyze AST
-      ValueParser.walk(ast, (node) => {
+      walk(ast, (node) => {
         if (node.kind !== 'function') return
         if (node.value !== 'theme') return
 
@@ -297,19 +298,19 @@ const converterCache = new DefaultMap((ds: DesignSystem) => {
         themeUsageCount += 1
 
         // Figure out if a modifier is used
-        ValueParser.walk(node.nodes, (child) => {
+        walk(node.nodes, (child) => {
           // If we see a `,`, it means that we have a fallback value
           if (child.kind === 'separator' && child.value.includes(',')) {
-            return ValueParser.ValueWalkAction.Stop
+            return WalkAction.Stop
           }
 
           // If we see a `/`, we have a modifier
           else if (child.kind === 'word' && child.value === '/') {
             themeModifierCount += 1
-            return ValueParser.ValueWalkAction.Stop
+            return WalkAction.Stop
           }
 
-          return ValueParser.ValueWalkAction.Skip
+          return WalkAction.Skip
         })
       })
 
@@ -434,7 +435,7 @@ function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  ValueParser.walk(ast, (node, ctx) => {
+  walk(ast, (node, ctx) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
@@ -503,7 +504,7 @@ function substituteFunctionsInValue(
         }
       }
 
-      ctx.replaceWith(ValueParser.parse(replacement))
+      return WalkAction.Replace(ValueParser.parse(replacement))
     }
   })
 
@@ -780,7 +781,7 @@ function allVariablesAreUsed(
     .join('\n')
 
   let isSafeMigration = true
-  ValueParser.walk(ValueParser.parse(value), (node) => {
+  walk(ValueParser.parse(value), (node) => {
     if (node.kind === 'function' && node.value === 'var') {
       let variable = node.nodes[0].value
       let r = new RegExp(`var\\(${variable}[,)]\\s*`, 'g')
@@ -792,7 +793,7 @@ function allVariablesAreUsed(
         replacementAsCss.includes(`${variable}:`)
       ) {
         isSafeMigration = false
-        return ValueParser.ValueWalkAction.Stop
+        return WalkAction.Stop
       }
     }
   })
@@ -1240,16 +1241,16 @@ function modernizeArbitraryValuesVariant(
 
         let parsed = ValueParser.parse(SelectorParser.toCss(ast))
         let containsNot = false
-        ValueParser.walk(parsed, (node, ctx) => {
+        walk(parsed, (node) => {
           if (node.kind === 'word' && node.value === 'not') {
             containsNot = true
-            ctx.replaceWith([])
+            return WalkAction.Replace([])
           }
         })
 
         // Remove unnecessary whitespace
         parsed = ValueParser.parse(ValueParser.toCss(parsed))
-        ValueParser.walk(parsed, (node) => {
+        walk(parsed, (node) => {
           if (node.kind === 'separator' && node.value !== ' ' && node.value.trim() === '') {
             // node.value contains at least 2 spaces. Normalize it to a single
             // space.

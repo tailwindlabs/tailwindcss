@@ -1,5 +1,5 @@
 import { substituteAtApply } from './apply'
-import { atRule, styleRule, toCss, walk, type AstNode } from './ast'
+import { atRule, styleRule, toCss, type AstNode } from './ast'
 import { printArbitraryValue } from './candidate'
 import { constantFoldDeclaration } from './constant-fold-declaration'
 import { CompileAstFlags, type DesignSystem } from './design-system'
@@ -8,6 +8,7 @@ import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { isValidSpacingMultiplier } from './utils/infer-data-type'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
 
@@ -69,11 +70,11 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
       // values or `--tw-sort` declarations.
-      walk(ast, (node, ctx) => {
+      walk(ast, (node) => {
         // Optimize declarations
         if (node.kind === 'declaration') {
           if (node.value === undefined || node.property === '--tw-sort') {
-            ctx.replaceWith([])
+            return WalkAction.Replace([])
           }
 
           // Normalize percentages by removing unnecessary dots and zeros.
@@ -90,17 +91,17 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
 
         // Replace special nodes with its children
         else if (node.kind === 'context' || node.kind === 'at-root') {
-          ctx.replaceWith(node.nodes)
+          return WalkAction.Replace(node.nodes)
         }
 
         // Remove comments
         else if (node.kind === 'comment') {
-          ctx.replaceWith([])
+          return WalkAction.Replace([])
         }
 
         // Remove at-rules that are not needed for the signature
         else if (node.kind === 'at-rule' && node.name === '@property') {
-          ctx.replaceWith([])
+          return WalkAction.Replace([])
         }
       })
 
@@ -151,7 +152,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
             let valueAst = ValueParser.parse(node.value)
 
             let seen = new Set<string>()
-            ValueParser.walk(valueAst, (valueNode, ctx) => {
+            walk(valueAst, (valueNode) => {
               if (valueNode.kind !== 'function') return
               if (valueNode.value !== 'var') return
 
@@ -204,7 +205,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
                   let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
                   if (nodeAsString === constructedValue) {
                     changed = true
-                    ctx.replaceWith(ValueParser.parse(variableValue))
+                    return WalkAction.Replace(ValueParser.parse(variableValue))
                   }
                 }
               }
@@ -328,7 +329,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
         else if (node.kind === 'rule') {
           let selectorAst = SelectorParser.parse(node.selector)
           let changed = false
-          SelectorParser.walk(selectorAst, (node, ctx) => {
+          walk(selectorAst, (node) => {
             if (node.kind === 'separator' && node.value !== ' ') {
               node.value = node.value.trim()
               changed = true
@@ -342,7 +343,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
               // E.g.: `:is(.foo)` → `.foo`
               if (node.nodes.length === 1) {
                 changed = true
-                ctx.replaceWith(node.nodes)
+                return WalkAction.Replace(node.nodes)
               }
 
               // A selector with the universal selector `*` followed by a pseudo
@@ -355,7 +356,7 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
                 node.nodes[1].value[0] === ':'
               ) {
                 changed = true
-                ctx.replaceWith(node.nodes[1])
+                return WalkAction.Replace(node.nodes[1])
               }
             }
 

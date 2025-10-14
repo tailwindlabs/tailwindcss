@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse, toCss, walk } from './selector-parser'
+import { parse, toCss } from './selector-parser'
+import { walk, WalkAction } from './walk'
 
 describe('parse', () => {
   it('should parse a simple selector', () => {
@@ -194,9 +195,9 @@ describe('toCss', () => {
 describe('walk', () => {
   it('can be used to replace a function call', () => {
     const ast = parse('.foo:hover:not(.bar:focus)')
-    walk(ast, (node, ctx) => {
+    walk(ast, (node) => {
       if (node.kind === 'function' && node.value === ':not') {
-        ctx.replaceWith({ kind: 'selector', value: '.inverted-bar' })
+        return WalkAction.Replace({ kind: 'selector', value: '.inverted-bar' } as const)
       }
     })
     expect(toCss(ast)).toBe('.foo:hover.inverted-bar')

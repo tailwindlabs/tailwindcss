@@ -4,6 +4,7 @@ import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 const COLON = 0x3a
 const DASH = 0x2d
@@ -1025,7 +1026,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
   let drop = new Set<ValueParser.ValueAstNode>()
 
-  ValueParser.walk(ast, (node, ctx) => {
+  walk(ast, (node, ctx) => {
     let parentArray = ctx.parent === null ? ast : (ctx.parent.nodes ?? [])
 
     // Handle operators (e.g.: inside of `calc(…)`)
@@ -1064,10 +1065,10 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
   })
 
   if (drop.size > 0) {
-    ValueParser.walk(ast, (node, ctx) => {
+    walk(ast, (node) => {
       if (drop.has(node)) {
         drop.delete(node)
-        ctx.replaceWith([])
+        return WalkAction.ReplaceSkip([])
       }
     })
   }

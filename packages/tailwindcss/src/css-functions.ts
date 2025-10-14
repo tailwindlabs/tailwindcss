@@ -1,9 +1,10 @@
 import { Features } from '.'
-import { walk, type AstNode } from './ast'
+import { type AstNode } from './ast'
 import type { DesignSystem } from './design-system'
 import { withAlpha } from './utilities'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 const CSS_FUNCTIONS: Record<
   string,
@@ -187,7 +188,7 @@ export function substituteFunctionsInValue(
   designSystem: DesignSystem,
 ): string {
   let ast = ValueParser.parse(value)
-  ValueParser.walk(ast, (node, ctx) => {
+  walk(ast, (node) => {
     if (node.kind === 'function' && node.value in CSS_FUNCTIONS) {
       let args = segment(ValueParser.toCss(node.nodes).trim(), ',').map((x) => x.trim())
       let result = CSS_FUNCTIONS[node.value as keyof typeof CSS_FUNCTIONS](
@@ -195,7 +196,7 @@ export function substituteFunctionsInValue(
         source,
         ...args,
       )
-      return ctx.replaceWith(ValueParser.parse(result))
+      return WalkAction.Replace(ValueParser.parse(result))
     }
   })
 
@@ -223,7 +224,7 @@ function eventuallyUnquote(value: string) {
 }
 
 function injectFallbackForInitialFallback(ast: ValueParser.ValueAstNode[], fallback: string): void {
-  ValueParser.walk(ast, (node) => {
+  walk(ast, (node) => {
     if (node.kind !== 'function') return
     if (node.value !== 'var' && node.value !== 'theme' && node.value !== '--theme') return
 

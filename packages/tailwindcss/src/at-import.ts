@@ -1,7 +1,8 @@
 import { Features } from '.'
-import { atRule, context, walk, WalkAction, type AstNode } from './ast'
+import { atRule, context, type AstNode } from './ast'
 import * as CSS from './css-parser'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 type LoadStylesheet = (
   id: string,
@@ -22,7 +23,7 @@ export async function substituteAtImports(
   let features = Features.None
   let promises: Promise<void>[] = []
 
-  walk(ast, (node, ctx) => {
+  walk(ast, (node) => {
     if (node.kind === 'at-rule' && (node.name === '@import' || node.name === '@reference')) {
       let parsed = parseImportParams(ValueParser.parse(node.params))
       if (parsed === null) return
@@ -66,11 +67,9 @@ export async function substituteAtImports(
         })(),
       )
 
-      ctx.replaceWith(contextNode)
-
       // The resolved Stylesheets already have their transitive @imports
       // resolved, so we can skip walking them.
-      return WalkAction.Skip
+      return WalkAction.ReplaceSkip(contextNode)
     }
   })
 

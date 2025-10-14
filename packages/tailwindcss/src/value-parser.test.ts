@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parse, toCss, walk } from './value-parser'
+import { parse, toCss } from './value-parser'
+import { walk, WalkAction } from './walk'
 
 describe('parse', () => {
   it('should parse a value', () => {
@@ -207,9 +208,9 @@ describe('walk', () => {
   it('can be used to replace a function call', () => {
     const ast = parse('(min-width: 600px) and (max-width: theme(lg))')
 
-    walk(ast, (node, ctx) => {
+    walk(ast, (node) => {
       if (node.kind === 'function' && node.value === 'theme') {
-        ctx.replaceWith({ kind: 'word', value: '64rem' })
+        return WalkAction.Replace({ kind: 'word', value: '64rem' } as const)
       }
     })
 

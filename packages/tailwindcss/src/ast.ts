@@ -6,6 +6,7 @@ import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 const AT_SIGN = 0x40
 
@@ -488,12 +489,12 @@ export function optimizeAst(
 
         let ast = ValueParser.parse(declaration.value)
         let requiresPolyfill = false
-        ValueParser.walk(ast, (node, ctx) => {
+        walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
-          ValueParser.walk(node.nodes, (node, ctx) => {
+          walk(node.nodes, (node) => {
             if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
               containsCurrentcolor = true
               requiresPolyfill = true
@@ -537,7 +538,7 @@ export function optimizeAst(
               }
             } while (varNode)
 
-            ctx.replaceWith({ kind: 'word', value: inlinedColor })
+            return WalkAction.Replace({ kind: 'word', value: inlinedColor } as const)
           })
 
           if (containsUnresolvableVars || containsCurrentcolor) {
@@ -548,7 +549,7 @@ export function optimizeAst(
             let firstColorValue =
               node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
             if (!firstColorValue) return
-            ctx.replaceWith(firstColorValue)
+            return WalkAction.Replace(firstColorValue)
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
@@ -853,7 +854,8 @@ function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | n
   let foundPath: AstNode[] = []
   walk(ast, (node, ctx) => {
     if (fn(node)) {
-      foundPath = [...ctx.path]
+      foundPath = ctx.path()
+      foundPath.push(node)
       return WalkAction.Stop
     }
   })

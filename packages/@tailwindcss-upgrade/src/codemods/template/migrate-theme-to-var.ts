@@ -5,6 +5,7 @@ import { isValidSpacingMultiplier } from '../../../../tailwindcss/src/utils/infe
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { toKeyPath } from '../../../../tailwindcss/src/utils/to-key-path'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { walk, WalkAction } from '../../../../tailwindcss/src/walk'
 
 export const enum Convert {
   All = 0,
@@ -27,7 +28,7 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
     let themeModifierCount = 0
 
     // Analyze AST
-    ValueParser.walk(ast, (node) => {
+    walk(ast, (node) => {
       if (node.kind !== 'function') return
       if (node.value !== 'theme') return
 
@@ -35,19 +36,19 @@ export function createConverter(designSystem: DesignSystem, { prettyPrint = fals
       themeUsageCount += 1
 
       // Figure out if a modifier is used
-      ValueParser.walk(node.nodes, (child) => {
+      walk(node.nodes, (child) => {
         // If we see a `,`, it means that we have a fallback value
         if (child.kind === 'separator' && child.value.includes(',')) {
-          return ValueParser.ValueWalkAction.Stop
+          return WalkAction.Stop
         }
 
         // If we see a `/`, we have a modifier
         else if (child.kind === 'word' && child.value === '/') {
           themeModifierCount += 1
-          return ValueParser.ValueWalkAction.Stop
+          return WalkAction.Stop
         }
 
-        return ValueParser.ValueWalkAction.Skip
+        return WalkAction.Skip
       })
     })
 
@@ -172,7 +173,7 @@ function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
   handle: (value: string, fallback?: string) => string | null,
 ) {
-  ValueParser.walk(ast, (node, ctx) => {
+  walk(ast, (node, ctx) => {
     if (node.kind === 'function' && node.value === 'theme') {
       if (node.nodes.length < 1) return
 
@@ -241,7 +242,7 @@ function substituteFunctionsInValue(
         }
       }
 
-      ctx.replaceWith(ValueParser.parse(replacement))
+      return WalkAction.Replace(ValueParser.parse(replacement))
     }
   })
 

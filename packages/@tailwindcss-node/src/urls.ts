@@ -5,8 +5,9 @@
 // Minor modifications have been made to work with the Tailwind CSS codebase
 
 import * as path from 'node:path'
-import { toCss, walk } from '../../tailwindcss/src/ast'
+import { toCss } from '../../tailwindcss/src/ast'
 import { parse } from '../../tailwindcss/src/css-parser'
+import { walk } from '../../tailwindcss/src/walk'
 import { normalizePath } from './normalize-path'
 
 const cssUrlRE =

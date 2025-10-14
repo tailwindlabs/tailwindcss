@@ -3,6 +3,7 @@ import { styleRule, toCss, walk, WalkAction, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { SourceLocation } from '../source-maps/source'
 import { segment } from '../utils/segment'
+import { WalkAction } from '../walk'
 import { applyConfigToTheme } from './apply-config-to-theme'
 import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
@@ -117,9 +118,8 @@ export async function applyCompatibilityHooks({
         Object.keys(options).length > 0 ? options : null,
       ])
 
-      ctx.replaceWith([])
       features |= Features.JsPluginCompat
-      return
+      return WalkAction.Replace([])
     }
 
     // Collect paths from `@config` at-rules
@@ -138,9 +138,8 @@ export async function applyCompatibilityHooks({
         reference: !!ctx.context.reference,
         src: node.src,
       })
-      ctx.replaceWith([])
       features |= Features.JsPluginCompat
-      return
+      return WalkAction.Replace([])
     }
   })
 
@@ -395,9 +394,7 @@ function upgradeToFullPluginSupport({
         return WalkAction.Stop
       }
 
-      ctx.replaceWith(styleRule(wrappingSelector, [node]))
-
-      return WalkAction.Stop
+      return WalkAction.ReplaceStop(styleRule(wrappingSelector, [node]))
     })
   }
 

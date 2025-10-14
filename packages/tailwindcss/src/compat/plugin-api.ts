@@ -1,6 +1,6 @@
 import type { Features } from '..'
 import { substituteAtApply } from '../apply'
-import { atRule, cloneAstNode, decl, rule, walk, type AstNode } from '../ast'
+import { atRule, cloneAstNode, decl, rule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -14,6 +14,7 @@ import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
+import { walk, WalkAction } from '../walk'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
 
@@ -281,7 +282,7 @@ export function buildPluginApi({
         let selectorAst = SelectorParser.parse(name)
         let foundValidUtility = false
 
-        SelectorParser.walk(selectorAst, (node) => {
+        walk(selectorAst, (node) => {
           if (
             node.kind === 'selector' &&
             node.value[0] === '.' &&
@@ -301,7 +302,7 @@ export function buildPluginApi({
           }
 
           if (node.kind === 'function' && node.value === ':not') {
-            return SelectorParser.SelectorWalkAction.Skip
+            return WalkAction.Skip
           }
         })
 
@@ -318,7 +319,7 @@ export function buildPluginApi({
           walk(ast, (node) => {
             if (node.kind === 'rule') {
               let selectorAst = SelectorParser.parse(node.selector)
-              SelectorParser.walk(selectorAst, (node) => {
+              walk(selectorAst, (node) => {
                 if (node.kind === 'selector' && node.value[0] === '.') {
                   node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
                 }
@@ -612,7 +613,7 @@ function replaceNestedClassNameReferences(
   walk(ast, (node) => {
     if (node.kind === 'rule') {
       let selectorAst = SelectorParser.parse(node.selector)
-      SelectorParser.walk(selectorAst, (node) => {
+      walk(selectorAst, (node) => {
         if (node.kind === 'selector' && node.value === `.${utilityName}`) {
           node.value = `.${escape(rawCandidate)}`
         }
