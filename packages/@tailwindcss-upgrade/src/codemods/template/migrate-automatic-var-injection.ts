@@ -1,9 +1,9 @@
-import { walk, WalkAction } from '../../../../tailwindcss/src/ast'
 import { cloneCandidate, type Candidate, type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import type { Writable } from '../../../../tailwindcss/src/types'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
+import { walk, WalkAction } from '../../../../tailwindcss/src/walk'
 
 export function migrateAutomaticVarInjection(
   designSystem: DesignSystem,

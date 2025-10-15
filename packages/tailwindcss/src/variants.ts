@@ -1,13 +1,11 @@
 import { Features } from '.'
 import {
-  WalkAction,
   atRoot,
   atRule,
   cloneAstNode,
   decl,
   rule,
   styleRule,
-  walk,
   type AstNode,
   type AtRule,
   type Rule,
@@ -21,6 +19,7 @@ import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import { walk, WalkAction } from './walk'
 
 export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*(?<![_-])$/
 
@@ -449,7 +448,7 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
       if (node.nodes.length > 0) return WalkAction.Continue
 
@@ -457,11 +456,14 @@ export function createVariants(theme: Theme): Variants {
       let atRules: AtRule[] = []
       let styleRules: StyleRule[] = []
 
-      for (let parent of path) {
-        if (parent.kind === 'at-rule') {
-          atRules.push(parent)
-        } else if (parent.kind === 'rule') {
-          styleRules.push(parent)
+      let path = ctx.path()
+      path.push(node)
+
+      for (let node of path) {
+        if (node.kind === 'at-rule') {
+          atRules.push(node)
+        } else if (node.kind === 'rule') {
+          styleRules.push(node)
         }
       }
 
@@ -525,11 +527,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path()) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -577,11 +579,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path()) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -725,11 +727,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path()) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -760,11 +762,11 @@ export function createVariants(theme: Theme): Variants {
 
     let didApply = false
 
-    walk([ruleNode], (node, { path }) => {
+    walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule') return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
-      for (let parent of path.slice(0, -1)) {
+      for (let parent of ctx.path()) {
         if (parent.kind !== 'rule') continue
 
         didApply = false
@@ -1191,10 +1193,10 @@ function quoteAttributeValue(input: string) {
 }
 
 export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
-  walk(ast, (node, { replaceWith }) => {
+  walk(ast, (node) => {
     // Replace `@slot` with rule nodes
     if (node.kind === 'at-rule' && node.name === '@slot') {
-      replaceWith(nodes)
+      return WalkAction.Replace(nodes)
     }
 
     // Wrap `@keyframes` and `@property` in `AtRoot` nodes
@@ -1207,7 +1209,7 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
 
 export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem): Features {
   let features = Features.None
-  walk(ast, (variantNode, { replaceWith }) => {
+  walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
     // Starting with the `&` rule node
@@ -1226,8 +1228,8 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
     }
 
     // Update the variant at-rule node, to be the `&` rule node
-    replaceWith(node)
     features |= Features.Variants
+    return WalkAction.Replace(node)
   })
   return features
 }
