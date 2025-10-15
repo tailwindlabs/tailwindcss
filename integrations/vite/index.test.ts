@@ -919,7 +919,7 @@ test(
   'optimize option: disabled',
   {
     fs: {
-      'package.json': txt`
+      'package.json': json`
         {
           "type": "module",
           "dependencies": {
@@ -927,7 +927,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5"
+            "vite": "^7"
           }
         }
       `,
@@ -945,16 +945,19 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="underline m-2 flex">Hello, world!</div>
+          <div class="hover:flex">Hello, world!</div>
         </body>
       `,
-      'src/index.css': css` @import 'tailwindcss/utilities'; `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
     },
   },
   async ({ exec, expect, fs }) => {
-    process.env.NODE_ENV = 'production'
-    await exec('pnpm vite build')
-    delete process.env.NODE_ENV
+    await exec('pnpm vite build', {
+      env: { NODE_ENV: 'production' },
+    })
 
     let files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
@@ -962,8 +965,10 @@ test(
 
     // Should not be minified when optimize is disabled
     let content = await fs.read(filename)
-    expect(content).toContain('.underline {')
-    expect(content).toContain('text-decoration-line: underline')
+    expect(content).toContain('.hover\\:flex {')
+    expect(content).toContain('&:hover {')
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('display: flex;')
   },
 )
 
@@ -971,7 +976,7 @@ test(
   'optimize option: enabled with minify disabled',
   {
     fs: {
-      'package.json': txt`
+      'package.json': json`
         {
           "type": "module",
           "dependencies": {
@@ -979,7 +984,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5"
+            "vite": "^7"
           }
         }
       `,
@@ -997,10 +1002,13 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="underline m-2 flex">Hello, world!</div>
+          <div class="hover:flex">Hello, world!</div>
         </body>
       `,
-      'src/index.css': css` @import 'tailwindcss/utilities'; `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
     },
   },
   async ({ exec, expect, fs }) => {
@@ -1012,8 +1020,9 @@ test(
 
     // Should be optimized but not minified
     let content = await fs.read(filename)
-    expect(content).toContain('.underline {')
-    expect(content).toContain('text-decoration-line: underline')
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('.hover\\:flex:hover {')
+    expect(content).toContain('display: flex;')
   },
 )
 
@@ -1021,7 +1030,7 @@ test(
   'optimize option: respects NODE_ENV by default',
   {
     fs: {
-      'package.json': txt`
+      'package.json': json`
         {
           "type": "module",
           "dependencies": {
@@ -1029,7 +1038,7 @@ test(
             "tailwindcss": "workspace:^"
           },
           "devDependencies": {
-            "vite": "^5"
+            "vite": "^7"
           }
         }
       `,
@@ -1038,6 +1047,7 @@ test(
         import { defineConfig } from 'vite'
 
         export default defineConfig({
+          build: { cssMinify: false },
           plugins: [tailwindcss()],
         })
       `,
@@ -1046,25 +1056,50 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="underline m-2 flex">Hello, world!</div>
+          <div class="hover:text-[black]">Hello, world!</div>
         </body>
       `,
-      'src/index.css': css` @import 'tailwindcss/utilities'; `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
     },
   },
   async ({ exec, expect, fs }) => {
-    // Should optimize when NODE_ENV=production
-    process.env.NODE_ENV = 'production'
-    await exec('pnpm vite build')
+    await exec('pnpm vite build', {
+      env: { NODE_ENV: 'production' },
+    })
 
     let files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)
     let [filename] = files[0]
 
     let content = await fs.read(filename)
-    // When optimized, CSS should be minified (no spaces around braces)
-    expect(content).toContain('.underline{text-decoration-line:underline}')
 
-    delete process.env.NODE_ENV
+    // We disabled minficiation since that can apply similar optimizations as Lightning CSS
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('.hover\\:text-\\[black\\]:hover {')
+
+    // But the hex color optimization is always applied by Lightning so we can verify that it ran
+    expect(content).toContain('color: #000;')
+
+    await exec('pnpm vite build', {
+      env: { NODE_ENV: 'development' },
+    })
+
+    files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    filename = files[0][0]
+
+    content = await fs.read(filename)
+
+    // We disabled minficiation since that can apply similar optimizations as Lightning CSS
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('.hover\\:text-\\[black\\] {')
+    expect(content).toContain('&:hover {')
+
+    // And note that the hex color optimization was also not applied
+    // This validates that Lightning CSS did not run for development
+    expect(content).toContain('color: black;')
   },
 )
