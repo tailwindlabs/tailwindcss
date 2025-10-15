@@ -447,6 +447,7 @@ export function createVariants(theme: Theme): Variants {
     if (variant.modifier) return null
 
     let didApply = false
+    let replacement: AstNode | null = null
 
     walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
@@ -492,13 +493,17 @@ export function createVariants(theme: Theme): Variants {
         rules.push(negatedAtRule)
       }
 
-      Object.assign(ruleNode, styleRule('&', rules))
+      replacement = styleRule('&', rules)
 
       // Track that the variant was actually applied
       didApply = true
 
       return WalkAction.Skip
     })
+
+    if (replacement) {
+      Object.assign(ruleNode, replacement)
+    }
 
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
     if (ruleNode.kind === 'rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
