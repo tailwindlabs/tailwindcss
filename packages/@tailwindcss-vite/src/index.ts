@@ -75,14 +75,20 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         config = _config
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
-        // Determine whether to optimize based on the option
+        // By default we optimize CSS based on whether or not we're building for production
+        shouldOptimize = process.env.NODE_ENV === 'production'
+
+        // But if the user provides explicit options we'll use to those instead
         if (opts.optimize !== undefined) {
           shouldOptimize = opts.optimize !== false
-          minify = typeof opts.optimize === 'object' ? opts.optimize.minify !== false : shouldOptimize
-        } else {
-          // Default behavior: check NODE_ENV
-          shouldOptimize = process.env.NODE_ENV === 'production'
-          minify = shouldOptimize && config.build.cssMinify !== false
+        }
+
+        // Minification is also performed when optimizing as long as it's also enabled in Vite
+        minify = shouldOptimize && config.build.cssMinify !== false
+
+        // But again, the user can override that choice explicitly
+        if (typeof opts.optimize === 'object') {
+          minify = opts.optimize.minify !== false
         }
       },
     },
