@@ -6,6 +6,7 @@ import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction, type VisitContext } from './walk'
 
 const AT_SIGN = 0x40
 
@@ -184,157 +185,33 @@ export function cloneAstNode<T extends AstNode>(node: T): T {
   }
 }
 
-export const enum WalkAction {
-  /** Continue walking, which is the default */
-  Continue,
-
-  /** Skip visiting the children of this node */
-  Skip,
-
-  /** Stop the walk entirely */
-  Stop,
-}
-
-export function walk(
-  ast: AstNode[],
-  visit: (
-    node: AstNode,
-    utils: {
-      parent: AstNode | null
-      replaceWith(newNode: AstNode | AstNode[]): void
-      context: Record<string, string | boolean>
-      path: AstNode[]
-    },
-  ) => void | WalkAction,
-  path: AstNode[] = [],
-  context: Record<string, string | boolean> = {},
-) {
-  for (let i = 0; i < ast.length; i++) {
-    let node = ast[i]
-    let parent = path[path.length - 1] ?? null
-
-    // We want context nodes to be transparent in walks. This means that
-    // whenever we encounter one, we immediately walk through its children and
-    // furthermore we also don't update the parent.
-    if (node.kind === 'context') {
-      if (walk(node.nodes, visit, path, { ...context, ...node.context }) === WalkAction.Stop) {
-        return WalkAction.Stop
-      }
-      continue
-    }
-
-    path.push(node)
-    let replacedNode = false
-    let replacedNodeOffset = 0
-    let status =
-      visit(node, {
-        parent,
-        context,
-        path,
-        replaceWith(newNode) {
-          if (replacedNode) return
-          replacedNode = true
-
-          if (Array.isArray(newNode)) {
-            if (newNode.length === 0) {
-              ast.splice(i, 1)
-              replacedNodeOffset = 0
-            } else if (newNode.length === 1) {
-              ast[i] = newNode[0]
-              replacedNodeOffset = 1
-            } else {
-              ast.splice(i, 1, ...newNode)
-              replacedNodeOffset = newNode.length
-            }
-          } else {
-            ast[i] = newNode
-            replacedNodeOffset = 1
-          }
-        },
-      }) ?? WalkAction.Continue
-    path.pop()
-
-    // We want to visit or skip the newly replaced node(s), which start at the
-    // current index (i). By decrementing the index here, the next loop will
-    // process this position (containing the replaced node) again.
-    if (replacedNode) {
-      if (status === WalkAction.Continue) {
-        i--
-      } else {
-        i += replacedNodeOffset - 1
-      }
-      continue
-    }
-
-    // Stop the walk entirely
-    if (status === WalkAction.Stop) return WalkAction.Stop
-
-    // Skip visiting the children of this node
-    if (status === WalkAction.Skip) continue
-
-    if ('nodes' in node) {
-      path.push(node)
-      let result = walk(node.nodes, visit, path, context)
-      path.pop()
-
-      if (result === WalkAction.Stop) {
-        return WalkAction.Stop
-      }
-    }
-  }
-}
-
-// This is a depth-first traversal of the AST
-export function walkDepth(
-  ast: AstNode[],
-  visit: (
-    node: AstNode,
-    utils: {
-      parent: AstNode | null
-      path: AstNode[]
-      context: Record<string, string | boolean>
-      replaceWith(newNode: AstNode[]): void
-    },
-  ) => void,
-  path: AstNode[] = [],
-  context: Record<string, string | boolean> = {},
-) {
-  for (let i = 0; i < ast.length; i++) {
-    let node = ast[i]
-    let parent = path[path.length - 1] ?? null
-
-    if (node.kind === 'rule' || node.kind === 'at-rule') {
-      path.push(node)
-      walkDepth(node.nodes, visit, path, context)
-      path.pop()
-    } else if (node.kind === 'context') {
-      walkDepth(node.nodes, visit, path, { ...context, ...node.context })
-      continue
-    }
-
-    path.push(node)
-    visit(node, {
-      parent,
-      context,
-      path,
-      replaceWith(newNode) {
-        if (Array.isArray(newNode)) {
-          if (newNode.length === 0) {
-            ast.splice(i, 1)
-          } else if (newNode.length === 1) {
-            ast[i] = newNode[0]
-          } else {
-            ast.splice(i, 1, ...newNode)
-          }
-        } else {
-          ast[i] = newNode
+export function cssContext(
+  ctx: VisitContext<AstNode>,
+): VisitContext<AstNode> & { context: Record<string, string | boolean> } {
+  return {
+    depth: ctx.depth,
+    get context() {
+      let context: Record<string, string | boolean> = {}
+      for (let child of ctx.path()) {
+        if (child.kind === 'context') {
+          Object.assign(context, child.context)
         }
+      }
 
-        // Skip over the newly inserted nodes (being depth-first it doesn't make sense to visit them)
-        i += newNode.length - 1
-      },
-    })
-    path.pop()
+      // Once computed, we never need to compute this again
+      Object.defineProperty(this, 'context', { value: context })
+      return context
+    },
+    get parent() {
+      let parent = (this.path().pop() as Extract<AstNode, { nodes: AstNode[] }>) ?? null
+
+      // Once computed, we never need to compute this again
+      Object.defineProperty(this, 'parent', { value: parent })
+      return parent
+    },
+    path() {
+      return ctx.path().filter((n) => n.kind !== 'context')
+    },
   }
 }
 
@@ -642,12 +519,12 @@ export function optimizeAst(
 
         let ast = ValueParser.parse(declaration.value)
         let requiresPolyfill = false
-        ValueParser.walk(ast, (node, { replaceWith }) => {
+        walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
-          ValueParser.walk(node.nodes, (node, { replaceWith }) => {
+          walk(node.nodes, (node) => {
             if (node.kind == 'word' && node.value.toLowerCase() === 'currentcolor') {
               containsCurrentcolor = true
               requiresPolyfill = true
@@ -691,7 +568,7 @@ export function optimizeAst(
               }
             } while (varNode)
 
-            replaceWith({ kind: 'word', value: inlinedColor })
+            return WalkAction.Replace({ kind: 'word', value: inlinedColor } as const)
           })
 
           if (containsUnresolvableVars || containsCurrentcolor) {
@@ -702,7 +579,7 @@ export function optimizeAst(
             let firstColorValue =
               node.nodes.length > separatorIndex ? node.nodes[separatorIndex + 1] : null
             if (!firstColorValue) return
-            replaceWith(firstColorValue)
+            return WalkAction.Replace(firstColorValue)
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
@@ -1005,9 +882,10 @@ export function toCss(ast: AstNode[], track?: boolean) {
 
 function findNode(ast: AstNode[], fn: (node: AstNode) => boolean): AstNode[] | null {
   let foundPath: AstNode[] = []
-  walk(ast, (node, { path }) => {
+  walk(ast, (node, ctx) => {
     if (fn(node)) {
-      foundPath = [...path]
+      foundPath = ctx.path()
+      foundPath.push(node)
       return WalkAction.Stop
     }
   })

@@ -1,5 +1,6 @@
-import { walk, type AstNode } from '../ast'
+import { type AstNode } from '../ast'
 import { DefaultMap } from '../utils/default-map'
+import { walk } from '../walk'
 import { createLineTable, type LineTable, type Position } from './line-table'
 import type { Source } from './source'
 

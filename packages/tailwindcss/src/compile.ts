@@ -1,13 +1,4 @@
-import {
-  atRule,
-  decl,
-  rule,
-  walk,
-  WalkAction,
-  type AstNode,
-  type Rule,
-  type StyleRule,
-} from './ast'
+import { atRule, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
@@ -15,6 +6,7 @@ import { asColor, type Utility } from './utilities'
 import { compare } from './utils/compare'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
+import { walk, WalkAction } from './walk'
 
 export function compileCandidates(
   rawCandidates: Iterable<string>,

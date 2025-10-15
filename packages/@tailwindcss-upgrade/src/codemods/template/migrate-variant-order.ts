@@ -1,7 +1,8 @@
-import { walk, type AstNode } from '../../../../tailwindcss/src/ast'
+import { type AstNode } from '../../../../tailwindcss/src/ast'
 import { type Variant } from '../../../../tailwindcss/src/candidate'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { walk } from '../../../../tailwindcss/src/walk'
 import * as version from '../../utils/version'
 
 export function migrateVariantOrder(

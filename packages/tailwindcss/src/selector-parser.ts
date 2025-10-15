@@ -30,7 +30,6 @@ export type SelectorAstNode =
   | SelectorNode
   | SelectorSeparatorNode
   | SelectorValueNode
-type SelectorParentNode = SelectorFunctionNode | null
 
 function combinator(value: string): SelectorCombinatorNode {
   return {
@@ -65,83 +64,6 @@ function value(value: string): SelectorValueNode {
   return {
     kind: 'value',
     value,
-  }
-}
-
-export const enum SelectorWalkAction {
-  /** Continue walking, which is the default */
-  Continue,
-
-  /** Skip visiting the children of this node */
-  Skip,
-
-  /** Stop the walk entirely */
-  Stop,
-}
-
-export function walk(
-  ast: SelectorAstNode[],
-  visit: (
-    node: SelectorAstNode,
-    utils: {
-      parent: SelectorParentNode
-      replaceWith(newNode: SelectorAstNode | SelectorAstNode[]): void
-    },
-  ) => void | SelectorWalkAction,
-  parent: SelectorParentNode = null,
-) {
-  for (let i = 0; i < ast.length; i++) {
-    let node = ast[i]
-    let replacedNode = false
-    let replacedNodeOffset = 0
-    let status =
-      visit(node, {
-        parent,
-        replaceWith(newNode) {
-          if (replacedNode) return
-          replacedNode = true
-
-          if (Array.isArray(newNode)) {
-            if (newNode.length === 0) {
-              ast.splice(i, 1)
-              replacedNodeOffset = 0
-            } else if (newNode.length === 1) {
-              ast[i] = newNode[0]
-              replacedNodeOffset = 1
-            } else {
-              ast.splice(i, 1, ...newNode)
-              replacedNodeOffset = newNode.length
-            }
-          } else {
-            ast[i] = newNode
-            replacedNodeOffset = 1
-          }
-        },
-      }) ?? SelectorWalkAction.Continue
-
-    // We want to visit or skip the newly replaced node(s), which start at the
-    // current index (i). By decrementing the index here, the next loop will
-    // process this position (containing the replaced node) again.
-    if (replacedNode) {
-      if (status === SelectorWalkAction.Continue) {
-        i--
-      } else {
-        i += replacedNodeOffset - 1
-      }
-      continue
-    }
-
-    // Stop the walk entirely
-    if (status === SelectorWalkAction.Stop) return SelectorWalkAction.Stop
-
-    // Skip visiting the children of this node
-    if (status === SelectorWalkAction.Skip) continue
-
-    if (node.kind === 'function') {
-      if (walk(node.nodes, visit, node) === SelectorWalkAction.Stop) {
-        return SelectorWalkAction.Stop
-      }
-    }
   }
 }
 
