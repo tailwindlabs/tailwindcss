@@ -40,11 +40,18 @@ export async function applyCompatibilityHooks({
 }) {
   let features = Features.None
   let pluginPaths: [
-    { id: string; base: string; reference: boolean; src: SourceLocation | undefined },
+    {
+      id: string
+      exportName: string
+      base: string
+      reference: boolean
+      src: SourceLocation | undefined
+    },
     CssPluginOptions | null,
   ][] = []
   let configPaths: {
     id: string
+    exportName: string
     base: string
     reference: boolean
     src: SourceLocation | undefined
@@ -59,8 +66,19 @@ export async function applyCompatibilityHooks({
         throw new Error('`@plugin` cannot be nested.')
       }
 
-      let pluginPath = node.params.slice(1, -1)
-      if (pluginPath.length === 0) {
+      let parts = segment(node.params, ' ')
+      if (parts.length === 0) {
+        throw new Error('`@plugin` must have a path.')
+      }
+
+      if (parts.length > 2) {
+        throw new Error('`@plugin` must have a path and an optional export name.')
+      }
+
+      let modulePath = parts[0].slice(1, -1)
+      let exportName = parts[1] ?? 'default'
+
+      if (modulePath.length === 0) {
         throw new Error('`@plugin` must have a path.')
       }
 
@@ -109,10 +127,11 @@ export async function applyCompatibilityHooks({
 
       pluginPaths.push([
         {
-          id: pluginPath,
+          id: modulePath,
           base: context.base as string,
           reference: !!context.reference,
           src: node.src,
+          exportName,
         },
         Object.keys(options).length > 0 ? options : null,
       ])
@@ -132,8 +151,25 @@ export async function applyCompatibilityHooks({
         throw new Error('`@config` cannot be nested.')
       }
 
+      let parts = segment(node.params, ' ')
+      if (parts.length === 0) {
+        throw new Error('`@config` must have a path.')
+      }
+
+      if (parts.length > 2) {
+        throw new Error('`@config` must have a path and an optional export name.')
+      }
+
+      let modulePath = parts[0].slice(1, -1)
+      let exportName = parts[1] ?? 'default'
+
+      if (modulePath.length === 0) {
+        throw new Error('`@config` must have a path.')
+      }
+
       configPaths.push({
-        id: node.params.slice(1, -1),
+        id: modulePath,
+        exportName,
         base: context.base as string,
         reference: !!context.reference,
         src: node.src,
@@ -176,24 +212,48 @@ export async function applyCompatibilityHooks({
 
   let [configs, pluginDetails] = await Promise.all([
     Promise.all(
-      configPaths.map(async ({ id, base, reference, src }) => {
+      configPaths.map(async ({ id, base, exportName, reference, src }) => {
         let loaded = await loadModule(id, base, 'config')
+
+        // TODO: This should be implemented by loadModule
+        let module = loaded.module
+
+        if (exportName !== 'default') {
+          module = loaded.module[exportName]
+
+          if (!module) {
+            throw new Error(`Config \`${id}\` does not have an export named \`${exportName}\``)
+          }
+        }
+
         return {
           path: id,
           base: loaded.base,
-          config: loaded.module as UserConfig,
+          config: module as UserConfig,
           reference,
           src,
         }
       }),
     ),
     Promise.all(
-      pluginPaths.map(async ([{ id, base, reference, src }, pluginOptions]) => {
+      pluginPaths.map(async ([{ id, base, exportName, reference, src }, pluginOptions]) => {
         let loaded = await loadModule(id, base, 'plugin')
+
+        // TODO: This should be implemented by loadModule
+        let module = loaded.module
+
+        if (exportName !== 'default') {
+          module = loaded.module[exportName]
+
+          if (!module) {
+            throw new Error(`Plugin \`${id}\` does not have an export named \`${exportName}\``)
+          }
+        }
+
         return {
           path: id,
           base: loaded.base,
-          plugin: loaded.module as Plugin,
+          plugin: module as Plugin,
           options: pluginOptions,
           reference,
           src,
