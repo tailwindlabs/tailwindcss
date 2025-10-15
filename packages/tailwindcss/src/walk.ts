@@ -57,36 +57,44 @@ function walkImplementation<T extends { nodes?: T[] }>(
   enter: (node: T, ctx: VisitContext<T>) => EnterResult<T> | void = () => WalkAction.Continue,
   exit: (node: T, ctx: VisitContext<T>) => ExitResult<T> | void = () => WalkAction.Continue,
 ) {
-  let stack: [nodes: T[], offset: number, parent: Parent<T> | null][] = [[ast, 0, null]]
+  let surrogate = { nodes: ast } as Parent<T>
+
+  // Reduce memory usage by tracking 2 different objects instead of a single
+  // stack data structure. We could use 2 arrays, but objects are faster in Bun.
+  // In Node.js the 2 arrays or 2 objects have similar performance.
+  //
+  // Used indexing to prevent `push()` / `pop()` overhead.
+  let offsets: Record<number, number> = { 0: 0 }
+  let parents: Record<number, Parent<T>> = { 0: surrogate }
+
+  let depth = 0
+
   let ctx: VisitContext<T> = {
     parent: null,
     depth: 0,
     path() {
       let path: T[] = []
 
-      for (let i = 1; i < stack.length; i++) {
-        let parent = stack[i][2]
-        if (parent) path.push(parent)
+      for (let i = 1; i <= depth; i++) {
+        path.push(parents[i])
       }
 
       return path
     },
   }
 
-  while (stack.length > 0) {
-    let depth = stack.length - 1
-    let frame = stack[depth]
-    let nodes = frame[0]
-    let offset = frame[1]
-    let parent = frame[2]
+  while (depth >= 0) {
+    let offset = offsets[depth]
+    let parent = parents[depth]
+    let nodes = parent.nodes
 
     // Done with this level
     if (offset >= nodes.length) {
-      stack.pop()
+      depth--
       continue
     }
 
-    ctx.parent = parent
+    ctx.parent = depth === 0 ? null : parent
     ctx.depth = depth
 
     // Enter phase (offsets are positive)
@@ -96,11 +104,13 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
       switch (result.kind) {
         case WalkKind.Continue: {
-          if (node.nodes && node.nodes.length > 0) {
-            stack.push([node.nodes, 0, node as Parent<T>])
-          }
+          offsets[depth] = ~offset // Prepare for exit phase, same offset
 
-          frame[1] = ~offset // Prepare for exit phase, same offset
+          if (node.nodes && node.nodes.length > 0) {
+            depth++
+            offsets[depth] = 0
+            parents[depth] = node as Parent<T>
+          }
           continue
         }
 
@@ -108,7 +118,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
           return // Stop immediately
 
         case WalkKind.Skip: {
-          frame[1] = ~offset // Prepare for exit phase, same offset
+          offsets[depth] = ~offset // Prepare for exit phase, same offset
           continue
         }
 
@@ -124,7 +134,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
         case WalkKind.ReplaceSkip: {
           nodes.splice(offset, 1, ...result.nodes)
-          frame[1] += result.nodes.length // Advance to next sibling past replacements
+          offsets[depth] += result.nodes.length // Advance to next sibling past replacements
           continue
         }
 
@@ -146,7 +156,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
     switch (result.kind) {
       case WalkKind.Continue:
-        frame[1] = index + 1 // Advance to next sibling
+        offsets[depth] = index + 1 // Advance to next sibling
         continue
 
       case WalkKind.Stop:
@@ -154,7 +164,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
       case WalkKind.Replace: {
         nodes.splice(index, 1, ...result.nodes)
-        frame[1] = index + result.nodes.length // Advance to next sibling past replacements
+        offsets[depth] = index + result.nodes.length // Advance to next sibling past replacements
         continue
       }
 
@@ -165,7 +175,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
       case WalkKind.ReplaceSkip: {
         nodes.splice(index, 1, ...result.nodes)
-        frame[1] = index + result.nodes.length // Advance to next sibling past replacements
+        offsets[depth] = index + result.nodes.length // Advance to next sibling past replacements
         continue
       }
 
