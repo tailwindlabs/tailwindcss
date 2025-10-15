@@ -571,7 +571,7 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
   // behavior if necessary.
   for (let i = 5 /* '@page'.length */; i < buffer.length; i++) {
     let currentChar = buffer.charCodeAt(i)
-    if (currentChar === SPACE || currentChar === OPEN_PAREN) {
+    if (currentChar === SPACE || currentChar === TAB || currentChar === OPEN_PAREN) {
       name = buffer.slice(0, i)
       params = buffer.slice(i)
       break

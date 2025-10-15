@@ -723,6 +723,26 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([{ kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] }])
     })
 
+    it.each([
+      [' '], // space
+      ['  '], // multiple spaces
+      ['\t'], // tab
+      [' \t'], // space + tab
+      ['\t '], // tab + space
+      ['\t\t'], // multiple tabs
+      ['\n'], // newline
+      [' \n'], // space + newline
+      ['\n '], // newline + space
+      ['\n\n'], // multiple newlines
+      ['\r\n'], // windows newline
+      [' \r\n'], // space + windows newline
+      ['\r\n '], // windows newline + space
+    ])('should parse an at-rule with whitespace %s in the params', (whitespace) => {
+      expect(parse(`@apply${whitespace}bg-red-500;`)).toEqual([
+        { kind: 'at-rule', name: '@apply', params: 'bg-red-500', nodes: [] },
+      ])
+    })
+
     it('should parse an at-rule without a block or semicolon', () => {
       expect(
         parse(`
