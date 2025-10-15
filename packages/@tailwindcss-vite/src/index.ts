@@ -75,8 +75,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         config = _config
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
-        // By default we optimize CSS based on whether or not we're building for production
-        shouldOptimize = process.env.NODE_ENV === 'production'
+        // By default we optimize CSS during the build phase unless NODE_ENV is `development`
+        shouldOptimize = process.env.NODE_ENV !== 'development'
 
         // But if the user provides explicit options we'll use to those instead
         if (opts.optimize !== undefined) {

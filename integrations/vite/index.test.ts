@@ -955,9 +955,7 @@ test(
     },
   },
   async ({ exec, expect, fs }) => {
-    await exec('pnpm vite build', {
-      env: { NODE_ENV: 'production' },
-    })
+    await exec('pnpm vite build')
 
     let files = await fs.glob('dist/**/*.css')
     expect(files).toHaveLength(1)

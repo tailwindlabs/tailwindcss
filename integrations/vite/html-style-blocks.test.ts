@@ -40,9 +40,7 @@ test(
     },
   },
   async ({ fs, exec, expect }) => {
-    await exec('pnpm vite build', {
-      env: { NODE_ENV: 'production' },
-    })
+    await exec('pnpm vite build')
 
     expect(await fs.dumpFiles('dist/*.html')).toMatchInlineSnapshot(`
       "
