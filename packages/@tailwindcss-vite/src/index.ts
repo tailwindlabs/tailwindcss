@@ -77,8 +77,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
         // Determine whether to optimize based on the option
         if (opts.optimize !== undefined) {
-          shouldOptimize = !!opts.optimize
-          minify = typeof opts.optimize === 'object' ? opts.optimize.minify !== false : true
+          shouldOptimize = opts.optimize !== false
+          minify = typeof opts.optimize === 'object' ? opts.optimize.minify !== false : shouldOptimize
         } else {
           // Default behavior: check NODE_ENV
           shouldOptimize = process.env.NODE_ENV === 'production'
