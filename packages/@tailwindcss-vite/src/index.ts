@@ -18,11 +18,19 @@ const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
-export default function tailwindcss(): Plugin[] {
+export type PluginOptions = {
+  /**
+   * Optimize and minify the output CSS.
+   */
+  optimize?: boolean | { minify?: boolean }
+}
+
+export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
 
   let isSSR = false
+  let shouldOptimize = false
   let minify = false
 
   let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
@@ -65,8 +73,17 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(_config) {
         config = _config
-        minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
+
+        // Determine whether to optimize based on the option
+        if (opts.optimize !== undefined) {
+          shouldOptimize = !!opts.optimize
+          minify = typeof opts.optimize === 'object' ? opts.optimize.minify !== false : true
+        } else {
+          // Default behavior: check NODE_ENV
+          shouldOptimize = process.env.NODE_ENV === 'production'
+          minify = shouldOptimize && config.build.cssMinify !== false
+        }
       },
     },
 
@@ -116,12 +133,14 @@ export default function tailwindcss(): Plugin[] {
         }
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
-        DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-        result = optimize(result.code, {
-          minify,
-          map: result.map,
-        })
-        DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+        if (shouldOptimize) {
+          DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
+          result = optimize(result.code, {
+            minify,
+            map: result.map,
+          })
+          DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+        }
 
         return result
       },
