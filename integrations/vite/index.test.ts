@@ -914,3 +914,112 @@ test(
 function firstLine(str: string) {
   return str.split('\n')[0]
 }
+
+test(
+  'optimize option: disabled',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss({ optimize: false })],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="hover:flex">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    // Should not be minified when optimize is disabled
+    let content = await fs.read(filename)
+    expect(content).toContain('.hover\\:flex {')
+    expect(content).toContain('&:hover {')
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('display: flex;')
+  },
+)
+
+test(
+  'optimize option: enabled with minify disabled',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss({ optimize: { minify: false } })],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="hover:flex">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    // Should be optimized but not minified
+    let content = await fs.read(filename)
+    expect(content).toContain('@media (hover: hover) {')
+    expect(content).toContain('.hover\\:flex:hover {')
+    expect(content).toContain('display: flex;')
+  },
+)

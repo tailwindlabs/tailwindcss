@@ -18,12 +18,20 @@ const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
 
-export default function tailwindcss(): Plugin[] {
+export type PluginOptions = {
+  /**
+   * Optimize and minify the output CSS.
+   */
+  optimize?: boolean | { minify?: boolean }
+}
+
+export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
 
   let isSSR = false
-  let minify = false
+  let shouldOptimize = true
+  let minify = true
 
   let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
     let cssResolver = config!.createResolver({
@@ -65,8 +73,22 @@ export default function tailwindcss(): Plugin[] {
 
       async configResolved(_config) {
         config = _config
-        minify = config.build.cssMinify !== false
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
+
+        // By default we optimize CSS during the build phase but if the user
+        // provides explicit options we'll use those instead
+        if (opts.optimize !== undefined) {
+          shouldOptimize = opts.optimize !== false
+        }
+
+        // Minification is also performed when optimizing as long as it's also
+        // enabled in Vite
+        minify = shouldOptimize && config.build.cssMinify !== false
+
+        // But again, the user can override that choice explicitly
+        if (typeof opts.optimize === 'object') {
+          minify = opts.optimize.minify !== false
+        }
       },
     },
 
@@ -116,12 +138,14 @@ export default function tailwindcss(): Plugin[] {
         }
         DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
-        DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-        result = optimize(result.code, {
-          minify,
-          map: result.map,
-        })
-        DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+        if (shouldOptimize) {
+          DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
+          result = optimize(result.code, {
+            minify,
+            map: result.map,
+          })
+          DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+        }
 
         return result
       },
