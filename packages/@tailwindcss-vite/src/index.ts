@@ -30,8 +30,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let config: ResolvedConfig | null = null
 
   let isSSR = false
-  let shouldOptimize = false
-  let minify = false
+  let shouldOptimize = true
+  let minify = true
 
   let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
     let cssResolver = config!.createResolver({
@@ -75,15 +75,14 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         config = _config
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
-        // By default we optimize CSS during the build phase unless NODE_ENV is `development`
-        shouldOptimize = process.env.NODE_ENV !== 'development'
-
-        // But if the user provides explicit options we'll use to those instead
+        // By default we optimize CSS during the build phase but if the user
+        // provides explicit options we'll use to those instead
         if (opts.optimize !== undefined) {
           shouldOptimize = opts.optimize !== false
         }
 
-        // Minification is also performed when optimizing as long as it's also enabled in Vite
+        // Minification is also performed when optimizing as long as it's also
+        // enabled in Vite
         minify = shouldOptimize && config.build.cssMinify !== false
 
         // But again, the user can override that choice explicitly
