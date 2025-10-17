@@ -123,111 +123,12 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
     }
   })
 
-  // Resolve theme values to their inlined value.
-  //
-  // E.g.:
-  //
-  // `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
-  // `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
-  //
-  // Due to the `@apply` from above, this will become:
-  //
-  // ```css
-  // .example {
-  //   color: oklch(63.7% 0.237 25.331);
-  // }
-  // ```
-  //
-  // Which conveniently will be equivalent to: `text-red-500` when we inline
-  // the value.
-  //
-  // Without inlining:
-  // ```css
-  // .example {
-  //   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
-  // }
-  // ```
-  //
-  // Inlined:
-  // ```css
-  // .example {
-  //   color: oklch(63.7% 0.237 25.331);
-  // }
-  // ```
-  //
-  // Recently we made sure that utilities like `text-red-500` also generate
-  // the fallback value for usage in `@reference` mode.
-  //
-  // The second assumption is that if you use `var(--key, fallback)` that
-  // happens to match a known variable _and_ its inlined value. Then we can
-  // replace it with the inlined variable. This allows us to handle custom
-  // `@theme` and `@theme inline` definitions.
   walk(ast, (node) => {
     // Handle declarations
     if (node.kind === 'declaration' && node.value !== undefined) {
+      // Resolve theme values to their inlined value.
       if (node.value.includes('var(')) {
-        let changed = false
-        let valueAst = ValueParser.parse(node.value)
-
-        let seen = new Set<string>()
-        walk(valueAst, (valueNode) => {
-          if (valueNode.kind !== 'function') return
-          if (valueNode.value !== 'var') return
-
-          // Resolve the underlying value of the variable
-          if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
-            return
-          }
-
-          let variable = valueNode.nodes[0].value
-
-          // Drop the prefix from the variable name if it is present. The
-          // internal variable doesn't have the prefix.
-          if (designSystem.theme.prefix && variable.startsWith(`--${designSystem.theme.prefix}-`)) {
-            variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
-          }
-          let variableValue = designSystem.resolveThemeValue(variable)
-          // Prevent infinite recursion when the variable value contains the
-          // variable itself.
-          if (seen.has(variable)) return
-          seen.add(variable)
-          if (variableValue === undefined) return // Couldn't resolve the variable
-
-          // Inject variable fallbacks when no fallback is present yet.
-          //
-          // A fallback could consist of multiple values.
-          //
-          // E.g.:
-          //
-          // ```
-          // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
-          // ```
-          {
-            // More than 1 argument means that a fallback is already present
-            if (valueNode.nodes.length === 1) {
-              // Inject the fallback value into the variable lookup
-              changed = true
-              valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
-            }
-          }
-
-          // Replace known variable + inlined fallback value with the value
-          // itself again
-          {
-            // We need at least 3 arguments. The variable, the separator and a fallback value.
-            if (valueNode.nodes.length >= 3) {
-              let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
-              let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
-              if (nodeAsString === constructedValue) {
-                changed = true
-                return WalkAction.Replace(ValueParser.parse(variableValue))
-              }
-            }
-          }
-        })
-
-        // Replace the value with the new value
-        if (changed) node.value = ValueParser.toCss(valueAst)
+        node.value = resolveVariablesInValue(node.value, designSystem)
       }
 
       // Very basic `calc(…)` constant folding to handle the spacing scale
@@ -248,6 +149,111 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
       node.value = printArbitraryValue(node.value)
     }
   })
+}
+
+// Resolve theme values to their inlined value.
+//
+// E.g.:
+//
+// `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
+// `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
+//
+// Due to the `@apply` from above, this will become:
+//
+// ```css
+// .example {
+//   color: oklch(63.7% 0.237 25.331);
+// }
+// ```
+//
+// Which conveniently will be equivalent to: `text-red-500` when we inline
+// the value.
+//
+// Without inlining:
+// ```css
+// .example {
+//   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
+// }
+// ```
+//
+// Inlined:
+// ```css
+// .example {
+//   color: oklch(63.7% 0.237 25.331);
+// }
+// ```
+//
+// Recently we made sure that utilities like `text-red-500` also generate
+// the fallback value for usage in `@reference` mode.
+//
+// The second assumption is that if you use `var(--key, fallback)` that
+// happens to match a known variable _and_ its inlined value. Then we can
+// replace it with the inlined variable. This allows us to handle custom
+// `@theme` and `@theme inline` definitions.
+function resolveVariablesInValue(value: string, designSystem: DesignSystem): string {
+  let changed = false
+  let valueAst = ValueParser.parse(value)
+
+  let seen = new Set<string>()
+  walk(valueAst, (valueNode) => {
+    if (valueNode.kind !== 'function') return
+    if (valueNode.value !== 'var') return
+
+    // Resolve the underlying value of the variable
+    if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
+      return
+    }
+
+    let variable = valueNode.nodes[0].value
+
+    // Drop the prefix from the variable name if it is present. The
+    // internal variable doesn't have the prefix.
+    if (designSystem.theme.prefix && variable.startsWith(`--${designSystem.theme.prefix}-`)) {
+      variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
+    }
+    let variableValue = designSystem.resolveThemeValue(variable)
+    // Prevent infinite recursion when the variable value contains the
+    // variable itself.
+    if (seen.has(variable)) return
+    seen.add(variable)
+    if (variableValue === undefined) return // Couldn't resolve the variable
+
+    // Inject variable fallbacks when no fallback is present yet.
+    //
+    // A fallback could consist of multiple values.
+    //
+    // E.g.:
+    //
+    // ```
+    // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
+    // ```
+    {
+      // More than 1 argument means that a fallback is already present
+      if (valueNode.nodes.length === 1) {
+        // Inject the fallback value into the variable lookup
+        changed = true
+        valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
+      }
+    }
+
+    // Replace known variable + inlined fallback value with the value
+    // itself again
+    {
+      // We need at least 3 arguments. The variable, the separator and a fallback value.
+      if (valueNode.nodes.length >= 3) {
+        let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
+        let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
+        if (nodeAsString === constructedValue) {
+          changed = true
+          return WalkAction.Replace(ValueParser.parse(variableValue))
+        }
+      }
+    }
+  })
+
+  // Replace the value with the new value
+  if (changed) return ValueParser.toCss(valueAst)
+  return value
 }
 
 // For all static utilities in the system, compute a lookup table that maps the
