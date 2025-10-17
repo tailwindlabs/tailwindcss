@@ -5,7 +5,6 @@ import {
   decl,
   rule,
   styleRule,
-  walk,
   type AstNode,
   type AtRule,
   type Declaration,
@@ -27,6 +26,7 @@ import {
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
+import { walk, WalkAction } from './walk'
 
 const IS_VALID_STATIC_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*$/
 const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
@@ -5894,7 +5894,7 @@ export function createCssUtility(node: AtRule) {
         //
         // Once Prettier / Biome handle these better (e.g.: not crashing without
         // `\\*` or not inserting whitespace) then most of these can go away.
-        ValueParser.walk(declarationValueAst, (fn) => {
+        walk(declarationValueAst, (fn) => {
           if (fn.kind !== 'function') return
 
           // Track usage of `--spacing(…)`
@@ -5904,7 +5904,7 @@ export function createCssUtility(node: AtRule) {
             // using the full `--spacing` theme scale.
             !(storage['--modifier'].usedSpacingNumber && storage['--value'].usedSpacingNumber)
           ) {
-            ValueParser.walk(fn.nodes, (node) => {
+            walk(fn.nodes, (node) => {
               if (node.kind !== 'function') return
               if (node.value !== '--value' && node.value !== '--modifier') return
               const key = node.value
@@ -5923,12 +5923,12 @@ export function createCssUtility(node: AtRule) {
                     storage['--modifier'].usedSpacingNumber &&
                     storage['--value'].usedSpacingNumber
                   ) {
-                    return ValueParser.ValueWalkAction.Stop
+                    return WalkAction.Stop
                   }
                 }
               }
             })
-            return ValueParser.ValueWalkAction.Continue
+            return WalkAction.Continue
           }
 
           if (fn.value !== '--value' && fn.value !== '--modifier') return
@@ -5987,9 +5987,9 @@ export function createCssUtility(node: AtRule) {
               let dataType = node.value
               let copy = structuredClone(fn)
               let sentinelValue = '¶'
-              ValueParser.walk(copy.nodes, (node, { replaceWith }) => {
+              walk(copy.nodes, (node) => {
                 if (node.kind === 'word' && node.value === dataType) {
-                  replaceWith({ kind: 'word', value: sentinelValue })
+                  return WalkAction.ReplaceSkip({ kind: 'word', value: sentinelValue } as const)
                 }
               })
               let underline = '^'.repeat(ValueParser.toCss([node]).length)
@@ -6048,66 +6048,68 @@ export function createCssUtility(node: AtRule) {
         // Whether `--value(ratio)` was resolved
         let resolvedRatioValue = false
 
-        walk([atRule], (node, { parent, replaceWith: replaceDeclarationWith }) => {
+        walk<AstNode>([atRule], (node, ctx) => {
+          let parent = ctx.parent
           if (parent?.kind !== 'rule' && parent?.kind !== 'at-rule') return
           if (node.kind !== 'declaration') return
           if (!node.value) return
 
+          let shouldRemoveDeclaration = false
+
           let valueAst = ValueParser.parse(node.value)
-          let result =
-            ValueParser.walk(valueAst, (valueNode, { replaceWith }) => {
-              if (valueNode.kind !== 'function') return
+          walk(valueAst, (valueNode) => {
+            if (valueNode.kind !== 'function') return
 
-              // Value function, e.g.: `--value(integer)`
-              if (valueNode.value === '--value') {
-                usedValueFn = true
+            // Value function, e.g.: `--value(integer)`
+            if (valueNode.value === '--value') {
+              usedValueFn = true
 
-                let resolved = resolveValueFunction(value, valueNode, designSystem)
-                if (resolved) {
-                  resolvedValueFn = true
-                  if (resolved.ratio) {
-                    resolvedRatioValue = true
-                  } else {
-                    resolvedDeclarations.set(node, parent)
-                  }
-                  replaceWith(resolved.nodes)
-                  return ValueParser.ValueWalkAction.Skip
+              let resolved = resolveValueFunction(value, valueNode, designSystem)
+              if (resolved) {
+                resolvedValueFn = true
+                if (resolved.ratio) {
+                  resolvedRatioValue = true
+                } else {
+                  resolvedDeclarations.set(node, parent)
                 }
-
-                // Drop the declaration in case we couldn't resolve the value
-                usedValueFn ||= false
-                replaceDeclarationWith([])
-                return ValueParser.ValueWalkAction.Stop
+                return WalkAction.ReplaceSkip(resolved.nodes)
               }
 
-              // Modifier function, e.g.: `--modifier(integer)`
-              else if (valueNode.value === '--modifier') {
-                // If there is no modifier present in the candidate, then the
-                // declaration can be removed.
-                if (modifier === null) {
-                  replaceDeclarationWith([])
-                  return ValueParser.ValueWalkAction.Stop
-                }
+              // Drop the declaration in case we couldn't resolve the value
+              usedValueFn ||= false
+              shouldRemoveDeclaration = true
+              return WalkAction.Stop
+            }
 
-                usedModifierFn = true
-
-                let replacement = resolveValueFunction(modifier, valueNode, designSystem)
-                if (replacement) {
-                  resolvedModifierFn = true
-                  replaceWith(replacement.nodes)
-                  return ValueParser.ValueWalkAction.Skip
-                }
-
-                // Drop the declaration in case we couldn't resolve the value
-                usedModifierFn ||= false
-                replaceDeclarationWith([])
-                return ValueParser.ValueWalkAction.Stop
+            // Modifier function, e.g.: `--modifier(integer)`
+            else if (valueNode.value === '--modifier') {
+              // If there is no modifier present in the candidate, then the
+              // declaration can be removed.
+              if (modifier === null) {
+                shouldRemoveDeclaration = true
+                return WalkAction.Stop
               }
-            }) ?? ValueParser.ValueWalkAction.Continue
 
-          if (result === ValueParser.ValueWalkAction.Continue) {
-            node.value = ValueParser.toCss(valueAst)
+              usedModifierFn = true
+
+              let replacement = resolveValueFunction(modifier, valueNode, designSystem)
+              if (replacement) {
+                resolvedModifierFn = true
+                return WalkAction.ReplaceSkip(replacement.nodes)
+              }
+
+              // Drop the declaration in case we couldn't resolve the value
+              usedModifierFn ||= false
+              shouldRemoveDeclaration = true
+              return WalkAction.Stop
+            }
+          })
+
+          if (shouldRemoveDeclaration) {
+            return WalkAction.ReplaceSkip([])
           }
+
+          node.value = ValueParser.toCss(valueAst)
         })
 
         // Used `--value(…)` but nothing resolved

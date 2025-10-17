@@ -1,10 +1,11 @@
 import { Features } from '.'
-import { cloneAstNode, rule, toCss, walk, WalkAction, type AstNode } from './ast'
+import { cloneAstNode, rule, toCss, type AstNode } from './ast'
 import { compileCandidates } from './compile'
 import type { DesignSystem } from './design-system'
 import type { SourceLocation } from './source-maps/source'
 import { DefaultMap } from './utils/default-map'
 import { segment } from './utils/segment'
+import { walk, WalkAction } from './walk'
 
 export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let features = Features.None
@@ -25,7 +26,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   let definitions = new DefaultMap(() => new Set<AstNode>())
 
   // Collect all new `@utility` definitions and all `@apply` rules first
-  walk([root], (node, { parent, path }) => {
+  walk([root], (node, ctx) => {
     if (node.kind !== 'at-rule') return
 
     // Do not allow `@apply` rules inside `@keyframes` rules.
@@ -61,16 +62,15 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
     if (node.name === '@apply') {
       // `@apply` cannot be top-level, so we need to have a parent such that we
       // can replace the `@apply` node with the actual utility classes later.
-      if (parent === null) return
+      if (ctx.parent === null) return
 
       features |= Features.AtApply
 
-      parents.add(parent)
+      parents.add(ctx.parent)
 
       for (let dependency of resolveApplyDependencies(node, designSystem)) {
         // Mark every parent in the path as having a dependency to that utility.
-        for (let parent of path) {
-          if (parent === node) continue
+        for (let parent of ctx.path()) {
           if (!parents.has(parent)) continue
           dependencies.get(parent).add(dependency)
         }
@@ -158,7 +158,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
   for (let parent of sorted) {
     if (!('nodes' in parent)) continue
 
-    walk(parent.nodes, (child, { replaceWith }) => {
+    walk(parent.nodes, (child) => {
       if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
       let parts = child.params.split(/(\s+)/g)
@@ -291,7 +291,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           }
         }
 
-        replaceWith(newNodes)
+        return WalkAction.Replace(newNodes)
       }
     })
   }
