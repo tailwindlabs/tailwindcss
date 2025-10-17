@@ -12,6 +12,12 @@ import { walk, WalkAction } from './walk'
 
 const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
 
+export enum SignatureFeatures {
+  None = 0,
+  ExpandProperties = 1 << 0,
+  LogicalToPhysical = 1 << 1,
+}
+
 export interface SignatureOptions {
   /**
    * The root font size in pixels. If provided, `rem` values will be normalized
@@ -20,6 +26,11 @@ export interface SignatureOptions {
    * E.g.: `mt-[16px]` with `rem: 16` will become `mt-4` (assuming `--spacing: 0.25rem`).
    */
   rem: number | null
+
+  /**
+   * Features that influence how signatures are computed.
+   */
+  features: SignatureFeatures
 
   /**
    * The design system to use for computing the signature of candidates.

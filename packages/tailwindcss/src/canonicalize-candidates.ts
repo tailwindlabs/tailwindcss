@@ -43,6 +43,14 @@ export interface CanonicalizeOptions {
    * E.g.: `mt-2 mr-2 mb-2 ml-2` → `m-2`
    */
   collapse?: boolean
+
+  /**
+   * Whether to convert between logical and physical properties when collapsing
+   * utilities.
+   *
+   * E.g.: `mr-2 ml-2` → `mx-2`
+   */
+  logicalToPhysical?: boolean
 }
 
 enum Features {
@@ -65,7 +73,9 @@ interface InternalCanonicalizeOptions {
 
 const signatureOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
   return new DefaultMap((rem: number | null = null) => {
-    return { designSystem, rem } satisfies SignatureOptions
+    return new DefaultMap((features: SignatureFeatures) => {
+      return { designSystem, rem, features } satisfies SignatureOptions
+    })
   })
 })
 
@@ -73,7 +83,14 @@ export function createSignatureOptions(
   designSystem: DesignSystem,
   options?: CanonicalizeOptions,
 ): SignatureOptions {
-  return signatureOptionsCache.get(designSystem).get(options?.rem ?? null)
+  let features = SignatureFeatures.None
+  if (options?.collapse) features |= SignatureFeatures.ExpandProperties
+  if (options?.logicalToPhysical) features |= SignatureFeatures.LogicalToPhysical
+
+  return signatureOptionsCache
+    .get(designSystem)
+    .get(options?.rem ?? null)
+    .get(features)
 }
 
 const internalOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
