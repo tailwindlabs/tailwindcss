@@ -53,18 +53,18 @@ await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
 // Build platform binaries and checksum them. We use baseline builds for all x64 platforms to ensure
 // compatibility with older hardware.
-let results = await Promise.all([
-  build('bun-linux-arm64', './tailwindcss-linux-arm64'),
-  build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
+let results = [
+  await build('bun-linux-arm64', './tailwindcss-linux-arm64'),
+  await build('bun-linux-arm64-musl', './tailwindcss-linux-arm64-musl'),
 
-  build('bun-linux-x64-baseline', './tailwindcss-linux-x64'),
-  build('bun-linux-x64-musl-baseline', './tailwindcss-linux-x64-musl'),
+  await build('bun-linux-x64-baseline', './tailwindcss-linux-x64'),
+  await build('bun-linux-x64-musl-baseline', './tailwindcss-linux-x64-musl'),
 
-  build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
-  build('bun-darwin-x64-baseline', './tailwindcss-macos-x64'),
+  await build('bun-darwin-arm64', './tailwindcss-macos-arm64'),
+  await build('bun-darwin-x64-baseline', './tailwindcss-macos-x64'),
 
-  build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
-])
+  await build('bun-windows-x64-baseline', './tailwindcss-windows-x64.exe'),
+]
 
 // Write the checksums to a file
 let sumsFile = path.resolve(__dirname, '../dist/sha256sums.txt')
