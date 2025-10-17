@@ -176,8 +176,8 @@ impl Ignore {
         if !self.is_root() {
             panic!("Ignore::add_parents called on non-root matcher");
         }
-        // CHANGED: Use `dunce::canonicalize` as we use it everywhere else.
-        let absolute_base = match dunce::canonicalize(path.as_ref()) {
+        // CHANGED: Use `fsops::canonicalize` as we use it everywhere else.
+        let absolute_base = match fsops::canonicalize(path.as_ref()) {
             Ok(path) => Arc::new(path),
             Err(_) => {
                 // There's not much we can do here, so just return our
