@@ -98,34 +98,14 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
       // Normalize percentages by removing unnecessary dots and zeros.
       //
       // E.g.: `50.0%` → `50%`
-      else if (node.value.includes('%')) {
+      if (node.value.includes('%')) {
         FLOATING_POINT_PERCENTAGE.lastIndex = 0
         node.value = node.value.replaceAll(
           FLOATING_POINT_PERCENTAGE,
           (match) => `${Number(match.slice(0, -1))}%`,
         )
       }
-    }
 
-    // Replace special nodes with its children
-    else if (node.kind === 'context' || node.kind === 'at-root') {
-      return WalkAction.Replace(node.nodes)
-    }
-
-    // Remove comments
-    else if (node.kind === 'comment') {
-      return WalkAction.Replace([])
-    }
-
-    // Remove at-rules that are not needed for the signature
-    else if (node.kind === 'at-rule' && node.name === '@property') {
-      return WalkAction.Replace([])
-    }
-  })
-
-  walk(ast, (node) => {
-    // Handle declarations
-    if (node.kind === 'declaration' && node.value !== undefined) {
       // Resolve theme values to their inlined value.
       if (node.value.includes('var(')) {
         node.value = resolveVariablesInValue(node.value, designSystem)
@@ -147,6 +127,21 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
       //
       // Essentially normalizing the `node.value` to a canonical form.
       node.value = printArbitraryValue(node.value)
+    }
+
+    // Replace special nodes with its children
+    else if (node.kind === 'context' || node.kind === 'at-root') {
+      return WalkAction.Replace(node.nodes)
+    }
+
+    // Remove comments
+    else if (node.kind === 'comment') {
+      return WalkAction.Replace([])
+    }
+
+    // Remove at-rules that are not needed for the signature
+    else if (node.kind === 'at-rule' && node.name === '@property') {
+      return WalkAction.Replace([])
     }
   })
 }
