@@ -74,7 +74,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     input: string,
     candidate: string,
     expected: string,
-    options?: CanonicalizeOptions,
+    options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
   ) {
     candidate = prepare(candidate)
     expected = prepare(expected)
@@ -299,7 +299,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[color:oklch(62.3%_0.214_259.815)]/50', 'text-primary'],
 
       // Arbitrary property to arbitrary value
-      ['[max-height:20px]', 'max-h-[20px]'],
+      ['[max-height:20%]', 'max-h-[20%]'],
 
       // Arbitrary property to bare value
       ['[grid-column:2]', 'col-2'],
