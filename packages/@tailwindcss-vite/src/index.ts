@@ -76,7 +76,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
         // By default we optimize CSS during the build phase but if the user
-        // provides explicit options we'll use to those instead
+        // provides explicit options we'll use those instead
         if (opts.optimize !== undefined) {
           shouldOptimize = opts.optimize !== false
         }
