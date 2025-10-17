@@ -145,6 +145,15 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
         return WalkAction.Replace([])
       }
     },
+    exit(node) {
+      if (node.kind === 'rule' || node.kind === 'at-rule') {
+        node.nodes.sort((a, b) => {
+          if (a.kind !== 'declaration') return 0
+          if (b.kind !== 'declaration') return 0
+          return a.property.localeCompare(b.property)
+        })
+      }
+    },
   })
 }
 
