@@ -44,7 +44,7 @@ export interface SignatureOptions {
 //
 // These produce the same signature, therefore they represent the same utility.
 export const computeUtilitySignature = new DefaultMap((options: SignatureOptions) => {
-  let { rem, designSystem } = options
+  let designSystem = options.designSystem
 
   return new DefaultMap<string, string | Symbol>((utility) => {
     try {
@@ -70,169 +70,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
       // values or `--tw-sort` declarations.
-      walk(ast, (node) => {
-        // Optimize declarations
-        if (node.kind === 'declaration') {
-          if (node.value === undefined || node.property === '--tw-sort') {
-            return WalkAction.Replace([])
-          }
-
-          // Normalize percentages by removing unnecessary dots and zeros.
-          //
-          // E.g.: `50.0%` → `50%`
-          else if (node.value.includes('%')) {
-            FLOATING_POINT_PERCENTAGE.lastIndex = 0
-            node.value = node.value.replaceAll(
-              FLOATING_POINT_PERCENTAGE,
-              (match) => `${Number(match.slice(0, -1))}%`,
-            )
-          }
-        }
-
-        // Replace special nodes with its children
-        else if (node.kind === 'context' || node.kind === 'at-root') {
-          return WalkAction.Replace(node.nodes)
-        }
-
-        // Remove comments
-        else if (node.kind === 'comment') {
-          return WalkAction.Replace([])
-        }
-
-        // Remove at-rules that are not needed for the signature
-        else if (node.kind === 'at-rule' && node.name === '@property') {
-          return WalkAction.Replace([])
-        }
-      })
-
-      // Resolve theme values to their inlined value.
-      //
-      // E.g.:
-      //
-      // `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
-      // `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
-      //
-      // Due to the `@apply` from above, this will become:
-      //
-      // ```css
-      // .example {
-      //   color: oklch(63.7% 0.237 25.331);
-      // }
-      // ```
-      //
-      // Which conveniently will be equivalent to: `text-red-500` when we inline
-      // the value.
-      //
-      // Without inlining:
-      // ```css
-      // .example {
-      //   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
-      // }
-      // ```
-      //
-      // Inlined:
-      // ```css
-      // .example {
-      //   color: oklch(63.7% 0.237 25.331);
-      // }
-      // ```
-      //
-      // Recently we made sure that utilities like `text-red-500` also generate
-      // the fallback value for usage in `@reference` mode.
-      //
-      // The second assumption is that if you use `var(--key, fallback)` that
-      // happens to match a known variable _and_ its inlined value. Then we can
-      // replace it with the inlined variable. This allows us to handle custom
-      // `@theme` and `@theme inline` definitions.
-      walk(ast, (node) => {
-        // Handle declarations
-        if (node.kind === 'declaration' && node.value !== undefined) {
-          if (node.value.includes('var(')) {
-            let changed = false
-            let valueAst = ValueParser.parse(node.value)
-
-            let seen = new Set<string>()
-            walk(valueAst, (valueNode) => {
-              if (valueNode.kind !== 'function') return
-              if (valueNode.value !== 'var') return
-
-              // Resolve the underlying value of the variable
-              if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
-                return
-              }
-
-              let variable = valueNode.nodes[0].value
-
-              // Drop the prefix from the variable name if it is present. The
-              // internal variable doesn't have the prefix.
-              if (
-                designSystem.theme.prefix &&
-                variable.startsWith(`--${designSystem.theme.prefix}-`)
-              ) {
-                variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
-              }
-              let variableValue = designSystem.resolveThemeValue(variable)
-              // Prevent infinite recursion when the variable value contains the
-              // variable itself.
-              if (seen.has(variable)) return
-              seen.add(variable)
-              if (variableValue === undefined) return // Couldn't resolve the variable
-
-              // Inject variable fallbacks when no fallback is present yet.
-              //
-              // A fallback could consist of multiple values.
-              //
-              // E.g.:
-              //
-              // ```
-              // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
-              // ```
-              {
-                // More than 1 argument means that a fallback is already present
-                if (valueNode.nodes.length === 1) {
-                  // Inject the fallback value into the variable lookup
-                  changed = true
-                  valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
-                }
-              }
-
-              // Replace known variable + inlined fallback value with the value
-              // itself again
-              {
-                // We need at least 3 arguments. The variable, the separator and a fallback value.
-                if (valueNode.nodes.length >= 3) {
-                  let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
-                  let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
-                  if (nodeAsString === constructedValue) {
-                    changed = true
-                    return WalkAction.Replace(ValueParser.parse(variableValue))
-                  }
-                }
-              }
-            })
-
-            // Replace the value with the new value
-            if (changed) node.value = ValueParser.toCss(valueAst)
-          }
-
-          // Very basic `calc(…)` constant folding to handle the spacing scale
-          // multiplier:
-          //
-          // Input:  `--spacing(4)`
-          //       → `calc(var(--spacing, 0.25rem) * 4)`
-          //       → `calc(0.25rem * 4)`       ← this is the case we will see
-          //                                     after inlining the variable
-          //       → `1rem`
-          node.value = constantFoldDeclaration(node.value, rem)
-
-          // We will normalize the `node.value`, this is the same kind of logic
-          // we use when printing arbitrary values. It will remove unnecessary
-          // whitespace.
-          //
-          // Essentially normalizing the `node.value` to a canonical form.
-          node.value = printArbitraryValue(node.value)
-        }
-      })
+      canonicalizeAst(ast, options)
 
       // Compute the final signature, by generating the CSS for the utility
       let signature = toCss(ast)
@@ -244,6 +82,173 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
     }
   })
 })
+
+// Optimize the CSS AST to make it suitable for signature comparison. We want to
+// expand declarations, ignore comments, sort declarations etc...
+function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
+  let { rem, designSystem } = options
+
+  walk(ast, (node) => {
+    // Optimize declarations
+    if (node.kind === 'declaration') {
+      if (node.value === undefined || node.property === '--tw-sort') {
+        return WalkAction.Replace([])
+      }
+
+      // Normalize percentages by removing unnecessary dots and zeros.
+      //
+      // E.g.: `50.0%` → `50%`
+      else if (node.value.includes('%')) {
+        FLOATING_POINT_PERCENTAGE.lastIndex = 0
+        node.value = node.value.replaceAll(
+          FLOATING_POINT_PERCENTAGE,
+          (match) => `${Number(match.slice(0, -1))}%`,
+        )
+      }
+    }
+
+    // Replace special nodes with its children
+    else if (node.kind === 'context' || node.kind === 'at-root') {
+      return WalkAction.Replace(node.nodes)
+    }
+
+    // Remove comments
+    else if (node.kind === 'comment') {
+      return WalkAction.Replace([])
+    }
+
+    // Remove at-rules that are not needed for the signature
+    else if (node.kind === 'at-rule' && node.name === '@property') {
+      return WalkAction.Replace([])
+    }
+  })
+
+  // Resolve theme values to their inlined value.
+  //
+  // E.g.:
+  //
+  // `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
+  // `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
+  //
+  // Due to the `@apply` from above, this will become:
+  //
+  // ```css
+  // .example {
+  //   color: oklch(63.7% 0.237 25.331);
+  // }
+  // ```
+  //
+  // Which conveniently will be equivalent to: `text-red-500` when we inline
+  // the value.
+  //
+  // Without inlining:
+  // ```css
+  // .example {
+  //   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
+  // }
+  // ```
+  //
+  // Inlined:
+  // ```css
+  // .example {
+  //   color: oklch(63.7% 0.237 25.331);
+  // }
+  // ```
+  //
+  // Recently we made sure that utilities like `text-red-500` also generate
+  // the fallback value for usage in `@reference` mode.
+  //
+  // The second assumption is that if you use `var(--key, fallback)` that
+  // happens to match a known variable _and_ its inlined value. Then we can
+  // replace it with the inlined variable. This allows us to handle custom
+  // `@theme` and `@theme inline` definitions.
+  walk(ast, (node) => {
+    // Handle declarations
+    if (node.kind === 'declaration' && node.value !== undefined) {
+      if (node.value.includes('var(')) {
+        let changed = false
+        let valueAst = ValueParser.parse(node.value)
+
+        let seen = new Set<string>()
+        walk(valueAst, (valueNode) => {
+          if (valueNode.kind !== 'function') return
+          if (valueNode.value !== 'var') return
+
+          // Resolve the underlying value of the variable
+          if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
+            return
+          }
+
+          let variable = valueNode.nodes[0].value
+
+          // Drop the prefix from the variable name if it is present. The
+          // internal variable doesn't have the prefix.
+          if (designSystem.theme.prefix && variable.startsWith(`--${designSystem.theme.prefix}-`)) {
+            variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
+          }
+          let variableValue = designSystem.resolveThemeValue(variable)
+          // Prevent infinite recursion when the variable value contains the
+          // variable itself.
+          if (seen.has(variable)) return
+          seen.add(variable)
+          if (variableValue === undefined) return // Couldn't resolve the variable
+
+          // Inject variable fallbacks when no fallback is present yet.
+          //
+          // A fallback could consist of multiple values.
+          //
+          // E.g.:
+          //
+          // ```
+          // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
+          // ```
+          {
+            // More than 1 argument means that a fallback is already present
+            if (valueNode.nodes.length === 1) {
+              // Inject the fallback value into the variable lookup
+              changed = true
+              valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
+            }
+          }
+
+          // Replace known variable + inlined fallback value with the value
+          // itself again
+          {
+            // We need at least 3 arguments. The variable, the separator and a fallback value.
+            if (valueNode.nodes.length >= 3) {
+              let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
+              let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
+              if (nodeAsString === constructedValue) {
+                changed = true
+                return WalkAction.Replace(ValueParser.parse(variableValue))
+              }
+            }
+          }
+        })
+
+        // Replace the value with the new value
+        if (changed) node.value = ValueParser.toCss(valueAst)
+      }
+
+      // Very basic `calc(…)` constant folding to handle the spacing scale
+      // multiplier:
+      //
+      // Input:  `--spacing(4)`
+      //       → `calc(var(--spacing, 0.25rem) * 4)`
+      //       → `calc(0.25rem * 4)`       ← this is the case we will see
+      //                                     after inlining the variable
+      //       → `1rem`
+      node.value = constantFoldDeclaration(node.value, rem)
+
+      // We will normalize the `node.value`, this is the same kind of logic
+      // we use when printing arbitrary values. It will remove unnecessary
+      // whitespace.
+      //
+      // Essentially normalizing the `node.value` to a canonical form.
+      node.value = printArbitraryValue(node.value)
+    }
+  })
+}
 
 // For all static utilities in the system, compute a lookup table that maps the
 // utility signature to the utility name. This is used to find the utility name
