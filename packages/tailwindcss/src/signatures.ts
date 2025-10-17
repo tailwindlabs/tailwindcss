@@ -3,6 +3,7 @@ import { atRule, styleRule, toCss, type AstNode } from './ast'
 import { printArbitraryValue } from './candidate'
 import { constantFoldDeclaration } from './constant-fold-declaration'
 import { CompileAstFlags, type DesignSystem } from './design-system'
+import { expandDeclaration } from './expand-declaration'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -105,6 +106,11 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
       if (node.kind === 'declaration') {
         if (node.value === undefined || node.property === '--tw-sort') {
           return WalkAction.Replace([])
+        }
+
+        if (options.features & SignatureFeatures.ExpandProperties) {
+          let replacement = expandDeclaration(node, options.features)
+          if (replacement) return WalkAction.Replace(replacement)
         }
 
         // Normalize percentages by removing unnecessary dots and zeros.
