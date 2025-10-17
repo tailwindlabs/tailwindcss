@@ -27,6 +27,12 @@ const designSystems = new DefaultMap((base: string) => {
   })
 })
 
+const DEFAULT_CANONICALIZATION_OPTIONS: CanonicalizeOptions = {
+  rem: 16,
+  collapse: true,
+  logicalToPhysical: true,
+}
+
 describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', (strategy) => {
   let testName = '`%s` → `%s` (%#)'
   if (strategy === 'with-variant') {
@@ -84,6 +90,30 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       expect(actual).toBe(expected)
     } catch (err) {
       if (err instanceof Error) Error.captureStackTrace(err, expectCanonicalization)
+      throw err
+    }
+  }
+
+  async function expectCombinedCanonicalization(
+    input: string,
+    candidates: string,
+    expected: string,
+    options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
+  ) {
+    let preparedCandidates = candidates.split(/\s+/g).map(prepare)
+    let preparedExpected = expected.split(/\s+/g).map(prepare)
+
+    if (strategy === 'prefix') {
+      input = input.replace("@import 'tailwindcss';", "@import 'tailwindcss' prefix(tw);")
+    }
+
+    let designSystem = await designSystems.get(__dirname).get(input)
+    let actual = designSystem.canonicalizeCandidates(preparedCandidates, options)
+
+    try {
+      expect(actual).toEqual(preparedExpected)
+    } catch (err) {
+      if (err instanceof Error) Error.captureStackTrace(err, expectCombinedCanonicalization)
       throw err
     }
   }
@@ -888,6 +918,37 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
   })
+
+  test.each([
+    // 4 to 1
+    ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
+
+    // 2 to 1
+    ['mt-1 mb-1', 'my-1'],
+
+    // Different order as above
+    ['mb-1 mt-1', 'my-1'],
+
+    // To completely different utility
+    ['w-4 h-4', 'size-4'],
+
+    // Do not touch if not operating on the same variants
+    ['hover:w-4 h-4', 'hover:w-4 h-4'],
+
+    // Arbitrary properties to combined class
+    ['[width:_16px_] [height:16px]', 'size-4'],
+
+    // Arbitrary properties to combined class with modifier
+    ['[font-size:14px] [line-height:1.625]', 'text-sm/relaxed'],
+  ])(
+    'should canonicalize multiple classes `%s` into a shorthand `%s`',
+    async (candidates, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+      await expectCombinedCanonicalization(input, candidates, expected)
+    },
+  )
 })
 
 describe('theme to var', () => {
