@@ -88,61 +88,63 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
 function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
   let { rem, designSystem } = options
 
-  walk(ast, (node) => {
-    // Optimize declarations
-    if (node.kind === 'declaration') {
-      if (node.value === undefined || node.property === '--tw-sort') {
+  walk(ast, {
+    enter(node) {
+      // Optimize declarations
+      if (node.kind === 'declaration') {
+        if (node.value === undefined || node.property === '--tw-sort') {
+          return WalkAction.Replace([])
+        }
+
+        // Normalize percentages by removing unnecessary dots and zeros.
+        //
+        // E.g.: `50.0%` → `50%`
+        if (node.value.includes('%')) {
+          FLOATING_POINT_PERCENTAGE.lastIndex = 0
+          node.value = node.value.replaceAll(
+            FLOATING_POINT_PERCENTAGE,
+            (match) => `${Number(match.slice(0, -1))}%`,
+          )
+        }
+
+        // Resolve theme values to their inlined value.
+        if (node.value.includes('var(')) {
+          node.value = resolveVariablesInValue(node.value, designSystem)
+        }
+
+        // Very basic `calc(…)` constant folding to handle the spacing scale
+        // multiplier:
+        //
+        // Input:  `--spacing(4)`
+        //       → `calc(var(--spacing, 0.25rem) * 4)`
+        //       → `calc(0.25rem * 4)`       ← this is the case we will see
+        //                                     after inlining the variable
+        //       → `1rem`
+        node.value = constantFoldDeclaration(node.value, rem)
+
+        // We will normalize the `node.value`, this is the same kind of logic
+        // we use when printing arbitrary values. It will remove unnecessary
+        // whitespace.
+        //
+        // Essentially normalizing the `node.value` to a canonical form.
+        node.value = printArbitraryValue(node.value)
+      }
+
+      // Replace special nodes with its children
+      else if (node.kind === 'context' || node.kind === 'at-root') {
+        return WalkAction.Replace(node.nodes)
+      }
+
+      // Remove comments
+      else if (node.kind === 'comment') {
         return WalkAction.Replace([])
       }
 
-      // Normalize percentages by removing unnecessary dots and zeros.
-      //
-      // E.g.: `50.0%` → `50%`
-      if (node.value.includes('%')) {
-        FLOATING_POINT_PERCENTAGE.lastIndex = 0
-        node.value = node.value.replaceAll(
-          FLOATING_POINT_PERCENTAGE,
-          (match) => `${Number(match.slice(0, -1))}%`,
-        )
+      // Remove at-rules that are not needed for the signature
+      else if (node.kind === 'at-rule' && node.name === '@property') {
+        return WalkAction.Replace([])
       }
-
-      // Resolve theme values to their inlined value.
-      if (node.value.includes('var(')) {
-        node.value = resolveVariablesInValue(node.value, designSystem)
-      }
-
-      // Very basic `calc(…)` constant folding to handle the spacing scale
-      // multiplier:
-      //
-      // Input:  `--spacing(4)`
-      //       → `calc(var(--spacing, 0.25rem) * 4)`
-      //       → `calc(0.25rem * 4)`       ← this is the case we will see
-      //                                     after inlining the variable
-      //       → `1rem`
-      node.value = constantFoldDeclaration(node.value, rem)
-
-      // We will normalize the `node.value`, this is the same kind of logic
-      // we use when printing arbitrary values. It will remove unnecessary
-      // whitespace.
-      //
-      // Essentially normalizing the `node.value` to a canonical form.
-      node.value = printArbitraryValue(node.value)
-    }
-
-    // Replace special nodes with its children
-    else if (node.kind === 'context' || node.kind === 'at-root') {
-      return WalkAction.Replace(node.nodes)
-    }
-
-    // Remove comments
-    else if (node.kind === 'comment') {
-      return WalkAction.Replace([])
-    }
-
-    // Remove at-rules that are not needed for the signature
-    else if (node.kind === 'at-rule' && node.name === '@property') {
-      return WalkAction.Replace([])
-    }
+    },
   })
 }
 
