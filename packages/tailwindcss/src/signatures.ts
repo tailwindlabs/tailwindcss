@@ -1,5 +1,5 @@
 import { substituteAtApply } from './apply'
-import { atRule, styleRule, toCss, type AstNode } from './ast'
+import { atRule, cloneAstNode, styleRule, toCss, type AstNode } from './ast'
 import { printArbitraryValue } from './candidate'
 import { constantFoldDeclaration } from './constant-fold-declaration'
 import { CompileAstFlags, type DesignSystem } from './design-system'
@@ -172,6 +172,8 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
       }
     },
   })
+
+  return ast
 }
 
 // Resolve theme values to their inlined value.
@@ -279,6 +281,50 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
   return value
 }
 
+// Index all static utilities by property and value
+export const staticUtilitiesByPropertyAndValue = new DefaultMap((_optiones: SignatureOptions) => {
+  return new DefaultMap((_property: string) => {
+    return new DefaultMap((_value: string) => {
+      return new Set<string>()
+    })
+  })
+})
+
+export const computeUtilityProperties = new DefaultMap((options: SignatureOptions) => {
+  return new DefaultMap((className) => {
+    let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
+    let designSystem = options.designSystem
+
+    if (
+      options.designSystem.theme.prefix &&
+      !className.startsWith(options.designSystem.theme.prefix)
+    ) {
+      className = `${options.designSystem.theme.prefix}:${className}`
+    }
+    let parsed = designSystem.parseCandidate(className)
+    if (parsed.length === 0) return localPropertyValueLookup
+
+    walk(
+      canonicalizeAst(
+        designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
+        options,
+      ),
+      (node) => {
+        if (node.kind === 'declaration') {
+          localPropertyValueLookup.get(node.property).add(node.value!)
+          staticUtilitiesByPropertyAndValue
+            .get(options)
+            .get(node.property)
+            .get(node.value!)
+            .add(className)
+        }
+      },
+    )
+
+    return localPropertyValueLookup
+  })
+})
+
 // For all static utilities in the system, compute a lookup table that maps the
 // utility signature to the utility name. This is used to find the utility name
 // for a given utility signature.
@@ -291,6 +337,9 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
   let signatures = computeUtilitySignature.get(options)
   let lookup = new DefaultMap<string, string[]>(() => [])
 
+  // Right now all plugins are implemented using functions so they are a black
+  // box. Let's use the `getClassList` and consider every known suggestion as a
+  // static utility for now.
   for (let [className, meta] of designSystem.getClassList()) {
     let signature = signatures.get(className)
     if (typeof signature !== 'string') continue
@@ -306,6 +355,7 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
     }
 
     lookup.get(signature).push(className)
+    computeUtilityProperties.get(options).get(className)
 
     for (let modifier of meta.modifiers) {
       // Modifiers representing numbers can be computed and don't need to be
@@ -319,6 +369,7 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
       let signature = signatures.get(classNameWithModifier)
       if (typeof signature !== 'string') continue
       lookup.get(signature).push(classNameWithModifier)
+      computeUtilityProperties.get(options).get(classNameWithModifier)
     }
   }
 
