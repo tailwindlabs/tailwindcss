@@ -12,10 +12,13 @@ import { keyPathToCssProperty } from './compat/apply-config-to-theme'
 import type { DesignSystem } from './design-system'
 import * as SelectorParser from './selector-parser'
 import {
+  computeUtilityProperties,
   computeUtilitySignature,
   computeVariantSignature,
   preComputedUtilities,
   preComputedVariants,
+  SignatureFeatures,
+  staticUtilitiesByPropertyAndValue,
   type SignatureOptions,
 } from './signatures'
 import type { Writable } from './types'
@@ -129,7 +132,172 @@ export function canonicalizeCandidates(
   for (let candidate of candidates) {
     result.add(cache.get(candidate))
   }
+
+  return result.size <= 1 || !(canonicalizeOptions.features & Features.CollapseUtilities)
+    ? Array.from(result)
+    : collapseCandidates(canonicalizeOptions, Array.from(result))
+}
+
+function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
+  if (candidates.length <= 1) return candidates
+
+  // To keep things simple, we group candidates such that we only collapse
+  // candidates with the same variants and important modifier together.
+  let groups = new DefaultMap((_before: string) => {
+    return new DefaultMap((_after: string) => {
+      return new Set<string>()
+    })
+  })
+
+  let prefix = options.designSystem.theme.prefix ? `${options.designSystem.theme.prefix}:` : ''
+
+  for (let candidate of candidates) {
+    let variants = segment(candidate, ':')
+    let utility = variants.pop()!
+
+    let important = utility.endsWith('!')
+    if (important) {
+      utility = utility.slice(0, -1)
+    }
+
+    let before = variants.length > 0 ? `${variants.join(':')}:` : ''
+    let after = important ? '!' : ''
+
+    // Group by variants and important flag
+    groups.get(before).get(after).add(`${prefix}${utility}`)
+  }
+
+  let result = new Set<string>()
+  for (let [before, group] of groups.entries()) {
+    for (let [after, candidates] of group.entries()) {
+      for (let candidate of collapseGroup(Array.from(candidates))) {
+        // Drop the prefix if we had one, because the prefix is already there as
+        // part of the variants.
+        if (prefix && candidate.startsWith(prefix)) {
+          candidate = candidate.slice(prefix.length)
+        }
+
+        result.add(`${before}${candidate}${after}`)
+      }
+    }
+  }
+
   return Array.from(result)
+
+  function collapseGroup(candidates: string[]) {
+    let signatureOptions = options.signatureOptions
+    let computeUtilitiesPropertiesLookup = computeUtilityProperties.get(signatureOptions)
+    let staticUtilities = staticUtilitiesByPropertyAndValue.get(signatureOptions)
+
+    // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
+    //
+    // NOTE: Currently assuming we are dealing with static utilities only. This
+    // will change the moment we have `@utility` for most built-ins.
+    let candidatePropertiesValues = candidates.map((candidate) =>
+      computeUtilitiesPropertiesLookup.get(candidate),
+    )
+
+    // For each property, lookup other utilities that also set this property and
+    // this exact value. If multiple properties are used, use the intersection of
+    // each property.
+    //
+    // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
+    let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
+      let result: Set<string> | null = null
+      for (let [property, values] of propertyValues) {
+        for (let value of values) {
+          let otherUtilities = staticUtilities.get(property).get(value)
+
+          if (result === null) result = new Set(otherUtilities)
+          else result = intersection(result, otherUtilities)
+
+          // The moment no other utilities match, we can stop searching because
+          // all intersections with an empty set will remain empty.
+          if (result!.size === 0) return result!
+        }
+      }
+      return result!
+    })
+
+    // Link each candidate that could be linked via another utility
+    // (intersection). This way we can reduce the amount of required combinations.
+    //
+    // E.g.: `mt-1` and `mb-1` can be linked via `my-1`.
+    //
+    // Candidates that cannot be linked won't be able to be collapsed.
+    // E.g.: `mt-1` and `text-red-500` cannot be collapsed because there is no 3rd
+    // utility with overlapping property/value combinations.
+    let linked = new DefaultMap<number, Set<number>>((key) => new Set<number>([key]))
+    let otherUtilitiesArray = Array.from(otherUtilities)
+    for (let i = 0; i < otherUtilitiesArray.length; i++) {
+      let current = otherUtilitiesArray[i]
+      for (let j = i + 1; j < otherUtilitiesArray.length; j++) {
+        let other = otherUtilitiesArray[j]
+
+        for (let property of current) {
+          if (other.has(property)) {
+            linked.get(i).add(j)
+            linked.get(j).add(i)
+
+            // The moment we find a link, we can stop comparing and move on to the
+            // next candidate. This will safe us some time
+            break
+          }
+        }
+      }
+    }
+
+    // Not a single candidate can be linked to another one, nothing left to do
+    if (linked.size === 0) return candidates
+
+    // Each candidate index will now have a set of other candidate indexes as
+    // its value. Let's make the lists unique combinations so that we can
+    // iterate over them.
+    let uniqueCombinations = new DefaultMap((key: string) => key.split(',').map(Number))
+    for (let group of linked.values()) {
+      let sorted = Array.from(group).sort((a, b) => a - b)
+      uniqueCombinations.get(sorted.join(','))
+    }
+
+    // Let's try to actually collapse them now.
+    let result = new Set<string>(candidates)
+    let drop = new Set<string>()
+
+    for (let idxs of uniqueCombinations.values()) {
+      for (let combo of combinations(idxs)) {
+        if (combo.some((idx) => drop.has(candidates[idx]))) continue // Skip already dropped items
+
+        let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
+
+        let collapsedSignature = computeUtilitySignature.get(signatureOptions).get(
+          combo
+            .map((idx) => candidates[idx])
+            .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
+            .join(' '),
+        )
+
+        for (let replacement of potentialReplacements) {
+          let signature = computeUtilitySignature.get(signatureOptions).get(replacement)
+          if (signature !== collapsedSignature) continue // Not a safe replacement
+
+          // We can replace all items in the combo with the replacement
+          for (let item of combo) {
+            drop.add(candidates[item])
+          }
+
+          // Use the replacement
+          result.add(replacement)
+          break
+        }
+      }
+    }
+
+    for (let item of drop) {
+      result.delete(item)
+    }
+
+    return Array.from(result)
+  }
 }
 
 const canonicalizeCandidateCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
@@ -1633,4 +1801,52 @@ function optimizeModifier(candidate: Candidate, options: InternalCanonicalizeOpt
   }
 
   return candidate
+}
+
+// Generator that generates all combinations of the given set. Using a generator
+// so we can stop early when we found a suitable combination.
+//
+// NOTE:
+//
+// 1. Yield biggest combinations first
+// 2. Sets of size 1 and 0 are not yielded
+function* combinations<T>(arr: T[]): Generator<T[]> {
+  let n = arr.length
+
+  for (let k = n; k >= 2; k--) {
+    let mask = (1n << BigInt(k)) - 1n
+    let limit = 1n << BigInt(n)
+
+    while (mask < limit) {
+      let out = new Array<T>(k)
+      let p = 0
+      for (let i = 0; i < n; i++) {
+        if ((mask >> BigInt(i)) & 1n) {
+          out[p++] = arr[i]
+        }
+      }
+      yield out
+
+      let carry = mask & -mask
+      let ripple = mask + carry
+      mask = (((ripple ^ mask) >> 2n) / carry) | ripple
+    }
+  }
+}
+
+function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+  // @ts-expect-error Set.prototype.intersection is only available in Node.js v22+
+  if (typeof a.intersection === 'function') return a.intersection(b)
+
+  // Polyfill for environments that do not support Set.prototype.intersection yet
+  if (a.size === 0 || b.size === 0) return new Set<T>()
+
+  let result = new Set<T>(a)
+  for (let item of b) {
+    if (!result.has(item)) {
+      result.delete(item)
+    }
+  }
+
+  return result
 }
