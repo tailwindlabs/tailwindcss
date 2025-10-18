@@ -1,8 +1,9 @@
 import { substituteAtApply } from './apply'
-import { atRule, styleRule, toCss, type AstNode } from './ast'
+import { atRule, cloneAstNode, styleRule, toCss, type AstNode } from './ast'
 import { printArbitraryValue } from './candidate'
 import { constantFoldDeclaration } from './constant-fold-declaration'
 import { CompileAstFlags, type DesignSystem } from './design-system'
+import { expandDeclaration } from './expand-declaration'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
@@ -12,6 +13,12 @@ import { walk, WalkAction } from './walk'
 
 const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
 
+export enum SignatureFeatures {
+  None = 0,
+  ExpandProperties = 1 << 0,
+  LogicalToPhysical = 1 << 1,
+}
+
 export interface SignatureOptions {
   /**
    * The root font size in pixels. If provided, `rem` values will be normalized
@@ -20,6 +27,11 @@ export interface SignatureOptions {
    * E.g.: `mt-[16px]` with `rem: 16` will become `mt-4` (assuming `--spacing: 0.25rem`).
    */
   rem: number | null
+
+  /**
+   * Features that influence how signatures are computed.
+   */
+  features: SignatureFeatures
 
   /**
    * The design system to use for computing the signature of candidates.
@@ -44,7 +56,7 @@ export interface SignatureOptions {
 //
 // These produce the same signature, therefore they represent the same utility.
 export const computeUtilitySignature = new DefaultMap((options: SignatureOptions) => {
-  let { rem, designSystem } = options
+  let designSystem = options.designSystem
 
   return new DefaultMap<string, string | Symbol>((utility) => {
     try {
@@ -70,169 +82,7 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
       // Optimize the AST. This is needed such that any internal intermediate
       // nodes are gone. This will also cleanup declaration nodes with undefined
       // values or `--tw-sort` declarations.
-      walk(ast, (node) => {
-        // Optimize declarations
-        if (node.kind === 'declaration') {
-          if (node.value === undefined || node.property === '--tw-sort') {
-            return WalkAction.Replace([])
-          }
-
-          // Normalize percentages by removing unnecessary dots and zeros.
-          //
-          // E.g.: `50.0%` → `50%`
-          else if (node.value.includes('%')) {
-            FLOATING_POINT_PERCENTAGE.lastIndex = 0
-            node.value = node.value.replaceAll(
-              FLOATING_POINT_PERCENTAGE,
-              (match) => `${Number(match.slice(0, -1))}%`,
-            )
-          }
-        }
-
-        // Replace special nodes with its children
-        else if (node.kind === 'context' || node.kind === 'at-root') {
-          return WalkAction.Replace(node.nodes)
-        }
-
-        // Remove comments
-        else if (node.kind === 'comment') {
-          return WalkAction.Replace([])
-        }
-
-        // Remove at-rules that are not needed for the signature
-        else if (node.kind === 'at-rule' && node.name === '@property') {
-          return WalkAction.Replace([])
-        }
-      })
-
-      // Resolve theme values to their inlined value.
-      //
-      // E.g.:
-      //
-      // `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
-      // `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
-      //
-      // Due to the `@apply` from above, this will become:
-      //
-      // ```css
-      // .example {
-      //   color: oklch(63.7% 0.237 25.331);
-      // }
-      // ```
-      //
-      // Which conveniently will be equivalent to: `text-red-500` when we inline
-      // the value.
-      //
-      // Without inlining:
-      // ```css
-      // .example {
-      //   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
-      // }
-      // ```
-      //
-      // Inlined:
-      // ```css
-      // .example {
-      //   color: oklch(63.7% 0.237 25.331);
-      // }
-      // ```
-      //
-      // Recently we made sure that utilities like `text-red-500` also generate
-      // the fallback value for usage in `@reference` mode.
-      //
-      // The second assumption is that if you use `var(--key, fallback)` that
-      // happens to match a known variable _and_ its inlined value. Then we can
-      // replace it with the inlined variable. This allows us to handle custom
-      // `@theme` and `@theme inline` definitions.
-      walk(ast, (node) => {
-        // Handle declarations
-        if (node.kind === 'declaration' && node.value !== undefined) {
-          if (node.value.includes('var(')) {
-            let changed = false
-            let valueAst = ValueParser.parse(node.value)
-
-            let seen = new Set<string>()
-            walk(valueAst, (valueNode) => {
-              if (valueNode.kind !== 'function') return
-              if (valueNode.value !== 'var') return
-
-              // Resolve the underlying value of the variable
-              if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
-                return
-              }
-
-              let variable = valueNode.nodes[0].value
-
-              // Drop the prefix from the variable name if it is present. The
-              // internal variable doesn't have the prefix.
-              if (
-                designSystem.theme.prefix &&
-                variable.startsWith(`--${designSystem.theme.prefix}-`)
-              ) {
-                variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
-              }
-              let variableValue = designSystem.resolveThemeValue(variable)
-              // Prevent infinite recursion when the variable value contains the
-              // variable itself.
-              if (seen.has(variable)) return
-              seen.add(variable)
-              if (variableValue === undefined) return // Couldn't resolve the variable
-
-              // Inject variable fallbacks when no fallback is present yet.
-              //
-              // A fallback could consist of multiple values.
-              //
-              // E.g.:
-              //
-              // ```
-              // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
-              // ```
-              {
-                // More than 1 argument means that a fallback is already present
-                if (valueNode.nodes.length === 1) {
-                  // Inject the fallback value into the variable lookup
-                  changed = true
-                  valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
-                }
-              }
-
-              // Replace known variable + inlined fallback value with the value
-              // itself again
-              {
-                // We need at least 3 arguments. The variable, the separator and a fallback value.
-                if (valueNode.nodes.length >= 3) {
-                  let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
-                  let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
-                  if (nodeAsString === constructedValue) {
-                    changed = true
-                    return WalkAction.Replace(ValueParser.parse(variableValue))
-                  }
-                }
-              }
-            })
-
-            // Replace the value with the new value
-            if (changed) node.value = ValueParser.toCss(valueAst)
-          }
-
-          // Very basic `calc(…)` constant folding to handle the spacing scale
-          // multiplier:
-          //
-          // Input:  `--spacing(4)`
-          //       → `calc(var(--spacing, 0.25rem) * 4)`
-          //       → `calc(0.25rem * 4)`       ← this is the case we will see
-          //                                     after inlining the variable
-          //       → `1rem`
-          node.value = constantFoldDeclaration(node.value, rem)
-
-          // We will normalize the `node.value`, this is the same kind of logic
-          // we use when printing arbitrary values. It will remove unnecessary
-          // whitespace.
-          //
-          // Essentially normalizing the `node.value` to a canonical form.
-          node.value = printArbitraryValue(node.value)
-        }
-      })
+      canonicalizeAst(ast, options)
 
       // Compute the final signature, by generating the CSS for the utility
       let signature = toCss(ast)
@@ -242,6 +92,236 @@ export const computeUtilitySignature = new DefaultMap((options: SignatureOptions
       // `null` are not considered equal.
       return Symbol()
     }
+  })
+})
+
+// Optimize the CSS AST to make it suitable for signature comparison. We want to
+// expand declarations, ignore comments, sort declarations etc...
+function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
+  let { rem, designSystem } = options
+
+  walk(ast, {
+    enter(node) {
+      // Optimize declarations
+      if (node.kind === 'declaration') {
+        if (node.value === undefined || node.property === '--tw-sort') {
+          return WalkAction.Replace([])
+        }
+
+        if (options.features & SignatureFeatures.ExpandProperties) {
+          let replacement = expandDeclaration(node, options.features)
+          if (replacement) return WalkAction.Replace(replacement)
+        }
+
+        // Normalize percentages by removing unnecessary dots and zeros.
+        //
+        // E.g.: `50.0%` → `50%`
+        if (node.value.includes('%')) {
+          FLOATING_POINT_PERCENTAGE.lastIndex = 0
+          node.value = node.value.replaceAll(
+            FLOATING_POINT_PERCENTAGE,
+            (match) => `${Number(match.slice(0, -1))}%`,
+          )
+        }
+
+        // Resolve theme values to their inlined value.
+        if (node.value.includes('var(')) {
+          node.value = resolveVariablesInValue(node.value, designSystem)
+        }
+
+        // Very basic `calc(…)` constant folding to handle the spacing scale
+        // multiplier:
+        //
+        // Input:  `--spacing(4)`
+        //       → `calc(var(--spacing, 0.25rem) * 4)`
+        //       → `calc(0.25rem * 4)`       ← this is the case we will see
+        //                                     after inlining the variable
+        //       → `1rem`
+        node.value = constantFoldDeclaration(node.value, rem)
+
+        // We will normalize the `node.value`, this is the same kind of logic
+        // we use when printing arbitrary values. It will remove unnecessary
+        // whitespace.
+        //
+        // Essentially normalizing the `node.value` to a canonical form.
+        node.value = printArbitraryValue(node.value)
+      }
+
+      // Replace special nodes with its children
+      else if (node.kind === 'context' || node.kind === 'at-root') {
+        return WalkAction.Replace(node.nodes)
+      }
+
+      // Remove comments
+      else if (node.kind === 'comment') {
+        return WalkAction.Replace([])
+      }
+
+      // Remove at-rules that are not needed for the signature
+      else if (node.kind === 'at-rule' && node.name === '@property') {
+        return WalkAction.Replace([])
+      }
+    },
+    exit(node) {
+      if (node.kind === 'rule' || node.kind === 'at-rule') {
+        node.nodes.sort((a, b) => {
+          if (a.kind !== 'declaration') return 0
+          if (b.kind !== 'declaration') return 0
+          return a.property.localeCompare(b.property)
+        })
+      }
+    },
+  })
+
+  return ast
+}
+
+// Resolve theme values to their inlined value.
+//
+// E.g.:
+//
+// `[color:var(--color-red-500)]` → `[color:oklch(63.7%_0.237_25.331)]`
+// `[color:oklch(63.7%_0.237_25.331)]` → `[color:oklch(63.7%_0.237_25.331)]`
+//
+// Due to the `@apply` from above, this will become:
+//
+// ```css
+// .example {
+//   color: oklch(63.7% 0.237 25.331);
+// }
+// ```
+//
+// Which conveniently will be equivalent to: `text-red-500` when we inline
+// the value.
+//
+// Without inlining:
+// ```css
+// .example {
+//   color: var(--color-red-500, oklch(63.7% 0.237 25.331));
+// }
+// ```
+//
+// Inlined:
+// ```css
+// .example {
+//   color: oklch(63.7% 0.237 25.331);
+// }
+// ```
+//
+// Recently we made sure that utilities like `text-red-500` also generate
+// the fallback value for usage in `@reference` mode.
+//
+// The second assumption is that if you use `var(--key, fallback)` that
+// happens to match a known variable _and_ its inlined value. Then we can
+// replace it with the inlined variable. This allows us to handle custom
+// `@theme` and `@theme inline` definitions.
+function resolveVariablesInValue(value: string, designSystem: DesignSystem): string {
+  let changed = false
+  let valueAst = ValueParser.parse(value)
+
+  let seen = new Set<string>()
+  walk(valueAst, (valueNode) => {
+    if (valueNode.kind !== 'function') return
+    if (valueNode.value !== 'var') return
+
+    // Resolve the underlying value of the variable
+    if (valueNode.nodes.length !== 1 && valueNode.nodes.length < 3) {
+      return
+    }
+
+    let variable = valueNode.nodes[0].value
+
+    // Drop the prefix from the variable name if it is present. The
+    // internal variable doesn't have the prefix.
+    if (designSystem.theme.prefix && variable.startsWith(`--${designSystem.theme.prefix}-`)) {
+      variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
+    }
+    let variableValue = designSystem.resolveThemeValue(variable)
+    // Prevent infinite recursion when the variable value contains the
+    // variable itself.
+    if (seen.has(variable)) return
+    seen.add(variable)
+    if (variableValue === undefined) return // Couldn't resolve the variable
+
+    // Inject variable fallbacks when no fallback is present yet.
+    //
+    // A fallback could consist of multiple values.
+    //
+    // E.g.:
+    //
+    // ```
+    // var(--font-sans, ui-sans-serif, system-ui, sans-serif, …)
+    // ```
+    {
+      // More than 1 argument means that a fallback is already present
+      if (valueNode.nodes.length === 1) {
+        // Inject the fallback value into the variable lookup
+        changed = true
+        valueNode.nodes.push(...ValueParser.parse(`,${variableValue}`))
+      }
+    }
+
+    // Replace known variable + inlined fallback value with the value
+    // itself again
+    {
+      // We need at least 3 arguments. The variable, the separator and a fallback value.
+      if (valueNode.nodes.length >= 3) {
+        let nodeAsString = ValueParser.toCss(valueNode.nodes) // This could include more than just the variable
+        let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
+        if (nodeAsString === constructedValue) {
+          changed = true
+          return WalkAction.Replace(ValueParser.parse(variableValue))
+        }
+      }
+    }
+  })
+
+  // Replace the value with the new value
+  if (changed) return ValueParser.toCss(valueAst)
+  return value
+}
+
+// Index all static utilities by property and value
+export const staticUtilitiesByPropertyAndValue = new DefaultMap((_optiones: SignatureOptions) => {
+  return new DefaultMap((_property: string) => {
+    return new DefaultMap((_value: string) => {
+      return new Set<string>()
+    })
+  })
+})
+
+export const computeUtilityProperties = new DefaultMap((options: SignatureOptions) => {
+  return new DefaultMap((className) => {
+    let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
+    let designSystem = options.designSystem
+
+    if (
+      options.designSystem.theme.prefix &&
+      !className.startsWith(options.designSystem.theme.prefix)
+    ) {
+      className = `${options.designSystem.theme.prefix}:${className}`
+    }
+    let parsed = designSystem.parseCandidate(className)
+    if (parsed.length === 0) return localPropertyValueLookup
+
+    walk(
+      canonicalizeAst(
+        designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
+        options,
+      ),
+      (node) => {
+        if (node.kind === 'declaration') {
+          localPropertyValueLookup.get(node.property).add(node.value!)
+          staticUtilitiesByPropertyAndValue
+            .get(options)
+            .get(node.property)
+            .get(node.value!)
+            .add(className)
+        }
+      },
+    )
+
+    return localPropertyValueLookup
   })
 })
 
@@ -257,6 +337,9 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
   let signatures = computeUtilitySignature.get(options)
   let lookup = new DefaultMap<string, string[]>(() => [])
 
+  // Right now all plugins are implemented using functions so they are a black
+  // box. Let's use the `getClassList` and consider every known suggestion as a
+  // static utility for now.
   for (let [className, meta] of designSystem.getClassList()) {
     let signature = signatures.get(className)
     if (typeof signature !== 'string') continue
@@ -272,6 +355,7 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
     }
 
     lookup.get(signature).push(className)
+    computeUtilityProperties.get(options).get(className)
 
     for (let modifier of meta.modifiers) {
       // Modifiers representing numbers can be computed and don't need to be
@@ -285,6 +369,7 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
       let signature = signatures.get(classNameWithModifier)
       if (typeof signature !== 'string') continue
       lookup.get(signature).push(classNameWithModifier)
+      computeUtilityProperties.get(options).get(classNameWithModifier)
     }
   }
 
