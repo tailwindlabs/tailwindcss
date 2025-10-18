@@ -27,9 +27,10 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["bat", "batch"], &["*.bat"]),
     (&["bazel"], &[
         "*.bazel", "*.bzl", "*.BUILD", "*.bazelrc", "BUILD", "MODULE.bazel",
-        "WORKSPACE", "WORKSPACE.bazel",
+        "WORKSPACE", "WORKSPACE.bazel", "WORKSPACE.bzlmod",
     ]),
     (&["bitbake"], &["*.bb", "*.bbappend", "*.bbclass", "*.conf", "*.inc"]),
+    (&["boxlang"], &["*.bx", "*.bxm", "*.bxs"]),
     (&["brotli"], &["*.br"]),
     (&["buildstream"], &["*.bst"]),
     (&["bzip2"], &["*.bz2", "*.tbz2"]),
@@ -39,6 +40,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["carp"], &["*.carp"]),
     (&["cbor"], &["*.cbor"]),
     (&["ceylon"], &["*.ceylon"]),
+    (&["cfml"], &["*.cfc", "*.cfm"]),
     (&["clojure"], &["*.clj", "*.cljc", "*.cljs", "*.cljx"]),
     (&["cmake"], &["*.cmake", "CMakeLists.txt"]),
     (&["cmd"], &["*.bat", "*.cmd"]),
@@ -62,7 +64,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["cython"], &["*.pyx", "*.pxi", "*.pxd"]),
     (&["d"], &["*.d"]),
     (&["dart"], &["*.dart"]),
-    (&["devicetree"], &["*.dts", "*.dtsi"]),
+    (&["devicetree"], &["*.dts", "*.dtsi", "*.dtso"]),
     (&["dhall"], &["*.dhall"]),
     (&["diff"], &["*.patch", "*.diff"]),
     (&["dita"], &["*.dita", "*.ditamap", "*.ditaval"]),
@@ -88,6 +90,8 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["fsharp"], &["*.fs", "*.fsx", "*.fsi"]),
     (&["fut"], &["*.fut"]),
     (&["gap"], &["*.g", "*.gap", "*.gi", "*.gd", "*.tst"]),
+    (&["gdscript"], &["*.gd"]),
+    (&["gleam"], &["*.gleam"]),
     (&["gn"], &["*.gn", "*.gni"]),
     (&["go"], &["*.go"]),
     (&["gprbuild"], &["*.gpr"]),
@@ -117,6 +121,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["julia"], &["*.jl"]),
     (&["jupyter"], &["*.ipynb", "*.jpynb"]),
     (&["k"], &["*.k"]),
+    (&["kconfig"], &["Kconfig", "Kconfig.*"]),
     (&["kotlin"], &["*.kt", "*.kts"]),
     (&["lean"], &["*.lean"]),
     (&["less"], &["*.less"]),
@@ -149,6 +154,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     ]),
     (&["lilypond"], &["*.ly", "*.ily"]),
     (&["lisp"], &["*.el", "*.jl", "*.lisp", "*.lsp", "*.sc", "*.scm"]),
+    (&["llvm"], &["*.ll"]),
     (&["lock"], &["*.lock", "package-lock.json"]),
     (&["log"], &["*.log"]),
     (&["lua"], &["*.lua"]),
@@ -159,6 +165,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
         "[Gg][Nn][Uu]makefile", "[Mm]akefile",
         "[Gg][Nn][Uu]makefile.am", "[Mm]akefile.am",
         "[Gg][Nn][Uu]makefile.in", "[Mm]akefile.in",
+        "Makefile.*",
         "*.mk", "*.mak"
     ]),
     (&["mako"], &["*.mako", "*.mao"]),
@@ -181,7 +188,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["motoko"], &["*.mo"]),
     (&["msbuild"], &[
         "*.csproj", "*.fsproj", "*.vcxproj", "*.proj", "*.props", "*.targets",
-        "*.sln",
+        "*.sln", "*.slnf"
     ]),
     (&["nim"], &["*.nim", "*.nimf", "*.nimble", "*.nims"]),
     (&["nix"], &["*.nix"]),
@@ -210,7 +217,9 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["py", "python"], &["*.py", "*.pyi"]),
     (&["qmake"], &["*.pro", "*.pri", "*.prf"]),
     (&["qml"], &["*.qml"]),
-    (&["r"], &["*.R", "*.r", "*.Rmd", "*.Rnw"]),
+    (&["qrc"], &["*.qrc"]),
+    (&["qui"], &["*.ui"]),
+    (&["r"], &["*.R", "*.r", "*.Rmd", "*.rmd", "*.Rnw", "*.rnw"]),
     (&["racket"], &["*.rkt"]),
     (&["raku"], &[
         "*.raku", "*.rakumod", "*.rakudoc", "*.rakutest",
@@ -227,14 +236,16 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
         // Idiomatic files
         "config.ru", "Gemfile", ".irbrc", "Rakefile",
         // Extensions
-        "*.gemspec", "*.rb", "*.rbw"
+        "*.gemspec", "*.rb", "*.rbw", "*.rake"
     ]),
     (&["rust"], &["*.rs"]),
     (&["sass"], &["*.sass", "*.scss"]),
     (&["scala"], &["*.scala", "*.sbt"]),
+    (&["scdoc"], &["*.scd", "*.scdoc"]),
+    (&["seed7"], &["*.sd7", "*.s7i"]),
     (&["sh"], &[
         // Portable/misc. init files
-        ".login", ".logout", ".profile", "profile",
+        ".env", ".login", ".logout", ".profile", "profile",
         // bash-specific init files
         ".bash_login", "bash_login",
         ".bash_logout", "bash_logout",
@@ -253,7 +264,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
         ".zprofile", "zprofile",
         ".zshrc", "zshrc",
         // Extensions
-        "*.bash", "*.csh", "*.ksh", "*.sh", "*.tcsh", "*.zsh",
+        "*.bash", "*.csh", "*.env", "*.ksh", "*.sh", "*.tcsh", "*.zsh",
     ]),
     (&["slim"], &["*.skim", "*.slim", "*.slime"]),
     (&["smarty"], &["*.tpl"]),
@@ -265,7 +276,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["sql"], &["*.sql", "*.psql"]),
     (&["stylus"], &["*.styl"]),
     (&["sv"], &["*.v", "*.vg", "*.sv", "*.svh", "*.h"]),
-    (&["svelte"], &["*.svelte"]),
+    (&["svelte"], &["*.svelte", "*.svelte.ts"]),
     (&["svg"], &["*.svg"]),
     (&["swift"], &["*.swift"]),
     (&["swig"], &["*.def", "*.i"]),
@@ -280,9 +291,8 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["texinfo"], &["*.texi"]),
     (&["textile"], &["*.textile"]),
     (&["tf"], &[
-        "*.tf", "*.auto.tfvars", "terraform.tfvars", "*.tf.json",
-        "*.auto.tfvars.json", "terraform.tfvars.json", "*.terraformrc",
-        "terraform.rc", "*.tfrc", "*.terraform.lock.hcl",
+        "*.tf", "*.tf.json", "*.tfvars", "*.tfvars.json",
+        "*.terraformrc", "terraform.rc", "*.tfrc", "*.terraform.lock.hcl",
     ]),
     (&["thrift"], &["*.thrift"]),
     (&["toml"], &["*.toml", "Cargo.lock"]),
@@ -290,6 +300,7 @@ pub(crate) const DEFAULT_TYPES: &[(&[&str], &[&str])] = &[
     (&["twig"], &["*.twig"]),
     (&["txt"], &["*.txt"]),
     (&["typoscript"], &["*.typoscript", "*.ts"]),
+    (&["typst"], &["*.typ"]),
     (&["usd"], &["*.usd", "*.usda", "*.usdc"]),
     (&["v"], &["*.v", "*.vsh"]),
     (&["vala"], &["*.vala"]),

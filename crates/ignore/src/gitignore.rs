@@ -20,8 +20,8 @@ use {
 };
 
 use crate::{
-    pathutil::{is_file_name, strip_prefix},
     Error, Match, PartialErrorBuilder,
+    pathutil::{is_file_name, strip_prefix},
 };
 
 /// Glob represents a single glob in a gitignore file.
@@ -128,7 +128,10 @@ impl Gitignore {
     /// `$XDG_CONFIG_HOME/git/ignore` is read. If `$XDG_CONFIG_HOME` is not
     /// set or is empty, then `$HOME/.config/git/ignore` is used instead.
     pub fn global() -> (Gitignore, Option<Error>) {
-        GitignoreBuilder::new("").build_global()
+        match std::env::current_dir() {
+            Ok(cwd) => GitignoreBuilder::new(cwd).build_global(),
+            Err(err) => (Gitignore::empty(), Some(err.into())),
+        }
     }
 
     /// Creates a new empty gitignore matcher that never matches anything.
@@ -303,6 +306,7 @@ pub struct GitignoreBuilder {
     root: PathBuf,
     globs: Vec<Glob>,
     case_insensitive: bool,
+    allow_unclosed_class: bool,
     // CHANGED: Add a flag to have Gitignore rules that apply only to files.
     only_on_files: bool,
 }
@@ -321,6 +325,7 @@ impl GitignoreBuilder {
             root: strip_prefix("./", root).unwrap_or(root).to_path_buf(),
             globs: vec![],
             case_insensitive: false,
+            allow_unclosed_class: true,
             // CHANGED: Add a flag to have Gitignore rules that apply only to files.
             only_on_files: false,
         }
@@ -403,6 +408,15 @@ impl GitignoreBuilder {
                     break;
                 }
             };
+
+            // Match Git's handling of .gitignore files that begin with the Unicode BOM
+            const UTF8_BOM: &str = "\u{feff}";
+            let line = if i == 0 {
+                line.trim_start_matches(UTF8_BOM)
+            } else {
+                &line
+            };
+
             if let Err(err) = self.add_line(Some(path.to_path_buf()), &line) {
                 errs.push(err.tagged(path, lineno));
             }
@@ -506,6 +520,7 @@ impl GitignoreBuilder {
             .literal_separator(true)
             .case_insensitive(self.case_insensitive)
             .backslash_escape(true)
+            .allow_unclosed_class(self.allow_unclosed_class)
             .build()
             .map_err(|err| Error::Glob {
                 glob: Some(glob.original.clone()),
@@ -527,6 +542,23 @@ impl GitignoreBuilder {
         // release.
         self.case_insensitive = yes;
         Ok(self)
+    }
+
+    /// Toggle whether unclosed character classes are allowed. When allowed,
+    /// a `[` without a matching `]` is treated literally instead of resulting
+    /// in a parse error.
+    ///
+    /// For example, if this is set then the glob `[abc` will be treated as the
+    /// literal string `[abc` instead of returning an error.
+    ///
+    /// By default, this is true in order to match established `gitignore`
+    /// semantics. Generally speaking, enabling this leads to worse failure
+    /// modes since the glob parser becomes more permissive. You might want to
+    /// enable this when compatibility (e.g., with POSIX glob implementations)
+    /// is more important than good error messages.
+    pub fn allow_unclosed_class(&mut self, yes: bool) -> &mut GitignoreBuilder {
+        self.allow_unclosed_class = yes;
+        self
     }
 
     /// CHANGED: Add a flag to have Gitignore rules that apply only to files.

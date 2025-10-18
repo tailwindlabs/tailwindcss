@@ -91,7 +91,7 @@ use {
     regex_automata::util::pool::Pool,
 };
 
-use crate::{default_types::DEFAULT_TYPES, pathutil::file_name, Error, Match};
+use crate::{Error, Match, default_types::DEFAULT_TYPES, pathutil::file_name};
 
 /// Glob represents a single glob in a set of file type definitions.
 ///
