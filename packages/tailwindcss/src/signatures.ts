@@ -108,27 +108,16 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
 
         // Ignore `--tw-{property}` if `{property}` exists with the same value
         if (node.property.startsWith('--tw-')) {
-          let siblings = ctx.parent?.nodes
-          if (siblings) {
-            let other = node.property.slice(5)
-
-            // Edge cases:
-            //
-            // `leading-*` sets `--tw-leading` but the property is `line-height`
-            if (node.property === '--tw-leading') other = 'line-height'
-            if (node.property === '--tw-tracking') other = 'letter-spacing'
-
-            if (
-              siblings.some(
-                (sibling) =>
-                  sibling.kind === 'declaration' &&
-                  sibling.property === other &&
-                  node.value === sibling.value &&
-                  node.important === sibling.important,
-              )
-            ) {
-              return WalkAction.Replace([])
-            }
+          if (
+            (ctx.parent?.nodes ?? []).some(
+              (sibling) =>
+                sibling.kind === 'declaration' &&
+                node.value === sibling.value &&
+                node.important === sibling.important &&
+                !sibling.property.startsWith('--tw-'),
+            )
+          ) {
+            return WalkAction.Replace([])
           }
         }
 
