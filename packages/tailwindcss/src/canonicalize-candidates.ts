@@ -12,10 +12,13 @@ import { keyPathToCssProperty } from './compat/apply-config-to-theme'
 import type { DesignSystem } from './design-system'
 import * as SelectorParser from './selector-parser'
 import {
+  computeUtilityProperties,
   computeUtilitySignature,
   computeVariantSignature,
   preComputedUtilities,
   preComputedVariants,
+  SignatureFeatures,
+  staticUtilitiesByPropertyAndValue,
   type SignatureOptions,
 } from './signatures'
 import type { Writable } from './types'
@@ -36,11 +39,46 @@ export interface CanonicalizeOptions {
    * E.g.: `mt-[16px]` with `rem: 16` will become `mt-4` (assuming `--spacing: 0.25rem`).
    */
   rem?: number
+
+  /**
+   * Whether to collapse multiple utilities into a single utility if possible.
+   *
+   * E.g.: `mt-2 mr-2 mb-2 ml-2` → `m-2`
+   */
+  collapse?: boolean
+
+  /**
+   * Whether to convert between logical and physical properties when collapsing
+   * utilities.
+   *
+   * E.g.: `mr-2 ml-2` → `mx-2`
+   */
+  logicalToPhysical?: boolean
 }
 
-const optionsCache = new DefaultMap((designSystem: DesignSystem) => {
+enum Features {
+  /**
+   * No features enabled (default)
+   */
+  None = 0,
+
+  /**
+   * Collapse multiple utilities into a single utility if possible.
+   */
+  CollapseUtilities = 1 << 0,
+}
+
+interface InternalCanonicalizeOptions {
+  features: Features
+  designSystem: DesignSystem
+  signatureOptions: SignatureOptions
+}
+
+const signatureOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
   return new DefaultMap((rem: number | null = null) => {
-    return { designSystem, rem } satisfies SignatureOptions
+    return new DefaultMap((features: SignatureFeatures) => {
+      return { designSystem, rem, features } satisfies SignatureOptions
+    })
   })
 })
 
@@ -48,7 +86,37 @@ export function createSignatureOptions(
   designSystem: DesignSystem,
   options?: CanonicalizeOptions,
 ): SignatureOptions {
-  return optionsCache.get(designSystem).get(options?.rem ?? null)
+  let features = SignatureFeatures.None
+  if (options?.collapse) features |= SignatureFeatures.ExpandProperties
+  if (options?.logicalToPhysical) features |= SignatureFeatures.LogicalToPhysical
+
+  return signatureOptionsCache
+    .get(designSystem)
+    .get(options?.rem ?? null)
+    .get(features)
+}
+
+const internalOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
+  return new DefaultMap((signatureOptions: SignatureOptions) => {
+    return new DefaultMap((features: Features) => {
+      return {
+        features,
+        designSystem,
+        signatureOptions,
+      } satisfies InternalCanonicalizeOptions
+    })
+  })
+})
+
+function createCanonicalizeOptions(
+  designSystem: DesignSystem,
+  signatureOptions: SignatureOptions,
+  options?: CanonicalizeOptions,
+) {
+  let features = Features.None
+  if (options?.collapse) features |= Features.CollapseUtilities
+
+  return internalOptionsCache.get(designSystem).get(signatureOptions).get(features)
 }
 
 export function canonicalizeCandidates(
@@ -56,15 +124,183 @@ export function canonicalizeCandidates(
   candidates: string[],
   options?: CanonicalizeOptions,
 ): string[] {
+  let signatureOptions = createSignatureOptions(designSystem, options)
+  let canonicalizeOptions = createCanonicalizeOptions(designSystem, signatureOptions, options)
+
   let result = new Set<string>()
-  let cache = canonicalizeCandidateCache.get(createSignatureOptions(designSystem, options))
+  let cache = canonicalizeCandidateCache.get(canonicalizeOptions)
   for (let candidate of candidates) {
     result.add(cache.get(candidate))
   }
-  return Array.from(result)
+
+  return result.size <= 1 || !(canonicalizeOptions.features & Features.CollapseUtilities)
+    ? Array.from(result)
+    : collapseCandidates(canonicalizeOptions, Array.from(result))
 }
 
-const canonicalizeCandidateCache = new DefaultMap((options: SignatureOptions) => {
+function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
+  if (candidates.length <= 1) return candidates
+
+  // To keep things simple, we group candidates such that we only collapse
+  // candidates with the same variants and important modifier together.
+  let groups = new DefaultMap((_before: string) => {
+    return new DefaultMap((_after: string) => {
+      return new Set<string>()
+    })
+  })
+
+  let prefix = options.designSystem.theme.prefix ? `${options.designSystem.theme.prefix}:` : ''
+
+  for (let candidate of candidates) {
+    let variants = segment(candidate, ':')
+    let utility = variants.pop()!
+
+    let important = utility.endsWith('!')
+    if (important) {
+      utility = utility.slice(0, -1)
+    }
+
+    let before = variants.length > 0 ? `${variants.join(':')}:` : ''
+    let after = important ? '!' : ''
+
+    // Group by variants and important flag
+    groups.get(before).get(after).add(`${prefix}${utility}`)
+  }
+
+  let result = new Set<string>()
+  for (let [before, group] of groups.entries()) {
+    for (let [after, candidates] of group.entries()) {
+      for (let candidate of collapseGroup(Array.from(candidates))) {
+        // Drop the prefix if we had one, because the prefix is already there as
+        // part of the variants.
+        if (prefix && candidate.startsWith(prefix)) {
+          candidate = candidate.slice(prefix.length)
+        }
+
+        result.add(`${before}${candidate}${after}`)
+      }
+    }
+  }
+
+  return Array.from(result)
+
+  function collapseGroup(candidates: string[]) {
+    let signatureOptions = options.signatureOptions
+    let computeUtilitiesPropertiesLookup = computeUtilityProperties.get(signatureOptions)
+    let staticUtilities = staticUtilitiesByPropertyAndValue.get(signatureOptions)
+
+    // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
+    //
+    // NOTE: Currently assuming we are dealing with static utilities only. This
+    // will change the moment we have `@utility` for most built-ins.
+    let candidatePropertiesValues = candidates.map((candidate) =>
+      computeUtilitiesPropertiesLookup.get(candidate),
+    )
+
+    // For each property, lookup other utilities that also set this property and
+    // this exact value. If multiple properties are used, use the intersection of
+    // each property.
+    //
+    // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
+    let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
+      let result: Set<string> | null = null
+      for (let [property, values] of propertyValues) {
+        for (let value of values) {
+          let otherUtilities = staticUtilities.get(property).get(value)
+
+          if (result === null) result = new Set(otherUtilities)
+          else result = intersection(result, otherUtilities)
+
+          // The moment no other utilities match, we can stop searching because
+          // all intersections with an empty set will remain empty.
+          if (result!.size === 0) return result!
+        }
+      }
+      return result!
+    })
+
+    // Link each candidate that could be linked via another utility
+    // (intersection). This way we can reduce the amount of required combinations.
+    //
+    // E.g.: `mt-1` and `mb-1` can be linked via `my-1`.
+    //
+    // Candidates that cannot be linked won't be able to be collapsed.
+    // E.g.: `mt-1` and `text-red-500` cannot be collapsed because there is no 3rd
+    // utility with overlapping property/value combinations.
+    let linked = new DefaultMap<number, Set<number>>((key) => new Set<number>([key]))
+    let otherUtilitiesArray = Array.from(otherUtilities)
+    for (let i = 0; i < otherUtilitiesArray.length; i++) {
+      let current = otherUtilitiesArray[i]
+      for (let j = i + 1; j < otherUtilitiesArray.length; j++) {
+        let other = otherUtilitiesArray[j]
+
+        for (let property of current) {
+          if (other.has(property)) {
+            linked.get(i).add(j)
+            linked.get(j).add(i)
+
+            // The moment we find a link, we can stop comparing and move on to the
+            // next candidate. This will safe us some time
+            break
+          }
+        }
+      }
+    }
+
+    // Not a single candidate can be linked to another one, nothing left to do
+    if (linked.size === 0) return candidates
+
+    // Each candidate index will now have a set of other candidate indexes as
+    // its value. Let's make the lists unique combinations so that we can
+    // iterate over them.
+    let uniqueCombinations = new DefaultMap((key: string) => key.split(',').map(Number))
+    for (let group of linked.values()) {
+      let sorted = Array.from(group).sort((a, b) => a - b)
+      uniqueCombinations.get(sorted.join(','))
+    }
+
+    // Let's try to actually collapse them now.
+    let result = new Set<string>(candidates)
+    let drop = new Set<string>()
+
+    for (let idxs of uniqueCombinations.values()) {
+      for (let combo of combinations(idxs)) {
+        if (combo.some((idx) => drop.has(candidates[idx]))) continue // Skip already dropped items
+
+        let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
+
+        let collapsedSignature = computeUtilitySignature.get(signatureOptions).get(
+          combo
+            .map((idx) => candidates[idx])
+            .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
+            .join(' '),
+        )
+
+        for (let replacement of potentialReplacements) {
+          let signature = computeUtilitySignature.get(signatureOptions).get(replacement)
+          if (signature !== collapsedSignature) continue // Not a safe replacement
+
+          // We can replace all items in the combo with the replacement
+          for (let item of combo) {
+            drop.add(candidates[item])
+          }
+
+          // Use the replacement
+          result.add(replacement)
+          break
+        }
+      }
+    }
+
+    for (let item of drop) {
+      result.delete(item)
+    }
+
+    return Array.from(result)
+  }
+}
+
+const canonicalizeCandidateCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
   let ds = options.designSystem
   let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
   let variantCache = canonicalizeVariantCache.get(options)
@@ -127,7 +363,7 @@ const canonicalizeCandidateCache = new DefaultMap((options: SignatureOptions) =>
 
 type VariantCanonicalizationFunction = (
   variant: Variant,
-  options: SignatureOptions,
+  options: InternalCanonicalizeOptions,
 ) => Variant | Variant[]
 
 const VARIANT_CANONICALIZATIONS: VariantCanonicalizationFunction[] = [
@@ -137,7 +373,7 @@ const VARIANT_CANONICALIZATIONS: VariantCanonicalizationFunction[] = [
   arbitraryVariants,
 ]
 
-const canonicalizeVariantCache = new DefaultMap((options: SignatureOptions) => {
+const canonicalizeVariantCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
   return new DefaultMap((variant: Variant): Variant[] => {
     let replacement = [variant]
     for (let fn of VARIANT_CANONICALIZATIONS) {
@@ -159,7 +395,7 @@ const canonicalizeVariantCache = new DefaultMap((options: SignatureOptions) => {
 
 type UtilityCanonicalizationFunction = (
   candidate: Candidate,
-  options: SignatureOptions,
+  options: InternalCanonicalizeOptions,
 ) => Candidate
 
 const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
@@ -173,7 +409,7 @@ const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   optimizeModifier,
 ]
 
-const canonicalizeUtilityCache = new DefaultMap((options: SignatureOptions) => {
+const canonicalizeUtilityCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
   let designSystem = options.designSystem
   return new DefaultMap((rawCandidate: string): string => {
     for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
@@ -219,7 +455,7 @@ const enum Convert {
   MigrateThemeOnly = 1 << 1,
 }
 
-function themeToVarUtility(candidate: Candidate, options: SignatureOptions): Candidate {
+function themeToVarUtility(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
   let convert = converterCache.get(options.designSystem)
 
   if (candidate.kind === 'arbitrary') {
@@ -251,7 +487,10 @@ function themeToVarUtility(candidate: Candidate, options: SignatureOptions): Can
   return candidate
 }
 
-function themeToVarVariant(variant: Variant, options: SignatureOptions): Variant | Variant[] {
+function themeToVarVariant(
+  variant: Variant,
+  options: InternalCanonicalizeOptions,
+): Variant | Variant[] {
   let convert = converterCache.get(options.designSystem)
 
   let iterator = walkVariants(variant)
@@ -586,7 +825,7 @@ const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> |
   })
 })
 
-function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
+function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
   // We are only interested in arbitrary properties and arbitrary values
   if (
     // Arbitrary property
@@ -598,8 +837,8 @@ function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Ca
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(options)
-  let signatures = computeUtilitySignature.get(options)
+  let utilities = preComputedUtilities.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -803,15 +1042,15 @@ function allVariablesAreUsed(
 
 // ----
 
-function bareValueUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
+function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
   // We are only interested in bare value utilities
   if (candidate.kind !== 'functional' || candidate.value?.kind !== 'named') {
     return candidate
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(options)
-  let signatures = computeUtilitySignature.get(options)
+  let utilities = preComputedUtilities.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -883,9 +1122,12 @@ const DEPRECATION_MAP = new Map([
   ['break-words', 'wrap-break-word'],
 ])
 
-function deprecatedUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
+function deprecatedUtilities(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
@@ -907,10 +1149,13 @@ function deprecatedUtilities(candidate: Candidate, options: SignatureOptions): C
 
 // ----
 
-function arbitraryVariants(variant: Variant, options: SignatureOptions): Variant | Variant[] {
+function arbitraryVariants(
+  variant: Variant,
+  options: InternalCanonicalizeOptions,
+): Variant | Variant[] {
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(options)
-  let variants = preComputedVariants.get(options)
+  let signatures = computeVariantSignature.get(options.signatureOptions)
+  let variants = preComputedVariants.get(options.signatureOptions)
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -935,9 +1180,12 @@ function arbitraryVariants(variant: Variant, options: SignatureOptions): Variant
 
 // ----
 
-function dropUnnecessaryDataTypes(candidate: Candidate, options: SignatureOptions): Candidate {
+function dropUnnecessaryDataTypes(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   if (
     candidate.kind === 'functional' &&
@@ -961,7 +1209,7 @@ function dropUnnecessaryDataTypes(candidate: Candidate, options: SignatureOption
 
 function arbitraryValueToBareValueUtility(
   candidate: Candidate,
-  options: SignatureOptions,
+  options: InternalCanonicalizeOptions,
 ): Candidate {
   // We are only interested in functional utilities with arbitrary values
   if (candidate.kind !== 'functional' || candidate.value?.kind !== 'arbitrary') {
@@ -969,7 +1217,7 @@ function arbitraryValueToBareValueUtility(
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   let expectedSignature = signatures.get(designSystem.printCandidate(candidate))
   if (expectedSignature === null) return candidate
@@ -1134,11 +1382,11 @@ function isAttributeSelector(node: SelectorParser.SelectorAstNode): boolean {
 
 function modernizeArbitraryValuesVariant(
   variant: Variant,
-  options: SignatureOptions,
+  options: InternalCanonicalizeOptions,
 ): Variant | Variant[] {
   let result = [variant]
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(options)
+  let signatures = computeVariantSignature.get(options.signatureOptions)
 
   let iterator = walkVariants(variant)
   for (let [variant, parent] of iterator) {
@@ -1493,7 +1741,7 @@ function modernizeArbitraryValuesVariant(
 // - `/[100%]`  → `/100`    → <empty>
 // - `/100`     → <empty>
 //
-function optimizeModifier(candidate: Candidate, options: SignatureOptions): Candidate {
+function optimizeModifier(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
   // We are only interested in functional or arbitrary utilities with a modifier
   if (
     (candidate.kind !== 'functional' && candidate.kind !== 'arbitrary') ||
@@ -1503,7 +1751,7 @@ function optimizeModifier(candidate: Candidate, options: SignatureOptions): Cand
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options)
+  let signatures = computeUtilitySignature.get(options.signatureOptions)
 
   let targetSignature = signatures.get(designSystem.printCandidate(candidate))
   let modifier = candidate.modifier
@@ -1556,4 +1804,56 @@ function optimizeModifier(candidate: Candidate, options: SignatureOptions): Cand
   }
 
   return candidate
+}
+
+// Generator that generates all combinations of the given set. Using a generator
+// so we can stop early when we found a suitable combination.
+//
+// NOTE:
+//
+// 1. Yield biggest combinations first
+// 2. Sets of size 1 and 0 are not yielded
+function* combinations<T>(arr: T[]): Generator<T[]> {
+  let n = arr.length
+  let limit = 1n << BigInt(n)
+
+  for (let k = n; k >= 2; k--) {
+    let mask = (1n << BigInt(k)) - 1n
+
+    while (mask < limit) {
+      let out = []
+      for (let i = 0; i < n; i++) {
+        if ((mask >> BigInt(i)) & 1n) {
+          out.push(arr[i])
+        }
+      }
+      yield out
+
+      // Gosper's hack:
+      // - https://programmingforinsomniacs.blogspot.com/2018/03/gospers-hack-explained.html
+      // - https://rosettacode.org/wiki/Gosper%27s_hack
+      //
+      // We need to generate the next mask in lexicographical order.
+      let carry = mask & -mask
+      let ripple = mask + carry
+      mask = (((ripple ^ mask) >> 2n) / carry) | ripple
+    }
+  }
+}
+
+function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+  // @ts-expect-error Set.prototype.intersection is only available in Node.js v22+
+  if (typeof a.intersection === 'function') return a.intersection(b)
+
+  // Polyfill for environments that do not support Set.prototype.intersection yet
+  if (a.size === 0 || b.size === 0) return new Set<T>()
+
+  let result = new Set<T>(a)
+  for (let item of b) {
+    if (!result.has(item)) {
+      result.delete(item)
+    }
+  }
+
+  return result
 }
