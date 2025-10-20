@@ -253,6 +253,14 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
       '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
     ],
+
+    // If a utility sets `property` and `--tw-{property}` with the same value,
+    // we can ignore the `--tw-{property}`. This is just here for composition.
+    // This means that we should be able to upgrade the one _without_ to the one
+    // _with_ the variable
+    ['[font-weight:400]', 'font-normal'],
+    ['[line-height:0]', 'leading-0'],
+    ['[border-style:solid]', 'border-solid'],
   ])(testName, async (candidate, expected) => {
     await expectCanonicalization(
       css`
