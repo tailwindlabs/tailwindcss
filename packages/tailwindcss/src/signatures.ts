@@ -99,11 +99,30 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
   let { rem, designSystem } = options
 
   walk(ast, {
-    enter(node) {
+    enter(node, ctx) {
       // Optimize declarations
       if (node.kind === 'declaration') {
         if (node.value === undefined || node.property === '--tw-sort') {
           return WalkAction.Replace([])
+        }
+
+        // Ignore `--tw-{property}` if `{property}` exists with the same value
+        if (node.property.startsWith('--tw-')) {
+          let siblings = ctx.parent?.nodes
+          if (siblings) {
+            let other = node.property.slice(5)
+            if (
+              siblings.some(
+                (sibling) =>
+                  sibling.kind === 'declaration' &&
+                  sibling.property === other &&
+                  node.value === sibling.value &&
+                  node.important === sibling.important,
+              )
+            ) {
+              return WalkAction.Replace([])
+            }
+          }
         }
 
         if (options.features & SignatureFeatures.ExpandProperties) {
