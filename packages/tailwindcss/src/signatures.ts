@@ -111,6 +111,12 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
           let siblings = ctx.parent?.nodes
           if (siblings) {
             let other = node.property.slice(5)
+
+            // Edge cases:
+            //
+            // `leading-*` sets `--tw-leading` but the property is `line-height`
+            if (node.property === '--tw-leading') other = 'line-height'
+
             if (
               siblings.some(
                 (sibling) =>
