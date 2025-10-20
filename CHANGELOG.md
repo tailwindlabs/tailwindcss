@@ -7,13 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- Remove the `postinstall` script from oxide ([#19149])(https://github.com/tailwindlabs/tailwindcss/pull/19149)
-
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
+
+## [4.1.15] - 2025-10-20
 
 ### Fixed
 
@@ -25,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t index into strings with the `theme(…)` function ([#19111](https://github.com/tailwindlabs/tailwindcss/pull/19111))
 - Fix parsing issue when `\t` is used in at-rules ([#19130](https://github.com/tailwindlabs/tailwindcss/pull/19130))
 - Upgrade: Canonicalize utilities containing `0` values ([#19095](https://github.com/tailwindlabs/tailwindcss/pull/19095))
+- Upgrade: Migrate deprecated `break-words` to `wrap-break-word` ([#19157](https://github.com/tailwindlabs/tailwindcss/pull/19157))
+
+### Changed
+
+- Remove the `postinstall` script from oxide ([#19149])(https://github.com/tailwindlabs/tailwindcss/pull/19149)
 
 ## [4.1.14] - 2025-10-01
 
@@ -3858,7 +3861,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.14...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.15...HEAD
+[4.1.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.14...v4.1.15
 [4.1.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.13...v4.1.14
 [4.1.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.12...v4.1.13
 [4.1.12]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.11...v4.1.12

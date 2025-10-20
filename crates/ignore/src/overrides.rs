@@ -1,5 +1,6 @@
 /*!
 The overrides module provides a way to specify a set of override globs.
+
 This provides functionality similar to `--include` or `--exclude` in command
 line tools.
 */
@@ -7,8 +8,8 @@ line tools.
 use std::path::Path;
 
 use crate::{
-    gitignore::{self, Gitignore, GitignoreBuilder},
     Error, Match,
+    gitignore::{self, Gitignore, GitignoreBuilder},
 };
 
 /// Glob represents a single glob in an override matcher.
@@ -116,9 +117,9 @@ impl OverrideBuilder {
     ///
     /// Matching is done relative to the directory path provided.
     pub fn new<P: AsRef<Path>>(path: P) -> OverrideBuilder {
-        OverrideBuilder {
-            builder: GitignoreBuilder::new(path),
-        }
+        let mut builder = GitignoreBuilder::new(path);
+        builder.allow_unclosed_class(false);
+        OverrideBuilder { builder }
     }
 
     /// Builds a new override matcher from the globs added so far.
@@ -141,7 +142,8 @@ impl OverrideBuilder {
 
     /// Toggle whether the globs should be matched case insensitively or not.
     ///
-    /// When this option is changed, only globs added after the change will be affected.
+    /// When this option is changed, only globs added after the change will be
+    /// affected.
     ///
     /// This is disabled by default.
     pub fn case_insensitive(&mut self, yes: bool) -> Result<&mut OverrideBuilder, Error> {
@@ -149,6 +151,28 @@ impl OverrideBuilder {
         // release.
         self.builder.case_insensitive(yes)?;
         Ok(self)
+    }
+
+    /// Toggle whether unclosed character classes are allowed. When allowed,
+    /// a `[` without a matching `]` is treated literally instead of resulting
+    /// in a parse error.
+    ///
+    /// For example, if this is set then the glob `[abc` will be treated as the
+    /// literal string `[abc` instead of returning an error.
+    ///
+    /// By default, this is false. Generally speaking, enabling this leads to
+    /// worse failure modes since the glob parser becomes more permissive. You
+    /// might want to enable this when compatibility (e.g., with POSIX glob
+    /// implementations) is more important than good error messages.
+    ///
+    /// This default is different from the default for [`Gitignore`]. Namely,
+    /// [`Gitignore`] is intended to match git's behavior as-is. But this
+    /// abstraction for "override" globs does not necessarily conform to any
+    /// other known specification and instead prioritizes better error
+    /// messages.
+    pub fn allow_unclosed_class(&mut self, yes: bool) -> &mut OverrideBuilder {
+        self.builder.allow_unclosed_class(yes);
+        self
     }
 }
 

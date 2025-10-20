@@ -561,6 +561,32 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       await expectCanonicalization(input, candidate, expected)
     })
+
+    test('`break-words` → `wrap-break-word`', async () => {
+      let candidate = 'break-words'
+      let expected = 'wrap-break-word'
+
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test('`break-words` → `break-words` with custom implementation', async () => {
+      let candidate = 'break-words'
+      let expected = 'break-words'
+
+      let input = css`
+        @import 'tailwindcss';
+
+        @utility break-words {
+          break: words; /* imagine this exists */
+        }
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
   })
 
   describe('arbitrary variants', () => {

@@ -495,11 +495,7 @@ impl<T> Match<T> {
 
     /// Return the match if it is not none. Otherwise, return other.
     pub fn or(self, other: Self) -> Self {
-        if self.is_none() {
-            other
-        } else {
-            self
-        }
+        if self.is_none() { other } else { self }
     }
 }
 
@@ -544,7 +540,7 @@ mod tests {
 
             let tmpdir = env::temp_dir();
             for _ in 0..TRIES {
-                let count = COUNTER.fetch_add(1, Ordering::SeqCst);
+                let count = COUNTER.fetch_add(1, Ordering::Relaxed);
                 let path = tmpdir.join("rust-ignore").join(count.to_string());
                 if path.is_dir() {
                     continue;

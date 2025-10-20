@@ -3606,7 +3606,6 @@ exports[`getClassList 1`] = `
   "break-inside-avoid-page",
   "break-keep",
   "break-normal",
-  "break-words",
   "brightness-0",
   "brightness-50",
   "brightness-75",

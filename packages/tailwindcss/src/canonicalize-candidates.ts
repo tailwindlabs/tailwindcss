@@ -1117,7 +1117,10 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
 // ----
 
-const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
+const DEPRECATION_MAP = new Map([
+  ['order-none', 'order-0'],
+  ['break-words', 'wrap-break-word'],
+])
 
 function deprecatedUtilities(
   candidate: Candidate,

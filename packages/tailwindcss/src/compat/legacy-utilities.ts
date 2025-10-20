@@ -92,4 +92,5 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
   })
 
   designSystem.utilities.static('order-none', () => [decl('order', '0')])
+  designSystem.utilities.static('break-words', () => [decl('overflow-wrap', 'break-word')])
 }
