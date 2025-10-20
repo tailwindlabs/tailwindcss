@@ -1,35 +1,36 @@
 import { expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
-import { buildDesignSystem } from './design-system'
 import plugin from './plugin'
-import { Theme, ThemeOptions } from './theme'
+import { ThemeOptions } from './theme'
 
 const css = String.raw
 
 function loadDesignSystem() {
-  let theme = new Theme()
-  theme.add('--spacing', '0.25rem')
-  theme.add('--colors-red-500', 'red')
-  theme.add('--colors-blue-500', 'blue')
-  theme.add('--breakpoint-sm', '640px')
-  theme.add('--aspect-video', '16 / 9')
-  theme.add('--font-sans', 'sans-serif')
-  theme.add('--font-weight-superbold', '900')
-  theme.add('--text-xs', '0.75rem')
-  theme.add('--text-xs--line-height', '1rem')
-  theme.add('--perspective-dramatic', '100px')
-  theme.add('--perspective-normal', '500px')
-  theme.add('--opacity-background', '0.3')
-  theme.add('--drop-shadow-sm', '0 1px 1px rgb(0 0 0 / 0.05)')
-  theme.add('--inset-shadow-sm', 'inset 0 1px 1px rgb(0 0 0 / 0.05)')
-  theme.add('--font-weight-bold', '700')
-  theme.add('--container-md', '768px')
-  theme.add('--container-lg', '1024px')
-  return buildDesignSystem(theme)
+  return __unstable__loadDesignSystem(`
+    @theme {
+      --spacing: 0.25rem;
+      --colors-red-500: red;
+      --colors-blue-500: blue;
+      --breakpoint-sm: 640px;
+      --aspect-video: 16 / 9;
+      --font-sans: sans-serif;
+      --font-weight-superbold: 900;
+      --text-xs: 0.75rem;
+      --text-xs--line-height: 1rem;
+      --perspective-dramatic: 100px;
+      --perspective-normal: 500px;
+      --opacity-background: 0.3;
+      --drop-shadow-sm: 0 1px 1px rgb(0 0 0 / 0.05);
+      --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+      --font-weight-bold: 700;
+      --container-md: 768px;
+      --container-lg: 1024px;
+    }
+  `)
 }
 
-test('getClassList', () => {
-  let design = loadDesignSystem()
+test('getClassList', async () => {
+  let design = await loadDesignSystem()
   let classList = design.getClassList()
   let classNames = classList.flatMap(([name, meta]) => [
     name,
@@ -39,8 +40,8 @@ test('getClassList', () => {
   expect(classNames).toMatchSnapshot()
 })
 
-test('Spacing utilities do not suggest bare values when not using the multiplier-based spacing scale', () => {
-  let design = loadDesignSystem()
+test('Spacing utilities do not suggest bare values when not using the multiplier-based spacing scale', async () => {
+  let design = await loadDesignSystem()
 
   // Remove spacing scale
   design.theme.clearNamespace('--spacing', ThemeOptions.NONE)
@@ -58,22 +59,22 @@ test('Spacing utilities do not suggest bare values when not using the multiplier
   expect(classNames).not.toContain('p-4')
 })
 
-test('Theme values with underscores are converted back to decimal points', () => {
-  let design = loadDesignSystem()
+test('Theme values with underscores are converted back to decimal points', async () => {
+  let design = await loadDesignSystem()
   let classes = design.getClassList()
 
   expect(classes).toContainEqual(['inset-0.5', { modifiers: [] }])
 })
 
-test('getVariants', () => {
-  let design = loadDesignSystem()
+test('getVariants', async () => {
+  let design = await loadDesignSystem()
   let variants = design.getVariants()
 
   expect(variants).toMatchSnapshot()
 })
 
-test('getVariants compound', () => {
-  let design = loadDesignSystem()
+test('getVariants compound', async () => {
+  let design = await loadDesignSystem()
   let variants = design.getVariants()
   let group = variants.find((v) => v.name === 'group')!
 
@@ -130,16 +131,16 @@ test('variant selectors are in the correct order', async () => {
   `)
 })
 
-test('The variant `has-force` does not crash', () => {
-  let design = loadDesignSystem()
+test('The variant `has-force` does not crash', async () => {
+  let design = await loadDesignSystem()
   let variants = design.getVariants()
   let has = variants.find((v) => v.name === 'has')!
 
   expect(has.selectors({ value: 'force' })).toMatchInlineSnapshot(`[]`)
 })
 
-test('Can produce CSS per candidate using `candidatesToCss`', () => {
-  let design = loadDesignSystem()
+test('Can produce CSS per candidate using `candidatesToCss`', async () => {
+  let design = await loadDesignSystem()
   design.invalidCandidates = new Set(['bg-[#fff]'])
 
   expect(design.candidatesToCss(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]', 'text-xs']))
