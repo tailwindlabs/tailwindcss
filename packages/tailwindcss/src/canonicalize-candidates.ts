@@ -1812,21 +1812,25 @@ function optimizeModifier(candidate: Candidate, options: InternalCanonicalizeOpt
 // 2. Sets of size 1 and 0 are not yielded
 function* combinations<T>(arr: T[]): Generator<T[]> {
   let n = arr.length
+  let limit = 1n << BigInt(n)
 
   for (let k = n; k >= 2; k--) {
     let mask = (1n << BigInt(k)) - 1n
-    let limit = 1n << BigInt(n)
 
     while (mask < limit) {
-      let out = new Array<T>(k)
-      let p = 0
+      let out = []
       for (let i = 0; i < n; i++) {
         if ((mask >> BigInt(i)) & 1n) {
-          out[p++] = arr[i]
+          out.push(arr[i])
         }
       }
       yield out
 
+      // Gosper's hack:
+      // - https://programmingforinsomniacs.blogspot.com/2018/03/gospers-hack-explained.html
+      // - https://rosettacode.org/wiki/Gosper%27s_hack
+      //
+      // We need to generate the next mask in lexicographical order.
       let carry = mask & -mask
       let ripple = mask + carry
       mask = (((ripple ^ mask) >> 2n) / carry) | ripple
