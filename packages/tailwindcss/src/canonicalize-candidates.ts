@@ -878,7 +878,10 @@ function bareValueUtilities(candidate: Candidate, options: SignatureOptions): Ca
 
 // ----
 
-const DEPRECATION_MAP = new Map([['order-none', 'order-0']])
+const DEPRECATION_MAP = new Map([
+  ['order-none', 'order-0'],
+  ['break-words', 'wrap-break-word'],
+])
 
 function deprecatedUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
   let designSystem = options.designSystem
