@@ -11,8 +11,6 @@ import { isValidSpacingMultiplier } from './utils/infer-data-type'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
-const FLOATING_POINT_PERCENTAGE = /\d*\.\d+(?:[eE][+-]?\d+)?%/g
-
 export enum SignatureFeatures {
   None = 0,
   ExpandProperties = 1 << 0,
@@ -101,27 +99,31 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
   let { rem, designSystem } = options
 
   walk(ast, {
-    enter(node) {
+    enter(node, ctx) {
       // Optimize declarations
       if (node.kind === 'declaration') {
         if (node.value === undefined || node.property === '--tw-sort') {
           return WalkAction.Replace([])
         }
 
+        // Ignore `--tw-{property}` if `{property}` exists with the same value
+        if (node.property.startsWith('--tw-')) {
+          if (
+            (ctx.parent?.nodes ?? []).some(
+              (sibling) =>
+                sibling.kind === 'declaration' &&
+                node.value === sibling.value &&
+                node.important === sibling.important &&
+                !sibling.property.startsWith('--tw-'),
+            )
+          ) {
+            return WalkAction.Replace([])
+          }
+        }
+
         if (options.features & SignatureFeatures.ExpandProperties) {
           let replacement = expandDeclaration(node, options.features)
           if (replacement) return WalkAction.Replace(replacement)
-        }
-
-        // Normalize percentages by removing unnecessary dots and zeros.
-        //
-        // E.g.: `50.0%` → `50%`
-        if (node.value.includes('%')) {
-          FLOATING_POINT_PERCENTAGE.lastIndex = 0
-          node.value = node.value.replaceAll(
-            FLOATING_POINT_PERCENTAGE,
-            (match) => `${Number(match.slice(0, -1))}%`,
-          )
         }
 
         // Resolve theme values to their inlined value.
