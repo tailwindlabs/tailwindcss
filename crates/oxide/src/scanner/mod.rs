@@ -63,7 +63,7 @@ fn init_tracing() {
         .unwrap_or_else(|_| panic!("Failed to open {file_path}"));
 
     let file_path = Path::new(&file_path);
-    let absolute_file_path = dunce::canonicalize(file_path)
+    let absolute_file_path = fsops::canonicalize(file_path)
         .unwrap_or_else(|_| panic!("Failed to canonicalize {file_path:?}"));
     eprintln!(
         "{} Writing debug info to: {}\n",
@@ -215,7 +215,7 @@ impl Scanner {
             .into_iter()
             .filter_map(|changed_content| match changed_content {
                 ChangedContent::File(file, extension) => {
-                    let Ok(file) = dunce::canonicalize(file) else {
+                    let Ok(file) = fsops::canonicalize(file) else {
                         return None;
                     };
                     Some(ChangedContent::File(file, extension))

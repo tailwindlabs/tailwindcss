@@ -87,7 +87,7 @@ mod scanner {
         let candidates = scanner.scan();
 
         let base_dir =
-            format!("{}{}", dunce::canonicalize(&base).unwrap().display(), "/").replace('\\', "/");
+            format!("{}{}", fsops::canonicalize(&base).unwrap().display(), "/").replace('\\', "/");
 
         // Get all scanned files as strings relative to the base directory
         let mut files = scanner
