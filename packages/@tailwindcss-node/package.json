@@ -39,7 +39,7 @@
   "dependencies": {
     "@jridgewell/remapping": "^2.3.4",
     "enhanced-resolve": "^5.18.3",
-    "jiti": "^2.6.0",
+    "jiti": "^2.6.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.19",
     "source-map-js": "^1.2.1",
