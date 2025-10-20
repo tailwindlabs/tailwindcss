@@ -167,7 +167,7 @@ test(
       "
       --- src/index.html ---
       <div
-        class="[letter-spacing:var(--tracking-super-wide)] [line-height:var(--leading-super-loose)]"
+        class="tracking-super-wide leading-super-loose"
       ></div>
       <div class="text-super-red/super-opaque leading-super-loose"></div>
 
