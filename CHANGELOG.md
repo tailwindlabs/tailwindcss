@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don’t index into strings with the `theme(…)` function ([#19111](https://github.com/tailwindlabs/tailwindcss/pull/19111))
 - Fix parsing issue when `\t` is used in at-rules ([#19130](https://github.com/tailwindlabs/tailwindcss/pull/19130))
 - Upgrade: Canonicalize utilities containing `0` values ([#19095](https://github.com/tailwindlabs/tailwindcss/pull/19095))
+- Upgrade: Migrate deprecated `break-words` to `wrap-break-word` ([#19157](https://github.com/tailwindlabs/tailwindcss/pull/19157))
 
 ## [4.1.14] - 2025-10-01
 
