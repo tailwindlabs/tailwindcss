@@ -116,6 +116,7 @@ function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
             //
             // `leading-*` sets `--tw-leading` but the property is `line-height`
             if (node.property === '--tw-leading') other = 'line-height'
+            if (node.property === '--tw-tracking') other = 'letter-spacing'
 
             if (
               siblings.some(
