@@ -4,10 +4,9 @@ import {
   createSignatureOptions,
   prepareDesignSystemStorage,
   UTILITY_SIGNATURE_KEY,
-import { createSignatureOptions } from '../../../../tailwindcss/src/canonicalize-candidates'
+} from '../../../../tailwindcss/src/canonicalize-candidates'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'

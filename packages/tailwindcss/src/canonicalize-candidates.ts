@@ -1919,7 +1919,7 @@ export interface SignatureOptions {
 // | `flex`           | `.x { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same utility.
-const UTILITY_SIGNATURE_KEY = Symbol()
+export const UTILITY_SIGNATURE_KEY = Symbol()
 function createUtilitySignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof UTILITY_SIGNATURE_KEY] {

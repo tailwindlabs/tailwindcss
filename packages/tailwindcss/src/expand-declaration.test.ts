@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
 import { toCss } from './ast'
+import { SignatureFeatures } from './canonicalize-candidates'
 import { parse } from './css-parser'
 import { expandDeclaration } from './expand-declaration'
-import { SignatureFeatures } from './signatures'
 import { walk, WalkAction } from './walk'
 
 const css = String.raw
