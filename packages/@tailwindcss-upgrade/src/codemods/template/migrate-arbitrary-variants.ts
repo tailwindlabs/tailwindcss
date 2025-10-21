@@ -1,23 +1,23 @@
 import { cloneCandidate } from '../../../../tailwindcss/src/candidate'
-import { createSignatureOptions } from '../../../../tailwindcss/src/canonicalize-candidates'
+import {
+  PRE_COMPUTED_VARIANTS_KEY,
+  prepareDesignSystemStorage,
+  VARIANT_SIGNATURE_KEY,
+} from '../../../../tailwindcss/src/canonicalize-candidates'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import {
-  computeVariantSignature,
-  preComputedVariants,
-} from '../../../../tailwindcss/src/signatures'
 import type { Writable } from '../../../../tailwindcss/src/types'
 import { replaceObject } from '../../../../tailwindcss/src/utils/replace-object'
 import { walkVariants } from '../../utils/walk-variants'
 
 export function migrateArbitraryVariants(
-  designSystem: DesignSystem,
+  baseDesignSystem: DesignSystem,
   _userConfig: Config | null,
   rawCandidate: string,
 ): string {
-  let signatureOptions = createSignatureOptions(designSystem)
-  let signatures = computeVariantSignature.get(signatureOptions)
-  let variants = preComputedVariants.get(signatureOptions)
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
+  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY]
 
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
     // We are only interested in the variants

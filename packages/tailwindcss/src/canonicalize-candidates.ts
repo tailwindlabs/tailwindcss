@@ -103,10 +103,11 @@ export interface DesignSystem extends BaseDesignSystem {
     >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
     [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | Symbol>
+    [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<string, string[]>
   }
 }
 
-function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
+export function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
   let designSystem = baseDesignSystem as DesignSystem
 
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache()
@@ -121,6 +122,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
+  designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
 
   return designSystem
 }
@@ -1229,7 +1231,7 @@ function arbitraryVariants(
 ): Variant | Variant[] {
   let designSystem = options.designSystem
   let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
-  let variants = preComputedVariants.get(designSystem)
+  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY]
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -2266,7 +2268,7 @@ export function createPreComputedUtilitiesCache(
 // | `focus:flex`     | `.x:focus { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same variant.
-const VARIANT_SIGNATURE_KEY = Symbol()
+export const VARIANT_SIGNATURE_KEY = Symbol()
 export function createVariantSignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
@@ -2359,7 +2361,10 @@ export function createVariantSignatureCache(
   })
 }
 
-export const preComputedVariants = new DefaultMap((designSystem: DesignSystem) => {
+export const PRE_COMPUTED_VARIANTS_KEY = Symbol()
+export function createPreComputedVariantsCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof PRE_COMPUTED_VARIANTS_KEY] {
   let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
   let lookup = new DefaultMap<string, string[]>(() => [])
 
@@ -2373,7 +2378,7 @@ export const preComputedVariants = new DefaultMap((designSystem: DesignSystem) =
   }
 
   return lookup
-})
+}
 
 function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => T): T {
   // Turn off `@theme inline` feature such that `@theme` and `@theme inline` are
