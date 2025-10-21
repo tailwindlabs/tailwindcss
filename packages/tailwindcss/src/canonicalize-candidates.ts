@@ -92,6 +92,7 @@ export interface DesignSystem extends BaseDesignSystem {
       InternalCanonicalizeOptions,
       DefaultMap<Variant, Variant[]>
     >
+    [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
   }
 }
 
@@ -102,6 +103,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[INTERNAL_OPTIONS_KEY] ??= createInternalOptionsCache(designSystem)
   designSystem.storage[CANONICALIZE_CANDIDATE_KEY] ??= createCanonicalizeCandidateCache()
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
+  designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
 
   return designSystem
 }
@@ -343,7 +345,7 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
     let ds = options.designSystem
     let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
     let variantCache = ds.storage[CANONICALIZE_VARIANT_KEY].get(options)
-    let utilityCache = canonicalizeUtilityCache.get(options)
+    let utilityCache = ds.storage[CANONICALIZE_UTILITY_KEY].get(options)
 
     return new DefaultMap<string, string>((rawCandidate: string, self) => {
       for (let candidate of ds.parseCandidate(rawCandidate)) {
@@ -452,25 +454,28 @@ const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   optimizeModifier,
 ]
 
-const canonicalizeUtilityCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
-  let designSystem = options.designSystem
-  return new DefaultMap((rawCandidate: string): string => {
-    for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
-      let replacement = cloneCandidate(readonlyCandidate) as Writable<typeof readonlyCandidate>
+const CANONICALIZE_UTILITY_KEY = Symbol()
+function createCanonicalizeUtilityCache(): DesignSystem['storage'][typeof CANONICALIZE_UTILITY_KEY] {
+  return new DefaultMap((options: InternalCanonicalizeOptions) => {
+    let designSystem = options.designSystem
+    return new DefaultMap((rawCandidate: string): string => {
+      for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
+        let replacement = cloneCandidate(readonlyCandidate) as Writable<typeof readonlyCandidate>
 
-      for (let fn of UTILITY_CANONICALIZATIONS) {
-        replacement = fn(replacement, options)
+        for (let fn of UTILITY_CANONICALIZATIONS) {
+          replacement = fn(replacement, options)
+        }
+
+        let canonicalizedCandidate = designSystem.printCandidate(replacement)
+        if (rawCandidate !== canonicalizedCandidate) {
+          return canonicalizedCandidate
+        }
       }
 
-      let canonicalizedCandidate = designSystem.printCandidate(replacement)
-      if (rawCandidate !== canonicalizedCandidate) {
-        return canonicalizedCandidate
-      }
-    }
-
-    return rawCandidate
+      return rawCandidate
+    })
   })
-})
+}
 
 // ----
 
