@@ -1,5 +1,5 @@
 import { decl, type AstNode } from './ast'
-import { SignatureFeatures } from './signatures'
+import { SignatureFeatures } from './canonicalize-candidates'
 import { segment } from './utils/segment'
 
 function createPrefixedQuad(
