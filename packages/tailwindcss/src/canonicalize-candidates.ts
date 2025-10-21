@@ -97,6 +97,10 @@ export interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [UTILITY_PROPERTIES_KEY]: DefaultMap<
+      SignatureOptions,
+      DefaultMap<string, DefaultMap<string, Set<string>>>
+    >
   }
 }
 
@@ -112,6 +116,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
+  designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
 
   return designSystem
 }
@@ -232,9 +237,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
   function collapseGroup(candidates: string[]) {
     let signatureOptions = options.signatureOptions
-    let computeUtilitiesPropertiesLookup = computeUtilityProperties
-      .get(designSystem)
-      .get(signatureOptions)
+    let computeUtilitiesPropertiesLookup =
+      designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
     let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
@@ -2154,7 +2158,10 @@ function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTI
   })
 }
 
-export const computeUtilityProperties = new DefaultMap((designSystem: DesignSystem) => {
+const UTILITY_PROPERTIES_KEY = Symbol()
+function createUtilityPropertiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof UTILITY_PROPERTIES_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
     return new DefaultMap((className) => {
       let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
@@ -2185,7 +2192,7 @@ export const computeUtilityProperties = new DefaultMap((designSystem: DesignSyst
       return localPropertyValueLookup
     })
   })
-})
+}
 
 // For all static utilities in the system, compute a lookup table that maps the
 // utility signature to the utility name. This is used to find the utility name
@@ -2217,7 +2224,7 @@ export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) 
       }
 
       lookup.get(signature).push(className)
-      computeUtilityProperties.get(designSystem).get(options).get(className)
+      designSystem.storage[UTILITY_PROPERTIES_KEY].get(options).get(className)
 
       for (let modifier of meta.modifiers) {
         // Modifiers representing numbers can be computed and don't need to be
@@ -2231,7 +2238,7 @@ export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) 
         let signature = signatures.get(classNameWithModifier)
         if (typeof signature !== 'string') continue
         lookup.get(signature).push(classNameWithModifier)
-        computeUtilityProperties.get(designSystem).get(options).get(classNameWithModifier)
+        designSystem.storage[UTILITY_PROPERTIES_KEY].get(options).get(classNameWithModifier)
       }
     }
 
