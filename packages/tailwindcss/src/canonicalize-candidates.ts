@@ -94,6 +94,7 @@ export interface DesignSystem extends BaseDesignSystem {
     >
     [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
+    [SPACING_KEY]: DefaultMap<string, number | null> | null
   }
 }
 
@@ -106,6 +107,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
   designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
+  designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
 
   return designSystem
 }
@@ -858,8 +860,11 @@ function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candida
 
 // ----
 
-const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> | null>((ds) => {
-  let spacingMultiplier = ds.resolveThemeValue('--spacing')
+const SPACING_KEY = Symbol()
+function createSpacingCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof SPACING_KEY] {
+  let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
   if (spacingMultiplier === undefined) return null
 
   let parsed = dimensions.get(spacingMultiplier)
@@ -876,7 +881,7 @@ const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> |
 
     return myValue / value
   })
-})
+}
 
 function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
   // We are only interested in arbitrary properties and arbitrary values
@@ -967,7 +972,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
       if (value === null) return
 
-      let spacingMultiplier = spacing.get(designSystem)?.get(value) ?? null
+      let spacingMultiplier = designSystem.storage[SPACING_KEY]?.get(value) ?? null
       let rootPrefix = ''
       if (spacingMultiplier !== null && spacingMultiplier < 0) {
         rootPrefix = '-'
