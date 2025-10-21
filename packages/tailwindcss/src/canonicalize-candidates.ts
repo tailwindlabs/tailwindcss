@@ -9,7 +9,7 @@ import {
   type Variant,
 } from './candidate'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
-import type { DesignSystem } from './design-system'
+import type { DesignSystem as BaseDesignSystem } from './design-system'
 import * as SelectorParser from './selector-parser'
 import {
   computeUtilityProperties,
@@ -72,6 +72,17 @@ interface InternalCanonicalizeOptions {
   features: Features
   designSystem: DesignSystem
   signatureOptions: SignatureOptions
+}
+
+export interface DesignSystem extends BaseDesignSystem {
+  storage: {
+  }
+}
+
+function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
+  let designSystem = baseDesignSystem as DesignSystem
+
+  return designSystem
 }
 
 const signatureOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
