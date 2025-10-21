@@ -80,6 +80,10 @@ export interface DesignSystem extends BaseDesignSystem {
       number | null, // Rem value
       DefaultMap<SignatureFeatures, SignatureOptions>
     >
+    [INTERNAL_OPTIONS_KEY]: DefaultMap<
+      SignatureOptions,
+      DefaultMap<Features, InternalCanonicalizeOptions>
+    >
   }
 }
 
@@ -87,6 +91,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   let designSystem = baseDesignSystem as DesignSystem
 
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache(designSystem)
+  designSystem.storage[INTERNAL_OPTIONS_KEY] ??= createInternalOptionsCache(designSystem)
 
   return designSystem
 }
@@ -115,27 +120,28 @@ export function createSignatureOptions(
   return designSystem.storage[SIGNATURE_OPTIONS_KEY].get(options?.rem ?? null).get(features)
 }
 
-const internalOptionsCache = new DefaultMap((designSystem: DesignSystem) => {
+const INTERNAL_OPTIONS_KEY = Symbol()
+function createInternalOptionsCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof INTERNAL_OPTIONS_KEY] {
   return new DefaultMap((signatureOptions: SignatureOptions) => {
     return new DefaultMap((features: Features) => {
-      return {
-        features,
-        designSystem,
-        signatureOptions,
-      } satisfies InternalCanonicalizeOptions
+      return { features, designSystem, signatureOptions } satisfies InternalCanonicalizeOptions
     })
   })
-})
+}
 
 function createCanonicalizeOptions(
-  designSystem: DesignSystem,
+  baseDesignSystem: BaseDesignSystem,
   signatureOptions: SignatureOptions,
   options?: CanonicalizeOptions,
 ) {
   let features = Features.None
   if (options?.collapse) features |= Features.CollapseUtilities
 
-  return internalOptionsCache.get(designSystem).get(signatureOptions).get(features)
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
+
+  return designSystem.storage[INTERNAL_OPTIONS_KEY].get(signatureOptions).get(features)
 }
 
 export function canonicalizeCandidates(
