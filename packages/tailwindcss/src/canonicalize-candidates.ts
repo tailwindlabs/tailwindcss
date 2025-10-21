@@ -101,6 +101,7 @@ export interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
   }
 }
 
@@ -117,6 +118,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
+  designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
 
   return designSystem
 }
@@ -907,7 +909,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
+  let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
@@ -1119,7 +1121,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
+  let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
@@ -2201,7 +2203,10 @@ function createUtilityPropertiesCache(
 // For all functional utilities, we can compute static-like utilities by
 // essentially pre-computing the values and modifiers. This is a bit slow, but
 // also only has to happen once per design system.
-export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) => {
+const PRE_COMPUTED_UTILITIES_KEY = Symbol()
+export function createPreComputedUtilitiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof PRE_COMPUTED_UTILITIES_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
     let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options)
     let lookup = new DefaultMap<string, string[]>(() => [])
@@ -2244,7 +2249,7 @@ export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) 
 
     return lookup
   })
-})
+}
 
 // Given a variant, compute a signature that represents the variant. The
 // signature will be a normalised form of the generated CSS for the variant, or
