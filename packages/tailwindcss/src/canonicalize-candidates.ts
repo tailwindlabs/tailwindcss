@@ -93,6 +93,7 @@ export interface DesignSystem extends BaseDesignSystem {
       DefaultMap<Variant, Variant[]>
     >
     [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
+    [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
   }
 }
 
@@ -104,6 +105,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[CANONICALIZE_CANDIDATE_KEY] ??= createCanonicalizeCandidateCache()
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
   designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
+  designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
 
   return designSystem
 }
@@ -504,7 +506,7 @@ const enum Convert {
 }
 
 function themeToVarUtility(candidate: Candidate, options: InternalCanonicalizeOptions): Candidate {
-  let convert = converterCache.get(options.designSystem)
+  let convert = options.designSystem.storage[CONVERTER_KEY]
 
   if (candidate.kind === 'arbitrary') {
     let [newValue, modifier] = convert(
@@ -539,7 +541,7 @@ function themeToVarVariant(
   variant: Variant,
   options: InternalCanonicalizeOptions,
 ): Variant | Variant[] {
-  let convert = converterCache.get(options.designSystem)
+  let convert = options.designSystem.storage[CONVERTER_KEY]
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -559,8 +561,11 @@ function themeToVarVariant(
   return variant
 }
 
-const converterCache = new DefaultMap((ds: DesignSystem) => {
-  return createConverter(ds)
+const CONVERTER_KEY = Symbol()
+function createConverterCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof CONVERTER_KEY] {
+  return createConverter(designSystem)
 
   function createConverter(designSystem: DesignSystem) {
     function convert(input: string, options = Convert.All): [string, CandidateModifier | null] {
@@ -716,7 +721,7 @@ const converterCache = new DefaultMap((ds: DesignSystem) => {
 
     return convert
   }
-})
+}
 
 function substituteFunctionsInValue(
   ast: ValueParser.ValueAstNode[],
