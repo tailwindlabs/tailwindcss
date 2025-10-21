@@ -71,7 +71,7 @@ interface InternalCanonicalizeOptions {
   signatureOptions: SignatureOptions
 }
 
-export interface DesignSystem extends BaseDesignSystem {
+interface DesignSystem extends BaseDesignSystem {
   storage: {
     [SIGNATURE_OPTIONS_KEY]: DefaultMap<
       number | null, // Rem value
@@ -1888,7 +1888,7 @@ export enum SignatureFeatures {
   LogicalToPhysical = 1 << 1,
 }
 
-export interface SignatureOptions {
+interface SignatureOptions {
   /**
    * The root font size in pixels. If provided, `rem` values will be normalized
    * to `px` values.
@@ -2208,7 +2208,7 @@ function createUtilityPropertiesCache(
 // essentially pre-computing the values and modifiers. This is a bit slow, but
 // also only has to happen once per design system.
 const PRE_COMPUTED_UTILITIES_KEY = Symbol()
-export function createPreComputedUtilitiesCache(
+function createPreComputedUtilitiesCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof PRE_COMPUTED_UTILITIES_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
@@ -2269,7 +2269,7 @@ export function createPreComputedUtilitiesCache(
 //
 // These produce the same signature, therefore they represent the same variant.
 export const VARIANT_SIGNATURE_KEY = Symbol()
-export function createVariantSignatureCache(
+function createVariantSignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
   return new DefaultMap<string, string | Symbol>((variant) => {
@@ -2362,7 +2362,7 @@ export function createVariantSignatureCache(
 }
 
 export const PRE_COMPUTED_VARIANTS_KEY = Symbol()
-export function createPreComputedVariantsCache(
+function createPreComputedVariantsCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof PRE_COMPUTED_VARIANTS_KEY] {
   let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
