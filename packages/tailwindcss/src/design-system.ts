@@ -59,6 +59,9 @@ export type DesignSystem = {
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
+
+  // General purpose storage
+  storage: Record<symbol, unknown>
 }
 
 export function buildDesignSystem(theme: Theme): DesignSystem {
@@ -214,6 +217,10 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions) {
       return canonicalizeCandidates(this, candidates, options)
     },
+
+    // General purpose storage, each key has to be a unique symbol to avoid
+    // collisions.
+    storage: {},
   }
 
   return designSystem

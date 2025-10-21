@@ -1,9 +1,12 @@
 import fs from 'node:fs/promises'
 import path, { extname } from 'node:path'
-import { createSignatureOptions } from '../../../../tailwindcss/src/canonicalize-candidates'
+import {
+  createSignatureOptions,
+  prepareDesignSystemStorage,
+  UTILITY_SIGNATURE_KEY,
+} from '../../../../tailwindcss/src/canonicalize-candidates'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
-import { computeUtilitySignature } from '../../../../tailwindcss/src/signatures'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
 import { extractRawCandidates } from './candidates'
@@ -40,7 +43,8 @@ export const DEFAULT_MIGRATIONS: Migration[] = [
   migrateModernizeArbitraryValues,
 ]
 
-let migrateCached = new DefaultMap((designSystem: DesignSystem) => {
+let migrateCached = new DefaultMap((baseDesignSystem: DesignSystem) => {
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
   let options = createSignatureOptions(designSystem)
 
   return new DefaultMap((userConfig: Config | null) => {
@@ -57,7 +61,7 @@ let migrateCached = new DefaultMap((designSystem: DesignSystem) => {
       // Verify that the candidate actually makes sense at all. E.g.: `duration`
       // is not a valid candidate, but it will parse because `duration-<number>`
       // exists.
-      let signature = computeUtilitySignature.get(options).get(rawCandidate)
+      let signature = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options).get(rawCandidate)
       if (typeof signature !== 'string') return original
 
       return rawCandidate
