@@ -93,6 +93,10 @@ export interface DesignSystem extends BaseDesignSystem {
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
     [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | Symbol>>
+    [STATIC_UTILITIES_KEY]: DefaultMap<
+      SignatureOptions,
+      DefaultMap<string, DefaultMap<string, Set<string>>>
+    >
   }
 }
 
@@ -107,6 +111,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
   designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
+  designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
 
   return designSystem
 }
@@ -230,7 +235,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let computeUtilitiesPropertiesLookup = computeUtilityProperties
       .get(designSystem)
       .get(signatureOptions)
-    let staticUtilities = staticUtilitiesByPropertyAndValue.get(signatureOptions)
+    let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
@@ -2138,13 +2143,16 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
 }
 
 // Index all static utilities by property and value
-export const staticUtilitiesByPropertyAndValue = new DefaultMap((_optiones: SignatureOptions) => {
-  return new DefaultMap((_property: string) => {
-    return new DefaultMap((_value: string) => {
-      return new Set<string>()
+const STATIC_UTILITIES_KEY = Symbol()
+function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTILITIES_KEY] {
+  return new DefaultMap((_optiones: SignatureOptions) => {
+    return new DefaultMap((_property: string) => {
+      return new DefaultMap((_value: string) => {
+        return new Set<string>()
+      })
     })
   })
-})
+}
 
 export const computeUtilityProperties = new DefaultMap((designSystem: DesignSystem) => {
   return new DefaultMap((options: SignatureOptions) => {
@@ -2166,8 +2174,7 @@ export const computeUtilityProperties = new DefaultMap((designSystem: DesignSyst
         (node) => {
           if (node.kind === 'declaration') {
             localPropertyValueLookup.get(node.property).add(node.value!)
-            staticUtilitiesByPropertyAndValue
-              .get(options)
+            designSystem.storage[STATIC_UTILITIES_KEY].get(options)
               .get(node.property)
               .get(node.value!)
               .add(className)
