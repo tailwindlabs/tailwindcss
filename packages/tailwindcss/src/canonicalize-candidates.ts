@@ -98,7 +98,7 @@ export interface DesignSystem extends BaseDesignSystem {
 function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
   let designSystem = baseDesignSystem as DesignSystem
 
-  designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache(designSystem)
+  designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache()
   designSystem.storage[INTERNAL_OPTIONS_KEY] ??= createInternalOptionsCache(designSystem)
   designSystem.storage[CANONICALIZE_CANDIDATE_KEY] ??= createCanonicalizeCandidateCache()
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
@@ -110,12 +110,10 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
 }
 
 const SIGNATURE_OPTIONS_KEY = Symbol()
-function createSignatureOptionsCache(
-  designSystem: DesignSystem,
-): DesignSystem['storage'][typeof SIGNATURE_OPTIONS_KEY] {
+function createSignatureOptionsCache(): DesignSystem['storage'][typeof SIGNATURE_OPTIONS_KEY] {
   return new DefaultMap((rem: number | null) => {
     return new DefaultMap((features: SignatureFeatures) => {
-      return { designSystem, rem, features } satisfies SignatureOptions
+      return { rem, features } satisfies SignatureOptions
     })
   })
 }
@@ -180,6 +178,7 @@ export function canonicalizeCandidates(
 
 function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
   if (candidates.length <= 1) return candidates
+  let designSystem = options.designSystem
 
   // To keep things simple, we group candidates such that we only collapse
   // candidates with the same variants and important modifier together.
@@ -226,7 +225,9 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
   function collapseGroup(candidates: string[]) {
     let signatureOptions = options.signatureOptions
-    let computeUtilitiesPropertiesLookup = computeUtilityProperties.get(signatureOptions)
+    let computeUtilitiesPropertiesLookup = computeUtilityProperties
+      .get(designSystem)
+      .get(signatureOptions)
     let staticUtilities = staticUtilitiesByPropertyAndValue.get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
@@ -309,15 +310,21 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
 
-        let collapsedSignature = computeUtilitySignature.get(signatureOptions).get(
-          combo
-            .map((idx) => candidates[idx])
-            .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
-            .join(' '),
-        )
+        let collapsedSignature = computeUtilitySignature
+          .get(designSystem)
+          .get(signatureOptions)
+          .get(
+            combo
+              .map((idx) => candidates[idx])
+              .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
+              .join(' '),
+          )
 
         for (let replacement of potentialReplacements) {
-          let signature = computeUtilitySignature.get(signatureOptions).get(replacement)
+          let signature = computeUtilitySignature
+            .get(designSystem)
+            .get(signatureOptions)
+            .get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
 
           // We can replace all items in the combo with the replacement
@@ -892,8 +899,8 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(options.signatureOptions)
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1104,8 +1111,8 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
   }
 
   let designSystem = options.designSystem
-  let utilities = preComputedUtilities.get(options.signatureOptions)
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1182,7 +1189,7 @@ function deprecatedUtilities(
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
@@ -1209,8 +1216,8 @@ function arbitraryVariants(
   options: InternalCanonicalizeOptions,
 ): Variant | Variant[] {
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(options.signatureOptions)
-  let variants = preComputedVariants.get(options.signatureOptions)
+  let signatures = computeVariantSignature.get(designSystem)
+  let variants = preComputedVariants.get(designSystem)
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -1240,7 +1247,7 @@ function dropUnnecessaryDataTypes(
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   if (
     candidate.kind === 'functional' &&
@@ -1272,7 +1279,7 @@ function arbitraryValueToBareValueUtility(
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   let expectedSignature = signatures.get(designSystem.printCandidate(candidate))
   if (expectedSignature === null) return candidate
@@ -1441,7 +1448,7 @@ function modernizeArbitraryValuesVariant(
 ): Variant | Variant[] {
   let result = [variant]
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(options.signatureOptions)
+  let signatures = computeVariantSignature.get(designSystem)
 
   let iterator = walkVariants(variant)
   for (let [variant, parent] of iterator) {
@@ -1806,7 +1813,7 @@ function optimizeModifier(candidate: Candidate, options: InternalCanonicalizeOpt
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(options.signatureOptions)
+  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
 
   let targetSignature = signatures.get(designSystem.printCandidate(candidate))
   let modifier = candidate.modifier
@@ -1880,11 +1887,6 @@ export interface SignatureOptions {
    * Features that influence how signatures are computed.
    */
   features: SignatureFeatures
-
-  /**
-   * The design system to use for computing the signature of candidates.
-   */
-  designSystem: DesignSystem
 }
 
 // Given a utility, compute a signature that represents the utility. The
@@ -1903,50 +1905,50 @@ export interface SignatureOptions {
 // | `flex`           | `.x { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same utility.
-export const computeUtilitySignature = new DefaultMap((options: SignatureOptions) => {
-  let designSystem = options.designSystem
+export const computeUtilitySignature = new DefaultMap((designSystem: DesignSystem) => {
+  return new DefaultMap((options: SignatureOptions) => {
+    return new DefaultMap<string, string | Symbol>((utility) => {
+      try {
+        // Ensure the prefix is added to the utility if it is not already present.
+        utility =
+          designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
+            ? `${designSystem.theme.prefix}:${utility}`
+            : utility
 
-  return new DefaultMap<string, string | Symbol>((utility) => {
-    try {
-      // Ensure the prefix is added to the utility if it is not already present.
-      utility =
-        designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
-          ? `${designSystem.theme.prefix}:${utility}`
-          : utility
+        // Use `@apply` to normalize the selector to `.x`
+        let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
 
-      // Use `@apply` to normalize the selector to `.x`
-      let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
+        temporarilyDisableThemeInline(designSystem, () => {
+          // There's separate utility caches for respect important vs not
+          // so we want to compile them both with `@theme inline` disabled
+          for (let candidate of designSystem.parseCandidate(utility)) {
+            designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
+          }
 
-      temporarilyDisableThemeInline(designSystem, () => {
-        // There's separate utility caches for respect important vs not
-        // so we want to compile them both with `@theme inline` disabled
-        for (let candidate of designSystem.parseCandidate(utility)) {
-          designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
-        }
+          substituteAtApply(ast, designSystem)
+        })
 
-        substituteAtApply(ast, designSystem)
-      })
+        // Optimize the AST. This is needed such that any internal intermediate
+        // nodes are gone. This will also cleanup declaration nodes with undefined
+        // values or `--tw-sort` declarations.
+        canonicalizeAst(designSystem, ast, options)
 
-      // Optimize the AST. This is needed such that any internal intermediate
-      // nodes are gone. This will also cleanup declaration nodes with undefined
-      // values or `--tw-sort` declarations.
-      canonicalizeAst(ast, options)
-
-      // Compute the final signature, by generating the CSS for the utility
-      let signature = toCss(ast)
-      return signature
-    } catch {
-      // A unique symbol is returned to ensure that 2 signatures resulting in
-      // `null` are not considered equal.
-      return Symbol()
-    }
+        // Compute the final signature, by generating the CSS for the utility
+        let signature = toCss(ast)
+        return signature
+      } catch {
+        // A unique symbol is returned to ensure that 2 signatures resulting in
+        // `null` are not considered equal.
+        return Symbol()
+      }
+    })
   })
 })
 
 // Optimize the CSS AST to make it suitable for signature comparison. We want to
 // expand declarations, ignore comments, sort declarations etc...
-function canonicalizeAst(ast: AstNode[], options: SignatureOptions) {
-  let { rem, designSystem } = options
+function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: SignatureOptions) {
+  let { rem } = options
 
   walk(ast, {
     enter(node, ctx) {
@@ -2142,38 +2144,37 @@ export const staticUtilitiesByPropertyAndValue = new DefaultMap((_optiones: Sign
   })
 })
 
-export const computeUtilityProperties = new DefaultMap((options: SignatureOptions) => {
-  return new DefaultMap((className) => {
-    let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
-    let designSystem = options.designSystem
+export const computeUtilityProperties = new DefaultMap((designSystem: DesignSystem) => {
+  return new DefaultMap((options: SignatureOptions) => {
+    return new DefaultMap((className) => {
+      let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
 
-    if (
-      options.designSystem.theme.prefix &&
-      !className.startsWith(options.designSystem.theme.prefix)
-    ) {
-      className = `${options.designSystem.theme.prefix}:${className}`
-    }
-    let parsed = designSystem.parseCandidate(className)
-    if (parsed.length === 0) return localPropertyValueLookup
+      if (designSystem.theme.prefix && !className.startsWith(designSystem.theme.prefix)) {
+        className = `${designSystem.theme.prefix}:${className}`
+      }
+      let parsed = designSystem.parseCandidate(className)
+      if (parsed.length === 0) return localPropertyValueLookup
 
-    walk(
-      canonicalizeAst(
-        designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
-        options,
-      ),
-      (node) => {
-        if (node.kind === 'declaration') {
-          localPropertyValueLookup.get(node.property).add(node.value!)
-          staticUtilitiesByPropertyAndValue
-            .get(options)
-            .get(node.property)
-            .get(node.value!)
-            .add(className)
-        }
-      },
-    )
+      walk(
+        canonicalizeAst(
+          designSystem,
+          designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
+          options,
+        ),
+        (node) => {
+          if (node.kind === 'declaration') {
+            localPropertyValueLookup.get(node.property).add(node.value!)
+            staticUtilitiesByPropertyAndValue
+              .get(options)
+              .get(node.property)
+              .get(node.value!)
+              .add(className)
+          }
+        },
+      )
 
-    return localPropertyValueLookup
+      return localPropertyValueLookup
+    })
   })
 })
 
@@ -2184,48 +2185,49 @@ export const computeUtilityProperties = new DefaultMap((options: SignatureOption
 // For all functional utilities, we can compute static-like utilities by
 // essentially pre-computing the values and modifiers. This is a bit slow, but
 // also only has to happen once per design system.
-export const preComputedUtilities = new DefaultMap((options: SignatureOptions) => {
-  let { designSystem } = options
-  let signatures = computeUtilitySignature.get(options)
-  let lookup = new DefaultMap<string, string[]>(() => [])
+export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) => {
+  return new DefaultMap((options: SignatureOptions) => {
+    let signatures = computeUtilitySignature.get(designSystem).get(options)
+    let lookup = new DefaultMap<string, string[]>(() => [])
 
-  // Right now all plugins are implemented using functions so they are a black
-  // box. Let's use the `getClassList` and consider every known suggestion as a
-  // static utility for now.
-  for (let [className, meta] of designSystem.getClassList()) {
-    let signature = signatures.get(className)
-    if (typeof signature !== 'string') continue
-
-    // Skip the utility if `-{utility}-0` has the same signature as
-    // `{utility}-0` (its positive version). This will prefer positive values
-    // over negative values.
-    if (className[0] === '-' && className.endsWith('-0')) {
-      let positiveSignature = signatures.get(className.slice(1))
-      if (typeof positiveSignature === 'string' && signature === positiveSignature) {
-        continue
-      }
-    }
-
-    lookup.get(signature).push(className)
-    computeUtilityProperties.get(options).get(className)
-
-    for (let modifier of meta.modifiers) {
-      // Modifiers representing numbers can be computed and don't need to be
-      // pre-computed. Doing the math and at the time of writing this, this
-      // would save you 250k additionally pre-computed utilities...
-      if (isValidSpacingMultiplier(modifier)) {
-        continue
-      }
-
-      let classNameWithModifier = `${className}/${modifier}`
-      let signature = signatures.get(classNameWithModifier)
+    // Right now all plugins are implemented using functions so they are a black
+    // box. Let's use the `getClassList` and consider every known suggestion as a
+    // static utility for now.
+    for (let [className, meta] of designSystem.getClassList()) {
+      let signature = signatures.get(className)
       if (typeof signature !== 'string') continue
-      lookup.get(signature).push(classNameWithModifier)
-      computeUtilityProperties.get(options).get(classNameWithModifier)
-    }
-  }
 
-  return lookup
+      // Skip the utility if `-{utility}-0` has the same signature as
+      // `{utility}-0` (its positive version). This will prefer positive values
+      // over negative values.
+      if (className[0] === '-' && className.endsWith('-0')) {
+        let positiveSignature = signatures.get(className.slice(1))
+        if (typeof positiveSignature === 'string' && signature === positiveSignature) {
+          continue
+        }
+      }
+
+      lookup.get(signature).push(className)
+      computeUtilityProperties.get(designSystem).get(options).get(className)
+
+      for (let modifier of meta.modifiers) {
+        // Modifiers representing numbers can be computed and don't need to be
+        // pre-computed. Doing the math and at the time of writing this, this
+        // would save you 250k additionally pre-computed utilities...
+        if (isValidSpacingMultiplier(modifier)) {
+          continue
+        }
+
+        let classNameWithModifier = `${className}/${modifier}`
+        let signature = signatures.get(classNameWithModifier)
+        if (typeof signature !== 'string') continue
+        lookup.get(signature).push(classNameWithModifier)
+        computeUtilityProperties.get(designSystem).get(options).get(classNameWithModifier)
+      }
+    }
+
+    return lookup
+  })
 })
 
 // Given a variant, compute a signature that represents the variant. The
@@ -2241,8 +2243,7 @@ export const preComputedUtilities = new DefaultMap((options: SignatureOptions) =
 // | `focus:flex`     | `.x:focus { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same variant.
-export const computeVariantSignature = new DefaultMap((options: SignatureOptions) => {
-  let { designSystem } = options
+export const computeVariantSignature = new DefaultMap((designSystem: DesignSystem) => {
   return new DefaultMap<string, string | Symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
@@ -2332,9 +2333,8 @@ export const computeVariantSignature = new DefaultMap((options: SignatureOptions
   })
 })
 
-export const preComputedVariants = new DefaultMap((options: SignatureOptions) => {
-  let { designSystem } = options
-  let signatures = computeVariantSignature.get(options)
+export const preComputedVariants = new DefaultMap((designSystem: DesignSystem) => {
+  let signatures = computeVariantSignature.get(designSystem)
   let lookup = new DefaultMap<string, string[]>(() => [])
 
   // Actual static variants
