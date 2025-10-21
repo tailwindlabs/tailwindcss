@@ -31,6 +31,9 @@ export function getClassList(design: DesignSystem): ClassEntry[] {
 
   // Static utilities only work as-is
   for (let utility of design.utilities.keys('static')) {
+    let completions = design.utilities.getCompletions(utility)
+    if (completions.length === 0) continue
+
     let item = items.get(utility)
     item.fraction = false
     item.modifiers = []

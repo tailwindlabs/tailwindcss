@@ -122,6 +122,12 @@ export class Utilities {
   }
 
   getCompletions(name: string): SuggestionGroup[] {
+    if (this.has(name, 'static')) {
+      return (
+        this.completions.get(name)?.() ?? [{ supportsNegative: false, values: [], modifiers: [] }]
+      )
+    }
+
     return this.completions.get(name)?.() ?? []
   }
 
