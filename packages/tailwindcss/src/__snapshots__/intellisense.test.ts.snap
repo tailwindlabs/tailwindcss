@@ -7576,7 +7576,6 @@ exports[`getClassList 1`] = `
   "max-w-min",
   "max-w-none",
   "max-w-px",
-  "max-w-screen",
   "max-w-svh",
   "max-w-svw",
   "mb-0",

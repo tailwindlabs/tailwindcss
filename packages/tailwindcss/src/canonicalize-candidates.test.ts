@@ -581,6 +581,17 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
+    test('`[overflow-wrap:break-word]` → `wrap-break-word`', async () => {
+      let candidate = '[overflow-wrap:break-word]'
+      let expected = 'wrap-break-word'
+
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
     test('`break-words` → `break-words` with custom implementation', async () => {
       let candidate = 'break-words'
       let expected = 'break-words'
