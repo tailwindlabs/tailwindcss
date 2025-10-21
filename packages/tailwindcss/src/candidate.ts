@@ -554,7 +554,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
         if (!isValidArbitrary(arbitraryValue)) continue
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
-        let typehint = ''
+        let typehint: string | null = null
         for (let i = 0; i < arbitraryValue.length; i++) {
           let code = arbitraryValue.charCodeAt(i)
 
@@ -579,6 +579,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
         if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) {
           continue
         }
+
+        if (typehint === '') continue
 
         candidate.value = {
           kind: 'arbitrary',

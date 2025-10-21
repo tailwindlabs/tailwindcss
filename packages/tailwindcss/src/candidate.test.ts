@@ -1776,6 +1776,14 @@ it('should not parse compound group with a non-compoundable variant', () => {
   expect(run('group-*:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
+it('empty data types are invalid', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+  let variants = new Variants()
+
+  expect(run('bg-[:foo]', { utilities, variants })).toMatchInlineSnapshot(`[]`)
+})
+
 it('should parse a variant containing an arbitrary string with unbalanced parens, brackets, curlies and other quotes', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
