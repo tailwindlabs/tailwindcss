@@ -102,6 +102,7 @@ export interface DesignSystem extends BaseDesignSystem {
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
+    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | Symbol>
   }
 }
 
@@ -119,6 +120,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
+  designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
 
   return designSystem
 }
@@ -1226,7 +1228,7 @@ function arbitraryVariants(
   options: InternalCanonicalizeOptions,
 ): Variant | Variant[] {
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(designSystem)
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
   let variants = preComputedVariants.get(designSystem)
 
   let iterator = walkVariants(variant)
@@ -1458,7 +1460,7 @@ function modernizeArbitraryValuesVariant(
 ): Variant | Variant[] {
   let result = [variant]
   let designSystem = options.designSystem
-  let signatures = computeVariantSignature.get(designSystem)
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
 
   let iterator = walkVariants(variant)
   for (let [variant, parent] of iterator) {
@@ -2264,7 +2266,10 @@ export function createPreComputedUtilitiesCache(
 // | `focus:flex`     | `.x:focus { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same variant.
-export const computeVariantSignature = new DefaultMap((designSystem: DesignSystem) => {
+const VARIANT_SIGNATURE_KEY = Symbol()
+export function createVariantSignatureCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
   return new DefaultMap<string, string | Symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
@@ -2352,10 +2357,10 @@ export const computeVariantSignature = new DefaultMap((designSystem: DesignSyste
       return Symbol()
     }
   })
-})
+}
 
 export const preComputedVariants = new DefaultMap((designSystem: DesignSystem) => {
-  let signatures = computeVariantSignature.get(designSystem)
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
   let lookup = new DefaultMap<string, string[]>(() => [])
 
   // Actual static variants
