@@ -84,6 +84,10 @@ export interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<Features, InternalCanonicalizeOptions>
     >
+    [CANONICALIZE_CANDIDATE_KEY]: DefaultMap<
+      InternalCanonicalizeOptions,
+      DefaultMap<string, string>
+    >
   }
 }
 
@@ -92,6 +96,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
 
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache(designSystem)
   designSystem.storage[INTERNAL_OPTIONS_KEY] ??= createInternalOptionsCache(designSystem)
+  designSystem.storage[CANONICALIZE_CANDIDATE_KEY] ??= createCanonicalizeCandidateCache()
 
   return designSystem
 }
@@ -145,15 +150,17 @@ function createCanonicalizeOptions(
 }
 
 export function canonicalizeCandidates(
-  designSystem: DesignSystem,
+  baseDesignSystem: BaseDesignSystem,
   candidates: string[],
   options?: CanonicalizeOptions,
 ): string[] {
-  let signatureOptions = createSignatureOptions(designSystem, options)
-  let canonicalizeOptions = createCanonicalizeOptions(designSystem, signatureOptions, options)
+  let signatureOptions = createSignatureOptions(baseDesignSystem, options)
+  let canonicalizeOptions = createCanonicalizeOptions(baseDesignSystem, signatureOptions, options)
+
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
 
   let result = new Set<string>()
-  let cache = canonicalizeCandidateCache.get(canonicalizeOptions)
+  let cache = designSystem.storage[CANONICALIZE_CANDIDATE_KEY].get(canonicalizeOptions)
   for (let candidate of candidates) {
     result.add(cache.get(candidate))
   }
@@ -325,66 +332,69 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
   }
 }
 
-const canonicalizeCandidateCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
-  let ds = options.designSystem
-  let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
-  let variantCache = canonicalizeVariantCache.get(options)
-  let utilityCache = canonicalizeUtilityCache.get(options)
+const CANONICALIZE_CANDIDATE_KEY = Symbol()
+function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANONICALIZE_CANDIDATE_KEY] {
+  return new DefaultMap((options: InternalCanonicalizeOptions) => {
+    let ds = options.designSystem
+    let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
+    let variantCache = canonicalizeVariantCache.get(options)
+    let utilityCache = canonicalizeUtilityCache.get(options)
 
-  return new DefaultMap<string, string>((rawCandidate: string, self) => {
-    for (let candidate of ds.parseCandidate(rawCandidate)) {
-      let variants = candidate.variants
-        .slice()
-        .reverse()
-        .flatMap((variant) => variantCache.get(variant))
-      let important = candidate.important
+    return new DefaultMap<string, string>((rawCandidate: string, self) => {
+      for (let candidate of ds.parseCandidate(rawCandidate)) {
+        let variants = candidate.variants
+          .slice()
+          .reverse()
+          .flatMap((variant) => variantCache.get(variant))
+        let important = candidate.important
 
-      // Canonicalize the base candidate (utility), and re-attach the variants
-      // and important flag afterwards. This way we can maximize cache hits for
-      // the base candidate and each individual variant.
-      if (important || variants.length > 0) {
-        let canonicalizedUtility = self.get(
-          ds.printCandidate({ ...candidate, variants: [], important: false }),
-        )
+        // Canonicalize the base candidate (utility), and re-attach the variants
+        // and important flag afterwards. This way we can maximize cache hits for
+        // the base candidate and each individual variant.
+        if (important || variants.length > 0) {
+          let canonicalizedUtility = self.get(
+            ds.printCandidate({ ...candidate, variants: [], important: false }),
+          )
 
-        // Rebuild the final candidate
-        let result = canonicalizedUtility
+          // Rebuild the final candidate
+          let result = canonicalizedUtility
 
-        // Remove the prefix if there are variants, because the variants exist
-        // between the prefix and the base candidate.
-        if (ds.theme.prefix !== null && variants.length > 0) {
-          result = result.slice(prefix.length)
+          // Remove the prefix if there are variants, because the variants exist
+          // between the prefix and the base candidate.
+          if (ds.theme.prefix !== null && variants.length > 0) {
+            result = result.slice(prefix.length)
+          }
+
+          // Re-attach the variants
+          if (variants.length > 0) {
+            result = `${variants.map((v) => ds.printVariant(v)).join(':')}:${result}`
+          }
+
+          // Re-attach the important flag
+          if (important) {
+            result += '!'
+          }
+
+          // Re-attach the prefix if there were variants
+          if (ds.theme.prefix !== null && variants.length > 0) {
+            result = `${prefix}${result}`
+          }
+
+          return result
         }
 
-        // Re-attach the variants
-        if (variants.length > 0) {
-          result = `${variants.map((v) => ds.printVariant(v)).join(':')}:${result}`
+        // We are guaranteed to have no variants and no important flag, just the
+        // base candidate left to canonicalize.
+        let result = utilityCache.get(rawCandidate)
+        if (result !== rawCandidate) {
+          return result
         }
-
-        // Re-attach the important flag
-        if (important) {
-          result += '!'
-        }
-
-        // Re-attach the prefix if there were variants
-        if (ds.theme.prefix !== null && variants.length > 0) {
-          result = `${prefix}${result}`
-        }
-
-        return result
       }
 
-      // We are guaranteed to have no variants and no important flag, just the
-      // base candidate left to canonicalize.
-      let result = utilityCache.get(rawCandidate)
-      if (result !== rawCandidate) {
-        return result
-      }
-    }
-
-    return rawCandidate
+      return rawCandidate
+    })
   })
-})
+}
 
 type VariantCanonicalizationFunction = (
   variant: Variant,
