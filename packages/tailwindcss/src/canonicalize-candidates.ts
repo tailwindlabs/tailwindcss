@@ -88,6 +88,10 @@ export interface DesignSystem extends BaseDesignSystem {
       InternalCanonicalizeOptions,
       DefaultMap<string, string>
     >
+    [CANONICALIZE_VARIANT_KEY]: DefaultMap<
+      InternalCanonicalizeOptions,
+      DefaultMap<Variant, Variant[]>
+    >
   }
 }
 
@@ -97,6 +101,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache(designSystem)
   designSystem.storage[INTERNAL_OPTIONS_KEY] ??= createInternalOptionsCache(designSystem)
   designSystem.storage[CANONICALIZE_CANDIDATE_KEY] ??= createCanonicalizeCandidateCache()
+  designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
 
   return designSystem
 }
@@ -337,7 +342,7 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
   return new DefaultMap((options: InternalCanonicalizeOptions) => {
     let ds = options.designSystem
     let prefix = ds.theme.prefix ? `${ds.theme.prefix}:` : ''
-    let variantCache = canonicalizeVariantCache.get(options)
+    let variantCache = ds.storage[CANONICALIZE_VARIANT_KEY].get(options)
     let utilityCache = canonicalizeUtilityCache.get(options)
 
     return new DefaultMap<string, string>((rawCandidate: string, self) => {
@@ -408,25 +413,28 @@ const VARIANT_CANONICALIZATIONS: VariantCanonicalizationFunction[] = [
   arbitraryVariants,
 ]
 
-const canonicalizeVariantCache = new DefaultMap((options: InternalCanonicalizeOptions) => {
-  return new DefaultMap((variant: Variant): Variant[] => {
-    let replacement = [variant]
-    for (let fn of VARIANT_CANONICALIZATIONS) {
-      for (let current of replacement.splice(0)) {
-        // A single variant can result in multiple variants, e.g.:
-        // `[&>[data-selected]]:flex` → `*:data-selected:flex`
-        let result = fn(cloneVariant(current), options)
-        if (Array.isArray(result)) {
-          replacement.push(...result)
-          continue
-        } else {
-          replacement.push(result)
+const CANONICALIZE_VARIANT_KEY = Symbol()
+function createCanonicalizeVariantCache(): DesignSystem['storage'][typeof CANONICALIZE_VARIANT_KEY] {
+  return new DefaultMap((options: InternalCanonicalizeOptions) => {
+    return new DefaultMap((variant: Variant): Variant[] => {
+      let replacement = [variant]
+      for (let fn of VARIANT_CANONICALIZATIONS) {
+        for (let current of replacement.splice(0)) {
+          // A single variant can result in multiple variants, e.g.:
+          // `[&>[data-selected]]:flex` → `*:data-selected:flex`
+          let result = fn(cloneVariant(current), options)
+          if (Array.isArray(result)) {
+            replacement.push(...result)
+            continue
+          } else {
+            replacement.push(result)
+          }
         }
       }
-    }
-    return replacement
+      return replacement
+    })
   })
-})
+}
 
 type UtilityCanonicalizationFunction = (
   candidate: Candidate,
