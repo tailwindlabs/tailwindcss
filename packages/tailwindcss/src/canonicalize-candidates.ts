@@ -92,6 +92,7 @@ export interface DesignSystem extends BaseDesignSystem {
     [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
+    [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | Symbol>>
   }
 }
 
@@ -105,6 +106,7 @@ function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignS
   designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
   designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
+  designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
 
   return designSystem
 }
@@ -310,21 +312,18 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
 
-        let collapsedSignature = computeUtilitySignature
-          .get(designSystem)
-          .get(signatureOptions)
-          .get(
-            combo
-              .map((idx) => candidates[idx])
-              .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
-              .join(' '),
-          )
+        let collapsedSignature = designSystem.storage[UTILITY_SIGNATURE_KEY].get(
+          signatureOptions,
+        ).get(
+          combo
+            .map((idx) => candidates[idx])
+            .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
+            .join(' '),
+        )
 
         for (let replacement of potentialReplacements) {
-          let signature = computeUtilitySignature
-            .get(designSystem)
-            .get(signatureOptions)
-            .get(replacement)
+          let signature =
+            designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
 
           // We can replace all items in the combo with the replacement
@@ -900,7 +899,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   let designSystem = options.designSystem
   let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1112,7 +1111,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   let designSystem = options.designSystem
   let utilities = preComputedUtilities.get(designSystem).get(options.signatureOptions)
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1189,7 +1188,7 @@ function deprecatedUtilities(
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
@@ -1247,7 +1246,7 @@ function dropUnnecessaryDataTypes(
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   if (
     candidate.kind === 'functional' &&
@@ -1279,7 +1278,7 @@ function arbitraryValueToBareValueUtility(
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let expectedSignature = signatures.get(designSystem.printCandidate(candidate))
   if (expectedSignature === null) return candidate
@@ -1813,7 +1812,7 @@ function optimizeModifier(candidate: Candidate, options: InternalCanonicalizeOpt
   }
 
   let designSystem = options.designSystem
-  let signatures = computeUtilitySignature.get(designSystem).get(options.signatureOptions)
+  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
 
   let targetSignature = signatures.get(designSystem.printCandidate(candidate))
   let modifier = candidate.modifier
@@ -1905,7 +1904,10 @@ export interface SignatureOptions {
 // | `flex`           | `.x { display: flex; }` |
 //
 // These produce the same signature, therefore they represent the same utility.
-export const computeUtilitySignature = new DefaultMap((designSystem: DesignSystem) => {
+const UTILITY_SIGNATURE_KEY = Symbol()
+function createUtilitySignatureCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof UTILITY_SIGNATURE_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
     return new DefaultMap<string, string | Symbol>((utility) => {
       try {
@@ -1943,7 +1945,7 @@ export const computeUtilitySignature = new DefaultMap((designSystem: DesignSyste
       }
     })
   })
-})
+}
 
 // Optimize the CSS AST to make it suitable for signature comparison. We want to
 // expand declarations, ignore comments, sort declarations etc...
@@ -2187,7 +2189,7 @@ export const computeUtilityProperties = new DefaultMap((designSystem: DesignSyst
 // also only has to happen once per design system.
 export const preComputedUtilities = new DefaultMap((designSystem: DesignSystem) => {
   return new DefaultMap((options: SignatureOptions) => {
-    let signatures = computeUtilitySignature.get(designSystem).get(options)
+    let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options)
     let lookup = new DefaultMap<string, string[]>(() => [])
 
     // Right now all plugins are implemented using functions so they are a black
