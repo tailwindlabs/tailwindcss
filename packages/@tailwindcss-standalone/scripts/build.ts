@@ -8,6 +8,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 async function buildForPlatform(triple: string, outfile: string) {
   console.log({ USERPROFILE: process.env.USERPROFILE })
+  console.log({ cwd: process.cwd() })
 
   // We wrap this in a retry because occasionally the atomic rename fails for some reason
   for (let i = 0; i < 5; ++i) {
