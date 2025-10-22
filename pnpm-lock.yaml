@@ -77,7 +77,7 @@ importers:
         specifier: ^8.5.0
         version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.19.1)(typescript@5.5.4)(yaml@2.6.0)
       turbo:
-        specifier: ^2.5.4
+        specifier: 2.5.4
         version: 2.5.4
       typescript:
         specifier: ^5.5.4
