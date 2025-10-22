@@ -16,6 +16,11 @@ async function buildForPlatform(triple: string, outfile: string) {
       // statically bundle the proper binaries for musl vs glibc
       cmd = cmd.env({
         PLATFORM_LIBC: triple.includes('-musl') ? 'musl' : 'glibc',
+
+        // This is a fix for binary downloads failing on Windows CI
+        USERPROFILE: undefined,
+        HOMEDRIVE: undefined,
+        HOMEPATH: undefined,
       })
 
       return await cmd
