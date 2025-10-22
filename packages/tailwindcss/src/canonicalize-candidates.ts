@@ -1797,6 +1797,15 @@ function modernizeArbitraryValuesVariant(
                     }, // aria-[foo~="true"], aria-[foo|="true"], …
           } satisfies Variant)
         }
+
+        // Arbitrary attributes
+        else {
+          replaceObject(variant, {
+            kind: 'arbitrary',
+            selector: target.value,
+            relative: false,
+          } satisfies Variant)
+        }
       }
 
       if (prefixedVariant) {
