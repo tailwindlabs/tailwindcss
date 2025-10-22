@@ -19,8 +19,6 @@ async function buildForPlatform(triple: string, outfile: string) {
 
         // This is a fix for binary downloads failing on Windows CI
         USERPROFILE: '',
-        HOMEDRIVE: '',
-        HOMEPATH: '',
       })
 
       return await cmd
