@@ -1610,7 +1610,7 @@ function modernizeArbitraryValuesVariant(
         ast[1].kind === 'combinator' &&
         ast[1].value.trim() === '>' &&
         ast[2].kind === 'selector' &&
-        isAttributeSelector(ast[2])
+        (isAttributeSelector(ast[2]) || ast[2].value[0] === ':')
       ) {
         ast = [ast[2]]
         prefixedVariant = designSystem.parseVariant('*')
@@ -1628,7 +1628,7 @@ function modernizeArbitraryValuesVariant(
         ast[1].kind === 'combinator' &&
         ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
         ast[2].kind === 'selector' &&
-        isAttributeSelector(ast[2])
+        (isAttributeSelector(ast[2]) || ast[2].value[0] === ':')
       ) {
         ast = [ast[2]]
         prefixedVariant = designSystem.parseVariant('**')
@@ -1742,7 +1742,19 @@ function modernizeArbitraryValuesVariant(
           return null
         })(targetNode.value)
 
-        if (newVariant === null) continue
+        if (newVariant === null) {
+          if (prefixedVariant) {
+            replaceObject(variant, {
+              kind: 'arbitrary',
+              selector: target.value,
+              relative: false,
+            } satisfies Variant)
+
+            return [prefixedVariant, variant]
+          }
+
+          continue
+        }
 
         // Add `not-` prefix
         if (compoundNot) newVariant = `not-${newVariant}`

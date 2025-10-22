@@ -857,6 +857,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&:first-child]:flex', 'first:flex'],
       ['[&:not(:first-child)]:flex', 'not-first:flex'],
 
+      ['[&_:first-child]:flex', '**:first:flex'],
+      ['[&_>_:first-child]:flex', '*:first:flex'],
+      ['[&_:--custom]:flex', '**:[:--custom]:flex'],
+      ['[&_>_:--custom]:flex', '*:[:--custom]:flex'],
+
       // in-* variants
       ['[p_&]:flex', 'in-[p]:flex'],
       ['[.foo_&]:flex', 'in-[.foo]:flex'],
