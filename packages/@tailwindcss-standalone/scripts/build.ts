@@ -18,9 +18,9 @@ async function buildForPlatform(triple: string, outfile: string) {
         PLATFORM_LIBC: triple.includes('-musl') ? 'musl' : 'glibc',
 
         // This is a fix for binary downloads failing on Windows CI
-        USERPROFILE: undefined,
-        HOMEDRIVE: undefined,
-        HOMEPATH: undefined,
+        USERPROFILE: '',
+        HOMEDRIVE: '',
+        HOMEPATH: '',
       })
 
       return await cmd
