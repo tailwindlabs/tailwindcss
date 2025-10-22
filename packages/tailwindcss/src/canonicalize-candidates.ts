@@ -1649,8 +1649,9 @@ function modernizeArbitraryValuesVariant(
           !isSingleSelector(target.nodes) ||
           // [foo][bar] is considered a single selector but has multiple nodes
           target.nodes.length !== 1
-        )
+        ) {
           continue
+        }
 
         // Expecting a single attribute selector
         if (!isAttributeSelector(target.nodes[0])) continue
