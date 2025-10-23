@@ -912,6 +912,14 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
     return candidate
   }
 
+  // Guard — skip when value contains var()/calc()/spaces/commas/slashes
+  if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') { 
+    const raw = String(candidate.value.value ?? '')
+    if (/var\(--[^)]+\)|calc\(|\s|,|\//.test(raw)) {
+      return candidate
+    }
+  }
+
   let designSystem = options.designSystem
   let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
@@ -997,6 +1005,10 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         spacingMultiplier = Math.abs(spacingMultiplier)
       }
 
+      // normalize and detect complex values
+      const valueStr = String(value)
+      const isComplex = /var\(--[^)]+\)|calc\(|\s|,|\//.test(valueStr)
+
       for (let root of Array.from(designSystem.utilities.keys('functional')).sort(
         // Sort negative roots after positive roots so that we can try
         // `mt-*` before `-mt-*`. This is especially useful in situations where
@@ -1006,17 +1018,23 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         if (rootPrefix) root = `${rootPrefix}${root}`
 
         // Try as bare value
-        for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
-          yield replacementCandidate
+        // ✅ changed: skip bare value for complex values; use valueStr
+        if (!isComplex) {
+          for (let replacementCandidate of parseCandidate(designSystem, `${root}-${valueStr}`)) {
+            yield replacementCandidate
+          }
         }
 
         // Try as bare value with modifier
         if (candidate.modifier) {
-          for (let replacementCandidate of parseCandidate(
-            designSystem,
-            `${root}-${value}${candidate.modifier}`,
-          )) {
-            yield replacementCandidate
+          // guard complex & use printModifier + valueStr
+          if (!isComplex) {
+            for (let replacementCandidate of parseCandidate(
+              designSystem,
+              `${root}-${valueStr}${printModifier(candidate.modifier)}`
+            )) {
+              yield replacementCandidate
+            }
           }
         }
 
@@ -1043,7 +1061,8 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         }
 
         // Try as arbitrary value
-        for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
+        // ✅ changed: use valueStr to keep normalized/bracketed form
+        for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${valueStr}]`)) { // ✅ changed
           yield replacementCandidate
         }
 
@@ -1051,7 +1070,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         if (candidate.modifier) {
           for (let replacementCandidate of parseCandidate(
             designSystem,
-            `${root}-[${value}]${printModifier(candidate.modifier)}`,
+            `${root}-[${valueStr}]${printModifier(candidate.modifier)}`,            // (kept) uses printModifier
           )) {
             yield replacementCandidate
           }
