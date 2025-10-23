@@ -586,6 +586,13 @@ const spacing = new DefaultMap<DesignSystem, DefaultMap<string, number | null> |
 })
 
 function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Candidate {
+   // Add guard: Skip conversion if candidate uses CSS variables or complex expressions (var(), calc(), spaces, commas, slashes)
+  if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') {
+    const raw = String(candidate.value.value ?? '')
+    if (/var\(--[^)]+\)|calc\(|\s|,|\//.test(raw)) {
+      return candidate
+    }
+  }
   // We are only interested in arbitrary properties and arbitrary values
   if (
     // Arbitrary property
@@ -673,6 +680,12 @@ function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Ca
       let value =
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
       if (value === null) return
+      
+      // Always cast value to string for consistency
+      const valueStr = String(value)
+
+      // Detect complex values (var(), calc(), spaces, commas, slashes)
+      const isComplex = /var\(--[^)]+\)|calc\(|\s|,|\//.test(valueStr)
 
       let spacingMultiplier = spacing.get(designSystem)?.get(value) ?? null
       let rootPrefix = ''
@@ -689,18 +702,19 @@ function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Ca
       )) {
         if (rootPrefix) root = `${rootPrefix}${root}`
 
-        // Try as bare value
-        for (let replacementCandidate of parseCandidate(designSystem, `${root}-${value}`)) {
-          yield replacementCandidate
-        }
-
-        // Try as bare value with modifier
-        if (candidate.modifier) {
-          for (let replacementCandidate of parseCandidate(
-            designSystem,
-            `${root}-${value}${candidate.modifier}`,
-          )) {
+        // Skip bare-value attempts for complex values to prevent gap-(--gap) corruption
+        if (!isComplex) {
+          for (let replacementCandidate of parseCandidate(designSystem, `${root}-${valueStr}`)) {
             yield replacementCandidate
+          }
+          // Always use printModifier() for modifiers
+          if (candidate.modifier) {
+            for (let replacementCandidate of parseCandidate(
+              designSystem,
+              `${root}-${valueStr}${printModifier(candidate.modifier)}`,
+            )) {
+              yield replacementCandidate
+            }
           }
         }
 
@@ -726,16 +740,14 @@ function arbitraryUtilities(candidate: Candidate, options: SignatureOptions): Ca
           }
         }
 
-        // Try as arbitrary value
-        for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${value}]`)) {
+        // Bracketed arbitrary values are always safe — keep them
+        for (let replacementCandidate of parseCandidate(designSystem, `${root}-[${valueStr}]`)) {
           yield replacementCandidate
         }
-
-        // Try as arbitrary value with modifier
         if (candidate.modifier) {
           for (let replacementCandidate of parseCandidate(
             designSystem,
-            `${root}-[${value}]${printModifier(candidate.modifier)}`,
+            `${root}-[${valueStr}]${printModifier(candidate.modifier)}`,
           )) {
             yield replacementCandidate
           }
