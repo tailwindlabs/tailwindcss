@@ -11,15 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
-### Changed
-
-- Improve canonicalization for `& > :pseudo` and `& :pseudo` arbitrary variants ([#19178](https://github.com/tailwindlabs/tailwindcss/pull/19178))
-
 ### Fixed
 
 - Discard candidates with an empty data type ([#19172](https://github.com/tailwindlabs/tailwindcss/pull/19172))
 - Fix canonicalization of arbitrary variants with attribute selectors ([#19176](https://github.com/tailwindlabs/tailwindcss/pull/19176))
 - Fix invalid colors due to nested `&` ([#19184](https://github.com/tailwindlabs/tailwindcss/pull/19184))
+
+### Changed
+
+- Improve canonicalization for `& > :pseudo` and `& :pseudo` arbitrary variants ([#19178](https://github.com/tailwindlabs/tailwindcss/pull/19178))
 
 ## [4.1.15] - 2025-10-20
 
