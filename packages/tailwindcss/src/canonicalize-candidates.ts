@@ -912,10 +912,13 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
     return candidate
   }
 
-  // Guard — skip when value contains var()/calc()/spaces/commas/slashes
+  // Guard — skip when value contains complex expressions that shouldn't be converted
+  // Allow theme() functions and color: data types, but block complex var() expressions
   if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') { 
     const raw = String(candidate.value.value ?? '')
-    if (/var\(--[^)]+\)|calc\(|\s|,|\//.test(raw)) {
+    // Skip if it contains calc() or complex var() expressions (with spaces, commas, slashes)
+    // But allow simple var(--color-name) patterns from theme() functions
+    if (/calc\(|\s|,|\//.test(raw) && !/theme\(|color:/.test(raw)) {
       return candidate
     }
   }
