@@ -363,6 +363,13 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
+  --shadow-around-xs: 0 0 2px rgb(0 0 0 / 0.05);
+--shadow-around-sm: 0 0 4px rgb(0 0 0 / 0.1);
+--shadow-around-md: 0 0 8px rgb(0 0 0 / 0.15);
+--shadow-around-lg: 0 0 12px rgb(0 0 0 / 0.2);
+--shadow-around-xl: 0 0 20px rgb(0 0 0 / 0.25);
+
+
   --inset-shadow-2xs: inset 0 1px rgb(0 0 0 / 0.05);
   --inset-shadow-xs: inset 0 1px 1px rgb(0 0 0 / 0.05);
   --inset-shadow-sm: inset 0 2px 4px rgb(0 0 0 / 0.05);
