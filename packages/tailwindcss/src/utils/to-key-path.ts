@@ -45,7 +45,7 @@ export function toKeyPath(path: string) {
     }
 
     // Add the part after the last bracket as a key
-    if (currentIndex <= part.length - 1) {
+    if (currentIndex < part.length) {
       keypath.push(part.slice(currentIndex))
     }
   }

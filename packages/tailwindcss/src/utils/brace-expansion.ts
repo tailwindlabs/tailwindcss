@@ -68,24 +68,25 @@ function expandSequence(seq: string): string[] {
   let step = stepStr ? parseInt(stepStr, 10) : undefined
   let result: string[] = []
 
-  if (/^-?\d+$/.test(start) && /^-?\d+$/.test(end)) {
-    let startNum = parseInt(start, 10)
-    let endNum = parseInt(end, 10)
+  // NUMERICAL_RANGE already ensures start and end are numbers (-?\d+)
+  // so no need to test again
+  let startNum = parseInt(start, 10)
+  let endNum = parseInt(end, 10)
 
-    if (step === undefined) {
-      step = startNum <= endNum ? 1 : -1
-    }
-    if (step === 0) {
-      throw new Error('Step cannot be zero in sequence expansion.')
-    }
-
-    let increasing = startNum < endNum
-    if (increasing && step < 0) step = -step
-    if (!increasing && step > 0) step = -step
-
-    for (let i = startNum; increasing ? i <= endNum : i >= endNum; i += step) {
-      result.push(i.toString())
-    }
+  if (step === undefined) {
+    step = startNum <= endNum ? 1 : -1
   }
+  if (step === 0) {
+    throw new Error('Step cannot be zero in sequence expansion.')
+  }
+
+  let increasing = startNum < endNum
+  if (increasing && step < 0) step = -step
+  if (!increasing && step > 0) step = -step
+
+  for (let i = startNum; increasing ? i <= endNum : i >= endNum; i += step) {
+    result.push(i.toString())
+  }
+
   return result
 }

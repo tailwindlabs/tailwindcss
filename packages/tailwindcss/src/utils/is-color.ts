@@ -198,7 +198,26 @@ const NAMED_COLORS = new Set([
 const IS_COLOR_FN = /^(rgba?|hsla?|hwb|color|(ok)?(lab|lch)|light-dark|color-mix)\(/i
 
 export function isColor(value: string): boolean {
-  return (
-    value.charCodeAt(0) === HASH || IS_COLOR_FN.test(value) || NAMED_COLORS.has(value.toLowerCase())
-  )
+  // Fast path: check for hash first (hex colors)
+  if (value.charCodeAt(0) === HASH) return true
+  
+  // Fast path: check for color functions
+  if (IS_COLOR_FN.test(value)) return true
+  
+  // Check named colors - try lowercase first, then convert if needed
+  // Most values in practice are already lowercase
+  if (NAMED_COLORS.has(value)) return true
+  
+  // Only convert to lowercase if the first check failed and value contains uppercase
+  // This avoids the toLowerCase() call in the common case
+  let hasUppercase = false
+  for (let i = 0; i < value.length; i++) {
+    let code = value.charCodeAt(i)
+    if (code >= 65 && code <= 90) { // A-Z
+      hasUppercase = true
+      break
+    }
+  }
+  
+  return hasUppercase && NAMED_COLORS.has(value.toLowerCase())
 }

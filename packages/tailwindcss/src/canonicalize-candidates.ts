@@ -1099,10 +1099,14 @@ function allVariablesAreUsed(
   walk(ValueParser.parse(value), (node) => {
     if (node.kind === 'function' && node.value === 'var') {
       let variable = node.nodes[0].value
-      let r = new RegExp(`var\\(${variable}[,)]\\s*`, 'g')
+      // Check if the variable is used in the replacement using string methods
+      // instead of RegExp to avoid the overhead of creating a RegExp per variable
+      let hasVarWithComma = replacementAsCss.includes(`var(${variable},`)
+      let hasVarWithParen = replacementAsCss.includes(`var(${variable})`)
+      
       if (
         // We need to check if the variable is used in the replacement
-        !r.test(replacementAsCss) ||
+        !(hasVarWithComma || hasVarWithParen) ||
         // The value cannot be set to a different value in the
         // replacement because that would make it an unsafe migration
         replacementAsCss.includes(`${variable}:`)
