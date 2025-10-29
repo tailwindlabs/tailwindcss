@@ -21,6 +21,11 @@ export function decodeArbitraryValue(input: string): string {
  * converted to `_` instead.
  */
 function convertUnderscoresToWhitespace(input: string, skipUnderscoreToSpace = false) {
+  // Fast path: if there are no underscores at all, return input as-is
+  if (input.indexOf('_') === -1) {
+    return input
+  }
+  
   let output = ''
   for (let i = 0; i < input.length; i++) {
     let char = input[i]

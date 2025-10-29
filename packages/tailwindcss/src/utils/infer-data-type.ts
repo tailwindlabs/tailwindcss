@@ -66,14 +66,11 @@ function isUrl(value: string): boolean {
 
 /* -------------------------------------------------------------------------- */
 
+const LINE_WIDTH_KEYWORDS = new Set(['thin', 'medium', 'thick'])
+
 function isLineWidth(value: string): boolean {
   return segment(value, ' ').every(
-    (value) =>
-      isLength(value) ||
-      isNumber(value) ||
-      value === 'thin' ||
-      value === 'medium' ||
-      value === 'thick',
+    (value) => isLength(value) || isNumber(value) || LINE_WIDTH_KEYWORDS.has(value),
   )
 }
 
@@ -111,22 +108,24 @@ function isImage(value: string) {
 
 /* -------------------------------------------------------------------------- */
 
+const GENERIC_NAMES = new Set([
+  'serif',
+  'sans-serif',
+  'monospace',
+  'cursive',
+  'fantasy',
+  'system-ui',
+  'ui-serif',
+  'ui-sans-serif',
+  'ui-monospace',
+  'ui-rounded',
+  'math',
+  'emoji',
+  'fangsong',
+])
+
 function isGenericName(value: string): boolean {
-  return (
-    value === 'serif' ||
-    value === 'sans-serif' ||
-    value === 'monospace' ||
-    value === 'cursive' ||
-    value === 'fantasy' ||
-    value === 'system-ui' ||
-    value === 'ui-serif' ||
-    value === 'ui-sans-serif' ||
-    value === 'ui-monospace' ||
-    value === 'ui-rounded' ||
-    value === 'math' ||
-    value === 'emoji' ||
-    value === 'fangsong'
-  )
+  return GENERIC_NAMES.has(value)
 }
 
 function isFamilyName(value: string): boolean {
@@ -145,17 +144,19 @@ function isFamilyName(value: string): boolean {
   return count > 0
 }
 
+const ABSOLUTE_SIZES = new Set([
+  'xx-small',
+  'x-small',
+  'small',
+  'medium',
+  'large',
+  'x-large',
+  'xx-large',
+  'xxx-large',
+])
+
 function isAbsoluteSize(value: string): boolean {
-  return (
-    value === 'xx-small' ||
-    value === 'x-small' ||
-    value === 'small' ||
-    value === 'medium' ||
-    value === 'large' ||
-    value === 'x-large' ||
-    value === 'xx-large' ||
-    value === 'xxx-large'
-  )
+  return ABSOLUTE_SIZES.has(value)
 }
 
 function isRelativeSize(value: string): boolean {
@@ -239,17 +240,13 @@ export function isLength(value: string): boolean {
 
 /* -------------------------------------------------------------------------- */
 
+const BACKGROUND_POSITION_KEYWORDS = new Set(['center', 'top', 'right', 'bottom', 'left'])
+
 function isBackgroundPosition(value: string): boolean {
   let count = 0
 
   for (let part of segment(value, ' ')) {
-    if (
-      part === 'center' ||
-      part === 'top' ||
-      part === 'right' ||
-      part === 'bottom' ||
-      part === 'left'
-    ) {
+    if (BACKGROUND_POSITION_KEYWORDS.has(part)) {
       count += 1
       continue
     }

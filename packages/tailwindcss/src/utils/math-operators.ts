@@ -39,12 +39,38 @@ const MATH_FUNCTIONS = [
 ]
 
 export function hasMathFn(input: string) {
-  return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
+  // Fast path: no opening paren means no function calls
+  if (input.indexOf('(') === -1) return false
+  
+  // Check for math functions without creating template strings
+  for (let fn of MATH_FUNCTIONS) {
+    let idx = input.indexOf(fn)
+    // Check if the function name is followed by an opening paren
+    if (idx !== -1 && input.charCodeAt(idx + fn.length) === OPEN_PAREN) {
+      return true
+    }
+  }
+  
+  return false
 }
 
 export function addWhitespaceAroundMathOperators(input: string) {
   // Bail early if there are no math functions in the input
-  if (!MATH_FUNCTIONS.some((fn) => input.includes(fn))) {
+  // Check for opening paren first as a fast path
+  if (input.indexOf('(') === -1) {
+    return input
+  }
+  
+  // Check if any math function exists in the string
+  let hasMathFunction = false
+  for (let fn of MATH_FUNCTIONS) {
+    if (input.includes(fn)) {
+      hasMathFunction = true
+      break
+    }
+  }
+  
+  if (!hasMathFunction) {
     return input
   }
 
