@@ -49,7 +49,8 @@ export function hasMathFn(input: string) {
     let idx = 0
     while ((idx = input.indexOf(fn, idx)) !== -1) {
       // Check if the character after the function name is '('
-      if (idx + fn.length < input.length && input.charCodeAt(idx + fn.length) === OPEN_PAREN) {
+      // charCodeAt returns NaN for out-of-bounds, which won't equal OPEN_PAREN
+      if (input.charCodeAt(idx + fn.length) === OPEN_PAREN) {
         return true
       }
       idx++
