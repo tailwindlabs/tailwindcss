@@ -44,10 +44,15 @@ export function hasMathFn(input: string) {
   
   // Check for math functions without creating template strings
   for (let fn of MATH_FUNCTIONS) {
-    let idx = input.indexOf(fn)
-    // Check if the function name is followed by an opening paren
-    if (idx !== -1 && input.charCodeAt(idx + fn.length) === OPEN_PAREN) {
-      return true
+    // Build the pattern to match: "fn("
+    // Look for the function name followed immediately by opening paren
+    let idx = 0
+    while ((idx = input.indexOf(fn, idx)) !== -1) {
+      // Check if the character after the function name is '('
+      if (idx + fn.length < input.length && input.charCodeAt(idx + fn.length) === OPEN_PAREN) {
+        return true
+      }
+      idx++
     }
   }
   
