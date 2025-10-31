@@ -231,6 +231,18 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                     return self.restart()
                 }
 
+                // An `!` at the top-level must be followed by "important" *and* be at the end
+                // otherwise its invalid
+                Class::Exclamation if self.bracket_stack.is_empty() => {
+                    if cursor.input[cursor.pos..].starts_with(b"!important]") {
+                      cursor.advance_by(10);
+
+                      return self.done(self.start_pos, cursor);
+                    }
+
+                    return self.restart()
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -292,6 +304,9 @@ enum Class {
 
     #[bytes(b'/')]
     Slash,
+
+    #[bytes(b'!')]
+    Exclamation,
 
     #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
@@ -369,6 +384,12 @@ mod tests {
                 "[background:url(https://example.com?q={[{[([{[[2]]}])]}]})]",
                 vec!["[background:url(https://example.com?q={[{[([{[[2]]}])]}]})]"],
             ),
+
+            // A property containing `!` at the top-level is invalid
+            ("[color:red!]", vec![]),
+
+            // Unless its part of `!important at the end
+            ("[color:red!important]", vec!["[color:red!important]"]),
         ] {
             for wrapper in [
                 // No wrapper
