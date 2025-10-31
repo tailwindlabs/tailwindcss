@@ -738,6 +738,83 @@ describe('default font family compatibility', () => {
     `)
   })
 
+  test('overriding `fontFamily.sans[1].letterSpacing` sets letter-spacing', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: ['Potato Sans', { letterSpacing: '0.05em' }],
+            },
+          },
+        },
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ".font-sans {
+        font-family: Potato Sans;
+        letter-spacing: 0.05em;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFeatureSettings`, `fontVariationSettings`, and `letterSpacing` for `fontFamily.sans` sets all properties', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-font-family: var(--font-family-sans);
+        --default-font-feature-settings: var(--font-family-sans--font-feature-settings);
+        --default-font-variation-settings: var(--font-family-sans--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              sans: [
+                'Potato Sans',
+                {
+                  fontFeatureSettings: '"cv06"',
+                  fontVariationSettings: '"XHGT" 0.7',
+                  letterSpacing: '0.05em',
+                },
+              ],
+            },
+          },
+        },
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
+      ".font-sans {
+        font-family: Potato Sans;
+        font-feature-settings: "cv06";
+        font-variation-settings: "XHGT" 0.7;
+        letter-spacing: 0.05em;
+      }
+      "
+    `)
+  })
+
   test('overriding `--font-family-sans` in `@theme` without `default` preserves the original `--default-font-*` values', async ({
     expect,
   }) => {
@@ -984,6 +1061,83 @@ describe('default font family compatibility', () => {
         font-family: Potato Mono;
         font-feature-settings: "cv06";
         font-variation-settings: "XHGT" 0.7;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFamily.mono[1].letterSpacing` sets letter-spacing', async ({ expect }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-family-mono);
+        --default-mono-font-feature-settings: var(--font-family-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-family-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: ['Potato Mono', { letterSpacing: '-0.02em' }],
+            },
+          },
+        },
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ".font-mono {
+        font-family: Potato Mono;
+        letter-spacing: -0.02em;
+      }
+      "
+    `)
+  })
+
+  test('overriding `fontFeatureSettings`, `fontVariationSettings`, and `letterSpacing` for `fontFamily.mono` sets all properties', async ({
+    expect,
+  }) => {
+    let input = css`
+      @theme default {
+        --default-mono-font-family: var(--font-mono);
+        --default-mono-font-feature-settings: var(--font-mono--font-feature-settings);
+        --default-mono-font-variation-settings: var(--font-mono--font-variation-settings);
+      }
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async () => ({
+        module: {
+          theme: {
+            fontFamily: {
+              mono: [
+                'Potato Mono',
+                {
+                  fontFeatureSettings: '"cv06"',
+                  fontVariationSettings: '"XHGT" 0.7',
+                  letterSpacing: '-0.02em',
+                },
+              ],
+            },
+          },
+        },
+        base: '/root',
+      }),
+    })
+
+    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
+      ".font-mono {
+        font-family: Potato Mono;
+        font-feature-settings: "cv06";
+        font-variation-settings: "XHGT" 0.7;
+        letter-spacing: -0.02em;
       }
       "
     `)

@@ -3774,7 +3774,7 @@ export function createUtilities(theme: Theme) {
       let value = theme.resolveWith(
         candidate.value.value,
         ['--font'],
-        ['--font-feature-settings', '--font-variation-settings'],
+        ['--font-feature-settings', '--font-variation-settings', '--letter-spacing'],
       )
       if (value) {
         let [families, options = {}] = value
@@ -3783,6 +3783,7 @@ export function createUtilities(theme: Theme) {
           decl('font-family', families),
           decl('font-feature-settings', options['--font-feature-settings']),
           decl('font-variation-settings', options['--font-variation-settings']),
+          decl('letter-spacing', options['--letter-spacing']),
         ]
       }
     }

@@ -1748,6 +1748,62 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  test('font families with letter-spacing option', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --font-display: 'Oswald', sans-serif;
+            --font-display--letter-spacing: 0.05em;
+          }
+          @tailwind utilities;
+        `,
+        ['font-display'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --font-display: "Oswald", sans-serif;
+        --font-display--letter-spacing: .05em;
+      }
+
+      .font-display {
+        font-family: var(--font-display);
+        letter-spacing: var(--font-display--letter-spacing);
+      }"
+    `)
+  })
+
+  test('font families with font-feature-settings, font-variation-settings, and letter-spacing', async () => {
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --font-display: 'Oswald', sans-serif;
+            --font-display--font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+            --font-display--font-variation-settings: 'opsz' 32;
+            --font-display--letter-spacing: 0.05em;
+          }
+          @tailwind utilities;
+        `,
+        ['font-display'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ":root, :host {
+        --font-display: "Oswald", sans-serif;
+        --font-display--font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        --font-display--font-variation-settings: "opsz" 32;
+        --font-display--letter-spacing: .05em;
+      }
+
+      .font-display {
+        font-family: var(--font-display);
+        font-feature-settings: var(--font-display--font-feature-settings);
+        font-variation-settings: var(--font-display--font-variation-settings);
+        letter-spacing: var(--font-display--letter-spacing);
+      }"
+    `)
+  })
+
   test('unsetting `--inset-*` does not unset `--inset-shadow-*`', async () => {
     expect(
       await compileCss(
