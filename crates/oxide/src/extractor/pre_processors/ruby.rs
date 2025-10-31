@@ -118,6 +118,28 @@ impl PreProcessor for Ruby {
                     continue;
                 },
 
+                // Replace comments in Ruby files
+                b'#' => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // End of the comment
+                            b'\n' => break,
+
+                            // Everything else is part of the comment and replaced
+                            _ => {
+                              result[cursor.pos] = b' ';
+                              cursor.advance();
+                            },
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                },
+
                 _ => {}
             }
 
@@ -224,6 +246,11 @@ mod tests {
             // (not nested array).
             (r#"%w[foo[bar baz]qux]"#, r#"%w foo[bar baz]qux "#),
 
+            (
+              "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",
+              "      \n      \n                                                        \n%w flex px-2.5 "
+            ),
+
             (r#""foo # bar""#, r#""foo # bar""#),
             (r#"'foo # bar'"#, r#"'foo # bar'"#),
             (
@@ -262,6 +289,12 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
             ),
+
+            (
+              "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",
+              vec!["flex", "px-2.5"],
+            ),
+
             (r#""foo # bar""#, vec!["foo", "bar"]),
             (r#"'foo # bar'"#, vec!["foo", "bar"]),
         ] {
