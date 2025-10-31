@@ -77,6 +77,50 @@ impl PreProcessor for Ruby {
 
         // Ruby extraction
         while cursor.pos < len {
+            match cursor.curr {
+                b'"' => {
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'"' => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                },
+
+                b'\'' => {
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'\'' => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                },
+
+                _ => {}
+            }
+
             // Looking for `%w` or `%W`
             if cursor.curr != b'%' && !matches!(cursor.next, b'w' | b'W') {
                 cursor.advance();
@@ -179,6 +223,13 @@ mod tests {
             // The nested delimiters evaluated to a flat array of strings
             // (not nested array).
             (r#"%w[foo[bar baz]qux]"#, r#"%w foo[bar baz]qux "#),
+
+            (r#""foo # bar""#, r#""foo # bar""#),
+            (r#"'foo # bar'"#, r#"'foo # bar'"#),
+            (
+              r#"def call = tag.span "Foo", class: %w[rounded-full h-0.75 w-0.75]"#,
+              r#"def call = tag.span "Foo", class: %w rounded-full h-0.75 w-0.75 "#
+            ),
         ] {
             Ruby::test(input, expected);
         }
@@ -211,6 +262,8 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
             ),
+            (r#""foo # bar""#, vec!["foo", "bar"]),
+            (r#"'foo # bar'"#, vec!["foo", "bar"]),
         ] {
             Ruby::test_extract_contains(input, expected);
         }
