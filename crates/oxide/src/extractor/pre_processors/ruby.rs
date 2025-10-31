@@ -96,7 +96,7 @@ impl PreProcessor for Ruby {
 
                     cursor.advance();
                     continue;
-                },
+                }
 
                 b'\'' => {
                     cursor.advance();
@@ -116,7 +116,7 @@ impl PreProcessor for Ruby {
 
                     cursor.advance();
                     continue;
-                },
+                }
 
                 // Replace comments in Ruby files
                 b'#' => {
@@ -130,15 +130,15 @@ impl PreProcessor for Ruby {
 
                             // Everything else is part of the comment and replaced
                             _ => {
-                              result[cursor.pos] = b' ';
-                              cursor.advance();
-                            },
+                                result[cursor.pos] = b' ';
+                                cursor.advance();
+                            }
                         };
                     }
 
                     cursor.advance();
                     continue;
-                },
+                }
 
                 _ => {}
             }
