@@ -297,6 +297,74 @@ test('Variants in CSS overwrite variants from plugins', async () => {
   `)
 })
 
+test('A `1` key is treated like a nested theme key *and* a normal theme key', async () => {
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
+  `
+
+  let compiler = await compile(input, {
+    loadModule: async () => ({
+      module: {
+        theme: {
+          fontSize: {
+            xs: ['0.5rem', { lineHeight: '0.25rem' }],
+          },
+          colors: {
+            a: {
+              1: { DEFAULT: '#ffffff', hovered: '#000000' },
+              2: { DEFAULT: '#000000', hovered: '#c0ffee' },
+            },
+            b: {
+              1: '#ffffff',
+              2: '#000000',
+            },
+          },
+        },
+      },
+      base: '/root',
+      path: '',
+    }),
+  })
+
+  expect(
+    compiler.build([
+      'text-xs',
+
+      'text-a-1',
+      'text-a-2',
+      'text-a-1-hovered',
+      'text-a-2-hovered',
+      'text-b-1',
+      'text-b-2',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".text-xs {
+      font-size: 0.5rem;
+      line-height: var(--tw-leading, 0.25rem);
+    }
+    .text-a-1 {
+      color: #ffffff;
+    }
+    .text-a-1-hovered {
+      color: #000000;
+    }
+    .text-a-2 {
+      color: #000000;
+    }
+    .text-a-2-hovered {
+      color: #c0ffee;
+    }
+    .text-b-1 {
+      color: #ffffff;
+    }
+    .text-b-2 {
+      color: #000000;
+    }
+    "
+  `)
+})
+
 describe('theme callbacks', () => {
   test('tuple values from the config overwrite `@theme default` tuple-ish values from the CSS theme', async ({
     expect,
