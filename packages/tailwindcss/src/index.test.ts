@@ -4678,14 +4678,19 @@ test('JS APIs support @variant', async () => {
       loadModule: async () => ({
         path: '',
         base: '/root',
-        module: ({ addBase }: PluginAPI) => {
+        module: ({ addBase, addUtilities, matchUtilities }: PluginAPI) => {
           addBase({ body: { '@variant dark': { color: 'red' } } })
+          addUtilities({ '.foo': { '@variant dark': { '--foo': 'foo' } } })
+          matchUtilities(
+            { bar: (value) => ({ '@variant dark': { '--bar': value } }) },
+            { values: { one: '1' } },
+          )
         },
       }),
     },
   )
 
-  let compiled = build(['underline'])
+  let compiled = build(['underline', 'foo', 'bar-one'])
 
   expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
     "@layer base {
@@ -4699,6 +4704,16 @@ test('JS APIs support @variant', async () => {
     @layer utilities {
       .underline {
         text-decoration-line: underline;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .bar-one {
+          --bar: 1;
+        }
+
+        .foo {
+          --foo: foo;
+        }
       }
     }"
   `)

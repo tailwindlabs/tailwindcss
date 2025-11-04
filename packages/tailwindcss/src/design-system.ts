@@ -23,7 +23,7 @@ import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
-import { Variants, createVariants } from './variants'
+import { Variants, createVariants, substituteAtVariant } from './variants'
 
 export const enum CompileAstFlags {
   None = 0,
@@ -83,6 +83,12 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
         // calls so we need evaluate any functions we find there that weren't in
         // the source CSS.
         substituteFunctions(
+          ast.map(({ node }) => node),
+          designSystem,
+        )
+
+        // JS plugins might contain an `@variant` inside a generated utility
+        substituteAtVariant(
           ast.map(({ node }) => node),
           designSystem,
         )
