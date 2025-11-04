@@ -79,7 +79,7 @@ jobs:
     runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
 
-    name: ${{ matrix.runner.name }} /  ${{ matrix.integration.name }} / ${{ matrix.integration.shard }}
+    name: ${{ matrix.runner.name }} /  ${{ matrix.integration.name }}
 
     steps:
       - uses: actions/checkout@v4
