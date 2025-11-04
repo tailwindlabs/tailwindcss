@@ -9,7 +9,6 @@ globwalk = "0.9.1"
 log = "0.4.22"
 rayon = "1.10.0"
 fxhash = { package = "rustc-hash", version = "2.1.1" }
-crossbeam = "0.8.4"
 tracing = { version = "0.1.40", features = [] }
 tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 walkdir = "2.5.0"

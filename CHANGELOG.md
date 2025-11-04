@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
 - Handle utilities with `1` keys in a JS config  ([#19254](https://github.com/tailwindlabs/tailwindcss/pull/19254))
 
 ### Added
