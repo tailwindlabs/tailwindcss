@@ -23,7 +23,7 @@ import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
-import { Variants, createVariants } from './variants'
+import { Variants, createVariants, substituteAtVariant } from './variants'
 
 export const enum CompileAstFlags {
   None = 0,
@@ -77,12 +77,18 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     return new DefaultMap<Candidate>((candidate) => {
       let ast = compileAstNodes(candidate, designSystem, flags)
 
-      // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
-      // properties (`[--my-var:theme(--color-red-500)]`) can contain function
-      // calls so we need evaluate any functions we find there that weren't in
-      // the source CSS.
       try {
+        // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+        // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+        // calls so we need evaluate any functions we find there that weren't in
+        // the source CSS.
         substituteFunctions(
+          ast.map(({ node }) => node),
+          designSystem,
+        )
+
+        // JS plugins might contain an `@variant` inside a generated utility
+        substituteAtVariant(
           ast.map(({ node }) => node),
           designSystem,
         )
