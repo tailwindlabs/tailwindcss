@@ -4665,6 +4665,45 @@ test('addBase', async () => {
   `)
 })
 
+test('JS APIs support @variant', async () => {
+  let { build } = await compile(
+    css`
+      @plugin "my-plugin";
+      @layer base, utilities;
+      @layer utilities {
+        @tailwind utilities;
+      }
+    `,
+    {
+      loadModule: async () => ({
+        path: '',
+        base: '/root',
+        module: ({ addBase }: PluginAPI) => {
+          addBase({ body: { '@variant dark': { color: 'red' } } })
+        },
+      }),
+    },
+  )
+
+  let compiled = build(['underline'])
+
+  expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    "@layer base {
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: red;
+        }
+      }
+    }
+
+    @layer utilities {
+      .underline {
+        text-decoration-line: underline;
+      }
+    }"
+  `)
+})
+
 it("should error when `layer(…)` is used, but it's not the first param", async () => {
   await expect(async () => {
     return await compileCss(
