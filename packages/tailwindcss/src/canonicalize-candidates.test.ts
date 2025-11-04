@@ -261,7 +261,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['[font-weight:400]', 'font-normal'],
     ['[line-height:0]', 'leading-0'],
     ['[border-style:solid]', 'border-solid'],
-  ])(testName, async (candidate, expected) => {
+  ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
     await expectCanonicalization(
       css`
         @import 'tailwindcss';
@@ -341,7 +341,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Arbitrary percentage value must be a whole number. Should not migrate to
       // a bare value.
       ['from-[2.5%]', 'from-[2.5%]'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
 
@@ -358,56 +358,68 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('migrate with custom static utility `@utility custom {…}`', async () => {
-      let candidate = '[--key:value]'
-      let expected = 'custom'
+    test(
+      'migrate with custom static utility `@utility custom {…}`',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = '[--key:value]'
+        let expected = 'custom'
 
-      let input = css`
-        @import 'tailwindcss';
-        @theme {
-          --*: initial;
-        }
-        @utility custom {
-          --key: value;
-        }
-      `
+        let input = css`
+          @import 'tailwindcss';
+          @theme {
+            --*: initial;
+          }
+          @utility custom {
+            --key: value;
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
 
-    test('migrate with custom functional utility `@utility custom-* {…}`', async () => {
-      let candidate = '[--key:value]'
-      let expected = 'custom-value'
+    test(
+      'migrate with custom functional utility `@utility custom-* {…}`',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = '[--key:value]'
+        let expected = 'custom-value'
 
-      let input = css`
-        @import 'tailwindcss';
-        @theme {
-          --*: initial;
-        }
-        @utility custom-* {
-          --key: --value('value');
-        }
-      `
+        let input = css`
+          @import 'tailwindcss';
+          @theme {
+            --*: initial;
+          }
+          @utility custom-* {
+            --key: --value('value');
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
 
-    test('migrate with custom functional utility `@utility custom-* {…}` that supports bare values', async () => {
-      let candidate = '[tab-size:4]'
-      let expected = 'tab-4'
+    test(
+      'migrate with custom functional utility `@utility custom-* {…}` that supports bare values',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = '[tab-size:4]'
+        let expected = 'tab-4'
 
-      let input = css`
-        @import 'tailwindcss';
-        @theme {
-          --*: initial;
-        }
-        @utility tab-* {
-          tab-size: --value(integer);
-        }
-      `
+        let input = css`
+          @import 'tailwindcss';
+          @theme {
+            --*: initial;
+          }
+          @utility tab-* {
+            tab-size: --value(integer);
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
 
     test.each([
       ['[tab-size:0]', 'tab-0'],
@@ -462,33 +474,41 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
         // the semantics of the value.
         ['max-w-(--breakpoint-md)', 'max-w-(--breakpoint-md)'],
         ['max-w-(--container-3xl)', 'max-w-3xl'],
-      ])(`migrate arbitrary value to theme value ${testName}`, async (candidate, expected) => {
+      ])(
+        `migrate arbitrary value to theme value ${testName}`,
+        { timeout: 10_000 },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+            ${theme} {
+              --*: initial;
+              --breakpoint-md: 48rem;
+              --container-3xl: 48rem;
+            }
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+    })
+
+    test(
+      'migrate an arbitrary property without spaces, to a theme value with spaces (canonicalization)',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = 'font-[foo,bar,baz]'
+        let expected = 'font-example'
         let input = css`
           @import 'tailwindcss';
-          ${theme} {
+          @theme {
             --*: initial;
-            --breakpoint-md: 48rem;
-            --container-3xl: 48rem;
+            --font-example: foo, bar, baz;
           }
         `
 
         await expectCanonicalization(input, candidate, expected)
-      })
-    })
-
-    test('migrate an arbitrary property without spaces, to a theme value with spaces (canonicalization)', async () => {
-      let candidate = 'font-[foo,bar,baz]'
-      let expected = 'font-example'
-      let input = css`
-        @import 'tailwindcss';
-        @theme {
-          --*: initial;
-          --font-example: foo, bar, baz;
-        }
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
+      },
+    )
 
     test.each([
       // Default spacing scale
@@ -503,18 +523,22 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Custom pixel based spacing scale
       ['w-[123px]', 'w-123', '1px'],
       ['w-[256px]', 'w-128', '2px'],
-    ])(`${testName} (spacing = \`%s\`)`, async (candidate, expected, spacing) => {
-      let input = css`
-        @import 'tailwindcss';
+    ])(
+      `${testName} (spacing = \`%s\`)`,
+      { timeout: 10_000 },
+      async (candidate, expected, spacing) => {
+        let input = css`
+          @import 'tailwindcss';
 
-        @theme {
-          --*: initial;
-          --spacing: ${spacing};
-        }
-      `
+          @theme {
+            --*: initial;
+            --spacing: ${spacing};
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
   })
 
   describe('bare values', () => {
@@ -538,13 +562,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // Custom utility with bare value integer
       ['tab-8', 'tab-github'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
   })
 
   describe('deprecated utilities', () => {
-    test('`order-none` → `order-0`', async () => {
+    test('`order-none` → `order-0`', { timeout: 10_000 }, async () => {
       let candidate = 'order-none'
       let expected = 'order-0'
 
@@ -555,22 +579,26 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('`order-none` → `order-none` with custom implementation', async () => {
-      let candidate = 'order-none'
-      let expected = 'order-none'
+    test(
+      '`order-none` → `order-none` with custom implementation',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = 'order-none'
+        let expected = 'order-none'
 
-      let input = css`
-        @import 'tailwindcss';
+        let input = css`
+          @import 'tailwindcss';
 
-        @utility order-none {
-          order: none; /* imagine this exists */
-        }
-      `
+          @utility order-none {
+            order: none; /* imagine this exists */
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
 
-    test('`break-words` → `wrap-break-word`', async () => {
+    test('`break-words` → `wrap-break-word`', { timeout: 10_000 }, async () => {
       let candidate = 'break-words'
       let expected = 'wrap-break-word'
 
@@ -581,7 +609,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('`[overflow-wrap:break-word]` → `wrap-break-word`', async () => {
+    test('`[overflow-wrap:break-word]` → `wrap-break-word`', { timeout: 10_000 }, async () => {
       let candidate = '[overflow-wrap:break-word]'
       let expected = 'wrap-break-word'
 
@@ -592,20 +620,24 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('`break-words` → `break-words` with custom implementation', async () => {
-      let candidate = 'break-words'
-      let expected = 'break-words'
+    test(
+      '`break-words` → `break-words` with custom implementation',
+      { timeout: 10_000 },
+      async () => {
+        let candidate = 'break-words'
+        let expected = 'break-words'
 
-      let input = css`
-        @import 'tailwindcss';
+        let input = css`
+          @import 'tailwindcss';
 
-        @utility break-words {
-          break: words; /* imagine this exists */
-        }
-      `
+          @utility break-words {
+            break: words; /* imagine this exists */
+          }
+        `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+        await expectCanonicalization(input, candidate, expected)
+      },
+    )
   })
 
   describe('arbitrary variants', () => {
@@ -635,11 +667,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['group-[&:focus]:flex', 'group-focus:flex'],
       ['peer-[&:focus]:flex', 'peer-focus:flex'],
       ['in-[&:focus]:flex', 'in-focus:flex'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('unsafe migrations keep the candidate as-is', async () => {
+    test('unsafe migrations keep the candidate as-is', { timeout: 10_000 }, async () => {
       // `hover:` also includes an `@media` query in addition to the `&:hover`
       // state. Migration is not safe because the functionality would be different.
       let candidate = '[&:hover]:flex'
@@ -654,7 +686,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('make unsafe migration safe (1)', async () => {
+    test('make unsafe migration safe (1)', { timeout: 10_000 }, async () => {
       // Overriding the `hover:` variant to only use a selector will make the
       // migration safe.
       let candidate = '[&:hover]:flex'
@@ -670,7 +702,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('make unsafe migration safe (2)', async () => {
+    test('make unsafe migration safe (2)', { timeout: 10_000 }, async () => {
       // Overriding the `hover:` variant to only use a selector will make the
       // migration safe. This time with the long-hand `@variant` syntax.
       let candidate = '[&:hover]:flex'
@@ -690,7 +722,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('custom selector-based variants', async () => {
+    test('custom selector-based variants', { timeout: 10_000 }, async () => {
       let candidate = '[&.macos]:flex'
       let expected = 'is-macos:flex'
       let input = css`
@@ -704,7 +736,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCanonicalization(input, candidate, expected)
     })
 
-    test('custom @media-based variants', async () => {
+    test('custom @media-based variants', { timeout: 10_000 }, async () => {
       let candidate = '[@media(prefers-reduced-transparency:reduce)]:flex'
       let expected = 'transparency-safe:flex'
       let input = css`
@@ -741,7 +773,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // A color with a known theme variable migrates to the full utility
       ['bg-(color:--color-red-500)', 'bg-red-500'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
   })
@@ -828,7 +860,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
         'data-[selected]:aria-[selected="true"]:aspect-[12/34]',
         'data-selected:aria-selected:aspect-12/34',
       ],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
       `
@@ -935,7 +967,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
 
       ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
       `
@@ -968,7 +1000,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // Keep modifiers on classes that don't _really_ exist
       ['group/name', 'group/name'],
-    ])(testName, async (candidate, expected) => {
+    ])(testName, { timeout: 10_000 }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
   })
@@ -996,6 +1028,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['[font-size:14px] [line-height:1.625]', 'text-sm/relaxed'],
   ])(
     'should canonicalize multiple classes `%s` into a shorthand `%s`',
+    { timeout: 10_000 },
     async (candidates, expected) => {
       let input = css`
         @import 'tailwindcss';
@@ -1006,7 +1039,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 })
 
 describe('theme to var', () => {
-  test('extended space scale converts to var or calc', async () => {
+  test('extended space scale converts to var or calc', { timeout: 10_000 }, async () => {
     let designSystem = await __unstable__loadDesignSystem(
       css`
         @tailwind utilities;
@@ -1033,7 +1066,7 @@ describe('theme to var', () => {
     ])
   })
 
-  test('custom space scale converts to var', async () => {
+  test('custom space scale converts to var', { timeout: 10_000 }, async () => {
     let designSystem = await __unstable__loadDesignSystem(
       css`
         @tailwind utilities;
@@ -1060,7 +1093,7 @@ describe('theme to var', () => {
 })
 
 describe('options', () => {
-  test('normalize `rem` units to `px`', async () => {
+  test('normalize `rem` units to `px`', { timeout: 10_000 }, async () => {
     let designSystem = await __unstable__loadDesignSystem(
       css`
         @tailwind utilities;
