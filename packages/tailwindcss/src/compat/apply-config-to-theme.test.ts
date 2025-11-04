@@ -1,7 +1,11 @@
 import { describe, expect, test } from 'vitest'
 import { buildDesignSystem } from '../design-system'
 import { Theme, ThemeOptions } from '../theme'
-import { applyConfigToTheme, keyPathToCssProperty } from './apply-config-to-theme'
+import {
+  applyConfigToTheme,
+  keyPathToCssProperty,
+  keyPathsToCssProperty,
+} from './apply-config-to-theme'
 import { resolveConfig } from './config/resolve-config'
 
 test('config values can be merged into the theme', () => {
@@ -210,6 +214,48 @@ describe('keyPathToCssProperty', () => {
     [['spacing', '0.5'], '--spacing-0_5'],
   ])('converts %s to %s', (keyPath, expected) => {
     expect(`--${keyPathToCssProperty(keyPath)}`).toEqual(expected)
+  })
+})
+
+describe('keyPathsToCssProperty', () => {
+  test.each([
+    // No "1" entries - should return single result
+    [['width', '40', '2/5'], ['width-40-2/5']],
+    [['spacing', '0.5'], ['spacing-0_5']],
+
+    // Single "1" entry before the end - should return two variants
+    [
+      ['fontSize', 'xs', '1', 'lineHeight'],
+      ['text-xs--line-height', 'text-xs-1-line-height'],
+    ],
+
+    // Multiple "1" entries before the end - should only split the last "1"
+    [
+      ['test', '1', 'middle', '1', 'end'],
+      ['test-1-middle--end', 'test-1-middle-1-end'],
+    ],
+
+    // A "1" at the end means everything should be kept as-is
+    [['spacing', '1'], ['spacing-1']],
+
+    // Even when there are other 1s in the path
+    [['test', '1', 'middle', '1'], ['test-1-middle-1']],
+
+    [['colors', 'a', '1', 'DEFAULT'], ['color-a-1']],
+    [
+      ['colors', 'a', '1', 'foo'],
+      ['color-a--foo', 'color-a-1-foo'],
+    ],
+  ])('converts %s to %s', (keyPath, expected) => {
+    expect(keyPathsToCssProperty(keyPath)).toEqual(expected)
+  })
+
+  test('returns empty array for container path', () => {
+    expect(keyPathsToCssProperty(['container', 'sm'])).toEqual([])
+  })
+
+  test('returns empty array for invalid keys', () => {
+    expect(keyPathsToCssProperty(['test', 'invalid@key'])).toEqual([])
   })
 })
 

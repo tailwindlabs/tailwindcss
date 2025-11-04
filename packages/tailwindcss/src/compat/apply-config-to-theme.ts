@@ -25,10 +25,9 @@ export function applyConfigToTheme(
   replacedThemeKeys: Set<string>,
 ) {
   for (let replacedThemeKey of replacedThemeKeys) {
-    let name = keyPathToCssProperty([replacedThemeKey])
-    if (!name) continue
-
-    designSystem.theme.clearNamespace(`--${name}`, ThemeOptions.DEFAULT)
+    for (let name of keyPathsToCssProperty([replacedThemeKey])) {
+      designSystem.theme.clearNamespace(`--${name}`, ThemeOptions.DEFAULT)
+    }
   }
 
   for (let [path, value] of themeableValues(theme)) {
@@ -50,14 +49,13 @@ export function applyConfigToTheme(
       }
     }
 
-    let name = keyPathToCssProperty(path)
-    if (!name) continue
-
-    designSystem.theme.add(
-      `--${name}`,
-      '' + value,
-      ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
-    )
+    for (let name of keyPathsToCssProperty(path)) {
+      designSystem.theme.add(
+        `--${name}`,
+        '' + value,
+        ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
+      )
+    }
   }
 
   // If someone has updated `fontFamily.sans` or `fontFamily.mono` in a JS
@@ -150,8 +148,12 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  return keyPathsToCssProperty(path)[0] ?? null
+}
+
+export function keyPathsToCssProperty(path: string[]): string[] {
   // The legacy container component config should not be included in the Theme
-  if (path[0] === 'container') return null
+  if (path[0] === 'container') return []
 
   path = path.slice()
 
@@ -170,32 +172,43 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
 
   for (let part of path) {
-    if (!IS_VALID_KEY.test(part)) return null
+    if (!IS_VALID_KEY.test(part)) return []
   }
 
-  return (
-    path
-      // [1] should move into the nested object tuple. To create the CSS variable
-      // name for this, we replace it with an empty string that will result in two
-      // subsequent dashes when joined.
-      //
-      // E.g.:
-      // - `fontSize.xs.1.lineHeight` -> `font-size-xs--line-height`
-      // - `spacing.1` -> `--spacing-1`
-      .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
+  // Find the position of the last `1` as long as it's not at the end
+  let lastOnePosition = path.lastIndexOf('1')
+  if (lastOnePosition === path.length - 1) lastOnePosition = -1
 
-      // Resolve the key path to a CSS variable segment
+  // Generate two combinations based on tuple access:
+  let paths: string[][] = []
+
+  // Option 1: Replace the last "1" with empty string if it exists
+  //
+  // We place this first as we "prefer" treating this as a tuple access. The exception to this is if
+  // the keypath ends in `DEFAULT` otherwise we'd see a key that ends in a dash like `--color-a-`
+  if (lastOnePosition !== -1 && path.at(-1) !== 'DEFAULT') {
+    let modified = path.slice()
+    modified[lastOnePosition] = ''
+    paths.push(modified)
+  }
+
+  // Option 2: The path as is
+  paths.push(path)
+
+  return paths.map((path) => {
+    // Remove the `DEFAULT` key at the end of a path
+    // We're reading from CSS anyway so it'll be a string
+    if (path.at(-1) === 'DEFAULT') path = path.slice(0, -1)
+
+    // Resolve the key path to a CSS variable segment
+    return path
       .map((part) =>
         part
           .replaceAll('.', '_')
           .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
       )
-
-      // Remove the `DEFAULT` key at the end of a path
-      // We're reading from CSS anyway so it'll be a string
-      .filter((part, index) => part !== 'DEFAULT' || index !== path.length - 1)
       .join('-')
-  )
+  })
 }
 
 function isValidThemePrimitive(value: unknown) {
