@@ -27,17 +27,43 @@ jobs:
 
         integration:
           - name: upgrade
-            shards: 3
+            shard: 1/3
+          - name: upgrade
+            shard: 2/3
+          - name: upgrade
+            shard: 3/3
           - name: vite
-            shards: 5
+            shard: 1/5
+          - name: vite
+            shard: 2/5
+          - name: vite
+            shard: 3/5
+          - name: vite
+            shard: 4/5
+          - name: vite
+            shard: 5/5
           - name: cli
-            shards: 4
+            shard: 1/4
+          - name: cli
+            shard: 2/4
+          - name: cli
+            shard: 3/4
+          - name: cli
+            shard: 4/4
           - name: postcss
-            shards: 5
+            shard: 1/5
+          - name: postcss
+            shard: 2/5
+          - name: postcss
+            shard: 3/5
+          - name: postcss
+            shard: 4/5
+          - name: postcss
+            shard: 5/5
           - name: oxide
-            shards: 1
+            shard: 1/1
           - name: webpack
-            shards: 1
+            shard: 1/1
 
         # Exclude windows and macos from being built on feature branches
         run-all:
@@ -53,7 +79,7 @@ jobs:
     runs-on: ${{ matrix.runner.os }}
     timeout-minutes: 30
 
-    name: ${{ matrix.runner.name }} /  ${{ matrix.integration.name }}
+    name: ${{ matrix.runner.name }} /  ${{ matrix.integration.name }} / ${{ matrix.integration.shard }}
 
     steps:
       - uses: actions/checkout@v4
@@ -109,17 +135,8 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
-      - name: Test ${{ matrix.integration.name }}
-        run: |
-
-          # Run shards in parallel
-          for i in $(seq 1 ${{ matrix.integration.shards }}); do
-            (pnpm run test:integrations ./integrations/${{ matrix.integration.name }} --shard $i/${{ matrix.integration.shards }}) &
-          done
-
-          # Wait for all background jobs
-          wait
-
+      - name: Test ${{ matrix.integration.name }} ${{ matrix.integration.shard }}
+        run: pnpm run test:integrations ./integrations/${{ matrix.integration.name }} --shard ${{ matrix.integration.shard }}
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
