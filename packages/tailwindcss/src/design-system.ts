@@ -77,11 +77,11 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     return new DefaultMap<Candidate>((candidate) => {
       let ast = compileAstNodes(candidate, designSystem, flags)
 
-      // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
-      // properties (`[--my-var:theme(--color-red-500)]`) can contain function
-      // calls so we need evaluate any functions we find there that weren't in
-      // the source CSS.
       try {
+        // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
+        // properties (`[--my-var:theme(--color-red-500)]`) can contain function
+        // calls so we need evaluate any functions we find there that weren't in
+        // the source CSS.
         substituteFunctions(
           ast.map(({ node }) => node),
           designSystem,
