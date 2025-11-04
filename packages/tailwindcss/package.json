@@ -132,7 +132,7 @@
     "@types/node": "catalog:",
     "dedent": "1.7.0",
     "lightningcss": "catalog:",
-    "magic-string": "^0.30.19",
+    "magic-string": "^0.30.21",
     "source-map-js": "^1.2.1"
   }
 }
