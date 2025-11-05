@@ -17,6 +17,7 @@ import type { DesignSystem } from './design-system'
 import type { Theme } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { escape } from './utils/escape'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
 import { walk, WalkAction } from './walk'
@@ -522,7 +523,7 @@ export function createVariants(theme: Theme): Variants {
     // Name the group by appending the modifier to `group` class itself if
     // present.
     let variantSelector = variant.modifier
-      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}group\\/${variant.modifier.value})`
+      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}group\\/${escape(variant.modifier.value)})`
       : `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}group)`
 
     let didApply = false
@@ -574,7 +575,7 @@ export function createVariants(theme: Theme): Variants {
     // Name the peer by appending the modifier to `peer` class itself if
     // present.
     let variantSelector = variant.modifier
-      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}peer\\/${variant.modifier.value})`
+      ? `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}peer\\/${escape(variant.modifier.value)})`
       : `:where(.${theme.prefix ? `${theme.prefix}\\:` : ''}peer)`
 
     let didApply = false
@@ -1063,7 +1064,7 @@ export function createVariants(theme: Theme): Variants {
                 atRule(
                   '@container',
                   variant.modifier
-                    ? `${variant.modifier.value} (width < ${value})`
+                    ? `${escape(variant.modifier.value)} (width < ${value})`
                     : `(width < ${value})`,
                   ruleNode.nodes,
                 ),
@@ -1092,7 +1093,7 @@ export function createVariants(theme: Theme): Variants {
                 atRule(
                   '@container',
                   variant.modifier
-                    ? `${variant.modifier.value} (width >= ${value})`
+                    ? `${escape(variant.modifier.value)} (width >= ${value})`
                     : `(width >= ${value})`,
                   ruleNode.nodes,
                 ),
@@ -1110,7 +1111,7 @@ export function createVariants(theme: Theme): Variants {
                 atRule(
                   '@container',
                   variant.modifier
-                    ? `${variant.modifier.value} (width >= ${value})`
+                    ? `${escape(variant.modifier.value)} (width >= ${value})`
                     : `(width >= ${value})`,
                   ruleNode.nodes,
                 ),

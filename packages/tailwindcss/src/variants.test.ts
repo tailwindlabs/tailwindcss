@@ -586,11 +586,13 @@ test('group-*', async () => {
 
         'group-hover:group-focus:flex',
         'group-focus:group-hover:flex',
+
+        'group-hover/foo+bar:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
     "@media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *) {
+      .group-hover\\:flex:is(:where(.group):hover *), .group-hover\\/foo\\+bar\\:flex:is(:where(.group\\/foo\\+bar):hover *) {
         display: flex;
       }
     }
@@ -677,11 +679,13 @@ test('peer-*', async () => {
         'peer-hocus:flex',
         'peer-hover:peer-focus:flex',
         'peer-focus:peer-hover:flex',
+
+        'peer-hover/foo+bar:flex',
       ],
     ),
   ).toMatchInlineSnapshot(`
     "@media (hover: hover) {
-      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *), .peer-hover\\/foo\\+bar\\:flex:is(:where(.peer\\/foo\\+bar):hover ~ *) {
         display: flex;
       }
     }
@@ -2081,6 +2085,7 @@ test('container queries', async () => {
       [
         '@lg:flex',
         '@lg/name:flex',
+        '@lg/foo+bar:flex',
         '@[123px]:flex',
         '@[456px]/name:flex',
         '@foo-bar:flex',
@@ -2088,6 +2093,7 @@ test('container queries', async () => {
 
         '@min-lg:flex',
         '@min-lg/name:flex',
+        '@min-lg/foo+bar:flex',
         '@min-[123px]:flex',
         '@min-[456px]/name:flex',
         '@min-foo-bar:flex',
@@ -2095,6 +2101,7 @@ test('container queries', async () => {
 
         '@max-lg:flex',
         '@max-lg/name:flex',
+        '@max-lg/foo+bar:flex',
         '@max-[123px]:flex',
         '@max-[456px]/name:flex',
         '@max-foo-bar:flex',
@@ -2110,6 +2117,12 @@ test('container queries', async () => {
 
     @container not (min-width: 1440px) {
       .\\@max-foo-bar\\:flex {
+        display: flex;
+      }
+    }
+
+    @container foo\\+bar not (min-width: 1024px) {
+      .\\@max-lg\\/foo\\+bar\\:flex {
         display: flex;
       }
     }
@@ -2150,6 +2163,12 @@ test('container queries', async () => {
       }
     }
 
+    @container foo\\+bar (min-width: 1024px) {
+      .\\@lg\\/foo\\+bar\\:flex {
+        display: flex;
+      }
+    }
+
     @container name (min-width: 1024px) {
       .\\@lg\\/name\\:flex {
         display: flex;
@@ -2158,6 +2177,12 @@ test('container queries', async () => {
 
     @container (min-width: 1024px) {
       .\\@lg\\:flex {
+        display: flex;
+      }
+    }
+
+    @container foo\\+bar (min-width: 1024px) {
+      .\\@min-lg\\/foo\\+bar\\:flex {
         display: flex;
       }
     }
