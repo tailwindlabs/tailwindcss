@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
+- Escape variant modifiers when used in selectors and at-rules ([#19269](https://github.com/tailwindlabs/tailwindcss/pull/19269))
 
 ### Added
 
