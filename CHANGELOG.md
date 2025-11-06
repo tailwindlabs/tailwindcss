@@ -7,13 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
-
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
+
+## [4.1.17] - 2025-11-06
+
+### Fixed
+
+- Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
+- Prevent occasional crash on Windows when loaded into a worker thread ([#19242](https://github.com/tailwindlabs/tailwindcss/pull/19242))
 
 ## [4.1.16] - 2025-10-23
 
@@ -3874,7 +3877,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.16...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.17...HEAD
+[4.1.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.16...v4.1.17
 [4.1.16]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.15...v4.1.16
 [4.1.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.14...v4.1.15
 [4.1.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.13...v4.1.14
