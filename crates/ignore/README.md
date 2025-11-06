@@ -1,5 +1,5 @@
-ignore
-======
+# ignore
+
 The ignore crate provides a fast recursive directory iterator that respects
 various filters such as globs, file types and `.gitignore` files. This crate
 also provides lower level direct access to gitignore and file type matchers.
@@ -28,7 +28,6 @@ This example shows the most basic usage of this crate. This code will
 recursively traverse the current directory while automatically filtering out
 files and directories according to ignore globs found in files like
 `.ignore` and `.gitignore`:
-
 
 ```rust,no_run
 use ignore::Walk;
