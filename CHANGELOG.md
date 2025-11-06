@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
+- Prevent occasional crash on Windows when loaded into a worker thread ([#19242](https://github.com/tailwindlabs/tailwindcss/pull/19242))
 
 ### Added
 
