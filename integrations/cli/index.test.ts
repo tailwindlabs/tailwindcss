@@ -2104,3 +2104,31 @@ test(
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
+
+test(
+  'CSS parse errors should include filename and line number',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'broken.css': css`
+        /* Test file to reproduce the CSS parsing error */
+        .test {
+          color: red;
+          /* margin-bottom: calc(var(--spacing) * 5); */ */
+        }
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    await expect(exec('pnpm tailwindcss --input broken.css --output dist/out.css')).rejects.toThrow(
+      /Invalid declaration.*at.*broken\.css:5:49/,
+    )
+  },
+)

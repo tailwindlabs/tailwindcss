@@ -36,6 +36,31 @@ export interface ParseOptions {
   from?: string
 }
 
+function getLineAndColumn(input: string, position: number): { line: number; column: number } {
+  let line = 1
+  let column = 1
+  
+  for (let i = 0; i < position && i < input.length; i++) {
+    if (input.charCodeAt(i) === LINE_BREAK) {
+      line++
+      column = 1
+    } else {
+      column++
+    }
+  }
+  
+  return { line, column }
+}
+
+function formatError(message: string, source: Source | null, position: number): string {
+  if (!source) {
+    return message
+  }
+  
+  const { line, column } = getLineAndColumn(source.code, position)
+  return `${message} at ${source.file}:${line}:${column}`
+}
+
 export function parse(input: string, opts?: ParseOptions) {
   let source: Source | null = opts?.from ? { file: opts.from, code: input } : null
 
@@ -138,7 +163,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // Start of a string.
     else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
-      let end = parseString(input, i, currentChar)
+      let end = parseString(input, i, currentChar, source)
 
       // Adjust `buffer` to include the string.
       buffer += input.slice(i, end + 1)
@@ -192,7 +217,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
         // Start of a string.
         else if (peekChar === SINGLE_QUOTE || peekChar === DOUBLE_QUOTE) {
-          j = parseString(input, j, peekChar)
+          j = parseString(input, j, peekChar, source)
         }
 
         // Start of a comment.
@@ -269,7 +294,7 @@ export function parse(input: string, opts?: ParseOptions) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
-      if (!declaration) throw new Error(`Invalid custom property, expected a value`)
+      if (!declaration) throw new Error(formatError(`Invalid custom property, expected a value`, source, start))
 
       if (source) {
         declaration.src = [source, start, i]
@@ -334,7 +359,7 @@ export function parse(input: string, opts?: ParseOptions) {
       let declaration = parseDeclaration(buffer)
       if (!declaration) {
         if (buffer.length === 0) continue
-        throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+        throw new Error(formatError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart))
       }
 
       if (source) {
@@ -391,7 +416,7 @@ export function parse(input: string, opts?: ParseOptions) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       if (closingBracketStack === '') {
-        throw new Error('Missing opening {')
+        throw new Error(formatError('Missing opening {', source, i))
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -453,7 +478,7 @@ export function parse(input: string, opts?: ParseOptions) {
           // Attach the declaration to the parent.
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
-            if (!node) throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+            if (!node) throw new Error(formatError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart))
 
             if (source) {
               node.src = [source, bufferStart, i]
@@ -492,7 +517,7 @@ export function parse(input: string, opts?: ParseOptions) {
     // `)`
     else if (currentChar === CLOSE_PAREN) {
       if (closingBracketStack[closingBracketStack.length - 1] !== ')') {
-        throw new Error('Missing opening (')
+        throw new Error(formatError('Missing opening (', source, i))
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -534,10 +559,10 @@ export function parse(input: string, opts?: ParseOptions) {
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
     if (parent.kind === 'rule') {
-      throw new Error(`Missing closing } at ${parent.selector}`)
+      throw new Error(formatError(`Missing closing } at ${parent.selector}`, source, input.length))
     }
     if (parent.kind === 'at-rule') {
-      throw new Error(`Missing closing } at ${parent.name} ${parent.params}`)
+      throw new Error(formatError(`Missing closing } at ${parent.name} ${parent.params}`, source, input.length))
     }
   }
 
@@ -594,7 +619,7 @@ function parseDeclaration(
   )
 }
 
-function parseString(input: string, startIdx: number, quoteChar: number): number {
+function parseString(input: string, startIdx: number, quoteChar: number, source: Source | null = null): number {
   let peekChar: number
 
   // We need to ensure that the closing quote is the same as the opening
@@ -637,7 +662,7 @@ function parseString(input: string, startIdx: number, quoteChar: number): number
         (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
     ) {
       throw new Error(
-        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`,
+        formatError(`Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`, source, startIdx)
       )
     }
 
@@ -656,7 +681,7 @@ function parseString(input: string, startIdx: number, quoteChar: number): number
       (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
     ) {
       throw new Error(
-        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`,
+        formatError(`Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`, source, startIdx)
       )
     }
   }
