@@ -2104,10 +2104,6 @@ test(
   },
 )
 
-function withBOM(text: string): string {
-  return '\uFEFF' + text
-}
-
 test(
   'CSS parse errors should include filename and line number',
   {
@@ -2120,8 +2116,7 @@ test(
           }
         }
       `,
-      'broken.css': css`
-        /* Test file to reproduce the CSS parsing error */
+      'input.css': css`
         .test {
           color: red;
           */
@@ -2130,8 +2125,12 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    await expect(exec('pnpm tailwindcss --input broken.css --output dist/out.css')).rejects.toThrow(
-      /Invalid declaration.*at.*broken\.css:4:/,
+    await expect(exec('pnpm tailwindcss --input input.css --output dist/out.css')).rejects.toThrow(
+      /CssSyntaxError: .*input.css: 3:2: Invalid declaration: `\*\/`/,
     )
   },
 )
+
+function withBOM(text: string): string {
+  return '\uFEFF' + text
+}
