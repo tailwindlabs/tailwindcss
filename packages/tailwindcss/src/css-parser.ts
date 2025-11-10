@@ -37,6 +37,9 @@ export interface ParseOptions {
   from?: string
 }
 
+/**
+ * CSS syntax error with source location information.
+ */
 export class CssSyntaxError extends Error {
   constructor(message: string, source: Source | null, position: number) {
     if (!source) {
