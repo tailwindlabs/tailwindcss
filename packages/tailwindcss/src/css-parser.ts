@@ -47,7 +47,7 @@ export class CssSyntaxError extends Error {
     if (loc) {
       let source = loc[0]
       let start = createLineTable(source.code).find(loc[1])
-      message = `${source.file}: ${start.line}:${start.column}: ${message}`
+      message = `${source.file}:${start.line}:${start.column + 1}: ${message}`
     }
 
     super(message)

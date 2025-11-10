@@ -1164,7 +1164,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             color: blue;
           }
         `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: input.css: 9:10: Missing opening {]`)
+      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: input.css:9:11: Missing opening {]`)
     })
 
     it('should error when curly brackets are unbalanced (closing)', () => {
@@ -1193,7 +1193,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
        /* ^ Missing closing } */
         `),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 6:10: Missing closing } at .bar]`,
+        `[CssSyntaxError: input.css:6:11: Missing closing } at .bar]`,
       )
     })
 
@@ -1217,7 +1217,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 3:21: Unterminated string: "Hello world!"]`,
+        `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!"]`,
       )
     })
 
@@ -1241,7 +1241,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 3:21: Unterminated string: "Hello world!;"]`,
+        `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!;"]`,
       )
     })
 
@@ -1251,7 +1251,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       )
 
       expect(() => parseWithLoc('--foo')).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 1:0: Invalid custom property, expected a value]`,
+        `[CssSyntaxError: input.css:1:1: Invalid custom property, expected a value]`,
       )
     })
 
@@ -1261,7 +1261,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       )
 
       expect(() => parseWithLoc('.foo { --bar }')).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 1:7: Invalid custom property, expected a value]`,
+        `[CssSyntaxError: input.css:1:8: Invalid custom property, expected a value]`,
       )
     })
 
@@ -1283,7 +1283,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
         `),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 3:19: Unterminated string: 'Hello world!']`,
+        `[CssSyntaxError: input.css:3:20: Unterminated string: 'Hello world!']`,
       )
     })
 
@@ -1293,7 +1293,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       )
 
       expect(() => parseWithLoc('.foo { bar }')).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 1:7: Invalid declaration: \`bar\`]`,
+        `[CssSyntaxError: input.css:1:8: Invalid declaration: \`bar\`]`,
       )
     })
   })
