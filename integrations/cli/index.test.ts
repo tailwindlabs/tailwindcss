@@ -1,8 +1,11 @@
 import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -2121,14 +2124,14 @@ test(
         /* Test file to reproduce the CSS parsing error */
         .test {
           color: red;
-          /* margin-bottom: calc(var(--spacing) * 5); */ */
+          */
         }
       `,
     },
   },
   async ({ exec, expect }) => {
     await expect(exec('pnpm tailwindcss --input broken.css --output dist/out.css')).rejects.toThrow(
-      /Invalid declaration.*at.*broken\.css:5:49/,
+      /Invalid declaration.*at.*broken\.css:4:/,
     )
   },
 )

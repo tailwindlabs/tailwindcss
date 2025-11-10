@@ -9,6 +9,7 @@ import {
   type Declaration,
   type Rule,
 } from './ast'
+import { createLineTable } from './source-maps/line-table'
 import type { Source } from './source-maps/source'
 
 const BACKSLASH = 0x5c
@@ -36,29 +37,16 @@ export interface ParseOptions {
   from?: string
 }
 
-function getLineAndColumn(input: string, position: number): { line: number; column: number } {
-  let line = 1
-  let column = 1
-  
-  for (let i = 0; i < position && i < input.length; i++) {
-    if (input.charCodeAt(i) === LINE_BREAK) {
-      line++
-      column = 1
+export class CssSyntaxError extends Error {
+  constructor(message: string, source: Source | null, position: number) {
+    if (!source) {
+      super(message)
     } else {
-      column++
+      const { line, column } = createLineTable(source.code).find(position)
+      super(`${message} at ${source.file}:${line}:${column}`)
     }
+    this.name = 'CssSyntaxError'
   }
-  
-  return { line, column }
-}
-
-function formatError(message: string, source: Source | null, position: number): string {
-  if (!source) {
-    return message
-  }
-  
-  const { line, column } = getLineAndColumn(source.code, position)
-  return `${message} at ${source.file}:${line}:${column}`
 }
 
 export function parse(input: string, opts?: ParseOptions) {
@@ -294,7 +282,7 @@ export function parse(input: string, opts?: ParseOptions) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
-      if (!declaration) throw new Error(formatError(`Invalid custom property, expected a value`, source, start))
+      if (!declaration) throw new CssSyntaxError(`Invalid custom property, expected a value`, source, start)
 
       if (source) {
         declaration.src = [source, start, i]
@@ -359,7 +347,7 @@ export function parse(input: string, opts?: ParseOptions) {
       let declaration = parseDeclaration(buffer)
       if (!declaration) {
         if (buffer.length === 0) continue
-        throw new Error(formatError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart))
+        throw new CssSyntaxError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart)
       }
 
       if (source) {
@@ -416,7 +404,7 @@ export function parse(input: string, opts?: ParseOptions) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       if (closingBracketStack === '') {
-        throw new Error(formatError('Missing opening {', source, i))
+        throw new CssSyntaxError('Missing opening {', source, i)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -478,7 +466,7 @@ export function parse(input: string, opts?: ParseOptions) {
           // Attach the declaration to the parent.
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
-            if (!node) throw new Error(formatError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart))
+            if (!node) throw new CssSyntaxError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart)
 
             if (source) {
               node.src = [source, bufferStart, i]
@@ -517,7 +505,7 @@ export function parse(input: string, opts?: ParseOptions) {
     // `)`
     else if (currentChar === CLOSE_PAREN) {
       if (closingBracketStack[closingBracketStack.length - 1] !== ')') {
-        throw new Error(formatError('Missing opening (', source, i))
+        throw new CssSyntaxError('Missing opening (', source, i)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -559,10 +547,10 @@ export function parse(input: string, opts?: ParseOptions) {
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
     if (parent.kind === 'rule') {
-      throw new Error(formatError(`Missing closing } at ${parent.selector}`, source, input.length))
+      throw new CssSyntaxError(`Missing closing } at ${parent.selector}`, source, input.length)
     }
     if (parent.kind === 'at-rule') {
-      throw new Error(formatError(`Missing closing } at ${parent.name} ${parent.params}`, source, input.length))
+      throw new CssSyntaxError(`Missing closing } at ${parent.name} ${parent.params}`, source, input.length)
     }
   }
 
@@ -661,8 +649,8 @@ function parseString(input: string, startIdx: number, quoteChar: number, source:
       (input.charCodeAt(i + 1) === LINE_BREAK ||
         (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
     ) {
-      throw new Error(
-        formatError(`Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`, source, startIdx)
+      throw new CssSyntaxError(
+        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`, source, startIdx
       )
     }
 
@@ -680,8 +668,8 @@ function parseString(input: string, startIdx: number, quoteChar: number, source:
       peekChar === LINE_BREAK ||
       (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
     ) {
-      throw new Error(
-        formatError(`Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`, source, startIdx)
+      throw new CssSyntaxError(
+        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`, source, startIdx
       )
     }
   }

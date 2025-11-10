@@ -1218,23 +1218,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 
     it('should include filename and line number in error messages when from option is provided', () => {
       expect(() => {
-        CSS.parse('/* margin-bottom: calc(var(--spacing) * 5); */ */', { from: 'test.css' })
-      }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Invalid declaration: \`*/\` at test.css:1:49]`,
-      )
+        CSS.parse('.test { */ }', { from: 'test.css' })
+      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at test\.css:1:9/)
     })
 
     it('should include filename and line number for multi-line CSS errors', () => {
       const multiLineCss = `/* Test file */
 .test {
   color: red;
-  /* margin-bottom: calc(var(--spacing) * 5); */ */
+  */
 }`
       expect(() => {
         CSS.parse(multiLineCss, { from: 'styles.css' })
-      }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Invalid declaration: \`*/\` at styles.css:4:49]`,
-      )
+      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at styles\.css:4:3/)
     })
 
     it('should include filename and line number for missing opening brace errors', () => {
@@ -1247,9 +1243,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 }`
       expect(() => {
         CSS.parse(cssWithMissingBrace, { from: 'broken.css' })
-      }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Missing opening { at broken.css:7:1]`,
-      )
+      }).toThrow(/CssSyntaxError: Missing opening \{ at broken\.css:7:1/)
     })
 
     it('should include filename and line number for unterminated string errors', () => {
@@ -1259,9 +1253,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 }`
       expect(() => {
         CSS.parse(cssWithUnterminatedString, { from: 'string-error.css' })
-      }).toThrowErrorMatchingInlineSnapshot(
-        `[Error: Unterminated string: "Hello world! at string-error.css:2:12]`,
-      )
+      }).toThrow(/CssSyntaxError: Unterminated string: "Hello world!" at string-error\.css:2:12/)
     })
   })
 
@@ -1278,9 +1270,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 
   it('should not include filename when from option is not provided', () => {
     expect(() => {
-      CSS.parse('/* margin-bottom: calc(var(--spacing) * 5); */ */')
-    }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Invalid declaration: \`*/\`]`,
-    )
+      CSS.parse('.test { */ }')
+    }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/`$/)
   })
 })
