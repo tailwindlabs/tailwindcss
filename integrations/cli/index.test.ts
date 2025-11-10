@@ -2126,7 +2126,7 @@ test(
   },
   async ({ exec, expect }) => {
     await expect(exec('pnpm tailwindcss --input input.css --output dist/out.css')).rejects.toThrow(
-      /CssSyntaxError: .*input.css:3:2: Invalid declaration: `\*\/`/,
+      /CssSyntaxError: .*input.css:3:3: Invalid declaration: `\*\/`/,
     )
   },
 )
