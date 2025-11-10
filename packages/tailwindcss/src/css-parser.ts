@@ -9,7 +9,8 @@ import {
   type Declaration,
   type Rule,
 } from './ast'
-import type { Source } from './source-maps/source'
+import { createLineTable } from './source-maps/line-table'
+import type { Source, SourceLocation } from './source-maps/source'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -34,6 +35,30 @@ const EXCLAMATION_MARK = 0x21
 
 export interface ParseOptions {
   from?: string
+}
+
+/**
+ * CSS syntax error with source location information.
+ */
+export class CssSyntaxError extends Error {
+  loc: SourceLocation | null
+
+  constructor(message: string, loc: SourceLocation | null) {
+    if (loc) {
+      let source = loc[0]
+      let start = createLineTable(source.code).find(loc[1])
+      message = `${source.file}:${start.line}:${start.column + 1}: ${message}`
+    }
+
+    super(message)
+
+    this.name = 'CssSyntaxError'
+    this.loc = loc
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, CssSyntaxError)
+    }
+  }
 }
 
 export function parse(input: string, opts?: ParseOptions) {
@@ -138,7 +163,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // Start of a string.
     else if (currentChar === SINGLE_QUOTE || currentChar === DOUBLE_QUOTE) {
-      let end = parseString(input, i, currentChar)
+      let end = parseString(input, i, currentChar, source)
 
       // Adjust `buffer` to include the string.
       buffer += input.slice(i, end + 1)
@@ -192,7 +217,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
         // Start of a string.
         else if (peekChar === SINGLE_QUOTE || peekChar === DOUBLE_QUOTE) {
-          j = parseString(input, j, peekChar)
+          j = parseString(input, j, peekChar, source)
         }
 
         // Start of a comment.
@@ -269,7 +294,12 @@ export function parse(input: string, opts?: ParseOptions) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
-      if (!declaration) throw new Error(`Invalid custom property, expected a value`)
+      if (!declaration) {
+        throw new CssSyntaxError(
+          `Invalid custom property, expected a value`,
+          source ? [source, start, i] : null,
+        )
+      }
 
       if (source) {
         declaration.src = [source, start, i]
@@ -334,7 +364,10 @@ export function parse(input: string, opts?: ParseOptions) {
       let declaration = parseDeclaration(buffer)
       if (!declaration) {
         if (buffer.length === 0) continue
-        throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+        throw new CssSyntaxError(
+          `Invalid declaration: \`${buffer.trim()}\``,
+          source ? [source, bufferStart, i] : null,
+        )
       }
 
       if (source) {
@@ -391,7 +424,7 @@ export function parse(input: string, opts?: ParseOptions) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       if (closingBracketStack === '') {
-        throw new Error('Missing opening {')
+        throw new CssSyntaxError('Missing opening {', source ? [source, i, i] : null)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -453,7 +486,12 @@ export function parse(input: string, opts?: ParseOptions) {
           // Attach the declaration to the parent.
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
-            if (!node) throw new Error(`Invalid declaration: \`${buffer.trim()}\``)
+            if (!node) {
+              throw new CssSyntaxError(
+                `Invalid declaration: \`${buffer.trim()}\``,
+                source ? [source, bufferStart, i] : null,
+              )
+            }
 
             if (source) {
               node.src = [source, bufferStart, i]
@@ -492,7 +530,7 @@ export function parse(input: string, opts?: ParseOptions) {
     // `)`
     else if (currentChar === CLOSE_PAREN) {
       if (closingBracketStack[closingBracketStack.length - 1] !== ')') {
-        throw new Error('Missing opening (')
+        throw new CssSyntaxError('Missing opening (', source ? [source, i, i] : null)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -534,10 +572,17 @@ export function parse(input: string, opts?: ParseOptions) {
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
     if (parent.kind === 'rule') {
-      throw new Error(`Missing closing } at ${parent.selector}`)
+      throw new CssSyntaxError(
+        `Missing closing } at ${parent.selector}`,
+        parent.src ? [parent.src[0], parent.src[1], parent.src[1]] : null,
+      )
     }
+
     if (parent.kind === 'at-rule') {
-      throw new Error(`Missing closing } at ${parent.name} ${parent.params}`)
+      throw new CssSyntaxError(
+        `Missing closing } at ${parent.name} ${parent.params}`,
+        parent.src ? [parent.src[0], parent.src[1], parent.src[1]] : null,
+      )
     }
   }
 
@@ -594,7 +639,12 @@ function parseDeclaration(
   )
 }
 
-function parseString(input: string, startIdx: number, quoteChar: number): number {
+function parseString(
+  input: string,
+  startIdx: number,
+  quoteChar: number,
+  source: Source | null = null,
+): number {
   let peekChar: number
 
   // We need to ensure that the closing quote is the same as the opening
@@ -636,8 +686,9 @@ function parseString(input: string, startIdx: number, quoteChar: number): number
       (input.charCodeAt(i + 1) === LINE_BREAK ||
         (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
     ) {
-      throw new Error(
+      throw new CssSyntaxError(
         `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`,
+        source ? [source, startIdx, i + 1] : null,
       )
     }
 
@@ -655,8 +706,9 @@ function parseString(input: string, startIdx: number, quoteChar: number): number
       peekChar === LINE_BREAK ||
       (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
     ) {
-      throw new Error(
+      throw new CssSyntaxError(
         `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`,
+        source ? [source, startIdx, i + 1] : null,
       )
     }
   }

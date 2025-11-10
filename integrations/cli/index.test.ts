@@ -1,8 +1,11 @@
 import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -2098,6 +2101,33 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'CSS parse errors should include filename and line number',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'input.css': css`
+        .test {
+          color: red;
+          */
+        }
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    await expect(exec('pnpm tailwindcss --input input.css --output dist/out.css')).rejects.toThrow(
+      /CssSyntaxError: .*input.css:3:3: Invalid declaration: `\*\/`/,
+    )
   },
 )
 

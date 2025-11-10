@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ensure validation of `source(…)` happens relative to the file it is in ([#19274](https://github.com/tailwindlabs/tailwindcss/pull/19274))
+- Include filename and line numbers in CSS parse errors ([#19282](https://github.com/tailwindlabs/tailwindcss/pull/19282))
 
 ### Added
 
