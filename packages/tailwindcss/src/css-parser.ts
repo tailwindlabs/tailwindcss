@@ -43,7 +43,7 @@ export class CssSyntaxError extends Error {
       super(message)
     } else {
       const { line, column } = createLineTable(source.code).find(position)
-      super(`${message} at ${source.file}:${line}:${column}`)
+      super(`${message} at ${source.file}:${line}:${column + 1}`)
     }
     this.name = 'CssSyntaxError'
   }

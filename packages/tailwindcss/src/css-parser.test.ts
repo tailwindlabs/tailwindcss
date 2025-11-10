@@ -1219,7 +1219,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     it('should include filename and line number in error messages when from option is provided', () => {
       expect(() => {
         CSS.parse('.test { */ }', { from: 'test.css' })
-      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at test\.css:1:9/)
+      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at test\.css:1:10/)
     })
 
     it('should include filename and line number for multi-line CSS errors', () => {
@@ -1230,7 +1230,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 }`
       expect(() => {
         CSS.parse(multiLineCss, { from: 'styles.css' })
-      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at styles\.css:4:3/)
+      }).toThrow(/CssSyntaxError: Invalid declaration: `\*\/` at styles\.css:4:4/)
     })
 
     it('should include filename and line number for missing opening brace errors', () => {
@@ -1243,7 +1243,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 }`
       expect(() => {
         CSS.parse(cssWithMissingBrace, { from: 'broken.css' })
-      }).toThrow(/CssSyntaxError: Missing opening \{ at broken\.css:7:1/)
+      }).toThrow(/CssSyntaxError: Missing opening \{ at broken\.css:7:2/)
     })
 
     it('should include filename and line number for unterminated string errors', () => {
@@ -1253,7 +1253,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
 }`
       expect(() => {
         CSS.parse(cssWithUnterminatedString, { from: 'string-error.css' })
-      }).toThrow(/CssSyntaxError: Unterminated string: "Hello world!" at string-error\.css:2:12/)
+      }).toThrow(/CssSyntaxError: Unterminated string: "Hello world!" at string-error\.css:2:13/)
     })
   })
 
