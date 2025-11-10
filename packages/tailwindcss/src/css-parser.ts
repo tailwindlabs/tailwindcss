@@ -574,14 +574,14 @@ export function parse(input: string, opts?: ParseOptions) {
     if (parent.kind === 'rule') {
       throw new CssSyntaxError(
         `Missing closing } at ${parent.selector}`,
-        source ? [source, bufferStart, bufferStart] : null,
+        parent.src ? [parent.src[0], parent.src[1], parent.src[1]] : null,
       )
     }
 
     if (parent.kind === 'at-rule') {
       throw new CssSyntaxError(
         `Missing closing } at ${parent.name} ${parent.params}`,
-        source ? [source, bufferStart, bufferStart] : null,
+        parent.src ? [parent.src[0], parent.src[1], parent.src[1]] : null,
       )
     }
   }

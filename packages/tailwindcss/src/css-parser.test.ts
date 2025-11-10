@@ -1193,7 +1193,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
        /* ^ Missing closing } */
         `),
       ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css: 7:12: Missing closing } at .bar]`,
+        `[CssSyntaxError: input.css: 6:10: Missing closing } at .bar]`,
       )
     })
 
