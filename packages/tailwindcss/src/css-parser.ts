@@ -10,7 +10,7 @@ import {
   type Rule,
 } from './ast'
 import { createLineTable } from './source-maps/line-table'
-import type { Source } from './source-maps/source'
+import type { Source, SourceLocation } from './source-maps/source'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -41,14 +41,23 @@ export interface ParseOptions {
  * CSS syntax error with source location information.
  */
 export class CssSyntaxError extends Error {
-  constructor(message: string, source: Source | null, position: number) {
-    if (!source) {
-      super(message)
-    } else {
-      const { line, column } = createLineTable(source.code).find(position)
-      super(`${message} at ${source.file}:${line}:${column + 1}`)
+  loc: SourceLocation | null
+
+  constructor(message: string, loc: SourceLocation | null) {
+    if (loc) {
+      let source = loc[0]
+      let start = createLineTable(source.code).find(loc[1])
+      message = `${source.file}: ${start.line}:${start.column}: ${message}`
     }
+
+    super(message)
+
     this.name = 'CssSyntaxError'
+    this.loc = loc
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, CssSyntaxError)
+    }
   }
 }
 
@@ -285,7 +294,12 @@ export function parse(input: string, opts?: ParseOptions) {
       }
 
       let declaration = parseDeclaration(buffer, colonIdx)
-      if (!declaration) throw new CssSyntaxError(`Invalid custom property, expected a value`, source, start)
+      if (!declaration) {
+        throw new CssSyntaxError(
+          `Invalid custom property, expected a value`,
+          source ? [source, start, i] : null,
+        )
+      }
 
       if (source) {
         declaration.src = [source, start, i]
@@ -350,7 +364,10 @@ export function parse(input: string, opts?: ParseOptions) {
       let declaration = parseDeclaration(buffer)
       if (!declaration) {
         if (buffer.length === 0) continue
-        throw new CssSyntaxError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart)
+        throw new CssSyntaxError(
+          `Invalid declaration: \`${buffer.trim()}\``,
+          source ? [source, bufferStart, i] : null,
+        )
       }
 
       if (source) {
@@ -407,7 +424,7 @@ export function parse(input: string, opts?: ParseOptions) {
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
       if (closingBracketStack === '') {
-        throw new CssSyntaxError('Missing opening {', source, i)
+        throw new CssSyntaxError('Missing opening {', source ? [source, i, i] : null)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -469,7 +486,12 @@ export function parse(input: string, opts?: ParseOptions) {
           // Attach the declaration to the parent.
           if (parent) {
             let node = parseDeclaration(buffer, colonIdx)
-            if (!node) throw new CssSyntaxError(`Invalid declaration: \`${buffer.trim()}\``, source, bufferStart)
+            if (!node) {
+              throw new CssSyntaxError(
+                `Invalid declaration: \`${buffer.trim()}\``,
+                source ? [source, bufferStart, i] : null,
+              )
+            }
 
             if (source) {
               node.src = [source, bufferStart, i]
@@ -508,7 +530,7 @@ export function parse(input: string, opts?: ParseOptions) {
     // `)`
     else if (currentChar === CLOSE_PAREN) {
       if (closingBracketStack[closingBracketStack.length - 1] !== ')') {
-        throw new CssSyntaxError('Missing opening (', source, i)
+        throw new CssSyntaxError('Missing opening (', source ? [source, i, i] : null)
       }
 
       closingBracketStack = closingBracketStack.slice(0, -1)
@@ -550,10 +572,17 @@ export function parse(input: string, opts?: ParseOptions) {
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
     if (parent.kind === 'rule') {
-      throw new CssSyntaxError(`Missing closing } at ${parent.selector}`, source, input.length)
+      throw new CssSyntaxError(
+        `Missing closing } at ${parent.selector}`,
+        source ? [source, bufferStart, bufferStart] : null,
+      )
     }
+
     if (parent.kind === 'at-rule') {
-      throw new CssSyntaxError(`Missing closing } at ${parent.name} ${parent.params}`, source, input.length)
+      throw new CssSyntaxError(
+        `Missing closing } at ${parent.name} ${parent.params}`,
+        source ? [source, bufferStart, bufferStart] : null,
+      )
     }
   }
 
@@ -610,7 +639,12 @@ function parseDeclaration(
   )
 }
 
-function parseString(input: string, startIdx: number, quoteChar: number, source: Source | null = null): number {
+function parseString(
+  input: string,
+  startIdx: number,
+  quoteChar: number,
+  source: Source | null = null,
+): number {
   let peekChar: number
 
   // We need to ensure that the closing quote is the same as the opening
@@ -653,7 +687,8 @@ function parseString(input: string, startIdx: number, quoteChar: number, source:
         (input.charCodeAt(i + 1) === CARRIAGE_RETURN && input.charCodeAt(i + 2) === LINE_BREAK))
     ) {
       throw new CssSyntaxError(
-        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`, source, startIdx
+        `Unterminated string: ${input.slice(startIdx, i + 1) + String.fromCharCode(quoteChar)}`,
+        source ? [source, startIdx, i + 1] : null,
       )
     }
 
@@ -672,7 +707,8 @@ function parseString(input: string, startIdx: number, quoteChar: number, source:
       (peekChar === CARRIAGE_RETURN && input.charCodeAt(i + 1) === LINE_BREAK)
     ) {
       throw new CssSyntaxError(
-        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`, source, startIdx
+        `Unterminated string: ${input.slice(startIdx, i) + String.fromCharCode(quoteChar)}`,
+        source ? [source, startIdx, i + 1] : null,
       )
     }
   }
