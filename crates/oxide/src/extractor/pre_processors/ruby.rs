@@ -143,8 +143,8 @@ impl PreProcessor for Ruby {
                 _ => {}
             }
 
-            // Looking for `%w` or `%W`
-            if cursor.curr != b'%' && !matches!(cursor.next, b'w' | b'W') {
+            // Looking for `%w`, `%W`, or `%p`
+            if cursor.curr != b'%' || !matches!(cursor.next, b'w' | b'W' | b'p') {
                 cursor.advance();
                 continue;
             }
