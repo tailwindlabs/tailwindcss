@@ -239,9 +239,14 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
             ),
+
+            // %w …\n
+            ("%w flex px-2.5\n", "%w flex px-2.5\n"),
+
             // Use backslash to embed spaces in the strings.
             (r#"%w[foo\ bar baz\ bat]"#, r#"%w foo  bar baz  bat "#),
             (r#"%W[foo\ bar baz\ bat]"#, r#"%W foo  bar baz  bat "#),
+
             // The nested delimiters evaluated to a flat array of strings
             // (not nested array).
             (r#"%w[foo[bar baz]qux]"#, r#"%w foo[bar baz]qux "#),
@@ -256,6 +261,23 @@ mod tests {
             (
               r#"def call = tag.span "Foo", class: %w[rounded-full h-0.75 w-0.75]"#,
               r#"def call = tag.span "Foo", class: %w rounded-full h-0.75 w-0.75 "#
+            ),
+
+            (r#"%w[foo ' bar]"#, r#"%w foo ' bar "#),
+            (r#"%w[foo " bar]"#, r#"%w foo " bar "#),
+            (r#"%W[foo ' bar]"#, r#"%W foo ' bar "#),
+            (r#"%W[foo " bar]"#, r#"%W foo " bar "#),
+
+            (r#"%p foo ' bar "#, r#"%p foo ' bar "#),
+            (r#"%p foo " bar "#, r#"%p foo " bar "#),
+
+            (
+              "%p has a ' quote\n# this should be removed\n%p has a ' quote",
+              "%p has a ' quote\n                        \n%p has a ' quote"
+            ),
+            (
+              "%p has a \" quote\n# this should be removed\n%p has a \" quote",
+              "%p has a \" quote\n                        \n%p has a \" quote"
             ),
         ] {
             Ruby::test(input, expected);
@@ -297,6 +319,8 @@ mod tests {
 
             (r#""foo # bar""#, vec!["foo", "bar"]),
             (r#"'foo # bar'"#, vec!["foo", "bar"]),
+
+            (r#"%w[foo ' bar]"#, vec!["foo", "bar"]),
         ] {
             Ruby::test_extract_contains(input, expected);
         }
