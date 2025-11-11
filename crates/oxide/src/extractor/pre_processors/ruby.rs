@@ -156,6 +156,7 @@ impl PreProcessor for Ruby {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
+                b' ' => b'\n',
                 _ => {
                     cursor.advance();
                     continue;
@@ -197,7 +198,10 @@ impl PreProcessor for Ruby {
 
                     // End of the pattern, replace the boundary character with a space
                     _ if cursor.curr == boundary => {
-                        result[cursor.pos] = b' ';
+                        if boundary != b'\n' {
+                          result[cursor.pos] = b' ';
+                        }
+
                         break;
                     }
 
