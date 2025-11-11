@@ -199,7 +199,7 @@ impl PreProcessor for Ruby {
                     // End of the pattern, replace the boundary character with a space
                     _ if cursor.curr == boundary => {
                         if boundary != b'\n' {
-                          result[cursor.pos] = b' ';
+                            result[cursor.pos] = b' ';
                         }
 
                         break;
