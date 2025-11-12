@@ -171,6 +171,15 @@ export default {
     '3xl': '1.5rem',
     full: '9999px',
   },
+  cornerShape: {
+    DEFAULT: 'round',
+    round: 'round',
+    square: 'square',
+    bevel: 'bevel',
+    scoop: 'scoop',
+    notch: 'notch',
+    squircle: 'squircle',
+  },
   borderSpacing: ({ theme }) => theme('spacing'),
   borderWidth: {
     DEFAULT: '1px',
