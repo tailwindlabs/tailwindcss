@@ -323,6 +323,18 @@ export function optimizeAst(
 
       if (nodes.length === 0) return
 
+
+
+      if (
+        nodes.length === 1 &&
+        nodes[0].kind === 'at-rule' &&
+        (nodes[0].name === '@media' || nodes[0].name === '@supports' || nodes[0].name === '@container' || nodes[0].name === '@scope')
+      ) {
+        let at = nodes[0]
+        parent.push(atRule(at.name, at.params, [styleRule(node.selector, at.nodes)]))
+        return
+      }
+
       // Rules with `&` as the selector should be flattened
       if (node.selector === '&') {
         parent.push(...nodes)
