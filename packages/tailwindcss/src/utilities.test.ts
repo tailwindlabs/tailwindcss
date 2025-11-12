@@ -11051,115 +11051,65 @@ test('rounded-bl', async () => {
   ).toEqual('')
 })
 
-test('corner', async () => {
-  const output = await compileCss(
-    css`
-      @theme {
-        --corner-shape: round;
-        --corner-shape-bevel: bevel;
-        --corner-shape-scoop: scoop;
-      }
-      @tailwind utilities;
-    `,
-    ['corner', 'corner-bevel', 'corner-scoop', 'corner-square', 'corner-[superellipse(0.6)]'],
-  )
+// All corner utilities are generated in the same way
+// so we can test them all at once with a loop
+const cornerPrefixes = [
+  'corner',
+  'corner-s',
+  'corner-e',
+  'corner-t',
+  'corner-r',
+  'corner-b',
+  'corner-l',
+  'corner-ss',
+  'corner-se',
+  'corner-ee',
+  'corner-es',
+  'corner-tl',
+  'corner-tr',
+  'corner-br',
+  'corner-bl',
+]
 
-  expect(output).toMatchInlineSnapshot(`
-    ":root, :host {
-      --corner-shape: round;
-      --corner-shape-bevel: bevel;
-      --corner-shape-scoop: scoop;
-    }
+for (const prefix of cornerPrefixes) {
+  test(`${prefix}-*`, async () => {
+    let classes = []
 
-    .corner {
-      corner-shape: var(--corner-shape);
-    }
+    // Corner shape
+    classes.push(`${prefix}-round`)
+    classes.push(`${prefix}-scoop`)
+    classes.push(`${prefix}-bevel`)
+    classes.push(`${prefix}-notch`)
+    classes.push(`${prefix}-square`)
+    classes.push(`${prefix}-squircle`)
+    classes.push(`${prefix}-custom`)
+    classes.push(`${prefix}-[superellipse(0.6)]`)
 
-    .corner-\\[superellipse\\(0\\.6\\)\\] {
-      corner-shape: superellipse(.6);
-    }
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --corner-shape-custom: superellipse(0.333);
+          }
+          @tailwind utilities;
+        `,
+        classes,
+      ),
+    ).toMatchSnapshot()
 
-    .corner-bevel {
-      corner-shape: var(--corner-shape-bevel);
-    }
+    expect(
+      await run(
+        classes.flatMap((cls) => [
+          // No corner utilities can ever be negative
+          `-${cls}`,
 
-    .corner-scoop {
-      corner-shape: var(--corner-shape-scoop);
-    }
-
-    .corner-square {
-      corner-shape: square;
-    }"
-  `)
-
-  expect(
-    await run([
-      '-corner',
-      '-corner-bevel',
-      '-corner-scoop',
-      '-corner-square',
-      '-corner-[superellipse(0.6)]',
-      'corner/foo',
-      'corner-bevel/foo',
-      'corner-scoop/foo',
-      'corner-square/foo',
-      'corner-[superellipse(0.6)]/foo',
-    ]),
-  ).toEqual('')
-})
-
-test('corner-t', async () => {
-  const output = await compileCss(
-    css`
-      @theme {
-        --corner-shape: round;
-        --corner-shape-scoop: scoop;
-        --corner-shape-notch: notch;
-      }
-      @tailwind utilities;
-    `,
-    [
-      'corner-t',
-      'corner-t-scoop',
-      'corner-tr',
-      'corner-tl',
-      'corner-t-[superellipse(0.8)]',
-      'corner-tr-notch',
-    ],
-  )
-
-  expect(output).toMatch(
-    /\.corner-t \{\s+corner-top-left-shape: var\(--corner-shape\);\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/,
-  )
-  expect(output).toMatch(
-    /\.corner-t-scoop \{\s+corner-top-left-shape: var\(--corner-shape-scoop\);\s+corner-top-right-shape: var\(--corner-shape-scoop\);\s+\}/,
-  )
-  expect(output).toMatch(/\.corner-tr \{\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/)
-  expect(output).toMatch(
-    /\.corner-tr-notch \{\s+corner-top-right-shape: var\(--corner-shape-notch\);\s+\}/,
-  )
-  expect(output).toMatch(/\.corner-tl \{\s+corner-top-left-shape: var\(--corner-shape\);\s+\}/)
-  expect(output).toContain('.corner-t-\\[superellipse\\(0\\.8\\)\\] {')
-  expect(output).toContain('corner-top-left-shape: superellipse(.8);')
-  expect(output).toContain('corner-top-right-shape: superellipse(.8);')
-
-  expect(
-    await run([
-      '-corner-t',
-      '-corner-t-scoop',
-      '-corner-tr',
-      '-corner-tl',
-      '-corner-tr-notch',
-      '-corner-[superellipse(0.8)]',
-      'corner-t/foo',
-      'corner-t-scoop/foo',
-      'corner-tr/foo',
-      'corner-tl/foo',
-      'corner-tr-notch/foo',
-      'corner-[superellipse(0.8)]/foo',
-    ]),
-  ).toEqual('')
-})
+          // Nor can they have modifiers
+          `${cls}/foo`,
+        ]),
+      ),
+    ).toEqual('')
+  })
+}
 
 test('border-style', async () => {
   expect(
