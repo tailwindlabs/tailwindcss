@@ -156,6 +156,7 @@ impl PreProcessor for Ruby {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
+                b'#' => b'#',
                 b' ' => b'\n',
                 _ => {
                     cursor.advance();
@@ -282,6 +283,11 @@ mod tests {
             (
               "%p has a \" quote\n# this should be removed\n%p has a \" quote",
               "%p has a \" quote\n                        \n%p has a \" quote"
+            ),
+
+            (
+              "%w#this text is kept# # this text is not",
+              "%w this text is kept                    ",
             ),
         ] {
             Ruby::test(input, expected);
