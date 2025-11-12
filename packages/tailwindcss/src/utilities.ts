@@ -2221,10 +2221,7 @@ export function createUtilities(theme: Theme) {
       ['corner-bl', ['corner-bottom-left-shape']],
     ] as const) {
       let staticValues: Record<string, AstNode[]> = Object.fromEntries(
-        shapes.map((shape) => [
-          shape,
-          properties.map((property) => decl(property, shape)),
-        ]),
+        shapes.map((shape) => [shape, properties.map((property) => decl(property, shape))]),
       )
 
       functionalUtility(root, {

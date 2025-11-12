@@ -1,11 +1,11 @@
-import { describe, expect, test, vi } from "vitest";
-import { compile } from ".";
-import { compileCss, optimizeCss, run } from "./test-utils/run";
+import { describe, expect, test, vi } from 'vitest'
+import { compile } from '.'
+import { compileCss, optimizeCss, run } from './test-utils/run'
 
-const css = String.raw;
+const css = String.raw
 
-test("sr-only", async () => {
-	expect(await run(["sr-only"])).toMatchInlineSnapshot(`
+test('sr-only', async () => {
+  expect(await run(['sr-only'])).toMatchInlineSnapshot(`
     ".sr-only {
       clip-path: inset(50%);
       white-space: nowrap;
@@ -17,14 +17,12 @@ test("sr-only", async () => {
       position: absolute;
       overflow: hidden;
     }"
-  `);
-	expect(
-		await run(["-sr-only", "sr-only-[var(--value)]", "sr-only/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-sr-only', 'sr-only-[var(--value)]', 'sr-only/foo'])).toEqual('')
+})
 
-test("not-sr-only", async () => {
-	expect(await run(["not-sr-only"])).toMatchInlineSnapshot(`
+test('not-sr-only', async () => {
+  expect(await run(['not-sr-only'])).toMatchInlineSnapshot(`
     ".not-sr-only {
       clip-path: none;
       white-space: normal;
@@ -35,20 +33,12 @@ test("not-sr-only", async () => {
       position: static;
       overflow: visible;
     }"
-  `);
-	expect(
-		await run([
-			"-not-sr-only",
-			"not-sr-only-[var(--value)]",
-			"not-sr-only/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'])).toEqual('')
+})
 
-test("pointer-events", async () => {
-	expect(
-		await run(["pointer-events-none", "pointer-events-auto"]),
-	).toMatchInlineSnapshot(`
+test('pointer-events', async () => {
+  expect(await run(['pointer-events-none', 'pointer-events-auto'])).toMatchInlineSnapshot(`
     ".pointer-events-auto {
       pointer-events: auto;
     }
@@ -56,21 +46,19 @@ test("pointer-events", async () => {
     .pointer-events-none {
       pointer-events: none;
     }"
-  `);
-	expect(
-		await run([
-			"-pointer-events-none",
-			"-pointer-events-auto",
-			"pointer-events-[var(--value)]",
-			"pointer-events-none/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-pointer-events-none',
+      '-pointer-events-auto',
+      'pointer-events-[var(--value)]',
+      'pointer-events-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("visibility", async () => {
-	expect(
-		await run(["visible", "invisible", "collapse"]),
-	).toMatchInlineSnapshot(`
+test('visibility', async () => {
+  expect(await run(['visible', 'invisible', 'collapse'])).toMatchInlineSnapshot(`
     ".collapse {
       visibility: collapse;
     }
@@ -82,23 +70,21 @@ test("visibility", async () => {
     .visible {
       visibility: visible;
     }"
-  `);
-	expect(
-		await run([
-			"-visible",
-			"-invisible",
-			"-collapse",
-			"visible/foo",
-			"invisible/foo",
-			"collapse/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-visible',
+      '-invisible',
+      '-collapse',
+      'visible/foo',
+      'invisible/foo',
+      'collapse/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("position", async () => {
-	expect(
-		await run(["static", "fixed", "absolute", "relative", "sticky"]),
-	).toMatchInlineSnapshot(`
+test('position', async () => {
+  expect(await run(['static', 'fixed', 'absolute', 'relative', 'sticky'])).toMatchInlineSnapshot(`
     ".absolute {
       position: absolute;
     }
@@ -118,27 +104,27 @@ test("position", async () => {
     .sticky {
       position: sticky;
     }"
-  `);
-	expect(
-		await run([
-			"-static",
-			"-fixed",
-			"-absolute",
-			"-relative",
-			"-sticky",
-			"static/foo",
-			"fixed/foo",
-			"absolute/foo",
-			"relative/foo",
-			"sticky/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-static',
+      '-fixed',
+      '-absolute',
+      '-relative',
+      '-sticky',
+      'static/foo',
+      'fixed/foo',
+      'absolute/foo',
+      'relative/foo',
+      'sticky/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("inset", async () => {
-	expect(
-		await compileCss(
-			css`
+test('inset', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
@@ -146,19 +132,19 @@ test("inset", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"inset-auto",
-				"inset-shadow-sm",
-				"inset-shadowned",
-				"-inset-full",
-				"inset-full",
-				"inset-3/4",
-				"inset-4",
-				"-inset-4",
-				"inset-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'inset-auto',
+        'inset-shadow-sm',
+        'inset-shadowned',
+        '-inset-full',
+        'inset-full',
+        'inset-3/4',
+        'inset-4',
+        '-inset-4',
+        'inset-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -300,47 +286,47 @@ test("inset", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await run([
-			"inset",
-			"inset--1",
-			"inset--1/2",
-			"inset--1/-2",
-			"inset-1/-2",
-			"inset-auto/foo",
-			"-inset-full/foo",
-			"inset-full/foo",
-			"inset-3/4/foo",
-			"inset-4/foo",
-			"-inset-4/foo",
-			"inset-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'inset',
+      'inset--1',
+      'inset--1/2',
+      'inset--1/-2',
+      'inset-1/-2',
+      'inset-auto/foo',
+      '-inset-full/foo',
+      'inset-full/foo',
+      'inset-3/4/foo',
+      'inset-4/foo',
+      '-inset-4/foo',
+      'inset-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("inset-x", async () => {
-	expect(
-		await compileCss(
-			css`
+test('inset-x', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"inset-x-shadowned",
-				"inset-x-auto",
-				"inset-x-full",
-				"-inset-x-full",
-				"inset-x-3/4",
-				"inset-x-4",
-				"-inset-x-4",
-				"inset-x-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'inset-x-shadowned',
+        'inset-x-auto',
+        'inset-x-full',
+        '-inset-x-full',
+        'inset-x-3/4',
+        'inset-x-4',
+        '-inset-x-4',
+        'inset-x-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -377,57 +363,57 @@ test("inset-x", async () => {
     .inset-x-shadowned {
       inset-inline: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px #0000000d;
         }
         @tailwind utilities;
       `,
-			[
-				"inset-x-shadow-sm",
-				"inset-x",
-				"inset-x--1",
-				"inset-x--1/2",
-				"inset-x--1/-2",
-				"inset-x-1/-2",
-				"inset-x-auto/foo",
-				"inset-x-full/foo",
-				"-inset-x-full/foo",
-				"inset-x-3/4/foo",
-				"inset-x-4/foo",
-				"-inset-x-4/foo",
-				"inset-x-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'inset-x-shadow-sm',
+        'inset-x',
+        'inset-x--1',
+        'inset-x--1/2',
+        'inset-x--1/-2',
+        'inset-x-1/-2',
+        'inset-x-auto/foo',
+        'inset-x-full/foo',
+        '-inset-x-full/foo',
+        'inset-x-3/4/foo',
+        'inset-x-4/foo',
+        '-inset-x-4/foo',
+        'inset-x-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("inset-y", async () => {
-	expect(
-		await compileCss(
-			css`
+test('inset-y', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"inset-y-shadowned",
-				"inset-y-auto",
-				"inset-y-full",
-				"-inset-y-full",
-				"inset-y-3/4",
-				"inset-y-4",
-				"-inset-y-4",
-				"inset-y-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'inset-y-shadowned',
+        'inset-y-auto',
+        'inset-y-full',
+        '-inset-y-full',
+        'inset-y-3/4',
+        'inset-y-4',
+        '-inset-y-4',
+        'inset-y-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -464,57 +450,57 @@ test("inset-y", async () => {
     .inset-y-shadowned {
       inset-block: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"inset-y-shadow-sm",
-				"inset-y",
-				"inset-y--1",
-				"inset-y--1/2",
-				"inset-y--1/-2",
-				"inset-1/-2",
-				"inset-y-auto/foo",
-				"inset-y-full/foo",
-				"-inset-y-full/foo",
-				"inset-y-3/4/foo",
-				"inset-y-4/foo",
-				"-inset-y-4/foo",
-				"inset-y-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'inset-y-shadow-sm',
+        'inset-y',
+        'inset-y--1',
+        'inset-y--1/2',
+        'inset-y--1/-2',
+        'inset-1/-2',
+        'inset-y-auto/foo',
+        'inset-y-full/foo',
+        '-inset-y-full/foo',
+        'inset-y-3/4/foo',
+        'inset-y-4/foo',
+        '-inset-y-4/foo',
+        'inset-y-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("start", async () => {
-	expect(
-		await compileCss(
-			css`
+test('start', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"start-shadowned",
-				"start-auto",
-				"-start-full",
-				"start-full",
-				"start-3/4",
-				"start-4",
-				"-start-4",
-				"start-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'start-shadowned',
+        'start-auto',
+        '-start-full',
+        'start-full',
+        'start-3/4',
+        'start-4',
+        '-start-4',
+        'start-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -551,57 +537,57 @@ test("start", async () => {
     .start-shadowned {
       inset-inline-start: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"start-shadow-sm",
-				"start",
-				"start--1",
-				"start--1/2",
-				"start--1/-2",
-				"start-1/-2",
-				"start-auto/foo",
-				"-start-full/foo",
-				"start-full/foo",
-				"start-3/4/foo",
-				"start-4/foo",
-				"-start-4/foo",
-				"start-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'start-shadow-sm',
+        'start',
+        'start--1',
+        'start--1/2',
+        'start--1/-2',
+        'start-1/-2',
+        'start-auto/foo',
+        '-start-full/foo',
+        'start-full/foo',
+        'start-3/4/foo',
+        'start-4/foo',
+        '-start-4/foo',
+        'start-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("end", async () => {
-	expect(
-		await compileCss(
-			css`
+test('end', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"end-shadowned",
-				"end-auto",
-				"-end-full",
-				"end-full",
-				"end-3/4",
-				"end-4",
-				"-end-4",
-				"end-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'end-shadowned',
+        'end-auto',
+        '-end-full',
+        'end-full',
+        'end-3/4',
+        'end-4',
+        '-end-4',
+        'end-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -638,39 +624,39 @@ test("end", async () => {
     .end-shadowned {
       inset-inline-end: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"end-shadow-sm",
-				"end",
-				"end--1",
-				"end--1/2",
-				"end--1/-2",
-				"end-1/-2",
-				"end-auto/foo",
-				"-end-full/foo",
-				"end-full/foo",
-				"end-3/4/foo",
-				"end-4/foo",
-				"-end-4/foo",
-				"end-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'end-shadow-sm',
+        'end',
+        'end--1',
+        'end--1/2',
+        'end--1/-2',
+        'end-1/-2',
+        'end-auto/foo',
+        '-end-full/foo',
+        'end-full/foo',
+        'end-3/4/foo',
+        'end-4/foo',
+        '-end-4/foo',
+        'end-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("top", async () => {
-	expect(
-		await compileCss(
-			css`
+test('top', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
@@ -678,18 +664,18 @@ test("top", async () => {
         @tailwind utilities;
       `,
 
-			[
-				"top-shadowned",
-				"top-auto",
-				"-top-full",
-				"top-full",
-				"top-3/4",
-				"top-4",
-				"-top-4",
-				"top-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'top-shadowned',
+        'top-auto',
+        '-top-full',
+        'top-full',
+        'top-3/4',
+        'top-4',
+        '-top-4',
+        'top-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -726,57 +712,57 @@ test("top", async () => {
     .top-shadowned {
       top: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"top-shadow-sm",
-				"top",
-				"top--1",
-				"top--1/2",
-				"top--1/-2",
-				"top-1/-2",
-				"top-auto/foo",
-				"-top-full/foo",
-				"top-full/foo",
-				"top-3/4/foo",
-				"top-4/foo",
-				"-top-4/foo",
-				"top-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'top-shadow-sm',
+        'top',
+        'top--1',
+        'top--1/2',
+        'top--1/-2',
+        'top-1/-2',
+        'top-auto/foo',
+        '-top-full/foo',
+        'top-full/foo',
+        'top-3/4/foo',
+        'top-4/foo',
+        '-top-4/foo',
+        'top-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("right", async () => {
-	expect(
-		await compileCss(
-			css`
+test('right', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"right-shadowned",
-				"right-auto",
-				"-right-full",
-				"right-full",
-				"right-3/4",
-				"right-4",
-				"-right-4",
-				"right-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'right-shadowned',
+        'right-auto',
+        '-right-full',
+        'right-full',
+        'right-3/4',
+        'right-4',
+        '-right-4',
+        'right-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -813,57 +799,57 @@ test("right", async () => {
     .right-shadowned {
       right: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"right-shadow-sm",
-				"right",
-				"right--1",
-				"right--1/2",
-				"right--1/-2",
-				"right-1/-2",
-				"right-auto/foo",
-				"-right-full/foo",
-				"right-full/foo",
-				"right-3/4/foo",
-				"right-4/foo",
-				"-right-4/foo",
-				"right-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'right-shadow-sm',
+        'right',
+        'right--1',
+        'right--1/2',
+        'right--1/-2',
+        'right-1/-2',
+        'right-auto/foo',
+        '-right-full/foo',
+        'right-full/foo',
+        'right-3/4/foo',
+        'right-4/foo',
+        '-right-4/foo',
+        'right-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("bottom", async () => {
-	expect(
-		await compileCss(
-			css`
+test('bottom', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"bottom-shadowned",
-				"bottom-auto",
-				"-bottom-full",
-				"bottom-full",
-				"bottom-3/4",
-				"bottom-4",
-				"-bottom-4",
-				"bottom-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'bottom-shadowned',
+        'bottom-auto',
+        '-bottom-full',
+        'bottom-full',
+        'bottom-3/4',
+        'bottom-4',
+        '-bottom-4',
+        'bottom-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -900,57 +886,57 @@ test("bottom", async () => {
     .bottom-shadowned {
       bottom: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"bottom-shadow-sm",
-				"bottom",
-				"bottom--1",
-				"bottom--1/2",
-				"bottom--1/-2",
-				"bottom-1/-2",
-				"bottom-auto/foo",
-				"-bottom-full/foo",
-				"bottom-full/foo",
-				"bottom-3/4/foo",
-				"bottom-4/foo",
-				"-bottom-4/foo",
-				"bottom-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'bottom-shadow-sm',
+        'bottom',
+        'bottom--1',
+        'bottom--1/2',
+        'bottom--1/-2',
+        'bottom-1/-2',
+        'bottom-auto/foo',
+        '-bottom-full/foo',
+        'bottom-full/foo',
+        'bottom-3/4/foo',
+        'bottom-4/foo',
+        '-bottom-4/foo',
+        'bottom-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("left", async () => {
-	expect(
-		await compileCss(
-			css`
+test('left', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
       `,
-			[
-				"left-shadowned",
-				"left-auto",
-				"-left-full",
-				"left-full",
-				"left-3/4",
-				"left-4",
-				"-left-4",
-				"left-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'left-shadowned',
+        'left-auto',
+        '-left-full',
+        'left-full',
+        'left-3/4',
+        'left-4',
+        '-left-4',
+        'left-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --inset-shadowned: 1940px;
@@ -987,37 +973,37 @@ test("left", async () => {
     .left-shadowned {
       left: var(--inset-shadowned);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --spacing-4: 1rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
       `,
-			[
-				"left-shadow-sm",
-				"left",
-				"left--1",
-				"left--1/2",
-				"left--1/-2",
-				"left-1/-2",
-				"left-auto/foo",
-				"-left-full/foo",
-				"left-full/foo",
-				"left-3/4/foo",
-				"left-4/foo",
-				"-left-4/foo",
-				"left-[4px]/foo",
-			],
-		),
-	).toEqual("");
-});
+      [
+        'left-shadow-sm',
+        'left',
+        'left--1',
+        'left--1/2',
+        'left--1/-2',
+        'left-1/-2',
+        'left-auto/foo',
+        '-left-full/foo',
+        'left-full/foo',
+        'left-3/4/foo',
+        'left-4/foo',
+        '-left-4/foo',
+        'left-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("isolation", async () => {
-	expect(await run(["isolate", "isolation-auto"])).toMatchInlineSnapshot(`
+test('isolation', async () => {
+  expect(await run(['isolate', 'isolation-auto'])).toMatchInlineSnapshot(`
     ".isolate {
       isolation: isolate;
     }
@@ -1025,21 +1011,15 @@ test("isolation", async () => {
     .isolation-auto {
       isolation: auto;
     }"
-  `);
-	expect(
-		await run([
-			"-isolate",
-			"-isolation-auto",
-			"isolate/foo",
-			"isolation-auto/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-isolate', '-isolation-auto', 'isolate/foo', 'isolation-auto/foo'])).toEqual(
+    '',
+  )
+})
 
-test("z-index", async () => {
-	expect(
-		await run(["z-auto", "z-10", "-z-10", "z-[123]", "-z-[var(--value)]"]),
-	).toMatchInlineSnapshot(`
+test('z-index', async () => {
+  expect(await run(['z-auto', 'z-10', '-z-10', 'z-[123]', '-z-[var(--value)]']))
+    .toMatchInlineSnapshot(`
       ".-z-10 {
         z-index: calc(10 * -1);
       }
@@ -1059,33 +1039,33 @@ test("z-index", async () => {
       .z-auto {
         z-index: auto;
       }"
-    `);
-	expect(
-		await run([
-			"z",
-			"z--1",
-			"-z-auto",
-			"z-unknown",
-			"z-123.5",
-			"z-auto/foo",
-			"z-10/foo",
-			"-z-10/foo",
-			"z-[123]/foo",
-			"-z-[var(--value)]/foo",
-		]),
-	).toEqual("");
+    `)
+  expect(
+    await run([
+      'z',
+      'z--1',
+      '-z-auto',
+      'z-unknown',
+      'z-123.5',
+      'z-auto/foo',
+      'z-10/foo',
+      '-z-10/foo',
+      'z-[123]/foo',
+      '-z-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --z-index-auto: 42;
         }
         @tailwind utilities;
       `,
-			["z-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['z-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --z-index-auto: 42;
     }
@@ -1093,21 +1073,21 @@ test("z-index", async () => {
     .z-auto {
       z-index: var(--z-index-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("order", async () => {
-	expect(
-		await run([
-			"order-4",
-			"-order-4",
-			"order-[123]",
-			"-order-[var(--value)]",
-			"order-first",
-			"order-last",
-			"order-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('order', async () => {
+  expect(
+    await run([
+      'order-4',
+      '-order-4',
+      'order-[123]',
+      '-order-[var(--value)]',
+      'order-first',
+      'order-last',
+      'order-none',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".-order-4 {
       order: calc(4 * -1);
     }
@@ -1135,37 +1115,37 @@ test("order", async () => {
     .order-none {
       order: 0;
     }"
-  `);
-	expect(
-		await run([
-			"order",
-			"order--4",
-			"-order-first",
-			"-order-last",
-			"-order-none",
-			"order-unknown",
-			"order-123.5",
-			"order-4/foo",
-			"-order-4/foo",
-			"order-[123]/foo",
-			"-order-[var(--value)]/foo",
-			"order-first/foo",
-			"order-last/foo",
-			"order-none/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'order',
+      'order--4',
+      '-order-first',
+      '-order-last',
+      '-order-none',
+      'order-unknown',
+      'order-123.5',
+      'order-4/foo',
+      '-order-4/foo',
+      'order-[123]/foo',
+      '-order-[var(--value)]/foo',
+      'order-first/foo',
+      'order-last/foo',
+      'order-none/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --order-first: 1;
         }
         @tailwind utilities;
       `,
-			["order-first"],
-		),
-	).toMatchInlineSnapshot(`
+      ['order-first'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --order-first: 1;
     }
@@ -1173,19 +1153,19 @@ test("order", async () => {
     .order-first {
       order: var(--order-first);
     }"
-  `);
+  `)
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --order-last: -1;
         }
         @tailwind utilities;
       `,
-			["order-last"],
-		),
-	).toMatchInlineSnapshot(`
+      ['order-last'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --order-last: -1;
     }
@@ -1193,22 +1173,22 @@ test("order", async () => {
     .order-last {
       order: var(--order-last);
     }"
-  `);
-});
+  `)
+})
 
-test("col", async () => {
-	expect(
-		await run([
-			"col-11",
-			"-col-12",
-			"col-auto",
-			"col-span-4",
-			"col-span-17",
-			"col-span-full",
-			"col-[span_123/span_123]",
-			"col-span-[var(--my-variable)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('col', async () => {
+  expect(
+    await run([
+      'col-11',
+      '-col-12',
+      'col-auto',
+      'col-span-4',
+      'col-span-17',
+      'col-span-full',
+      'col-[span_123/span_123]',
+      'col-span-[var(--my-variable)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".-col-12 {
       grid-column: calc(12 * -1);
     }
@@ -1240,34 +1220,34 @@ test("col", async () => {
     .col-span-full {
       grid-column: 1 / -1;
     }"
-  `);
-	expect(
-		await run([
-			"col",
-			"col-span",
-			"col-span--1",
-			"-col-span-4",
-			"col-span-unknown",
-			"col-auto/foo",
-			"col-span-4/foo",
-			"col-span-17/foo",
-			"col-span-full/foo",
-			"col-[span_123/span_123]/foo",
-			"col-span-[var(--my-variable)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'col',
+      'col-span',
+      'col-span--1',
+      '-col-span-4',
+      'col-span-unknown',
+      'col-auto/foo',
+      'col-span-4/foo',
+      'col-span-17/foo',
+      'col-span-full/foo',
+      'col-[span_123/span_123]/foo',
+      'col-span-[var(--my-variable)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-column-auto: 5;
         }
         @tailwind utilities;
       `,
-			["col-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['col-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-column-auto: 5;
     }
@@ -1275,28 +1255,28 @@ test("col", async () => {
     .col-auto {
       grid-column: var(--grid-column-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("col-start", async () => {
-	expect(
-		await compileCss(
-			css`
+test('col-start', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-column-start-custom: 1 column-start;
         }
         @tailwind utilities;
       `,
-			[
-				"col-start-auto",
-				"col-start-4",
-				"col-start-99",
-				"col-start-[123]",
-				"-col-start-4",
-				"col-start-custom",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'col-start-auto',
+        'col-start-4',
+        'col-start-99',
+        'col-start-[123]',
+        '-col-start-4',
+        'col-start-custom',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-column-start-custom: 1 column-start;
     }
@@ -1324,31 +1304,31 @@ test("col-start", async () => {
     .col-start-custom {
       grid-column-start: var(--grid-column-start-custom);
     }"
-  `);
-	expect(
-		await run([
-			"col-start",
-			"col-start--1",
-			"col-start-unknown",
-			"col-start-auto/foo",
-			"col-start-4/foo",
-			"col-start-99/foo",
-			"col-start-[123]/foo",
-			"-col-start-4/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'col-start',
+      'col-start--1',
+      'col-start-unknown',
+      'col-start-auto/foo',
+      'col-start-4/foo',
+      'col-start-99/foo',
+      'col-start-[123]/foo',
+      '-col-start-4/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-column-start-auto: 7;
         }
         @tailwind utilities;
       `,
-			["col-start-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['col-start-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-column-start-auto: 7;
     }
@@ -1356,28 +1336,21 @@ test("col-start", async () => {
     .col-start-auto {
       grid-column-start: var(--grid-column-start-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("col-end", async () => {
-	expect(
-		await compileCss(
-			css`
+test('col-end', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-column-end-custom: 1 column-end;
         }
         @tailwind utilities;
       `,
-			[
-				"col-end-auto",
-				"col-end-4",
-				"col-end-99",
-				"col-end-[123]",
-				"-col-end-4",
-				"col-end-custom",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-column-end-custom: 1 column-end;
     }
@@ -1405,31 +1378,31 @@ test("col-end", async () => {
     .col-end-custom {
       grid-column-end: var(--grid-column-end-custom);
     }"
-  `);
-	expect(
-		await run([
-			"col-end",
-			"col-end--1",
-			"col-end-unknown",
-			"col-end-auto/foo",
-			"col-end-4/foo",
-			"col-end-99/foo",
-			"col-end-[123]/foo",
-			"-col-end-4/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'col-end',
+      'col-end--1',
+      'col-end-unknown',
+      'col-end-auto/foo',
+      'col-end-4/foo',
+      'col-end-99/foo',
+      'col-end-[123]/foo',
+      '-col-end-4/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-column-end-auto: 3;
         }
         @tailwind utilities;
       `,
-			["col-end-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['col-end-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-column-end-auto: 3;
     }
@@ -1437,22 +1410,22 @@ test("col-end", async () => {
     .col-end-auto {
       grid-column-end: var(--grid-column-end-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("row", async () => {
-	expect(
-		await run([
-			"row-11",
-			"-row-12",
-			"row-auto",
-			"row-span-4",
-			"row-span-17",
-			"row-span-full",
-			"row-[span_123/span_123]",
-			"row-span-[var(--my-variable)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('row', async () => {
+  expect(
+    await run([
+      'row-11',
+      '-row-12',
+      'row-auto',
+      'row-span-4',
+      'row-span-17',
+      'row-span-full',
+      'row-[span_123/span_123]',
+      'row-span-[var(--my-variable)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".-row-12 {
       grid-row: calc(12 * -1);
     }
@@ -1484,34 +1457,34 @@ test("row", async () => {
     .row-span-full {
       grid-row: 1 / -1;
     }"
-  `);
-	expect(
-		await run([
-			"row",
-			"row-span",
-			"row-span--1",
-			"-row-span-4",
-			"row-span-unknown",
-			"row-auto/foo",
-			"row-span-4/foo",
-			"row-span-17/foo",
-			"row-span-full/foo",
-			"row-[span_123/span_123]/foo",
-			"row-span-[var(--my-variable)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'row',
+      'row-span',
+      'row-span--1',
+      '-row-span-4',
+      'row-span-unknown',
+      'row-auto/foo',
+      'row-span-4/foo',
+      'row-span-17/foo',
+      'row-span-full/foo',
+      'row-[span_123/span_123]/foo',
+      'row-span-[var(--my-variable)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-row-auto: 9;
         }
         @tailwind utilities;
       `,
-			["row-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['row-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-row-auto: 9;
     }
@@ -1519,28 +1492,28 @@ test("row", async () => {
     .row-auto {
       grid-row: var(--grid-row-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("row-start", async () => {
-	expect(
-		await compileCss(
-			css`
+test('row-start', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-row-start-custom: 1 row-start;
         }
         @tailwind utilities;
       `,
-			[
-				"row-start-auto",
-				"row-start-4",
-				"row-start-99",
-				"row-start-[123]",
-				"-row-start-4",
-				"row-start-custom",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'row-start-auto',
+        'row-start-4',
+        'row-start-99',
+        'row-start-[123]',
+        '-row-start-4',
+        'row-start-custom',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-row-start-custom: 1 row-start;
     }
@@ -1568,31 +1541,31 @@ test("row-start", async () => {
     .row-start-custom {
       grid-row-start: var(--grid-row-start-custom);
     }"
-  `);
-	expect(
-		await run([
-			"row-start",
-			"row-start--1",
-			"row-start-unknown",
-			"row-start-auto/foo",
-			"row-start-4/foo",
-			"row-start-99/foo",
-			"row-start-[123]/foo",
-			"-row-start-4/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'row-start',
+      'row-start--1',
+      'row-start-unknown',
+      'row-start-auto/foo',
+      'row-start-4/foo',
+      'row-start-99/foo',
+      'row-start-[123]/foo',
+      '-row-start-4/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-row-start-auto: 11;
         }
         @tailwind utilities;
       `,
-			["row-start-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['row-start-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-row-start-auto: 11;
     }
@@ -1600,28 +1573,21 @@ test("row-start", async () => {
     .row-start-auto {
       grid-row-start: var(--grid-row-start-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("row-end", async () => {
-	expect(
-		await compileCss(
-			css`
+test('row-end', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-row-end-custom: 1 row-end;
         }
         @tailwind utilities;
       `,
-			[
-				"row-end-auto",
-				"row-end-4",
-				"row-end-99",
-				"row-end-[123]",
-				"-row-end-4",
-				"row-end-custom",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-row-end-custom: 1 row-end;
     }
@@ -1649,31 +1615,31 @@ test("row-end", async () => {
     .row-end-custom {
       grid-row-end: var(--grid-row-end-custom);
     }"
-  `);
-	expect(
-		await run([
-			"row-end",
-			"row-end--1",
-			"row-end-unknown",
-			"row-end-auto/foo",
-			"row-end-4/foo",
-			"row-end-99/foo",
-			"row-end-[123]/foo",
-			"-row-end-4/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'row-end',
+      'row-end--1',
+      'row-end-unknown',
+      'row-end-auto/foo',
+      'row-end-4/foo',
+      'row-end-99/foo',
+      'row-end-[123]/foo',
+      '-row-end-4/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-row-end-auto: 13;
         }
         @tailwind utilities;
       `,
-			["row-end-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['row-end-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-row-end-auto: 13;
     }
@@ -1681,19 +1647,12 @@ test("row-end", async () => {
     .row-end-auto {
       grid-row-end: var(--grid-row-end-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("float", async () => {
-	expect(
-		await run([
-			"float-start",
-			"float-end",
-			"float-right",
-			"float-left",
-			"float-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('float', async () => {
+  expect(await run(['float-start', 'float-end', 'float-right', 'float-left', 'float-none']))
+    .toMatchInlineSnapshot(`
       ".float-end {
         float: inline-end;
       }
@@ -1713,35 +1672,35 @@ test("float", async () => {
       .float-start {
         float: inline-start;
       }"
-    `);
-	expect(
-		await run([
-			"float",
-			"-float-start",
-			"-float-end",
-			"-float-right",
-			"-float-left",
-			"-float-none",
-			"float-start/foo",
-			"float-end/foo",
-			"float-right/foo",
-			"float-left/foo",
-			"float-none/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'float',
+      '-float-start',
+      '-float-end',
+      '-float-right',
+      '-float-left',
+      '-float-none',
+      'float-start/foo',
+      'float-end/foo',
+      'float-right/foo',
+      'float-left/foo',
+      'float-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("clear", async () => {
-	expect(
-		await run([
-			"clear-start",
-			"clear-end",
-			"clear-right",
-			"clear-left",
-			"clear-both",
-			"clear-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('clear', async () => {
+  expect(
+    await run([
+      'clear-start',
+      'clear-end',
+      'clear-right',
+      'clear-left',
+      'clear-both',
+      'clear-none',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".clear-both {
       clear: both;
     }
@@ -1765,38 +1724,38 @@ test("clear", async () => {
     .clear-start {
       clear: inline-start;
     }"
-  `);
-	expect(
-		await run([
-			"clear",
-			"-clear-start",
-			"-clear-end",
-			"-clear-right",
-			"-clear-left",
-			"-clear-both",
-			"-clear-none",
-			"clear-start/foo",
-			"clear-end/foo",
-			"clear-right/foo",
-			"clear-left/foo",
-			"clear-both/foo",
-			"clear-none/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'clear',
+      '-clear-start',
+      '-clear-end',
+      '-clear-right',
+      '-clear-left',
+      '-clear-both',
+      '-clear-none',
+      'clear-start/foo',
+      'clear-end/foo',
+      'clear-right/foo',
+      'clear-left/foo',
+      'clear-both/foo',
+      'clear-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("margin", async () => {
-	expect(
-		await compileCss(
-			css`
+test('margin', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["m-auto", "m-4", "m-[4px]", "-m-4", "-m-[var(--value)]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -1820,44 +1779,37 @@ test("margin", async () => {
     .m-auto {
       margin: auto;
     }"
-  `);
-	expect(
-		await run([
-			"m",
-			"m-auto/foo",
-			"m-4/foo",
-			"m-[4px]/foo",
-			"-m-4/foo",
-			"-m-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['m', 'm-auto/foo', 'm-4/foo', 'm-[4px]/foo', '-m-4/foo', '-m-[var(--value)]/foo']),
+  ).toEqual('')
+})
 
-test("mx", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mx', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mx-auto",
-				"mx-1",
-				"mx-4",
-				"mx-99",
-				"mx-big",
-				"mx-[4px]",
-				"-mx-4",
-				"-mx-big",
-				"-mx-[4px]",
-				"mx-[var(--my-var)]",
-				"-mx-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mx-auto',
+        'mx-1',
+        'mx-4',
+        'mx-99',
+        'mx-big',
+        'mx-[4px]',
+        '-mx-4',
+        '-mx-big',
+        '-mx-[4px]',
+        'mx-[var(--my-var)]',
+        '-mx-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -1906,44 +1858,44 @@ test("mx", async () => {
     .mx-big {
       margin-inline: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"mx",
-			"mx-auto/foo",
-			"mx-4/foo",
-			"mx-[4px]/foo",
-			"-mx-4/foo",
-			"-mx-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mx',
+      'mx-auto/foo',
+      'mx-4/foo',
+      'mx-[4px]/foo',
+      '-mx-4/foo',
+      '-mx-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("my", async () => {
-	expect(
-		await compileCss(
-			css`
+test('my', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"my-1",
-				"my-99",
-				"my-2.5",
-				"my-big",
-				"my-[4px]",
-				"-my-4",
-				"-my-2.5",
-				"-my-big",
-				"-my-[4px]",
-				"my-[var(--my-var)]",
-				"-my-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'my-1',
+        'my-99',
+        'my-2.5',
+        'my-big',
+        'my-[4px]',
+        '-my-4',
+        '-my-2.5',
+        '-my-big',
+        '-my-[4px]',
+        'my-[var(--my-var)]',
+        '-my-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -1992,44 +1944,44 @@ test("my", async () => {
     .my-big {
       margin-block: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"my",
-			"my-auto/foo",
-			"my-4/foo",
-			"my-[4px]/foo",
-			"-my-4/foo",
-			"-my-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'my',
+      'my-auto/foo',
+      'my-4/foo',
+      'my-[4px]/foo',
+      '-my-4/foo',
+      '-my-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mt", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mt', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mt-1",
-				"mt-99",
-				"mt-2.5",
-				"mt-big",
-				"mt-[4px]",
-				"-mt-4",
-				"-mt-2.5",
-				"-mt-big",
-				"-mt-[4px]",
-				"mt-[var(--my-var)]",
-				"-mt-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mt-1',
+        'mt-99',
+        'mt-2.5',
+        'mt-big',
+        'mt-[4px]',
+        '-mt-4',
+        '-mt-2.5',
+        '-mt-big',
+        '-mt-[4px]',
+        'mt-[var(--my-var)]',
+        '-mt-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2078,44 +2030,44 @@ test("mt", async () => {
     .mt-big {
       margin-top: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"mt",
-			"mt-auto/foo",
-			"mt-4/foo",
-			"mt-[4px]/foo",
-			"-mt-4/foo",
-			"-mt-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mt',
+      'mt-auto/foo',
+      'mt-4/foo',
+      'mt-[4px]/foo',
+      '-mt-4/foo',
+      '-mt-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("ms", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ms', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"ms-1",
-				"ms-99",
-				"ms-2.5",
-				"ms-big",
-				"ms-[4px]",
-				"-ms-4",
-				"-ms-2.5",
-				"-ms-big",
-				"-ms-[4px]",
-				"ms-[var(--my-var)]",
-				"-ms-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'ms-1',
+        'ms-99',
+        'ms-2.5',
+        'ms-big',
+        'ms-[4px]',
+        '-ms-4',
+        '-ms-2.5',
+        '-ms-big',
+        '-ms-[4px]',
+        'ms-[var(--my-var)]',
+        '-ms-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2164,44 +2116,44 @@ test("ms", async () => {
     .ms-big {
       margin-inline-start: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"ms",
-			"ms-auto/foo",
-			"ms-4/foo",
-			"ms-[4px]/foo",
-			"-ms-4/foo",
-			"-ms-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'ms',
+      'ms-auto/foo',
+      'ms-4/foo',
+      'ms-[4px]/foo',
+      '-ms-4/foo',
+      '-ms-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("me", async () => {
-	expect(
-		await compileCss(
-			css`
+test('me', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"me-1",
-				"me-99",
-				"me-2.5",
-				"me-big",
-				"me-[4px]",
-				"-me-4",
-				"-me-2.5",
-				"-me-big",
-				"-me-[4px]",
-				"me-[var(--my-var)]",
-				"-me-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'me-1',
+        'me-99',
+        'me-2.5',
+        'me-big',
+        'me-[4px]',
+        '-me-4',
+        '-me-2.5',
+        '-me-big',
+        '-me-[4px]',
+        'me-[var(--my-var)]',
+        '-me-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2250,44 +2202,44 @@ test("me", async () => {
     .me-big {
       margin-inline-end: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"me",
-			"me-auto/foo",
-			"me-4/foo",
-			"me-[4px]/foo",
-			"-me-4/foo",
-			"-me-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'me',
+      'me-auto/foo',
+      'me-4/foo',
+      'me-[4px]/foo',
+      '-me-4/foo',
+      '-me-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mr", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mr', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mr-1",
-				"mr-99",
-				"mr-2.5",
-				"mr-big",
-				"mr-[4px]",
-				"-mr-4",
-				"-mr-2.5",
-				"-mr-big",
-				"-mr-[4px]",
-				"mr-[var(--my-var)]",
-				"-mr-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mr-1',
+        'mr-99',
+        'mr-2.5',
+        'mr-big',
+        'mr-[4px]',
+        '-mr-4',
+        '-mr-2.5',
+        '-mr-big',
+        '-mr-[4px]',
+        'mr-[var(--my-var)]',
+        '-mr-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2336,44 +2288,44 @@ test("mr", async () => {
     .mr-big {
       margin-right: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"mr",
-			"mr-auto/foo",
-			"mr-4/foo",
-			"mr-[4px]/foo",
-			"-mr-4/foo",
-			"-mr-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mr',
+      'mr-auto/foo',
+      'mr-4/foo',
+      'mr-[4px]/foo',
+      '-mr-4/foo',
+      '-mr-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mb", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mb', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mb-1",
-				"mb-99",
-				"mb-2.5",
-				"mb-big",
-				"mb-[4px]",
-				"-mb-4",
-				"-mb-2.5",
-				"-mb-big",
-				"-mb-[4px]",
-				"mb-[var(--my-var)]",
-				"-mb-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mb-1',
+        'mb-99',
+        'mb-2.5',
+        'mb-big',
+        'mb-[4px]',
+        '-mb-4',
+        '-mb-2.5',
+        '-mb-big',
+        '-mb-[4px]',
+        'mb-[var(--my-var)]',
+        '-mb-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2422,44 +2374,44 @@ test("mb", async () => {
     .mb-big {
       margin-bottom: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"mb",
-			"mb-auto/foo",
-			"mb-4/foo",
-			"mb-[4px]/foo",
-			"-mb-4/foo",
-			"-mb-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mb',
+      'mb-auto/foo',
+      'mb-4/foo',
+      'mb-[4px]/foo',
+      '-mb-4/foo',
+      '-mb-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("ml", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ml', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			[
-				"ml-1",
-				"ml-99",
-				"ml-2.5",
-				"ml-big",
-				"ml-[4px]",
-				"-ml-4",
-				"-ml-2.5",
-				"-ml-big",
-				"-ml-[4px]",
-				"ml-[var(--my-var)]",
-				"-ml-[var(--my-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'ml-1',
+        'ml-99',
+        'ml-2.5',
+        'ml-big',
+        'ml-[4px]',
+        '-ml-4',
+        '-ml-2.5',
+        '-ml-big',
+        '-ml-[4px]',
+        'ml-[var(--my-var)]',
+        '-ml-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -2508,31 +2460,31 @@ test("ml", async () => {
     .ml-big {
       margin-left: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run([
-			"ml",
-			"ml-auto/foo",
-			"ml-4/foo",
-			"ml-[4px]/foo",
-			"-ml-4/foo",
-			"-ml-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'ml',
+      'ml-auto/foo',
+      'ml-4/foo',
+      'ml-[4px]/foo',
+      '-ml-4/foo',
+      '-ml-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("margin sort order", async () => {
-	expect(
-		await compileCss(
-			css`
+test('margin sort order', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["mb-4", "me-4", "mx-4", "ml-4", "ms-4", "m-4", "mr-4", "mt-4", "my-4"],
-		),
-	).toMatchInlineSnapshot(`
+      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -2572,25 +2524,25 @@ test("margin sort order", async () => {
     .ml-4 {
       margin-left: var(--spacing-4);
     }"
-  `);
-	expect(
-		await run([
-			"m",
-			"mb-4/foo",
-			"me-4/foo",
-			"mx-4/foo",
-			"ml-4/foo",
-			"ms-4/foo",
-			"m-4/foo",
-			"mr-4/foo",
-			"mt-4/foo",
-			"my-4/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'm',
+      'mb-4/foo',
+      'me-4/foo',
+      'mx-4/foo',
+      'ml-4/foo',
+      'ms-4/foo',
+      'm-4/foo',
+      'mr-4/foo',
+      'mt-4/foo',
+      'my-4/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("box-sizing", async () => {
-	expect(await run(["box-border", "box-content"])).toMatchInlineSnapshot(`
+test('box-sizing', async () => {
+  expect(await run(['box-border', 'box-content'])).toMatchInlineSnapshot(`
     ".box-border {
       box-sizing: border-box;
     }
@@ -2598,27 +2550,15 @@ test("box-sizing", async () => {
     .box-content {
       box-sizing: content-box;
     }"
-  `);
-	expect(
-		await run([
-			"box",
-			"-box-border",
-			"-box-content",
-			"box-border/foo",
-			"box-content/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['box', '-box-border', '-box-content', 'box-border/foo', 'box-content/foo']),
+  ).toEqual('')
+})
 
-test("line-clamp", async () => {
-	expect(
-		await run([
-			"line-clamp-4",
-			"line-clamp-99",
-			"line-clamp-[123]",
-			"line-clamp-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('line-clamp', async () => {
+  expect(await run(['line-clamp-4', 'line-clamp-99', 'line-clamp-[123]', 'line-clamp-none']))
+    .toMatchInlineSnapshot(`
       ".line-clamp-4 {
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
@@ -2646,34 +2586,34 @@ test("line-clamp", async () => {
         display: block;
         overflow: visible;
       }"
-    `);
-	expect(
-		await run([
-			"line-clamp",
-			"line-clamp--4",
-			"-line-clamp-4",
-			"-line-clamp-[123]",
-			"-line-clamp-none",
-			"line-clamp-unknown",
-			"line-clamp-123.5",
-			"line-clamp-4/foo",
-			"line-clamp-99/foo",
-			"line-clamp-[123]/foo",
-			"line-clamp-none/foo",
-		]),
-	).toEqual("");
+    `)
+  expect(
+    await run([
+      'line-clamp',
+      'line-clamp--4',
+      '-line-clamp-4',
+      '-line-clamp-[123]',
+      '-line-clamp-none',
+      'line-clamp-unknown',
+      'line-clamp-123.5',
+      'line-clamp-4/foo',
+      'line-clamp-99/foo',
+      'line-clamp-[123]/foo',
+      'line-clamp-none/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --line-clamp-none: 0;
         }
         @tailwind utilities;
       `,
-			["line-clamp-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['line-clamp-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --line-clamp-none: 0;
     }
@@ -2684,35 +2624,35 @@ test("line-clamp", async () => {
       display: -webkit-box;
       overflow: hidden;
     }"
-  `);
-});
+  `)
+})
 
-test("display", async () => {
-	expect(
-		await run([
-			"block",
-			"inline-block",
-			"inline",
-			"flex",
-			"inline-flex",
-			"table",
-			"inline-table",
-			"table-caption",
-			"table-cell",
-			"table-column",
-			"table-column-group",
-			"table-footer-group",
-			"table-header-group",
-			"table-row-group",
-			"table-row",
-			"flow-root",
-			"grid",
-			"inline-grid",
-			"contents",
-			"list-item",
-			"hidden",
-		]),
-	).toMatchInlineSnapshot(`
+test('display', async () => {
+  expect(
+    await run([
+      'block',
+      'inline-block',
+      'inline',
+      'flex',
+      'inline-flex',
+      'table',
+      'inline-table',
+      'table-caption',
+      'table-cell',
+      'table-column',
+      'table-column-group',
+      'table-footer-group',
+      'table-header-group',
+      'table-row-group',
+      'table-row',
+      'flow-root',
+      'grid',
+      'inline-grid',
+      'contents',
+      'list-item',
+      'hidden',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".block {
       display: block;
     }
@@ -2796,59 +2736,57 @@ test("display", async () => {
     .table-row-group {
       display: table-row-group;
     }"
-  `);
-	expect(
-		await run([
-			"-block",
-			"-inline-block",
-			"-inline",
-			"-flex",
-			"-inline-flex",
-			"-table",
-			"-inline-table",
-			"-table-caption",
-			"-table-cell",
-			"-table-column",
-			"-table-column-group",
-			"-table-footer-group",
-			"-table-header-group",
-			"-table-row-group",
-			"-table-row",
-			"-flow-root",
-			"-grid",
-			"-inline-grid",
-			"-contents",
-			"-list-item",
-			"-hidden",
-			"block/foo",
-			"inline-block/foo",
-			"inline/foo",
-			"flex/foo",
-			"inline-flex/foo",
-			"table/foo",
-			"inline-table/foo",
-			"table-caption/foo",
-			"table-cell/foo",
-			"table-column/foo",
-			"table-column-group/foo",
-			"table-footer-group/foo",
-			"table-header-group/foo",
-			"table-row-group/foo",
-			"table-row/foo",
-			"flow-root/foo",
-			"grid/foo",
-			"inline-grid/foo",
-			"contents/foo",
-			"list-item/foo",
-			"hidden/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-block',
+      '-inline-block',
+      '-inline',
+      '-flex',
+      '-inline-flex',
+      '-table',
+      '-inline-table',
+      '-table-caption',
+      '-table-cell',
+      '-table-column',
+      '-table-column-group',
+      '-table-footer-group',
+      '-table-header-group',
+      '-table-row-group',
+      '-table-row',
+      '-flow-root',
+      '-grid',
+      '-inline-grid',
+      '-contents',
+      '-list-item',
+      '-hidden',
+      'block/foo',
+      'inline-block/foo',
+      'inline/foo',
+      'flex/foo',
+      'inline-flex/foo',
+      'table/foo',
+      'inline-table/foo',
+      'table-caption/foo',
+      'table-cell/foo',
+      'table-column/foo',
+      'table-column-group/foo',
+      'table-footer-group/foo',
+      'table-header-group/foo',
+      'table-row-group/foo',
+      'table-row/foo',
+      'flow-root/foo',
+      'grid/foo',
+      'inline-grid/foo',
+      'contents/foo',
+      'list-item/foo',
+      'hidden/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("field-sizing", async () => {
-	expect(
-		await run(["field-sizing-content", "field-sizing-fixed"]),
-	).toMatchInlineSnapshot(`
+test('field-sizing', async () => {
+  expect(await run(['field-sizing-content', 'field-sizing-fixed'])).toMatchInlineSnapshot(`
     ".field-sizing-content {
       field-sizing: content;
     }
@@ -2856,28 +2794,24 @@ test("field-sizing", async () => {
     .field-sizing-fixed {
       field-sizing: fixed;
     }"
-  `);
-	expect(
-		await run([
-			"field-sizing-[other]",
-			"-field-sizing-content",
-			"-field-sizing-fixed",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['field-sizing-[other]', '-field-sizing-content', '-field-sizing-fixed']),
+  ).toEqual('')
+})
 
-test("aspect-ratio", async () => {
-	expect(
-		await compileCss(
-			css`
+test('aspect-ratio', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --aspect-video: 16 / 9;
         }
         @tailwind utilities;
       `,
-			["aspect-video", "aspect-[10/9]", "aspect-4/3"],
-		),
-	).toMatchInlineSnapshot(`
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --aspect-video: 16 / 9;
     }
@@ -2893,45 +2827,45 @@ test("aspect-ratio", async () => {
     .aspect-video {
       aspect-ratio: var(--aspect-video);
     }"
-  `);
-	expect(
-		await run([
-			"aspect",
-			"aspect-potato",
-			"-aspect-video",
-			"-aspect-[10/9]",
-			"aspect-foo/bar",
-			"aspect-video/foo",
-			"aspect-[10/9]/foo",
-			"aspect-4/3/foo",
-			"aspect--4/3",
-			"aspect--4/-3",
-			"aspect-4/-3",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'aspect',
+      'aspect-potato',
+      '-aspect-video',
+      '-aspect-[10/9]',
+      'aspect-foo/bar',
+      'aspect-video/foo',
+      'aspect-[10/9]/foo',
+      'aspect-4/3/foo',
+      'aspect--4/3',
+      'aspect--4/-3',
+      'aspect-4/-3',
+    ]),
+  ).toEqual('')
+})
 
-test("size", async () => {
-	expect(
-		await compileCss(
-			css`
+test('size', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"size-auto",
-				"size-full",
-				"size-min",
-				"size-max",
-				"size-fit",
-				"size-4",
-				"size-1/2",
-				"size-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'size-auto',
+        'size-full',
+        'size-min',
+        'size-max',
+        'size-fit',
+        'size-4',
+        'size-1/2',
+        'size-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -2975,56 +2909,56 @@ test("size", async () => {
       width: min-content;
       height: min-content;
     }"
-  `);
-	expect(
-		await run([
-			"size",
-			"size--1",
-			"size--1/2",
-			"size--1/-2",
-			"size-1/-2",
-			"-size-4",
-			"-size-1/2",
-			"-size-[4px]",
-			"size-auto/foo",
-			"size-full/foo",
-			"size-min/foo",
-			"size-max/foo",
-			"size-fit/foo",
-			"size-4/foo",
-			"size-1/2/foo",
-			"size-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'size',
+      'size--1',
+      'size--1/2',
+      'size--1/-2',
+      'size-1/-2',
+      '-size-4',
+      '-size-1/2',
+      '-size-[4px]',
+      'size-auto/foo',
+      'size-full/foo',
+      'size-min/foo',
+      'size-max/foo',
+      'size-fit/foo',
+      'size-4/foo',
+      'size-1/2/foo',
+      'size-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --width-xl: 36rem;
         }
         @tailwind utilities;
       `,
-			[
-				"w-full",
-				"w-auto",
-				"w-screen",
-				"w-svw",
-				"w-lvw",
-				"w-dvw",
-				"w-min",
-				"w-max",
-				"w-fit",
-				"w-4",
-				"w-xl",
-				"w-1/2",
-				"w-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'w-full',
+        'w-auto',
+        'w-screen',
+        'w-svw',
+        'w-lvw',
+        'w-dvw',
+        'w-min',
+        'w-max',
+        'w-fit',
+        'w-4',
+        'w-xl',
+        'w-1/2',
+        'w-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --width-xl: 36rem;
@@ -3081,56 +3015,56 @@ test("width", async () => {
     .w-xl {
       width: var(--width-xl);
     }"
-  `);
-	expect(
-		await run([
-			"w",
-			"w--1",
-			"w--1/2",
-			"w--1/-2",
-			"w-1/-2",
-			"-w-4",
-			"-w-1/2",
-			"-w-[4px]",
-			"w-full/foo",
-			"w-auto/foo",
-			"w-screen/foo",
-			"w-svw/foo",
-			"w-lvw/foo",
-			"w-dvw/foo",
-			"w-min/foo",
-			"w-max/foo",
-			"w-fit/foo",
-			"w-4/foo",
-			"w-xl/foo",
-			"w-1/2/foo",
-			"w-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'w',
+      'w--1',
+      'w--1/2',
+      'w--1/-2',
+      'w-1/-2',
+      '-w-4',
+      '-w-1/2',
+      '-w-[4px]',
+      'w-full/foo',
+      'w-auto/foo',
+      'w-screen/foo',
+      'w-svw/foo',
+      'w-lvw/foo',
+      'w-dvw/foo',
+      'w-min/foo',
+      'w-max/foo',
+      'w-fit/foo',
+      'w-4/foo',
+      'w-xl/foo',
+      'w-1/2/foo',
+      'w-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("min-width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('min-width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
-			[
-				"min-w-full",
-				"min-w-auto",
-				"min-w-min",
-				"min-w-max",
-				"min-w-fit",
-				"min-w-4",
-				"min-w-xl",
-				"min-w-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'min-w-full',
+        'min-w-auto',
+        'min-w-min',
+        'min-w-max',
+        'min-w-fit',
+        'min-w-4',
+        'min-w-xl',
+        'min-w-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
@@ -3167,45 +3101,37 @@ test("min-width", async () => {
     .min-w-xl {
       min-width: var(--container-xl);
     }"
-  `);
-	expect(
-		await run([
-			"min-w",
-			"-min-w-4",
-			"-min-w-[4px]",
-			"min-w-auto/foo",
-			"min-w-full/foo",
-			"min-w-min/foo",
-			"min-w-max/foo",
-			"min-w-fit/foo",
-			"min-w-4/foo",
-			"min-w-xl/foo",
-			"min-w-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'min-w',
+      '-min-w-4',
+      '-min-w-[4px]',
+      'min-w-auto/foo',
+      'min-w-full/foo',
+      'min-w-min/foo',
+      'min-w-max/foo',
+      'min-w-fit/foo',
+      'min-w-4/foo',
+      'min-w-xl/foo',
+      'min-w-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("max-width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('max-width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
           --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
-			[
-				"max-w-none",
-				"max-w-full",
-				"max-w-max",
-				"max-w-fit",
-				"max-w-4",
-				"max-w-xl",
-				"max-w-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
       --container-xl: 36rem;
@@ -3238,51 +3164,51 @@ test("max-width", async () => {
     .max-w-xl {
       max-width: var(--container-xl);
     }"
-  `);
-	expect(
-		await run([
-			"max-w",
-			"max-w-auto",
-			"-max-w-4",
-			"-max-w-[4px]",
-			"max-w-none/foo",
-			"max-w-full/foo",
-			"max-w-max/foo",
-			"max-w-max/foo",
-			"max-w-fit/foo",
-			"max-w-4/foo",
-			"max-w-xl/foo",
-			"max-w-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'max-w',
+      'max-w-auto',
+      '-max-w-4',
+      '-max-w-[4px]',
+      'max-w-none/foo',
+      'max-w-full/foo',
+      'max-w-max/foo',
+      'max-w-max/foo',
+      'max-w-fit/foo',
+      'max-w-4/foo',
+      'max-w-xl/foo',
+      'max-w-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("height", async () => {
-	expect(
-		await compileCss(
-			css`
+test('height', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"h-full",
-				"h-auto",
-				"h-screen",
-				"h-svh",
-				"h-lvh",
-				"h-dvh",
-				"h-min",
-				"h-lh",
-				"h-max",
-				"h-fit",
-				"h-4",
-				"h-1/2",
-				"h-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'h-full',
+        'h-auto',
+        'h-screen',
+        'h-svh',
+        'h-lvh',
+        'h-dvh',
+        'h-min',
+        'h-lh',
+        'h-max',
+        'h-fit',
+        'h-4',
+        'h-1/2',
+        'h-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -3338,59 +3264,59 @@ test("height", async () => {
     .h-svh {
       height: 100svh;
     }"
-  `);
-	expect(
-		await run([
-			"h",
-			"-h-4",
-			"h--1",
-			"h--1/2",
-			"h--1/-2",
-			"h-1/-2",
-			"-h-1/2",
-			"-h-[4px]",
-			"h-full/foo",
-			"h-auto/foo",
-			"h-screen/foo",
-			"h-svh/foo",
-			"h-lvh/foo",
-			"h-dvh/foo",
-			"h-lh/foo",
-			"h-min/foo",
-			"h-max/foo",
-			"h-fit/foo",
-			"h-4/foo",
-			"h-1/2/foo",
-			"h-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'h',
+      '-h-4',
+      'h--1',
+      'h--1/2',
+      'h--1/-2',
+      'h-1/-2',
+      '-h-1/2',
+      '-h-[4px]',
+      'h-full/foo',
+      'h-auto/foo',
+      'h-screen/foo',
+      'h-svh/foo',
+      'h-lvh/foo',
+      'h-dvh/foo',
+      'h-lh/foo',
+      'h-min/foo',
+      'h-max/foo',
+      'h-fit/foo',
+      'h-4/foo',
+      'h-1/2/foo',
+      'h-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("min-height", async () => {
-	expect(
-		await compileCss(
-			css`
+test('min-height', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"min-h-full",
-				"min-h-auto",
-				"min-h-screen",
-				"min-h-svh",
-				"min-h-lvh",
-				"min-h-dvh",
-				"min-h-min",
-				"min-h-lh",
-				"min-h-max",
-				"min-h-fit",
-				"min-h-4",
-				"min-h-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'min-h-full',
+        'min-h-auto',
+        'min-h-screen',
+        'min-h-svh',
+        'min-h-lvh',
+        'min-h-dvh',
+        'min-h-min',
+        'min-h-lh',
+        'min-h-max',
+        'min-h-fit',
+        'min-h-4',
+        'min-h-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -3442,53 +3368,53 @@ test("min-height", async () => {
     .min-h-svh {
       min-height: 100svh;
     }"
-  `);
-	expect(
-		await run([
-			"min-h",
-			"-min-h-4",
-			"-min-h-[4px]",
-			"min-h-auto/foo",
-			"min-h-full/foo",
-			"min-h-screen/foo",
-			"min-h-svh/foo",
-			"min-h-lvh/foo",
-			"min-h-dvh/foo",
-			"min-h-lh/foo",
-			"min-h-min/foo",
-			"min-h-max/foo",
-			"min-h-fit/foo",
-			"min-h-4/foo",
-			"min-h-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'min-h',
+      '-min-h-4',
+      '-min-h-[4px]',
+      'min-h-auto/foo',
+      'min-h-full/foo',
+      'min-h-screen/foo',
+      'min-h-svh/foo',
+      'min-h-lvh/foo',
+      'min-h-dvh/foo',
+      'min-h-lh/foo',
+      'min-h-min/foo',
+      'min-h-max/foo',
+      'min-h-fit/foo',
+      'min-h-4/foo',
+      'min-h-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("max-height", async () => {
-	expect(
-		await compileCss(
-			css`
+test('max-height', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"max-h-none",
-				"max-h-full",
-				"max-h-screen",
-				"max-h-svh",
-				"max-h-lvh",
-				"max-h-dvh",
-				"max-h-lh",
-				"max-h-min",
-				"max-h-max",
-				"max-h-fit",
-				"max-h-4",
-				"max-h-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'max-h-none',
+        'max-h-full',
+        'max-h-screen',
+        'max-h-svh',
+        'max-h-lvh',
+        'max-h-dvh',
+        'max-h-lh',
+        'max-h-min',
+        'max-h-max',
+        'max-h-fit',
+        'max-h-4',
+        'max-h-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -3540,34 +3466,34 @@ test("max-height", async () => {
     .max-h-svh {
       max-height: 100svh;
     }"
-  `);
-	expect(
-		await run([
-			"max-h",
-			"max-h-auto",
-			"-max-h-4",
-			"-max-h-[4px]",
-			"max-h-none/foo",
-			"max-h-full/foo",
-			"max-h-screen/foo",
-			"max-h-svh/foo",
-			"max-h-lvh/foo",
-			"max-h-dvh/foo",
-			"max-h-lh/foo",
-			"max-h-min/foo",
-			"max-h-max/foo",
-			"max-h-fit/foo",
-			"max-h-4/foo",
-			"max-h-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'max-h',
+      'max-h-auto',
+      '-max-h-4',
+      '-max-h-[4px]',
+      'max-h-none/foo',
+      'max-h-full/foo',
+      'max-h-screen/foo',
+      'max-h-svh/foo',
+      'max-h-lvh/foo',
+      'max-h-dvh/foo',
+      'max-h-lh/foo',
+      'max-h-min/foo',
+      'max-h-max/foo',
+      'max-h-fit/foo',
+      'max-h-4/foo',
+      'max-h-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-describe("container", () => {
-	test("creates the right media queries and sorts it before width", async () => {
-		expect(
-			await compileCss(
-				css`
+describe('container', () => {
+  test('creates the right media queries and sorts it before width', async () => {
+    expect(
+      await compileCss(
+        css`
           @theme {
             --breakpoint-sm: 40rem;
             --breakpoint-md: 48rem;
@@ -3577,9 +3503,9 @@ describe("container", () => {
           }
           @tailwind utilities;
         `,
-				["w-1/2", "container", "max-w-[var(--breakpoint-sm)]"],
-			),
-		).toMatchInlineSnapshot(`
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
       }
@@ -3625,13 +3551,13 @@ describe("container", () => {
       .max-w-\\[var\\(--breakpoint-sm\\)\\] {
         max-width: var(--breakpoint-sm);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("sorts breakpoints based on unit and then in ascending aOrder", async () => {
-		expect(
-			await compileCss(
-				css`
+  test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
+    expect(
+      await compileCss(
+        css`
           @theme reference {
             --breakpoint-lg: 64rem;
             --breakpoint-xl: 80rem;
@@ -3643,9 +3569,9 @@ describe("container", () => {
           }
           @tailwind utilities;
         `,
-				["container"],
-			),
-		).toMatchInlineSnapshot(`
+        ['container'],
+      ),
+    ).toMatchInlineSnapshot(`
       ".container {
         width: 100%;
       }
@@ -3691,13 +3617,13 @@ describe("container", () => {
           max-width: 96rem;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom `@utility container` always follow the core utility ", async () => {
-		expect(
-			await compileCss(
-				css`
+  test('custom `@utility container` always follow the core utility ', async () => {
+    expect(
+      await compileCss(
+        css`
           @theme {
             --breakpoint-sm: 40rem;
             --breakpoint-md: 48rem;
@@ -3716,9 +3642,9 @@ describe("container", () => {
             }
           }
         `,
-				["w-1/2", "container", "max-w-[var(--breakpoint-sm)]"],
-			),
-		).toMatchInlineSnapshot(`
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
+      ),
+    ).toMatchInlineSnapshot(`
       ":root, :host {
         --breakpoint-sm: 40rem;
       }
@@ -3775,22 +3701,22 @@ describe("container", () => {
       .max-w-\\[var\\(--breakpoint-sm\\)\\] {
         max-width: var(--breakpoint-sm);
       }"
-    `);
-	});
-});
+    `)
+  })
+})
 
-test("flex", async () => {
-	expect(
-		await run([
-			"flex-1",
-			"flex-99",
-			"flex-1/2",
-			"flex-auto",
-			"flex-initial",
-			"flex-none",
-			"flex-[123]",
-		]),
-	).toMatchInlineSnapshot(`
+test('flex', async () => {
+  expect(
+    await run([
+      'flex-1',
+      'flex-99',
+      'flex-1/2',
+      'flex-auto',
+      'flex-initial',
+      'flex-none',
+      'flex-[123]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".flex-1 {
       flex: 1;
     }
@@ -3818,34 +3744,32 @@ test("flex", async () => {
     .flex-none {
       flex: none;
     }"
-  `);
-	expect(
-		await run([
-			"-flex-1",
-			"flex--1",
-			"-flex-auto",
-			"-flex-initial",
-			"-flex-none",
-			"-flex-[123]",
-			"flex-unknown",
-			"flex-1/foo",
-			"flex-99/foo",
-			"flex--1/2",
-			"flex--1/-2",
-			"flex-1/-2",
-			"flex-1/2/foo",
-			"flex-auto/foo",
-			"flex-initial/foo",
-			"flex-none/foo",
-			"flex-[123]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-flex-1',
+      'flex--1',
+      '-flex-auto',
+      '-flex-initial',
+      '-flex-none',
+      '-flex-[123]',
+      'flex-unknown',
+      'flex-1/foo',
+      'flex-99/foo',
+      'flex--1/2',
+      'flex--1/-2',
+      'flex-1/-2',
+      'flex-1/2/foo',
+      'flex-auto/foo',
+      'flex-initial/foo',
+      'flex-none/foo',
+      'flex-[123]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("flex-shrink", async () => {
-	expect(
-		await run(["shrink", "shrink-0", "shrink-[123]"]),
-	).toMatchInlineSnapshot(`
+test('flex-shrink', async () => {
+  expect(await run(['shrink', 'shrink-0', 'shrink-[123]'])).toMatchInlineSnapshot(`
     ".shrink {
       flex-shrink: 1;
     }
@@ -3857,24 +3781,24 @@ test("flex-shrink", async () => {
     .shrink-\\[123\\] {
       flex-shrink: 123;
     }"
-  `);
-	expect(
-		await run([
-			"-shrink",
-			"shrink--1",
-			"shrink-1.5",
-			"-shrink-0",
-			"-shrink-[123]",
-			"shrink-unknown",
-			"shrink/foo",
-			"shrink-0/foo",
-			"shrink-[123]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-shrink',
+      'shrink--1',
+      'shrink-1.5',
+      '-shrink-0',
+      '-shrink-[123]',
+      'shrink-unknown',
+      'shrink/foo',
+      'shrink-0/foo',
+      'shrink-[123]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("flex-grow", async () => {
-	expect(await run(["grow", "grow-0", "grow-[123]"])).toMatchInlineSnapshot(`
+test('flex-grow', async () => {
+  expect(await run(['grow', 'grow-0', 'grow-[123]'])).toMatchInlineSnapshot(`
     ".grow {
       flex-grow: 1;
     }
@@ -3886,34 +3810,34 @@ test("flex-grow", async () => {
     .grow-\\[123\\] {
       flex-grow: 123;
     }"
-  `);
-	expect(
-		await run([
-			"-grow",
-			"grow--1",
-			"grow-1.5",
-			"-grow-0",
-			"-grow-[123]",
-			"grow-unknown",
-			"grow/foo",
-			"grow-0/foo",
-			"grow-[123]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-grow',
+      'grow--1',
+      'grow-1.5',
+      '-grow-0',
+      '-grow-[123]',
+      'grow-unknown',
+      'grow/foo',
+      'grow-0/foo',
+      'grow-[123]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("flex-basis", async () => {
-	expect(
-		await compileCss(
-			css`
+test('flex-basis', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
-			["basis-auto", "basis-full", "basis-xl", "basis-11/12", "basis-[123px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --container-xl: 36rem;
     }
@@ -3937,27 +3861,27 @@ test("flex-basis", async () => {
     .basis-xl {
       flex-basis: var(--container-xl);
     }"
-  `);
-	expect(
-		await run([
-			"basis",
-			"basis--1",
-			"basis--1/2",
-			"basis--1/-2",
-			"basis-1/-2",
-			"-basis-full",
-			"-basis-[123px]",
-			"basis-auto/foo",
-			"basis-full/foo",
-			"basis-xl/foo",
-			"basis-11/12/foo",
-			"basis-[123px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'basis',
+      'basis--1',
+      'basis--1/2',
+      'basis--1/-2',
+      'basis-1/-2',
+      '-basis-full',
+      '-basis-[123px]',
+      'basis-auto/foo',
+      'basis-full/foo',
+      'basis-xl/foo',
+      'basis-11/12/foo',
+      'basis-[123px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("table-layout", async () => {
-	expect(await run(["table-auto", "table-fixed"])).toMatchInlineSnapshot(`
+test('table-layout', async () => {
+  expect(await run(['table-auto', 'table-fixed'])).toMatchInlineSnapshot(`
     ".table-auto {
       table-layout: auto;
     }
@@ -3965,19 +3889,14 @@ test("table-layout", async () => {
     .table-fixed {
       table-layout: fixed;
     }"
-  `);
-	expect(
-		await run([
-			"-table-auto",
-			"-table-fixed",
-			"table-auto/foo",
-			"table-fixed/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-table-auto', '-table-fixed', 'table-auto/foo', 'table-fixed/foo'])).toEqual(
+    '',
+  )
+})
 
-test("caption-side", async () => {
-	expect(await run(["caption-top", "caption-bottom"])).toMatchInlineSnapshot(`
+test('caption-side', async () => {
+  expect(await run(['caption-top', 'caption-bottom'])).toMatchInlineSnapshot(`
     ".caption-bottom {
       caption-side: bottom;
     }
@@ -3985,21 +3904,14 @@ test("caption-side", async () => {
     .caption-top {
       caption-side: top;
     }"
-  `);
-	expect(
-		await run([
-			"-caption-top",
-			"-caption-bottom",
-			"caption-top/foo",
-			"caption-bottom/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['-caption-top', '-caption-bottom', 'caption-top/foo', 'caption-bottom/foo']),
+  ).toEqual('')
+})
 
-test("border-collapse", async () => {
-	expect(
-		await run(["border-collapse", "border-separate"]),
-	).toMatchInlineSnapshot(`
+test('border-collapse', async () => {
+  expect(await run(['border-collapse', 'border-separate'])).toMatchInlineSnapshot(`
     ".border-collapse {
       border-collapse: collapse;
     }
@@ -4007,29 +3919,29 @@ test("border-collapse", async () => {
     .border-separate {
       border-collapse: separate;
     }"
-  `);
-	expect(
-		await run([
-			"-border-collapse",
-			"-border-separate",
-			"border-collapse/foo",
-			"border-separate/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-border-collapse',
+      '-border-separate',
+      'border-collapse/foo',
+      'border-separate/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("border-spacing", async () => {
-	expect(
-		await compileCss(
-			css`
+test('border-spacing', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-			["border-spacing-1", "border-spacing-[123px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['border-spacing-1', 'border-spacing-[123px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4066,30 +3978,30 @@ test("border-spacing", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"border-spacing",
-			"-border-spacing-1",
-			"-border-spacing-[123px]",
-			"border-spacing-1/foo",
-			"border-spacing-[123px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'border-spacing',
+      '-border-spacing-1',
+      '-border-spacing-[123px]',
+      'border-spacing-1/foo',
+      'border-spacing-[123px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("border-spacing-x", async () => {
-	expect(
-		await compileCss(
-			css`
+test('border-spacing-x', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-			["border-spacing-x-1", "border-spacing-x-[123px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4124,30 +4036,30 @@ test("border-spacing-x", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"border-spacing-x",
-			"-border-spacing-x-1",
-			"-border-spacing-x-[123px]",
-			"border-spacing-x-1/foo",
-			"border-spacing-x-[123px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'border-spacing-x',
+      '-border-spacing-x-1',
+      '-border-spacing-x-[123px]',
+      'border-spacing-x-1/foo',
+      'border-spacing-x-[123px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("border-spacing-y", async () => {
-	expect(
-		await compileCss(
-			css`
+test('border-spacing-y', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-			["border-spacing-y-1", "border-spacing-y-[123px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4182,34 +4094,34 @@ test("border-spacing-y", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"border-spacing-x",
-			"-border-spacing-y-1",
-			"-border-spacing-y-[123px]",
-			"border-spacing-y-1/foo",
-			"border-spacing-y-[123px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'border-spacing-x',
+      '-border-spacing-y-1',
+      '-border-spacing-y-[123px]',
+      'border-spacing-y-1/foo',
+      'border-spacing-y-[123px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("origin", async () => {
-	expect(
-		await run([
-			"origin-center",
-			"origin-top",
-			"origin-top-right",
-			"origin-right",
-			"origin-bottom-right",
-			"origin-bottom",
-			"origin-bottom-left",
-			"origin-left",
-			"origin-top-left",
-			"origin-[50px_100px]",
-			"origin-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('origin', async () => {
+  expect(
+    await run([
+      'origin-center',
+      'origin-top',
+      'origin-top-right',
+      'origin-right',
+      'origin-bottom-right',
+      'origin-bottom',
+      'origin-bottom-left',
+      'origin-left',
+      'origin-top-left',
+      'origin-[50px_100px]',
+      'origin-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".origin-\\[50px_100px\\] {
       transform-origin: 50px 100px;
     }
@@ -4253,36 +4165,36 @@ test("origin", async () => {
     .origin-top-right {
       transform-origin: 100% 0;
     }"
-  `);
-	expect(
-		await run([
-			"-origin-center",
-			"-origin-[var(--value)]",
-			"origin-center/foo",
-			"origin-top/foo",
-			"origin-top-right/foo",
-			"origin-right/foo",
-			"origin-bottom-right/foo",
-			"origin-bottom/foo",
-			"origin-bottom-left/foo",
-			"origin-left/foo",
-			"origin-top-left/foo",
-			"origin-[50px_100px]/foo",
-			"origin-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      '-origin-center',
+      '-origin-[var(--value)]',
+      'origin-center/foo',
+      'origin-top/foo',
+      'origin-top-right/foo',
+      'origin-right/foo',
+      'origin-bottom-right/foo',
+      'origin-bottom/foo',
+      'origin-bottom-left/foo',
+      'origin-left/foo',
+      'origin-top-left/foo',
+      'origin-[50px_100px]/foo',
+      'origin-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --transform-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-			["origin-top"],
-		),
-	).toMatchInlineSnapshot(`
+      ['origin-top'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --transform-origin-top: 10px 20px;
     }
@@ -4290,25 +4202,25 @@ test("origin", async () => {
     .origin-top {
       transform-origin: var(--transform-origin-top);
     }"
-  `);
-});
+  `)
+})
 
-test("perspective-origin", async () => {
-	expect(
-		await run([
-			"perspective-origin-center",
-			"perspective-origin-top",
-			"perspective-origin-top-right",
-			"perspective-origin-right",
-			"perspective-origin-bottom-right",
-			"perspective-origin-bottom",
-			"perspective-origin-bottom-left",
-			"perspective-origin-left",
-			"perspective-origin-top-left",
-			"perspective-origin-[50px_100px]",
-			"perspective-origin-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('perspective-origin', async () => {
+  expect(
+    await run([
+      'perspective-origin-center',
+      'perspective-origin-top',
+      'perspective-origin-top-right',
+      'perspective-origin-right',
+      'perspective-origin-bottom-right',
+      'perspective-origin-bottom',
+      'perspective-origin-bottom-left',
+      'perspective-origin-left',
+      'perspective-origin-top-left',
+      'perspective-origin-[50px_100px]',
+      'perspective-origin-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".perspective-origin-\\[50px_100px\\] {
       perspective-origin: 50px 100px;
     }
@@ -4352,36 +4264,36 @@ test("perspective-origin", async () => {
     .perspective-origin-top-right {
       perspective-origin: 100% 0;
     }"
-  `);
-	expect(
-		await run([
-			"-perspective-origin-center",
-			"-perspective-origin-[var(--value)]",
-			"perspective-origin-center/foo",
-			"perspective-origin-top/foo",
-			"perspective-origin-top-right/foo",
-			"perspective-origin-right/foo",
-			"perspective-origin-bottom-right/foo",
-			"perspective-origin-bottom/foo",
-			"perspective-origin-bottom-left/foo",
-			"perspective-origin-left/foo",
-			"perspective-origin-top-left/foo",
-			"perspective-origin-[50px_100px]/foo",
-			"perspective-origin-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      '-perspective-origin-center',
+      '-perspective-origin-[var(--value)]',
+      'perspective-origin-center/foo',
+      'perspective-origin-top/foo',
+      'perspective-origin-top-right/foo',
+      'perspective-origin-right/foo',
+      'perspective-origin-bottom-right/foo',
+      'perspective-origin-bottom/foo',
+      'perspective-origin-bottom-left/foo',
+      'perspective-origin-left/foo',
+      'perspective-origin-top-left/foo',
+      'perspective-origin-[50px_100px]/foo',
+      'perspective-origin-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --perspective-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-			["perspective-origin-top"],
-		),
-	).toMatchInlineSnapshot(`
+      ['perspective-origin-top'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --perspective-origin-top: 10px 20px;
     }
@@ -4390,19 +4302,19 @@ test("perspective-origin", async () => {
       perspective-origin: var(--perspective-origin-top);
       perspective: var(--perspective-origin-top);
     }"
-  `);
-});
+  `)
+})
 
-test("translate", async () => {
-	expect(
-		await run([
-			"translate-1/2",
-			"translate-full",
-			"-translate-full",
-			"translate-[123px]",
-			"-translate-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('translate', async () => {
+  expect(
+    await run([
+      'translate-1/2',
+      'translate-full',
+      '-translate-full',
+      'translate-[123px]',
+      '-translate-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4460,32 +4372,32 @@ test("translate", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"translate",
-			"translate--1",
-			"translate--1/2",
-			"translate--1/-2",
-			"translate-1/-2",
-			"translate-1/2/foo",
-			"translate-full/foo",
-			"-translate-full/foo",
-			"translate-[123px]/foo",
-			"-translate-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'translate',
+      'translate--1',
+      'translate--1/2',
+      'translate--1/-2',
+      'translate-1/-2',
+      'translate-1/2/foo',
+      'translate-full/foo',
+      '-translate-full/foo',
+      'translate-[123px]/foo',
+      '-translate-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("translate-x", async () => {
-	expect(
-		await run([
-			"translate-x-full",
-			"-translate-x-full",
-			"translate-x-px",
-			"-translate-x-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('translate-x', async () => {
+  expect(
+    await run([
+      'translate-x-full',
+      '-translate-x-full',
+      'translate-x-px',
+      '-translate-x-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4533,37 +4445,32 @@ test("translate-x", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"translate-x",
-			"translate-x--1",
-			"translate-x--1/2",
-			"translate-x--1/-2",
-			"translate-x-1/-2",
-			"translate-x-full/foo",
-			"-translate-x-full/foo",
-			"translate-x-px/foo",
-			"-translate-x-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'translate-x',
+      'translate-x--1',
+      'translate-x--1/2',
+      'translate-x--1/-2',
+      'translate-x-1/-2',
+      'translate-x-full/foo',
+      '-translate-x-full/foo',
+      'translate-x-px/foo',
+      '-translate-x-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"translate-x-full",
-				"-translate-x-full",
-				"translate-x-px",
-				"-translate-x-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4611,30 +4518,30 @@ test("translate-x", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"perspective",
-			"-perspective",
-			"perspective-potato",
-			"perspective-123",
-			"perspective-normal/foo",
-			"perspective-dramatic/foo",
-			"perspective-none/foo",
-			"perspective-[456px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("translate-y", async () => {
-	expect(
-		await run([
-			"translate-y-full",
-			"-translate-y-full",
-			"translate-y-px",
-			"-translate-y-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('translate-y', async () => {
+  expect(
+    await run([
+      'translate-y-full',
+      '-translate-y-full',
+      'translate-y-px',
+      '-translate-y-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4682,37 +4589,32 @@ test("translate-y", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"translate-y",
-			"translate-y--1",
-			"translate-y--1/2",
-			"translate-y--1/-2",
-			"translate-y-1/-2",
-			"translate-y-full/foo",
-			"-translate-y-full/foo",
-			"translate-y-px/foo",
-			"-translate-y-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'translate-y',
+      'translate-y--1',
+      'translate-y--1/2',
+      'translate-y--1/-2',
+      'translate-y-1/-2',
+      'translate-y-full/foo',
+      '-translate-y-full/foo',
+      'translate-y-px/foo',
+      '-translate-y-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"translate-y-full",
-				"-translate-y-full",
-				"translate-y-px",
-				"-translate-y-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4760,29 +4662,24 @@ test("translate-y", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"perspective",
-			"-perspective",
-			"perspective-potato",
-			"perspective-123",
-			"perspective-normal/foo",
-			"perspective-dramatic/foo",
-			"perspective-none/foo",
-			"perspective-[456px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("translate-z", async () => {
-	expect(
-		await run([
-			"-translate-z-px",
-			"translate-z-px",
-			"-translate-z-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('translate-z', async () => {
+  expect(await run(['-translate-z-px', 'translate-z-px', '-translate-z-[var(--value)]']))
+    .toMatchInlineSnapshot(`
       "@layer properties {
         @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
@@ -4825,25 +4722,25 @@ test("translate-z", async () => {
         inherits: false;
         initial-value: 0;
       }"
-    `);
-	expect(
-		await run([
-			"translate-z",
-			"translate-z--1",
-			"translate-z--1/2",
-			"translate-z--1/-2",
-			"translate-z-1/-2",
-			"translate-z-full",
-			"-translate-z-full",
-			"translate-z-1/2",
-			"translate-y-px/foo",
-			"-translate-z-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'translate-z',
+      'translate-z--1',
+      'translate-z--1/2',
+      'translate-z--1/-2',
+      'translate-z-1/-2',
+      'translate-z-full',
+      '-translate-z-full',
+      'translate-z-1/2',
+      'translate-y-px/foo',
+      '-translate-z-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("translate-3d", async () => {
-	expect(await run(["translate-3d"])).toMatchInlineSnapshot(`
+test('translate-3d', async () => {
+  expect(await run(['translate-3d'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -4875,22 +4772,22 @@ test("translate-3d", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(await run(["-translate-3d", "translate-3d/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-translate-3d', 'translate-3d/foo'])).toEqual('')
+})
 
-test("rotate", async () => {
-	expect(
-		await run([
-			"rotate-45",
-			"-rotate-45",
-			"rotate-[123deg]",
-			"rotate-[0.3_0.7_1_45deg]",
-			"rotate-(--var)",
-			"-rotate-[123deg]",
-			"-rotate-(--var)",
-		]),
-	).toMatchInlineSnapshot(`
+test('rotate', async () => {
+  expect(
+    await run([
+      'rotate-45',
+      '-rotate-45',
+      'rotate-[123deg]',
+      'rotate-[0.3_0.7_1_45deg]',
+      'rotate-(--var)',
+      '-rotate-[123deg]',
+      '-rotate-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".-rotate-\\(--var\\) {
       rotate: calc(var(--var) * -1);
     }
@@ -4918,31 +4815,31 @@ test("rotate", async () => {
     .rotate-\\[123deg\\] {
       rotate: 123deg;
     }"
-  `);
-	expect(
-		await run([
-			"rotate",
-			"rotate-z",
-			"rotate--2",
-			"rotate-unknown",
-			"rotate-45/foo",
-			"-rotate-45/foo",
-			"rotate-[123deg]/foo",
-			"rotate-[0.3_0.7_1_45deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'rotate',
+      'rotate-z',
+      'rotate--2',
+      'rotate-unknown',
+      'rotate-45/foo',
+      '-rotate-45/foo',
+      'rotate-[123deg]/foo',
+      'rotate-[0.3_0.7_1_45deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rotate-x", async () => {
-	expect(
-		await run([
-			"rotate-x-45",
-			"-rotate-x-45",
-			"rotate-x-[123deg]",
-			"rotate-x-(--var)",
-			"-rotate-x-(--var)",
-		]),
-	).toMatchInlineSnapshot(`
+test('rotate-x', async () => {
+  expect(
+    await run([
+      'rotate-x-45',
+      '-rotate-x-45',
+      'rotate-x-[123deg]',
+      'rotate-x-(--var)',
+      '-rotate-x-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5004,31 +4901,31 @@ test("rotate-x", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"rotate-x",
-			"rotate-x--1",
-			"-rotate-x",
-			"rotate-x-potato",
-			"rotate-x-45/foo",
-			"-rotate-x-45/foo",
-			"rotate-x-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'rotate-x',
+      'rotate-x--1',
+      '-rotate-x',
+      'rotate-x-potato',
+      'rotate-x-45/foo',
+      '-rotate-x-45/foo',
+      'rotate-x-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rotate-y", async () => {
-	expect(
-		await run([
-			"rotate-y-45",
-			"rotate-y-[123deg]",
-			"rotate-y-(--var)",
-			"-rotate-y-45",
-			"-rotate-y-[123deg]",
-			"-rotate-y-(--var)",
-		]),
-	).toMatchInlineSnapshot(`
+test('rotate-y', async () => {
+  expect(
+    await run([
+      'rotate-y-45',
+      'rotate-y-[123deg]',
+      'rotate-y-(--var)',
+      '-rotate-y-45',
+      '-rotate-y-[123deg]',
+      '-rotate-y-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5095,31 +4992,31 @@ test("rotate-y", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"rotate-y",
-			"rotate-y--1",
-			"-rotate-y",
-			"rotate-y-potato",
-			"rotate-y-45/foo",
-			"-rotate-y-45/foo",
-			"rotate-y-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'rotate-y',
+      'rotate-y--1',
+      '-rotate-y',
+      'rotate-y-potato',
+      'rotate-y-45/foo',
+      '-rotate-y-45/foo',
+      'rotate-y-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rotate-z", async () => {
-	expect(
-		await run([
-			"rotate-z-45",
-			"rotate-z-[123deg]",
-			"rotate-z-(--var)",
-			"-rotate-z-45",
-			"-rotate-z-[123deg]",
-			"-rotate-z-(--var)",
-		]),
-	).toMatchInlineSnapshot(`
+test('rotate-z', async () => {
+  expect(
+    await run([
+      'rotate-z-45',
+      'rotate-z-[123deg]',
+      'rotate-z-(--var)',
+      '-rotate-z-45',
+      '-rotate-z-[123deg]',
+      '-rotate-z-(--var)',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5186,24 +5083,22 @@ test("rotate-z", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"rotate-z",
-			"rotate-z--1",
-			"-rotate-z",
-			"rotate-z-potato",
-			"rotate-z-45/foo",
-			"-rotate-z-45/foo",
-			"rotate-z-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'rotate-z',
+      'rotate-z--1',
+      '-rotate-z',
+      'rotate-z-potato',
+      'rotate-z-45/foo',
+      '-rotate-z-45/foo',
+      'rotate-z-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("skew", async () => {
-	expect(
-		await run(["skew-6", "-skew-6", "skew-[123deg]"]),
-	).toMatchInlineSnapshot(`
+test('skew', async () => {
+  expect(await run(['skew-6', '-skew-6', 'skew-[123deg]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5258,23 +5153,21 @@ test("skew", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"skew",
-			"skew--1",
-			"skew-unknown",
-			"skew-6/foo",
-			"-skew-6/foo",
-			"skew-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'skew',
+      'skew--1',
+      'skew-unknown',
+      'skew-6/foo',
+      '-skew-6/foo',
+      'skew-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("skew-x", async () => {
-	expect(
-		await run(["skew-x-6", "-skew-x-6", "skew-x-[123deg]"]),
-	).toMatchInlineSnapshot(`
+test('skew-x', async () => {
+  expect(await run(['skew-x-6', '-skew-x-6', 'skew-x-[123deg]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5326,23 +5219,21 @@ test("skew-x", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"skew-x",
-			"skew-x--1",
-			"skew-x-unknown",
-			"skew-x-6/foo",
-			"-skew-x-6/foo",
-			"skew-x-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'skew-x',
+      'skew-x--1',
+      'skew-x-unknown',
+      'skew-x-6/foo',
+      '-skew-x-6/foo',
+      'skew-x-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("skew-y", async () => {
-	expect(
-		await run(["skew-y-6", "-skew-y-6", "skew-y-[123deg]"]),
-	).toMatchInlineSnapshot(`
+test('skew-y', async () => {
+  expect(await run(['skew-y-6', '-skew-y-6', 'skew-y-[123deg]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5394,23 +5285,22 @@ test("skew-y", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"skew-y",
-			"skew-y--1",
-			"skew-y-unknown",
-			"skew-y-6/foo",
-			"-skew-y-6/foo",
-			"skew-y-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'skew-y',
+      'skew-y--1',
+      'skew-y-unknown',
+      'skew-y-6/foo',
+      '-skew-y-6/foo',
+      'skew-y-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scale", async () => {
-	expect(
-		await run(["scale-50", "-scale-50", "scale-[2]", "scale-[2_1.5_3]"]),
-	).toMatchInlineSnapshot(`
+test('scale', async () => {
+  expect(await run(['scale-50', '-scale-50', 'scale-[2]', 'scale-[2_1.5_3]']))
+    .toMatchInlineSnapshot(`
       "@layer properties {
         @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
@@ -5460,23 +5350,23 @@ test("scale", async () => {
         inherits: false;
         initial-value: 1;
       }"
-    `);
-	expect(
-		await run([
-			"scale",
-			"scale--50",
-			"scale-1.5",
-			"scale-unknown",
-			"scale-50/foo",
-			"-scale-50/foo",
-			"scale-[2]/foo",
-			"scale-[2_1.5_3]/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'scale',
+      'scale--50',
+      'scale-1.5',
+      'scale-unknown',
+      'scale-50/foo',
+      '-scale-50/foo',
+      'scale-[2]/foo',
+      'scale-[2_1.5_3]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scale-3d", async () => {
-	expect(await run(["scale-3d"])).toMatchInlineSnapshot(`
+test('scale-3d', async () => {
+  expect(await run(['scale-3d'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5508,14 +5398,12 @@ test("scale-3d", async () => {
       inherits: false;
       initial-value: 1;
     }"
-  `);
-	expect(await run(["-scale-3d", "scale-3d/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-scale-3d', 'scale-3d/foo'])).toEqual('')
+})
 
-test("scale-x", async () => {
-	expect(
-		await run(["scale-x-50", "-scale-x-50", "scale-x-[2]"]),
-	).toMatchInlineSnapshot(`
+test('scale-x', async () => {
+  expect(await run(['scale-x-50', '-scale-x-50', 'scale-x-[2]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5558,8 +5446,8 @@ test("scale-x", async () => {
       inherits: false;
       initial-value: 1;
     }"
-  `);
-	expect(await run(["scale-200", "scale-x-400"])).toMatchInlineSnapshot(`
+  `)
+  expect(await run(['scale-200', 'scale-x-400'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5599,26 +5487,24 @@ test("scale-x", async () => {
       inherits: false;
       initial-value: 1;
     }"
-  `);
-	expect(
-		await run([
-			"scale-x",
-			"scale-x--1",
-			"scale-x-1.5",
-			"scale-x-unknown",
-			"scale-200/foo",
-			"scale-x-400/foo",
-			"scale-x-50/foo",
-			"-scale-x-50/foo",
-			"scale-x-[2]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scale-x',
+      'scale-x--1',
+      'scale-x-1.5',
+      'scale-x-unknown',
+      'scale-200/foo',
+      'scale-x-400/foo',
+      'scale-x-50/foo',
+      '-scale-x-50/foo',
+      'scale-x-[2]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scale-y", async () => {
-	expect(
-		await run(["scale-y-50", "-scale-y-50", "scale-y-[2]"]),
-	).toMatchInlineSnapshot(`
+test('scale-y', async () => {
+  expect(await run(['scale-y-50', '-scale-y-50', 'scale-y-[2]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5661,24 +5547,22 @@ test("scale-y", async () => {
       inherits: false;
       initial-value: 1;
     }"
-  `);
-	expect(
-		await run([
-			"scale-y",
-			"scale-y--1",
-			"scale-y-1.5",
-			"scale-y-unknown",
-			"scale-y-50/foo",
-			"-scale-y-50/foo",
-			"scale-y-[2]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scale-y',
+      'scale-y--1',
+      'scale-y-1.5',
+      'scale-y-unknown',
+      'scale-y-50/foo',
+      '-scale-y-50/foo',
+      'scale-y-[2]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scale-z", async () => {
-	expect(
-		await run(["scale-z-50", "-scale-z-50", "scale-z-[123deg]"]),
-	).toMatchInlineSnapshot(`
+test('scale-z', async () => {
+  expect(await run(['scale-z-50', '-scale-z-50', 'scale-z-[123deg]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5721,29 +5605,29 @@ test("scale-z", async () => {
       inherits: false;
       initial-value: 1;
     }"
-  `);
-	expect(
-		await run([
-			"scale-z",
-			"scale-z--1",
-			"scale-z-1.5",
-			"scale-z-50/foo",
-			"-scale-z-50/foo",
-			"scale-z-[123deg]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scale-z',
+      'scale-z--1',
+      'scale-z-1.5',
+      'scale-z-50/foo',
+      '-scale-z-50/foo',
+      'scale-z-[123deg]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("transform", async () => {
-	expect(
-		await run([
-			"transform",
-			"transform-cpu",
-			"transform-gpu",
-			"transform-none",
-			"transform-[scaleZ(2)_rotateY(45deg)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('transform', async () => {
+  expect(
+    await run([
+      'transform',
+      'transform-cpu',
+      'transform-gpu',
+      'transform-none',
+      'transform-[scaleZ(2)_rotateY(45deg)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -5800,20 +5684,20 @@ test("transform", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"transform-flat",
-			"transform-3d",
-			"transform-content",
-			"transform-border",
-			"transform-fill",
-			"transform-stroke",
-			"transform-view",
-			"backface-visible",
-			"backface-hidden",
-		]),
-	).toMatchInlineSnapshot(`
+  `)
+  expect(
+    await run([
+      'transform-flat',
+      'transform-3d',
+      'transform-content',
+      'transform-border',
+      'transform-fill',
+      'transform-stroke',
+      'transform-view',
+      'backface-visible',
+      'backface-hidden',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".backface-hidden {
       backface-visibility: hidden;
     }
@@ -5849,49 +5733,44 @@ test("transform", async () => {
     .transform-view {
       transform-box: view-box;
     }"
-  `);
-	expect(
-		await run([
-			"-transform",
-			"-transform-cpu",
-			"-transform-gpu",
-			"-transform-none",
-			"transform/foo",
-			"transform-cpu/foo",
-			"transform-gpu/foo",
-			"transform-none/foo",
-			"transform-[scaleZ(2)_rotateY(45deg)]/foo",
-			"transform-flat/foo",
-			"transform-3d/foo",
-			"transform-content/foo",
-			"transform-border/foo",
-			"transform-fill/foo",
-			"transform-stroke/foo",
-			"transform-view/foo",
-			"backface-visible/foo",
-			"backface-hidden/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-transform',
+      '-transform-cpu',
+      '-transform-gpu',
+      '-transform-none',
+      'transform/foo',
+      'transform-cpu/foo',
+      'transform-gpu/foo',
+      'transform-none/foo',
+      'transform-[scaleZ(2)_rotateY(45deg)]/foo',
+      'transform-flat/foo',
+      'transform-3d/foo',
+      'transform-content/foo',
+      'transform-border/foo',
+      'transform-fill/foo',
+      'transform-stroke/foo',
+      'transform-view/foo',
+      'backface-visible/foo',
+      'backface-hidden/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("perspective", async () => {
-	expect(
-		await compileCss(
-			css`
+test('perspective', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --perspective-dramatic: 100px;
           --perspective-normal: 500px;
         }
         @tailwind utilities;
       `,
-			[
-				"perspective-normal",
-				"perspective-dramatic",
-				"perspective-none",
-				"perspective-[456px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --perspective-dramatic: 100px;
       --perspective-normal: 500px;
@@ -5912,31 +5791,31 @@ test("perspective", async () => {
     .perspective-normal {
       perspective: var(--perspective-normal);
     }"
-  `);
-	expect(
-		await run([
-			"perspective",
-			"-perspective",
-			"perspective-potato",
-			"perspective-123",
-			"perspective-normal/foo",
-			"perspective-dramatic/foo",
-			"perspective-none/foo",
-			"perspective-[456px]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'perspective',
+      '-perspective',
+      'perspective-potato',
+      'perspective-123',
+      'perspective-normal/foo',
+      'perspective-dramatic/foo',
+      'perspective-none/foo',
+      'perspective-[456px]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --perspective-none: 400px;
         }
         @tailwind utilities;
       `,
-			["perspective-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['perspective-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --perspective-none: 400px;
     }
@@ -5944,60 +5823,60 @@ test("perspective", async () => {
     .perspective-none {
       perspective: var(--perspective-none);
     }"
-  `);
-});
+  `)
+})
 
-test("cursor", async () => {
-	expect(
-		await compileCss(
-			css`
+test('cursor', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --cursor-custom: url(/my-cursor.png);
         }
         @tailwind utilities;
       `,
-			[
-				"cursor-auto",
-				"cursor-default",
-				"cursor-pointer",
-				"cursor-wait",
-				"cursor-text",
-				"cursor-move",
-				"cursor-help",
-				"cursor-not-allowed",
-				"cursor-none",
-				"cursor-context-menu",
-				"cursor-progress",
-				"cursor-cell",
-				"cursor-crosshair",
-				"cursor-vertical-text",
-				"cursor-alias",
-				"cursor-copy",
-				"cursor-no-drop",
-				"cursor-grab",
-				"cursor-grabbing",
-				"cursor-all-scroll",
-				"cursor-col-resize",
-				"cursor-row-resize",
-				"cursor-n-resize",
-				"cursor-e-resize",
-				"cursor-s-resize",
-				"cursor-w-resize",
-				"cursor-ne-resize",
-				"cursor-nw-resize",
-				"cursor-se-resize",
-				"cursor-sw-resize",
-				"cursor-ew-resize",
-				"cursor-ns-resize",
-				"cursor-nesw-resize",
-				"cursor-nwse-resize",
-				"cursor-zoom-in",
-				"cursor-zoom-out",
-				"cursor-[var(--value)]",
-				"cursor-custom",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'cursor-auto',
+        'cursor-default',
+        'cursor-pointer',
+        'cursor-wait',
+        'cursor-text',
+        'cursor-move',
+        'cursor-help',
+        'cursor-not-allowed',
+        'cursor-none',
+        'cursor-context-menu',
+        'cursor-progress',
+        'cursor-cell',
+        'cursor-crosshair',
+        'cursor-vertical-text',
+        'cursor-alias',
+        'cursor-copy',
+        'cursor-no-drop',
+        'cursor-grab',
+        'cursor-grabbing',
+        'cursor-all-scroll',
+        'cursor-col-resize',
+        'cursor-row-resize',
+        'cursor-n-resize',
+        'cursor-e-resize',
+        'cursor-s-resize',
+        'cursor-w-resize',
+        'cursor-ne-resize',
+        'cursor-nw-resize',
+        'cursor-se-resize',
+        'cursor-sw-resize',
+        'cursor-ew-resize',
+        'cursor-ns-resize',
+        'cursor-nesw-resize',
+        'cursor-nwse-resize',
+        'cursor-zoom-in',
+        'cursor-zoom-out',
+        'cursor-[var(--value)]',
+        'cursor-custom',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --cursor-custom: url("/my-cursor.png");
     }
@@ -6153,94 +6032,92 @@ test("cursor", async () => {
     .cursor-zoom-out {
       cursor: zoom-out;
     }"
-  `);
-	expect(
-		await run([
-			"cursor",
-			"-cursor-auto",
-			"-cursor-default",
-			"-cursor-pointer",
-			"-cursor-wait",
-			"-cursor-text",
-			"-cursor-move",
-			"-cursor-help",
-			"-cursor-not-allowed",
-			"-cursor-none",
-			"-cursor-context-menu",
-			"-cursor-progress",
-			"-cursor-cell",
-			"-cursor-crosshair",
-			"-cursor-vertical-text",
-			"-cursor-alias",
-			"-cursor-copy",
-			"-cursor-no-drop",
-			"-cursor-grab",
-			"-cursor-grabbing",
-			"-cursor-all-scroll",
-			"-cursor-col-resize",
-			"-cursor-row-resize",
-			"-cursor-n-resize",
-			"-cursor-e-resize",
-			"-cursor-s-resize",
-			"-cursor-w-resize",
-			"-cursor-ne-resize",
-			"-cursor-nw-resize",
-			"-cursor-se-resize",
-			"-cursor-sw-resize",
-			"-cursor-ew-resize",
-			"-cursor-ns-resize",
-			"-cursor-nesw-resize",
-			"-cursor-nwse-resize",
-			"-cursor-zoom-in",
-			"-cursor-zoom-out",
-			"-cursor-[var(--value)]",
-			"-cursor-custom",
-			"cursor-auto/foo",
-			"cursor-default/foo",
-			"cursor-pointer/foo",
-			"cursor-wait/foo",
-			"cursor-text/foo",
-			"cursor-move/foo",
-			"cursor-help/foo",
-			"cursor-not-allowed/foo",
-			"cursor-none/foo",
-			"cursor-context-menu/foo",
-			"cursor-progress/foo",
-			"cursor-cell/foo",
-			"cursor-crosshair/foo",
-			"cursor-vertical-text/foo",
-			"cursor-alias/foo",
-			"cursor-copy/foo",
-			"cursor-no-drop/foo",
-			"cursor-grab/foo",
-			"cursor-grabbing/foo",
-			"cursor-all-scroll/foo",
-			"cursor-col-resize/foo",
-			"cursor-row-resize/foo",
-			"cursor-n-resize/foo",
-			"cursor-e-resize/foo",
-			"cursor-s-resize/foo",
-			"cursor-w-resize/foo",
-			"cursor-ne-resize/foo",
-			"cursor-nw-resize/foo",
-			"cursor-se-resize/foo",
-			"cursor-sw-resize/foo",
-			"cursor-ew-resize/foo",
-			"cursor-ns-resize/foo",
-			"cursor-nesw-resize/foo",
-			"cursor-nwse-resize/foo",
-			"cursor-zoom-in/foo",
-			"cursor-zoom-out/foo",
-			"cursor-[var(--value)]/foo",
-			"cursor-custom/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'cursor',
+      '-cursor-auto',
+      '-cursor-default',
+      '-cursor-pointer',
+      '-cursor-wait',
+      '-cursor-text',
+      '-cursor-move',
+      '-cursor-help',
+      '-cursor-not-allowed',
+      '-cursor-none',
+      '-cursor-context-menu',
+      '-cursor-progress',
+      '-cursor-cell',
+      '-cursor-crosshair',
+      '-cursor-vertical-text',
+      '-cursor-alias',
+      '-cursor-copy',
+      '-cursor-no-drop',
+      '-cursor-grab',
+      '-cursor-grabbing',
+      '-cursor-all-scroll',
+      '-cursor-col-resize',
+      '-cursor-row-resize',
+      '-cursor-n-resize',
+      '-cursor-e-resize',
+      '-cursor-s-resize',
+      '-cursor-w-resize',
+      '-cursor-ne-resize',
+      '-cursor-nw-resize',
+      '-cursor-se-resize',
+      '-cursor-sw-resize',
+      '-cursor-ew-resize',
+      '-cursor-ns-resize',
+      '-cursor-nesw-resize',
+      '-cursor-nwse-resize',
+      '-cursor-zoom-in',
+      '-cursor-zoom-out',
+      '-cursor-[var(--value)]',
+      '-cursor-custom',
+      'cursor-auto/foo',
+      'cursor-default/foo',
+      'cursor-pointer/foo',
+      'cursor-wait/foo',
+      'cursor-text/foo',
+      'cursor-move/foo',
+      'cursor-help/foo',
+      'cursor-not-allowed/foo',
+      'cursor-none/foo',
+      'cursor-context-menu/foo',
+      'cursor-progress/foo',
+      'cursor-cell/foo',
+      'cursor-crosshair/foo',
+      'cursor-vertical-text/foo',
+      'cursor-alias/foo',
+      'cursor-copy/foo',
+      'cursor-no-drop/foo',
+      'cursor-grab/foo',
+      'cursor-grabbing/foo',
+      'cursor-all-scroll/foo',
+      'cursor-col-resize/foo',
+      'cursor-row-resize/foo',
+      'cursor-n-resize/foo',
+      'cursor-e-resize/foo',
+      'cursor-s-resize/foo',
+      'cursor-w-resize/foo',
+      'cursor-ne-resize/foo',
+      'cursor-nw-resize/foo',
+      'cursor-se-resize/foo',
+      'cursor-sw-resize/foo',
+      'cursor-ew-resize/foo',
+      'cursor-ns-resize/foo',
+      'cursor-nesw-resize/foo',
+      'cursor-nwse-resize/foo',
+      'cursor-zoom-in/foo',
+      'cursor-zoom-out/foo',
+      'cursor-[var(--value)]/foo',
+      'cursor-custom/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("touch-action", async () => {
-	expect(
-		await run(["touch-auto", "touch-none", "touch-manipulation"]),
-	).toMatchInlineSnapshot(`
+test('touch-action', async () => {
+  expect(await run(['touch-auto', 'touch-none', 'touch-manipulation'])).toMatchInlineSnapshot(`
     ".touch-auto {
       touch-action: auto;
     }
@@ -6252,30 +6129,30 @@ test("touch-action", async () => {
     .touch-none {
       touch-action: none;
     }"
-  `);
-	expect(
-		await run([
-			"-touch-auto",
-			"-touch-none",
-			"-touch-manipulation",
-			"touch-auto/foo",
-			"touch-none/foo",
-			"touch-manipulation/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-touch-auto',
+      '-touch-none',
+      '-touch-manipulation',
+      'touch-auto/foo',
+      'touch-none/foo',
+      'touch-manipulation/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("touch-pan", async () => {
-	expect(
-		await run([
-			"touch-pan-x",
-			"touch-pan-left",
-			"touch-pan-right",
-			"touch-pan-y",
-			"touch-pan-up",
-			"touch-pan-down",
-		]),
-	).toMatchInlineSnapshot(`
+test('touch-pan', async () => {
+  expect(
+    await run([
+      'touch-pan-x',
+      'touch-pan-left',
+      'touch-pan-right',
+      'touch-pan-y',
+      'touch-pan-up',
+      'touch-pan-down',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -6330,27 +6207,27 @@ test("touch-pan", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"-touch-pan-x",
-			"-touch-pan-left",
-			"-touch-pan-right",
-			"-touch-pan-y",
-			"-touch-pan-up",
-			"-touch-pan-down",
-			"touch-pan-x/foo",
-			"touch-pan-left/foo",
-			"touch-pan-right/foo",
-			"touch-pan-y/foo",
-			"touch-pan-up/foo",
-			"touch-pan-down/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-touch-pan-x',
+      '-touch-pan-left',
+      '-touch-pan-right',
+      '-touch-pan-y',
+      '-touch-pan-up',
+      '-touch-pan-down',
+      'touch-pan-x/foo',
+      'touch-pan-left/foo',
+      'touch-pan-right/foo',
+      'touch-pan-y/foo',
+      'touch-pan-up/foo',
+      'touch-pan-down/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("touch-pinch-zoom", async () => {
-	expect(await run(["touch-pinch-zoom"])).toMatchInlineSnapshot(`
+test('touch-pinch-zoom', async () => {
+  expect(await run(['touch-pinch-zoom'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -6380,14 +6257,13 @@ test("touch-pinch-zoom", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(await run(["-touch-pinch-zoom", "touch-pinch-zoom/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-touch-pinch-zoom', 'touch-pinch-zoom/foo'])).toEqual('')
+})
 
-test("select", async () => {
-	expect(
-		await run(["select-none", "select-text", "select-all", "select-auto"]),
-	).toMatchInlineSnapshot(`
+test('select', async () => {
+  expect(await run(['select-none', 'select-text', 'select-all', 'select-auto']))
+    .toMatchInlineSnapshot(`
       ".select-all {
         -webkit-user-select: all;
         user-select: all;
@@ -6407,25 +6283,23 @@ test("select", async () => {
         -webkit-user-select: text;
         user-select: text;
       }"
-    `);
-	expect(
-		await run([
-			"-select-none",
-			"-select-text",
-			"-select-all",
-			"-select-auto",
-			"select-none/foo",
-			"select-text/foo",
-			"select-all/foo",
-			"select-auto/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-select-none',
+      '-select-text',
+      '-select-all',
+      '-select-auto',
+      'select-none/foo',
+      'select-text/foo',
+      'select-all/foo',
+      'select-auto/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("resize", async () => {
-	expect(
-		await run(["resize-none", "resize", "resize-x", "resize-y"]),
-	).toMatchInlineSnapshot(`
+test('resize', async () => {
+  expect(await run(['resize-none', 'resize', 'resize-x', 'resize-y'])).toMatchInlineSnapshot(`
     ".resize {
       resize: both;
     }
@@ -6441,25 +6315,23 @@ test("resize", async () => {
     .resize-y {
       resize: vertical;
     }"
-  `);
-	expect(
-		await run([
-			"-resize-none",
-			"-resize",
-			"-resize-x",
-			"-resize-y",
-			"resize-none/foo",
-			"resize/foo",
-			"resize-x/foo",
-			"resize-y/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-resize-none',
+      '-resize',
+      '-resize-x',
+      '-resize-y',
+      'resize-none/foo',
+      'resize/foo',
+      'resize-x/foo',
+      'resize-y/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-snap-type", async () => {
-	expect(
-		await run(["snap-none", "snap-x", "snap-y", "snap-both"]),
-	).toMatchInlineSnapshot(`
+test('scroll-snap-type', async () => {
+  expect(await run(['snap-none', 'snap-x', 'snap-y', 'snap-both'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -6489,25 +6361,23 @@ test("scroll-snap-type", async () => {
       inherits: false;
       initial-value: proximity;
     }"
-  `);
-	expect(
-		await run([
-			"-snap-none",
-			"-snap-x",
-			"-snap-y",
-			"-snap-both",
-			"snap-none/foo",
-			"snap-x/foo",
-			"snap-y/foo",
-			"snap-both/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-snap-none',
+      '-snap-x',
+      '-snap-y',
+      '-snap-both',
+      'snap-none/foo',
+      'snap-x/foo',
+      'snap-y/foo',
+      'snap-both/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("--tw-scroll-snap-strictness", async () => {
-	expect(
-		await run(["snap-mandatory", "snap-proximity"]),
-	).toMatchInlineSnapshot(`
+test('--tw-scroll-snap-strictness', async () => {
+  expect(await run(['snap-mandatory', 'snap-proximity'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -6529,21 +6399,15 @@ test("--tw-scroll-snap-strictness", async () => {
       inherits: false;
       initial-value: proximity;
     }"
-  `);
-	expect(
-		await run([
-			"-snap-mandatory",
-			"-snap-proximity",
-			"snap-mandatory/foo",
-			"snap-proximity/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['-snap-mandatory', '-snap-proximity', 'snap-mandatory/foo', 'snap-proximity/foo']),
+  ).toEqual('')
+})
 
-test("scroll-snap-align", async () => {
-	expect(
-		await run(["snap-align-none", "snap-start", "snap-end", "snap-center"]),
-	).toMatchInlineSnapshot(`
+test('scroll-snap-align', async () => {
+  expect(await run(['snap-align-none', 'snap-start', 'snap-end', 'snap-center']))
+    .toMatchInlineSnapshot(`
       ".snap-align-none {
         scroll-snap-align: none;
       }
@@ -6559,23 +6423,23 @@ test("scroll-snap-align", async () => {
       .snap-start {
         scroll-snap-align: start;
       }"
-    `);
-	expect(
-		await run([
-			"-snap-align-none",
-			"-snap-start",
-			"-snap-end",
-			"-snap-center",
-			"snap-align-none/foo",
-			"snap-start/foo",
-			"snap-end/foo",
-			"snap-center/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-snap-align-none',
+      '-snap-start',
+      '-snap-end',
+      '-snap-center',
+      'snap-align-none/foo',
+      'snap-start/foo',
+      'snap-end/foo',
+      'snap-center/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-snap-stop", async () => {
-	expect(await run(["snap-normal", "snap-always"])).toMatchInlineSnapshot(`
+test('scroll-snap-stop', async () => {
+  expect(await run(['snap-normal', 'snap-always'])).toMatchInlineSnapshot(`
     ".snap-always {
       scroll-snap-stop: always;
     }
@@ -6583,34 +6447,24 @@ test("scroll-snap-stop", async () => {
     .snap-normal {
       scroll-snap-stop: normal;
     }"
-  `);
-	expect(
-		await run([
-			"-snap-normal",
-			"-snap-always",
-			"snap-normal/foo",
-			"snap-always/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-snap-normal', '-snap-always', 'snap-normal/foo', 'snap-always/foo'])).toEqual(
+    '',
+  )
+})
 
-test("scroll-m", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-m', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-m-4",
-				"scroll-m-[4px]",
-				"-scroll-m-4",
-				"-scroll-m-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6630,35 +6484,30 @@ test("scroll-m", async () => {
     .scroll-m-\\[4px\\] {
       scroll-margin: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-m",
-			"scroll-m-4/foo",
-			"scroll-m-[4px]/foo",
-			"-scroll-m-4/foo",
-			"-scroll-m-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-m',
+      'scroll-m-4/foo',
+      'scroll-m-[4px]/foo',
+      '-scroll-m-4/foo',
+      '-scroll-m-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-mx", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-mx', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-mx-4",
-				"scroll-mx-[4px]",
-				"-scroll-mx-4",
-				"-scroll-mx-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6678,35 +6527,30 @@ test("scroll-mx", async () => {
     .scroll-mx-\\[4px\\] {
       scroll-margin-inline: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-mx",
-			"scroll-mx-4/foo",
-			"scroll-mx-[4px]/foo",
-			"-scroll-mx-4/foo",
-			"-scroll-mx-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-mx',
+      'scroll-mx-4/foo',
+      'scroll-mx-[4px]/foo',
+      '-scroll-mx-4/foo',
+      '-scroll-mx-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-my", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-my', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-my-4",
-				"scroll-my-[4px]",
-				"-scroll-my-4",
-				"-scroll-my-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6726,35 +6570,30 @@ test("scroll-my", async () => {
     .scroll-my-\\[4px\\] {
       scroll-margin-block: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-my",
-			"scroll-my-4/foo",
-			"scroll-my-[4px]/foo",
-			"-scroll-my-4/foo",
-			"-scroll-my-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-my',
+      'scroll-my-4/foo',
+      'scroll-my-[4px]/foo',
+      '-scroll-my-4/foo',
+      '-scroll-my-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-ms", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-ms', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-ms-4",
-				"scroll-ms-[4px]",
-				"-scroll-ms-4",
-				"-scroll-ms-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6774,35 +6613,30 @@ test("scroll-ms", async () => {
     .scroll-ms-\\[4px\\] {
       scroll-margin-inline-start: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-ms",
-			"scroll-ms-4/foo",
-			"scroll-ms-[4px]/foo",
-			"-scroll-ms-4/foo",
-			"-scroll-ms-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-ms',
+      'scroll-ms-4/foo',
+      'scroll-ms-[4px]/foo',
+      '-scroll-ms-4/foo',
+      '-scroll-ms-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-me", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-me', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-me-4",
-				"scroll-me-[4px]",
-				"-scroll-me-4",
-				"-scroll-me-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6822,35 +6656,30 @@ test("scroll-me", async () => {
     .scroll-me-\\[4px\\] {
       scroll-margin-inline-end: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-me",
-			"scroll-me-4/foo",
-			"scroll-me-[4px]/foo",
-			"-scroll-me-4/foo",
-			"-scroll-me-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-me',
+      'scroll-me-4/foo',
+      'scroll-me-[4px]/foo',
+      '-scroll-me-4/foo',
+      '-scroll-me-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-mt", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-mt', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-mt-4",
-				"scroll-mt-[4px]",
-				"-scroll-mt-4",
-				"-scroll-mt-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6870,35 +6699,30 @@ test("scroll-mt", async () => {
     .scroll-mt-\\[4px\\] {
       scroll-margin-top: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-mt",
-			"scroll-mt-4/foo",
-			"scroll-mt-[4px]/foo",
-			"-scroll-mt-4/foo",
-			"-scroll-mt-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-mt',
+      'scroll-mt-4/foo',
+      'scroll-mt-[4px]/foo',
+      '-scroll-mt-4/foo',
+      '-scroll-mt-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-mr", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-mr', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-mr-4",
-				"scroll-mr-[4px]",
-				"-scroll-mr-4",
-				"-scroll-mr-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6918,35 +6742,30 @@ test("scroll-mr", async () => {
     .scroll-mr-\\[4px\\] {
       scroll-margin-right: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-mr",
-			"scroll-mr-4/foo",
-			"scroll-mr-[4px]/foo",
-			"-scroll-mr-4/foo",
-			"-scroll-mr-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-mr',
+      'scroll-mr-4/foo',
+      'scroll-mr-[4px]/foo',
+      '-scroll-mr-4/foo',
+      '-scroll-mr-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-mb", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-mb', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-mb-4",
-				"scroll-mb-[4px]",
-				"-scroll-mb-4",
-				"-scroll-mb-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -6966,35 +6785,30 @@ test("scroll-mb", async () => {
     .scroll-mb-\\[4px\\] {
       scroll-margin-bottom: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-mb",
-			"scroll-mb-4/foo",
-			"scroll-mb-[4px]/foo",
-			"-scroll-mb-4/foo",
-			"-scroll-mb-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-mb',
+      'scroll-mb-4/foo',
+      'scroll-mb-[4px]/foo',
+      '-scroll-mb-4/foo',
+      '-scroll-mb-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-ml", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-ml', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-ml-4",
-				"scroll-ml-[4px]",
-				"-scroll-ml-4",
-				"-scroll-ml-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7014,35 +6828,30 @@ test("scroll-ml", async () => {
     .scroll-ml-\\[4px\\] {
       scroll-margin-left: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-ml",
-			"scroll-ml-4/foo",
-			"scroll-ml-[4px]/foo",
-			"-scroll-ml-4/foo",
-			"-scroll-ml-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-ml',
+      'scroll-ml-4/foo',
+      'scroll-ml-[4px]/foo',
+      '-scroll-ml-4/foo',
+      '-scroll-ml-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-p", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-p', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-p-4",
-				"scroll-p-[4px]",
-				"-scroll-p-4",
-				"-scroll-p-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7054,35 +6863,30 @@ test("scroll-p", async () => {
     .scroll-p-\\[4px\\] {
       scroll-padding: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-p",
-			"scroll-p-4/foo",
-			"scroll-p-[4px]/foo",
-			"-scroll-p-4/foo",
-			"-scroll-p-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-p',
+      'scroll-p-4/foo',
+      'scroll-p-[4px]/foo',
+      '-scroll-p-4/foo',
+      '-scroll-p-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-px", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-px', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-px-4",
-				"scroll-px-[4px]",
-				"-scroll-px-4",
-				"-scroll-px-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7094,35 +6898,30 @@ test("scroll-px", async () => {
     .scroll-px-\\[4px\\] {
       scroll-padding-inline: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-px",
-			"scroll-px-4/foo",
-			"scroll-px-[4px]/foo",
-			"-scroll-px-4/foo",
-			"-scroll-px-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-px',
+      'scroll-px-4/foo',
+      'scroll-px-[4px]/foo',
+      '-scroll-px-4/foo',
+      '-scroll-px-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-py", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-py', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-py-4",
-				"scroll-py-[4px]",
-				"-scroll-py-4",
-				"-scroll-py-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7134,35 +6933,30 @@ test("scroll-py", async () => {
     .scroll-py-\\[4px\\] {
       scroll-padding-block: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-py",
-			"scroll-py-4/foo",
-			"scroll-py-[4px]/foo",
-			"-scroll-py-4/foo",
-			"-scroll-py-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-py',
+      'scroll-py-4/foo',
+      'scroll-py-[4px]/foo',
+      '-scroll-py-4/foo',
+      '-scroll-py-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-ps", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-ps', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-ps-4",
-				"scroll-ps-[4px]",
-				"-scroll-ps-4",
-				"-scroll-ps-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7174,35 +6968,30 @@ test("scroll-ps", async () => {
     .scroll-ps-\\[4px\\] {
       scroll-padding-inline-start: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-ps",
-			"scroll-ps-4/foo",
-			"scroll-ps-[4px]/foo",
-			"-scroll-ps-4/foo",
-			"-scroll-ps-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-ps',
+      'scroll-ps-4/foo',
+      'scroll-ps-[4px]/foo',
+      '-scroll-ps-4/foo',
+      '-scroll-ps-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-pe", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-pe', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-pe-4",
-				"scroll-pe-[4px]",
-				"-scroll-pe-4",
-				"-scroll-pe-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7214,35 +7003,30 @@ test("scroll-pe", async () => {
     .scroll-pe-\\[4px\\] {
       scroll-padding-inline-end: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-pe",
-			"scroll-pe-4/foo",
-			"scroll-pe-[4px]/foo",
-			"-scroll-pe-4/foo",
-			"-scroll-pe-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-pe',
+      'scroll-pe-4/foo',
+      'scroll-pe-[4px]/foo',
+      '-scroll-pe-4/foo',
+      '-scroll-pe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-pt", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-pt', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-pt-4",
-				"scroll-pt-[4px]",
-				"-scroll-pt-4",
-				"-scroll-pt-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7254,35 +7038,30 @@ test("scroll-pt", async () => {
     .scroll-pt-\\[4px\\] {
       scroll-padding-top: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-pt",
-			"scroll-pt-4/foo",
-			"scroll-pt-[4px]/foo",
-			"-scroll-pt-4/foo",
-			"-scroll-pt-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-pt',
+      'scroll-pt-4/foo',
+      'scroll-pt-[4px]/foo',
+      '-scroll-pt-4/foo',
+      '-scroll-pt-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-pr", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-pr', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-pr-4",
-				"scroll-pr-[4px]",
-				"-scroll-pr-4",
-				"-scroll-pr-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7294,35 +7073,30 @@ test("scroll-pr", async () => {
     .scroll-pr-\\[4px\\] {
       scroll-padding-right: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-pr",
-			"scroll-pr-4/foo",
-			"scroll-pr-[4px]/foo",
-			"-scroll-pr-4/foo",
-			"-scroll-pr-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-pr',
+      'scroll-pr-4/foo',
+      'scroll-pr-[4px]/foo',
+      '-scroll-pr-4/foo',
+      '-scroll-pr-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-pb", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-pb', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-pb-4",
-				"scroll-pb-[4px]",
-				"-scroll-pb-4",
-				"-scroll-pb-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7334,35 +7108,30 @@ test("scroll-pb", async () => {
     .scroll-pb-\\[4px\\] {
       scroll-padding-bottom: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-pb",
-			"scroll-pb-4/foo",
-			"scroll-pb-[4px]/foo",
-			"-scroll-pb-4/foo",
-			"-scroll-pb-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-pb',
+      'scroll-pb-4/foo',
+      'scroll-pb-[4px]/foo',
+      '-scroll-pb-4/foo',
+      '-scroll-pb-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-pl", async () => {
-	expect(
-		await compileCss(
-			css`
+test('scroll-pl', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			[
-				"scroll-pl-4",
-				"scroll-pl-[4px]",
-				"-scroll-pl-4",
-				"-scroll-pl-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -7374,20 +7143,20 @@ test("scroll-pl", async () => {
     .scroll-pl-\\[4px\\] {
       scroll-padding-left: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"scroll-pl",
-			"scroll-pl-4/foo",
-			"scroll-pl-[4px]/foo",
-			"-scroll-pl-4/foo",
-			"-scroll-pl-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scroll-pl',
+      'scroll-pl-4/foo',
+      'scroll-pl-[4px]/foo',
+      '-scroll-pl-4/foo',
+      '-scroll-pl-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("list-style-position", async () => {
-	expect(await run(["list-inside", "list-outside"])).toMatchInlineSnapshot(`
+test('list-style-position', async () => {
+  expect(await run(['list-inside', 'list-outside'])).toMatchInlineSnapshot(`
     ".list-inside {
       list-style-position: inside;
     }
@@ -7395,26 +7164,15 @@ test("list-style-position", async () => {
     .list-outside {
       list-style-position: outside;
     }"
-  `);
-	expect(
-		await run([
-			"-list-inside",
-			"-list-outside",
-			"list-inside/foo",
-			"list-outside/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['-list-inside', '-list-outside', 'list-inside/foo', 'list-outside/foo']),
+  ).toEqual('')
+})
 
-test("list", async () => {
-	expect(
-		await run([
-			"list-none",
-			"list-disc",
-			"list-decimal",
-			"list-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('list', async () => {
+  expect(await run(['list-none', 'list-disc', 'list-decimal', 'list-[var(--value)]']))
+    .toMatchInlineSnapshot(`
       ".list-\\[var\\(--value\\)\\] {
         list-style-type: var(--value);
       }
@@ -7430,31 +7188,31 @@ test("list", async () => {
       .list-none {
         list-style-type: none;
       }"
-    `);
-	expect(
-		await run([
-			"-list-none",
-			"-list-disc",
-			"-list-decimal",
-			"-list-[var(--value)]",
-			"list-none/foo",
-			"list-disc/foo",
-			"list-decimal/foo",
-			"list-[var(--value)]/foo",
-		]),
-	).toEqual("");
+    `)
+  expect(
+    await run([
+      '-list-none',
+      '-list-disc',
+      '-list-decimal',
+      '-list-[var(--value)]',
+      'list-none/foo',
+      'list-disc/foo',
+      'list-decimal/foo',
+      'list-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --list-style-type-none: disc;
         }
         @tailwind utilities;
       `,
-			["list-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['list-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --list-style-type-none: disc;
     }
@@ -7462,13 +7220,11 @@ test("list", async () => {
     .list-none {
       list-style-type: var(--list-style-type-none);
     }"
-  `);
-});
+  `)
+})
 
-test("list-image", async () => {
-	expect(
-		await run(["list-image-none", "list-image-[var(--value)]"]),
-	).toMatchInlineSnapshot(`
+test('list-image', async () => {
+  expect(await run(['list-image-none', 'list-image-[var(--value)]'])).toMatchInlineSnapshot(`
     ".list-image-\\[var\\(--value\\)\\] {
       list-style-image: var(--value);
     }
@@ -7476,28 +7232,28 @@ test("list-image", async () => {
     .list-image-none {
       list-style-image: none;
     }"
-  `);
-	expect(
-		await run([
-			"list-image",
-			"-list-image-none",
-			"-list-image-[var(--value)]",
-			"list-image-none/foo",
-			"list-image-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'list-image',
+      '-list-image-none',
+      '-list-image-[var(--value)]',
+      'list-image-none/foo',
+      'list-image-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --list-style-image-none: url(../foo.png);
         }
         @tailwind utilities;
       `,
-			["list-image-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['list-image-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --list-style-image-none: url("../foo.png");
     }
@@ -7505,13 +7261,11 @@ test("list-image", async () => {
     .list-image-none {
       list-style-image: var(--list-style-image-none);
     }"
-  `);
-});
+  `)
+})
 
-test("appearance", async () => {
-	expect(
-		await run(["appearance-none", "appearance-auto"]),
-	).toMatchInlineSnapshot(`
+test('appearance', async () => {
+  expect(await run(['appearance-none', 'appearance-auto'])).toMatchInlineSnapshot(`
     ".appearance-auto {
       appearance: auto;
     }
@@ -7519,29 +7273,29 @@ test("appearance", async () => {
     .appearance-none {
       appearance: none;
     }"
-  `);
-	expect(
-		await run([
-			"appearance",
-			"-appearance-none",
-			"-appearance-auto",
-			"appearance-none/foo",
-			"appearance-auto/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'appearance',
+      '-appearance-none',
+      '-appearance-auto',
+      'appearance-none/foo',
+      'appearance-auto/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("color-scheme", async () => {
-	expect(
-		await run([
-			"scheme-normal",
-			"scheme-dark",
-			"scheme-light",
-			"scheme-light-dark",
-			"scheme-only-dark",
-			"scheme-only-light",
-		]),
-	).toMatchInlineSnapshot(`
+test('color-scheme', async () => {
+  expect(
+    await run([
+      'scheme-normal',
+      'scheme-dark',
+      'scheme-light',
+      'scheme-light-dark',
+      'scheme-only-dark',
+      'scheme-only-light',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".scheme-dark {
       color-scheme: dark;
     }
@@ -7565,40 +7319,40 @@ test("color-scheme", async () => {
     .scheme-only-light {
       color-scheme: light only;
     }"
-  `);
-	expect(
-		await run([
-			"scheme",
-			"-scheme-dark",
-			"-scheme-light",
-			"-scheme-light-dark",
-			"-scheme-dark-only",
-			"-scheme-light-only",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'scheme',
+      '-scheme-dark',
+      '-scheme-light',
+      '-scheme-light-dark',
+      '-scheme-dark-only',
+      '-scheme-light-only',
+    ]),
+  ).toEqual('')
+})
 
-test("columns", async () => {
-	expect(
-		await compileCss(
-			css`
+test('columns', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --container-3xs: 16rem;
           --container-7xl: 80rem;
         }
         @tailwind utilities;
       `,
-			[
-				"columns-auto",
-				"columns-3xs",
-				"columns-7xl",
-				"columns-4",
-				"columns-99",
-				"columns-[123]",
-				"columns-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'columns-auto',
+        'columns-3xs',
+        'columns-7xl',
+        'columns-4',
+        'columns-99',
+        'columns-[123]',
+        'columns-[var(--value)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --container-3xs: 16rem;
       --container-7xl: 80rem;
@@ -7631,36 +7385,36 @@ test("columns", async () => {
     .columns-auto {
       columns: auto;
     }"
-  `);
-	expect(
-		await run([
-			"columns",
-			"columns--4",
-			"-columns-4",
-			"-columns-[123]",
-			"-columns-[var(--value)]",
-			"columns-unknown",
-			"columns-auto/foo",
-			"columns-3xs/foo",
-			"columns-7xl/foo",
-			"columns-4/foo",
-			"columns-99/foo",
-			"columns-[123]/foo",
-			"columns-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'columns',
+      'columns--4',
+      '-columns-4',
+      '-columns-[123]',
+      '-columns-[var(--value)]',
+      'columns-unknown',
+      'columns-auto/foo',
+      'columns-3xs/foo',
+      'columns-7xl/foo',
+      'columns-4/foo',
+      'columns-99/foo',
+      'columns-[123]/foo',
+      'columns-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --columns-auto: 3;
         }
         @tailwind utilities;
       `,
-			["columns-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['columns-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --columns-auto: 3;
     }
@@ -7668,22 +7422,22 @@ test("columns", async () => {
     .columns-auto {
       columns: var(--columns-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("break-before", async () => {
-	expect(
-		await run([
-			"break-before-auto",
-			"break-before-avoid",
-			"break-before-all",
-			"break-before-avoid-page",
-			"break-before-page",
-			"break-before-left",
-			"break-before-right",
-			"break-before-column",
-		]),
-	).toMatchInlineSnapshot(`
+test('break-before', async () => {
+  expect(
+    await run([
+      'break-before-auto',
+      'break-before-avoid',
+      'break-before-all',
+      'break-before-avoid-page',
+      'break-before-page',
+      'break-before-left',
+      'break-before-right',
+      'break-before-column',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".break-before-all {
       break-before: all;
     }
@@ -7715,39 +7469,39 @@ test("break-before", async () => {
     .break-before-right {
       break-before: right;
     }"
-  `);
-	expect(
-		await run([
-			"break-before",
-			"-break-before-auto",
-			"-break-before-avoid",
-			"-break-before-all",
-			"-break-before-avoid-page",
-			"-break-before-page",
-			"-break-before-left",
-			"-break-before-right",
-			"-break-before-column",
-			"break-before-auto/foo",
-			"break-before-avoid/foo",
-			"break-before-all/foo",
-			"break-before-avoid-page/foo",
-			"break-before-page/foo",
-			"break-before-left/foo",
-			"break-before-right/foo",
-			"break-before-column/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'break-before',
+      '-break-before-auto',
+      '-break-before-avoid',
+      '-break-before-all',
+      '-break-before-avoid-page',
+      '-break-before-page',
+      '-break-before-left',
+      '-break-before-right',
+      '-break-before-column',
+      'break-before-auto/foo',
+      'break-before-avoid/foo',
+      'break-before-all/foo',
+      'break-before-avoid-page/foo',
+      'break-before-page/foo',
+      'break-before-left/foo',
+      'break-before-right/foo',
+      'break-before-column/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("break-inside", async () => {
-	expect(
-		await run([
-			"break-inside-auto",
-			"break-inside-avoid",
-			"break-inside-avoid-page",
-			"break-inside-avoid-column",
-		]),
-	).toMatchInlineSnapshot(`
+test('break-inside', async () => {
+  expect(
+    await run([
+      'break-inside-auto',
+      'break-inside-avoid',
+      'break-inside-avoid-page',
+      'break-inside-avoid-column',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".break-inside-auto {
       break-inside: auto;
     }
@@ -7763,35 +7517,35 @@ test("break-inside", async () => {
     .break-inside-avoid-page {
       break-inside: avoid-page;
     }"
-  `);
-	expect(
-		await run([
-			"break-inside",
-			"-break-inside-auto",
-			"-break-inside-avoid",
-			"-break-inside-avoid-page",
-			"-break-inside-avoid-column",
-			"break-inside-auto/foo",
-			"break-inside-avoid/foo",
-			"break-inside-avoid-page/foo",
-			"break-inside-avoid-column/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'break-inside',
+      '-break-inside-auto',
+      '-break-inside-avoid',
+      '-break-inside-avoid-page',
+      '-break-inside-avoid-column',
+      'break-inside-auto/foo',
+      'break-inside-avoid/foo',
+      'break-inside-avoid-page/foo',
+      'break-inside-avoid-column/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("break-after", async () => {
-	expect(
-		await run([
-			"break-after-auto",
-			"break-after-avoid",
-			"break-after-all",
-			"break-after-avoid-page",
-			"break-after-page",
-			"break-after-left",
-			"break-after-right",
-			"break-after-column",
-		]),
-	).toMatchInlineSnapshot(`
+test('break-after', async () => {
+  expect(
+    await run([
+      'break-after-auto',
+      'break-after-avoid',
+      'break-after-all',
+      'break-after-avoid-page',
+      'break-after-page',
+      'break-after-left',
+      'break-after-right',
+      'break-after-column',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".break-after-all {
       break-after: all;
     }
@@ -7823,40 +7577,40 @@ test("break-after", async () => {
     .break-after-right {
       break-after: right;
     }"
-  `);
-	expect(
-		await run([
-			"break-after",
-			"-break-after-auto",
-			"-break-after-avoid",
-			"-break-after-all",
-			"-break-after-avoid-page",
-			"-break-after-page",
-			"-break-after-left",
-			"-break-after-right",
-			"-break-after-column",
-			"break-after-auto/foo",
-			"break-after-avoid/foo",
-			"break-after-all/foo",
-			"break-after-avoid-page/foo",
-			"break-after-page/foo",
-			"break-after-left/foo",
-			"break-after-right/foo",
-			"break-after-column/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'break-after',
+      '-break-after-auto',
+      '-break-after-avoid',
+      '-break-after-all',
+      '-break-after-avoid-page',
+      '-break-after-page',
+      '-break-after-left',
+      '-break-after-right',
+      '-break-after-column',
+      'break-after-auto/foo',
+      'break-after-avoid/foo',
+      'break-after-all/foo',
+      'break-after-avoid-page/foo',
+      'break-after-page/foo',
+      'break-after-left/foo',
+      'break-after-right/foo',
+      'break-after-column/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("auto-cols", async () => {
-	expect(
-		await run([
-			"auto-cols-auto",
-			"auto-cols-min",
-			"auto-cols-max",
-			"auto-cols-fr",
-			"auto-cols-[2fr]",
-		]),
-	).toMatchInlineSnapshot(`
+test('auto-cols', async () => {
+  expect(
+    await run([
+      'auto-cols-auto',
+      'auto-cols-min',
+      'auto-cols-max',
+      'auto-cols-fr',
+      'auto-cols-[2fr]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".auto-cols-\\[2fr\\] {
       grid-auto-columns: 2fr;
     }
@@ -7876,31 +7630,31 @@ test("auto-cols", async () => {
     .auto-cols-min {
       grid-auto-columns: min-content;
     }"
-  `);
-	expect(
-		await run([
-			"auto-cols",
-			"-auto-cols-auto",
-			"-auto-cols-[2fr]",
-			"auto-cols-auto/foo",
-			"auto-cols-min/foo",
-			"auto-cols-max/foo",
-			"auto-cols-fr/foo",
-			"auto-cols-[2fr]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'auto-cols',
+      '-auto-cols-auto',
+      '-auto-cols-[2fr]',
+      'auto-cols-auto/foo',
+      'auto-cols-min/foo',
+      'auto-cols-max/foo',
+      'auto-cols-fr/foo',
+      'auto-cols-[2fr]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-auto-columns-auto: 2fr;
         }
         @tailwind utilities;
       `,
-			["auto-cols-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['auto-cols-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-auto-columns-auto: 2fr;
     }
@@ -7908,19 +7662,19 @@ test("auto-cols", async () => {
     .auto-cols-auto {
       grid-auto-columns: var(--grid-auto-columns-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("grid-flow", async () => {
-	expect(
-		await run([
-			"grid-flow-row",
-			"grid-flow-col",
-			"grid-flow-dense",
-			"grid-flow-row-dense",
-			"grid-flow-col-dense",
-		]),
-	).toMatchInlineSnapshot(`
+test('grid-flow', async () => {
+  expect(
+    await run([
+      'grid-flow-row',
+      'grid-flow-col',
+      'grid-flow-dense',
+      'grid-flow-row-dense',
+      'grid-flow-col-dense',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".grid-flow-col {
       grid-auto-flow: column;
     }
@@ -7940,34 +7694,34 @@ test("grid-flow", async () => {
     .grid-flow-row-dense {
       grid-auto-flow: row dense;
     }"
-  `);
-	expect(
-		await run([
-			"grid-flow",
-			"-grid-flow-row",
-			"-grid-flow-col",
-			"-grid-flow-dense",
-			"-grid-flow-row-dense",
-			"-grid-flow-col-dense",
-			"grid-flow-row/foo",
-			"grid-flow-col/foo",
-			"grid-flow-dense/foo",
-			"grid-flow-row-dense/foo",
-			"grid-flow-col-dense/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'grid-flow',
+      '-grid-flow-row',
+      '-grid-flow-col',
+      '-grid-flow-dense',
+      '-grid-flow-row-dense',
+      '-grid-flow-col-dense',
+      'grid-flow-row/foo',
+      'grid-flow-col/foo',
+      'grid-flow-dense/foo',
+      'grid-flow-row-dense/foo',
+      'grid-flow-col-dense/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("auto-rows", async () => {
-	expect(
-		await run([
-			"auto-rows-auto",
-			"auto-rows-min",
-			"auto-rows-max",
-			"auto-rows-fr",
-			"auto-rows-[2fr]",
-		]),
-	).toMatchInlineSnapshot(`
+test('auto-rows', async () => {
+  expect(
+    await run([
+      'auto-rows-auto',
+      'auto-rows-min',
+      'auto-rows-max',
+      'auto-rows-fr',
+      'auto-rows-[2fr]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".auto-rows-\\[2fr\\] {
       grid-auto-rows: 2fr;
     }
@@ -7987,31 +7741,31 @@ test("auto-rows", async () => {
     .auto-rows-min {
       grid-auto-rows: min-content;
     }"
-  `);
-	expect(
-		await run([
-			"auto-rows",
-			"-auto-rows-auto",
-			"-auto-rows-[2fr]",
-			"auto-rows-auto/foo",
-			"auto-rows-min/foo",
-			"auto-rows-max/foo",
-			"auto-rows-fr/foo",
-			"auto-rows-[2fr]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'auto-rows',
+      '-auto-rows-auto',
+      '-auto-rows-[2fr]',
+      'auto-rows-auto/foo',
+      'auto-rows-min/foo',
+      'auto-rows-max/foo',
+      'auto-rows-fr/foo',
+      'auto-rows-[2fr]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-auto-rows-auto: 2fr;
         }
         @tailwind utilities;
       `,
-			["auto-rows-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['auto-rows-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-auto-rows-auto: 2fr;
     }
@@ -8019,19 +7773,19 @@ test("auto-rows", async () => {
     .auto-rows-auto {
       grid-auto-rows: var(--grid-auto-rows-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("grid-cols", async () => {
-	expect(
-		await run([
-			"grid-cols-none",
-			"grid-cols-subgrid",
-			"grid-cols-12",
-			"grid-cols-99",
-			"grid-cols-[123]",
-		]),
-	).toMatchInlineSnapshot(`
+test('grid-cols', async () => {
+  expect(
+    await run([
+      'grid-cols-none',
+      'grid-cols-subgrid',
+      'grid-cols-12',
+      'grid-cols-99',
+      'grid-cols-[123]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
@@ -8051,36 +7805,36 @@ test("grid-cols", async () => {
     .grid-cols-subgrid {
       grid-template-columns: subgrid;
     }"
-  `);
-	expect(
-		await run([
-			"grid-cols",
-			"grid-cols-0",
-			"-grid-cols-none",
-			"-grid-cols-subgrid",
-			"grid-cols--12",
-			"-grid-cols-12",
-			"-grid-cols-[123]",
-			"grid-cols-unknown",
-			"grid-cols-none/foo",
-			"grid-cols-subgrid/foo",
-			"grid-cols-12/foo",
-			"grid-cols-99/foo",
-			"grid-cols-[123]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'grid-cols',
+      'grid-cols-0',
+      '-grid-cols-none',
+      '-grid-cols-subgrid',
+      'grid-cols--12',
+      '-grid-cols-12',
+      '-grid-cols-[123]',
+      'grid-cols-unknown',
+      'grid-cols-none/foo',
+      'grid-cols-subgrid/foo',
+      'grid-cols-12/foo',
+      'grid-cols-99/foo',
+      'grid-cols-[123]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-template-columns-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-			["grid-cols-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['grid-cols-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-template-columns-none: 200px 1fr;
     }
@@ -8088,19 +7842,19 @@ test("grid-cols", async () => {
     .grid-cols-none {
       grid-template-columns: var(--grid-template-columns-none);
     }"
-  `);
-});
+  `)
+})
 
-test("grid-rows", async () => {
-	expect(
-		await run([
-			"grid-rows-none",
-			"grid-rows-subgrid",
-			"grid-rows-12",
-			"grid-rows-99",
-			"grid-rows-[123]",
-		]),
-	).toMatchInlineSnapshot(`
+test('grid-rows', async () => {
+  expect(
+    await run([
+      'grid-rows-none',
+      'grid-rows-subgrid',
+      'grid-rows-12',
+      'grid-rows-99',
+      'grid-rows-[123]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".grid-rows-12 {
       grid-template-rows: repeat(12, minmax(0, 1fr));
     }
@@ -8120,36 +7874,36 @@ test("grid-rows", async () => {
     .grid-rows-subgrid {
       grid-template-rows: subgrid;
     }"
-  `);
-	expect(
-		await run([
-			"grid-rows",
-			"grid-rows-0",
-			"-grid-rows-none",
-			"-grid-rows-subgrid",
-			"grid-rows--12",
-			"-grid-rows-12",
-			"-grid-rows-[123]",
-			"grid-rows-unknown",
-			"grid-rows-none/foo",
-			"grid-rows-subgrid/foo",
-			"grid-rows-12/foo",
-			"grid-rows-99/foo",
-			"grid-rows-[123]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'grid-rows',
+      'grid-rows-0',
+      '-grid-rows-none',
+      '-grid-rows-subgrid',
+      'grid-rows--12',
+      '-grid-rows-12',
+      '-grid-rows-[123]',
+      'grid-rows-unknown',
+      'grid-rows-none/foo',
+      'grid-rows-subgrid/foo',
+      'grid-rows-12/foo',
+      'grid-rows-99/foo',
+      'grid-rows-[123]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --grid-template-rows-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-			["grid-rows-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['grid-rows-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --grid-template-rows-none: 200px 1fr;
     }
@@ -8157,13 +7911,12 @@ test("grid-rows", async () => {
     .grid-rows-none {
       grid-template-rows: var(--grid-template-rows-none);
     }"
-  `);
-});
+  `)
+})
 
-test("flex-direction", async () => {
-	expect(
-		await run(["flex-row", "flex-row-reverse", "flex-col", "flex-col-reverse"]),
-	).toMatchInlineSnapshot(`
+test('flex-direction', async () => {
+  expect(await run(['flex-row', 'flex-row-reverse', 'flex-col', 'flex-col-reverse']))
+    .toMatchInlineSnapshot(`
       ".flex-col {
         flex-direction: column;
       }
@@ -8179,25 +7932,23 @@ test("flex-direction", async () => {
       .flex-row-reverse {
         flex-direction: row-reverse;
       }"
-    `);
-	expect(
-		await run([
-			"-flex-row",
-			"-flex-row-reverse",
-			"-flex-col",
-			"-flex-col-reverse",
-			"flex-row/foo",
-			"flex-row-reverse/foo",
-			"flex-col/foo",
-			"flex-col-reverse/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-flex-row',
+      '-flex-row-reverse',
+      '-flex-col',
+      '-flex-col-reverse',
+      'flex-row/foo',
+      'flex-row-reverse/foo',
+      'flex-col/foo',
+      'flex-col-reverse/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("flex-wrap", async () => {
-	expect(
-		await run(["flex-wrap", "flex-wrap-reverse", "flex-nowrap"]),
-	).toMatchInlineSnapshot(`
+test('flex-wrap', async () => {
+  expect(await run(['flex-wrap', 'flex-wrap-reverse', 'flex-nowrap'])).toMatchInlineSnapshot(`
     ".flex-nowrap {
       flex-wrap: nowrap;
     }
@@ -8209,34 +7960,34 @@ test("flex-wrap", async () => {
     .flex-wrap-reverse {
       flex-wrap: wrap-reverse;
     }"
-  `);
-	expect(
-		await run([
-			"-flex-wrap",
-			"-flex-wrap-reverse",
-			"-flex-nowrap",
-			"flex-wrap/foo",
-			"flex-wrap-reverse/foo",
-			"flex-nowrap/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-flex-wrap',
+      '-flex-wrap-reverse',
+      '-flex-nowrap',
+      'flex-wrap/foo',
+      'flex-wrap-reverse/foo',
+      'flex-nowrap/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("place-content", async () => {
-	expect(
-		await run([
-			"place-content-center",
-			"place-content-center-safe",
-			"place-content-start",
-			"place-content-end",
-			"place-content-end-safe",
-			"place-content-between",
-			"place-content-around",
-			"place-content-evenly",
-			"place-content-baseline",
-			"place-content-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('place-content', async () => {
+  expect(
+    await run([
+      'place-content-center',
+      'place-content-center-safe',
+      'place-content-start',
+      'place-content-end',
+      'place-content-end-safe',
+      'place-content-between',
+      'place-content-around',
+      'place-content-evenly',
+      'place-content-baseline',
+      'place-content-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".place-content-around {
       place-content: space-around;
     }
@@ -8276,42 +8027,42 @@ test("place-content", async () => {
     .place-content-stretch {
       place-content: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"place-content",
-			"-place-content-center",
-			"-place-content-start",
-			"-place-content-end",
-			"-place-content-between",
-			"-place-content-around",
-			"-place-content-evenly",
-			"-place-content-baseline",
-			"-place-content-stretch",
-			"place-content-center/foo",
-			"place-content-start/foo",
-			"place-content-end/foo",
-			"place-content-between/foo",
-			"place-content-around/foo",
-			"place-content-evenly/foo",
-			"place-content-baseline/foo",
-			"place-content-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'place-content',
+      '-place-content-center',
+      '-place-content-start',
+      '-place-content-end',
+      '-place-content-between',
+      '-place-content-around',
+      '-place-content-evenly',
+      '-place-content-baseline',
+      '-place-content-stretch',
+      'place-content-center/foo',
+      'place-content-start/foo',
+      'place-content-end/foo',
+      'place-content-between/foo',
+      'place-content-around/foo',
+      'place-content-evenly/foo',
+      'place-content-baseline/foo',
+      'place-content-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("place-items", async () => {
-	expect(
-		await run([
-			"place-items-start",
-			"place-items-end",
-			"place-items-end-safe",
-			"place-items-center",
-			"place-items-center-safe",
-			"place-items-baseline",
-			"place-items-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('place-items', async () => {
+  expect(
+    await run([
+      'place-items-start',
+      'place-items-end',
+      'place-items-end-safe',
+      'place-items-center',
+      'place-items-center-safe',
+      'place-items-baseline',
+      'place-items-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".place-items-baseline {
       place-items: baseline;
     }
@@ -8339,40 +8090,40 @@ test("place-items", async () => {
     .place-items-stretch {
       place-items: stretch stretch;
     }"
-  `);
-	expect(
-		await run([
-			"place-items",
-			"-place-items-start",
-			"-place-items-end",
-			"-place-items-center",
-			"-place-items-baseline",
-			"-place-items-stretch",
-			"place-items-start/foo",
-			"place-items-end/foo",
-			"place-items-center/foo",
-			"place-items-baseline/foo",
-			"place-items-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'place-items',
+      '-place-items-start',
+      '-place-items-end',
+      '-place-items-center',
+      '-place-items-baseline',
+      '-place-items-stretch',
+      'place-items-start/foo',
+      'place-items-end/foo',
+      'place-items-center/foo',
+      'place-items-baseline/foo',
+      'place-items-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("align-content", async () => {
-	expect(
-		await run([
-			"content-normal",
-			"content-center",
-			"content-center-safe",
-			"content-start",
-			"content-end",
-			"content-end-safe",
-			"content-between",
-			"content-around",
-			"content-evenly",
-			"content-baseline",
-			"content-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('align-content', async () => {
+  expect(
+    await run([
+      'content-normal',
+      'content-center',
+      'content-center-safe',
+      'content-start',
+      'content-end',
+      'content-end-safe',
+      'content-between',
+      'content-around',
+      'content-evenly',
+      'content-baseline',
+      'content-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".content-around {
       align-content: space-around;
     }
@@ -8416,45 +8167,45 @@ test("align-content", async () => {
     .content-stretch {
       align-content: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"content",
-			"-content-normal",
-			"-content-center",
-			"-content-start",
-			"-content-end",
-			"-content-between",
-			"-content-around",
-			"-content-evenly",
-			"-content-baseline",
-			"-content-stretch",
-			"content-normal/foo",
-			"content-center/foo",
-			"content-start/foo",
-			"content-end/foo",
-			"content-between/foo",
-			"content-around/foo",
-			"content-evenly/foo",
-			"content-baseline/foo",
-			"content-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'content',
+      '-content-normal',
+      '-content-center',
+      '-content-start',
+      '-content-end',
+      '-content-between',
+      '-content-around',
+      '-content-evenly',
+      '-content-baseline',
+      '-content-stretch',
+      'content-normal/foo',
+      'content-center/foo',
+      'content-start/foo',
+      'content-end/foo',
+      'content-between/foo',
+      'content-around/foo',
+      'content-evenly/foo',
+      'content-baseline/foo',
+      'content-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("items", async () => {
-	expect(
-		await run([
-			"items-start",
-			"items-end",
-			"items-end-safe",
-			"items-center",
-			"items-center-safe",
-			"items-baseline",
-			"items-baseline-last",
-			"items-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('items', async () => {
+  expect(
+    await run([
+      'items-start',
+      'items-end',
+      'items-end-safe',
+      'items-center',
+      'items-center-safe',
+      'items-baseline',
+      'items-baseline-last',
+      'items-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".items-baseline {
       align-items: baseline;
     }
@@ -8486,41 +8237,41 @@ test("items", async () => {
     .items-stretch {
       align-items: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"items",
-			"-items-start",
-			"-items-end",
-			"-items-center",
-			"-items-baseline",
-			"-items-first-baseline",
-			"-items-last-baseline",
-			"-items-stretch",
-			"items-start/foo",
-			"items-end/foo",
-			"items-center/foo",
-			"items-baseline/foo",
-			"items-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'items',
+      '-items-start',
+      '-items-end',
+      '-items-center',
+      '-items-baseline',
+      '-items-first-baseline',
+      '-items-last-baseline',
+      '-items-stretch',
+      'items-start/foo',
+      'items-end/foo',
+      'items-center/foo',
+      'items-baseline/foo',
+      'items-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("justify", async () => {
-	expect(
-		await run([
-			"justify-normal",
-			"justify-start",
-			"justify-end",
-			"justify-end-safe",
-			"justify-center",
-			"justify-center-safe",
-			"justify-between",
-			"justify-around",
-			"justify-evenly",
-			"justify-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('justify', async () => {
+  expect(
+    await run([
+      'justify-normal',
+      'justify-start',
+      'justify-end',
+      'justify-end-safe',
+      'justify-center',
+      'justify-center-safe',
+      'justify-between',
+      'justify-around',
+      'justify-evenly',
+      'justify-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".justify-around {
       justify-content: space-around;
     }
@@ -8560,41 +8311,41 @@ test("justify", async () => {
     .justify-stretch {
       justify-content: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"justify",
-			"-justify-normal",
-			"-justify-start",
-			"-justify-end",
-			"-justify-center",
-			"-justify-between",
-			"-justify-around",
-			"-justify-evenly",
-			"-justify-stretch",
-			"justify-normal/foo",
-			"justify-start/foo",
-			"justify-end/foo",
-			"justify-center/foo",
-			"justify-between/foo",
-			"justify-around/foo",
-			"justify-evenly/foo",
-			"justify-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'justify',
+      '-justify-normal',
+      '-justify-start',
+      '-justify-end',
+      '-justify-center',
+      '-justify-between',
+      '-justify-around',
+      '-justify-evenly',
+      '-justify-stretch',
+      'justify-normal/foo',
+      'justify-start/foo',
+      'justify-end/foo',
+      'justify-center/foo',
+      'justify-between/foo',
+      'justify-around/foo',
+      'justify-evenly/foo',
+      'justify-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("justify-items", async () => {
-	expect(
-		await run([
-			"justify-items-start",
-			"justify-items-end",
-			"justify-items-end-safe",
-			"justify-items-center",
-			"justify-items-center-safe",
-			"justify-items-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('justify-items', async () => {
+  expect(
+    await run([
+      'justify-items-start',
+      'justify-items-end',
+      'justify-items-end-safe',
+      'justify-items-center',
+      'justify-items-center-safe',
+      'justify-items-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".justify-items-center {
       justify-items: center;
     }
@@ -8618,34 +8369,34 @@ test("justify-items", async () => {
     .justify-items-stretch {
       justify-items: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"justify-items",
-			"-justify-items-start",
-			"-justify-items-end",
-			"-justify-items-center",
-			"-justify-items-stretch",
-			"justify-items-start/foo",
-			"justify-items-end/foo",
-			"justify-items-center/foo",
-			"justify-items-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'justify-items',
+      '-justify-items-start',
+      '-justify-items-end',
+      '-justify-items-center',
+      '-justify-items-stretch',
+      'justify-items-start/foo',
+      'justify-items-end/foo',
+      'justify-items-center/foo',
+      'justify-items-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("gap", async () => {
-	expect(
-		await compileCss(
-			css`
+test('gap', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["gap-4", "gap-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['gap-4', 'gap-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -8657,24 +8408,22 @@ test("gap", async () => {
     .gap-\\[4px\\] {
       gap: 4px;
     }"
-  `);
-	expect(
-		await run(["gap", "-gap-4", "-gap-[4px]", "gap-4/foo", "gap-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['gap', '-gap-4', '-gap-[4px]', 'gap-4/foo', 'gap-[4px]/foo'])).toEqual('')
+})
 
-test("gap-x", async () => {
-	expect(
-		await compileCss(
-			css`
+test('gap-x', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["gap-x-4", "gap-x-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['gap-x-4', 'gap-x-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -8686,30 +8435,24 @@ test("gap-x", async () => {
     .gap-x-\\[4px\\] {
       column-gap: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"gap-x",
-			"-gap-x-4",
-			"-gap-x-[4px]",
-			"gap-x-4/foo",
-			"gap-x-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['gap-x', '-gap-x-4', '-gap-x-[4px]', 'gap-x-4/foo', 'gap-x-[4px]/foo']),
+  ).toEqual('')
+})
 
-test("gap-y", async () => {
-	expect(
-		await compileCss(
-			css`
+test('gap-y', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["gap-y-4", "gap-y-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['gap-y-4', 'gap-y-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
     }
@@ -8721,30 +8464,24 @@ test("gap-y", async () => {
     .gap-y-\\[4px\\] {
       row-gap: 4px;
     }"
-  `);
-	expect(
-		await run([
-			"gap-y",
-			"-gap-y-4",
-			"-gap-y-[4px]",
-			"gap-y-4/foo",
-			"gap-y-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['gap-y', '-gap-y-4', '-gap-y-[4px]', 'gap-y-4/foo', 'gap-y-[4px]/foo']),
+  ).toEqual('')
+})
 
-test("space-x", async () => {
-	expect(
-		await compileCss(
-			css`
+test('space-x', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["space-x-4", "space-x-[4px]", "-space-x-4"],
-		),
-	).toMatchInlineSnapshot(`
+      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -8780,29 +8517,22 @@ test("space-x", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"space-x",
-			"space-x-4/foo",
-			"space-x-[4px]/foo",
-			"-space-x-4/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['space-x', 'space-x-4/foo', 'space-x-[4px]/foo', '-space-x-4/foo'])).toEqual('')
+})
 
-test("space-y", async () => {
-	expect(
-		await compileCss(
-			css`
+test('space-y', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-			["space-y-4", "space-y-[4px]", "-space-y-4"],
-		),
-	).toMatchInlineSnapshot(`
+      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -8838,19 +8568,12 @@ test("space-y", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(
-		await run([
-			"space-y",
-			"space-y-4/foo",
-			"space-y-[4px]/foo",
-			"-space-y-4/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['space-y', 'space-y-4/foo', 'space-y-[4px]/foo', '-space-y-4/foo'])).toEqual('')
+})
 
-test("space-x-reverse", async () => {
-	expect(await run(["space-x-reverse"])).toMatchInlineSnapshot(`
+test('space-x-reverse', async () => {
+  expect(await run(['space-x-reverse'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -8868,12 +8591,12 @@ test("space-x-reverse", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(await run(["-space-x-reverse", "space-x-reverse/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-space-x-reverse', 'space-x-reverse/foo'])).toEqual('')
+})
 
-test("space-y-reverse", async () => {
-	expect(await run(["space-y-reverse"])).toMatchInlineSnapshot(`
+test('space-y-reverse', async () => {
+  expect(await run(['space-y-reverse'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -8891,19 +8614,19 @@ test("space-y-reverse", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(await run(["-space-y-reverse", "space-y-reverse/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-space-y-reverse', 'space-y-reverse/foo'])).toEqual('')
+})
 
-test("divide-x", async () => {
-	expect(
-		await compileCss(
-			css`
+test('divide-x', async () => {
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			["divide-x", "divide-x-4", "divide-x-123", "divide-x-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -8952,34 +8675,34 @@ test("divide-x", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(
-		await run([
-			"-divide-x",
-			"divide-x--4",
-			"-divide-x-4",
-			"-divide-x-123",
-			"divide-x-unknown",
-			"divide-x/foo",
-			"divide-x-4/foo",
-			"divide-x-123/foo",
-			"divide-x-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-divide-x',
+      'divide-x--4',
+      '-divide-x-4',
+      '-divide-x-123',
+      'divide-x-unknown',
+      'divide-x/foo',
+      'divide-x-4/foo',
+      'divide-x-123/foo',
+      'divide-x-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("divide-x with custom default border width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('divide-x with custom default border width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-			["divide-x"],
-		),
-	).toMatchInlineSnapshot(`
+      ['divide-x'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -9007,19 +8730,19 @@ test("divide-x with custom default border width", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(await run(["divide-x/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['divide-x/foo'])).toEqual('')
+})
 
-test("divide-y", async () => {
-	expect(
-		await compileCss(
-			css`
+test('divide-y', async () => {
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			["divide-y", "divide-y-4", "divide-y-123", "divide-y-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -9072,34 +8795,34 @@ test("divide-y", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(
-		await run([
-			"-divide-y",
-			"divide-y--4",
-			"-divide-y-4",
-			"-divide-y-123",
-			"divide-y-unknown",
-			"divide-y/foo",
-			"divide-y-4/foo",
-			"divide-y-123/foo",
-			"divide-y-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-divide-y',
+      'divide-y--4',
+      '-divide-y-4',
+      '-divide-y-123',
+      'divide-y-unknown',
+      'divide-y/foo',
+      'divide-y-4/foo',
+      'divide-y-123/foo',
+      'divide-y-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("divide-y with custom default border width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('divide-y with custom default border width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-			["divide-y"],
-		),
-	).toMatchInlineSnapshot(`
+      ['divide-y'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -9128,12 +8851,12 @@ test("divide-y with custom default border width", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(await run(["divide-y/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['divide-y/foo'])).toEqual('')
+})
 
-test("divide-x-reverse", async () => {
-	expect(await run(["divide-x-reverse"])).toMatchInlineSnapshot(`
+test('divide-x-reverse', async () => {
+  expect(await run(['divide-x-reverse'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -9151,12 +8874,12 @@ test("divide-x-reverse", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(await run(["-divide-x-reverse", "divide-x-reverse/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-divide-x-reverse', 'divide-x-reverse/foo'])).toEqual('')
+})
 
-test("divide-y-reverse", async () => {
-	expect(await run(["divide-y-reverse"])).toMatchInlineSnapshot(`
+test('divide-y-reverse', async () => {
+  expect(await run(['divide-y-reverse'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -9174,20 +8897,14 @@ test("divide-y-reverse", async () => {
       inherits: false;
       initial-value: 0;
     }"
-  `);
-	expect(await run(["-divide-y-reverse", "divide-y-reverse/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-divide-y-reverse', 'divide-y-reverse/foo'])).toEqual('')
+})
 
-test("divide-style", async () => {
-	expect(
-		await run([
-			"divide-solid",
-			"divide-dashed",
-			"divide-dotted",
-			"divide-double",
-			"divide-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('divide-style', async () => {
+  expect(
+    await run(['divide-solid', 'divide-dashed', 'divide-dotted', 'divide-double', 'divide-none']),
+  ).toMatchInlineSnapshot(`
     ":where(.divide-dashed > :not(:last-child)) {
       --tw-border-style: dashed;
       border-style: dashed;
@@ -9212,56 +8929,56 @@ test("divide-style", async () => {
       --tw-border-style: solid;
       border-style: solid;
     }"
-  `);
-	expect(
-		await run([
-			"divide",
-			"-divide-solid",
-			"-divide-dashed",
-			"-divide-dotted",
-			"-divide-double",
-			"-divide-none",
-			"divide-solid/foo",
-			"divide-dashed/foo",
-			"divide-dotted/foo",
-			"divide-double/foo",
-			"divide-none/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'divide',
+      '-divide-solid',
+      '-divide-dashed',
+      '-divide-dotted',
+      '-divide-double',
+      '-divide-none',
+      'divide-solid/foo',
+      'divide-dashed/foo',
+      'divide-dotted/foo',
+      'divide-double/foo',
+      'divide-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("accent", async () => {
-	expect(
-		await compileCss(
-			css`
+test('accent', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --accent-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				"accent-red-500",
-				"accent-red-500/50",
-				"accent-red-500/2.25",
-				"accent-red-500/2.5",
-				"accent-red-500/2.75",
-				"accent-red-500/[0.5]",
-				"accent-red-500/[50%]",
-				"accent-blue-500",
-				"accent-current",
-				"accent-current/50",
-				"accent-current/[0.5]",
-				"accent-current/[50%]",
-				"accent-inherit",
-				"accent-transparent",
-				"accent-[#0088cc]",
-				"accent-[#0088cc]/50",
-				"accent-[#0088cc]/[0.5]",
-				"accent-[#0088cc]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'accent-red-500',
+        'accent-red-500/50',
+        'accent-red-500/2.25',
+        'accent-red-500/2.5',
+        'accent-red-500/2.75',
+        'accent-red-500/[0.5]',
+        'accent-red-500/[50%]',
+        'accent-blue-500',
+        'accent-current',
+        'accent-current/50',
+        'accent-current/[0.5]',
+        'accent-current/[50%]',
+        'accent-inherit',
+        'accent-transparent',
+        'accent-[#0088cc]',
+        'accent-[#0088cc]/50',
+        'accent-[#0088cc]/[0.5]',
+        'accent-[#0088cc]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --accent-color-blue-500: #3b82f6;
@@ -9380,76 +9097,76 @@ test("accent", async () => {
     .accent-transparent {
       accent-color: #0000;
     }"
-  `);
-	expect(
-		await run([
-			"accent",
-			"-accent-red-500",
-			"accent-red-500/-50",
-			"-accent-red-500/50",
-			"-accent-red-500/[0.5]",
-			"-accent-red-500/[50%]",
-			"-accent-current",
-			"-accent-current/50",
-			"-accent-current/[0.5]",
-			"-accent-current/[50%]",
-			"-accent-inherit",
-			"-accent-transparent",
-			"accent-[#0088cc]/-50",
-			"-accent-[#0088cc]",
-			"-accent-[#0088cc]/50",
-			"-accent-[#0088cc]/[0.5]",
-			"-accent-[#0088cc]/[50%]",
-			"accent-red-500/foo",
-			"accent-red-500/50/foo",
-			"accent-red-500/[0.5]/foo",
-			"accent-red-500/[50%]/foo",
-			"accent-current/foo",
-			"accent-current/50/foo",
-			"accent-current/[0.5]/foo",
-			"accent-current/[50%]/foo",
-			"accent-inherit/foo",
-			"accent-transparent/foo",
-			"accent-[#0088cc]/foo",
-			"accent-[#0088cc]/50/foo",
-			"accent-[#0088cc]/[0.5]/foo",
-			"accent-[#0088cc]/[50%]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'accent',
+      '-accent-red-500',
+      'accent-red-500/-50',
+      '-accent-red-500/50',
+      '-accent-red-500/[0.5]',
+      '-accent-red-500/[50%]',
+      '-accent-current',
+      '-accent-current/50',
+      '-accent-current/[0.5]',
+      '-accent-current/[50%]',
+      '-accent-inherit',
+      '-accent-transparent',
+      'accent-[#0088cc]/-50',
+      '-accent-[#0088cc]',
+      '-accent-[#0088cc]/50',
+      '-accent-[#0088cc]/[0.5]',
+      '-accent-[#0088cc]/[50%]',
+      'accent-red-500/foo',
+      'accent-red-500/50/foo',
+      'accent-red-500/[0.5]/foo',
+      'accent-red-500/[50%]/foo',
+      'accent-current/foo',
+      'accent-current/50/foo',
+      'accent-current/[0.5]/foo',
+      'accent-current/[50%]/foo',
+      'accent-inherit/foo',
+      'accent-transparent/foo',
+      'accent-[#0088cc]/foo',
+      'accent-[#0088cc]/50/foo',
+      'accent-[#0088cc]/[0.5]/foo',
+      'accent-[#0088cc]/[50%]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("caret", async () => {
-	expect(
-		await compileCss(
-			css`
+test('caret', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --caret-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				"caret-red-500",
-				"caret-red-500/50",
-				"caret-red-500/2.25",
-				"caret-red-500/2.5",
-				"caret-red-500/2.75",
-				"caret-red-500/[0.5]",
-				"caret-red-500/[50%]",
-				"caret-blue-500",
-				"caret-current",
-				"caret-current/50",
-				"caret-current/[0.5]",
-				"caret-current/[50%]",
-				"caret-inherit",
-				"caret-transparent",
-				"caret-[#0088cc]",
-				"caret-[#0088cc]/50",
-				"caret-[#0088cc]/[0.5]",
-				"caret-[#0088cc]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'caret-red-500',
+        'caret-red-500/50',
+        'caret-red-500/2.25',
+        'caret-red-500/2.5',
+        'caret-red-500/2.75',
+        'caret-red-500/[0.5]',
+        'caret-red-500/[50%]',
+        'caret-blue-500',
+        'caret-current',
+        'caret-current/50',
+        'caret-current/[0.5]',
+        'caret-current/[50%]',
+        'caret-inherit',
+        'caret-transparent',
+        'caret-[#0088cc]',
+        'caret-[#0088cc]/50',
+        'caret-[#0088cc]/[0.5]',
+        'caret-[#0088cc]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --caret-color-blue-500: #3b82f6;
@@ -9568,74 +9285,74 @@ test("caret", async () => {
     .caret-transparent {
       caret-color: #0000;
     }"
-  `);
-	expect(
-		await run([
-			"caret",
-			"-caret-red-500",
-			"-caret-red-500/50",
-			"-caret-red-500/[0.5]",
-			"-caret-red-500/[50%]",
-			"-caret-current",
-			"-caret-current/50",
-			"-caret-current/[0.5]",
-			"-caret-current/[50%]",
-			"-caret-inherit",
-			"-caret-transparent",
-			"-caret-[#0088cc]",
-			"-caret-[#0088cc]/50",
-			"-caret-[#0088cc]/[0.5]",
-			"-caret-[#0088cc]/[50%]",
-			"caret-red-500/foo",
-			"caret-red-500/50/foo",
-			"caret-red-500/[0.5]/foo",
-			"caret-red-500/[50%]/foo",
-			"caret-current/foo",
-			"caret-current/50/foo",
-			"caret-current/[0.5]/foo",
-			"caret-current/[50%]/foo",
-			"caret-inherit/foo",
-			"caret-transparent/foo",
-			"caret-[#0088cc]/foo",
-			"caret-[#0088cc]/50/foo",
-			"caret-[#0088cc]/[0.5]/foo",
-			"caret-[#0088cc]/[50%]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'caret',
+      '-caret-red-500',
+      '-caret-red-500/50',
+      '-caret-red-500/[0.5]',
+      '-caret-red-500/[50%]',
+      '-caret-current',
+      '-caret-current/50',
+      '-caret-current/[0.5]',
+      '-caret-current/[50%]',
+      '-caret-inherit',
+      '-caret-transparent',
+      '-caret-[#0088cc]',
+      '-caret-[#0088cc]/50',
+      '-caret-[#0088cc]/[0.5]',
+      '-caret-[#0088cc]/[50%]',
+      'caret-red-500/foo',
+      'caret-red-500/50/foo',
+      'caret-red-500/[0.5]/foo',
+      'caret-red-500/[50%]/foo',
+      'caret-current/foo',
+      'caret-current/50/foo',
+      'caret-current/[0.5]/foo',
+      'caret-current/[50%]/foo',
+      'caret-inherit/foo',
+      'caret-transparent/foo',
+      'caret-[#0088cc]/foo',
+      'caret-[#0088cc]/50/foo',
+      'caret-[#0088cc]/[0.5]/foo',
+      'caret-[#0088cc]/[50%]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("divide-color", async () => {
-	expect(
-		await compileCss(
-			css`
+test('divide-color', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --border-color-best-blue: #6495ed;
         }
         @tailwind utilities;
       `,
-			[
-				"divide-red-500",
-				"divide-red-500/50",
-				"divide-red-500/2.25",
-				"divide-red-500/2.5",
-				"divide-red-500/2.75",
-				"divide-red-500/[0.5]",
-				"divide-red-500/[50%]",
-				"divide-best-blue",
-				"divide-current",
-				"divide-current/50",
-				"divide-current/[0.5]",
-				"divide-current/[50%]",
-				"divide-inherit",
-				"divide-transparent",
-				"divide-[#0088cc]",
-				"divide-[#0088cc]/50",
-				"divide-[#0088cc]/[0.5]",
-				"divide-[#0088cc]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'divide-red-500',
+        'divide-red-500/50',
+        'divide-red-500/2.25',
+        'divide-red-500/2.5',
+        'divide-red-500/2.75',
+        'divide-red-500/[0.5]',
+        'divide-red-500/[50%]',
+        'divide-best-blue',
+        'divide-current',
+        'divide-current/50',
+        'divide-current/[0.5]',
+        'divide-current/[50%]',
+        'divide-inherit',
+        'divide-transparent',
+        'divide-[#0088cc]',
+        'divide-[#0088cc]/50',
+        'divide-[#0088cc]/[0.5]',
+        'divide-[#0088cc]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --border-color-best-blue: #6495ed;
@@ -9754,54 +9471,54 @@ test("divide-color", async () => {
     :where(.divide-transparent > :not(:last-child)) {
       border-color: #0000;
     }"
-  `);
-	expect(
-		await run([
-			"divide",
-			"-divide-red-500",
-			"-divide-red-500/50",
-			"-divide-red-500/[0.5]",
-			"-divide-red-500/[50%]",
-			"-divide-current",
-			"-divide-current/50",
-			"-divide-current/[0.5]",
-			"-divide-current/[50%]",
-			"-divide-inherit",
-			"-divide-transparent",
-			"-divide-[#0088cc]",
-			"-divide-[#0088cc]/50",
-			"-divide-[#0088cc]/[0.5]",
-			"-divide-[#0088cc]/[50%]",
-			"divide-red-500/foo",
-			"divide-red-500/50/foo",
-			"divide-red-500/[0.5]/foo",
-			"divide-red-500/[50%]/foo",
-			"divide-current/foo",
-			"divide-current/50/foo",
-			"divide-current/[0.5]/foo",
-			"divide-current/[50%]/foo",
-			"divide-inherit/foo",
-			"divide-transparent/foo",
-			"divide-[#0088cc]/foo",
-			"divide-[#0088cc]/50/foo",
-			"divide-[#0088cc]/[0.5]/foo",
-			"divide-[#0088cc]/[50%]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'divide',
+      '-divide-red-500',
+      '-divide-red-500/50',
+      '-divide-red-500/[0.5]',
+      '-divide-red-500/[50%]',
+      '-divide-current',
+      '-divide-current/50',
+      '-divide-current/[0.5]',
+      '-divide-current/[50%]',
+      '-divide-inherit',
+      '-divide-transparent',
+      '-divide-[#0088cc]',
+      '-divide-[#0088cc]/50',
+      '-divide-[#0088cc]/[0.5]',
+      '-divide-[#0088cc]/[50%]',
+      'divide-red-500/foo',
+      'divide-red-500/50/foo',
+      'divide-red-500/[0.5]/foo',
+      'divide-red-500/[50%]/foo',
+      'divide-current/foo',
+      'divide-current/50/foo',
+      'divide-current/[0.5]/foo',
+      'divide-current/[50%]/foo',
+      'divide-inherit/foo',
+      'divide-transparent/foo',
+      'divide-[#0088cc]/foo',
+      'divide-[#0088cc]/50/foo',
+      'divide-[#0088cc]/[0.5]/foo',
+      'divide-[#0088cc]/[50%]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("place-self", async () => {
-	expect(
-		await run([
-			"place-self-auto",
-			"place-self-start",
-			"place-self-end",
-			"place-self-end-safe",
-			"place-self-center",
-			"place-self-center-safe",
-			"place-self-stretch",
-		]),
-	).toMatchInlineSnapshot(`
+test('place-self', async () => {
+  expect(
+    await run([
+      'place-self-auto',
+      'place-self-start',
+      'place-self-end',
+      'place-self-end-safe',
+      'place-self-center',
+      'place-self-center-safe',
+      'place-self-stretch',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".place-self-auto {
       place-self: auto;
     }
@@ -9829,38 +9546,38 @@ test("place-self", async () => {
     .place-self-stretch {
       place-self: stretch stretch;
     }"
-  `);
-	expect(
-		await run([
-			"place-self",
-			"-place-self-auto",
-			"-place-self-start",
-			"-place-self-end",
-			"-place-self-center",
-			"-place-self-stretch",
-			"place-self-auto/foo",
-			"place-self-start/foo",
-			"place-self-end/foo",
-			"place-self-center/foo",
-			"place-self-stretch/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'place-self',
+      '-place-self-auto',
+      '-place-self-start',
+      '-place-self-end',
+      '-place-self-center',
+      '-place-self-stretch',
+      'place-self-auto/foo',
+      'place-self-start/foo',
+      'place-self-end/foo',
+      'place-self-center/foo',
+      'place-self-stretch/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("self", async () => {
-	expect(
-		await run([
-			"self-auto",
-			"self-start",
-			"self-end",
-			"self-end-safe",
-			"self-center",
-			"self-center-safe",
-			"self-stretch",
-			"self-baseline",
-			"self-baseline-last",
-		]),
-	).toMatchInlineSnapshot(`
+test('self', async () => {
+  expect(
+    await run([
+      'self-auto',
+      'self-start',
+      'self-end',
+      'self-end-safe',
+      'self-center',
+      'self-center-safe',
+      'self-stretch',
+      'self-baseline',
+      'self-baseline-last',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".self-auto {
       align-self: auto;
     }
@@ -9896,39 +9613,39 @@ test("self", async () => {
     .self-stretch {
       align-self: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"self",
-			"-self-auto",
-			"-self-start",
-			"-self-end",
-			"-self-center",
-			"-self-stretch",
-			"-self-baseline",
-			"self-auto/foo",
-			"self-start/foo",
-			"self-end/foo",
-			"self-center/foo",
-			"self-stretch/foo",
-			"self-baseline/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'self',
+      '-self-auto',
+      '-self-start',
+      '-self-end',
+      '-self-center',
+      '-self-stretch',
+      '-self-baseline',
+      'self-auto/foo',
+      'self-start/foo',
+      'self-end/foo',
+      'self-center/foo',
+      'self-stretch/foo',
+      'self-baseline/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("justify-self", async () => {
-	expect(
-		await run([
-			"justify-self-auto",
-			"justify-self-start",
-			"justify-self-end",
-			"justify-self-end-safe",
-			"justify-self-center",
-			"justify-self-center-safe",
-			"justify-self-stretch",
-			"justify-self-baseline",
-		]),
-	).toMatchInlineSnapshot(`
+test('justify-self', async () => {
+  expect(
+    await run([
+      'justify-self-auto',
+      'justify-self-start',
+      'justify-self-end',
+      'justify-self-end-safe',
+      'justify-self-center',
+      'justify-self-center-safe',
+      'justify-self-stretch',
+      'justify-self-baseline',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".justify-self-auto {
       justify-self: auto;
     }
@@ -9956,36 +9673,36 @@ test("justify-self", async () => {
     .justify-self-stretch {
       justify-self: stretch;
     }"
-  `);
-	expect(
-		await run([
-			"justify-self",
-			"-justify-self-auto",
-			"-justify-self-start",
-			"-justify-self-end",
-			"-justify-self-center",
-			"-justify-self-stretch",
-			"-justify-self-baseline",
-			"justify-self-auto/foo",
-			"justify-self-start/foo",
-			"justify-self-end/foo",
-			"justify-self-center/foo",
-			"justify-self-stretch/foo",
-			"justify-self-baseline/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'justify-self',
+      '-justify-self-auto',
+      '-justify-self-start',
+      '-justify-self-end',
+      '-justify-self-center',
+      '-justify-self-stretch',
+      '-justify-self-baseline',
+      'justify-self-auto/foo',
+      'justify-self-start/foo',
+      'justify-self-end/foo',
+      'justify-self-center/foo',
+      'justify-self-stretch/foo',
+      'justify-self-baseline/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overflow", async () => {
-	expect(
-		await run([
-			"overflow-auto",
-			"overflow-hidden",
-			"overflow-clip",
-			"overflow-visible",
-			"overflow-scroll",
-		]),
-	).toMatchInlineSnapshot(`
+test('overflow', async () => {
+  expect(
+    await run([
+      'overflow-auto',
+      'overflow-hidden',
+      'overflow-clip',
+      'overflow-visible',
+      'overflow-scroll',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".overflow-auto {
       overflow: auto;
     }
@@ -10005,34 +9722,34 @@ test("overflow", async () => {
     .overflow-visible {
       overflow: visible;
     }"
-  `);
-	expect(
-		await run([
-			"overflow",
-			"-overflow-auto",
-			"-overflow-hidden",
-			"-overflow-clip",
-			"-overflow-visible",
-			"-overflow-scroll",
-			"overflow-auto/foo",
-			"overflow-hidden/foo",
-			"overflow-clip/foo",
-			"overflow-visible/foo",
-			"overflow-scroll/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'overflow',
+      '-overflow-auto',
+      '-overflow-hidden',
+      '-overflow-clip',
+      '-overflow-visible',
+      '-overflow-scroll',
+      'overflow-auto/foo',
+      'overflow-hidden/foo',
+      'overflow-clip/foo',
+      'overflow-visible/foo',
+      'overflow-scroll/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overflow-x", async () => {
-	expect(
-		await run([
-			"overflow-x-auto",
-			"overflow-x-hidden",
-			"overflow-x-clip",
-			"overflow-x-visible",
-			"overflow-x-scroll",
-		]),
-	).toMatchInlineSnapshot(`
+test('overflow-x', async () => {
+  expect(
+    await run([
+      'overflow-x-auto',
+      'overflow-x-hidden',
+      'overflow-x-clip',
+      'overflow-x-visible',
+      'overflow-x-scroll',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".overflow-x-auto {
       overflow-x: auto;
     }
@@ -10052,34 +9769,34 @@ test("overflow-x", async () => {
     .overflow-x-visible {
       overflow-x: visible;
     }"
-  `);
-	expect(
-		await run([
-			"overflow-x",
-			"-overflow-x-auto",
-			"-overflow-x-hidden",
-			"-overflow-x-clip",
-			"-overflow-x-visible",
-			"-overflow-x-scroll",
-			"overflow-x-auto/foo",
-			"overflow-x-hidden/foo",
-			"overflow-x-clip/foo",
-			"overflow-x-visible/foo",
-			"overflow-x-scroll/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'overflow-x',
+      '-overflow-x-auto',
+      '-overflow-x-hidden',
+      '-overflow-x-clip',
+      '-overflow-x-visible',
+      '-overflow-x-scroll',
+      'overflow-x-auto/foo',
+      'overflow-x-hidden/foo',
+      'overflow-x-clip/foo',
+      'overflow-x-visible/foo',
+      'overflow-x-scroll/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overflow-y", async () => {
-	expect(
-		await run([
-			"overflow-y-auto",
-			"overflow-y-hidden",
-			"overflow-y-clip",
-			"overflow-y-visible",
-			"overflow-y-scroll",
-		]),
-	).toMatchInlineSnapshot(`
+test('overflow-y', async () => {
+  expect(
+    await run([
+      'overflow-y-auto',
+      'overflow-y-hidden',
+      'overflow-y-clip',
+      'overflow-y-visible',
+      'overflow-y-scroll',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".overflow-y-auto {
       overflow-y: auto;
     }
@@ -10099,28 +9816,27 @@ test("overflow-y", async () => {
     .overflow-y-visible {
       overflow-y: visible;
     }"
-  `);
-	expect(
-		await run([
-			"overflow-y",
-			"-overflow-y-auto",
-			"-overflow-y-hidden",
-			"-overflow-y-clip",
-			"-overflow-y-visible",
-			"-overflow-y-scroll",
-			"overflow-y-auto/foo",
-			"overflow-y-hidden/foo",
-			"overflow-y-clip/foo",
-			"overflow-y-visible/foo",
-			"overflow-y-scroll/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'overflow-y',
+      '-overflow-y-auto',
+      '-overflow-y-hidden',
+      '-overflow-y-clip',
+      '-overflow-y-visible',
+      '-overflow-y-scroll',
+      'overflow-y-auto/foo',
+      'overflow-y-hidden/foo',
+      'overflow-y-clip/foo',
+      'overflow-y-visible/foo',
+      'overflow-y-scroll/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overscroll", async () => {
-	expect(
-		await run(["overscroll-auto", "overscroll-contain", "overscroll-none"]),
-	).toMatchInlineSnapshot(`
+test('overscroll', async () => {
+  expect(await run(['overscroll-auto', 'overscroll-contain', 'overscroll-none']))
+    .toMatchInlineSnapshot(`
       ".overscroll-auto {
         overscroll-behavior: auto;
       }
@@ -10132,28 +9848,23 @@ test("overscroll", async () => {
       .overscroll-none {
         overscroll-behavior: none;
       }"
-    `);
-	expect(
-		await run([
-			"overscroll",
-			"-overscroll-auto",
-			"-overscroll-contain",
-			"-overscroll-none",
-			"overscroll-auto/foo",
-			"overscroll-contain/foo",
-			"overscroll-none/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'overscroll',
+      '-overscroll-auto',
+      '-overscroll-contain',
+      '-overscroll-none',
+      'overscroll-auto/foo',
+      'overscroll-contain/foo',
+      'overscroll-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overscroll-x", async () => {
-	expect(
-		await run([
-			"overscroll-x-auto",
-			"overscroll-x-contain",
-			"overscroll-x-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('overscroll-x', async () => {
+  expect(await run(['overscroll-x-auto', 'overscroll-x-contain', 'overscroll-x-none']))
+    .toMatchInlineSnapshot(`
       ".overscroll-x-auto {
         overscroll-behavior-x: auto;
       }
@@ -10165,28 +9876,23 @@ test("overscroll-x", async () => {
       .overscroll-x-none {
         overscroll-behavior-x: none;
       }"
-    `);
-	expect(
-		await run([
-			"overscroll-x",
-			"-overscroll-x-auto",
-			"-overscroll-x-contain",
-			"-overscroll-x-none",
-			"overscroll-x-auto/foo",
-			"overscroll-x-contain/foo",
-			"overscroll-x-none/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'overscroll-x',
+      '-overscroll-x-auto',
+      '-overscroll-x-contain',
+      '-overscroll-x-none',
+      'overscroll-x-auto/foo',
+      'overscroll-x-contain/foo',
+      'overscroll-x-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overscroll-y", async () => {
-	expect(
-		await run([
-			"overscroll-y-auto",
-			"overscroll-y-contain",
-			"overscroll-y-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('overscroll-y', async () => {
+  expect(await run(['overscroll-y-auto', 'overscroll-y-contain', 'overscroll-y-none']))
+    .toMatchInlineSnapshot(`
       ".overscroll-y-auto {
         overscroll-behavior-y: auto;
       }
@@ -10198,22 +9904,22 @@ test("overscroll-y", async () => {
       .overscroll-y-none {
         overscroll-behavior-y: none;
       }"
-    `);
-	expect(
-		await run([
-			"overscroll-y",
-			"-overscroll-y-auto",
-			"-overscroll-y-contain",
-			"-overscroll-y-none",
-			"overscroll-y-auto/foo",
-			"overscroll-y-contain/foo",
-			"overscroll-y-none/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'overscroll-y',
+      '-overscroll-y-auto',
+      '-overscroll-y-contain',
+      '-overscroll-y-none',
+      'overscroll-y-auto/foo',
+      'overscroll-y-contain/foo',
+      'overscroll-y-none/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("scroll-behavior", async () => {
-	expect(await run(["scroll-auto", "scroll-smooth"])).toMatchInlineSnapshot(`
+test('scroll-behavior', async () => {
+  expect(await run(['scroll-auto', 'scroll-smooth'])).toMatchInlineSnapshot(`
     ".scroll-auto {
       scroll-behavior: auto;
     }
@@ -10221,31 +9927,25 @@ test("scroll-behavior", async () => {
     .scroll-smooth {
       scroll-behavior: smooth;
     }"
-  `);
-	expect(
-		await run([
-			"scroll",
-			"-scroll-auto",
-			"-scroll-smooth",
-			"scroll-auto/foo",
-			"scroll-smooth/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run(['scroll', '-scroll-auto', '-scroll-smooth', 'scroll-auto/foo', 'scroll-smooth/foo']),
+  ).toEqual('')
+})
 
-test("truncate", async () => {
-	expect(await run(["truncate"])).toMatchInlineSnapshot(`
+test('truncate', async () => {
+  expect(await run(['truncate'])).toMatchInlineSnapshot(`
     ".truncate {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
     }"
-  `);
-	expect(await run(["-truncate", "truncate/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-truncate', 'truncate/foo'])).toEqual('')
+})
 
-test("text-overflow", async () => {
-	expect(await run(["text-ellipsis", "text-clip"])).toMatchInlineSnapshot(`
+test('text-overflow', async () => {
+  expect(await run(['text-ellipsis', 'text-clip'])).toMatchInlineSnapshot(`
     ".text-clip {
       text-overflow: clip;
     }
@@ -10253,21 +9953,14 @@ test("text-overflow", async () => {
     .text-ellipsis {
       text-overflow: ellipsis;
     }"
-  `);
-	expect(
-		await run([
-			"-text-ellipsis",
-			"-text-clip",
-			"text-ellipsis/foo",
-			"text-clip/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-text-ellipsis', '-text-clip', 'text-ellipsis/foo', 'text-clip/foo'])).toEqual(
+    '',
+  )
+})
 
-test("hyphens", async () => {
-	expect(
-		await run(["hyphens-none", "hyphens-manual", "hyphens-auto"]),
-	).toMatchInlineSnapshot(`
+test('hyphens', async () => {
+  expect(await run(['hyphens-none', 'hyphens-manual', 'hyphens-auto'])).toMatchInlineSnapshot(`
     ".hyphens-auto {
       -webkit-hyphens: auto;
       hyphens: auto;
@@ -10282,31 +9975,31 @@ test("hyphens", async () => {
       -webkit-hyphens: none;
       hyphens: none;
     }"
-  `);
-	expect(
-		await run([
-			"hyphens",
-			"-hyphens-none",
-			"-hyphens-manual",
-			"-hyphens-auto",
-			"hyphens-none/foo",
-			"hyphens-manual/foo",
-			"hyphens-auto/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'hyphens',
+      '-hyphens-none',
+      '-hyphens-manual',
+      '-hyphens-auto',
+      'hyphens-none/foo',
+      'hyphens-manual/foo',
+      'hyphens-auto/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("whitespace", async () => {
-	expect(
-		await run([
-			"whitespace-normal",
-			"whitespace-nowrap",
-			"whitespace-pre",
-			"whitespace-pre-line",
-			"whitespace-pre-wrap",
-			"whitespace-break-spaces",
-		]),
-	).toMatchInlineSnapshot(`
+test('whitespace', async () => {
+  expect(
+    await run([
+      'whitespace-normal',
+      'whitespace-nowrap',
+      'whitespace-pre',
+      'whitespace-pre-line',
+      'whitespace-pre-wrap',
+      'whitespace-break-spaces',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".whitespace-break-spaces {
       white-space: break-spaces;
     }
@@ -10330,30 +10023,29 @@ test("whitespace", async () => {
     .whitespace-pre-wrap {
       white-space: pre-wrap;
     }"
-  `);
-	expect(
-		await run([
-			"whitespace",
-			"-whitespace-normal",
-			"-whitespace-nowrap",
-			"-whitespace-pre",
-			"-whitespace-pre-line",
-			"-whitespace-pre-wrap",
-			"-whitespace-break-spaces",
-			"whitespace-normal/foo",
-			"whitespace-nowrap/foo",
-			"whitespace-pre/foo",
-			"whitespace-pre-line/foo",
-			"whitespace-pre-wrap/foo",
-			"whitespace-break-spaces/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'whitespace',
+      '-whitespace-normal',
+      '-whitespace-nowrap',
+      '-whitespace-pre',
+      '-whitespace-pre-line',
+      '-whitespace-pre-wrap',
+      '-whitespace-break-spaces',
+      'whitespace-normal/foo',
+      'whitespace-nowrap/foo',
+      'whitespace-pre/foo',
+      'whitespace-pre-line/foo',
+      'whitespace-pre-wrap/foo',
+      'whitespace-break-spaces/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("text-wrap", async () => {
-	expect(
-		await run(["text-wrap", "text-nowrap", "text-balance", "text-pretty"]),
-	).toMatchInlineSnapshot(`
+test('text-wrap', async () => {
+  expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
+    .toMatchInlineSnapshot(`
       ".text-balance {
         text-wrap: balance;
       }
@@ -10369,25 +10061,24 @@ test("text-wrap", async () => {
       .text-wrap {
         text-wrap: wrap;
       }"
-    `);
-	expect(
-		await run([
-			"-text-wrap",
-			"-text-nowrap",
-			"-text-balance",
-			"-text-pretty",
-			"text-wrap/foo",
-			"text-nowrap/foo",
-			"text-balance/foo",
-			"text-pretty/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-text-wrap',
+      '-text-nowrap',
+      '-text-balance',
+      '-text-pretty',
+      'text-wrap/foo',
+      'text-nowrap/foo',
+      'text-balance/foo',
+      'text-pretty/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("word-break", async () => {
-	expect(
-		await run(["break-normal", "break-words", "break-all", "break-keep"]),
-	).toMatchInlineSnapshot(`
+test('word-break', async () => {
+  expect(await run(['break-normal', 'break-words', 'break-all', 'break-keep']))
+    .toMatchInlineSnapshot(`
       ".break-normal {
         overflow-wrap: normal;
         word-break: normal;
@@ -10404,25 +10095,23 @@ test("word-break", async () => {
       .break-keep {
         word-break: keep-all;
       }"
-    `);
-	expect(
-		await run([
-			"-break-normal",
-			"-break-words",
-			"-break-all",
-			"-break-keep",
-			"break-normal/foo",
-			"break-words/foo",
-			"break-all/foo",
-			"break-keep/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-break-normal',
+      '-break-words',
+      '-break-all',
+      '-break-keep',
+      'break-normal/foo',
+      'break-words/foo',
+      'break-all/foo',
+      'break-keep/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("overflow-wrap", async () => {
-	expect(
-		await run(["wrap-anywhere", "wrap-break-word", "wrap-normal"]),
-	).toMatchInlineSnapshot(`
+test('overflow-wrap', async () => {
+  expect(await run(['wrap-anywhere', 'wrap-break-word', 'wrap-normal'])).toMatchInlineSnapshot(`
     ".wrap-anywhere {
       overflow-wrap: anywhere;
     }
@@ -10434,38 +10123,32 @@ test("overflow-wrap", async () => {
     .wrap-normal {
       overflow-wrap: normal;
     }"
-  `);
-	expect(
-		await run([
-			"-wrap-anywhere",
-			"-wrap-break-word",
-			"-wrap-normal",
-			"wrap-anywhere/foo",
-			"wrap-break-word/foo",
-			"wrap-normal/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-wrap-anywhere',
+      '-wrap-break-word',
+      '-wrap-normal',
+      'wrap-anywhere/foo',
+      'wrap-break-word/foo',
+      'wrap-normal/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-sm: 0.125rem;
           --radius: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"rounded",
-				"rounded-full",
-				"rounded-none",
-				"rounded-sm",
-				"rounded-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-sm: .125rem;
       --radius: .25rem;
@@ -10490,18 +10173,18 @@ test("rounded", async () => {
     .rounded-sm {
       border-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-full: 99999px;
         }
         @tailwind utilities;
       `,
-			["rounded-full"],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-full'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-full: 99999px;
     }
@@ -10509,27 +10192,27 @@ test("rounded", async () => {
     .rounded-full {
       border-radius: var(--radius-full);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded",
-			"-rounded-full",
-			"-rounded-none",
-			"-rounded-sm",
-			"-rounded-[4px]",
-			"rounded/foo",
-			"rounded-full/foo",
-			"rounded-none/foo",
-			"rounded-sm/foo",
-			"rounded-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded',
+      '-rounded-full',
+      '-rounded-none',
+      '-rounded-sm',
+      '-rounded-[4px]',
+      'rounded/foo',
+      'rounded-full/foo',
+      'rounded-none/foo',
+      'rounded-sm/foo',
+      'rounded-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-s", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-s', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10538,15 +10221,9 @@ test("rounded-s", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-s",
-				"rounded-s-full",
-				"rounded-s-none",
-				"rounded-s-sm",
-				"rounded-s-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10578,27 +10255,27 @@ test("rounded-s", async () => {
       border-start-start-radius: var(--radius-sm);
       border-end-start-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-s",
-			"-rounded-s-full",
-			"-rounded-s-none",
-			"-rounded-s-sm",
-			"-rounded-s-[4px]",
-			"rounded-s/foo",
-			"rounded-s-full/foo",
-			"rounded-s-none/foo",
-			"rounded-s-sm/foo",
-			"rounded-s-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-s',
+      '-rounded-s-full',
+      '-rounded-s-none',
+      '-rounded-s-sm',
+      '-rounded-s-[4px]',
+      'rounded-s/foo',
+      'rounded-s-full/foo',
+      'rounded-s-none/foo',
+      'rounded-s-sm/foo',
+      'rounded-s-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-e", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-e', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10607,15 +10284,9 @@ test("rounded-e", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-e",
-				"rounded-e-full",
-				"rounded-e-none",
-				"rounded-e-sm",
-				"rounded-e-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10647,27 +10318,27 @@ test("rounded-e", async () => {
       border-start-end-radius: var(--radius-sm);
       border-end-end-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-e",
-			"-rounded-e-full",
-			"-rounded-e-none",
-			"-rounded-e-sm",
-			"-rounded-e-[4px]",
-			"rounded-e/foo",
-			"rounded-e-full/foo",
-			"rounded-e-none/foo",
-			"rounded-e-sm/foo",
-			"rounded-e-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-e',
+      '-rounded-e-full',
+      '-rounded-e-none',
+      '-rounded-e-sm',
+      '-rounded-e-[4px]',
+      'rounded-e/foo',
+      'rounded-e-full/foo',
+      'rounded-e-none/foo',
+      'rounded-e-sm/foo',
+      'rounded-e-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-t", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-t', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10676,15 +10347,9 @@ test("rounded-t", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-t",
-				"rounded-t-full",
-				"rounded-t-none",
-				"rounded-t-sm",
-				"rounded-t-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10716,27 +10381,27 @@ test("rounded-t", async () => {
       border-top-left-radius: var(--radius-sm);
       border-top-right-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-t",
-			"-rounded-t-full",
-			"-rounded-t-none",
-			"-rounded-t-sm",
-			"-rounded-t-[4px]",
-			"rounded-t/foo",
-			"rounded-t-full/foo",
-			"rounded-t-none/foo",
-			"rounded-t-sm/foo",
-			"rounded-t-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-t',
+      '-rounded-t-full',
+      '-rounded-t-none',
+      '-rounded-t-sm',
+      '-rounded-t-[4px]',
+      'rounded-t/foo',
+      'rounded-t-full/foo',
+      'rounded-t-none/foo',
+      'rounded-t-sm/foo',
+      'rounded-t-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-r", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-r', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10745,15 +10410,9 @@ test("rounded-r", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-r",
-				"rounded-r-full",
-				"rounded-r-none",
-				"rounded-r-sm",
-				"rounded-r-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10785,27 +10444,27 @@ test("rounded-r", async () => {
       border-top-right-radius: var(--radius-sm);
       border-bottom-right-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-r",
-			"-rounded-r-full",
-			"-rounded-r-none",
-			"-rounded-r-sm",
-			"-rounded-r-[4px]",
-			"rounded-r/foo",
-			"rounded-r-full/foo",
-			"rounded-r-none/foo",
-			"rounded-r-sm/foo",
-			"rounded-r-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-r',
+      '-rounded-r-full',
+      '-rounded-r-none',
+      '-rounded-r-sm',
+      '-rounded-r-[4px]',
+      'rounded-r/foo',
+      'rounded-r-full/foo',
+      'rounded-r-none/foo',
+      'rounded-r-sm/foo',
+      'rounded-r-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-b", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-b', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10814,15 +10473,9 @@ test("rounded-b", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-b",
-				"rounded-b-full",
-				"rounded-b-none",
-				"rounded-b-sm",
-				"rounded-b-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10854,27 +10507,27 @@ test("rounded-b", async () => {
       border-bottom-right-radius: var(--radius-sm);
       border-bottom-left-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-b",
-			"-rounded-b-full",
-			"-rounded-b-none",
-			"-rounded-b-sm",
-			"-rounded-b-[4px]",
-			"rounded-b/foo",
-			"rounded-b-full/foo",
-			"rounded-b-none/foo",
-			"rounded-b-sm/foo",
-			"rounded-b-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-b',
+      '-rounded-b-full',
+      '-rounded-b-none',
+      '-rounded-b-sm',
+      '-rounded-b-[4px]',
+      'rounded-b/foo',
+      'rounded-b-full/foo',
+      'rounded-b-none/foo',
+      'rounded-b-sm/foo',
+      'rounded-b-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-l", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-l', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10883,15 +10536,9 @@ test("rounded-l", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-l",
-				"rounded-l-full",
-				"rounded-l-none",
-				"rounded-l-sm",
-				"rounded-l-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10923,27 +10570,27 @@ test("rounded-l", async () => {
       border-top-left-radius: var(--radius-sm);
       border-bottom-left-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-l",
-			"-rounded-l-full",
-			"-rounded-l-none",
-			"-rounded-l-sm",
-			"-rounded-l-[4px]",
-			"rounded-l/foo",
-			"rounded-l-full/foo",
-			"rounded-l-none/foo",
-			"rounded-l-sm/foo",
-			"rounded-l-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-l',
+      '-rounded-l-full',
+      '-rounded-l-none',
+      '-rounded-l-sm',
+      '-rounded-l-[4px]',
+      'rounded-l/foo',
+      'rounded-l-full/foo',
+      'rounded-l-none/foo',
+      'rounded-l-sm/foo',
+      'rounded-l-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-ss", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-ss', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -10952,15 +10599,9 @@ test("rounded-ss", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-ss",
-				"rounded-ss-full",
-				"rounded-ss-none",
-				"rounded-ss-sm",
-				"rounded-ss-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -10987,27 +10628,27 @@ test("rounded-ss", async () => {
     .rounded-ss-sm {
       border-start-start-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-ss",
-			"-rounded-ss-full",
-			"-rounded-ss-none",
-			"-rounded-ss-sm",
-			"-rounded-ss-[4px]",
-			"rounded-ss/foo",
-			"rounded-ss-full/foo",
-			"rounded-ss-none/foo",
-			"rounded-ss-sm/foo",
-			"rounded-ss-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-ss',
+      '-rounded-ss-full',
+      '-rounded-ss-none',
+      '-rounded-ss-sm',
+      '-rounded-ss-[4px]',
+      'rounded-ss/foo',
+      'rounded-ss-full/foo',
+      'rounded-ss-none/foo',
+      'rounded-ss-sm/foo',
+      'rounded-ss-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-se", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-se', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11016,15 +10657,9 @@ test("rounded-se", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-se",
-				"rounded-se-full",
-				"rounded-se-none",
-				"rounded-se-sm",
-				"rounded-se-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11051,27 +10686,27 @@ test("rounded-se", async () => {
     .rounded-se-sm {
       border-start-end-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-se",
-			"-rounded-se-full",
-			"-rounded-se-none",
-			"-rounded-se-sm",
-			"-rounded-se-[4px]",
-			"rounded-se/foo",
-			"rounded-se-full/foo",
-			"rounded-se-none/foo",
-			"rounded-se-sm/foo",
-			"rounded-se-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-se',
+      '-rounded-se-full',
+      '-rounded-se-none',
+      '-rounded-se-sm',
+      '-rounded-se-[4px]',
+      'rounded-se/foo',
+      'rounded-se-full/foo',
+      'rounded-se-none/foo',
+      'rounded-se-sm/foo',
+      'rounded-se-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-ee", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-ee', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11080,15 +10715,9 @@ test("rounded-ee", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-ee",
-				"rounded-ee-full",
-				"rounded-ee-none",
-				"rounded-ee-sm",
-				"rounded-ee-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11115,27 +10744,27 @@ test("rounded-ee", async () => {
     .rounded-ee-sm {
       border-end-end-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-ee",
-			"-rounded-ee-full",
-			"-rounded-ee-none",
-			"-rounded-ee-sm",
-			"-rounded-ee-[4px]",
-			"rounded-ee/foo",
-			"rounded-ee-full/foo",
-			"rounded-ee-none/foo",
-			"rounded-ee-sm/foo",
-			"rounded-ee-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-ee',
+      '-rounded-ee-full',
+      '-rounded-ee-none',
+      '-rounded-ee-sm',
+      '-rounded-ee-[4px]',
+      'rounded-ee/foo',
+      'rounded-ee-full/foo',
+      'rounded-ee-none/foo',
+      'rounded-ee-sm/foo',
+      'rounded-ee-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-es", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-es', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11144,15 +10773,9 @@ test("rounded-es", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-es",
-				"rounded-es-full",
-				"rounded-es-none",
-				"rounded-es-sm",
-				"rounded-es-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11179,27 +10802,27 @@ test("rounded-es", async () => {
     .rounded-es-sm {
       border-end-start-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-es",
-			"-rounded-es-full",
-			"-rounded-es-none",
-			"-rounded-es-sm",
-			"-rounded-es-[4px]",
-			"rounded-es/foo",
-			"rounded-es-full/foo",
-			"rounded-es-none/foo",
-			"rounded-es-sm/foo",
-			"rounded-es-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-es',
+      '-rounded-es-full',
+      '-rounded-es-none',
+      '-rounded-es-sm',
+      '-rounded-es-[4px]',
+      'rounded-es/foo',
+      'rounded-es-full/foo',
+      'rounded-es-none/foo',
+      'rounded-es-sm/foo',
+      'rounded-es-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-tl", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-tl', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11208,15 +10831,9 @@ test("rounded-tl", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-tl",
-				"rounded-tl-full",
-				"rounded-tl-none",
-				"rounded-tl-sm",
-				"rounded-tl-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11243,27 +10860,27 @@ test("rounded-tl", async () => {
     .rounded-tl-sm {
       border-top-left-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-tl",
-			"-rounded-tl-full",
-			"-rounded-tl-none",
-			"-rounded-tl-sm",
-			"-rounded-tl-[4px]",
-			"rounded-tl/foo",
-			"rounded-tl-full/foo",
-			"rounded-tl-none/foo",
-			"rounded-tl-sm/foo",
-			"rounded-tl-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-tl',
+      '-rounded-tl-full',
+      '-rounded-tl-none',
+      '-rounded-tl-sm',
+      '-rounded-tl-[4px]',
+      'rounded-tl/foo',
+      'rounded-tl-full/foo',
+      'rounded-tl-none/foo',
+      'rounded-tl-sm/foo',
+      'rounded-tl-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-tr", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-tr', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11272,15 +10889,9 @@ test("rounded-tr", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-tr",
-				"rounded-tr-full",
-				"rounded-tr-none",
-				"rounded-tr-sm",
-				"rounded-tr-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11307,27 +10918,27 @@ test("rounded-tr", async () => {
     .rounded-tr-sm {
       border-top-right-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-tr",
-			"-rounded-tr-full",
-			"-rounded-tr-none",
-			"-rounded-tr-sm",
-			"-rounded-tr-[4px]",
-			"rounded-tr/foo",
-			"rounded-tr-full/foo",
-			"rounded-tr-none/foo",
-			"rounded-tr-sm/foo",
-			"rounded-tr-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-tr',
+      '-rounded-tr-full',
+      '-rounded-tr-none',
+      '-rounded-tr-sm',
+      '-rounded-tr-[4px]',
+      'rounded-tr/foo',
+      'rounded-tr-full/foo',
+      'rounded-tr-none/foo',
+      'rounded-tr-sm/foo',
+      'rounded-tr-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-br", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-br', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11336,15 +10947,9 @@ test("rounded-br", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-br",
-				"rounded-br-full",
-				"rounded-br-none",
-				"rounded-br-sm",
-				"rounded-br-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11371,27 +10976,27 @@ test("rounded-br", async () => {
     .rounded-br-sm {
       border-bottom-right-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-br",
-			"-rounded-br-full",
-			"-rounded-br-none",
-			"-rounded-br-sm",
-			"-rounded-br-[4px]",
-			"rounded-br/foo",
-			"rounded-br-full/foo",
-			"rounded-br-none/foo",
-			"rounded-br-sm/foo",
-			"rounded-br-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-br',
+      '-rounded-br-full',
+      '-rounded-br-none',
+      '-rounded-br-sm',
+      '-rounded-br-[4px]',
+      'rounded-br/foo',
+      'rounded-br-full/foo',
+      'rounded-br-none/foo',
+      'rounded-br-sm/foo',
+      'rounded-br-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("rounded-bl", async () => {
-	expect(
-		await compileCss(
-			css`
+test('rounded-bl', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --radius-none: 0px;
           --radius-full: 9999px;
@@ -11400,15 +11005,9 @@ test("rounded-bl", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"rounded-bl",
-				"rounded-bl-full",
-				"rounded-bl-none",
-				"rounded-bl-sm",
-				"rounded-bl-[4px]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --radius-none: 0px;
       --radius-full: 9999px;
@@ -11435,26 +11034,26 @@ test("rounded-bl", async () => {
     .rounded-bl-sm {
       border-bottom-left-radius: var(--radius-sm);
     }"
-  `);
-	expect(
-		await run([
-			"-rounded-bl",
-			"-rounded-bl-full",
-			"-rounded-bl-none",
-			"-rounded-bl-sm",
-			"-rounded-bl-[4px]",
-			"rounded-bl/foo",
-			"rounded-bl-full/foo",
-			"rounded-bl-none/foo",
-			"rounded-bl-sm/foo",
-			"rounded-bl-[4px]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-rounded-bl',
+      '-rounded-bl-full',
+      '-rounded-bl-none',
+      '-rounded-bl-sm',
+      '-rounded-bl-[4px]',
+      'rounded-bl/foo',
+      'rounded-bl-full/foo',
+      'rounded-bl-none/foo',
+      'rounded-bl-sm/foo',
+      'rounded-bl-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("corner", async () => {
-	const output = await compileCss(
-		css`
+test('corner', async () => {
+  const output = await compileCss(
+    css`
       @theme {
         --corner-shape: round;
         --corner-shape-bevel: bevel;
@@ -11462,47 +11061,35 @@ test("corner", async () => {
       }
       @tailwind utilities;
     `,
-		[
-			"corner",
-			"corner-bevel",
-			"corner-scoop",
-			"corner-square",
-			"corner-[superellipse(0.6)]",
-		],
-	);
+    ['corner', 'corner-bevel', 'corner-scoop', 'corner-square', 'corner-[superellipse(0.6)]'],
+  )
 
-	expect(output).toMatch(
-		/\.corner \{\s+corner-shape: var\(--corner-shape\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-bevel \{\s+corner-shape: var\(--corner-shape-bevel\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-scoop \{\s+corner-shape: var\(--corner-shape-scoop\);\s+\}/,
-	);
-	expect(output).toMatch(/\.corner-square \{\s+corner-shape: square;\s+\}/);
-	expect(output).toContain(".corner-\\[superellipse\\(0\\.6\\)\\] {");
-	expect(output).toContain("corner-shape: superellipse(.6);");
+  expect(output).toMatch(/\.corner \{\s+corner-shape: var\(--corner-shape\);\s+\}/)
+  expect(output).toMatch(/\.corner-bevel \{\s+corner-shape: var\(--corner-shape-bevel\);\s+\}/)
+  expect(output).toMatch(/\.corner-scoop \{\s+corner-shape: var\(--corner-shape-scoop\);\s+\}/)
+  expect(output).toMatch(/\.corner-square \{\s+corner-shape: square;\s+\}/)
+  expect(output).toContain('.corner-\\[superellipse\\(0\\.6\\)\\] {')
+  expect(output).toContain('corner-shape: superellipse(.6);')
 
-	expect(
-		await run([
-			"-corner",
-			"-corner-bevel",
-			"-corner-scoop",
-			"-corner-square",
-			"-corner-[superellipse(0.6)]",
-			"corner/foo",
-			"corner-bevel/foo",
-			"corner-scoop/foo",
-			"corner-square/foo",
-			"corner-[superellipse(0.6)]/foo",
-		]),
-	).toEqual("");
-});
+  expect(
+    await run([
+      '-corner',
+      '-corner-bevel',
+      '-corner-scoop',
+      '-corner-square',
+      '-corner-[superellipse(0.6)]',
+      'corner/foo',
+      'corner-bevel/foo',
+      'corner-scoop/foo',
+      'corner-square/foo',
+      'corner-[superellipse(0.6)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("corner-t", async () => {
-	const output = await compileCss(
-		css`
+test('corner-t', async () => {
+  const output = await compileCss(
+    css`
       @theme {
         --corner-shape: round;
         --corner-shape-scoop: scoop;
@@ -11510,64 +11097,60 @@ test("corner-t", async () => {
       }
       @tailwind utilities;
     `,
-		[
-			"corner-t",
-			"corner-t-scoop",
-			"corner-tr",
-			"corner-tl",
-			"corner-t-[superellipse(0.8)]",
-			"corner-tr-notch",
-		],
-	);
+    [
+      'corner-t',
+      'corner-t-scoop',
+      'corner-tr',
+      'corner-tl',
+      'corner-t-[superellipse(0.8)]',
+      'corner-tr-notch',
+    ],
+  )
 
-	expect(output).toMatch(
-		/\.corner-t \{\s+corner-top-left-shape: var\(--corner-shape\);\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-t-scoop \{\s+corner-top-left-shape: var\(--corner-shape-scoop\);\s+corner-top-right-shape: var\(--corner-shape-scoop\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-tr \{\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-tr-notch \{\s+corner-top-right-shape: var\(--corner-shape-notch\);\s+\}/,
-	);
-	expect(output).toMatch(
-		/\.corner-tl \{\s+corner-top-left-shape: var\(--corner-shape\);\s+\}/,
-	);
-	expect(output).toContain(".corner-t-\\[superellipse\\(0\\.8\\)\\] {");
-	expect(output).toContain("corner-top-left-shape: superellipse(.8);");
-	expect(output).toContain("corner-top-right-shape: superellipse(.8);");
+  expect(output).toMatch(
+    /\.corner-t \{\s+corner-top-left-shape: var\(--corner-shape\);\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/,
+  )
+  expect(output).toMatch(
+    /\.corner-t-scoop \{\s+corner-top-left-shape: var\(--corner-shape-scoop\);\s+corner-top-right-shape: var\(--corner-shape-scoop\);\s+\}/,
+  )
+  expect(output).toMatch(/\.corner-tr \{\s+corner-top-right-shape: var\(--corner-shape\);\s+\}/)
+  expect(output).toMatch(
+    /\.corner-tr-notch \{\s+corner-top-right-shape: var\(--corner-shape-notch\);\s+\}/,
+  )
+  expect(output).toMatch(/\.corner-tl \{\s+corner-top-left-shape: var\(--corner-shape\);\s+\}/)
+  expect(output).toContain('.corner-t-\\[superellipse\\(0\\.8\\)\\] {')
+  expect(output).toContain('corner-top-left-shape: superellipse(.8);')
+  expect(output).toContain('corner-top-right-shape: superellipse(.8);')
 
-	expect(
-		await run([
-			"-corner-t",
-			"-corner-t-scoop",
-			"-corner-tr",
-			"-corner-tl",
-			"-corner-tr-notch",
-			"-corner-[superellipse(0.8)]",
-			"corner-t/foo",
-			"corner-t-scoop/foo",
-			"corner-tr/foo",
-			"corner-tl/foo",
-			"corner-tr-notch/foo",
-			"corner-[superellipse(0.8)]/foo",
-		]),
-	).toEqual("");
-});
+  expect(
+    await run([
+      '-corner-t',
+      '-corner-t-scoop',
+      '-corner-tr',
+      '-corner-tl',
+      '-corner-tr-notch',
+      '-corner-[superellipse(0.8)]',
+      'corner-t/foo',
+      'corner-t-scoop/foo',
+      'corner-tr/foo',
+      'corner-tl/foo',
+      'corner-tr-notch/foo',
+      'corner-[superellipse(0.8)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("border-style", async () => {
-	expect(
-		await run([
-			"border-solid",
-			"border-dashed",
-			"border-dotted",
-			"border-double",
-			"border-hidden",
-			"border-none",
-		]),
-	).toMatchInlineSnapshot(`
+test('border-style', async () => {
+  expect(
+    await run([
+      'border-solid',
+      'border-dashed',
+      'border-dotted',
+      'border-double',
+      'border-hidden',
+      'border-none',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".border-dashed {
       --tw-border-style: dashed;
       border-style: dashed;
@@ -11597,85 +11180,85 @@ test("border-style", async () => {
       --tw-border-style: solid;
       border-style: solid;
     }"
-  `);
-	expect(
-		await run([
-			"-border-solid",
-			"-border-dashed",
-			"-border-dotted",
-			"-border-double",
-			"-border-hidden",
-			"-border-none",
-			"border-solid/foo",
-			"border-dashed/foo",
-			"border-dotted/foo",
-			"border-double/foo",
-			"border-hidden/foo",
-			"border-none/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-border-solid',
+      '-border-dashed',
+      '-border-dotted',
+      '-border-double',
+      '-border-hidden',
+      '-border-none',
+      'border-solid/foo',
+      'border-dashed/foo',
+      'border-dotted/foo',
+      'border-double/foo',
+      'border-hidden/foo',
+      'border-none/foo',
+    ]),
+  ).toEqual('')
+})
 
 // All border utilities are generated in the same way
 // so we can test them all at once with a loop
 const prefixes = [
-	"border",
-	"border-x",
-	"border-y",
-	"border-s",
-	"border-e",
-	"border-t",
-	"border-r",
-	"border-b",
-	"border-l",
-];
+  'border',
+  'border-x',
+  'border-y',
+  'border-s',
+  'border-e',
+  'border-t',
+  'border-r',
+  'border-b',
+  'border-l',
+]
 
 for (const prefix of prefixes) {
-	test(`${prefix}-*`, async () => {
-		const classes = [];
+  test(`${prefix}-*`, async () => {
+    const classes = []
 
-		// Width
-		classes.push(prefix);
-		classes.push(`${prefix}-0`);
-		classes.push(`${prefix}-2`);
-		classes.push(`${prefix}-4`);
-		classes.push(`${prefix}-123`);
+    // Width
+    classes.push(prefix)
+    classes.push(`${prefix}-0`)
+    classes.push(`${prefix}-2`)
+    classes.push(`${prefix}-4`)
+    classes.push(`${prefix}-123`)
 
-		// Inference: Width
-		classes.push(`${prefix}-[thin]`);
-		classes.push(`${prefix}-[medium]`);
-		classes.push(`${prefix}-[thick]`);
-		classes.push(`${prefix}-[12px]`);
-		classes.push(`${prefix}-[12px_8px]`);
-		classes.push(`${prefix}-[0_2px_0_2px]`);
-		classes.push(`${prefix}-[0_1]`);
-		classes.push(`${prefix}-[thin_2px]`);
-		classes.push(`${prefix}-[length:var(--my-width)]`);
-		classes.push(`${prefix}-[line-width:var(--my-width)]`);
+    // Inference: Width
+    classes.push(`${prefix}-[thin]`)
+    classes.push(`${prefix}-[medium]`)
+    classes.push(`${prefix}-[thick]`)
+    classes.push(`${prefix}-[12px]`)
+    classes.push(`${prefix}-[12px_8px]`)
+    classes.push(`${prefix}-[0_2px_0_2px]`)
+    classes.push(`${prefix}-[0_1]`)
+    classes.push(`${prefix}-[thin_2px]`)
+    classes.push(`${prefix}-[length:var(--my-width)]`)
+    classes.push(`${prefix}-[line-width:var(--my-width)]`)
 
-		// Color
-		classes.push(`${prefix}-red-500`);
-		classes.push(`${prefix}-red-500/50`);
-		classes.push(`${prefix}-red-500/2.25`);
-		classes.push(`${prefix}-red-500/2.5`);
-		classes.push(`${prefix}-red-500/2.75`);
-		classes.push(`${prefix}-blue-500`);
-		classes.push(`${prefix}-[#0088cc]`);
-		classes.push(`${prefix}-[#0088cc]/50`);
-		classes.push(`${prefix}-current`);
-		classes.push(`${prefix}-current/50`);
-		classes.push(`${prefix}-inherit`);
-		classes.push(`${prefix}-transparent`);
+    // Color
+    classes.push(`${prefix}-red-500`)
+    classes.push(`${prefix}-red-500/50`)
+    classes.push(`${prefix}-red-500/2.25`)
+    classes.push(`${prefix}-red-500/2.5`)
+    classes.push(`${prefix}-red-500/2.75`)
+    classes.push(`${prefix}-blue-500`)
+    classes.push(`${prefix}-[#0088cc]`)
+    classes.push(`${prefix}-[#0088cc]/50`)
+    classes.push(`${prefix}-current`)
+    classes.push(`${prefix}-current/50`)
+    classes.push(`${prefix}-inherit`)
+    classes.push(`${prefix}-transparent`)
 
-		// Inference: Color
-		classes.push(`${prefix}-[var(--my-color)]`);
-		classes.push(`${prefix}-[var(--my-color)]/50`);
-		classes.push(`${prefix}-[color:var(--my-color)]`);
-		classes.push(`${prefix}-[color:var(--my-color)]/50`);
+    // Inference: Color
+    classes.push(`${prefix}-[var(--my-color)]`)
+    classes.push(`${prefix}-[var(--my-color)]/50`)
+    classes.push(`${prefix}-[color:var(--my-color)]`)
+    classes.push(`${prefix}-[color:var(--my-color)]/50`)
 
-		expect(
-			await compileCss(
-				css`
+    expect(
+      await compileCss(
+        css`
           @theme {
             --radius-none: 0px;
             --radius-full: 9999px;
@@ -11685,42 +11268,42 @@ for (const prefix of prefixes) {
           }
           @tailwind utilities;
         `,
-				classes,
-			),
-		).toMatchSnapshot();
+        classes,
+      ),
+    ).toMatchSnapshot()
 
-		// No border utilities can ever be negative
-		expect(await run(classes.map((cls) => `-${cls}`))).toEqual("");
-		expect(
-			await run([
-				`${prefix}/foo`,
-				`${prefix}-0/foo`,
-				`${prefix}-2/foo`,
-				`${prefix}-4/foo`,
-				`${prefix}-123/foo`,
-				`${prefix}-[thin]/foo`,
-				`${prefix}-[medium]/foo`,
-				`${prefix}-[thick]/foo`,
-				`${prefix}-[12px]/foo`,
-				`${prefix}-[length:var(--my-width)]/foo`,
-				`${prefix}-[line-width:var(--my-width)]/foo`,
-			]),
-		).toEqual("");
-	});
+    // No border utilities can ever be negative
+    expect(await run(classes.map((cls) => `-${cls}`))).toEqual('')
+    expect(
+      await run([
+        `${prefix}/foo`,
+        `${prefix}-0/foo`,
+        `${prefix}-2/foo`,
+        `${prefix}-4/foo`,
+        `${prefix}-123/foo`,
+        `${prefix}-[thin]/foo`,
+        `${prefix}-[medium]/foo`,
+        `${prefix}-[thick]/foo`,
+        `${prefix}-[12px]/foo`,
+        `${prefix}-[length:var(--my-width)]/foo`,
+        `${prefix}-[line-width:var(--my-width)]/foo`,
+      ]),
+    ).toEqual('')
+  })
 }
 
-test("border with custom default border width", async () => {
-	expect(
-		await compileCss(
-			css`
+test('border with custom default border width', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-			["border"],
-		),
-	).toMatchInlineSnapshot(`
+      ['border'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -11739,163 +11322,163 @@ test("border with custom default border width", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(await run(["-border", "border/foo"])).toEqual("");
-});
+  `)
+  expect(await run(['-border', 'border/foo'])).toEqual('')
+})
 
-test("bg", async () => {
-	expect(
-		await compileCss(
-			css`
+test('bg', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --background-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				// background-color
-				"bg-red-500",
-				"bg-red-500/50",
-				"bg-red-500/2.25",
-				"bg-red-500/2.5",
-				"bg-red-500/2.75",
-				"bg-red-500/[0.5]",
-				"bg-red-500/[50%]",
-				"bg-red-500/100",
-				"bg-red-500/[100%]",
-				"bg-blue-500",
-				"bg-current",
-				"bg-current/50",
-				"bg-current/[0.5]",
-				"bg-current/[50%]",
-				"bg-current/[var(--bg-opacity)]",
-				"bg-inherit",
-				"bg-transparent",
-				"bg-[#0088cc]",
-				"bg-[#0088cc]/50",
-				"bg-[#0088cc]/[0.5]",
-				"bg-[#0088cc]/[50%]",
-				"bg-[var(--some-var)]",
-				"bg-[var(--some-var)]/50",
-				"bg-[var(--some-var)]/[0.5]",
-				"bg-[var(--some-var)]/[50%]",
-				"bg-[color:var(--some-var)]",
-				"bg-[color:var(--some-var)]/50",
-				"bg-[color:var(--some-var)]/[0.5]",
-				"bg-[color:var(--some-var)]/[50%]",
+      [
+        // background-color
+        'bg-red-500',
+        'bg-red-500/50',
+        'bg-red-500/2.25',
+        'bg-red-500/2.5',
+        'bg-red-500/2.75',
+        'bg-red-500/[0.5]',
+        'bg-red-500/[50%]',
+        'bg-red-500/100',
+        'bg-red-500/[100%]',
+        'bg-blue-500',
+        'bg-current',
+        'bg-current/50',
+        'bg-current/[0.5]',
+        'bg-current/[50%]',
+        'bg-current/[var(--bg-opacity)]',
+        'bg-inherit',
+        'bg-transparent',
+        'bg-[#0088cc]',
+        'bg-[#0088cc]/50',
+        'bg-[#0088cc]/[0.5]',
+        'bg-[#0088cc]/[50%]',
+        'bg-[var(--some-var)]',
+        'bg-[var(--some-var)]/50',
+        'bg-[var(--some-var)]/[0.5]',
+        'bg-[var(--some-var)]/[50%]',
+        'bg-[color:var(--some-var)]',
+        'bg-[color:var(--some-var)]/50',
+        'bg-[color:var(--some-var)]/[0.5]',
+        'bg-[color:var(--some-var)]/[50%]',
 
-				// background-image
-				"bg-none",
+        // background-image
+        'bg-none',
 
-				// Modern linear-gradient API
-				"bg-linear-to-t",
-				"bg-linear-to-tr",
-				"bg-linear-to-r",
-				"bg-linear-to-br",
-				"bg-linear-to-b",
-				"bg-linear-to-bl",
-				"bg-linear-to-l",
-				"bg-linear-to-tl",
-				"bg-linear-45",
-				"-bg-linear-45",
+        // Modern linear-gradient API
+        'bg-linear-to-t',
+        'bg-linear-to-tr',
+        'bg-linear-to-r',
+        'bg-linear-to-br',
+        'bg-linear-to-b',
+        'bg-linear-to-bl',
+        'bg-linear-to-l',
+        'bg-linear-to-tl',
+        'bg-linear-45',
+        '-bg-linear-45',
 
-				// With interpolation mode modifier
-				"bg-linear-to-r/oklch",
-				"bg-linear-to-r/oklab",
-				"bg-linear-to-r/hsl",
-				"bg-linear-to-r/srgb",
-				"bg-linear-to-r/longer",
-				"bg-linear-to-r/shorter",
-				"bg-linear-to-r/increasing",
-				"bg-linear-to-r/decreasing",
-				"bg-linear-to-r/[in_hsl_longer_hue]",
-				"bg-linear-45/oklab",
-				"-bg-linear-45/oklab",
-				"bg-linear-45/shorter",
-				"bg-linear-45/[in_hsl_longer_hue]",
-				"bg-conic/oklch",
-				"bg-conic/oklab",
-				"bg-conic/hsl",
-				"bg-conic/srgb",
-				"bg-conic/longer",
-				"bg-conic/shorter",
-				"bg-conic/increasing",
-				"bg-conic/decreasing",
-				"bg-conic/[in_hsl_longer_hue]",
-				"bg-conic-45/oklab",
-				"-bg-conic-45/oklab",
-				"bg-conic-45/shorter",
-				"bg-conic-45/[in_hsl_longer_hue]",
-				"bg-radial/oklch",
-				"bg-radial/oklab",
-				"bg-radial/hsl",
-				"bg-radial/srgb",
-				"bg-radial/longer",
-				"bg-radial/shorter",
-				"bg-radial/increasing",
-				"bg-radial/decreasing",
-				"bg-radial/[in_hsl_longer_hue]",
-				"bg-radial-[circle_at_center]",
-				// Invalid but proves not converted to `in oklch longer hue` when used
-				// as an arbitrary value
-				"bg-linear-to-r/[longer]",
+        // With interpolation mode modifier
+        'bg-linear-to-r/oklch',
+        'bg-linear-to-r/oklab',
+        'bg-linear-to-r/hsl',
+        'bg-linear-to-r/srgb',
+        'bg-linear-to-r/longer',
+        'bg-linear-to-r/shorter',
+        'bg-linear-to-r/increasing',
+        'bg-linear-to-r/decreasing',
+        'bg-linear-to-r/[in_hsl_longer_hue]',
+        'bg-linear-45/oklab',
+        '-bg-linear-45/oklab',
+        'bg-linear-45/shorter',
+        'bg-linear-45/[in_hsl_longer_hue]',
+        'bg-conic/oklch',
+        'bg-conic/oklab',
+        'bg-conic/hsl',
+        'bg-conic/srgb',
+        'bg-conic/longer',
+        'bg-conic/shorter',
+        'bg-conic/increasing',
+        'bg-conic/decreasing',
+        'bg-conic/[in_hsl_longer_hue]',
+        'bg-conic-45/oklab',
+        '-bg-conic-45/oklab',
+        'bg-conic-45/shorter',
+        'bg-conic-45/[in_hsl_longer_hue]',
+        'bg-radial/oklch',
+        'bg-radial/oklab',
+        'bg-radial/hsl',
+        'bg-radial/srgb',
+        'bg-radial/longer',
+        'bg-radial/shorter',
+        'bg-radial/increasing',
+        'bg-radial/decreasing',
+        'bg-radial/[in_hsl_longer_hue]',
+        'bg-radial-[circle_at_center]',
+        // Invalid but proves not converted to `in oklch longer hue` when used
+        // as an arbitrary value
+        'bg-linear-to-r/[longer]',
 
-				"bg-[url(/image.png)]",
-				"bg-[url:var(--my-url)]",
-				"bg-[linear-gradient(to_bottom,red,blue)]",
-				"bg-[image:var(--my-gradient)]",
-				"bg-linear-[125deg]",
-				"bg-linear-[1.3rad]",
-				"bg-linear-[to_bottom]",
-				"-bg-linear-[125deg]",
-				"-bg-linear-[1.3rad]",
+        'bg-[url(/image.png)]',
+        'bg-[url:var(--my-url)]',
+        'bg-[linear-gradient(to_bottom,red,blue)]',
+        'bg-[image:var(--my-gradient)]',
+        'bg-linear-[125deg]',
+        'bg-linear-[1.3rad]',
+        'bg-linear-[to_bottom]',
+        '-bg-linear-[125deg]',
+        '-bg-linear-[1.3rad]',
 
-				// background-size
-				"bg-auto",
-				"bg-cover",
-				"bg-contain",
-				"bg-[cover]",
-				"bg-[contain]",
-				"bg-[size:120px_120px]",
+        // background-size
+        'bg-auto',
+        'bg-cover',
+        'bg-contain',
+        'bg-[cover]',
+        'bg-[contain]',
+        'bg-[size:120px_120px]',
 
-				// background-attachment
-				"bg-fixed",
-				"bg-local",
-				"bg-scroll",
+        // background-attachment
+        'bg-fixed',
+        'bg-local',
+        'bg-scroll',
 
-				// background-position
-				"bg-top",
-				"bg-top-left",
-				"bg-top-right",
-				"bg-bottom",
-				"bg-bottom-left",
-				"bg-bottom-right",
-				"bg-left",
-				"bg-right",
-				"bg-center",
-				"bg-[50%]",
-				"bg-[120px]",
-				"bg-[120px_120px]",
-				"bg-[length:120px_120px]",
-				"bg-[position:120px_120px]",
-				"bg-[size:120px_120px]",
-				// Legacy versions in v4.0 and earlier
-				"bg-right-top",
-				"bg-right-bottom",
-				"bg-left-bottom",
-				"bg-left-top",
+        // background-position
+        'bg-top',
+        'bg-top-left',
+        'bg-top-right',
+        'bg-bottom',
+        'bg-bottom-left',
+        'bg-bottom-right',
+        'bg-left',
+        'bg-right',
+        'bg-center',
+        'bg-[50%]',
+        'bg-[120px]',
+        'bg-[120px_120px]',
+        'bg-[length:120px_120px]',
+        'bg-[position:120px_120px]',
+        'bg-[size:120px_120px]',
+        // Legacy versions in v4.0 and earlier
+        'bg-right-top',
+        'bg-right-bottom',
+        'bg-left-bottom',
+        'bg-left-top',
 
-				// background-repeat
-				"bg-repeat",
-				"bg-no-repeat",
-				"bg-repeat-x",
-				"bg-repeat-y",
-				"bg-repeat-round",
-				"bg-repeat-space",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // background-repeat
+        'bg-repeat',
+        'bg-no-repeat',
+        'bg-repeat-x',
+        'bg-repeat-y',
+        'bg-repeat-round',
+        'bg-repeat-space',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --background-color-blue-500: #3b82f6;
@@ -12712,114 +12295,114 @@ test("bg", async () => {
     .bg-repeat-y {
       background-repeat: repeat-y;
     }"
-  `);
-	expect(
-		await run([
-			"bg",
-			"bg-unknown",
+  `)
+  expect(
+    await run([
+      'bg',
+      'bg-unknown',
 
-			// background-color
-			"-bg-red-500",
-			"-bg-red-500/50",
-			"-bg-red-500/[0.5]",
-			"-bg-red-500/[50%]",
-			"-bg-current",
-			"-bg-current/50",
-			"-bg-current/[0.5]",
-			"-bg-current/[50%]",
-			"-bg-inherit",
-			"-bg-transparent",
-			"-bg-[#0088cc]",
-			"-bg-[#0088cc]/50",
-			"-bg-[#0088cc]/[0.5]",
-			"-bg-[#0088cc]/[50%]",
+      // background-color
+      '-bg-red-500',
+      '-bg-red-500/50',
+      '-bg-red-500/[0.5]',
+      '-bg-red-500/[50%]',
+      '-bg-current',
+      '-bg-current/50',
+      '-bg-current/[0.5]',
+      '-bg-current/[50%]',
+      '-bg-inherit',
+      '-bg-transparent',
+      '-bg-[#0088cc]',
+      '-bg-[#0088cc]/50',
+      '-bg-[#0088cc]/[0.5]',
+      '-bg-[#0088cc]/[50%]',
 
-			// background-image
-			"-bg-none",
-			"-bg-gradient-to-br",
-			"-bg-linear-to-br",
-			"-bg-linear-[to_bottom]",
+      // background-image
+      '-bg-none',
+      '-bg-gradient-to-br',
+      '-bg-linear-to-br',
+      '-bg-linear-[to_bottom]',
 
-			// background-size
-			"-bg-auto",
-			"-bg-cover",
-			"-bg-contain",
+      // background-size
+      '-bg-auto',
+      '-bg-cover',
+      '-bg-contain',
 
-			// background-attachment
-			"-bg-fixed",
-			"-bg-local",
-			"-bg-scroll",
+      // background-attachment
+      '-bg-fixed',
+      '-bg-local',
+      '-bg-scroll',
 
-			// background-position
-			"-bg-center",
-			"-bg-top",
-			"-bg-right-top",
-			"-bg-right-bottom",
-			"-bg-bottom",
-			"-bg-left-bottom",
-			"-bg-left",
-			"-bg-left-top",
+      // background-position
+      '-bg-center',
+      '-bg-top',
+      '-bg-right-top',
+      '-bg-right-bottom',
+      '-bg-bottom',
+      '-bg-left-bottom',
+      '-bg-left',
+      '-bg-left-top',
 
-			// background-repeat
-			"-bg-repeat",
-			"-bg-no-repeat",
-			"-bg-repeat-x",
-			"-bg-repeat-y",
-			"-bg-round",
-			"-bg-space",
+      // background-repeat
+      '-bg-repeat',
+      '-bg-no-repeat',
+      '-bg-repeat-x',
+      '-bg-repeat-y',
+      '-bg-round',
+      '-bg-space',
 
-			"bg-none/foo",
-			"bg-[url(/image.png)]/foo",
-			"bg-[url:var(--my-url)]/foo",
-			"bg-[linear-gradient(to_bottom,red,blue)]/foo",
-			"bg-[image:var(--my-gradient)]/foo",
-			"bg-linear-[to_bottom]/hsl",
-			"bg-conic-[45deg]/hsl",
-			"bg-conic-[circle_at_center]/hsl",
-			"bg-auto/foo",
-			"bg-cover/foo",
-			"bg-contain/foo",
-			"bg-[cover]/foo",
-			"bg-[contain]/foo",
-			"bg-[size:120px_120px]/foo",
-			"bg-fixed/foo",
-			"bg-local/foo",
-			"bg-scroll/foo",
-			"bg-center/foo",
-			"bg-top/foo",
-			"bg-right-top/foo",
-			"bg-right-bottom/foo",
-			"bg-bottom/foo",
-			"bg-left-bottom/foo",
-			"bg-left/foo",
-			"bg-left-top/foo",
-			"bg-[50%]/foo",
-			"bg-[120px]/foo",
-			"bg-[120px_120px]/foo",
-			"bg-[length:120px_120px]/foo",
-			"bg-[position:120px_120px]/foo",
-			"bg-[size:120px_120px]/foo",
-			"bg-repeat/foo",
-			"bg-no-repeat/foo",
-			"bg-repeat-x/foo",
-			"bg-repeat-y/foo",
-			"bg-round/foo",
-			"bg-space/foo",
-		]),
-	).toEqual("");
+      'bg-none/foo',
+      'bg-[url(/image.png)]/foo',
+      'bg-[url:var(--my-url)]/foo',
+      'bg-[linear-gradient(to_bottom,red,blue)]/foo',
+      'bg-[image:var(--my-gradient)]/foo',
+      'bg-linear-[to_bottom]/hsl',
+      'bg-conic-[45deg]/hsl',
+      'bg-conic-[circle_at_center]/hsl',
+      'bg-auto/foo',
+      'bg-cover/foo',
+      'bg-contain/foo',
+      'bg-[cover]/foo',
+      'bg-[contain]/foo',
+      'bg-[size:120px_120px]/foo',
+      'bg-fixed/foo',
+      'bg-local/foo',
+      'bg-scroll/foo',
+      'bg-center/foo',
+      'bg-top/foo',
+      'bg-right-top/foo',
+      'bg-right-bottom/foo',
+      'bg-bottom/foo',
+      'bg-left-bottom/foo',
+      'bg-left/foo',
+      'bg-left-top/foo',
+      'bg-[50%]/foo',
+      'bg-[120px]/foo',
+      'bg-[120px_120px]/foo',
+      'bg-[length:120px_120px]/foo',
+      'bg-[position:120px_120px]/foo',
+      'bg-[size:120px_120px]/foo',
+      'bg-repeat/foo',
+      'bg-no-repeat/foo',
+      'bg-repeat-x/foo',
+      'bg-repeat-y/foo',
+      'bg-round/foo',
+      'bg-space/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --opacity-half: 0.5;
           --opacity-custom: var(--custom-opacity);
         }
         @tailwind utilities;
       `,
-			["bg-current/half", "bg-current/custom", "[color:red]/half"],
-		),
-	).toMatchInlineSnapshot(`
+      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".bg-current\\/custom {
       background-color: currentColor;
     }
@@ -12849,25 +12432,21 @@ test("bg", async () => {
         color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
       }
     }"
-  `);
-});
+  `)
+})
 
-test("bg-position", async () => {
-	expect(
-		await compileCss(
-			css`
+test('bg-position', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				"bg-position-[120px]",
-				"bg-position-[120px_120px]",
-				"bg-position-[var(--some-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".bg-position-\\[120px\\] {
       background-position: 120px;
     }
@@ -12879,34 +12458,34 @@ test("bg-position", async () => {
     .bg-position-\\[var\\(--some-var\\)\\] {
       background-position: var(--some-var);
     }"
-  `);
-	expect(
-		await run([
-			"bg-position",
-			"bg-position/foo",
-			"-bg-position",
-			"-bg-position/foo",
+  `)
+  expect(
+    await run([
+      'bg-position',
+      'bg-position/foo',
+      '-bg-position',
+      '-bg-position/foo',
 
-			"bg-position-[120px_120px]/foo",
+      'bg-position-[120px_120px]/foo',
 
-			"-bg-position-[120px_120px]",
-			"-bg-position-[120px_120px]/foo",
-		]),
-	).toEqual("");
-});
+      '-bg-position-[120px_120px]',
+      '-bg-position-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("bg-size", async () => {
-	expect(
-		await compileCss(
-			css`
+test('bg-size', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			["bg-size-[120px]", "bg-size-[120px_120px]", "bg-size-[var(--some-var)]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".bg-size-\\[120px\\] {
       background-size: 120px;
     }
@@ -12918,67 +12497,67 @@ test("bg-size", async () => {
     .bg-size-\\[var\\(--some-var\\)\\] {
       background-size: var(--some-var);
     }"
-  `);
-	expect(
-		await run([
-			"bg-size",
-			"bg-size/foo",
-			"-bg-size",
-			"-bg-size/foo",
+  `)
+  expect(
+    await run([
+      'bg-size',
+      'bg-size/foo',
+      '-bg-size',
+      '-bg-size/foo',
 
-			"bg-size-[120px_120px]/foo",
+      'bg-size-[120px_120px]/foo',
 
-			"-bg-size-[120px_120px]",
-			"-bg-size-[120px_120px]/foo",
-		]),
-	).toEqual("");
-});
+      '-bg-size-[120px_120px]',
+      '-bg-size-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				// --tw-gradient-from
-				"from-red-500",
-				"from-red-500/50",
-				"from-red-500/[0.5]",
-				"from-red-500/[50%]",
-				"from-current",
-				"from-current/50",
-				"from-current/[0.5]",
-				"from-current/[50%]",
-				"from-inherit",
-				"from-transparent",
-				"from-[#0088cc]",
-				"from-[#0088cc]/50",
-				"from-[#0088cc]/[0.5]",
-				"from-[#0088cc]/[50%]",
-				"from-[var(--my-color)]",
-				"from-[var(--my-color)]/50",
-				"from-[var(--my-color)]/[0.5]",
-				"from-[var(--my-color)]/[50%]",
-				"from-[color:var(--my-color)]",
-				"from-[color:var(--my-color)]/50",
-				"from-[color:var(--my-color)]/[0.5]",
-				"from-[color:var(--my-color)]/[50%]",
+      [
+        // --tw-gradient-from
+        'from-red-500',
+        'from-red-500/50',
+        'from-red-500/[0.5]',
+        'from-red-500/[50%]',
+        'from-current',
+        'from-current/50',
+        'from-current/[0.5]',
+        'from-current/[50%]',
+        'from-inherit',
+        'from-transparent',
+        'from-[#0088cc]',
+        'from-[#0088cc]/50',
+        'from-[#0088cc]/[0.5]',
+        'from-[#0088cc]/[50%]',
+        'from-[var(--my-color)]',
+        'from-[var(--my-color)]/50',
+        'from-[var(--my-color)]/[0.5]',
+        'from-[var(--my-color)]/[50%]',
+        'from-[color:var(--my-color)]',
+        'from-[color:var(--my-color)]/50',
+        'from-[color:var(--my-color)]/[0.5]',
+        'from-[color:var(--my-color)]/[50%]',
 
-				// --tw-gradient-from-position
-				"from-0%",
-				"from-5%",
-				"from-100%",
-				"from-[50%]",
-				"from-[50px]",
-				"from-[length:var(--my-position)]",
-				"from-[percentage:var(--my-position)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // --tw-gradient-from-position
+        'from-0%',
+        'from-5%',
+        'from-100%',
+        'from-[50%]',
+        'from-[50px]',
+        'from-[length:var(--my-position)]',
+        'from-[percentage:var(--my-position)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -13281,87 +12860,87 @@ test("from", async () => {
       inherits: false;
       initial-value: 100%;
     }"
-  `);
-	expect(
-		await run([
-			"from",
-			"from-25.%",
-			"from-25.0%",
-			"from-123",
-			"from--123",
-			"from--5%",
-			"from-unknown",
-			"from-unknown%",
+  `)
+  expect(
+    await run([
+      'from',
+      'from-25.%',
+      'from-25.0%',
+      'from-123',
+      'from--123',
+      'from--5%',
+      'from-unknown',
+      'from-unknown%',
 
-			// --tw-gradient-from
-			"-from-red-500",
-			"-from-red-500/50",
-			"-from-red-500/[0.5]",
-			"-from-red-500/[50%]",
-			"-from-current",
-			"-from-current/50",
-			"-from-current/[0.5]",
-			"-from-current/[50%]",
-			"-from-inherit",
-			"-from-transparent",
-			"-from-[#0088cc]",
-			"-from-[#0088cc]/50",
-			"-from-[#0088cc]/[0.5]",
-			"-from-[#0088cc]/[50%]",
+      // --tw-gradient-from
+      '-from-red-500',
+      '-from-red-500/50',
+      '-from-red-500/[0.5]',
+      '-from-red-500/[50%]',
+      '-from-current',
+      '-from-current/50',
+      '-from-current/[0.5]',
+      '-from-current/[50%]',
+      '-from-inherit',
+      '-from-transparent',
+      '-from-[#0088cc]',
+      '-from-[#0088cc]/50',
+      '-from-[#0088cc]/[0.5]',
+      '-from-[#0088cc]/[50%]',
 
-			// --tw-gradient-from-position
-			"-from-0%",
-			"-from-5%",
-			"-from-100%",
-		]),
-	).toEqual("");
-});
+      // --tw-gradient-from-position
+      '-from-0%',
+      '-from-5%',
+      '-from-100%',
+    ]),
+  ).toEqual('')
+})
 
-test("via", async () => {
-	expect(
-		await compileCss(
-			css`
+test('via', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				// --tw-gradient-stops
-				"via-red-500",
-				"via-red-500/50",
-				"via-red-500/[0.5]",
-				"via-red-500/[50%]",
-				"via-current",
-				"via-current/50",
-				"via-current/[0.5]",
-				"via-current/[50%]",
-				"via-inherit",
-				"via-transparent",
-				"via-[#0088cc]",
-				"via-[#0088cc]/50",
-				"via-[#0088cc]/[0.5]",
-				"via-[#0088cc]/[50%]",
-				"via-[var(--my-color)]",
-				"via-[var(--my-color)]/50",
-				"via-[var(--my-color)]/[0.5]",
-				"via-[var(--my-color)]/[50%]",
-				"via-[color:var(--my-color)]",
-				"via-[color:var(--my-color)]/50",
-				"via-[color:var(--my-color)]/[0.5]",
-				"via-[color:var(--my-color)]/[50%]",
+      [
+        // --tw-gradient-stops
+        'via-red-500',
+        'via-red-500/50',
+        'via-red-500/[0.5]',
+        'via-red-500/[50%]',
+        'via-current',
+        'via-current/50',
+        'via-current/[0.5]',
+        'via-current/[50%]',
+        'via-inherit',
+        'via-transparent',
+        'via-[#0088cc]',
+        'via-[#0088cc]/50',
+        'via-[#0088cc]/[0.5]',
+        'via-[#0088cc]/[50%]',
+        'via-[var(--my-color)]',
+        'via-[var(--my-color)]/50',
+        'via-[var(--my-color)]/[0.5]',
+        'via-[var(--my-color)]/[50%]',
+        'via-[color:var(--my-color)]',
+        'via-[color:var(--my-color)]/50',
+        'via-[color:var(--my-color)]/[0.5]',
+        'via-[color:var(--my-color)]/[50%]',
 
-				// --tw-gradient-via-position
-				"via-0%",
-				"via-5%",
-				"via-100%",
-				"via-[50%]",
-				"via-[50px]",
-				"via-[length:var(--my-position)]",
-				"via-[percentage:var(--my-position)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // --tw-gradient-via-position
+        'via-0%',
+        'via-5%',
+        'via-100%',
+        'via-[50%]',
+        'via-[50px]',
+        'via-[length:var(--my-position)]',
+        'via-[percentage:var(--my-position)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -13684,85 +13263,85 @@ test("via", async () => {
       inherits: false;
       initial-value: 100%;
     }"
-  `);
-	expect(
-		await run([
-			"via",
-			"via-123",
-			"via--123",
-			"via--5%",
-			"via-unknown",
-			"via-unknown%",
+  `)
+  expect(
+    await run([
+      'via',
+      'via-123',
+      'via--123',
+      'via--5%',
+      'via-unknown',
+      'via-unknown%',
 
-			// --tw-gradient-stops
-			"-via-red-500",
-			"-via-red-500/50",
-			"-via-red-500/[0.5]",
-			"-via-red-500/[50%]",
-			"-via-current",
-			"-via-current/50",
-			"-via-current/[0.5]",
-			"-via-current/[50%]",
-			"-via-inherit",
-			"-via-transparent",
-			"-via-[#0088cc]",
-			"-via-[#0088cc]/50",
-			"-via-[#0088cc]/[0.5]",
-			"-via-[#0088cc]/[50%]",
+      // --tw-gradient-stops
+      '-via-red-500',
+      '-via-red-500/50',
+      '-via-red-500/[0.5]',
+      '-via-red-500/[50%]',
+      '-via-current',
+      '-via-current/50',
+      '-via-current/[0.5]',
+      '-via-current/[50%]',
+      '-via-inherit',
+      '-via-transparent',
+      '-via-[#0088cc]',
+      '-via-[#0088cc]/50',
+      '-via-[#0088cc]/[0.5]',
+      '-via-[#0088cc]/[50%]',
 
-			// --tw-gradient-via-position
-			"-via-0%",
-			"-via-5%",
-			"-via-100%",
-		]),
-	).toEqual("");
-});
+      // --tw-gradient-via-position
+      '-via-0%',
+      '-via-5%',
+      '-via-100%',
+    ]),
+  ).toEqual('')
+})
 
-test("to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				// --tw-gradient-to
-				"to-red-500",
-				"to-red-500/50",
-				"to-red-500/[0.5]",
-				"to-red-500/[50%]",
-				"to-current",
-				"to-current/50",
-				"to-current/[0.5]",
-				"to-current/[50%]",
-				"to-inherit",
-				"to-transparent",
-				"to-[#0088cc]",
-				"to-[#0088cc]/50",
-				"to-[#0088cc]/[0.5]",
-				"to-[#0088cc]/[50%]",
-				"to-[var(--my-color)]",
-				"to-[var(--my-color)]/50",
-				"to-[var(--my-color)]/[0.5]",
-				"to-[var(--my-color)]/[50%]",
-				"to-[color:var(--my-color)]",
-				"to-[color:var(--my-color)]/50",
-				"to-[color:var(--my-color)]/[0.5]",
-				"to-[color:var(--my-color)]/[50%]",
+      [
+        // --tw-gradient-to
+        'to-red-500',
+        'to-red-500/50',
+        'to-red-500/[0.5]',
+        'to-red-500/[50%]',
+        'to-current',
+        'to-current/50',
+        'to-current/[0.5]',
+        'to-current/[50%]',
+        'to-inherit',
+        'to-transparent',
+        'to-[#0088cc]',
+        'to-[#0088cc]/50',
+        'to-[#0088cc]/[0.5]',
+        'to-[#0088cc]/[50%]',
+        'to-[var(--my-color)]',
+        'to-[var(--my-color)]/50',
+        'to-[var(--my-color)]/[0.5]',
+        'to-[var(--my-color)]/[50%]',
+        'to-[color:var(--my-color)]',
+        'to-[color:var(--my-color)]/50',
+        'to-[color:var(--my-color)]/[0.5]',
+        'to-[color:var(--my-color)]/[50%]',
 
-				// --tw-gradient-to-position
-				"to-0%",
-				"to-5%",
-				"to-100%",
-				"to-[50%]",
-				"to-[50px]",
-				"to-[length:var(--my-position)]",
-				"to-[percentage:var(--my-position)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // --tw-gradient-to-position
+        'to-0%',
+        'to-5%',
+        'to-100%',
+        'to-[50%]',
+        'to-[50px]',
+        'to-[length:var(--my-position)]',
+        'to-[percentage:var(--my-position)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -14065,108 +13644,108 @@ test("to", async () => {
       inherits: false;
       initial-value: 100%;
     }"
-  `);
-	expect(
-		await run([
-			"to",
-			"to-123",
-			"to--123",
-			"to--5%",
-			"to-unknown",
-			"to-unknown%",
+  `)
+  expect(
+    await run([
+      'to',
+      'to-123',
+      'to--123',
+      'to--5%',
+      'to-unknown',
+      'to-unknown%',
 
-			// --tw-gradient-to
-			"-to-red-500",
-			"-to-red-500/50",
-			"-to-red-500/[0.5]",
-			"-to-red-500/[50%]",
-			"-to-current",
-			"-to-current/50",
-			"-to-current/[0.5]",
-			"-to-current/[50%]",
-			"-to-inherit",
-			"-to-transparent",
-			"-to-[#0088cc]",
-			"-to-[#0088cc]/50",
-			"-to-[#0088cc]/[0.5]",
-			"-to-[#0088cc]/[50%]",
+      // --tw-gradient-to
+      '-to-red-500',
+      '-to-red-500/50',
+      '-to-red-500/[0.5]',
+      '-to-red-500/[50%]',
+      '-to-current',
+      '-to-current/50',
+      '-to-current/[0.5]',
+      '-to-current/[50%]',
+      '-to-inherit',
+      '-to-transparent',
+      '-to-[#0088cc]',
+      '-to-[#0088cc]/50',
+      '-to-[#0088cc]/[0.5]',
+      '-to-[#0088cc]/[50%]',
 
-			// --tw-gradient-to-position
-			"-to-0%",
-			"-to-5%",
-			"-to-100%",
-		]),
-	).toEqual("");
-});
+      // --tw-gradient-to-position
+      '-to-0%',
+      '-to-5%',
+      '-to-100%',
+    ]),
+  ).toEqual('')
+})
 
-test("mask", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				// mask-image
-				"mask-none",
-				"mask-[linear-gradient(#ffff,#0000)]",
-				"mask-[url(http://example.com)]",
-				"mask-[var(--some-var)]",
-				"mask-[image:var(--some-var)]",
-				"mask-[url:var(--some-var)]",
+      [
+        // mask-image
+        'mask-none',
+        'mask-[linear-gradient(#ffff,#0000)]',
+        'mask-[url(http://example.com)]',
+        'mask-[var(--some-var)]',
+        'mask-[image:var(--some-var)]',
+        'mask-[url:var(--some-var)]',
 
-				// mask-composite
-				"mask-add",
-				"mask-subtract",
-				"mask-intersect",
-				"mask-exclude",
+        // mask-composite
+        'mask-add',
+        'mask-subtract',
+        'mask-intersect',
+        'mask-exclude',
 
-				// mask-mode
-				"mask-alpha",
-				"mask-luminance",
-				"mask-match",
+        // mask-mode
+        'mask-alpha',
+        'mask-luminance',
+        'mask-match',
 
-				// mask-type
-				"mask-type-alpha",
-				"mask-type-luminance",
+        // mask-type
+        'mask-type-alpha',
+        'mask-type-luminance',
 
-				// mask-size
-				"mask-auto",
-				"mask-cover",
-				"mask-contain",
-				"mask-[cover]",
-				"mask-[contain]",
-				"mask-[size:120px_120px]",
+        // mask-size
+        'mask-auto',
+        'mask-cover',
+        'mask-contain',
+        'mask-[cover]',
+        'mask-[contain]',
+        'mask-[size:120px_120px]',
 
-				// mask-position
-				"mask-center",
-				"mask-top",
-				"mask-top-right",
-				"mask-top-left",
-				"mask-bottom",
-				"mask-bottom-right",
-				"mask-bottom-left",
-				"mask-left",
-				"mask-right",
-				"mask-center",
-				"mask-[50%]",
-				"mask-[120px]",
-				"mask-[120px_120px]",
-				"mask-[length:120px_120px]",
-				"mask-[position:120px_120px]",
+        // mask-position
+        'mask-center',
+        'mask-top',
+        'mask-top-right',
+        'mask-top-left',
+        'mask-bottom',
+        'mask-bottom-right',
+        'mask-bottom-left',
+        'mask-left',
+        'mask-right',
+        'mask-center',
+        'mask-[50%]',
+        'mask-[120px]',
+        'mask-[120px_120px]',
+        'mask-[length:120px_120px]',
+        'mask-[position:120px_120px]',
 
-				// mask-repeat
-				"mask-repeat",
-				"mask-no-repeat",
-				"mask-repeat-x",
-				"mask-repeat-y",
-				"mask-repeat-round",
-				"mask-repeat-space",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // mask-repeat
+        'mask-repeat',
+        'mask-no-repeat',
+        'mask-repeat-x',
+        'mask-repeat-y',
+        'mask-repeat-round',
+        'mask-repeat-space',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ".mask-\\[image\\:var\\(--some-var\\)\\] {
       -webkit-mask-image: var(--some-var);
       -webkit-mask-image: var(--some-var);
@@ -14363,106 +13942,106 @@ test("mask", async () => {
       -webkit-mask-repeat: repeat-y;
       mask-repeat: repeat-y;
     }"
-  `);
-	expect(
-		await run([
-			"mask",
-			"mask-unknown",
+  `)
+  expect(
+    await run([
+      'mask',
+      'mask-unknown',
 
-			// mask-image
-			"-mask-none",
-			"mask-none/foo",
-			"-mask-[var(--some-var)]",
-			"mask-[var(--some-var)]/foo",
-			"-mask-[image:var(--some-var)]",
-			"mask-[image:var(--some-var)]/foo",
-			"-mask-[url:var(--some-var)]",
-			"mask-[url:var(--some-var)]/foo",
+      // mask-image
+      '-mask-none',
+      'mask-none/foo',
+      '-mask-[var(--some-var)]',
+      'mask-[var(--some-var)]/foo',
+      '-mask-[image:var(--some-var)]',
+      'mask-[image:var(--some-var)]/foo',
+      '-mask-[url:var(--some-var)]',
+      'mask-[url:var(--some-var)]/foo',
 
-			// mask-composite
-			"-mask-add",
-			"-mask-subtract",
-			"-mask-intersect",
-			"-mask-exclude",
-			"mask-add/foo",
-			"mask-subtract/foo",
-			"mask-intersect/foo",
-			"mask-exclude/foo",
+      // mask-composite
+      '-mask-add',
+      '-mask-subtract',
+      '-mask-intersect',
+      '-mask-exclude',
+      'mask-add/foo',
+      'mask-subtract/foo',
+      'mask-intersect/foo',
+      'mask-exclude/foo',
 
-			// mask-mode
-			"-mask-alpha",
-			"-mask-luminance",
-			"-mask-match",
-			"mask-alpha/foo",
-			"mask-luminance/foo",
-			"mask-match/foo",
+      // mask-mode
+      '-mask-alpha',
+      '-mask-luminance',
+      '-mask-match',
+      'mask-alpha/foo',
+      'mask-luminance/foo',
+      'mask-match/foo',
 
-			// mask-type
-			"-mask-type-alpha",
-			"-mask-type-luminance",
-			"mask-type-alpha/foo",
-			"mask-type-luminance/foo",
+      // mask-type
+      '-mask-type-alpha',
+      '-mask-type-luminance',
+      'mask-type-alpha/foo',
+      'mask-type-luminance/foo',
 
-			// mask-size
-			"-mask-auto",
-			"-mask-cover",
-			"-mask-contain",
-			"-mask-auto/foo",
-			"-mask-cover/foo",
-			"-mask-contain/foo",
+      // mask-size
+      '-mask-auto',
+      '-mask-cover',
+      '-mask-contain',
+      '-mask-auto/foo',
+      '-mask-cover/foo',
+      '-mask-contain/foo',
 
-			// mask-position
-			"-mask-center",
-			"-mask-top",
-			"-mask-right-top",
-			"-mask-right-bottom",
-			"-mask-bottom",
-			"-mask-left-bottom",
-			"-mask-left",
-			"-mask-left-top",
-			"-mask-center/foo",
-			"-mask-top/foo",
-			"-mask-right-top/foo",
-			"-mask-right-bottom/foo",
-			"-mask-bottom/foo",
-			"-mask-left-bottom/foo",
-			"-mask-left/foo",
-			"-mask-left-top/foo",
+      // mask-position
+      '-mask-center',
+      '-mask-top',
+      '-mask-right-top',
+      '-mask-right-bottom',
+      '-mask-bottom',
+      '-mask-left-bottom',
+      '-mask-left',
+      '-mask-left-top',
+      '-mask-center/foo',
+      '-mask-top/foo',
+      '-mask-right-top/foo',
+      '-mask-right-bottom/foo',
+      '-mask-bottom/foo',
+      '-mask-left-bottom/foo',
+      '-mask-left/foo',
+      '-mask-left-top/foo',
 
-			// mask-repeat
-			"mask-repeat/foo",
-			"mask-no-repeat/foo",
-			"mask-repeat-x/foo",
-			"mask-repeat-y/foo",
-			"mask-round/foo",
-			"mask-space/foo",
-			"-mask-repeat",
-			"-mask-no-repeat",
-			"-mask-repeat-x",
-			"-mask-repeat-y",
-			"-mask-round",
-			"-mask-space",
-			"-mask-repeat/foo",
-			"-mask-no-repeat/foo",
-			"-mask-repeat-x/foo",
-			"-mask-repeat-y/foo",
-			"-mask-round/foo",
-			"-mask-space/foo",
-		]),
-	).toEqual("");
+      // mask-repeat
+      'mask-repeat/foo',
+      'mask-no-repeat/foo',
+      'mask-repeat-x/foo',
+      'mask-repeat-y/foo',
+      'mask-round/foo',
+      'mask-space/foo',
+      '-mask-repeat',
+      '-mask-no-repeat',
+      '-mask-repeat-x',
+      '-mask-repeat-y',
+      '-mask-round',
+      '-mask-space',
+      '-mask-repeat/foo',
+      '-mask-no-repeat/foo',
+      '-mask-repeat-x/foo',
+      '-mask-repeat-y/foo',
+      '-mask-round/foo',
+      '-mask-space/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --opacity-half: 0.5;
           --opacity-custom: var(--custom-opacity);
         }
         @tailwind utilities;
       `,
-			["mask-current/half", "mask-current/custom", "[color:red]/half"],
-		),
-	).toMatchInlineSnapshot(`
+      ['mask-current/half', 'mask-current/custom', '[color:red]/half'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".\\[color\\:red\\]\\/half {
       color: color-mix(in srgb, red .5, transparent);
     }
@@ -14472,25 +14051,21 @@ test("mask", async () => {
         color: color-mix(in oklab, red var(--opacity-half, .5), transparent);
       }
     }"
-  `);
-});
+  `)
+})
 
-test("mask-position", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-position', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-position-[120px]",
-				"mask-position-[120px_120px]",
-				"mask-position-[var(--some-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['mask-position-[120px]', 'mask-position-[120px_120px]', 'mask-position-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".mask-position-\\[120px\\] {
       -webkit-mask-position: 120px;
       mask-position: 120px;
@@ -14506,38 +14081,34 @@ test("mask-position", async () => {
       -webkit-mask-position: var(--some-var);
       mask-position: var(--some-var);
     }"
-  `);
-	expect(
-		await run([
-			"mask-position",
-			"mask-position/foo",
-			"-mask-position",
-			"-mask-position/foo",
+  `)
+  expect(
+    await run([
+      'mask-position',
+      'mask-position/foo',
+      '-mask-position',
+      '-mask-position/foo',
 
-			"mask-position-[120px_120px]/foo",
+      'mask-position-[120px_120px]/foo',
 
-			"-mask-position-[120px_120px]",
-			"-mask-position-[120px_120px]/foo",
-		]),
-	).toEqual("");
-});
+      '-mask-position-[120px_120px]',
+      '-mask-position-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-size", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-size', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-size-[120px]",
-				"mask-size-[120px_120px]",
-				"mask-size-[var(--some-var)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['mask-size-[120px]', 'mask-size-[120px_120px]', 'mask-size-[var(--some-var)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".mask-size-\\[120px\\] {
       -webkit-mask-size: 120px;
       mask-size: 120px;
@@ -14553,45 +14124,45 @@ test("mask-size", async () => {
       -webkit-mask-size: var(--some-var);
       mask-size: var(--some-var);
     }"
-  `);
-	expect(
-		await run([
-			"mask-size",
-			"mask-size/foo",
-			"-mask-size",
-			"-mask-size/foo",
+  `)
+  expect(
+    await run([
+      'mask-size',
+      'mask-size/foo',
+      '-mask-size',
+      '-mask-size/foo',
 
-			"mask-size-[120px_120px]/foo",
+      'mask-size-[120px_120px]/foo',
 
-			"-mask-size-[120px_120px]",
-			"-mask-size-[120px_120px]/foo",
-		]),
-	).toEqual("");
-});
+      '-mask-size-[120px_120px]',
+      '-mask-size-[120px_120px]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-t-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-t-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-t-from-0",
-				"mask-t-from-1.5",
-				"mask-t-from-2",
-				"mask-t-from-0%",
-				"mask-t-from-2%",
-				"mask-t-from-[0px]",
-				"mask-t-from-[0%]",
-				"mask-t-from-(--my-var)",
-				"mask-t-from-(color:--my-var)",
-				"mask-t-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mask-t-from-0',
+        'mask-t-from-1.5',
+        'mask-t-from-2',
+        'mask-t-from-0%',
+        'mask-t-from-2%',
+        'mask-t-from-[0px]',
+        'mask-t-from-[0%]',
+        'mask-t-from-(--my-var)',
+        'mask-t-from-(color:--my-var)',
+        'mask-t-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -14787,72 +14358,72 @@ test("mask-t-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-t-from",
-				"mask-t-from-2.8175",
-				"mask-t-from--1.5",
-				"mask-t-from--2",
+      [
+        'mask-t-from',
+        'mask-t-from-2.8175',
+        'mask-t-from--1.5',
+        'mask-t-from--2',
 
-				"mask-t-from-2.5%",
-				"mask-t-from--5%",
-				"mask-t-from-unknown",
-				"mask-t-from-unknown%",
+        'mask-t-from-2.5%',
+        'mask-t-from--5%',
+        'mask-t-from-unknown',
+        'mask-t-from-unknown%',
 
-				"-mask-t-from-0",
-				"-mask-t-from-1.5",
-				"-mask-t-from-2",
-				"-mask-t-from-0%",
-				"-mask-t-from-2%",
-				"-mask-t-from-[0px]",
-				"-mask-t-from-[0%]",
+        '-mask-t-from-0',
+        '-mask-t-from-1.5',
+        '-mask-t-from-2',
+        '-mask-t-from-0%',
+        '-mask-t-from-2%',
+        '-mask-t-from-[0px]',
+        '-mask-t-from-[0%]',
 
-				"-mask-t-from-(--my-var)",
-				"-mask-t-from-(color:--my-var)",
-				"-mask-t-from-(length:--my-var)",
+        '-mask-t-from-(--my-var)',
+        '-mask-t-from-(color:--my-var)',
+        '-mask-t-from-(length:--my-var)',
 
-				"mask-l-from-[-25%]",
-				"mask-l-from-[25%]/foo",
-				"mask-l-from-[-25%]/foo",
-				"-mask-l-from-[-25%]",
-				"-mask-l-from-[25%]/foo",
-				"-mask-l-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-t-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-t-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-t-to-0",
-				"mask-t-to-1.5",
-				"mask-t-to-2",
-				"mask-t-to-0%",
-				"mask-t-to-2%",
-				"mask-t-to-[0px]",
-				"mask-t-to-[0%]",
-				"mask-t-to-(--my-var)",
-				"mask-t-to-(color:--my-var)",
-				"mask-t-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mask-t-to-0',
+        'mask-t-to-1.5',
+        'mask-t-to-2',
+        'mask-t-to-0%',
+        'mask-t-to-2%',
+        'mask-t-to-[0px]',
+        'mask-t-to-[0%]',
+        'mask-t-to-(--my-var)',
+        'mask-t-to-(color:--my-var)',
+        'mask-t-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -15048,73 +14619,73 @@ test("mask-t-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-t-to",
-				"mask-t-to-2.8175",
-				"mask-t-to--1.5",
-				"mask-t-to--2",
+      [
+        'mask-t-to',
+        'mask-t-to-2.8175',
+        'mask-t-to--1.5',
+        'mask-t-to--2',
 
-				"mask-t-to-2.5%",
-				"mask-t-to--5%",
-				"mask-t-to-unknown",
-				"mask-t-to-unknown%",
+        'mask-t-to-2.5%',
+        'mask-t-to--5%',
+        'mask-t-to-unknown',
+        'mask-t-to-unknown%',
 
-				"-mask-t-to-0",
-				"-mask-t-to-1.5",
-				"-mask-t-to-2",
-				"-mask-t-to-0%",
-				"-mask-t-to-2%",
-				"-mask-t-to-[0px]",
-				"-mask-t-to-[0%]",
+        '-mask-t-to-0',
+        '-mask-t-to-1.5',
+        '-mask-t-to-2',
+        '-mask-t-to-0%',
+        '-mask-t-to-2%',
+        '-mask-t-to-[0px]',
+        '-mask-t-to-[0%]',
 
-				"-mask-t-to-(--my-var)",
-				"-mask-t-to-(color:--my-var)",
-				"-mask-t-to-(length:--my-var)",
+        '-mask-t-to-(--my-var)',
+        '-mask-t-to-(color:--my-var)',
+        '-mask-t-to-(length:--my-var)',
 
-				"mask-l-from-[-25%]",
-				"mask-l-from-[25%]/foo",
-				"mask-l-from-[-25%]/foo",
-				"-mask-l-from-[-25%]",
-				"-mask-l-from-[25%]/foo",
-				"-mask-l-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-r-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-r-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-r-from-0",
-				"mask-r-from-1.5",
-				"mask-r-from-2",
-				"mask-r-from-0%",
-				"mask-r-from-2%",
-				"mask-r-from-[0px]",
-				"mask-r-from-[0%]",
+      [
+        'mask-r-from-0',
+        'mask-r-from-1.5',
+        'mask-r-from-2',
+        'mask-r-from-0%',
+        'mask-r-from-2%',
+        'mask-r-from-[0px]',
+        'mask-r-from-[0%]',
 
-				"mask-r-from-(--my-var)",
-				"mask-r-from-(color:--my-var)",
-				"mask-r-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-r-from-(--my-var)',
+        'mask-r-from-(color:--my-var)',
+        'mask-r-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -15310,73 +14881,73 @@ test("mask-r-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-r-from",
-				"mask-r-from-2.8175",
-				"mask-r-from--1.5",
-				"mask-r-from--2",
+      [
+        'mask-r-from',
+        'mask-r-from-2.8175',
+        'mask-r-from--1.5',
+        'mask-r-from--2',
 
-				"mask-r-from-2.5%",
-				"mask-r-from--5%",
-				"mask-r-from-unknown",
-				"mask-r-from-unknown%",
+        'mask-r-from-2.5%',
+        'mask-r-from--5%',
+        'mask-r-from-unknown',
+        'mask-r-from-unknown%',
 
-				"-mask-r-from-0",
-				"-mask-r-from-1.5",
-				"-mask-r-from-2",
-				"-mask-r-from-0%",
-				"-mask-r-from-2%",
-				"-mask-r-from-[0px]",
-				"-mask-r-from-[0%]",
+        '-mask-r-from-0',
+        '-mask-r-from-1.5',
+        '-mask-r-from-2',
+        '-mask-r-from-0%',
+        '-mask-r-from-2%',
+        '-mask-r-from-[0px]',
+        '-mask-r-from-[0%]',
 
-				"-mask-r-from-(--my-var)",
-				"-mask-r-from-(color:--my-var)",
-				"-mask-r-from-(length:--my-var)",
+        '-mask-r-from-(--my-var)',
+        '-mask-r-from-(color:--my-var)',
+        '-mask-r-from-(length:--my-var)',
 
-				"mask-r-from-[-25%]",
-				"mask-r-from-[25%]/foo",
-				"mask-r-from-[-25%]/foo",
-				"-mask-r-from-[-25%]",
-				"-mask-r-from-[25%]/foo",
-				"-mask-r-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-r-from-[-25%]',
+        'mask-r-from-[25%]/foo',
+        'mask-r-from-[-25%]/foo',
+        '-mask-r-from-[-25%]',
+        '-mask-r-from-[25%]/foo',
+        '-mask-r-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-r-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-r-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-r-to-0",
-				"mask-r-to-1.5",
-				"mask-r-to-2",
-				"mask-r-to-0%",
-				"mask-r-to-2%",
-				"mask-r-to-[0px]",
-				"mask-r-to-[0%]",
+      [
+        'mask-r-to-0',
+        'mask-r-to-1.5',
+        'mask-r-to-2',
+        'mask-r-to-0%',
+        'mask-r-to-2%',
+        'mask-r-to-[0px]',
+        'mask-r-to-[0%]',
 
-				"mask-r-to-(--my-var)",
-				"mask-r-to-(color:--my-var)",
-				"mask-r-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-r-to-(--my-var)',
+        'mask-r-to-(color:--my-var)',
+        'mask-r-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -15572,73 +15143,73 @@ test("mask-r-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-r-to",
-				"mask-r-to-2.8175",
-				"mask-r-to--1.5",
-				"mask-r-to--2",
+      [
+        'mask-r-to',
+        'mask-r-to-2.8175',
+        'mask-r-to--1.5',
+        'mask-r-to--2',
 
-				"mask-r-to-2.5%",
-				"mask-r-to--5%",
-				"mask-r-to-unknown",
-				"mask-r-to-unknown%",
+        'mask-r-to-2.5%',
+        'mask-r-to--5%',
+        'mask-r-to-unknown',
+        'mask-r-to-unknown%',
 
-				"-mask-r-to-0",
-				"-mask-r-to-1.5",
-				"-mask-r-to-2",
-				"-mask-r-to-0%",
-				"-mask-r-to-2%",
-				"-mask-r-to-[0px]",
-				"-mask-r-to-[0%]",
+        '-mask-r-to-0',
+        '-mask-r-to-1.5',
+        '-mask-r-to-2',
+        '-mask-r-to-0%',
+        '-mask-r-to-2%',
+        '-mask-r-to-[0px]',
+        '-mask-r-to-[0%]',
 
-				"-mask-r-to-(--my-var)",
-				"-mask-r-to-(color:--my-var)",
-				"-mask-r-to-(length:--my-var)",
+        '-mask-r-to-(--my-var)',
+        '-mask-r-to-(color:--my-var)',
+        '-mask-r-to-(length:--my-var)',
 
-				"mask-r-to-[-25%]",
-				"mask-r-to-[25%]/foo",
-				"mask-r-to-[-25%]/foo",
-				"-mask-r-to-[-25%]",
-				"-mask-r-to-[25%]/foo",
-				"-mask-r-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-r-to-[-25%]',
+        'mask-r-to-[25%]/foo',
+        'mask-r-to-[-25%]/foo',
+        '-mask-r-to-[-25%]',
+        '-mask-r-to-[25%]/foo',
+        '-mask-r-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-b-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-b-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-b-from-0",
-				"mask-b-from-1.5",
-				"mask-b-from-2",
-				"mask-b-from-0%",
-				"mask-b-from-2%",
-				"mask-b-from-[0px]",
-				"mask-b-from-[0%]",
+      [
+        'mask-b-from-0',
+        'mask-b-from-1.5',
+        'mask-b-from-2',
+        'mask-b-from-0%',
+        'mask-b-from-2%',
+        'mask-b-from-[0px]',
+        'mask-b-from-[0%]',
 
-				"mask-b-from-(--my-var)",
-				"mask-b-from-(color:--my-var)",
-				"mask-b-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-b-from-(--my-var)',
+        'mask-b-from-(color:--my-var)',
+        'mask-b-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -15834,73 +15405,73 @@ test("mask-b-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-b-from",
-				"mask-b-from-2.8175",
-				"mask-b-from--1.5",
-				"mask-b-from--2",
+      [
+        'mask-b-from',
+        'mask-b-from-2.8175',
+        'mask-b-from--1.5',
+        'mask-b-from--2',
 
-				"mask-b-from-2.5%",
-				"mask-b-from--5%",
-				"mask-b-from-unknown",
-				"mask-b-from-unknown%",
+        'mask-b-from-2.5%',
+        'mask-b-from--5%',
+        'mask-b-from-unknown',
+        'mask-b-from-unknown%',
 
-				"-mask-b-from-0",
-				"-mask-b-from-1.5",
-				"-mask-b-from-2",
-				"-mask-b-from-0%",
-				"-mask-b-from-2%",
-				"-mask-b-from-[0px]",
-				"-mask-b-from-[0%]",
+        '-mask-b-from-0',
+        '-mask-b-from-1.5',
+        '-mask-b-from-2',
+        '-mask-b-from-0%',
+        '-mask-b-from-2%',
+        '-mask-b-from-[0px]',
+        '-mask-b-from-[0%]',
 
-				"-mask-b-from-(--my-var)",
-				"-mask-b-from-(color:--my-var)",
-				"-mask-b-from-(length:--my-var)",
+        '-mask-b-from-(--my-var)',
+        '-mask-b-from-(color:--my-var)',
+        '-mask-b-from-(length:--my-var)',
 
-				"mask-b-from-[-25%]",
-				"mask-b-from-[25%]/foo",
-				"mask-b-from-[-25%]/foo",
-				"-mask-b-from-[-25%]",
-				"-mask-b-from-[25%]/foo",
-				"-mask-b-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-b-from-[-25%]',
+        'mask-b-from-[25%]/foo',
+        'mask-b-from-[-25%]/foo',
+        '-mask-b-from-[-25%]',
+        '-mask-b-from-[25%]/foo',
+        '-mask-b-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-b-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-b-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-b-to-0",
-				"mask-b-to-1.5",
-				"mask-b-to-2",
-				"mask-b-to-0%",
-				"mask-b-to-2%",
-				"mask-b-to-[0px]",
-				"mask-b-to-[0%]",
+      [
+        'mask-b-to-0',
+        'mask-b-to-1.5',
+        'mask-b-to-2',
+        'mask-b-to-0%',
+        'mask-b-to-2%',
+        'mask-b-to-[0px]',
+        'mask-b-to-[0%]',
 
-				"mask-b-to-(--my-var)",
-				"mask-b-to-(color:--my-var)",
-				"mask-b-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-b-to-(--my-var)',
+        'mask-b-to-(color:--my-var)',
+        'mask-b-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -16096,73 +15667,73 @@ test("mask-b-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-b-to",
-				"mask-b-to-2.8175",
-				"mask-b-to--1.5",
-				"mask-b-to--2",
+      [
+        'mask-b-to',
+        'mask-b-to-2.8175',
+        'mask-b-to--1.5',
+        'mask-b-to--2',
 
-				"mask-b-to-2.5%",
-				"mask-b-to--5%",
-				"mask-b-to-unknown",
-				"mask-b-to-unknown%",
+        'mask-b-to-2.5%',
+        'mask-b-to--5%',
+        'mask-b-to-unknown',
+        'mask-b-to-unknown%',
 
-				"-mask-b-to-0",
-				"-mask-b-to-1.5",
-				"-mask-b-to-2",
-				"-mask-b-to-0%",
-				"-mask-b-to-2%",
-				"-mask-b-to-[0px]",
-				"-mask-b-to-[0%]",
+        '-mask-b-to-0',
+        '-mask-b-to-1.5',
+        '-mask-b-to-2',
+        '-mask-b-to-0%',
+        '-mask-b-to-2%',
+        '-mask-b-to-[0px]',
+        '-mask-b-to-[0%]',
 
-				"-mask-b-to-(--my-var)",
-				"-mask-b-to-(color:--my-var)",
-				"-mask-b-to-(length:--my-var)",
+        '-mask-b-to-(--my-var)',
+        '-mask-b-to-(color:--my-var)',
+        '-mask-b-to-(length:--my-var)',
 
-				"mask-b-to-[-25%]",
-				"mask-b-to-[25%]/foo",
-				"mask-b-to-[-25%]/foo",
-				"-mask-b-to-[-25%]",
-				"-mask-b-to-[25%]/foo",
-				"-mask-b-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-b-to-[-25%]',
+        'mask-b-to-[25%]/foo',
+        'mask-b-to-[-25%]/foo',
+        '-mask-b-to-[-25%]',
+        '-mask-b-to-[25%]/foo',
+        '-mask-b-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-l-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-l-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-l-from-0",
-				"mask-l-from-1.5",
-				"mask-l-from-2",
-				"mask-l-from-0%",
-				"mask-l-from-2%",
-				"mask-l-from-[0px]",
-				"mask-l-from-[0%]",
+      [
+        'mask-l-from-0',
+        'mask-l-from-1.5',
+        'mask-l-from-2',
+        'mask-l-from-0%',
+        'mask-l-from-2%',
+        'mask-l-from-[0px]',
+        'mask-l-from-[0%]',
 
-				"mask-l-from-(--my-var)",
-				"mask-l-from-(color:--my-var)",
-				"mask-l-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-l-from-(--my-var)',
+        'mask-l-from-(color:--my-var)',
+        'mask-l-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -16358,73 +15929,73 @@ test("mask-l-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-l-from",
-				"mask-l-from-2.8175",
-				"mask-l-from--1.5",
-				"mask-l-from--2",
+      [
+        'mask-l-from',
+        'mask-l-from-2.8175',
+        'mask-l-from--1.5',
+        'mask-l-from--2',
 
-				"mask-l-from-2.5%",
-				"mask-l-from--5%",
-				"mask-l-from-unknown",
-				"mask-l-from-unknown%",
+        'mask-l-from-2.5%',
+        'mask-l-from--5%',
+        'mask-l-from-unknown',
+        'mask-l-from-unknown%',
 
-				"-mask-l-from-0",
-				"-mask-l-from-1.5",
-				"-mask-l-from-2",
-				"-mask-l-from-0%",
-				"-mask-l-from-2%",
-				"-mask-l-from-[0px]",
-				"-mask-l-from-[0%]",
+        '-mask-l-from-0',
+        '-mask-l-from-1.5',
+        '-mask-l-from-2',
+        '-mask-l-from-0%',
+        '-mask-l-from-2%',
+        '-mask-l-from-[0px]',
+        '-mask-l-from-[0%]',
 
-				"-mask-l-from-(--my-var)",
-				"-mask-l-from-(color:--my-var)",
-				"-mask-l-from-(length:--my-var)",
+        '-mask-l-from-(--my-var)',
+        '-mask-l-from-(color:--my-var)',
+        '-mask-l-from-(length:--my-var)',
 
-				"mask-l-from-[-25%]",
-				"mask-l-from-[25%]/foo",
-				"mask-l-from-[-25%]/foo",
-				"-mask-l-from-[-25%]",
-				"-mask-l-from-[25%]/foo",
-				"-mask-l-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-l-from-[-25%]',
+        'mask-l-from-[25%]/foo',
+        'mask-l-from-[-25%]/foo',
+        '-mask-l-from-[-25%]',
+        '-mask-l-from-[25%]/foo',
+        '-mask-l-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-l-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-l-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-l-to-0",
-				"mask-l-to-1.5",
-				"mask-l-to-2",
-				"mask-l-to-0%",
-				"mask-l-to-2%",
-				"mask-l-to-[0px]",
-				"mask-l-to-[0%]",
+      [
+        'mask-l-to-0',
+        'mask-l-to-1.5',
+        'mask-l-to-2',
+        'mask-l-to-0%',
+        'mask-l-to-2%',
+        'mask-l-to-[0px]',
+        'mask-l-to-[0%]',
 
-				"mask-l-to-(--my-var)",
-				"mask-l-to-(color:--my-var)",
-				"mask-l-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-l-to-(--my-var)',
+        'mask-l-to-(color:--my-var)',
+        'mask-l-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -16620,73 +16191,73 @@ test("mask-l-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-l-to",
-				"mask-l-to-2.8175",
-				"mask-l-to--1.5",
-				"mask-l-to--2",
+      [
+        'mask-l-to',
+        'mask-l-to-2.8175',
+        'mask-l-to--1.5',
+        'mask-l-to--2',
 
-				"mask-l-to-2.5%",
-				"mask-l-to--5%",
-				"mask-l-to-unknown",
-				"mask-l-to-unknown%",
+        'mask-l-to-2.5%',
+        'mask-l-to--5%',
+        'mask-l-to-unknown',
+        'mask-l-to-unknown%',
 
-				"-mask-l-to-0",
-				"-mask-l-to-1.5",
-				"-mask-l-to-2",
-				"-mask-l-to-0%",
-				"-mask-l-to-2%",
-				"-mask-l-to-[0px]",
-				"-mask-l-to-[0%]",
+        '-mask-l-to-0',
+        '-mask-l-to-1.5',
+        '-mask-l-to-2',
+        '-mask-l-to-0%',
+        '-mask-l-to-2%',
+        '-mask-l-to-[0px]',
+        '-mask-l-to-[0%]',
 
-				"-mask-l-to-(--my-var)",
-				"-mask-l-to-(color:--my-var)",
-				"-mask-l-to-(length:--my-var)",
+        '-mask-l-to-(--my-var)',
+        '-mask-l-to-(color:--my-var)',
+        '-mask-l-to-(length:--my-var)',
 
-				"mask-l-to-[-25%]",
-				"mask-l-to-[25%]/foo",
-				"mask-l-to-[-25%]/foo",
-				"-mask-l-to-[-25%]",
-				"-mask-l-to-[25%]/foo",
-				"-mask-l-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-l-to-[-25%]',
+        'mask-l-to-[25%]/foo',
+        'mask-l-to-[-25%]/foo',
+        '-mask-l-to-[-25%]',
+        '-mask-l-to-[25%]/foo',
+        '-mask-l-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-x-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-x-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-x-from-0",
-				"mask-x-from-1.5",
-				"mask-x-from-2",
-				"mask-x-from-0%",
-				"mask-x-from-2%",
-				"mask-x-from-[0px]",
-				"mask-x-from-[0%]",
+      [
+        'mask-x-from-0',
+        'mask-x-from-1.5',
+        'mask-x-from-2',
+        'mask-x-from-0%',
+        'mask-x-from-2%',
+        'mask-x-from-[0px]',
+        'mask-x-from-[0%]',
 
-				"mask-x-from-(--my-var)",
-				"mask-x-from-(color:--my-var)",
-				"mask-x-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-x-from-(--my-var)',
+        'mask-x-from-(color:--my-var)',
+        'mask-x-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -16928,73 +16499,73 @@ test("mask-x-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-x-from",
-				"mask-x-from-2.8175",
-				"mask-x-from--1.5",
-				"mask-x-from--2",
+      [
+        'mask-x-from',
+        'mask-x-from-2.8175',
+        'mask-x-from--1.5',
+        'mask-x-from--2',
 
-				"mask-x-from-2.5%",
-				"mask-x-from--5%",
-				"mask-x-from-unknown",
-				"mask-x-from-unknown%",
+        'mask-x-from-2.5%',
+        'mask-x-from--5%',
+        'mask-x-from-unknown',
+        'mask-x-from-unknown%',
 
-				"-mask-x-from-0",
-				"-mask-x-from-1.5",
-				"-mask-x-from-2",
-				"-mask-x-from-0%",
-				"-mask-x-from-2%",
-				"-mask-x-from-[0px]",
-				"-mask-x-from-[0%]",
+        '-mask-x-from-0',
+        '-mask-x-from-1.5',
+        '-mask-x-from-2',
+        '-mask-x-from-0%',
+        '-mask-x-from-2%',
+        '-mask-x-from-[0px]',
+        '-mask-x-from-[0%]',
 
-				"-mask-x-from-(--my-var)",
-				"-mask-x-from-(color:--my-var)",
-				"-mask-x-from-(length:--my-var)",
+        '-mask-x-from-(--my-var)',
+        '-mask-x-from-(color:--my-var)',
+        '-mask-x-from-(length:--my-var)',
 
-				"mask-x-from-[-25%]",
-				"mask-x-from-[25%]/foo",
-				"mask-x-from-[-25%]/foo",
-				"-mask-x-from-[-25%]",
-				"-mask-x-from-[25%]/foo",
-				"-mask-x-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-x-from-[-25%]',
+        'mask-x-from-[25%]/foo',
+        'mask-x-from-[-25%]/foo',
+        '-mask-x-from-[-25%]',
+        '-mask-x-from-[25%]/foo',
+        '-mask-x-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-x-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-x-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-x-to-0",
-				"mask-x-to-1.5",
-				"mask-x-to-2",
-				"mask-x-to-0%",
-				"mask-x-to-2%",
-				"mask-x-to-[0px]",
-				"mask-x-to-[0%]",
+      [
+        'mask-x-to-0',
+        'mask-x-to-1.5',
+        'mask-x-to-2',
+        'mask-x-to-0%',
+        'mask-x-to-2%',
+        'mask-x-to-[0px]',
+        'mask-x-to-[0%]',
 
-				"mask-x-to-(--my-var)",
-				"mask-x-to-(color:--my-var)",
-				"mask-x-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-x-to-(--my-var)',
+        'mask-x-to-(color:--my-var)',
+        'mask-x-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -17236,73 +16807,73 @@ test("mask-x-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-x-to",
-				"mask-x-to-2.8175",
-				"mask-x-to--1.5",
-				"mask-x-to--2",
+      [
+        'mask-x-to',
+        'mask-x-to-2.8175',
+        'mask-x-to--1.5',
+        'mask-x-to--2',
 
-				"mask-x-to-2.5%",
-				"mask-x-to--5%",
-				"mask-x-to-unknown",
-				"mask-x-to-unknown%",
+        'mask-x-to-2.5%',
+        'mask-x-to--5%',
+        'mask-x-to-unknown',
+        'mask-x-to-unknown%',
 
-				"-mask-x-to-0",
-				"-mask-x-to-1.5",
-				"-mask-x-to-2",
-				"-mask-x-to-0%",
-				"-mask-x-to-2%",
-				"-mask-x-to-[0px]",
-				"-mask-x-to-[0%]",
+        '-mask-x-to-0',
+        '-mask-x-to-1.5',
+        '-mask-x-to-2',
+        '-mask-x-to-0%',
+        '-mask-x-to-2%',
+        '-mask-x-to-[0px]',
+        '-mask-x-to-[0%]',
 
-				"-mask-x-to-(--my-var)",
-				"-mask-x-to-(color:--my-var)",
-				"-mask-x-to-(length:--my-var)",
+        '-mask-x-to-(--my-var)',
+        '-mask-x-to-(color:--my-var)',
+        '-mask-x-to-(length:--my-var)',
 
-				"mask-x-to-[-25%]",
-				"mask-x-to-[25%]/foo",
-				"mask-x-to-[-25%]/foo",
-				"-mask-x-to-[-25%]",
-				"-mask-x-to-[25%]/foo",
-				"-mask-x-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-x-to-[-25%]',
+        'mask-x-to-[25%]/foo',
+        'mask-x-to-[-25%]/foo',
+        '-mask-x-to-[-25%]',
+        '-mask-x-to-[25%]/foo',
+        '-mask-x-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-y-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-y-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-y-from-0",
-				"mask-y-from-1.5",
-				"mask-y-from-2",
-				"mask-y-from-0%",
-				"mask-y-from-2%",
-				"mask-y-from-[0px]",
-				"mask-y-from-[0%]",
+      [
+        'mask-y-from-0',
+        'mask-y-from-1.5',
+        'mask-y-from-2',
+        'mask-y-from-0%',
+        'mask-y-from-2%',
+        'mask-y-from-[0px]',
+        'mask-y-from-[0%]',
 
-				"mask-y-from-(--my-var)",
-				"mask-y-from-(color:--my-var)",
-				"mask-y-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-y-from-(--my-var)',
+        'mask-y-from-(color:--my-var)',
+        'mask-y-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -17544,73 +17115,73 @@ test("mask-y-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-y-from",
-				"mask-y-from-2.8175",
-				"mask-y-from--1.5",
-				"mask-y-from--2",
+      [
+        'mask-y-from',
+        'mask-y-from-2.8175',
+        'mask-y-from--1.5',
+        'mask-y-from--2',
 
-				"mask-y-from-2.5%",
-				"mask-y-from--5%",
-				"mask-y-from-unknown",
-				"mask-y-from-unknown%",
+        'mask-y-from-2.5%',
+        'mask-y-from--5%',
+        'mask-y-from-unknown',
+        'mask-y-from-unknown%',
 
-				"-mask-y-from-0",
-				"-mask-y-from-1.5",
-				"-mask-y-from-2",
-				"-mask-y-from-0%",
-				"-mask-y-from-2%",
-				"-mask-y-from-[0px]",
-				"-mask-y-from-[0%]",
+        '-mask-y-from-0',
+        '-mask-y-from-1.5',
+        '-mask-y-from-2',
+        '-mask-y-from-0%',
+        '-mask-y-from-2%',
+        '-mask-y-from-[0px]',
+        '-mask-y-from-[0%]',
 
-				"-mask-y-from-(--my-var)",
-				"-mask-y-from-(color:--my-var)",
-				"-mask-y-from-(length:--my-var)",
+        '-mask-y-from-(--my-var)',
+        '-mask-y-from-(color:--my-var)',
+        '-mask-y-from-(length:--my-var)',
 
-				"mask-y-from-[-25%]",
-				"mask-y-from-[25%]/foo",
-				"mask-y-from-[-25%]/foo",
-				"-mask-y-from-[-25%]",
-				"-mask-y-from-[25%]/foo",
-				"-mask-y-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-y-from-[-25%]',
+        'mask-y-from-[25%]/foo',
+        'mask-y-from-[-25%]/foo',
+        '-mask-y-from-[-25%]',
+        '-mask-y-from-[25%]/foo',
+        '-mask-y-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-y-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-y-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-y-to-0",
-				"mask-y-to-1.5",
-				"mask-y-to-2",
-				"mask-y-to-0%",
-				"mask-y-to-2%",
-				"mask-y-to-[0px]",
-				"mask-y-to-[0%]",
+      [
+        'mask-y-to-0',
+        'mask-y-to-1.5',
+        'mask-y-to-2',
+        'mask-y-to-0%',
+        'mask-y-to-2%',
+        'mask-y-to-[0px]',
+        'mask-y-to-[0%]',
 
-				"mask-y-to-(--my-var)",
-				"mask-y-to-(color:--my-var)",
-				"mask-y-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-y-to-(--my-var)',
+        'mask-y-to-(color:--my-var)',
+        'mask-y-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -17852,58 +17423,58 @@ test("mask-y-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-y-to",
-				"mask-y-to-2.8175",
-				"mask-y-to--1.5",
-				"mask-y-to--2",
+      [
+        'mask-y-to',
+        'mask-y-to-2.8175',
+        'mask-y-to--1.5',
+        'mask-y-to--2',
 
-				"mask-y-to-2.5%",
-				"mask-y-to--5%",
-				"mask-y-to-unknown",
-				"mask-y-to-unknown%",
+        'mask-y-to-2.5%',
+        'mask-y-to--5%',
+        'mask-y-to-unknown',
+        'mask-y-to-unknown%',
 
-				"-mask-y-to-0",
-				"-mask-y-to-1.5",
-				"-mask-y-to-2",
-				"-mask-y-to-0%",
-				"-mask-y-to-2%",
-				"-mask-y-to-[0px]",
-				"-mask-y-to-[0%]",
+        '-mask-y-to-0',
+        '-mask-y-to-1.5',
+        '-mask-y-to-2',
+        '-mask-y-to-0%',
+        '-mask-y-to-2%',
+        '-mask-y-to-[0px]',
+        '-mask-y-to-[0%]',
 
-				"-mask-y-to-(--my-var)",
-				"-mask-y-to-(color:--my-var)",
-				"-mask-y-to-(length:--my-var)",
+        '-mask-y-to-(--my-var)',
+        '-mask-y-to-(color:--my-var)',
+        '-mask-y-to-(length:--my-var)',
 
-				"mask-y-to-[-25%]",
-				"mask-y-to-[25%]/foo",
-				"mask-y-to-[-25%]/foo",
-				"-mask-y-to-[-25%]",
-				"-mask-y-to-[25%]/foo",
-				"-mask-y-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-y-to-[-25%]',
+        'mask-y-to-[25%]/foo',
+        'mask-y-to-[-25%]/foo',
+        '-mask-y-to-[-25%]',
+        '-mask-y-to-[25%]/foo',
+        '-mask-y-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-linear", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-linear', async () => {
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			["mask-linear-45", "mask-linear-[3rad]", "-mask-linear-45"],
-		),
-	).toMatchInlineSnapshot(`
+      ['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -17999,50 +17570,50 @@ test("mask-linear", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await run([
-			"mask-linear",
-			"-mask-linear",
+  `)
+  expect(
+    await run([
+      'mask-linear',
+      '-mask-linear',
 
-			"mask-linear--75",
-			"mask-linear-unknown",
-			"mask-linear--75/foo",
-			"mask-linear-unknown/foo",
+      'mask-linear--75',
+      'mask-linear-unknown',
+      'mask-linear--75/foo',
+      'mask-linear-unknown/foo',
 
-			"mask-linear-45/foo",
-			"-mask-linear-45/foo",
+      'mask-linear-45/foo',
+      '-mask-linear-45/foo',
 
-			"mask-linear-[3rad]/foo",
-			"-mask-linear-[3rad]/foo",
-		]),
-	).toEqual("");
-});
+      'mask-linear-[3rad]/foo',
+      '-mask-linear-[3rad]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-linear-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-linear-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-linear-from-0",
-				"mask-linear-from-1.5",
-				"mask-linear-from-2",
-				"mask-linear-from-0%",
-				"mask-linear-from-2%",
-				"mask-linear-from-[0px]",
-				"mask-linear-from-[0%]",
+      [
+        'mask-linear-from-0',
+        'mask-linear-from-1.5',
+        'mask-linear-from-2',
+        'mask-linear-from-0%',
+        'mask-linear-from-2%',
+        'mask-linear-from-[0px]',
+        'mask-linear-from-[0%]',
 
-				"mask-linear-from-(--my-var)",
-				"mask-linear-from-(color:--my-var)",
-				"mask-linear-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-linear-from-(--my-var)',
+        'mask-linear-from-(color:--my-var)',
+        'mask-linear-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -18217,73 +17788,73 @@ test("mask-linear-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-linear-from",
-				"mask-linear-from-2.8175",
-				"mask-linear-from--1.5",
-				"mask-linear-from--2",
+      [
+        'mask-linear-from',
+        'mask-linear-from-2.8175',
+        'mask-linear-from--1.5',
+        'mask-linear-from--2',
 
-				"mask-linear-from-2.5%",
-				"mask-linear-from--5%",
-				"mask-linear-from-unknown",
-				"mask-linear-from-unknown%",
+        'mask-linear-from-2.5%',
+        'mask-linear-from--5%',
+        'mask-linear-from-unknown',
+        'mask-linear-from-unknown%',
 
-				"-mask-linear-from-0",
-				"-mask-linear-from-1.5",
-				"-mask-linear-from-2",
-				"-mask-linear-from-0%",
-				"-mask-linear-from-2%",
-				"-mask-linear-from-[0px]",
-				"-mask-linear-from-[0%]",
+        '-mask-linear-from-0',
+        '-mask-linear-from-1.5',
+        '-mask-linear-from-2',
+        '-mask-linear-from-0%',
+        '-mask-linear-from-2%',
+        '-mask-linear-from-[0px]',
+        '-mask-linear-from-[0%]',
 
-				"-mask-linear-from-(--my-var)",
-				"-mask-linear-from-(color:--my-var)",
-				"-mask-linear-from-(length:--my-var)",
+        '-mask-linear-from-(--my-var)',
+        '-mask-linear-from-(color:--my-var)',
+        '-mask-linear-from-(length:--my-var)',
 
-				"mask-linear-from-[-25%]",
-				"mask-linear-from-[25%]/foo",
-				"mask-linear-from-[-25%]/foo",
-				"-mask-linear-from-[-25%]",
-				"-mask-linear-from-[25%]/foo",
-				"-mask-linear-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-linear-from-[-25%]',
+        'mask-linear-from-[25%]/foo',
+        'mask-linear-from-[-25%]/foo',
+        '-mask-linear-from-[-25%]',
+        '-mask-linear-from-[25%]/foo',
+        '-mask-linear-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-linear-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-linear-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-linear-to-0",
-				"mask-linear-to-1.5",
-				"mask-linear-to-2",
-				"mask-linear-to-0%",
-				"mask-linear-to-2%",
-				"mask-linear-to-[0px]",
-				"mask-linear-to-[0%]",
+      [
+        'mask-linear-to-0',
+        'mask-linear-to-1.5',
+        'mask-linear-to-2',
+        'mask-linear-to-0%',
+        'mask-linear-to-2%',
+        'mask-linear-to-[0px]',
+        'mask-linear-to-[0%]',
 
-				"mask-linear-to-(--my-var)",
-				"mask-linear-to-(color:--my-var)",
-				"mask-linear-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-linear-to-(--my-var)',
+        'mask-linear-to-(color:--my-var)',
+        'mask-linear-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -18458,66 +18029,66 @@ test("mask-linear-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-linear-to",
-				"mask-linear-to-2.8175",
-				"mask-linear-to--1.5",
-				"mask-linear-to--2",
+      [
+        'mask-linear-to',
+        'mask-linear-to-2.8175',
+        'mask-linear-to--1.5',
+        'mask-linear-to--2',
 
-				"mask-linear-to-2.5%",
-				"mask-linear-to--5%",
-				"mask-linear-to-unknown",
-				"mask-linear-to-unknown%",
+        'mask-linear-to-2.5%',
+        'mask-linear-to--5%',
+        'mask-linear-to-unknown',
+        'mask-linear-to-unknown%',
 
-				"-mask-linear-to-0",
-				"-mask-linear-to-1.5",
-				"-mask-linear-to-2",
-				"-mask-linear-to-0%",
-				"-mask-linear-to-2%",
-				"-mask-linear-to-[0px]",
-				"-mask-linear-to-[0%]",
+        '-mask-linear-to-0',
+        '-mask-linear-to-1.5',
+        '-mask-linear-to-2',
+        '-mask-linear-to-0%',
+        '-mask-linear-to-2%',
+        '-mask-linear-to-[0px]',
+        '-mask-linear-to-[0%]',
 
-				"-mask-linear-to-(--my-var)",
-				"-mask-linear-to-(color:--my-var)",
-				"-mask-linear-to-(length:--my-var)",
+        '-mask-linear-to-(--my-var)',
+        '-mask-linear-to-(color:--my-var)',
+        '-mask-linear-to-(length:--my-var)',
 
-				"mask-linear-to-[-25%]",
-				"mask-linear-to-[25%]/foo",
-				"mask-linear-to-[-25%]/foo",
-				"-mask-linear-to-[-25%]",
-				"-mask-linear-to-[25%]/foo",
-				"-mask-linear-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-linear-to-[-25%]',
+        'mask-linear-to-[25%]/foo',
+        'mask-linear-to-[-25%]/foo',
+        '-mask-linear-to-[-25%]',
+        '-mask-linear-to-[25%]/foo',
+        '-mask-linear-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-radial", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-radial', async () => {
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			[
-				"mask-circle",
-				"mask-ellipse",
-				"mask-radial-closest-side",
-				"mask-radial-farthest-side",
-				"mask-radial-closest-corner",
-				"mask-radial-farthest-corner",
-				"mask-radial-[25%_25%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mask-circle',
+        'mask-ellipse',
+        'mask-radial-closest-side',
+        'mask-radial-farthest-side',
+        'mask-radial-closest-corner',
+        'mask-radial-farthest-corner',
+        'mask-radial-[25%_25%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -18629,49 +18200,49 @@ test("mask-radial", async () => {
       inherits: false;
       initial-value: center;
     }"
-  `);
-	expect(
-		await run([
-			"mask-radial",
-			"mask-radial-[25%_25%]/foo",
-			"mask-radial/foo",
-			"-mask-radial",
-			"-mask-radial-[25%_25%]",
-			"-mask-radial/foo",
-			"-mask-radial-[25%_25%]/foo",
+  `)
+  expect(
+    await run([
+      'mask-radial',
+      'mask-radial-[25%_25%]/foo',
+      'mask-radial/foo',
+      '-mask-radial',
+      '-mask-radial-[25%_25%]',
+      '-mask-radial/foo',
+      '-mask-radial-[25%_25%]/foo',
 
-			"mask-radial-from-[-25%]",
-			"mask-radial-from-[25%]/foo",
-			"mask-radial-from-[-25%]/foo",
-			"-mask-radial-from-[-25%]",
-			"-mask-radial-from-[25%]/foo",
-			"-mask-radial-from-[-25%]/foo",
-		]),
-	).toEqual("");
-});
+      'mask-radial-from-[-25%]',
+      'mask-radial-from-[25%]/foo',
+      'mask-radial-from-[-25%]/foo',
+      '-mask-radial-from-[-25%]',
+      '-mask-radial-from-[25%]/foo',
+      '-mask-radial-from-[-25%]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-radial-at", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-radial-at', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-radial-at-top",
-				"mask-radial-at-top-left",
-				"mask-radial-at-top-right",
-				"mask-radial-at-bottom",
-				"mask-radial-at-bottom-left",
-				"mask-radial-at-bottom-right",
-				"mask-radial-at-left",
-				"mask-radial-at-right",
-				"mask-radial-at-[25%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'mask-radial-at-top',
+        'mask-radial-at-top-left',
+        'mask-radial-at-top-right',
+        'mask-radial-at-bottom',
+        'mask-radial-at-bottom-left',
+        'mask-radial-at-bottom-right',
+        'mask-radial-at-left',
+        'mask-radial-at-right',
+        'mask-radial-at-[25%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ".mask-radial-at-\\[25\\%\\] {
       --tw-mask-radial-position: 25%;
     }
@@ -18707,72 +18278,72 @@ test("mask-radial-at", async () => {
     .mask-radial-at-top-right {
       --tw-mask-radial-position: top right;
     }"
-  `);
-	expect(
-		await run([
-			"mask-radial-at",
-			"mask-radial-at/foo",
-			"mask-radial-at-25",
-			"mask-radial-at-unknown",
-			"mask-radial-at-[25%]/foo",
-			"mask-radial-at-top/foo",
-			"mask-radial-at-top-left/foo",
-			"mask-radial-at-top-right/foo",
-			"mask-radial-at-bottom/foo",
-			"mask-radial-at-bottom-left/foo",
-			"mask-radial-at-bottom-right/foo",
-			"mask-radial-at-left/foo",
-			"mask-radial-at-right/foo",
+  `)
+  expect(
+    await run([
+      'mask-radial-at',
+      'mask-radial-at/foo',
+      'mask-radial-at-25',
+      'mask-radial-at-unknown',
+      'mask-radial-at-[25%]/foo',
+      'mask-radial-at-top/foo',
+      'mask-radial-at-top-left/foo',
+      'mask-radial-at-top-right/foo',
+      'mask-radial-at-bottom/foo',
+      'mask-radial-at-bottom-left/foo',
+      'mask-radial-at-bottom-right/foo',
+      'mask-radial-at-left/foo',
+      'mask-radial-at-right/foo',
 
-			"-mask-radial-at",
-			"-mask-radial-at/foo",
-			"-mask-radial-at-25",
-			"-mask-radial-at-unknown",
-			"-mask-radial-at-[25%]",
-			"-mask-radial-at-[25%]/foo",
+      '-mask-radial-at',
+      '-mask-radial-at/foo',
+      '-mask-radial-at-25',
+      '-mask-radial-at-unknown',
+      '-mask-radial-at-[25%]',
+      '-mask-radial-at-[25%]/foo',
 
-			"-mask-radial-at-top",
-			"-mask-radial-at-top-left",
-			"-mask-radial-at-top-right",
-			"-mask-radial-at-bottom",
-			"-mask-radial-at-bottom-left",
-			"-mask-radial-at-bottom-right",
-			"-mask-radial-at-left",
-			"-mask-radial-at-right",
+      '-mask-radial-at-top',
+      '-mask-radial-at-top-left',
+      '-mask-radial-at-top-right',
+      '-mask-radial-at-bottom',
+      '-mask-radial-at-bottom-left',
+      '-mask-radial-at-bottom-right',
+      '-mask-radial-at-left',
+      '-mask-radial-at-right',
 
-			"mask-radial-at-[25%]/foo",
-			"mask-radial-at-[-25%]/foo",
-			"-mask-radial-at-[-25%]",
-			"-mask-radial-at-[25%]/foo",
-			"-mask-radial-at-[-25%]/foo",
-		]),
-	).toEqual("");
-});
+      'mask-radial-at-[25%]/foo',
+      'mask-radial-at-[-25%]/foo',
+      '-mask-radial-at-[-25%]',
+      '-mask-radial-at-[25%]/foo',
+      '-mask-radial-at-[-25%]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-radial-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-radial-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-radial-from-0",
-				"mask-radial-from-1.5",
-				"mask-radial-from-2",
-				"mask-radial-from-0%",
-				"mask-radial-from-2%",
-				"mask-radial-from-[0px]",
-				"mask-radial-from-[0%]",
+      [
+        'mask-radial-from-0',
+        'mask-radial-from-1.5',
+        'mask-radial-from-2',
+        'mask-radial-from-0%',
+        'mask-radial-from-2%',
+        'mask-radial-from-[0px]',
+        'mask-radial-from-[0%]',
 
-				"mask-radial-from-(--my-var)",
-				"mask-radial-from-(color:--my-var)",
-				"mask-radial-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-radial-from-(--my-var)',
+        'mask-radial-from-(color:--my-var)',
+        'mask-radial-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -18961,73 +18532,73 @@ test("mask-radial-from", async () => {
       inherits: false;
       initial-value: center;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-radial-from",
-				"mask-radial-from-2.8175",
-				"mask-radial-from--1.5",
-				"mask-radial-from--2",
+      [
+        'mask-radial-from',
+        'mask-radial-from-2.8175',
+        'mask-radial-from--1.5',
+        'mask-radial-from--2',
 
-				"mask-radial-from-2.5%",
-				"mask-radial-from--5%",
-				"mask-radial-from-unknown",
-				"mask-radial-from-unknown%",
+        'mask-radial-from-2.5%',
+        'mask-radial-from--5%',
+        'mask-radial-from-unknown',
+        'mask-radial-from-unknown%',
 
-				"-mask-radial-from-0",
-				"-mask-radial-from-1.5",
-				"-mask-radial-from-2",
-				"-mask-radial-from-0%",
-				"-mask-radial-from-2%",
-				"-mask-radial-from-[0px]",
-				"-mask-radial-from-[0%]",
+        '-mask-radial-from-0',
+        '-mask-radial-from-1.5',
+        '-mask-radial-from-2',
+        '-mask-radial-from-0%',
+        '-mask-radial-from-2%',
+        '-mask-radial-from-[0px]',
+        '-mask-radial-from-[0%]',
 
-				"-mask-radial-from-(--my-var)",
-				"-mask-radial-from-(color:--my-var)",
-				"-mask-radial-from-(length:--my-var)",
+        '-mask-radial-from-(--my-var)',
+        '-mask-radial-from-(color:--my-var)',
+        '-mask-radial-from-(length:--my-var)',
 
-				"mask-radial-from-[-25%]",
-				"mask-radial-from-[25%]/foo",
-				"mask-radial-from-[-25%]/foo",
-				"-mask-radial-from-[-25%]",
-				"-mask-radial-from-[25%]/foo",
-				"-mask-radial-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-radial-from-[-25%]',
+        'mask-radial-from-[25%]/foo',
+        'mask-radial-from-[-25%]/foo',
+        '-mask-radial-from-[-25%]',
+        '-mask-radial-from-[25%]/foo',
+        '-mask-radial-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-radial-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-radial-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-radial-to-0",
-				"mask-radial-to-1.5",
-				"mask-radial-to-2",
-				"mask-radial-to-0%",
-				"mask-radial-to-2%",
-				"mask-radial-to-[0px]",
-				"mask-radial-to-[0%]",
+      [
+        'mask-radial-to-0',
+        'mask-radial-to-1.5',
+        'mask-radial-to-2',
+        'mask-radial-to-0%',
+        'mask-radial-to-2%',
+        'mask-radial-to-[0px]',
+        'mask-radial-to-[0%]',
 
-				"mask-radial-to-(--my-var)",
-				"mask-radial-to-(color:--my-var)",
-				"mask-radial-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-radial-to-(--my-var)',
+        'mask-radial-to-(color:--my-var)',
+        'mask-radial-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -19216,58 +18787,58 @@ test("mask-radial-to", async () => {
       inherits: false;
       initial-value: center;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-radial-to",
-				"mask-radial-to-2.8175",
-				"mask-radial-to--1.5",
-				"mask-radial-to--2",
+      [
+        'mask-radial-to',
+        'mask-radial-to-2.8175',
+        'mask-radial-to--1.5',
+        'mask-radial-to--2',
 
-				"mask-radial-to-2.5%",
-				"mask-radial-to--5%",
-				"mask-radial-to-unknown",
-				"mask-radial-to-unknown%",
+        'mask-radial-to-2.5%',
+        'mask-radial-to--5%',
+        'mask-radial-to-unknown',
+        'mask-radial-to-unknown%',
 
-				"-mask-radial-to-0",
-				"-mask-radial-to-1.5",
-				"-mask-radial-to-2",
-				"-mask-radial-to-0%",
-				"-mask-radial-to-2%",
-				"-mask-radial-to-[0px]",
-				"-mask-radial-to-[0%]",
+        '-mask-radial-to-0',
+        '-mask-radial-to-1.5',
+        '-mask-radial-to-2',
+        '-mask-radial-to-0%',
+        '-mask-radial-to-2%',
+        '-mask-radial-to-[0px]',
+        '-mask-radial-to-[0%]',
 
-				"-mask-radial-to-(--my-var)",
-				"-mask-radial-to-(color:--my-var)",
-				"-mask-radial-to-(length:--my-var)",
+        '-mask-radial-to-(--my-var)',
+        '-mask-radial-to-(color:--my-var)',
+        '-mask-radial-to-(length:--my-var)',
 
-				"mask-radial-to-[-25%]",
-				"mask-radial-to-[25%]/foo",
-				"mask-radial-to-[-25%]/foo",
-				"-mask-radial-to-[-25%]",
-				"-mask-radial-to-[25%]/foo",
-				"-mask-radial-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-radial-to-[-25%]',
+        'mask-radial-to-[25%]/foo',
+        'mask-radial-to-[-25%]/foo',
+        '-mask-radial-to-[-25%]',
+        '-mask-radial-to-[25%]/foo',
+        '-mask-radial-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-conic", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-conic', async () => {
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			["mask-conic-45", "mask-conic-[3rad]", "-mask-conic-45"],
-		),
-	).toMatchInlineSnapshot(`
+      ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -19363,50 +18934,50 @@ test("mask-conic", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await run([
-			"mask-conic",
-			"-mask-conic",
+  `)
+  expect(
+    await run([
+      'mask-conic',
+      '-mask-conic',
 
-			"mask-conic--75",
-			"mask-conic-unknown",
-			"mask-conic--75/foo",
-			"mask-conic-unknown/foo",
+      'mask-conic--75',
+      'mask-conic-unknown',
+      'mask-conic--75/foo',
+      'mask-conic-unknown/foo',
 
-			"mask-conic-45/foo",
-			"-mask-conic-45/foo",
+      'mask-conic-45/foo',
+      '-mask-conic-45/foo',
 
-			"mask-conic-[3rad]/foo",
-			"-mask-conic-[3rad]/foo",
-		]),
-	).toEqual("");
-});
+      'mask-conic-[3rad]/foo',
+      '-mask-conic-[3rad]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-conic-from", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-conic-from', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-conic-from-0",
-				"mask-conic-from-1.5",
-				"mask-conic-from-2",
-				"mask-conic-from-0%",
-				"mask-conic-from-2%",
-				"mask-conic-from-[0px]",
-				"mask-conic-from-[0%]",
+      [
+        'mask-conic-from-0',
+        'mask-conic-from-1.5',
+        'mask-conic-from-2',
+        'mask-conic-from-0%',
+        'mask-conic-from-2%',
+        'mask-conic-from-[0px]',
+        'mask-conic-from-[0%]',
 
-				"mask-conic-from-(--my-var)",
-				"mask-conic-from-(color:--my-var)",
-				"mask-conic-from-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-conic-from-(--my-var)',
+        'mask-conic-from-(color:--my-var)',
+        'mask-conic-from-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -19581,73 +19152,73 @@ test("mask-conic-from", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-conic-from",
-				"mask-conic-from-2.8175",
-				"mask-conic-from--1.5",
-				"mask-conic-from--2",
+      [
+        'mask-conic-from',
+        'mask-conic-from-2.8175',
+        'mask-conic-from--1.5',
+        'mask-conic-from--2',
 
-				"mask-conic-from-2.5%",
-				"mask-conic-from--5%",
-				"mask-conic-from-unknown",
-				"mask-conic-from-unknown%",
+        'mask-conic-from-2.5%',
+        'mask-conic-from--5%',
+        'mask-conic-from-unknown',
+        'mask-conic-from-unknown%',
 
-				"-mask-conic-from-0",
-				"-mask-conic-from-1.5",
-				"-mask-conic-from-2",
-				"-mask-conic-from-0%",
-				"-mask-conic-from-2%",
-				"-mask-conic-from-[0px]",
-				"-mask-conic-from-[0%]",
+        '-mask-conic-from-0',
+        '-mask-conic-from-1.5',
+        '-mask-conic-from-2',
+        '-mask-conic-from-0%',
+        '-mask-conic-from-2%',
+        '-mask-conic-from-[0px]',
+        '-mask-conic-from-[0%]',
 
-				"-mask-conic-from-(--my-var)",
-				"-mask-conic-from-(color:--my-var)",
-				"-mask-conic-from-(length:--my-var)",
+        '-mask-conic-from-(--my-var)',
+        '-mask-conic-from-(color:--my-var)',
+        '-mask-conic-from-(length:--my-var)',
 
-				"mask-conic-from-[-25%]",
-				"mask-conic-from-[25%]/foo",
-				"mask-conic-from-[-25%]/foo",
-				"-mask-conic-from-[-25%]",
-				"-mask-conic-from-[25%]/foo",
-				"-mask-conic-from-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-conic-from-[-25%]',
+        'mask-conic-from-[25%]/foo',
+        'mask-conic-from-[-25%]/foo',
+        '-mask-conic-from-[-25%]',
+        '-mask-conic-from-[25%]/foo',
+        '-mask-conic-from-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("mask-conic-to", async () => {
-	expect(
-		await compileCss(
-			css`
+test('mask-conic-to', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-conic-to-0",
-				"mask-conic-to-1.5",
-				"mask-conic-to-2",
-				"mask-conic-to-0%",
-				"mask-conic-to-2%",
-				"mask-conic-to-[0px]",
-				"mask-conic-to-[0%]",
+      [
+        'mask-conic-to-0',
+        'mask-conic-to-1.5',
+        'mask-conic-to-2',
+        'mask-conic-to-0%',
+        'mask-conic-to-2%',
+        'mask-conic-to-[0px]',
+        'mask-conic-to-[0%]',
 
-				"mask-conic-to-(--my-var)",
-				"mask-conic-to-(color:--my-var)",
-				"mask-conic-to-(length:--my-var)",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        'mask-conic-to-(--my-var)',
+        'mask-conic-to-(color:--my-var)',
+        'mask-conic-to-(length:--my-var)',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -19822,53 +19393,51 @@ test("mask-conic-to", async () => {
       inherits: false;
       initial-value: transparent;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-			[
-				"mask-conic-to",
-				"mask-conic-to-2.8175",
-				"mask-conic-to--1.5",
-				"mask-conic-to--2",
+      [
+        'mask-conic-to',
+        'mask-conic-to-2.8175',
+        'mask-conic-to--1.5',
+        'mask-conic-to--2',
 
-				"mask-conic-to-2.5%",
-				"mask-conic-to--5%",
-				"mask-conic-to-unknown",
-				"mask-conic-to-unknown%",
+        'mask-conic-to-2.5%',
+        'mask-conic-to--5%',
+        'mask-conic-to-unknown',
+        'mask-conic-to-unknown%',
 
-				"-mask-conic-to-0",
-				"-mask-conic-to-1.5",
-				"-mask-conic-to-2",
-				"-mask-conic-to-0%",
-				"-mask-conic-to-2%",
-				"-mask-conic-to-[0px]",
-				"-mask-conic-to-[0%]",
+        '-mask-conic-to-0',
+        '-mask-conic-to-1.5',
+        '-mask-conic-to-2',
+        '-mask-conic-to-0%',
+        '-mask-conic-to-2%',
+        '-mask-conic-to-[0px]',
+        '-mask-conic-to-[0%]',
 
-				"-mask-conic-to-(--my-var)",
-				"-mask-conic-to-(color:--my-var)",
-				"-mask-conic-to-(length:--my-var)",
+        '-mask-conic-to-(--my-var)',
+        '-mask-conic-to-(color:--my-var)',
+        '-mask-conic-to-(length:--my-var)',
 
-				"mask-conic-to-[-25%]",
-				"mask-conic-to-[25%]/foo",
-				"mask-conic-to-[-25%]/foo",
-				"-mask-conic-to-[-25%]",
-				"-mask-conic-to-[25%]/foo",
-				"-mask-conic-to-[-25%]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'mask-conic-to-[-25%]',
+        'mask-conic-to-[25%]/foo',
+        'mask-conic-to-[-25%]/foo',
+        '-mask-conic-to-[-25%]',
+        '-mask-conic-to-[25%]/foo',
+        '-mask-conic-to-[-25%]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("box-decoration", async () => {
-	expect(
-		await run(["box-decoration-slice", "box-decoration-clone"]),
-	).toMatchInlineSnapshot(`
+test('box-decoration', async () => {
+  expect(await run(['box-decoration-slice', 'box-decoration-clone'])).toMatchInlineSnapshot(`
     ".box-decoration-clone {
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
@@ -19878,28 +19447,22 @@ test("box-decoration", async () => {
       -webkit-box-decoration-break: slice;
       box-decoration-break: slice;
     }"
-  `);
-	expect(
-		await run([
-			"box",
-			"box-decoration",
-			"-box-decoration-slice",
-			"-box-decoration-clone",
-			"box-decoration-slice/foo",
-			"box-decoration-clone/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'box',
+      'box-decoration',
+      '-box-decoration-slice',
+      '-box-decoration-clone',
+      'box-decoration-slice/foo',
+      'box-decoration-clone/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("bg-clip", async () => {
-	expect(
-		await run([
-			"bg-clip-border",
-			"bg-clip-padding",
-			"bg-clip-content",
-			"bg-clip-text",
-		]),
-	).toMatchInlineSnapshot(`
+test('bg-clip', async () => {
+  expect(await run(['bg-clip-border', 'bg-clip-padding', 'bg-clip-content', 'bg-clip-text']))
+    .toMatchInlineSnapshot(`
       ".bg-clip-border {
         background-clip: border-box;
       }
@@ -19916,26 +19479,25 @@ test("bg-clip", async () => {
         -webkit-background-clip: text;
         background-clip: text;
       }"
-    `);
-	expect(
-		await run([
-			"bg-clip",
-			"-bg-clip-border",
-			"-bg-clip-padding",
-			"-bg-clip-content",
-			"-bg-clip-text",
-			"bg-clip-border/foo",
-			"bg-clip-padding/foo",
-			"bg-clip-content/foo",
-			"bg-clip-text/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'bg-clip',
+      '-bg-clip-border',
+      '-bg-clip-padding',
+      '-bg-clip-content',
+      '-bg-clip-text',
+      'bg-clip-border/foo',
+      'bg-clip-padding/foo',
+      'bg-clip-content/foo',
+      'bg-clip-text/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("bg-origin", async () => {
-	expect(
-		await run(["bg-origin-border", "bg-origin-padding", "bg-origin-content"]),
-	).toMatchInlineSnapshot(`
+test('bg-origin', async () => {
+  expect(await run(['bg-origin-border', 'bg-origin-padding', 'bg-origin-content']))
+    .toMatchInlineSnapshot(`
       ".bg-origin-border {
         background-origin: border-box;
       }
@@ -19947,32 +19509,32 @@ test("bg-origin", async () => {
       .bg-origin-padding {
         background-origin: padding-box;
       }"
-    `);
-	expect(
-		await run([
-			"bg-origin",
-			"-bg-origin-border",
-			"-bg-origin-padding",
-			"-bg-origin-content",
-			"bg-origin-border/foo",
-			"bg-origin-padding/foo",
-			"bg-origin-content/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'bg-origin',
+      '-bg-origin-border',
+      '-bg-origin-padding',
+      '-bg-origin-content',
+      'bg-origin-border/foo',
+      'bg-origin-padding/foo',
+      'bg-origin-content/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-clip", async () => {
-	expect(
-		await run([
-			"mask-clip-border",
-			"mask-clip-padding",
-			"mask-clip-content",
-			"mask-clip-fill",
-			"mask-clip-stroke",
-			"mask-clip-view",
-			"mask-no-clip",
-		]),
-	).toMatchInlineSnapshot(`
+test('mask-clip', async () => {
+  expect(
+    await run([
+      'mask-clip-border',
+      'mask-clip-padding',
+      'mask-clip-content',
+      'mask-clip-fill',
+      'mask-clip-stroke',
+      'mask-clip-view',
+      'mask-no-clip',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".mask-clip-border {
       -webkit-mask-clip: border-box;
       mask-clip: border-box;
@@ -20007,39 +19569,39 @@ test("mask-clip", async () => {
       -webkit-mask-clip: no-clip;
       mask-clip: no-clip;
     }"
-  `);
-	expect(
-		await run([
-			"mask-clip",
-			"-mask-clip-border",
-			"-mask-clip-padding",
-			"-mask-clip-content",
-			"-mask-clip-fill",
-			"-mask-clip-stroke",
-			"-mask-clip-view",
-			"-mask-no-clip",
-			"mask-clip-border/foo",
-			"mask-clip-padding/foo",
-			"mask-clip-content/foo",
-			"mask-clip-fill/foo",
-			"mask-clip-stroke/foo",
-			"mask-clip-view/foo",
-			"mask-no-clip/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mask-clip',
+      '-mask-clip-border',
+      '-mask-clip-padding',
+      '-mask-clip-content',
+      '-mask-clip-fill',
+      '-mask-clip-stroke',
+      '-mask-clip-view',
+      '-mask-no-clip',
+      'mask-clip-border/foo',
+      'mask-clip-padding/foo',
+      'mask-clip-content/foo',
+      'mask-clip-fill/foo',
+      'mask-clip-stroke/foo',
+      'mask-clip-view/foo',
+      'mask-no-clip/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mask-origin", async () => {
-	expect(
-		await run([
-			"mask-origin-border",
-			"mask-origin-padding",
-			"mask-origin-content",
-			"mask-origin-fill",
-			"mask-origin-stroke",
-			"mask-origin-view",
-		]),
-	).toMatchInlineSnapshot(`
+test('mask-origin', async () => {
+  expect(
+    await run([
+      'mask-origin-border',
+      'mask-origin-padding',
+      'mask-origin-content',
+      'mask-origin-fill',
+      'mask-origin-stroke',
+      'mask-origin-view',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".mask-origin-border {
       -webkit-mask-origin: border-box;
       mask-origin: border-box;
@@ -20069,47 +19631,47 @@ test("mask-origin", async () => {
       -webkit-mask-origin: view-box;
       mask-origin: view-box;
     }"
-  `);
-	expect(
-		await run([
-			"mask-origin",
-			"-mask-origin-border",
-			"-mask-origin-padding",
-			"-mask-origin-content",
-			"-mask-origin-fill",
-			"-mask-origin-stroke",
-			"-mask-origin-view",
-			"mask-origin-border/foo",
-			"mask-origin-padding/foo",
-			"mask-origin-content/foo",
-			"mask-origin-fill/foo",
-			"mask-origin-stroke/foo",
-			"mask-origin-view/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mask-origin',
+      '-mask-origin-border',
+      '-mask-origin-padding',
+      '-mask-origin-content',
+      '-mask-origin-fill',
+      '-mask-origin-stroke',
+      '-mask-origin-view',
+      'mask-origin-border/foo',
+      'mask-origin-padding/foo',
+      'mask-origin-content/foo',
+      'mask-origin-fill/foo',
+      'mask-origin-stroke/foo',
+      'mask-origin-view/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("bg-blend", async () => {
-	expect(
-		await run([
-			"bg-blend-normal",
-			"bg-blend-multiply",
-			"bg-blend-screen",
-			"bg-blend-overlay",
-			"bg-blend-darken",
-			"bg-blend-lighten",
-			"bg-blend-color-dodge",
-			"bg-blend-color-burn",
-			"bg-blend-hard-light",
-			"bg-blend-soft-light",
-			"bg-blend-difference",
-			"bg-blend-exclusion",
-			"bg-blend-hue",
-			"bg-blend-saturation",
-			"bg-blend-color",
-			"bg-blend-luminosity",
-		]),
-	).toMatchInlineSnapshot(`
+test('bg-blend', async () => {
+  expect(
+    await run([
+      'bg-blend-normal',
+      'bg-blend-multiply',
+      'bg-blend-screen',
+      'bg-blend-overlay',
+      'bg-blend-darken',
+      'bg-blend-lighten',
+      'bg-blend-color-dodge',
+      'bg-blend-color-burn',
+      'bg-blend-hard-light',
+      'bg-blend-soft-light',
+      'bg-blend-difference',
+      'bg-blend-exclusion',
+      'bg-blend-hue',
+      'bg-blend-saturation',
+      'bg-blend-color',
+      'bg-blend-luminosity',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".bg-blend-color {
       background-blend-mode: color;
     }
@@ -20173,69 +19735,69 @@ test("bg-blend", async () => {
     .bg-blend-soft-light {
       background-blend-mode: soft-light;
     }"
-  `);
-	expect(
-		await run([
-			"bg-blend",
-			"-bg-blend-normal",
-			"-bg-blend-multiply",
-			"-bg-blend-screen",
-			"-bg-blend-overlay",
-			"-bg-blend-darken",
-			"-bg-blend-lighten",
-			"-bg-blend-color-dodge",
-			"-bg-blend-color-burn",
-			"-bg-blend-hard-light",
-			"-bg-blend-soft-light",
-			"-bg-blend-difference",
-			"-bg-blend-exclusion",
-			"-bg-blend-hue",
-			"-bg-blend-saturation",
-			"-bg-blend-color",
-			"-bg-blend-luminosity",
-			"bg-blend-normal/foo",
-			"bg-blend-multiply/foo",
-			"bg-blend-screen/foo",
-			"bg-blend-overlay/foo",
-			"bg-blend-darken/foo",
-			"bg-blend-lighten/foo",
-			"bg-blend-color-dodge/foo",
-			"bg-blend-color-burn/foo",
-			"bg-blend-hard-light/foo",
-			"bg-blend-soft-light/foo",
-			"bg-blend-difference/foo",
-			"bg-blend-exclusion/foo",
-			"bg-blend-hue/foo",
-			"bg-blend-saturation/foo",
-			"bg-blend-color/foo",
-			"bg-blend-luminosity/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'bg-blend',
+      '-bg-blend-normal',
+      '-bg-blend-multiply',
+      '-bg-blend-screen',
+      '-bg-blend-overlay',
+      '-bg-blend-darken',
+      '-bg-blend-lighten',
+      '-bg-blend-color-dodge',
+      '-bg-blend-color-burn',
+      '-bg-blend-hard-light',
+      '-bg-blend-soft-light',
+      '-bg-blend-difference',
+      '-bg-blend-exclusion',
+      '-bg-blend-hue',
+      '-bg-blend-saturation',
+      '-bg-blend-color',
+      '-bg-blend-luminosity',
+      'bg-blend-normal/foo',
+      'bg-blend-multiply/foo',
+      'bg-blend-screen/foo',
+      'bg-blend-overlay/foo',
+      'bg-blend-darken/foo',
+      'bg-blend-lighten/foo',
+      'bg-blend-color-dodge/foo',
+      'bg-blend-color-burn/foo',
+      'bg-blend-hard-light/foo',
+      'bg-blend-soft-light/foo',
+      'bg-blend-difference/foo',
+      'bg-blend-exclusion/foo',
+      'bg-blend-hue/foo',
+      'bg-blend-saturation/foo',
+      'bg-blend-color/foo',
+      'bg-blend-luminosity/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("mix-blend", async () => {
-	expect(
-		await run([
-			"mix-blend-normal",
-			"mix-blend-multiply",
-			"mix-blend-screen",
-			"mix-blend-overlay",
-			"mix-blend-darken",
-			"mix-blend-lighten",
-			"mix-blend-color-dodge",
-			"mix-blend-color-burn",
-			"mix-blend-hard-light",
-			"mix-blend-soft-light",
-			"mix-blend-difference",
-			"mix-blend-exclusion",
-			"mix-blend-hue",
-			"mix-blend-saturation",
-			"mix-blend-color",
-			"mix-blend-luminosity",
-			"mix-blend-plus-darker",
-			"mix-blend-plus-lighter",
-		]),
-	).toMatchInlineSnapshot(`
+test('mix-blend', async () => {
+  expect(
+    await run([
+      'mix-blend-normal',
+      'mix-blend-multiply',
+      'mix-blend-screen',
+      'mix-blend-overlay',
+      'mix-blend-darken',
+      'mix-blend-lighten',
+      'mix-blend-color-dodge',
+      'mix-blend-color-burn',
+      'mix-blend-hard-light',
+      'mix-blend-soft-light',
+      'mix-blend-difference',
+      'mix-blend-exclusion',
+      'mix-blend-hue',
+      'mix-blend-saturation',
+      'mix-blend-color',
+      'mix-blend-luminosity',
+      'mix-blend-plus-darker',
+      'mix-blend-plus-lighter',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".mix-blend-color {
       mix-blend-mode: color;
     }
@@ -20307,81 +19869,81 @@ test("mix-blend", async () => {
     .mix-blend-soft-light {
       mix-blend-mode: soft-light;
     }"
-  `);
-	expect(
-		await run([
-			"mix-blend",
-			"-mix-blend-normal",
-			"-mix-blend-multiply",
-			"-mix-blend-screen",
-			"-mix-blend-overlay",
-			"-mix-blend-darken",
-			"-mix-blend-lighten",
-			"-mix-blend-color-dodge",
-			"-mix-blend-color-burn",
-			"-mix-blend-hard-light",
-			"-mix-blend-soft-light",
-			"-mix-blend-difference",
-			"-mix-blend-exclusion",
-			"-mix-blend-hue",
-			"-mix-blend-saturation",
-			"-mix-blend-color",
-			"-mix-blend-luminosity",
-			"-mix-blend-plus-lighter",
-			"mix-blend-normal/foo",
-			"mix-blend-multiply/foo",
-			"mix-blend-screen/foo",
-			"mix-blend-overlay/foo",
-			"mix-blend-darken/foo",
-			"mix-blend-lighten/foo",
-			"mix-blend-color-dodge/foo",
-			"mix-blend-color-burn/foo",
-			"mix-blend-hard-light/foo",
-			"mix-blend-soft-light/foo",
-			"mix-blend-difference/foo",
-			"mix-blend-exclusion/foo",
-			"mix-blend-hue/foo",
-			"mix-blend-saturation/foo",
-			"mix-blend-color/foo",
-			"mix-blend-luminosity/foo",
-			"mix-blend-plus-darker/foo",
-			"mix-blend-plus-lighter/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'mix-blend',
+      '-mix-blend-normal',
+      '-mix-blend-multiply',
+      '-mix-blend-screen',
+      '-mix-blend-overlay',
+      '-mix-blend-darken',
+      '-mix-blend-lighten',
+      '-mix-blend-color-dodge',
+      '-mix-blend-color-burn',
+      '-mix-blend-hard-light',
+      '-mix-blend-soft-light',
+      '-mix-blend-difference',
+      '-mix-blend-exclusion',
+      '-mix-blend-hue',
+      '-mix-blend-saturation',
+      '-mix-blend-color',
+      '-mix-blend-luminosity',
+      '-mix-blend-plus-lighter',
+      'mix-blend-normal/foo',
+      'mix-blend-multiply/foo',
+      'mix-blend-screen/foo',
+      'mix-blend-overlay/foo',
+      'mix-blend-darken/foo',
+      'mix-blend-lighten/foo',
+      'mix-blend-color-dodge/foo',
+      'mix-blend-color-burn/foo',
+      'mix-blend-hard-light/foo',
+      'mix-blend-soft-light/foo',
+      'mix-blend-difference/foo',
+      'mix-blend-exclusion/foo',
+      'mix-blend-hue/foo',
+      'mix-blend-saturation/foo',
+      'mix-blend-color/foo',
+      'mix-blend-luminosity/foo',
+      'mix-blend-plus-darker/foo',
+      'mix-blend-plus-lighter/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("fill", async () => {
-	expect(
-		await compileCss(
-			css`
+test('fill', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --fill-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				"fill-red-500",
-				"fill-red-500/50",
-				"fill-red-500/2.25",
-				"fill-red-500/2.5",
-				"fill-red-500/2.75",
-				"fill-red-500/[0.5]",
-				"fill-red-500/[50%]",
-				"fill-blue-500",
-				"fill-current",
-				"fill-current/50",
-				"fill-current/[0.5]",
-				"fill-current/[50%]",
-				"fill-inherit",
-				"fill-transparent",
-				"fill-[#0088cc]",
-				"fill-[#0088cc]/50",
-				"fill-[#0088cc]/[0.5]",
-				"fill-[#0088cc]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'fill-red-500',
+        'fill-red-500/50',
+        'fill-red-500/2.25',
+        'fill-red-500/2.5',
+        'fill-red-500/2.75',
+        'fill-red-500/[0.5]',
+        'fill-red-500/[50%]',
+        'fill-blue-500',
+        'fill-current',
+        'fill-current/50',
+        'fill-current/[0.5]',
+        'fill-current/[50%]',
+        'fill-inherit',
+        'fill-transparent',
+        'fill-[#0088cc]',
+        'fill-[#0088cc]/50',
+        'fill-[#0088cc]/[0.5]',
+        'fill-[#0088cc]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --fill-blue-500: #3b82f6;
@@ -20500,82 +20062,82 @@ test("fill", async () => {
     .fill-transparent {
       fill: #0000;
     }"
-  `);
-	expect(
-		await run([
-			"fill",
-			"fill-unknown",
-			"-fill-red-500",
-			"-fill-red-500/50",
-			"-fill-red-500/[0.5]",
-			"-fill-red-500/[50%]",
-			"-fill-current",
-			"-fill-current/50",
-			"-fill-current/[0.5]",
-			"-fill-current/[50%]",
-			"-fill-inherit",
-			"-fill-transparent",
-			"-fill-[#0088cc]",
-			"-fill-[#0088cc]/50",
-			"-fill-[#0088cc]/[0.5]",
-			"-fill-[#0088cc]/[50%]",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'fill',
+      'fill-unknown',
+      '-fill-red-500',
+      '-fill-red-500/50',
+      '-fill-red-500/[0.5]',
+      '-fill-red-500/[50%]',
+      '-fill-current',
+      '-fill-current/50',
+      '-fill-current/[0.5]',
+      '-fill-current/[50%]',
+      '-fill-inherit',
+      '-fill-transparent',
+      '-fill-[#0088cc]',
+      '-fill-[#0088cc]/50',
+      '-fill-[#0088cc]/[0.5]',
+      '-fill-[#0088cc]/[50%]',
+    ]),
+  ).toEqual('')
+})
 
-test("stroke", async () => {
-	expect(
-		await compileCss(
-			css`
+test('stroke', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --stroke-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				// Color
-				"stroke-red-500",
-				"stroke-red-500/50",
-				"stroke-red-500/2.25",
-				"stroke-red-500/2.5",
-				"stroke-red-500/2.75",
-				"stroke-red-500/[0.5]",
-				"stroke-red-500/[50%]",
-				"stroke-blue-500",
-				"stroke-current",
-				"stroke-current/50",
-				"stroke-current/[0.5]",
-				"stroke-current/[50%]",
-				"stroke-inherit",
-				"stroke-transparent",
-				"stroke-[#0088cc]",
-				"stroke-[#0088cc]/50",
-				"stroke-[#0088cc]/[0.5]",
-				"stroke-[#0088cc]/[50%]",
-				"stroke-[var(--my-color)]",
-				"stroke-[var(--my-color)]/50",
-				"stroke-[var(--my-color)]/[0.5]",
-				"stroke-[var(--my-color)]/[50%]",
-				"stroke-[color:var(--my-color)]",
-				"stroke-[color:var(--my-color)]/50",
-				"stroke-[color:var(--my-color)]/[0.5]",
-				"stroke-[color:var(--my-color)]/[50%]",
-				"stroke-none",
+      [
+        // Color
+        'stroke-red-500',
+        'stroke-red-500/50',
+        'stroke-red-500/2.25',
+        'stroke-red-500/2.5',
+        'stroke-red-500/2.75',
+        'stroke-red-500/[0.5]',
+        'stroke-red-500/[50%]',
+        'stroke-blue-500',
+        'stroke-current',
+        'stroke-current/50',
+        'stroke-current/[0.5]',
+        'stroke-current/[50%]',
+        'stroke-inherit',
+        'stroke-transparent',
+        'stroke-[#0088cc]',
+        'stroke-[#0088cc]/50',
+        'stroke-[#0088cc]/[0.5]',
+        'stroke-[#0088cc]/[50%]',
+        'stroke-[var(--my-color)]',
+        'stroke-[var(--my-color)]/50',
+        'stroke-[var(--my-color)]/[0.5]',
+        'stroke-[var(--my-color)]/[50%]',
+        'stroke-[color:var(--my-color)]',
+        'stroke-[color:var(--my-color)]/50',
+        'stroke-[color:var(--my-color)]/[0.5]',
+        'stroke-[color:var(--my-color)]/[50%]',
+        'stroke-none',
 
-				// Width
-				"stroke-0",
-				"stroke-1",
-				"stroke-2",
-				"stroke-[1.5]",
-				"stroke-[12px]",
-				"stroke-[50%]",
-				"stroke-[number:var(--my-width)]",
-				"stroke-[length:var(--my-width)]",
-				"stroke-[percentage:var(--my-width)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // Width
+        'stroke-0',
+        'stroke-1',
+        'stroke-2',
+        'stroke-[1.5]',
+        'stroke-[12px]',
+        'stroke-[50%]',
+        'stroke-[number:var(--my-width)]',
+        'stroke-[length:var(--my-width)]',
+        'stroke-[percentage:var(--my-width)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --stroke-blue-500: #3b82f6;
@@ -20786,64 +20348,64 @@ test("stroke", async () => {
     .stroke-\\[length\\:var\\(--my-width\\)\\], .stroke-\\[number\\:var\\(--my-width\\)\\], .stroke-\\[percentage\\:var\\(--my-width\\)\\] {
       stroke-width: var(--my-width);
     }"
-  `);
-	expect(
-		await run([
-			"stroke",
-			"stroke-unknown",
+  `)
+  expect(
+    await run([
+      'stroke',
+      'stroke-unknown',
 
-			// Color
-			"-stroke-red-500",
-			"-stroke-red-500/50",
-			"-stroke-red-500/[0.5]",
-			"-stroke-red-500/[50%]",
-			"-stroke-current",
-			"-stroke-current/50",
-			"-stroke-current/[0.5]",
-			"-stroke-current/[50%]",
-			"-stroke-inherit",
-			"-stroke-transparent",
-			"-stroke-[#0088cc]",
-			"-stroke-[#0088cc]/50",
-			"-stroke-[#0088cc]/[0.5]",
-			"-stroke-[#0088cc]/[50%]",
+      // Color
+      '-stroke-red-500',
+      '-stroke-red-500/50',
+      '-stroke-red-500/[0.5]',
+      '-stroke-red-500/[50%]',
+      '-stroke-current',
+      '-stroke-current/50',
+      '-stroke-current/[0.5]',
+      '-stroke-current/[50%]',
+      '-stroke-inherit',
+      '-stroke-transparent',
+      '-stroke-[#0088cc]',
+      '-stroke-[#0088cc]/50',
+      '-stroke-[#0088cc]/[0.5]',
+      '-stroke-[#0088cc]/[50%]',
 
-			// Width
-			"-stroke-0",
-			"stroke--1",
-		]),
-	).toEqual("");
-});
+      // Width
+      '-stroke-0',
+      'stroke--1',
+    ]),
+  ).toEqual('')
+})
 
-test("object", async () => {
-	expect(
-		await run([
-			// object-fit
-			"object-contain",
-			"object-cover",
-			"object-fill",
-			"object-none",
-			"object-scale-down",
+test('object', async () => {
+  expect(
+    await run([
+      // object-fit
+      'object-contain',
+      'object-cover',
+      'object-fill',
+      'object-none',
+      'object-scale-down',
 
-			// object-position
-			"object-[var(--value)]",
-			"object-top",
-			"object-top-left",
-			"object-top-right",
-			"object-bottom",
-			"object-bottom-left",
-			"object-bottom-right",
-			"object-left",
-			"object-right",
-			"object-center",
+      // object-position
+      'object-[var(--value)]',
+      'object-top',
+      'object-top-left',
+      'object-top-right',
+      'object-bottom',
+      'object-bottom-left',
+      'object-bottom-right',
+      'object-left',
+      'object-right',
+      'object-center',
 
-			// Legacy versions in v4.0 and earlier
-			"object-left-bottom",
-			"object-left-top",
-			"object-right-bottom",
-			"object-right-top",
-		]),
-	).toMatchInlineSnapshot(`
+      // Legacy versions in v4.0 and earlier
+      'object-left-bottom',
+      'object-left-top',
+      'object-right-bottom',
+      'object-right-top',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".object-contain {
       object-fit: contain;
     }
@@ -20919,50 +20481,50 @@ test("object", async () => {
     .object-top-right {
       object-position: right top;
     }"
-  `);
-	expect(
-		await run([
-			"object",
-			// object-fit
-			"-object-contain",
-			"-object-cover",
-			"-object-fill",
-			"-object-none",
-			"-object-scale-down",
+  `)
+  expect(
+    await run([
+      'object',
+      // object-fit
+      '-object-contain',
+      '-object-cover',
+      '-object-fill',
+      '-object-none',
+      '-object-scale-down',
 
-			// object-position
-			"-object-[var(--value)]",
-			"-object-bottom",
+      // object-position
+      '-object-[var(--value)]',
+      '-object-bottom',
 
-			"object-contain/foo",
-			"object-cover/foo",
-			"object-fill/foo",
-			"object-none/foo",
-			"object-scale-down/foo",
-			"object-[var(--value)]/foo",
-			"object-bottom/foo",
-			"object-center/foo",
-			"object-left/foo",
-			"object-left-bottom/foo",
-			"object-left-top/foo",
-			"object-right/foo",
-			"object-right-bottom/foo",
-			"object-right-top/foo",
-			"object-top/foo",
-		]),
-	).toEqual("");
+      'object-contain/foo',
+      'object-cover/foo',
+      'object-fill/foo',
+      'object-none/foo',
+      'object-scale-down/foo',
+      'object-[var(--value)]/foo',
+      'object-bottom/foo',
+      'object-center/foo',
+      'object-left/foo',
+      'object-left-bottom/foo',
+      'object-left-top/foo',
+      'object-right/foo',
+      'object-right-bottom/foo',
+      'object-right-top/foo',
+      'object-top/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --object-position-center: top left;
         }
         @tailwind utilities;
       `,
-			["object-center"],
-		),
-	).toMatchInlineSnapshot(`
+      ['object-center'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --object-position-center: top left;
     }
@@ -20970,22 +20532,22 @@ test("object", async () => {
     .object-center {
       object-position: var(--object-position-center);
     }"
-  `);
-});
+  `)
+})
 
-test("p", async () => {
-	expect(
-		await compileCss(
-			css`
+test('p', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["p-1", "p-4", "p-99", "p-big", "p-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21010,25 +20572,23 @@ test("p", async () => {
     .p-big {
       padding: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["p", "-p-4", "-p-[4px]", "p-4/foo", "p-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['p', '-p-4', '-p-[4px]', 'p-4/foo', 'p-[4px]/foo'])).toEqual('')
+})
 
-test("px", async () => {
-	expect(
-		await compileCss(
-			css`
+test('px', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["px-1", "px-99", "px-2.5", "px-big", "px-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21053,25 +20613,23 @@ test("px", async () => {
     .px-big {
       padding-inline: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["px", "-px-4", "-px-[4px]", "px-4/foo", "px-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['px', '-px-4', '-px-[4px]', 'px-4/foo', 'px-[4px]/foo'])).toEqual('')
+})
 
-test("py", async () => {
-	expect(
-		await compileCss(
-			css`
+test('py', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["py-1", "py-4", "py-99", "py-big", "py-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21096,25 +20654,23 @@ test("py", async () => {
     .py-big {
       padding-block: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["py", "-py-4", "-py-[4px]", "py-4/foo", "py-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['py', '-py-4', '-py-[4px]', 'py-4/foo', 'py-[4px]/foo'])).toEqual('')
+})
 
-test("pt", async () => {
-	expect(
-		await compileCss(
-			css`
+test('pt', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["pt-1", "pt-4", "pt-99", "pt-big", "pt-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21139,25 +20695,23 @@ test("pt", async () => {
     .pt-big {
       padding-top: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["pt", "-pt-4", "-pt-[4px]", "pt-4/foo", "pt-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['pt', '-pt-4', '-pt-[4px]', 'pt-4/foo', 'pt-[4px]/foo'])).toEqual('')
+})
 
-test("ps", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ps', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["ps-1", "ps-4", "ps-99", "ps-big", "ps-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21182,25 +20736,23 @@ test("ps", async () => {
     .ps-big {
       padding-inline-start: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["ps", "-ps-4", "-ps-[4px]", "ps-4/foo", "ps-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['ps', '-ps-4', '-ps-[4px]', 'ps-4/foo', 'ps-[4px]/foo'])).toEqual('')
+})
 
-test("pe", async () => {
-	expect(
-		await compileCss(
-			css`
+test('pe', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["pe-1", "pe-4", "pe-99", "pe-big", "pe-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21225,25 +20777,23 @@ test("pe", async () => {
     .pe-big {
       padding-inline-end: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["pe", "-pe-4", "-pe-[4px]", "pe-4/foo", "pe-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
+})
 
-test("pr", async () => {
-	expect(
-		await compileCss(
-			css`
+test('pr', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["pr-1", "pr-4", "pr-99", "pr-big", "pr-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21268,25 +20818,23 @@ test("pr", async () => {
     .pr-big {
       padding-right: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["pr", "-pr-4", "-pr-[4px]", "pr-4/foo", "pr-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['pr', '-pr-4', '-pr-[4px]', 'pr-4/foo', 'pr-[4px]/foo'])).toEqual('')
+})
 
-test("pb", async () => {
-	expect(
-		await compileCss(
-			css`
+test('pb', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["pb-1", "pb-4", "pb-99", "pb-big", "pb-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21311,25 +20859,23 @@ test("pb", async () => {
     .pb-big {
       padding-bottom: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["pb", "-pb-4", "-pb-[4px]", "pb-4/foo", "pb-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['pb', '-pb-4', '-pb-[4px]', 'pb-4/foo', 'pb-[4px]/foo'])).toEqual('')
+})
 
-test("pl", async () => {
-	expect(
-		await compileCss(
-			css`
+test('pl', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --spacing-big: 100rem;
         }
         @tailwind utilities;
       `,
-			["pl-1", "pl-4", "pl-99", "pl-big", "pl-[4px]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --spacing-big: 100rem;
@@ -21354,23 +20900,14 @@ test("pl", async () => {
     .pl-big {
       padding-left: var(--spacing-big);
     }"
-  `);
-	expect(
-		await run(["pl", "-pl-4", "-pl-[4px]", "pl-4/foo", "pl-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['pl', '-pl-4', '-pl-[4px]', 'pl-4/foo', 'pl-[4px]/foo'])).toEqual('')
+})
 
-test("text-align", async () => {
-	expect(
-		await run([
-			"text-left",
-			"text-center",
-			"text-right",
-			"text-justify",
-			"text-start",
-			"text-end",
-		]),
-	).toMatchInlineSnapshot(`
+test('text-align', async () => {
+  expect(
+    await run(['text-left', 'text-center', 'text-right', 'text-justify', 'text-start', 'text-end']),
+  ).toMatchInlineSnapshot(`
     ".text-center {
       text-align: center;
     }
@@ -21394,27 +20931,27 @@ test("text-align", async () => {
     .text-start {
       text-align: start;
     }"
-  `);
-	expect(
-		await run([
-			"-text-left",
-			"-text-center",
-			"-text-right",
-			"-text-justify",
-			"-text-start",
-			"-text-end",
-			"text-left/foo",
-			"text-center/foo",
-			"text-right/foo",
-			"text-justify/foo",
-			"text-start/foo",
-			"text-end/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-text-left',
+      '-text-center',
+      '-text-right',
+      '-text-justify',
+      '-text-start',
+      '-text-end',
+      'text-left/foo',
+      'text-center/foo',
+      'text-right/foo',
+      'text-justify/foo',
+      'text-start/foo',
+      'text-end/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("indent", async () => {
-	expect(await run(["indent-[4px]", "-indent-[4px]"])).toMatchInlineSnapshot(`
+test('indent', async () => {
+  expect(await run(['indent-[4px]', '-indent-[4px]'])).toMatchInlineSnapshot(`
     ".-indent-\\[4px\\] {
       text-indent: -4px;
     }
@@ -21422,27 +20959,25 @@ test("indent", async () => {
     .indent-\\[4px\\] {
       text-indent: 4px;
     }"
-  `);
-	expect(
-		await run(["indent", "indent-[4px]/foo", "-indent-[4px]/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['indent', 'indent-[4px]/foo', '-indent-[4px]/foo'])).toEqual('')
+})
 
-test("align", async () => {
-	expect(
-		await run([
-			"align-baseline",
-			"align-top",
-			"align-middle",
-			"align-bottom",
-			"align-text-top",
-			"align-text-bottom",
-			"align-sub",
-			"align-super",
+test('align', async () => {
+  expect(
+    await run([
+      'align-baseline',
+      'align-top',
+      'align-middle',
+      'align-bottom',
+      'align-text-top',
+      'align-text-bottom',
+      'align-sub',
+      'align-super',
 
-			"align-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+      'align-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".align-\\[var\\(--value\\)\\] {
       vertical-align: var(--value);
     }
@@ -21478,38 +21013,38 @@ test("align", async () => {
     .align-top {
       vertical-align: top;
     }"
-  `);
-	expect(
-		await run([
-			"align",
-			"-align-baseline",
-			"-align-top",
-			"-align-middle",
-			"-align-bottom",
-			"-align-text-top",
-			"-align-text-bottom",
-			"-align-sub",
-			"-align-super",
+  `)
+  expect(
+    await run([
+      'align',
+      '-align-baseline',
+      '-align-top',
+      '-align-middle',
+      '-align-bottom',
+      '-align-text-top',
+      '-align-text-bottom',
+      '-align-sub',
+      '-align-super',
 
-			"-align-[var(--value)]",
+      '-align-[var(--value)]',
 
-			"align-baseline/foo",
-			"align-top/foo",
-			"align-middle/foo",
-			"align-bottom/foo",
-			"align-text-top/foo",
-			"align-text-bottom/foo",
-			"align-sub/foo",
-			"align-super/foo",
-			"align-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+      'align-baseline/foo',
+      'align-top/foo',
+      'align-middle/foo',
+      'align-bottom/foo',
+      'align-text-top/foo',
+      'align-text-bottom/foo',
+      'align-sub/foo',
+      'align-super/foo',
+      'align-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("font", async () => {
-	expect(
-		await compileCss(
-			css`
+test('font', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --font-sans:
             ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -21518,22 +21053,22 @@ test("font", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				// font-family
-				"font-sans",
-				'font-["arial_rounded"]',
-				"font-[ui-sans-serif]",
-				"font-[var(--my-family)]",
-				"font-[family-name:var(--my-family)]",
-				"font-[generic-name:var(--my-family)]",
+      [
+        // font-family
+        'font-sans',
+        'font-["arial_rounded"]',
+        'font-[ui-sans-serif]',
+        'font-[var(--my-family)]',
+        'font-[family-name:var(--my-family)]',
+        'font-[generic-name:var(--my-family)]',
 
-				// font-weight
-				"font-bold",
-				"font-[100]",
-				"font-[number:var(--my-weight)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // font-weight
+        'font-bold',
+        'font-[100]',
+        'font-[number:var(--my-weight)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -21587,10 +21122,10 @@ test("font", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme reference {
           --font-sans:
             ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -21599,33 +21134,31 @@ test("font", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"font",
-				// font-family
-				"-font-sans",
+      [
+        'font',
+        // font-family
+        '-font-sans',
 
-				// font-weight
-				"-font-bold",
+        // font-weight
+        '-font-bold',
 
-				"font-weight-bold",
-				"font-sans/foo",
-				'font-["arial_rounded"]/foo',
-				"font-[ui-sans-serif]/foo",
-				"font-[var(--my-family)]/foo",
-				"font-[family-name:var(--my-family)]/foo",
-				"font-[generic-name:var(--my-family)]/foo",
-				"font-bold/foo",
-				"font-[100]/foo",
-				"font-[number:var(--my-weight)]/foo",
-			],
-		),
-	).toEqual("");
-});
+        'font-weight-bold',
+        'font-sans/foo',
+        'font-["arial_rounded"]/foo',
+        'font-[ui-sans-serif]/foo',
+        'font-[var(--my-family)]/foo',
+        'font-[family-name:var(--my-family)]/foo',
+        'font-[generic-name:var(--my-family)]/foo',
+        'font-bold/foo',
+        'font-[100]/foo',
+        'font-[number:var(--my-weight)]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("text-transform", async () => {
-	expect(
-		await run(["uppercase", "lowercase", "capitalize", "normal-case"]),
-	).toMatchInlineSnapshot(`
+test('text-transform', async () => {
+  expect(await run(['uppercase', 'lowercase', 'capitalize', 'normal-case'])).toMatchInlineSnapshot(`
     ".capitalize {
       text-transform: capitalize;
     }
@@ -21641,23 +21174,23 @@ test("text-transform", async () => {
     .uppercase {
       text-transform: uppercase;
     }"
-  `);
-	expect(
-		await run([
-			"-uppercase",
-			"-lowercase",
-			"-capitalize",
-			"-normal-case",
-			"uppercase/foo",
-			"lowercase/foo",
-			"capitalize/foo",
-			"normal-case/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-uppercase',
+      '-lowercase',
+      '-capitalize',
+      '-normal-case',
+      'uppercase/foo',
+      'lowercase/foo',
+      'capitalize/foo',
+      'normal-case/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("font-style", async () => {
-	expect(await run(["italic", "not-italic"])).toMatchInlineSnapshot(`
+test('font-style', async () => {
+  expect(await run(['italic', 'not-italic'])).toMatchInlineSnapshot(`
     ".italic {
       font-style: italic;
     }
@@ -21665,20 +21198,13 @@ test("font-style", async () => {
     .not-italic {
       font-style: normal;
     }"
-  `);
-	expect(
-		await run(["-italic", "-not-italic", "italic/foo", "not-italic/foo"]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['-italic', '-not-italic', 'italic/foo', 'not-italic/foo'])).toEqual('')
+})
 
-test("font-stretch", async () => {
-	expect(
-		await run([
-			"font-stretch-ultra-expanded",
-			"font-stretch-50%",
-			"font-stretch-200%",
-		]),
-	).toMatchInlineSnapshot(`
+test('font-stretch', async () => {
+  expect(await run(['font-stretch-ultra-expanded', 'font-stretch-50%', 'font-stretch-200%']))
+    .toMatchInlineSnapshot(`
       ".font-stretch-50\\% {
         font-stretch: 50%;
       }
@@ -21690,26 +21216,25 @@ test("font-stretch", async () => {
       .font-stretch-ultra-expanded {
         font-stretch: ultra-expanded;
       }"
-    `);
-	expect(
-		await run([
-			"font-stretch",
-			"font-stretch-20%",
-			"font-stretch-50",
-			"font-stretch-400%",
-			"font-stretch-50.5%",
-			"font-stretch-potato",
-			"font-stretch-ultra-expanded/foo",
-			"font-stretch-50%/foo",
-			"font-stretch-200%/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'font-stretch',
+      'font-stretch-20%',
+      'font-stretch-50',
+      'font-stretch-400%',
+      'font-stretch-50.5%',
+      'font-stretch-potato',
+      'font-stretch-ultra-expanded/foo',
+      'font-stretch-50%/foo',
+      'font-stretch-200%/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("text-decoration-line", async () => {
-	expect(
-		await run(["underline", "overline", "line-through", "no-underline"]),
-	).toMatchInlineSnapshot(`
+test('text-decoration-line', async () => {
+  expect(await run(['underline', 'overline', 'line-through', 'no-underline']))
+    .toMatchInlineSnapshot(`
       ".line-through {
         text-decoration-line: line-through;
       }
@@ -21725,51 +21250,51 @@ test("text-decoration-line", async () => {
       .underline {
         text-decoration-line: underline;
       }"
-    `);
-	expect(
-		await run([
-			"-underline",
-			"-overline",
-			"-line-through",
-			"-no-underline",
-			"underline/foo",
-			"overline/foo",
-			"line-through/foo",
-			"no-underline/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      '-underline',
+      '-overline',
+      '-line-through',
+      '-no-underline',
+      'underline/foo',
+      'overline/foo',
+      'line-through/foo',
+      'no-underline/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("placeholder", async () => {
-	expect(
-		await compileCss(
-			css`
+test('placeholder', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				"placeholder-red-500",
-				"placeholder-red-500/50",
-				"placeholder-red-500/2.25",
-				"placeholder-red-500/2.5",
-				"placeholder-red-500/2.75",
-				"placeholder-red-500/[0.5]",
-				"placeholder-red-500/[50%]",
-				"placeholder-current",
-				"placeholder-current/50",
-				"placeholder-current/[0.5]",
-				"placeholder-current/[50%]",
-				"placeholder-inherit",
-				"placeholder-transparent",
-				"placeholder-[#0088cc]",
-				"placeholder-[#0088cc]/50",
-				"placeholder-[#0088cc]/[0.5]",
-				"placeholder-[#0088cc]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'placeholder-red-500',
+        'placeholder-red-500/50',
+        'placeholder-red-500/2.25',
+        'placeholder-red-500/2.5',
+        'placeholder-red-500/2.75',
+        'placeholder-red-500/[0.5]',
+        'placeholder-red-500/[50%]',
+        'placeholder-current',
+        'placeholder-current/50',
+        'placeholder-current/[0.5]',
+        'placeholder-current/[50%]',
+        'placeholder-inherit',
+        'placeholder-transparent',
+        'placeholder-[#0088cc]',
+        'placeholder-[#0088cc]/50',
+        'placeholder-[#0088cc]/[0.5]',
+        'placeholder-[#0088cc]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
     }
@@ -21883,86 +21408,86 @@ test("placeholder", async () => {
     .placeholder-transparent::placeholder {
       color: #0000;
     }"
-  `);
-	expect(
-		await run([
-			"placeholder",
-			"-placeholder-red-500",
-			"-placeholder-red-500/50",
-			"-placeholder-red-500/[0.5]",
-			"-placeholder-red-500/[50%]",
-			"-placeholder-current",
-			"-placeholder-current/50",
-			"-placeholder-current/[0.5]",
-			"-placeholder-current/[50%]",
-			"-placeholder-inherit",
-			"-placeholder-transparent",
-			"-placeholder-[#0088cc]",
-			"-placeholder-[#0088cc]/50",
-			"-placeholder-[#0088cc]/[0.5]",
-			"-placeholder-[#0088cc]/[50%]",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'placeholder',
+      '-placeholder-red-500',
+      '-placeholder-red-500/50',
+      '-placeholder-red-500/[0.5]',
+      '-placeholder-red-500/[50%]',
+      '-placeholder-current',
+      '-placeholder-current/50',
+      '-placeholder-current/[0.5]',
+      '-placeholder-current/[50%]',
+      '-placeholder-inherit',
+      '-placeholder-transparent',
+      '-placeholder-[#0088cc]',
+      '-placeholder-[#0088cc]/50',
+      '-placeholder-[#0088cc]/[0.5]',
+      '-placeholder-[#0088cc]/[50%]',
+    ]),
+  ).toEqual('')
+})
 
-test("decoration", async () => {
-	expect(
-		await compileCss(
-			css`
+test('decoration', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --text-decoration-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				// text-decoration-color
-				"decoration-red-500",
-				"decoration-red-500/50",
-				"decoration-red-500/[0.5]",
-				"decoration-red-500/[50%]",
-				"decoration-blue-500",
-				"decoration-current",
-				"decoration-current/50",
-				"decoration-current/[0.5]",
-				"decoration-current/[50%]",
-				"decoration-inherit",
-				"decoration-transparent",
-				"decoration-[#0088cc]",
-				"decoration-[#0088cc]/50",
-				"decoration-[#0088cc]/[0.5]",
-				"decoration-[#0088cc]/[50%]",
-				"decoration-[var(--my-color)]",
-				"decoration-[var(--my-color)]/50",
-				"decoration-[var(--my-color)]/[0.5]",
-				"decoration-[var(--my-color)]/[50%]",
-				"decoration-[color:var(--my-color)]",
-				"decoration-[color:var(--my-color)]/50",
-				"decoration-[color:var(--my-color)]/[0.5]",
-				"decoration-[color:var(--my-color)]/[50%]",
+      [
+        // text-decoration-color
+        'decoration-red-500',
+        'decoration-red-500/50',
+        'decoration-red-500/[0.5]',
+        'decoration-red-500/[50%]',
+        'decoration-blue-500',
+        'decoration-current',
+        'decoration-current/50',
+        'decoration-current/[0.5]',
+        'decoration-current/[50%]',
+        'decoration-inherit',
+        'decoration-transparent',
+        'decoration-[#0088cc]',
+        'decoration-[#0088cc]/50',
+        'decoration-[#0088cc]/[0.5]',
+        'decoration-[#0088cc]/[50%]',
+        'decoration-[var(--my-color)]',
+        'decoration-[var(--my-color)]/50',
+        'decoration-[var(--my-color)]/[0.5]',
+        'decoration-[var(--my-color)]/[50%]',
+        'decoration-[color:var(--my-color)]',
+        'decoration-[color:var(--my-color)]/50',
+        'decoration-[color:var(--my-color)]/[0.5]',
+        'decoration-[color:var(--my-color)]/[50%]',
 
-				// text-decoration-style
-				"decoration-solid",
-				"decoration-double",
-				"decoration-dotted",
-				"decoration-dashed",
-				"decoration-wavy",
+        // text-decoration-style
+        'decoration-solid',
+        'decoration-double',
+        'decoration-dotted',
+        'decoration-dashed',
+        'decoration-wavy',
 
-				// text-decoration-thickness
-				"decoration-auto",
-				"decoration-from-font",
-				"decoration-0",
-				"decoration-1",
-				"decoration-2",
-				"decoration-4",
-				"decoration-123",
-				"decoration-[12px]",
-				"decoration-[50%]",
-				"decoration-[length:var(--my-thickness)]",
-				"decoration-[percentage:var(--my-thickness)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // text-decoration-thickness
+        'decoration-auto',
+        'decoration-from-font',
+        'decoration-0',
+        'decoration-1',
+        'decoration-2',
+        'decoration-4',
+        'decoration-123',
+        'decoration-[12px]',
+        'decoration-[50%]',
+        'decoration-[length:var(--my-thickness)]',
+        'decoration-[percentage:var(--my-thickness)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --text-decoration-color-blue-500: #3b82f6;
@@ -22213,79 +21738,74 @@ test("decoration", async () => {
     .decoration-from-font {
       text-decoration-thickness: from-font;
     }"
-  `);
-	expect(
-		await run([
-			"decoration",
-			// text-decoration-color
-			"-decoration-red-500",
-			"-decoration-red-500/50",
-			"-decoration-red-500/[0.5]",
-			"-decoration-red-500/[50%]",
-			"-decoration-current",
-			"-decoration-current/50",
-			"-decoration-current/[0.5]",
-			"-decoration-current/[50%]",
-			"-decoration-transparent",
-			"-decoration-[#0088cc]",
-			"-decoration-[#0088cc]/50",
-			"-decoration-[#0088cc]/[0.5]",
-			"-decoration-[#0088cc]/[50%]",
+  `)
+  expect(
+    await run([
+      'decoration',
+      // text-decoration-color
+      '-decoration-red-500',
+      '-decoration-red-500/50',
+      '-decoration-red-500/[0.5]',
+      '-decoration-red-500/[50%]',
+      '-decoration-current',
+      '-decoration-current/50',
+      '-decoration-current/[0.5]',
+      '-decoration-current/[50%]',
+      '-decoration-transparent',
+      '-decoration-[#0088cc]',
+      '-decoration-[#0088cc]/50',
+      '-decoration-[#0088cc]/[0.5]',
+      '-decoration-[#0088cc]/[50%]',
 
-			// text-decoration-style
-			"-decoration-solid",
-			"-decoration-double",
-			"-decoration-dotted",
-			"-decoration-dashed",
-			"-decoration-wavy",
+      // text-decoration-style
+      '-decoration-solid',
+      '-decoration-double',
+      '-decoration-dotted',
+      '-decoration-dashed',
+      '-decoration-wavy',
 
-			// text-decoration-thickness
-			"decoration--2",
-			"-decoration-auto",
-			"-decoration-from-font",
-			"-decoration-0",
-			"-decoration-1",
-			"-decoration-2",
-			"-decoration-4",
-			"-decoration-123",
+      // text-decoration-thickness
+      'decoration--2',
+      '-decoration-auto',
+      '-decoration-from-font',
+      '-decoration-0',
+      '-decoration-1',
+      '-decoration-2',
+      '-decoration-4',
+      '-decoration-123',
 
-			"decoration-solid/foo",
-			"decoration-double/foo",
-			"decoration-dotted/foo",
-			"decoration-dashed/foo",
-			"decoration-wavy/foo",
-			"decoration-auto/foo",
-			"decoration-from-font/foo",
-			"decoration-0/foo",
-			"decoration-1/foo",
-			"decoration-2/foo",
-			"decoration-4/foo",
-			"decoration-123/foo",
-			"decoration-[12px]/foo",
-			"decoration-[50%]/foo",
-			"decoration-[length:var(--my-thickness)]/foo",
-			"decoration-[percentage:var(--my-thickness)]/foo",
-		]),
-	).toEqual("");
-});
+      'decoration-solid/foo',
+      'decoration-double/foo',
+      'decoration-dotted/foo',
+      'decoration-dashed/foo',
+      'decoration-wavy/foo',
+      'decoration-auto/foo',
+      'decoration-from-font/foo',
+      'decoration-0/foo',
+      'decoration-1/foo',
+      'decoration-2/foo',
+      'decoration-4/foo',
+      'decoration-123/foo',
+      'decoration-[12px]/foo',
+      'decoration-[50%]/foo',
+      'decoration-[length:var(--my-thickness)]/foo',
+      'decoration-[percentage:var(--my-thickness)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("animate", async () => {
-	expect(
-		await compileCss(
-			css`
+test('animate', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --animate-spin: spin 1s linear infinite;
         }
         @tailwind utilities;
       `,
-			[
-				"animate-spin",
-				"animate-none",
-				"animate-[bounce_1s_infinite]",
-				"animate-not-found",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --animate-spin: spin 1s linear infinite;
     }
@@ -22301,32 +21821,32 @@ test("animate", async () => {
     .animate-spin {
       animation: var(--animate-spin);
     }"
-  `);
-	expect(
-		await run([
-			"animate",
-			"-animate-spin",
-			"-animate-none",
-			"-animate-[bounce_1s_infinite]",
-			"-animate-not-found",
-			"animate-spin/foo",
-			"animate-none/foo",
-			"animate-[bounce_1s_infinite]/foo",
-			"animate-not-found/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'animate',
+      '-animate-spin',
+      '-animate-none',
+      '-animate-[bounce_1s_infinite]',
+      '-animate-not-found',
+      'animate-spin/foo',
+      'animate-none/foo',
+      'animate-[bounce_1s_infinite]/foo',
+      'animate-not-found/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --animate-none: bounce 1s infinite;
         }
         @tailwind utilities;
       `,
-			["animate-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['animate-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --animate-none: bounce 1s infinite;
     }
@@ -22334,13 +21854,13 @@ test("animate", async () => {
     .animate-none {
       animation: var(--animate-none);
     }"
-  `);
-});
+  `)
+})
 
-test("filter", async () => {
-	expect(
-		await compileCss(
-			css`
+test('filter', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --blur-xl: 24px;
           --color-red-500: #ef4444;
@@ -22352,46 +21872,46 @@ test("filter", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"filter",
-				"filter-none",
-				"filter-[var(--value)]",
-				"blur-xl",
-				"blur-none",
-				"blur-[4px]",
-				"brightness-50",
-				"brightness-[1.23]",
-				"contrast-50",
-				"contrast-[1.23]",
-				"grayscale",
-				"grayscale-0",
-				"grayscale-[var(--value)]",
-				"hue-rotate-15",
-				"hue-rotate-[45deg]",
-				"-hue-rotate-15",
-				"-hue-rotate-[45deg]",
-				"invert",
-				"invert-0",
-				"invert-[var(--value)]",
-				"drop-shadow",
-				"drop-shadow/25",
-				"drop-shadow-xl",
-				"drop-shadow-multi",
-				"drop-shadow-[0_0_red]",
-				"drop-shadow-red-500",
-				"drop-shadow-red-500/50",
-				"drop-shadow-none",
-				"drop-shadow-inherit",
-				"saturate-0",
-				"saturate-[1.75]",
-				"saturate-[var(--value)]",
-				"sepia",
-				"sepia-0",
-				"sepia-[50%]",
-				"sepia-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'filter',
+        'filter-none',
+        'filter-[var(--value)]',
+        'blur-xl',
+        'blur-none',
+        'blur-[4px]',
+        'brightness-50',
+        'brightness-[1.23]',
+        'contrast-50',
+        'contrast-[1.23]',
+        'grayscale',
+        'grayscale-0',
+        'grayscale-[var(--value)]',
+        'hue-rotate-15',
+        'hue-rotate-[45deg]',
+        '-hue-rotate-15',
+        '-hue-rotate-[45deg]',
+        'invert',
+        'invert-0',
+        'invert-[var(--value)]',
+        'drop-shadow',
+        'drop-shadow/25',
+        'drop-shadow-xl',
+        'drop-shadow-multi',
+        'drop-shadow-[0_0_red]',
+        'drop-shadow-red-500',
+        'drop-shadow-red-500/50',
+        'drop-shadow-none',
+        'drop-shadow-inherit',
+        'saturate-0',
+        'saturate-[1.75]',
+        'saturate-[var(--value)]',
+        'sepia',
+        'sepia-0',
+        'sepia-[50%]',
+        'sepia-[var(--value)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -22685,97 +22205,97 @@ test("filter", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"-filter",
-			"-filter-none",
-			"-filter-[var(--value)]",
-			"-blur-xl",
-			"-blur-[4px]",
-			"brightness--50",
-			"-brightness-50",
-			"-brightness-[1.23]",
-			"brightness-unknown",
-			"contrast--50",
-			"-contrast-50",
-			"-contrast-[1.23]",
-			"contrast-unknown",
-			"-grayscale",
-			"-grayscale-0",
-			"grayscale--1",
-			"-grayscale-[var(--value)]",
-			"grayscale-unknown",
-			"hue-rotate--5",
-			"hue-rotate-unknown",
-			"-invert",
-			"invert--5",
-			"-invert-0",
-			"-invert-[var(--value)]",
-			"invert-unknown",
-			"-drop-shadow-xl",
-			"-drop-shadow-[0_0_red]",
+  `)
+  expect(
+    await run([
+      '-filter',
+      '-filter-none',
+      '-filter-[var(--value)]',
+      '-blur-xl',
+      '-blur-[4px]',
+      'brightness--50',
+      '-brightness-50',
+      '-brightness-[1.23]',
+      'brightness-unknown',
+      'contrast--50',
+      '-contrast-50',
+      '-contrast-[1.23]',
+      'contrast-unknown',
+      '-grayscale',
+      '-grayscale-0',
+      'grayscale--1',
+      '-grayscale-[var(--value)]',
+      'grayscale-unknown',
+      'hue-rotate--5',
+      'hue-rotate-unknown',
+      '-invert',
+      'invert--5',
+      '-invert-0',
+      '-invert-[var(--value)]',
+      'invert-unknown',
+      '-drop-shadow-xl',
+      '-drop-shadow-[0_0_red]',
 
-			"drop-shadow/foo",
-			"-drop-shadow/foo",
-			"-drop-shadow/25",
-			"-drop-shadow-red-500",
-			"drop-shadow-red-500/foo",
-			"-drop-shadow-red-500/foo",
-			"-drop-shadow-red-500/50",
+      'drop-shadow/foo',
+      '-drop-shadow/foo',
+      '-drop-shadow/25',
+      '-drop-shadow-red-500',
+      'drop-shadow-red-500/foo',
+      '-drop-shadow-red-500/foo',
+      '-drop-shadow-red-500/50',
 
-			"-saturate-0",
-			"saturate--5",
-			"-saturate-[1.75]",
-			"-saturate-[var(--value)]",
-			"saturate-saturate",
-			"-sepia",
-			"sepia--50",
-			"-sepia-0",
-			"-sepia-[50%]",
-			"-sepia-[var(--value)]",
-			"sepia-unknown",
-			"filter/foo",
-			"filter-none/foo",
-			"filter-[var(--value)]/foo",
-			"blur-xl/foo",
-			"blur-none/foo",
-			"blur-[4px]/foo",
-			"brightness-50/foo",
-			"brightness-[1.23]/foo",
-			"contrast-50/foo",
-			"contrast-[1.23]/foo",
-			"grayscale/foo",
-			"grayscale-0/foo",
-			"grayscale-[var(--value)]/foo",
-			"hue-rotate-15/foo",
-			"hue-rotate-[45deg]/foo",
-			"invert/foo",
-			"invert-0/foo",
-			"invert-[var(--value)]/foo",
-			"drop-shadow-xl/foo",
-			"drop-shadow-[0_0_red]/foo",
-			"saturate-0/foo",
-			"saturate-[1.75]/foo",
-			"saturate-[var(--value)]/foo",
-			"sepia/foo",
-			"sepia-0/foo",
-			"sepia-[50%]/foo",
-			"sepia-[var(--value)]/foo",
-		]),
-	).toEqual("");
+      '-saturate-0',
+      'saturate--5',
+      '-saturate-[1.75]',
+      '-saturate-[var(--value)]',
+      'saturate-saturate',
+      '-sepia',
+      'sepia--50',
+      '-sepia-0',
+      '-sepia-[50%]',
+      '-sepia-[var(--value)]',
+      'sepia-unknown',
+      'filter/foo',
+      'filter-none/foo',
+      'filter-[var(--value)]/foo',
+      'blur-xl/foo',
+      'blur-none/foo',
+      'blur-[4px]/foo',
+      'brightness-50/foo',
+      'brightness-[1.23]/foo',
+      'contrast-50/foo',
+      'contrast-[1.23]/foo',
+      'grayscale/foo',
+      'grayscale-0/foo',
+      'grayscale-[var(--value)]/foo',
+      'hue-rotate-15/foo',
+      'hue-rotate-[45deg]/foo',
+      'invert/foo',
+      'invert-0/foo',
+      'invert-[var(--value)]/foo',
+      'drop-shadow-xl/foo',
+      'drop-shadow-[0_0_red]/foo',
+      'saturate-0/foo',
+      'saturate-[1.75]/foo',
+      'saturate-[var(--value)]/foo',
+      'sepia/foo',
+      'sepia-0/foo',
+      'sepia-[50%]/foo',
+      'sepia-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --blur-none: 2px;
         }
         @tailwind utilities;
       `,
-			["blur-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['blur-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -22870,55 +22390,55 @@ test("filter", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-});
+  `)
+})
 
-test("backdrop-filter", async () => {
-	expect(
-		await compileCss(
-			css`
+test('backdrop-filter', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --blur-xl: 24px;
         }
         @tailwind utilities;
       `,
-			[
-				"backdrop-filter",
-				"backdrop-filter-none",
-				"backdrop-filter-[var(--value)]",
-				"backdrop-blur-none",
-				"backdrop-blur-xl",
-				"backdrop-blur-[4px]",
-				"backdrop-brightness-50",
-				"backdrop-brightness-[1.23]",
-				"backdrop-contrast-50",
-				"backdrop-contrast-[1.23]",
-				"backdrop-grayscale",
-				"backdrop-grayscale-0",
-				"backdrop-grayscale-[var(--value)]",
-				"backdrop-hue-rotate-15",
-				"backdrop-hue-rotate-[45deg]",
-				"-backdrop-hue-rotate-15",
-				"-backdrop-hue-rotate-[45deg]",
-				"backdrop-invert",
-				"backdrop-invert-0",
-				"backdrop-invert-[var(--value)]",
-				"backdrop-opacity-50",
-				"backdrop-opacity-71",
-				"backdrop-opacity-1.25",
-				"backdrop-opacity-2.5",
-				"backdrop-opacity-3.75",
-				"backdrop-opacity-[0.5]",
-				"backdrop-saturate-0",
-				"backdrop-saturate-[1.75]",
-				"backdrop-saturate-[var(--value)]",
-				"backdrop-sepia",
-				"backdrop-sepia-0",
-				"backdrop-sepia-[50%]",
-				"backdrop-sepia-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'backdrop-filter',
+        'backdrop-filter-none',
+        'backdrop-filter-[var(--value)]',
+        'backdrop-blur-none',
+        'backdrop-blur-xl',
+        'backdrop-blur-[4px]',
+        'backdrop-brightness-50',
+        'backdrop-brightness-[1.23]',
+        'backdrop-contrast-50',
+        'backdrop-contrast-[1.23]',
+        'backdrop-grayscale',
+        'backdrop-grayscale-0',
+        'backdrop-grayscale-[var(--value)]',
+        'backdrop-hue-rotate-15',
+        'backdrop-hue-rotate-[45deg]',
+        '-backdrop-hue-rotate-15',
+        '-backdrop-hue-rotate-[45deg]',
+        'backdrop-invert',
+        'backdrop-invert-0',
+        'backdrop-invert-[var(--value)]',
+        'backdrop-opacity-50',
+        'backdrop-opacity-71',
+        'backdrop-opacity-1.25',
+        'backdrop-opacity-2.5',
+        'backdrop-opacity-3.75',
+        'backdrop-opacity-[0.5]',
+        'backdrop-saturate-0',
+        'backdrop-saturate-[1.75]',
+        'backdrop-saturate-[var(--value)]',
+        'backdrop-sepia',
+        'backdrop-sepia-0',
+        'backdrop-sepia-[50%]',
+        'backdrop-sepia-[var(--value)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23178,91 +22698,91 @@ test("backdrop-filter", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"-backdrop-filter",
-			"-backdrop-filter-none",
-			"-backdrop-filter-[var(--value)]",
-			"-backdrop-blur-xl",
-			"-backdrop-blur-[4px]",
-			"backdrop-brightness--50",
-			"-backdrop-brightness-50",
-			"-backdrop-brightness-[1.23]",
-			"backdrop-brightness-unknown",
-			"backdrop-contrast--50",
-			"-backdrop-contrast-50",
-			"-backdrop-contrast-[1.23]",
-			"backdrop-contrast-unknown",
-			"-backdrop-grayscale",
-			"backdrop-grayscale--1",
-			"-backdrop-grayscale-0",
-			"-backdrop-grayscale-[var(--value)]",
-			"backdrop-grayscale-unknown",
-			"backdrop-hue-rotate-unknown",
-			"-backdrop-invert",
-			"backdrop-invert--1",
-			"-backdrop-invert-0",
-			"-backdrop-invert-[var(--value)]",
-			"backdrop-invert-unknown",
-			"backdrop-opacity--50",
-			"-backdrop-opacity-50",
-			"-backdrop-opacity-[0.5]",
-			"backdrop-opacity-unknown",
-			"-backdrop-saturate-0",
-			"backdrop-saturate--50",
-			"-backdrop-saturate-[1.75]",
-			"-backdrop-saturate-[var(--value)]",
-			"backdrop-saturate-unknown",
-			"-backdrop-sepia",
-			"backdrop-sepia--50",
-			"-backdrop-sepia-0",
-			"-backdrop-sepia-[50%]",
-			"-backdrop-sepia-[var(--value)]",
-			"backdrop-sepia-unknown",
-			"backdrop-filter/foo",
-			"backdrop-filter-none/foo",
-			"backdrop-filter-[var(--value)]/foo",
-			"backdrop-blur-none/foo",
-			"backdrop-blur-xl/foo",
-			"backdrop-blur-[4px]/foo",
-			"backdrop-brightness-50/foo",
-			"backdrop-brightness-[1.23]/foo",
-			"backdrop-contrast-50/foo",
-			"backdrop-contrast-[1.23]/foo",
-			"backdrop-grayscale/foo",
-			"backdrop-grayscale-0/foo",
-			"backdrop-grayscale-[var(--value)]/foo",
-			"backdrop-hue-rotate--15",
-			"backdrop-hue-rotate-15/foo",
-			"backdrop-hue-rotate-[45deg]/foo",
-			"backdrop-invert/foo",
-			"backdrop-invert-0/foo",
-			"backdrop-invert-[var(--value)]/foo",
-			"backdrop-opacity-50/foo",
-			"backdrop-opacity-71/foo",
-			"backdrop-opacity-[0.5]/foo",
-			"backdrop-saturate-0/foo",
-			"backdrop-saturate-[1.75]/foo",
-			"backdrop-saturate-[var(--value)]/foo",
-			"backdrop-sepia/foo",
-			"backdrop-sepia-0/foo",
-			"backdrop-sepia-[50%]/foo",
-			"backdrop-sepia-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      '-backdrop-filter',
+      '-backdrop-filter-none',
+      '-backdrop-filter-[var(--value)]',
+      '-backdrop-blur-xl',
+      '-backdrop-blur-[4px]',
+      'backdrop-brightness--50',
+      '-backdrop-brightness-50',
+      '-backdrop-brightness-[1.23]',
+      'backdrop-brightness-unknown',
+      'backdrop-contrast--50',
+      '-backdrop-contrast-50',
+      '-backdrop-contrast-[1.23]',
+      'backdrop-contrast-unknown',
+      '-backdrop-grayscale',
+      'backdrop-grayscale--1',
+      '-backdrop-grayscale-0',
+      '-backdrop-grayscale-[var(--value)]',
+      'backdrop-grayscale-unknown',
+      'backdrop-hue-rotate-unknown',
+      '-backdrop-invert',
+      'backdrop-invert--1',
+      '-backdrop-invert-0',
+      '-backdrop-invert-[var(--value)]',
+      'backdrop-invert-unknown',
+      'backdrop-opacity--50',
+      '-backdrop-opacity-50',
+      '-backdrop-opacity-[0.5]',
+      'backdrop-opacity-unknown',
+      '-backdrop-saturate-0',
+      'backdrop-saturate--50',
+      '-backdrop-saturate-[1.75]',
+      '-backdrop-saturate-[var(--value)]',
+      'backdrop-saturate-unknown',
+      '-backdrop-sepia',
+      'backdrop-sepia--50',
+      '-backdrop-sepia-0',
+      '-backdrop-sepia-[50%]',
+      '-backdrop-sepia-[var(--value)]',
+      'backdrop-sepia-unknown',
+      'backdrop-filter/foo',
+      'backdrop-filter-none/foo',
+      'backdrop-filter-[var(--value)]/foo',
+      'backdrop-blur-none/foo',
+      'backdrop-blur-xl/foo',
+      'backdrop-blur-[4px]/foo',
+      'backdrop-brightness-50/foo',
+      'backdrop-brightness-[1.23]/foo',
+      'backdrop-contrast-50/foo',
+      'backdrop-contrast-[1.23]/foo',
+      'backdrop-grayscale/foo',
+      'backdrop-grayscale-0/foo',
+      'backdrop-grayscale-[var(--value)]/foo',
+      'backdrop-hue-rotate--15',
+      'backdrop-hue-rotate-15/foo',
+      'backdrop-hue-rotate-[45deg]/foo',
+      'backdrop-invert/foo',
+      'backdrop-invert-0/foo',
+      'backdrop-invert-[var(--value)]/foo',
+      'backdrop-opacity-50/foo',
+      'backdrop-opacity-71/foo',
+      'backdrop-opacity-[0.5]/foo',
+      'backdrop-saturate-0/foo',
+      'backdrop-saturate-[1.75]/foo',
+      'backdrop-saturate-[var(--value)]/foo',
+      'backdrop-sepia/foo',
+      'backdrop-sepia-0/foo',
+      'backdrop-sepia-[50%]/foo',
+      'backdrop-sepia-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --backdrop-blur-none: 2px;
         }
         @tailwind utilities;
       `,
-			["backdrop-blur-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['backdrop-blur-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23333,13 +22853,13 @@ test("backdrop-filter", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-});
+  `)
+})
 
-test("transition", async () => {
-	expect(
-		await compileCss(
-			css`
+test('transition', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
@@ -23350,18 +22870,18 @@ test("transition", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				"transition",
-				"transition-none",
-				"transition-all",
-				"transition-transform",
-				"transition-shadow",
-				"transition-colors",
-				"transition-opacity",
-				"transition-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'transition',
+        'transition-none',
+        'transition-all',
+        'transition-transform',
+        'transition-shadow',
+        'transition-colors',
+        'transition-opacity',
+        'transition-[var(--value)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --default-transition-timing-function: ease;
       --default-transition-duration: .1s;
@@ -23413,20 +22933,20 @@ test("transition", async () => {
     .transition-none {
       transition-property: none;
     }"
-  `);
+  `)
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme inline {
           --default-transition-timing-function: ease;
           --default-transition-duration: 100ms;
         }
         @tailwind utilities;
       `,
-			["transition", "transition-all", "transition-colors"],
-		),
-	).toMatchInlineSnapshot(`
+      ['transition', 'transition-all', 'transition-colors'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".transition {
       transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter, display, content-visibility, overlay, pointer-events;
       transition-timing-function: var(--tw-ease, ease);
@@ -23444,52 +22964,52 @@ test("transition", async () => {
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, .1s);
     }"
-  `);
+  `)
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @tailwind utilities;
       `,
-			["transition-all"],
-		),
-	).toMatchInlineSnapshot(`
+      ['transition-all'],
+    ),
+  ).toMatchInlineSnapshot(`
     ".transition-all {
       transition-property: all;
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, 0s);
     }"
-  `);
+  `)
 
-	expect(
-		await run([
-			"-transition",
-			"-transition-none",
-			"-transition-all",
-			"-transition-opacity",
-			"-transition-[var(--value)]",
-			"transition/foo",
-			"transition-none/foo",
-			"transition-all/foo",
-			"transition-transform/foo",
-			"transition-shadow/foo",
-			"transition-colors/foo",
-			"transition-opacity/foo",
-			"transition-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  expect(
+    await run([
+      '-transition',
+      '-transition-none',
+      '-transition-all',
+      '-transition-opacity',
+      '-transition-[var(--value)]',
+      'transition/foo',
+      'transition-none/foo',
+      'transition-all/foo',
+      'transition-transform/foo',
+      'transition-shadow/foo',
+      'transition-colors/foo',
+      'transition-opacity/foo',
+      'transition-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --transition-property-colors: transform;
         }
         @tailwind utilities;
       `,
-			["transition-colors"],
-		),
-	).toMatchInlineSnapshot(`
+      ['transition-colors'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --transition-property-colors: transform;
     }
@@ -23499,13 +23019,11 @@ test("transition", async () => {
       transition-timing-function: var(--tw-ease, ease);
       transition-duration: var(--tw-duration, 0s);
     }"
-  `);
-});
+  `)
+})
 
-test("transition-behavior", async () => {
-	expect(
-		await run(["transition-discrete", "transition-normal"]),
-	).toMatchInlineSnapshot(`
+test('transition-behavior', async () => {
+  expect(await run(['transition-discrete', 'transition-normal'])).toMatchInlineSnapshot(`
     ".transition-discrete {
       transition-behavior: allow-discrete;
     }
@@ -23513,15 +23031,13 @@ test("transition-behavior", async () => {
     .transition-normal {
       transition-behavior: normal;
     }"
-  `);
+  `)
 
-	expect(await run(["-transition-discrete", "-transition-normal"])).toEqual("");
-});
+  expect(await run(['-transition-discrete', '-transition-normal'])).toEqual('')
+})
 
-test("delay", async () => {
-	expect(
-		await run(["delay-123", "delay-200", "delay-[300ms]"]),
-	).toMatchInlineSnapshot(`
+test('delay', async () => {
+  expect(await run(['delay-123', 'delay-200', 'delay-[300ms]'])).toMatchInlineSnapshot(`
     ".delay-123 {
       transition-delay: .123s;
     }
@@ -23533,25 +23049,23 @@ test("delay", async () => {
     .delay-\\[300ms\\] {
       transition-delay: .3s;
     }"
-  `);
-	expect(
-		await run([
-			"delay",
-			"delay--200",
-			"-delay-200",
-			"-delay-[300ms]",
-			"delay-unknown",
-			"delay-123/foo",
-			"delay-200/foo",
-			"delay-[300ms]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'delay',
+      'delay--200',
+      '-delay-200',
+      '-delay-[300ms]',
+      'delay-unknown',
+      'delay-123/foo',
+      'delay-200/foo',
+      'delay-[300ms]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("duration", async () => {
-	expect(
-		await run(["duration-123", "duration-200", "duration-[300ms]"]),
-	).toMatchInlineSnapshot(`
+test('duration', async () => {
+  expect(await run(['duration-123', 'duration-200', 'duration-[300ms]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23579,33 +23093,33 @@ test("duration", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"duration",
-			"duration--200",
-			"-duration-200",
-			"-duration-[300ms]",
-			"duration-123/foo",
-			"duration-200/foo",
-			"duration-[300ms]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'duration',
+      'duration--200',
+      '-duration-200',
+      '-duration-[300ms]',
+      'duration-123/foo',
+      'duration-200/foo',
+      'duration-[300ms]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("ease", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ease', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --ease-in: cubic-bezier(0.4, 0, 1, 1);
           --ease-out: cubic-bezier(0, 0, 0.2, 1);
         }
         @tailwind utilities;
       `,
-			["ease-in", "ease-out", "ease-[var(--value)]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['ease-in', 'ease-out', 'ease-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23638,29 +23152,29 @@ test("ease", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"-ease-in",
-			"-ease-out",
-			"-ease-[var(--value)]",
-			"ease-in/foo",
-			"ease-out/foo",
-			"ease-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      '-ease-in',
+      '-ease-out',
+      '-ease-[var(--value)]',
+      'ease-in/foo',
+      'ease-out/foo',
+      'ease-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --ease-linear: steps(4);
         }
         @tailwind utilities;
       `,
-			["ease-linear"],
-		),
-	).toMatchInlineSnapshot(`
+      ['ease-linear'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23682,19 +23196,19 @@ test("ease", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-});
+  `)
+})
 
-test("will-change", async () => {
-	expect(
-		await run([
-			"will-change-auto",
-			"will-change-contents",
-			"will-change-transform",
-			"will-change-scroll",
-			"will-change-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('will-change', async () => {
+  expect(
+    await run([
+      'will-change-auto',
+      'will-change-contents',
+      'will-change-transform',
+      'will-change-scroll',
+      'will-change-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".will-change-\\[var\\(--value\\)\\] {
       will-change: var(--value);
     }
@@ -23714,38 +23228,38 @@ test("will-change", async () => {
     .will-change-transform {
       will-change: transform;
     }"
-  `);
-	expect(
-		await run([
-			"will-change",
-			"-will-change-auto",
-			"-will-change-contents",
-			"-will-change-transform",
-			"-will-change-scroll",
-			"-will-change-[var(--value)]",
-			"will-change-auto/foo",
-			"will-change-contents/foo",
-			"will-change-transform/foo",
-			"will-change-scroll/foo",
-			"will-change-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'will-change',
+      '-will-change-auto',
+      '-will-change-contents',
+      '-will-change-transform',
+      '-will-change-scroll',
+      '-will-change-[var(--value)]',
+      'will-change-auto/foo',
+      'will-change-contents/foo',
+      'will-change-transform/foo',
+      'will-change-scroll/foo',
+      'will-change-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("contain", async () => {
-	expect(
-		await run([
-			"contain-none",
-			"contain-content",
-			"contain-strict",
-			"contain-size",
-			"contain-inline-size",
-			"contain-layout",
-			"contain-paint",
-			"contain-style",
-			"contain-[unset]",
-		]),
-	).toMatchInlineSnapshot(`
+test('contain', async () => {
+  expect(
+    await run([
+      'contain-none',
+      'contain-content',
+      'contain-strict',
+      'contain-size',
+      'contain-inline-size',
+      'contain-layout',
+      'contain-paint',
+      'contain-style',
+      'contain-[unset]',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23817,24 +23331,24 @@ test("contain", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"contain-none/foo",
-			"contain-content/foo",
-			"contain-strict/foo",
-			"contain-size/foo",
-			"contain-inline-size/foo",
-			"contain-layout/foo",
-			"contain-paint/foo",
-			"contain-style/foo",
-			"contain-[unset]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'contain-none/foo',
+      'contain-content/foo',
+      'contain-strict/foo',
+      'contain-size/foo',
+      'contain-inline-size/foo',
+      'contain-layout/foo',
+      'contain-paint/foo',
+      'contain-style/foo',
+      'contain-[unset]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("content", async () => {
-	expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
+test('content', async () => {
+  expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23853,20 +23367,15 @@ test("content", async () => {
       inherits: false;
       initial-value: "";
     }"
-  `);
-	expect(
-		await run([
-			"content",
-			'-content-["hello_world"]',
-			'content-["hello_world"]/foo',
-		]),
-	).toEqual("");
-});
+  `)
+  expect(await run(['content', '-content-["hello_world"]', 'content-["hello_world"]/foo'])).toEqual(
+    '',
+  )
+})
 
-test("forced-color-adjust", async () => {
-	expect(
-		await run(["forced-color-adjust-none", "forced-color-adjust-auto"]),
-	).toMatchInlineSnapshot(`
+test('forced-color-adjust', async () => {
+  expect(await run(['forced-color-adjust-none', 'forced-color-adjust-auto']))
+    .toMatchInlineSnapshot(`
       ".forced-color-adjust-auto {
         forced-color-adjust: auto;
       }
@@ -23874,33 +23383,33 @@ test("forced-color-adjust", async () => {
       .forced-color-adjust-none {
         forced-color-adjust: none;
       }"
-    `);
-	expect(
-		await run([
-			"forced",
-			"forced-color",
-			"forced-color-adjust",
-			"-forced-color-adjust-none",
-			"-forced-color-adjust-auto",
-			"forced-color-adjust-none/foo",
-			"forced-color-adjust-auto/foo",
-		]),
-	).toEqual("");
-});
+    `)
+  expect(
+    await run([
+      'forced',
+      'forced-color',
+      'forced-color-adjust',
+      '-forced-color-adjust-none',
+      '-forced-color-adjust-auto',
+      'forced-color-adjust-none/foo',
+      'forced-color-adjust-auto/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("leading", async () => {
-	expect(
-		await compileCss(
-			css`
+test('leading', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --leading-tight: 1.25;
           --leading-6: 1.5rem;
         }
         @tailwind utilities;
       `,
-			["leading-tight", "leading-6", "leading-[var(--value)]"],
-		),
-	).toMatchInlineSnapshot(`
+      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23933,30 +23442,30 @@ test("leading", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"leading",
-			"-leading-tight",
-			"-leading-6",
-			"-leading-[var(--value)]",
-			"leading-tight/foo",
-			"leading-6/foo",
-			"leading-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'leading',
+      '-leading-tight',
+      '-leading-6',
+      '-leading-[var(--value)]',
+      'leading-tight/foo',
+      'leading-6/foo',
+      'leading-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --leading-none: 2;
         }
         @tailwind utilities;
       `,
-			["leading-none"],
-		),
-	).toMatchInlineSnapshot(`
+      ['leading-none'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23978,27 +23487,22 @@ test("leading", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-});
+  `)
+})
 
-test("tracking", async () => {
-	expect(
-		await compileCss(
-			css`
+test('tracking', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --tracking-normal: 0em;
           --tracking-wide: 0.025em;
         }
         @tailwind utilities;
       `,
-			[
-				"tracking-normal",
-				"tracking-wide",
-				"tracking-[var(--value)]",
-				"-tracking-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -24036,22 +23540,20 @@ test("tracking", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"tracking",
-			"tracking-normal/foo",
-			"tracking-wide/foo",
-			"tracking-[var(--value)]/foo",
-			"-tracking-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'tracking',
+      'tracking-normal/foo',
+      'tracking-wide/foo',
+      'tracking-[var(--value)]/foo',
+      '-tracking-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("font-smoothing", async () => {
-	expect(
-		await run(["antialiased", "subpixel-antialiased"]),
-	).toMatchInlineSnapshot(`
+test('font-smoothing', async () => {
+  expect(await run(['antialiased', 'subpixel-antialiased'])).toMatchInlineSnapshot(`
     ".antialiased {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -24061,31 +23563,31 @@ test("font-smoothing", async () => {
       -webkit-font-smoothing: auto;
       -moz-osx-font-smoothing: auto;
     }"
-  `);
-	expect(
-		await run([
-			"-antialiased",
-			"-subpixel-antialiased",
-			"antialiased/foo",
-			"subpixel-antialiased/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-antialiased',
+      '-subpixel-antialiased',
+      'antialiased/foo',
+      'subpixel-antialiased/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("font-variant-numeric", async () => {
-	expect(
-		await run([
-			"normal-nums",
-			"ordinal",
-			"slashed-zero",
-			"lining-nums",
-			"oldstyle-nums",
-			"proportional-nums",
-			"tabular-nums",
-			"diagonal-fractions",
-			"stacked-fractions",
-		]),
-	).toMatchInlineSnapshot(`
+test('font-variant-numeric', async () => {
+  expect(
+    await run([
+      'normal-nums',
+      'ordinal',
+      'slashed-zero',
+      'lining-nums',
+      'oldstyle-nums',
+      'proportional-nums',
+      'tabular-nums',
+      'diagonal-fractions',
+      'stacked-fractions',
+    ]),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -24166,92 +23668,92 @@ test("font-variant-numeric", async () => {
       syntax: "*";
       inherits: false
     }"
-  `);
-	expect(
-		await run([
-			"-normal-nums",
-			"-ordinal",
-			"-slashed-zero",
-			"-lining-nums",
-			"-oldstyle-nums",
-			"-proportional-nums",
-			"-tabular-nums",
-			"-diagonal-fractions",
-			"-stacked-fractions",
-			"normal-nums/foo",
-			"ordinal/foo",
-			"slashed-zero/foo",
-			"lining-nums/foo",
-			"oldstyle-nums/foo",
-			"proportional-nums/foo",
-			"tabular-nums/foo",
-			"diagonal-fractions/foo",
-			"stacked-fractions/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-normal-nums',
+      '-ordinal',
+      '-slashed-zero',
+      '-lining-nums',
+      '-oldstyle-nums',
+      '-proportional-nums',
+      '-tabular-nums',
+      '-diagonal-fractions',
+      '-stacked-fractions',
+      'normal-nums/foo',
+      'ordinal/foo',
+      'slashed-zero/foo',
+      'lining-nums/foo',
+      'oldstyle-nums/foo',
+      'proportional-nums/foo',
+      'tabular-nums/foo',
+      'diagonal-fractions/foo',
+      'stacked-fractions/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("outline", async () => {
-	expect(
-		await compileCss(
-			css`
+test('outline', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --outline-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				"outline",
-				"outline-hidden",
+      [
+        'outline',
+        'outline-hidden',
 
-				// outline-style
-				"outline-none",
-				"outline-solid",
-				"outline-dashed",
-				"outline-dotted",
-				"outline-double",
+        // outline-style
+        'outline-none',
+        'outline-solid',
+        'outline-dashed',
+        'outline-dotted',
+        'outline-double',
 
-				// outline-color
-				"outline-red-500",
-				"outline-red-500/50",
-				"outline-red-500/[0.5]",
-				"outline-red-500/[50%]",
-				"outline-blue-500",
-				"outline-current",
-				"outline-current/50",
-				"outline-current/[0.5]",
-				"outline-current/[50%]",
-				"outline-inherit",
-				"outline-transparent",
-				"outline-[#0088cc]",
-				"outline-[#0088cc]/50",
-				"outline-[#0088cc]/[0.5]",
-				"outline-[#0088cc]/[50%]",
-				"outline-[black]",
-				"outline-[black]/50",
-				"outline-[black]/[0.5]",
-				"outline-[black]/[50%]",
-				"outline-[var(--value)]",
-				"outline-[var(--value)]/50",
-				"outline-[var(--value)]/[0.5]",
-				"outline-[var(--value)]/[50%]",
-				"outline-[color:var(--value)]",
-				"outline-[color:var(--value)]/50",
-				"outline-[color:var(--value)]/[0.5]",
-				"outline-[color:var(--value)]/[50%]",
+        // outline-color
+        'outline-red-500',
+        'outline-red-500/50',
+        'outline-red-500/[0.5]',
+        'outline-red-500/[50%]',
+        'outline-blue-500',
+        'outline-current',
+        'outline-current/50',
+        'outline-current/[0.5]',
+        'outline-current/[50%]',
+        'outline-inherit',
+        'outline-transparent',
+        'outline-[#0088cc]',
+        'outline-[#0088cc]/50',
+        'outline-[#0088cc]/[0.5]',
+        'outline-[#0088cc]/[50%]',
+        'outline-[black]',
+        'outline-[black]/50',
+        'outline-[black]/[0.5]',
+        'outline-[black]/[50%]',
+        'outline-[var(--value)]',
+        'outline-[var(--value)]/50',
+        'outline-[var(--value)]/[0.5]',
+        'outline-[var(--value)]/[50%]',
+        'outline-[color:var(--value)]',
+        'outline-[color:var(--value)]/50',
+        'outline-[color:var(--value)]/[0.5]',
+        'outline-[color:var(--value)]/[50%]',
 
-				// outline-width
-				"outline-0",
-				"outline-[1.5]",
-				"outline-[12px]",
-				"outline-[50%]",
-				"outline-[number:var(--my-width)]",
-				"outline-[length:var(--my-width)]",
-				"outline-[percentage:var(--my-width)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // outline-width
+        'outline-0',
+        'outline-[1.5]',
+        'outline-[12px]',
+        'outline-[50%]',
+        'outline-[number:var(--my-width)]',
+        'outline-[length:var(--my-width)]',
+        'outline-[percentage:var(--my-width)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -24497,18 +23999,18 @@ test("outline", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-outline-width: 2px;
         }
         @tailwind utilities;
       `,
-			["outline"],
-		),
-	).toMatchInlineSnapshot(`
+      ['outline'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -24527,57 +24029,57 @@ test("outline", async () => {
       inherits: false;
       initial-value: solid;
     }"
-  `);
-	expect(
-		await run([
-			"-outline",
+  `)
+  expect(
+    await run([
+      '-outline',
 
-			// outline-style
-			"-outline-none",
-			"-outline-dashed",
-			"-outline-dotted",
-			"-outline-double",
+      // outline-style
+      '-outline-none',
+      '-outline-dashed',
+      '-outline-dotted',
+      '-outline-double',
 
-			// outline-color
-			"-outline-red-500",
-			"-outline-red-500/50",
-			"-outline-red-500/[0.5]",
-			"-outline-red-500/[50%]",
-			"-outline-current",
-			"-outline-current/50",
-			"-outline-current/[0.5]",
-			"-outline-current/[50%]",
-			"-outline-inherit",
-			"-outline-transparent",
-			"-outline-[#0088cc]",
-			"-outline-[#0088cc]/50",
-			"-outline-[#0088cc]/[0.5]",
-			"-outline-[#0088cc]/[50%]",
-			"-outline-[black]",
+      // outline-color
+      '-outline-red-500',
+      '-outline-red-500/50',
+      '-outline-red-500/[0.5]',
+      '-outline-red-500/[50%]',
+      '-outline-current',
+      '-outline-current/50',
+      '-outline-current/[0.5]',
+      '-outline-current/[50%]',
+      '-outline-inherit',
+      '-outline-transparent',
+      '-outline-[#0088cc]',
+      '-outline-[#0088cc]/50',
+      '-outline-[#0088cc]/[0.5]',
+      '-outline-[#0088cc]/[50%]',
+      '-outline-[black]',
 
-			// outline-width
-			"-outline-0",
-			"outline--10",
+      // outline-width
+      '-outline-0',
+      'outline--10',
 
-			"outline/foo",
-			"outline-none/foo",
-			"outline-solid/foo",
-			"outline-dashed/foo",
-			"outline-dotted/foo",
-			"outline-double/foo",
-		]),
-	).toEqual("");
-});
+      'outline/foo',
+      'outline-none/foo',
+      'outline-solid/foo',
+      'outline-dashed/foo',
+      'outline-dotted/foo',
+      'outline-double/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("outline-offset", async () => {
-	expect(
-		await run([
-			"outline-offset-4",
-			"-outline-offset-4",
-			"outline-offset-[var(--value)]",
-			"-outline-offset-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('outline-offset', async () => {
+  expect(
+    await run([
+      'outline-offset-4',
+      '-outline-offset-4',
+      'outline-offset-[var(--value)]',
+      '-outline-offset-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".-outline-offset-4 {
       outline-offset: calc(4px * -1);
     }
@@ -24593,30 +24095,30 @@ test("outline-offset", async () => {
     .outline-offset-\\[var\\(--value\\)\\] {
       outline-offset: var(--value);
     }"
-  `);
-	expect(
-		await run([
-			"outline-offset",
-			"outline-offset--4",
-			"outline-offset-unknown",
-			"outline-offset-4/foo",
-			"-outline-offset-4/foo",
-			"outline-offset-[var(--value)]/foo",
-			"-outline-offset-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'outline-offset',
+      'outline-offset--4',
+      'outline-offset-unknown',
+      'outline-offset-4/foo',
+      '-outline-offset-4/foo',
+      'outline-offset-[var(--value)]/foo',
+      '-outline-offset-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("opacity", async () => {
-	expect(
-		await run([
-			"opacity-15",
-			"opacity-2.5",
-			"opacity-3.25",
-			"opacity-4.75",
-			"opacity-[var(--value)]",
-		]),
-	).toMatchInlineSnapshot(`
+test('opacity', async () => {
+  expect(
+    await run([
+      'opacity-15',
+      'opacity-2.5',
+      'opacity-3.25',
+      'opacity-4.75',
+      'opacity-[var(--value)]',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".opacity-2\\.5 {
       opacity: .025;
     }
@@ -24636,40 +24138,40 @@ test("opacity", async () => {
     .opacity-\\[var\\(--value\\)\\] {
       opacity: var(--value);
     }"
-  `);
-	expect(
-		await run([
-			"opacity",
-			"opacity--15",
-			"opacity-1.125",
-			"-opacity-15",
-			"-opacity-[var(--value)]",
-			"opacity-unknown",
-			"opacity-15/foo",
-			"opacity-[var(--value)]/foo",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      'opacity',
+      'opacity--15',
+      'opacity-1.125',
+      '-opacity-15',
+      '-opacity-[var(--value)]',
+      'opacity-unknown',
+      'opacity-15/foo',
+      'opacity-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("underline-offset", async () => {
-	expect(
-		await compileCss(
-			css`
+test('underline-offset', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
         }
         @tailwind utilities;
       `,
-			[
-				"underline-offset-auto",
-				"underline-offset-4",
-				"-underline-offset-4",
-				"underline-offset-123",
-				"-underline-offset-123",
-				"underline-offset-[var(--value)]",
-				"-underline-offset-[var(--value)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+      [
+        'underline-offset-auto',
+        'underline-offset-4',
+        '-underline-offset-4',
+        'underline-offset-123',
+        '-underline-offset-123',
+        'underline-offset-[var(--value)]',
+        '-underline-offset-[var(--value)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ".-underline-offset-4 {
       text-underline-offset: calc(4px * -1);
     }
@@ -24697,34 +24199,34 @@ test("underline-offset", async () => {
     .underline-offset-auto {
       text-underline-offset: auto;
     }"
-  `);
-	expect(
-		await run([
-			"underline-offset",
-			"underline-offset--4",
-			"-underline-offset-auto",
-			"underline-offset-unknown",
-			"underline-offset-auto/foo",
-			"underline-offset-4/foo",
-			"-underline-offset-4/foo",
-			"underline-offset-123/foo",
-			"-underline-offset-123/foo",
-			"underline-offset-[var(--value)]/foo",
-			"-underline-offset-[var(--value)]/foo",
-		]),
-	).toEqual("");
+  `)
+  expect(
+    await run([
+      'underline-offset',
+      'underline-offset--4',
+      '-underline-offset-auto',
+      'underline-offset-unknown',
+      'underline-offset-auto/foo',
+      'underline-offset-4/foo',
+      '-underline-offset-4/foo',
+      'underline-offset-123/foo',
+      '-underline-offset-123/foo',
+      'underline-offset-[var(--value)]/foo',
+      '-underline-offset-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
 
-	expect(
-		await compileCss(
-			css`
+  expect(
+    await compileCss(
+      css`
         @theme {
           --text-underline-offset-auto: 4px;
         }
         @tailwind utilities;
       `,
-			["underline-offset-auto"],
-		),
-	).toMatchInlineSnapshot(`
+      ['underline-offset-auto'],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --text-underline-offset-auto: 4px;
     }
@@ -24732,13 +24234,13 @@ test("underline-offset", async () => {
     .underline-offset-auto {
       text-underline-offset: var(--text-underline-offset-auto);
     }"
-  `);
-});
+  `)
+})
 
-test("text", async () => {
-	expect(
-		await compileCss(
-			css`
+test('text', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --spacing: 0.25rem;
           --color-red-500: #ef4444;
@@ -24749,61 +24251,61 @@ test("text", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				// color
-				"text-red-500",
-				"text-red-500/50",
-				"text-red-500/2.25",
-				"text-red-500/2.5",
-				"text-red-500/2.75",
-				"text-red-500/[0.5]",
-				"text-red-500/[50%]",
-				"text-blue-500",
-				"text-current",
-				"text-current/50",
-				"text-current/[0.5]",
-				"text-current/[50%]",
-				"text-inherit",
-				"text-transparent",
-				"text-[#0088cc]",
-				"text-[#0088cc]/50",
-				"text-[#0088cc]/[0.5]",
-				"text-[#0088cc]/[50%]",
+      [
+        // color
+        'text-red-500',
+        'text-red-500/50',
+        'text-red-500/2.25',
+        'text-red-500/2.5',
+        'text-red-500/2.75',
+        'text-red-500/[0.5]',
+        'text-red-500/[50%]',
+        'text-blue-500',
+        'text-current',
+        'text-current/50',
+        'text-current/[0.5]',
+        'text-current/[50%]',
+        'text-inherit',
+        'text-transparent',
+        'text-[#0088cc]',
+        'text-[#0088cc]/50',
+        'text-[#0088cc]/[0.5]',
+        'text-[#0088cc]/[50%]',
 
-				"text-[var(--my-color)]",
-				"text-[var(--my-color)]/50",
-				"text-[var(--my-color)]/[0.5]",
-				"text-[var(--my-color)]/[50%]",
-				"text-[color:var(--my-color)]",
-				"text-[color:var(--my-color)]/50",
-				"text-[color:var(--my-color)]/[0.5]",
-				"text-[color:var(--my-color)]/[50%]",
+        'text-[var(--my-color)]',
+        'text-[var(--my-color)]/50',
+        'text-[var(--my-color)]/[0.5]',
+        'text-[var(--my-color)]/[50%]',
+        'text-[color:var(--my-color)]',
+        'text-[color:var(--my-color)]/50',
+        'text-[color:var(--my-color)]/[0.5]',
+        'text-[color:var(--my-color)]/[50%]',
 
-				// font-size / line-height / letter-spacing / font-weight
-				"text-sm",
-				"text-sm/6",
-				"text-sm/none",
-				"text-[10px]/none",
-				"text-sm/snug",
-				"text-sm/[4px]",
-				"text-[12px]",
-				"text-[12px]/6",
-				"text-[50%]",
-				"text-[50%]/6",
-				"text-[xx-large]",
-				"text-[xx-large]/6",
-				"text-[larger]",
-				"text-[larger]/6",
-				"text-[length:var(--my-size)]",
-				"text-[percentage:var(--my-size)]",
-				"text-[absolute-size:var(--my-size)]",
-				"text-[relative-size:var(--my-size)]",
-				"text-[clamp(1rem,2rem,3rem)]",
-				"text-[clamp(1rem,var(--size),3rem)]",
-				"text-[clamp(1rem,var(--size),3rem)]/9",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // font-size / line-height / letter-spacing / font-weight
+        'text-sm',
+        'text-sm/6',
+        'text-sm/none',
+        'text-[10px]/none',
+        'text-sm/snug',
+        'text-sm/[4px]',
+        'text-[12px]',
+        'text-[12px]/6',
+        'text-[50%]',
+        'text-[50%]/6',
+        'text-[xx-large]',
+        'text-[xx-large]/6',
+        'text-[larger]',
+        'text-[larger]/6',
+        'text-[length:var(--my-size)]',
+        'text-[percentage:var(--my-size)]',
+        'text-[absolute-size:var(--my-size)]',
+        'text-[relative-size:var(--my-size)]',
+        'text-[clamp(1rem,2rem,3rem)]',
+        'text-[clamp(1rem,var(--size),3rem)]',
+        'text-[clamp(1rem,var(--size),3rem)]/9',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
       --color-red-500: #ef4444;
@@ -25073,48 +24575,48 @@ test("text", async () => {
     .text-transparent {
       color: #0000;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme inline reference {
           --text-sm: 0.875rem;
         }
         @tailwind utilities;
       `,
-			[
-				"text",
-				// color
-				"-text-red-500",
-				"-text-red-500/50",
-				"-text-red-500/[0.5]",
-				"-text-red-500/[50%]",
-				"-text-current",
-				"-text-current/50",
-				"-text-current/[0.5]",
-				"-text-current/[50%]",
-				"-text-inherit",
-				"-text-transparent",
-				"-text-[#0088cc]",
-				"-text-[#0088cc]/50",
-				"-text-[#0088cc]/[0.5]",
-				"-text-[#0088cc]/[50%]",
+      [
+        'text',
+        // color
+        '-text-red-500',
+        '-text-red-500/50',
+        '-text-red-500/[0.5]',
+        '-text-red-500/[50%]',
+        '-text-current',
+        '-text-current/50',
+        '-text-current/[0.5]',
+        '-text-current/[50%]',
+        '-text-inherit',
+        '-text-transparent',
+        '-text-[#0088cc]',
+        '-text-[#0088cc]/50',
+        '-text-[#0088cc]/[0.5]',
+        '-text-[#0088cc]/[50%]',
 
-				// font-size / line-height / letter-spacing / font-weight
-				"-text-sm",
-				"-text-sm/6",
-				"text-sm/foo",
-				"-text-sm/[4px]",
-				"text-[10px]/foo",
-			],
-		),
-	).toEqual("");
-});
+        // font-size / line-height / letter-spacing / font-weight
+        '-text-sm',
+        '-text-sm/6',
+        'text-sm/foo',
+        '-text-sm/[4px]',
+        'text-[10px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
 
-test("text-shadow", async () => {
-	expect(
-		await compileCss(
-			css`
+test('text-shadow', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
@@ -25122,47 +24624,47 @@ test("text-shadow", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				// Shadows
-				"text-shadow-2xs",
-				"text-shadow-sm",
-				"text-shadow-none",
-				"text-shadow-[12px_12px_#0088cc]",
-				"text-shadow-[12px_12px_var(--value)]",
-				"text-shadow-[10px_10px]",
-				"text-shadow-[var(--value)]",
-				"text-shadow-[shadow:var(--value)]",
+      [
+        // Shadows
+        'text-shadow-2xs',
+        'text-shadow-sm',
+        'text-shadow-none',
+        'text-shadow-[12px_12px_#0088cc]',
+        'text-shadow-[12px_12px_var(--value)]',
+        'text-shadow-[10px_10px]',
+        'text-shadow-[var(--value)]',
+        'text-shadow-[shadow:var(--value)]',
 
-				"text-shadow-sm/25",
-				"text-shadow-[12px_12px_#0088cc]/25",
-				"text-shadow-[12px_12px_var(--value)]/25",
-				"text-shadow-[10px_10px]/25",
+        'text-shadow-sm/25',
+        'text-shadow-[12px_12px_#0088cc]/25',
+        'text-shadow-[12px_12px_var(--value)]/25',
+        'text-shadow-[10px_10px]/25',
 
-				// Colors
-				"text-shadow-red-500",
-				"text-shadow-red-500/50",
-				"text-shadow-red-500/2.25",
-				"text-shadow-red-500/2.5",
-				"text-shadow-red-500/2.75",
-				"text-shadow-red-500/[0.5]",
-				"text-shadow-red-500/[50%]",
-				"text-shadow-current",
-				"text-shadow-current/50",
-				"text-shadow-current/[0.5]",
-				"text-shadow-current/[50%]",
-				"text-shadow-inherit",
-				"text-shadow-transparent",
-				"text-shadow-[#0088cc]",
-				"text-shadow-[#0088cc]/50",
-				"text-shadow-[#0088cc]/[0.5]",
-				"text-shadow-[#0088cc]/[50%]",
-				"text-shadow-[color:var(--value)]",
-				"text-shadow-[color:var(--value)]/50",
-				"text-shadow-[color:var(--value)]/[0.5]",
-				"text-shadow-[color:var(--value)]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // Colors
+        'text-shadow-red-500',
+        'text-shadow-red-500/50',
+        'text-shadow-red-500/2.25',
+        'text-shadow-red-500/2.5',
+        'text-shadow-red-500/2.75',
+        'text-shadow-red-500/[0.5]',
+        'text-shadow-red-500/[50%]',
+        'text-shadow-current',
+        'text-shadow-current/50',
+        'text-shadow-current/[0.5]',
+        'text-shadow-current/[50%]',
+        'text-shadow-inherit',
+        'text-shadow-transparent',
+        'text-shadow-[#0088cc]',
+        'text-shadow-[#0088cc]/50',
+        'text-shadow-[#0088cc]/[0.5]',
+        'text-shadow-[#0088cc]/[50%]',
+        'text-shadow-[color:var(--value)]',
+        'text-shadow-[color:var(--value)]/50',
+        'text-shadow-[color:var(--value)]/[0.5]',
+        'text-shadow-[color:var(--value)]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -25450,34 +24952,34 @@ test("text-shadow", async () => {
       inherits: false;
       initial-value: 100%;
     }"
-  `);
-	expect(
-		await run([
-			"-shadow-xl",
-			"-shadow-none",
-			"-shadow-red-500",
-			"-shadow-red-500/50",
-			"-shadow-red-500/[0.5]",
-			"-shadow-red-500/[50%]",
-			"-shadow-current",
-			"-shadow-current/50",
-			"-shadow-current/[0.5]",
-			"-shadow-current/[50%]",
-			"-shadow-inherit",
-			"-shadow-transparent",
-			"-shadow-[#0088cc]",
-			"-shadow-[#0088cc]/50",
-			"-shadow-[#0088cc]/[0.5]",
-			"-shadow-[#0088cc]/[50%]",
-			"-shadow-[var(--value)]",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-shadow-xl',
+      '-shadow-none',
+      '-shadow-red-500',
+      '-shadow-red-500/50',
+      '-shadow-red-500/[0.5]',
+      '-shadow-red-500/[50%]',
+      '-shadow-current',
+      '-shadow-current/50',
+      '-shadow-current/[0.5]',
+      '-shadow-current/[50%]',
+      '-shadow-inherit',
+      '-shadow-transparent',
+      '-shadow-[#0088cc]',
+      '-shadow-[#0088cc]/50',
+      '-shadow-[#0088cc]/[0.5]',
+      '-shadow-[#0088cc]/[50%]',
+      '-shadow-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
 
-test("shadow", async () => {
-	expect(
-		await compileCss(
-			css`
+test('shadow', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --box-shadow-color-blue-500: #3b82f6;
@@ -25486,48 +24988,48 @@ test("shadow", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				// Shadows
-				"shadow-sm",
-				"shadow-xl",
-				"shadow-none",
-				"shadow-[12px_12px_#0088cc]",
-				"shadow-[12px_12px_var(--value)]",
-				"shadow-[10px_10px]",
-				"shadow-[var(--value)]",
-				"shadow-[shadow:var(--value)]",
+      [
+        // Shadows
+        'shadow-sm',
+        'shadow-xl',
+        'shadow-none',
+        'shadow-[12px_12px_#0088cc]',
+        'shadow-[12px_12px_var(--value)]',
+        'shadow-[10px_10px]',
+        'shadow-[var(--value)]',
+        'shadow-[shadow:var(--value)]',
 
-				"shadow-sm/25",
-				"shadow-[12px_12px_#0088cc]/25",
-				"shadow-[12px_12px_var(--value)]/25",
-				"shadow-[10px_10px]/25",
+        'shadow-sm/25',
+        'shadow-[12px_12px_#0088cc]/25',
+        'shadow-[12px_12px_var(--value)]/25',
+        'shadow-[10px_10px]/25',
 
-				// Colors
-				"shadow-red-500",
-				"shadow-red-500/50",
-				"shadow-red-500/2.25",
-				"shadow-red-500/2.5",
-				"shadow-red-500/2.75",
-				"shadow-red-500/[0.5]",
-				"shadow-red-500/[50%]",
-				"shadow-blue-500",
-				"shadow-current",
-				"shadow-current/50",
-				"shadow-current/[0.5]",
-				"shadow-current/[50%]",
-				"shadow-inherit",
-				"shadow-transparent",
-				"shadow-[#0088cc]",
-				"shadow-[#0088cc]/50",
-				"shadow-[#0088cc]/[0.5]",
-				"shadow-[#0088cc]/[50%]",
-				"shadow-[color:var(--value)]",
-				"shadow-[color:var(--value)]/50",
-				"shadow-[color:var(--value)]/[0.5]",
-				"shadow-[color:var(--value)]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // Colors
+        'shadow-red-500',
+        'shadow-red-500/50',
+        'shadow-red-500/2.25',
+        'shadow-red-500/2.5',
+        'shadow-red-500/2.75',
+        'shadow-red-500/[0.5]',
+        'shadow-red-500/[50%]',
+        'shadow-blue-500',
+        'shadow-current',
+        'shadow-current/50',
+        'shadow-current/[0.5]',
+        'shadow-current/[50%]',
+        'shadow-inherit',
+        'shadow-transparent',
+        'shadow-[#0088cc]',
+        'shadow-[#0088cc]/50',
+        'shadow-[#0088cc]/[0.5]',
+        'shadow-[#0088cc]/[50%]',
+        'shadow-[color:var(--value)]',
+        'shadow-[color:var(--value)]/50',
+        'shadow-[color:var(--value)]/[0.5]',
+        'shadow-[color:var(--value)]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -25923,34 +25425,34 @@ test("shadow", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await run([
-			"-shadow-xl",
-			"-shadow-none",
-			"-shadow-red-500",
-			"-shadow-red-500/50",
-			"-shadow-red-500/[0.5]",
-			"-shadow-red-500/[50%]",
-			"-shadow-current",
-			"-shadow-current/50",
-			"-shadow-current/[0.5]",
-			"-shadow-current/[50%]",
-			"-shadow-inherit",
-			"-shadow-transparent",
-			"-shadow-[#0088cc]",
-			"-shadow-[#0088cc]/50",
-			"-shadow-[#0088cc]/[0.5]",
-			"-shadow-[#0088cc]/[50%]",
-			"-shadow-[var(--value)]",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-shadow-xl',
+      '-shadow-none',
+      '-shadow-red-500',
+      '-shadow-red-500/50',
+      '-shadow-red-500/[0.5]',
+      '-shadow-red-500/[50%]',
+      '-shadow-current',
+      '-shadow-current/50',
+      '-shadow-current/[0.5]',
+      '-shadow-current/[50%]',
+      '-shadow-inherit',
+      '-shadow-transparent',
+      '-shadow-[#0088cc]',
+      '-shadow-[#0088cc]/50',
+      '-shadow-[#0088cc]/[0.5]',
+      '-shadow-[#0088cc]/[50%]',
+      '-shadow-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
 
-test("inset-shadow", async () => {
-	expect(
-		await compileCss(
-			css`
+test('inset-shadow', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --inset-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
@@ -25958,49 +25460,49 @@ test("inset-shadow", async () => {
         }
         @tailwind utilities;
       `,
-			[
-				// Shadows
-				"inset-shadow",
-				"inset-shadow-sm",
-				"inset-shadow-none",
-				"inset-shadow-[12px_12px_#0088cc]",
-				"inset-shadow-[12px_12px_var(--value)]",
-				"inset-shadow-[10px_10px]",
-				"inset-shadow-[var(--value)]",
-				"inset-shadow-[shadow:var(--value)]",
-				"inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]",
+      [
+        // Shadows
+        'inset-shadow',
+        'inset-shadow-sm',
+        'inset-shadow-none',
+        'inset-shadow-[12px_12px_#0088cc]',
+        'inset-shadow-[12px_12px_var(--value)]',
+        'inset-shadow-[10px_10px]',
+        'inset-shadow-[var(--value)]',
+        'inset-shadow-[shadow:var(--value)]',
+        'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]',
 
-				"inset-shadow-sm/25",
-				"inset-shadow-[12px_12px_#0088cc]/25",
-				"inset-shadow-[12px_12px_var(--value)]/25",
-				"inset-shadow-[10px_10px]/25",
-				"inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]/25",
+        'inset-shadow-sm/25',
+        'inset-shadow-[12px_12px_#0088cc]/25',
+        'inset-shadow-[12px_12px_var(--value)]/25',
+        'inset-shadow-[10px_10px]/25',
+        'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]/25',
 
-				// Colors
-				"inset-shadow-red-500",
-				"inset-shadow-red-500/50",
-				"inset-shadow-red-500/2.25",
-				"inset-shadow-red-500/2.5",
-				"inset-shadow-red-500/2.75",
-				"inset-shadow-red-500/[0.5]",
-				"inset-shadow-red-500/[50%]",
-				"inset-shadow-current",
-				"inset-shadow-current/50",
-				"inset-shadow-current/[0.5]",
-				"inset-shadow-current/[50%]",
-				"inset-shadow-inherit",
-				"inset-shadow-transparent",
-				"inset-shadow-[#0088cc]",
-				"inset-shadow-[#0088cc]/50",
-				"inset-shadow-[#0088cc]/[0.5]",
-				"inset-shadow-[#0088cc]/[50%]",
-				"inset-shadow-[color:var(--value)]",
-				"inset-shadow-[color:var(--value)]/50",
-				"inset-shadow-[color:var(--value)]/[0.5]",
-				"inset-shadow-[color:var(--value)]/[50%]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // Colors
+        'inset-shadow-red-500',
+        'inset-shadow-red-500/50',
+        'inset-shadow-red-500/2.25',
+        'inset-shadow-red-500/2.5',
+        'inset-shadow-red-500/2.75',
+        'inset-shadow-red-500/[0.5]',
+        'inset-shadow-red-500/[50%]',
+        'inset-shadow-current',
+        'inset-shadow-current/50',
+        'inset-shadow-current/[0.5]',
+        'inset-shadow-current/[50%]',
+        'inset-shadow-inherit',
+        'inset-shadow-transparent',
+        'inset-shadow-[#0088cc]',
+        'inset-shadow-[#0088cc]/50',
+        'inset-shadow-[#0088cc]/[0.5]',
+        'inset-shadow-[#0088cc]/[50%]',
+        'inset-shadow-[color:var(--value)]',
+        'inset-shadow-[color:var(--value)]/50',
+        'inset-shadow-[color:var(--value)]/[0.5]',
+        'inset-shadow-[color:var(--value)]/[50%]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -26405,81 +25907,81 @@ test("inset-shadow", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await run([
-			"-inset-shadow-sm",
-			"-inset-shadow-none",
-			"-inset-shadow-red-500",
-			"-inset-shadow-red-500/50",
-			"-inset-shadow-red-500/[0.5]",
-			"-inset-shadow-red-500/[50%]",
-			"-inset-shadow-current",
-			"-inset-shadow-current/50",
-			"-inset-shadow-current/[0.5]",
-			"-inset-shadow-current/[50%]",
-			"-inset-shadow-inherit",
-			"-inset-shadow-transparent",
-			"-inset-shadow-[#0088cc]",
-			"-inset-shadow-[#0088cc]/50",
-			"-inset-shadow-[#0088cc]/[0.5]",
-			"-inset-shadow-[#0088cc]/[50%]",
-			"-inset-shadow-[var(--value)]",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-inset-shadow-sm',
+      '-inset-shadow-none',
+      '-inset-shadow-red-500',
+      '-inset-shadow-red-500/50',
+      '-inset-shadow-red-500/[0.5]',
+      '-inset-shadow-red-500/[50%]',
+      '-inset-shadow-current',
+      '-inset-shadow-current/50',
+      '-inset-shadow-current/[0.5]',
+      '-inset-shadow-current/[50%]',
+      '-inset-shadow-inherit',
+      '-inset-shadow-transparent',
+      '-inset-shadow-[#0088cc]',
+      '-inset-shadow-[#0088cc]/50',
+      '-inset-shadow-[#0088cc]/[0.5]',
+      '-inset-shadow-[#0088cc]/[50%]',
+      '-inset-shadow-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
 
-test("ring", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ring', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --ring-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				// ring color
-				"ring-inset",
-				"ring-red-500",
-				"ring-red-500/50",
-				"ring-red-500/2.25",
-				"ring-red-500/2.5",
-				"ring-red-500/2.75",
-				"ring-red-500/[0.5]",
-				"ring-red-500/[50%]",
-				"ring-blue-500",
-				"ring-current",
-				"ring-current/50",
-				"ring-current/[0.5]",
-				"ring-current/[50%]",
-				"ring-inherit",
-				"ring-transparent",
-				"ring-[#0088cc]",
-				"ring-[#0088cc]/50",
-				"ring-[#0088cc]/[0.5]",
-				"ring-[#0088cc]/[50%]",
-				"ring-[var(--my-color)]",
-				"ring-[var(--my-color)]/50",
-				"ring-[var(--my-color)]/[0.5]",
-				"ring-[var(--my-color)]/[50%]",
-				"ring-[color:var(--my-color)]",
-				"ring-[color:var(--my-color)]/50",
-				"ring-[color:var(--my-color)]/[0.5]",
-				"ring-[color:var(--my-color)]/[50%]",
+      [
+        // ring color
+        'ring-inset',
+        'ring-red-500',
+        'ring-red-500/50',
+        'ring-red-500/2.25',
+        'ring-red-500/2.5',
+        'ring-red-500/2.75',
+        'ring-red-500/[0.5]',
+        'ring-red-500/[50%]',
+        'ring-blue-500',
+        'ring-current',
+        'ring-current/50',
+        'ring-current/[0.5]',
+        'ring-current/[50%]',
+        'ring-inherit',
+        'ring-transparent',
+        'ring-[#0088cc]',
+        'ring-[#0088cc]/50',
+        'ring-[#0088cc]/[0.5]',
+        'ring-[#0088cc]/[50%]',
+        'ring-[var(--my-color)]',
+        'ring-[var(--my-color)]/50',
+        'ring-[var(--my-color)]/[0.5]',
+        'ring-[var(--my-color)]/[50%]',
+        'ring-[color:var(--my-color)]',
+        'ring-[color:var(--my-color)]/50',
+        'ring-[color:var(--my-color)]/[0.5]',
+        'ring-[color:var(--my-color)]/[50%]',
 
-				// ring width
-				"ring",
-				"ring-0",
-				"ring-1",
-				"ring-2",
-				"ring-4",
-				"ring-[12px]",
-				"ring-[length:var(--my-width)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // ring width
+        'ring',
+        'ring-0',
+        'ring-1',
+        'ring-2',
+        'ring-4',
+        'ring-[12px]',
+        'ring-[length:var(--my-width)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -26797,18 +26299,18 @@ test("ring", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await compileCss(
-			css`
+  `)
+  expect(
+    await compileCss(
+      css`
         @theme {
           --default-ring-width: 2px;
         }
         @tailwind utilities;
       `,
-			["ring"],
-		),
-	).toMatchInlineSnapshot(`
+      ['ring'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -26913,93 +26415,93 @@ test("ring", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await run([
-			// ring color
-			"-ring-inset",
-			"-ring-red-500",
-			"-ring-red-500/50",
-			"-ring-red-500/[0.5]",
-			"-ring-red-500/[50%]",
-			"-ring-current",
-			"-ring-current/50",
-			"-ring-current/[0.5]",
-			"-ring-current/[50%]",
-			"-ring-inherit",
-			"-ring-transparent",
-			"-ring-[#0088cc]",
-			"-ring-[#0088cc]/50",
-			"-ring-[#0088cc]/[0.5]",
-			"-ring-[#0088cc]/[50%]",
+  `)
+  expect(
+    await run([
+      // ring color
+      '-ring-inset',
+      '-ring-red-500',
+      '-ring-red-500/50',
+      '-ring-red-500/[0.5]',
+      '-ring-red-500/[50%]',
+      '-ring-current',
+      '-ring-current/50',
+      '-ring-current/[0.5]',
+      '-ring-current/[50%]',
+      '-ring-inherit',
+      '-ring-transparent',
+      '-ring-[#0088cc]',
+      '-ring-[#0088cc]/50',
+      '-ring-[#0088cc]/[0.5]',
+      '-ring-[#0088cc]/[50%]',
 
-			// ring width
-			"-ring",
-			"ring--1",
-			"-ring-0",
-			"-ring-1",
-			"-ring-2",
-			"-ring-4",
+      // ring width
+      '-ring',
+      'ring--1',
+      '-ring-0',
+      '-ring-1',
+      '-ring-2',
+      '-ring-4',
 
-			"ring/foo",
-			"ring-0/foo",
-			"ring-1/foo",
-			"ring-2/foo",
-			"ring-4/foo",
-			"ring-[12px]/foo",
-			"ring-[length:var(--my-width)]/foo",
-		]),
-	).toEqual("");
-});
+      'ring/foo',
+      'ring-0/foo',
+      'ring-1/foo',
+      'ring-2/foo',
+      'ring-4/foo',
+      'ring-[12px]/foo',
+      'ring-[length:var(--my-width)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("inset-ring", async () => {
-	expect(
-		await compileCss(
-			css`
+test('inset-ring', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-			[
-				// ring color
-				"inset-ring-red-500",
-				"inset-ring-red-500/50",
-				"inset-ring-red-500/2.25",
-				"inset-ring-red-500/2.5",
-				"inset-ring-red-500/2.75",
-				"inset-ring-red-500/[0.5]",
-				"inset-ring-red-500/[50%]",
-				"inset-ring-current",
-				"inset-ring-current/50",
-				"inset-ring-current/[0.5]",
-				"inset-ring-current/[50%]",
-				"inset-ring-inherit",
-				"inset-ring-transparent",
-				"inset-ring-[#0088cc]",
-				"inset-ring-[#0088cc]/50",
-				"inset-ring-[#0088cc]/[0.5]",
-				"inset-ring-[#0088cc]/[50%]",
-				"inset-ring-[var(--my-color)]",
-				"inset-ring-[var(--my-color)]/50",
-				"inset-ring-[var(--my-color)]/[0.5]",
-				"inset-ring-[var(--my-color)]/[50%]",
-				"inset-ring-[color:var(--my-color)]",
-				"inset-ring-[color:var(--my-color)]/50",
-				"inset-ring-[color:var(--my-color)]/[0.5]",
-				"inset-ring-[color:var(--my-color)]/[50%]",
+      [
+        // ring color
+        'inset-ring-red-500',
+        'inset-ring-red-500/50',
+        'inset-ring-red-500/2.25',
+        'inset-ring-red-500/2.5',
+        'inset-ring-red-500/2.75',
+        'inset-ring-red-500/[0.5]',
+        'inset-ring-red-500/[50%]',
+        'inset-ring-current',
+        'inset-ring-current/50',
+        'inset-ring-current/[0.5]',
+        'inset-ring-current/[50%]',
+        'inset-ring-inherit',
+        'inset-ring-transparent',
+        'inset-ring-[#0088cc]',
+        'inset-ring-[#0088cc]/50',
+        'inset-ring-[#0088cc]/[0.5]',
+        'inset-ring-[#0088cc]/[50%]',
+        'inset-ring-[var(--my-color)]',
+        'inset-ring-[var(--my-color)]/50',
+        'inset-ring-[var(--my-color)]/[0.5]',
+        'inset-ring-[var(--my-color)]/[50%]',
+        'inset-ring-[color:var(--my-color)]',
+        'inset-ring-[color:var(--my-color)]/50',
+        'inset-ring-[color:var(--my-color)]/[0.5]',
+        'inset-ring-[color:var(--my-color)]/[50%]',
 
-				// ring width
-				"inset-ring",
-				"inset-ring-0",
-				"inset-ring-1",
-				"inset-ring-2",
-				"inset-ring-4",
-				"inset-ring-[12px]",
-				"inset-ring-[length:var(--my-width)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // ring width
+        'inset-ring',
+        'inset-ring-0',
+        'inset-ring-1',
+        'inset-ring-2',
+        'inset-ring-4',
+        'inset-ring-[12px]',
+        'inset-ring-[length:var(--my-width)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -27308,92 +26810,92 @@ test("inset-ring", async () => {
       inherits: false;
       initial-value: 0 0 #0000;
     }"
-  `);
-	expect(
-		await run([
-			// ring color
-			"-inset-ring-red-500",
-			"-inset-ring-red-500/50",
-			"-inset-ring-red-500/[0.5]",
-			"-inset-ring-red-500/[50%]",
-			"-inset-ring-current",
-			"-inset-ring-current/50",
-			"-inset-ring-current/[0.5]",
-			"-inset-ring-current/[50%]",
-			"-inset-ring-inherit",
-			"-inset-ring-transparent",
-			"-inset-ring-[#0088cc]",
-			"-inset-ring-[#0088cc]/50",
-			"-inset-ring-[#0088cc]/[0.5]",
-			"-inset-ring-[#0088cc]/[50%]",
+  `)
+  expect(
+    await run([
+      // ring color
+      '-inset-ring-red-500',
+      '-inset-ring-red-500/50',
+      '-inset-ring-red-500/[0.5]',
+      '-inset-ring-red-500/[50%]',
+      '-inset-ring-current',
+      '-inset-ring-current/50',
+      '-inset-ring-current/[0.5]',
+      '-inset-ring-current/[50%]',
+      '-inset-ring-inherit',
+      '-inset-ring-transparent',
+      '-inset-ring-[#0088cc]',
+      '-inset-ring-[#0088cc]/50',
+      '-inset-ring-[#0088cc]/[0.5]',
+      '-inset-ring-[#0088cc]/[50%]',
 
-			// ring width
-			"-inset-ring",
-			"inset-ring--1",
-			"-inset-ring-0",
-			"-inset-ring-1",
-			"-inset-ring-2",
-			"-inset-ring-4",
+      // ring width
+      '-inset-ring',
+      'inset-ring--1',
+      '-inset-ring-0',
+      '-inset-ring-1',
+      '-inset-ring-2',
+      '-inset-ring-4',
 
-			"inset-ring/foo",
-			"inset-ring-0/foo",
-			"inset-ring-1/foo",
-			"inset-ring-2/foo",
-			"inset-ring-4/foo",
-			"inset-ring-[12px]/foo",
-			"inset-ring-[length:var(--my-width)]/foo",
-		]),
-	).toEqual("");
-});
+      'inset-ring/foo',
+      'inset-ring-0/foo',
+      'inset-ring-1/foo',
+      'inset-ring-2/foo',
+      'inset-ring-4/foo',
+      'inset-ring-[12px]/foo',
+      'inset-ring-[length:var(--my-width)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("ring-offset", async () => {
-	expect(
-		await compileCss(
-			css`
+test('ring-offset', async () => {
+  expect(
+    await compileCss(
+      css`
         @theme {
           --color-red-500: #ef4444;
           --ring-offset-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
-			[
-				// ring color
-				"ring-offset-inset",
-				"ring-offset-red-500",
-				"ring-offset-red-500/50",
-				"ring-offset-red-500/[0.5]",
-				"ring-offset-red-500/[50%]",
-				"ring-offset-blue-500",
-				"ring-offset-current",
-				"ring-offset-current/50",
-				"ring-offset-current/[0.5]",
-				"ring-offset-current/[50%]",
-				"ring-offset-inherit",
-				"ring-offset-transparent",
-				"ring-offset-[#0088cc]",
-				"ring-offset-[#0088cc]/50",
-				"ring-offset-[#0088cc]/[0.5]",
-				"ring-offset-[#0088cc]/[50%]",
+      [
+        // ring color
+        'ring-offset-inset',
+        'ring-offset-red-500',
+        'ring-offset-red-500/50',
+        'ring-offset-red-500/[0.5]',
+        'ring-offset-red-500/[50%]',
+        'ring-offset-blue-500',
+        'ring-offset-current',
+        'ring-offset-current/50',
+        'ring-offset-current/[0.5]',
+        'ring-offset-current/[50%]',
+        'ring-offset-inherit',
+        'ring-offset-transparent',
+        'ring-offset-[#0088cc]',
+        'ring-offset-[#0088cc]/50',
+        'ring-offset-[#0088cc]/[0.5]',
+        'ring-offset-[#0088cc]/[50%]',
 
-				"ring-offset-[var(--my-color)]",
-				"ring-offset-[var(--my-color)]/50",
-				"ring-offset-[var(--my-color)]/[0.5]",
-				"ring-offset-[var(--my-color)]/[50%]",
-				"ring-offset-[color:var(--my-color)]",
-				"ring-offset-[color:var(--my-color)]/50",
-				"ring-offset-[color:var(--my-color)]/[0.5]",
-				"ring-offset-[color:var(--my-color)]/[50%]",
+        'ring-offset-[var(--my-color)]',
+        'ring-offset-[var(--my-color)]/50',
+        'ring-offset-[var(--my-color)]/[0.5]',
+        'ring-offset-[var(--my-color)]/[50%]',
+        'ring-offset-[color:var(--my-color)]',
+        'ring-offset-[color:var(--my-color)]/50',
+        'ring-offset-[color:var(--my-color)]/[0.5]',
+        'ring-offset-[color:var(--my-color)]/[50%]',
 
-				// ring width
-				"ring-offset-0",
-				"ring-offset-1",
-				"ring-offset-2",
-				"ring-offset-4",
-				"ring-offset-[12px]",
-				"ring-offset-[length:var(--my-width)]",
-			],
-		),
-	).toMatchInlineSnapshot(`
+        // ring width
+        'ring-offset-0',
+        'ring-offset-1',
+        'ring-offset-2',
+        'ring-offset-4',
+        'ring-offset-[12px]',
+        'ring-offset-[length:var(--my-width)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
     ":root, :host {
       --color-red-500: #ef4444;
       --ring-offset-color-blue-500: #3b82f6;
@@ -27572,55 +27074,55 @@ test("ring-offset", async () => {
     .ring-offset-transparent {
       --tw-ring-offset-color: transparent;
     }"
-  `);
-	expect(
-		await run([
-			"ring-offset",
-			// ring color
-			"-ring-offset-inset",
-			"-ring-offset-red-500",
-			"-ring-offset-red-500/50",
-			"-ring-offset-red-500/[0.5]",
-			"-ring-offset-red-500/[50%]",
-			"-ring-offset-current",
-			"-ring-offset-current/50",
-			"-ring-offset-current/[0.5]",
-			"-ring-offset-current/[50%]",
-			"-ring-offset-inherit",
-			"-ring-offset-transparent",
-			"-ring-offset-[#0088cc]",
-			"-ring-offset-[#0088cc]/50",
-			"-ring-offset-[#0088cc]/[0.5]",
-			"-ring-offset-[#0088cc]/[50%]",
+  `)
+  expect(
+    await run([
+      'ring-offset',
+      // ring color
+      '-ring-offset-inset',
+      '-ring-offset-red-500',
+      '-ring-offset-red-500/50',
+      '-ring-offset-red-500/[0.5]',
+      '-ring-offset-red-500/[50%]',
+      '-ring-offset-current',
+      '-ring-offset-current/50',
+      '-ring-offset-current/[0.5]',
+      '-ring-offset-current/[50%]',
+      '-ring-offset-inherit',
+      '-ring-offset-transparent',
+      '-ring-offset-[#0088cc]',
+      '-ring-offset-[#0088cc]/50',
+      '-ring-offset-[#0088cc]/[0.5]',
+      '-ring-offset-[#0088cc]/[50%]',
 
-			// ring width
-			"ring-offset--1",
-			"-ring-offset-0",
-			"-ring-offset-1",
-			"-ring-offset-2",
-			"-ring-offset-4",
+      // ring width
+      'ring-offset--1',
+      '-ring-offset-0',
+      '-ring-offset-1',
+      '-ring-offset-2',
+      '-ring-offset-4',
 
-			"ring-offset-0/foo",
-			"ring-offset-1/foo",
-			"ring-offset-2/foo",
-			"ring-offset-4/foo",
-			"ring-offset-[12px]/foo",
-			"ring-offset-[length:var(--my-width)]/foo",
-		]),
-	).toEqual("");
-});
+      'ring-offset-0/foo',
+      'ring-offset-1/foo',
+      'ring-offset-2/foo',
+      'ring-offset-4/foo',
+      'ring-offset-[12px]/foo',
+      'ring-offset-[length:var(--my-width)]/foo',
+    ]),
+  ).toEqual('')
+})
 
-test("@container", async () => {
-	expect(
-		await run([
-			"@container",
-			"@container-normal",
-			"@container/sidebar",
-			"@container-normal/sidebar",
-			"@container-size",
-			"@container-size/sidebar",
-		]),
-	).toMatchInlineSnapshot(`
+test('@container', async () => {
+  expect(
+    await run([
+      '@container',
+      '@container-normal',
+      '@container/sidebar',
+      '@container-normal/sidebar',
+      '@container-size',
+      '@container-size/sidebar',
+    ]),
+  ).toMatchInlineSnapshot(`
     ".\\@container-normal\\/sidebar {
       container: sidebar;
     }
@@ -27644,31 +27146,31 @@ test("@container", async () => {
     .\\@container-size {
       container-type: size;
     }"
-  `);
-	expect(
-		await run([
-			"-@container",
-			"-@container-normal",
-			"-@container/sidebar",
-			"-@container-normal/sidebar",
-			"-@container-size",
-			"-@container-size/sidebar",
-		]),
-	).toEqual("");
-});
+  `)
+  expect(
+    await run([
+      '-@container',
+      '-@container-normal',
+      '-@container/sidebar',
+      '-@container-normal/sidebar',
+      '-@container-size',
+      '-@container-size/sidebar',
+    ]),
+  ).toEqual('')
+})
 
-describe("spacing utilities", () => {
-	test("`--spacing: initial` disables the spacing multiplier", async () => {
-		const { build } = await compile(css`
+describe('spacing utilities', () => {
+  test('`--spacing: initial` disables the spacing multiplier', async () => {
+    const { build } = await compile(css`
       @theme {
         --spacing: initial;
         --spacing-4: 1rem;
       }
       @tailwind utilities;
-    `);
-		const compiled = build(["px-1", "px-4"]);
+    `)
+    const compiled = build(['px-1', 'px-4'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-4: 1rem;
       }
@@ -27676,20 +27178,20 @@ describe("spacing utilities", () => {
       .px-4 {
         padding-inline: var(--spacing-4);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("`--spacing-*: initial` disables the spacing multiplier", async () => {
-		const { build } = await compile(css`
+  test('`--spacing-*: initial` disables the spacing multiplier', async () => {
+    const { build } = await compile(css`
       @theme {
         --spacing-*: initial;
         --spacing-4: 1rem;
       }
       @tailwind utilities;
-    `);
-		const compiled = build(["px-1", "px-4"]);
+    `)
+    const compiled = build(['px-1', 'px-4'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-4: 1rem;
       }
@@ -27697,26 +27199,19 @@ describe("spacing utilities", () => {
       .px-4 {
         padding-inline: var(--spacing-4);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier", async () => {
-		const { build } = await compile(css`
+  test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
+    const { build } = await compile(css`
       @theme {
         --spacing: 4px;
       }
       @tailwind utilities;
-    `);
-		const compiled = build([
-			"px-0.25",
-			"px-1.5",
-			"px-2.75",
-			"px-0.375",
-			"px-2.50",
-			"px-.75",
-		]);
+    `)
+    const compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing: 4px;
       }
@@ -27732,32 +27227,32 @@ describe("spacing utilities", () => {
       .px-2\\.75 {
         padding-inline: calc(var(--spacing) * 2.75);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("spacing utilities must have a value", async () => {
-		const { build } = await compile(css`
+  test('spacing utilities must have a value', async () => {
+    const { build } = await compile(css`
       @theme reference {
         --spacing: 4px;
       }
       @tailwind utilities;
-    `);
-		const compiled = build(["px"]);
+    `)
+    const compiled = build(['px'])
 
-		expect(optimizeCss(compiled).trim()).toEqual("");
-	});
+    expect(optimizeCss(compiled).trim()).toEqual('')
+  })
 
-	test("--spacing-* variables take precedence over --container-* variables", async () => {
-		const { build } = await compile(css`
+  test('--spacing-* variables take precedence over --container-* variables', async () => {
+    const { build } = await compile(css`
       @theme {
         --spacing-sm: 8px;
         --container-sm: 256px;
       }
       @tailwind utilities;
-    `);
-		const compiled = build(["w-sm", "max-w-sm", "min-w-sm", "basis-sm"]);
+    `)
+    const compiled = build(['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       ":root, :host {
         --spacing-sm: 8px;
       }
@@ -27777,13 +27272,13 @@ describe("spacing utilities", () => {
       .basis-sm {
         flex-basis: var(--spacing-sm);
       }"
-    `);
-	});
-});
+    `)
+  })
+})
 
-describe("custom utilities", () => {
-	test("custom static utility", async () => {
-		const { build } = await compile(css`
+describe('custom utilities', () => {
+  test('custom static utility', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27796,10 +27291,10 @@ describe("custom utilities", () => {
         text-box-trim: both;
         text-box-edge: cap alphabetic;
       }
-    `);
-		const compiled = build(["text-trim", "lg:text-trim"]);
+    `)
+    const compiled = build(['text-trim', 'lg:text-trim'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-trim {
           text-box-trim: both;
@@ -27813,11 +27308,11 @@ describe("custom utilities", () => {
           }
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom static utility emit CSS variables if the utility is used", async () => {
-		const { build } = await compile(css`
+  test('custom static utility emit CSS variables if the utility is used', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27829,17 +27324,15 @@ describe("custom utilities", () => {
       @utility foo {
         value: var(--example-foo);
       }
-    `);
-		let compiled = build([]);
+    `)
+    let compiled = build([])
 
-		// `foo` is not used yet:
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(
-			`"@layer utilities;"`,
-		);
+    // `foo` is not used yet:
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
 
-		// `foo` is used, and the CSS variable is emitted:
-		compiled = build(["foo"]);
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    // `foo` is used, and the CSS variable is emitted:
+    compiled = build(['foo'])
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .foo {
           value: var(--example-foo);
@@ -27849,11 +27342,11 @@ describe("custom utilities", () => {
       :root, :host {
         --example-foo: 123px;
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom static utility (negative)", async () => {
-		const { build } = await compile(css`
+  test('custom static utility (negative)', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27861,20 +27354,20 @@ describe("custom utilities", () => {
       @utility -example {
         value: -1;
       }
-    `);
-		const compiled = build(["-example", "lg:-example"]);
+    `)
+    const compiled = build(['-example', 'lg:-example'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .-example {
           value: -1;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("Multiple static utilities are merged", async () => {
-		const { build } = await compile(css`
+  test('Multiple static utilities are merged', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27887,21 +27380,21 @@ describe("custom utilities", () => {
       @utility really-round {
         border-radius: 30rem;
       }
-    `);
-		const compiled = build(["really-round"]);
+    `)
+    const compiled = build(['really-round'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .really-round {
           --custom-prop: hi;
           border-radius: 30rem;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom utilities support some special characters", async () => {
-		const { build } = await compile(css`
+  test('custom utilities support some special characters', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27913,20 +27406,20 @@ describe("custom utilities", () => {
       @utility push-50% {
         right: 50%;
       }
-    `);
-		const compiled = build(["push-1/2", "push-50%"]);
+    `)
+    const compiled = build(['push-1/2', 'push-50%'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .push-1\\/2, .push-50\\% {
           right: 50%;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("can override specific versions of a functional utility with a static utility", async () => {
-		const { build } = await compile(css`
+  test('can override specific versions of a functional utility with a static utility', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27941,10 +27434,10 @@ describe("custom utilities", () => {
         line-height: var(--text-sm--line-height, 1.255rem);
         text-rendering: optimizeLegibility;
       }
-    `);
-		const compiled = build(["text-sm"]);
+    `)
+    const compiled = build(['text-sm'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .text-sm {
           font-size: var(--text-sm, .8755rem);
@@ -27954,11 +27447,11 @@ describe("custom utilities", () => {
           line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("can override the default value of a functional utility", async () => {
-		const { build } = await compile(css`
+  test('can override the default value of a functional utility', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27970,10 +27463,10 @@ describe("custom utilities", () => {
       @utility rounded {
         border-radius: 50rem;
       }
-    `);
-		const compiled = build(["rounded", "rounded-xl", "rounded-[33px]"]);
+    `)
+    const compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .rounded {
           border-radius: 50rem;
@@ -27987,11 +27480,11 @@ describe("custom utilities", () => {
           border-radius: var(--radius-xl, 16px);
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom utilities are sorted by used properties", async () => {
-		const { build } = await compile(css`
+  test('custom utilities are sorted by used properties', async () => {
+    const { build } = await compile(css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -27999,15 +27492,10 @@ describe("custom utilities", () => {
       @utility push-left {
         right: 100%;
       }
-    `);
-		const compiled = build([
-			"top-[100px]",
-			"push-left",
-			"right-[100px]",
-			"bottom-[100px]",
-		]);
+    `)
+    const compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
 
-		expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
       "@layer utilities {
         .top-\\[100px\\] {
           top: 100px;
@@ -28025,39 +27513,39 @@ describe("custom utilities", () => {
           bottom: 100px;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom utilities must use a valid name definitions", async () => {
-		await expect(() =>
-			compile(css`
+  test('custom utilities must use a valid name definitions', async () => {
+    await expect(() =>
+      compile(css`
         @utility push-| {
           right: 100%;
         }
       `),
-		).rejects.toThrowError(/should be alphanumeric/);
+    ).rejects.toThrowError(/should be alphanumeric/)
 
-		await expect(() =>
-			compile(css`
+    await expect(() =>
+      compile(css`
         @utility ~push {
           right: 100%;
         }
       `),
-		).rejects.toThrowError(/should be alphanumeric/);
+    ).rejects.toThrowError(/should be alphanumeric/)
 
-		await expect(() =>
-			compile(css`
+    await expect(() =>
+      compile(css`
         @utility @push {
           right: 100%;
         }
       `),
-		).rejects.toThrowError(/should be alphanumeric/);
-	});
+    ).rejects.toThrowError(/should be alphanumeric/)
+  })
 
-	test("custom utilities work with `@apply`", async () => {
-		expect(
-			await compileCss(
-				css`
+  test('custom utilities work with `@apply`', async () => {
+    expect(
+      await compileCss(
+        css`
           @utility foo {
             @apply flex flex-col underline;
           }
@@ -28072,9 +27560,9 @@ describe("custom utilities", () => {
 
           @tailwind utilities;
         `,
-				["foo", "hover:foo", "bar"],
-			),
-		).toMatchInlineSnapshot(`
+        ['foo', 'hover:foo', 'bar'],
+      ),
+    ).toMatchInlineSnapshot(`
       ".bar {
         z-index: 10;
       }
@@ -28096,13 +27584,13 @@ describe("custom utilities", () => {
           display: flex;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("referencing custom utilities in custom utilities via `@apply` should work", async () => {
-		expect(
-			await compileCss(
-				css`
+  test('referencing custom utilities in custom utilities via `@apply` should work', async () => {
+    expect(
+      await compileCss(
+        css`
           @utility foo {
             @apply flex flex-col underline;
           }
@@ -28113,9 +27601,9 @@ describe("custom utilities", () => {
 
           @tailwind utilities;
         `,
-				["bar"],
-			),
-		).toMatchInlineSnapshot(`
+        ['bar'],
+      ),
+    ).toMatchInlineSnapshot(`
       ".bar {
         flex-wrap: wrap;
       }
@@ -28127,13 +27615,13 @@ describe("custom utilities", () => {
           display: flex;
         }
       }"
-    `);
-	});
+    `)
+  })
 
-	test("custom utilities with `@apply` causing circular dependencies should error", async () => {
-		await expect(() =>
-			compileCss(
-				css`
+  test('custom utilities with `@apply` causing circular dependencies should error', async () => {
+    await expect(() =>
+      compileCss(
+        css`
           @utility foo {
             @apply flex-wrap hover:bar;
           }
@@ -28144,17 +27632,17 @@ describe("custom utilities", () => {
 
           @tailwind utilities;
         `,
-				["foo", "bar"],
-			),
-		).rejects.toThrowErrorMatchingInlineSnapshot(
-			`[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
-		);
-	});
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
+    )
+  })
 
-	test("custom utilities with `@apply` causing circular dependencies should error (deeply nesting)", async () => {
-		await expect(() =>
-			compileCss(
-				css`
+  test('custom utilities with `@apply` causing circular dependencies should error (deeply nesting)', async () => {
+    await expect(() =>
+      compileCss(
+        css`
           @utility foo {
             .bar {
               .baz {
@@ -28175,17 +27663,17 @@ describe("custom utilities", () => {
 
           @tailwind utilities;
         `,
-				["foo", "bar"],
-			),
-		).rejects.toThrowErrorMatchingInlineSnapshot(
-			`[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
-		);
-	});
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
+    )
+  })
 
-	test("custom utilities with `@apply` causing circular dependencies should error (multiple levels)", async () => {
-		await expect(() =>
-			compileCss(
-				css`
+  test('custom utilities with `@apply` causing circular dependencies should error (multiple levels)', async () => {
+    await expect(() =>
+      compileCss(
+        css`
           body {
             @apply foo;
           }
@@ -28204,16 +27692,16 @@ describe("custom utilities", () => {
 
           @tailwind utilities;
         `,
-				["foo", "bar"],
-			),
-		).rejects.toThrowErrorMatchingInlineSnapshot(
-			`[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
-		);
-	});
+        ['foo', 'bar'],
+      ),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
+    )
+  })
 
-	describe("functional utilities", () => {
-		test("resolving values from `@theme`", async () => {
-			const input = css`
+  describe('functional utilities', () => {
+    test('resolving values from `@theme`', async () => {
+      const input = css`
         @theme reference {
           --tab-size-1: 1;
           --tab-size-2: 2;
@@ -28226,11 +27714,10 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["tab-1", "tab-2", "tab-4", "tab-github"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
           ".tab-1 {
             tab-size: var(--tab-size-1, 1);
           }
@@ -28246,16 +27733,16 @@ describe("custom utilities", () => {
           .tab-github {
             tab-size: var(--tab-size-github, 8);
           }"
-        `);
-			expect(await compileCss(input, ["tab-3", "tab-gitlab"])).toEqual("");
-		});
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
 
-		test("resolving values from `@theme`, with `--tab-size-*` syntax", async () => {
-			const input =
-				// Explicitly not using the css tagged template literal so that
-				// Prettier doesn't format the `value(--tab-size-*)` as
-				// `value(--tab-size- *)`
-				`
+    test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
+      const input =
+        // Explicitly not using the css tagged template literal so that
+        // Prettier doesn't format the `value(--tab-size-*)` as
+        // `value(--tab-size- *)`
+        `
           @theme reference {
             --tab-size-1: 1;
             --tab-size-2: 2;
@@ -28268,11 +27755,10 @@ describe("custom utilities", () => {
           }
 
           @tailwind utilities;
-        `;
+        `
 
-			expect(
-				await compileCss(input, ["tab-1", "tab-2", "tab-4", "tab-github"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
           ".tab-1 {
             tab-size: var(--tab-size-1, 1);
           }
@@ -28288,12 +27774,12 @@ describe("custom utilities", () => {
           .tab-github {
             tab-size: var(--tab-size-github, 8);
           }"
-        `);
-			expect(await compileCss(input, ["tab-3", "tab-gitlab"])).toEqual("");
-		});
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
 
-		test("resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)", async () => {
-			const input = css`
+    test('resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)', async () => {
+      const input = css`
         @theme reference {
           --tab-size-1: 1;
           --tab-size-2: 2;
@@ -28306,11 +27792,10 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["tab-1", "tab-2", "tab-4", "tab-github"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+        .toMatchInlineSnapshot(`
           ".tab-1 {
             tab-size: var(--tab-size-1, 1);
           }
@@ -28326,22 +27811,20 @@ describe("custom utilities", () => {
           .tab-github {
             tab-size: var(--tab-size-github, 8);
           }"
-        `);
-			expect(await compileCss(input, ["tab-3", "tab-gitlab"])).toEqual("");
-		});
+        `)
+      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
 
-		test("resolving bare values", async () => {
-			const input = css`
+    test('resolving bare values', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value(integer);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["tab-1", "tab-76", "tab-971"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-1', 'tab-76', 'tab-971'])).toMatchInlineSnapshot(`
         ".tab-1 {
           tab-size: 1;
         }
@@ -28353,24 +27836,22 @@ describe("custom utilities", () => {
         .tab-971 {
           tab-size: 971;
         }"
-      `);
-			expect(await compileCss(input, ["tab-foo"])).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['tab-foo'])).toEqual('')
+    })
 
-		test("bare values with unsupported data types should result in a warning", async () => {
-			const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
-			const input = css`
+    test('bare values with unsupported data types should result in a warning', async () => {
+      const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const input = css`
         @utility paint-* {
           paint: --value([color], color);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["paint-#0088cc", "paint-red"]),
-			).toMatchInlineSnapshot(`""`);
-			expect(spy.mock.calls).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['paint-#0088cc', 'paint-red'])).toMatchInlineSnapshot(`""`)
+      expect(spy.mock.calls).toMatchInlineSnapshot(`
         [
           [
             "Unsupported bare value data type: "color".
@@ -28384,28 +27865,28 @@ describe("custom utilities", () => {
         \`\`\`",
           ],
         ]
-      `);
-		});
+      `)
+    })
 
-		test("resolve literal values", async () => {
-			const input = css`
+    test('resolve literal values', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value('revert');
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["tab-revert"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-revert'])).toMatchInlineSnapshot(`
         ".tab-revert {
           tab-size: revert;
         }"
-      `);
-			expect(await compileCss(input, ["tab-initial"])).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['tab-initial'])).toEqual('')
+    })
 
-		test("resolving bare values with constraints for integer, percentage, and ratio", async () => {
-			const input = css`
+    test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
+      const input = css`
         @utility example-* {
           --value-as-number: --value(number);
           --value-as-percentage: --value(percentage);
@@ -28413,16 +27894,10 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"example-1",
-					"example-0.5",
-					"example-20%",
-					"example-2/3",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
+        .toMatchInlineSnapshot(`
           ".example-0\\.5 {
             --value-as-number: .5;
           }
@@ -28438,48 +27913,48 @@ describe("custom utilities", () => {
           .example-20\\% {
             --value-as-percentage: 20%;
           }"
-        `);
-			expect(
-				await compileCss(input, [
-					"example-1.23",
-					"example-12.34%",
-					"example-1.2/3",
-					"example-1/2.3",
-					"example-1.2/3.4",
-				]),
-			).toEqual("");
-		});
+        `)
+      expect(
+        await compileCss(input, [
+          'example-1.23',
+          'example-12.34%',
+          'example-1.2/3',
+          'example-1/2.3',
+          'example-1.2/3.4',
+        ]),
+      ).toEqual('')
+    })
 
-		test("resolving unsupported bare values", async () => {
-			const input = css`
+    test('resolving unsupported bare values', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value(color);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["tab-#0088cc", "tab-foo"])).toEqual("");
-		});
+      expect(await compileCss(input, ['tab-#0088cc', 'tab-foo'])).toEqual('')
+    })
 
-		test("resolving arbitrary values", async () => {
-			const input = css`
+    test('resolving arbitrary values', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value([integer]);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"tab-[1]",
-					"tab-[76]",
-					"tab-[971]",
-					"tab-[integer:var(--my-value)]",
-					"tab-(integer:my-value)",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[integer:var(--my-value)]',
+          'tab-(integer:my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".tab-\\[1\\] {
           tab-size: 1;
         }
@@ -28495,37 +27970,37 @@ describe("custom utilities", () => {
         .tab-\\[integer\\:var\\(--my-value\\)\\] {
           tab-size: var(--my-value);
         }"
-      `);
-			expect(
-				await compileCss(input, [
-					"tab-[#0088cc]",
-					"tab-[1px]",
-					"tab-[var(--my-value)]",
-					"tab-(--my-value)",
-					"tab-[color:var(--my-value)]",
-					"tab-(color:--my-value)",
-				]),
-			).toEqual("");
-		});
+      `)
+      expect(
+        await compileCss(input, [
+          'tab-[#0088cc]',
+          'tab-[1px]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+          'tab-[color:var(--my-value)]',
+          'tab-(color:--my-value)',
+        ]),
+      ).toEqual('')
+    })
 
-		test("resolving any arbitrary values", async () => {
-			const input = css`
+    test('resolving any arbitrary values', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value([*]);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"tab-[1]",
-					"tab-[76]",
-					"tab-[971]",
-					"tab-[var(--my-value)]",
-					"tab-(--my-value)",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".tab-\\(--my-value\\) {
           tab-size: var(--my-value);
         }
@@ -28545,27 +28020,27 @@ describe("custom utilities", () => {
         .tab-\\[var\\(--my-value\\)\\] {
           tab-size: var(--my-value);
         }"
-      `);
-		});
+      `)
+    })
 
-		test("resolving any arbitrary values (without space)", async () => {
-			const input = `
+    test('resolving any arbitrary values (without space)', async () => {
+      const input = `
         @utility tab-* {
           tab-size: --value([*]);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"tab-[1]",
-					"tab-[76]",
-					"tab-[971]",
-					"tab-[var(--my-value)]",
-					"tab-(--my-value)",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".tab-\\(--my-value\\) {
           tab-size: var(--my-value);
         }
@@ -28585,27 +28060,27 @@ describe("custom utilities", () => {
         .tab-\\[var\\(--my-value\\)\\] {
           tab-size: var(--my-value);
         }"
-      `);
-		});
+      `)
+    })
 
-		test("resolving any arbitrary values (with escaped `*`)", async () => {
-			const input = css`
+    test('resolving any arbitrary values (with escaped `*`)', async () => {
+      const input = css`
         @utility tab-* {
           tab-size: --value([\*]);
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"tab-[1]",
-					"tab-[76]",
-					"tab-[971]",
-					"tab-[var(--my-value)]",
-					"tab-(--my-value)",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'tab-[1]',
+          'tab-[76]',
+          'tab-[971]',
+          'tab-[var(--my-value)]',
+          'tab-(--my-value)',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".tab-\\(--my-value\\) {
           tab-size: var(--my-value);
         }
@@ -28625,11 +28100,11 @@ describe("custom utilities", () => {
         .tab-\\[var\\(--my-value\\)\\] {
           tab-size: var(--my-value);
         }"
-      `);
-		});
+      `)
+    })
 
-		test("resolving theme, bare and arbitrary values all at once", async () => {
-			const input = css`
+    test('resolving theme, bare and arbitrary values all at once', async () => {
+      const input = css`
         @theme reference {
           --tab-size-github: 8;
         }
@@ -28641,11 +28116,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["tab-github", "tab-76", "tab-[123]"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['tab-github', 'tab-76', 'tab-[123]'])).toMatchInlineSnapshot(`
         ".tab-76 {
           tab-size: 76;
         }
@@ -28657,14 +28130,12 @@ describe("custom utilities", () => {
         .tab-github {
           tab-size: var(--tab-size-github, 8);
         }"
-      `);
-			expect(await compileCss(input, ["tab-[#0088cc]", "tab-[1px]"])).toEqual(
-				"",
-			);
-		});
+      `)
+      expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
+    })
 
-		test("in combination with calc to produce different data types of values", async () => {
-			const input = css`
+    test('in combination with calc to produce different data types of values', async () => {
+      const input = css`
         @theme reference {
           --example-full: 100%;
         }
@@ -28676,15 +28147,10 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"example-full",
-					"example-12",
-					"example-[20%]",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-full', 'example-12', 'example-[20%]']))
+        .toMatchInlineSnapshot(`
           ".example-12 {
             --value: calc(12 * 1%);
           }
@@ -28696,14 +28162,12 @@ describe("custom utilities", () => {
           .example-full {
             --value: var(--example-full, 100%);
           }"
-        `);
-			expect(
-				await compileCss(input, ["example-half", "example-[#0088cc]"]),
-			).toEqual("");
-		});
+        `)
+      expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
+    })
 
-		test("shorthand if resulting values are of the same type", async () => {
-			const input = css`
+    test('shorthand if resulting values are of the same type', async () => {
+      const input = css`
         @theme reference {
           --tab-size-github: 8;
           --example-full: 100%;
@@ -28719,18 +28183,18 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"tab-github",
-					"tab-76",
-					"tab-[123]",
-					"example-37",
-					"example-[50%]",
-					"example-full",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'tab-github',
+          'tab-76',
+          'tab-[123]',
+          'example-37',
+          'example-[50%]',
+          'example-full',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".example-37 {
           --value: calc(37 * 1%);
         }
@@ -28754,19 +28218,14 @@ describe("custom utilities", () => {
         .tab-github {
           tab-size: var(--tab-size-github, 8);
         }"
-      `);
-			expect(
-				await compileCss(input, [
-					"tab-[#0088cc]",
-					"tab-[1px]",
-					"example-foo",
-					"example-[13px]",
-				]),
-			).toEqual("");
-		});
+      `)
+      expect(
+        await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]', 'example-foo', 'example-[13px]']),
+      ).toEqual('')
+    })
 
-		test("negative values", async () => {
-			const input = css`
+    test('negative values', async () => {
+      const input = css`
         @theme reference {
           --example-full: 100%;
         }
@@ -28780,18 +28239,18 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"example-full",
-					"-example-full",
-					"example-[10px]",
-					"-example-[10px]",
-					"example-[20%]",
-					"-example-[20%]",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'example-full',
+          '-example-full',
+          'example-[10px]',
+          '-example-[10px]',
+          'example-[20%]',
+          '-example-[20%]',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".-example-\\[10px\\] {
           --value: calc(10px * -1);
         }
@@ -28815,28 +28274,28 @@ describe("custom utilities", () => {
         .example-full {
           --value: var(--example-full, 100%);
         }"
-      `);
-			expect(await compileCss(input, ["example-10"])).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['example-10'])).toEqual('')
+    })
 
-		test("using the same value multiple times", async () => {
-			const input = css`
+    test('using the same value multiple times', async () => {
+      const input = css`
         @utility example-* {
           --value: calc(var(--spacing) * --value(number)) calc(var(--spacing) * --value(number));
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["example-12"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
         ".example-12 {
           --value: calc(var(--spacing) * 12) calc(var(--spacing) * 12);
         }"
-      `);
-		});
+      `)
+    })
 
-		test("using `--spacing(…)` shorthand", async () => {
-			const input = css`
+    test('using `--spacing(…)` shorthand', async () => {
+      const input = css`
         @theme {
           --spacing: 4px;
         }
@@ -28846,9 +28305,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["example-12"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
         ":root, :host {
           --spacing: 4px;
         }
@@ -28856,11 +28315,11 @@ describe("custom utilities", () => {
         .example-12 {
           margin: calc(var(--spacing) * 12);
         }"
-      `);
-		});
+      `)
+    })
 
-		test("using `--spacing(…)` shorthand (inline theme)", async () => {
-			const input = css`
+    test('using `--spacing(…)` shorthand (inline theme)', async () => {
+      const input = css`
         @theme inline reference {
           --spacing: 4px;
         }
@@ -28870,17 +28329,17 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["example-12"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
         ".example-12 {
           margin: 48px;
         }"
-      `);
-		});
+      `)
+    })
 
-		test("modifiers", async () => {
-			const input = css`
+    test('modifiers', async () => {
+      const input = css`
         @theme reference {
           --value-sm: 14px;
           --modifier-7: 28px;
@@ -28894,18 +28353,18 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"example-sm",
-					"example-sm/7",
-					"example-[12px]",
-					"example-[12px]/[16px]",
-					"example-sm/literal",
-					"example-sm/literal-2",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(input, [
+          'example-sm',
+          'example-sm/7',
+          'example-[12px]',
+          'example-[12px]/[16px]',
+          'example-sm/literal',
+          'example-sm/literal-2',
+        ]),
+      ).toMatchInlineSnapshot(`
         ".example-\\[12px\\]\\/\\[16px\\] {
           --value: 12px;
           --modifier: 16px;
@@ -28935,19 +28394,19 @@ describe("custom utilities", () => {
         .example-sm {
           --value: var(--value-sm, 14px);
         }"
-      `);
-			expect(
-				await compileCss(input, [
-					"example-foo",
-					"example-foo/[12px]",
-					"example-foo/12",
-					"example-sm/unknown-literal",
-				]),
-			).toEqual("");
-		});
+      `)
+      expect(
+        await compileCss(input, [
+          'example-foo',
+          'example-foo/[12px]',
+          'example-foo/12',
+          'example-sm/unknown-literal',
+        ]),
+      ).toEqual('')
+    })
 
-		test("fractions", async () => {
-			const input = css`
+    test('fractions', async () => {
+      const input = css`
         @theme reference {
           --example-video: 16 / 9;
         }
@@ -28957,15 +28416,10 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, [
-					"example-video",
-					"example-1/1",
-					"example-[7/9]",
-				]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']))
+        .toMatchInlineSnapshot(`
           ".example-1\\/1 {
             --value: 1 / 1;
           }
@@ -28977,12 +28431,12 @@ describe("custom utilities", () => {
           .example-video {
             --value: var(--example-video, 16 / 9);
           }"
-        `);
-			expect(await compileCss(input, ["example-foo"])).toEqual("");
-		});
+        `)
+      expect(await compileCss(input, ['example-foo'])).toEqual('')
+    })
 
-		test("resolve theme values with sub-namespace (--text- * --line-height)", async () => {
-			const input = css`
+    test('resolve theme values with sub-namespace (--text- * --line-height)', async () => {
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -28995,11 +28449,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["example-xs", "example-xs/6"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
@@ -29010,14 +28462,12 @@ describe("custom utilities", () => {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
-      `);
-			expect(
-				await compileCss(input, ["example-foo", "example-xs/foo"]),
-			).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
 
-		test("resolve theme values with sub-namespace (--text-\\* --line-height)", async () => {
-			const input = css`
+    test('resolve theme values with sub-namespace (--text-\\* --line-height)', async () => {
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -29030,11 +28480,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["example-xs", "example-xs/6"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
@@ -29045,14 +28493,12 @@ describe("custom utilities", () => {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
-      `);
-			expect(
-				await compileCss(input, ["example-foo", "example-xs/foo"]),
-			).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
 
-		test("resolve theme values with sub-namespace (--value(--text --line-height))", async () => {
-			const input = css`
+    test('resolve theme values with sub-namespace (--value(--text --line-height))', async () => {
+      const input = css`
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -29065,11 +28511,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["example-xs", "example-xs/6"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
@@ -29080,14 +28524,12 @@ describe("custom utilities", () => {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
-      `);
-			expect(
-				await compileCss(input, ["example-foo", "example-xs/foo"]),
-			).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
 
-		test("resolve theme values with sub-namespace (--value(--text-*--line-height))", async () => {
-			const input = `
+    test('resolve theme values with sub-namespace (--value(--text-*--line-height))', async () => {
+      const input = `
         @theme reference {
           --text-xs: 0.75rem;
           --text-xs--line-height: calc(1 / 0.75);
@@ -29100,11 +28542,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(
-				await compileCss(input, ["example-xs", "example-xs/6"]),
-			).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
         ".example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
@@ -29115,14 +28555,12 @@ describe("custom utilities", () => {
           font-size: var(--text-xs, .75rem);
           line-height: var(--text-xs--line-height, calc(1 / .75));
         }"
-      `);
-			expect(
-				await compileCss(input, ["example-foo", "example-xs/foo"]),
-			).toEqual("");
-		});
+      `)
+      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+    })
 
-		test("variables used in `@utility` will not be emitted if the utility is not used", async () => {
-			const input = css`
+    test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
+      const input = css`
         @theme {
           --example-foo: red;
           --color-red-500: #f00;
@@ -29134,17 +28572,17 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["flex"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
         ".flex {
           display: flex;
         }"
-      `);
-		});
+      `)
+    })
 
-		test("variables used in `@utility` will be emitted if the utility is used", async () => {
-			const input = css`
+    test('variables used in `@utility` will be emitted if the utility is used', async () => {
+      const input = css`
         @theme {
           --example-foo: red;
           --color-red-500: #f00;
@@ -29156,9 +28594,9 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["example-foo"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
         ":root, :host {
           --example-foo: red;
           --color-red-500: red;
@@ -29168,18 +28606,18 @@ describe("custom utilities", () => {
           color: var(--color-red-500);
           background-color: var(--example-foo);
         }"
-      `);
-		});
+      `)
+    })
 
-		// This originated from a bug. Essentially in the second `--mask-right` we
-		// call both `--modifier(…)` and `--value(…)`. The moment we processed
-		// `--modifier(…)` it deleted the `--mask-right` declaration (expected
-		// behavior). But we didn't properly stop so the `--value(…)` was still
-		// processed and also tried to remove the `--mask-right` declaration.
-		//
-		// This test now ensures that we only remove/replace a declaration once.
-		test("declaration nodes are only replaced/removed once", async () => {
-			const input = css`
+    // This originated from a bug. Essentially in the second `--mask-right` we
+    // call both `--modifier(…)` and `--value(…)`. The moment we processed
+    // `--modifier(…)` it deleted the `--mask-right` declaration (expected
+    // behavior). But we didn't properly stop so the `--value(…)` was still
+    // processed and also tried to remove the `--mask-right` declaration.
+    //
+    // This test now ensures that we only remove/replace a declaration once.
+    test('declaration nodes are only replaced/removed once', async () => {
+      const input = css`
         @utility mask-r-* {
           --mask-right: linear-gradient(to left, transparent, black --value(percentage));
           --mask-right: linear-gradient(
@@ -29191,21 +28629,21 @@ describe("custom utilities", () => {
         }
 
         @tailwind utilities;
-      `;
+      `
 
-			expect(await compileCss(input, ["mask-r-20%"])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['mask-r-20%'])).toMatchInlineSnapshot(`
         ".mask-r-20\\% {
           --mask-right: linear-gradient(to left, transparent, black 20%);
           -webkit-mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
           -webkit-mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
           mask-image: var(--mask-linear), var(--mask-radial), var(--mask-conic);
         }"
-      `);
-		});
-	});
+      `)
+    })
+  })
 
-	test("resolve value based on `@theme`", async () => {
-		const input = css`
+  test('resolve value based on `@theme`', async () => {
+    const input = css`
       @theme {
         --tab-size-github: 8;
       }
@@ -29215,9 +28653,9 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["tab-github"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ":root, :host {
         --tab-size-github: 8;
       }
@@ -29225,11 +28663,11 @@ describe("custom utilities", () => {
       .tab-github {
         tab-size: var(--tab-size-github);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("resolve value based on `@theme reference`", async () => {
-		const input = css`
+  test('resolve value based on `@theme reference`', async () => {
+    const input = css`
       @theme reference {
         --tab-size-github: 8;
       }
@@ -29239,17 +28677,17 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["tab-github"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ".tab-github {
         tab-size: var(--tab-size-github, 8);
       }"
-    `);
-	});
+    `)
+  })
 
-	test("resolve value based on `@theme inline`", async () => {
-		const input = css`
+  test('resolve value based on `@theme inline`', async () => {
+    const input = css`
       @theme inline {
         --tab-size-github: 8;
       }
@@ -29259,17 +28697,17 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["tab-github"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ".tab-github {
         tab-size: 8;
       }"
-    `);
-	});
+    `)
+  })
 
-	test("resolve value based on `@theme inline reference`", async () => {
-		const input = css`
+  test('resolve value based on `@theme inline reference`', async () => {
+    const input = css`
       @theme inline reference {
         --tab-size-github: 8;
       }
@@ -29279,17 +28717,17 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["tab-github"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
       ".tab-github {
         tab-size: 8;
       }"
-    `);
-	});
+    `)
+  })
 
-	test("sub namespaces can live in different @theme blocks (1)", async () => {
-		const input = `
+  test('sub namespaces can live in different @theme blocks (1)', async () => {
+    const input = `
       @theme reference {
         --text-xs: 0.75rem;
       }
@@ -29304,18 +28742,18 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["example-xs"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
         font-size: var(--text-xs, .75rem);
         line-height: 1.33333;
       }"
-    `);
-	});
+    `)
+  })
 
-	test("sub namespaces can live in different @theme blocks (2)", async () => {
-		const input = `
+  test('sub namespaces can live in different @theme blocks (2)', async () => {
+    const input = `
       @theme inline reference {
         --text-xs: 0.75rem;
       }
@@ -29330,13 +28768,13 @@ describe("custom utilities", () => {
       }
 
       @tailwind utilities;
-    `;
+    `
 
-		expect(await compileCss(input, ["example-xs"])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
       ".example-xs {
         font-size: .75rem;
         line-height: var(--text-xs--line-height, calc(1 / .75));
       }"
-    `);
-	});
-});
+    `)
+  })
+})
