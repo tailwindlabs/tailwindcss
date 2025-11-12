@@ -197,6 +197,10 @@ export function applyVariant(
   // not hitting this code path.
   let { applyFn } = variants.get(variant.root)!
 
+
+
+  let originalSelector = node.kind === 'rule' ? (node as StyleRule).selector : undefined
+
   if (variant.kind === 'compound') {
     // Some variants traverse the AST to mutate the nodes. E.g.: `group-*` wants
     // to prefix every selector of the variant it's compounding with `.group`.
@@ -255,6 +259,47 @@ export function applyVariant(
   // All other variants
   let result = applyFn(node, variant)
   if (result === null) return null
+
+
+
+
+
+
+  if (result && typeof result === 'object' && 'kind' in (result as any)) {
+    const newNode = result as AstNode
+    if (newNode.kind === 'at-rule' && originalSelector) {
+      let replaced = false
+      walk(newNode.nodes, (child) => {
+        if (child.kind === 'rule' && child.selector === '&') {
+          child.selector = originalSelector!
+          replaced = true
+        }
+      })
+
+      if (!replaced) {
+        newNode.nodes = [rule(originalSelector!, newNode.nodes)]
+      }
+    }
+
+
+    if (newNode.kind === 'at-rule') {
+      ;(node as any).kind = 'at-rule'
+      ;(node as any).name = newNode.name
+      ;(node as any).params = newNode.params
+      ;(node as any).nodes = newNode.nodes
+
+      delete (node as any).selector
+    } else if (newNode.kind === 'rule') {
+      ;(node as any).kind = 'rule'
+      ;(node as any).selector = newNode.selector
+      ;(node as any).nodes = newNode.nodes
+      delete (node as any).name
+      delete (node as any).params
+    } else {
+
+      ;(node as any).nodes = (newNode as any).nodes ?? []
+    }
+  }
 }
 
 function isFallbackUtility(utility: Utility) {
