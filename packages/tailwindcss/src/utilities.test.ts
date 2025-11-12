@@ -11064,12 +11064,33 @@ test('corner', async () => {
     ['corner', 'corner-bevel', 'corner-scoop', 'corner-square', 'corner-[superellipse(0.6)]'],
   )
 
-  expect(output).toMatch(/\.corner \{\s+corner-shape: var\(--corner-shape\);\s+\}/)
-  expect(output).toMatch(/\.corner-bevel \{\s+corner-shape: var\(--corner-shape-bevel\);\s+\}/)
-  expect(output).toMatch(/\.corner-scoop \{\s+corner-shape: var\(--corner-shape-scoop\);\s+\}/)
-  expect(output).toMatch(/\.corner-square \{\s+corner-shape: square;\s+\}/)
-  expect(output).toContain('.corner-\\[superellipse\\(0\\.6\\)\\] {')
-  expect(output).toContain('corner-shape: superellipse(.6);')
+  expect(output).toMatchInlineSnapshot(`
+    ":root, :host {
+      --corner-shape: round;
+      --corner-shape-bevel: bevel;
+      --corner-shape-scoop: scoop;
+    }
+
+    .corner {
+      corner-shape: var(--corner-shape);
+    }
+
+    .corner-\\[superellipse\\(0\\.6\\)\\] {
+      corner-shape: superellipse(.6);
+    }
+
+    .corner-bevel {
+      corner-shape: var(--corner-shape-bevel);
+    }
+
+    .corner-scoop {
+      corner-shape: var(--corner-shape-scoop);
+    }
+
+    .corner-square {
+      corner-shape: square;
+    }"
+  `)
 
   expect(
     await run([
