@@ -34,10 +34,6 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
           ...theme('radius', {}),
         }),
 
-        cornerShape: ({ theme }) => ({
-          ...theme('corner-shape', {}),
-        }),
-
         screens: ({ theme }) => ({
           ...theme('breakpoint', {}),
         }),

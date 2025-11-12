@@ -35,10 +35,6 @@ test('config values can be merged into the theme', () => {
             sm: '0.33rem',
           },
 
-          cornerShape: {
-            scoop: 'superellipse(0.6)',
-          },
-
           animation: {
             blink: 'blink 1s linear infinite',
           },
@@ -97,7 +93,6 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('normal', ['--shadow'])).toEqual('0 1px 3px black')
   expect(theme.resolve('retro', ['--aspect'])).toEqual('4 / 3')
   expect(theme.resolve('sm', ['--radius'])).toEqual('0.33rem')
-  expect(theme.resolve('scoop', ['--corner-shape'])).toEqual('superellipse(0.6)')
   expect(theme.resolve('blink', ['--animate'])).toEqual('blink 1s linear infinite')
   expect(theme.resolve('red-500', ['--color'])).toEqual('red')
   expect(theme.resolve('sans', ['--font'])).toEqual('Inter, system-ui, sans-serif')
