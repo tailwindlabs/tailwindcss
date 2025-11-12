@@ -2201,7 +2201,7 @@ export function createUtilities(theme: Theme) {
 
   {
     // corner-shape
-    const shapes = ['round', 'square', 'bevel', 'scoop', 'notch', 'squircle'] as const
+    let shapes = ['round', 'square', 'bevel', 'scoop', 'notch', 'squircle']
 
     for (let [root, properties] of [
       ['corner', ['corner-shape']],
@@ -2220,14 +2220,12 @@ export function createUtilities(theme: Theme) {
       ['corner-br', ['corner-bottom-right-shape']],
       ['corner-bl', ['corner-bottom-left-shape']],
     ] as const) {
-      let staticValues: Record<string, AstNode[]> = Object.fromEntries(
-        shapes.map((shape) => [shape, properties.map((property) => decl(property, shape))]),
-      )
-
       functionalUtility(root, {
         themeKeys: ['--corner-shape'],
-        staticValues,
         handle: (value) => properties.map((property) => decl(property, value)),
+        staticValues: Object.fromEntries(
+          shapes.map((shape) => [shape, properties.map((property) => decl(property, shape))]),
+        ),
       })
     }
   }
