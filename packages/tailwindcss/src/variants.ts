@@ -325,7 +325,8 @@ export function compoundsForSelectors(selectors: string[]) {
       if (
         !sel.startsWith('@media') &&
         !sel.startsWith('@supports') &&
-        !sel.startsWith('@container')
+        !sel.startsWith('@container') &&
+        !sel.startsWith('@scope')
       ) {
         return Compounds.Never
       }

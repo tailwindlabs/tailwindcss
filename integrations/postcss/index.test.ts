@@ -895,3 +895,58 @@ test(
     expect(content).toContain(candidate`content-['project-c/src/index.html']`)
   },
 )
+
+test(
+  'custom variants with @scope',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'index.html': html`
+        <div class="foo">
+          <div class="a:text-red-500"></div>
+        </div>
+      `,
+      'index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @variant a (&) {
+          @scope (.foo) {
+            @slot;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, root }) => {
+    await exec('pnpm postcss ./index.css --output dist/out.css', { cwd: root })
+
+    await fs.expectFileToContain('dist/out.css', [
+      css`
+        @scope (.foo) {
+          .a\\:text-red-500 {
+            --tw-text-opacity: 1;
+            color: rgb(239 68 68 / var(--tw-text-opacity));
+          }
+        }
+      `,
+    ])
+  },
+)
