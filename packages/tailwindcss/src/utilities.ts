@@ -2201,7 +2201,7 @@ export function createUtilities(theme: Theme) {
 
   {
     // corner-shape
-    let shapes = ['round', 'square', 'bevel', 'scoop', 'notch', 'squircle']
+    let shapes = ['round', 'scoop', 'bevel', 'notch', 'square', 'squircle']
 
     for (let [root, properties] of [
       ['corner', ['corner-shape']],
