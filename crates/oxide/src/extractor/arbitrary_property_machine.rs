@@ -231,8 +231,8 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                     return self.restart()
                 }
 
-                // An `!` at the top-level must be followed by "important" *and* be at the end
-                // otherwise its invalid
+                // An `!` at the top-level is invalid. We don't allow things to end with
+                // `!important` either as we have dedicated syntax for this.
                 Class::Exclamation if self.bracket_stack.is_empty() => {
                     return self.restart();
                 }
