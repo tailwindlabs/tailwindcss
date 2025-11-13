@@ -234,12 +234,6 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 // An `!` at the top-level must be followed by "important" *and* be at the end
                 // otherwise its invalid
                 Class::Exclamation if self.bracket_stack.is_empty() => {
-                    if cursor.input[cursor.pos..].starts_with(b"!important]") {
-                        cursor.advance_by(10);
-
-                        return self.done(self.start_pos, cursor);
-                    }
-
                     return self.restart();
                 }
 
@@ -386,8 +380,7 @@ mod tests {
             ),
             // A property containing `!` at the top-level is invalid
             ("[color:red!]", vec![]),
-            // Unless its part of `!important at the end
-            ("[color:red!important]", vec!["[color:red!important]"]),
+            ("[color:red!important]", vec![]),
         ] {
             for wrapper in [
                 // No wrapper
