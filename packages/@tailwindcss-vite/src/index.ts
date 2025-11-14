@@ -134,7 +134,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         filter: {
           id: {
             exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
-            include: [/css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+            include: [/\.css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
           },
         },
         async handler(src, id) {
