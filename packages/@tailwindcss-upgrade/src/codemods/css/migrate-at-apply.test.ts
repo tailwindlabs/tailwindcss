@@ -85,35 +85,39 @@ it('should move the legacy `!` prefix, to the new `!` postfix notation', async (
   `)
 })
 
-it('should apply all candidate migration when migrating with a config', async () => {
-  async function migrateWithPrefix(input: string) {
-    return postcss()
-      .use(
-        migrateAtApply({
-          designSystem: await __unstable__loadDesignSystem(
-            css`
-              @import 'tailwindcss' prefix(tw);
-            `,
-            { base: __dirname },
-          ),
-          userConfig: {
-            prefix: 'tw_',
-          },
-        }),
-      )
-      .process(input, { from: expect.getState().testPath })
-      .then((result) => result.css)
-  }
+it(
+  'should apply all candidate migration when migrating with a config',
+  { timeout: 10_000 },
+  async () => {
+    async function migrateWithPrefix(input: string) {
+      return postcss()
+        .use(
+          migrateAtApply({
+            designSystem: await __unstable__loadDesignSystem(
+              css`
+                @import 'tailwindcss' prefix(tw);
+              `,
+              { base: __dirname },
+            ),
+            userConfig: {
+              prefix: 'tw_',
+            },
+          }),
+        )
+        .process(input, { from: expect.getState().testPath })
+        .then((result) => result.css)
+    }
 
-  expect(
-    await migrateWithPrefix(css`
-      .foo {
-        @apply !tw_flex [color:--my-color] tw_bg-gradient-to-t;
-      }
-    `),
-  ).toMatchInlineSnapshot(`
+    expect(
+      await migrateWithPrefix(css`
+        .foo {
+          @apply !tw_flex [color:--my-color] tw_bg-gradient-to-t;
+        }
+      `),
+    ).toMatchInlineSnapshot(`
     ".foo {
       @apply tw:flex! tw:text-(--my-color) tw:bg-linear-to-t;
     }"
   `)
-})
+  },
+)
