@@ -1103,3 +1103,63 @@ test(
     expect(content).toContain('display: flex;')
   },
 )
+
+test(
+  `the plugin works when using the environment API`,
+  {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          plugins: [tailwindcss()],
+          builder: {},
+          environments: {
+            server: {
+              build: {
+                cssMinify: false,
+                emitAssets: true,
+                rollupOptions: { input: './src/server.ts' },
+              },
+            },
+          },
+        })
+      `,
+      // Has to exist or the build fails
+      'index.html': html`
+        <div class="content-['index.html']"></div>
+      `,
+      'src/server.ts': js`
+        // Import the stylesheet in the server build
+        import a from './index.css?url'
+        console.log(a)
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ root, fs, exec, expect }) => {
+    await exec('pnpm vite build', { cwd: root })
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`content-['index.html']`])
+  },
+)
