@@ -157,7 +157,6 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
       enforce: 'pre',
-
       transform: {
         filter: {
           id: {
@@ -206,13 +205,15 @@ function getExtension(id: string) {
 }
 
 function isPotentialCssRootFile(id: string) {
-  if (id.includes('/.vite/')) return
+  if (id.includes('/.vite/')) return false
+
+  // Don't intercept special static asset resources
+  if (SPECIAL_QUERY_RE.test(id)) return false
+  if (COMMON_JS_PROXY_RE.test(id)) return false
+
   let extension = getExtension(id)
-  let isCssFile =
-    (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
-    // Don't intercept special static asset resources
-    !SPECIAL_QUERY_RE.test(id) &&
-    !COMMON_JS_PROXY_RE.test(id)
+  let isCssFile = extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)
+
   return isCssFile
 }
 
