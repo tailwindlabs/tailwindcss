@@ -29,7 +29,7 @@ export type PluginOptions = {
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
-  let roots = new Map<string, Root>()
+  let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
 
   let isSSR = false
   let shouldOptimize = true
@@ -134,6 +134,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
 
+          let roots = rootsByEnv.get(this.environment?.name ?? 'default')
           let root = roots.get(id)
           if (!root) {
             root ??= createRoot(this.environment ?? null, id)
@@ -170,6 +171,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
 
+          let roots = rootsByEnv.get(this.environment?.name ?? 'default')
           let root = roots.get(id)
           if (!root) {
             root ??= createRoot(this.environment ?? null, id)
