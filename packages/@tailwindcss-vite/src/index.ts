@@ -97,23 +97,30 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
       enforce: 'pre',
+      transform: {
+        filter: {
+          id: {
+            exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
+            include: [/css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+          },
+        },
+        async handler(src, id) {
+          if (!isPotentialCssRootFile(id)) return
 
-      async transform(src, id, options) {
-        if (!isPotentialCssRootFile(id)) return
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
 
-        using I = new Instrumentation()
-        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
+          let root = roots.get(id)
 
-        let root = roots.get(id)
+          let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+          if (!result) {
+            roots.delete(id)
+            return src
+          }
 
-        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!result) {
-          roots.delete(id)
-          return src
-        }
-
-        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
-        return result
+          DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
+          return result
+        },
       },
     },
 
@@ -123,31 +130,39 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       apply: 'build',
       enforce: 'pre',
 
-      async transform(src, id) {
-        if (!isPotentialCssRootFile(id)) return
+      transform: {
+        filter: {
+          id: {
+            exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
+            include: [/css(?:\?.*)?$/, /&lang\.css$/, INLINE_STYLE_ID_RE],
+          },
+        },
+        async handler(src, id) {
+          if (!isPotentialCssRootFile(id)) return
 
-        using I = new Instrumentation()
-        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
 
-        let root = roots.get(id)
+          let root = roots.get(id)
 
-        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!result) {
-          roots.delete(id)
-          return src
-        }
-        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
+          let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+          if (!result) {
+            roots.delete(id)
+            return src
+          }
+          DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
-        if (shouldOptimize) {
-          DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-          result = optimize(result.code, {
-            minify,
-            map: result.map,
-          })
-          DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
-        }
+          if (shouldOptimize) {
+            DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
+            result = optimize(result.code, {
+              minify,
+              map: result.map,
+            })
+            DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+          }
 
-        return result
+          return result
+        },
       },
     },
   ] satisfies Plugin[]
