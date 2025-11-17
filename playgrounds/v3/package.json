@@ -18,7 +18,7 @@
     "@types/node": "^20.14.8",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.22",
     "eslint": "^9.39.1",
     "eslint-config-next": "^15.5.6",
     "typescript": "^5.5.4"
