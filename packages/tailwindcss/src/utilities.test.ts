@@ -11172,7 +11172,7 @@ test('border-style', async () => {
 
 // All border utilities are generated in the same way
 // so we can test them all at once with a loop
-let prefixes = [
+const prefixes = [
   'border',
   'border-x',
   'border-y',
