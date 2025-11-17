@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add utilities for the experimental `corner-shape` property (e.g. `corner-scoop`, `corner-tl-bevel`)
+- _Experimental_: Add utilities for the experimental `corner-shape` property (e.g. `corner-scoop`, `corner-tl-bevel`)
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
 ## [4.1.17] - 2025-11-06
