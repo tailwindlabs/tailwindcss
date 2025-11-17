@@ -12,7 +12,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableContainerSizeUtility } from './feature-flags'
+import { enableContainerSizeUtility, enableCornerShapeUtilities } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -2199,7 +2199,7 @@ export function createUtilities(theme: Theme) {
     }
   }
 
-  {
+  if (enableCornerShapeUtilities) {
     // corner-shape
     let shapes = ['round', 'scoop', 'bevel', 'notch', 'square', 'squircle']
 
