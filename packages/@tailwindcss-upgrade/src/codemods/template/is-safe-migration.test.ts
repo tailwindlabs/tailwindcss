@@ -79,7 +79,7 @@ describe('is-safe-migration', async () => {
       'outline',
     ],
     [
-      // As the last argument, but there is techinically another `"` on the same line
+      // As the last argument, but there is technically another `"` on the same line
       `function foo({ size = "1.25rem", digit, outline }): { return "foo" }`,
       'outline',
     ],
