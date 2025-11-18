@@ -1,5 +1,4 @@
 import jitiFactory from 'jiti'
-import { transform } from 'sucrase'
 
 import { Config } from '../../types/config'
 
@@ -17,16 +16,7 @@ function lazyJiti() {
     jiti ??
     (jiti = jitiFactory(__filename, {
       interopDefault: true,
-      transform: (opts) => {
-        // Sucrase can't transform import.meta so we have to use Babel
-        if (opts.source.includes('import.meta')) {
-          return require('jiti/dist/babel.js')(opts)
-        }
-
-        return transform(opts.source, {
-          transforms: ['typescript', 'imports'],
-        })
-      },
+      transform: (opts) => require('jiti/dist/babel.js')(opts),
     }))
   )
 }

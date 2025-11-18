@@ -31,22 +31,12 @@ let localModules = {
 // Swap out the default JITI implementation with one that has the built-in modules above preloaded as "native modules"
 // NOTE: This uses a private, internal API of Tailwind CSS and is subject to change at any time
 let { useCustomJiti } = require('tailwindcss/lib/lib/load-config')
-let { transform } = require('sucrase')
 
 useCustomJiti(() =>
   require('jiti')(__filename, {
     interopDefault: true,
     nativeModules: Object.keys(localModules),
-    transform: (opts) => {
-      // Sucrase can't transform import.meta so we have to use Babel
-      if (opts.source.includes('import.meta')) {
-        return require('jiti/dist/babel.js')(opts)
-      }
-
-      return transform(opts.source, {
-        transforms: ['typescript', 'imports'],
-      })
-    },
+    transform: (opts) => require('jiti/dist/babel.js')(opts),
   })
 )
 
