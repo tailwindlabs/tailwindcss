@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process'
 
-export function isRepoDirty() {
+export function isRepoDirty(cwd?: string) {
   try {
-    let stdout = execSync('git status --porcelain', { encoding: 'utf-8' })
+    let stdout = execSync('git status --porcelain', { encoding: 'utf-8', cwd })
     return stdout.trim() !== ''
   } catch (error) {
     // If it's not a git repository we don't know if it's dirty or not. But we
