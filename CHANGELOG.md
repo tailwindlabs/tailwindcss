@@ -7,18 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Ensure validation of `source(…)` happens relative to the file it is in ([#19274](https://github.com/tailwindlabs/tailwindcss/pull/19274))
+- Include filename and line numbers in CSS parse errors ([#19282](https://github.com/tailwindlabs/tailwindcss/pull/19282))
+- Skip comments in Ruby files when checking for class names ([#19243](https://github.com/tailwindlabs/tailwindcss/pull/19243))
+- Skip over arbitrary property utilities with a top-level `!` in the value ([#19243](https://github.com/tailwindlabs/tailwindcss/pull/19243))
+- Support environment API in `@tailwindcss/vite` ([#18970](https://github.com/tailwindlabs/tailwindcss/pull/18970))
+
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
-### Changed
+## [4.1.17] - 2025-11-06
 
-- Improve canonicalization for `& > :pseudo` and `& :pseudo` arbitrary variants ([#19178](https://github.com/tailwindlabs/tailwindcss/pull/19178))
+### Fixed
+
+- Substitute `@variant` inside legacy JS APIs ([#19263](https://github.com/tailwindlabs/tailwindcss/pull/19263))
+- Prevent occasional crash on Windows when loaded into a worker thread ([#19242](https://github.com/tailwindlabs/tailwindcss/pull/19242))
+
+## [4.1.16] - 2025-10-23
 
 ### Fixed
 
 - Discard candidates with an empty data type ([#19172](https://github.com/tailwindlabs/tailwindcss/pull/19172))
 - Fix canonicalization of arbitrary variants with attribute selectors ([#19176](https://github.com/tailwindlabs/tailwindcss/pull/19176))
+- Fix invalid colors due to nested `&` ([#19184](https://github.com/tailwindlabs/tailwindcss/pull/19184))
+- Improve canonicalization for `& > :pseudo` and `& :pseudo` arbitrary variants ([#19178](https://github.com/tailwindlabs/tailwindcss/pull/19178))
 
 ## [4.1.15] - 2025-10-20
 
@@ -3870,7 +3885,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.15...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.17...HEAD
+[4.1.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.16...v4.1.17
+[4.1.16]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.15...v4.1.16
 [4.1.15]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.14...v4.1.15
 [4.1.14]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.13...v4.1.14
 [4.1.13]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.12...v4.1.13

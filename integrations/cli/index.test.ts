@@ -1,8 +1,11 @@
 import dedent from 'dedent'
 import os from 'node:os'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
 import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -1333,6 +1336,65 @@ test(
 )
 
 test(
+  'source(…) and `@source` are relative to the file they are in',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': css` @import './project-a/src/index.css'; `,
+
+      'project-a/src/index.css': css`
+        /* Run auto-content detection in ../../project-b */
+        @import 'tailwindcss/utilities' source('../../project-b');
+
+        /* Explicitly using node_modules in the @source allows git ignored folders */
+        @source '../../project-c';
+      `,
+
+      // Project A is the current folder, but we explicitly configured
+      // `source(project-b)`, therefore project-a should not be included in
+      // the output.
+      'project-a/src/index.html': html`
+        <div
+          class="content-['SHOULD-NOT-EXIST-IN-OUTPUT'] content-['project-a/src/index.html']"
+        ></div>
+      `,
+
+      // Project B is the configured `source(…)`, therefore auto source
+      // detection should include known extensions and folders in the output.
+      'project-b/src/index.html': html`
+        <div
+          class="content-['project-b/src/index.html']"
+        ></div>
+      `,
+
+      // Project C should apply auto source detection, therefore known
+      // extensions and folders should be included in the output.
+      'project-c/src/index.html': html`
+        <div
+          class="content-['project-c/src/index.html']"
+        ></div>
+      `,
+    },
+  },
+  async ({ fs, exec, spawn, root, expect }) => {
+    await exec('pnpm tailwindcss --input ./index.css --output dist/out.css', { cwd: root })
+
+    let content = await fs.dumpFiles('./dist/*.css')
+
+    expect(content).not.toContain(candidate`content-['project-a/src/index.html']`)
+    expect(content).toContain(candidate`content-['project-b/src/index.html']`)
+    expect(content).toContain(candidate`content-['project-c/src/index.html']`)
+  },
+)
+
+test(
   'auto source detection disabled',
   {
     fs: {
@@ -1901,9 +1963,7 @@ test(
           ::placeholder {
             color: currentcolor;
             @supports (color: color-mix(in lab, red, red)) {
-              & {
-                color: color-mix(in oklab, currentcolor 50%, transparent);
-              }
+              color: color-mix(in oklab, currentcolor 50%, transparent);
             }
           }
         }
@@ -1946,9 +2006,7 @@ test(
         .bg-red-500\\/50 {
           background-color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
           @supports (color: color-mix(in lab, red, red)) {
-            & {
-              background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
-            }
+            background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
           }
         }
         .shadow-md {
@@ -2043,6 +2101,33 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'CSS parse errors should include filename and line number',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'input.css': css`
+        .test {
+          color: red;
+          */
+        }
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    await expect(exec('pnpm tailwindcss --input input.css --output dist/out.css')).rejects.toThrow(
+      /CssSyntaxError: .*input.css:3:3: Invalid declaration: `\*\/`/,
+    )
   },
 )
 
