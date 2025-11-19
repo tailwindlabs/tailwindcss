@@ -169,6 +169,81 @@ export function keyPathToCssProperty(path: string[]) {
   if (path[0] === 'screens') path[0] = 'breakpoint'
   if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
 
+  if (path[0] == 'accentColor') path[0] = 'accent-color'
+  if (path[0] == 'backdropBlur') path[0] = 'backdrop-blur'
+  if (path[0] == 'backdropBrightness') path[0] = 'backdrop-brightness'
+  if (path[0] == 'backdropContrast') path[0] = 'backdrop-contrast'
+  if (path[0] == 'backdropGrayscale') path[0] = 'backdrop-grayscale'
+  if (path[0] == 'backdropHueRotate') path[0] = 'backdrop-hue-rotate'
+  if (path[0] == 'backdropInvert') path[0] = 'backdrop-invert'
+  if (path[0] == 'backdropOpacity') path[0] = 'backdrop-opacity'
+  if (path[0] == 'backdropSaturate') path[0] = 'backdrop-saturate'
+  if (path[0] == 'backdropSepia') path[0] = 'backdrop-sepia'
+  if (path[0] == 'backgroundColor') path[0] = 'background-color'
+  if (path[0] == 'backgroundOpacity') path[0] = 'background-opacity'
+  if (path[0] == 'borderColor') path[0] = 'border-color'
+  if (path[0] == 'borderOpacity') path[0] = 'border-opacity'
+  if (path[0] == 'borderSpacing') path[0] = 'border-spacing'
+  if (path[0] == 'boxShadowColor') path[0] = 'box-shadow-color'
+  if (path[0] == 'caretColor') path[0] = 'caret-color'
+  if (path[0] == 'divideColor') path[0] = 'divide-color'
+  if (path[0] == 'divideOpacity') path[0] = 'divide-opacity'
+  if (path[0] == 'divideWidth') path[0] = 'divide-width'
+  if (path[0] == 'flexBasis') path[0] = 'flex-basis'
+  if (path[0] == 'gradientColorStops') path[0] = 'gradient-color-stops'
+  if (path[0] == 'maxHeight') path[0] = 'max-height'
+  if (path[0] == 'minHeight') path[0] = 'min-height'
+  if (path[0] == 'minWidth') path[0] = 'min-width'
+  if (path[0] == 'outlineColor') path[0] = 'outline-color'
+  if (path[0] == 'placeholderColor') path[0] = 'placeholder-color'
+  if (path[0] == 'placeholderOpacity') path[0] = 'placeholder-opacity'
+  if (path[0] == 'ringColor') path[0] = 'ring-color'
+  if (path[0] == 'ringOffsetColor') path[0] = 'ring-offset-color'
+  if (path[0] == 'ringOpacity') path[0] = 'ring-opacity'
+  if (path[0] == 'scrollMargin') path[0] = 'scroll-margin'
+  if (path[0] == 'scrollPadding') path[0] = 'scroll-padding'
+  if (path[0] == 'textColor') path[0] = 'text-color'
+  if (path[0] == 'textDecorationColor') path[0] = 'text-decoration-color'
+  if (path[0] == 'textIndent') path[0] = 'text-indent'
+  if (path[0] == 'textOpacity') path[0] = 'text-opacity'
+  if (path[0] == 'backgroundImage') path[0] = 'background-image'
+  if (path[0] == 'backgroundPosition') path[0] = 'background-position'
+  if (path[0] == 'backgroundSize') path[0] = 'background-size'
+  if (path[0] == 'borderWidth') path[0] = 'border-width'
+  if (path[0] == 'dropShadow') path[0] = 'drop-shadow'
+  if (path[0] == 'flexGrow') path[0] = 'flex-grow'
+  if (path[0] == 'flexShrink') path[0] = 'flex-shrink'
+  if (path[0] == 'fontWeight') path[0] = 'font-weight'
+  if (path[0] == 'gradientColorStopPositions') path[0] = 'gradient-color-stop-positions'
+  if (path[0] == 'gridAutoColumns') path[0] = 'grid-auto-columns'
+  if (path[0] == 'gridAutoRows') path[0] = 'grid-auto-rows'
+  if (path[0] == 'gridColumn') path[0] = 'grid-column'
+  if (path[0] == 'gridColumnEnd') path[0] = 'grid-column-end'
+  if (path[0] == 'gridColumnStart') path[0] = 'grid-column-start'
+  if (path[0] == 'gridRow') path[0] = 'grid-row'
+  if (path[0] == 'gridRowEnd') path[0] = 'grid-row-end'
+  if (path[0] == 'gridRowStart') path[0] = 'grid-row-start'
+  if (path[0] == 'gridTemplateColumns') path[0] = 'grid-template-columns'
+  if (path[0] == 'gridTemplateRows') path[0] = 'grid-template-rows'
+  if (path[0] == 'hueRotate') path[0] = 'hue-rotate'
+  if (path[0] == 'listStyleType') path[0] = 'list-style-type'
+  if (path[0] == 'listStyleImage') path[0] = 'list-style-image'
+  if (path[0] == 'lineClamp') path[0] = 'line-clamp'
+  if (path[0] == 'objectPosition') path[0] = 'object-position'
+  if (path[0] == 'outlineOffset') path[0] = 'outline-offset'
+  if (path[0] == 'outlineWidth') path[0] = 'outline-width'
+  if (path[0] == 'ringOffsetWidth') path[0] = 'ring-offset-width'
+  if (path[0] == 'ringWidth') path[0] = 'ring-width'
+  if (path[0] == 'strokeWidth') path[0] = 'stroke-width'
+  if (path[0] == 'textDecorationThickness') path[0] = 'text-decoration-thickness'
+  if (path[0] == 'textUnderlineOffset') path[0] = 'text-underline-offset'
+  if (path[0] == 'transformOrigin') path[0] = 'transform-origin'
+  if (path[0] == 'transitionDelay') path[0] = 'transition-delay'
+  if (path[0] == 'transitionDuration') path[0] = 'transition-duration'
+  if (path[0] == 'transitionProperty') path[0] = 'transition-property'
+  if (path[0] == 'willChange') path[0] = 'will-change'
+  if (path[0] == 'zIndex') path[0] = 'z-index'
+
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null
   }
@@ -185,11 +260,16 @@ export function keyPathToCssProperty(path: string[]) {
       .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
-      .map((part) =>
-        part
-          .replaceAll('.', '_')
-          .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
-      )
+      .map((part) => {
+        part = part.replaceAll('.', '_')
+
+        if (part === 'lineHeight') return 'line-height'
+        if (part.startsWith('-')) {
+          part = part.replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+        }
+
+        return part
+      })
 
       // Remove the `DEFAULT` key at the end of a path
       // We're reading from CSS anyway so it'll be a string
