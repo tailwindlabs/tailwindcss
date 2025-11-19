@@ -37,7 +37,7 @@ let table = [
   ],
   ['min(1+2)', 'min(1 + 2)'],
   ['max(1+2)', 'max(1 + 2)'],
-  ['clamp(1+2,1+3,1+4)', 'clamp(1 + 2,1 + 3,1 + 4)'],
+  ['clamp(1+2,1+3,1+4)', 'clamp(1 + 2, 1 + 3, 1 + 4)'],
   ['var(--heading-h1-font-size)', 'var(--heading-h1-font-size)'],
   ['var(--my-var-with-more-than-3-words)', 'var(--my-var-with-more-than-3-words)'],
   ['var(--width, calc(100%+1rem))', 'var(--width, calc(100% + 1rem))'],
@@ -69,7 +69,7 @@ let table = [
   ['calc(theme(spacing.foo-bar))', 'calc(theme(spacing.foo-bar))'],
 
   // A negative number immediately after a `,` should not have spaces inserted
-  ['clamp(-3px+4px,-3px+4px,-3px+4px)', 'clamp(-3px + 4px,-3px + 4px,-3px + 4px)'],
+  ['clamp(-3px+4px,-3px+4px,-3px+4px)', 'clamp(-3px + 4px, -3px + 4px, -3px + 4px)'],
 
   // Prevent formatting inside `var()` functions
   ['calc(var(--foo-bar-bar)*2)', 'calc(var(--foo-bar-bar) * 2)'],
