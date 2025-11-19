@@ -149,6 +149,9 @@ function normalizeMathOperatorSpacing(value) {
     'repeating-conic-gradient',
 
     'anchor-size',
+
+    'sibling-index',
+    'sibling-count',
   ]
 
   return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {

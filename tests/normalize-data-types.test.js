@@ -98,6 +98,8 @@ let table = [
 
   // Prevent formatting functions that are not math functions
   ['w-[calc(anchor-size(width)+8px)]', 'w-[calc(anchor-size(width) + 8px)]'],
+  ['w-[calc(sibling-index()*1%)]', 'w-[calc(sibling-index() * 1%)]'],
+  ['w-[calc(sibling-count()*1%)]', 'w-[calc(sibling-count() * 1%)]'],
 
   // Misc
   ['color(0_0_0/1.0)', 'color(0 0 0/1.0)'],
