@@ -1,4 +1,5 @@
 import { parseColor } from './color'
+import { addWhitespaceAroundMathOperators } from './math-operators'
 import { parseBoxShadowValue } from './parseBoxShadowValue'
 import { splitAtTopLevelOnly } from './splitAtTopLevelOnly'
 
@@ -76,7 +77,7 @@ export function normalize(value, context = null, isRoot = true) {
     value = value.trim()
   }
 
-  value = normalizeMathOperatorSpacing(value)
+  value = addWhitespaceAroundMathOperators(value)
 
   return value
 }
@@ -107,122 +108,6 @@ export function normalizeAttributeSelectors(value) {
     })
   }
   return value
-}
-
-/**
- * Add spaces around operators inside math functions
- * like calc() that do not follow an operator, '(', or `,`.
- *
- * @param {string} value
- * @returns {string}
- */
-function normalizeMathOperatorSpacing(value) {
-  let preventFormattingInFunctions = ['theme']
-  let preventFormattingKeywords = [
-    'min-content',
-    'max-content',
-    'fit-content',
-
-    // Env
-    'safe-area-inset-top',
-    'safe-area-inset-right',
-    'safe-area-inset-bottom',
-    'safe-area-inset-left',
-
-    'titlebar-area-x',
-    'titlebar-area-y',
-    'titlebar-area-width',
-    'titlebar-area-height',
-
-    'keyboard-inset-top',
-    'keyboard-inset-right',
-    'keyboard-inset-bottom',
-    'keyboard-inset-left',
-    'keyboard-inset-width',
-    'keyboard-inset-height',
-
-    'radial-gradient',
-    'linear-gradient',
-    'conic-gradient',
-    'repeating-radial-gradient',
-    'repeating-linear-gradient',
-    'repeating-conic-gradient',
-
-    'anchor-size',
-  ]
-
-  return value.replace(/(calc|min|max|clamp)\(.+\)/g, (match) => {
-    let result = ''
-
-    function lastChar() {
-      let char = result.trimEnd()
-      return char[char.length - 1]
-    }
-
-    for (let i = 0; i < match.length; i++) {
-      function peek(word) {
-        return word.split('').every((char, j) => match[i + j] === char)
-      }
-
-      function consumeUntil(chars) {
-        let minIndex = Infinity
-        for (let char of chars) {
-          let index = match.indexOf(char, i)
-          if (index !== -1 && index < minIndex) {
-            minIndex = index
-          }
-        }
-
-        let result = match.slice(i, minIndex)
-        i += result.length - 1
-        return result
-      }
-
-      let char = match[i]
-
-      // Handle `var(--variable)`
-      if (peek('var')) {
-        // When we consume until `)`, then we are dealing with this scenario:
-        //   `var(--example)`
-        //
-        // When we consume until `,`, then we are dealing with this scenario:
-        //   `var(--example, 1rem)`
-        //
-        //   In this case we do want to "format", the default value as well
-        result += consumeUntil([')', ','])
-      }
-
-      // Skip formatting of known keywords
-      else if (preventFormattingKeywords.some((keyword) => peek(keyword))) {
-        let keyword = preventFormattingKeywords.find((keyword) => peek(keyword))
-        result += keyword
-        i += keyword.length - 1
-      }
-
-      // Skip formatting inside known functions
-      else if (preventFormattingInFunctions.some((fn) => peek(fn))) {
-        result += consumeUntil([')'])
-      }
-
-      // Don't break CSS grid track names
-      else if (peek('[')) {
-        result += consumeUntil([']'])
-      }
-
-      // Handle operators
-      else if (
-        ['+', '-', '*', '/'].includes(char) &&
-        !['(', '+', '-', '*', '/', ','].includes(lastChar())
-      ) {
-        result += ` ${char} `
-      } else {
-        result += char
-      }
-    }
-
-    // Simplify multiple spaces
-    return result.replace(/\s+/g, ' ')
-  })
 }
 
 export function url(value) {
