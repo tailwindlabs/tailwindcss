@@ -207,6 +207,11 @@ function normalizeMathOperatorSpacing(value) {
         result += consumeUntil([')'])
       }
 
+      // Skip formatting inside custom functions
+      else if (peek('--') && /^\D+\(/.test(match.slice(i))) {
+        result += consumeUntil([')'])
+      }
+
       // Don't break CSS grid track names
       else if (peek('[')) {
         result += consumeUntil([']'])
