@@ -194,6 +194,8 @@ test(
         --color-steel: rgb(70 130 180);
         --color-smoke: rgba(245, 245, 245, var(--smoke-alpha, 1));
 
+        --default-ring-color: #c0ffee;
+
         --opacity-*: initial;
         --opacity-superOpaque: 95%;
 
