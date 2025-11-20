@@ -37,6 +37,7 @@ interface TestConfig {
     [filePath: string]: string | Uint8Array
   }
 
+  timeout?: number
   installDependencies?: boolean
 }
 interface TestContext {
@@ -86,7 +87,7 @@ export function test(
   return defaultTest(
     name,
     {
-      timeout: TEST_TIMEOUT,
+      timeout: config.timeout ?? TEST_TIMEOUT,
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
       skip,

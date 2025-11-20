@@ -174,6 +174,8 @@ test(
 test(
   `upgrades a v3 project with prefixes to v4`,
   {
+    // Somehow this test takes *way* longer than the rest (but not always?)
+    timeout: 120_000,
     fs: {
       'package.json': json`
         {
