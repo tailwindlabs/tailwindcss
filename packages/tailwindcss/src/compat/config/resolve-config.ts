@@ -33,6 +33,7 @@ interface ResolutionContext {
 let minimal: ResolvedConfig = {
   blocklist: [],
   future: {},
+  experimental: {},
   prefix: '',
   important: false,
   darkMode: null,

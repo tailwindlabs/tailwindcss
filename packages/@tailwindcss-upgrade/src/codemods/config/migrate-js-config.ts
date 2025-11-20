@@ -411,6 +411,8 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     'presets',
     'prefix', // Prefix is handled in the dedicated prefix migrator
     'corePlugins',
+    'future',
+    'experimental',
   ]
 
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
@@ -423,6 +425,29 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
 
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
     return false
+  }
+
+  // If there are unknown "future" flags we should bail
+  if (unresolvedConfig.future && unresolvedConfig.future !== 'all') {
+    let knownFutureFlags = [
+      'hoverOnlyWhenSupported',
+      'respectDefaultRingColorOpacity',
+      'disableColorOpacityUtilitiesByDefault',
+      'relativeContentPathsByDefault',
+    ]
+
+    if (Object.keys(unresolvedConfig.future).some((key) => !knownFutureFlags.includes(key))) {
+      return false
+    }
+  }
+
+  // If there are unknown "experimental" flags we should bail
+  if (unresolvedConfig.experimental && unresolvedConfig.experimental !== 'all') {
+    let knownFutureFlags = ['generalizedModifiers']
+
+    if (Object.keys(unresolvedConfig.experimental).some((key) => !knownFutureFlags.includes(key))) {
+      return false
+    }
   }
 
   // Only migrate the config file if all top-level theme keys are allowed to be
