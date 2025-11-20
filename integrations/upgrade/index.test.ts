@@ -2818,7 +2818,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs, expect }) => {
+  async ({ exec, root, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     let before = await fs.dumpFiles('./src/**/*.{css,html}')
@@ -2855,7 +2855,7 @@ test(
     `)
 
     // Commit the changes
-    if (isRepoDirty()) {
+    if (isRepoDirty(root)) {
       await exec('git add .')
       await exec('git commit -m "upgrade"')
     }

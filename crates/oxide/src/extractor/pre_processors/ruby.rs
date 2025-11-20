@@ -77,8 +77,74 @@ impl PreProcessor for Ruby {
 
         // Ruby extraction
         while cursor.pos < len {
-            // Looking for `%w` or `%W`
-            if cursor.curr != b'%' && !matches!(cursor.next, b'w' | b'W') {
+            match cursor.curr {
+                b'"' => {
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'"' => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                }
+
+                b'\'' => {
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // Escaped character, skip ahead to the next character
+                            b'\\' => cursor.advance_twice(),
+
+                            // End of the string
+                            b'\'' => break,
+
+                            // Everything else is valid
+                            _ => cursor.advance(),
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                }
+
+                // Replace comments in Ruby files
+                b'#' => {
+                    result[cursor.pos] = b' ';
+                    cursor.advance();
+
+                    while cursor.pos < len {
+                        match cursor.curr {
+                            // End of the comment
+                            b'\n' => break,
+
+                            // Everything else is part of the comment and replaced
+                            _ => {
+                                result[cursor.pos] = b' ';
+                                cursor.advance();
+                            }
+                        };
+                    }
+
+                    cursor.advance();
+                    continue;
+                }
+
+                _ => {}
+            }
+
+            // Looking for `%w`, `%W`, or `%p`
+            if cursor.curr != b'%' || !matches!(cursor.next, b'w' | b'W' | b'p') {
                 cursor.advance();
                 continue;
             }
@@ -90,6 +156,8 @@ impl PreProcessor for Ruby {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
+                b'#' => b'#',
+                b' ' => b'\n',
                 _ => {
                     cursor.advance();
                     continue;
@@ -131,7 +199,10 @@ impl PreProcessor for Ruby {
 
                     // End of the pattern, replace the boundary character with a space
                     _ if cursor.curr == boundary => {
-                        result[cursor.pos] = b' ';
+                        if boundary != b'\n' {
+                            result[cursor.pos] = b' ';
+                        }
+
                         break;
                     }
 
@@ -173,12 +244,51 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
             ),
+
+            // %w …\n
+            ("%w flex px-2.5\n", "%w flex px-2.5\n"),
+
             // Use backslash to embed spaces in the strings.
             (r#"%w[foo\ bar baz\ bat]"#, r#"%w foo  bar baz  bat "#),
             (r#"%W[foo\ bar baz\ bat]"#, r#"%W foo  bar baz  bat "#),
+
             // The nested delimiters evaluated to a flat array of strings
             // (not nested array).
             (r#"%w[foo[bar baz]qux]"#, r#"%w foo[bar baz]qux "#),
+
+            (
+              "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",
+              "      \n      \n                                                        \n%w flex px-2.5 "
+            ),
+
+            (r#""foo # bar""#, r#""foo # bar""#),
+            (r#"'foo # bar'"#, r#"'foo # bar'"#),
+            (
+              r#"def call = tag.span "Foo", class: %w[rounded-full h-0.75 w-0.75]"#,
+              r#"def call = tag.span "Foo", class: %w rounded-full h-0.75 w-0.75 "#
+            ),
+
+            (r#"%w[foo ' bar]"#, r#"%w foo ' bar "#),
+            (r#"%w[foo " bar]"#, r#"%w foo " bar "#),
+            (r#"%W[foo ' bar]"#, r#"%W foo ' bar "#),
+            (r#"%W[foo " bar]"#, r#"%W foo " bar "#),
+
+            (r#"%p foo ' bar "#, r#"%p foo ' bar "#),
+            (r#"%p foo " bar "#, r#"%p foo " bar "#),
+
+            (
+              "%p has a ' quote\n# this should be removed\n%p has a ' quote",
+              "%p has a ' quote\n                        \n%p has a ' quote"
+            ),
+            (
+              "%p has a \" quote\n# this should be removed\n%p has a \" quote",
+              "%p has a \" quote\n                        \n%p has a \" quote"
+            ),
+
+            (
+              "%w#this text is kept# # this text is not",
+              "%w this text is kept                    ",
+            ),
         ] {
             Ruby::test(input, expected);
         }
@@ -211,6 +321,16 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
             ),
+
+            (
+              "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",
+              vec!["flex", "px-2.5"],
+            ),
+
+            (r#""foo # bar""#, vec!["foo", "bar"]),
+            (r#"'foo # bar'"#, vec!["foo", "bar"]),
+
+            (r#"%w[foo ' bar]"#, vec!["foo", "bar"]),
         ] {
             Ruby::test_extract_contains(input, expected);
         }

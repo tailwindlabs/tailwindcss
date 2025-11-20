@@ -231,6 +231,12 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                     return self.restart()
                 }
 
+                // An `!` at the top-level is invalid. We don't allow things to end with
+                // `!important` either as we have dedicated syntax for this.
+                Class::Exclamation if self.bracket_stack.is_empty() => {
+                    return self.restart();
+                }
+
                 // Everything else is valid
                 _ => cursor.advance(),
             };
@@ -292,6 +298,9 @@ enum Class {
 
     #[bytes(b'/')]
     Slash,
+
+    #[bytes(b'!')]
+    Exclamation,
 
     #[bytes(b' ', b'\t', b'\n', b'\r', b'\x0C')]
     Whitespace,
@@ -369,6 +378,9 @@ mod tests {
                 "[background:url(https://example.com?q={[{[([{[[2]]}])]}]})]",
                 vec!["[background:url(https://example.com?q={[{[([{[[2]]}])]}]})]"],
             ),
+            // A property containing `!` at the top-level is invalid
+            ("[color:red!]", vec![]),
+            ("[color:red!important]", vec![]),
         ] {
             for wrapper in [
                 // No wrapper

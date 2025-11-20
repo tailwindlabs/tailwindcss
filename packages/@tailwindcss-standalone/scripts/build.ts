@@ -16,6 +16,10 @@ async function buildForPlatform(triple: string, outfile: string) {
       // statically bundle the proper binaries for musl vs glibc
       cmd = cmd.env({
         PLATFORM_LIBC: triple.includes('-musl') ? 'musl' : 'glibc',
+
+        // Workaround for Bun binary downloads failing on Windows CI when
+        // USERPROFILE is passed through by Turborepo.
+        USERPROFILE: '',
       })
 
       return await cmd

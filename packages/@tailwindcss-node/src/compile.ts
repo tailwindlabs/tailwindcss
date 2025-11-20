@@ -63,10 +63,9 @@ function createCompileOptions({
   }
 }
 
-async function ensureSourceDetectionRootExists(
-  compiler: { root: Awaited<ReturnType<typeof compile>>['root'] },
-  base: string,
-) {
+async function ensureSourceDetectionRootExists(compiler: {
+  root: Awaited<ReturnType<typeof compile>>['root']
+}) {
   // Verify if the `source(…)` path exists (until the glob pattern starts)
   if (compiler.root && compiler.root !== 'none') {
     let globSymbols = /[*{]/
@@ -80,25 +79,27 @@ async function ensureSourceDetectionRootExists(
     }
 
     let exists = await fsPromises
-      .stat(path.resolve(base, basePath.join('/')))
+      .stat(path.resolve(compiler.root.base, basePath.join('/')))
       .then((stat) => stat.isDirectory())
       .catch(() => false)
 
     if (!exists) {
-      throw new Error(`The \`source(${compiler.root.pattern})\` does not exist`)
+      throw new Error(
+        `The \`source(${compiler.root.pattern})\` does not exist or is not a directory.`,
+      )
     }
   }
 }
 
 export async function compileAst(ast: AstNode[], options: CompileOptions) {
   let compiler = await _compileAst(ast, createCompileOptions(options))
-  await ensureSourceDetectionRootExists(compiler, options.base)
+  await ensureSourceDetectionRootExists(compiler)
   return compiler
 }
 
 export async function compile(css: string, options: CompileOptions) {
   let compiler = await _compile(css, createCompileOptions(options))
-  await ensureSourceDetectionRootExists(compiler, options.base)
+  await ensureSourceDetectionRootExists(compiler)
   return compiler
 }
 
