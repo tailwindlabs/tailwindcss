@@ -21,6 +21,25 @@ const designSystems = new DefaultMap((base: string) => {
             @tailwind utilities;
 
             ${defaultTheme}
+
+            /* TODO(perf): Only here to speed up the tests */
+            @theme {
+              --*: initial;
+              --breakpoint-lg: 64rem;
+              --breakpoint-md: 48rem;
+              --color-blue-200: oklch(88.2% 0.059 254.128);
+              --color-blue-500: oklch(62.3% 0.214 259.815);
+              --color-red-500: oklch(63.7% 0.237 25.331);
+              --color-white: #fff;
+              --container-md: 28rem;
+              --font-weight-normal: 400;
+              --leading-relaxed: 1.625;
+              --spacing: 0.25rem;
+              --text-sm--line-height: calc(1.25 / 0.875);
+              --text-sm: 0.875rem;
+              --text-xs--line-height: calc(1 / 0.75);
+              --text-xs: 0.75rem;
+            }
           `,
         }
       },
