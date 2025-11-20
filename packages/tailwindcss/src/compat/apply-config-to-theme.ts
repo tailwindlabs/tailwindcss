@@ -185,11 +185,27 @@ export function keyPathToCssProperty(path: string[]) {
       .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
-      .map((part) =>
-        part
-          .replaceAll('.', '_')
-          .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
-      )
+      .map((part, idx) => {
+        part = part.replaceAll('.', '_')
+
+        let shouldConvert =
+          // The first "namespace" part should be converted to kebab-case
+          // This converts things like backgroundColor to `background-color`
+          idx === 0 ||
+          // Any tuple nested key should be converted to kebab-case
+          // These are identified with a leading `-`
+          // e.g. `fontSize.xs.1.lineHeight` -> `font-size-xs--line-height`
+          part.startsWith('-') ||
+          // `lineHeight` is a bit of a special case in which it does not
+          // always begin with a leading `-` even when as a nested tuple key
+          part === 'lineHeight'
+
+        if (shouldConvert) {
+          part = part.replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+        }
+
+        return part
+      })
 
       // Remove the `DEFAULT` key at the end of a path
       // We're reading from CSS anyway so it'll be a string

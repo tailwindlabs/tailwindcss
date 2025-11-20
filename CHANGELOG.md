@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip comments in Ruby files when checking for class names ([#19243](https://github.com/tailwindlabs/tailwindcss/pull/19243))
 - Skip over arbitrary property utilities with a top-level `!` in the value ([#19243](https://github.com/tailwindlabs/tailwindcss/pull/19243))
 - Support environment API in `@tailwindcss/vite` ([#18970](https://github.com/tailwindlabs/tailwindcss/pull/18970))
+- Preserve case of theme keys from JS configs and plugins ([#19337](https://github.com/tailwindlabs/tailwindcss/pull/19337))
 - Upgrade: Handle `future` and `experimental` config keys ([#19344](https://github.com/tailwindlabs/tailwindcss/pull/19344))
 
 ### Added

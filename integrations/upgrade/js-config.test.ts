@@ -167,9 +167,9 @@ test(
       "
       --- src/index.html ---
       <div
-        class="tracking-super-wide leading-super-loose"
+        class="tracking-superWide leading-superLoose"
       ></div>
-      <div class="text-super-red/super-opaque leading-super-loose"></div>
+      <div class="text-superRed/superOpaque leading-superLoose"></div>
 
       --- src/input.css ---
       @import 'tailwindcss';
@@ -187,12 +187,12 @@ test(
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
-        --color-super-red: #ff0000;
+        --color-superRed: #ff0000;
         --color-steel: rgb(70 130 180);
         --color-smoke: rgba(245, 245, 245, var(--smoke-alpha, 1));
 
         --opacity-*: initial;
-        --opacity-super-opaque: 95%;
+        --opacity-superOpaque: 95%;
 
         --text-*: initial;
         --text-xs: 0.75rem;
@@ -265,9 +265,9 @@ test(
         --animate-spin-clockwise: spin-clockwise 1s linear infinite;
         --animate-spin-counterclockwise: spin-counterclockwise 1s linear infinite;
 
-        --tracking-super-wide: 0.25em;
+        --tracking-superWide: 0.25em;
 
-        --leading-super-loose: 3;
+        --leading-superLoose: 3;
 
         @keyframes spin-clockwise {
           0% {
