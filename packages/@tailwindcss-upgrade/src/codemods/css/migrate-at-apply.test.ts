@@ -101,6 +101,7 @@ it(
             designSystem: await __unstable__loadDesignSystem(
               css`
                 @import 'tailwindcss' prefix(tw);
+
                 /* TODO(perf): Only here to speed up the tests */
                 @theme {
                   --*: initial;
