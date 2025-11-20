@@ -1719,3 +1719,55 @@ test('The theme() function does not try indexing into strings', async () => {
     "
   `)
 })
+
+test('camel case keys are preserved', async () => {
+  let compiler = await compile(
+    css`
+      @tailwind utilities;
+      @theme {
+        --color-blue-green: slate;
+      }
+      @config "./plugin.js";
+    `,
+    {
+      loadModule: async () => {
+        return {
+          base: '/',
+          path: '',
+          module: {
+            theme: {
+              extend: {
+                backgroundColor: {
+                  lightGreen: '#c0ffee',
+                },
+              },
+            },
+          },
+        }
+      },
+    },
+  )
+
+  expect(
+    compiler.build([
+      // From CSS
+      'bg-blue-green', // should be output
+      'bg-blueGreen', // should not
+
+      // From JS config
+      'bg-light-green', // should not be output
+      'bg-lightGreen', // should be
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".bg-blue-green {
+      background-color: var(--color-blue-green);
+    }
+    .bg-lightGreen {
+      background-color: #c0ffee;
+    }
+    :root, :host {
+      --color-blue-green: slate;
+    }
+    "
+  `)
+})

@@ -5935,43 +5935,6 @@ describe('`@property` polyfill', async () => {
       }"
     `)
   })
-
-  // TODO: Move test into compat folder
-  it('camel case keys are preserved', async () => {
-    await expect(
-      compileCss(
-        css`
-          @tailwind utilities;
-          @theme {
-            --color-blue-green: slate;
-          }
-          @config "./plugin.js";
-        `,
-        ['bg-lightGreen', 'bg-blue-green', 'bg-blueGreen'],
-        {
-          loadModule: async () => {
-            return {
-              base: '/',
-              path: '',
-              module: {
-                theme: {
-                  extend: {
-                    backgroundColor: {
-                      lightGreen: '#c0ffee',
-                    },
-                  },
-                },
-              },
-            }
-          },
-        },
-      ),
-    ).resolves.toMatchInlineSnapshot(`
-      ".bg-lightGreen {
-        background-color: #c0ffee;
-      }"
-    `)
-  })
 })
 
 describe('feature detection', () => {
