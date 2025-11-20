@@ -34,6 +34,9 @@ test(
               steel: 'rgb(70 130 180 / <alpha-value>)',
               smoke: 'rgba(245, 245, 245, var(--smoke-alpha, <alpha-value>))',
             },
+            ringColor: {
+              DEFAULT: '#c0ffee',
+            },
             opacity: {
               superOpaque: '0.95',
             },
