@@ -105,3 +105,12 @@ export interface UserConfig {
 export interface ResolvedConfig {
   future: Record<string, boolean>
 }
+
+// `experimental` key support
+export interface UserConfig {
+  experimental?: 'all' | Record<string, boolean>
+}
+
+export interface ResolvedConfig {
+  experimental: Record<string, boolean>
+}
