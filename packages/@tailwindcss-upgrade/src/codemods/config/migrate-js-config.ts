@@ -429,23 +429,23 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
 
   // If there are unknown "future" flags we should bail
   if (unresolvedConfig.future && unresolvedConfig.future !== 'all') {
-    let knownFutureFlags = [
+    let knownFlags = [
       'hoverOnlyWhenSupported',
       'respectDefaultRingColorOpacity',
       'disableColorOpacityUtilitiesByDefault',
       'relativeContentPathsByDefault',
     ]
 
-    if (Object.keys(unresolvedConfig.future).some((key) => !knownFutureFlags.includes(key))) {
+    if (Object.keys(unresolvedConfig.future).some((key) => !knownFlags.includes(key))) {
       return false
     }
   }
 
   // If there are unknown "experimental" flags we should bail
   if (unresolvedConfig.experimental && unresolvedConfig.experimental !== 'all') {
-    let knownFutureFlags = ['generalizedModifiers']
+    let knownFlags = ['generalizedModifiers']
 
-    if (Object.keys(unresolvedConfig.experimental).some((key) => !knownFutureFlags.includes(key))) {
+    if (Object.keys(unresolvedConfig.experimental).some((key) => !knownFlags.includes(key))) {
       return false
     }
   }
