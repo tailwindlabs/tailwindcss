@@ -57,6 +57,10 @@ test('config values can be merged into the theme', () => {
             '2xl': ['2rem'],
           },
 
+          ringColor: {
+            DEFAULT: '#fff',
+          },
+
           letterSpacing: {
             superWide: '0.25em',
           },
@@ -125,6 +129,8 @@ test('config values can be merged into the theme', () => {
   expect(theme.resolve('100%', ['--width'])).toEqual('100%')
   expect(theme.resolve('9xs', ['--container'])).toEqual('6rem')
   expect(theme.resolve('fast', ['--ease'])).toEqual('cubic-bezier(0, 0.55, 0.45, 1)')
+  expect(theme.get(['--ring-color'])).toEqual(null)
+  expect(theme.get(['--default-ring-color'])).toEqual('#fff')
 })
 
 test('will reset default theme values with overwriting theme values', () => {

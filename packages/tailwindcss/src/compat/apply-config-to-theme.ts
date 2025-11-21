@@ -50,6 +50,18 @@ export function applyConfigToTheme(
       }
     }
 
+    // ringColor.DEFAULT is a special case that maps to `--default-ring-color`
+    // as to match the behavior of v3
+    if (path[0] === 'ringColor' && path[1] === 'DEFAULT') {
+      designSystem.theme.add(
+        '--default-ring-color',
+        '' + value,
+        ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
+      )
+
+      continue
+    }
+
     let name = keyPathToCssProperty(path)
     if (!name) continue
 

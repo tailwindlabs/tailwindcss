@@ -237,6 +237,14 @@ async function migrateTheme(
       prevSectionKey = sectionKey
     }
 
+    // ringColor.DEFAULT is a special case that maps to `--default-ring-color`
+    // as to match the behavior of v3
+    if (key[0] === 'ringColor' && key[1] === 'DEFAULT') {
+      let property = 'default-ring-color'
+      themeSection.push(`  ${escape(`--${property}`)}: ${value};`)
+      continue
+    }
+
     if (resetNamespaces.has(key[0]) && resetNamespaces.get(key[0]) === false) {
       resetNamespaces.set(key[0], true)
       let property = keyPathToCssProperty([key[0]])
