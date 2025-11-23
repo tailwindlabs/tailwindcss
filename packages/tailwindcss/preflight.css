@@ -385,6 +385,15 @@ input:where([type='button'], [type='reset'], [type='submit']),
 }
 
 /*
+  Remove default max-width and max-height constraints on dialog elements in iOS Safari.
+*/
+
+dialog {
+  max-width: none;
+  max-height: none;
+}
+
+/*
   Make elements with the HTML hidden attribute stay hidden by default.
 */
 
