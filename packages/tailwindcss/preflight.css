@@ -246,6 +246,8 @@ textarea,
   font-variation-settings: inherit; /* 1 */
   letter-spacing: inherit; /* 1 */
   color: inherit; /* 1 */
+  text-align: inherit; /* 1 */
+  text-transform: inherit; /* 1 */
   border-radius: 0; /* 2 */
   background-color: transparent; /* 3 */
   opacity: 1; /* 4 */
