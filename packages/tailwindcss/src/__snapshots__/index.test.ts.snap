@@ -242,7 +242,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     display: block;
   }
 
-  img, video {
+  img, svg, video {
     max-width: 100%;
     height: auto;
   }

@@ -128,7 +128,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     display: block;
   }
 
-  img, video {
+  img, svg, video {
     max-width: 100%;
     height: auto;
   }
