@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
-import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -849,8 +849,11 @@ describe.each([
 
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
 
+      let originalCss = await fs.read('dist/out.css')
+      let currentCss = originalCss
+
       // Make sure we can find a source map
-      let map = parseSourceMap(await fs.read('dist/out.css'))
+      let map = parseSourceMap(currentCss)
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -883,14 +886,19 @@ describe.each([
       })
 
       // Write to project source files
-      let written = process.onStderr((m) => m.includes('Done in'))
       await fs.write('src/index.html', html`
         <div class="flex underline"></div>
       `)
-      await written
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        expect(currentCss).not.toEqual(originalCss)
+        originalCss = currentCss
+      })
 
       // Make sure the source map was updated
-      map = parseSourceMap(await fs.read('dist/out.css'))
+      map = parseSourceMap(currentCss)
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -947,7 +955,6 @@ describe.each([
       })
 
       // Write to the main CSS file
-      written = process.onStderr((m) => m.includes('Done in'))
       await fs.write(
         'src/index.css',
         css`
@@ -955,10 +962,16 @@ describe.each([
           @source inline("w-auto");
         `,
       )
-      await written
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        expect(currentCss).not.toEqual(originalCss)
+        originalCss = currentCss
+      })
 
       // Make sure the source map was updated
-      map = parseSourceMap(await fs.read('dist/out.css'))
+      map = parseSourceMap(currentCss)
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1070,10 +1083,13 @@ describe.each([
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
 
       // Make sure we can find a source map
-      let map = parseSourceMap({
-        map: await fs.read('dist/out.css.map'),
-        content: await fs.read('dist/out.css'),
-      })
+      let originalCss = await fs.read('dist/out.css')
+      let originalMap = await fs.read('dist/out.css.map')
+      let currentCss = originalCss
+      let currentMap = originalMap
+
+      // Make sure we can find a source map
+      let map = parseSourceMap({ map: currentMap, content: currentCss })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1106,17 +1122,22 @@ describe.each([
       })
 
       // Write to project source files
-      let written = process.onStderr((m) => m.includes('Done in'))
       await fs.write('src/index.html', html`
         <div class="flex underline"></div>
       `)
-      await written
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        currentMap = await fs.read('dist/out.css.map')
+        expect(currentCss).not.toEqual(originalCss)
+        expect(currentMap).not.toEqual(originalMap)
+        originalCss = currentCss
+        originalMap = currentMap
+      })
 
       // Make sure the source map was updated
-      map = parseSourceMap({
-        map: await fs.read('dist/out.css.map'),
-        content: await fs.read('dist/out.css'),
-      })
+      map = parseSourceMap({ map: currentMap, content: currentCss })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1173,7 +1194,6 @@ describe.each([
       })
 
       // Write to the main CSS file
-      written = process.onStderr((m) => m.includes('Done in'))
       await fs.write(
         'src/index.css',
         css`
@@ -1181,13 +1201,19 @@ describe.each([
           @source inline("w-auto");
         `,
       )
-      await written
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        currentMap = await fs.read('dist/out.css.map')
+        expect(currentCss).not.toEqual(originalCss)
+        expect(currentMap).not.toEqual(originalMap)
+        originalCss = currentCss
+        originalMap = currentMap
+      })
 
       // Make sure the source map was updated
-      map = parseSourceMap({
-        map: await fs.read('dist/out.css.map'),
-        content: await fs.read('dist/out.css'),
-      })
+      map = parseSourceMap({ map: currentMap, content: currentCss })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
