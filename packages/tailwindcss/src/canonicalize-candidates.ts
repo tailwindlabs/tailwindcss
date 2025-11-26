@@ -1016,9 +1016,11 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
               valueDimension[1] === spacingMultiplierDimension[1] // Ensure the units match
             ) {
               let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
-              yield Object.assign({}, candidate, {
-                value: { kind: 'named', value: bareValue, fraction: null },
-              })
+              if (isValidSpacingMultiplier(bareValue)) {
+                yield Object.assign({}, candidate, {
+                  value: { kind: 'named', value: bareValue, fraction: null },
+                })
+              }
             }
           }
         }
