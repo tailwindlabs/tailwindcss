@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
+import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import { DefaultMap } from './utils/default-map'
 
@@ -54,7 +55,7 @@ const DEFAULT_CANONICALIZATION_OPTIONS: CanonicalizeOptions = {
 }
 
 describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', (strategy) => {
-  let testName = '`%s` → `%s` (%#)'
+  let testName = '%s → %s (%#)'
   if (strategy === 'with-variant') {
     testName = testName.replaceAll('%s', 'focus:%s')
   } else if (strategy === 'important') {
@@ -1025,37 +1026,69 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     })
   })
 
-  test.each([
-    // 4 to 1
-    ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
+  describe('combine to shorthand utilities', () => {
+    test.each([
+      // 4 to 1
+      ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
 
-    // 2 to 1
-    ['mt-1 mb-1', 'my-1'],
+      // 2 to 1
+      ['mt-1 mb-1', 'my-1'],
 
-    // Different order as above
-    ['mb-1 mt-1', 'my-1'],
+      // Different order as above
+      ['mb-1 mt-1', 'my-1'],
 
-    // To completely different utility
-    ['w-4 h-4', 'size-4'],
+      // To completely different utility
+      ['w-4 h-4', 'size-4'],
 
-    // Do not touch if not operating on the same variants
-    ['hover:w-4 h-4', 'hover:w-4 h-4'],
+      // Do not touch if not operating on the same variants
+      ['hover:w-4 h-4', 'hover:w-4 h-4'],
 
-    // Arbitrary properties to combined class
-    ['[width:_16px_] [height:16px]', 'size-4'],
+      // Arbitrary properties to combined class
+      ['[width:_16px_] [height:16px]', 'size-4'],
 
-    // Arbitrary properties to combined class with modifier
-    ['[font-size:14px] [line-height:1.625]', 'text-sm/relaxed'],
-  ])(
-    'should canonicalize multiple classes `%s` into a shorthand `%s`',
-    { timeout },
-    async (candidates, expected) => {
+      // Arbitrary properties to combined class with modifier
+      ['[font-size:14px] [line-height:1.625]', 'text-sm/relaxed'],
+    ])(testName, { timeout }, async (candidates, expected) => {
       let input = css`
         @import 'tailwindcss';
       `
       await expectCombinedCanonicalization(input, candidates, expected)
-    },
-  )
+    })
+  })
+
+  describe('font-size/line-height to text-{x}/{y}', () => {
+    test.each([
+      ...Array.from(
+        cartesian(
+          ['[font-size:14px]', 'text-[14px]', 'text-[14px]/6', 'text-sm', 'text-sm/6'],
+          ['[line-height:28px]', 'leading-[28px]', 'leading-7'],
+        ),
+      ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-sm/7']),
+      ...Array.from(
+        cartesian(
+          ['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'],
+          ['[line-height:28px]', 'leading-[28px]', 'leading-7'],
+        ),
+      ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-[15px]/7']),
+      ...Array.from(
+        cartesian(
+          ['[font-size:14px]', 'text-[14px]', 'text-[14px]/6', 'text-sm', 'text-sm/6'],
+          ['[line-height:28.5px]', 'leading-[28.5px]'],
+        ),
+      ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-sm/[28.5px]']),
+      ...Array.from(
+        cartesian(
+          ['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'],
+          ['[line-height:28.5px]', 'leading-[28.5px]'],
+        ),
+      ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-[15px]/[28.5px]']),
+    ])(testName, { timeout }, async (candidates, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+      await expectCombinedCanonicalization(input, candidates.trim(), expected)
+    })
+  })
 })
 
 describe('theme to var', () => {
