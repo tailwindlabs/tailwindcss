@@ -12,10 +12,12 @@ test.each([
   ['flex-shrink-0', 'shrink-0'],
   ['decoration-clone', 'box-decoration-clone'],
   ['decoration-slice', 'box-decoration-slice'],
+  ['content-slash', 'content-[\'/\']'],
 
   ['max-lg:hover:decoration-slice', 'max-lg:hover:box-decoration-slice'],
   ['max-lg:hover:decoration-slice!', 'max-lg:hover:box-decoration-slice!'],
   ['max-lg:hover:!decoration-slice', 'max-lg:hover:box-decoration-slice!'],
+  ['after:content-slash', 'after:content-[\'/\']'],
 
   ['focus:outline-none', 'focus:outline-hidden'],
 
@@ -26,5 +28,5 @@ test.each([
     base: __dirname,
   })
 
-  expect(migrateSimpleLegacyClasses(designSystem, {}, candidate)).toEqual(result)
+  expect(migrateSimpleLegacyClasses(designSystem as any, {}, candidate)).toEqual(result)
 })

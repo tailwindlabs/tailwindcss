@@ -15,6 +15,8 @@ const LEGACY_CLASS_MAP: Record<string, string> = {
   'decoration-clone': 'box-decoration-clone',
   'decoration-slice': 'box-decoration-slice',
 
+  'content-slash': 'content-[\'/\']',
+
   // Since v4.1.0
   'bg-left-top': 'bg-top-left',
   'bg-left-bottom': 'bg-bottom-left',
