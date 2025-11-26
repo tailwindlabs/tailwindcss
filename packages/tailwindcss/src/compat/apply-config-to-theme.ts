@@ -147,9 +147,27 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
   return toAdd
 }
 
+const SPECIAL_DEFAULT_KEYS: Record<string, string> = {
+  borderWidth: 'border-width',
+  outlineWidth: 'outline-width',
+  ringColor: 'ring-color',
+  ringWidth: 'ring-width',
+  transitionDuration: 'transition-duration',
+  transitionTimingFunction: 'transition-timing-function',
+}
+
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  // In some special cases the `DEFAULT` key did not map to a "default" utility
+  // e.g. `ringColor.DEFAULT` wasn't *just* used for `ring`. It was used for
+  // all ring utilities as the color when one wasn't specified.
+  //
+  // We place these specialty values under the `--default-*` namespace to signal
+  // that they are defaults used by (potentially) multiple utilities.
+  let specialDefault = SPECIAL_DEFAULT_KEYS[path[0]]
+  if (specialDefault && path[1] === 'DEFAULT') return `default-${specialDefault}`
+
   // The legacy container component config should not be included in the Theme
   if (path[0] === 'container') return null
 
