@@ -1013,7 +1013,8 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
             if (
               valueDimension &&
               spacingMultiplierDimension &&
-              valueDimension[1] === spacingMultiplierDimension[1] // Ensure the units match
+              valueDimension[1] === spacingMultiplierDimension[1] && // Ensure the units match
+              spacingMultiplierDimension[0] !== 0
             ) {
               let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
               if (isValidSpacingMultiplier(bareValue)) {
