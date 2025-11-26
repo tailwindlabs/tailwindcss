@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve case of theme keys from JS configs and plugins ([#19337](https://github.com/tailwindlabs/tailwindcss/pull/19337))
 - Write source maps correctly on the CLI when using `--watch` ([#19373](https://github.com/tailwindlabs/tailwindcss/pull/19373))
 - Upgrade: Handle `future` and `experimental` config keys ([#19344](https://github.com/tailwindlabs/tailwindcss/pull/19344))
+- Try to canonicalize any arbitrary utility to a bare value ([#19379](https://github.com/tailwindlabs/tailwindcss/pull/19379))
 
 ### Added
 
