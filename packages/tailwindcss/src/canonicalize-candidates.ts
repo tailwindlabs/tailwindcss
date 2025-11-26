@@ -990,6 +990,40 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         candidate.kind === 'arbitrary' ? candidate.value : (candidate.value?.value ?? null)
       if (value === null) return
 
+      // Try to canonicalize any incoming arbitrary value. Canonicalization of
+      // `rem` and `px` values will be converted to `px`, so we have to
+      // canonicalize the spacing multiplier as well.
+      if (
+        options.signatureOptions.rem !== null &&
+        candidate.kind === 'functional' &&
+        candidate.value?.kind === 'arbitrary'
+      ) {
+        let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
+        if (spacingMultiplier !== undefined) {
+          // Canonicalizing the spacing multiplier allows us to handle both
+          // `--spacing: 0.25rem` and `--spacing: 4px` values correctly.
+          let canonicalizedSpacingMultiplier = constantFoldDeclaration(
+            spacingMultiplier,
+            options.signatureOptions.rem,
+          )
+          if (canonicalizedSpacingMultiplier !== null) {
+            let canonicalizedValue = constantFoldDeclaration(value, options.signatureOptions.rem)
+            let valueDimension = dimensions.get(canonicalizedValue)
+            let spacingMultiplierDimension = dimensions.get(canonicalizedSpacingMultiplier)
+            if (
+              valueDimension &&
+              spacingMultiplierDimension &&
+              valueDimension[1] === spacingMultiplierDimension[1] // Ensure the units match
+            ) {
+              let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
+              yield Object.assign({}, candidate, {
+                value: { kind: 'named', value: bareValue, fraction: null },
+              })
+            }
+          }
+        }
+      }
+
       let spacingMultiplier = designSystem.storage[SPACING_KEY]?.get(value) ?? null
       let rootPrefix = ''
       if (spacingMultiplier !== null && spacingMultiplier < 0) {
