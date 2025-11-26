@@ -1006,22 +1006,21 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
             spacingMultiplier,
             options.signatureOptions.rem,
           )
-          if (canonicalizedSpacingMultiplier !== null) {
-            let canonicalizedValue = constantFoldDeclaration(value, options.signatureOptions.rem)
-            let valueDimension = dimensions.get(canonicalizedValue)
-            let spacingMultiplierDimension = dimensions.get(canonicalizedSpacingMultiplier)
-            if (
-              valueDimension &&
-              spacingMultiplierDimension &&
-              valueDimension[1] === spacingMultiplierDimension[1] && // Ensure the units match
-              spacingMultiplierDimension[0] !== 0
-            ) {
-              let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
-              if (isValidSpacingMultiplier(bareValue)) {
-                yield Object.assign({}, candidate, {
-                  value: { kind: 'named', value: bareValue, fraction: null },
-                })
-              }
+
+          let canonicalizedValue = constantFoldDeclaration(value, options.signatureOptions.rem)
+          let valueDimension = dimensions.get(canonicalizedValue)
+          let spacingMultiplierDimension = dimensions.get(canonicalizedSpacingMultiplier)
+          if (
+            valueDimension &&
+            spacingMultiplierDimension &&
+            valueDimension[1] === spacingMultiplierDimension[1] && // Ensure the units match
+            spacingMultiplierDimension[0] !== 0
+          ) {
+            let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
+            if (isValidSpacingMultiplier(bareValue)) {
+              yield Object.assign({}, candidate, {
+                value: { kind: 'named', value: bareValue, fraction: null },
+              })
             }
           }
         }
