@@ -114,6 +114,11 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           minify = opts.optimize.minify !== false
         }
       },
+
+      // Add empty transform to prevent Vite 7.0+ from trying to call undefined transform
+      transform() {
+        return null
+      },
     },
 
     {
