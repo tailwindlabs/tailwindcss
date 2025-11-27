@@ -321,7 +321,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             if (args['--map']) {
               DEBUG && I.start('Build Source Map')
-              compiledMap = compiler.buildSourceMap() as any
+              compiledMap = toSourceMap(compiler.buildSourceMap())
               DEBUG && I.end('Build Source Map')
             }
           }
@@ -346,7 +346,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             if (args['--map']) {
               DEBUG && I.start('Build Source Map')
-              compiledMap = compiler.buildSourceMap() as any
+              compiledMap = toSourceMap(compiler.buildSourceMap())
               DEBUG && I.end('Build Source Map')
             }
           }

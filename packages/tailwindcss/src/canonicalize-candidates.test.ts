@@ -530,8 +530,24 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Default spacing scale
       ['w-[64rem]', 'w-256', '0.25rem'],
 
+      // Non-suggested numbers
+      ['gap-[7.25rem]', 'gap-29', '0.25rem'],
+      ['gap-[calc(7rem+0.25rem)]', 'gap-29', '0.25rem'],
+      ['gap-[116px]', 'gap-29', '0.25rem'],
+
+      // Non-suggested numbers, with the same spacing scale with different
+      // units
+      ['gap-[7.25rem]', 'gap-29', '4px'],
+      ['gap-[calc(7rem+0.25rem)]', 'gap-29', '4px'],
+      ['gap-[116px]', 'gap-29', '4px'],
+
+      // Non-suggested numbers, with a different spacing scale
+      ['gap-[7.25rem]', 'gap-116', '1px'],
+      ['gap-[calc(7rem+0.25rem)]', 'gap-116', '1px'],
+      ['gap-[116px]', 'gap-116', '1px'],
+
       // Keep arbitrary value if units are different
-      ['w-[124px]', 'w-[124px]', '0.25rem'],
+      ['w-[124px]', 'w-31', '0.25rem'],
 
       // Keep arbitrary value if bare value doesn't fit in steps of .25
       ['w-[0.123rem]', 'w-[0.123rem]', '0.25rem'],
