@@ -237,16 +237,21 @@ async function migrateTheme(
       prevSectionKey = sectionKey
     }
 
-    if (resetNamespaces.has(key[0]) && resetNamespaces.get(key[0]) === false) {
-      resetNamespaces.set(key[0], true)
-      let property = keyPathToCssProperty([key[0]])
-      if (property !== null) {
-        themeSection.push(`  ${escape(`--${property}`)}-*: initial;`)
-      }
-    }
-
     let property = keyPathToCssProperty(key)
+
     if (property !== null) {
+      if (
+        !property.startsWith('default-') &&
+        resetNamespaces.has(key[0]) &&
+        resetNamespaces.get(key[0]) === false
+      ) {
+        resetNamespaces.set(key[0], true)
+        let ns = keyPathToCssProperty([key[0]])
+        if (ns !== null) {
+          themeSection.push(`  ${escape(`--${ns}`)}-*: initial;`)
+        }
+      }
+
       themeSection.push(`  ${escape(`--${property}`)}: ${value};`)
     }
   }
