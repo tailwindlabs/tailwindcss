@@ -2380,7 +2380,7 @@ test(
         <div class="blur blur-xs"></div>
         <div class="backdrop-blur backdrop-blur-xs"></div>
         <div class="rounded rounded-sm"></div>
-        <div class="ring-3"></div>
+        <div class="ring"></div>
       </div>
       "
     `)
