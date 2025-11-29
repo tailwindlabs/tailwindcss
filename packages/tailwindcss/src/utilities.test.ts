@@ -23259,7 +23259,17 @@ test('contain', async () => {
 })
 
 test('content', async () => {
-  expect(await run(['content-["hello_world"]'])).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --content-slash: '/';
+        }
+        @tailwind utilities;
+      `,
+      ['content-slash', 'content-["hello_world"]'],
+    ),
+  ).toMatchInlineSnapshot(`
     "@layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
@@ -23268,8 +23278,17 @@ test('content', async () => {
       }
     }
 
+    :root, :host {
+      --content-slash: "/";
+    }
+
     .content-\\[\\"hello_world\\"\\] {
       --tw-content: "hello world";
+      content: var(--tw-content);
+    }
+
+    .content-slash {
+      --tw-content: var(--content-slash);
       content: var(--tw-content);
     }
 

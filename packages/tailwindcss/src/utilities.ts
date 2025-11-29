@@ -4688,7 +4688,9 @@ export function createUtilities(theme: Theme) {
     ['content', 'none'],
   ])
   functionalUtility('content', {
-    themeKeys: [],
+    // BC: We only read from the `--content` theme key for compatibility reasons. It's recommended
+    // to use the utility with arbitrary values instead.
+    themeKeys: ['--content'],
     handle: (value) => [
       atRoot([property('--tw-content', '""')]),
       decl('--tw-content', value),
