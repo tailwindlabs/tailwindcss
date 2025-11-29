@@ -59,7 +59,7 @@ const THEME_KEYS = new Map([
   ['backdrop-blur-sm', '--backdrop-blur-sm'],
   ['backdrop-blur-xs', '--backdrop-blur-xs'],
 
-  ['ring', '--ring-width'],
+  ['ring', '--default-ring-width'],
   ['ring-3', '--ring-width-3'],
 ])
 

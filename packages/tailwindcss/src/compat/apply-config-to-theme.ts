@@ -147,30 +147,55 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
   return toAdd
 }
 
+const SPECIAL_DEFAULT_KEYS: Record<string, string> = {
+  borderWidth: 'border-width',
+  outlineWidth: 'outline-width',
+  ringColor: 'ring-color',
+  ringWidth: 'ring-width',
+  transitionDuration: 'transition-duration',
+  transitionTimingFunction: 'transition-timing-function',
+}
+
+const OLD_TO_NEW_NAMESPACE: Record<string, string> = {
+  animation: 'animate',
+  aspectRatio: 'aspect',
+  borderRadius: 'radius',
+  boxShadow: 'shadow',
+  colors: 'color',
+  containers: 'container',
+  fontFamily: 'font',
+  fontSize: 'text',
+  letterSpacing: 'tracking',
+  lineHeight: 'leading',
+  maxWidth: 'container',
+  screens: 'breakpoint',
+  transitionTimingFunction: 'ease',
+}
+
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  // In some special cases the `DEFAULT` key did not map to a "default" utility
+  // e.g. `ringColor.DEFAULT` wasn't *just* used for `ring`. It was used for
+  // all ring utilities as the color when one wasn't specified.
+  //
+  // We place these specialty values under the `--default-*` namespace to signal
+  // that they are defaults used by (potentially) multiple utilities.
+  let specialDefault = SPECIAL_DEFAULT_KEYS[path[0]]
+  if (specialDefault && path[1] === 'DEFAULT') return `default-${specialDefault}`
+
   // The legacy container component config should not be included in the Theme
   if (path[0] === 'container') return null
 
-  path = path.slice()
-
-  if (path[0] === 'animation') path[0] = 'animate'
-  if (path[0] === 'aspectRatio') path[0] = 'aspect'
-  if (path[0] === 'borderRadius') path[0] = 'radius'
-  if (path[0] === 'boxShadow') path[0] = 'shadow'
-  if (path[0] === 'colors') path[0] = 'color'
-  if (path[0] === 'containers') path[0] = 'container'
-  if (path[0] === 'fontFamily') path[0] = 'font'
-  if (path[0] === 'fontSize') path[0] = 'text'
-  if (path[0] === 'letterSpacing') path[0] = 'tracking'
-  if (path[0] === 'lineHeight') path[0] = 'leading'
-  if (path[0] === 'maxWidth') path[0] = 'container'
-  if (path[0] === 'screens') path[0] = 'breakpoint'
-  if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
-
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null
+  }
+
+  // Map old v3 namespaces to new theme namespaces
+  let ns = OLD_TO_NEW_NAMESPACE[path[0]]
+  if (ns) {
+    path = path.slice()
+    path[0] = ns
   }
 
   return (

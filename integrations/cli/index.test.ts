@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
-import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -813,6 +813,481 @@ describe.each([
       })
 
       expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+    },
+  )
+
+  test(
+    'watch mode + inline source maps',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'ssrc/index.html': html`
+          <div class="flex"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          /*  */
+        `,
+      },
+    },
+    async ({ spawn, expect, fs, parseSourceMap }) => {
+      let process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --map --watch`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+      let originalCss = await fs.read('dist/out.css')
+      let currentCss = originalCss
+
+      // Make sure we can find a source map
+      let map = parseSourceMap(currentCss)
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+
+      // Write to project source files
+      await fs.write('src/index.html', html`
+        <div class="flex underline"></div>
+      `)
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        expect(currentCss).not.toEqual(originalCss)
+        originalCss = currentCss
+      })
+
+      // Make sure the source map was updated
+      map = parseSourceMap(currentCss)
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.underli...',
+      })
+
+      expect(map.at(5, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.underline...',
+      })
+
+      expect(map.at(6, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'text-decor...',
+      })
+
+      expect(map.at(7, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+
+      // Write to the main CSS file
+      await fs.write(
+        'src/index.css',
+        css`
+          @import 'tailwindcss/utilities';
+          @source inline("w-auto");
+        `,
+      )
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        expect(currentCss).not.toEqual(originalCss)
+        originalCss = currentCss
+      })
+
+      // Make sure the source map was updated
+      map = parseSourceMap(currentCss)
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.w-auto...',
+      })
+
+      expect(map.at(5, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.w-auto {...',
+      })
+
+      expect(map.at(6, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'width: aut...',
+      })
+
+      expect(map.at(7, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.underli...',
+      })
+
+      expect(map.at(8, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.underline...',
+      })
+
+      expect(map.at(9, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'text-decor...',
+      })
+
+      expect(map.at(10, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+    },
+  )
+
+  test(
+    'watch mode + separate source maps',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'ssrc/index.html': html`
+          <div class="flex"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          /*  */
+        `,
+      },
+    },
+    async ({ spawn, expect, fs, parseSourceMap }) => {
+      let process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --map dist/out.css.map --watch`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+
+      // Make sure we can find a source map
+      let originalCss = await fs.read('dist/out.css')
+      let originalMap = await fs.read('dist/out.css.map')
+      let currentCss = originalCss
+      let currentMap = originalMap
+
+      // Make sure we can find a source map
+      let map = parseSourceMap({ map: currentMap, content: currentCss })
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+
+      // Write to project source files
+      await fs.write('src/index.html', html`
+        <div class="flex underline"></div>
+      `)
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        currentMap = await fs.read('dist/out.css.map')
+        expect(currentCss).not.toEqual(originalCss)
+        expect(currentMap).not.toEqual(originalMap)
+        originalCss = currentCss
+        originalMap = currentMap
+      })
+
+      // Make sure the source map was updated
+      map = parseSourceMap({ map: currentMap, content: currentCss })
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.underli...',
+      })
+
+      expect(map.at(5, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.underline...',
+      })
+
+      expect(map.at(6, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'text-decor...',
+      })
+
+      expect(map.at(7, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}...',
+      })
+
+      // Write to the main CSS file
+      await fs.write(
+        'src/index.css',
+        css`
+          @import 'tailwindcss/utilities';
+          @source inline("w-auto");
+        `,
+      )
+
+      // Wait for the CSS to be rebuilt
+      await retryAssertion(async () => {
+        currentCss = await fs.read('dist/out.css')
+        currentMap = await fs.read('dist/out.css.map')
+        expect(currentCss).not.toEqual(originalCss)
+        expect(currentMap).not.toEqual(originalMap)
+        originalCss = currentCss
+        originalMap = currentMap
+      })
+
+      // Make sure the source map was updated
+      map = parseSourceMap({ map: currentMap, content: currentCss })
+
+      expect(map.at(1, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '/*! tailwi...',
+      })
+
+      expect(map.at(2, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.flex {...',
+      })
+
+      expect(map.at(3, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'display: f...',
+      })
+
+      expect(map.at(4, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.w-auto...',
+      })
+
+      expect(map.at(5, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.w-auto {...',
+      })
+
+      expect(map.at(6, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'width: aut...',
+      })
+
+      expect(map.at(7, 0)).toMatchObject({
+        source: null,
+        original: '(none)',
+        generated: '}\n.underli...',
+      })
+
+      expect(map.at(8, 0)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: '.underline...',
+      })
+
+      expect(map.at(9, 2)).toMatchObject({
+        source:
+          kind === 'CLI'
+            ? expect.stringContaining('utilities.css')
+            : expect.stringMatching(/\/utilities-\w+\.css$/),
+        original: '@tailwind...',
+        generated: 'text-decor...',
+      })
+
+      expect(map.at(10, 0)).toMatchObject({
         source: null,
         original: '(none)',
         generated: '}...',
