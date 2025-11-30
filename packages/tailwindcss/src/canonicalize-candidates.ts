@@ -286,11 +286,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // E.g.: `mt-1` and `text-red-500` cannot be collapsed because there is no 3rd
     // utility with overlapping property/value combinations.
     let linked = new DefaultMap<number, Set<number>>((key) => new Set<number>([key]))
-    let otherUtilitiesArray = Array.from(otherUtilities)
-    for (let i = 0; i < otherUtilitiesArray.length; i++) {
-      let current = otherUtilitiesArray[i]
-      for (let j = i + 1; j < otherUtilitiesArray.length; j++) {
-        let other = otherUtilitiesArray[j]
+    for (let i = 0; i < otherUtilities.length; i++) {
+      let current = otherUtilities[i]
+      for (let j = i + 1; j < otherUtilities.length; j++) {
+        let other = otherUtilities[j]
 
         for (let property of current) {
           if (other.has(property)) {
