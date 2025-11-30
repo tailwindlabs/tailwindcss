@@ -94,7 +94,7 @@ await mkdir(path.resolve(__dirname, '../dist'), { recursive: true })
 
 // Write the checksums to a file
 let sumsFile = path.resolve(__dirname, '../dist/sha256sums.txt')
-let sums = summary.map(({ name, sum }) => `${sum}  ./tailwindcss-${name}`)
+let sums = summary.map(({ name, sum }) => `${sum}  ./${name}`)
 
 await writeFile(sumsFile, sums.join('\n') + '\n')
 
