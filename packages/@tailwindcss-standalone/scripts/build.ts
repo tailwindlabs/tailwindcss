@@ -53,6 +53,12 @@ for (let { target, name } of builds) {
     compile: {
       target,
       outfile,
+
+      // Disable .env loading
+      autoloadDotenv: false,
+
+      // Disable bunfig.toml loading
+      autoloadBunfig: false,
     },
   })
 
