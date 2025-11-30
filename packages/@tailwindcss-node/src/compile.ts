@@ -166,17 +166,6 @@ async function loadStylesheet(
 
   onDependency(resolvedPath)
 
-  if (typeof globalThis.__tw_readFile === 'function') {
-    let file = await globalThis.__tw_readFile(resolvedPath, 'utf-8')
-    if (file) {
-      return {
-        path: resolvedPath,
-        base: path.dirname(resolvedPath),
-        content: file,
-      }
-    }
-  }
-
   let file = await fsPromises.readFile(resolvedPath, 'utf-8')
   return {
     path: resolvedPath,
