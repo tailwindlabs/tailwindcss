@@ -7,7 +7,17 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 // Workaround for Bun binary downloads failing on Windows CI when
 // USERPROFILE is passed through by Turborepo.
-process.env.USERPROFILE = ''
+//
+// Unfortunately, setting this at runtime doesn't appear to work so we have to
+// spawn a new process without the env var.
+if (process.env.NESTED_BUILD !== '1' && process.env.USERPROFILE && process.env.USERPROFILE !== '') {
+  let result = await Bun.$`bun ./build.ts`.env({
+    USERPROFILE: '',
+    NESTED_BUILD: '1',
+  })
+
+  process.exit(result.exitCode)
+}
 
 // We use baseline builds for all x64 platforms to ensure compatibility with
 // older hardware.
