@@ -43,6 +43,12 @@ for (let { target, name } of builds) {
   let result = await Bun.build({
     entrypoints: ['./src/index.ts'],
     target: 'node',
+    minify: {
+      whitespace: false,
+      syntax: true,
+      identifiers: false,
+      keepNames: true,
+    },
 
     define: {
       // This ensures only necessary binaries are bundled for linux targets
