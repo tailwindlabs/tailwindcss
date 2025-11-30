@@ -2093,6 +2093,26 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
     },
     exit(node) {
       if (node.kind === 'rule' || node.kind === 'at-rule') {
+        // Remove declarations that are re-defined again later.
+        //
+        // This could maybe result in unwanted behavior (because similar
+        // properties typically exist for backwards compatibility), but for
+        // signature purposes we can assume that the last declaration wins.
+        if (node.nodes.length > 1) {
+          let seen = new Set<string>()
+          for (let i = node.nodes.length - 1; i >= 0; i--) {
+            let child = node.nodes[i]
+            if (child.kind !== 'declaration') continue
+            if (child.value === undefined) continue
+
+            if (seen.has(child.property)) {
+              node.nodes.splice(i, 1)
+            }
+            seen.add(child.property)
+          }
+        }
+
+        // Sort declarations alphabetically by property name
         node.nodes.sort((a, b) => {
           if (a.kind !== 'declaration') return 0
           if (b.kind !== 'declaration') return 0
