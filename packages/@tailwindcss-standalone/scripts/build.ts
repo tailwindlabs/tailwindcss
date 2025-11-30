@@ -48,6 +48,12 @@ for (let { target, name } of builds) {
       // This ensures only necessary binaries are bundled for linux targets
       // It reduces binary size since no runtime selection is necessary
       'process.env.PLATFORM_LIBC': JSON.stringify(target.includes('-musl') ? 'musl' : 'glibc'),
+
+      // This prevents the WASI build from being bundled with the binary
+      'process.env.NAPI_RS_FORCE_WASI': JSON.stringify(''),
+
+      // This simplifies the Oxide loading code a small amount
+      'process.env.NAPI_RS_NATIVE_LIBRARY_PATH': JSON.stringify(''),
     },
 
     compile: {
@@ -60,6 +66,17 @@ for (let { target, name } of builds) {
       // Disable bunfig.toml loading
       autoloadBunfig: false,
     },
+
+    plugins: [
+      {
+        name: 'tailwindcss-plugin',
+        setup(build) {
+          build.onLoad({ filter: /tailwindcss-oxide\.wasi\.cjs$/ }, async (args) => {
+            return { contents: '' }
+          })
+        },
+      },
+    ],
   })
 
   let entry = result.outputs.find((output) => output.kind === 'entry-point')
