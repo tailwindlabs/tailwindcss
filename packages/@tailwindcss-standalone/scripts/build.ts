@@ -54,6 +54,9 @@ for (let { target, name } of builds) {
 
       // This simplifies the Oxide loading code a small amount
       'process.env.NAPI_RS_NATIVE_LIBRARY_PATH': JSON.stringify(''),
+
+      // No need to support additional NODE_PATHs in the standalone build
+      'process.env.NODE_PATH': JSON.stringify(''),
     },
 
     compile: {
