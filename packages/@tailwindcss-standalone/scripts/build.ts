@@ -40,12 +40,16 @@ let start = process.hrtime.bigint()
 for (let { target, name } of builds) {
   let outfile = path.resolve(__dirname, `../dist/${name}`)
 
-  process.env.PLATFORM_LIBC = target.includes('-musl') ? 'musl' : 'glibc'
-
   let result = await Bun.build({
     entrypoints: ['./src/index.ts'],
     target: 'node',
-    env: 'inline',
+
+    define: {
+      // This ensures only necessary binaries are bundled for linux targets
+      // It reduces binary size since no runtime selection is necessary
+      'process.env.PLATFORM_LIBC': JSON.stringify(target.includes('-musl') ? 'musl' : 'glibc'),
+    },
+
     compile: {
       target,
       outfile,
