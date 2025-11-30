@@ -11,7 +11,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 // Unfortunately, setting this at runtime doesn't appear to work so we have to
 // spawn a new process without the env var.
 if (process.env.NESTED_BUILD !== '1' && process.env.USERPROFILE && process.env.USERPROFILE !== '') {
-  let result = await Bun.$`bun ./build.ts`.env({
+  let result = await Bun.$`bun ${fileURLToPath(import.meta.url)}`.env({
     USERPROFILE: '',
     NESTED_BUILD: '1',
   })
