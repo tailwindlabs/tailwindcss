@@ -14,7 +14,9 @@ process.env.USERPROFILE = ''
 let builds: { target: Bun.Build.Target; name: string }[] = [
   { name: 'tailwindcss-linux-arm64', target: 'bun-linux-arm64' },
   { name: 'tailwindcss-linux-arm64-musl', target: 'bun-linux-arm64-musl' },
-  { name: 'tailwindcss-linux-x64', target: 'bun-linux-x64-baseline-glibc' },
+  // @ts-expect-error: Either the types are wrong or the runtime needs to be updated
+  // to accept a `-glibc` at the end like the types suggest.
+  { name: 'tailwindcss-linux-x64', target: 'bun-linux-x64-baseline' },
   { name: 'tailwindcss-linux-x64-musl', target: 'bun-linux-x64-baseline-musl' },
   { name: 'tailwindcss-macos-arm64', target: 'bun-darwin-arm64' },
   { name: 'tailwindcss-macos-x64', target: 'bun-darwin-x64-baseline' },
