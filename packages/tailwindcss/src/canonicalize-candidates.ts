@@ -255,6 +255,75 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       computeUtilitiesPropertiesLookup.get(candidate),
     )
 
+    // Hard-coded optimization: if any candidate sets `line-height` and another
+    // candidate sets `font-size`, we pre-compute the `text-*` utilities with
+    // this line-height to try and collapse to those combined values.
+    if (candidatePropertiesValues.some((x) => x.has('line-height'))) {
+      let fontSizeNames = designSystem.theme.keysInNamespaces(['--text'])
+      let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
+      if (fontSizeNames.length > 0 && spacingMultiplier !== undefined) {
+        // Canonicalizing the spacing multiplier allows us to handle both
+        // `--spacing: 0.25rem` and `--spacing: 4px` values correctly.
+        let canonicalizedSpacingMultiplier = constantFoldDeclaration(
+          spacingMultiplier,
+          options.signatureOptions.rem,
+        )
+
+        let interestingLineHeights = new Set<string>()
+        let seenLineHeights = new Set<string>()
+        for (let pairs of candidatePropertiesValues) {
+          for (let lineHeight of pairs.get('line-height')) {
+            if (seenLineHeights.has(lineHeight)) continue
+            seenLineHeights.add(lineHeight)
+
+            let canonicalizedValue = constantFoldDeclaration(
+              lineHeight,
+              options.signatureOptions.rem,
+            )
+            let valueDimension = dimensions.get(canonicalizedValue)
+            let spacingMultiplierDimension = dimensions.get(canonicalizedSpacingMultiplier)
+            if (
+              valueDimension &&
+              spacingMultiplierDimension &&
+              valueDimension[1] === spacingMultiplierDimension[1] && // Ensure the units match
+              spacingMultiplierDimension[0] !== 0
+            ) {
+              let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
+              if (isValidSpacingMultiplier(bareValue)) {
+                interestingLineHeights.add(bareValue)
+
+                for (let name of fontSizeNames) {
+                  computeUtilitiesPropertiesLookup.get(`text-${name}/${bareValue}`)
+                }
+              } else {
+                interestingLineHeights.add(lineHeight)
+
+                for (let name of fontSizeNames) {
+                  computeUtilitiesPropertiesLookup.get(`text-${name}/[${lineHeight}]`)
+                }
+              }
+            }
+          }
+        }
+
+        let seenFontSizes = new Set<string>()
+        for (let pairs of candidatePropertiesValues) {
+          for (let fontSize of pairs.get('font-size')) {
+            if (seenFontSizes.has(fontSize)) continue
+            seenFontSizes.add(fontSize)
+
+            for (let lineHeight of interestingLineHeights) {
+              if (isValidSpacingMultiplier(lineHeight)) {
+                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/${lineHeight}`)
+              } else {
+                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/[${lineHeight}]`)
+              }
+            }
+          }
+        }
+      }
+    }
+
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
     // each property.
