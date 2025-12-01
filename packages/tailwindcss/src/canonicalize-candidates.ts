@@ -107,7 +107,10 @@ interface DesignSystem extends BaseDesignSystem {
   }
 }
 
-export function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
+export function prepareDesignSystemStorage(
+  baseDesignSystem: BaseDesignSystem,
+  options?: CanonicalizeOptions,
+): DesignSystem {
   let designSystem = baseDesignSystem as DesignSystem
 
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache()
@@ -116,7 +119,7 @@ export function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): 
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
   designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
-  designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
+  designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem, options)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
@@ -144,7 +147,7 @@ export function createSignatureOptions(
   if (options?.collapse) features |= SignatureFeatures.ExpandProperties
   if (options?.logicalToPhysical) features |= SignatureFeatures.LogicalToPhysical
 
-  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem, options)
 
   return designSystem.storage[SIGNATURE_OPTIONS_KEY].get(options?.rem ?? null).get(features)
 }
@@ -952,9 +955,12 @@ function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candida
 const SPACING_KEY = Symbol()
 function createSpacingCache(
   designSystem: DesignSystem,
+  options?: CanonicalizeOptions,
 ): DesignSystem['storage'][typeof SPACING_KEY] {
   let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
   if (spacingMultiplier === undefined) return null
+
+  spacingMultiplier = constantFoldDeclaration(spacingMultiplier, options?.rem ?? null)
 
   let parsed = dimensions.get(spacingMultiplier)
   if (!parsed) return null
@@ -962,7 +968,7 @@ function createSpacingCache(
   let [value, unit] = parsed
 
   return new DefaultMap<string, number | null>((input) => {
-    let parsed = dimensions.get(input)
+    let parsed = dimensions.get(constantFoldDeclaration(input, options?.rem ?? null))
     if (!parsed) return null
 
     let [myValue, myUnit] = parsed
