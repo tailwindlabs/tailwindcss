@@ -949,6 +949,11 @@ function createSpacingCache(
   let [value, unit] = parsed
 
   return new DefaultMap<string, number | null>((input) => {
+    // If we already know that the spacing multiplier is 0, all spacing
+    // multipliers will also be 0. No need to even try and parse/canonicalize
+    // the input value.
+    if (value === 0) return null
+
     let parsed = dimensions.get(constantFoldDeclaration(input, options?.rem ?? null))
     if (!parsed) return null
 
