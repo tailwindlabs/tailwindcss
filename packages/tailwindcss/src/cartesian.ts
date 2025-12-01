@@ -11,6 +11,11 @@ export function* cartesian<T extends CartesianInput>(...sets: T): Generator<Cart
   let n = sets.length
   if (n === 0) return
 
+  // If any input set is empty, the Cartesian product is empty.
+  if (sets.some((set) => set.length === 0)) {
+    return
+  }
+
   // Index lookup
   let idx = Array(n).fill(0)
 
