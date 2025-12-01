@@ -107,7 +107,10 @@ interface DesignSystem extends BaseDesignSystem {
   }
 }
 
-export function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): DesignSystem {
+export function prepareDesignSystemStorage(
+  baseDesignSystem: BaseDesignSystem,
+  options?: CanonicalizeOptions,
+): DesignSystem {
   let designSystem = baseDesignSystem as DesignSystem
 
   designSystem.storage[SIGNATURE_OPTIONS_KEY] ??= createSignatureOptionsCache()
@@ -116,7 +119,7 @@ export function prepareDesignSystemStorage(baseDesignSystem: BaseDesignSystem): 
   designSystem.storage[CANONICALIZE_VARIANT_KEY] ??= createCanonicalizeVariantCache()
   designSystem.storage[CANONICALIZE_UTILITY_KEY] ??= createCanonicalizeUtilityCache()
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
-  designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem)
+  designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem, options)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
@@ -144,7 +147,7 @@ export function createSignatureOptions(
   if (options?.collapse) features |= SignatureFeatures.ExpandProperties
   if (options?.logicalToPhysical) features |= SignatureFeatures.LogicalToPhysical
 
-  let designSystem = prepareDesignSystemStorage(baseDesignSystem)
+  let designSystem = prepareDesignSystemStorage(baseDesignSystem, options)
 
   return designSystem.storage[SIGNATURE_OPTIONS_KEY].get(options?.rem ?? null).get(features)
 }
@@ -255,6 +258,56 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       computeUtilitiesPropertiesLookup.get(candidate),
     )
 
+    // Hard-coded optimization: if any candidate sets `line-height` and another
+    // candidate sets `font-size`, we pre-compute the `text-*` utilities with
+    // this line-height to try and collapse to those combined values.
+    if (candidatePropertiesValues.some((x) => x.has('line-height'))) {
+      let fontSizeNames = designSystem.theme.keysInNamespaces(['--text'])
+      if (fontSizeNames.length > 0) {
+        let interestingLineHeights = new Set<string | number>()
+        let seenLineHeights = new Set<string>()
+        for (let pairs of candidatePropertiesValues) {
+          for (let lineHeight of pairs.get('line-height')) {
+            if (seenLineHeights.has(lineHeight)) continue
+            seenLineHeights.add(lineHeight)
+
+            let bareValue = designSystem.storage[SPACING_KEY]?.get(lineHeight) ?? null
+            if (bareValue !== null) {
+              if (isValidSpacingMultiplier(bareValue)) {
+                interestingLineHeights.add(bareValue)
+
+                for (let name of fontSizeNames) {
+                  computeUtilitiesPropertiesLookup.get(`text-${name}/${bareValue}`)
+                }
+              } else {
+                interestingLineHeights.add(lineHeight)
+
+                for (let name of fontSizeNames) {
+                  computeUtilitiesPropertiesLookup.get(`text-${name}/[${lineHeight}]`)
+                }
+              }
+            }
+          }
+        }
+
+        let seenFontSizes = new Set<string>()
+        for (let pairs of candidatePropertiesValues) {
+          for (let fontSize of pairs.get('font-size')) {
+            if (seenFontSizes.has(fontSize)) continue
+            seenFontSizes.add(fontSize)
+
+            for (let lineHeight of interestingLineHeights) {
+              if (isValidSpacingMultiplier(lineHeight)) {
+                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/${lineHeight}`)
+              } else {
+                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/[${lineHeight}]`)
+              }
+            }
+          }
+        }
+      }
+    }
+
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
     // each property.
@@ -262,17 +315,20 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
     let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
       let result: Set<string> | null = null
-      for (let [property, values] of propertyValues) {
-        for (let value of values) {
-          let otherUtilities = staticUtilities.get(property).get(value)
-
-          if (result === null) result = new Set(otherUtilities)
-          else result = intersection(result, otherUtilities)
-
-          // The moment no other utilities match, we can stop searching because
-          // all intersections with an empty set will remain empty.
-          if (result!.size === 0) return result!
+      for (let property of propertyValues.keys()) {
+        let otherUtilities = new Set<string>()
+        for (let group of staticUtilities.get(property).values()) {
+          for (let candidate of group) {
+            otherUtilities.add(candidate)
+          }
         }
+
+        if (result === null) result = otherUtilities
+        else result = intersection(result, otherUtilities)
+
+        // The moment no other utilities match, we can stop searching because
+        // all intersections with an empty set will remain empty.
+        if (result!.size === 0) return result!
       }
       return result!
     })
@@ -286,11 +342,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // E.g.: `mt-1` and `text-red-500` cannot be collapsed because there is no 3rd
     // utility with overlapping property/value combinations.
     let linked = new DefaultMap<number, Set<number>>((key) => new Set<number>([key]))
-    let otherUtilitiesArray = Array.from(otherUtilities)
-    for (let i = 0; i < otherUtilitiesArray.length; i++) {
-      let current = otherUtilitiesArray[i]
-      for (let j = i + 1; j < otherUtilitiesArray.length; j++) {
-        let other = otherUtilitiesArray[j]
+    for (let i = 0; i < otherUtilities.length; i++) {
+      let current = otherUtilities[i]
+      for (let j = i + 1; j < otherUtilities.length; j++) {
+        let other = otherUtilities[j]
 
         for (let property of current) {
           if (other.has(property)) {
@@ -881,9 +936,12 @@ function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candida
 const SPACING_KEY = Symbol()
 function createSpacingCache(
   designSystem: DesignSystem,
+  options?: CanonicalizeOptions,
 ): DesignSystem['storage'][typeof SPACING_KEY] {
   let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
   if (spacingMultiplier === undefined) return null
+
+  spacingMultiplier = constantFoldDeclaration(spacingMultiplier, options?.rem ?? null)
 
   let parsed = dimensions.get(spacingMultiplier)
   if (!parsed) return null
@@ -891,7 +949,12 @@ function createSpacingCache(
   let [value, unit] = parsed
 
   return new DefaultMap<string, number | null>((input) => {
-    let parsed = dimensions.get(input)
+    // If we already know that the spacing multiplier is 0, all spacing
+    // multipliers will also be 0. No need to even try and parse/canonicalize
+    // the input value.
+    if (value === 0) return null
+
+    let parsed = dimensions.get(constantFoldDeclaration(input, options?.rem ?? null))
     if (!parsed) return null
 
     let [myValue, myUnit] = parsed
@@ -998,30 +1061,12 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         candidate.kind === 'functional' &&
         candidate.value?.kind === 'arbitrary'
       ) {
-        let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
-        if (spacingMultiplier !== undefined) {
-          // Canonicalizing the spacing multiplier allows us to handle both
-          // `--spacing: 0.25rem` and `--spacing: 4px` values correctly.
-          let canonicalizedSpacingMultiplier = constantFoldDeclaration(
-            spacingMultiplier,
-            options.signatureOptions.rem,
-          )
-
-          let canonicalizedValue = constantFoldDeclaration(value, options.signatureOptions.rem)
-          let valueDimension = dimensions.get(canonicalizedValue)
-          let spacingMultiplierDimension = dimensions.get(canonicalizedSpacingMultiplier)
-          if (
-            valueDimension &&
-            spacingMultiplierDimension &&
-            valueDimension[1] === spacingMultiplierDimension[1] && // Ensure the units match
-            spacingMultiplierDimension[0] !== 0
-          ) {
-            let bareValue = `${valueDimension[0] / spacingMultiplierDimension[0]}`
-            if (isValidSpacingMultiplier(bareValue)) {
-              yield Object.assign({}, candidate, {
-                value: { kind: 'named', value: bareValue, fraction: null },
-              })
-            }
+        let bareValue = designSystem.storage[SPACING_KEY]?.get(value) ?? null
+        if (bareValue !== null) {
+          if (isValidSpacingMultiplier(bareValue)) {
+            yield Object.assign({}, candidate, {
+              value: { kind: 'named', value: bareValue, fraction: null },
+            })
           }
         }
       }
@@ -2093,6 +2138,26 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
     },
     exit(node) {
       if (node.kind === 'rule' || node.kind === 'at-rule') {
+        // Remove declarations that are re-defined again later.
+        //
+        // This could maybe result in unwanted behavior (because similar
+        // properties typically exist for backwards compatibility), but for
+        // signature purposes we can assume that the last declaration wins.
+        if (node.nodes.length > 1) {
+          let seen = new Set<string>()
+          for (let i = node.nodes.length - 1; i >= 0; i--) {
+            let child = node.nodes[i]
+            if (child.kind !== 'declaration') continue
+            if (child.value === undefined) continue
+
+            if (seen.has(child.property)) {
+              node.nodes.splice(i, 1)
+            }
+            seen.add(child.property)
+          }
+        }
+
+        // Sort declarations alphabetically by property name
         node.nodes.sort((a, b) => {
           if (a.kind !== 'declaration') return 0
           if (b.kind !== 'declaration') return 0

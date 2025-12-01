@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve backwards compatibility for `content` theme key from JS configs ([#19381](https://github.com/tailwindlabs/tailwindcss/pull/19381))
 - Upgrade: Handle `future` and `experimental` config keys ([#19344](https://github.com/tailwindlabs/tailwindcss/pull/19344))
 - Try to canonicalize any arbitrary utility to a bare value ([#19379](https://github.com/tailwindlabs/tailwindcss/pull/19379))
+- Canonicalization: combine `text-*` and `leading-*` classes ([#19396](https://github.com/tailwindlabs/tailwindcss/pull/19396))
 
 ### Added
 
