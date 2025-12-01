@@ -237,16 +237,21 @@ async function migrateTheme(
       prevSectionKey = sectionKey
     }
 
-    if (resetNamespaces.has(key[0]) && resetNamespaces.get(key[0]) === false) {
-      resetNamespaces.set(key[0], true)
-      let property = keyPathToCssProperty([key[0]])
-      if (property !== null) {
-        themeSection.push(`  ${escape(`--${property}`)}-*: initial;`)
-      }
-    }
-
     let property = keyPathToCssProperty(key)
+
     if (property !== null) {
+      if (
+        !property.startsWith('default-') &&
+        resetNamespaces.has(key[0]) &&
+        resetNamespaces.get(key[0]) === false
+      ) {
+        resetNamespaces.set(key[0], true)
+        let ns = keyPathToCssProperty([key[0]])
+        if (ns !== null) {
+          themeSection.push(`  ${escape(`--${ns}`)}-*: initial;`)
+        }
+      }
+
       themeSection.push(`  ${escape(`--${property}`)}: ${value};`)
     }
   }
@@ -411,6 +416,8 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     'presets',
     'prefix', // Prefix is handled in the dedicated prefix migrator
     'corePlugins',
+    'future',
+    'experimental',
   ]
 
   if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
@@ -423,6 +430,29 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
 
   if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
     return false
+  }
+
+  // If there are unknown "future" flags we should bail
+  if (unresolvedConfig.future && unresolvedConfig.future !== 'all') {
+    let knownFlags = [
+      'hoverOnlyWhenSupported',
+      'respectDefaultRingColorOpacity',
+      'disableColorOpacityUtilitiesByDefault',
+      'relativeContentPathsByDefault',
+    ]
+
+    if (Object.keys(unresolvedConfig.future).some((key) => !knownFlags.includes(key))) {
+      return false
+    }
+  }
+
+  // If there are unknown "experimental" flags we should bail
+  if (unresolvedConfig.experimental && unresolvedConfig.experimental !== 'all') {
+    let knownFlags = ['generalizedModifiers']
+
+    if (Object.keys(unresolvedConfig.experimental).some((key) => !knownFlags.includes(key))) {
+      return false
+    }
   }
 
   // Only migrate the config file if all top-level theme keys are allowed to be

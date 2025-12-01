@@ -34,6 +34,9 @@ test(
               steel: 'rgb(70 130 180 / <alpha-value>)',
               smoke: 'rgba(245, 245, 245, var(--smoke-alpha, <alpha-value>))',
             },
+            ringColor: {
+              DEFAULT: '#c0ffee',
+            },
             opacity: {
               superOpaque: '0.95',
             },
@@ -167,9 +170,9 @@ test(
       "
       --- src/index.html ---
       <div
-        class="tracking-super-wide leading-super-loose"
+        class="tracking-superWide leading-superLoose"
       ></div>
-      <div class="text-super-red/super-opaque leading-super-loose"></div>
+      <div class="text-superRed/superOpaque leading-superLoose"></div>
 
       --- src/input.css ---
       @import 'tailwindcss';
@@ -187,12 +190,14 @@ test(
         --color-red-500: #ef4444;
         --color-red-600: #dc2626;
 
-        --color-super-red: #ff0000;
+        --color-superRed: #ff0000;
         --color-steel: rgb(70 130 180);
         --color-smoke: rgba(245, 245, 245, var(--smoke-alpha, 1));
 
+        --default-ring-color: #c0ffee;
+
         --opacity-*: initial;
-        --opacity-super-opaque: 95%;
+        --opacity-superOpaque: 95%;
 
         --text-*: initial;
         --text-xs: 0.75rem;
@@ -265,9 +270,9 @@ test(
         --animate-spin-clockwise: spin-clockwise 1s linear infinite;
         --animate-spin-counterclockwise: spin-counterclockwise 1s linear infinite;
 
-        --tracking-super-wide: 0.25em;
+        --tracking-superWide: 0.25em;
 
-        --leading-super-loose: 3;
+        --leading-superLoose: 3;
 
         @keyframes spin-clockwise {
           0% {
@@ -1841,3 +1846,243 @@ describe('border compatibility', () => {
     },
   )
 })
+
+test(
+  `future and experimental keys are supported`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+        import defaultTheme from 'tailwindcss/defaultTheme'
+
+        module.exports = {
+          darkMode: 'selector',
+          content: ['./src/**/*.{html,js}'],
+          future: {
+            hoverOnlyWhenSupported: true,
+            respectDefaultRingColorOpacity: true,
+            disableColorOpacityUtilitiesByDefault: true,
+            relativeContentPathsByDefault: true,
+          },
+          experimental: {
+            generalizedModifiers: true,
+          },
+          theme: {
+            colors: {
+              red: {
+                400: '#f87171',
+                500: 'red',
+              },
+            },
+          },
+          plugins: [],
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @custom-variant dark (&:where(.dark, .dark *));
+
+      @theme {
+        --color-*: initial;
+        --color-red-400: #f87171;
+        --color-red-500: red;
+      }
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+      "
+    `)
+
+    expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toBe('')
+  },
+)
+
+test(
+  `unknown future keys dont migrate the config`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+        import defaultTheme from 'tailwindcss/defaultTheme'
+
+        module.exports = {
+          darkMode: 'selector',
+          content: ['./src/**/*.{html,js}'],
+          future: {
+            something: true,
+          },
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @config '../tailwind.config.ts';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+      "
+    `)
+
+    expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toMatchInlineSnapshot(`
+      "--- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+      import defaultTheme from 'tailwindcss/defaultTheme'
+
+      module.exports = {
+        darkMode: 'selector',
+        content: ['./src/**/*.{html,js}'],
+        future: {
+          something: true,
+        },
+      } satisfies Config"
+    `)
+  },
+)
+
+test(
+  `unknown experimental keys dont migrate the config`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+        import defaultTheme from 'tailwindcss/defaultTheme'
+
+        module.exports = {
+          darkMode: 'selector',
+          content: ['./src/**/*.{html,js}'],
+          experimental: {
+            something: true,
+          },
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
+      "
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @config '../tailwind.config.ts';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+      "
+    `)
+
+    expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toMatchInlineSnapshot(`
+      "--- tailwind.config.ts ---
+      import { type Config } from 'tailwindcss'
+      import defaultTheme from 'tailwindcss/defaultTheme'
+
+      module.exports = {
+        darkMode: 'selector',
+        content: ['./src/**/*.{html,js}'],
+        experimental: {
+          something: true,
+        },
+      } satisfies Config"
+    `)
+  },
+)

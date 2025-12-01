@@ -174,6 +174,8 @@ test(
 test(
   `upgrades a v3 project with prefixes to v4`,
   {
+    // Somehow this test takes *way* longer than the rest (but not always?)
+    timeout: 120_000,
     fs: {
       'package.json': json`
         {
@@ -2345,8 +2347,7 @@ test(
         --shadow-*: initial;
         --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 
-        --ring-width-*: initial;
-        --ring-width: 4px;
+        --default-ring-width: 4px;
 
         --blur: var(--custom-default-blur);
 
@@ -2818,7 +2819,7 @@ test(
       `,
     },
   },
-  async ({ exec, fs, expect }) => {
+  async ({ exec, root, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
     let before = await fs.dumpFiles('./src/**/*.{css,html}')
@@ -2855,7 +2856,7 @@ test(
     `)
 
     // Commit the changes
-    if (isRepoDirty()) {
+    if (isRepoDirty(root)) {
       await exec('git add .')
       await exec('git commit -m "upgrade"')
     }

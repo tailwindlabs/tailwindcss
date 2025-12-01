@@ -31,6 +31,16 @@ test('config values can be merged into the theme', () => {
             normal: '0 1px 3px black',
           },
 
+          borderWidth: {
+            DEFAULT: '1.5px',
+          },
+          outlineWidth: {
+            DEFAULT: '2.5px',
+          },
+          ringWidth: {
+            DEFAULT: '3.5px',
+          },
+
           borderRadius: {
             sm: '0.33rem',
           },
@@ -57,6 +67,10 @@ test('config values can be merged into the theme', () => {
             '2xl': ['2rem'],
           },
 
+          ringColor: {
+            DEFAULT: '#fff',
+          },
+
           letterSpacing: {
             superWide: '0.25em',
           },
@@ -77,7 +91,11 @@ test('config values can be merged into the theme', () => {
           },
 
           transitionTimingFunction: {
+            DEFAULT: 'ease-in-out',
             fast: 'cubic-bezier(0, 0.55, 0.45, 1)',
+          },
+          transitionDuration: {
+            DEFAULT: '1234ms',
           },
         },
       },
@@ -118,13 +136,30 @@ test('config values can be merged into the theme', () => {
   ])
   expect(theme.resolve('2xl', ['--text'])).toEqual('2rem')
   expect(theme.resolveWith('2xl', ['--text'], ['--line-height'])).toEqual(['2rem', {}])
-  expect(theme.resolve('super-wide', ['--tracking'])).toEqual('0.25em')
-  expect(theme.resolve('super-loose', ['--leading'])).toEqual('3')
+  expect(theme.resolve('superWide', ['--tracking'])).toEqual('0.25em')
+  expect(theme.resolve('superLoose', ['--leading'])).toEqual('3')
   expect(theme.resolve('1/2', ['--width'])).toEqual('60%')
   expect(theme.resolve('0.5', ['--width'])).toEqual('60%')
   expect(theme.resolve('100%', ['--width'])).toEqual('100%')
   expect(theme.resolve('9xs', ['--container'])).toEqual('6rem')
   expect(theme.resolve('fast', ['--ease'])).toEqual('cubic-bezier(0, 0.55, 0.45, 1)')
+
+  expect(theme.get(['--border'])).toEqual(null)
+  expect(theme.get(['--default-border-width'])).toEqual('1.5px')
+
+  expect(theme.get(['--outline'])).toEqual(null)
+  expect(theme.get(['--default-outline-width'])).toEqual('2.5px')
+
+  expect(theme.get(['--ring-color'])).toEqual(null)
+  expect(theme.get(['--default-ring-color'])).toEqual('#fff')
+
+  expect(theme.get(['--ring-width'])).toEqual(null)
+  expect(theme.get(['--default-ring-width'])).toEqual('3.5px')
+
+  expect(theme.get(['--default-transition-duration'])).toEqual('1234ms')
+
+  expect(theme.get(['--ease'])).toEqual(null)
+  expect(theme.get(['--default-transition-timing-function'])).toEqual('ease-in-out')
 })
 
 test('will reset default theme values with overwriting theme values', () => {

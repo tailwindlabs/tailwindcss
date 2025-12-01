@@ -11,7 +11,8 @@ import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+import type { Environment, Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+import * as vite from 'vite'
 
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
@@ -28,28 +29,51 @@ export type PluginOptions = {
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
+  let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
 
   let isSSR = false
   let shouldOptimize = true
   let minify = true
 
-  let roots: DefaultMap<string, Root> = new DefaultMap((id) => {
-    let cssResolver = config!.createResolver({
-      ...config!.resolve,
-      extensions: ['.css'],
-      mainFields: ['style'],
-      conditions: ['style', 'development|production'],
-      tryIndex: false,
-      preferRelative: true,
-    })
-    function customCssResolver(id: string, base: string) {
-      return cssResolver(id, base, true, isSSR)
+  function createRoot(env: Environment | null, id: string) {
+    type ResolveFn = (id: string, base: string) => Promise<string | false | undefined>
+
+    let customCssResolver: ResolveFn
+    let customJsResolver: ResolveFn
+
+    if (!env) {
+      // Older, pre-environment Vite API
+      // TODO: Can we drop this??
+      let cssResolver = config!.createResolver({
+        ...config!.resolve,
+        extensions: ['.css'],
+        mainFields: ['style'],
+        conditions: ['style', 'development|production'],
+        tryIndex: false,
+        preferRelative: true,
+      })
+
+      let jsResolver = config!.createResolver(config!.resolve)
+
+      customCssResolver = (id: string, base: string) => cssResolver(id, base, true, isSSR)
+      customJsResolver = (id: string, base: string) => jsResolver(id, base, true, isSSR)
+    } else {
+      // Newer Vite versions
+      let cssResolver = vite.createIdResolver(env.config, {
+        ...env.config.resolve,
+        extensions: ['.css'],
+        mainFields: ['style'],
+        conditions: ['style', 'development|production'],
+        tryIndex: false,
+        preferRelative: true,
+      })
+
+      let jsResolver = vite.createIdResolver(env.config, env.config.resolve)
+
+      customCssResolver = (id: string, base: string) => cssResolver(env, id, base, true)
+      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, true)
     }
 
-    let jsResolver = config!.createResolver(config!.resolve)
-    function customJsResolver(id: string, base: string) {
-      return jsResolver(id, base, true, isSSR)
-    }
     return new Root(
       id,
       config!.root,
@@ -59,7 +83,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       customCssResolver,
       customJsResolver,
     )
-  })
+  }
 
   return [
     {
@@ -97,23 +121,35 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       name: '@tailwindcss/vite:generate:serve',
       apply: 'serve',
       enforce: 'pre',
+      transform: {
+        filter: {
+          id: {
+            exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
+            include: [/\.css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+          },
+        },
+        async handler(src, id) {
+          if (!isPotentialCssRootFile(id)) return
 
-      async transform(src, id, options) {
-        if (!isPotentialCssRootFile(id)) return
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
 
-        using I = new Instrumentation()
-        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (serve)')
+          let roots = rootsByEnv.get(this.environment?.name ?? 'default')
+          let root = roots.get(id)
+          if (!root) {
+            root ??= createRoot(this.environment ?? null, id)
+            roots.set(id, root)
+          }
 
-        let root = roots.get(id)
+          let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+          if (!result) {
+            roots.delete(id)
+            return src
+          }
 
-        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!result) {
-          roots.delete(id)
-          return src
-        }
-
-        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
-        return result
+          DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
+          return result
+        },
       },
     },
 
@@ -122,32 +158,44 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
       enforce: 'pre',
+      transform: {
+        filter: {
+          id: {
+            exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
+            include: [/\.css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+          },
+        },
+        async handler(src, id) {
+          if (!isPotentialCssRootFile(id)) return
 
-      async transform(src, id) {
-        if (!isPotentialCssRootFile(id)) return
+          using I = new Instrumentation()
+          DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
 
-        using I = new Instrumentation()
-        DEBUG && I.start('[@tailwindcss/vite] Generate CSS (build)')
+          let roots = rootsByEnv.get(this.environment?.name ?? 'default')
+          let root = roots.get(id)
+          if (!root) {
+            root ??= createRoot(this.environment ?? null, id)
+            roots.set(id, root)
+          }
 
-        let root = roots.get(id)
+          let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+          if (!result) {
+            roots.delete(id)
+            return src
+          }
+          DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
-        let result = await root.generate(src, (file) => this.addWatchFile(file), I)
-        if (!result) {
-          roots.delete(id)
-          return src
-        }
-        DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
+          if (shouldOptimize) {
+            DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
+            result = optimize(result.code, {
+              minify,
+              map: result.map,
+            })
+            DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
+          }
 
-        if (shouldOptimize) {
-          DEBUG && I.start('[@tailwindcss/vite] Optimize CSS')
-          result = optimize(result.code, {
-            minify,
-            map: result.map,
-          })
-          DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
-        }
-
-        return result
+          return result
+        },
       },
     },
   ] satisfies Plugin[]
@@ -159,13 +207,15 @@ function getExtension(id: string) {
 }
 
 function isPotentialCssRootFile(id: string) {
-  if (id.includes('/.vite/')) return
+  if (id.includes('/.vite/')) return false
+
+  // Don't intercept special static asset resources
+  if (SPECIAL_QUERY_RE.test(id)) return false
+  if (COMMON_JS_PROXY_RE.test(id)) return false
+
   let extension = getExtension(id)
-  let isCssFile =
-    (extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)) &&
-    // Don't intercept special static asset resources
-    !SPECIAL_QUERY_RE.test(id) &&
-    !COMMON_JS_PROXY_RE.test(id)
+  let isCssFile = extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)
+
   return isCssFile
 }
 

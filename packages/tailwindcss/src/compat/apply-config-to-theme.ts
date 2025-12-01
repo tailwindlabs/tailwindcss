@@ -147,30 +147,55 @@ export function themeableValues(config: ResolvedConfig['theme']): [string[], unk
   return toAdd
 }
 
+const SPECIAL_DEFAULT_KEYS: Record<string, string> = {
+  borderWidth: 'border-width',
+  outlineWidth: 'outline-width',
+  ringColor: 'ring-color',
+  ringWidth: 'ring-width',
+  transitionDuration: 'transition-duration',
+  transitionTimingFunction: 'transition-timing-function',
+}
+
+const OLD_TO_NEW_NAMESPACE: Record<string, string> = {
+  animation: 'animate',
+  aspectRatio: 'aspect',
+  borderRadius: 'radius',
+  boxShadow: 'shadow',
+  colors: 'color',
+  containers: 'container',
+  fontFamily: 'font',
+  fontSize: 'text',
+  letterSpacing: 'tracking',
+  lineHeight: 'leading',
+  maxWidth: 'container',
+  screens: 'breakpoint',
+  transitionTimingFunction: 'ease',
+}
+
 const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
+  // In some special cases the `DEFAULT` key did not map to a "default" utility
+  // e.g. `ringColor.DEFAULT` wasn't *just* used for `ring`. It was used for
+  // all ring utilities as the color when one wasn't specified.
+  //
+  // We place these specialty values under the `--default-*` namespace to signal
+  // that they are defaults used by (potentially) multiple utilities.
+  let specialDefault = SPECIAL_DEFAULT_KEYS[path[0]]
+  if (specialDefault && path[1] === 'DEFAULT') return `default-${specialDefault}`
+
   // The legacy container component config should not be included in the Theme
   if (path[0] === 'container') return null
 
-  path = path.slice()
-
-  if (path[0] === 'animation') path[0] = 'animate'
-  if (path[0] === 'aspectRatio') path[0] = 'aspect'
-  if (path[0] === 'borderRadius') path[0] = 'radius'
-  if (path[0] === 'boxShadow') path[0] = 'shadow'
-  if (path[0] === 'colors') path[0] = 'color'
-  if (path[0] === 'containers') path[0] = 'container'
-  if (path[0] === 'fontFamily') path[0] = 'font'
-  if (path[0] === 'fontSize') path[0] = 'text'
-  if (path[0] === 'letterSpacing') path[0] = 'tracking'
-  if (path[0] === 'lineHeight') path[0] = 'leading'
-  if (path[0] === 'maxWidth') path[0] = 'container'
-  if (path[0] === 'screens') path[0] = 'breakpoint'
-  if (path[0] === 'transitionTimingFunction') path[0] = 'ease'
-
   for (let part of path) {
     if (!IS_VALID_KEY.test(part)) return null
+  }
+
+  // Map old v3 namespaces to new theme namespaces
+  let ns = OLD_TO_NEW_NAMESPACE[path[0]]
+  if (ns) {
+    path = path.slice()
+    path[0] = ns
   }
 
   return (
@@ -185,11 +210,27 @@ export function keyPathToCssProperty(path: string[]) {
       .map((path, idx, all) => (path === '1' && idx !== all.length - 1 ? '' : path))
 
       // Resolve the key path to a CSS variable segment
-      .map((part) =>
-        part
-          .replaceAll('.', '_')
-          .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`),
-      )
+      .map((part, idx) => {
+        part = part.replaceAll('.', '_')
+
+        let shouldConvert =
+          // The first "namespace" part should be converted to kebab-case
+          // This converts things like backgroundColor to `background-color`
+          idx === 0 ||
+          // Any tuple nested key should be converted to kebab-case
+          // These are identified with a leading `-`
+          // e.g. `fontSize.xs.1.lineHeight` -> `font-size-xs--line-height`
+          part.startsWith('-') ||
+          // `lineHeight` is a bit of a special case in which it does not
+          // always begin with a leading `-` even when as a nested tuple key
+          part === 'lineHeight'
+
+        if (shouldConvert) {
+          part = part.replace(/([a-z])([A-Z])/g, (_, a, b) => `${a}-${b.toLowerCase()}`)
+        }
+
+        return part
+      })
 
       // Remove the `DEFAULT` key at the end of a path
       // We're reading from CSS anyway so it'll be a string

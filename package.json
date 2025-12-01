@@ -55,10 +55,10 @@
     "prettier": "catalog:",
     "prettier-plugin-embed": "^0.5.0",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "tsup": "^8.5.0",
-    "turbo": "^2.5.4",
+    "tsup": "^8.5.1",
+    "turbo": "^2.6.1",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^4.0.3"
   },
   "packageManager": "pnpm@9.6.0",
   "pnpm": {

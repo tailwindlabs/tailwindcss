@@ -4,10 +4,22 @@ import * as versions from '../../utils/version'
 import { migrateCandidate } from './migrate'
 vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 
+const css = String.raw
+
 describe('is-safe-migration', async () => {
-  let designSystem = await __unstable__loadDesignSystem('@import "tailwindcss";', {
-    base: __dirname,
-  })
+  let designSystem = await __unstable__loadDesignSystem(
+    css`
+      @import 'tailwindcss';
+
+      /* TODO(perf): Only here to speed up the tests */
+      @theme {
+        --*: initial;
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      }
+    `,
+    { base: __dirname },
+  )
 
   test.each([
     [`let notBorder = !border    \n`, '!border'],
