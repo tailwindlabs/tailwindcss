@@ -287,7 +287,7 @@ class Root {
     let inputPath = idToPath(this.id)
 
     function addWatchFile(file: string) {
-      // Don't watch the input file since it's already a dependency anc causes
+      // Don't watch the input file since it's already a dependency and causes
       // issues with some setups (e.g. Qwik).
       if (file === inputPath) {
         return
