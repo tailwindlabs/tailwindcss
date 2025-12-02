@@ -5174,7 +5174,7 @@ export function createUtilities(theme: Theme) {
     {
       values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
       valueThemeKeys: ['--text', '--spacing'],
-      modifiers: [],
+      modifiers: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
       modifierThemeKeys: ['--leading', '--spacing'],
     },
   ])
