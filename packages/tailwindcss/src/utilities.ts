@@ -5102,7 +5102,7 @@ export function createUtilities(theme: Theme) {
           let modifier =
             candidate.modifier.kind === 'arbitrary'
               ? candidate.modifier.value
-              : theme.resolve(candidate.modifier.value, ['--leading'])
+              : theme.resolve(candidate.modifier.value, ['--leading', '--spacing'])
 
           if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
             let multiplier = theme.resolve(null, ['--spacing'])
@@ -5161,7 +5161,7 @@ export function createUtilities(theme: Theme) {
       values: [],
       valueThemeKeys: ['--text'],
       modifiers: [],
-      modifierThemeKeys: ['--leading'],
+      modifierThemeKeys: ['--leading', '--spacing'],
     },
   ])
 
