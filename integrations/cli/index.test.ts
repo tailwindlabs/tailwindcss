@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
-import { candidate, css, html, js, json, retryAssertion, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, retryAssertion, test, ts, txt, yaml } from '../utils'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -2591,7 +2591,7 @@ test(
           }
         }
       `,
-      'input.css': css`
+      'input.css': txt`
         .test {
           color: red;
           */
