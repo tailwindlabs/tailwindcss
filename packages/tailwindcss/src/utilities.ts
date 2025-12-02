@@ -5092,7 +5092,7 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.resolveWith(
         candidate.value.value,
-        ['--text'],
+        ['--text', '--spacing'],
         ['--line-height', '--letter-spacing', '--font-weight'],
       )
       if (value) {
@@ -5159,7 +5159,7 @@ export function createUtilities(theme: Theme) {
     },
     {
       values: [],
-      valueThemeKeys: ['--text'],
+      valueThemeKeys: ['--text', '--spacing'],
       modifiers: [],
       modifierThemeKeys: ['--leading', '--spacing'],
     },
