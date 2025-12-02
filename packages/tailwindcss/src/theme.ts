@@ -243,7 +243,7 @@ export class Theme {
   }
 
   resolveWith(
-    candidateValue: string,
+    candidateValue: string | null,
     themeKeys: ThemeKey[],
     nestedKeys: `--${string}`[] = [],
   ): [string, Record<string, string>] | null {

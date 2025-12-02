@@ -5095,6 +5095,20 @@ export function createUtilities(theme: Theme) {
         ['--text', '--spacing'],
         ['--line-height', '--letter-spacing', '--font-weight'],
       )
+
+      // Bare values use the spacing scale
+      if (!value) {
+        let multiplier = theme.resolveWith(
+          null,
+          ['--spacing'],
+          ['--line-height', '--letter-spacing', '--font-weight'],
+        )
+        if (!multiplier) return
+        if (!isValidSpacingMultiplier(candidate.value.value)) return
+
+        value = [`calc(${multiplier[0]} * ${candidate.value.value})`, multiplier[1]]
+      }
+
       if (value) {
         let [fontSize, options = {}] = Array.isArray(value) ? value : [value]
 
@@ -5158,7 +5172,7 @@ export function createUtilities(theme: Theme) {
       modifiers: Array.from({ length: 21 }, (_, index) => `${index * 5}`),
     },
     {
-      values: [],
+      values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
       valueThemeKeys: ['--text', '--spacing'],
       modifiers: [],
       modifierThemeKeys: ['--leading', '--spacing'],
