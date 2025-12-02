@@ -24173,6 +24173,7 @@ test('text', async () => {
       css`
         @theme {
           --spacing: 0.25rem;
+          --spacing-superbig: 25rem;
           --color-red-500: #ef4444;
           --text-color-blue-500: #3b82f6;
           --text-sm: 0.875rem;
@@ -24233,16 +24234,57 @@ test('text', async () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
+
+        // font-size / line-height / letter-spacing / font-weight
+        'text-20',
+        'text-20/6',
+        'text-20/none',
+        'text-20/snug',
+        'text-20/superbig',
+        'text-20/[4px]',
+
+        'text-superbig',
+        'text-superbig/6',
+        'text-superbig/none',
+        'text-superbig/snug',
+        'text-superbig/superbig',
+        'text-superbig/[4px]',
       ],
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing: .25rem;
+      --spacing-superbig: 25rem;
       --color-red-500: #ef4444;
       --text-color-blue-500: #3b82f6;
       --text-sm: .875rem;
       --text-sm--line-height: 1.25rem;
       --leading-snug: 1.375;
+    }
+
+    .text-20\\/6 {
+      font-size: calc(var(--spacing) * 20);
+      line-height: calc(var(--spacing) * 6);
+    }
+
+    .text-20\\/\\[4px\\] {
+      font-size: calc(var(--spacing) * 20);
+      line-height: 4px;
+    }
+
+    .text-20\\/none {
+      font-size: calc(var(--spacing) * 20);
+      line-height: 1;
+    }
+
+    .text-20\\/snug {
+      font-size: calc(var(--spacing) * 20);
+      line-height: var(--leading-snug);
+    }
+
+    .text-20\\/superbig {
+      font-size: calc(var(--spacing) * 20);
+      line-height: var(--spacing-superbig);
     }
 
     .text-\\[10px\\]\\/none {
@@ -24300,6 +24342,35 @@ test('text', async () => {
       line-height: var(--leading-snug);
     }
 
+    .text-superbig\\/6 {
+      font-size: var(--spacing-superbig);
+      line-height: calc(var(--spacing) * 6);
+    }
+
+    .text-superbig\\/\\[4px\\] {
+      font-size: var(--spacing-superbig);
+      line-height: 4px;
+    }
+
+    .text-superbig\\/none {
+      font-size: var(--spacing-superbig);
+      line-height: 1;
+    }
+
+    .text-superbig\\/snug {
+      font-size: var(--spacing-superbig);
+      line-height: var(--leading-snug);
+    }
+
+    .text-superbig\\/superbig {
+      font-size: var(--spacing-superbig);
+      line-height: var(--spacing-superbig);
+    }
+
+    .text-20 {
+      font-size: calc(var(--spacing) * 20);
+    }
+
     .text-\\[12px\\] {
       font-size: 12px;
     }
@@ -24330,6 +24401,10 @@ test('text', async () => {
 
     .text-\\[xx-large\\] {
       font-size: xx-large;
+    }
+
+    .text-superbig {
+      font-size: var(--spacing-superbig);
     }
 
     .text-\\[\\#0088cc\\] {
