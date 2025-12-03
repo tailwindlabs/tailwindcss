@@ -10,6 +10,7 @@ const COLON = 0x3a
 const DASH = 0x2d
 const LOWER_A = 0x61
 const LOWER_Z = 0x7a
+const IS_VALID_NAMED_VALUE = /^[a-zA-Z0-9_.%-]+$/
 
 export type ArbitraryUtilityValue = {
   kind: 'arbitrary'
@@ -596,6 +597,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
             ? null
             : `${value}/${modifierSegment}`
 
+        if (!IS_VALID_NAMED_VALUE.test(value)) continue
+
         candidate.value = {
           kind: 'named',
           value,
@@ -646,6 +649,8 @@ function parseModifier(modifier: string): CandidateModifier | null {
       value: arbitraryValue,
     }
   }
+
+  if (!IS_VALID_NAMED_VALUE.test(modifier)) return null
 
   return {
     kind: 'named',
@@ -797,6 +802,8 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
               },
             }
           }
+
+          if (!IS_VALID_NAMED_VALUE.test(value)) continue
 
           return {
             kind: 'functional',

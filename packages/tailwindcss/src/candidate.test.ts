@@ -1997,7 +1997,12 @@ it.each([
 
   // Arbitrary variant values that end the block
   'data-[a]{color:red}foo[a]:flex',
-])('should not parse invalid arbitrary values: %s', (rawCandidate) => {
+
+  // Named values contain invalid characters
+  'data-foo=bar:flex',
+  'bg-foo=bar',
+  'bg-red-500/foo=bar',
+])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
   utilities.functional('bg', () => [])
