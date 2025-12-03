@@ -59,6 +59,7 @@ export type DesignSystem = {
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
+  candidatesToAst(classes: string[]): AstNode[][]
 
   // General purpose storage
   storage: Record<symbol, unknown>
@@ -145,6 +146,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     important: false,
 
     candidatesToCss,
+    candidatesToAst,
 
     getClassOrder(classes) {
       return getClassOrder(this, classes)
