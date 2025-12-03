@@ -595,7 +595,7 @@ async function parseCss(
     }
   })
 
-  let designSystem = buildDesignSystem(theme)
+  let designSystem = buildDesignSystem(theme, utilitiesNode?.src)
 
   if (important) {
     designSystem.important = important
@@ -855,7 +855,7 @@ export async function compile(
 }
 
 export async function __unstable__loadDesignSystem(css: string, opts: CompileOptions = {}) {
-  let result = await parseCss(CSS.parse(css), opts)
+  let result = await parseCss(CSS.parse(css, { from: opts.from }), opts)
   return result.designSystem
 }
 

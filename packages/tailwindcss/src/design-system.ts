@@ -19,11 +19,13 @@ import {
   type VariantEntry,
 } from './intellisense'
 import { getClassOrder } from './sort'
+import type { SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import { Variants, createVariants, substituteAtVariant } from './variants'
+import { WalkAction, walk } from './walk'
 
 export const enum CompileAstFlags {
   None = 0,
@@ -65,7 +67,10 @@ export type DesignSystem = {
   storage: Record<symbol, unknown>
 }
 
-export function buildDesignSystem(theme: Theme): DesignSystem {
+export function buildDesignSystem(
+  theme: Theme,
+  utilitiesSrc?: SourceLocation | undefined,
+): DesignSystem {
   let utilities = createUtilities(theme)
   let variants = createVariants(theme)
 
@@ -121,6 +126,17 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
           wasValid = false
         },
       })
+
+      if (utilitiesSrc) {
+        walk(astNodes, (node) => {
+          // We do this conditionally to preserve source locations from both
+          // `@utility` and `@custom-variant`. Even though generated nodes are
+          // cached this should be fine because `utilitiesNode.src` should not
+          // change without a full rebuild which destroys the cache.
+          node.src ??= utilitiesSrc
+          return WalkAction.Continue
+        })
+      }
 
       // Disable all polyfills to not unnecessarily pollute IntelliSense output
       astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
