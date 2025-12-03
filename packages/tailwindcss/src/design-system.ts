@@ -1,5 +1,5 @@
 import { Polyfills } from '.'
-import { optimizeAst, toCss } from './ast'
+import { optimizeAst, toCss, type AstNode } from './ast'
 import {
   parseCandidate,
   parseVariant,
@@ -109,6 +109,33 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     }
   })
 
+  function candidatesToAst(classes: string[]): AstNode[][] {
+    let result: AstNode[][] = []
+
+    for (let className of classes) {
+      let wasValid = true
+
+      let { astNodes } = compileCandidates([className], designSystem, {
+        onInvalidCandidate() {
+          wasValid = false
+        },
+      })
+
+      // Disable all polyfills to not unnecessarily pollute IntelliSense output
+      astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
+
+      result.push(wasValid ? astNodes : [])
+    }
+
+    return result
+  }
+
+  function candidatesToCss(classes: string[]): (string | null)[] {
+    return candidatesToAst(classes).map((nodes) => {
+      return nodes.length > 0 ? toCss(nodes) : null
+    })
+  }
+
   let designSystem: DesignSystem = {
     theme,
     utilities,
@@ -117,30 +144,7 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     invalidCandidates: new Set(),
     important: false,
 
-    candidatesToCss(classes: string[]) {
-      let result: (string | null)[] = []
-
-      for (let className of classes) {
-        let wasInvalid = false
-
-        let { astNodes } = compileCandidates([className], this, {
-          onInvalidCandidate() {
-            wasInvalid = true
-          },
-        })
-
-        // Disable all polyfills to not unnecessarily pollute IntelliSense output
-        astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
-
-        if (astNodes.length === 0 || wasInvalid) {
-          result.push(null)
-        } else {
-          result.push(toCss(astNodes))
-        }
-      }
-
-      return result
-    },
+    candidatesToCss,
 
     getClassOrder(classes) {
       return getClassOrder(this, classes)
