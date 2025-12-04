@@ -38,7 +38,7 @@
     "picocolors": "^1.1.1",
     "postcss": "^8.4.41",
     "postcss-import": "^16.1.1",
-    "postcss-selector-parser": "^7.1.0",
+    "postcss-selector-parser": "^7.1.1",
     "prettier": "catalog:",
     "semver": "^7.7.3",
     "tailwindcss": "workspace:*",
