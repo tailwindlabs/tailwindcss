@@ -1,4 +1,5 @@
 import { parseCandidate } from '../../../../tailwindcss/src/candidate'
+import { parse as parseHtml } from 'node-html-parser'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
@@ -187,31 +188,24 @@ export function isSafeMigration(
   return true
 }
 
-// Assumptions:
-// - All `<style` tags appear before the next `</style>` tag
-// - All `<style` tags are closed with `</style>`
-// - No nested `<style>` tags
+// Robustly locates all <style> blocks (with or without attributes) using an HTML parser.
 const styleBlockRanges = new DefaultMap((source: string) => {
-  let ranges: number[] = []
-  let offset = 0
-
-  while (true) {
-    let startTag = source.indexOf('<style', offset)
-    if (startTag === -1) return ranges
-
-    offset = startTag + 1
-
-    // Ensure the style looks like:
-    // - `<style>`   (closed)
-    // - `<style …>` (with attributes)
-    if (!source[startTag + 6].match(/[>\s]/)) continue
-
-    let endTag = source.indexOf('</style>', offset)
-    if (endTag === -1) return ranges
-    offset = endTag + 1
-
-    ranges.push(startTag, endTag)
+  const ranges: number[] = []
+  try {
+    const root = parseHtml(source, { lowerCaseTagName: false, comment: false, blockTextElements: { style: true } })
+    const styleNodes = root.querySelectorAll('style')
+    styleNodes.forEach(node => {
+      const nodeHtml = node.toString()
+      const start = typeof node.range === 'object' && node.range !== null
+        ? node.range[0]
+        : source.indexOf(nodeHtml)
+      const end = start + nodeHtml.length
+      ranges.push(start, end)
+    })
+  } catch (_) {
+    // fallback: do nothing if parser fails
   }
+  return ranges
 })
 
 const BACKSLASH = 0x5c
