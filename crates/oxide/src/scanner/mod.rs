@@ -553,11 +553,17 @@ where
             a
         })
         .into_iter()
-        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+        .filter_map(|s| match String::from_utf8(s.to_vec()) {
+            Ok(s) => Some(s),
+            Err(_e) => {
+                // Optionally log or handle invalid UTF-8 here
+                // eprintln!("Skipped invalid UTF-8 candidate, error: {:?}", _e);
+                None
+            }
+        })
         .collect();
 
-    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
-    //         guaranteed to have unique candidates.
+    // Unstable sort is performant & remains correct with unique candidates
     result.par_sort_unstable();
 
     result
