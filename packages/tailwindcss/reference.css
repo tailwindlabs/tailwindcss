@@ -1,0 +1,256 @@
+/* Tailwind CSS syntax reference: demonstrates all supported directives and functions */
+
+@config "./reference/reference.config.js";
+
+@plugin "./reference/reference.plugin.js" {
+  enable-grid: true;
+  card-color: 'white';
+  accent-scale: 'sky', 'amber';
+  shadow-depth: 24;
+}
+
+@import 'tailwindcss' prefix(tw);
+@import 'tailwindcss/utilities' important;
+@import 'tailwindcss/theme' theme(static);
+@import './reference/reference-import.css' layer(utilities) supports(display: grid);
+
+@reference 'tailwindcss/theme';
+@reference './reference/reference-variant.css';
+
+@source "./app/**/*.{js,ts,jsx,tsx}";
+@source not "./app/**/__tests__/*";
+@source inline("tw:prose tw:underline");
+@source not inline("tw:legacy");
+
+@theme reference prefix(tw);
+
+@theme default {
+  --color-brand: #1d4ed8;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --spacing: 0.25rem;
+
+  @keyframes reference-pulse {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0.35;
+    }
+  }
+}
+
+@theme {
+  --color-accent: oklch(70% 0.12 220);
+  --radius-card: 1rem;
+  --value-sm: 14px;
+  --modifier-7: 28px;
+}
+
+@theme inline {
+  --shadow-card: 0 25px 50px -12px color-mix(in oklab, var(--color-brand) 25%, transparent);
+}
+
+@theme inline prefix(tw) {
+  --size-icon: 1.25rem;
+}
+
+@theme reference inline {
+  --card-outline: 1px solid color-mix(in oklab, var(--color-brand) 60%, transparent);
+}
+
+@theme static {
+  --ring-brand: var(--color-brand);
+
+  @keyframes reference-spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@media theme(reference) prefix(tw) important {
+  @theme {
+    --color-card-foreground: var(--color-accent);
+  }
+}
+
+@media source("./components/**/*.{tsx,jsx}") theme(inline) {
+  @theme {
+    --spacing-component: calc(var(--spacing) * 6);
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities source("./app/**/*.{html,js,ts,jsx,tsx}");
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: theme('fontFamily.sans', var(--font-sans));
+  }
+
+  body {
+    background-color: --alpha(var(--color-brand) / 7.5%);
+    color: var(--color-card-foreground, var(--color-accent));
+  }
+}
+
+@layer theme {
+  @theme {
+    --layer-spacing-8: calc(var(--spacing) * 8);
+  }
+}
+
+@layer components {
+  .card {
+    @apply tw:bg-white tw:text-slate-900 tw:shadow-lg tw:rounded;
+    padding: --spacing(6);
+    border-radius: --theme(--radius-card, 0.75rem);
+    outline: --theme(--card-outline inline, 0 solid transparent);
+    box-shadow: var(--shadow-card, --theme(--shadow-card, 0 10px 30px rgba(15, 23, 42, 0.15)));
+  }
+
+  .card {
+    @variant reference-dark {
+      outline-color: --theme(--ring-brand inline, var(--color-brand));
+    }
+
+    @variant motion-safe {
+      transition: transform 200ms ease;
+    }
+
+    @variant hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: --spacing(2);
+    font-size: theme('fontSize.sm', 0.875rem);
+  }
+
+  .chip {
+    @variant hocus {
+      @apply tw:ring-2 tw:ring-offset-2;
+    }
+  }
+}
+
+@layer utilities {
+  @variant hover {
+    .hover\\:reference-underline {
+      text-decoration-line: underline;
+    }
+  }
+
+  .content-auto {
+    content-visibility: auto;
+  }
+}
+
+@utility card {
+  --tw-card-shadow: var(--shadow-card);
+  box-shadow: var(--tw-card-shadow);
+}
+
+@utility stack-* {
+  --stack-gap: calc(var(--spacing) * --value(number));
+  margin-top: var(--stack-gap);
+  margin-bottom: var(--stack-gap);
+}
+
+@utility aspect-* {
+  aspect-ratio: --value(ratio);
+}
+
+@utility example-* {
+  --value: --value(--value, [length]);
+  --modifier: --modifier(--modifier, [length]);
+  --modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
+  --modifier-literals: --modifier('literal', 'literal-2');
+}
+
+@utility mask-r-* {
+  --mask-right: linear-gradient(
+    to left,
+    transparent calc(var(--spacing) * --modifier(integer)),
+    black calc(var(--spacing) * --value(integer))
+  );
+  mask-image: var(--mask-right);
+}
+
+@custom-variant hocus (&:hover, &:focus);
+
+@custom-variant theme-wrap {
+  @variant reference-dark {
+    @slot;
+  }
+}
+
+@variant reference-dark {
+  &:where([data-theme='reference-dark'] *) {
+    @slot;
+  }
+}
+
+@variant motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @slot;
+  }
+}
+
+@variant hover {
+  &:hover {
+    @slot;
+  }
+}
+
+@variant hover {
+  @variant reference-dark {
+    .reference-hover-dark {
+      color: var(--color-brand);
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  @variant reference-dark {
+    @page {
+      margin: 1in;
+    }
+  }
+}
+
+.badge {
+  border-radius: var(--radius-card);
+  padding-inline: --spacing(3);
+  padding-block: --spacing(1.5);
+}
+
+.badge {
+  @variant reference-dark {
+    border-color: var(--color-brand);
+  }
+}
+
+.icon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+}
+
+.icon {
+  @variant theme-wrap {
+    color: var(--color-card-foreground, var(--color-brand));
+  }
+}
