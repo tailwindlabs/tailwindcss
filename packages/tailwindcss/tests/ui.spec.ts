@@ -1472,6 +1472,16 @@ test('conic mask color can be changed on hover', async ({ page }) => {
   ]).toContain(await getPropertyValue('#x', 'mask-image'))
 })
 
+test('dialog elements have max-width and max-height reset by Preflight', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`<dialog id="x">Hello world</dialog>`,
+  )
+
+  expect(await getPropertyValue('#x', 'max-width')).toEqual('none')
+  expect(await getPropertyValue('#x', 'max-height')).toEqual('none')
+})
+
 test("::backdrop can receive a border with just the 'border' utility", async ({ page }) => {
   let { getPropertyValue } = await render(
     page,
