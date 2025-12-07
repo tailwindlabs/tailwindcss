@@ -17,6 +17,38 @@ it('should be possible to parse a single argument', () => {
   `)
 })
 
+it('should only return the last value for duplicate arguments', () => {
+  expect(
+    args(
+      {
+        '--output': { type: 'string', description: 'Output file' },
+      },
+      ['--output', 'output.css', '--output', 'override.css'],
+    ),
+  ).toMatchInlineSnapshot(`
+    {
+      "--output": "override.css",
+      "_": [],
+    }
+  `)
+})
+
+it('uses last value when flag with "-" is supplied multiple times', () => {
+  let result = args(
+    {
+      '--output': { type: 'string', description: 'Output file', alias: '-o' },
+    },
+    ['--output', 'output.css', '--output', '-'],
+  )
+
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "--output": "-",
+      "_": [],
+    }
+  `)
+})
+
 it('should fallback to the default value if no flag is passed', () => {
   expect(
     args(
