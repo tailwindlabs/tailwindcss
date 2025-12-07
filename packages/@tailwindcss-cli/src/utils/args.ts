@@ -79,6 +79,8 @@ export function args<const T extends Arg>(options: T, argv = process.argv.slice(
   for (let key in parsed) {
     if (parsed[key] === '__IO_DEFAULT_VALUE__') {
       parsed[key] = '-'
+    } else if (key !== '_' && Array.isArray(parsed[key])) {
+      parsed[key] = parsed[key].at(-1)
     }
   }
 
