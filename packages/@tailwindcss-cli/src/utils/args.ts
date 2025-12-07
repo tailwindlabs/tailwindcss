@@ -80,7 +80,7 @@ export function args<const T extends Arg>(options: T, argv = process.argv.slice(
     let value = parsed[key]
 
     if (key !== '_' && Array.isArray(value)) {
-      value = value.pop()
+      value = value[value.length - 1]
     }
 
     if (value === '__IO_DEFAULT_VALUE__') {
