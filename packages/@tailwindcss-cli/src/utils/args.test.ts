@@ -33,6 +33,22 @@ it('should only return the last value for duplicate arguments', () => {
   `)
 })
 
+it('uses last value when flag with "-" is supplied multiple times', () => {
+  let result = args(
+    {
+      '--output': { type: 'string', description: 'Output file', alias: '-o' },
+    },
+    ['--output', 'output.css', '--output', '-'],
+  )
+
+  expect(result).toMatchInlineSnapshot(`
+    {
+      "--output": "-",
+      "_": [],
+    }
+  `)
+})
+
 it('should fallback to the default value if no flag is passed', () => {
   expect(
     args(

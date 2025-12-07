@@ -77,11 +77,17 @@ export function args<const T extends Arg>(options: T, argv = process.argv.slice(
   let parsed = parse(argv)
 
   for (let key in parsed) {
-    if (parsed[key] === '__IO_DEFAULT_VALUE__') {
-      parsed[key] = '-'
-    } else if (key !== '_' && Array.isArray(parsed[key])) {
-      parsed[key] = parsed[key].pop()
+    let value = parsed[key]
+
+    if (key !== '_' && Array.isArray(value)) {
+      value = value.pop()
     }
+
+    if (value === '__IO_DEFAULT_VALUE__') {
+      value = '-'
+    }
+
+    parsed[key] = value
   }
 
   let result: { _: string[]; [key: string]: unknown } = {
