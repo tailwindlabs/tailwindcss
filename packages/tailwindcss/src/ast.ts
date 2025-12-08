@@ -275,12 +275,13 @@ export function optimizeAst(
 
       // Track used animation names
       if (node.property === 'animation') {
-        for (let keyframeName of extractKeyframeNames(node.value))
+        for (let keyframeName of extractKeyframeNames(node.value)) {
           usedKeyframeNames.add(keyframeName)
+        }
       }
 
       // Create fallback values for usages of the `color-mix(…)` function that reference variables
-      // found in the theme config.
+      // found in the theme config.
       if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
         colorMixDeclarations.get(parent).add(node)
       }
