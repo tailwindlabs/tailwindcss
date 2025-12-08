@@ -13,10 +13,19 @@ export function drainStdin() {
 }
 
 export async function outputFile(file: string, contents: string) {
-  try {
-    let currentContents = await fs.readFile(file, 'utf8')
-    if (currentContents === contents) return // Skip writing the file
-  } catch {}
+  // Check for special files like `/dev/stdout` or pipes. We don't want to read from these as that
+  // will hang the process until the file descriptors are closed.
+  let isSpecialFile = await fs
+    .stat(file)
+    .then((stats) => stats.isCharacterDevice() || stats.isFIFO())
+    .catch(() => false)
+
+  if (!isSpecialFile) {
+    try {
+      let currentContents = await fs.readFile(file, 'utf8')
+      if (currentContents === contents) return // Skip writing the file
+    } catch {}
+  }
 
   // Ensure the parent directories exist
   await fs.mkdir(path.dirname(file), { recursive: true })
