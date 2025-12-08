@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
+import { decl, rule } from './ast'
 import plugin from './plugin'
 import { ThemeOptions } from './theme'
 
@@ -165,6 +166,26 @@ test('Can produce CSS per candidate using `candidatesToCss`', async () => {
     `)
 })
 
+test('Can produce AST per candidate using `candidatesToAst`', async () => {
+  let design = await loadDesignSystem()
+  design.invalidCandidates = new Set(['bg-[#fff]'])
+
+  expect(
+    design.candidatesToAst(['underline', 'i-dont-exist', 'bg-[#fff]', 'bg-[#000]', 'text-xs']),
+  ).toEqual([
+    [rule('.underline', [decl('text-decoration-line', 'underline')])],
+    [],
+    [],
+    [rule('.bg-\\[\\#000\\]', [decl('background-color', '#000')])],
+    [
+      rule('.text-xs', [
+        decl('font-size', 'var(--text-xs)'),
+        decl('line-height', 'var(--tw-leading, var(--text-xs--line-height))'),
+      ]),
+    ],
+  ])
+})
+
 test('Utilities do not show wrapping selector in intellisense', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
@@ -238,7 +259,7 @@ test('Utilities, when marked as important, show as important in intellisense', a
 test('Static utilities from plugins are listed in hovers and completions', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @plugin "./plugin.js"l;
+    @plugin "./plugin.js";
   `
 
   let design = await __unstable__loadDesignSystem(input, {
@@ -275,7 +296,7 @@ test('Static utilities from plugins are listed in hovers and completions', async
 test('Functional utilities from plugins are listed in hovers and completions', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @plugin "./plugin.js"l;
+    @plugin "./plugin.js";
   `
 
   let design = await __unstable__loadDesignSystem(input, {

@@ -1,5 +1,5 @@
 import { Polyfills } from '.'
-import { optimizeAst, toCss } from './ast'
+import { optimizeAst, toCss, type AstNode } from './ast'
 import {
   parseCandidate,
   parseVariant,
@@ -19,11 +19,13 @@ import {
   type VariantEntry,
 } from './intellisense'
 import { getClassOrder } from './sort'
+import type { SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions, type ThemeKey } from './theme'
 import { Utilities, createUtilities, withAlpha } from './utilities'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import { Variants, createVariants, substituteAtVariant } from './variants'
+import { WalkAction, walk } from './walk'
 
 export const enum CompileAstFlags {
   None = 0,
@@ -59,12 +61,16 @@ export type DesignSystem = {
 
   // Used by IntelliSense
   candidatesToCss(classes: string[]): (string | null)[]
+  candidatesToAst(classes: string[]): AstNode[][]
 
   // General purpose storage
   storage: Record<symbol, unknown>
 }
 
-export function buildDesignSystem(theme: Theme): DesignSystem {
+export function buildDesignSystem(
+  theme: Theme,
+  utilitiesSrc?: SourceLocation | undefined,
+): DesignSystem {
   let utilities = createUtilities(theme)
   let variants = createVariants(theme)
 
@@ -109,6 +115,44 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     }
   })
 
+  function candidatesToAst(classes: string[]): AstNode[][] {
+    let result: AstNode[][] = []
+
+    for (let className of classes) {
+      let wasValid = true
+
+      let { astNodes } = compileCandidates([className], designSystem, {
+        onInvalidCandidate() {
+          wasValid = false
+        },
+      })
+
+      if (utilitiesSrc) {
+        walk(astNodes, (node) => {
+          // We do this conditionally to preserve source locations from both
+          // `@utility` and `@custom-variant`. Even though generated nodes are
+          // cached this should be fine because `utilitiesNode.src` should not
+          // change without a full rebuild which destroys the cache.
+          node.src ??= utilitiesSrc
+          return WalkAction.Continue
+        })
+      }
+
+      // Disable all polyfills to not unnecessarily pollute IntelliSense output
+      astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
+
+      result.push(wasValid ? astNodes : [])
+    }
+
+    return result
+  }
+
+  function candidatesToCss(classes: string[]): (string | null)[] {
+    return candidatesToAst(classes).map((nodes) => {
+      return nodes.length > 0 ? toCss(nodes) : null
+    })
+  }
+
   let designSystem: DesignSystem = {
     theme,
     utilities,
@@ -117,30 +161,8 @@ export function buildDesignSystem(theme: Theme): DesignSystem {
     invalidCandidates: new Set(),
     important: false,
 
-    candidatesToCss(classes: string[]) {
-      let result: (string | null)[] = []
-
-      for (let className of classes) {
-        let wasInvalid = false
-
-        let { astNodes } = compileCandidates([className], this, {
-          onInvalidCandidate() {
-            wasInvalid = true
-          },
-        })
-
-        // Disable all polyfills to not unnecessarily pollute IntelliSense output
-        astNodes = optimizeAst(astNodes, designSystem, Polyfills.None)
-
-        if (astNodes.length === 0 || wasInvalid) {
-          result.push(null)
-        } else {
-          result.push(toCss(astNodes))
-        }
-      }
-
-      return result
-    },
+    candidatesToCss,
+    candidatesToAst,
 
     getClassOrder(classes) {
       return getClassOrder(this, classes)
