@@ -18,7 +18,7 @@ export async function outputFile(file: string, contents: string) {
   let isSpecialFile = await fs
     .stat(file)
     .then((stats) => stats.isCharacterDevice() || stats.isFIFO())
-    .catch(() => true)
+    .catch(() => false)
 
   if (!isSpecialFile) {
     try {
