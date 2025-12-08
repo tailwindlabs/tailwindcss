@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Validate candidates similarly to Oxide ([#19397](https://github.com/tailwindlabs/tailwindcss/pull/19397))
 - Canonicalization: combine `text-*` and `leading-*` classes ([#19396](https://github.com/tailwindlabs/tailwindcss/pull/19396))
 - Correctly handle duplicate CLI arguments ([#19416](https://github.com/tailwindlabs/tailwindcss/pull/19416))
+- Don’t emit color-mix fallback rules inside `@keyframes` ([#19419](https://github.com/tailwindlabs/tailwindcss/pull/19419))
 
 ### Added
 
