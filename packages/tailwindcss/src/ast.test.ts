@@ -290,6 +290,36 @@ it('should not emit exact duplicate declarations in the same rule', () => {
   `)
 })
 
+it('should not emit color-mix() fallbacks inside @keyframes', () => {
+  let ast = CSS.parse(css`
+    @keyframes my-animation {
+      0% {
+        color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
+      }
+      100% {
+        color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
+      }
+    }
+  `)
+
+  let theme = new Theme()
+  theme.add('--color-emerald-600', 'oklch(59.6% 0.145 163.225)')
+
+  let design = buildDesignSystem(theme)
+
+  expect(toCss(optimizeAst(ast, design))).toMatchInlineSnapshot(`
+    "@keyframes my-animation {
+      0% {
+        color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
+      }
+      100% {
+        color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
+      }
+    }
+    "
+  `)
+})
+
 it('should only visit children once when calling `replaceWith` with single element array', () => {
   let visited = new Set()
 
