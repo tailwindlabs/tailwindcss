@@ -259,7 +259,7 @@ test('Utilities, when marked as important, show as important in intellisense', a
 test('Static utilities from plugins are listed in hovers and completions', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @plugin "./plugin.js"l;
+    @plugin "./plugin.js";
   `
 
   let design = await __unstable__loadDesignSystem(input, {
@@ -296,7 +296,7 @@ test('Static utilities from plugins are listed in hovers and completions', async
 test('Functional utilities from plugins are listed in hovers and completions', async () => {
   let input = css`
     @import 'tailwindcss/utilities';
-    @plugin "./plugin.js"l;
+    @plugin "./plugin.js";
   `
 
   let design = await __unstable__loadDesignSystem(input, {
