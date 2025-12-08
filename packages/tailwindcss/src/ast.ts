@@ -282,7 +282,11 @@ export function optimizeAst(
 
       // Create fallback values for usages of the `color-mix(…)` function that reference variables
       // found in the theme config.
-      if (polyfills & Polyfills.ColorMix && node.value.includes('color-mix(')) {
+      if (
+        polyfills & Polyfills.ColorMix &&
+        node.value.includes('color-mix(') &&
+        !context.keyframes
+      ) {
         colorMixDeclarations.get(parent).add(node)
       }
 
