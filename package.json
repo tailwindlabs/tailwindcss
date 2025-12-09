@@ -5,7 +5,10 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "types/index.d.ts",
-  "repository": "https://github.com/tailwindlabs/tailwindcss.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tailwindlabs/tailwindcss.git#v3"
+  },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
   "bin": {
@@ -28,6 +31,9 @@
     "release-channel": "node ./scripts/release-channel.js",
     "release-notes": "node ./scripts/release-notes.js",
     "prepublishOnly": "npm install --force && npm run build"
+  },
+  "publishConfig": {
+    "provenance": true
   },
   "files": [
     "src/*",
