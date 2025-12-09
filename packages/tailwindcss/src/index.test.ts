@@ -909,6 +909,20 @@ describe('@apply', () => {
       `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1\` into a separate rule.]`,
     )
   })
+
+  it('should error when used with a body', async () => {
+    await expect(
+      compile(css`
+        .foo {
+          @apply underline {
+            color: red;
+          }
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The rule \`@apply underline\` must not have a body.]`,
+    )
+  })
 })
 
 describe('arbitrary variants', () => {
