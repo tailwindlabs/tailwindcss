@@ -166,7 +166,10 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
 
       let offset = 0
       for (let [idx, part] of parts.entries()) {
-        if (idx % 2 === 0) candidateOffsets[part] = offset
+        if (idx % 2 === 0) {
+          candidateOffsets[part] = offset
+        }
+
         offset += part.length
       }
 
