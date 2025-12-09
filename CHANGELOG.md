@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Correctly handle duplicate CLI arguments ([#19416](https://github.com/tailwindlabs/tailwindcss/pull/19416))
 - Don’t emit color-mix fallback rules inside `@keyframes` ([#19419](https://github.com/tailwindlabs/tailwindcss/pull/19419))
 - CLI: Don't hang when output is `/dev/stdout` ([#19421](https://github.com/tailwindlabs/tailwindcss/pull/19421))
+- Allow `@apply` to be used with CSS mixins ([#19427](https://github.com/tailwindlabs/tailwindcss/pull/19427))
 
 ### Added
 
