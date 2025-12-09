@@ -201,6 +201,19 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         )
       }
 
+      // If we find a dashed ident *here* it means that someone is trying
+      // to use mixins and our `@apply` behavior together.
+      //
+      // This is considered invalid usage and we want to inform the user
+      // as such.
+      let hasBody = child.nodes.length > 0
+
+      if (hasBody && normalIdents.length) {
+        let list = normalIdents.join(' ')
+
+        throw new Error(`The rule \`@apply ${list}\` must not have a body.`)
+      }
+
       // Replace the `@apply` rule with the actual utility classes
       {
         // Parse the candidates to an AST that we can replace the `@apply` rule
