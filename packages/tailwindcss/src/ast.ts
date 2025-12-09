@@ -400,7 +400,8 @@ export function optimizeAst(
         copy.name === '@charset' ||
         copy.name === '@custom-media' ||
         copy.name === '@namespace' ||
-        copy.name === '@import'
+        copy.name === '@import' ||
+        copy.name === '@apply'
       ) {
         parent.push(copy)
       }
