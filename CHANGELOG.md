@@ -1422,7 +1422,7 @@ For a deep-dive into everything that's new, [check out the announcement post](ht
 
 - First 4.0.0-alpha.1 release
 
-## [3.4.18] - 2024-10-01
+## [3.4.18] - 2025-10-01
 
 ### Fixed
 
