@@ -17,12 +17,12 @@ jobs:
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
 
-    runs-on: macos-13
+    runs-on: macos-latest
     timeout-minutes: 15
 
     strategy:
       matrix:
-        node-version: [16]
+        node-version: [20]
 
     steps:
       - uses: actions/checkout@v3
