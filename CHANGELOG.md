@@ -1422,6 +1422,12 @@ For a deep-dive into everything that's new, [check out the announcement post](ht
 
 - First 4.0.0-alpha.1 release
 
+## [3.4.19] - 2025-12-10
+
+### Fixed
+
+- Don’t break `sibling-*()` functions when used inside `calc(…)` ([#19335](https://github.com/tailwindlabs/tailwindcss/pull/19335))
+
 ## [3.4.18] - 2025-10-01
 
 ### Fixed
