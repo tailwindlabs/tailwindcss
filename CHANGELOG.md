@@ -3963,6 +3963,7 @@ No release notes
 [4.0.0-alpha.24]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-alpha.23...v4.0.0-alpha.24
 [4.0.0-alpha.23]: https://github.com/tailwindlabs/tailwindcss/compare/v4.0.0-alpha.22...v4.0.0-alpha.23
 [4.0.0-alpha.22]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...v4.0.0-alpha.22
+[3.4.19]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.18...v3.4.19
 [3.4.18]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...v3.4.18
 [3.4.17]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...v3.4.17
 [3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
