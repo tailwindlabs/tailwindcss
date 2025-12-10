@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-win32-x64-msvc",
-  "version": "4.1.17",
+  "version": "4.1.18",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
