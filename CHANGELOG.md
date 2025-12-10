@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [3.4.19] - 2025-12-10
+
 ### Fixed
 
 - Don’t break `sibling-*()` functions when used inside `calc(…)` ([#19335](https://github.com/tailwindlabs/tailwindcss/pull/19335))
@@ -2489,7 +2493,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.18...v3
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.19...v3
+[3.4.19]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.18...v3.4.19
 [3.4.18]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.17...v3.4.18
 [3.4.17]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.16...v3.4.17
 [3.4.16]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.15...v3.4.16
