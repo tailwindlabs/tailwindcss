@@ -48,7 +48,7 @@ describe.each(Object.keys(variantConfig))('%s', (variant) => {
       },
     },
     async ({ exec, expect }) => {
-      expect(
+      await expect(
         exec('pnpm postcss src/index.css --output dist/out.css', undefined, { ignoreStdErr: true }),
       ).rejects.toThrowError(
         `It looks like you're trying to use \`tailwindcss\` directly as a PostCSS plugin. The PostCSS plugin has moved to a separate package, so to continue using Tailwind CSS with PostCSS you'll need to install \`@tailwindcss/postcss\` and update your PostCSS configuration.`,
