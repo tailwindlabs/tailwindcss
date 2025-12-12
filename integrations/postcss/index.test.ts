@@ -698,9 +698,7 @@ test(
       <div class="flex underline"></div>
     `)
 
-    await process.onStderr((message) =>
-      message.includes('does-not-exist is not exported from package'),
-    )
+    await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -743,9 +741,7 @@ test(
       `,
     )
 
-    await process.onStderr((message) =>
-      message.includes('does-not-exist is not exported from package'),
-    )
+    await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
