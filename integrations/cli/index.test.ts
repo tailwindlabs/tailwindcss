@@ -786,10 +786,7 @@ describe.each([
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
 
       // Make sure we can find a source map
-      let map = parseSourceMap({
-        filepath: 'dist/out.css',
-        content: await fs.read('dist/out.css'),
-      })
+      let map = parseSourceMap(await fs.read('dist/out.css'))
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
