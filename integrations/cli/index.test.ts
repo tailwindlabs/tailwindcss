@@ -752,7 +752,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )
@@ -786,7 +786,10 @@ describe.each([
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
 
       // Make sure we can find a source map
-      let map = parseSourceMap(await fs.read('dist/out.css'))
+      let map = parseSourceMap({
+        filepath: 'dist/out.css',
+        content: await fs.read('dist/out.css'),
+      })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -815,7 +818,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )
@@ -1118,7 +1121,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
 
       // Write to project source files
@@ -1190,7 +1193,7 @@ describe.each([
       expect(map.at(7, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
 
       // Write to the main CSS file
@@ -1290,7 +1293,7 @@ describe.each([
       expect(map.at(10, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )
