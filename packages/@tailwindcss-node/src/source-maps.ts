@@ -6,6 +6,7 @@ export type { DecodedSource, DecodedSourceMap }
 export interface SourceMap {
   readonly raw: string
   readonly inline: string
+  comment(url: string): string
 }
 
 function serializeSourceMap(map: DecodedSourceMap): string {
@@ -54,5 +55,6 @@ export function toSourceMap(map: DecodedSourceMap | string): SourceMap {
       let inlined = Buffer.from(raw, 'utf-8').toString('base64')
       return comment(`data:application/json;base64,${inlined}`)
     },
+    comment,
   }
 }
