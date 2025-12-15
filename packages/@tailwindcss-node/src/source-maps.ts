@@ -44,16 +44,15 @@ function serializeSourceMap(map: DecodedSourceMap): string {
 export function toSourceMap(map: DecodedSourceMap | string): SourceMap {
   let raw = typeof map === 'string' ? map : serializeSourceMap(map)
 
+  function comment(url: string) {
+    return `/*# sourceMappingURL=${url} */\n`
+  }
+
   return {
     raw,
     get inline() {
-      let tmp = ''
-
-      tmp += '/*# sourceMappingURL=data:application/json;base64,'
-      tmp += Buffer.from(raw, 'utf-8').toString('base64')
-      tmp += ' */\n'
-
-      return tmp
+      let inlined = Buffer.from(raw, 'utf-8').toString('base64')
+      return comment(`data:application/json;base64,${inlined}`)
     },
   }
 }
