@@ -5812,6 +5812,24 @@ describe('`color-mix(…)` polyfill', () => {
       }"
     `)
   })
+
+  it('should not create a fallback when color-mix contains only CSS variables that cannot be resolved', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+          @utility unresolvable-color-mix {
+            background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+          }
+        `,
+        ['unresolvable-color-mix'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".unresolvable-color-mix {
+        background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+      }"
+    `)
+  })
 })
 
 describe('`@property` polyfill', async () => {
