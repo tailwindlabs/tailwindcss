@@ -5818,17 +5818,17 @@ describe('`color-mix(…)` polyfill', () => {
       compileCss(
         css`
           @tailwind utilities;
-          @utility color-mix-in-supports-block {
+          @utility mixed-color {
             @supports (color: color-mix(in lab, red, red)) {
               background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
             }
           }
         `,
-        ['color-mix-in-supports-block'],
+        ['mixed-color'],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      ".color-mix-in-supports-block {
-        @supports (color: color-mix(in lab, red, red)) {
+      "@supports (color: color-mix(in lab, red, red)) {
+        .mixed-color {
           background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }"
