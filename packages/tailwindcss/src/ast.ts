@@ -285,6 +285,7 @@ export function optimizeAst(
       if (
         polyfills & Polyfills.ColorMix &&
         node.value.includes('color-mix(') &&
+        !context.supportsColorMix &&
         !context.keyframes
       ) {
         colorMixDeclarations.get(parent).add(node)
@@ -382,6 +383,8 @@ export function optimizeAst(
     else if (node.kind === 'at-rule') {
       if (node.name === '@keyframes') {
         context = { ...context, keyframes: true }
+      } else if (node.name === '@supports' && node.params.includes('color-mix(')) {
+        context = { ...context, supportsColorMix: true }
       }
 
       let copy = { ...node, nodes: [] }
