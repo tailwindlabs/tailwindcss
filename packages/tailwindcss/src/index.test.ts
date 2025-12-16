@@ -5813,7 +5813,7 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
-  it('should not create a fallback when color-mix contains only CSS variables that cannot be resolved', async () => {
+  it('should not apply color-mix optimizations when already inside a @supports at-rule that checks for color-mix', async () => {
     await expect(
       compileCss(
         css`
