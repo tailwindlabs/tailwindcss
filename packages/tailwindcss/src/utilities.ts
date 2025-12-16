@@ -189,7 +189,19 @@ export function withAlpha(value: string, alpha: string): string {
     return value
   }
 
+  // prefix the color-mix function with an internal /* tw:optimize */ comment so that
+  // only this will be optimized later
   return `color-mix(in oklab, ${value} ${alpha}, transparent)`
+}
+
+export const optimizeCommentPattern = /^\s*\/\*\s*tw:optimize\s*\*\/\s/;
+
+export function containsOptimizeComment(value: string): boolean {
+  return optimizeCommentPattern.test(value);
+}
+
+export function removeOptimizeComment(value: string): string {
+  return value.replace(optimizeCommentPattern, '');
 }
 
 /**

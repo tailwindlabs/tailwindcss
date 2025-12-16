@@ -5818,15 +5818,19 @@ describe('`color-mix(…)` polyfill', () => {
       compileCss(
         css`
           @tailwind utilities;
-          @utility unresolvable-color-mix {
-            background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+          @utility color-mix-in-supports-block {
+            @supports (color: color-mix(in lab, red, red)) {
+              background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+            }
           }
         `,
-        ['unresolvable-color-mix'],
+        ['color-mix-in-supports-block'],
       ),
     ).resolves.toMatchInlineSnapshot(`
-      ".unresolvable-color-mix {
-        background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+      ".color-mix-in-supports-block {
+        @supports (color: color-mix(in lab, red, red)) {
+          background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+        }
       }"
     `)
   })

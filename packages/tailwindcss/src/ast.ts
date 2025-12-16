@@ -240,6 +240,18 @@ export function optimizeAst(
     context: Record<string, string | boolean> = {},
     depth = 0,
   ) {
+    // Already checking for color-mix support. No need to do it again.
+    if (
+      node.kind === 'at-rule' &&
+      node.name === '@supports' &&
+      node.params.includes('color-mix(')
+    ) {
+      for (const child of node.nodes) {
+        transform(child, node.nodes, { ...context, supportsColorMix: true }, depth + 1)
+      }
+      return
+    }
+
     // Declaration
     if (node.kind === 'declaration') {
       if (node.property === '--tw-sort' || node.value === undefined || node.value === null) {
@@ -285,6 +297,7 @@ export function optimizeAst(
       if (
         polyfills & Polyfills.ColorMix &&
         node.value.includes('color-mix(') &&
+        !context.supportsColorMix &&
         !context.keyframes
       ) {
         colorMixDeclarations.get(parent).add(node)
