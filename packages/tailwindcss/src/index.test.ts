@@ -5820,7 +5820,7 @@ describe('`color-mix(…)` polyfill', () => {
           @tailwind utilities;
           @utility color-mix-in-supports-block {
             @supports (color: color-mix(in lab, red, red)) {
-              background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+              background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
             }
           }
         `,
@@ -5829,7 +5829,7 @@ describe('`color-mix(…)` polyfill', () => {
     ).resolves.toMatchInlineSnapshot(`
       ".color-mix-in-supports-block {
         @supports (color: color-mix(in lab, red, red)) {
-          background: color-mix(in oklab, var(--tw-gradient-from), var(--tw-gradient-to) 0%);
+          background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }"
     `)
