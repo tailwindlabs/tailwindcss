@@ -5813,22 +5813,22 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
-  it('should not apply color-mix optimizations when already inside a @supports at-rule that checks for color-mix', async () => {
+  it('does not apply optimizations when already inside a @supports (color: color-mix... block', async () => {
     await expect(
       compileCss(
         css`
           @tailwind utilities;
-          @utility mixed-color {
+          @utility mixed {
             @supports (color: color-mix(in lab, red, red)) {
               background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
             }
           }
         `,
-        ['mixed-color'],
+        ['mixed'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "@supports (color: color-mix(in lab, red, red)) {
-        .mixed-color {
+        .mixed {
           background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }"
