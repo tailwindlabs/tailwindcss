@@ -5820,7 +5820,8 @@ describe('`color-mix(…)` polyfill', () => {
           @tailwind utilities;
           @utility mixed {
             @supports (color: color-mix(in lab, red, red)) {
-              background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
+              /* deliberately using the internal tw-color-mix here, as we want to test for it to be ignored */
+              background: tw-color-mix(in oklab, var(--color-1), var(--color-2) 0%);
             }
           }
         `,
@@ -5829,7 +5830,7 @@ describe('`color-mix(…)` polyfill', () => {
     ).resolves.toMatchInlineSnapshot(`
       "@supports (color: color-mix(in lab, red, red)) {
         .mixed {
-          background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
+          background: tw-color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }"
     `)
