@@ -5834,6 +5834,24 @@ describe('`color-mix(…)` polyfill', () => {
       }"
     `)
   })
+
+  it('does not apply optimizations to native color-mix()', async () => {
+    await expect(
+      compileCss(
+        css`
+          @tailwind utilities;
+          @utility mixed {
+            background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
+          }
+        `,
+        ['mixed'],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".mixed {
+        background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
+      }"
+    `)
+  })
 })
 
 describe('`@property` polyfill', async () => {
