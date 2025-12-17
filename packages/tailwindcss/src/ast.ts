@@ -3,6 +3,7 @@ import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
+import { withAlphaMarker } from './utilities.ts'
 import { DefaultMap } from './utils/default-map'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
@@ -280,10 +281,10 @@ export function optimizeAst(
         }
       }
 
-      if (node.value.includes('tw-color-mix(')) {
+      if (node.value.includes(withAlphaMarker)) {
         // Always normalize the internal marker back to standard `color-mix(...)`
-        // so invalid `tw-color-mix(...)` never reaches the final CSS.
-        node.value = node.value.replaceAll(/tw-color-mix\(/g, 'color-mix(')
+        // so that invalid syntax never reaches the final CSS.
+        node.value = node.value.replaceAll(withAlphaMarker, 'color-mix(')
 
         // Only register for ColorMix polyfilling when that polyfill is enabled
         // and we’re outside explicit supports/keyframes contexts.

@@ -173,6 +173,7 @@ function property(ident: string, initialValue?: string, syntax?: string) {
 /**
  * Apply opacity to a color using `color-mix`.
  */
+export const withAlphaMarker = 'tw-color-mix(';
 export function withAlpha(value: string, alpha: string): string {
   if (alpha === null) return value
 
@@ -189,7 +190,7 @@ export function withAlpha(value: string, alpha: string): string {
     return value
   }
 
-  return `tw-color-mix(in oklab, ${value} ${alpha}, transparent)`
+  return `${withAlphaMarker}in oklab, ${value} ${alpha}, transparent)`
 }
 
 /**
