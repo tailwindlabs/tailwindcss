@@ -189,7 +189,7 @@ export function withAlpha(value: string, alpha: string): string {
     return value
   }
 
-  return `color-mix(in oklab, ${value} ${alpha}, transparent)`
+  return `tw-color-mix(in oklab, ${value} ${alpha}, transparent)`
 }
 
 /**

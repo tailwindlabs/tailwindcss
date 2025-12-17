@@ -284,10 +284,11 @@ export function optimizeAst(
       // found in the theme config.
       if (
         polyfills & Polyfills.ColorMix &&
-        node.value.includes('color-mix(') &&
+        node.value.includes('tw-color-mix(') &&
         !context.supportsColorMix &&
         !context.keyframes
       ) {
+        node.value = node.value.replaceAll(/tw-color-mix\(/g, 'color-mix(');
         colorMixDeclarations.get(parent).add(node)
       }
 
@@ -527,6 +528,7 @@ export function optimizeAst(
 
         let ast = ValueParser.parse(declaration.value)
         let requiresPolyfill = false
+
         walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
