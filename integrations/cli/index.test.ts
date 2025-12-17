@@ -2438,7 +2438,6 @@ test(
           ::placeholder {
             color: currentColor;
           }
-
           @supports (color: color-mix(in lab, red, red)) {
             ::placeholder {
               color: color-mix(in oklab, currentColor 50%, transparent);
