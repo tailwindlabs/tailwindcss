@@ -280,16 +280,20 @@ export function optimizeAst(
         }
       }
 
-      // Create fallback values for usages of the `color-mix(…)` function that reference variables
-      // found in the theme config.
-      if (
-        polyfills & Polyfills.ColorMix &&
-        node.value.includes('tw-color-mix(') &&
-        !context.supportsColorMix &&
-        !context.keyframes
-      ) {
-        node.value = node.value.replaceAll(/tw-color-mix\(/g, 'color-mix(');
-        colorMixDeclarations.get(parent).add(node)
+      if (node.value.includes('tw-color-mix(')) {
+        // Always normalize the internal marker back to standard `color-mix(...)`
+        // so invalid `tw-color-mix(...)` never reaches the final CSS.
+        node.value = node.value.replaceAll(/tw-color-mix\(/g, 'color-mix(')
+
+        // Only register for ColorMix polyfilling when that polyfill is enabled
+        // and we’re outside explicit supports/keyframes contexts.
+        if (
+          polyfills & Polyfills.ColorMix &&
+          !context.supportsColorMix &&
+          !context.keyframes
+        ) {
+          colorMixDeclarations.get(parent).add(node)
+        }
       }
 
       parent.push(node)
