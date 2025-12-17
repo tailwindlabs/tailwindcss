@@ -372,7 +372,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
           --color-red-500: red;
 
           /* Equivalent of blue-500/50 */
-          --color-primary: color-mix(in oklab, oklch(62.3% 0.214 259.815) 50%, transparent);
+          --color-primary: tw-color-mix(in oklab, oklch(62.3% 0.214 259.815) 50%, transparent);
         }
       `
 
