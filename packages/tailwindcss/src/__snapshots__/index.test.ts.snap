@@ -292,7 +292,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
 
     @supports (color: color-mix(in lab, red, red)) {
       ::placeholder {
-        color: color-mix(in oklab, currentcolor 50%, transparent);
+        color: color-mix(in oklab, currentColor 50%, transparent);
       }
     }
   }
