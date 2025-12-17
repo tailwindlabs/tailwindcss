@@ -291,7 +291,13 @@ textarea,
 @supports (not (-webkit-appearance: -apple-pay-button)) /* Not Safari */ or
   (contain-intrinsic-size: 1px) /* Safari 17+ */ {
   ::placeholder {
-    color: color-mix(in oklab, currentcolor 50%, transparent);
+    color: currentColor;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    ::placeholder {
+      color: color-mix(in oklab, currentcolor 50%, transparent);
+    }
   }
 }
 
