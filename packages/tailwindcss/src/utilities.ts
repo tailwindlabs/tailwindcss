@@ -193,7 +193,7 @@ export function withAlpha(value: string, alpha: string): string {
 }
 
 /**
- * Apply opacity to a color using `color-mix`.
+ * Replace the opacity in a color using relative color syntax.
  */
 export function replaceAlpha(value: string, alpha: string): string {
   // Convert numeric values (like `0.5`) to percentages (like `50%`) so they
