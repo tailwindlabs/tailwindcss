@@ -3802,6 +3802,44 @@ describe('@source', () => {
 
       expect(build(['bg-red-500', 'bg-red-700'])).toMatchInlineSnapshot(`""`)
     })
+
+    test('works with whitespace around the argument', async () => {
+      let { build } = await compile(
+        css`
+          /* prettier-ignore */
+          @source inline( "underline" );
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`
+        ".underline {
+          text-decoration-line: underline;
+        }
+        "
+      `)
+    })
+
+    test('works with newlines around the argument', async () => {
+      let { build } = await compile(
+        css`
+          /* prettier-ignore */
+          @source inline(
+            "underline"
+          );
+          @tailwind utilities;
+        `,
+        { base: '/root' },
+      )
+
+      expect(build([])).toMatchInlineSnapshot(`
+        ".underline {
+          text-decoration-line: underline;
+        }
+        "
+      `)
+    })
   })
 })
 
