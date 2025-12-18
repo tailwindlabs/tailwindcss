@@ -11,8 +11,8 @@
   "dependencies": {
     "@tailwindcss/vite": "workspace:^",
     "@vitejs/plugin-react": "^5.1.2",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
