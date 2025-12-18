@@ -3818,7 +3818,7 @@ describe('@source', () => {
         }
         "
       `)
-    });
+    })
 
     test('works with newlines around the argument', async () => {
       let { build } = await compile(
@@ -3837,7 +3837,7 @@ describe('@source', () => {
         }
         "
       `)
-    });
+    })
   })
 })
 
