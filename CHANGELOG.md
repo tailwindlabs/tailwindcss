@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
+- Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
 
 ### Added
 
