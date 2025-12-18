@@ -117,7 +117,7 @@ test(
     await fs.expectFileToContain('dist/out.css', [
       //
       `::-webkit-date-and-time-value`,
-      `[type='checkbox']:indeterminate`,
+      `input:where([type='checkbox']):indeterminate`,
     ])
 
     // No classes are included even though they are used in the HTML
