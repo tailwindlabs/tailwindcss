@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@jridgewell/remapping": "^2.3.4",
-    "enhanced-resolve": "^5.18.3",
+    "enhanced-resolve": "^5.18.4",
     "jiti": "^2.6.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.21",
