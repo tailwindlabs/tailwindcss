@@ -752,7 +752,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )
@@ -815,7 +815,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )
@@ -1118,7 +1118,7 @@ describe.each([
       expect(map.at(4, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
 
       // Write to project source files
@@ -1190,7 +1190,7 @@ describe.each([
       expect(map.at(7, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
 
       // Write to the main CSS file
@@ -1290,7 +1290,7 @@ describe.each([
       expect(map.at(10, 0)).toMatchObject({
         source: null,
         original: '(none)',
-        generated: '}...',
+        generated: '}\n\n/*# sou...',
       })
     },
   )

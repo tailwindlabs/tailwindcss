@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
 - Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
+- CLI: Emit comment when source maps are saved to files ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
 
 ### Added
 

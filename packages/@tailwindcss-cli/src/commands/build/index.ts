@@ -182,6 +182,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         output += `\n`
         output += map.inline
       } else if (typeof args['--map'] === 'string') {
+        let basePath =
+          args['--output'] && args['--output'] !== '-'
+            ? path.dirname(path.resolve(args['--output']))
+            : process.cwd()
+
+        let mapPath = path.resolve(args['--map'])
+
+        let relativePath = path.relative(basePath, mapPath)
+
+        output += `\n`
+        output += map.comment(relativePath)
+
         DEBUG && I.start('Write source map')
         await outputFile(args['--map'], map.raw)
         DEBUG && I.end('Write source map')
