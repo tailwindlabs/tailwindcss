@@ -274,7 +274,7 @@ async function parseCss(
 
       if (path[0] === 'i' && path.startsWith('inline(')) {
         inline = true
-        path = path.slice(7, -1)
+        path = path.slice(7, -1).trim()
       }
 
       if (
