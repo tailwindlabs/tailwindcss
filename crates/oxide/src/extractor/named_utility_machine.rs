@@ -284,6 +284,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                             | Class::Dot
                             | Class::Number
                             | Class::AlphaLower
+                            | Class::AlphaUpper
                     ) {
                         return self.restart();
                     }
@@ -425,6 +426,8 @@ mod tests {
             // With number followed by dash or underscore
             ("text-title1-strong", vec!["text-title1-strong"]),
             ("text-title1_strong", vec!["text-title1_strong"]),
+            // With capital letter followed by number
+            ("text-titleV1-strong", vec!["text-titleV1-strong"]),
             // With trailing % sign
             ("from-15%", vec!["from-15%"]),
             // Arbitrary value with bracket notation
