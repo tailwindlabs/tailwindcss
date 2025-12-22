@@ -23,7 +23,7 @@ jobs:
             os: namespace-profile-default
 
           - name: macOS
-            os: macos-14
+            os: macos-latest
 
         integration:
           - upgrade

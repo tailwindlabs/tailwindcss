@@ -22,7 +22,7 @@ jobs:
             os: namespace-profile-default
 
           - name: macOS
-            os: macos-14
+            os: macos-latest
 
         # Exclude windows and macos from being built on feature branches
         run-all:
