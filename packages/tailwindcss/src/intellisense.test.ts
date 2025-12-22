@@ -635,13 +635,13 @@ test('Theme keys with underscores are suggested with underscores', async () => {
       /* Disable the spacing scale */
       --spacing: initial;
 
-      /* This will get suggeted with a dot because its surrounded by numbers */
+      /* This will get suggested with a dot because its surrounded by numbers */
       --spacing-1_5: 1.5rem;
 
-      /* This will get suggeted with a dot  */
+      /* This will get suggested with a dot  */
       --spacing-2\.5: 1.5rem;
 
-      /* This will get suggeted with an underscore */
+      /* This will get suggested with an underscore */
       --spacing-logo_margin: 0.875rem;
     }
 

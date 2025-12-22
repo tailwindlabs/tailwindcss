@@ -1,6 +1,6 @@
 import { css, js, json, test } from '../utils'
 
-// This test runs the wasm build using the `node:wasi` runtine.
+// This test runs the wasm build using the `node:wasi` runtime.
 //
 // There are currently a known problems that the Node WASI preview implementation does not properly
 // handle FS reads on macOS and it does not implement all APIs on Windows. Because of that, this
