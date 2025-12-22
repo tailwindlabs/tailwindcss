@@ -468,7 +468,7 @@ test(
     // the CSS
     await fetchStyles(url)
 
-    // At this point, no changes should triger a compile step. If we see any
+    // At this point, no changes should trigger a compile step. If we see any
     // changes, there is an infinite loop because we (the user) didn't write any
     // files to disk.
     //
