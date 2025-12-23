@@ -13,7 +13,12 @@ import { escape } from '../utils/escape'
 import { inferDataType } from '../utils/infer-data-type'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
-import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
+import {
+  compoundsForSelectors,
+  IS_VALID_VARIANT_NAME,
+  substituteAtSlot,
+  substituteAtVariant,
+} from '../variants'
 import { walk, WalkAction } from '../walk'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
@@ -110,6 +115,7 @@ export function buildPluginApi({
       if (referenceMode) return
       let baseNodes = objectToAst(css)
       featuresRef.current |= substituteFunctions(baseNodes, designSystem)
+      featuresRef.current |= substituteAtVariant(baseNodes, designSystem)
       let rule = atRule('@layer', 'base', baseNodes)
       walk([rule], (node) => {
         node.src = src
