@@ -130,7 +130,7 @@
     "@jridgewell/remapping": "^2.3.4",
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
-    "dedent": "1.7.0",
+    "dedent": "1.7.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.21",
     "source-map-js": "^1.2.1"

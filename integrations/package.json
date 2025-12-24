@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
-    "dedent": "1.7.0",
+    "dedent": "1.7.1",
     "fast-glob": "^3.3.3",
     "source-map-js": "^1.2.1"
   }
