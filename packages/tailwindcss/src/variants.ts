@@ -26,7 +26,7 @@ export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*(?<![_-])$/
 type VariantFn<T extends Variant['kind']> = (
   rule: Rule,
   variant: Extract<Variant, { kind: T }>,
-) => null | void
+) => null | void | AstNode
 
 type CompareFn = (a: Variant, z: Variant) => number
 
