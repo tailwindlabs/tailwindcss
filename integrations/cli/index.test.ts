@@ -2406,7 +2406,7 @@ test(
         }
         img, svg, video, canvas, audio, iframe, embed, object {
           display: block;
-          vertical-align: middle;
+          align-items: center;
         }
         img, video {
           max-width: 100%;
