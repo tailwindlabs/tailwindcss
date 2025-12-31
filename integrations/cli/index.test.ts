@@ -2405,8 +2405,8 @@ test(
           list-style: none;
         }
         img, svg, video, canvas, audio, iframe, embed, object {
-          display: block;
-          vertical-align: middle;
+           display: flex;
+           align-items: center;
         }
         img, video {
           max-width: 100%;
