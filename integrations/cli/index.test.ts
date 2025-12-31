@@ -2405,7 +2405,7 @@ test(
           list-style: none;
         }
         img, svg, video, canvas, audio, iframe, embed, object {
-          display: block;
+          display: flex;
           align-items: center;
         }
         img, video {
