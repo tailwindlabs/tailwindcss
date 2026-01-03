@@ -11051,6 +11051,1113 @@ test('rounded-bl', async () => {
   ).toEqual('')
 })
 
+test('radius', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius', 'radius-full', 'radius-none', 'radius-sm', 'radius-4', 'radius-px', 'radius-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius {
+      border-radius: var(--radius);
+    }
+
+    .radius-4 {
+      border-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-\\[4px\\] {
+      border-radius: 4px;
+    }
+
+    .radius-full {
+      border-radius: 3.40282e38px;
+    }
+
+    .radius-none {
+      border-radius: 0;
+    }
+
+    .radius-px {
+      border-radius: 1px;
+    }
+
+    .radius-sm {
+      border-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --radius-full: 99999px;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-full'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --radius-full: 99999px;
+    }
+
+    .radius-full {
+      border-radius: var(--radius-full);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius',
+      '-radius-full',
+      '-radius-none',
+      '-radius-sm',
+      '-radius-4',
+      '-radius-[4px]',
+      'radius/foo',
+      'radius-full/foo',
+      'radius-none/foo',
+      'radius-sm/foo',
+      'radius-4/foo',
+      'radius-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-s', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-s', 'radius-s-full', 'radius-s-none', 'radius-s-sm', 'radius-s-4', 'radius-s-px', 'radius-s-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-s {
+      border-start-start-radius: var(--radius);
+      border-end-start-radius: var(--radius);
+    }
+
+    .radius-s-4 {
+      border-start-start-radius: calc(var(--spacing) * 4);
+      border-end-start-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-s-\\[4px\\] {
+      border-start-start-radius: 4px;
+      border-end-start-radius: 4px;
+    }
+
+    .radius-s-full {
+      border-start-start-radius: var(--radius-full);
+      border-end-start-radius: var(--radius-full);
+    }
+
+    .radius-s-none {
+      border-start-start-radius: var(--radius-none);
+      border-end-start-radius: var(--radius-none);
+    }
+
+    .radius-s-px {
+      border-start-start-radius: 1px;
+      border-end-start-radius: 1px;
+    }
+
+    .radius-s-sm {
+      border-start-start-radius: var(--radius-sm);
+      border-end-start-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-s',
+      '-radius-s-full',
+      '-radius-s-none',
+      '-radius-s-sm',
+      '-radius-s-4',
+      '-radius-s-[4px]',
+      'radius-s/foo',
+      'radius-s-full/foo',
+      'radius-s-none/foo',
+      'radius-s-sm/foo',
+      'radius-s-4/foo',
+      'radius-s-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-e', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-e', 'radius-e-full', 'radius-e-none', 'radius-e-sm', 'radius-e-4', 'radius-e-px', 'radius-e-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-e {
+      border-start-end-radius: var(--radius);
+      border-end-end-radius: var(--radius);
+    }
+
+    .radius-e-4 {
+      border-start-end-radius: calc(var(--spacing) * 4);
+      border-end-end-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-e-\\[4px\\] {
+      border-start-end-radius: 4px;
+      border-end-end-radius: 4px;
+    }
+
+    .radius-e-full {
+      border-start-end-radius: var(--radius-full);
+      border-end-end-radius: var(--radius-full);
+    }
+
+    .radius-e-none {
+      border-start-end-radius: var(--radius-none);
+      border-end-end-radius: var(--radius-none);
+    }
+
+    .radius-e-px {
+      border-start-end-radius: 1px;
+      border-end-end-radius: 1px;
+    }
+
+    .radius-e-sm {
+      border-start-end-radius: var(--radius-sm);
+      border-end-end-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-e',
+      '-radius-e-full',
+      '-radius-e-none',
+      '-radius-e-sm',
+      '-radius-e-4',
+      '-radius-e-[4px]',
+      'radius-e/foo',
+      'radius-e-full/foo',
+      'radius-e-none/foo',
+      'radius-e-sm/foo',
+      'radius-e-4/foo',
+      'radius-e-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-t', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-t', 'radius-t-full', 'radius-t-none', 'radius-t-sm', 'radius-t-4', 'radius-t-px', 'radius-t-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-t {
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+    }
+
+    .radius-t-4 {
+      border-top-left-radius: calc(var(--spacing) * 4);
+      border-top-right-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-t-\\[4px\\] {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+
+    .radius-t-full {
+      border-top-left-radius: var(--radius-full);
+      border-top-right-radius: var(--radius-full);
+    }
+
+    .radius-t-none {
+      border-top-left-radius: var(--radius-none);
+      border-top-right-radius: var(--radius-none);
+    }
+
+    .radius-t-px {
+      border-top-left-radius: 1px;
+      border-top-right-radius: 1px;
+    }
+
+    .radius-t-sm {
+      border-top-left-radius: var(--radius-sm);
+      border-top-right-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-t',
+      '-radius-t-full',
+      '-radius-t-none',
+      '-radius-t-sm',
+      '-radius-t-4',
+      '-radius-t-[4px]',
+      'radius-t/foo',
+      'radius-t-full/foo',
+      'radius-t-none/foo',
+      'radius-t-sm/foo',
+      'radius-t-4/foo',
+      'radius-t-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-r', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-r', 'radius-r-full', 'radius-r-none', 'radius-r-sm', 'radius-r-4', 'radius-r-px', 'radius-r-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-r {
+      border-top-right-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+
+    .radius-r-4 {
+      border-top-right-radius: calc(var(--spacing) * 4);
+      border-bottom-right-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-r-\\[4px\\] {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    .radius-r-full {
+      border-top-right-radius: var(--radius-full);
+      border-bottom-right-radius: var(--radius-full);
+    }
+
+    .radius-r-none {
+      border-top-right-radius: var(--radius-none);
+      border-bottom-right-radius: var(--radius-none);
+    }
+
+    .radius-r-px {
+      border-top-right-radius: 1px;
+      border-bottom-right-radius: 1px;
+    }
+
+    .radius-r-sm {
+      border-top-right-radius: var(--radius-sm);
+      border-bottom-right-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-r',
+      '-radius-r-full',
+      '-radius-r-none',
+      '-radius-r-sm',
+      '-radius-r-4',
+      '-radius-r-[4px]',
+      'radius-r/foo',
+      'radius-r-full/foo',
+      'radius-r-none/foo',
+      'radius-r-sm/foo',
+      'radius-r-4/foo',
+      'radius-r-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-b', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-b', 'radius-b-full', 'radius-b-none', 'radius-b-sm', 'radius-b-4', 'radius-b-px', 'radius-b-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-b {
+      border-bottom-right-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
+    }
+
+    .radius-b-4 {
+      border-bottom-right-radius: calc(var(--spacing) * 4);
+      border-bottom-left-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-b-\\[4px\\] {
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .radius-b-full {
+      border-bottom-right-radius: var(--radius-full);
+      border-bottom-left-radius: var(--radius-full);
+    }
+
+    .radius-b-none {
+      border-bottom-right-radius: var(--radius-none);
+      border-bottom-left-radius: var(--radius-none);
+    }
+
+    .radius-b-px {
+      border-bottom-right-radius: 1px;
+      border-bottom-left-radius: 1px;
+    }
+
+    .radius-b-sm {
+      border-bottom-right-radius: var(--radius-sm);
+      border-bottom-left-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-b',
+      '-radius-b-full',
+      '-radius-b-none',
+      '-radius-b-sm',
+      '-radius-b-4',
+      '-radius-b-[4px]',
+      'radius-b/foo',
+      'radius-b-full/foo',
+      'radius-b-none/foo',
+      'radius-b-sm/foo',
+      'radius-b-4/foo',
+      'radius-b-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-l', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-l', 'radius-l-full', 'radius-l-none', 'radius-l-sm', 'radius-l-4', 'radius-l-px', 'radius-l-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-l {
+      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
+    }
+
+    .radius-l-4 {
+      border-top-left-radius: calc(var(--spacing) * 4);
+      border-bottom-left-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-l-\\[4px\\] {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .radius-l-full {
+      border-top-left-radius: var(--radius-full);
+      border-bottom-left-radius: var(--radius-full);
+    }
+
+    .radius-l-none {
+      border-top-left-radius: var(--radius-none);
+      border-bottom-left-radius: var(--radius-none);
+    }
+
+    .radius-l-px {
+      border-top-left-radius: 1px;
+      border-bottom-left-radius: 1px;
+    }
+
+    .radius-l-sm {
+      border-top-left-radius: var(--radius-sm);
+      border-bottom-left-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-l',
+      '-radius-l-full',
+      '-radius-l-none',
+      '-radius-l-sm',
+      '-radius-l-4',
+      '-radius-l-[4px]',
+      'radius-l/foo',
+      'radius-l-full/foo',
+      'radius-l-none/foo',
+      'radius-l-sm/foo',
+      'radius-l-4/foo',
+      'radius-l-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-ss', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-ss', 'radius-ss-full', 'radius-ss-none', 'radius-ss-sm', 'radius-ss-4', 'radius-ss-px', 'radius-ss-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-ss {
+      border-start-start-radius: var(--radius);
+    }
+
+    .radius-ss-4 {
+      border-start-start-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-ss-\\[4px\\] {
+      border-start-start-radius: 4px;
+    }
+
+    .radius-ss-full {
+      border-start-start-radius: var(--radius-full);
+    }
+
+    .radius-ss-none {
+      border-start-start-radius: var(--radius-none);
+    }
+
+    .radius-ss-px {
+      border-start-start-radius: 1px;
+    }
+
+    .radius-ss-sm {
+      border-start-start-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-ss',
+      '-radius-ss-full',
+      '-radius-ss-none',
+      '-radius-ss-sm',
+      '-radius-ss-4',
+      '-radius-ss-[4px]',
+      'radius-ss/foo',
+      'radius-ss-full/foo',
+      'radius-ss-none/foo',
+      'radius-ss-sm/foo',
+      'radius-ss-4/foo',
+      'radius-ss-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-se', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-se', 'radius-se-full', 'radius-se-none', 'radius-se-sm', 'radius-se-4', 'radius-se-px', 'radius-se-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-se {
+      border-start-end-radius: var(--radius);
+    }
+
+    .radius-se-4 {
+      border-start-end-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-se-\\[4px\\] {
+      border-start-end-radius: 4px;
+    }
+
+    .radius-se-full {
+      border-start-end-radius: var(--radius-full);
+    }
+
+    .radius-se-none {
+      border-start-end-radius: var(--radius-none);
+    }
+
+    .radius-se-px {
+      border-start-end-radius: 1px;
+    }
+
+    .radius-se-sm {
+      border-start-end-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-se',
+      '-radius-se-full',
+      '-radius-se-none',
+      '-radius-se-sm',
+      '-radius-se-4',
+      '-radius-se-[4px]',
+      'radius-se/foo',
+      'radius-se-full/foo',
+      'radius-se-none/foo',
+      'radius-se-sm/foo',
+      'radius-se-4/foo',
+      'radius-se-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-ee', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-ee', 'radius-ee-full', 'radius-ee-none', 'radius-ee-sm', 'radius-ee-4', 'radius-ee-px', 'radius-ee-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-ee {
+      border-end-end-radius: var(--radius);
+    }
+
+    .radius-ee-4 {
+      border-end-end-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-ee-\\[4px\\] {
+      border-end-end-radius: 4px;
+    }
+
+    .radius-ee-full {
+      border-end-end-radius: var(--radius-full);
+    }
+
+    .radius-ee-none {
+      border-end-end-radius: var(--radius-none);
+    }
+
+    .radius-ee-px {
+      border-end-end-radius: 1px;
+    }
+
+    .radius-ee-sm {
+      border-end-end-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-ee',
+      '-radius-ee-full',
+      '-radius-ee-none',
+      '-radius-ee-sm',
+      '-radius-ee-4',
+      '-radius-ee-[4px]',
+      'radius-ee/foo',
+      'radius-ee-full/foo',
+      'radius-ee-none/foo',
+      'radius-ee-sm/foo',
+      'radius-ee-4/foo',
+      'radius-ee-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-es', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-es', 'radius-es-full', 'radius-es-none', 'radius-es-sm', 'radius-es-4', 'radius-es-px', 'radius-es-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-es {
+      border-end-start-radius: var(--radius);
+    }
+
+    .radius-es-4 {
+      border-end-start-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-es-\\[4px\\] {
+      border-end-start-radius: 4px;
+    }
+
+    .radius-es-full {
+      border-end-start-radius: var(--radius-full);
+    }
+
+    .radius-es-none {
+      border-end-start-radius: var(--radius-none);
+    }
+
+    .radius-es-px {
+      border-end-start-radius: 1px;
+    }
+
+    .radius-es-sm {
+      border-end-start-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-es',
+      '-radius-es-full',
+      '-radius-es-none',
+      '-radius-es-sm',
+      '-radius-es-4',
+      '-radius-es-[4px]',
+      'radius-es/foo',
+      'radius-es-full/foo',
+      'radius-es-none/foo',
+      'radius-es-sm/foo',
+      'radius-es-4/foo',
+      'radius-es-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-tl', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-tl', 'radius-tl-full', 'radius-tl-none', 'radius-tl-sm', 'radius-tl-4', 'radius-tl-px', 'radius-tl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-tl {
+      border-top-left-radius: var(--radius);
+    }
+
+    .radius-tl-4 {
+      border-top-left-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-tl-\\[4px\\] {
+      border-top-left-radius: 4px;
+    }
+
+    .radius-tl-full {
+      border-top-left-radius: var(--radius-full);
+    }
+
+    .radius-tl-none {
+      border-top-left-radius: var(--radius-none);
+    }
+
+    .radius-tl-px {
+      border-top-left-radius: 1px;
+    }
+
+    .radius-tl-sm {
+      border-top-left-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-tl',
+      '-radius-tl-full',
+      '-radius-tl-none',
+      '-radius-tl-sm',
+      '-radius-tl-4',
+      '-radius-tl-[4px]',
+      'radius-tl/foo',
+      'radius-tl-full/foo',
+      'radius-tl-none/foo',
+      'radius-tl-sm/foo',
+      'radius-tl-4/foo',
+      'radius-tl-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-tr', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-tr', 'radius-tr-full', 'radius-tr-none', 'radius-tr-sm', 'radius-tr-4', 'radius-tr-px', 'radius-tr-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-tr {
+      border-top-right-radius: var(--radius);
+    }
+
+    .radius-tr-4 {
+      border-top-right-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-tr-\\[4px\\] {
+      border-top-right-radius: 4px;
+    }
+
+    .radius-tr-full {
+      border-top-right-radius: var(--radius-full);
+    }
+
+    .radius-tr-none {
+      border-top-right-radius: var(--radius-none);
+    }
+
+    .radius-tr-px {
+      border-top-right-radius: 1px;
+    }
+
+    .radius-tr-sm {
+      border-top-right-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-tr',
+      '-radius-tr-full',
+      '-radius-tr-none',
+      '-radius-tr-sm',
+      '-radius-tr-4',
+      '-radius-tr-[4px]',
+      'radius-tr/foo',
+      'radius-tr-full/foo',
+      'radius-tr-none/foo',
+      'radius-tr-sm/foo',
+      'radius-tr-4/foo',
+      'radius-tr-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-br', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-br', 'radius-br-full', 'radius-br-none', 'radius-br-sm', 'radius-br-4', 'radius-br-px', 'radius-br-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-br {
+      border-bottom-right-radius: var(--radius);
+    }
+
+    .radius-br-4 {
+      border-bottom-right-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-br-\\[4px\\] {
+      border-bottom-right-radius: 4px;
+    }
+
+    .radius-br-full {
+      border-bottom-right-radius: var(--radius-full);
+    }
+
+    .radius-br-none {
+      border-bottom-right-radius: var(--radius-none);
+    }
+
+    .radius-br-px {
+      border-bottom-right-radius: 1px;
+    }
+
+    .radius-br-sm {
+      border-bottom-right-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-br',
+      '-radius-br-full',
+      '-radius-br-none',
+      '-radius-br-sm',
+      '-radius-br-4',
+      '-radius-br-[4px]',
+      'radius-br/foo',
+      'radius-br-full/foo',
+      'radius-br-none/foo',
+      'radius-br-sm/foo',
+      'radius-br-4/foo',
+      'radius-br-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('radius-bl', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['radius-bl', 'radius-bl-full', 'radius-bl-none', 'radius-bl-sm', 'radius-bl-4', 'radius-bl-px', 'radius-bl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .radius-bl {
+      border-bottom-left-radius: var(--radius);
+    }
+
+    .radius-bl-4 {
+      border-bottom-left-radius: calc(var(--spacing) * 4);
+    }
+
+    .radius-bl-\\[4px\\] {
+      border-bottom-left-radius: 4px;
+    }
+
+    .radius-bl-full {
+      border-bottom-left-radius: var(--radius-full);
+    }
+
+    .radius-bl-none {
+      border-bottom-left-radius: var(--radius-none);
+    }
+
+    .radius-bl-px {
+      border-bottom-left-radius: 1px;
+    }
+
+    .radius-bl-sm {
+      border-bottom-left-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-radius-bl',
+      '-radius-bl-full',
+      '-radius-bl-none',
+      '-radius-bl-sm',
+      '-radius-bl-4',
+      '-radius-bl-[4px]',
+      'radius-bl/foo',
+      'radius-bl-full/foo',
+      'radius-bl-none/foo',
+      'radius-bl-sm/foo',
+      'radius-bl-4/foo',
+      'radius-bl-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('border-style', async () => {
   expect(
     await run([

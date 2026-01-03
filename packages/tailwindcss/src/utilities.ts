@@ -2172,30 +2172,45 @@ export function createUtilities(theme: Theme) {
   {
     // border-radius
     for (let [root, properties] of [
-      ['rounded', ['border-radius']],
-      ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
-      ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
-      ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
-      ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
-      ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
-      ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
-      ['rounded-ss', ['border-start-start-radius']],
-      ['rounded-se', ['border-start-end-radius']],
-      ['rounded-ee', ['border-end-end-radius']],
-      ['rounded-es', ['border-end-start-radius']],
-      ['rounded-tl', ['border-top-left-radius']],
-      ['rounded-tr', ['border-top-right-radius']],
-      ['rounded-br', ['border-bottom-right-radius']],
-      ['rounded-bl', ['border-bottom-left-radius']],
+      ['radius', ['border-radius']],
+      ['radius-s', ['border-start-start-radius', 'border-end-start-radius']],
+      ['radius-e', ['border-start-end-radius', 'border-end-end-radius']],
+      ['radius-t', ['border-top-left-radius', 'border-top-right-radius']],
+      ['radius-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+      ['radius-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+      ['radius-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+      ['radius-ss', ['border-start-start-radius']],
+      ['radius-se', ['border-start-end-radius']],
+      ['radius-ee', ['border-end-end-radius']],
+      ['radius-es', ['border-end-start-radius']],
+      ['radius-tl', ['border-top-left-radius']],
+      ['radius-tr', ['border-top-right-radius']],
+      ['radius-br', ['border-bottom-right-radius']],
+      ['radius-bl', ['border-bottom-left-radius']],
     ] as const) {
+      utilities.static(`${root}-px`, () => properties.map((property) => decl(property, '1px')))
       functionalUtility(root, {
-        themeKeys: ['--radius'],
+        themeKeys: ['--radius', '--spacing'],
+        handleBareValue: ({ value }) => {
+          let multiplier = theme.resolve(null, ['--spacing'])
+          if (!multiplier) return null
+          if (!isValidSpacingMultiplier(value)) return null
+
+          return `calc(${multiplier} * ${value})`
+        },
         handle: (value) => properties.map((property) => decl(property, value)),
         staticValues: {
           none: properties.map((property) => decl(property, '0')),
           full: properties.map((property) => decl(property, 'calc(infinity * 1px)')),
         },
       })
+
+      suggest(root, () => [
+        {
+          values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+          valueThemeKeys: ['--radius'],
+        },
+      ])
     }
   }
 
