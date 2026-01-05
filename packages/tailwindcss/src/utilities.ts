@@ -28,9 +28,6 @@ import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
-const IS_VALID_STATIC_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*$/
-const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
-
 const DEFAULT_SPACING_SUGGESTIONS = [
   '0',
   '0.5',
@@ -5835,7 +5832,7 @@ export function createCssUtility(node: AtRule) {
   let name = node.params
 
   // Functional utilities. E.g.: `tab-size-*`
-  if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
+  if (isValidFunctionalUtilityName(name)) {
     // API:
     //
     // - `--value('literal')`         resolves a literal named value
@@ -6184,7 +6181,7 @@ export function createCssUtility(node: AtRule) {
     }
   }
 
-  if (IS_VALID_STATIC_UTILITY_NAME.test(name)) {
+  if (isValidStaticUtilityName(name)) {
     return (designSystem: DesignSystem) => {
       designSystem.utilities.static(name, () => node.nodes.map(cloneAstNode))
     }
@@ -6427,4 +6424,145 @@ function alphaReplacedDropShadowProperties(
   } else {
     return [decl(property, prefix + replacedValue)]
   }
+}
+
+const UTILITY_ROOT = /^-?[a-z][a-zA-Z0-9_-]*/
+
+const PERCENT = 37
+const SLASH = 47
+const DOT = 46
+const LOWER_A = 97
+const LOWER_Z = 122
+const UPPER_A = 65
+const UPPER_Z = 90
+const ZERO = 48
+const NINE = 57
+const UNDERSCORE = 95
+const DASH = 45
+
+export function isValidStaticUtilityName(name: string): boolean {
+  let match = UTILITY_ROOT.exec(name)
+  if (match === null) return false // Invalid root
+
+  let root = match[0]
+  let value = name.slice(root.length)
+
+  // Root should not end in `-` if there is no value
+  //
+  // `tab-size-`
+  //  ---------     Root
+  if (value.length === 0 && root.endsWith('-')) {
+    return false
+  }
+
+  // No remaining value is valid
+  //
+  // `tab-size`
+  //  --------    Root
+  if (value.length === 0) {
+    return true
+  }
+
+  // Any valid (static) utility should be valid including:
+  // - Bare values with `.`: `p-1.5`
+  // - Bare values with `%`: `w-50%`
+  // - With an embedded modifier: `text-xs/8`
+
+  let seenSlash = false
+  for (let i = 0; i < value.length; i++) {
+    let charCode = value.charCodeAt(i)
+    switch (charCode) {
+      case PERCENT: {
+        // A percentage is only valid at the end of the value
+        if (i !== value.length - 1) return false
+
+        // A percent is only valid when preceded by a digit. E.g.: `w-%` is invalid
+        let previousChar = value[i - 1] || root[root.length - 1] || ''
+        let previousCharCode = previousChar.charCodeAt(0)
+        if (previousCharCode < ZERO || previousCharCode > NINE) return false
+        break
+      }
+
+      case SLASH: {
+        // A slash must be followed by at least 1 character. E.g.: `foo/` is invalid
+        if (i === value.length - 1) return false
+
+        // A slash can only appear once. E.g.: `foo/bar/baz` is invalid
+        if (seenSlash) return false
+        seenSlash = true
+        break
+      }
+
+      case DOT: {
+        // Dots are only allowed between digits. E.g.: `p-1.a` is invalid
+        let previousChar = value[i - 1] || root[root.length - 1] || ''
+        let previousCharCode = previousChar.charCodeAt(0)
+        if (previousCharCode < ZERO || previousCharCode > NINE) return false
+
+        let nextChar = value[i + 1] || ''
+        let nextCharCode = nextChar.charCodeAt(0)
+        if (nextCharCode < ZERO || nextCharCode > NINE) return false
+        break
+      }
+
+      // Allowed special characters
+      case UNDERSCORE:
+      case DASH: {
+        continue
+      }
+
+      default: {
+        if (
+          (charCode >= LOWER_A && charCode <= LOWER_Z) || // Allow a-z
+          (charCode >= UPPER_A && charCode <= UPPER_Z) || // Allow A-Z
+          (charCode >= ZERO && charCode <= NINE) // Allow 0-9
+        ) {
+          continue
+        }
+
+        // Everything else is invalid
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
+export function isValidFunctionalUtilityName(name: string): boolean {
+  if (!name.endsWith('-*')) return false // Missing '-*' suffix
+  name = name.slice(0, -2)
+
+  let match = UTILITY_ROOT.exec(name)
+  if (match === null) return false // Invalid root
+
+  let root = match[0]
+  let value = name.slice(root.length)
+
+  // Root should not end in `-` if there is no value
+  //
+  // `tab-size--*`
+  //  ---------     Root
+  //           --   Suffix
+  //
+  // Because with default values, this could match `tab-size-` which is invalid.
+  if (value.length === 0 && root.endsWith('-')) {
+    return false
+  }
+
+  // No remaining value is valid
+  //
+  // `tab-size-*`
+  //  --------    Root
+  //          --  Suffix
+  if (value.length === 0) {
+    return true
+  }
+
+  // But if there is a value remaining, it's invalid.
+  //
+  // E.g.: `tab-size-[…]-*`
+  //
+  // If we allow more characters, we can extend the validation here
+  return false
 }
