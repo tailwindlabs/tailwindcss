@@ -119,7 +119,11 @@ impl PreProcessor for Ruby {
                 }
 
                 // Replace comments in Ruby files
-                b'#' => {
+                //
+                // Except for strict locals, these are defined in a `<%# locals: … %>`. Checking if
+                // the comment is preceded by a `%` should be enough without having to perform more
+                // parsing logic. Worst case we _do_ scan a few comments.
+                b'#' if !matches!(cursor.prev, b'%') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
