@@ -387,6 +387,19 @@ mod tests {
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/19239
+    #[test]
+    fn test_skip_comments() {
+        let input = r#"
+          # From activerecord-8.1.1/lib/active_record/errors.rb:147
+          # Rails uses RDoc cross-reference syntax in inline documentation:
+          # {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]
+        "#;
+
+        // Nothing should be extracted from comments, so expect an empty array.
+        Ruby::test_extract_exact(input, vec![]);
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/19481
     #[test]
     fn test_strict_locals() {
