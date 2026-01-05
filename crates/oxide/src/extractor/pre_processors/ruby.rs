@@ -382,4 +382,32 @@ mod tests {
         "#;
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19481
+    #[test]
+    fn test_strict_locals() {
+        // Strict locals are defined in a `<%# locals: … %>`, but the `#` looks like a comment
+        // which we should not ignore in this case.
+        let input = r#"
+          <%# locals: (css: "text-amber-600") %>
+          <% more_css = "text-sky-500" %>
+
+          <p class="text-green-500">
+            In a partial
+          </p>
+
+          <p class="<%= css %>">
+            In a partial using explicit local variables
+          </p>
+
+          <p class="<%= more_css %>">
+            In a partial using explicit local variables
+          </p>
+        "#;
+
+        Ruby::test_extract_contains(
+            input,
+            vec!["text-amber-600", "text-sky-500", "text-green-500"],
+        );
+    }
 }
