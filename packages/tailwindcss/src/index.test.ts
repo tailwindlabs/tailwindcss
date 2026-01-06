@@ -5299,6 +5299,38 @@ describe('@variant', () => {
     `)
   })
 
+  it('should be possible to use comma-separated `@variant` rules', async () => {
+    await expect(
+      compileCss(
+        css`
+          .btn {
+            background: black;
+
+            @variant hover, focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `,
+        [],
+      ),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      @media (hover: hover) {
+        .btn:hover {
+          background: red;
+        }
+      }
+
+      .btn:focus {
+        background: red;
+      }"
+    `)
+  })
+
   it('should be possible to use `@variant` with a funky looking variants', async () => {
     await expect(
       compileCss(
