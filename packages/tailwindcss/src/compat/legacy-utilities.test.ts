@@ -211,3 +211,150 @@ test('flex-shrink', async () => {
     ]),
   ).toEqual('')
 })
+
+test('rounded', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .rounded {
+      border-radius: var(--radius);
+    }
+
+    .rounded-\\[4px\\] {
+      border-radius: 4px;
+    }
+
+    .rounded-full {
+      border-radius: 3.40282e38px;
+    }
+
+    .rounded-none {
+      border-radius: 0;
+    }
+
+    .rounded-sm {
+      border-radius: var(--radius-sm);
+    }"
+  `)
+  expect(
+    await run([
+      '-rounded',
+      '-rounded-full',
+      '-rounded-none',
+      '-rounded-sm',
+      '-rounded-[4px]',
+      'rounded/foo',
+      'rounded-full/foo',
+      'rounded-none/foo',
+      'rounded-sm/foo',
+      'rounded-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('rounded-s', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .rounded-s {
+      border-start-start-radius: var(--radius);
+      border-end-start-radius: var(--radius);
+    }
+
+    .rounded-s-\\[4px\\] {
+      border-start-start-radius: 4px;
+      border-end-start-radius: 4px;
+    }
+
+    .rounded-s-full {
+      border-start-start-radius: var(--radius-full);
+      border-end-start-radius: var(--radius-full);
+    }
+
+    .rounded-s-none {
+      border-start-start-radius: var(--radius-none);
+      border-end-start-radius: var(--radius-none);
+    }
+
+    .rounded-s-sm {
+      border-start-start-radius: var(--radius-sm);
+      border-end-start-radius: var(--radius-sm);
+    }"
+  `)
+})
+
+test('rounded-tl', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --radius-none: 0px;
+          --radius-full: 9999px;
+          --radius-sm: 0.125rem;
+          --radius: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --radius-none: 0px;
+      --radius-full: 9999px;
+      --radius-sm: .125rem;
+      --radius: .25rem;
+    }
+
+    .rounded-tl {
+      border-top-left-radius: var(--radius);
+    }
+
+    .rounded-tl-\\[4px\\] {
+      border-top-left-radius: 4px;
+    }
+
+    .rounded-tl-full {
+      border-top-left-radius: var(--radius-full);
+    }
+
+    .rounded-tl-none {
+      border-top-left-radius: var(--radius-none);
+    }
+
+    .rounded-tl-sm {
+      border-top-left-radius: var(--radius-sm);
+    }"
+  `)
+})

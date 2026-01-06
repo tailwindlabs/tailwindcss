@@ -2,6 +2,24 @@ import { decl } from '../ast'
 import type { DesignSystem } from '../design-system'
 import { isPositiveInteger } from '../utils/infer-data-type'
 
+const ROUNDED_UTILITIES = [
+  ['rounded', ['border-radius']],
+  ['rounded-s', ['border-start-start-radius', 'border-end-start-radius']],
+  ['rounded-e', ['border-start-end-radius', 'border-end-end-radius']],
+  ['rounded-t', ['border-top-left-radius', 'border-top-right-radius']],
+  ['rounded-r', ['border-top-right-radius', 'border-bottom-right-radius']],
+  ['rounded-b', ['border-bottom-right-radius', 'border-bottom-left-radius']],
+  ['rounded-l', ['border-top-left-radius', 'border-bottom-left-radius']],
+  ['rounded-ss', ['border-start-start-radius']],
+  ['rounded-se', ['border-start-end-radius']],
+  ['rounded-ee', ['border-end-end-radius']],
+  ['rounded-es', ['border-end-start-radius']],
+  ['rounded-tl', ['border-top-left-radius']],
+  ['rounded-tr', ['border-top-right-radius']],
+  ['rounded-br', ['border-bottom-right-radius']],
+  ['rounded-bl', ['border-bottom-left-radius']],
+] as const
+
 export function registerLegacyUtilities(designSystem: DesignSystem) {
   for (let [value, direction] of [
     ['t', 'top'],
@@ -111,4 +129,38 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
 
   designSystem.utilities.suggest('break-words', () => [])
   designSystem.utilities.static('break-words', () => [decl('overflow-wrap', 'break-word')])
+
+  // Legacy `rounded-*` utilities for compatibility
+  for (let [root, properties] of ROUNDED_UTILITIES) {
+    designSystem.utilities.suggest(root, () => [])
+    designSystem.utilities.functional(root, (candidate) => {
+      if (candidate.modifier) return
+
+      let value: string | null = null
+
+      if (!candidate.value) {
+        value = designSystem.theme.resolve(null, ['--radius'])
+      } else if (candidate.value.kind === 'arbitrary') {
+        value = candidate.value.value
+      } else if (candidate.value.value === 'none') {
+        // Try to resolve from theme first, fall back to static '0'
+        value = designSystem.theme.resolve('none', ['--radius'])
+        if (value === null) {
+          return properties.map((property) => decl(property, '0'))
+        }
+      } else if (candidate.value.value === 'full') {
+        // Try to resolve from theme first, fall back to static infinity
+        value = designSystem.theme.resolve('full', ['--radius'])
+        if (value === null) {
+          return properties.map((property) => decl(property, 'calc(infinity * 1px)'))
+        }
+      } else {
+        value = designSystem.theme.resolve(candidate.value.value, ['--radius'])
+      }
+
+      if (value === null) return
+
+      return properties.map((property) => decl(property, value))
+    })
+  }
 }
