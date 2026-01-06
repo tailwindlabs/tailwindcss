@@ -38,7 +38,7 @@
     "emnapi": "1.7.1"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 20"
   },
   "files": [
     "index.js",
