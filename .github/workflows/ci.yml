@@ -8,12 +8,14 @@ on:
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: 24
+
 jobs:
   tests:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20]
         runner:
           - name: Windows
             os: windows-latest
@@ -44,10 +46,10 @@ jobs:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist

@@ -8,13 +8,14 @@ on:
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: 24
+
 jobs:
   tests:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20]
-
         runner:
           - name: Windows
             os: windows-latest
@@ -57,10 +58,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
