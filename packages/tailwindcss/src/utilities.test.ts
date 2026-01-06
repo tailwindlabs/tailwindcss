@@ -27220,6 +27220,7 @@ describe('custom utilities', () => {
     ['foo-sm/8', true], // Bare value with number modifier
     ['foo-4/snug', true], // Bare value with named modifier
     ['foo_', true], // This is supported today, so let's not break it
+    ['foo/bar', true], // A slash to separate the modifier is valid.
 
     ['Foo', false], // Starting with uppercase letter is invalid
     ['-Foo', false], // Starting with uppercase letter is invalid (negative)
@@ -27229,6 +27230,7 @@ describe('custom utilities', () => {
     ['foo.bar', false], // Dots are only valid when surrounded by numbers
     ['foo-1..5', false], // Double dots are invalid
     ['foo..bar', false], // Double dots are invalid definitely without numbers
+    ['foo/bar/baz', false], // Multiple slashes are invalid
   ])('valid static utility name "%s" (%s)', (name, valid) => {
     expect(isValidStaticUtilityName(name)).toBe(valid)
   })
