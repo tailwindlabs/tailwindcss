@@ -191,6 +191,16 @@ export default [
   'border-bottom-right-radius',
   'border-bottom-left-radius',
 
+  'corner-shape',
+  'corner-start-start-shape',
+  'corner-start-end-shape',
+  'corner-end-end-shape',
+  'corner-end-start-shape',
+  'corner-top-left-shape',
+  'corner-top-right-shape',
+  'corner-bottom-right-shape',
+  'corner-bottom-left-shape',
+
   'border-width',
   'border-inline-width',
   'border-block-width',

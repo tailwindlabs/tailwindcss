@@ -12,7 +12,7 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableContainerSizeUtility } from './feature-flags'
+import { enableContainerSizeUtility, enableCornerShapeUtilities } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -2192,6 +2192,37 @@ export function createUtilities(theme: Theme) {
           none: properties.map((property) => decl(property, '0')),
           full: properties.map((property) => decl(property, 'calc(infinity * 1px)')),
         },
+      })
+    }
+  }
+
+  if (enableCornerShapeUtilities) {
+    // corner-shape
+    let shapes = ['round', 'scoop', 'bevel', 'notch', 'square', 'squircle']
+
+    for (let [root, properties] of [
+      ['corner', ['corner-shape']],
+      ['corner-s', ['corner-start-start-shape', 'corner-end-start-shape']],
+      ['corner-e', ['corner-start-end-shape', 'corner-end-end-shape']],
+      ['corner-t', ['corner-top-left-shape', 'corner-top-right-shape']],
+      ['corner-r', ['corner-top-right-shape', 'corner-bottom-right-shape']],
+      ['corner-b', ['corner-bottom-right-shape', 'corner-bottom-left-shape']],
+      ['corner-l', ['corner-top-left-shape', 'corner-bottom-left-shape']],
+      ['corner-ss', ['corner-start-start-shape']],
+      ['corner-se', ['corner-start-end-shape']],
+      ['corner-ee', ['corner-end-end-shape']],
+      ['corner-es', ['corner-end-start-shape']],
+      ['corner-tl', ['corner-top-left-shape']],
+      ['corner-tr', ['corner-top-right-shape']],
+      ['corner-br', ['corner-bottom-right-shape']],
+      ['corner-bl', ['corner-bottom-left-shape']],
+    ] as const) {
+      functionalUtility(root, {
+        themeKeys: ['--corner-shape'],
+        handle: (value) => properties.map((property) => decl(property, value)),
+        staticValues: Object.fromEntries(
+          shapes.map((shape) => [shape, properties.map((property) => decl(property, shape))]),
+        ),
       })
     }
   }
