@@ -33,7 +33,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "^3.4.1",
+    "@napi-rs/cli": "^3.5.1",
     "@napi-rs/wasm-runtime": "^1.1.0",
     "emnapi": "1.7.1"
   },
