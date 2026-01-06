@@ -8,12 +8,14 @@ on:
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: 24
+
 jobs:
   tests:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20]
         runner:
           - name: Windows
             os: windows-latest
@@ -41,18 +43,18 @@ jobs:
     name: ${{ matrix.runner.name }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
@@ -64,7 +66,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./crates/node/*.node
@@ -104,9 +106,9 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:ui
 
-      - name: Notify Discord
-        if: failure() && github.ref == 'refs/heads/main'
-        uses: discord-actions/message@v2
-        with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
+      # - name: Notify Discord
+      #   if: failure() && github.ref == 'refs/heads/main'
+      #   uses: discord-actions/message@v2
+      #   with:
+      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      #     message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'

@@ -8,7 +8,7 @@ on:
 
 env:
   APP_NAME: tailwindcss-oxide
-  NODE_VERSION: 20
+  NODE_VERSION: 24
   OXIDE_LOCATION: ./crates/node
 
 permissions:
@@ -73,11 +73,11 @@ jobs:
     container: ${{ matrix.container }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -90,7 +90,7 @@ jobs:
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
@@ -102,7 +102,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./crates/node/*.node
@@ -117,7 +117,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Install Node.JS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -143,7 +143,7 @@ jobs:
         run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -153,7 +153,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build FreeBSD
         uses: cross-platform-actions/action@v0.25.0
         env:
@@ -187,7 +187,7 @@ jobs:
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bindings-x86_64-unknown-freebsd
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -207,7 +207,7 @@ jobs:
       - build-freebsd
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 20
 
@@ -221,7 +221,7 @@ jobs:
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -229,7 +229,7 @@ jobs:
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
@@ -241,7 +241,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./crates/node/*.node
@@ -262,7 +262,7 @@ jobs:
         run: pnpm --filter=!./playgrounds/* install
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: ${{ env.OXIDE_LOCATION }}
 
@@ -301,13 +301,13 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Upload standalone artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
 
       - name: Upload npm package tarballs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: npm-package-tarballs
           path: dist/*.tgz
