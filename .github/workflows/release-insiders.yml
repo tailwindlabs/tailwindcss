@@ -72,7 +72,7 @@ jobs:
     container: ${{ matrix.container }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build FreeBSD
         uses: cross-platform-actions/action@v0.25.0
         env:
@@ -206,7 +206,7 @@ jobs:
       - build-freebsd
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 20
 
