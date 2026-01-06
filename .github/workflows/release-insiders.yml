@@ -59,13 +59,13 @@ jobs:
             strip: aarch64-linux-musl-strip
             download: true
             container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust@sha256:78c9ab1f117f8c535b93c4b91a2f19063dda6e4dba48a6187df49810625992c1
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             strip: strip
             download: true
             container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+              image: ghcr.io/napi-rs/napi-rs/nodejs-rust@sha256:78c9ab1f117f8c535b93c4b91a2f19063dda6e4dba48a6187df49810625992c1
 
     name: Build ${{ matrix.target }} (oxide)
     runs-on: ${{ matrix.os }}
