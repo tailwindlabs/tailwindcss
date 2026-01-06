@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
 import { compileCss, optimizeCss, run } from './test-utils/run'
+import { isValidFunctionalUtilityName, isValidStaticUtilityName } from './utilities'
 
 const css = String.raw
 
@@ -27207,6 +27208,48 @@ describe('spacing utilities', () => {
 })
 
 describe('custom utilities', () => {
+  test.each([
+    ['foo', true], // Simple name
+    ['foo-123', true], // Ending with a number is valid
+    ['foo-2.5', true], // Dots are valid when surrounded by numbers
+    ['-foo', true], // Simple name with negative sign
+    ['foo-bar', true], // With dashes
+    ['foo_bar', true], // With underscores
+    ['foo-50%', true], // Bare value with percentage
+    ['foo-1/2', true], // Bare value with fraction
+    ['foo-sm/8', true], // Bare value with number modifier
+    ['foo-4/snug', true], // Bare value with named modifier
+    ['foo_', true], // This is supported today, so let's not break it
+    ['foo/bar', true], // A slash to separate the modifier is valid.
+
+    ['Foo', false], // Starting with uppercase letter is invalid
+    ['-Foo', false], // Starting with uppercase letter is invalid (negative)
+    ['foo-', false], // Should not end with a dash
+    ['foo-1/', false], // Invalid fraction/modifier
+    ['foo-p%', false], // Invalid percentage
+    ['foo.bar', false], // Dots are only valid when surrounded by numbers
+    ['foo-1..5', false], // Double dots are invalid
+    ['foo..bar', false], // Double dots are invalid definitely without numbers
+    ['foo/bar/baz', false], // Multiple slashes are invalid
+  ])('valid static utility name "%s" (%s)', (name, valid) => {
+    expect(isValidStaticUtilityName(name)).toBe(valid)
+  })
+
+  test.each([
+    ['foo', false], // Simple name, missing '-*' suffix
+    ['foo-*', true], // Simple name
+    ['foo--*', false], // Root should not end in `-`
+    ['-foo-*', true], // Simple name (negative)
+    ['foo-bar-*', true], // With dashes
+    ['foo_bar-*', true], // With underscores
+    ['Foo-*', false], // Starting with uppercase letter is invalid
+    ['-Foo-*', false], // Starting with uppercase letter is invalid
+    ['foo!-*', false], // Invalid special character
+    ['foo-[…]', false], // Invalid special character
+  ])('valid functional name "%s" (%s)', (name, valid) => {
+    expect(isValidFunctionalUtilityName(name)).toBe(valid)
+  })
+
   test('custom static utility', async () => {
     let { build } = await compile(css`
       @layer utilities {

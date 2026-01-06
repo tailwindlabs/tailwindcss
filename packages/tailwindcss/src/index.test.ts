@@ -4660,6 +4660,41 @@ describe('@utility', () => {
       `[Error: \`@utility my-*-utility\` defines an invalid utility name. The dynamic portion marked by \`-*\` must appear once at the end.]`,
     )
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19505
+  test('@utility name cannot contain multiple `/` characters', async () => {
+    await expect(
+      compileCss(
+        css`
+          @utility ui/button {
+            display: inline-flex;
+            background: blue;
+          }
+          @tailwind utilities;
+        `,
+        ['ui/button'],
+      ),
+    ).resolves.toMatchInlineSnapshot(
+      `
+      ".ui\\/button {
+        background: #00f;
+        display: inline-flex;
+      }"
+    `,
+    )
+
+    await expect(
+      compileCss(css`
+        @utility ui/button/sm {
+          display: inline-flex;
+          background: blue;
+          font-size: 12px;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: \`@utility ui/button/sm\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
+    )
+  })
 })
 
 test('addBase', async () => {
