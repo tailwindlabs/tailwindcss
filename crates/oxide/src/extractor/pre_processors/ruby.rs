@@ -119,7 +119,11 @@ impl PreProcessor for Ruby {
                 }
 
                 // Replace comments in Ruby files
-                b'#' => {
+                //
+                // Except for strict locals, these are defined in a `<%# locals: … %>`. Checking if
+                // the comment is preceded by a `%` should be enough without having to perform more
+                // parsing logic. Worst case we _do_ scan a few comments.
+                b'#' if !matches!(cursor.prev, b'%') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
@@ -381,5 +385,46 @@ mod tests {
             end
         "#;
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19239
+    #[test]
+    fn test_skip_comments() {
+        let input = r#"
+          # From activerecord-8.1.1/lib/active_record/errors.rb:147
+          # Rails uses RDoc cross-reference syntax in inline documentation:
+          # {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]
+        "#;
+
+        // Nothing should be extracted from comments, so expect an empty array.
+        Ruby::test_extract_exact(input, vec![]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19481
+    #[test]
+    fn test_strict_locals() {
+        // Strict locals are defined in a `<%# locals: … %>`, but the `#` looks like a comment
+        // which we should not ignore in this case.
+        let input = r#"
+          <%# locals: (css: "text-amber-600") %>
+          <% more_css = "text-sky-500" %>
+
+          <p class="text-green-500">
+            In a partial
+          </p>
+
+          <p class="<%= css %>">
+            In a partial using explicit local variables
+          </p>
+
+          <p class="<%= more_css %>">
+            In a partial using explicit local variables
+          </p>
+        "#;
+
+        Ruby::test_extract_contains(
+            input,
+            vec!["text-amber-600", "text-sky-500", "text-green-500"],
+        );
     }
 }
