@@ -1216,7 +1216,7 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
     let nodes: AstNode[] = []
     for (let variant of variants) {
       // Starting with the `&` rule node
-      let node = styleRule('&', variantNode.nodes)
+      let node = styleRule('&', variantNode.nodes.map(cloneAstNode))
 
       let variantAst = designSystem.parseVariant(variant)
       if (variantAst === null) {
