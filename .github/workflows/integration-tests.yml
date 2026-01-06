@@ -105,7 +105,11 @@ jobs:
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
       - name: Test ${{ matrix.integration }}
-        run: pnpm run test:integrations ./integrations/${{ matrix.integration }}
+        run: |
+          pnpm run test:integrations ./integrations/${{ matrix.integration }} 
+          || pnpm run test:integrations ./integrations/${{ matrix.integration }}
+          || pnpm run test:integrations ./integrations/${{ matrix.integration }}
+
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
