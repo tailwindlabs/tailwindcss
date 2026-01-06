@@ -109,9 +109,9 @@ jobs:
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
-      # - name: Notify Discord
-      #   if: failure() && github.ref == 'refs/heads/main'
-      #   uses: discord-actions/message@v2
-      #   with:
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      #     message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
+      - name: Notify Discord
+        if: failure() && github.ref == 'refs/heads/main'
+        uses: discord-actions/message@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
