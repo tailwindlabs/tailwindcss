@@ -90,7 +90,7 @@ jobs:
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
@@ -102,7 +102,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./crates/node/*.node
@@ -229,7 +229,7 @@ jobs:
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/bin/
@@ -241,7 +241,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ./crates/node/*.node
