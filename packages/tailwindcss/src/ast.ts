@@ -329,6 +329,8 @@ export function optimizeAst(
 
       if (nodes.length === 0) return
 
+
+
       // Rules with `&` as the selector should be flattened
       if (node.selector === '&') {
         parent.push(...nodes)
