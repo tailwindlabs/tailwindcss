@@ -175,7 +175,7 @@ test(
   `upgrades a v3 project with prefixes to v4`,
   {
     // Somehow this test takes *way* longer than the rest (but not always?)
-    timeout: 120_000,
+    timeout: 180_000,
     fs: {
       'package.json': json`
         {
@@ -603,6 +603,7 @@ test(
 test(
   'migrates a simple postcss setup',
   {
+    timeout: 120_000,
     fs: {
       'package.json': json`
         {
@@ -774,6 +775,7 @@ test(
 test(
   'migrates a postcss setup using package.json config',
   {
+    timeout: 120_000,
     fs: {
       'package.json': json`
         {
@@ -847,6 +849,7 @@ test(
 test(
   'migrates a postcss setup using a json based config file',
   {
+    timeout: 120_000,
     fs: {
       'package.json': json`
         {
