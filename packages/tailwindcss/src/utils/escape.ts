@@ -79,3 +79,8 @@ export function unescape(escaped: string) {
       : match[1]
   })
 }
+
+
+export function normalizeEscapedKey(key: string) {
+  return key.replace(/\\(.)/g, '$1')
+}

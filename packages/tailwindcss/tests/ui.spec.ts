@@ -5,6 +5,7 @@ import path from 'node:path'
 import { optimize } from '../../@tailwindcss-node/src/optimize'
 import { compile } from '../src'
 import { segment } from '../src/utils/segment'
+import { resolveConfig } from '../src/compat/config/resolve-config'
 
 const html = String.raw
 const css = String.raw
@@ -2258,3 +2259,16 @@ async function getPropertyValue(
     [selector, property] as const,
   )
 }
+
+
+test('supports escaped characters in theme keys', () => {
+  let config = resolveConfig({
+    theme: {
+      colors: {
+        'brand\\:primary': '#ff0000',
+      },
+    },
+  })
+
+  expect(config.theme.colors['brand\\:primary']).toBe('#ff0000')
+})
