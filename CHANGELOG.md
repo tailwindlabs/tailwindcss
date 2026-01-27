@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `pbs-*`, `pbe-*`, `mbs-*`, `mbe-*`, `border-bs-*`, `border-be-*` utilities for `padding-block-start`, `padding-block-end`, `margin-block-start`, `margin-block-end`, `border-block-start`, and `border-block-end` ([#XXXXX](https://github.com/tailwindlabs/tailwindcss/pull/XXXXX))
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
 ## [4.1.18] - 2025-12-11
