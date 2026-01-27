@@ -888,6 +888,8 @@ export function createUtilities(theme: Theme) {
     ['my', 'margin-block'],
     ['ms', 'margin-inline-start'],
     ['me', 'margin-inline-end'],
+    ['mbs', 'margin-block-start'],
+    ['mbe', 'margin-block-end'],
     ['mt', 'margin-top'],
     ['mr', 'margin-right'],
     ['mb', 'margin-bottom'],
@@ -1774,6 +1776,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-my', 'scroll-margin-block'],
     ['scroll-ms', 'scroll-margin-inline-start'],
     ['scroll-me', 'scroll-margin-inline-end'],
+    ['scroll-mbs', 'scroll-margin-block-start'],
+    ['scroll-mbe', 'scroll-margin-block-end'],
     ['scroll-mt', 'scroll-margin-top'],
     ['scroll-mr', 'scroll-margin-right'],
     ['scroll-mb', 'scroll-margin-bottom'],
@@ -1798,6 +1802,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-py', 'scroll-padding-block'],
     ['scroll-ps', 'scroll-padding-inline-start'],
     ['scroll-pe', 'scroll-padding-inline-end'],
+    ['scroll-pbs', 'scroll-padding-block-start'],
+    ['scroll-pbe', 'scroll-padding-block-end'],
     ['scroll-pt', 'scroll-padding-top'],
     ['scroll-pr', 'scroll-padding-right'],
     ['scroll-pb', 'scroll-padding-bottom'],
@@ -2342,6 +2348,22 @@ export function createUtilities(theme: Theme) {
         decl('border-inline-end-width', value),
       ],
       color: (value) => [decl('border-inline-end-color', value)],
+    })
+
+    borderSideUtility('border-bs', {
+      width: (value) => [
+        decl('border-block-start-style', 'var(--tw-border-style)'),
+        decl('border-block-start-width', value),
+      ],
+      color: (value) => [decl('border-block-start-color', value)],
+    })
+
+    borderSideUtility('border-be', {
+      width: (value) => [
+        decl('border-block-end-style', 'var(--tw-border-style)'),
+        decl('border-block-end-width', value),
+      ],
+      color: (value) => [decl('border-block-end-color', value)],
     })
 
     borderSideUtility('border-t', {
@@ -3706,6 +3728,8 @@ export function createUtilities(theme: Theme) {
     ['py', 'padding-block'],
     ['ps', 'padding-inline-start'],
     ['pe', 'padding-inline-end'],
+    ['pbs', 'padding-block-start'],
+    ['pbe', 'padding-block-end'],
     ['pt', 'padding-top'],
     ['pr', 'padding-right'],
     ['pb', 'padding-bottom'],
