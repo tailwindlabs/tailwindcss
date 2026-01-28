@@ -313,7 +313,8 @@ describe('--theme(…)', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+                    "Segoe UI Symbol", "Noto Color Emoji";
         --tw-default-font-family: var(--tw-font-sans);
       }
 

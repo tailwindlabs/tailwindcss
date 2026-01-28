@@ -421,7 +421,7 @@ export function createUtilities(theme: Theme) {
           if (value === null && desc.supportsFractions && candidate.value.fraction) {
             let [lhs, rhs] = segment(candidate.value.fraction, '/')
             if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
-            value = `calc(${candidate.value.fraction} * 100%)`
+            value = `calc(${lhs} / ${rhs} * 100%)`
           }
 
           // If there is still no value but the utility supports bare values,
@@ -6377,7 +6377,7 @@ function resolveValueFunction(
 
       // Ratio must be a valid fraction, e.g.: <integer>/<integer>
       if (type === 'ratio') {
-        let [lhs, rhs] = segment(resolved, '/')
+        let [lhs, rhs] = segment(resolved, '/').map(Number)
         if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
       }
 
@@ -6392,7 +6392,12 @@ function resolveValueFunction(
         continue
       }
 
-      return { nodes: ValueParser.parse(resolved), ratio: type === 'ratio' }
+      if (type === 'ratio') {
+        let [lhs, rhs] = segment(resolved, '/')
+        return { nodes: ValueParser.parse(`${lhs.trim()} / ${rhs.trim()}`), ratio: true }
+      }
+
+      return { nodes: ValueParser.parse(resolved), ratio: false }
     }
 
     // Arbitrary value, e.g.: `--value([integer])`
