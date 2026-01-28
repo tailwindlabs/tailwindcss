@@ -1,4 +1,13 @@
-import { compile, env, Features, Instrumentation, normalizePath, optimize } from '@tailwindcss/node'
+import QuickLRU from '@alloc/quick-lru'
+import {
+  compile,
+  env,
+  Features,
+  Instrumentation,
+  normalizePath,
+  optimize,
+  Polyfills,
+} from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs'
@@ -29,7 +38,7 @@ interface CacheEntry {
   fullRebuildPaths: string[]
 }
 
-const cache = new Map<string, CacheEntry>()
+const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(inputFile: string, opts: LoaderOptions): CacheEntry {
   let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
@@ -54,10 +63,24 @@ export default async function tailwindLoader(
   const inputFile = this.resourcePath
   const base = options.base ?? process.cwd()
   const shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
+  const isCSSModuleFile = inputFile.endsWith('.module.css')
 
   using I = new Instrumentation()
 
   DEBUG && I.start(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+
+  // Bail out early if this is guaranteed to be a non-Tailwind CSS file.
+  {
+    DEBUG && I.start('Quick bail check')
+    let canBail = !/@(import|reference|theme|variant|config|plugin|apply|tailwind)\b/.test(source)
+    if (canBail) {
+      DEBUG && I.end('Quick bail check')
+      DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+      callback(null, source)
+      return
+    }
+    DEBUG && I.end('Quick bail check')
+  }
 
   try {
     let context = getContextFromCache(inputFile, options)
@@ -80,6 +103,10 @@ export default async function tailwindLoader(
         base: inputBasePath,
         shouldRewriteUrls: true,
         onDependency: (depPath) => context.fullRebuildPaths.push(depPath),
+        // In CSS Module files, we have to disable the `@property` polyfill since these will
+        // emit global `*` rules which are considered to be non-pure and will cause builds
+        // to fail.
+        polyfills: isCSSModuleFile ? Polyfills.All ^ Polyfills.AtProperty : Polyfills.All,
       })
       DEBUG && I.end('Create compiler')
 
