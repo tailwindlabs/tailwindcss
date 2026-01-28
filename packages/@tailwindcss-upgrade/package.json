@@ -36,7 +36,7 @@
     "jiti": "^2.0.0-beta.3",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
-    "postcss": "^8.4.41",
+    "postcss": "^8.5.6",
     "postcss-import": "^16.1.1",
     "postcss-selector-parser": "^7.1.1",
     "prettier": "catalog:",
