@@ -4,5 +4,6 @@ pnpm-lock.yaml
 target/
 crates/node/index.d.ts
 crates/node/index.js
+crates/ignore/
 .next
 .fingerprint
