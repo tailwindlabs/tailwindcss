@@ -498,6 +498,7 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
       json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
       json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
       json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {
       json.pnpm.overrides[pkg] = resolveVersion(pkg)
     }

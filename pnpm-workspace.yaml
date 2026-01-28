@@ -9,6 +9,7 @@ catalog:
   '@types/node': ^20.19.0
   prettier: 3.6.2
   vite: ^7.0.0
+  webpack: ^5
   lightningcss: 1.30.2
   lightningcss-darwin-arm64: 1.30.2
   lightningcss-darwin-x64: 1.30.2
