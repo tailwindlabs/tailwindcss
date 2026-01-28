@@ -63,7 +63,7 @@
   "packageManager": "pnpm@9.6.0",
   "pnpm": {
     "patchedDependencies": {
-      "lightningcss@1.30.2": "patches/lightningcss@1.30.2.patch",
+      "lightningcss@1.31.1": "patches/lightningcss@1.31.1.patch",
       "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch"
     }
   }
