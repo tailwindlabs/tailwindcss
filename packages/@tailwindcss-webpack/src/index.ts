@@ -58,12 +58,12 @@ export default async function tailwindLoader(
   this: LoaderContext<LoaderOptions>,
   source: string,
 ): Promise<void> {
-  const callback = this.async()
-  const options = this.getOptions() ?? {}
-  const inputFile = this.resourcePath
-  const base = options.base ?? process.cwd()
-  const shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
-  const isCSSModuleFile = inputFile.endsWith('.module.css')
+  let callback = this.async()
+  let options = this.getOptions() ?? {}
+  let inputFile = this.resourcePath
+  let base = options.base ?? process.cwd()
+  let shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
+  let isCSSModuleFile = inputFile.endsWith('.module.css')
 
   using I = new Instrumentation()
 
