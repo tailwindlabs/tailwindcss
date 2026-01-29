@@ -11,6 +11,8 @@ export default [
   'inset-block',
   'inset-inline-start',
   'inset-inline-end',
+  'inset-block-start',
+  'inset-block-end',
   'top',
   'right',
   'bottom',

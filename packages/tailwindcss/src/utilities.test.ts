@@ -654,6 +654,354 @@ test('end', async () => {
   ).toEqual('')
 })
 
+test('inset-s', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-s-shadowned',
+        'inset-s-auto',
+        '-inset-s-full',
+        'inset-s-full',
+        'inset-s-3/4',
+        'inset-s-4',
+        '-inset-s-4',
+        'inset-s-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-s-4 {
+      inset-inline-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-s-full {
+      inset-inline-start: -100%;
+    }
+
+    .inset-s-3\\/4 {
+      inset-inline-start: 75%;
+    }
+
+    .inset-s-4 {
+      inset-inline-start: var(--spacing-4);
+    }
+
+    .inset-s-\\[4px\\] {
+      inset-inline-start: 4px;
+    }
+
+    .inset-s-auto {
+      inset-inline-start: auto;
+    }
+
+    .inset-s-full {
+      inset-inline-start: 100%;
+    }
+
+    .inset-s-shadowned {
+      inset-inline-start: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-s-shadow-sm',
+        'inset-s',
+        'inset-s--1',
+        'inset-s--1/2',
+        'inset-s--1/-2',
+        'inset-s-1/-2',
+        'inset-s-auto/foo',
+        '-inset-s-full/foo',
+        'inset-s-full/foo',
+        'inset-s-3/4/foo',
+        'inset-s-4/foo',
+        '-inset-s-4/foo',
+        'inset-s-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('inset-e', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-e-shadowned',
+        'inset-e-auto',
+        '-inset-e-full',
+        'inset-e-full',
+        'inset-e-3/4',
+        'inset-e-4',
+        '-inset-e-4',
+        'inset-e-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-e-4 {
+      inset-inline-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-e-full {
+      inset-inline-end: -100%;
+    }
+
+    .inset-e-3\\/4 {
+      inset-inline-end: 75%;
+    }
+
+    .inset-e-4 {
+      inset-inline-end: var(--spacing-4);
+    }
+
+    .inset-e-\\[4px\\] {
+      inset-inline-end: 4px;
+    }
+
+    .inset-e-auto {
+      inset-inline-end: auto;
+    }
+
+    .inset-e-full {
+      inset-inline-end: 100%;
+    }
+
+    .inset-e-shadowned {
+      inset-inline-end: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-e-shadow-sm',
+        'inset-e',
+        'inset-e--1',
+        'inset-e--1/2',
+        'inset-e--1/-2',
+        'inset-e-1/-2',
+        'inset-e-auto/foo',
+        '-inset-e-full/foo',
+        'inset-e-full/foo',
+        'inset-e-3/4/foo',
+        'inset-e-4/foo',
+        '-inset-e-4/foo',
+        'inset-e-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('inset-bs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-bs-shadowned',
+        'inset-bs-auto',
+        '-inset-bs-full',
+        'inset-bs-full',
+        'inset-bs-3/4',
+        'inset-bs-4',
+        '-inset-bs-4',
+        'inset-bs-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-bs-4 {
+      inset-block-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-bs-full {
+      inset-block-start: -100%;
+    }
+
+    .inset-bs-3\\/4 {
+      inset-block-start: 75%;
+    }
+
+    .inset-bs-4 {
+      inset-block-start: var(--spacing-4);
+    }
+
+    .inset-bs-\\[4px\\] {
+      inset-block-start: 4px;
+    }
+
+    .inset-bs-auto {
+      inset-block-start: auto;
+    }
+
+    .inset-bs-full {
+      inset-block-start: 100%;
+    }
+
+    .inset-bs-shadowned {
+      inset-block-start: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-bs-shadow-sm',
+        'inset-bs',
+        'inset-bs--1',
+        'inset-bs--1/2',
+        'inset-bs--1/-2',
+        'inset-bs-1/-2',
+        'inset-bs-auto/foo',
+        '-inset-bs-full/foo',
+        'inset-bs-full/foo',
+        'inset-bs-3/4/foo',
+        'inset-bs-4/foo',
+        '-inset-bs-4/foo',
+        'inset-bs-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('inset-be', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-be-shadowned',
+        'inset-be-auto',
+        '-inset-be-full',
+        'inset-be-full',
+        'inset-be-3/4',
+        'inset-be-4',
+        '-inset-be-4',
+        'inset-be-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-be-4 {
+      inset-block-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-be-full {
+      inset-block-end: -100%;
+    }
+
+    .inset-be-3\\/4 {
+      inset-block-end: 75%;
+    }
+
+    .inset-be-4 {
+      inset-block-end: var(--spacing-4);
+    }
+
+    .inset-be-\\[4px\\] {
+      inset-block-end: 4px;
+    }
+
+    .inset-be-auto {
+      inset-block-end: auto;
+    }
+
+    .inset-be-full {
+      inset-block-end: 100%;
+    }
+
+    .inset-be-shadowned {
+      inset-block-end: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-be-shadow-sm',
+        'inset-be',
+        'inset-be--1',
+        'inset-be--1/2',
+        'inset-be--1/-2',
+        'inset-be-1/-2',
+        'inset-be-auto/foo',
+        '-inset-be-full/foo',
+        'inset-be-full/foo',
+        'inset-be-3/4/foo',
+        'inset-be-4/foo',
+        '-inset-be-4/foo',
+        'inset-be-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
 test('top', async () => {
   expect(
     await compileCss(
