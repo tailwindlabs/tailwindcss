@@ -86,7 +86,7 @@ impl<'a> Extractor<'a> {
         {
             let cursor = &mut self.cursor.clone();
             while cursor.pos < len {
-                if cursor.curr.is_ascii_whitespace() {
+                if cursor.curr().is_ascii_whitespace() {
                     cursor.advance();
                     continue;
                 }
@@ -104,7 +104,7 @@ impl<'a> Extractor<'a> {
             let cursor = &mut self.cursor.clone();
 
             while cursor.pos < len {
-                if cursor.curr.is_ascii_whitespace() {
+                if cursor.curr().is_ascii_whitespace() {
                     cursor.advance();
                     continue;
                 }
@@ -147,7 +147,7 @@ impl<'a> Extractor<'a> {
 
         let cursor = &mut self.cursor.clone();
         while cursor.pos < len {
-            if cursor.curr.is_ascii_whitespace() {
+            if cursor.curr().is_ascii_whitespace() {
                 cursor.advance();
                 continue;
             }
