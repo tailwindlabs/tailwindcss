@@ -149,6 +149,9 @@ pub struct Scanner {
 
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
+
+    /// Whether sources have been scanned since the last `scan()` call
+    sources_scanned: bool,
 }
 
 impl Scanner {
@@ -179,6 +182,7 @@ impl Scanner {
     }
 
     pub fn scan(&mut self) -> Vec<String> {
+        self.sources_scanned = false;
         self.scan_sources();
 
         // TODO: performance improvement, bail early if we don't have any changed content
@@ -314,6 +318,11 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     fn scan_sources(&mut self) {
+        if self.sources_scanned {
+            return;
+        }
+        self.sources_scanned = true;
+
         let Some(walker) = &mut self.walker else {
             return;
         };
