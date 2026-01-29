@@ -191,11 +191,22 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm webpack --mode=development')
 
-    let output = await fs.dumpFiles('./dist/*.css')
-    expect(output).toContain('.btn')
-    expect(output).toContain('display: flex')
-    expect(output).toContain('align-items: center')
-    expect(output).toContain('border-radius:')
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/main.css ---
+      :root, :host {
+        --spacing: 0.25rem;
+        --radius-md: 0.375rem;
+      }
+      .btn {
+        display: flex;
+        align-items: center;
+        border-radius: var(--radius-md);
+        padding-inline: calc(var(--spacing) * 4);
+        padding-block: calc(var(--spacing) * 2);
+      }
+      "
+    `)
   },
 )
 
@@ -257,8 +268,11 @@ test(
   async ({ fs, exec, expect }) => {
     await exec('pnpm webpack --mode=development')
 
-    let output = await fs.dumpFiles('./dist/*.css')
-    // Check that the output is minified (no newlines between rules)
-    expect(output).toContain('.flex{display:flex}')
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/main.css ---
+      .flex{display:flex}
+      "
+    `)
   },
 )
