@@ -120,11 +120,6 @@ impl Scanner {
         self.sources_scanned = false;
         self.discover_sources();
 
-        // TODO: performance improvement, bail early if we don't have any changed content
-        // if self.changed_content.is_empty() {
-        //     return vec![];
-        // }
-
         let _new_candidates = self.extract_candidates();
 
         // Make sure we have a sorted list of candidates
