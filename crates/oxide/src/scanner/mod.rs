@@ -183,7 +183,7 @@ impl Scanner {
 
     pub fn scan(&mut self) -> Vec<String> {
         self.sources_scanned = false;
-        self.scan_sources();
+        self.discover_sources();
 
         // TODO: performance improvement, bail early if we don't have any changed content
         // if self.changed_content.is_empty() {
@@ -317,52 +317,8 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    fn scan_sources(&mut self) {
-        if self.sources_scanned {
-            return;
-        }
-        self.sources_scanned = true;
-
-        let Some(walker) = &mut self.walker else {
-            return;
-        };
-
-        for entry in walker.build().filter_map(Result::ok) {
-            let path = entry.into_path();
-            let Ok(metadata) = path.metadata() else {
-                continue;
-            };
-            if metadata.is_dir() {
-                self.dirs.push(path);
-            } else if metadata.is_file() {
-                let extension = path
-                    .extension()
-                    .and_then(|x| x.to_str())
-                    .unwrap_or_default(); // In case the file has no extension
-
-                match extension {
-                    // Special handing for CSS files, we don't want to extract candidates from
-                    // these files, but we do want to extract used CSS variables.
-                    "css" => {
-                        self.css_files.push(path.clone());
-                    }
-                    _ => {
-                        self.changed_content.push(ChangedContent::File(
-                            path.to_path_buf(),
-                            extension.to_owned(),
-                        ));
-                    }
-                }
-
-                self.extensions.insert(extension.to_owned());
-                self.files.push(path);
-            }
-        }
-    }
-
-    #[tracing::instrument(skip_all)]
     pub fn get_files(&mut self) -> Vec<String> {
-        self.scan_sources();
+        self.discover_sources();
 
         self.files
             .par_iter()
@@ -376,7 +332,7 @@ impl Scanner {
             return globs.clone();
         }
 
-        self.scan_sources();
+        self.discover_sources();
 
         let mut globs = vec![];
         for source in self.sources.iter() {
@@ -464,6 +420,50 @@ impl Scanner {
                 _ => None,
             })
             .collect()
+    }
+
+    #[tracing::instrument(skip_all)]
+    fn discover_sources(&mut self) {
+        if self.sources_scanned {
+            return;
+        }
+        self.sources_scanned = true;
+
+        let Some(walker) = &mut self.walker else {
+            return;
+        };
+
+        for entry in walker.build().filter_map(Result::ok) {
+            let path = entry.into_path();
+            let Ok(metadata) = path.metadata() else {
+                continue;
+            };
+            if metadata.is_dir() {
+                self.dirs.push(path);
+            } else if metadata.is_file() {
+                let extension = path
+                    .extension()
+                    .and_then(|x| x.to_str())
+                    .unwrap_or_default(); // In case the file has no extension
+
+                match extension {
+                    // Special handing for CSS files, we don't want to extract candidates from
+                    // these files, but we do want to extract used CSS variables.
+                    "css" => {
+                        self.css_files.push(path.clone());
+                    }
+                    _ => {
+                        self.changed_content.push(ChangedContent::File(
+                            path.to_path_buf(),
+                            extension.to_owned(),
+                        ));
+                    }
+                }
+
+                self.extensions.insert(extension.to_owned());
+                self.files.push(path);
+            }
+        }
     }
 }
 
