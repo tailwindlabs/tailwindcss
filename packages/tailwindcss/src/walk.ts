@@ -52,42 +52,53 @@ export function walk<T extends object>(
   else walkImplementation(ast, hooks.enter, hooks.exit)
 }
 
+interface Stack<T> {
+  value: T
+  prev: Stack<T> | null
+}
+
 function walkImplementation<T extends { nodes?: T[] }>(
   ast: T[],
   enter: (node: T, ctx: VisitContext<T>) => EnterResult<T> | void = () => WalkAction.Continue,
   exit: (node: T, ctx: VisitContext<T>) => ExitResult<T> | void = () => WalkAction.Continue,
 ) {
-  let stack: [nodes: T[], offset: number, parent: Parent<T> | null][] = [[ast, 0, null]]
+  type StackFrame = [nodes: T[], offset: number, parent: Parent<T> | null]
+  let stack: Stack<StackFrame> | null = { value: [ast, 0, null], prev: null }
+
   let ctx: VisitContext<T> = {
     parent: null,
     depth: 0,
     path() {
       let path: T[] = []
 
-      for (let i = 1; i < stack.length; i++) {
-        let parent = stack[i][2]
+      let frames: Stack<StackFrame> | null = stack
+
+      while (frames) {
+        let parent = frames.value[2]
         if (parent) path.push(parent)
+        frames = frames.prev
       }
+
+      path.reverse()
 
       return path
     },
   }
 
-  while (stack.length > 0) {
-    let depth = stack.length - 1
-    let frame = stack[depth]
+  while (stack !== null) {
+    let frame = stack.value
     let nodes = frame[0]
     let offset = frame[1]
     let parent = frame[2]
 
     // Done with this level
     if (offset >= nodes.length) {
-      stack.pop()
+      stack = stack.prev
+      ctx.depth -= 1
       continue
     }
 
     ctx.parent = parent
-    ctx.depth = depth
 
     // Enter phase (offsets are positive)
     if (offset >= 0) {
@@ -97,7 +108,11 @@ function walkImplementation<T extends { nodes?: T[] }>(
       switch (result.kind) {
         case WalkKind.Continue: {
           if (node.nodes && node.nodes.length > 0) {
-            stack.push([node.nodes, 0, node as Parent<T>])
+            ctx.depth += 1
+            stack = {
+              value: [node.nodes, 0, node as Parent<T>],
+              prev: stack,
+            }
           }
 
           frame[1] = ~offset // Prepare for exit phase, same offset
