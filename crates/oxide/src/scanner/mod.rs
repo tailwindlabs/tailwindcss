@@ -656,6 +656,30 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
         builder.add_gitignore(ignore);
     }
 
+    // Pre-compute source matching data to avoid allocations in the hot filter_entry path
+    let auto_bases: Vec<PathBuf> = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base.clone()),
+            _ => None,
+        })
+        .collect();
+
+    let pattern_sources: Vec<(PathBuf, String)> = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Pattern { base, pattern } => {
+                let normalized = if pattern.starts_with("/") {
+                    pattern.to_string()
+                } else {
+                    format!("/{pattern}")
+                };
+                Some((base.clone(), normalized))
+            }
+            _ => None,
+        })
+        .collect();
+
     builder.filter_entry({
         move |entry| {
             let path = entry.path();
@@ -664,35 +688,27 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
             // necessary for manual-patterns that can filter the file extension)
             if path.is_file() {
                 let mut matches = false;
-                for source in sources.iter() {
-                    match source {
-                        SourceEntry::Auto { base } | SourceEntry::External { base } => {
-                            if path.starts_with(base) {
-                                matches = true;
-                                break;
-                            }
-                        }
-                        SourceEntry::Pattern { base, pattern } => {
-                            let mut pattern = pattern.to_string();
-                            // Ensure that the pattern is pinned to the base path.
-                            if !pattern.starts_with("/") {
-                                pattern = format!("/{pattern}");
-                            }
 
-                            // Check if path starts with base, if so, remove the prefix and check the remainder against the pattern
-                            let remainder = path.strip_prefix(base);
-                            if remainder.is_ok_and(|remainder| {
-                                let mut path_str = remainder.to_string_lossy().to_string();
-                                if !path_str.starts_with("/") {
-                                    path_str = format!("/{path_str}");
-                                }
-                                glob_match(pattern, path_str.as_bytes())
-                            }) {
-                                matches = true;
-                                break;
+                for base in &auto_bases {
+                    if path.starts_with(base) {
+                        matches = true;
+                        break;
+                    }
+                }
+
+                if !matches {
+                    for (base, pattern) in &pattern_sources {
+                        let remainder = path.strip_prefix(base);
+                        if remainder.is_ok_and(|remainder| {
+                            let mut path_str = remainder.to_string_lossy().to_string();
+                            if !path_str.starts_with("/") {
+                                path_str = format!("/{path_str}");
                             }
+                            glob_match(pattern, path_str.as_bytes())
+                        }) {
+                            matches = true;
+                            break;
                         }
-                        _ => {}
                     }
                 }
 
