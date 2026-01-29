@@ -11052,6 +11052,66 @@ test('rounded-bl', async () => {
   ).toEqual('')
 })
 
+// All corner utilities are generated in the same way
+// so we can test them all at once with a loop
+const cornerPrefixes = [
+  'corner',
+  'corner-s',
+  'corner-e',
+  'corner-t',
+  'corner-r',
+  'corner-b',
+  'corner-l',
+  'corner-ss',
+  'corner-se',
+  'corner-ee',
+  'corner-es',
+  'corner-tl',
+  'corner-tr',
+  'corner-br',
+  'corner-bl',
+]
+
+for (let prefix of cornerPrefixes) {
+  test(`${prefix}-*`, async () => {
+    let classes = []
+
+    // Corner shape
+    classes.push(`${prefix}-round`)
+    classes.push(`${prefix}-scoop`)
+    classes.push(`${prefix}-bevel`)
+    classes.push(`${prefix}-notch`)
+    classes.push(`${prefix}-square`)
+    classes.push(`${prefix}-squircle`)
+    classes.push(`${prefix}-custom`)
+    classes.push(`${prefix}-[superellipse(0.6)]`)
+
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --corner-shape-custom: superellipse(0.333);
+          }
+          @tailwind utilities;
+        `,
+        classes,
+      ),
+    ).toMatchSnapshot()
+
+    expect(
+      await run(
+        classes.flatMap((cls) => [
+          // No corner utilities can ever be negative
+          `-${cls}`,
+
+          // Nor can they have modifiers
+          `${cls}/foo`,
+        ]),
+      ),
+    ).toEqual('')
+  })
+}
+
 test('border-style', async () => {
   expect(
     await run([

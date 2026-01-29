@@ -1664,3 +1664,621 @@ exports[`border-y-* 1`] = `
   initial-value: solid;
 }"
 `;
+
+exports[`corner-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-\\[superellipse\\(0\\.6\\)\\] {
+  corner-shape: superellipse(.6);
+}
+
+.corner-bevel {
+  corner-shape: bevel;
+}
+
+.corner-custom {
+  corner-shape: var(--corner-shape-custom);
+}
+
+.corner-notch {
+  corner-shape: notch;
+}
+
+.corner-round {
+  corner-shape: round;
+}
+
+.corner-scoop {
+  corner-shape: scoop;
+}
+
+.corner-square {
+  corner-shape: square;
+}
+
+.corner-squircle {
+  corner-shape: squircle;
+}"
+`;
+
+exports[`corner-b-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-b-\\[superellipse\\(0\\.6\\)\\] {
+  corner-bottom-right-shape: superellipse(.6);
+  corner-bottom-left-shape: superellipse(.6);
+}
+
+.corner-b-bevel {
+  corner-bottom-right-shape: bevel;
+  corner-bottom-left-shape: bevel;
+}
+
+.corner-b-custom {
+  corner-bottom-right-shape: var(--corner-shape-custom);
+  corner-bottom-left-shape: var(--corner-shape-custom);
+}
+
+.corner-b-notch {
+  corner-bottom-right-shape: notch;
+  corner-bottom-left-shape: notch;
+}
+
+.corner-b-round {
+  corner-bottom-right-shape: round;
+  corner-bottom-left-shape: round;
+}
+
+.corner-b-scoop {
+  corner-bottom-right-shape: scoop;
+  corner-bottom-left-shape: scoop;
+}
+
+.corner-b-square {
+  corner-bottom-right-shape: square;
+  corner-bottom-left-shape: square;
+}
+
+.corner-b-squircle {
+  corner-bottom-right-shape: squircle;
+  corner-bottom-left-shape: squircle;
+}"
+`;
+
+exports[`corner-bl-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-bl-\\[superellipse\\(0\\.6\\)\\] {
+  corner-bottom-left-shape: superellipse(.6);
+}
+
+.corner-bl-bevel {
+  corner-bottom-left-shape: bevel;
+}
+
+.corner-bl-custom {
+  corner-bottom-left-shape: var(--corner-shape-custom);
+}
+
+.corner-bl-notch {
+  corner-bottom-left-shape: notch;
+}
+
+.corner-bl-round {
+  corner-bottom-left-shape: round;
+}
+
+.corner-bl-scoop {
+  corner-bottom-left-shape: scoop;
+}
+
+.corner-bl-square {
+  corner-bottom-left-shape: square;
+}
+
+.corner-bl-squircle {
+  corner-bottom-left-shape: squircle;
+}"
+`;
+
+exports[`corner-br-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-br-\\[superellipse\\(0\\.6\\)\\] {
+  corner-bottom-right-shape: superellipse(.6);
+}
+
+.corner-br-bevel {
+  corner-bottom-right-shape: bevel;
+}
+
+.corner-br-custom {
+  corner-bottom-right-shape: var(--corner-shape-custom);
+}
+
+.corner-br-notch {
+  corner-bottom-right-shape: notch;
+}
+
+.corner-br-round {
+  corner-bottom-right-shape: round;
+}
+
+.corner-br-scoop {
+  corner-bottom-right-shape: scoop;
+}
+
+.corner-br-square {
+  corner-bottom-right-shape: square;
+}
+
+.corner-br-squircle {
+  corner-bottom-right-shape: squircle;
+}"
+`;
+
+exports[`corner-e-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-e-\\[superellipse\\(0\\.6\\)\\] {
+  corner-start-end-shape: superellipse(.6);
+  corner-end-end-shape: superellipse(.6);
+}
+
+.corner-e-bevel {
+  corner-start-end-shape: bevel;
+  corner-end-end-shape: bevel;
+}
+
+.corner-e-custom {
+  corner-start-end-shape: var(--corner-shape-custom);
+  corner-end-end-shape: var(--corner-shape-custom);
+}
+
+.corner-e-notch {
+  corner-start-end-shape: notch;
+  corner-end-end-shape: notch;
+}
+
+.corner-e-round {
+  corner-start-end-shape: round;
+  corner-end-end-shape: round;
+}
+
+.corner-e-scoop {
+  corner-start-end-shape: scoop;
+  corner-end-end-shape: scoop;
+}
+
+.corner-e-square {
+  corner-start-end-shape: square;
+  corner-end-end-shape: square;
+}
+
+.corner-e-squircle {
+  corner-start-end-shape: squircle;
+  corner-end-end-shape: squircle;
+}"
+`;
+
+exports[`corner-ee-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-ee-\\[superellipse\\(0\\.6\\)\\] {
+  corner-end-end-shape: superellipse(.6);
+}
+
+.corner-ee-bevel {
+  corner-end-end-shape: bevel;
+}
+
+.corner-ee-custom {
+  corner-end-end-shape: var(--corner-shape-custom);
+}
+
+.corner-ee-notch {
+  corner-end-end-shape: notch;
+}
+
+.corner-ee-round {
+  corner-end-end-shape: round;
+}
+
+.corner-ee-scoop {
+  corner-end-end-shape: scoop;
+}
+
+.corner-ee-square {
+  corner-end-end-shape: square;
+}
+
+.corner-ee-squircle {
+  corner-end-end-shape: squircle;
+}"
+`;
+
+exports[`corner-es-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-es-\\[superellipse\\(0\\.6\\)\\] {
+  corner-end-start-shape: superellipse(.6);
+}
+
+.corner-es-bevel {
+  corner-end-start-shape: bevel;
+}
+
+.corner-es-custom {
+  corner-end-start-shape: var(--corner-shape-custom);
+}
+
+.corner-es-notch {
+  corner-end-start-shape: notch;
+}
+
+.corner-es-round {
+  corner-end-start-shape: round;
+}
+
+.corner-es-scoop {
+  corner-end-start-shape: scoop;
+}
+
+.corner-es-square {
+  corner-end-start-shape: square;
+}
+
+.corner-es-squircle {
+  corner-end-start-shape: squircle;
+}"
+`;
+
+exports[`corner-l-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-l-\\[superellipse\\(0\\.6\\)\\] {
+  corner-top-left-shape: superellipse(.6);
+  corner-bottom-left-shape: superellipse(.6);
+}
+
+.corner-l-bevel {
+  corner-top-left-shape: bevel;
+  corner-bottom-left-shape: bevel;
+}
+
+.corner-l-custom {
+  corner-top-left-shape: var(--corner-shape-custom);
+  corner-bottom-left-shape: var(--corner-shape-custom);
+}
+
+.corner-l-notch {
+  corner-top-left-shape: notch;
+  corner-bottom-left-shape: notch;
+}
+
+.corner-l-round {
+  corner-top-left-shape: round;
+  corner-bottom-left-shape: round;
+}
+
+.corner-l-scoop {
+  corner-top-left-shape: scoop;
+  corner-bottom-left-shape: scoop;
+}
+
+.corner-l-square {
+  corner-top-left-shape: square;
+  corner-bottom-left-shape: square;
+}
+
+.corner-l-squircle {
+  corner-top-left-shape: squircle;
+  corner-bottom-left-shape: squircle;
+}"
+`;
+
+exports[`corner-r-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-r-\\[superellipse\\(0\\.6\\)\\] {
+  corner-top-right-shape: superellipse(.6);
+  corner-bottom-right-shape: superellipse(.6);
+}
+
+.corner-r-bevel {
+  corner-top-right-shape: bevel;
+  corner-bottom-right-shape: bevel;
+}
+
+.corner-r-custom {
+  corner-top-right-shape: var(--corner-shape-custom);
+  corner-bottom-right-shape: var(--corner-shape-custom);
+}
+
+.corner-r-notch {
+  corner-top-right-shape: notch;
+  corner-bottom-right-shape: notch;
+}
+
+.corner-r-round {
+  corner-top-right-shape: round;
+  corner-bottom-right-shape: round;
+}
+
+.corner-r-scoop {
+  corner-top-right-shape: scoop;
+  corner-bottom-right-shape: scoop;
+}
+
+.corner-r-square {
+  corner-top-right-shape: square;
+  corner-bottom-right-shape: square;
+}
+
+.corner-r-squircle {
+  corner-top-right-shape: squircle;
+  corner-bottom-right-shape: squircle;
+}"
+`;
+
+exports[`corner-s-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-s-\\[superellipse\\(0\\.6\\)\\] {
+  corner-start-start-shape: superellipse(.6);
+  corner-end-start-shape: superellipse(.6);
+}
+
+.corner-s-bevel {
+  corner-start-start-shape: bevel;
+  corner-end-start-shape: bevel;
+}
+
+.corner-s-custom {
+  corner-start-start-shape: var(--corner-shape-custom);
+  corner-end-start-shape: var(--corner-shape-custom);
+}
+
+.corner-s-notch {
+  corner-start-start-shape: notch;
+  corner-end-start-shape: notch;
+}
+
+.corner-s-round {
+  corner-start-start-shape: round;
+  corner-end-start-shape: round;
+}
+
+.corner-s-scoop {
+  corner-start-start-shape: scoop;
+  corner-end-start-shape: scoop;
+}
+
+.corner-s-square {
+  corner-start-start-shape: square;
+  corner-end-start-shape: square;
+}
+
+.corner-s-squircle {
+  corner-start-start-shape: squircle;
+  corner-end-start-shape: squircle;
+}"
+`;
+
+exports[`corner-se-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-se-\\[superellipse\\(0\\.6\\)\\] {
+  corner-start-end-shape: superellipse(.6);
+}
+
+.corner-se-bevel {
+  corner-start-end-shape: bevel;
+}
+
+.corner-se-custom {
+  corner-start-end-shape: var(--corner-shape-custom);
+}
+
+.corner-se-notch {
+  corner-start-end-shape: notch;
+}
+
+.corner-se-round {
+  corner-start-end-shape: round;
+}
+
+.corner-se-scoop {
+  corner-start-end-shape: scoop;
+}
+
+.corner-se-square {
+  corner-start-end-shape: square;
+}
+
+.corner-se-squircle {
+  corner-start-end-shape: squircle;
+}"
+`;
+
+exports[`corner-ss-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-ss-\\[superellipse\\(0\\.6\\)\\] {
+  corner-start-start-shape: superellipse(.6);
+}
+
+.corner-ss-bevel {
+  corner-start-start-shape: bevel;
+}
+
+.corner-ss-custom {
+  corner-start-start-shape: var(--corner-shape-custom);
+}
+
+.corner-ss-notch {
+  corner-start-start-shape: notch;
+}
+
+.corner-ss-round {
+  corner-start-start-shape: round;
+}
+
+.corner-ss-scoop {
+  corner-start-start-shape: scoop;
+}
+
+.corner-ss-square {
+  corner-start-start-shape: square;
+}
+
+.corner-ss-squircle {
+  corner-start-start-shape: squircle;
+}"
+`;
+
+exports[`corner-t-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-t-\\[superellipse\\(0\\.6\\)\\] {
+  corner-top-left-shape: superellipse(.6);
+  corner-top-right-shape: superellipse(.6);
+}
+
+.corner-t-bevel {
+  corner-top-left-shape: bevel;
+  corner-top-right-shape: bevel;
+}
+
+.corner-t-custom {
+  corner-top-left-shape: var(--corner-shape-custom);
+  corner-top-right-shape: var(--corner-shape-custom);
+}
+
+.corner-t-notch {
+  corner-top-left-shape: notch;
+  corner-top-right-shape: notch;
+}
+
+.corner-t-round {
+  corner-top-left-shape: round;
+  corner-top-right-shape: round;
+}
+
+.corner-t-scoop {
+  corner-top-left-shape: scoop;
+  corner-top-right-shape: scoop;
+}
+
+.corner-t-square {
+  corner-top-left-shape: square;
+  corner-top-right-shape: square;
+}
+
+.corner-t-squircle {
+  corner-top-left-shape: squircle;
+  corner-top-right-shape: squircle;
+}"
+`;
+
+exports[`corner-tl-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-tl-\\[superellipse\\(0\\.6\\)\\] {
+  corner-top-left-shape: superellipse(.6);
+}
+
+.corner-tl-bevel {
+  corner-top-left-shape: bevel;
+}
+
+.corner-tl-custom {
+  corner-top-left-shape: var(--corner-shape-custom);
+}
+
+.corner-tl-notch {
+  corner-top-left-shape: notch;
+}
+
+.corner-tl-round {
+  corner-top-left-shape: round;
+}
+
+.corner-tl-scoop {
+  corner-top-left-shape: scoop;
+}
+
+.corner-tl-square {
+  corner-top-left-shape: square;
+}
+
+.corner-tl-squircle {
+  corner-top-left-shape: squircle;
+}"
+`;
+
+exports[`corner-tr-* 1`] = `
+":root, :host {
+  --corner-shape-custom: superellipse(.333);
+}
+
+.corner-tr-\\[superellipse\\(0\\.6\\)\\] {
+  corner-top-right-shape: superellipse(.6);
+}
+
+.corner-tr-bevel {
+  corner-top-right-shape: bevel;
+}
+
+.corner-tr-custom {
+  corner-top-right-shape: var(--corner-shape-custom);
+}
+
+.corner-tr-notch {
+  corner-top-right-shape: notch;
+}
+
+.corner-tr-round {
+  corner-top-right-shape: round;
+}
+
+.corner-tr-scoop {
+  corner-top-right-shape: scoop;
+}
+
+.corner-tr-square {
+  corner-top-right-shape: square;
+}
+
+.corner-tr-squircle {
+  corner-top-right-shape: squircle;
+}"
+`;
