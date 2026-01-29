@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
+- Add `@tailwindcss/webpack` loader for Tailwind CSS v4 ([#19610](https://github.com/tailwindlabs/tailwindcss/pull/19610))
 
 ## [4.1.18] - 2025-12-11
 
