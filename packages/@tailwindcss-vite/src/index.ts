@@ -375,6 +375,7 @@ class Root {
     }
 
     if (this.compiler.features & Features.Utilities) {
+      DEBUG && I.start('Register dependency messages')
       // Watch individual files found via custom `@source` paths
       for (let file of this.scanner.files) {
         addWatchFile(file)
@@ -411,6 +412,7 @@ class Root {
           }
         }
       }
+      DEBUG && I.end('Register dependency messages')
     }
 
     DEBUG && I.start('Build CSS')
