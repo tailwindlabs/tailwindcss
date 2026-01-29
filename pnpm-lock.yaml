@@ -450,6 +450,9 @@ importers:
 
   packages/@tailwindcss-webpack:
     dependencies:
+      '@alloc/quick-lru':
+        specifier: ^5.2.0
+        version: 5.2.0
       '@tailwindcss/node':
         specifier: workspace:*
         version: link:../@tailwindcss-node
@@ -503,7 +506,7 @@ importers:
         version: 3.3.3
       next:
         specifier: ^16.1.0
-        version: 16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 16.1.0(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react:
         specifier: ^19.2.3
         version: 19.2.3
@@ -537,7 +540,7 @@ importers:
     dependencies:
       next:
         specifier: ^16.1.0
-        version: 16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 16.1.0(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react:
         specifier: ^19.2.3
         version: 19.2.3
@@ -8032,7 +8035,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  next@16.1.0(@playwright/test@1.57.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       '@next/env': 16.1.0
       '@swc/helpers': 0.5.15
@@ -8041,7 +8044,7 @@ snapshots:
       postcss: 8.4.31
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-      styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.2.3)
+      styled-jsx: 5.1.6(react@19.2.3)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.1.0
       '@next/swc-darwin-x64': 16.1.0
@@ -8654,12 +8657,10 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-jsx@5.1.6(@babel/core@7.28.5)(react@19.2.3):
+  styled-jsx@5.1.6(react@19.2.3):
     dependencies:
       client-only: 0.0.1
       react: 19.2.3
-    optionalDependencies:
-      '@babel/core': 7.28.5
 
   sucrase@3.35.0:
     dependencies:
