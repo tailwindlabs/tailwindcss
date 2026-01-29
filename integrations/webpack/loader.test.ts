@@ -276,3 +276,76 @@ test(
     `)
   },
 )
+
+test(
+  '@tailwindcss/webpack loader with CSS @import',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import './index.css'`,
+      'src/index.html': html`
+        <div class="flex custom-util"></div>
+      `,
+      'src/index.css': css`
+        @import './custom.css';
+        @import 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+      'src/custom.css': css`
+        /**/
+        @utility custom-util {
+          color: var(--color-red-500);
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm webpack --mode=development')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/main.css ---
+      :root, :host {
+        --color-red-500: oklch(63.7% 0.237 25.331);
+      }
+      .flex {
+        display: flex;
+      }
+      .custom-util {
+        color: var(--color-red-500);
+      }
+      "
+    `)
+  },
+)
