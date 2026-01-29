@@ -3662,6 +3662,561 @@ test('max-height', async () => {
   ).toEqual('')
 })
 
+test('inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --width-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inline-full',
+        'inline-auto',
+        'inline-screen',
+        'inline-svw',
+        'inline-lvw',
+        'inline-dvw',
+        'inline-min',
+        'inline-max',
+        'inline-fit',
+        'inline-4',
+        'inline-xl',
+        'inline-1/2',
+        'inline-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --width-xl: 36rem;
+    }
+
+    .inline-1\\/2 {
+      inline-size: 50%;
+    }
+
+    .inline-4 {
+      inline-size: var(--spacing-4);
+    }
+
+    .inline-\\[4px\\] {
+      inline-size: 4px;
+    }
+
+    .inline-auto {
+      inline-size: auto;
+    }
+
+    .inline-dvw {
+      inline-size: 100dvw;
+    }
+
+    .inline-fit {
+      inline-size: fit-content;
+    }
+
+    .inline-full {
+      inline-size: 100%;
+    }
+
+    .inline-lvw {
+      inline-size: 100lvw;
+    }
+
+    .inline-max {
+      inline-size: max-content;
+    }
+
+    .inline-min {
+      inline-size: min-content;
+    }
+
+    .inline-screen {
+      inline-size: 100vw;
+    }
+
+    .inline-svw {
+      inline-size: 100svw;
+    }
+
+    .inline-xl {
+      inline-size: var(--width-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'inline--1',
+      'inline--1/2',
+      'inline--1/-2',
+      'inline-1/-2',
+      '-inline-4',
+      '-inline-1/2',
+      '-inline-[4px]',
+      'inline-full/foo',
+      'inline-auto/foo',
+      'inline-screen/foo',
+      'inline-svw/foo',
+      'inline-lvw/foo',
+      'inline-dvw/foo',
+      'inline-min/foo',
+      'inline-max/foo',
+      'inline-fit/foo',
+      'inline-4/foo',
+      'inline-xl/foo',
+      'inline-1/2/foo',
+      'inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('min-inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'min-inline-full',
+        'min-inline-auto',
+        'min-inline-min',
+        'min-inline-max',
+        'min-inline-fit',
+        'min-inline-4',
+        'min-inline-xl',
+        'min-inline-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --container-xl: 36rem;
+    }
+
+    .min-inline-4 {
+      min-inline-size: var(--spacing-4);
+    }
+
+    .min-inline-\\[4px\\] {
+      min-inline-size: 4px;
+    }
+
+    .min-inline-auto {
+      min-inline-size: auto;
+    }
+
+    .min-inline-fit {
+      min-inline-size: fit-content;
+    }
+
+    .min-inline-full {
+      min-inline-size: 100%;
+    }
+
+    .min-inline-max {
+      min-inline-size: max-content;
+    }
+
+    .min-inline-min {
+      min-inline-size: min-content;
+    }
+
+    .min-inline-xl {
+      min-inline-size: var(--container-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'min-inline',
+      '-min-inline-4',
+      '-min-inline-[4px]',
+      'min-inline-auto/foo',
+      'min-inline-full/foo',
+      'min-inline-min/foo',
+      'min-inline-max/foo',
+      'min-inline-fit/foo',
+      'min-inline-4/foo',
+      'min-inline-xl/foo',
+      'min-inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('max-inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      ['max-inline-none', 'max-inline-full', 'max-inline-max', 'max-inline-fit', 'max-inline-4', 'max-inline-xl', 'max-inline-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --container-xl: 36rem;
+    }
+
+    .max-inline-4 {
+      max-inline-size: var(--spacing-4);
+    }
+
+    .max-inline-\\[4px\\] {
+      max-inline-size: 4px;
+    }
+
+    .max-inline-fit {
+      max-inline-size: fit-content;
+    }
+
+    .max-inline-full {
+      max-inline-size: 100%;
+    }
+
+    .max-inline-max {
+      max-inline-size: max-content;
+    }
+
+    .max-inline-none {
+      max-inline-size: none;
+    }
+
+    .max-inline-xl {
+      max-inline-size: var(--container-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'max-inline',
+      'max-inline-auto',
+      '-max-inline-4',
+      '-max-inline-[4px]',
+      'max-inline-none/foo',
+      'max-inline-full/foo',
+      'max-inline-max/foo',
+      'max-inline-max/foo',
+      'max-inline-fit/foo',
+      'max-inline-4/foo',
+      'max-inline-xl/foo',
+      'max-inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'block-full',
+        'block-auto',
+        'block-screen',
+        'block-svh',
+        'block-lvh',
+        'block-dvh',
+        'block-min',
+        'block-lh',
+        'block-max',
+        'block-fit',
+        'block-4',
+        'block-1/2',
+        'block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .block-1\\/2 {
+      block-size: 50%;
+    }
+
+    .block-4 {
+      block-size: var(--spacing-4);
+    }
+
+    .block-\\[4px\\] {
+      block-size: 4px;
+    }
+
+    .block-auto {
+      block-size: auto;
+    }
+
+    .block-dvh {
+      block-size: 100dvh;
+    }
+
+    .block-fit {
+      block-size: fit-content;
+    }
+
+    .block-full {
+      block-size: 100%;
+    }
+
+    .block-lh {
+      block-size: 1lh;
+    }
+
+    .block-lvh {
+      block-size: 100lvh;
+    }
+
+    .block-max {
+      block-size: max-content;
+    }
+
+    .block-min {
+      block-size: min-content;
+    }
+
+    .block-screen {
+      block-size: 100vh;
+    }
+
+    .block-svh {
+      block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      '-block-4',
+      'block--1',
+      'block--1/2',
+      'block--1/-2',
+      'block-1/-2',
+      '-block-1/2',
+      '-block-[4px]',
+      'block-full/foo',
+      'block-auto/foo',
+      'block-screen/foo',
+      'block-svh/foo',
+      'block-lvh/foo',
+      'block-dvh/foo',
+      'block-lh/foo',
+      'block-min/foo',
+      'block-max/foo',
+      'block-fit/foo',
+      'block-4/foo',
+      'block-1/2/foo',
+      'block-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('min-block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'min-block-full',
+        'min-block-auto',
+        'min-block-screen',
+        'min-block-svh',
+        'min-block-lvh',
+        'min-block-dvh',
+        'min-block-min',
+        'min-block-lh',
+        'min-block-max',
+        'min-block-fit',
+        'min-block-4',
+        'min-block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .min-block-4 {
+      min-block-size: var(--spacing-4);
+    }
+
+    .min-block-\\[4px\\] {
+      min-block-size: 4px;
+    }
+
+    .min-block-auto {
+      min-block-size: auto;
+    }
+
+    .min-block-dvh {
+      min-block-size: 100dvh;
+    }
+
+    .min-block-fit {
+      min-block-size: fit-content;
+    }
+
+    .min-block-full {
+      min-block-size: 100%;
+    }
+
+    .min-block-lh {
+      min-block-size: 1lh;
+    }
+
+    .min-block-lvh {
+      min-block-size: 100lvh;
+    }
+
+    .min-block-max {
+      min-block-size: max-content;
+    }
+
+    .min-block-min {
+      min-block-size: min-content;
+    }
+
+    .min-block-screen {
+      min-block-size: 100vh;
+    }
+
+    .min-block-svh {
+      min-block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      'min-block',
+      '-min-block-4',
+      '-min-block-[4px]',
+      'min-block-auto/foo',
+      'min-block-full/foo',
+      'min-block-screen/foo',
+      'min-block-svh/foo',
+      'min-block-lvh/foo',
+      'min-block-dvh/foo',
+      'min-block-lh/foo',
+      'min-block-min/foo',
+      'min-block-max/foo',
+      'min-block-fit/foo',
+      'min-block-4/foo',
+      'min-block-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('max-block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'max-block-none',
+        'max-block-full',
+        'max-block-screen',
+        'max-block-svh',
+        'max-block-lvh',
+        'max-block-dvh',
+        'max-block-lh',
+        'max-block-min',
+        'max-block-max',
+        'max-block-fit',
+        'max-block-4',
+        'max-block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .max-block-4 {
+      max-block-size: var(--spacing-4);
+    }
+
+    .max-block-\\[4px\\] {
+      max-block-size: 4px;
+    }
+
+    .max-block-dvh {
+      max-block-size: 100dvh;
+    }
+
+    .max-block-fit {
+      max-block-size: fit-content;
+    }
+
+    .max-block-full {
+      max-block-size: 100%;
+    }
+
+    .max-block-lh {
+      max-block-size: 1lh;
+    }
+
+    .max-block-lvh {
+      max-block-size: 100lvh;
+    }
+
+    .max-block-max {
+      max-block-size: max-content;
+    }
+
+    .max-block-min {
+      max-block-size: min-content;
+    }
+
+    .max-block-none {
+      max-block-size: none;
+    }
+
+    .max-block-screen {
+      max-block-size: 100vh;
+    }
+
+    .max-block-svh {
+      max-block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      'max-block',
+      'max-block-auto',
+      '-max-block-4',
+      '-max-block-[4px]',
+      'max-block-none/foo',
+      'max-block-full/foo',
+      'max-block-screen/foo',
+      'max-block-svh/foo',
+      'max-block-lvh/foo',
+      'max-block-dvh/foo',
+      'max-block-lh/foo',
+      'max-block-min/foo',
+      'max-block-max/foo',
+      'max-block-fit/foo',
+      'max-block-4/foo',
+      'max-block-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 describe('container', () => {
   test('creates the right media queries and sorts it before width', async () => {
     expect(
