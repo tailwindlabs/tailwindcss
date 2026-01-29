@@ -241,7 +241,7 @@ impl Scanner {
         new_candidates.par_sort_unstable();
 
         // Track new candidates for subsequent calls
-        self.candidates.par_extend(new_candidates.clone());
+        self.candidates.extend(new_candidates.iter().cloned());
 
         new_candidates
     }
