@@ -20,11 +20,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          '@tailwindcss/webpack',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
       },
     ],
   },

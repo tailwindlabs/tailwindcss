@@ -123,12 +123,9 @@ test(
     `)
 
     // Add a new Tailwind class to the HTML file
-    await fs.write(
-      'src/index.html',
-      html`
+    await fs.write('src/index.html', html`
         <div class="flex underline"></div>
-      `,
-    )
+      `)
     await process.onStdout((m) => m.includes('compiled successfully in'))
 
     expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
