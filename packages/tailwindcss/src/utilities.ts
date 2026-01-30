@@ -3909,6 +3909,14 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  /**
+   * @css `font-feature-settings`
+   */
+  functionalUtility('font-features', {
+    themeKeys: [],
+    handle: (value) => [decl('font-feature-settings', value)],
+  })
+
   staticUtility('uppercase', [['text-transform', 'uppercase']])
   staticUtility('lowercase', [['text-transform', 'lowercase']])
   staticUtility('capitalize', [['text-transform', 'capitalize']])

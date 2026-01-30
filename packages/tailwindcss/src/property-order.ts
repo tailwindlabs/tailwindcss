@@ -343,6 +343,7 @@ export default [
   'vertical-align',
 
   'font-family',
+  'font-feature-settings',
   'font-size',
   'line-height',
   'font-weight',

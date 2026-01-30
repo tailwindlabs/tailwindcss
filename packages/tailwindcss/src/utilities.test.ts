@@ -22218,6 +22218,41 @@ test('font', async () => {
   ).toEqual('')
 })
 
+test('font-features', async () => {
+  expect(
+    await run([
+      'font-features-["smcp"]',
+      'font-features-["c2sc","smcp"]',
+      'font-features-[var(--my-features)]',
+      'font-features-(--my-features)',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".font-features-\\(--my-features\\) {
+      font-feature-settings: var(--my-features);
+    }
+
+    .font-features-\\[\\"c2sc\\"\\,\\"smcp\\"\\] {
+      font-feature-settings: "c2sc", "smcp";
+    }
+
+    .font-features-\\[\\"smcp\\"\\] {
+      font-feature-settings: "smcp";
+    }
+
+    .font-features-\\[var\\(--my-features\\)\\] {
+      font-feature-settings: var(--my-features);
+    }"
+  `)
+  expect(
+    await run([
+      'font-features',
+      '-font-features-["smcp"]',
+      'font-features-smcp',
+      'font-features-["smcp"]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('text-transform', async () => {
   expect(await run(['uppercase', 'lowercase', 'capitalize', 'normal-case'])).toMatchInlineSnapshot(`
     ".capitalize {
