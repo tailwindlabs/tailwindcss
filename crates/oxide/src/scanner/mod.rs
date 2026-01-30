@@ -231,19 +231,18 @@ impl Scanner {
             new_candidates.extend(css_variables);
         }
 
-        // Only compute the new candidates and ignore the ones we already have. This is for
-        // subsequent calls to prevent serializing the entire set of candidates every time.
-        let mut new_candidates = new_candidates
-            .into_par_iter()
-            .filter(|candidate| !self.candidates.contains(candidate))
-            .collect::<Vec<_>>();
-
-        new_candidates.par_sort_unstable();
+        // Only keep candidates we haven't seen before
+        for existing in self.candidates.iter() {
+            new_candidates.remove(existing);
+        }
 
         // Track new candidates for subsequent calls
         self.candidates.extend(new_candidates.iter().cloned());
 
-        new_candidates
+        let mut result: Vec<String> = new_candidates.into_iter().collect();
+        result.par_sort_unstable();
+
+        result
     }
 
     #[tracing::instrument(skip_all)]
@@ -451,23 +450,23 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 }
 
 #[tracing::instrument(skip_all)]
-fn extract_css_variables(blobs: Vec<Vec<u8>>) -> Vec<String> {
+fn extract_css_variables(blobs: Vec<Vec<u8>>) -> FxHashSet<String> {
     extract(blobs, |mut extractor| {
         extractor.extract_variables_from_css()
     })
 }
 
 #[tracing::instrument(skip_all)]
-fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
+fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> FxHashSet<String> {
     extract(blobs, |mut extractor| extractor.extract())
 }
 
 #[tracing::instrument(skip_all)]
-fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
+fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> FxHashSet<String>
 where
     H: Fn(Extractor) -> Vec<Extracted> + std::marker::Sync,
 {
-    let mut result: Vec<_> = blobs
+    blobs
         .par_iter()
         .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
         .filter_map(|blob| {
@@ -493,13 +492,7 @@ where
         })
         .into_iter()
         .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
-        .collect();
-
-    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
-    //         guaranteed to have unique candidates.
-    result.par_sort_unstable();
-
-    result
+        .collect()
 }
 
 /// Create a walker for the given sources to detect all the files that we have to scan.
