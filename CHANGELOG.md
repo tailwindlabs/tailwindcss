@@ -7,15 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
-- Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
-- CLI: Emit comment when source maps are saved to files ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
-- Detect utilities when containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
-- Fix class extraction for Rails' strict locals ([#19525](https://github.com/tailwindlabs/tailwindcss/pull/19525))
-- Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
-
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
@@ -24,6 +15,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `inline-*`, `min-inline-*`, `max-inline-*`, `block-*`, `min-block-*`, `max-block-*` utilities for `inline-size`, `min-inline-size`, `max-inline-size`, `block-size`, `min-block-size`, and `max-block-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
 - Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities for `inset-inline-start`, `inset-inline-end`, `inset-block-start`, and `inset-block-end` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
 - Add `font-features-*` utility for `font-feature-settings` ([#19623](https://github.com/tailwindlabs/tailwindcss/pull/19615))
+
+### Fixed
+
+- Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
+- Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
+- CLI: Emit comment when source maps are saved to files ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
+- Detect utilities when containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
+- Fix class extraction for Rails' strict locals ([#19525](https://github.com/tailwindlabs/tailwindcss/pull/19525))
+- Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
 
 ### Deprecated
 
