@@ -2216,6 +2216,178 @@ test('me', async () => {
   ).toEqual('')
 })
 
+test('mbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mbs-1',
+        'mbs-99',
+        'mbs-2.5',
+        'mbs-big',
+        'mbs-[4px]',
+        '-mbs-4',
+        '-mbs-2.5',
+        '-mbs-big',
+        '-mbs-[4px]',
+        'mbs-[var(--my-var)]',
+        '-mbs-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mbs-2\\.5 {
+      margin-block-start: calc(var(--spacing) * -2.5);
+    }
+
+    .-mbs-4 {
+      margin-block-start: calc(var(--spacing) * -4);
+    }
+
+    .-mbs-\\[4px\\] {
+      margin-block-start: -4px;
+    }
+
+    .-mbs-\\[var\\(--my-var\\)\\] {
+      margin-block-start: calc(var(--my-var) * -1);
+    }
+
+    .-mbs-big {
+      margin-block-start: calc(var(--spacing-big) * -1);
+    }
+
+    .mbs-1 {
+      margin-block-start: calc(var(--spacing) * 1);
+    }
+
+    .mbs-2\\.5 {
+      margin-block-start: calc(var(--spacing) * 2.5);
+    }
+
+    .mbs-99 {
+      margin-block-start: calc(var(--spacing) * 99);
+    }
+
+    .mbs-\\[4px\\] {
+      margin-block-start: 4px;
+    }
+
+    .mbs-\\[var\\(--my-var\\)\\] {
+      margin-block-start: var(--my-var);
+    }
+
+    .mbs-big {
+      margin-block-start: var(--spacing-big);
+    }"
+  `)
+  expect(
+    await run([
+      'mbs',
+      'mbs-auto/foo',
+      'mbs-4/foo',
+      'mbs-[4px]/foo',
+      '-mbs-4/foo',
+      '-mbs-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('mbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mbe-1',
+        'mbe-99',
+        'mbe-2.5',
+        'mbe-big',
+        'mbe-[4px]',
+        '-mbe-4',
+        '-mbe-2.5',
+        '-mbe-big',
+        '-mbe-[4px]',
+        'mbe-[var(--my-var)]',
+        '-mbe-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mbe-2\\.5 {
+      margin-block-end: calc(var(--spacing) * -2.5);
+    }
+
+    .-mbe-4 {
+      margin-block-end: calc(var(--spacing) * -4);
+    }
+
+    .-mbe-\\[4px\\] {
+      margin-block-end: -4px;
+    }
+
+    .-mbe-\\[var\\(--my-var\\)\\] {
+      margin-block-end: calc(var(--my-var) * -1);
+    }
+
+    .-mbe-big {
+      margin-block-end: calc(var(--spacing-big) * -1);
+    }
+
+    .mbe-1 {
+      margin-block-end: calc(var(--spacing) * 1);
+    }
+
+    .mbe-2\\.5 {
+      margin-block-end: calc(var(--spacing) * 2.5);
+    }
+
+    .mbe-99 {
+      margin-block-end: calc(var(--spacing) * 99);
+    }
+
+    .mbe-\\[4px\\] {
+      margin-block-end: 4px;
+    }
+
+    .mbe-\\[var\\(--my-var\\)\\] {
+      margin-block-end: var(--my-var);
+    }
+
+    .mbe-big {
+      margin-block-end: var(--spacing-big);
+    }"
+  `)
+  expect(
+    await run([
+      'mbe',
+      'mbe-auto/foo',
+      'mbe-4/foo',
+      'mbe-[4px]/foo',
+      '-mbe-4/foo',
+      '-mbe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('mr', async () => {
   expect(
     await compileCss(
@@ -6669,6 +6841,92 @@ test('scroll-me', async () => {
   ).toEqual('')
 })
 
+test('scroll-mbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .-scroll-mbs-4 {
+      scroll-margin-block-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-scroll-mbs-\\[var\\(--value\\)\\] {
+      scroll-margin-block-start: calc(var(--value) * -1);
+    }
+
+    .scroll-mbs-4 {
+      scroll-margin-block-start: var(--spacing-4);
+    }
+
+    .scroll-mbs-\\[4px\\] {
+      scroll-margin-block-start: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-mbs',
+      'scroll-mbs-4/foo',
+      'scroll-mbs-[4px]/foo',
+      '-scroll-mbs-4/foo',
+      '-scroll-mbs-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-mbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .-scroll-mbe-4 {
+      scroll-margin-block-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-scroll-mbe-\\[var\\(--value\\)\\] {
+      scroll-margin-block-end: calc(var(--value) * -1);
+    }
+
+    .scroll-mbe-4 {
+      scroll-margin-block-end: var(--spacing-4);
+    }
+
+    .scroll-mbe-\\[4px\\] {
+      scroll-margin-block-end: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-mbe',
+      'scroll-mbe-4/foo',
+      'scroll-mbe-[4px]/foo',
+      '-scroll-mbe-4/foo',
+      '-scroll-mbe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('scroll-mt', async () => {
   expect(
     await compileCss(
@@ -7012,6 +7270,76 @@ test('scroll-pe', async () => {
       'scroll-pe-[4px]/foo',
       '-scroll-pe-4/foo',
       '-scroll-pe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-pbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .scroll-pbs-4 {
+      scroll-padding-block-start: var(--spacing-4);
+    }
+
+    .scroll-pbs-\\[4px\\] {
+      scroll-padding-block-start: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-pbs',
+      'scroll-pbs-4/foo',
+      'scroll-pbs-[4px]/foo',
+      '-scroll-pbs-4',
+      '-scroll-pbs-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-pbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .scroll-pbe-4 {
+      scroll-padding-block-end: var(--spacing-4);
+    }
+
+    .scroll-pbe-\\[4px\\] {
+      scroll-padding-block-end: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-pbe',
+      'scroll-pbe-4/foo',
+      'scroll-pbe-[4px]/foo',
+      '-scroll-pbe-4',
+      '-scroll-pbe-[var(--value)]',
     ]),
   ).toEqual('')
 })
@@ -11119,6 +11447,8 @@ const prefixes = [
   'border-y',
   'border-s',
   'border-e',
+  'border-bs',
+  'border-be',
   'border-t',
   'border-r',
   'border-b',
@@ -20691,6 +21021,88 @@ test('pe', async () => {
     }"
   `)
   expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
+})
+
+test('pbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pbs-1 {
+      padding-block-start: calc(var(--spacing) * 1);
+    }
+
+    .pbs-4 {
+      padding-block-start: calc(var(--spacing) * 4);
+    }
+
+    .pbs-99 {
+      padding-block-start: calc(var(--spacing) * 99);
+    }
+
+    .pbs-\\[4px\\] {
+      padding-block-start: 4px;
+    }
+
+    .pbs-big {
+      padding-block-start: var(--spacing-big);
+    }"
+  `)
+  expect(await run(['pbs', '-pbs-4', '-pbs-[4px]', 'pbs-4/foo', 'pbs-[4px]/foo'])).toEqual('')
+})
+
+test('pbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pbe-1 {
+      padding-block-end: calc(var(--spacing) * 1);
+    }
+
+    .pbe-4 {
+      padding-block-end: calc(var(--spacing) * 4);
+    }
+
+    .pbe-99 {
+      padding-block-end: calc(var(--spacing) * 99);
+    }
+
+    .pbe-\\[4px\\] {
+      padding-block-end: 4px;
+    }
+
+    .pbe-big {
+      padding-block-end: var(--spacing-big);
+    }"
+  `)
+  expect(await run(['pbe', '-pbe-4', '-pbe-[4px]', 'pbe-4/foo', 'pbe-[4px]/foo'])).toEqual('')
 })
 
 test('pr', async () => {
