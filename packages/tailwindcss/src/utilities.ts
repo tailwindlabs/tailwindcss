@@ -1135,12 +1135,12 @@ export function createUtilities(theme: Theme) {
   staticUtility(`max-block-none`, [['max-block-size', 'none']])
 
   for (let [name, namespaces, property] of [
-    ['inline', ['--width', '--spacing', '--container'], 'inline-size'],
-    ['min-inline', ['--min-width', '--spacing', '--container'], 'min-inline-size'],
-    ['max-inline', ['--max-width', '--spacing', '--container'], 'max-inline-size'],
-    ['block', ['--height', '--spacing'], 'block-size'],
-    ['min-block', ['--min-height', '--height', '--spacing'], 'min-block-size'],
-    ['max-block', ['--max-height', '--height', '--spacing'], 'max-block-size'],
+    ['inline', ['--spacing', '--container'], 'inline-size'],
+    ['min-inline', ['--spacing', '--container'], 'min-inline-size'],
+    ['max-inline', ['--spacing', '--container'], 'max-inline-size'],
+    ['block', ['--spacing'], 'block-size'],
+    ['min-block', ['--spacing'], 'min-block-size'],
+    ['max-block', ['--spacing'], 'max-block-size'],
   ] as [string, ThemeKey[], string][]) {
     spacingUtility(name, namespaces, (value) => [decl(property, value)], {
       supportsFractions: true,
