@@ -1069,6 +1069,82 @@ export function createUtilities(theme: Theme) {
     })
   }
 
+  /**
+   * @css `inline-size`
+   * @css `min-inline-size`
+   * @css `max-inline-size`
+   * @css `block-size`
+   * @css `min-block-size`
+   * @css `max-block-size`
+   */
+  for (let [key, value] of [
+    ['full', '100%'],
+    ['min', 'min-content'],
+    ['max', 'max-content'],
+    ['fit', 'fit-content'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  // inline-size viewport units (like width)
+  for (let [key, value] of [
+    ['svw', '100svw'],
+    ['lvw', '100lvw'],
+    ['dvw', '100dvw'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+  }
+
+  // block-size viewport units (like height)
+  for (let [key, value] of [
+    ['svh', '100svh'],
+    ['lvh', '100lvh'],
+    ['dvh', '100dvh'],
+  ]) {
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  staticUtility(`inline-auto`, [['inline-size', 'auto']])
+  staticUtility(`block-auto`, [['block-size', 'auto']])
+  staticUtility(`min-inline-auto`, [['min-inline-size', 'auto']])
+  staticUtility(`min-block-auto`, [['min-block-size', 'auto']])
+
+  staticUtility(`block-lh`, [['block-size', '1lh']])
+  staticUtility(`min-block-lh`, [['min-block-size', '1lh']])
+  staticUtility(`max-block-lh`, [['max-block-size', '1lh']])
+
+  staticUtility(`inline-screen`, [['inline-size', '100vw']])
+  staticUtility(`min-inline-screen`, [['min-inline-size', '100vw']])
+  staticUtility(`max-inline-screen`, [['max-inline-size', '100vw']])
+  staticUtility(`block-screen`, [['block-size', '100vh']])
+  staticUtility(`min-block-screen`, [['min-block-size', '100vh']])
+  staticUtility(`max-block-screen`, [['max-block-size', '100vh']])
+
+  staticUtility(`max-inline-none`, [['max-inline-size', 'none']])
+  staticUtility(`max-block-none`, [['max-block-size', 'none']])
+
+  for (let [name, namespaces, property] of [
+    ['inline', ['--width', '--spacing', '--container'], 'inline-size'],
+    ['min-inline', ['--min-width', '--spacing', '--container'], 'min-inline-size'],
+    ['max-inline', ['--max-width', '--spacing', '--container'], 'max-inline-size'],
+    ['block', ['--height', '--spacing'], 'block-size'],
+    ['min-block', ['--min-height', '--height', '--spacing'], 'min-block-size'],
+    ['max-block', ['--max-height', '--height', '--spacing'], 'max-block-size'],
+  ] as [string, ThemeKey[], string][]) {
+    spacingUtility(name, namespaces, (value) => [decl(property, value)], {
+      supportsFractions: true,
+    })
+  }
+
   utilities.static('container', () => {
     let breakpoints = [...theme.namespace('--breakpoint').values()]
     breakpoints.sort((a, z) => compareBreakpoints(a, z, 'asc'))
