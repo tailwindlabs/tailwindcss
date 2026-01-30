@@ -3842,7 +3842,7 @@ test('inline-size', async () => {
       css`
         @theme {
           --spacing-4: 1rem;
-          --width-xl: 36rem;
+          --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
@@ -3865,7 +3865,7 @@ test('inline-size', async () => {
   ).toMatchInlineSnapshot(`
     ":root, :host {
       --spacing-4: 1rem;
-      --width-xl: 36rem;
+      --container-xl: 36rem;
     }
 
     .inline-1\\/2 {
@@ -3917,7 +3917,7 @@ test('inline-size', async () => {
     }
 
     .inline-xl {
-      inline-size: var(--width-xl);
+      inline-size: var(--container-xl);
     }"
   `)
   expect(
