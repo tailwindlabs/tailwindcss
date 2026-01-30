@@ -51,10 +51,7 @@ impl<'a> Cursor<'a> {
 
         self.prev = self.curr;
         self.curr = self.next;
-        self.next = *self
-            .input
-            .get(self.pos.saturating_add(1))
-            .unwrap_or(&0x00u8);
+        self.next = *self.input.get(self.pos + 1).unwrap_or(&0x00u8);
     }
 
     #[inline(always)]
@@ -63,10 +60,7 @@ impl<'a> Cursor<'a> {
 
         self.prev = self.next;
         self.curr = *self.input.get(self.pos).unwrap_or(&0x00u8);
-        self.next = *self
-            .input
-            .get(self.pos.saturating_add(1))
-            .unwrap_or(&0x00u8);
+        self.next = *self.input.get(self.pos + 1).unwrap_or(&0x00u8);
     }
 
     pub fn move_to(&mut self, pos: usize) {
