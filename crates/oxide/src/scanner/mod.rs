@@ -19,6 +19,7 @@ use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
+use std::sync::{Arc, Mutex};
 use tracing::event;
 
 // @source "some/folder";               // This is auto source detection
@@ -211,6 +212,8 @@ impl Scanner {
     fn extract_candidates(&mut self, blobs: Vec<Vec<u8>>, css_files: Vec<PathBuf>) -> Vec<String> {
         // Extract all candidates from the pre-read blobs
         let mut new_candidates = parse_all_blobs(blobs);
+
+        // Extract all CSS variables from the CSS files
         if !css_files.is_empty() {
             let css_variables = extract_css_variables(read_all_files(
                 css_files
@@ -353,42 +356,108 @@ impl Scanner {
             return (vec![], vec![]);
         };
 
-        let mut css_files: Vec<PathBuf> = vec![];
-        let mut content_paths: Vec<ChangedContent> = Vec::new();
+        // Use parallel walk for the initial scan — this is ~2x faster than single-threaded
+        // for projects with many files/directories.
+        //
+        // Each walker thread collects entries into a thread-local buffer that flushes
+        // to a shared Vec periodically and automatically on Drop (thread exit).
+        type WalkEntry = (PathBuf, bool, String);
 
-        for entry in walker.build().filter_map(Result::ok) {
-            let path = entry.into_path();
-            let Ok(metadata) = path.metadata() else {
-                continue;
+        struct FlushOnDrop {
+            local: Vec<WalkEntry>,
+            shared: Arc<Mutex<Vec<WalkEntry>>>,
+        }
+
+        impl Drop for FlushOnDrop {
+            fn drop(&mut self) {
+                if !self.local.is_empty() {
+                    self.shared.lock().unwrap().append(&mut self.local);
+                }
+            }
+        }
+
+        let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
+
+        walker.build_parallel().run(|| {
+            let mut buf = FlushOnDrop {
+                local: Vec::with_capacity(256),
+                shared: collected.clone(),
             };
-            if metadata.is_dir() {
-                self.dirs.push(path);
-            } else if metadata.is_file() {
-                let extension = path
-                    .extension()
-                    .and_then(|x| x.to_str())
-                    .unwrap_or_default(); // In case the file has no extension
 
-                match extension {
+            Box::new(move |entry| {
+                let Ok(entry) = entry else {
+                    return ignore::WalkState::Continue;
+                };
+
+                let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+
+                let path = entry.into_path();
+
+                if is_dir {
+                    buf.local.push((path, true, String::new()));
+                } else {
+                    let ext = path
+                        .extension()
+                        .and_then(|x| x.to_str())
+                        .unwrap_or_default()
+                        .to_owned();
+                    buf.local.push((path, false, ext));
+                }
+
+                if buf.local.len() >= 256 {
+                    buf.shared.lock().unwrap().append(&mut buf.local);
+                }
+
+                ignore::WalkState::Continue
+            })
+        });
+
+        // All threads have finished and flushed their buffers via FlushOnDrop::drop
+        let all_entries = Arc::try_unwrap(collected).unwrap().into_inner().unwrap();
+
+        let mut css_files: Vec<PathBuf> = vec![];
+        let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
+        let mut seen_files: FxHashSet<PathBuf> = FxHashSet::default();
+
+        for (path, is_dir, extension) in all_entries {
+            if is_dir {
+                self.dirs.push(path);
+            } else {
+                // Deduplicate: parallel walk can visit the same file from multiple threads
+                if !seen_files.insert(path.clone()) {
+                    continue;
+                }
+
+                match extension.as_str() {
                     // Special handing for CSS files, we don't want to extract candidates from
                     // these files, but we do want to extract used CSS variables.
                     "css" => {
                         css_files.push(path.clone());
                     }
                     _ => {
-                        content_paths.push(ChangedContent::File(
-                            path.to_path_buf(),
-                            extension.to_owned(),
-                        ));
+                        content_paths.push((path.clone(), extension.clone()));
                     }
                 }
 
-                self.extensions.insert(extension.to_owned());
+                self.extensions.insert(extension);
                 self.files.push(path);
             }
         }
 
-        let scanned_blobs = read_all_files(content_paths);
+        // Read + preprocess all discovered files in parallel
+        let scanned_blobs: Vec<Vec<u8>> = content_paths
+            .into_par_iter()
+            .filter_map(|(path, ext)| {
+                let content = std::fs::read(&path).ok()?;
+                event!(tracing::Level::INFO, "Reading {:?}", path);
+                let processed = pre_process_input(content, &ext);
+                if processed.is_empty() {
+                    None
+                } else {
+                    Some(processed)
+                }
+            })
+            .collect();
 
         (scanned_blobs, css_files)
     }
@@ -494,6 +563,9 @@ where
 }
 
 /// Sets up a WalkBuilder with all source roots, gitignore rules, and source pattern matching.
+///
+/// This is the common setup shared between the full walker (with mtime tracking for re-scans)
+/// and the parallel walker (without mtime tracking for the initial scan).
 fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
@@ -666,6 +738,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
         })
         .collect();
 
+    // Source pattern matching filter (lock-free, safe for parallel walking)
     builder.filter_entry(move |entry| {
         let path = entry.path();
 
