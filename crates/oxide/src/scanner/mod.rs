@@ -13,14 +13,12 @@ use crate::GlobEntry;
 use auto_source_detection::BINARY_EXTENSIONS_GLOB;
 use bstr::ByteSlice;
 use fast_glob::glob_match;
-use fxhash::{FxHashMap, FxHashSet};
+use fxhash::FxHashSet;
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex};
-use std::time::SystemTime;
 use tracing::event;
 
 // @source "some/folder";               // This is auto source detection
@@ -104,9 +102,11 @@ impl Scanner {
             }
         }
 
+        let walker = create_walker(&sources);
+
         Self {
-            sources: sources.clone(),
-            walker: create_walker(sources),
+            sources,
+            walker,
             ..Default::default()
         }
     }
@@ -493,13 +493,8 @@ where
         .collect()
 }
 
-/// Create a walker for the given sources to detect all the files that we have to scan.
-///
-/// The `mtimes` map is used to keep track of the last modified time of each file. This is used to
-/// determine if a file or folder has changed since the last scan and we can skip folders that
-/// haven't changed.
-fn create_walker(sources: Sources) -> Option<WalkBuilder> {
-    let mtimes: Arc<Mutex<FxHashMap<PathBuf, SystemTime>>> = Default::default();
+/// Sets up a WalkBuilder with all source roots, gitignore rules, and source pattern matching.
+fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
     let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
@@ -671,67 +666,43 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
         })
         .collect();
 
-    builder.filter_entry({
-        move |entry| {
-            let path = entry.path();
+    builder.filter_entry(move |entry| {
+        let path = entry.path();
 
-            // Ensure the entries are matching any of the provided source patterns (this is
-            // necessary for manual-patterns that can filter the file extension)
-            if path.is_file() {
-                let mut matches = false;
+        // Ensure the entries are matching any of the provided source patterns (this is
+        // necessary for manual-patterns that can filter the file extension)
+        if path.is_file() {
+            let mut matches = false;
 
-                for base in &auto_bases {
-                    if path.starts_with(base) {
+            for base in &auto_bases {
+                if path.starts_with(base) {
+                    matches = true;
+                    break;
+                }
+            }
+
+            if !matches {
+                for (base, pattern) in &pattern_sources {
+                    let remainder = path.strip_prefix(base);
+                    if remainder.is_ok_and(|remainder| {
+                        let mut path_str = remainder.to_string_lossy().to_string();
+                        if !path_str.starts_with("/") {
+                            path_str = format!("/{path_str}");
+                        }
+                        glob_match(pattern, path_str.as_bytes())
+                    }) {
                         matches = true;
                         break;
                     }
                 }
-
-                if !matches {
-                    for (base, pattern) in &pattern_sources {
-                        let remainder = path.strip_prefix(base);
-                        if remainder.is_ok_and(|remainder| {
-                            let mut path_str = remainder.to_string_lossy().to_string();
-                            if !path_str.starts_with("/") {
-                                path_str = format!("/{path_str}");
-                            }
-                            glob_match(pattern, path_str.as_bytes())
-                        }) {
-                            matches = true;
-                            break;
-                        }
-                    }
-                }
-
-                if !matches {
-                    return false;
-                }
             }
 
-            let mut mtimes = mtimes.lock().unwrap();
-            let current_time = match entry.metadata() {
-                Ok(metadata) if metadata.is_file() => {
-                    if let Ok(time) = metadata.modified() {
-                        Some(time)
-                    } else {
-                        None
-                    }
-                }
-                _ => None,
-            };
-
-            let previous_time =
-                current_time.and_then(|time| mtimes.insert(entry.clone().into_path(), time));
-
-            match (current_time, previous_time) {
-                (Some(current), Some(prev)) if prev == current => false,
-                _ => {
-                    event!(tracing::Level::INFO, "Discovering {:?}", path);
-
-                    true
-                }
+            if !matches {
+                return false;
             }
         }
+
+        true
     });
 
     Some(builder)
