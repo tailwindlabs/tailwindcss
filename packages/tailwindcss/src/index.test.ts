@@ -4643,11 +4643,11 @@ describe('@utility', () => {
         @tailwind utilities;
       }
 
-      @utility p\\ush-1\\/2 {
+      @utility p\ush-1\/2 {
         right: 50%;
       }
 
-      @utility p\\ush-50\\% {
+      @utility p\ush-50\% {
         right: 50%;
       }
     `)
