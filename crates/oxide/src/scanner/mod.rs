@@ -366,64 +366,13 @@ impl Scanner {
             return (vec![], vec![]);
         };
 
-        // Use parallel walk for the initial scan — this is ~2x faster than single-threaded
-        // for projects with many files/directories.
-        //
-        // Each walker thread collects entries into a thread-local buffer that flushes
-        // to a shared Vec periodically and automatically on Drop (thread exit).
-        type WalkEntry = (PathBuf, bool, String);
-
-        struct FlushOnDrop {
-            local: Vec<WalkEntry>,
-            shared: Arc<Mutex<Vec<WalkEntry>>>,
-        }
-
-        impl Drop for FlushOnDrop {
-            fn drop(&mut self) {
-                if !self.local.is_empty() {
-                    self.shared.lock().unwrap().append(&mut self.local);
-                }
-            }
-        }
-
-        let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
-
-        walker.build_parallel().run(|| {
-            let mut buf = FlushOnDrop {
-                local: Vec::with_capacity(256),
-                shared: collected.clone(),
-            };
-
-            Box::new(move |entry| {
-                let Ok(entry) = entry else {
-                    return ignore::WalkState::Continue;
-                };
-
-                let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
-
-                let path = entry.into_path();
-
-                if is_dir {
-                    buf.local.push((path, true, String::new()));
-                } else {
-                    let ext = path
-                        .extension()
-                        .and_then(|x| x.to_str())
-                        .unwrap_or_default()
-                        .to_owned();
-                    buf.local.push((path, false, ext));
-                }
-
-                if buf.local.len() >= 256 {
-                    buf.shared.lock().unwrap().append(&mut buf.local);
-                }
-
-                ignore::WalkState::Continue
-            })
-        });
-
-        // All threads have finished and flushed their buffers via FlushOnDrop::drop
-        let all_entries = Arc::try_unwrap(collected).unwrap().into_inner().unwrap();
+        // Use synchronous walk for the initial build (lower overhead) and parallel
+        // walk for subsequent calls (watch mode) where the overhead is amortised.
+        let all_entries = if self.has_scanned_once {
+            walk_parallel(walker)
+        } else {
+            walk_synchronous(walker)
+        };
 
         let mut css_files: Vec<PathBuf> = vec![];
         let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
@@ -597,6 +546,89 @@ where
         .into_iter()
         .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
         .collect()
+}
+
+type WalkEntry = (PathBuf, bool, String);
+
+/// Walk the file system synchronously. Used for the initial build where the overhead of spawning
+/// parallel walker threads is not worth it.
+#[tracing::instrument(skip_all)]
+fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
+    let mut entries = Vec::new();
+
+    for entry in walker.build().filter_map(Result::ok) {
+        let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+        let path = entry.into_path();
+
+        if is_dir {
+            entries.push((path, true, String::new()));
+        } else {
+            let ext = path
+                .extension()
+                .and_then(|x| x.to_str())
+                .unwrap_or_default()
+                .to_owned();
+            entries.push((path, false, ext));
+        }
+    }
+
+    entries
+}
+
+/// Walk the file system in parallel. Used in watch mode where the parallel walker overhead is
+/// amortised across many rebuilds and subsequent calls are much faster.
+#[tracing::instrument(skip_all)]
+fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
+    struct FlushOnDrop {
+        local: Vec<WalkEntry>,
+        shared: Arc<Mutex<Vec<WalkEntry>>>,
+    }
+
+    impl Drop for FlushOnDrop {
+        fn drop(&mut self) {
+            if !self.local.is_empty() {
+                self.shared.lock().unwrap().append(&mut self.local);
+            }
+        }
+    }
+
+    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
+
+    walker.build_parallel().run(|| {
+        let mut buf = FlushOnDrop {
+            local: Vec::with_capacity(256),
+            shared: collected.clone(),
+        };
+
+        Box::new(move |entry| {
+            let Ok(entry) = entry else {
+                return ignore::WalkState::Continue;
+            };
+
+            let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+            let path = entry.into_path();
+
+            if is_dir {
+                buf.local.push((path, true, String::new()));
+            } else {
+                let ext = path
+                    .extension()
+                    .and_then(|x| x.to_str())
+                    .unwrap_or_default()
+                    .to_owned();
+                buf.local.push((path, false, ext));
+            }
+
+            if buf.local.len() >= 256 {
+                buf.shared.lock().unwrap().append(&mut buf.local);
+            }
+
+            ignore::WalkState::Continue
+        })
+    });
+
+    // All threads have finished and flushed their buffers via FlushOnDrop::drop
+    Arc::try_unwrap(collected).unwrap().into_inner().unwrap()
 }
 
 /// Sets up a WalkBuilder with all source roots, gitignore rules, and source pattern matching.
