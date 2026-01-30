@@ -524,12 +524,10 @@ export function createUtilities(theme: Theme) {
       supportsNegative = false,
       supportsFractions = false,
       staticValues,
-      skipSuggestions = false,
     }: {
       supportsNegative?: boolean
       supportsFractions?: boolean
       staticValues?: Record<string, AstNode[]>
-      skipSuggestions?: boolean
     } = {},
   ) {
     if (supportsNegative) {
@@ -559,16 +557,14 @@ export function createUtilities(theme: Theme) {
       staticValues,
     })
 
-    if (!skipSuggestions) {
-      suggest(name, () => [
-        {
-          values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
-          supportsNegative,
-          supportsFractions,
-          valueThemeKeys: themeKeys,
-        },
-      ])
-    }
+    suggest(name, () => [
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+        supportsNegative,
+        supportsFractions,
+        valueThemeKeys: themeKeys,
+      },
+    ])
   }
 
   /**
@@ -624,7 +620,7 @@ export function createUtilities(theme: Theme) {
   /**
    * @css `inset`
    */
-  for (let [name, property, { deprecated = false } = {}] of [
+  for (let [name, property] of [
     ['inset', 'inset'],
     ['inset-x', 'inset-inline'],
     ['inset-y', 'inset-block'],
@@ -632,8 +628,6 @@ export function createUtilities(theme: Theme) {
     ['inset-e', 'inset-inline-end'],
     ['inset-bs', 'inset-block-start'],
     ['inset-be', 'inset-block-end'],
-    ['start', 'inset-inline-start', { deprecated: true }],
-    ['end', 'inset-inline-end', { deprecated: true }],
     ['top', 'top'],
     ['right', 'right'],
     ['bottom', 'bottom'],
@@ -645,7 +639,6 @@ export function createUtilities(theme: Theme) {
     spacingUtility(name, ['--inset', '--spacing'], (value) => [decl(property, value)], {
       supportsNegative: true,
       supportsFractions: true,
-      skipSuggestions: deprecated,
     })
   }
 

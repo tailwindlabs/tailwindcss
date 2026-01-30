@@ -211,3 +211,177 @@ test('flex-shrink', async () => {
     ]),
   ).toEqual('')
 })
+
+test('start', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'start-shadowned',
+        'start-auto',
+        '-start-full',
+        'start-full',
+        'start-3/4',
+        'start-4',
+        '-start-4',
+        'start-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-start-4 {
+      inset-inline-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-start-full {
+      inset-inline-start: -100%;
+    }
+
+    .start-3\\/4 {
+      inset-inline-start: 75%;
+    }
+
+    .start-4 {
+      inset-inline-start: var(--spacing-4);
+    }
+
+    .start-\\[4px\\] {
+      inset-inline-start: 4px;
+    }
+
+    .start-auto {
+      inset-inline-start: auto;
+    }
+
+    .start-full {
+      inset-inline-start: 100%;
+    }
+
+    .start-shadowned {
+      inset-inline-start: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'start-shadow-sm',
+        'start',
+        'start--1',
+        'start--1/2',
+        'start--1/-2',
+        'start-1/-2',
+        'start-auto/foo',
+        '-start-full/foo',
+        'start-full/foo',
+        'start-3/4/foo',
+        'start-4/foo',
+        '-start-4/foo',
+        'start-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('end', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'end-shadowned',
+        'end-auto',
+        '-end-full',
+        'end-full',
+        'end-3/4',
+        'end-4',
+        '-end-4',
+        'end-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-end-4 {
+      inset-inline-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-end-full {
+      inset-inline-end: -100%;
+    }
+
+    .end-3\\/4 {
+      inset-inline-end: 75%;
+    }
+
+    .end-4 {
+      inset-inline-end: var(--spacing-4);
+    }
+
+    .end-\\[4px\\] {
+      inset-inline-end: 4px;
+    }
+
+    .end-auto {
+      inset-inline-end: auto;
+    }
+
+    .end-full {
+      inset-inline-end: 100%;
+    }
+
+    .end-shadowned {
+      inset-inline-end: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'end-shadow-sm',
+        'end',
+        'end--1',
+        'end--1/2',
+        'end--1/-2',
+        'end-1/-2',
+        'end-auto/foo',
+        '-end-full/foo',
+        'end-full/foo',
+        'end-3/4/foo',
+        'end-4/foo',
+        '-end-4/foo',
+        'end-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
