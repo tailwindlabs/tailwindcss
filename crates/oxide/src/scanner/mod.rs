@@ -79,8 +79,14 @@ pub struct Scanner {
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
 
-    /// Track mtimes for files so re-scans can skip unchanged files
+    /// Track mtimes for files so re-scans can skip unchanged files.
+    /// Only populated after the first scan completes (to avoid unnecessary
+    /// metadata calls on initial build).
     mtimes: FxHashMap<PathBuf, SystemTime>,
+
+    /// Whether we've completed at least one full scan. When false, we skip
+    /// mtime tracking entirely so the initial build stays fast.
+    has_scanned_once: bool,
 
     /// Whether sources have been scanned since the last `scan()` call
     sources_scanned: bool,
@@ -432,17 +438,23 @@ impl Scanner {
                     continue;
                 }
 
-                // Check mtime to skip unchanged files on re-scans
-                let current_mtime = std::fs::metadata(&path)
-                    .ok()
-                    .and_then(|m| m.modified().ok());
+                // On re-scans, check mtime to skip unchanged files.
+                // On the first scan we skip this entirely to avoid extra
+                // metadata syscalls.
+                let changed = if self.has_scanned_once {
+                    let current_mtime = std::fs::metadata(&path)
+                        .ok()
+                        .and_then(|m| m.modified().ok());
 
-                let changed = match current_mtime {
-                    Some(mtime) => {
-                        let prev = self.mtimes.insert(path.clone(), mtime);
-                        prev.is_none_or(|prev| prev != mtime)
+                    match current_mtime {
+                        Some(mtime) => {
+                            let prev = self.mtimes.insert(path.clone(), mtime);
+                            prev.is_none_or(|prev| prev != mtime)
+                        }
+                        None => true,
                     }
-                    None => true,
+                } else {
+                    true
                 };
 
                 match extension.as_str() {
@@ -479,6 +491,10 @@ impl Scanner {
                 }
             })
             .collect();
+
+        if !self.has_scanned_once {
+            self.has_scanned_once = true;
+        }
 
         (scanned_blobs, css_files)
     }
