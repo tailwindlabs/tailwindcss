@@ -64,14 +64,8 @@ pub struct Scanner {
     /// The walker to detect all files that we have to scan
     walker: Option<WalkBuilder>,
 
-    /// All changed content that we have to parse
-    changed_content: Vec<ChangedContent>,
-
     /// All found extensions
     extensions: FxHashSet<String>,
-
-    /// All CSS files we want to scan for CSS variable usage
-    css_files: Vec<PathBuf>,
 
     /// All files that we have to scan
     files: Vec<PathBuf>,
@@ -101,6 +95,7 @@ impl Scanner {
         }
 
         let sources = Sources::new(public_source_entries_to_private_source_entries(sources));
+        let walker = create_walker(&sources);
 
         if *SHOULD_TRACE {
             event!(tracing::Level::INFO, "Optimized sources:");
@@ -118,16 +113,15 @@ impl Scanner {
 
     pub fn scan(&mut self) -> Vec<String> {
         self.sources_scanned = false;
-        self.discover_sources();
 
-        let _new_candidates = self.extract_candidates();
+        let (scanned_blobs, css_files) = self.discover_sources();
 
-        // Make sure we have a sorted list of candidates
-        let mut candidates = self.candidates.iter().cloned().collect::<Vec<_>>();
-        candidates.par_sort_unstable();
+        self.extract_candidates(scanned_blobs, css_files);
 
-        // Return all candidates instead of only the new ones
-        candidates
+        // Return all candidates sorted
+        let mut result = self.candidates.iter().cloned().collect::<Vec<_>>();
+        result.par_sort_unstable();
+        result
     }
 
     #[tracing::instrument(skip_all)]
@@ -142,7 +136,7 @@ impl Scanner {
 
         // Raw content can be parsed directly, no need to verify if the file exists and is allowed
         // to be scanned.
-        self.changed_content.extend(changed_contents);
+        let mut content_to_scan: Vec<ChangedContent> = changed_contents;
 
         // Fully resolve all files
         let changed_files = changed_files
@@ -166,7 +160,7 @@ impl Scanner {
             });
 
         // All known files are allowed to be scanned
-        self.changed_content.extend(known_files);
+        content_to_scan.extend(known_files);
 
         // Figure out if the new unknown files are allowed to be scanned
         if !new_unknown_files.is_empty() {
@@ -187,7 +181,7 @@ impl Scanner {
                         // extract the current file and remove it from the list of passed in files.
                         if file == path {
                             self.files.push(path.to_path_buf()); // Track for future use
-                            self.changed_content.push(changed_file.clone()); // Track for parsing
+                            content_to_scan.push(changed_file.clone()); // Track for parsing
                             drop_file_indexes.push(idx);
                         }
                     }
@@ -208,18 +202,15 @@ impl Scanner {
             }
         }
 
-        self.extract_candidates()
+        // Read all content into blobs for extraction
+        let blobs = read_all_files(content_to_scan);
+        self.extract_candidates(blobs, vec![])
     }
 
     #[tracing::instrument(skip_all)]
-    fn extract_candidates(&mut self) -> Vec<String> {
-        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-
-        // Extract all candidates from the changed content
-        let mut new_candidates = parse_all_blobs(read_all_files(changed_content));
-
-        // Extract all CSS variables from the CSS files
-        let css_files = self.css_files.drain(..).collect::<Vec<_>>();
+    fn extract_candidates(&mut self, blobs: Vec<Vec<u8>>, css_files: Vec<PathBuf>) -> Vec<String> {
+        // Extract all candidates from the pre-read blobs
+        let mut new_candidates = parse_all_blobs(blobs);
         if !css_files.is_empty() {
             let css_variables = extract_css_variables(read_all_files(
                 css_files
@@ -247,7 +238,7 @@ impl Scanner {
 
     #[tracing::instrument(skip_all)]
     pub fn get_files(&mut self) -> Vec<String> {
-        self.discover_sources();
+        let _ = self.discover_sources();
 
         self.files
             .par_iter()
@@ -261,7 +252,7 @@ impl Scanner {
             return globs.clone();
         }
 
-        self.discover_sources();
+        let _ = self.discover_sources();
 
         let mut globs = vec![];
         for source in self.sources.iter() {
@@ -352,15 +343,18 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    fn discover_sources(&mut self) {
+    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>) {
         if self.sources_scanned {
-            return;
+            return (vec![], vec![]);
         }
         self.sources_scanned = true;
 
         let Some(walker) = &mut self.walker else {
-            return;
+            return (vec![], vec![]);
         };
+
+        let mut css_files: Vec<PathBuf> = vec![];
+        let mut content_paths: Vec<ChangedContent> = Vec::new();
 
         for entry in walker.build().filter_map(Result::ok) {
             let path = entry.into_path();
@@ -379,10 +373,10 @@ impl Scanner {
                     // Special handing for CSS files, we don't want to extract candidates from
                     // these files, but we do want to extract used CSS variables.
                     "css" => {
-                        self.css_files.push(path.clone());
+                        css_files.push(path.clone());
                     }
                     _ => {
-                        self.changed_content.push(ChangedContent::File(
+                        content_paths.push(ChangedContent::File(
                             path.to_path_buf(),
                             extension.to_owned(),
                         ));
@@ -393,6 +387,10 @@ impl Scanner {
                 self.files.push(path);
             }
         }
+
+        let scanned_blobs = read_all_files(content_paths);
+
+        (scanned_blobs, css_files)
     }
 }
 
