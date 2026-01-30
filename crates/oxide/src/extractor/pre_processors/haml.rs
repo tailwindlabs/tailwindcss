@@ -159,7 +159,7 @@ impl PreProcessor for Haml {
                     // Override the last known newline position
                     last_newline_position = end;
 
-                    let replaced = pre_process_input(ruby_code, "rb");
+                    let replaced = pre_process_input(ruby_code.to_vec(), "rb");
                     result.replace_range(start..end, replaced);
                 }
 

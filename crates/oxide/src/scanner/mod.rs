@@ -413,26 +413,26 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
         ChangedContent::Content(contents, extension) => (contents.into_bytes(), extension),
     };
 
-    Some(pre_process_input(&content, &extension))
+    Some(pre_process_input(content, &extension))
 }
 
-pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
+pub fn pre_process_input(content: Vec<u8>, extension: &str) -> Vec<u8> {
     use crate::extractor::pre_processors::*;
 
     match extension {
-        "clj" | "cljs" | "cljc" => Clojure.process(content),
-        "heex" | "eex" | "ex" | "exs" => Elixir.process(content),
-        "cshtml" | "razor" => Razor.process(content),
-        "haml" => Haml.process(content),
-        "json" => Json.process(content),
-        "md" | "mdx" => Markdown.process(content),
-        "pug" => Pug.process(content),
-        "rb" | "erb" => Ruby.process(content),
-        "slim" | "slang" => Slim.process(content),
-        "svelte" => Svelte.process(content),
-        "rs" => Rust.process(content),
-        "vue" => Vue.process(content),
-        _ => content.to_vec(),
+        "clj" | "cljs" | "cljc" => Clojure.process(&content),
+        "heex" | "eex" | "ex" | "exs" => Elixir.process(&content),
+        "cshtml" | "razor" => Razor.process(&content),
+        "haml" => Haml.process(&content),
+        "json" => Json.process(&content),
+        "md" | "mdx" => Markdown.process(&content),
+        "pug" => Pug.process(&content),
+        "rb" | "erb" => Ruby.process(&content),
+        "slim" | "slang" => Slim.process(&content),
+        "svelte" => Svelte.process(&content),
+        "rs" => Rust.process(&content),
+        "vue" => Vue.process(&content),
+        _ => content,
     }
 }
 
