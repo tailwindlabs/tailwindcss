@@ -13,6 +13,10 @@ env:
   OXIDE_LOCATION: ./crates/node
   RELEASE_CHANNEL: insiders
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
