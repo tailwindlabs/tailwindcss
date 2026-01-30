@@ -13,13 +13,14 @@ use crate::GlobEntry;
 use auto_source_detection::BINARY_EXTENSIONS_GLOB;
 use bstr::ByteSlice;
 use fast_glob::glob_match;
-use fxhash::FxHashSet;
+use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
+use std::time::SystemTime;
 use tracing::event;
 
 // @source "some/folder";               // This is auto source detection
@@ -77,6 +78,9 @@ pub struct Scanner {
 
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
+
+    /// Track mtimes for files so re-scans can skip unchanged files
+    mtimes: FxHashMap<PathBuf, SystemTime>,
 
     /// Whether sources have been scanned since the last `scan()` call
     sources_scanned: bool,
@@ -428,14 +432,31 @@ impl Scanner {
                     continue;
                 }
 
+                // Check mtime to skip unchanged files on re-scans
+                let current_mtime = std::fs::metadata(&path)
+                    .ok()
+                    .and_then(|m| m.modified().ok());
+
+                let changed = match current_mtime {
+                    Some(mtime) => {
+                        let prev = self.mtimes.insert(path.clone(), mtime);
+                        prev.is_none_or(|prev| prev != mtime)
+                    }
+                    None => true,
+                };
+
                 match extension.as_str() {
                     // Special handing for CSS files, we don't want to extract candidates from
                     // these files, but we do want to extract used CSS variables.
                     "css" => {
-                        css_files.push(path.clone());
+                        if changed {
+                            css_files.push(path.clone());
+                        }
                     }
                     _ => {
-                        content_paths.push((path.clone(), extension.clone()));
+                        if changed {
+                            content_paths.push((path.clone(), extension.clone()));
+                        }
                     }
                 }
 
