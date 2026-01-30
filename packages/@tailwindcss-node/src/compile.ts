@@ -194,7 +194,7 @@ async function importModule(path: string): Promise<any> {
   }
 }
 
-const modules = ['node_modules', ...(process.env.NODE_PATH ? [process.env.NODE_PATH] : [])]
+const modules = ['node_modules', ...(process.env.NODE_PATH ? [...process.env.NODE_PATH.split(path.delimiter)] : [])]
 
 const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
   fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
