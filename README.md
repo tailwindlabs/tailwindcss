@@ -29,7 +29,9 @@ For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
 For help, discussion about best practices, or feature ideas:
 
-[Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/tailwindcss/discussions)
+- [GitHub Discussions](https://github.com/tailwindcss/tailwindcss/discussions) — Ask questions and share ideas
+- [Discord](https://tailwindcss.com/discord) — Chat with the community in real-time
+- [Twitter](https://twitter.com/tailwindcss) — Follow for updates and announcements
 
 ## Contributing
 
