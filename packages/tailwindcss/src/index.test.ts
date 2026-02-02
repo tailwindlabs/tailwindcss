@@ -4615,6 +4615,40 @@ describe('@custom-variant', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618#issuecomment-3830775912
+  test('@custom-variant can use existing @slot @variants', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant hover {
+            &:hover {
+              @slot;
+            }
+
+            &[data-hover] {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus, .hocus\\:flex[data-hover]:focus {
+        display: flex;
+      }"
+    `)
+  })
+
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
       await compileCss(
