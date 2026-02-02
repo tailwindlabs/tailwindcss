@@ -1911,7 +1911,7 @@ test('outline style is optional', async ({ page }) => {
     html`<div id="x" class="outline-2 outline-white"></div>`,
   )
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) solid 2px')
+  expect(await getPropertyValue('#x', 'outline')).toEqual('2px solid rgb(255, 255, 255)')
 })
 
 test('outline style is preserved when changing outline width', async ({ page }) => {
@@ -1922,11 +1922,11 @@ test('outline style is preserved when changing outline width', async ({ page }) 
     </div>`,
   )
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 2px')
+  expect(await getPropertyValue('#x', 'outline')).toEqual('2px dotted rgb(255, 255, 255)')
 
   await page.locator('#x').hover()
 
-  expect(await getPropertyValue('#x', 'outline')).toEqual('rgb(255, 255, 255) dotted 4px')
+  expect(await getPropertyValue('#x', 'outline')).toEqual('4px dotted rgb(255, 255, 255)')
 })
 
 test('borders can be added without a border-style utility', async ({ page }) => {
@@ -2249,7 +2249,7 @@ async function getPropertyValue(
   selector: [string, string | undefined],
   property: string,
 ) {
-  return page.evaluate(
+  let value = await page.evaluate(
     ([[selector, pseudo], property]) => {
       return window
         .getComputedStyle(document.querySelector(selector)!, pseudo)
@@ -2257,4 +2257,16 @@ async function getPropertyValue(
     },
     [selector, property] as const,
   )
+
+  switch (property) {
+    case 'outline':
+      // Order in webkit vs chromium is different. Sort to normalize.
+      return segment(value, ' ')
+        .map((part) => part.trim())
+        .sort((a, z) => a.length - z.length)
+        .join(' ')
+
+    default:
+      return value
+  }
 }
