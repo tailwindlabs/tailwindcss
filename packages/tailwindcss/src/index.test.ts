@@ -4558,6 +4558,32 @@ describe('@custom-variant', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            @slot;
+          }
+
+          @custom-variant b {
+            @variant a {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex, .b\\:flex, .a\\:b\\:flex, .b\\:a\\:flex {
+        display: flex;
+      }"
+    `)
+  })
+
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
       await compileCss(
