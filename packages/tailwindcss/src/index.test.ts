@@ -4584,6 +4584,37 @@ describe('@custom-variant', () => {
     `)
   })
 
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant (2)', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            .a {
+              @slot;
+            }
+          }
+
+          @custom-variant b {
+            .b {
+              @variant a {
+                .a-inside-b {
+                  @slot;
+                }
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex .a, .b\\:flex .b .a .a-inside-b, .a\\:b\\:flex .a .b .a .a-inside-b, .b\\:a\\:flex .b .a .a-inside-b .a {
+        display: flex;
+      }"
+    `)
+  })
+
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
       await compileCss(
