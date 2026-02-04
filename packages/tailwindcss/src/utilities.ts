@@ -5607,7 +5607,7 @@ export function createUtilities(theme: Theme) {
                 value,
                 alpha,
                 (color) => `var(--tw-inset-shadow-color, ${color})`,
-                'inset ',
+                'inset',
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -6476,8 +6476,8 @@ function alphaReplacedShadowProperties(
   function applyPrefix(x: string) {
     if (!prefix) return x
     return segment(x, ',')
-      .map((value) => prefix + value)
-      .join(',')
+      .map((value) => prefix.trim() + ' ' + value.trim())
+      .join(', ')
   }
 
   if (requiresFallback) {
