@@ -113,9 +113,13 @@ jobs:
         env:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
+  notify:
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.tests.result == 'failure' }}
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
       - name: Notify Discord
-        if: failure() && github.ref == 'refs/heads/main'
         uses: discord-actions/message@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: 'The [most recent build](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
+          message: 'The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'
