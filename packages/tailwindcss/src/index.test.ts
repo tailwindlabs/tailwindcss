@@ -1561,7 +1561,8 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+        --animate-very-long-animation-name: very-long-animation-name
+                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
       }
 
       .animate-very-long-animation-name {
@@ -5650,7 +5651,7 @@ describe('`color-mix(…)` polyfill', () => {
 
       @supports (color: color-mix(in lab, red, red)) {
         .text-red-500\\/50 {
-          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+          color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }"
     `)
