@@ -104,8 +104,6 @@ impl Scanner {
         }
 
         let sources = Sources::new(public_source_entries_to_private_source_entries(sources));
-        let walker = create_walker(&sources);
-
         if *SHOULD_TRACE {
             event!(tracing::Level::INFO, "Optimized sources:");
             for source in sources.iter() {
