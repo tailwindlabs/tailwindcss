@@ -71,7 +71,7 @@ pub struct Scanner {
     files: FxHashSet<PathBuf>,
 
     /// All directories, sub-directories, etc… we saw during source detection
-    dirs: Vec<PathBuf>,
+    dirs: FxHashSet<PathBuf>,
 
     /// All generated globs, used for setting up watchers
     globs: Option<Vec<GlobEntry>>,
@@ -378,7 +378,7 @@ impl Scanner {
 
         for (path, is_dir, extension) in all_entries {
             if is_dir {
-                self.dirs.push(path);
+                self.dirs.insert(path);
             } else {
                 // Deduplicate: parallel walk can visit the same file from multiple threads
                 if !seen_files.insert(path.clone()) {
