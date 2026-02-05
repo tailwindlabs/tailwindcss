@@ -68,7 +68,7 @@ pub struct Scanner {
     extensions: FxHashSet<String>,
 
     /// All files that we have to scan
-    files: Vec<PathBuf>,
+    files: FxHashSet<PathBuf>,
 
     /// All directories, sub-directories, etc… we saw during source detection
     dirs: Vec<PathBuf>,
@@ -189,7 +189,7 @@ impl Scanner {
                         // When the file is found on disk it means that all the rules pass. We can
                         // extract the current file and remove it from the list of passed in files.
                         if file == path {
-                            self.files.push(path.to_path_buf()); // Track for future use
+                            self.files.insert(path.to_path_buf()); // Track for future use
                             content_to_scan.push(changed_file.clone()); // Track for parsing
                             drop_file_indexes.push(idx);
                         }
@@ -420,7 +420,7 @@ impl Scanner {
                 }
 
                 self.extensions.insert(extension);
-                self.files.push(path);
+                self.files.insert(path);
             }
         }
 
