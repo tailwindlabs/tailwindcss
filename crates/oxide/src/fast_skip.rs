@@ -10,7 +10,7 @@ pub fn fast_skip(cursor: &Cursor) -> Option<usize> {
         return None;
     }
 
-    if !cursor.curr.is_ascii_whitespace() {
+    if !cursor.curr().is_ascii_whitespace() {
         return None;
     }
 
