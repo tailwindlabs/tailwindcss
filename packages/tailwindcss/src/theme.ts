@@ -302,3 +302,8 @@ export class Theme {
 }
 
 export type ThemeKey = `--${string}`
+
+
+export function normalizeEscapedKey(key: string) {
+  return key.replace(/\\(.)/g, '$1')
+}
