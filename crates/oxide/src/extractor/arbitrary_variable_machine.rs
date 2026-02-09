@@ -80,13 +80,13 @@ impl Machine for ArbitraryVariableMachine<IdleState> {
 
     #[inline(always)]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
+        match cursor.curr().into() {
             // Arbitrary variables start with `(` followed by a CSS variable
             //
             // E.g.: `(--my-variable)`
             //        ^^
             //
-            Class::OpenParen => match cursor.next.into() {
+            Class::OpenParen => match cursor.next().into() {
                 Class::Dash => {
                     self.start_pos = cursor.pos;
                     cursor.advance();
@@ -117,7 +117,7 @@ impl Machine for ArbitraryVariableMachine<ParsingState> {
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.css_variable_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.into() {
+            MachineState::Done(_) => match cursor.next().into() {
                 // A CSS variable followed by a `,` means that there is a fallback
                 //
                 // E.g.: `(--my-color,red)`
@@ -134,7 +134,7 @@ impl Machine for ArbitraryVariableMachine<ParsingState> {
                 _ => {
                     cursor.advance();
 
-                    match cursor.curr.into() {
+                    match cursor.curr().into() {
                         // End of an arbitrary variable, must be followed by `)`
                         Class::CloseParen => self.done(self.start_pos, cursor),
 
@@ -156,7 +156,7 @@ impl Machine for ArbitraryVariableMachine<ParsingDataTypeState> {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
+            match cursor.curr().into() {
                 // Valid data type characters
                 //
                 // E.g.: `(length:--my-length)`
@@ -169,7 +169,7 @@ impl Machine for ArbitraryVariableMachine<ParsingDataTypeState> {
                 //
                 // E.g.: `(length:--my-length)`
                 //               ^
-                Class::Colon => match cursor.next.into() {
+                Class::Colon => match cursor.next().into() {
                     Class::Dash => {
                         cursor.advance();
                         return self.transition::<ParsingState>().next(cursor);
@@ -196,8 +196,8 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         let len = cursor.input.len();
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Escape => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Escape => match cursor.next().into() {
                     // An escaped whitespace character is not allowed
                     //
                     // E.g.: `(--my-\ color)`
@@ -212,7 +212,7 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
                 },
 
                 Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
-                    if !self.bracket_stack.push(cursor.curr) {
+                    if !self.bracket_stack.push(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -221,7 +221,7 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
                 Class::CloseParen | Class::CloseBracket | Class::CloseCurly
                     if !self.bracket_stack.is_empty() =>
                 {
-                    if !self.bracket_stack.pop(cursor.curr) {
+                    if !self.bracket_stack.pop(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -253,7 +253,7 @@ impl Machine for ArbitraryVariableMachine<ParsingFallbackState> {
                 Class::Whitespace => return self.restart(),
 
                 // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
-                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                Class::Dollar if matches!(cursor.next().into(), Class::OpenCurly) => {
                     return self.restart()
                 }
 
