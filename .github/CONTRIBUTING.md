@@ -76,7 +76,7 @@ To run the integration tests, use:
 pnpm build && pnpm test:integrations
 ```
 
-Additionally, some features require testing in browsers (i.e to ensure CSS variable resolution works as expected). These can be run via:
+Additionally, some features require testing in browsers (i.e., to ensure CSS variable resolution works as expected). These can be run via:
 
 ```sh
 pnpm build && pnpm test:ui
