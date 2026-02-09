@@ -1361,7 +1361,7 @@ test('resolves paths ending with a 1', async () => {
   `)
 })
 
-test('upgrades to a full JS compat theme lookup if a value can not be mapped to a CSS variable', async () => {
+test('upgrades to a full JS compat theme lookup if a value cannot be mapped to a CSS variable', async () => {
   expect(
     await compileCss(
       css`

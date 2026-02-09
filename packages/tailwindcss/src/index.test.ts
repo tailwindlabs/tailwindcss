@@ -3098,7 +3098,7 @@ describe('plugins', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`)
   })
 
-  test('@plugin can not have an empty path', () => {
+  test('@plugin cannot have an empty path', () => {
     return expect(
       compile(
         css`
