@@ -5,12 +5,16 @@ import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
+import { normalizeEscapedKey } from './utils/escape'
+
 
 const COLON = 0x3a
 const DASH = 0x2d
 const LOWER_A = 0x61
 const LOWER_Z = 0x7a
 const IS_VALID_NAMED_VALUE = /^[a-zA-Z0-9_.%-]+$/
+
+
 
 export type ArbitraryUtilityValue = {
   kind: 'arbitrary'
@@ -76,16 +80,13 @@ export type ArbitraryModifier = {
   value: string
 }
 
-export type NamedModifier = {
-  kind: 'named'
+let candidate = normalizeEscapedKey(match[1])
 
-  /**
-   * ```
-   * bg-red-500/50
-   *            ^^
-   * ```
-   */
-  value: string
+export type NamedModifier = {
+  candidate.value = {
+  kind: 'named',
+  value: normalizeEscapedKey(value),
+  fraction,
 }
 
 export type CandidateModifier = ArbitraryModifier | NamedModifier
