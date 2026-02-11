@@ -65,6 +65,9 @@
     "patchedDependencies": {
       "lightningcss@1.31.1": "patches/lightningcss@1.31.1.patch",
       "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch"
+    },
+    "overrides": {
+      "micromatch": "4.0.8"
     }
   }
 }
