@@ -19,6 +19,7 @@ import { DefaultMap } from './utils/default-map'
 import {
   inferDataType,
   isPositiveInteger,
+  isPositiveNumber,
   isStrictPositiveInteger,
   isValidOpacityValue,
   isValidSpacingMultiplier,
@@ -981,7 +982,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      if (!isPositiveNumber(lhs) || !isPositiveNumber(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],

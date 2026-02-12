@@ -3156,15 +3156,20 @@ test('aspect-ratio', async () => {
         }
         @tailwind utilities;
       `,
-      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3', 'aspect-8.5/11'],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
+    :root, :host {
       --aspect-video: 16 / 9;
     }
 
     .aspect-4\\/3 {
       aspect-ratio: 4 / 3;
+    }
+
+    .aspect-8\\.5\\/11 {
+      aspect-ratio: 8.5 / 11;
     }
 
     .aspect-\\[10\\/9\\] {
