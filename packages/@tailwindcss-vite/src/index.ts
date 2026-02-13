@@ -96,8 +96,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       },
 
       handleHotUpdate({ server, file }) {
-        // If the changed file is being watched by Tailwind but isn't part of the
-        // module graph (like a PHP or HTML file), we need to trigger a full
+        // If the changed file is being watched by Tailwind but isn't part of
+        // the module graph (like a PHP or HTML file), we need to trigger a full
         // reload manually.
         if (
           !server.moduleGraph.getModulesByFile(file) &&
@@ -108,7 +108,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             )
           })
         ) {
-          const payload = { type: 'full-reload' as const, path: '*' }
+          let payload = { type: 'full-reload' as const, path: '*' }
           if (server.hot) {
             server.hot.send(payload)
           } else {
