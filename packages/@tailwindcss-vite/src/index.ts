@@ -95,6 +95,25 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         servers.push(server)
       },
 
+      handleHotUpdate({ server, file }) {
+        // If the changed file is being watched by Tailwind but isn't part of the
+        // module graph (like a PHP or HTML file), we need to trigger a full
+        // reload manually.
+        if (
+          !server.moduleGraph.getModulesByFile(file) &&
+          Array.from(server.watcher.getWatched()).some(([dir, files]) => {
+            return file.startsWith(dir) && files.includes(path.basename(file))
+          })
+        ) {
+          const payload = { type: 'full-reload' as const, path: '*' }
+          if (server.hot) {
+            server.hot.send(payload)
+          } else {
+            server.ws.send(payload)
+          }
+        }
+      },
+
       async configResolved(_config) {
         config = _config
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
