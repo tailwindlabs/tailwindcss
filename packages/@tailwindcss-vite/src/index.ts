@@ -101,8 +101,11 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         // reload manually.
         if (
           !server.moduleGraph.getModulesByFile(file) &&
-          Array.from(server.watcher.getWatched()).some(([dir, files]) => {
-            return file.startsWith(dir) && files.includes(path.basename(file))
+          Object.entries(server.watcher.getWatched()).some(([dir, files]) => {
+            return (
+              (file === dir || file.startsWith(dir + path.sep)) &&
+              files.includes(path.basename(file))
+            )
           })
         ) {
           const payload = { type: 'full-reload' as const, path: '*' }
@@ -111,6 +114,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           } else {
             server.ws.send(payload)
           }
+          return []
         }
       },
 
