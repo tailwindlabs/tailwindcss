@@ -1145,6 +1145,29 @@ describe('theme to var', () => {
   })
 })
 
+describe('regressions', () => {
+  test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss'; /* regression */
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    let target = ['underline', 'h-4', 'w-4']
+
+    expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+    designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+    designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+    expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+  })
+})
+
 describe('options', () => {
   test('normalize `rem` units to `px`', { timeout }, async () => {
     let designSystem = await __unstable__loadDesignSystem(

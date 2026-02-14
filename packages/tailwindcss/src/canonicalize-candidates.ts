@@ -22,6 +22,7 @@ import type { Writable } from './types'
 import { DefaultMap } from './utils/default-map'
 import { dimensions } from './utils/dimensions'
 import { isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
+import './utils/map-get-or-insert'
 import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
 import { toKeyPath } from './utils/to-key-path'
@@ -93,14 +94,8 @@ interface DesignSystem extends BaseDesignSystem {
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
     [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | Symbol>>
-    [STATIC_UTILITIES_KEY]: DefaultMap<
-      SignatureOptions,
-      DefaultMap<string, DefaultMap<string, Set<string>>>
-    >
-    [UTILITY_PROPERTIES_KEY]: DefaultMap<
-      SignatureOptions,
-      DefaultMap<string, DefaultMap<string, Set<string>>>
-    >
+    [STATIC_UTILITIES_KEY]: Map<SignatureOptions, Map<string, Map<string, Set<string>>>>
+    [UTILITY_PROPERTIES_KEY]: Map<SignatureOptions, Map<string, Map<string, Set<string>>>>
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
     [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | Symbol>
     [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<string, string[]>
@@ -122,7 +117,7 @@ export function prepareDesignSystemStorage(
   designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem, options)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
-  designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
+  designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache()
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
   designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
@@ -246,28 +241,26 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
   function collapseGroup(candidates: string[]) {
     let signatureOptions = options.signatureOptions
-    let computeUtilitiesPropertiesLookup =
-      designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
-    let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
+    let staticUtilities = getStaticUtilitiesLookup(designSystem, signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
     // NOTE: Currently assuming we are dealing with static utilities only. This
     // will change the moment we have `@utility` for most built-ins.
     let candidatePropertiesValues = candidates.map((candidate) =>
-      computeUtilitiesPropertiesLookup.get(candidate),
+      getUtilityPropertiesLookup(designSystem, signatureOptions, candidate),
     )
 
     // Hard-coded optimization: if any candidate sets `line-height` and another
     // candidate sets `font-size`, we pre-compute the `text-*` utilities with
     // this line-height to try and collapse to those combined values.
-    if (candidatePropertiesValues.some((x) => x.has('line-height'))) {
+    if (candidatePropertiesValues.some((x) => (x.get('line-height')?.size ?? 0) > 0)) {
       let fontSizeNames = designSystem.theme.keysInNamespaces(['--text'])
       if (fontSizeNames.length > 0) {
         let interestingLineHeights = new Set<string | number>()
         let seenLineHeights = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
-          for (let lineHeight of pairs.get('line-height')) {
+          for (let lineHeight of pairs.get('line-height') ?? []) {
             if (seenLineHeights.has(lineHeight)) continue
             seenLineHeights.add(lineHeight)
 
@@ -277,13 +270,21 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
                 interestingLineHeights.add(bareValue)
 
                 for (let name of fontSizeNames) {
-                  computeUtilitiesPropertiesLookup.get(`text-${name}/${bareValue}`)
+                  getUtilityPropertiesLookup(
+                    designSystem,
+                    signatureOptions,
+                    `text-${name}/${bareValue}`,
+                  )
                 }
               } else {
                 interestingLineHeights.add(lineHeight)
 
                 for (let name of fontSizeNames) {
-                  computeUtilitiesPropertiesLookup.get(`text-${name}/[${lineHeight}]`)
+                  getUtilityPropertiesLookup(
+                    designSystem,
+                    signatureOptions,
+                    `text-${name}/[${lineHeight}]`,
+                  )
                 }
               }
             }
@@ -292,15 +293,23 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let seenFontSizes = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
-          for (let fontSize of pairs.get('font-size')) {
+          for (let fontSize of pairs.get('font-size') || []) {
             if (seenFontSizes.has(fontSize)) continue
             seenFontSizes.add(fontSize)
 
             for (let lineHeight of interestingLineHeights) {
               if (isValidSpacingMultiplier(lineHeight)) {
-                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/${lineHeight}`)
+                getUtilityPropertiesLookup(
+                  designSystem,
+                  signatureOptions,
+                  `text-[${fontSize}]/${lineHeight}`,
+                )
               } else {
-                computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/[${lineHeight}]`)
+                getUtilityPropertiesLookup(
+                  designSystem,
+                  signatureOptions,
+                  `text-[${fontSize}]/[${lineHeight}]`,
+                )
               }
             }
           }
@@ -317,7 +326,12 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       let result: Set<string> | null = null
       for (let property of propertyValues.keys()) {
         let otherUtilities = new Set<string>()
-        for (let group of staticUtilities.get(property).values()) {
+        let groupsByValue = staticUtilities.get(property)
+        if (!groupsByValue) {
+          return new Set<string>()
+        }
+
+        for (let group of groupsByValue.values()) {
           for (let candidate of group) {
             otherUtilities.add(candidate)
           }
@@ -2278,49 +2292,85 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
 // Index all static utilities by property and value
 const STATIC_UTILITIES_KEY = Symbol()
 function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTILITIES_KEY] {
-  return new DefaultMap((_optiones: SignatureOptions) => {
-    return new DefaultMap((_property: string) => {
-      return new DefaultMap((_value: string) => {
-        return new Set<string>()
-      })
-    })
-  })
+  return new Map()
 }
 
 const UTILITY_PROPERTIES_KEY = Symbol()
-function createUtilityPropertiesCache(
+function createUtilityPropertiesCache(): DesignSystem['storage'][typeof UTILITY_PROPERTIES_KEY] {
+  return new Map()
+}
+
+function getStaticUtilitiesLookup(
   designSystem: DesignSystem,
-): DesignSystem['storage'][typeof UTILITY_PROPERTIES_KEY] {
-  return new DefaultMap((options: SignatureOptions) => {
-    return new DefaultMap((className) => {
-      let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
+  options: SignatureOptions,
+): Map<string, Map<string, Set<string>>> {
+  let lookup = designSystem.storage[STATIC_UTILITIES_KEY].get(options)
+  if (lookup) return lookup
 
-      if (designSystem.theme.prefix && !className.startsWith(designSystem.theme.prefix)) {
-        className = `${designSystem.theme.prefix}:${className}`
+  return designSystem.storage[STATIC_UTILITIES_KEY].getOrInsert(options, new Map())
+}
+
+function getUtilityPropertiesCache(
+  designSystem: DesignSystem,
+  options: SignatureOptions,
+): Map<string, Map<string, Set<string>>> {
+  let cache = designSystem.storage[UTILITY_PROPERTIES_KEY].get(options)
+  if (cache) return cache
+
+  return designSystem.storage[UTILITY_PROPERTIES_KEY].getOrInsert(options, new Map())
+}
+
+function getUtilityPropertiesLookup(
+  designSystem: DesignSystem,
+  options: SignatureOptions,
+  className: string,
+): Map<string, Set<string>> {
+  let utilityPropertiesCache = getUtilityPropertiesCache(designSystem, options)
+  let localPropertyValueLookup = utilityPropertiesCache.get(className)
+  if (localPropertyValueLookup) return localPropertyValueLookup
+
+  localPropertyValueLookup = new Map<string, Set<string>>()
+  utilityPropertiesCache.set(className, localPropertyValueLookup)
+
+  let resolvedClassName = className
+  if (designSystem.theme.prefix && !resolvedClassName.startsWith(designSystem.theme.prefix)) {
+    resolvedClassName = `${designSystem.theme.prefix}:${resolvedClassName}`
+  }
+
+  let parsed = designSystem.parseCandidate(resolvedClassName)
+  if (parsed.length === 0) return localPropertyValueLookup
+
+  let staticUtilities = getStaticUtilitiesLookup(designSystem, options)
+
+  walk(
+    canonicalizeAst(
+      designSystem,
+      designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
+      options,
+    ),
+    (node) => {
+      if (node.kind !== 'declaration') return
+
+      let values = localPropertyValueLookup.get(node.property)
+      if (!values) {
+        values = localPropertyValueLookup.getOrInsert(node.property, new Set<string>())
       }
-      let parsed = designSystem.parseCandidate(className)
-      if (parsed.length === 0) return localPropertyValueLookup
+      values.add(node.value!)
 
-      walk(
-        canonicalizeAst(
-          designSystem,
-          designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
-          options,
-        ),
-        (node) => {
-          if (node.kind === 'declaration') {
-            localPropertyValueLookup.get(node.property).add(node.value!)
-            designSystem.storage[STATIC_UTILITIES_KEY].get(options)
-              .get(node.property)
-              .get(node.value!)
-              .add(className)
-          }
-        },
-      )
+      let utilitiesByValue = staticUtilities.get(node.property)
+      if (!utilitiesByValue) {
+        utilitiesByValue = staticUtilities.getOrInsert(node.property, new Map())
+      }
 
-      return localPropertyValueLookup
-    })
-  })
+      let utilities = utilitiesByValue.get(node.value!)
+      if (!utilities) {
+        utilities = utilitiesByValue.getOrInsert(node.value!, new Set<string>())
+      }
+      utilities.add(resolvedClassName)
+    },
+  )
+
+  return localPropertyValueLookup
 }
 
 // For all static utilities in the system, compute a lookup table that maps the
@@ -2356,7 +2406,7 @@ function createPreComputedUtilitiesCache(
       }
 
       lookup.get(signature).push(className)
-      designSystem.storage[UTILITY_PROPERTIES_KEY].get(options).get(className)
+      getUtilityPropertiesLookup(designSystem, options, className)
 
       for (let modifier of meta.modifiers) {
         // Modifiers representing numbers can be computed and don't need to be
@@ -2370,7 +2420,7 @@ function createPreComputedUtilitiesCache(
         let signature = signatures.get(classNameWithModifier)
         if (typeof signature !== 'string') continue
         lookup.get(signature).push(classNameWithModifier)
-        designSystem.storage[UTILITY_PROPERTIES_KEY].get(options).get(classNameWithModifier)
+        getUtilityPropertiesLookup(designSystem, options, classNameWithModifier)
       }
     }
 
