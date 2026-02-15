@@ -353,6 +353,11 @@ export function isStrictPositiveInteger(value: any) {
   return Number.isInteger(num) && num > 0 && String(num) === String(value)
 }
 
+export function isPositiveNumber(value: any) {
+  let num = Number(value)
+  return Number.isFinite(num) && num > 0 && String(num) === String(value)
+}
+
 export function isValidSpacingMultiplier(value: any) {
   return isMultipleOf(value, 0.25)
 }
