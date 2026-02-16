@@ -432,8 +432,6 @@ mod tests {
 
     #[test]
     fn test_invalid_utf8_does_not_panic() {
-        use crate::extractor::pre_processors::pre_processor::PreProcessor;
-
         // Invalid UTF-8 sequence: 0x80 is a continuation byte without a leading byte
         let invalid_utf8: &[u8] = &[0x80, 0x81, 0x82];
 
