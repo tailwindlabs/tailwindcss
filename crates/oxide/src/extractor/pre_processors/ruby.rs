@@ -34,44 +34,46 @@ impl PreProcessor for Ruby {
 
         // Extract embedded template languages
         // https://viewcomponent.org/guide/templates.html#interpolations
-        let content_as_str = std::str::from_utf8(content).unwrap();
+        // Only process if content is valid UTF-8, otherwise skip HEREDOC extraction
+        // but still perform the byte-level Ruby processing below
+        if let Ok(content_as_str) = std::str::from_utf8(content) {
+            let starts = TEMPLATE_START_REGEX
+                .captures_iter(content_as_str)
+                .collect::<Vec<_>>();
+            let ends = TEMPLATE_END_REGEX
+                .captures_iter(content_as_str)
+                .collect::<Vec<_>>();
 
-        let starts = TEMPLATE_START_REGEX
-            .captures_iter(content_as_str)
-            .collect::<Vec<_>>();
-        let ends = TEMPLATE_END_REGEX
-            .captures_iter(content_as_str)
-            .collect::<Vec<_>>();
+            for start in starts.iter() {
+                // The language for this block
+                let lang = start.get(1).unwrap().as_str();
 
-        for start in starts.iter() {
-            // The language for this block
-            let lang = start.get(1).unwrap().as_str();
+                // The HEREDOC delimiter
+                let delimiter_start = start.get(2).unwrap().as_str();
 
-            // The HEREDOC delimiter
-            let delimiter_start = start.get(2).unwrap().as_str();
+                // Where the "body" starts for the HEREDOC block
+                let body_start = start.get(0).unwrap().end();
 
-            // Where the "body" starts for the HEREDOC block
-            let body_start = start.get(0).unwrap().end();
+                // Look through all of the ends to find a matching language
+                for end in ends.iter() {
+                    // 1. This must appear after the start
+                    let body_end = end.get(0).unwrap().start();
+                    if body_end < body_start {
+                        continue;
+                    }
 
-            // Look through all of the ends to find a matching language
-            for end in ends.iter() {
-                // 1. This must appear after the start
-                let body_end = end.get(0).unwrap().start();
-                if body_end < body_start {
-                    continue;
+                    // The languages must match otherwise we haven't found the end
+                    let delimiter_end = end.get(1).unwrap().as_str();
+                    if delimiter_end != delimiter_start {
+                        continue;
+                    }
+
+                    let body = &content_as_str[body_start..body_end];
+                    let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
+
+                    result.replace_range(body_start..body_end, replaced);
+                    break;
                 }
-
-                // The languages must match otherwise we haven't found the end
-                let delimiter_end = end.get(1).unwrap().as_str();
-                if delimiter_end != delimiter_start {
-                    continue;
-                }
-
-                let body = &content_as_str[body_start..body_end];
-                let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
-
-                result.replace_range(body_start..body_end, replaced);
-                break;
             }
         }
 
@@ -426,5 +428,25 @@ mod tests {
             input,
             vec!["text-amber-600", "text-sky-500", "text-green-500"],
         );
+    }
+
+    #[test]
+    fn test_invalid_utf8_does_not_panic() {
+        // Invalid UTF-8 sequence: 0x80 is a continuation byte without a leading byte
+        let invalid_utf8: &[u8] = &[0x80, 0x81, 0x82];
+
+        let processor = Ruby::default();
+
+        // Should not panic, just return the input unchanged
+        let result = processor.process(invalid_utf8);
+        assert_eq!(result, invalid_utf8);
+    }
+
+    #[test]
+    fn test_valid_utf8_with_multibyte_chars() {
+        // Test that valid UTF-8 with multi-byte characters (like em-dashes) works
+        let input = "# Comment with em—dash\n%w[flex px-2.5]";
+
+        Ruby::test_extract_contains(input, vec!["flex", "px-2.5"]);
     }
 }
