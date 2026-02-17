@@ -161,7 +161,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         {
           // It's a little bit confusing, because due to the `addWatchFile`
           // calls, it _is_ part of the module graph but nothing is really
-          // handling those files. These modules typically haven an id of
+          // handling those files. These modules typically have an id of
           // undefined and/or have a type of 'asset'.
           //
           // If we call `addWatchFile` on a file that is part of the actual
