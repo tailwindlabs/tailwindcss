@@ -15,7 +15,7 @@ impl PreProcessor for Slim {
         let mut bracket_stack = BracketStack::default();
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
                 // ```diff
@@ -43,7 +43,7 @@ impl PreProcessor for Slim {
                     // digit.
                     // E.g.: `bg-red-500.2xl:flex`
                     //                 ^^^
-                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                    if cursor.prev().is_ascii_digit() && cursor.next().is_ascii_digit() {
                         let mut next_cursor = cursor.clone();
                         next_cursor.advance();
 
@@ -65,7 +65,7 @@ impl PreProcessor for Slim {
                 //   class=%w[bg-blue-500 w-10 h-10]
                 // ]
                 // ```
-                b'%' if matches!(cursor.next, b'w' | b'W')
+                b'%' if matches!(cursor.next(), b'w' | b'W')
                     && matches!(cursor.input.get(cursor.pos + 2), Some(b'[' | b'(' | b'{')) =>
                 {
                     result[cursor.pos] = b' '; // Replace `%`
@@ -73,7 +73,7 @@ impl PreProcessor for Slim {
                     result[cursor.pos] = b' '; // Replace `w`
                     cursor.advance();
                     result[cursor.pos] = b' '; // Replace `[` or `(` or `{`
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                     cursor.advance(); // Move past the bracket
                     continue;
                 }
@@ -96,10 +96,10 @@ impl PreProcessor for Slim {
                 // Instead of listing all boundary characters, let's list the characters we know
                 // will be invalid instead.
                 b'[' if bracket_stack.is_empty()
-                    && matches!(cursor.prev, b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9') =>
+                    && matches!(cursor.prev(), b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9') =>
                 {
                     result[cursor.pos] = b' ';
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 // In Slim the class name shorthand can be followed by a parenthesis. E.g.:
@@ -114,17 +114,17 @@ impl PreProcessor for Slim {
                 //
                 // However, we also need to make sure that we keep the parens that are part of the
                 // utility class. E.g.: `bg-(--my-color)`.
-                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-' | b'/') => {
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev(), b'-' | b'/') => {
                     result[cursor.pos] = b' ';
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b'(' | b'[' | b'{' => {
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b')' | b']' | b'}' if !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
+                    bracket_stack.pop(cursor.curr());
                 }
 
                 // Consume everything else

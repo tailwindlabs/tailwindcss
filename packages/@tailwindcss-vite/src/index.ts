@@ -9,6 +9,7 @@ import {
 } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
+import { realpathSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type {
@@ -185,6 +186,64 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           return result
         },
       },
+
+      hotUpdate({ file, modules, timestamp, server }) {
+        // Ensure full-reloads are triggered for files that are being watched by
+        // Tailwind but aren't part of the module graph (like PHP or HTML
+        // files). If we don't do this, then changes to those files won't
+        // trigger a reload at all since Vite doesn't know about them.
+        {
+          // It's a little bit confusing, because due to the `addWatchFile`
+          // calls, it _is_ part of the module graph but nothing is really
+          // handling those files. These modules typically have an id of
+          // undefined and/or have a type of 'asset'.
+          //
+          // If we call `addWatchFile` on a file that is part of the actual
+          // module graph, then we will see a module for it with a type of `js`
+          // and a type of `asset`. We are only interested if _all_ of them are
+          // missing an id and/or have a type of 'asset', which is a strong
+          // signal that the changed file is not being handled by Vite or any of
+          // the plugins.
+          //
+          // Note: in Vite v7.0.6 the modules here will have a type of `js`, not
+          // 'asset'. But it will also have a `HARD_INVALIDATED` state and will
+          // do a full page reload already.
+          let isExternalFile = modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
+          if (!isExternalFile) return
+
+          for (let env of new Set([this.environment.name, 'client'])) {
+            let roots = rootsByEnv.get(env)
+            if (roots.size === 0) continue
+
+            // If the file is not being watched by any of the roots, then we can
+            // skip the reload since it's not relevant to Tailwind CSS.
+            if (!isScannedFile(file, modules, roots)) {
+              continue
+            }
+
+            // https://vite.dev/changes/hotupdate-hook#migration-guide
+            let invalidatedModules = new Set<vite.EnvironmentModuleNode>()
+            for (let mod of modules) {
+              this.environment.moduleGraph.invalidateModule(
+                mod,
+                invalidatedModules,
+                timestamp,
+                true,
+              )
+            }
+
+            if (env === this.environment.name) {
+              this.environment.hot.send({ type: 'full-reload' })
+            } else if (server.hot.send) {
+              server.hot.send({ type: 'full-reload' })
+            } else if (server.ws.send) {
+              server.ws.send({ type: 'full-reload' })
+            }
+
+            return []
+          }
+        }
+      },
     },
 
     {
@@ -304,6 +363,10 @@ class Root {
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
     private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
   ) {}
+
+  get scannedFiles() {
+    return this.scanner?.files ?? []
+  }
 
   // Generate the CSS for the root file. This can return false if the file is
   // not considered a Tailwind root. When this happened, the root can be GCed.
@@ -485,4 +548,55 @@ class Root {
     }
     return false
   }
+}
+
+function isScannedFile(
+  file: string,
+  modules: vite.EnvironmentModuleNode[],
+  roots: Map<string, Root>,
+) {
+  let seen = new Set()
+  let q = [...modules]
+  let checks = {
+    file,
+    get realpath() {
+      try {
+        let realpath = realpathSync(file)
+        Object.defineProperty(checks, 'realpath', { value: realpath })
+        return realpath
+      } catch {
+        return null
+      }
+    },
+  }
+
+  while (q.length > 0) {
+    let module = q.shift()!
+    if (seen.has(module)) continue
+    seen.add(module)
+
+    if (module.id) {
+      let root = roots.get(module.id)
+
+      if (root) {
+        // If the file is part of the scanned files for this root, then we know
+        // for sure that it's being watched by any of the Tailwind CSS roots. It
+        // doesn't matter which root it is since it's only used to know whether
+        // we should trigger a full reload or not.
+        if (
+          root.scannedFiles.includes(checks.file) ||
+          (checks.realpath && root.scannedFiles.includes(checks.realpath))
+        ) {
+          return true
+        }
+      }
+    }
+
+    // Keep walking up the tree until we find a root.
+    for (let importer of module.importers) {
+      q.push(importer)
+    }
+  }
+
+  return false
 }
