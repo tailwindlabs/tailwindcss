@@ -526,9 +526,13 @@ function isScannedFile(
   let checks = {
     file,
     get realpath() {
-      let realpath = realpathSync(file)
-      Object.defineProperty(checks, 'realpath', { value: realpath })
-      return realpath
+      try {
+        let realpath = realpathSync(file)
+        Object.defineProperty(checks, 'realpath', { value: realpath })
+        return realpath
+      } catch {
+        return null
+      }
     },
   }
 
@@ -547,7 +551,7 @@ function isScannedFile(
         // we should trigger a full reload or not.
         if (
           root.scannedFiles.includes(checks.file) ||
-          root.scannedFiles.includes(checks.realpath)
+          (checks.realpath && root.scannedFiles.includes(checks.realpath))
         ) {
           return true
         }
