@@ -1,4 +1,4 @@
-import { candidate, fetchStyles, html, js, json, retryAssertion, test, ts } from '../utils'
+import { candidate, css, fetchStyles, html, js, json, retryAssertion, test, ts } from '../utils'
 
 test(
   'dev mode',
@@ -127,5 +127,75 @@ test(
     expect(files).toHaveLength(1)
 
     await fs.expectFileToContain(files[0][0], [candidate`underline`, candidate`overline`])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/19677
+test(
+  'import aliases should work in <style> blocks',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "astro": "^5",
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          }
+        }
+      `,
+      'astro.config.mjs': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'astro/config'
+
+        // https://astro.build/config
+        export default defineConfig({
+          vite: { plugins: [tailwindcss()] },
+        })
+      `,
+      'tsconfig.json': json`
+        {
+          "extends": "astro/tsconfigs/strict",
+          "include": [".astro/types.d.ts", "**/*"],
+          "exclude": ["dist"],
+          "compilerOptions": {
+            "paths": {
+              "@styles/*": ["./src/styles/*"]
+            }
+          }
+        }
+      `,
+      // prettier-ignore
+      'src/pages/index.astro': html`
+        ---
+        import '@styles/global.css'
+        ---
+
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width" />
+            <meta name="generator" content={Astro.generator} />
+            <title>Astro</title>
+            <style>
+              @reference "@styles/global.css";
+            </style>
+          </head>
+          <body>
+            <h1 class="underline">Astro</h1>
+          </body>
+        </html>
+      `,
+      'src/styles/global.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm astro build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+
+    await fs.expectFileToContain(files[0][0], [candidate`underline`])
   },
 )

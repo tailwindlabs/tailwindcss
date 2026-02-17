@@ -12,7 +12,13 @@ import { Scanner } from '@tailwindcss/oxide'
 import { realpathSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { Environment, Plugin, ResolvedConfig, ViteDevServer } from 'vite'
+import type {
+  Environment,
+  InternalResolveOptions,
+  Plugin,
+  ResolvedConfig,
+  ViteDevServer,
+} from 'vite'
 import * as vite from 'vite'
 
 const DEBUG = env.DEBUG
@@ -59,8 +65,36 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       customCssResolver = (id: string, base: string) => cssResolver(id, base, true, isSSR)
       customJsResolver = (id: string, base: string) => jsResolver(id, base, true, isSSR)
     } else {
+      type ResolveIdFn = (
+        environment: Environment,
+        id: string,
+        importer?: string,
+        aliasOnly?: boolean,
+      ) => Promise<string | undefined>
+
+      // There are cases where Environment API is available,
+      // but `createResolver` is still overriden (for example astro v5)
+      //
+      // Copied as-is from vite, because this function is not a part of public API
+      //
+      // TODO: Remove this function and pre-environment code when Vite < 7 is no longer supported
+      function createBackCompatIdResolver(
+        config: ResolvedConfig,
+        options?: Partial<InternalResolveOptions>,
+      ): ResolveIdFn {
+        const compatResolve = config.createResolver(options)
+        let resolve: ResolveIdFn
+        return async (environment, id, importer, aliasOnly) => {
+          if (environment.name === 'client' || environment.name === 'ssr') {
+            return compatResolve(id, importer, aliasOnly, environment.name === 'ssr')
+          }
+          resolve ??= vite.createIdResolver(config, options)
+          return resolve(environment, id, importer, aliasOnly)
+        }
+      }
+
       // Newer Vite versions
-      let cssResolver = vite.createIdResolver(env.config, {
+      let cssResolver = createBackCompatIdResolver(env.config, {
         ...env.config.resolve,
         extensions: ['.css'],
         mainFields: ['style'],
@@ -69,7 +103,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         preferRelative: true,
       })
 
-      let jsResolver = vite.createIdResolver(env.config, env.config.resolve)
+      let jsResolver = createBackCompatIdResolver(env.config, env.config.resolve)
 
       customCssResolver = (id: string, base: string) => cssResolver(env, id, base, true)
       customJsResolver = (id: string, base: string) => jsResolver(env, id, base, true)
