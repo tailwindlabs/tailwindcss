@@ -68,7 +68,8 @@ impl PreProcessor for Ruby {
                 }
 
                 let body = &content_as_str[body_start..body_end];
-                let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
+                let replaced =
+                    pre_process_input(body.as_bytes().to_vec(), &lang.to_ascii_lowercase());
 
                 result.replace_range(body_start..body_end, replaced);
                 break;
@@ -77,12 +78,12 @@ impl PreProcessor for Ruby {
 
         // Ruby extraction
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 b'"' => {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -102,7 +103,7 @@ impl PreProcessor for Ruby {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -123,12 +124,12 @@ impl PreProcessor for Ruby {
                 // Except for strict locals, these are defined in a `<%# locals: … %>`. Checking if
                 // the comment is preceded by a `%` should be enough without having to perform more
                 // parsing logic. Worst case we _do_ scan a few comments.
-                b'#' if !matches!(cursor.prev, b'%') => {
+                b'#' if !matches!(cursor.prev(), b'%') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // End of the comment
                             b'\n' => break,
 
@@ -148,7 +149,7 @@ impl PreProcessor for Ruby {
             }
 
             // Looking for `%w`, `%W`, or `%p`
-            if cursor.curr != b'%' || !matches!(cursor.next, b'w' | b'W' | b'p') {
+            if cursor.curr() != b'%' || !matches!(cursor.next(), b'w' | b'W' | b'p') {
                 cursor.advance();
                 continue;
             }
@@ -156,7 +157,7 @@ impl PreProcessor for Ruby {
             cursor.advance_twice();
 
             // Boundary character
-            let boundary = match cursor.curr {
+            let boundary = match cursor.curr() {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
@@ -177,11 +178,11 @@ impl PreProcessor for Ruby {
             cursor.advance();
 
             while cursor.pos < len {
-                match cursor.curr {
+                match cursor.curr() {
                     // Skip escaped characters
                     b'\\' => {
                         // Use backslash to embed spaces in the strings.
-                        if cursor.next == b' ' {
+                        if cursor.next() == b' ' {
                             result[cursor.pos] = b' ';
                         }
 
@@ -190,19 +191,19 @@ impl PreProcessor for Ruby {
 
                     // Start of a nested bracket
                     b'[' | b'(' | b'{' => {
-                        bracket_stack.push(cursor.curr);
+                        bracket_stack.push(cursor.curr());
                     }
 
                     // End of a nested bracket
                     b']' | b')' | b'}' if !bracket_stack.is_empty() => {
-                        if !bracket_stack.pop(cursor.curr) {
+                        if !bracket_stack.pop(cursor.curr()) {
                             // Unbalanced
                             cursor.advance();
                         }
                     }
 
                     // End of the pattern, replace the boundary character with a space
-                    _ if cursor.curr == boundary => {
+                    _ if cursor.curr() == boundary => {
                         if boundary != b'\n' {
                             result[cursor.pos] = b' ';
                         }

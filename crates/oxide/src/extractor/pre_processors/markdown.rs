@@ -13,7 +13,7 @@ impl PreProcessor for Markdown {
         let mut in_directive = false;
 
         while cursor.pos < len {
-            match (in_directive, cursor.curr) {
+            match (in_directive, cursor.curr()) {
                 (false, b'{') => {
                     result[cursor.pos] = b' ';
                     in_directive = true;

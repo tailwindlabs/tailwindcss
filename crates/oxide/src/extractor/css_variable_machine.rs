@@ -20,7 +20,7 @@ impl Machine for CssVariableMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // CSS Variables must start with `--`
-        if Class::Dash != cursor.curr.into() || Class::Dash != cursor.next.into() {
+        if Class::Dash != cursor.curr().into() || Class::Dash != cursor.next().into() {
             return MachineState::Idle;
         }
 
@@ -30,11 +30,11 @@ impl Machine for CssVariableMachine {
         cursor.advance_twice();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
+            match cursor.curr().into() {
                 // https://drafts.csswg.org/css-syntax-3/#ident-token-diagram
                 //
                 Class::AllowedCharacter | Class::Dash => {
-                    match cursor.next.into() {
+                    match cursor.next().into() {
                         // Valid character followed by a valid character or an escape character
                         //
                         // E.g.: `--my-variable`
@@ -58,7 +58,7 @@ impl Machine for CssVariableMachine {
                     }
                 }
 
-                Class::Escape => match cursor.next.into() {
+                Class::Escape => match cursor.next().into() {
                     // An escaped whitespace character is not allowed
                     //
                     // In CSS it is allowed, but in the context of a class it's not because then we
