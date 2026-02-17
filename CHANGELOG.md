@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix class extraction for Rails' strict locals ([#19525](https://github.com/tailwindlabs/tailwindcss/pull/19525))
 - Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
 - Fix infinite loop when using `@variant` inside `@custom-variant` ([#19633](https://github.com/tailwindlabs/tailwindcss/pull/19633))
+- `@tailwindcss/vite`: ensure changes to external files listed via `@source` trigger a full page reload ([#19670](https://github.com/tailwindlabs/tailwindcss/pull/19670))
 
 ### Deprecated
 
