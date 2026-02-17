@@ -231,9 +231,6 @@ async function parseCss(
         )
       }
 
-      // Remove escape characters - treat `push-1\/2` as `push-1/2`
-      node.params = unescape(node.params)
-
       let utility = createCssUtility(node)
       if (utility === null) {
         if (!node.params.endsWith('-*')) {
