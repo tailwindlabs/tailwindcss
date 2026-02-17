@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
 - Fix infinite loop when using `@variant` inside `@custom-variant` ([#19633](https://github.com/tailwindlabs/tailwindcss/pull/19633))
 - Allow multiples of `.25` in `aspect-*` fractions ([#19688](https://github.com/tailwindlabs/tailwindcss/pull/19688))
+- Ensure changes to external files listed via `@source` trigger a full page reload when using `@tailwindcss/vite` ([#19670](https://github.com/tailwindlabs/tailwindcss/pull/19670))
 
 ### Deprecated
 
