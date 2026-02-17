@@ -177,7 +177,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           let isExternalFile = modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
 
-          for (let env of [this.environment.name, 'client']) {
+          for (let env of new Set([this.environment.name, 'client'])) {
             let roots = rootsByEnv.get(env)
             if (roots.size === 0) continue
 
