@@ -1,4 +1,5 @@
 .git
+.jj
 .hg
 .svn
 node_modules
