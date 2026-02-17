@@ -513,7 +513,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
               })
             `,
             'project-a/index.html': html`
-            <html>
+              <html>
                 <head>
                   <link rel="stylesheet" href="./src/index.css" />
                 </head>
@@ -522,7 +522,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
                   <script type="module" src="./src/main.ts"></script>
                 </body>
               </html>
-          `,
+            `,
             'project-a/src/main.ts': jsx`import { classes } from './app'`,
             'project-a/src/app.ts': jsx`export let classes = "content-['project-a/src/app.ts']"`,
             'project-a/src/index.css': css`
