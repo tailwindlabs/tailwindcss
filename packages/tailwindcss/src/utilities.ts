@@ -16,6 +16,7 @@ import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import {
   inferDataType,
   isPositiveInteger,
@@ -5939,7 +5940,11 @@ export const BARE_VALUE_DATA_TYPES = [
 ]
 
 export function createCssUtility(node: AtRule) {
-  let name = node.params
+  // Unescape the utility name so that CSS escape sequences (e.g. `my\/utility`)
+  // are treated as their unescaped equivalents (e.g. `my/utility`). This
+  // allows linters that require proper CSS escaping (e.g. biome) to work
+  // correctly with @utility rules that contain special characters.
+  let name = unescape(node.params)
 
   // Functional utilities. E.g.: `tab-size-*`
   if (isValidFunctionalUtilityName(name)) {

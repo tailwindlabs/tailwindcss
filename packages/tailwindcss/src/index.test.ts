@@ -4787,6 +4787,59 @@ describe('@utility', () => {
       `[Error: \`@utility ui/button/sm\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
     )
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19607
+  test('@utility supports escaped utility names', async () => {
+    // Linters like biome require the `/` to be escaped as `\/` in CSS.
+    // Tailwind should accept the already-escaped form `my\/utility` and treat
+    // it as equivalent to the unescaped `my/utility`.
+    await expect(
+      compileCss(
+        css`
+          @utility my\/utility {
+            display: inline-flex;
+            background: blue;
+          }
+          @tailwind utilities;
+        `,
+        ['my/utility'],
+      ),
+    ).resolves.toMatchInlineSnapshot(
+      `
+      ".my\\/utility {
+        background: #00f;
+        display: inline-flex;
+      }"
+    `,
+    )
+  })
+
+  test('@utility with escaped name is equivalent to the unescaped form', async () => {
+    // `@utility my\/button` (escaped) should produce the same result as
+    // `@utility my/button` (unescaped).
+    let [escapedResult, unescapedResult] = await Promise.all([
+      compileCss(
+        css`
+          @utility my\/button {
+            display: inline-flex;
+          }
+          @tailwind utilities;
+        `,
+        ['my/button'],
+      ),
+      compileCss(
+        css`
+          @utility my/button {
+            display: inline-flex;
+          }
+          @tailwind utilities;
+        `,
+        ['my/button'],
+      ),
+    ])
+
+    expect(escapedResult).toEqual(unescapedResult)
+  })
 })
 
 test('addBase', async () => {
