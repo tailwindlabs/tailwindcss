@@ -1561,7 +1561,8 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+        --animate-very-long-animation-name: very-long-animation-name
+                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
       }
 
       .animate-very-long-animation-name {
@@ -4558,6 +4559,97 @@ describe('@custom-variant', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            @slot;
+          }
+
+          @custom-variant b {
+            @variant a {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex, .b\\:flex, .a\\:b\\:flex, .b\\:a\\:flex {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant (2)', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            .a {
+              @slot;
+            }
+          }
+
+          @custom-variant b {
+            .b {
+              @variant a {
+                .a-inside-b {
+                  @slot;
+                }
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex .a, .b\\:flex .b .a .a-inside-b, .a\\:b\\:flex .a .b .a .a-inside-b, .b\\:a\\:flex .b .a .a-inside-b .a {
+        display: flex;
+      }"
+    `)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618#issuecomment-3830775912
+  test('@custom-variant can use existing @slot @variants', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant hover {
+            &:hover {
+              @slot;
+            }
+
+            &[data-hover] {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus, .hocus\\:flex[data-hover]:focus {
+        display: flex;
+      }"
+    `)
+  })
+
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
       await compileCss(
@@ -5584,7 +5676,7 @@ describe('`color-mix(…)` polyfill', () => {
 
       @supports (color: color-mix(in lab, red, red)) {
         .text-red-500\\/50 {
-          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+          color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }"
     `)

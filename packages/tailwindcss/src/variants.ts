@@ -1196,7 +1196,7 @@ export function substituteAtSlot(ast: AstNode[], nodes: AstNode[]) {
   walk(ast, (node) => {
     // Replace `@slot` with rule nodes
     if (node.kind === 'at-rule' && node.name === '@slot') {
-      return WalkAction.Replace(nodes)
+      return WalkAction.ReplaceSkip(nodes)
     }
 
     // Wrap `@keyframes` and `@property` in `AtRoot` nodes
