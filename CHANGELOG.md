@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure changes to external files listed via `@source` trigger a full page reload when using `@tailwindcss/vite` ([#19670](https://github.com/tailwindlabs/tailwindcss/pull/19670))
 - Improve performance Oxide scanner in bigger projects ([#19632](https://github.com/tailwindlabs/tailwindcss/pull/19632))
 - Ensure import aliases in Astro v5 work without crashing ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
+- Allow escape characters in `@utility` names to improve support with formatters such as Biome ([#19626](https://github.com/tailwindlabs/tailwindcss/pull/19626))
 
 ### Deprecated
 

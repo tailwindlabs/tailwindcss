@@ -4729,6 +4729,31 @@ describe('@utility', () => {
     )
   })
 
+  test('@utility can handle escape sequences correctly', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-1\/2 {
+        right: 50%;
+      }
+
+      @utility push-50\% {
+        right: 50%;
+      }
+    `)
+    let compiled = build(['push-1/2', 'push-50%'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .push-1\\/2, .push-50\\% {
+          right: 50%;
+        }
+      }"
+    `)
+  })
+
   test('A functional @utility must end in -*', () => {
     return expect(
       compileCss(css`
