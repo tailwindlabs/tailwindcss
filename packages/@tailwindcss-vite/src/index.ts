@@ -523,6 +523,15 @@ function isScannedFile(
 ) {
   let seen = new Set()
   let q = [...modules]
+  let checks = {
+    file,
+    get realpath() {
+      let realpath = realpathSync(file)
+      Object.defineProperty(checks, 'realpath', { value: realpath })
+      return realpath
+    },
+  }
+
   while (q.length > 0) {
     let module = q.shift()!
     if (seen.has(module)) continue
@@ -536,7 +545,10 @@ function isScannedFile(
         // for sure that it's being watched by any of the Tailwind CSS roots. It
         // doesn't matter which root it is since it's only used to know whether
         // we should trigger a full reload or not.
-        if (root.scannedFiles.includes(file) || root.scannedFiles.includes(realpathSync(file))) {
+        if (
+          root.scannedFiles.includes(checks.file) ||
+          root.scannedFiles.includes(checks.realpath)
+        ) {
           return true
         }
       }
