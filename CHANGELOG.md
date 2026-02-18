@@ -26,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `block-*`, `min-block-*`, `max-block-*` utilities for `block-size`, `min-block-size`, and `max-block-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
 - Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities for `inset-inline-start`, `inset-inline-end`, `inset-block-start`, and `inset-block-end` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
 - Add `font-features-*` utility for `font-feature-settings` ([#19623](https://github.com/tailwindlabs/tailwindcss/pull/19615))
-- Add `.jj` to default ignored content directories ([#19687](https://github.com/tailwindlabs/tailwindcss/pull/19687))
 
 ### Fixed
 
@@ -43,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure import aliases in Astro v5 work without crashing when using `@tailwindcss/vite` ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
 - Allow escape characters in `@utility` names to improve support with formatters such as Biome ([#19626](https://github.com/tailwindlabs/tailwindcss/pull/19626))
 - Fix incorrect canonicalization results when canonicalizing multiple times ([#19675](https://github.com/tailwindlabs/tailwindcss/pull/19675))
+- Add `.jj` to default ignored content directories ([#19687](https://github.com/tailwindlabs/tailwindcss/pull/19687))
 
 ### Deprecated
 
