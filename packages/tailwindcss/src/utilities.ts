@@ -6659,22 +6659,16 @@ export function isValidFunctionalUtilityName(name: string): boolean {
   let root = match[0]
   let value = name.slice(root.length)
 
-  // Root should not end in `-` if there is no value
-  //
-  // `tab-size--*`
-  //  ---------     Root
-  //           --   Suffix
-  //
-  // Because with default values, this could match `tab-size-` which is invalid.
-  if (value.length === 0 && root.endsWith('-')) {
-    return false
-  }
-
   // No remaining value is valid
   //
   // `tab-size-*`
   //  --------    Root
   //          --  Suffix
+  //
+  // A root ending in `-` is also valid for functional utilities like
+  // `border--*` where the double dash separates the property from its
+  // value scale. The candidate parser already handles the edge case of
+  // a bare `border-` class (empty value) by rejecting it in `findRoots`.
   if (value.length === 0) {
     return true
   }
