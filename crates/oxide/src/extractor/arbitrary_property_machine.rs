@@ -74,7 +74,7 @@ impl Machine for ArbitraryPropertyMachine<IdleState> {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
+        match cursor.curr().into() {
             // Start of an arbitrary property
             Class::OpenBracket => {
                 self.start_pos = cursor.pos;
@@ -97,8 +97,8 @@ impl Machine for ArbitraryPropertyMachine<ParsingPropertyState> {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Dash => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Dash => match cursor.next().into() {
                     // Start of a CSS variable
                     //
                     // E.g.: `[--my-color:red]`
@@ -137,7 +137,7 @@ impl ArbitraryPropertyMachine<ParsingPropertyState> {
     fn parse_property_variable(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.css_variable_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.into() {
+            MachineState::Done(_) => match cursor.next().into() {
                 // End of the CSS variable, must be followed by a `:`
                 //
                 // E.g.: `[--my-color:red]`
@@ -165,8 +165,8 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
         let len = cursor.input.len();
         let start_of_value_pos = cursor.pos;
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Escape => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Escape => match cursor.next().into() {
                     // An escaped whitespace character is not allowed
                     //
                     // E.g.: `[color:var(--my-\ color)]`
@@ -181,7 +181,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 },
 
                 Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
-                    if !self.bracket_stack.push(cursor.curr) {
+                    if !self.bracket_stack.push(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -190,7 +190,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 Class::CloseParen | Class::CloseBracket | Class::CloseCurly
                     if !self.bracket_stack.is_empty() =>
                 {
-                    if !self.bracket_stack.pop(cursor.curr) {
+                    if !self.bracket_stack.pop(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -227,7 +227,7 @@ impl Machine for ArbitraryPropertyMachine<ParsingValueState> {
                 Class::Slash if start_of_value_pos == cursor.pos => return self.restart(),
 
                 // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
-                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                Class::Dollar if matches!(cursor.next().into(), Class::OpenCurly) => {
                     return self.restart()
                 }
 

@@ -1,5 +1,6 @@
 pub mod auto_source_detection;
 pub mod detect_sources;
+pub mod init_tracing;
 pub mod sources;
 
 use crate::extractor::{Extracted, Extractor};
@@ -14,15 +15,13 @@ use bstr::ByteSlice;
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
+use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
-use std::fs::OpenOptions;
-use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::sync::{self, Arc, Mutex};
+use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
 use tracing::event;
-use tracing_subscriber::fmt::writer::BoxMakeWriter;
 
 // @source "some/folder";               // This is auto source detection
 // @source "some/folder/**/*";          // This is auto source detection
@@ -34,70 +33,6 @@ use tracing_subscriber::fmt::writer::BoxMakeWriter;
 //
 // @source "do-include-me.bin";         // `.bin` is typically ignored, but now it's explicit so should be included
 // @source "git-ignored.html";          // A git ignored file that is listed explicitly, should be scanned
-static SHOULD_TRACE: sync::LazyLock<bool> = sync::LazyLock::new(
-    || matches!(std::env::var("DEBUG"), Ok(value) if value.eq("*") || (value.contains("tailwindcss:oxide") && !value.contains("-tailwindcss:oxide"))),
-);
-
-fn dim(input: &str) -> String {
-    format!("\u{001b}[2m{input}\u{001b}[22m")
-}
-
-fn blue(input: &str) -> String {
-    format!("\u{001b}[34m{input}\u{001b}[39m")
-}
-
-fn highlight(input: &str) -> String {
-    format!("{}{}{}", dim(&blue("`")), blue(input), dim(&blue("`")))
-}
-
-fn init_tracing() {
-    if !*SHOULD_TRACE {
-        return;
-    }
-
-    let file_path = format!("tailwindcss-{}.log", std::process::id());
-    let file = OpenOptions::new()
-        .create(true)
-        .append(true)
-        .open(&file_path)
-        .unwrap_or_else(|_| panic!("Failed to open {file_path}"));
-
-    let file_path = Path::new(&file_path);
-    let absolute_file_path = dunce::canonicalize(file_path)
-        .unwrap_or_else(|_| panic!("Failed to canonicalize {file_path:?}"));
-    eprintln!(
-        "{} Writing debug info to: {}\n",
-        dim("[DEBUG]"),
-        highlight(absolute_file_path.as_path().to_str().unwrap())
-    );
-
-    let file = Arc::new(Mutex::new(file));
-
-    let writer: BoxMakeWriter = BoxMakeWriter::new({
-        let file = file.clone();
-        move || Box::new(MutexWriter(file.clone())) as Box<dyn Write + Send>
-    });
-
-    _ = tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
-        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::ACTIVE)
-        .with_writer(writer)
-        .with_ansi(false)
-        .compact()
-        .try_init();
-}
-
-struct MutexWriter(Arc<Mutex<std::fs::File>>);
-
-impl Write for MutexWriter {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        self.0.lock().unwrap().write(buf)
-    }
-
-    fn flush(&mut self) -> io::Result<()> {
-        self.0.lock().unwrap().flush()
-    }
-}
 
 #[derive(Debug, Clone)]
 pub enum ChangedContent {
@@ -129,26 +64,32 @@ pub struct Scanner {
     /// The walker to detect all files that we have to scan
     walker: Option<WalkBuilder>,
 
-    /// All changed content that we have to parse
-    changed_content: Vec<ChangedContent>,
-
     /// All found extensions
     extensions: FxHashSet<String>,
 
-    /// All CSS files we want to scan for CSS variable usage
-    css_files: Vec<PathBuf>,
-
     /// All files that we have to scan
-    files: Vec<PathBuf>,
+    files: FxHashSet<PathBuf>,
 
     /// All directories, sub-directories, etc… we saw during source detection
-    dirs: Vec<PathBuf>,
+    dirs: FxHashSet<PathBuf>,
 
     /// All generated globs, used for setting up watchers
     globs: Option<Vec<GlobEntry>>,
 
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
+
+    /// Track mtimes for files so re-scans can skip unchanged files.
+    /// Only populated after the first scan completes (to avoid unnecessary
+    /// metadata calls on initial build).
+    mtimes: FxHashMap<PathBuf, SystemTime>,
+
+    /// Whether we've completed at least one full scan. When false, we skip
+    /// mtime tracking entirely so the initial build stays fast.
+    has_scanned_once: bool,
+
+    /// Whether sources have been scanned since the last `scan()` call
+    sources_scanned: bool,
 }
 
 impl Scanner {
@@ -163,7 +104,6 @@ impl Scanner {
         }
 
         let sources = Sources::new(public_source_entries_to_private_source_entries(sources));
-
         if *SHOULD_TRACE {
             event!(tracing::Level::INFO, "Optimized sources:");
             for source in sources.iter() {
@@ -171,29 +111,26 @@ impl Scanner {
             }
         }
 
+        let walker = create_walker(&sources);
+
         Self {
-            sources: sources.clone(),
-            walker: create_walker(sources),
+            sources,
+            walker,
             ..Default::default()
         }
     }
 
     pub fn scan(&mut self) -> Vec<String> {
-        self.scan_sources();
+        self.sources_scanned = false;
 
-        // TODO: performance improvement, bail early if we don't have any changed content
-        // if self.changed_content.is_empty() {
-        //     return vec![];
-        // }
+        let (scanned_blobs, css_files) = self.discover_sources();
 
-        let _new_candidates = self.extract_candidates();
+        self.extract_candidates(scanned_blobs, css_files);
 
-        // Make sure we have a sorted list of candidates
-        let mut candidates = self.candidates.iter().cloned().collect::<Vec<_>>();
-        candidates.par_sort_unstable();
-
-        // Return all candidates instead of only the new ones
-        candidates
+        // Return all candidates sorted
+        let mut result = self.candidates.iter().cloned().collect::<Vec<_>>();
+        result.par_sort_unstable();
+        result
     }
 
     #[tracing::instrument(skip_all)]
@@ -208,7 +145,7 @@ impl Scanner {
 
         // Raw content can be parsed directly, no need to verify if the file exists and is allowed
         // to be scanned.
-        self.changed_content.extend(changed_contents);
+        let mut content_to_scan: Vec<ChangedContent> = changed_contents;
 
         // Fully resolve all files
         let changed_files = changed_files
@@ -232,7 +169,7 @@ impl Scanner {
             });
 
         // All known files are allowed to be scanned
-        self.changed_content.extend(known_files);
+        content_to_scan.extend(known_files);
 
         // Figure out if the new unknown files are allowed to be scanned
         if !new_unknown_files.is_empty() {
@@ -252,8 +189,8 @@ impl Scanner {
                         // When the file is found on disk it means that all the rules pass. We can
                         // extract the current file and remove it from the list of passed in files.
                         if file == path {
-                            self.files.push(path.to_path_buf()); // Track for future use
-                            self.changed_content.push(changed_file.clone()); // Track for parsing
+                            self.files.insert(path.to_path_buf()); // Track for future use
+                            content_to_scan.push(changed_file.clone()); // Track for parsing
                             drop_file_indexes.push(idx);
                         }
                     }
@@ -274,18 +211,17 @@ impl Scanner {
             }
         }
 
-        self.extract_candidates()
+        // Read all content into blobs for extraction
+        let blobs = read_all_files(content_to_scan);
+        self.extract_candidates(blobs, vec![])
     }
 
     #[tracing::instrument(skip_all)]
-    fn extract_candidates(&mut self) -> Vec<String> {
-        let changed_content = self.changed_content.drain(..).collect::<Vec<_>>();
-
-        // Extract all candidates from the changed content
-        let mut new_candidates = parse_all_blobs(read_all_files(changed_content));
+    fn extract_candidates(&mut self, blobs: Vec<Vec<u8>>, css_files: Vec<PathBuf>) -> Vec<String> {
+        // Extract all candidates from the pre-read blobs
+        let mut new_candidates = parse_all_blobs(blobs);
 
         // Extract all CSS variables from the CSS files
-        let css_files = self.css_files.drain(..).collect::<Vec<_>>();
         if !css_files.is_empty() {
             let css_variables = extract_css_variables(read_all_files(
                 css_files
@@ -297,63 +233,23 @@ impl Scanner {
             new_candidates.extend(css_variables);
         }
 
-        // Only compute the new candidates and ignore the ones we already have. This is for
-        // subsequent calls to prevent serializing the entire set of candidates every time.
-        let mut new_candidates = new_candidates
-            .into_par_iter()
-            .filter(|candidate| !self.candidates.contains(candidate))
-            .collect::<Vec<_>>();
-
-        new_candidates.par_sort_unstable();
+        // Only keep candidates we haven't seen before
+        for existing in self.candidates.iter() {
+            new_candidates.remove(existing);
+        }
 
         // Track new candidates for subsequent calls
-        self.candidates.par_extend(new_candidates.clone());
+        self.candidates.extend(new_candidates.iter().cloned());
 
-        new_candidates
-    }
+        let mut result: Vec<String> = new_candidates.into_iter().collect();
+        result.par_sort_unstable();
 
-    #[tracing::instrument(skip_all)]
-    fn scan_sources(&mut self) {
-        let Some(walker) = &mut self.walker else {
-            return;
-        };
-
-        for entry in walker.build().filter_map(Result::ok) {
-            let path = entry.into_path();
-            let Ok(metadata) = path.metadata() else {
-                continue;
-            };
-            if metadata.is_dir() {
-                self.dirs.push(path);
-            } else if metadata.is_file() {
-                let extension = path
-                    .extension()
-                    .and_then(|x| x.to_str())
-                    .unwrap_or_default(); // In case the file has no extension
-
-                match extension {
-                    // Special handing for CSS files, we don't want to extract candidates from
-                    // these files, but we do want to extract used CSS variables.
-                    "css" => {
-                        self.css_files.push(path.clone());
-                    }
-                    _ => {
-                        self.changed_content.push(ChangedContent::File(
-                            path.to_path_buf(),
-                            extension.to_owned(),
-                        ));
-                    }
-                }
-
-                self.extensions.insert(extension.to_owned());
-                self.files.push(path);
-            }
-        }
+        result
     }
 
     #[tracing::instrument(skip_all)]
     pub fn get_files(&mut self) -> Vec<String> {
-        self.scan_sources();
+        let _ = self.discover_sources();
 
         self.files
             .par_iter()
@@ -367,7 +263,7 @@ impl Scanner {
             return globs.clone();
         }
 
-        self.scan_sources();
+        let _ = self.discover_sources();
 
         let mut globs = vec![];
         for source in self.sources.iter() {
@@ -456,6 +352,99 @@ impl Scanner {
             })
             .collect()
     }
+
+    #[tracing::instrument(skip_all)]
+    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>) {
+        if self.sources_scanned {
+            return (vec![], vec![]);
+        }
+        self.sources_scanned = true;
+
+        let Some(walker) = &mut self.walker else {
+            return (vec![], vec![]);
+        };
+
+        // Use synchronous walk for the initial build (lower overhead) and parallel
+        // walk for subsequent calls (watch mode) where the overhead is amortised.
+        let all_entries = if self.has_scanned_once {
+            walk_parallel(walker)
+        } else {
+            walk_synchronous(walker)
+        };
+
+        let mut css_files: Vec<PathBuf> = vec![];
+        let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
+        let mut seen_files: FxHashSet<PathBuf> = FxHashSet::default();
+
+        for (path, is_dir, extension) in all_entries {
+            if is_dir {
+                self.dirs.insert(path);
+            } else {
+                // Deduplicate: parallel walk can visit the same file from multiple threads
+                if !seen_files.insert(path.clone()) {
+                    continue;
+                }
+
+                // On re-scans, check mtime to skip unchanged files.
+                // On the first scan we skip this entirely to avoid extra
+                // metadata syscalls.
+                let changed = if self.has_scanned_once {
+                    let current_mtime = std::fs::metadata(&path)
+                        .ok()
+                        .and_then(|m| m.modified().ok());
+
+                    match current_mtime {
+                        Some(mtime) => {
+                            let prev = self.mtimes.insert(path.clone(), mtime);
+                            prev.is_none_or(|prev| prev != mtime)
+                        }
+                        None => true,
+                    }
+                } else {
+                    true
+                };
+
+                match extension.as_str() {
+                    // Special handing for CSS files, we don't want to extract candidates from
+                    // these files, but we do want to extract used CSS variables.
+                    "css" => {
+                        if changed {
+                            css_files.push(path.clone());
+                        }
+                    }
+                    _ => {
+                        if changed {
+                            content_paths.push((path.clone(), extension.clone()));
+                        }
+                    }
+                }
+
+                self.extensions.insert(extension);
+                self.files.insert(path);
+            }
+        }
+
+        // Read + preprocess all discovered files in parallel
+        let scanned_blobs: Vec<Vec<u8>> = content_paths
+            .into_par_iter()
+            .filter_map(|(path, ext)| {
+                let content = std::fs::read(&path).ok()?;
+                event!(tracing::Level::INFO, "Reading {:?}", path);
+                let processed = pre_process_input(content, &ext);
+                if processed.is_empty() {
+                    None
+                } else {
+                    Some(processed)
+                }
+            })
+            .collect();
+
+        if !self.has_scanned_once {
+            self.has_scanned_once = true;
+        }
+
+        (scanned_blobs, css_files)
+    }
 }
 
 fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
@@ -474,26 +463,26 @@ fn read_changed_content(c: ChangedContent) -> Option<Vec<u8>> {
         ChangedContent::Content(contents, extension) => (contents.into_bytes(), extension),
     };
 
-    Some(pre_process_input(&content, &extension))
+    Some(pre_process_input(content, &extension))
 }
 
-pub fn pre_process_input(content: &[u8], extension: &str) -> Vec<u8> {
+pub fn pre_process_input(content: Vec<u8>, extension: &str) -> Vec<u8> {
     use crate::extractor::pre_processors::*;
 
     match extension {
-        "clj" | "cljs" | "cljc" => Clojure.process(content),
-        "heex" | "eex" | "ex" | "exs" => Elixir.process(content),
-        "cshtml" | "razor" => Razor.process(content),
-        "haml" => Haml.process(content),
-        "json" => Json.process(content),
-        "md" | "mdx" => Markdown.process(content),
-        "pug" => Pug.process(content),
-        "rb" | "erb" => Ruby.process(content),
-        "slim" | "slang" => Slim.process(content),
-        "svelte" => Svelte.process(content),
-        "rs" => Rust.process(content),
-        "vue" => Vue.process(content),
-        _ => content.to_vec(),
+        "clj" | "cljs" | "cljc" => Clojure.process(&content),
+        "heex" | "eex" | "ex" | "exs" => Elixir.process(&content),
+        "cshtml" | "razor" => Razor.process(&content),
+        "haml" => Haml.process(&content),
+        "json" => Json.process(&content),
+        "md" | "mdx" => Markdown.process(&content),
+        "pug" => Pug.process(&content),
+        "rb" | "erb" => Ruby.process(&content),
+        "slim" | "slang" => Slim.process(&content),
+        "svelte" => Svelte.process(&content),
+        "rs" => Rust.process(&content),
+        "vue" => Vue.process(&content),
+        _ => content,
     }
 }
 
@@ -512,23 +501,23 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
 }
 
 #[tracing::instrument(skip_all)]
-fn extract_css_variables(blobs: Vec<Vec<u8>>) -> Vec<String> {
+fn extract_css_variables(blobs: Vec<Vec<u8>>) -> FxHashSet<String> {
     extract(blobs, |mut extractor| {
         extractor.extract_variables_from_css()
     })
 }
 
 #[tracing::instrument(skip_all)]
-fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> Vec<String> {
+fn parse_all_blobs(blobs: Vec<Vec<u8>>) -> FxHashSet<String> {
     extract(blobs, |mut extractor| extractor.extract())
 }
 
 #[tracing::instrument(skip_all)]
-fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> Vec<String>
+fn extract<H>(blobs: Vec<Vec<u8>>, handle: H) -> FxHashSet<String>
 where
     H: Fn(Extractor) -> Vec<Extracted> + std::marker::Sync,
 {
-    let mut result: Vec<_> = blobs
+    blobs
         .par_iter()
         .flat_map(|blob| blob.par_split(|x| *x == b'\n'))
         .filter_map(|blob| {
@@ -554,22 +543,97 @@ where
         })
         .into_iter()
         .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
-        .collect();
-
-    // SAFETY: Unstable sort is faster and in this scenario it's also safe because we are
-    //         guaranteed to have unique candidates.
-    result.par_sort_unstable();
-
-    result
+        .collect()
 }
 
-/// Create a walker for the given sources to detect all the files that we have to scan.
+type WalkEntry = (PathBuf, bool, String);
+
+/// Walk the file system synchronously. Used for the initial build where the overhead of spawning
+/// parallel walker threads is not worth it.
+#[tracing::instrument(skip_all)]
+fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
+    let mut entries = Vec::new();
+
+    for entry in walker.build().filter_map(Result::ok) {
+        let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+        let path = entry.into_path();
+
+        if is_dir {
+            entries.push((path, true, String::new()));
+        } else {
+            let ext = path
+                .extension()
+                .and_then(|x| x.to_str())
+                .unwrap_or_default()
+                .to_owned();
+            entries.push((path, false, ext));
+        }
+    }
+
+    entries
+}
+
+/// Walk the file system in parallel. Used in watch mode where the parallel walker overhead is
+/// amortised across many rebuilds and subsequent calls are much faster.
+#[tracing::instrument(skip_all)]
+fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
+    struct FlushOnDrop {
+        local: Vec<WalkEntry>,
+        shared: Arc<Mutex<Vec<WalkEntry>>>,
+    }
+
+    impl Drop for FlushOnDrop {
+        fn drop(&mut self) {
+            if !self.local.is_empty() {
+                self.shared.lock().unwrap().append(&mut self.local);
+            }
+        }
+    }
+
+    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
+
+    walker.build_parallel().run(|| {
+        let mut buf = FlushOnDrop {
+            local: Vec::with_capacity(256),
+            shared: collected.clone(),
+        };
+
+        Box::new(move |entry| {
+            let Ok(entry) = entry else {
+                return ignore::WalkState::Continue;
+            };
+
+            let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+            let path = entry.into_path();
+
+            if is_dir {
+                buf.local.push((path, true, String::new()));
+            } else {
+                let ext = path
+                    .extension()
+                    .and_then(|x| x.to_str())
+                    .unwrap_or_default()
+                    .to_owned();
+                buf.local.push((path, false, ext));
+            }
+
+            if buf.local.len() >= 256 {
+                buf.shared.lock().unwrap().append(&mut buf.local);
+            }
+
+            ignore::WalkState::Continue
+        })
+    });
+
+    // All threads have finished and flushed their buffers via FlushOnDrop::drop
+    Arc::try_unwrap(collected).unwrap().into_inner().unwrap()
+}
+
+/// Sets up a WalkBuilder with all source roots, gitignore rules, and source pattern matching.
 ///
-/// The `mtimes` map is used to keep track of the last modified time of each file. This is used to
-/// determine if a file or folder has changed since the last scan and we can skip folders that
-/// haven't changed.
-fn create_walker(sources: Sources) -> Option<WalkBuilder> {
-    let mtimes: Arc<Mutex<FxHashMap<PathBuf, SystemTime>>> = Default::default();
+/// This is the common setup shared between the full walker (with mtime tracking for re-scans)
+/// and the parallel walker (without mtime tracking for the initial scan).
+fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
     let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
@@ -717,75 +781,68 @@ fn create_walker(sources: Sources) -> Option<WalkBuilder> {
         builder.add_gitignore(ignore);
     }
 
-    builder.filter_entry({
-        move |entry| {
-            let path = entry.path();
+    // Pre-compute source matching data to avoid allocations in the hot filter_entry path
+    let auto_bases: Vec<PathBuf> = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base.clone()),
+            _ => None,
+        })
+        .collect();
 
-            // Ensure the entries are matching any of the provided source patterns (this is
-            // necessary for manual-patterns that can filter the file extension)
-            if path.is_file() {
-                let mut matches = false;
-                for source in sources.iter() {
-                    match source {
-                        SourceEntry::Auto { base } | SourceEntry::External { base } => {
-                            if path.starts_with(base) {
-                                matches = true;
-                                break;
-                            }
-                        }
-                        SourceEntry::Pattern { base, pattern } => {
-                            let mut pattern = pattern.to_string();
-                            // Ensure that the pattern is pinned to the base path.
-                            if !pattern.starts_with("/") {
-                                pattern = format!("/{pattern}");
-                            }
+    let pattern_sources: Vec<(PathBuf, String)> = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Pattern { base, pattern } => {
+                let normalized = if pattern.starts_with("/") {
+                    pattern.to_string()
+                } else {
+                    format!("/{pattern}")
+                };
+                Some((base.clone(), normalized))
+            }
+            _ => None,
+        })
+        .collect();
 
-                            // Check if path starts with base, if so, remove the prefix and check the remainder against the pattern
-                            let remainder = path.strip_prefix(base);
-                            if remainder.is_ok_and(|remainder| {
-                                let mut path_str = remainder.to_string_lossy().to_string();
-                                if !path_str.starts_with("/") {
-                                    path_str = format!("/{path_str}");
-                                }
-                                glob_match(pattern, path_str.as_bytes())
-                            }) {
-                                matches = true;
-                                break;
-                            }
-                        }
-                        _ => {}
-                    }
-                }
+    // Source pattern matching filter (lock-free, safe for parallel walking)
+    builder.filter_entry(move |entry| {
+        let path = entry.path();
 
-                if !matches {
-                    return false;
+        // Ensure the entries are matching any of the provided source patterns (this is
+        // necessary for manual-patterns that can filter the file extension)
+        if path.is_file() {
+            let mut matches = false;
+
+            for base in &auto_bases {
+                if path.starts_with(base) {
+                    matches = true;
+                    break;
                 }
             }
 
-            let mut mtimes = mtimes.lock().unwrap();
-            let current_time = match entry.metadata() {
-                Ok(metadata) if metadata.is_file() => {
-                    if let Ok(time) = metadata.modified() {
-                        Some(time)
-                    } else {
-                        None
+            if !matches {
+                for (base, pattern) in &pattern_sources {
+                    let remainder = path.strip_prefix(base);
+                    if remainder.is_ok_and(|remainder| {
+                        let mut path_str = remainder.to_string_lossy().to_string();
+                        if !path_str.starts_with("/") {
+                            path_str = format!("/{path_str}");
+                        }
+                        glob_match(pattern, path_str.as_bytes())
+                    }) {
+                        matches = true;
+                        break;
                     }
                 }
-                _ => None,
-            };
+            }
 
-            let previous_time =
-                current_time.and_then(|time| mtimes.insert(entry.clone().into_path(), time));
-
-            match (current_time, previous_time) {
-                (Some(current), Some(prev)) if prev == current => false,
-                _ => {
-                    event!(tracing::Level::INFO, "Discovering {:?}", path);
-
-                    true
-                }
+            if !matches {
+                return false;
             }
         }
+
+        true
     });
 
     Some(builder)

@@ -7,6 +7,7 @@ import {
   html,
   js,
   json,
+  jsx,
   retryAssertion,
   test,
   ts,
@@ -469,6 +470,117 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
         expect(styles).toContain(candidate`[.changed_&]:content-['project-b/src/index.js']`)
         expect(styles).toContain(candidate`red`)
       })
+    },
+  )
+
+  describe.sequential.each([['^6'], ['7.0.8'], ['7.1.12'], ['7.3.1']])(
+    'Using Vite %s',
+    (version) => {
+      test(
+        'external source file changes trigger a full reload',
+        {
+          fs: {
+            'package.json': json`{}`,
+            'pnpm-workspace.yaml': yaml`
+              #
+              packages:
+                - project-a
+            `,
+            'project-a/package.json': json`
+            {
+              "type": "module",
+              "dependencies": {
+                "@tailwindcss/vite": "workspace:^",
+                "tailwindcss": "workspace:^"
+              },
+              "devDependencies": {
+                ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+                "vite": "${version}"
+              }
+            }
+          `,
+            'project-a/vite.config.ts': ts`
+              import fs from 'node:fs'
+              import path from 'node:path'
+              import tailwindcss from '@tailwindcss/vite'
+              import { defineConfig } from 'vite'
+
+              export default defineConfig({
+                css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+                build: { cssMinify: false },
+                plugins: [tailwindcss()],
+                logLevel: 'info',
+              })
+            `,
+            'project-a/index.html': html`
+              <html>
+                <head>
+                  <link rel="stylesheet" href="./src/index.css" />
+                </head>
+                <body>
+                  <div id="app"></div>
+                  <script type="module" src="./src/main.ts"></script>
+                </body>
+              </html>
+            `,
+            'project-a/src/main.ts': jsx`import { classes } from './app'`,
+            'project-a/src/app.ts': jsx`export let classes = "content-['project-a/src/app.ts']"`,
+            'project-a/src/index.css': css`
+              @import 'tailwindcss';
+              @source '../../project-b/**/*.php';
+            `,
+            'project-b/src/index.php': html`
+              <div
+                class="content-['project-b/src/index.php']"
+              ></div>
+            `,
+          },
+        },
+        async ({ root, spawn, fs, expect }) => {
+          let process = await spawn('pnpm vite dev --debug hmr', {
+            cwd: path.join(root, 'project-a'),
+          })
+          await process.onStdout((m) => m.includes('ready in'))
+
+          let url = ''
+          await process.onStdout((m) => {
+            let match = /Local:\s*(http.*)\//.exec(m)
+            if (match) url = match[1]
+            return Boolean(url)
+          })
+
+          await retryAssertion(async () => {
+            let styles = await fetchStyles(url, '/index.html')
+            expect(styles).toContain(candidate`content-['project-b/src/index.php']`)
+          })
+
+          // Flush all messages so that we can be sure the next messages are from
+          // the file changes we're about to make
+          process.flush()
+
+          // Changing an external .php file should trigger a full reload
+          {
+            await fs.write(
+              'project-b/src/index.php',
+              txt`<div class="content-['updated:project-b/src/index.php']"></div>`,
+            )
+
+            // Ensure the page reloaded
+            if (version === '^6' || version === '7.0.8') {
+              await process.onStdout((m) => m.includes('page reload') && m.includes('index.php'))
+            } else {
+              await process.onStderr(
+                (m) => m.includes('vite:hmr (client)') && m.includes('index.php'),
+              )
+            }
+            await process.onStderr((m) => m.includes('vite:hmr (ssr)') && m.includes('index.php'))
+
+            // Ensure the styles were regenerated with the new content
+            let styles = await fetchStyles(url, '/index.html')
+            expect(styles).toContain(candidate`content-['updated:project-b/src/index.php']`)
+          }
+        },
+      )
     },
   )
 

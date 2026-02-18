@@ -16,6 +16,7 @@ import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import {
   inferDataType,
   isPositiveInteger,
@@ -981,7 +982,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      if (!isValidSpacingMultiplier(lhs) || !isValidSpacingMultiplier(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -5939,7 +5940,11 @@ export const BARE_VALUE_DATA_TYPES = [
 ]
 
 export function createCssUtility(node: AtRule) {
-  let name = node.params
+  // Allow escaped characters in the name for compatibility with formatters and
+  // other parsers, to ensure valid CSS syntax. E.g.: `@utility foo-1\/2`.
+  //
+  // Note: the actual utility will be `foo-1/2`
+  let name = unescape(node.params)
 
   // Functional utilities. E.g.: `tab-size-*`
   if (isValidFunctionalUtilityName(name)) {
