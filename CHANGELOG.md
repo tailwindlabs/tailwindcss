@@ -21,21 +21,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `inline-*`, `min-inline-*`, `max-inline-*`, `block-*`, `min-block-*`, `max-block-*` utilities for `inline-size`, `min-inline-size`, `max-inline-size`, `block-size`, `min-block-size`, and `max-block-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
 - Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities for `inset-inline-start`, `inset-inline-end`, `inset-block-start`, and `inset-block-end` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
 - Add `font-features-*` utility for `font-feature-settings` ([#19623](https://github.com/tailwindlabs/tailwindcss/pull/19615))
-- Add `.jj` to ignored content directories ([#19687](https://github.com/tailwindlabs/tailwindcss/pull/19687))
+- Add `.jj` to default ignored content directories ([#19687](https://github.com/tailwindlabs/tailwindcss/pull/19687))
 
 ### Fixed
 
-- Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
+- Prevent double `@supports` wrapper for `color-mix` values ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
 - Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
-- CLI: Emit comment when source maps are saved to files ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
-- Detect utilities when containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
+- Emit comment when source maps are saved to files when using `@tailwindcss/cli` ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
+- Detect utilities containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
 - Fix class extraction for Rails' strict locals ([#19525](https://github.com/tailwindlabs/tailwindcss/pull/19525))
 - Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
 - Fix infinite loop when using `@variant` inside `@custom-variant` ([#19633](https://github.com/tailwindlabs/tailwindcss/pull/19633))
-- Allow multiples of `.25` in `aspect-*` fractions ([#19688](https://github.com/tailwindlabs/tailwindcss/pull/19688))
+- Allow multiples of `.25` in `aspect-*` fractions (e.g. `aspect-8.5/11`) ([#19688](https://github.com/tailwindlabs/tailwindcss/pull/19688))
 - Ensure changes to external files listed via `@source` trigger a full page reload when using `@tailwindcss/vite` ([#19670](https://github.com/tailwindlabs/tailwindcss/pull/19670))
-- Improve performance Oxide scanner in bigger projects ([#19632](https://github.com/tailwindlabs/tailwindcss/pull/19632))
-- Ensure import aliases in Astro v5 work without crashing ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
+- Improve performance of Oxide scanner in bigger projects by reducing file system walks ([#19632](https://github.com/tailwindlabs/tailwindcss/pull/19632))
+- Ensure import aliases in Astro v5 work without crashing when using `@tailwindcss/vite` ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
 - Allow escape characters in `@utility` names to improve support with formatters such as Biome ([#19626](https://github.com/tailwindlabs/tailwindcss/pull/19626))
 - Fix invalid cache during subsequent canonicalization calls ([#19675](https://github.com/tailwindlabs/tailwindcss/pull/19675))
 
