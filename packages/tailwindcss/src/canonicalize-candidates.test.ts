@@ -1145,29 +1145,6 @@ describe('theme to var', () => {
   })
 })
 
-describe('regressions', () => {
-  test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
-    let designSystem = await designSystems.get(__dirname).get(css`
-      @import 'tailwindcss'; /* regression */
-    `)
-
-    let options: CanonicalizeOptions = {
-      collapse: true,
-      logicalToPhysical: true,
-      rem: 16,
-    }
-
-    let target = ['underline', 'h-4', 'w-4']
-
-    expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
-
-    designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
-    designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
-
-    expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
-  })
-})
-
 describe('options', () => {
   test('normalize `rem` units to `px`', { timeout }, async () => {
     let designSystem = await __unstable__loadDesignSystem(
@@ -1185,4 +1162,26 @@ describe('options', () => {
     expect(designSystem.canonicalizeCandidates(['m-[16px]'], { rem: 64 })).toEqual(['m-1'])
     expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]']) // Ensure options don't influence shared state
   })
+})
+
+// https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
+test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss'; /* regression */
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  let target = ['underline', 'h-4', 'w-4']
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+  designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+  designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
 })
