@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve performance Oxide scanner in bigger projects ([#19632](https://github.com/tailwindlabs/tailwindcss/pull/19632))
 - Ensure import aliases in Astro v5 work without crashing ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
 - Allow escape characters in `@utility` names to improve support with formatters such as Biome ([#19626](https://github.com/tailwindlabs/tailwindcss/pull/19626))
+- Fix invalid cache during subsequent canonicalization calls ([#19675](https://github.com/tailwindlabs/tailwindcss/pull/19675))
 
 ### Deprecated
 

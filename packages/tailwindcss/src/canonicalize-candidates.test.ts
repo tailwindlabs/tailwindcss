@@ -1163,3 +1163,46 @@ describe('options', () => {
     expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]']) // Ensure options don't influence shared state
   })
 })
+
+// https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
+test('a subset of classes should be canonicalizable', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  expect(
+    designSystem.canonicalizeCandidates(['underline', 'h-4', 'w-4', 'text-sm'], options),
+  ).toEqual(['underline', 'text-sm', 'size-4'])
+})
+
+test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  let target = ['underline', 'h-4', 'w-4']
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+  designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+  designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+  expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
+    'underline',
+    'text-sm',
+    'size-4',
+  ])
+})

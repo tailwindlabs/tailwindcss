@@ -267,6 +267,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         let interestingLineHeights = new Set<string | number>()
         let seenLineHeights = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
+          if (!pairs.has('line-height')) continue
+
           for (let lineHeight of pairs.get('line-height')) {
             if (seenLineHeights.has(lineHeight)) continue
             seenLineHeights.add(lineHeight)
@@ -292,6 +294,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let seenFontSizes = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
+          if (!pairs.has('font-size')) continue
+
           for (let fontSize of pairs.get('font-size')) {
             if (seenFontSizes.has(fontSize)) continue
             seenFontSizes.add(fontSize)
