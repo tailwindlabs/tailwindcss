@@ -1200,4 +1200,9 @@ test('collapse canonicalization is not affected by previous calls', { timeout },
   designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
 
   expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+  expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
+    'underline',
+    'text-sm',
+    'size-4',
+  ])
 })
