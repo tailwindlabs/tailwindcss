@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
+
+## [4.2.0] - 2026-02-18
+
+### Added
+
 - Add `mauve`, `olive`, `mist`, and `taupe` color palettes to the default theme ([`#19627`](https://github.com/tailwindlabs/tailwindcss/pull/19627))
 - Add `@tailwindcss/webpack` loader for Tailwind CSS v4 ([#19610](https://github.com/tailwindlabs/tailwindcss/pull/19610))
 - Add `pbs-*`, `pbe-*`, `mbs-*`, `mbe-*`, `scroll-pbs-*`, `scroll-pbe-*`, `scroll-mbs-*`, `scroll-mbe-*`, `border-bs-*`, `border-be-*` utilities for `padding-block-start`, `padding-block-end`, `margin-block-start`, `margin-block-end`, `scroll-padding-block-start`, `scroll-padding-block-end`, `scroll-margin-block-start`, `scroll-margin-block-end`, `border-block-start`, and `border-block-end` ([`#19601`](https://github.com/tailwindlabs/tailwindcss/pull/19601))
@@ -3931,7 +3936,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...v4.2.0
 [4.1.18]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.17...v4.1.18
 [3.4.19]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.18...v3.4.19
 [4.1.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.16...v4.1.17
