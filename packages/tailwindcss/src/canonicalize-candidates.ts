@@ -315,7 +315,9 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
     let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
       let result: Set<string> | null = null
-      for (let property of propertyValues.keys()) {
+      for (let [property, values] of propertyValues.entries()) {
+        if (values.size === 0) continue
+
         let otherUtilities = new Set<string>()
         for (let group of staticUtilities.get(property).values()) {
           for (let candidate of group) {
@@ -330,7 +332,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         // all intersections with an empty set will remain empty.
         if (result!.size === 0) return result!
       }
-      return result!
+      return result ?? new Set<string>()
     })
 
     // Link each candidate that could be linked via another utility
