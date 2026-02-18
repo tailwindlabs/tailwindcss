@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/webpack",
-  "version": "4.1.18",
+  "version": "4.2.0",
   "description": "A webpack loader for Tailwind CSS v4.",
   "license": "MIT",
   "repository": {
