@@ -267,6 +267,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         let interestingLineHeights = new Set<string | number>()
         let seenLineHeights = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
+          if (!pairs.has('line-height')) continue
+
           for (let lineHeight of pairs.get('line-height')) {
             if (seenLineHeights.has(lineHeight)) continue
             seenLineHeights.add(lineHeight)
@@ -292,6 +294,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let seenFontSizes = new Set<string>()
         for (let pairs of candidatePropertiesValues) {
+          if (!pairs.has('font-size')) continue
+
           for (let fontSize of pairs.get('font-size')) {
             if (seenFontSizes.has(fontSize)) continue
             seenFontSizes.add(fontSize)
@@ -315,9 +319,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
     let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
       let result: Set<string> | null = null
-      for (let [property, values] of propertyValues.entries()) {
-        if (values.size === 0) continue
-
+      for (let property of propertyValues.keys()) {
         let otherUtilities = new Set<string>()
         for (let group of staticUtilities.get(property).values()) {
           for (let candidate of group) {
@@ -332,7 +334,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         // all intersections with an empty set will remain empty.
         if (result!.size === 0) return result!
       }
-      return result ?? new Set<string>()
+      return result!
     })
 
     // Link each candidate that could be linked via another utility
