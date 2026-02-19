@@ -6665,10 +6665,15 @@ export function isValidFunctionalUtilityName(name: string): boolean {
   //  --------    Root
   //          --  Suffix
   //
-  // A root ending in `-` is also valid for functional utilities like
-  // `border--*` where the double dash separates the property from its
-  // value scale. The candidate parser already handles the edge case of
-  // a bare `border-` class (empty value) by rejecting it in `findRoots`.
+  // Backwards compatibility: a root ending in `-` was valid and correctly
+  // scanned by Oxide. This means that custom utilities can result in candidates
+  // such as `foo--bar`.
+  //
+  // We might want to revisit this for Tailwind CSS v5, but for now we have to
+  // make it backwards compatible.
+  //
+  // PR: https://github.com/tailwindlabs/tailwindcss/pull/19696
+  //
   if (value.length === 0) {
     return true
   }
