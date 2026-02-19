@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deprecated
 
-- Deprecate `start-*` and `end-*` utilities in favor of `inline-s-*` and `inline-e-*` utilities ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
+- Deprecate `start-*` and `end-*` utilities in favor of `inset-s-*` and `inset-e-*` utilities ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
 
 ## [4.1.18] - 2025-12-11
 
