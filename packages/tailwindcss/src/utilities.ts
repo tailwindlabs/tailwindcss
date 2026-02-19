@@ -6659,22 +6659,21 @@ export function isValidFunctionalUtilityName(name: string): boolean {
   let root = match[0]
   let value = name.slice(root.length)
 
-  // Root should not end in `-` if there is no value
-  //
-  // `tab-size--*`
-  //  ---------     Root
-  //           --   Suffix
-  //
-  // Because with default values, this could match `tab-size-` which is invalid.
-  if (value.length === 0 && root.endsWith('-')) {
-    return false
-  }
-
   // No remaining value is valid
   //
   // `tab-size-*`
   //  --------    Root
   //          --  Suffix
+  //
+  // Backwards compatibility: a root ending in `-` was valid and correctly
+  // scanned by Oxide. This means that custom utilities can result in candidates
+  // such as `foo--bar`.
+  //
+  // We might want to revisit this for Tailwind CSS v5, but for now we have to
+  // make it backwards compatible.
+  //
+  // PR: https://github.com/tailwindlabs/tailwindcss/pull/19696
+  //
   if (value.length === 0) {
     return true
   }

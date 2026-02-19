@@ -28428,7 +28428,7 @@ describe('custom utilities', () => {
   test.each([
     ['foo', false], // Simple name, missing '-*' suffix
     ['foo-*', true], // Simple name
-    ['foo--*', false], // Root should not end in `-`
+    ['foo--*', true], // Root ending in `-` is valid (e.g. `border--*`)
     ['-foo-*', true], // Simple name (negative)
     ['foo-bar-*', true], // With dashes
     ['foo_bar-*', true], // With underscores
@@ -28898,6 +28898,38 @@ describe('custom utilities', () => {
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('functional utility with double-dash separator', async () => {
+      let input = css`
+        @theme reference {
+          --color-border-0: #e5e7eb;
+          --color-border-1: #d1d5db;
+          --color-border-2: #9ca3af;
+        }
+
+        @utility border--* {
+          border-color: --value(--color-border-*, [color]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['border--0', 'border--1', 'border--2']))
+        .toMatchInlineSnapshot(`
+          ".border--0 {
+            border-color: var(--color-border-0, #e5e7eb);
+          }
+
+          .border--1 {
+            border-color: var(--color-border-1, #d1d5db);
+          }
+
+          .border--2 {
+            border-color: var(--color-border-2, #9ca3af);
+          }"
+        `)
+      expect(await compileCss(input, ['border--3'])).toEqual('')
     })
 
     test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
