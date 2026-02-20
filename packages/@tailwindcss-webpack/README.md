@@ -31,8 +31,7 @@ Then create a CSS file that imports Tailwind:
 
 ```css
 /* src/index.css */
-@import 'tailwindcss/theme';
-@import 'tailwindcss/utilities';
+@import 'tailwindcss';
 ```
 
 ## Options
