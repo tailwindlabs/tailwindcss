@@ -30,10 +30,18 @@ During development, you can run tests in watch mode:
 pnpm tdd
 ```
 
-The `playgrounds` directory contains example projects you can use to test your changes. To start the Vite playground, use:
+The `playgrounds` directory contains example projects you can use to test your changes.
+
+- Start the Vite playground:
 
 ```sh
 pnpm build && pnpm vite
+```
+
+- Start the Next.js playground:
+
+```sh
+pnpm build && pnpm nextjs
 ```
 
 ## Bug fixes
@@ -50,16 +58,18 @@ If you open a pull request for a new feature, we're likely to close it not becau
 
 ## Coding standards
 
-Our code formatting rules are defined in the `"prettier"` section of [package.json](https://github.com/tailwindlabs/tailwindcss/blob/main/package.json). You can check your code against these standards by running:
+Our code formatting rules are defined in the `"prettier"` section of [package.json](https://github.com/tailwindlabs/tailwindcss/blob/main/package.json).
+
+- Check formatting + linting:
 
 ```sh
-pnpm run lint
+pnpm lint
 ```
 
-To automatically fix any style violations in your code, you can run:
+- Fix formatting:
 
 ```sh
-pnpm run format
+pnpm format
 ```
 
 ## Running tests
@@ -98,6 +108,6 @@ When a pull request is created, Tailwind CSS maintainers will be notified automa
 
 ## Communication
 
-- **GitHub discussions**: For feature ideas and general questions
-- **GitHub issues**: For bug reports
-- **GitHub pull requests**: For code contributions
+- **GitHub Discussions**: For feature ideas and general questions
+- **GitHub Issues**: For bug reports
+- **GitHub Pull Requests**: For code contributions
