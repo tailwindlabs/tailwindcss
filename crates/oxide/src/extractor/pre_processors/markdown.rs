@@ -9,6 +9,7 @@ impl PreProcessor for Markdown {
         let len = content.len();
         let mut result = content.to_vec();
         let mut cursor = cursor::Cursor::new(content);
+        let mut bracket_stack = vec![];
 
         let mut in_directive = false;
 
@@ -18,11 +19,17 @@ impl PreProcessor for Markdown {
                     result[cursor.pos] = b' ';
                     in_directive = true;
                 }
+                (true, b'(' | b'[' | b'{' | b'<') => {
+                    bracket_stack.push(cursor.curr());
+                }
+                (true, b')' | b']' | b'}' | b'>') if !bracket_stack.is_empty() => {
+                    bracket_stack.pop();
+                }
                 (true, b'}') => {
                     result[cursor.pos] = b' ';
                     in_directive = false;
                 }
-                (true, b'.') => {
+                (true, b'.') if bracket_stack.is_empty() => {
                     result[cursor.pos] = b' ';
                 }
                 _ => {}
@@ -56,6 +63,19 @@ mod tests {
                 ":span[Some Text]{#myId .my-class key=val key2='val 2'}",
                 ":span[Some Text] #myId  my-class key=val key2='val 2' ",
             ),
+        ] {
+            Markdown::test(input, expected);
+        }
+    }
+
+    #[test]
+    fn test_nested_classes_keep_the_dots() {
+        for (input, expected) in [
+            (
+                r#"{<div class="px-2.5"></div>}"#,
+                r#" <div class="px-2.5"></div> "#,
+            ),
+            (r#"{content-['example.js']}"#, r#" content-['example.js'] "#),
         ] {
             Markdown::test(input, expected);
         }

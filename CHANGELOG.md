@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Allow trailing dash in functional utility names for backwards compatibility ([#19696](https://github.com/tailwindlabs/tailwindcss/pull/19696))
+- Fix missing extracted classes in mdx files containing `.` ([#19711](https://github.com/tailwindlabs/tailwindcss/pull/19711))
 
 ## [4.2.0] - 2026-02-18
 
