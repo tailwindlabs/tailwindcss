@@ -61,8 +61,8 @@ it('should append `!` to each utility, when using `!important`', async () => {
   `)
 })
 
-// TODO: Handle SCSS syntax
-it.skip('should append `!` to each utility, when using `#{!important}`', async () => {
+// SCSS: Sass interpolation for !important is supported
+it('should append `!` to each utility, when using `#{!important}`', async () => {
   expect(
     await migrate(css`
       .foo {
