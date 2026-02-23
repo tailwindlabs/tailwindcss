@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide-wasm32-wasi",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "cpu": [
     "wasm32"
   ],
