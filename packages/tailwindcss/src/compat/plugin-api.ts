@@ -423,7 +423,7 @@ export function buildPluginApi({
                 ignoreModifier = true
               } else if (Object.hasOwn(values, candidate.value.value)) {
                 value = values[candidate.value.value]
-              } else if (Object.hasOwn(values, '__BARE_VALUE__')) {
+              } else if (values.__BARE_VALUE__) {
                 value = values.__BARE_VALUE__(candidate.value) ?? null
                 ignoreModifier =
                   (candidate.value.fraction !== null && value?.includes('/')) ?? false
