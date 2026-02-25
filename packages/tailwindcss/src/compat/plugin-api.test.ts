@@ -4592,4 +4592,48 @@ describe('config()', () => {
 
     expect(fn).toHaveBeenCalledWith('defaultvalue')
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19721
+  test('matchUtilities does not match Object.prototype properties as values', async ({
+    expect,
+  }) => {
+    let input = css`
+      @tailwind utilities;
+      @plugin "my-plugin";
+    `
+
+    let compiler = await compile(input, {
+      loadModule: async (id, base) => {
+        return {
+          path: '',
+          base,
+          module: plugin(function ({ matchUtilities }) {
+            matchUtilities(
+              {
+                test: (value) => ({ '--test': value }),
+              },
+              {
+                values: {
+                  foo: 'bar',
+                },
+              },
+            )
+          }),
+        }
+      },
+    })
+
+    // These should not crash or produce output
+    expect(
+      optimizeCss(
+        compiler.build([
+          'test-constructor',
+          'test-hasOwnProperty',
+          'test-toString',
+          'test-valueOf',
+          'test-__proto__',
+        ]),
+      ).trim(),
+    ).toEqual('')
+  })
 })

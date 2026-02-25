@@ -391,6 +391,8 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
+    if (desc.staticValues) desc.staticValues = Object.assign(Object.create(null), desc.staticValues)
+
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
