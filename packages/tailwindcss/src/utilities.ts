@@ -391,6 +391,8 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
+    if (desc.staticValues) desc.staticValues = Object.assign(Object.create(null), desc.staticValues)
+
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
@@ -439,10 +441,8 @@ export function createUtilities(theme: Theme) {
           }
 
           if (value === null && !negative && desc.staticValues && !candidate.modifier) {
-            if (Object.hasOwn(desc.staticValues, candidate.value.value)) {
-              let fallback = desc.staticValues[candidate.value.value]
-              if (fallback) return fallback.map(cloneAstNode)
-            }
+            let fallback = desc.staticValues[candidate.value.value]
+            if (fallback) return fallback.map(cloneAstNode)
           }
         }
 
