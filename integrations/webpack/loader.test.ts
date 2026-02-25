@@ -418,3 +418,78 @@ test(
     `)
   },
 )
+
+test(
+  '@tailwindcss/webpack loader isolates cache by resource including query',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+        let path = require('node:path')
+
+        module.exports = {
+          mode: 'development',
+          entry: {
+            a: './src/a.js',
+            b: './src/b.js',
+          },
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [
+                  MiniCssExtractPlugin.loader,
+                  'css-loader',
+                  '@tailwindcss/webpack',
+                  path.resolve(__dirname, 'query-loader.js'),
+                ],
+              },
+            ],
+          },
+        }
+      `,
+      'query-loader.js': js`
+        module.exports = function (source) {
+          if (this.resourceQuery.includes('a')) {
+            return '@import "tailwindcss/utilities";\n\n@utility only-a {\n  color: var(--color-red-500);\n}\n'
+          }
+
+          if (this.resourceQuery.includes('b')) {
+            return '@import "tailwindcss/utilities";\n\n@utility only-b {\n  color: var(--color-blue-500);\n}\n'
+          }
+
+          return source
+        }
+      `,
+      'src/a.js': js`import './index.css?a'`,
+      'src/b.js': js`import './index.css?b'`,
+      'src/index.css': css``,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm webpack --mode=development')
+
+    await fs.expectFileToContain('dist/a.css', ['only-a', '--color-red-500'])
+    await fs.expectFileToContain('dist/b.css', ['only-b', '--color-blue-500'])
+    await fs.expectFileNotToContain('dist/a.css', ['only-b', '--color-blue-500'])
+    await fs.expectFileNotToContain('dist/b.css', ['only-a', '--color-red-500'])
+  },
+)
