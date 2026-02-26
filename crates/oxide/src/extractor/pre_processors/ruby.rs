@@ -388,6 +388,20 @@ mod tests {
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/19728
+    #[test]
+    fn test_heredoc_with_unknown_language() {
+        let input = r#"
+            def width_class(width = nil)
+              <<~STYLE_CLASS
+                #{width || 'w-100'}
+              STYLE_CLASS
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["w-100"]);
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/19239
     #[test]
     fn test_skip_comments() {
