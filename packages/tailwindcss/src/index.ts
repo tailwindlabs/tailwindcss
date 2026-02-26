@@ -34,7 +34,7 @@ import { segment } from './utils/segment'
 import { topologicalSort } from './utils/topological-sort'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
 import { walk, WalkAction } from './walk'
-export type Config = UserConfig
+export interface Config extends UserConfig {}
 
 const IS_VALID_PREFIX = /^[a-z]+$/
 
