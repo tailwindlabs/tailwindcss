@@ -40,8 +40,12 @@ interface CacheEntry {
 
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
-function getContextFromCache(inputFile: string, opts: LoaderOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+function getCacheKey(resourceId: string, opts: LoaderOptions): string {
+  return `${resourceId}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+}
+
+function getContextFromCache(resourceId: string, opts: LoaderOptions): CacheEntry {
+  let key = getCacheKey(resourceId, opts)
   if (cache.has(key)) return cache.get(key)!
   let entry: CacheEntry = {
     mtimes: new Map<string, number>(),
@@ -61,6 +65,7 @@ export default async function tailwindLoader(
   let callback = this.async()
   let options = this.getOptions() ?? {}
   let inputFile = this.resourcePath
+  let resourceId = this.resource
   let base = options.base ?? process.cwd()
   let shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
   let isCSSModuleFile = inputFile.endsWith('.module.css')
@@ -83,7 +88,7 @@ export default async function tailwindLoader(
   }
 
   try {
-    let context = getContextFromCache(inputFile, options)
+    let context = getContextFromCache(resourceId, options)
     let inputBasePath = path.dirname(path.resolve(inputFile))
 
     // Whether this is the first build or not
@@ -273,7 +278,7 @@ export default async function tailwindLoader(
     callback(null, result)
   } catch (error) {
     // Clear the cache entry on error to force a full rebuild next time
-    let key = `${inputFile}:${options.base ?? ''}:${JSON.stringify(options.optimize)}`
+    let key = getCacheKey(resourceId, options)
     cache.delete(key)
 
     DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
