@@ -1206,3 +1206,40 @@ test('collapse canonicalization is not affected by previous calls', { timeout },
     'size-4',
   ])
 })
+
+test('collapse does not crash when utilities with no standard properties are present', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  // Shadow utilities use CSS custom properties and @property rules but may
+  // produce empty property maps in the collapse algorithm. This should not
+  // crash with "Cannot read properties of null" or "X is not iterable".
+  expect(() =>
+    designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
+  ).not.toThrow()
+
+  expect(() =>
+    designSystem.canonicalizeCandidates(['shadow-md', 'p-4'], options),
+  ).not.toThrow()
+
+  expect(() =>
+    designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
+  ).not.toThrow()
+
+  // Verify the candidates are returned (not collapsed, since shadows can't
+  // meaningfully collapse with unrelated utilities)
+  expect(
+    designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
+  ).toEqual(expect.arrayContaining(['shadow-sm', 'border']))
+
+  expect(
+    designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
+  ).toEqual(expect.arrayContaining(['shadow-sm', 'shadow-md']))
+})

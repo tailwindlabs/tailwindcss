@@ -334,7 +334,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         // all intersections with an empty set will remain empty.
         if (result!.size === 0) return result!
       }
-      return result!
+      return result ?? new Set<string>()
     })
 
     // Link each candidate that could be linked via another utility
