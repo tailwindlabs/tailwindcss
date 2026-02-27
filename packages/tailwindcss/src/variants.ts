@@ -1212,24 +1212,28 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
   walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
-    // Starting with the `&` rule node
-    let node = styleRule('&', variantNode.nodes)
+    let variants = segment(variantNode.params, ',').map((variant) => variant.trim())
+    let nodes: AstNode[] = []
+    for (let variant of variants) {
+      // Starting with the `&` rule node
+      let node = styleRule('&', variantNode.nodes.map(cloneAstNode))
 
-    let variant = variantNode.params
+      let variantAst = designSystem.parseVariant(variant)
+      if (variantAst === null) {
+        throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+      }
 
-    let variantAst = designSystem.parseVariant(variant)
-    if (variantAst === null) {
-      throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-    }
+      let result = applyVariant(node, variantAst, designSystem.variants)
+      if (result === null) {
+        throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+      }
 
-    let result = applyVariant(node, variantAst, designSystem.variants)
-    if (result === null) {
-      throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+      nodes.push(node)
     }
 
     // Update the variant at-rule node, to be the `&` rule node
     features |= Features.Variants
-    return WalkAction.Replace(node)
+    return WalkAction.Replace(nodes)
   })
   return features
 }
