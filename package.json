@@ -48,7 +48,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.58.0",
+    "@playwright/test": "^1.58.2",
     "@types/node": "catalog:",
     "postcss": "8.5.6",
     "postcss-import": "^16.1.1",
