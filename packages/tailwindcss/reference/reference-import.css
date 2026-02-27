@@ -1,0 +1,12 @@
+/* Imported stylesheet used by reference.css via @import */
+
+@theme inline {
+  --imported-gap: 1.5rem;
+}
+
+@layer utilities {
+  .from-import {
+    display: grid;
+    gap: var(--imported-gap, 1rem);
+  }
+}

@@ -217,6 +217,160 @@ describe('compiling CSS', () => {
     `)
   })
 
+  test('reference.css compiles end-to-end', async () => {
+    let referencePath = path.resolve(__dirname, '..', 'reference.css')
+    let referenceCss = fs.readFileSync(referencePath, 'utf-8')
+    let referenceDir = path.dirname(referencePath)
+
+    let builtinStyles = new Map<string, string>([
+      ['tailwindcss', path.resolve(referenceDir, 'index.css')],
+      ['tailwindcss/index.css', path.resolve(referenceDir, 'index.css')],
+      ['tailwindcss/preflight', path.resolve(referenceDir, 'preflight.css')],
+      ['tailwindcss/preflight.css', path.resolve(referenceDir, 'preflight.css')],
+      ['tailwindcss/theme', path.resolve(referenceDir, 'theme.css')],
+      ['tailwindcss/theme.css', path.resolve(referenceDir, 'theme.css')],
+      ['tailwindcss/utilities', path.resolve(referenceDir, 'utilities.css')],
+      ['tailwindcss/utilities.css', path.resolve(referenceDir, 'utilities.css')],
+    ])
+
+    let loadStylesheet = async (id: string, base: string) => {
+      let normalizedBase = base === '' ? referenceDir : base
+      let normalizedId = id.replace(/\\/g, '/')
+      if (builtinStyles.has(normalizedId)) {
+        let filePath = builtinStyles.get(normalizedId)!
+        return {
+          path: filePath,
+          base: path.dirname(filePath),
+          content: fs.readFileSync(filePath, 'utf-8'),
+        }
+      }
+
+      let resolved = path.resolve(normalizedBase, id)
+      return {
+        path: resolved,
+        base: path.dirname(resolved),
+        content: fs.readFileSync(resolved, 'utf-8'),
+      }
+    }
+
+    let referencePlugin = plugin.withOptions(
+      (options: Record<string, unknown> = {}) => {
+        return ({ addUtilities, addVariant, theme }: PluginAPI) => {
+          let enableGrid =
+            typeof options['enable-grid'] === 'boolean' ? options['enable-grid'] : true
+          let cardColor =
+            typeof options['card-color'] === 'string' ? options['card-color'] : 'white'
+          let shadowDepthValue = options['shadow-depth']
+          let shadowDepth =
+            typeof shadowDepthValue === 'number'
+              ? shadowDepthValue
+              : Number(shadowDepthValue) || 16
+
+          let accentScale = Array.isArray(options['accent-scale']) ? options['accent-scale'] : []
+          let accentUtilities: Record<string, Record<string, string>> = {}
+          for (let accent of accentScale) {
+            if (typeof accent === 'string') {
+              accentUtilities[`.plugin-accent-${accent}`] = {
+                color: `var(--color-${accent}, currentColor)`,
+              }
+            }
+          }
+
+          addUtilities({
+            '.plugin-card': {
+              display: enableGrid ? 'grid' : 'block',
+              gap: theme('spacing.6', '1.5rem'),
+              'background-color': cardColor,
+              'box-shadow': `0 ${shadowDepth}px 32px -12px rgba(15, 23, 42, 0.18)`,
+            },
+            ...accentUtilities,
+          })
+
+          addVariant('supports-grid', {
+            '@supports (display: grid)': '@slot',
+          })
+        }
+      },
+      () => ({
+        theme: {
+          extend: {
+            colors: {
+              brand: '#2563eb',
+              'card-foreground': '#1f2937',
+            },
+          },
+        },
+      }),
+    )
+
+    let referenceConfig = {
+      darkMode: ['class', '[data-theme="reference-dark"]'],
+      safelist: ['tw:underline', 'plugin-card'],
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1d4ed8',
+            'card-foreground': '#111827',
+          },
+          spacing: {
+            6: '1.5rem',
+          },
+        },
+      },
+    }
+
+    let moduleRegistry = new Map<string, any>([
+      [path.resolve(referenceDir, 'reference/reference.plugin.js'), referencePlugin],
+      [path.resolve(referenceDir, 'reference/reference.config.js'), referenceConfig],
+    ])
+
+    let loadModule = async (id: string, base: string) => {
+      let normalizedBase = base === '' ? referenceDir : base
+      let resolved = path.resolve(normalizedBase, id)
+      if (!moduleRegistry.has(resolved)) {
+        throw new Error(`Unknown module requested by reference.css test: ${id}`)
+      }
+
+      return {
+        path: resolved,
+        base: path.dirname(resolved),
+        module: moduleRegistry.get(resolved),
+      }
+    }
+
+    let candidates = [
+      'tw:underline',
+      'stack-4',
+      'aspect-16/9',
+      'example-sm/7',
+      'example-[12px]/[16px]',
+      'mask-r-4/6',
+      'theme-wrap:tw:bg-brand',
+      'supports-grid:tw:flex',
+      'motion-safe:tw:animate-pulse',
+      'reference-dark:tw:text-brand',
+      'data-open:tw:px-4',
+      'hocus:tw:ring-2',
+      'plugin-card',
+    ]
+
+    let output = await compileCss(referenceCss, candidates, {
+      from: referencePath,
+      loadStylesheet,
+      loadModule,
+    })
+
+    expect(output).toContain('.stack-4')
+    expect(output).toContain('.example-sm\\/7')
+    expect(output).toContain('.mask-r-4\\/6')
+    expect(output).toContain('.supports-grid\\:tw\\:flex')
+    expect(output).toContain('.theme-wrap\\:tw\\:bg-brand')
+    expect(output).toContain('.plugin-card')
+    expect(output).toContain('.data-open\\:tw\\:px-4')
+    expect(output).toContain('.from-import')
+    expect(output).toMatch(/@media \\(prefers-reduced-motion: no-preference\\)/)
+  })
+
   test('adds vendor prefixes', async () => {
     expect(
       await compileCss(
