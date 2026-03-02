@@ -210,7 +210,9 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           // do a full page reload already.
           //
           // Empty modules can be skipped since it means it's not `addWatchFile`d and thus irrelevant to Tailwind.
-          let isExternalFile = modules.length > 0 && modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
+          let isExternalFile =
+            modules.length > 0 &&
+            modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
 
           // Skip if the module exists in other environments.
@@ -219,8 +221,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             if (environment.name === this.environment.name) continue
 
             const modules = environment.moduleGraph.getModulesByFile(file)
-            if (modules && [...modules].some(m => m.type !== 'asset')) {
-              return;
+            if (modules && [...modules].some((m) => m.type !== 'asset')) {
+              return
             }
           }
 

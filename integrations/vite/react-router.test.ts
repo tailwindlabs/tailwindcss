@@ -145,9 +145,7 @@ test(
           )
         }
       `,
-      'app/direct-hdr-dep.ts': ts`
-        export const direct = 'HDR: 0'
-      `,
+      'app/direct-hdr-dep.ts': ts` export const direct = 'HDR: 0' `,
     },
   },
   async ({ fs, spawn, expect }) => {
@@ -176,12 +174,7 @@ test(
     // but it only exists in the server module graph. Without the fix, the
     // Tailwind CSS plugin would trigger a full page reload on the client
     // instead of letting react-router handle HDR.
-    await fs.write(
-      'app/direct-hdr-dep.ts',
-      ts`
-        export const direct = 'HDR: 1'
-      `,
-    )
+    await fs.write('app/direct-hdr-dep.ts', ts` export const direct = 'HDR: 1' `)
 
     // check update
     await retryAssertion(async () => {
