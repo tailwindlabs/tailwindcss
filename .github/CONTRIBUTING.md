@@ -53,13 +53,13 @@ If you open a pull request for a new feature, we're likely to close it not becau
 Our code formatting rules are defined in the `"prettier"` section of [package.json](https://github.com/tailwindlabs/tailwindcss/blob/main/package.json). You can check your code against these standards by running:
 
 ```sh
-pnpm run lint
+pnpm lint
 ```
 
 To automatically fix any style violations in your code, you can run:
 
 ```sh
-pnpm run format
+pnpm format
 ```
 
 ## Running tests
