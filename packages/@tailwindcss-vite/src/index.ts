@@ -208,8 +208,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           // Note: in Vite v7.0.6 the modules here will have a type of `js`, not
           // 'asset'. But it will also have a `HARD_INVALIDATED` state and will
           // do a full page reload already.
-          let isExternalFile = modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
+          //
+          // Empty modules can be skipped since it means it's not `addWatchFile`d and thus irrelevant to Tailwind.
+          let isExternalFile = modules.length > 0 && modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
+
+          // Skip if the module exists in other environments.
+          // SSR framework has its own server side hmr/reload mechanism when handling server only modules.
+          for (const environment of Object.values(server.environments)) {
+            if (environment.name === this.environment.name) continue
+
+            const modules = environment.moduleGraph.getModulesByFile(file)
+            if (modules && [...modules].some(m => m.type !== 'asset')) {
+              return;
+            }
+          }
 
           for (let env of new Set([this.environment.name, 'client'])) {
             let roots = rootsByEnv.get(env)
