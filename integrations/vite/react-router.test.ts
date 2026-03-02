@@ -102,6 +102,101 @@ test('dev mode', { fs: WORKSPACE }, async ({ fs, spawn, expect }) => {
   })
 })
 
+test(
+  // cf. https://github.com/remix-run/react-router/blob/00cb4d7b310663b2e84152700c05d3b503005e83/integration/vite-hmr-hdr-test.ts#L311-L318
+  'dev mode, editing a server-only loader dependency triggers HDR instead of a full reload',
+  {
+    fs: {
+      ...WORKSPACE,
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@react-router/dev": "^7",
+            "@react-router/node": "^7",
+            "@react-router/serve": "^7",
+            "@tailwindcss/vite": "workspace:^",
+            "@types/node": "^20",
+            "@types/react-dom": "^19",
+            "@types/react": "^19",
+            "isbot": "^5",
+            "react-dom": "^19",
+            "react-router": "^7",
+            "react": "^19",
+            "tailwindcss": "workspace:^",
+            "vite": "^7"
+          }
+        }
+      `,
+      'app/routes/home.tsx': ts`
+        import type { Route } from './+types/home'
+        import { direct } from '../direct-hdr-dep'
+
+        export async function loader() {
+          return { message: direct }
+        }
+
+        export default function Home({ loaderData }: Route.ComponentProps) {
+          return (
+            <div>
+              <h1 className="font-bold">{loaderData.message}</h1>
+              <input data-testinput />
+            </div>
+          )
+        }
+      `,
+      'app/direct-hdr-dep.ts': ts`
+        export const direct = 'HDR: 0'
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm react-router dev')
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    // check initial state
+    await retryAssertion(async () => {
+      let html = await (await fetch(url)).text()
+      expect(html).toContain('HDR: 0')
+
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`font-bold`)
+    })
+
+    // Flush stdout so we only see messages triggered by the edit below.
+    process.flush()
+
+    // Edit the server-only module. The client environment watches this file
+    // but it only exists in the server module graph. Without the fix, the
+    // Tailwind CSS plugin would trigger a full page reload on the client
+    // instead of letting react-router handle HDR.
+    await fs.write(
+      'app/direct-hdr-dep.ts',
+      ts`
+        export const direct = 'HDR: 1'
+      `,
+    )
+
+    // check update
+    await retryAssertion(async () => {
+      let html = await (await fetch(url)).text()
+      expect(html).toContain('HDR: 1')
+
+      let css = await fetchStyles(url)
+      expect(css).toContain(candidate`font-bold`)
+    })
+
+    // Assert the client receives an HMR update (not a full page reload).
+    await process.onStdout((m) => m.includes('(client) hmr update'))
+  },
+)
+
 test('build mode', { fs: WORKSPACE }, async ({ spawn, exec, expect }) => {
   await exec('pnpm react-router build')
   let process = await spawn('pnpm react-router-serve ./build/server/index.js')
