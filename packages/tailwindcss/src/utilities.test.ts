@@ -1646,6 +1646,13 @@ test('row', async () => {
       'row-span-full/foo',
       'row-[span_123/span_123]/foo',
       'row-span-[var(--my-variable)]/foo',
+
+      // Candidates matching Object.prototype properties should not crash or
+      // produce output (see: https://github.com/tailwindlabs/tailwindcss/issues/19721)
+      'row-constructor',
+      'row-hasOwnProperty',
+      'row-toString',
+      'row-valueOf',
     ]),
   ).toEqual('')
 

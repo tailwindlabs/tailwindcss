@@ -124,7 +124,9 @@ impl PreProcessor for Ruby {
                 // Except for strict locals, these are defined in a `<%# locals: … %>`. Checking if
                 // the comment is preceded by a `%` should be enough without having to perform more
                 // parsing logic. Worst case we _do_ scan a few comments.
-                b'#' if !matches!(cursor.prev(), b'%') => {
+                //
+                // We also want to skip interpolation syntax, which look like `#{…}`.
+                b'#' if !matches!(cursor.prev(), b'%') && !matches!(cursor.next(), b'{') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
@@ -386,6 +388,20 @@ mod tests {
             end
         "#;
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19728
+    #[test]
+    fn test_interpolated_expressions() {
+        let input = r#"
+            def width_class(width = nil)
+              <<~STYLE_CLASS
+                #{width || 'w-100'}
+              STYLE_CLASS
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["w-100"]);
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/19239

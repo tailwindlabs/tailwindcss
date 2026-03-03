@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
+### Fixed
+
+- Guard object lookups against inherited prototype properties ([#19725](https://github.com/tailwindlabs/tailwindcss/pull/19725))
+
 ## [4.2.1] - 2026-02-23
 
 ### Fixed
