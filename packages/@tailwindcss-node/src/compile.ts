@@ -68,7 +68,9 @@ async function ensureSourceDetectionRootExists(compiler: {
 }) {
   // Verify if the `source(…)` path exists (until the glob pattern starts)
   if (compiler.root && compiler.root !== 'none') {
-    let globSymbols = /[*{]/
+    // Detect common glob metacharacters so we only verify the static path prefix.
+    // This includes `[]` character classes and `?` wildcards in addition to `*` and `{}`.
+    let globSymbols = /[*{[?]/
     let basePath = []
     for (let segment of compiler.root.pattern.split('/')) {
       if (globSymbols.test(segment)) {
