@@ -527,6 +527,7 @@ type UtilityCanonicalizationFunction = (
 const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   bgGradientToLinear,
   themeToVarUtility,
+  calcToSpacingFunction,
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
@@ -638,6 +639,69 @@ function themeToVarVariant(
   }
 
   return variant
+}
+
+function calcToSpacingFunction(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
+  if (candidate.kind === 'arbitrary') {
+    candidate.value = spacingCalcToSpacingFunction(candidate.value, options.designSystem)
+  } else if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') {
+    candidate.value.value = spacingCalcToSpacingFunction(
+      candidate.value.value,
+      options.designSystem,
+    )
+  }
+
+  return candidate
+}
+
+function spacingCalcToSpacingFunction(input: string, designSystem: DesignSystem) {
+  let spacingVariable = designSystem.theme.prefix
+    ? `--${designSystem.theme.prefix}-spacing`
+    : '--spacing'
+
+  let ast = ValueParser.parse(input)
+
+  walk(ast, (node) => {
+    // calc(…)
+    if (node.kind !== 'function' || node.value !== 'calc') return
+
+    // calc(var(--spacing) * 2)
+    //      --------------       1. function        (var)
+    //                    -      2. separator       ( )
+    //                     -     3. word            (*)
+    //                      -    4. separator       ( )
+    //                       -   5. any value, word (2)
+    if (node.nodes.length !== 5) return
+
+    // *
+    if (node.nodes[2].kind !== 'word' || node.nodes[2].value !== '*') {
+      return
+    }
+
+    // var(--spacing)
+    if (
+      node.nodes[0].kind !== 'function' ||
+      node.nodes[0].value !== 'var' ||
+      node.nodes[0].nodes.length !== 1 ||
+      node.nodes[0].nodes[0].kind !== 'word' ||
+      node.nodes[0].nodes[0].value !== spacingVariable
+    ) {
+      return
+    }
+
+    return WalkAction.Replace(
+      ValueParser.parse(
+        `--spacing(${
+          ValueParser.toCss([node.nodes[4]]) // Value node
+        })`,
+      ),
+    )
+  })
+
+  return ValueParser.toCss(ast)
 }
 
 const CONVERTER_KEY = Symbol()
