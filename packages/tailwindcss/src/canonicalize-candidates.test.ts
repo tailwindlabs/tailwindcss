@@ -254,6 +254,20 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Additionally we remove unnecessary whitespace.
     ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
 
+    // `calc(var(--spacing)*…)` to `--spacing(…)`
+    ['pt-[min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+    ['pt-[min(20%,calc(var(--spacing)*var(--other)))]', 'pt-[min(20%,--spacing(var(--other)))]'],
+    ['pt-[calc(var(--spacing)*8)]', 'pt-8'],
+    ['pt-[calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
+    ['[padding-top:min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+    [
+      '[padding-top:min(20%,calc(var(--spacing)*var(--other)))]',
+      'pt-[min(20%,--spacing(var(--other)))]',
+    ],
+    ['[padding-top:calc(var(--spacing)*8)]', 'pt-8'],
+    ['[padding-top:calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
     // `theme(…)` calls valid in v3, but not in v4 should still be converted.
     ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
