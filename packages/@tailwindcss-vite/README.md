@@ -41,7 +41,7 @@ If you're interested in contributing to Tailwind CSS, please read our [contribut
 
 ### Enabling or disabling Lightning CSS
 
-By default, this plugin detects whether or not the CSS is being built for production by checking the `NODE_ENV` environment variable. When building for production Lightning CSS will be enabled otherwise it is disabled.
+By default, this plugin detects whether or not the CSS is being built for production by checking the `NODE_ENV` environment variable. When building for production, Lightning CSS will be enabled; otherwise, it is disabled.
 
 If you want to always enable or disable Lightning CSS the `optimize` option may be used:
 
