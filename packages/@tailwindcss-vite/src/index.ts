@@ -411,18 +411,31 @@ class Root {
 
       DEBUG && I.start('Setup compiler')
       let addBuildDependenciesPromises: Promise<void>[] = []
-      this.compiler = await compile(content, {
-        from: this.enableSourceMaps ? this.id : undefined,
-        base: inputBase,
-        shouldRewriteUrls: true,
-        onDependency: (path) => {
-          addWatchFile(path)
-          addBuildDependenciesPromises.push(this.addBuildDependency(path))
-        },
+      try {
+        this.compiler = await compile(content, {
+          from: this.enableSourceMaps ? this.id : undefined,
+          base: inputBase,
+          shouldRewriteUrls: true,
+          onDependency: (path) => {
+            addWatchFile(path)
+            addBuildDependenciesPromises.push(this.addBuildDependency(path))
+          },
 
-        customCssResolver: this.customCssResolver,
-        customJsResolver: this.customJsResolver,
-      })
+          customCssResolver: this.customCssResolver,
+          customJsResolver: this.customJsResolver,
+        })
+      } catch (error) {
+        // If a dependency file was deleted during HMR (e.g. an SVG asset),
+        // the compile step will fail with ENOENT. Handle this gracefully by
+        // invalidating the compiler so the next rebuild picks up the change.
+        if (error instanceof Error && 'code' in error && (error as NodeJS.ErrnoException).code === 'ENOENT') {
+          DEBUG && I.end('Setup compiler')
+          this.compiler = undefined
+          this.scanner = undefined
+          return false
+        }
+        throw error
+      }
       await Promise.all(addBuildDependenciesPromises)
       DEBUG && I.end('Setup compiler')
 
