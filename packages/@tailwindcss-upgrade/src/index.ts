@@ -293,6 +293,8 @@ async function run() {
         let designSystem = await sheet.designSystem()
         if (!designSystem) continue
 
+        let config = configBySheet.get(sheet)
+
         // Figure out the source files to migrate
         let sources = (() => {
           // Disable auto source detection
@@ -300,16 +302,20 @@ async function run() {
             return []
           }
 
-          // No root specified, use the base directory
+          // No root specified — during a v3→v4 migration the CSS entrypoint won't
+          // have an @source directive yet. Use the content patterns from the v3 JS
+          // config if available, rather than falling back to '**/*' which would
+          // scan every file in the project (including migrations, vendor files, etc.).
           if (compiler.root === null) {
+            if (config?.sources && config.sources.length > 0) {
+              return config.sources
+            }
             return [{ base, pattern: '**/*', negated: false }]
           }
 
           // Use the specified root
           return [{ ...compiler.root, negated: false }]
         })().concat(compiler.sources)
-
-        let config = configBySheet.get(sheet)
         let scanner = new Scanner({ sources })
         let filesToMigrate = []
         for (let file of scanner.files) {
