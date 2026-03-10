@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Guard object lookups against inherited prototype properties ([#19725](https://github.com/tailwindlabs/tailwindcss/pull/19725))
 - Canonicalize `calc(var(--spacing)*…)` expressions into `--spacing(…)` ([#19769](https://github.com/tailwindlabs/tailwindcss/pull/19769))
+- Fix crash in canonicalization step when handling utilities with empty property maps ([#19727](https://github.com/tailwindlabs/tailwindcss/pull/19727))
 
 ## [4.2.1] - 2026-02-23
 
