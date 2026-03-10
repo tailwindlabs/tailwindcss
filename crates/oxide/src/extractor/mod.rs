@@ -386,7 +386,7 @@ mod tests {
                 r#"["flex",["italic",["underline"]]]"#,
                 vec!["flex", "italic", "underline"],
             ),
-            (r#"[:is(italic):is(underline)]"#, vec![]),
+            (r#"[:is(italic):is(underline)]"#, vec!["italic", "underline"]),
             (
                 r#"[:is(italic):is(underline)]:flex"#,
                 vec!["[:is(italic):is(underline)]:flex"],
@@ -443,7 +443,7 @@ mod tests {
             ("bg-[red][blue]", vec![]),
             // Arbitrary value followed by an arbitrary variable is invalid
             ("bg-[red]-(--my-color)", vec![]),
-            ("bg-[red](--my-color)", vec![]),
+            ("bg-[red](--my-color)", vec!["bg-[red]"]),
             // Important looking utility cannot be followed by another utility
             ("flex!block", vec![]),
             // Invalid variants make the whole candidate invalid
@@ -521,9 +521,9 @@ mod tests {
                 // Inside a string
                 ("'{}'", vec![]),
                 // Inside a function call
-                ("fn('{}')", vec![]),
+                ("fn('{}')", vec!["fn"]),
                 // Inside nested function calls
-                ("fn1(fn2('{}'))", vec![]),
+                ("fn1(fn2('{}'))", vec!["fn1", "fn2"]),
                 // --------------------------
                 //
                 // HTML
@@ -712,10 +712,10 @@ mod tests {
     #[test]
     fn test_gleam_syntax() {
         for (input, expected) in [
-            (r#"html.div([attribute.class("py-10")], [])"#, vec!["py-10"]),
+            (r#"html.div([attribute.class("py-10")], [])"#, vec!["class", "div", "py-10"]),
             (
                 r#"html.div([attribute.class("hover:py-10")], [])"#,
-                vec!["hover:py-10"],
+                vec!["class", "div", "hover:py-10"],
             ),
         ] {
             assert_extract_sorted_candidates(input, expected);
@@ -739,8 +739,8 @@ mod tests {
                 vec!["flex", "italic", "underline"],
             ),
             // Not a valid arbitrary variant (not followed by a candidate)
-            // Inner classes `is`, `italic` and `underline` are not valid in this context
-            (r#"[:is(italic):is(underline)]"#, vec![]),
+            // Inner classes `italic` and `underline` are extracted since parens act as boundaries
+            (r#"[:is(italic):is(underline)]"#, vec!["italic", "underline"]),
             // Valid arbitrary variant, nothing inside should be extracted
             (
                 r#"[:is(italic):is(underline)]:flex"#,
@@ -772,7 +772,7 @@ mod tests {
             // Function call
             (
                 r#"let classes = something('flex');"#,
-                vec!["let", "classes", "flex"],
+                vec!["let", "classes", "flex", "something"],
             ),
             // Function call in array
             (
@@ -823,7 +823,7 @@ mod tests {
         for (input, expected) in [
             (
                 r#"'[ngClass]': `{"variant": variant(), "no-variant": !variant() }`"#,
-                vec!["variant", "no-variant"],
+                vec!["!variant", "variant", "no-variant"],
             ),
             (
                 r#"'[class]': '"bg-gradient-to-b px-6 py-3 rounded-3xl from-5%"',"#,
@@ -831,27 +831,27 @@ mod tests {
             ),
             (
                 r#"'[class.from-secondary-light]': `variant() === 'secondary'`,"#,
-                vec!["from-secondary-light", "secondary"],
+                vec!["from-secondary-light", "secondary", "variant"],
             ),
             (
                 r#"'[class.to-secondary]': `variant() === 'secondary'`,"#,
-                vec!["to-secondary", "secondary"],
+                vec!["to-secondary", "secondary", "variant"],
             ),
             (
                 r#"'[class.from-5%]': `variant() === 'secondary'`,"#,
-                vec!["from-5%", "secondary"],
+                vec!["from-5%", "secondary", "variant"],
             ),
             (
                 r#"'[class.from-1%]': `variant() === 'primary'`,"#,
-                vec!["from-1%", "primary"],
+                vec!["from-1%", "primary", "variant"],
             ),
             (
                 r#"'[class.from-light-blue]': `variant() === 'primary'`,"#,
-                vec!["from-light-blue", "primary"],
+                vec!["from-light-blue", "primary", "variant"],
             ),
             (
                 r#"'[class.to-primary]': `variant() === 'primary'`,"#,
-                vec!["to-primary", "primary"],
+                vec!["to-primary", "primary", "variant"],
             ),
         ] {
             assert_extract_sorted_candidates(input, expected);

@@ -285,7 +285,7 @@ mod tests {
                 // Inside a string
                 ("'{}'", vec![]),
                 // Inside a function call
-                ("fn('{}')", vec![]),
+                ("fn('{}')", vec!["fn"]),
                 // Inside nested function calls
                 ("fn1(fn2('{}'))", vec!["fn1", "fn2"]),
                 // --------------------------

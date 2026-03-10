@@ -441,7 +441,7 @@ mod tests {
             // Exceptions:
             // Arbitrary variable must be valid
             (r"bg-(--my-color\)", vec![]),
-            (r"bg-(--my#color)", vec![]),
+            (r"bg-(--my#color)", vec!["color"]),
             // Single letter utility with uppercase letter is invalid
             ("A", vec![]),
             // A dot must be in-between numbers
@@ -474,7 +474,7 @@ mod tests {
                 // Inside a string
                 ("'{}'", vec![]),
                 // Inside a function call
-                ("fn('{}')", vec![]),
+                ("fn('{}')", vec!["fn"]),
                 // Inside nested function calls
                 ("fn1(fn2('{}'))", vec!["fn1", "fn2"]),
                 // --------------------------

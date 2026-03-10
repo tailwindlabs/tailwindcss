@@ -57,6 +57,13 @@ enum Class {
     //     ^
     // ```
     #[bytes(b'\0')]
+    // Function-call-like syntax in data attributes, e.g.:
+    //
+    // ```
+    // <div data-loading="addClass(opacity-50)">
+    //                            ^           ^
+    // ```
+    #[bytes(b'(', b')')]
     Common,
 
     // Angular like attributes, e.g.:

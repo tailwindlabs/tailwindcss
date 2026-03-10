@@ -239,6 +239,17 @@ mod tests {
                 "sm:[&>[data-slot=icon]:last-child]:right-2.5",
                 vec!["sm:[&>[data-slot=icon]:last-child]:right-2.5"],
             ),
+            // Function-call-like syntax in data attributes (e.g. Symfony Live Components)
+            //
+            // E.g.: `<div data-loading="addClass(opacity-50)">`
+            (
+                r#"<div data-loading="addClass(opacity-50)">"#,
+                vec!["data-loading", "addClass", "opacity-50"],
+            ),
+            (
+                r#"<div data-loading="addClass(opacity-50) removeClass(hidden)">"#,
+                vec!["data-loading", "addClass", "opacity-50", "removeClass", "hidden"],
+            ),
             // Exceptions regarding boundaries
             //
             // `flex!` is valid, but since it's followed by a non-boundary character it's invalid.
@@ -261,9 +272,9 @@ mod tests {
                 // Inside a string
                 ("'{}'", vec![]),
                 // Inside a function call
-                ("fn('{}')", vec![]),
+                ("fn('{}')", vec!["fn"]),
                 // Inside nested function calls
-                ("fn1(fn2('{}'))", vec![]),
+                ("fn1(fn2('{}'))", vec!["fn1", "fn2"]),
                 // --------------------------
                 //
                 // HTML
