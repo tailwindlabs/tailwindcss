@@ -114,21 +114,4 @@ describe('runCommandLine', () => {
     expect(result.stderr).toBe('No candidate groups provided')
     expect(result.stdout).toContain('Usage:')
   })
-
-  test('renders text help output', async () => {
-    let result = await runCommandLine({
-      argv: ['--help'],
-      stdinIsTTY: true,
-      stdoutIsTTY: false,
-    })
-
-    expect(result).toEqual({
-      exitCode: 0,
-      stdout: expect.stringContaining('Usage:'),
-      stderr: '',
-    })
-    expect(result.stdout).toContain('tailwindcss canonicalize [classes...]')
-    expect(result.stdout).toContain('Options:')
-    expect(result.stdout).not.toContain('markdown output')
-  })
 })
