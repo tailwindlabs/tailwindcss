@@ -2,9 +2,9 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, test } from 'vitest'
 import { runCommandLine } from '.'
-import { normalizeWindowsSeperators } from '../../utils/test-helpers'
+import { normalizeWindowsSeparators } from '../../utils/test-helpers'
 
-let css = normalizeWindowsSeperators(
+let css = normalizeWindowsSeparators(
   path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/input.css'),
 )
 
