@@ -473,7 +473,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  describe.sequential.each([['^6'], ['7.0.8'], ['7.1.12'], ['7.3.1']])(
+  describe.sequential.each([['^6'], ['7.0.8'], ['7.1.12'], ['7.3.1'], ['8.0.0']])(
     'Using Vite %s',
     (version) => {
       test(
