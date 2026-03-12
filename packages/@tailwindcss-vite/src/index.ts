@@ -223,8 +223,12 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             if (environment.name === this.environment.name) continue
 
             let modules = environment.moduleGraph.getModulesByFile(file)
-            if (modules && [...modules].some((m) => m.type !== 'asset')) {
-              return
+            if (modules) {
+              for (let module of modules) {
+                if (module.type !== 'asset') {
+                  return
+                }
+              }
             }
           }
 
