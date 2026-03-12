@@ -219,10 +219,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           // SSR framework has its own server side hmr/reload mechanism when handling server only modules.
           // See https://v6.vite.dev/guide/migration.html
           // > Updates to an SSR-only module no longer triggers a full page reload in the client. ...
-          for (const environment of Object.values(server.environments)) {
+          for (let environment of Object.values(server.environments)) {
             if (environment.name === this.environment.name) continue
 
-            const modules = environment.moduleGraph.getModulesByFile(file)
+            let modules = environment.moduleGraph.getModulesByFile(file)
             if (modules && [...modules].some((m) => m.type !== 'asset')) {
               return
             }
