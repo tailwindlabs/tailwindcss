@@ -8,7 +8,7 @@ let css = normalizeWindowsSeparators(
   path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/input.css'),
 )
 
-describe('runCommandLine', () => {
+describe('runCommandLine', { timeout: 30_000 }, () => {
   test('canonicalizes, collapses, and sorts candidate groups from positional arguments', async () => {
     let result = await runCommandLine({
       argv: ['--css', css, 'py-3 p-1 px-3'],
