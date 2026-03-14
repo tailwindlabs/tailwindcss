@@ -1,6 +1,8 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { createInterface } from 'node:readline'
+import type { Readable, Writable } from 'node:stream'
 import { compare } from '../../../../tailwindcss/src/utils/compare'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { args, type Arg } from '../../utils/args'
@@ -37,6 +39,10 @@ function usageWithCss() {
   return 'tailwindcss canonicalize --css input.css [classes...]'
 }
 
+function usageWithStream() {
+  return 'tailwindcss canonicalize --stream [--css input.css]'
+}
+
 export function options() {
   return {
     '--css': {
@@ -49,6 +55,11 @@ export function options() {
       description: 'Output format',
       default: 'text',
       values: ['text', 'json', 'jsonl'],
+    },
+    '--stream': {
+      type: 'boolean',
+      description: 'Read candidate groups from stdin line by line and write results to stdout',
+      default: false,
     },
   } satisfies Arg
 }
@@ -86,6 +97,11 @@ export async function runCommandLine({
       }
     }
 
+    if (flags['--stream']) {
+      await streamStdin({ css: flags['--css'], cwd, input: process.stdin, output: process.stdout })
+      return { exitCode: 0, stdout: '', stderr: '' }
+    }
+
     let format = parseFormat(flags['--format'])
     let inputs = flags._.length > 0 ? flags._ : await readCandidateGroups({ stdin, stdinIsTTY })
 
@@ -110,6 +126,25 @@ export async function runCommandLine({
       stdout: '',
       stderr: error instanceof Error ? error.message : String(error),
     }
+  }
+}
+
+export async function streamStdin({
+  css: cssFile,
+  cwd,
+  input,
+  output,
+}: {
+  css: string | null
+  cwd: string
+  input: Readable
+  output: Writable
+}): Promise<void> {
+  let designSystem = await loadDesignSystem(cssFile, cwd)
+  let rl = createInterface({ input })
+
+  for await (let line of rl) {
+    output.write(sortAndCanonicalizeCandidates(designSystem, line) + '\n')
   }
 }
 
@@ -156,16 +191,7 @@ export async function processCandidateGroups({
   let designSystem = await loadDesignSystem(css, cwd)
 
   return inputs.map((input) => {
-    let originalCandidates = splitCandidates(input)
-    let outputCandidates = sortCandidates(
-      designSystem,
-      designSystem.canonicalizeCandidates(originalCandidates, {
-        collapse: true,
-        logicalToPhysical: true,
-      }),
-    )
-
-    let output = outputCandidates.join(' ')
+    let output = sortAndCanonicalizeCandidates(designSystem, input)
 
     return {
       input,
@@ -189,7 +215,7 @@ export function formatCandidateResults(results: CandidateGroupResult[], format: 
 function helpMessage() {
   return help({
     render: false,
-    usage: [usage(), usageWithCss()],
+    usage: [usage(), usageWithCss(), usageWithStream()],
     options: {
       ...options(),
       ...sharedOptions,
@@ -246,11 +272,17 @@ function splitCandidates(input: string) {
     .filter((candidate) => candidate.length > 0)
 }
 
-function sortCandidates(
+function sortAndCanonicalizeCandidates(
   designSystem: Awaited<ReturnType<typeof __unstable__loadDesignSystem>>,
-  candidates: string[],
+  input: string,
 ) {
+  let candidates = splitCandidates(input)
+  candidates = designSystem.canonicalizeCandidates(candidates, {
+    collapse: true,
+    logicalToPhysical: true,
+  })
   return defaultSort(designSystem.getClassOrder(candidates))
+    .join(' ')
 }
 
 function defaultSort(entries: [string, bigint | null][]) {
