@@ -136,16 +136,16 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
   didRemovePostCSSImport: boolean
 } | null> {
   function isTailwindCSSPlugin(line: string) {
-    return /['"]?tailwindcss['"]?\: ?\{\}/.test(line)
+    return /['"]?tailwindcss['"]?: ?\{\}/.test(line)
   }
   function isPostCSSImportPlugin(line: string) {
-    return /['"]?postcss-import['"]?\: ?\{\}/.test(line)
+    return /['"]?postcss-import['"]?: ?\{\}/.test(line)
   }
   function isAutoprefixerPlugin(line: string) {
-    return /['"]?autoprefixer['"]?\: ?\{\}/.test(line)
+    return /['"]?autoprefixer['"]?: ?\{\}/.test(line)
   }
   function isTailwindCSSNestingPlugin(line: string) {
-    return /['"]tailwindcss\/nesting['"]\: ?(\{\}|['"]postcss-nesting['"])/.test(line)
+    return /['"]tailwindcss\/nesting['"]: ?(\{\}|['"]postcss-nesting['"])/.test(line)
   }
 
   info('Migrating PostCSS configuration…')

@@ -196,7 +196,7 @@ test('build mode', { fs: WORKSPACE }, async ({ spawn, exec, expect }) => {
 
   let url = ''
   await process.onStdout((m) => {
-    let match = /\[react-router-serve\]\s*(http.*)\ \/?/.exec(m)
+    let match = /\[react-router-serve\]\s*(http.*) \/?/.exec(m)
     if (match) url = match[1]
     return url != ''
   })
