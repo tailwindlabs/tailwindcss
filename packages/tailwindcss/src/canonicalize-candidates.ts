@@ -92,7 +92,7 @@ interface DesignSystem extends BaseDesignSystem {
     [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
-    [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | Symbol>>
+    [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | symbol>>
     [STATIC_UTILITIES_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
@@ -102,7 +102,7 @@ interface DesignSystem extends BaseDesignSystem {
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
-    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | Symbol>
+    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | symbol>
     [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<string, string[]>
   }
 }
@@ -2095,7 +2095,7 @@ function createUtilitySignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof UTILITY_SIGNATURE_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
-    return new DefaultMap<string, string | Symbol>((utility) => {
+    return new DefaultMap<string, string | symbol>((utility) => {
       try {
         // Ensure the prefix is added to the utility if it is not already present.
         utility =
@@ -2463,7 +2463,7 @@ export const VARIANT_SIGNATURE_KEY = Symbol()
 function createVariantSignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
-  return new DefaultMap<string, string | Symbol>((variant) => {
+  return new DefaultMap<string, string | symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
       variant =
