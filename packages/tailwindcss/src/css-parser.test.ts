@@ -212,7 +212,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         {
           kind: 'declaration',
           property: 'content',
-          value: `'These are not the end \"\\' of the string'`,
+          value: `'These are not the end "\\' of the string'`,
           important: false,
         },
       ])

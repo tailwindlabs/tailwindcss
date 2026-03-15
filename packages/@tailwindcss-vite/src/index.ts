@@ -24,7 +24,7 @@ import * as vite from 'vite'
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
-const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
+const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
 
 export type PluginOptions = {
   /**
@@ -415,7 +415,7 @@ class Root {
       // crash Vite. We work around this for now by ignoring updates to them.
       //
       // https://github.com/tailwindlabs/tailwindcss/issues/16877
-      if (/[\#\?].*\.svg$/.test(file)) {
+      if (/[#?].*\.svg$/.test(file)) {
         return
       }
       _addWatchFile(file)
