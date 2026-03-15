@@ -39,13 +39,13 @@ impl BracketStack {
             return false;
         }
 
-        self.bracket_stack_len -= 1;
         unsafe {
-            if *self.bracket_stack.get_unchecked(self.bracket_stack_len) != bracket {
+            if *self.bracket_stack.get_unchecked(self.bracket_stack_len - 1) != bracket {
                 return false;
             }
         }
 
+        self.bracket_stack_len -= 1;
         true
     }
 

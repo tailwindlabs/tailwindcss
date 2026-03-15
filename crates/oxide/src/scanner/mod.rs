@@ -585,7 +585,12 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
     impl Drop for FlushOnDrop {
         fn drop(&mut self) {
             if !self.local.is_empty() {
-                self.shared.lock().unwrap().append(&mut self.local);
+                // Use `unwrap_or_else` to handle a poisoned mutex gracefully instead of
+                // panicking. A panic in `Drop` during unwinding would cause a process abort.
+                self.shared
+                    .lock()
+                    .unwrap_or_else(|e| e.into_inner())
+                    .append(&mut self.local);
             }
         }
     }

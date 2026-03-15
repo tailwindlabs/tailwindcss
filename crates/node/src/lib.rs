@@ -138,7 +138,12 @@ impl Scanner {
     input: ChangedContent,
   ) -> Vec<CandidateWithPosition> {
     let content = input.content.unwrap_or_else(|| {
-      std::fs::read_to_string(input.file.unwrap()).expect("Failed to read file")
+      std::fs::read_to_string(
+        input
+          .file
+          .expect("ChangedContent must have either `content` or `file`"),
+      )
+      .expect("Failed to read file")
     });
 
     let input = ChangedContent {
