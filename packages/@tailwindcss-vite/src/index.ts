@@ -62,7 +62,11 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = config!.createResolver(config!.resolve)
 
-      customCssResolver = (id: string, base: string) => cssResolver(id, base, false, isSSR)
+      customCssResolver = async (id: string, base: string) => {
+        let resolved = await cssResolver(id, base, false, isSSR)
+        if (resolved && !resolved.endsWith('.css')) return undefined
+        return resolved
+      }
       customJsResolver = (id: string, base: string) => jsResolver(id, base, false, isSSR)
     } else {
       type ResolveIdFn = (
@@ -105,7 +109,11 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = createBackCompatIdResolver(env.config, env.config.resolve)
 
-      customCssResolver = (id: string, base: string) => cssResolver(env, id, base, false)
+      customCssResolver = async (id: string, base: string) => {
+        let resolved = await cssResolver(env, id, base, false)
+        if (resolved && !resolved.endsWith('.css')) return undefined
+        return resolved
+      }
       customJsResolver = (id: string, base: string) => jsResolver(env, id, base, false)
     }
 
