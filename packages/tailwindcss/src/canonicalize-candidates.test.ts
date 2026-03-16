@@ -1054,6 +1054,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // To completely different utility
       ['w-4 h-4', 'size-4'],
 
+      // Goes beyond the default spacing scale that's being used in intellisense
+      // for code completion. Since it's about bare values, we should still be
+      // able to combine them.
+      ['w-123 h-123', 'size-123'],
+      ['w-128 h-128', 'size-128'], // `w-128` on its own would become `w-lg`
+      ['mt-123 mb-123', 'my-123'],
+
       // Do not touch if not operating on the same variants
       ['hover:w-4 h-4', 'hover:w-4 h-4'],
 
