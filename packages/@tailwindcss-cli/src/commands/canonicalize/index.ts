@@ -306,7 +306,7 @@ function splitCandidates(input: string) {
     .filter((candidate) => candidate.length > 0)
 }
 
-function sortAndCanonicalizeCandidates(
+function canonicalize(
   designSystem: Awaited<ReturnType<typeof __unstable__loadDesignSystem>>,
   input: string,
 ) {
@@ -322,7 +322,7 @@ function createCandidateGroupResult(
   designSystem: Awaited<ReturnType<typeof __unstable__loadDesignSystem>>,
   input: string,
 ): CandidateGroupResult {
-  let output = sortAndCanonicalizeCandidates(designSystem, input)
+  let output = canonicalize(designSystem, input)
 
   return {
     input,
