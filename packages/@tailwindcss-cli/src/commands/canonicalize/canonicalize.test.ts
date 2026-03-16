@@ -120,7 +120,7 @@ describe('runCommandLine', { timeout: 30_000 }, () => {
     let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
     let { stream: output, collect: collectOutput } = createOutput()
 
-    await streamStdin({ css, cwd: path.dirname(css), input, output })
+    await streamStdin({ css, cwd: path.dirname(css), format: 'text', input, output })
 
     expect(collectOutput()).toBe('p-3\nm-2\n')
   })
@@ -129,9 +129,41 @@ describe('runCommandLine', { timeout: 30_000 }, () => {
     let input = Readable.from('py-3 p-1 px-3\n\nmt-2 mr-2 mb-2 ml-2\n')
     let { stream: output, collect: collectOutput } = createOutput()
 
-    await streamStdin({ css, cwd: path.dirname(css), input, output })
+    await streamStdin({ css, cwd: path.dirname(css), format: 'text', input, output })
 
     expect(collectOutput()).toBe('p-3\n\nm-2\n')
+  })
+
+  test('streams json output when requested', async () => {
+    let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'json', input, output })
+
+    expect(JSON.parse(collectOutput())).toEqual([
+      {
+        input: 'py-3 p-1 px-3',
+        output: 'p-3',
+        changed: true,
+      },
+      {
+        input: 'mt-2 mr-2 mb-2 ml-2',
+        output: 'm-2',
+        changed: true,
+      },
+    ])
+  })
+
+  test('streams jsonl output when requested', async () => {
+    let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'jsonl', input, output })
+
+    expect(collectOutput()).toBe(
+      '{"input":"py-3 p-1 px-3","output":"p-3","changed":true}\n' +
+        '{"input":"mt-2 mr-2 mb-2 ml-2","output":"m-2","changed":true}\n',
+    )
   })
 })
 

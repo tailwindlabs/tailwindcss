@@ -89,20 +89,27 @@ export async function runCommandLine({
       argv,
     )
 
+    let format = parseFormat(flags['--format'] ?? 'text')
+
     if ((stdoutIsTTY && argv.length === 0) || flags['--help']) {
       return {
         exitCode: 0,
-        stdout: helpMessage(),
+        stdout: helpMessage() ?? '',
         stderr: '',
       }
     }
 
     if (flags['--stream']) {
-      await streamStdin({ css: flags['--css'], cwd, input: process.stdin, output: process.stdout })
+      await streamStdin({
+        css: flags['--css'],
+        cwd,
+        format,
+        input: process.stdin,
+        output: process.stdout,
+      })
       return { exitCode: 0, stdout: '', stderr: '' }
     }
 
-    let format = parseFormat(flags['--format'])
     let inputs = flags._.length > 0 ? flags._ : await readCandidateGroups({ stdin, stdinIsTTY })
 
     if (inputs.length === 0) {
@@ -132,19 +139,54 @@ export async function runCommandLine({
 export async function streamStdin({
   css: cssFile,
   cwd,
+  format,
   input,
   output,
 }: {
   css: string | null
   cwd: string
+  format: OutputFormat
   input: Readable
   output: Writable
 }): Promise<void> {
   let designSystem = await loadDesignSystem(cssFile, cwd)
   let rl = createInterface({ input })
+  let first = true
+
+  if (format === 'json') {
+    output.write('[')
+  }
 
   for await (let line of rl) {
-    output.write(sortAndCanonicalizeCandidates(designSystem, line) + '\n')
+    let result = createCandidateGroupResult(designSystem, line)
+
+    switch (format) {
+      case 'text': {
+        output.write(result.output + '\n')
+        break
+      }
+
+      case 'jsonl': {
+        output.write(JSON.stringify(result) + '\n')
+        break
+      }
+
+      case 'json': {
+        if (first) {
+          output.write('\n')
+        } else {
+          output.write(',\n')
+        }
+
+        output.write(indent(JSON.stringify(result, null, 2), 2))
+        first = false
+        break
+      }
+    }
+  }
+
+  if (format === 'json') {
+    output.write(first ? ']' : '\n]')
   }
 }
 
@@ -190,15 +232,7 @@ export async function processCandidateGroups({
 }): Promise<CandidateGroupResult[]> {
   let designSystem = await loadDesignSystem(css, cwd)
 
-  return inputs.map((input) => {
-    let output = sortAndCanonicalizeCandidates(designSystem, input)
-
-    return {
-      input,
-      output,
-      changed: output !== input,
-    }
-  })
+  return inputs.map((input) => createCandidateGroupResult(designSystem, input))
 }
 
 export function formatCandidateResults(results: CandidateGroupResult[], format: OutputFormat) {
@@ -258,7 +292,7 @@ function parseFormat(input: string): OutputFormat {
 function usageError(message: string): RunCommandLineResult {
   return {
     exitCode: 1,
-    stdout: helpMessage(),
+    stdout: helpMessage() ?? '',
     stderr: message,
   }
 }
@@ -281,8 +315,28 @@ function sortAndCanonicalizeCandidates(
     collapse: true,
     logicalToPhysical: true,
   })
-  return defaultSort(designSystem.getClassOrder(candidates))
-    .join(' ')
+  return defaultSort(designSystem.getClassOrder(candidates)).join(' ')
+}
+
+function createCandidateGroupResult(
+  designSystem: Awaited<ReturnType<typeof __unstable__loadDesignSystem>>,
+  input: string,
+): CandidateGroupResult {
+  let output = sortAndCanonicalizeCandidates(designSystem, input)
+
+  return {
+    input,
+    output,
+    changed: output !== input,
+  }
+}
+
+function indent(input: string, size: number) {
+  let prefix = ' '.repeat(size)
+  return input
+    .split('\n')
+    .map((line) => prefix + line)
+    .join('\n')
 }
 
 function defaultSort(entries: [string, bigint | null][]) {
