@@ -1061,6 +1061,16 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['w-128 h-128', 'size-128'], // `w-128` on its own would become `w-lg`
       ['mt-123 mb-123', 'my-123'],
 
+      // Collapse duplicates into themselves
+      ['w-8 w-8', 'w-8'],
+
+      // `w-*` and `h-*` would canonicalize to `size-5`
+      // `size-5` and `size-5` should then canonicalize to `size-5`
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5', 'size-5'],
+
+      // Same as above, but with an additional unrelated class
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5 flex', 'size-5 flex'],
+
       // Do not touch if not operating on the same variants
       ['hover:w-4 h-4', 'hover:w-4 h-4'],
 

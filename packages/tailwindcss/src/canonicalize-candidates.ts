@@ -446,13 +446,17 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
 
-          // We can replace all items in the combo with the replacement
-          for (let item of combo) {
-            drop.add(candidates[item])
-          }
-
           // Use the replacement
           result.add(replacement)
+
+          // We can replace all items in the combo with the replacement. If the
+          // replacement is already part of the combo, keep that one around.
+          for (let item of combo) {
+            if (candidates[item] !== replacement) {
+              drop.add(candidates[item])
+            }
+          }
+
           break
         }
       }
