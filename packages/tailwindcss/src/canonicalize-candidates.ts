@@ -312,17 +312,63 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       }
     }
 
+    let dynamicUtilities = new DefaultMap((candidate: string) => {
+      let result = new DefaultMap(
+        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
+      )
+
+      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
+      if (relevantProperties.size === 0) return result
+
+      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
+        if (
+          parsedCandidate.kind !== 'functional' ||
+          parsedCandidate.value?.kind !== 'named' // Necessary for bare values
+        ) {
+          continue
+        }
+
+        for (let root of designSystem.utilities.keys('functional')) {
+          if (root === parsedCandidate.root) continue // Skip self
+
+          let replacement = printUnprefixedCandidate(designSystem, {
+            ...cloneCandidate(parsedCandidate),
+            root,
+          })
+
+          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          for (let [property, values] of propertyValues) {
+            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
+
+            for (let value of values) {
+              result.get(property).get(value).add(replacement)
+            }
+          }
+        }
+
+        return result
+      }
+
+      return result
+    })
+
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
     // each property.
     //
     // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
-    let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
+    let otherUtilities = candidatePropertiesValues.map((propertyValues, idx) => {
       let result: Set<string> | null = null
       for (let property of propertyValues.keys()) {
         let otherUtilities = new Set<string>()
         for (let group of staticUtilities.get(property).values()) {
           for (let candidate of group) {
+            otherUtilities.add(candidate)
+          }
+        }
+
+        for (let value of propertyValues.get(property)) {
+          for (let candidate of dynamicUtilities.get(candidates[idx]).get(property).get(value)) {
             otherUtilities.add(candidate)
           }
         }
