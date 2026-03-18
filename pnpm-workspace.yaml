@@ -10,11 +10,11 @@ catalog:
   prettier: 3.8.1
   vite: ^8.0.0
   webpack: ^5
-  lightningcss: 1.31.1
-  lightningcss-darwin-arm64: 1.31.1
-  lightningcss-darwin-x64: 1.31.1
-  lightningcss-linux-arm64-gnu: 1.31.1
-  lightningcss-linux-arm64-musl: 1.31.1
-  lightningcss-linux-x64-gnu: 1.31.1
-  lightningcss-linux-x64-musl: 1.31.1
-  lightningcss-win32-x64-msvc: 1.31.1
+  lightningcss: 1.32.0
+  lightningcss-darwin-arm64: 1.32.0
+  lightningcss-darwin-x64: 1.32.0
+  lightningcss-linux-arm64-gnu: 1.32.0
+  lightningcss-linux-arm64-musl: 1.32.0
+  lightningcss-linux-x64-gnu: 1.32.0
+  lightningcss-linux-x64-musl: 1.32.0
+  lightningcss-win32-x64-msvc: 1.32.0
