@@ -81,8 +81,8 @@ impl Machine for NamedVariantMachine<IdleState> {
 
     #[inline(always)]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
-            Class::AlphaLower | Class::Star => match cursor.next.into() {
+        match cursor.curr().into() {
+            Class::AlphaLower | Class::Star => match cursor.next().into() {
                 // Valid single character variant, must be followed by a `:`
                 //
                 // E.g.: `<div class="x:flex"></div>`
@@ -134,8 +134,8 @@ impl Machine for NamedVariantMachine<ParsingState> {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Dash => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Dash => match cursor.next().into() {
                     // Start of an arbitrary value
                     //
                     // E.g.: `data-[state=pending]:`.
@@ -192,7 +192,7 @@ impl Machine for NamedVariantMachine<ParsingState> {
                     };
                 }
 
-                Class::Underscore => match cursor.next.into() {
+                Class::Underscore => match cursor.next().into() {
                     // Valid characters _if_ followed by another valid character. These characters are
                     // only valid inside of the variant but not at the end of the variant.
                     //
@@ -240,11 +240,11 @@ impl Machine for NamedVariantMachine<ParsingState> {
                 // E.g.: `2.5xl:flex`
                 //        ^^^
                 Class::Dot => {
-                    if !matches!(cursor.prev.into(), Class::Number) {
+                    if !matches!(cursor.prev().into(), Class::Number) {
                         return self.restart();
                     }
 
-                    if !matches!(cursor.next.into(), Class::Number) {
+                    if !matches!(cursor.next().into(), Class::Number) {
                         return self.restart();
                     }
 
@@ -263,7 +263,7 @@ impl Machine for NamedVariantMachine<ParsingState> {
 impl NamedVariantMachine<ParsingState> {
     #[inline(always)]
     fn parse_arbitrary_end(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.next.into() {
+        match cursor.next().into() {
             Class::Slash => {
                 cursor.advance();
                 self.transition::<ParsingModifierState>().next(cursor)
@@ -285,7 +285,7 @@ impl Machine for NamedVariantMachine<ParsingModifierState> {
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         match self.modifier_machine.next(cursor) {
             MachineState::Idle => self.restart(),
-            MachineState::Done(_) => match cursor.next.into() {
+            MachineState::Done(_) => match cursor.next().into() {
                 // Modifier must be followed by a `:`
                 //
                 // E.g.: `group-hover/name:`
@@ -308,7 +308,7 @@ impl Machine for NamedVariantMachine<ParsingEndState> {
 
     #[inline(always)]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
+        match cursor.curr().into() {
             // The end of a variant must be the `:`
             //
             // E.g.: `hover:`

@@ -1,0 +1,175 @@
+import path from 'node:path'
+import { PassThrough, Readable } from 'node:stream'
+import { fileURLToPath } from 'node:url'
+import { describe, expect, test } from 'vitest'
+import { runCommandLine, streamStdin } from '.'
+import { normalizeWindowsSeparators } from '../../utils/test-helpers'
+
+let css = normalizeWindowsSeparators(
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/input.css'),
+)
+
+describe('runCommandLine', { timeout: 30_000 }, () => {
+  test('canonicalizes, collapses, and sorts candidate groups from positional arguments', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css, 'py-3 p-1 px-3'],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: 'p-3',
+      stderr: '',
+    })
+  })
+
+  test('falls back to the default tailwind import when --css is omitted', async () => {
+    let result = await runCommandLine({
+      argv: ['py-3 p-1 px-3'],
+      cwd: path.dirname(css),
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: 'p-3',
+      stderr: '',
+    })
+  })
+
+  test('canonicalizes, collapses, and sorts multiple groups from stdin lines', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css],
+      stdin: '[display:_flex_] py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2 focus:hover:p-3 hover:p-1 py-3\n',
+      stdinIsTTY: false,
+      stdoutIsTTY: false,
+    })
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: 'flex p-3\nm-2 py-3 hover:p-1 focus:hover:p-3',
+      stderr: '',
+    })
+  })
+
+  test('collapses equivalent candidates', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css, 'mt-2 mr-2 mb-2 ml-2'],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: 'm-2',
+      stderr: '',
+    })
+  })
+
+  test('renders json output for processed candidate groups', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css, '--format', 'json', 'py-3 p-1 px-3'],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result.exitCode).toBe(0)
+    expect(JSON.parse(result.stdout)).toEqual([
+      {
+        input: 'py-3 p-1 px-3',
+        output: 'p-3',
+        changed: true,
+      },
+    ])
+    expect(result.stderr).toBe('')
+  })
+
+  test('splits candidate lists with segment-aware spacing', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css, '--format', 'json', "content-['hello world'] p-1"],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result.exitCode).toBe(0)
+    expect(JSON.parse(result.stdout)).toEqual([
+      {
+        input: "content-['hello world'] p-1",
+        output: "p-1 content-['hello_world']",
+        changed: true,
+      },
+    ])
+    expect(result.stderr).toBe('')
+  })
+
+  test('shows a usage error when no candidate groups are provided', async () => {
+    let result = await runCommandLine({
+      argv: ['--css', css],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result.exitCode).toBe(1)
+    expect(result.stderr).toBe('No candidate groups provided')
+    expect(result.stdout).toContain('Usage:')
+  })
+
+  test('streams canonicalized output line by line', async () => {
+    let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'text', input, output })
+
+    expect(collectOutput()).toBe('p-3\nm-2\n')
+  })
+
+  test('streams empty lines as empty lines', async () => {
+    let input = Readable.from('py-3 p-1 px-3\n\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'text', input, output })
+
+    expect(collectOutput()).toBe('p-3\n\nm-2\n')
+  })
+
+  test('streams json output when requested', async () => {
+    let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'json', input, output })
+
+    expect(JSON.parse(collectOutput())).toEqual([
+      {
+        input: 'py-3 p-1 px-3',
+        output: 'p-3',
+        changed: true,
+      },
+      {
+        input: 'mt-2 mr-2 mb-2 ml-2',
+        output: 'm-2',
+        changed: true,
+      },
+    ])
+  })
+
+  test('streams jsonl output when requested', async () => {
+    let input = Readable.from('py-3 p-1 px-3\nmt-2 mr-2 mb-2 ml-2\n')
+    let { stream: output, collect: collectOutput } = createOutput()
+
+    await streamStdin({ css, cwd: path.dirname(css), format: 'jsonl', input, output })
+
+    expect(collectOutput()).toBe(
+      '{"input":"py-3 p-1 px-3","output":"p-3","changed":true}\n' +
+        '{"input":"mt-2 mr-2 mb-2 ml-2","output":"m-2","changed":true}\n',
+    )
+  })
+})
+
+function createOutput() {
+  let stream = new PassThrough()
+  let chunks: Buffer[] = []
+  stream.on('data', (chunk) => chunks.push(chunk))
+  return { stream, collect: () => Buffer.concat(chunks).toString() }
+}

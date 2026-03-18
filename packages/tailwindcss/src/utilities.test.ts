@@ -1646,6 +1646,13 @@ test('row', async () => {
       'row-span-full/foo',
       'row-[span_123/span_123]/foo',
       'row-span-[var(--my-variable)]/foo',
+
+      // Candidates matching Object.prototype properties should not crash or
+      // produce output (see: https://github.com/tailwindlabs/tailwindcss/issues/19721)
+      'row-constructor',
+      'row-hasOwnProperty',
+      'row-toString',
+      'row-valueOf',
     ]),
   ).toEqual('')
 
@@ -3156,7 +3163,7 @@ test('aspect-ratio', async () => {
         }
         @tailwind utilities;
       `,
-      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3', 'aspect-8.5/11'],
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
@@ -3165,6 +3172,10 @@ test('aspect-ratio', async () => {
 
     .aspect-4\\/3 {
       aspect-ratio: 4 / 3;
+    }
+
+    .aspect-8\\.5\\/11 {
+      aspect-ratio: 8.5 / 11;
     }
 
     .aspect-\\[10\\/9\\] {
@@ -3188,6 +3199,7 @@ test('aspect-ratio', async () => {
       'aspect--4/3',
       'aspect--4/-3',
       'aspect-4/-3',
+      'aspect-1.23/4.56',
     ]),
   ).toEqual('')
 })
@@ -28423,7 +28435,7 @@ describe('custom utilities', () => {
   test.each([
     ['foo', false], // Simple name, missing '-*' suffix
     ['foo-*', true], // Simple name
-    ['foo--*', false], // Root should not end in `-`
+    ['foo--*', true], // Root ending in `-` is valid (e.g. `border--*`)
     ['-foo-*', true], // Simple name (negative)
     ['foo-bar-*', true], // With dashes
     ['foo_bar-*', true], // With underscores
@@ -28893,6 +28905,38 @@ describe('custom utilities', () => {
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('functional utility with double-dash separator', async () => {
+      let input = css`
+        @theme reference {
+          --color-border-0: #e5e7eb;
+          --color-border-1: #d1d5db;
+          --color-border-2: #9ca3af;
+        }
+
+        @utility border--* {
+          border-color: --value(--color-border-*, [color]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['border--0', 'border--1', 'border--2']))
+        .toMatchInlineSnapshot(`
+          ".border--0 {
+            border-color: var(--color-border-0, #e5e7eb);
+          }
+
+          .border--1 {
+            border-color: var(--color-border-1, #d1d5db);
+          }
+
+          .border--2 {
+            border-color: var(--color-border-2, #9ca3af);
+          }"
+        `)
+      expect(await compileCss(input, ['border--3'])).toEqual('')
     })
 
     test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {

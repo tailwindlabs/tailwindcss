@@ -30,20 +30,20 @@ impl Machine for StringMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        if Class::Quote != cursor.curr.into() {
+        if Class::Quote != cursor.curr().into() {
             return MachineState::Idle;
         }
 
         // Start of a string
         let len = cursor.input.len();
         let start_pos = cursor.pos;
-        let end_char = cursor.curr;
+        let end_char = cursor.curr();
 
         cursor.advance();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Escape => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Escape => match cursor.next().into() {
                     // An escaped whitespace character is not allowed
                     Class::Whitespace => return MachineState::Idle,
 
@@ -52,7 +52,7 @@ impl Machine for StringMachine {
                 },
 
                 // End of the string
-                Class::Quote if cursor.curr == end_char => return self.done(start_pos, cursor),
+                Class::Quote if cursor.curr() == end_char => return self.done(start_pos, cursor),
 
                 // Any kind of whitespace is not allowed
                 Class::Whitespace => return MachineState::Idle,

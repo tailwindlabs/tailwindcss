@@ -254,6 +254,20 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     // Additionally we remove unnecessary whitespace.
     ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
 
+    // `calc(var(--spacing)*…)` to `--spacing(…)`
+    ['pt-[min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+    ['pt-[min(20%,calc(var(--spacing)*var(--other)))]', 'pt-[min(20%,--spacing(var(--other)))]'],
+    ['pt-[calc(var(--spacing)*8)]', 'pt-8'],
+    ['pt-[calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
+    ['[padding-top:min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+    [
+      '[padding-top:min(20%,calc(var(--spacing)*var(--other)))]',
+      'pt-[min(20%,--spacing(var(--other)))]',
+    ],
+    ['[padding-top:calc(var(--spacing)*8)]', 'pt-8'],
+    ['[padding-top:calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
     // `theme(…)` calls valid in v3, but not in v4 should still be converted.
     ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
 
@@ -1040,6 +1054,23 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // To completely different utility
       ['w-4 h-4', 'size-4'],
 
+      // Goes beyond the default spacing scale that's being used in intellisense
+      // for code completion. Since it's about bare values, we should still be
+      // able to combine them.
+      ['w-123 h-123', 'size-123'],
+      ['w-128 h-128', 'size-128'], // `w-128` on its own would become `w-lg`
+      ['mt-123 mb-123', 'my-123'],
+
+      // Collapse duplicates into themselves
+      ['w-8 w-8', 'w-8'],
+
+      // `w-*` and `h-*` would canonicalize to `size-5`
+      // `size-5` and `size-5` should then canonicalize to `size-5`
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5', 'size-5'],
+
+      // Same as above, but with an additional unrelated class
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5 flex', 'size-5 flex'],
+
       // Do not touch if not operating on the same variants
       ['hover:w-4 h-4', 'hover:w-4 h-4'],
 
@@ -1163,3 +1194,85 @@ describe('options', () => {
     expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]']) // Ensure options don't influence shared state
   })
 })
+
+// https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
+test('a subset of classes should be canonicalizable', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  expect(
+    designSystem.canonicalizeCandidates(['underline', 'h-4', 'w-4', 'text-sm'], options),
+  ).toEqual(['underline', 'text-sm', 'size-4'])
+})
+
+test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  let target = ['underline', 'h-4', 'w-4']
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+  designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+  designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+  expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
+    'underline',
+    'text-sm',
+    'size-4',
+  ])
+})
+
+test(
+  'collapse does not crash when utilities with no standard properties are present',
+  { timeout },
+  async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    // Shadow utilities use CSS custom properties and @property rules but may
+    // produce empty property maps in the collapse algorithm. This should not
+    // crash with "Cannot read properties of null" or "X is not iterable".
+    expect(() =>
+      designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
+    ).not.toThrow()
+
+    expect(() => designSystem.canonicalizeCandidates(['shadow-md', 'p-4'], options)).not.toThrow()
+
+    expect(() =>
+      designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
+    ).not.toThrow()
+
+    // Verify the candidates are returned (not collapsed, since shadows can't
+    // meaningfully collapse with unrelated utilities)
+    expect(designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options)).toEqual(
+      expect.arrayContaining(['shadow-sm', 'border']),
+    )
+
+    expect(designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options)).toEqual(
+      expect.arrayContaining(['shadow-sm', 'shadow-md']),
+    )
+  },
+)
