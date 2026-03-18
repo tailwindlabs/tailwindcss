@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
+## [4.2.2] - 2026-03-18
+
 ### Fixed
 
 - Guard object lookups against inherited prototype properties ([#19725](https://github.com/tailwindlabs/tailwindcss/pull/19725))
@@ -19,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Skip full reload for server only modules scanned by client CSS when using `@tailwindcss/vite` ([#19745](https://github.com/tailwindlabs/tailwindcss/pull/19745))
 - Add support for Vite 8 in `@tailwindcss/vite` ([#19790](https://github.com/tailwindlabs/tailwindcss/pull/19790))
 - Improve canonicalization for bare values exceeding default spacing scale suggestions (e.g. `w-1234 h-1234` → `size-1234`) ([#19809](https://github.com/tailwindlabs/tailwindcss/pull/19809))
-- Fix canonicalization resulting in empty list (e.g. `w-5 h-5 size-5` → `` instead of `size-5`) ([#19812](https://github.com/tailwindlabs/tailwindcss/pull/19812))
+- Fix canonicalization resulting in empty list (e.g. `w-5 h-5 size-5` → ``instead of`size-5`) ([#19812](https://github.com/tailwindlabs/tailwindcss/pull/19812))
 
 ## [4.2.1] - 2026-02-23
 
@@ -3958,7 +3960,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...HEAD
+[4.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.1...v4.2.2
 [4.2.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...v4.2.0
 [4.1.18]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.17...v4.1.18
