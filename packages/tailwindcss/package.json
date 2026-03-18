@@ -130,6 +130,7 @@
     "@jridgewell/remapping": "^2.3.5",
     "@tailwindcss/oxide": "workspace:^",
     "@types/node": "catalog:",
+    "brace-expansion": "^5.0.4",
     "dedent": "1.7.1",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.21",

@@ -19,9 +19,12 @@ describe('expand(…)', () => {
     ['a/{10..0..5}/b', ['a/10/b', 'a/5/b', 'a/0/b']],
     ['a/{10..0..-5}/b', ['a/0/b', 'a/5/b', 'a/10/b']],
 
-    // Numeric range with padding (we do not support padding)
-    ['a/{00..05}/b', ['a/0/b', 'a/1/b', 'a/2/b', 'a/3/b', 'a/4/b', 'a/5/b']],
-    ['a{001..9}b', ['a1b', 'a2b', 'a3b', 'a4b', 'a5b', 'a6b', 'a7b', 'a8b', 'a9b']],
+    // Numeric range with zero-padding
+    ['a/{00..05}/b', ['a/00/b', 'a/01/b', 'a/02/b', 'a/03/b', 'a/04/b', 'a/05/b']],
+    [
+      'a{001..9}b',
+      ['a001b', 'a002b', 'a003b', 'a004b', 'a005b', 'a006b', 'a007b', 'a008b', 'a009b'],
+    ],
 
     // Numeric range with step
     ['a/{0..5..2}/b', ['a/0/b', 'a/2/b', 'a/4/b']],
@@ -61,15 +64,15 @@ describe('expand(…)', () => {
       ],
     ],
 
-    // Should not try to expand ranges with decimals
-    ['{1.1..2.2}', ['1.1..2.2']],
+    // Decimal ranges are not expanded; braces are preserved as a literal
+    ['{1.1..2.2}', ['{1.1..2.2}']],
   ])('should expand %s (%#)', (input, expected) => {
     expect(expand(input).sort()).toEqual(expected.sort())
   })
 
-  test('throws on unbalanced braces', () => {
-    expect(() => expand('a{b,c{d,e},{f,g}h}x{y,z')).toThrowErrorMatchingInlineSnapshot(
-      `[Error: The pattern \`x{y,z\` is not balanced.]`,
+  test('gracefully handles unbalanced braces', () => {
+    expect(expand('a{b,c{d,e},{f,g}h}x{y,z').sort()).toEqual(
+      ['abx{y,z', 'acdx{y,z', 'acex{y,z', 'afhx{y,z', 'aghx{y,z'].sort(),
     )
   })
 
