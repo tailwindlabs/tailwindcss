@@ -26,7 +26,7 @@ function extractAlpha(color: string): string | null {
   }
 
   // Legacy rgba/hsla syntax with comma: rgba(0, 0, 0, 0.12)
-  const commaAlphaMatch = color.match(/,\s*([\d.]+)\s*\)/)
+  // Must be rgba/hsla (with 'a') to have 4 values where the last is alpha`n  const commaAlphaMatch = color.match(/^(?:rgba|hsla)\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\s*\)$/i)
   if (commaAlphaMatch) {
     const alpha = commaAlphaMatch[1]
     const alphaNum = parseFloat(alpha)
