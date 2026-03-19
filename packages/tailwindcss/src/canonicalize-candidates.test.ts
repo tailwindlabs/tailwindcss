@@ -1120,6 +1120,40 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       await expectCombinedCanonicalization(input, candidates.trim(), expected)
     })
   })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1558
+  test.each([
+    ['tracking-[-0.05em]', 'tracking-tighter'],
+    ['tracking-[-0.025em]', 'tracking-tight'],
+    ['tracking-[0em]', 'tracking-normal'],
+    ['tracking-[0.025em]', 'tracking-wide'],
+    ['tracking-[0.05em]', 'tracking-wider'],
+    ['tracking-[0.1em]', 'tracking-widest'],
+
+    // Negative values that don't make sense
+    // See: https://tailwindcss.com/docs/letter-spacing#using-negative-values
+    ['-tracking-tighter', 'tracking-wider'],
+    ['-tracking-tight', 'tracking-wide'],
+    ['-tracking-normal', 'tracking-normal'],
+    ['-tracking-wide', 'tracking-tight'],
+    ['-tracking-wider', 'tracking-tighter'],
+  ])(testName, { timeout }, async (candidate, expected) => {
+    await expectCanonicalization(
+      css`
+        @import 'tailwindcss';
+        @theme {
+          --tracking-tighter: -0.05em;
+          --tracking-tight: -0.025em;
+          --tracking-normal: 0em;
+          --tracking-wide: 0.025em;
+          --tracking-wider: 0.05em;
+          --tracking-widest: 0.1em;
+        }
+      `,
+      candidate,
+      expected,
+    )
+  })
 })
 
 describe('theme to var', () => {
