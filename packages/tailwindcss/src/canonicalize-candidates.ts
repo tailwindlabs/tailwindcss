@@ -1128,11 +1128,29 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
@@ -1353,11 +1371,29 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
