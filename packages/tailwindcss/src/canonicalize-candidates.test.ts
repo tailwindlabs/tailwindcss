@@ -1129,6 +1129,14 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['tracking-[0.025em]', 'tracking-wide'],
     ['tracking-[0.05em]', 'tracking-wider'],
     ['tracking-[0.1em]', 'tracking-widest'],
+
+    // Negative values that don't make sense
+    // See: https://tailwindcss.com/docs/letter-spacing#using-negative-values
+    ['-tracking-tighter', 'tracking-wider'],
+    ['-tracking-tight', 'tracking-wide'],
+    ['-tracking-normal', 'tracking-normal'],
+    ['-tracking-wide', 'tracking-tight'],
+    ['-tracking-wider', 'tracking-tighter'],
   ])(testName, { timeout }, async (candidate, expected) => {
     await expectCanonicalization(
       css`
