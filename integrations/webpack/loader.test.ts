@@ -469,11 +469,11 @@ test(
       'query-loader.js': js`
         module.exports = function (source) {
           if (this.resourceQuery.includes('a')) {
-            return '@import "tailwindcss/utilities";\n\n@utility only-a {\n  color: var(--color-red-500);\n}\n'
+            return '@import "tailwindcss/utilities"; @utility only-a {color: var(--color-red-500);}'
           }
 
           if (this.resourceQuery.includes('b')) {
-            return '@import "tailwindcss/utilities";\n\n@utility only-b {\n  color: var(--color-blue-500);\n}\n'
+            return '@import "tailwindcss/utilities"; @utility only-b {color: var(--color-blue-500);}'
           }
 
           return source
