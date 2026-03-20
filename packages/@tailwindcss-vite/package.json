@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/vite",
-  "version": "4.1.18",
+  "version": "4.2.2",
   "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
   "license": "MIT",
   "repository": {
@@ -37,6 +37,6 @@
     "vite": "catalog:"
   },
   "peerDependencies": {
-    "vite": "^5.2.0 || ^6 || ^7"
+    "vite": "^5.2.0 || ^6 || ^7 || ^8"
   }
 }

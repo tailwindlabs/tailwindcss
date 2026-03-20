@@ -1501,6 +1501,14 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19786
+  test('out-of-range escaped CSS variable candidates do not crash the build', async () => {
+    // Shouldn't crash
+    await run([
+      String.raw`--Coding-Projects-CharacterMapper-Master-Workspace\d8819554-4725-4235-9d22-2d0ed572e924`,
+    ])
+  })
+
   test('`@keyframes` in `@theme` are hoisted', async () => {
     expect(
       await compileCss(
@@ -3098,7 +3106,7 @@ describe('plugins', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`)
   })
 
-  test('@plugin can not have an empty path', () => {
+  test('@plugin cannot have an empty path', () => {
     return expect(
       compile(
         css`
@@ -4727,6 +4735,31 @@ describe('@utility', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
     )
+  })
+
+  test('@utility can handle escape sequences correctly', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-1\/2 {
+        right: 50%;
+      }
+
+      @utility push-50\% {
+        right: 50%;
+      }
+    `)
+    let compiled = build(['push-1/2', 'push-50%'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .push-1\\/2, .push-50\\% {
+          right: 50%;
+        }
+      }"
+    `)
   })
 
   test('A functional @utility must end in -*', () => {

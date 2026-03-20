@@ -13,13 +13,13 @@ impl PreProcessor for Elixir {
 
         while cursor.pos < content.len() {
             // Look for a sigil marker
-            if cursor.curr != b'~' {
+            if cursor.curr() != b'~' {
                 cursor.advance();
                 continue;
             }
 
             // Scan charlists, strings, and wordlists
-            if !matches!(cursor.next, b'c' | b'C' | b's' | b'S' | b'w' | b'W') {
+            if !matches!(cursor.next(), b'c' | b'C' | b's' | b'S' | b'w' | b'W') {
                 cursor.advance();
                 continue;
             }
@@ -27,7 +27,7 @@ impl PreProcessor for Elixir {
             cursor.advance_twice();
 
             // Match the opening for a sigil
-            if !matches!(cursor.curr, b'(' | b'[' | b'{') {
+            if !matches!(cursor.curr(), b'(' | b'[' | b'{') {
                 continue;
             }
 
@@ -35,19 +35,19 @@ impl PreProcessor for Elixir {
             result[cursor.pos] = b' ';
 
             // Scan until we find a balanced closing one and replace it too
-            bracket_stack.push(cursor.curr);
+            bracket_stack.push(cursor.curr());
 
             while cursor.pos < content.len() {
                 cursor.advance();
 
-                match cursor.curr {
+                match cursor.curr() {
                     // Escaped character, skip ahead to the next character
                     b'\\' => cursor.advance_twice(),
                     b'(' | b'[' | b'{' => {
-                        bracket_stack.push(cursor.curr);
+                        bracket_stack.push(cursor.curr());
                     }
                     b')' | b']' | b'}' if !bracket_stack.is_empty() => {
-                        bracket_stack.pop(cursor.curr);
+                        bracket_stack.pop(cursor.curr());
 
                         if bracket_stack.is_empty() {
                             // Replace the closing bracket with a space

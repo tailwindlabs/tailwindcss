@@ -16,6 +16,7 @@ import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import {
   inferDataType,
   isPositiveInteger,
@@ -390,6 +391,8 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
+    if (desc.staticValues) desc.staticValues = Object.assign(Object.create(null), desc.staticValues)
+
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
@@ -981,7 +984,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      if (!isValidSpacingMultiplier(lhs) || !isValidSpacingMultiplier(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -5939,7 +5942,11 @@ export const BARE_VALUE_DATA_TYPES = [
 ]
 
 export function createCssUtility(node: AtRule) {
-  let name = node.params
+  // Allow escaped characters in the name for compatibility with formatters and
+  // other parsers, to ensure valid CSS syntax. E.g.: `@utility foo-1\/2`.
+  //
+  // Note: the actual utility will be `foo-1/2`
+  let name = unescape(node.params)
 
   // Functional utilities. E.g.: `tab-size-*`
   if (isValidFunctionalUtilityName(name)) {
@@ -6654,22 +6661,21 @@ export function isValidFunctionalUtilityName(name: string): boolean {
   let root = match[0]
   let value = name.slice(root.length)
 
-  // Root should not end in `-` if there is no value
-  //
-  // `tab-size--*`
-  //  ---------     Root
-  //           --   Suffix
-  //
-  // Because with default values, this could match `tab-size-` which is invalid.
-  if (value.length === 0 && root.endsWith('-')) {
-    return false
-  }
-
   // No remaining value is valid
   //
   // `tab-size-*`
   //  --------    Root
   //          --  Suffix
+  //
+  // Backwards compatibility: a root ending in `-` was valid and correctly
+  // scanned by Oxide. This means that custom utilities can result in candidates
+  // such as `foo--bar`.
+  //
+  // We might want to revisit this for Tailwind CSS v5, but for now we have to
+  // make it backwards compatible.
+  //
+  // PR: https://github.com/tailwindlabs/tailwindcss/pull/19696
+  //
   if (value.length === 0) {
     return true
   }

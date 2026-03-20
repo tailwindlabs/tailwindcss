@@ -10,25 +10,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
-- Add `@tailwindcss/webpack` loader for Tailwind CSS v4 ([#19610](https://github.com/tailwindlabs/tailwindcss/pull/19610))
-- Add `pbs-*`, `pbe-*`, `mbs-*`, `mbe-*`, `scroll-pbs-*`, `scroll-pbe-*`, `scroll-mbs-*`, `scroll-mbe-*`, `border-bs-*`, `border-be-*` utilities for `padding-block-start`, `padding-block-end`, `margin-block-start`, `margin-block-end`, `scroll-padding-block-start`, `scroll-padding-block-end`, `scroll-margin-block-start`, `scroll-margin-block-end`, `border-block-start`, and `border-block-end` ([`#19601`](https://github.com/tailwindlabs/tailwindcss/pull/19601))
-- Add `inline-*`, `min-inline-*`, `max-inline-*`, `block-*`, `min-block-*`, `max-block-*` utilities for `inline-size`, `min-inline-size`, `max-inline-size`, `block-size`, `min-block-size`, and `max-block-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
-- Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities for `inset-inline-start`, `inset-inline-end`, `inset-block-start`, and `inset-block-end` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
-- Add `font-features-*` utility for `font-feature-settings` ([#19623](https://github.com/tailwindlabs/tailwindcss/pull/19615))
 
 ### Fixed
 
-- Do not wrap `color-mix` in a `@supports` rule if one already exists ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
+- Improve canonicalizations for `tracking-*` utilities ([#19827](https://github.com/tailwindlabs/tailwindcss/pull/19827))
+- Fix crash due to invalid characters in candidate ([#19829](https://github.com/tailwindlabs/tailwindcss/pull/19829))
+
+## [4.2.2] - 2026-03-18
+
+### Fixed
+
+- Don't crash when candidates contain prototype properties like `row-constructor` ([#19725](https://github.com/tailwindlabs/tailwindcss/pull/19725))
+- Canonicalize `calc(var(--spacing)*…)` expressions into `--spacing(…)` ([#19769](https://github.com/tailwindlabs/tailwindcss/pull/19769))
+- Fix crash in canonicalization step when handling utilities containing `@property` at-rules (e.g. `shadow-sm border`) ([#19727](https://github.com/tailwindlabs/tailwindcss/pull/19727))
+- Skip full reload for server only modules scanned by client CSS when using `@tailwindcss/vite` ([#19745](https://github.com/tailwindlabs/tailwindcss/pull/19745))
+- Add support for Vite 8 in `@tailwindcss/vite` ([#19790](https://github.com/tailwindlabs/tailwindcss/pull/19790))
+- Improve canonicalization for bare values exceeding default spacing scale suggestions (e.g. `w-1234 h-1234` → `size-1234`) ([#19809](https://github.com/tailwindlabs/tailwindcss/pull/19809))
+- Fix canonicalization resulting in empty list (e.g. `w-5 h-5 size-5` → `''` instead of `size-5`) ([#19812](https://github.com/tailwindlabs/tailwindcss/pull/19812))
+- Resolve tsconfig paths to allow for `@import '@/path/to/file';` when using `@tailwindcss/vite` ([#19803](https://github.com/tailwindlabs/tailwindcss/pull/19803))
+
+## [4.2.1] - 2026-02-23
+
+### Fixed
+
+- Allow trailing dash in functional utility names for backwards compatibility ([#19696](https://github.com/tailwindlabs/tailwindcss/pull/19696))
+- Properly detect classes containing `.` characters within curly braces in MDX files ([#19711](https://github.com/tailwindlabs/tailwindcss/pull/19711))
+
+## [4.2.0] - 2026-02-18
+
+### Added
+
+- Add mauve, olive, mist, and taupe color palettes to the default theme ([#19627](https://github.com/tailwindlabs/tailwindcss/pull/19627))
+- Add `@tailwindcss/webpack` package to run Tailwind CSS as a webpack plugin ([#19610](https://github.com/tailwindlabs/tailwindcss/pull/19610))
+- Add `pbs-*` and `pbe-*` utilities for `padding-block-start` and `padding-block-end` ([#19601](https://github.com/tailwindlabs/tailwindcss/pull/19601))
+- Add `mbs-*` and `mbe-*` utilities for `margin-block-start` and `margin-block-end` ([#19601](https://github.com/tailwindlabs/tailwindcss/pull/19601))
+- Add `scroll-pbs-*` and `scroll-pbe-*` utilities for `scroll-padding-block-start` and `scroll-padding-block-end` ([#19601](https://github.com/tailwindlabs/tailwindcss/pull/19601))
+- Add `scroll-mbs-*` and `scroll-mbe-*` utilities for `scroll-margin-block-start` and `scroll-margin-block-end` ([#19601](https://github.com/tailwindlabs/tailwindcss/pull/19601))
+- Add `border-bs-*` and `border-be-*` utilities for `border-block-start` and `border-block-end` ([#19601](https://github.com/tailwindlabs/tailwindcss/pull/19601))
+- Add `inline-*`, `min-inline-*`, `max-inline-*` utilities for `inline-size`, `min-inline-size`, and `max-inline-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
+- Add `block-*`, `min-block-*`, `max-block-*` utilities for `block-size`, `min-block-size`, and `max-block-size` ([#19612](https://github.com/tailwindlabs/tailwindcss/pull/19612))
+- Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities for `inset-inline-start`, `inset-inline-end`, `inset-block-start`, and `inset-block-end` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
+- Add `font-features-*` utility for `font-feature-settings` ([#19623](https://github.com/tailwindlabs/tailwindcss/pull/19623))
+
+### Fixed
+
+- Prevent double `@supports` wrapper for `color-mix` values ([#19450](https://github.com/tailwindlabs/tailwindcss/pull/19450))
 - Allow whitespace around `@source inline()` argument ([#19461](https://github.com/tailwindlabs/tailwindcss/pull/19461))
-- CLI: Emit comment when source maps are saved to files ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
-- Detect utilities when containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
+- Emit comment when source maps are saved to files when using `@tailwindcss/cli` ([#19447](https://github.com/tailwindlabs/tailwindcss/pull/19447))
+- Detect utilities containing capital letters followed by numbers ([#19465](https://github.com/tailwindlabs/tailwindcss/pull/19465))
 - Fix class extraction for Rails' strict locals ([#19525](https://github.com/tailwindlabs/tailwindcss/pull/19525))
 - Align `@utility` name validation with Oxide scanner rules ([#19524](https://github.com/tailwindlabs/tailwindcss/pull/19524))
 - Fix infinite loop when using `@variant` inside `@custom-variant` ([#19633](https://github.com/tailwindlabs/tailwindcss/pull/19633))
+- Allow multiples of `.25` in `aspect-*` fractions (e.g. `aspect-8.5/11`) ([#19688](https://github.com/tailwindlabs/tailwindcss/pull/19688))
+- Ensure changes to external files listed via `@source` trigger a full page reload when using `@tailwindcss/vite` ([#19670](https://github.com/tailwindlabs/tailwindcss/pull/19670))
+- Improve performance of Oxide scanner in bigger projects by reducing file system walks ([#19632](https://github.com/tailwindlabs/tailwindcss/pull/19632))
+- Ensure import aliases in Astro v5 work without crashing when using `@tailwindcss/vite` ([#19677](https://github.com/tailwindlabs/tailwindcss/issues/19677))
+- Allow escape characters in `@utility` names to improve support with formatters such as Biome ([#19626](https://github.com/tailwindlabs/tailwindcss/pull/19626))
+- Fix incorrect canonicalization results when canonicalizing multiple times ([#19675](https://github.com/tailwindlabs/tailwindcss/pull/19675))
+- Add `.jj` to default ignored content directories ([#19687](https://github.com/tailwindlabs/tailwindcss/pull/19687))
 
 ### Deprecated
 
-- Deprecate `start-*` and `end-*` utilities in favor of `inline-s-*` and `inline-e-*` ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
+- Deprecate `start-*` and `end-*` utilities in favor of `inset-s-*` and `inset-e-*` utilities ([#19613](https://github.com/tailwindlabs/tailwindcss/pull/19613))
 
 ## [4.1.18] - 2025-12-11
 
@@ -3923,7 +3966,10 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...HEAD
+[4.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.1...v4.2.2
+[4.2.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.0...v4.2.1
+[4.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...v4.2.0
 [4.1.18]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.17...v4.1.18
 [3.4.19]: https://github.com/tailwindlabs/tailwindcss/compare/v3.4.18...v3.4.19
 [4.1.17]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.16...v4.1.17

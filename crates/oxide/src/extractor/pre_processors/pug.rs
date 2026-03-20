@@ -15,7 +15,7 @@ impl PreProcessor for Pug {
         let mut bracket_stack = BracketStack::default();
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
                 // ```diff
@@ -43,7 +43,7 @@ impl PreProcessor for Pug {
                     // digit.
                     // E.g.: `bg-red-500.2xl:flex`
                     //                 ^^^
-                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                    if cursor.prev().is_ascii_digit() && cursor.next().is_ascii_digit() {
                         let mut next_cursor = cursor.clone();
                         next_cursor.advance();
 
@@ -68,17 +68,17 @@ impl PreProcessor for Pug {
                 //
                 // However, we also need to make sure that we keep the parens that are part of the
                 // utility class. E.g.: `bg-(--my-color)`.
-                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev, b'-' | b'/') => {
+                b'(' if bracket_stack.is_empty() && !matches!(cursor.prev(), b'-' | b'/') => {
                     result[cursor.pos] = b' ';
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b'(' | b'[' | b'{' => {
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b')' | b']' | b'}' if !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
+                    bracket_stack.pop(cursor.curr());
                 }
 
                 // Consume everything else
