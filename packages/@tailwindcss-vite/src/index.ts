@@ -24,7 +24,7 @@ import * as vite from 'vite'
 const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
-const INLINE_STYLE_ID_RE = /[?&]index\=\d+\.css$/
+const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
 
 export type PluginOptions = {
   /**
@@ -62,8 +62,12 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = config!.createResolver(config!.resolve)
 
-      customCssResolver = (id: string, base: string) => cssResolver(id, base, true, isSSR)
-      customJsResolver = (id: string, base: string) => jsResolver(id, base, true, isSSR)
+      customCssResolver = async (id: string, base: string) => {
+        let resolved = await cssResolver(id, base, false, isSSR)
+        if (resolved && !resolved.endsWith('.css')) return undefined
+        return resolved
+      }
+      customJsResolver = (id: string, base: string) => jsResolver(id, base, false, isSSR)
     } else {
       type ResolveIdFn = (
         environment: Environment,
@@ -105,8 +109,12 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = createBackCompatIdResolver(env.config, env.config.resolve)
 
-      customCssResolver = (id: string, base: string) => cssResolver(env, id, base, true)
-      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, true)
+      customCssResolver = async (id: string, base: string) => {
+        let resolved = await cssResolver(env, id, base, false)
+        if (resolved && !resolved.endsWith('.css')) return undefined
+        return resolved
+      }
+      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, false)
     }
 
     return new Root(
@@ -208,8 +216,29 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           // Note: in Vite v7.0.6 the modules here will have a type of `js`, not
           // 'asset'. But it will also have a `HARD_INVALIDATED` state and will
           // do a full page reload already.
-          let isExternalFile = modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
+          //
+          // Empty modules can be skipped since it means it's not `addWatchFile`d and thus irrelevant to Tailwind.
+          let isExternalFile =
+            modules.length > 0 &&
+            modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
+
+          // Skip if the module exists in other environments. SSR framework has
+          // its own server side hmr/reload mechanism when handling server
+          // only modules. See https://v6.vite.dev/guide/migration.html
+          // > Updates to an SSR-only module no longer triggers a full page reload in the client. ...
+          for (let environment of Object.values(server.environments)) {
+            if (environment.name === this.environment.name) continue
+
+            let modules = environment.moduleGraph.getModulesByFile(file)
+            if (modules) {
+              for (let module of modules) {
+                if (module.type !== 'asset') {
+                  return
+                }
+              }
+            }
+          }
 
           for (let env of new Set([this.environment.name, 'client'])) {
             let roots = rootsByEnv.get(env)
@@ -394,7 +423,7 @@ class Root {
       // crash Vite. We work around this for now by ignoring updates to them.
       //
       // https://github.com/tailwindlabs/tailwindcss/issues/16877
-      if (/[\#\?].*\.svg$/.test(file)) {
+      if (/[#?].*\.svg$/.test(file)) {
         return
       }
       _addWatchFile(file)

@@ -92,7 +92,7 @@ interface DesignSystem extends BaseDesignSystem {
     [CANONICALIZE_UTILITY_KEY]: DefaultMap<InternalCanonicalizeOptions, DefaultMap<string, string>>
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
-    [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | Symbol>>
+    [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | symbol>>
     [STATIC_UTILITIES_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
@@ -102,7 +102,7 @@ interface DesignSystem extends BaseDesignSystem {
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
-    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | Symbol>
+    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | symbol>
     [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<string, string[]>
   }
 }
@@ -312,17 +312,63 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       }
     }
 
+    let dynamicUtilities = new DefaultMap((candidate: string) => {
+      let result = new DefaultMap(
+        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
+      )
+
+      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
+      if (relevantProperties.size === 0) return result
+
+      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
+        if (
+          parsedCandidate.kind !== 'functional' ||
+          parsedCandidate.value?.kind !== 'named' // Necessary for bare values
+        ) {
+          continue
+        }
+
+        for (let root of designSystem.utilities.keys('functional')) {
+          if (root === parsedCandidate.root) continue // Skip self
+
+          let replacement = printUnprefixedCandidate(designSystem, {
+            ...cloneCandidate(parsedCandidate),
+            root,
+          })
+
+          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          for (let [property, values] of propertyValues) {
+            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
+
+            for (let value of values) {
+              result.get(property).get(value).add(replacement)
+            }
+          }
+        }
+
+        return result
+      }
+
+      return result
+    })
+
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
     // each property.
     //
     // E.g.: `margin-top` → `mt-1`, `my-1`, `m-1`
-    let otherUtilities = candidatePropertiesValues.map((propertyValues) => {
+    let otherUtilities = candidatePropertiesValues.map((propertyValues, idx) => {
       let result: Set<string> | null = null
       for (let property of propertyValues.keys()) {
         let otherUtilities = new Set<string>()
         for (let group of staticUtilities.get(property).values()) {
           for (let candidate of group) {
+            otherUtilities.add(candidate)
+          }
+        }
+
+        for (let value of propertyValues.get(property)) {
+          for (let candidate of dynamicUtilities.get(candidates[idx]).get(property).get(value)) {
             otherUtilities.add(candidate)
           }
         }
@@ -334,7 +380,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         // all intersections with an empty set will remain empty.
         if (result!.size === 0) return result!
       }
-      return result!
+      return result ?? new Set<string>()
     })
 
     // Link each candidate that could be linked via another utility
@@ -400,13 +446,17 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
 
-          // We can replace all items in the combo with the replacement
-          for (let item of combo) {
-            drop.add(candidates[item])
-          }
-
           // Use the replacement
           result.add(replacement)
+
+          // We can replace all items in the combo with the replacement. If the
+          // replacement is already part of the combo, keep that one around.
+          for (let item of combo) {
+            if (candidates[item] !== replacement) {
+              drop.add(candidates[item])
+            }
+          }
+
           break
         }
       }
@@ -527,6 +577,7 @@ type UtilityCanonicalizationFunction = (
 const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   bgGradientToLinear,
   themeToVarUtility,
+  calcToSpacingFunction,
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
@@ -638,6 +689,69 @@ function themeToVarVariant(
   }
 
   return variant
+}
+
+function calcToSpacingFunction(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
+  if (candidate.kind === 'arbitrary') {
+    candidate.value = spacingCalcToSpacingFunction(candidate.value, options.designSystem)
+  } else if (candidate.kind === 'functional' && candidate.value?.kind === 'arbitrary') {
+    candidate.value.value = spacingCalcToSpacingFunction(
+      candidate.value.value,
+      options.designSystem,
+    )
+  }
+
+  return candidate
+}
+
+function spacingCalcToSpacingFunction(input: string, designSystem: DesignSystem) {
+  let spacingVariable = designSystem.theme.prefix
+    ? `--${designSystem.theme.prefix}-spacing`
+    : '--spacing'
+
+  let ast = ValueParser.parse(input)
+
+  walk(ast, (node) => {
+    // calc(…)
+    if (node.kind !== 'function' || node.value !== 'calc') return
+
+    // calc(var(--spacing) * 2)
+    //      --------------       1. function        (var)
+    //                    -      2. separator       ( )
+    //                     -     3. word            (*)
+    //                      -    4. separator       ( )
+    //                       -   5. any value, word (2)
+    if (node.nodes.length !== 5) return
+
+    // *
+    if (node.nodes[2].kind !== 'word' || node.nodes[2].value !== '*') {
+      return
+    }
+
+    // var(--spacing)
+    if (
+      node.nodes[0].kind !== 'function' ||
+      node.nodes[0].value !== 'var' ||
+      node.nodes[0].nodes.length !== 1 ||
+      node.nodes[0].nodes[0].kind !== 'word' ||
+      node.nodes[0].nodes[0].value !== spacingVariable
+    ) {
+      return
+    }
+
+    return WalkAction.Replace(
+      ValueParser.parse(
+        `--spacing(${
+          ValueParser.toCss([node.nodes[4]]) // Value node
+        })`,
+      ),
+    )
+  })
+
+  return ValueParser.toCss(ast)
 }
 
 const CONVERTER_KEY = Symbol()
@@ -1014,11 +1128,29 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
@@ -1239,11 +1371,29 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
@@ -2031,7 +2181,7 @@ function createUtilitySignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof UTILITY_SIGNATURE_KEY] {
   return new DefaultMap((options: SignatureOptions) => {
-    return new DefaultMap<string, string | Symbol>((utility) => {
+    return new DefaultMap<string, string | symbol>((utility) => {
       try {
         // Ensure the prefix is added to the utility if it is not already present.
         utility =
@@ -2399,7 +2549,7 @@ export const VARIANT_SIGNATURE_KEY = Symbol()
 function createVariantSignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
-  return new DefaultMap<string, string | Symbol>((variant) => {
+  return new DefaultMap<string, string | symbol>((variant) => {
     try {
       // Ensure the prefix is added to the utility if it is not already present.
       variant =

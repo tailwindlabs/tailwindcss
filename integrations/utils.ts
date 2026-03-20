@@ -569,7 +569,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9/_.?=%-]+)"/gi
   let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
   let stylesheets: string[] = []
