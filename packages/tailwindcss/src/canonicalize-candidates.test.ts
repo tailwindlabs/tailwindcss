@@ -1054,6 +1054,23 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // To completely different utility
       ['w-4 h-4', 'size-4'],
 
+      // Goes beyond the default spacing scale that's being used in intellisense
+      // for code completion. Since it's about bare values, we should still be
+      // able to combine them.
+      ['w-123 h-123', 'size-123'],
+      ['w-128 h-128', 'size-128'], // `w-128` on its own would become `w-lg`
+      ['mt-123 mb-123', 'my-123'],
+
+      // Collapse duplicates into themselves
+      ['w-8 w-8', 'w-8'],
+
+      // `w-*` and `h-*` would canonicalize to `size-5`
+      // `size-5` and `size-5` should then canonicalize to `size-5`
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5', 'size-5'],
+
+      // Same as above, but with an additional unrelated class
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5 flex', 'size-5 flex'],
+
       // Do not touch if not operating on the same variants
       ['hover:w-4 h-4', 'hover:w-4 h-4'],
 
@@ -1102,6 +1119,40 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       `
       await expectCombinedCanonicalization(input, candidates.trim(), expected)
     })
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1558
+  test.each([
+    ['tracking-[-0.05em]', 'tracking-tighter'],
+    ['tracking-[-0.025em]', 'tracking-tight'],
+    ['tracking-[0em]', 'tracking-normal'],
+    ['tracking-[0.025em]', 'tracking-wide'],
+    ['tracking-[0.05em]', 'tracking-wider'],
+    ['tracking-[0.1em]', 'tracking-widest'],
+
+    // Negative values that don't make sense
+    // See: https://tailwindcss.com/docs/letter-spacing#using-negative-values
+    ['-tracking-tighter', 'tracking-wider'],
+    ['-tracking-tight', 'tracking-wide'],
+    ['-tracking-normal', 'tracking-normal'],
+    ['-tracking-wide', 'tracking-tight'],
+    ['-tracking-wider', 'tracking-tighter'],
+  ])(testName, { timeout }, async (candidate, expected) => {
+    await expectCanonicalization(
+      css`
+        @import 'tailwindcss';
+        @theme {
+          --tracking-tighter: -0.05em;
+          --tracking-tight: -0.025em;
+          --tracking-normal: 0em;
+          --tracking-wide: 0.025em;
+          --tracking-wider: 0.05em;
+          --tracking-widest: 0.1em;
+        }
+      `,
+      candidate,
+      expected,
+    )
   })
 })
 
