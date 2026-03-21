@@ -1310,3 +1310,19 @@ test(
     )
   },
 )
+
+test('collapse canonicalization works for arbitrary values', { timeout }, async () => {
+  let designSystem = await designSystems.get(__dirname).get(css`
+    @import 'tailwindcss';
+  `)
+
+  let options: CanonicalizeOptions = {
+    collapse: true,
+    logicalToPhysical: true,
+    rem: 16,
+  }
+
+  expect(
+    designSystem.canonicalizeCandidates(['px-[1.2rem]', 'py-[1.2rem]', 'text-left'], options),
+  ).toEqual(['text-left', 'p-[1.2rem]'])
+})
