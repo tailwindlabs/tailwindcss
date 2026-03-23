@@ -1311,6 +1311,7 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/19835
 test('collapse canonicalization works for arbitrary values', { timeout }, async () => {
   let designSystem = await designSystems.get(__dirname).get(css`
     @import 'tailwindcss';
