@@ -23,7 +23,7 @@ function expand(input: string, options: SignatureFeatures): string {
 describe('expand declarations', () => {
   let options = SignatureFeatures.ExpandProperties
 
-  test('expand to 4 properties', () => {
+  test('inset', () => {
     let input = css`
       .one {
         inset: 10px;
@@ -71,7 +71,7 @@ describe('expand declarations', () => {
     `)
   })
 
-  test('expand to 2 properties', () => {
+  test('gap', () => {
     let input = css`
       .one {
         gap: 10px;
@@ -147,6 +147,22 @@ describe('expand declarations', () => {
 describe('expand logical properties', () => {
   let options = SignatureFeatures.ExpandProperties | SignatureFeatures.LogicalToPhysical
 
+  test('margin-inline', () => {
+    let input = css`
+      .example {
+        margin-inline: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        margin-left: 10px;
+        margin-right: 20px;
+      }
+      "
+    `)
+  })
+
   test('margin-block', () => {
     let input = css`
       .example {
@@ -158,6 +174,38 @@ describe('expand logical properties', () => {
       ".example {
         margin-top: 10px;
         margin-bottom: 20px;
+      }
+      "
+    `)
+  })
+
+  test('padding-inline', () => {
+    let input = css`
+      .example {
+        padding-inline: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        padding-left: 10px;
+        padding-right: 20px;
+      }
+      "
+    `)
+  })
+
+  test('padding-block', () => {
+    let input = css`
+      .example {
+        padding-block: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        padding-top: 10px;
+        padding-bottom: 20px;
       }
       "
     `)
