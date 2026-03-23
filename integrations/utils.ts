@@ -16,7 +16,8 @@ const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((na
 )
 
 interface SpawnedProcess {
-  dispose: () => void
+  dispose: () => Promise<void>
+  kill: () => Promise<void>
   flush: () => void
   onStdout: (predicate: (message: string) => boolean) => Promise<void>
   onStderr: (predicate: (message: string) => boolean) => Promise<void>
@@ -194,6 +195,21 @@ export function test(
             return disposePromise
           }
           disposables.push(dispose)
+
+          function kill() {
+            child.kill('SIGKILL')
+            let timer = setTimeout(
+              () =>
+                rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
+              ASSERTION_TIMEOUT,
+            )
+            disposePromise.finally(() => {
+              clearTimeout(timer)
+            })
+            return disposePromise
+          }
+          disposables.push(kill)
+
           function onExit() {
             resolveDisposal?.()
           }
@@ -262,6 +278,7 @@ export function test(
 
           return {
             dispose,
+            kill,
             flush() {
               stdoutActors.splice(0)
               stderrActors.splice(0)
