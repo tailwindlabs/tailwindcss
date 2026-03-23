@@ -321,10 +321,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       if (relevantProperties.size === 0) return result
 
       for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
-        if (
-          parsedCandidate.kind !== 'functional' ||
-          parsedCandidate.value?.kind !== 'named' // Necessary for bare values
-        ) {
+        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
           continue
         }
 

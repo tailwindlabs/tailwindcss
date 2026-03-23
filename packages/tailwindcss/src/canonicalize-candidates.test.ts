@@ -1310,3 +1310,34 @@ test(
     )
   },
 )
+
+// https://github.com/tailwindlabs/tailwindcss/issues/19835
+test.each([
+  // Arbitrary values should be collapsed to another arbitrary value
+  [
+    ['px-[1.2rem]', 'py-[1.2rem]', 'text-left'],
+    ['text-left', 'p-[1.2rem]'],
+  ],
+
+  // Arbitrary values could also be collapsed into a bare value
+  [
+    ['px-[30.75rem]', 'py-[30.75rem]', 'text-left'],
+    ['text-left', 'p-123'],
+  ],
+])(
+  'collapse canonicalization works for arbitrary values',
+  { timeout },
+  async (candidates, expected) => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+  },
+)
