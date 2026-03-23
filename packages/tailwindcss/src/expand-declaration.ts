@@ -35,6 +35,7 @@ let VARIADIC_EXPANSION_MAP: Record<string, Record<number, [prop: string, index: 
   inset: createBareQuad(),
   margin: createPrefixedQuad('margin'),
   padding: createPrefixedQuad('padding'),
+  'scroll-margin': createPrefixedQuad('scroll-margin'),
   'border-width': createPrefixedQuad(
     'border',
     'top-width',
@@ -70,6 +71,8 @@ let VARIADIC_LOGICAL_EXPANSION_MAP: Record<
   'margin-inline': createPair('margin-left', 'margin-right'),
   'padding-block': createPair('padding-top', 'padding-bottom'),
   'padding-inline': createPair('padding-left', 'padding-right'),
+  'scroll-margin-block': createPair('scroll-margin-top', 'scroll-margin-bottom'),
+  'scroll-margin-inline': createPair('scroll-margin-left', 'scroll-margin-right'),
 }
 
 // The entire value is mapped to each property

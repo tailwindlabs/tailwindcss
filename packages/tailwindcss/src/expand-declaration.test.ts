@@ -239,6 +239,54 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('scroll-margin', () => {
+    let input = css`
+      .one {
+        scroll-margin: 1px;
+      }
+
+      .two {
+        scroll-margin: 1px 2px;
+      }
+
+      .three {
+        scroll-margin: 1px 2px 3px;
+      }
+
+      .four {
+        scroll-margin: 1px 2px 3px 4px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        scroll-margin-top: 1px;
+        scroll-margin-right: 1px;
+        scroll-margin-bottom: 1px;
+        scroll-margin-left: 1px;
+      }
+      .two {
+        scroll-margin-top: 1px;
+        scroll-margin-right: 2px;
+        scroll-margin-bottom: 1px;
+        scroll-margin-left: 2px;
+      }
+      .three {
+        scroll-margin-top: 1px;
+        scroll-margin-right: 2px;
+        scroll-margin-bottom: 3px;
+        scroll-margin-left: 2px;
+      }
+      .four {
+        scroll-margin-top: 1px;
+        scroll-margin-right: 2px;
+        scroll-margin-bottom: 3px;
+        scroll-margin-left: 4px;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
@@ -350,6 +398,38 @@ describe('expand logical properties', () => {
       ".example {
         padding-top: 10px;
         padding-bottom: 20px;
+      }
+      "
+    `)
+  })
+
+  test('scroll-margin-inline', () => {
+    let input = css`
+      .example {
+        scroll-margin-inline: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        scroll-margin-left: 10px;
+        scroll-margin-right: 20px;
+      }
+      "
+    `)
+  })
+
+  test('scroll-margin-block', () => {
+    let input = css`
+      .example {
+        scroll-margin-block: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        scroll-margin-top: 10px;
+        scroll-margin-bottom: 20px;
       }
       "
     `)
