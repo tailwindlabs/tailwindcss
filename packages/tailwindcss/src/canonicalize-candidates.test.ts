@@ -1319,7 +1319,7 @@ test.each([
     ['text-left', 'p-[1.2rem]'],
   ],
 
-  // Arbitrary values could also be collapsed in a bare value
+  // Arbitrary values could also be collapsed into a bare value
   [
     ['px-[30.75rem]', 'py-[30.75rem]', 'text-left'],
     ['text-left', 'p-123'],
