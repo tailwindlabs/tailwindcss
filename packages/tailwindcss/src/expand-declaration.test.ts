@@ -614,14 +614,14 @@ describe('expand logical properties', () => {
   test('border-block-style', () => {
     let input = css`
       .example {
-        border-inline-style: 1px;
+        border-block-style: 1px;
       }
     `
 
     expect(expand(input, options)).toMatchInlineSnapshot(`
       ".example {
-        border-left-style: 1px;
-        border-right-style: 1px;
+        border-bottom-style: 1px;
+        border-top-style: 1px;
       }
       "
     `)
