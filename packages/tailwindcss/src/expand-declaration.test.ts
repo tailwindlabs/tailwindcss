@@ -143,6 +143,54 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('border-style', () => {
+    let input = css`
+      .one {
+        border-style: solid;
+      }
+
+      .two {
+        border-style: solid dashed;
+      }
+
+      .three {
+        border-style: solid dashed dotted;
+      }
+
+      .four {
+        border-style: solid dashed dotted double;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        border-top-style: solid;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-left-style: solid;
+      }
+      .two {
+        border-top-style: solid;
+        border-right-style: dashed;
+        border-bottom-style: solid;
+        border-left-style: dashed;
+      }
+      .three {
+        border-top-style: solid;
+        border-right-style: dashed;
+        border-bottom-style: dotted;
+        border-left-style: dashed;
+      }
+      .four {
+        border-top-style: solid;
+        border-right-style: dashed;
+        border-bottom-style: dotted;
+        border-left-style: double;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
@@ -286,6 +334,38 @@ describe('expand logical properties', () => {
       ".example {
         border-left-width: 1px;
         border-right-width: 1px;
+      }
+      "
+    `)
+  })
+
+  test('border-inline-style', () => {
+    let input = css`
+      .example {
+        border-inline-style: 1px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        border-left-style: 1px;
+        border-right-style: 1px;
+      }
+      "
+    `)
+  })
+
+  test('border-block-style', () => {
+    let input = css`
+      .example {
+        border-inline-style: 1px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        border-left-style: 1px;
+        border-right-style: 1px;
       }
       "
     `)
