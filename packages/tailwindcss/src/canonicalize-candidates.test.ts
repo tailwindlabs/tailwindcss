@@ -1044,9 +1044,21 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     test.each([
       // 4 to 1
       ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
+      ['border-t-123 border-r-123 border-b-123 border-l-123', 'border-123'],
+      ['border-t-1 border-r-1 border-b-1 border-l-1', 'border'], // `border` is shorter than `border-1`
+      ['border-t-red-500 border-r-red-500 border-b-red-500 border-l-red-500', 'border-red-500'],
+      ['scroll-mt-1 scroll-mr-1 scroll-mb-1 scroll-ml-1', 'scroll-m-1'],
+      ['scroll-pt-1 scroll-pr-1 scroll-pb-1 scroll-pl-1', 'scroll-p-1'],
 
       // 2 to 1
       ['mt-1 mb-1', 'my-1'],
+      ['border-t-123 border-b-123', 'border-y-123'],
+      ['border-t-1 border-b-1', 'border-y'], // `border-y` is shorter than `border-y-1`
+      ['border-t-red-500 border-b-red-500', 'border-y-red-500'],
+      ['scroll-mt-1 scroll-mb-1', 'scroll-my-1'],
+      ['scroll-pt-1 scroll-pb-1', 'scroll-py-1'],
+      ['overflow-x-hidden overflow-y-hidden', 'overflow-hidden'],
+      ['overscroll-x-contain overscroll-y-contain', 'overscroll-contain'],
 
       // Different order as above
       ['mb-1 mt-1', 'my-1'],
