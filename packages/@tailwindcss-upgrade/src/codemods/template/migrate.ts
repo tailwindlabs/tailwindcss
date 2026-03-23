@@ -124,7 +124,8 @@ export async function migrate(designSystem: DesignSystem, userConfig: Config | n
   let contents = await fs.readFile(fullPath, 'utf-8')
 
   let migrated = await migrateContents(designSystem, userConfig, contents, extname(file))
-  if (migrated !== contents) {
-    await fs.writeFile(fullPath, migrated)
-  }
+  if (migrated === contents) return // Nothing changed
+  if (migrated.trim() === '') return // Emptied out, something went horribly wrong
+
+  await fs.writeFile(fullPath, migrated)
 }
