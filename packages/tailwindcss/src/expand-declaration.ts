@@ -49,6 +49,13 @@ let VARIADIC_EXPANSION_MAP: Record<string, Record<number, [prop: string, index: 
     'bottom-style',
     'left-style',
   ),
+  'border-color': createPrefixedQuad(
+    'border',
+    'top-color',
+    'right-color',
+    'bottom-color',
+    'left-color',
+  ),
   gap: createPair('row-gap', 'column-gap'),
 }
 

@@ -1046,11 +1046,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
       ['border-t-123 border-r-123 border-b-123 border-l-123', 'border-123'],
       ['border-t-1 border-r-1 border-b-1 border-l-1', 'border'], // `border` is shorter than `border-1`
+      ['border-t-red-500 border-r-red-500 border-b-red-500 border-l-red-500', 'border-red-500'],
 
       // 2 to 1
       ['mt-1 mb-1', 'my-1'],
       ['border-t-123 border-b-123', 'border-y-123'],
       ['border-t-1 border-b-1', 'border-y'], // `border-y` is shorter than `border-y-1`
+      ['border-t-red-500 border-b-red-500', 'border-y-red-500'],
 
       // Different order as above
       ['mb-1 mt-1', 'my-1'],

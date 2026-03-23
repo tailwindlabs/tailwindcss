@@ -191,6 +191,54 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('border-color', () => {
+    let input = css`
+      .one {
+        border-color: red;
+      }
+
+      .two {
+        border-color: red green;
+      }
+
+      .three {
+        border-color: red green blue;
+      }
+
+      .four {
+        border-color: red green blue black;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        border-top-color: red;
+        border-right-color: red;
+        border-bottom-color: red;
+        border-left-color: red;
+      }
+      .two {
+        border-top-color: red;
+        border-right-color: green;
+        border-bottom-color: red;
+        border-left-color: green;
+      }
+      .three {
+        border-top-color: red;
+        border-right-color: green;
+        border-bottom-color: blue;
+        border-left-color: green;
+      }
+      .four {
+        border-top-color: red;
+        border-right-color: green;
+        border-bottom-color: blue;
+        border-left-color: black;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
