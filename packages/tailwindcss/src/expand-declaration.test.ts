@@ -95,6 +95,54 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('border-width', () => {
+    let input = css`
+      .one {
+        border-width: 1px;
+      }
+
+      .two {
+        border-width: 1px 2px;
+      }
+
+      .three {
+        border-width: 1px 2px 3px;
+      }
+
+      .four {
+        border-width: 1px 2px 3px 4px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 1px;
+        border-left-width: 1px;
+      }
+      .two {
+        border-top-width: 1px;
+        border-right-width: 2px;
+        border-bottom-width: 1px;
+        border-left-width: 2px;
+      }
+      .three {
+        border-top-width: 1px;
+        border-right-width: 2px;
+        border-bottom-width: 3px;
+        border-left-width: 2px;
+      }
+      .four {
+        border-top-width: 1px;
+        border-right-width: 2px;
+        border-bottom-width: 3px;
+        border-left-width: 4px;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
@@ -206,6 +254,38 @@ describe('expand logical properties', () => {
       ".example {
         padding-top: 10px;
         padding-bottom: 20px;
+      }
+      "
+    `)
+  })
+
+  test('border-inline-width', () => {
+    let input = css`
+      .example {
+        border-inline-width: 1px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        border-left-width: 1px;
+        border-right-width: 1px;
+      }
+      "
+    `)
+  })
+
+  test('border-block-width', () => {
+    let input = css`
+      .example {
+        border-inline-width: 1px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        border-left-width: 1px;
+        border-right-width: 1px;
       }
       "
     `)
