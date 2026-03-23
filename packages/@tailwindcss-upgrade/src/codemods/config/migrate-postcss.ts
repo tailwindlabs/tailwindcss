@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pkg } from '../../utils/packages'
 import { highlight, info, relative, success, warn } from '../../utils/renderer'
+import { writeFileSafely } from '../../utils/write-file-safely'
 
 // Migrates simple PostCSS setups. This is to cover non-dynamic config files
 // similar to the ones we have all over our docs:
@@ -50,7 +51,7 @@ export async function migratePostCSSConfig(base: string) {
       ranMigration = true
 
       if (result) {
-        await fs.writeFile(
+        await writeFileSafely(
           packageJsonPath,
           JSON.stringify({ ...packageJson, postcss: result?.json }, null, 2),
         )
@@ -76,7 +77,7 @@ export async function migratePostCSSConfig(base: string) {
         ranMigration = true
 
         if (result) {
-          await fs.writeFile(jsonConfigPath, JSON.stringify(result.json, null, 2))
+          await writeFileSafely(jsonConfigPath, JSON.stringify(result.json, null, 2))
 
           didMigrate = true
           didAddPostcssClient = result.didAddPostcssClient
@@ -206,7 +207,7 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
       newLines.push(line)
     }
   }
-  await fs.writeFile(configPath, newLines.join('\n'))
+  await writeFileSafely(configPath, newLines.join('\n'))
 
   return { didAddPostcssClient, didRemoveAutoprefixer, didRemovePostCSSImport }
 }

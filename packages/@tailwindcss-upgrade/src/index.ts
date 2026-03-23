@@ -23,6 +23,7 @@ import { isRepoDirty } from './utils/git'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
 import * as version from './utils/version'
+import { writeFileSafely } from './utils/write-file-safely'
 
 const options = {
   '--config': { type: 'string', description: 'Path to the configuration file', alias: '-c' },
@@ -250,7 +251,7 @@ async function run() {
     for (let sheet of stylesheets) {
       if (!sheet.file) continue
 
-      await fs.writeFile(sheet.file, sheet.root.toString())
+      await writeFileSafely(sheet.file, sheet.root.toString())
 
       if (sheet.isTailwindRoot) {
         success(`Migrated stylesheet: ${highlight(relative(sheet.file, base))}`, { prefix: '↳ ' })
