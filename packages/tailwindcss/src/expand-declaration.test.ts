@@ -287,6 +287,54 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('scroll-padding', () => {
+    let input = css`
+      .one {
+        scroll-padding: 1px;
+      }
+
+      .two {
+        scroll-padding: 1px 2px;
+      }
+
+      .three {
+        scroll-padding: 1px 2px 3px;
+      }
+
+      .four {
+        scroll-padding: 1px 2px 3px 4px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        scroll-padding-top: 1px;
+        scroll-padding-right: 1px;
+        scroll-padding-bottom: 1px;
+        scroll-padding-left: 1px;
+      }
+      .two {
+        scroll-padding-top: 1px;
+        scroll-padding-right: 2px;
+        scroll-padding-bottom: 1px;
+        scroll-padding-left: 2px;
+      }
+      .three {
+        scroll-padding-top: 1px;
+        scroll-padding-right: 2px;
+        scroll-padding-bottom: 3px;
+        scroll-padding-left: 2px;
+      }
+      .four {
+        scroll-padding-top: 1px;
+        scroll-padding-right: 2px;
+        scroll-padding-bottom: 3px;
+        scroll-padding-left: 4px;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
@@ -430,6 +478,38 @@ describe('expand logical properties', () => {
       ".example {
         scroll-margin-top: 10px;
         scroll-margin-bottom: 20px;
+      }
+      "
+    `)
+  })
+
+  test('scroll-padding-inline', () => {
+    let input = css`
+      .example {
+        scroll-padding-inline: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        scroll-padding-left: 10px;
+        scroll-padding-right: 20px;
+      }
+      "
+    `)
+  })
+
+  test('scroll-padding-block', () => {
+    let input = css`
+      .example {
+        scroll-padding-block: 10px 20px;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".example {
+        scroll-padding-top: 10px;
+        scroll-padding-bottom: 20px;
       }
       "
     `)

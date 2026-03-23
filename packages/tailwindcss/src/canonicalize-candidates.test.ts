@@ -1048,6 +1048,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['border-t-1 border-r-1 border-b-1 border-l-1', 'border'], // `border` is shorter than `border-1`
       ['border-t-red-500 border-r-red-500 border-b-red-500 border-l-red-500', 'border-red-500'],
       ['scroll-mt-1 scroll-mr-1 scroll-mb-1 scroll-ml-1', 'scroll-m-1'],
+      ['scroll-pt-1 scroll-pr-1 scroll-pb-1 scroll-pl-1', 'scroll-p-1'],
 
       // 2 to 1
       ['mt-1 mb-1', 'my-1'],
@@ -1055,6 +1056,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['border-t-1 border-b-1', 'border-y'], // `border-y` is shorter than `border-y-1`
       ['border-t-red-500 border-b-red-500', 'border-y-red-500'],
       ['scroll-mt-1 scroll-mb-1', 'scroll-my-1'],
+      ['scroll-pt-1 scroll-pb-1', 'scroll-py-1'],
 
       // Different order as above
       ['mb-1 mt-1', 'my-1'],
