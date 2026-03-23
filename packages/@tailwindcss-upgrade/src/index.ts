@@ -302,14 +302,23 @@ async function run() {
             return []
           }
 
-          // No root specified — during a v3→v4 migration the CSS entrypoint won't
-          // have an @source directive yet. Use the content patterns from the v3 JS
-          // config if available, rather than falling back to '**/*' which would
-          // scan every file in the project (including migrations, vendor files, etc.).
+          // No root specified
           if (compiler.root === null) {
-            if (config?.sources && config.sources.length > 0) {
-              return config.sources
+            // When coming from Tailwind CSS v3, we have to use the
+            // `config.sources` (which came from `config.content` originally)
+            if (version.isMajor(3)) {
+              if (config?.sources) {
+                return config.sources.map((source) => ({ ...source, negated: false }))
+              }
+
+              // When we don't have any sources, then we have to fallback to no
+              // sources at all. We cannot fallback to the `**/*` pattern.
+              return []
             }
+
+            // When we are upgrading a Tailwind CSS v4 and up version, we use
+            // the default `**/*` pattern. All custom `@source` directives will
+            // be attached later as sources.
             return [{ base, pattern: '**/*', negated: false }]
           }
 
