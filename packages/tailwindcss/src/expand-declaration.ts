@@ -60,6 +60,7 @@ let VARIADIC_EXPANSION_MAP: Record<string, Record<number, [prop: string, index: 
   ),
   gap: createPair('row-gap', 'column-gap'),
   overflow: createPair('overflow-x', 'overflow-y'),
+  'overscroll-behavior': createPair('overscroll-behavior-x', 'overscroll-behavior-y'),
 }
 
 // Depending on the length of the value, map to different properties

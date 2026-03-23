@@ -359,6 +359,30 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('overscroll-behavior', () => {
+    let input = css`
+      .one {
+        overscroll-behavior: none;
+      }
+
+      .two {
+        overscroll-behavior: auto contain;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        overscroll-behavior-x: none;
+        overscroll-behavior-y: none;
+      }
+      .two {
+        overscroll-behavior-x: auto;
+        overscroll-behavior-y: contain;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {
