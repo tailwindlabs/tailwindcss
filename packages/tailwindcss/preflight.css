@@ -167,14 +167,6 @@ table {
 }
 
 /*
-  Use the modern Firefox focus style for all focusable elements.
-*/
-
-:-moz-focusring {
-  outline: auto;
-}
-
-/*
   Add the correct vertical alignment in Chrome and Firefox.
 */
 

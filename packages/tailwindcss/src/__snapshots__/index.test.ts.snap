@@ -223,10 +223,6 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     border-collapse: collapse;
   }
 
-  :-moz-focusring {
-    outline: auto;
-  }
-
   progress {
     vertical-align: baseline;
   }
