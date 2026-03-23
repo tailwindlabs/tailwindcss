@@ -59,6 +59,7 @@ let VARIADIC_EXPANSION_MAP: Record<string, Record<number, [prop: string, index: 
     'left-color',
   ),
   gap: createPair('row-gap', 'column-gap'),
+  overflow: createPair('overflow-x', 'overflow-y'),
 }
 
 // Depending on the length of the value, map to different properties

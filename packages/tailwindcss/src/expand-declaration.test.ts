@@ -335,6 +335,30 @@ describe('expand declarations', () => {
     `)
   })
 
+  test('overflow', () => {
+    let input = css`
+      .one {
+        overflow: clip;
+      }
+
+      .two {
+        overflow: hidden visible;
+      }
+    `
+
+    expect(expand(input, options)).toMatchInlineSnapshot(`
+      ".one {
+        overflow-x: clip;
+        overflow-y: clip;
+      }
+      .two {
+        overflow-x: hidden;
+        overflow-y: visible;
+      }
+      "
+    `)
+  })
+
   test('expansion with `!important`', () => {
     let input = css`
       .one {

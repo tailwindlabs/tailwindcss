@@ -1057,6 +1057,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['border-t-red-500 border-b-red-500', 'border-y-red-500'],
       ['scroll-mt-1 scroll-mb-1', 'scroll-my-1'],
       ['scroll-pt-1 scroll-pb-1', 'scroll-py-1'],
+      ['overflow-x-hidden overflow-y-hidden', 'overflow-hidden'],
 
       // Different order as above
       ['mb-1 mt-1', 'my-1'],
