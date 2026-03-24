@@ -3078,7 +3078,7 @@ test(
       'tailwind.config.js': js`
         /** @type {import('tailwindcss').Config} */
         module.exports = {
-          content: ['./src/migrate-me.html'],
+          content: ['./src/*.html', './src/*.less'],
         }
       `,
       'src/app.css': css`
@@ -3086,21 +3086,29 @@ test(
         @config '../tailwind.config.js';
       `,
 
-      // Should be ignored by .gitignore, but should explicitly be included
-      // because of the `content` array in the `tailwind.config.js` file.
-      'src/migrate-me.html': html`
-        <div class="order-[0]"></div>
-      `,
-      // Should be ignored by .gitignore
-      'src/do-not-migrate-me.html': html`
-        <div class="order-[0]"></div>
-      `,
+      // Ignore all .html files
       'src/.gitignore': txt`
         *.html
       `,
 
+      // HTML files are in .gitignore, even though they are explicitly mentioned
+      // in the `content` array. Still ignore them
+      'src/do-not-migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+
       // Should be picked up by auto-content detection
       'templates/migrate-me.php': html`
+        <div class="order-[0]"></div>
+      `,
+
+      // Does not get picked up by auto content detection (because it's a less
+      // file), but was explicitly listed in the `content` array.
+      //
+      // A bit of a hacky way, I admit, but it allows us to differentiate
+      // between git ignored files, auto content detection and explicitly listed
+      // files.
+      'src/migrate-me.less': html`
         <div class="order-[0]"></div>
       `,
     },
@@ -3108,7 +3116,7 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
 
-    expect(await fs.dumpFiles('./{src,templates}/**/*.{css,html,php}')).toMatchInlineSnapshot(`
+    expect(await fs.dumpFiles('./{src,templates}/**/*')).toMatchInlineSnapshot(`
       "
       --- ./src/app.css ---
       @import 'tailwindcss';
@@ -3117,7 +3125,7 @@ test(
       --- ./src/do-not-migrate-me.html ---
       <div class="order-[0]"></div>
 
-      --- ./src/migrate-me.html ---
+      --- ./src/migrate-me.less ---
       <div class="order-0"></div>
 
       --- ./templates/migrate-me.php ---
