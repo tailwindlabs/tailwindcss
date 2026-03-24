@@ -96,6 +96,7 @@ async function run() {
       info('Searching for CSS files in the current directory and its subdirectories…')
 
       files = await globby(['**/*.css'], {
+        cwd: base,
         absolute: true,
         gitignore: true,
         // gitignore: true will first search for all .gitignore including node_modules folders, this makes the initial search much faster
