@@ -3,6 +3,10 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 export async function writeFileSafely(file: string, contents: string) {
+  // Resolve symlinks so the rename replaces the actual target file rather than
+  // replacing the symlink itself with a regular file.
+  let realFile = await fs.realpath(file).catch(() => file)
+
   // Start by creating a new file in the current directory that is guaranteed to
   // be unique (via `uuid`). We can embed the `process.id` in case we need to
   // debug things later.
@@ -17,8 +21,8 @@ export async function writeFileSafely(file: string, contents: string) {
   // 1. We could make sure that we inherit the file permissions
   // 2. Use an explicit fsync to force a flush to disk
   let temporaryFile = path.join(
-    path.dirname(file),
-    `.${path.basename(file)}.tailwind-upgrade.${process.pid}.${randomUUID()}.tmp`,
+    path.dirname(realFile),
+    `.${path.basename(realFile)}.tailwind-upgrade.${process.pid}.${randomUUID()}.tmp`,
   )
 
   // Write file uses the `w` flag by default, which is defined as:
@@ -37,7 +41,7 @@ export async function writeFileSafely(file: string, contents: string) {
   // on the same file system) so this either succeeds or doesn't happen.
   try {
     await fs.writeFile(temporaryFile, contents, 'utf8')
-    await fs.rename(temporaryFile, file)
+    await fs.rename(temporaryFile, realFile)
   } catch (error) {
     await fs.unlink(temporaryFile).catch(() => {})
     throw error
