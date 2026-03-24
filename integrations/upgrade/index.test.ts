@@ -3202,7 +3202,8 @@ test(
     // Wait for the trigger that we are mid-write
     await process.onStderr((message) => message === '__TRUNCATED_TARGET__')
 
-    await process.kill()
+    // Kill the process
+    await process.dispose()
 
     expect(await fs.read('src/keep.php')).toBe(originalKeepFile)
     expect(await fs.read('src/templates/template-0.php')).toBe(originalTemplate)
