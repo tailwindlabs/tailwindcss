@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Scanner } from '@tailwindcss/oxide'
-import { globby } from 'globby'
+import { globby, isGitIgnored } from 'globby'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import pc from 'picocolors'
@@ -43,6 +43,7 @@ if (flags['--help']) {
 
 async function run() {
   let base = process.cwd()
+  let isIgnored = await isGitIgnored({ cwd: base })
 
   eprintln(header())
   eprintln()
@@ -329,8 +330,70 @@ async function run() {
         })().concat(compiler.sources)
         let scanner = new Scanner({ sources })
         let filesToMigrate = []
+
+        let ignoredPaths = new Set<string>()
+
         for (let file of scanner.files) {
+          file = await fs.realpath(file) // Ensure we are dealing with the real path, not symlinks
           if (file.endsWith('.css')) continue
+
+          // When a file is git ignored, then we don't want to migrate it even
+          // if it was listed in the `config.content` array or part of any
+          // `@source` directives.
+          //
+          // We can make this an option later to explicitly allow this, but
+          // this should be the default. This guarantees that:
+          //
+          // 1. Files coming from node_modules aren't touched
+          // 2. Generated files aren't changed (the source should update, not the target)
+          // 3. You can see all the changes that happened
+          try {
+            if (isIgnored(file)) {
+              let culprit = file
+
+              // To prevent print all ignored files, we can also walk up the
+              // parent tree and log those instead _if_ they are:
+              //
+              // 1. Also git ignored
+              // 2. Are not going outside of the current repo
+              let parent = path.dirname(file)
+              do {
+                try {
+                  if (isIgnored(parent)) {
+                    culprit = parent
+                  }
+                } catch {
+                  // Escaping the current repo
+                  break
+                }
+
+                parent = path.dirname(parent)
+              } while (parent)
+
+              if (ignoredPaths.has(culprit)) continue // Already logged, skip
+              ignoredPaths.add(culprit)
+
+              if (culprit === file) {
+                info(`Git ignored, skipping: ${highlight(relative(culprit, base))}`, {
+                  prefix: '↳ ',
+                })
+              } else {
+                info(`Git ignored folder, skipping: ${highlight(relative(culprit, base))}`, {
+                  prefix: '↳ ',
+                })
+              }
+
+              continue
+            }
+          } catch (err) {
+            info(`Outside repository, skipping: ${highlight(relative(file, base))}`, {
+              prefix: '↳ ',
+            })
+            // Skip this file when we run into errors. E.g.: when the current
+            // file is not part of the current git repo it will throw an error.
+            continue
+          }
+
           if (seenFiles.has(file)) continue
           seenFiles.add(file)
           filesToMigrate.push(file)
