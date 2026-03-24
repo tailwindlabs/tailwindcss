@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe } from 'vitest'
-import { css, html, json, test, ts } from '../utils'
+import { css, html, json, test, ts, txt } from '../utils'
 
 test(
   `upgrade JS config files with flat theme values, darkMode, and content fields`,
@@ -319,6 +319,105 @@ test(
     `)
 
     expect((await fs.dumpFiles('tailwind.config.ts')).trim()).toBe('')
+  },
+)
+
+test(
+  'skips gitignored template files even when they are explicitly referenced in `content`',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules
+        src/ignored
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        module.exports = {
+          content: [
+            './src/migrate-me.html',
+            './src/ignored/do-not-migrate-me.html',
+            './node_modules/my-external-lib/template.html',
+          ],
+          theme: {},
+          plugins: [],
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'src/ignored/do-not-migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'node_modules/my-external-lib/template.html': html`
+        <div
+          class="order-[0]"
+        ></div>
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(
+      await fs.dumpFiles(
+        '{src/**/*.{css,html},node_modules/my-external-lib/template.html,.gitignore}',
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      --- .gitignore ---
+      node_modules
+      src/ignored
+
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @source './ignored/do-not-migrate-me.html';
+      @source '../node_modules/my-external-lib/template.html';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      --- src/migrate-me.html ---
+      <div class="order-0"></div>
+
+      --- node_modules/my-external-lib/template.html ---
+      <div
+        class="order-[0]"
+      ></div>
+
+      --- src/ignored/do-not-migrate-me.html ---
+      <div class="order-[0]"></div>
+      "
+    `)
   },
 )
 
