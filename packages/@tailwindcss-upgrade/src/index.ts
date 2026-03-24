@@ -334,7 +334,7 @@ async function run() {
         let ignoredPaths = new Set<string>()
 
         for (let file of scanner.files) {
-          file = await fs.realpath(file) // Ensure we are dealing with the real path, not symlinks
+          file = await fs.realpath(file).catch(() => file) // Ensure we are dealing with the real path, not symlinks
           if (file.endsWith('.css')) continue
 
           // When a file is git ignored, then we don't want to migrate it even
