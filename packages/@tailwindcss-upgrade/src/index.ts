@@ -400,23 +400,26 @@ async function run() {
         }
 
         // Migrate each file
+        let changes = 0
         await Promise.allSettled(
-          filesToMigrate.map((file) =>
-            migrateTemplate(designSystem, config?.userConfig ?? null, file),
-          ),
+          filesToMigrate.map(async (file) => {
+            let changed = await migrateTemplate(designSystem, config?.userConfig ?? null, file)
+            if (changed) {
+              changes++
+              info(`Migrated ${highlight(relative(file, base))}`, { prefix: '↳ ' })
+            }
+          }),
         )
 
         if (config?.configFilePath) {
           success(
-            `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))}`,
+            `Migrated templates for configuration file: ${highlight(relative(config.configFilePath, base))} (${changes} file${changes === 1 ? '' : 's'} changed)`,
             { prefix: '↳ ' },
           )
         } else {
           success(
-            `Migrated templates for: ${highlight(relative(sheet.file ?? '<unknown>', base))}`,
-            {
-              prefix: '↳ ',
-            },
+            `Migrated templates for: ${highlight(relative(sheet.file ?? '<unknown>', base))} (${changes} file${changes === 1 ? '' : 's'} changed)`,
+            { prefix: '↳ ' },
           )
         }
       }

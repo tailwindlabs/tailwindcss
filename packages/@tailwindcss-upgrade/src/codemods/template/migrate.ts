@@ -120,13 +120,18 @@ export default async function migrateContents(
   return spliceChangesIntoString(contents, changes)
 }
 
-export async function migrate(designSystem: DesignSystem, userConfig: Config | null, file: string) {
+export async function migrate(
+  designSystem: DesignSystem,
+  userConfig: Config | null,
+  file: string,
+): Promise<boolean> {
   let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
   let migrated = await migrateContents(designSystem, userConfig, contents, extname(file))
-  if (migrated === contents) return // Nothing changed
-  if (migrated.trim() === '') return // Emptied out, something went horribly wrong
+  if (migrated === contents) return false // Nothing changed
+  if (migrated.trim() === '') return false // Emptied out, something went horribly wrong
 
   await writeFileSafely(fullPath, migrated)
+  return true
 }
