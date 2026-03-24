@@ -3150,13 +3150,10 @@ test(
         let originalWriteFile = fs.writeFile.bind(fs)
 
         fs.writeFile = async (file, contents, ...rest) => {
-          // Only mimic a bad write, when writing to template files
-          if (!file.includes('src/templates')) return originalWriteFile(file, contents, ...rest)
-
           // Mimic a bad write
           await originalWriteFile(file, '') // As-if we truncated first
           console.error('__TRUNCATED_TARGET__')
-          await new Promise((r) => setTimeout(r, 150)) // Wait 150ms
+          await new Promise((r) => setTimeout(r, 50)) // Wait 50ms to allow us to kill the process
           await originalWriteFile(file, contents, ...rest) // Write the actual contents
         }
       `,
@@ -3190,7 +3187,13 @@ test(
         NODE_OPTIONS: '--require=./hook.cjs',
       },
     })
+
+    // We're only interested once we start migrating the templates
+    await process.onStderr((message) => message.includes('Migrating templates'))
+
+    // Wait for the trigger that we are mid-write
     await process.onStderr((message) => message === '__TRUNCATED_TARGET__')
+
     await process.kill()
 
     expect(await fs.read('src/keep.php')).toBe(originalKeepFile)
