@@ -198,7 +198,6 @@ export function canonicalizeCandidates(
 }
 
 function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
-  if (candidates.length <= 1) return candidates
   let designSystem = options.designSystem
 
   // To keep things simple, we group candidates such that we only collapse
