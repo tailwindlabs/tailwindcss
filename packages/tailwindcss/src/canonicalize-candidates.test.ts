@@ -94,30 +94,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
   async function expectCanonicalization(
     input: string,
-    candidate: string,
-    expected: string,
-    options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
-  ) {
-    candidate = prepare(candidate)
-    expected = prepare(expected)
-
-    if (strategy === 'prefix') {
-      input = input.replace("@import 'tailwindcss';", "@import 'tailwindcss' prefix(tw);")
-    }
-
-    let designSystem = await designSystems.get(__dirname).get(input)
-    let [actual] = designSystem.canonicalizeCandidates([candidate], options)
-
-    try {
-      expect(actual).toBe(expected)
-    } catch (err) {
-      if (err instanceof Error) Error.captureStackTrace(err, expectCanonicalization)
-      throw err
-    }
-  }
-
-  async function expectCombinedCanonicalization(
-    input: string,
     candidates: string,
     expected: string,
     options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
@@ -135,7 +111,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     try {
       expect(actual).toEqual(preparedExpected)
     } catch (err) {
-      if (err instanceof Error) Error.captureStackTrace(err, expectCombinedCanonicalization)
+      if (err instanceof Error) Error.captureStackTrace(err, expectCanonicalization)
       throw err
     }
   }
@@ -1104,7 +1080,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       let input = css`
         @import 'tailwindcss';
       `
-      await expectCombinedCanonicalization(input, candidates, expected)
+      await expectCanonicalization(input, candidates, expected)
     })
   })
 
@@ -1138,7 +1114,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       let input = css`
         @import 'tailwindcss';
       `
-      await expectCombinedCanonicalization(input, candidates.trim(), expected)
+      await expectCanonicalization(input, candidates.trim(), expected)
     })
   })
 
