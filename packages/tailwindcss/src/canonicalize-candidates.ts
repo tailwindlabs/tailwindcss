@@ -1431,6 +1431,27 @@ const DEPRECATION_MAP = new Map([
   ['overflow-ellipsis', 'text-ellipsis'],
 ])
 
+const DEPRECATION_TRANSFORMATION_MAP = new Map([
+  [/^start-(.*?)$/, 'inset-s-$1'],
+  [/^start-(.*?)$/, 'inset-s-$1'],
+  [/^end-(.*?)$/, 'inset-e-$1'],
+  [/^end-(.*?)$/, 'inset-e-$1'],
+])
+
+function* tryDeprecatedUtilities(candidate: string) {
+  // Try static replacements
+  let replacement = DEPRECATION_MAP.get(candidate)
+  if (replacement) yield replacement
+
+  // Try dynamic replacements
+  for (let [searchValue, replaceValue] of DEPRECATION_TRANSFORMATION_MAP) {
+    let replacement = candidate.replace(searchValue, replaceValue)
+    if (replacement === candidate) continue
+
+    yield replacement
+  }
+}
+
 function deprecatedUtilities(
   candidate: Candidate,
   options: InternalCanonicalizeOptions,
@@ -1440,20 +1461,21 @@ function deprecatedUtilities(
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-  let replacementString = DEPRECATION_MAP.get(targetCandidateString) ?? null
-  if (replacementString === null) return candidate
+  for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
+    let legacySignature = signatures.get(targetCandidateString)
+    if (typeof legacySignature !== 'string') continue
 
-  let legacySignature = signatures.get(targetCandidateString)
-  if (typeof legacySignature !== 'string') return candidate
+    let replacementSignature = signatures.get(replacementString)
+    if (typeof replacementSignature !== 'string') continue
 
-  let replacementSignature = signatures.get(replacementString)
-  if (typeof replacementSignature !== 'string') return candidate
+    // Not the same signature, not safe to migrate
+    if (legacySignature !== replacementSignature) continue
 
-  // Not the same signature, not safe to migrate
-  if (legacySignature !== replacementSignature) return candidate
+    let [replacement] = parseCandidate(designSystem, replacementString)
+    return replacement
+  }
 
-  let [replacement] = parseCandidate(designSystem, replacementString)
-  return replacement
+  return candidate
 }
 
 // ----
