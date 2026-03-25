@@ -1250,115 +1250,120 @@ describe('options', () => {
   })
 })
 
-// https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
-test('a subset of classes should be canonicalizable', { timeout }, async () => {
-  let designSystem = await designSystems.get(__dirname).get(css`
-    @import 'tailwindcss';
-  `)
+describe('regressions', () => {
+  // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
+  {
+    test('a subset of classes should be canonicalizable', { timeout }, async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
 
-  let options: CanonicalizeOptions = {
-    collapse: true,
-    logicalToPhysical: true,
-    rem: 16,
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(
+        designSystem.canonicalizeCandidates(['underline', 'h-4', 'w-4', 'text-sm'], options),
+      ).toEqual(['underline', 'text-sm', 'size-4'])
+    })
+
+    test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      let target = ['underline', 'h-4', 'w-4']
+
+      expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+      designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+      designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+      expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+      expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
+        'underline',
+        'text-sm',
+        'size-4',
+      ])
+    })
   }
 
-  expect(
-    designSystem.canonicalizeCandidates(['underline', 'h-4', 'w-4', 'text-sm'], options),
-  ).toEqual(['underline', 'text-sm', 'size-4'])
+  // https://github.com/tailwindlabs/tailwindcss/pull/19727
+  test(
+    'collapse does not crash when utilities with no standard properties are present',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // Shadow utilities use CSS custom properties and @property rules but may
+      // produce empty property maps in the collapse algorithm. This should not
+      // crash with "Cannot read properties of null" or "X is not iterable".
+      expect(() =>
+        designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
+      ).not.toThrow()
+
+      expect(() => designSystem.canonicalizeCandidates(['shadow-md', 'p-4'], options)).not.toThrow()
+
+      expect(() =>
+        designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
+      ).not.toThrow()
+
+      // Verify the candidates are returned (not collapsed, since shadows can't
+      // meaningfully collapse with unrelated utilities)
+      expect(designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options)).toEqual(
+        expect.arrayContaining(['shadow-sm', 'border']),
+      )
+
+      expect(designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options)).toEqual(
+        expect.arrayContaining(['shadow-sm', 'shadow-md']),
+      )
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19835
+  test.each([
+    // Arbitrary values should be collapsed to another arbitrary value
+    [
+      ['px-[1.2rem]', 'py-[1.2rem]', 'text-left'],
+      ['text-left', 'p-[1.2rem]'],
+    ],
+
+    // Arbitrary values could also be collapsed into a bare value
+    [
+      ['px-[30.75rem]', 'py-[30.75rem]', 'text-left'],
+      ['text-left', 'p-123'],
+    ],
+  ])(
+    'collapse canonicalization works for arbitrary values',
+    { timeout },
+    async (candidates, expected) => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
 })
-
-test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
-  let designSystem = await designSystems.get(__dirname).get(css`
-    @import 'tailwindcss';
-  `)
-
-  let options: CanonicalizeOptions = {
-    collapse: true,
-    logicalToPhysical: true,
-    rem: 16,
-  }
-
-  let target = ['underline', 'h-4', 'w-4']
-
-  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
-
-  designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
-  designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
-
-  expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
-  expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
-    'underline',
-    'text-sm',
-    'size-4',
-  ])
-})
-
-test(
-  'collapse does not crash when utilities with no standard properties are present',
-  { timeout },
-  async () => {
-    let designSystem = await designSystems.get(__dirname).get(css`
-      @import 'tailwindcss';
-    `)
-
-    let options: CanonicalizeOptions = {
-      collapse: true,
-      logicalToPhysical: true,
-      rem: 16,
-    }
-
-    // Shadow utilities use CSS custom properties and @property rules but may
-    // produce empty property maps in the collapse algorithm. This should not
-    // crash with "Cannot read properties of null" or "X is not iterable".
-    expect(() =>
-      designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
-    ).not.toThrow()
-
-    expect(() => designSystem.canonicalizeCandidates(['shadow-md', 'p-4'], options)).not.toThrow()
-
-    expect(() =>
-      designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
-    ).not.toThrow()
-
-    // Verify the candidates are returned (not collapsed, since shadows can't
-    // meaningfully collapse with unrelated utilities)
-    expect(designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options)).toEqual(
-      expect.arrayContaining(['shadow-sm', 'border']),
-    )
-
-    expect(designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options)).toEqual(
-      expect.arrayContaining(['shadow-sm', 'shadow-md']),
-    )
-  },
-)
-
-// https://github.com/tailwindlabs/tailwindcss/issues/19835
-test.each([
-  // Arbitrary values should be collapsed to another arbitrary value
-  [
-    ['px-[1.2rem]', 'py-[1.2rem]', 'text-left'],
-    ['text-left', 'p-[1.2rem]'],
-  ],
-
-  // Arbitrary values could also be collapsed into a bare value
-  [
-    ['px-[30.75rem]', 'py-[30.75rem]', 'text-left'],
-    ['text-left', 'p-123'],
-  ],
-])(
-  'collapse canonicalization works for arbitrary values',
-  { timeout },
-  async (candidates, expected) => {
-    let designSystem = await designSystems.get(__dirname).get(css`
-      @import 'tailwindcss';
-    `)
-
-    let options: CanonicalizeOptions = {
-      collapse: true,
-      logicalToPhysical: true,
-      rem: 16,
-    }
-
-    expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
-  },
-)
