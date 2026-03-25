@@ -1431,10 +1431,8 @@ const DEPRECATION_MAP = new Map([
 ])
 
 const DEPRECATION_TRANSFORMATION_MAP = new Map([
-  [/^start-(.*?)$/, 'inset-s-$1'],
-  [/^start-(.*?)$/, 'inset-s-$1'],
-  [/^end-(.*?)$/, 'inset-e-$1'],
-  [/^end-(.*?)$/, 'inset-e-$1'],
+  [/^(-)?start-(.*?)$/, '$1inset-s-$2'],
+  [/^(-)?end-(.*?)$/, '$1inset-e-$2'],
 ])
 
 function* tryDeprecatedUtilities(candidate: string) {
