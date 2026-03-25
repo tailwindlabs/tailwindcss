@@ -70,7 +70,9 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
               (lhs[1] !== null && rhs[1] === null) // Unit * Unitless, e.g.: `1rem * 2`
             ) {
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(
+                ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? rhs[1] ?? ''}`),
+              )
             }
             break
           }

@@ -24,6 +24,10 @@ it.each([
   ['calc(3rem * 6)', '18rem'],
   ['calc(5rem / 2)', '2.5rem'],
 
+  // Negating with units
+  ['calc(2rem * -1)', '-2rem'],
+  ['calc(-1 * 2rem)', '-2rem'],
+
   // Nested partial evaluation
   ['calc(calc(1 + 2) + 2rem)', 'calc(3 + 2rem)'],
 
