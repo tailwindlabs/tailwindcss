@@ -1118,6 +1118,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
   let designSystem = options.designSystem
   let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1127,9 +1128,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   // Try a few options to find a suitable replacement utility
   for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
-    let replacementString = designSystem.printCandidate(replacementCandidate)
-    let replacementSignature = signatures.get(replacementString)
-    if (replacementSignature !== targetSignature) {
+    if (!hasSameSignature(candidate, replacementCandidate)) {
       continue
     }
 
@@ -1366,6 +1365,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
   let designSystem = options.designSystem
   let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1375,9 +1375,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   // Try a few options to find a suitable replacement utility
   for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
-    let replacementString = designSystem.printCandidate(replacementCandidate)
-    let replacementSignature = signatures.get(replacementString)
-    if (replacementSignature !== targetSignature) {
+    if (!hasSameSignature(candidate, replacementCandidate)) {
       continue
     }
 
@@ -1480,19 +1478,14 @@ function deprecatedUtilities(
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-  let legacySignature = signatures.get(targetCandidateString)
-  if (typeof legacySignature !== 'string') return candidate
-
   for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
-    let replacementSignature = signatures.get(replacementString)
-    if (typeof replacementSignature !== 'string') continue
-
-    // Not the same signature, not safe to migrate
-    if (legacySignature !== replacementSignature) continue
+    if (!hasSameSignature(candidate, replacementString)) {
+      continue
+    }
 
     let [replacement] = parseCandidate(designSystem, replacementString)
     return replacement
