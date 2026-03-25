@@ -6,10 +6,18 @@ import { walk, WalkAction } from './walk'
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
 export function constantFoldDeclaration(input: string, rem: number | null = null): string {
-  let folded = false
-  let valueAst = ValueParser.parse(input)
+  let [folded, valueAst] = constantFoldDeclarationAst(ValueParser.parse(input), rem)
 
-  walk(valueAst, {
+  return folded ? ValueParser.toCss(valueAst) : input
+}
+
+export function constantFoldDeclarationAst(
+  ast: ValueParser.ValueAstNode[],
+  rem: number | null = null,
+): [folded: boolean, ast: ValueParser.ValueAstNode[]] {
+  let folded = false
+
+  walk(ast, {
     exit(valueNode) {
       // Canonicalize dimensions to their simplest form. This includes:
       // - Convert `-0`, `+0`, `0.0`, … to `0`
@@ -113,7 +121,7 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
     },
   })
 
-  return folded ? ValueParser.toCss(valueAst) : input
+  return [folded, ast]
 }
 
 function canonicalizeDimension(input: string, rem: number | null = null): string | null {
