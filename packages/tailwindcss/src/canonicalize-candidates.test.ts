@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
@@ -611,68 +612,45 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   })
 
   describe('deprecated utilities', () => {
-    test('`order-none` → `order-0`', { timeout }, async () => {
-      let candidate = 'order-none'
-      let expected = 'order-0'
+    for (let [candidate, expected] of [
+      ['order-none', 'order-0'],
+      ['break-words', 'wrap-break-word'],
+      ['overflow-ellipsis', 'text-ellipsis'],
 
-      let input = css`
-        @import 'tailwindcss';
-      `
+      ['start-full', 'inset-s-full'],
+      ['start-auto', 'inset-s-auto'],
+      ['start-8', 'inset-s-8'], // Within default spacing scale
+      ['start-123', 'inset-s-123'], // Outside of default spacing scale
 
-      await expectCanonicalization(input, candidate, expected)
-    })
+      ['end-full', 'inset-e-full'],
+      ['end-auto', 'inset-e-auto'],
+      ['end-8', 'inset-e-8'], // Within default spacing scale
+      ['end-123', 'inset-e-123'], // Outside of default spacing scale
+    ]) {
+      test(`\`${candidate}\` → \`${expected}\` (%#)`, { timeout }, async () => {
+        let input = css`
+          @import 'tailwindcss';
+        `
 
-    test('`order-none` → `order-none` with custom implementation', { timeout }, async () => {
-      let candidate = 'order-none'
-      let expected = 'order-none'
+        await expectCanonicalization(input, candidate, expected)
+      })
 
-      let input = css`
-        @import 'tailwindcss';
+      test(
+        `\`${candidate}\` → \`${candidate}\` because of custom implementation (%#)`,
+        { timeout },
+        async () => {
+          let input = css`
+            @import 'tailwindcss';
 
-        @utility order-none {
-          order: none; /* imagine this exists */
-        }
-      `
+            @utility ${candidate} {
+              --custom-${randomUUID()}: implementation;
+            }
+          `
 
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`break-words` → `wrap-break-word`', { timeout }, async () => {
-      let candidate = 'break-words'
-      let expected = 'wrap-break-word'
-
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`[overflow-wrap:break-word]` → `wrap-break-word`', { timeout }, async () => {
-      let candidate = '[overflow-wrap:break-word]'
-      let expected = 'wrap-break-word'
-
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`break-words` → `break-words` with custom implementation', { timeout }, async () => {
-      let candidate = 'break-words'
-      let expected = 'break-words'
-
-      let input = css`
-        @import 'tailwindcss';
-
-        @utility break-words {
-          break: words; /* imagine this exists */
-        }
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
+          await expectCanonicalization(input, candidate, candidate)
+        },
+      )
+    }
   })
 
   describe('arbitrary variants', () => {
