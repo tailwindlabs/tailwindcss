@@ -78,6 +78,10 @@ interface DesignSystem extends BaseDesignSystem {
       number | null, // Rem value
       DefaultMap<SignatureFeatures, SignatureOptions>
     >
+    [COMPARE_CANDIDATES_KEY]: DefaultMap<
+      SignatureOptions,
+      (a: Candidate | string, b: Candidate | string) => boolean
+    >
     [INTERNAL_OPTIONS_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<Features, InternalCanonicalizeOptions>
@@ -127,6 +131,7 @@ export function prepareDesignSystemStorage(
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
   designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
+  designSystem.storage[COMPARE_CANDIDATES_KEY] ??= createSignatureComparison(designSystem)
 
   return designSystem
 }
@@ -137,6 +142,25 @@ function createSignatureOptionsCache(): DesignSystem['storage'][typeof SIGNATURE
     return new DefaultMap((features: SignatureFeatures) => {
       return { rem, features } satisfies SignatureOptions
     })
+  })
+}
+
+const COMPARE_CANDIDATES_KEY = Symbol()
+function createSignatureComparison(designSystem: DesignSystem) {
+  return new DefaultMap((options: SignatureOptions) => {
+    let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options)
+
+    return function hasSameSignature(a: Candidate | string, b: Candidate | string): boolean {
+      let aCandidateString = typeof a === 'string' ? a : designSystem.printCandidate(a)
+      let aSignature = signatures.get(aCandidateString)
+      if (typeof aSignature !== 'string') return false
+
+      let bCandidateString = typeof b === 'string' ? b : designSystem.printCandidate(b)
+      let bSignature = signatures.get(bCandidateString)
+      if (typeof bSignature !== 'string') return false
+
+      return aSignature === bSignature
+    }
   })
 }
 
