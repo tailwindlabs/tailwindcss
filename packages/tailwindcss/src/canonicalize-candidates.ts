@@ -1458,10 +1458,10 @@ function deprecatedUtilities(
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-  for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
-    let legacySignature = signatures.get(targetCandidateString)
-    if (typeof legacySignature !== 'string') continue
+  let legacySignature = signatures.get(targetCandidateString)
+  if (typeof legacySignature !== 'string') return candidate
 
+  for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
     let replacementSignature = signatures.get(replacementString)
     if (typeof replacementSignature !== 'string') continue
 
