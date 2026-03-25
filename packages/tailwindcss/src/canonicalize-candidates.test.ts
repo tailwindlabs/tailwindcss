@@ -612,7 +612,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   })
 
   describe('deprecated utilities', () => {
-    for (let [candidate, expected] of [
+    let deprecated = [
       ['order-none', 'order-0'],
       ['break-words', 'wrap-break-word'],
       ['overflow-ellipsis', 'text-ellipsis'],
@@ -626,7 +626,21 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['end-auto', 'inset-e-auto'],
       ['end-8', 'inset-e-8'], // Within default spacing scale
       ['end-123', 'inset-e-123'], // Outside of default spacing scale
-    ]) {
+    ]
+
+    // Creating a shared CSS file such that we can re-use the same design system
+    // for all of these.
+    let customImplementations = deprecated
+      .map(
+        ([candidate]) => css`
+          @utility ${candidate} {
+            --custom-${randomUUID()}: implementation;
+          }
+        `,
+      )
+      .join('\n')
+
+    for (let [candidate, expected] of deprecated) {
       test(`\`${candidate}\` → \`${expected}\` (%#)`, { timeout }, async () => {
         let input = css`
           @import 'tailwindcss';
@@ -642,9 +656,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
           let input = css`
             @import 'tailwindcss';
 
-            @utility ${candidate} {
-              --custom-${randomUUID()}: implementation;
-            }
+            ${customImplementations}
           `
 
           await expectCanonicalization(input, candidate, candidate)
