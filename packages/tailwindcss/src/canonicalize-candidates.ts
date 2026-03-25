@@ -13,7 +13,7 @@ import {
 } from './candidate'
 import { canonicalizeCalcExpressionsAst } from './canonicalize-calc-expressions'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
-import { constantFoldDeclaration } from './constant-fold-declaration'
+import { constantFoldDeclaration, constantFoldDeclarationAst } from './constant-fold-declaration'
 import type { DesignSystem as BaseDesignSystem } from './design-system'
 import { CompileAstFlags } from './design-system'
 import { expandDeclaration } from './expand-declaration'
@@ -599,6 +599,7 @@ const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   bgGradientToLinear,
   themeToVarUtility,
   calcToSpacingFunction,
+  optimizeArbitraryValueExpressions,
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
@@ -2104,6 +2105,98 @@ function modernizeArbitraryValuesVariant(
   }
 
   return result
+}
+
+// ---
+
+function optimizeArbitraryValueExpressions(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
+  if (candidate.kind !== 'functional' || candidate.value?.kind !== 'arbitrary') {
+    return candidate
+  }
+
+  let designSystem = options.designSystem
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
+
+  let valueAst = ValueParser.parse(candidate.value.value)
+
+  // Start by constant folding the value expression, when dealing with `calc(…)`
+  if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
+    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst)
+    if (folded) {
+      let replacement = cloneCandidate(candidate)
+      replacement.value!.value = ValueParser.toCss(foldedValueAst)
+
+      if (hasSameSignature(candidate, replacement)) {
+        candidate = replacement
+        valueAst = foldedValueAst
+      }
+    }
+  }
+
+  // Move `-` sign into the arbitrary value itself
+  if (candidate.root[0] === '-') {
+    // We're dealing with a `var(…)`, keep as-is
+    if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'var') {
+      return candidate
+    }
+
+    // Move `* -1` inside, and try to constant fold to see if it's even worth
+    // updating the candidate or not.
+    let expressionAst = ValueParser.parse(`calc(${candidate.value!.value} * -1)`)
+    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst)
+    if (folded) {
+      let replacement = cloneCandidate(candidate)
+
+      replacement.root = replacement.root.slice(1) // Drop the leading `-`
+      replacement.value!.value = ValueParser.toCss(foldedExpressionAst)
+
+      if (hasSameSignature(candidate, replacement)) {
+        candidate = replacement
+        valueAst = foldedExpressionAst
+      }
+    }
+  }
+
+  // Move `-` sign out of the arbitrary value
+  //
+  // calc(arg * -1)
+  // calc(-1  * arg)
+  if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
+    let calcArgs = valueAst[0].nodes
+
+    // Handle `something * -1` and `-1 * something`
+    if (
+      calcArgs.length === 5 &&
+      calcArgs[1].kind === 'separator' &&
+      calcArgs[1].value === ' ' &&
+      calcArgs[2].kind === 'word' &&
+      calcArgs[2].value === '*' &&
+      calcArgs[3].kind === 'separator' &&
+      calcArgs[3].value === ' '
+    ) {
+      let arg =
+        calcArgs[4].kind === 'word' && calcArgs[4].value === '-1'
+          ? calcArgs[0]
+          : calcArgs[0].kind === 'word' && calcArgs[0].value === '-1'
+            ? calcArgs[4]
+            : null
+
+      if (arg) {
+        let replacement = cloneCandidate(candidate)
+        replacement.root = `-${candidate.root}`
+        replacement.value!.value = ValueParser.toCss([arg])
+
+        if (hasSameSignature(candidate, replacement)) {
+          candidate = replacement
+        }
+      }
+    }
+  }
+
+  return candidate
 }
 
 // ----
