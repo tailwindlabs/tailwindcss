@@ -198,7 +198,6 @@ export function canonicalizeCandidates(
 }
 
 function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
-  if (candidates.length <= 1) return candidates
   let designSystem = options.designSystem
 
   // To keep things simple, we group candidates such that we only collapse
@@ -1428,7 +1427,27 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 const DEPRECATION_MAP = new Map([
   ['order-none', 'order-0'],
   ['break-words', 'wrap-break-word'],
+  ['overflow-ellipsis', 'text-ellipsis'],
 ])
+
+const DEPRECATION_TRANSFORMATION_MAP = new Map([
+  [/^(-)?start-(.*?)$/, '$1inset-s-$2'],
+  [/^(-)?end-(.*?)$/, '$1inset-e-$2'],
+])
+
+function* tryDeprecatedUtilities(candidate: string) {
+  // Try static replacements
+  let replacement = DEPRECATION_MAP.get(candidate)
+  if (replacement) yield replacement
+
+  // Try dynamic replacements
+  for (let [searchValue, replaceValue] of DEPRECATION_TRANSFORMATION_MAP) {
+    let replacement = candidate.replace(searchValue, replaceValue)
+    if (replacement === candidate) continue
+
+    yield replacement
+  }
+}
 
 function deprecatedUtilities(
   candidate: Candidate,
@@ -1439,20 +1458,21 @@ function deprecatedUtilities(
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-  let replacementString = DEPRECATION_MAP.get(targetCandidateString) ?? null
-  if (replacementString === null) return candidate
-
   let legacySignature = signatures.get(targetCandidateString)
   if (typeof legacySignature !== 'string') return candidate
 
-  let replacementSignature = signatures.get(replacementString)
-  if (typeof replacementSignature !== 'string') return candidate
+  for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
+    let replacementSignature = signatures.get(replacementString)
+    if (typeof replacementSignature !== 'string') continue
 
-  // Not the same signature, not safe to migrate
-  if (legacySignature !== replacementSignature) return candidate
+    // Not the same signature, not safe to migrate
+    if (legacySignature !== replacementSignature) continue
 
-  let [replacement] = parseCandidate(designSystem, replacementString)
-  return replacement
+    let [replacement] = parseCandidate(designSystem, replacementString)
+    return replacement
+  }
+
+  return candidate
 }
 
 // ----
