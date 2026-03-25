@@ -143,16 +143,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   /// ----------------------------------
 
   test.each([
-    /// Legacy bg-gradient-* → bg-linear-*
-    ['bg-gradient-to-t', 'bg-linear-to-t'],
-    ['bg-gradient-to-tr', 'bg-linear-to-tr'],
-    ['bg-gradient-to-r', 'bg-linear-to-r'],
-    ['bg-gradient-to-br', 'bg-linear-to-br'],
-    ['bg-gradient-to-b', 'bg-linear-to-b'],
-    ['bg-gradient-to-bl', 'bg-linear-to-bl'],
-    ['bg-gradient-to-l', 'bg-linear-to-l'],
-    ['bg-gradient-to-tl', 'bg-linear-to-tl'],
-
     /// theme(…) to `var(…)`
     // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
     ['[color:red]', 'text-[red]'],
@@ -612,6 +602,24 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   })
 
   describe('deprecated utilities', () => {
+    test.each([
+      /// Legacy bg-gradient-* → bg-linear-*
+      ['bg-gradient-to-t', 'bg-linear-to-t'],
+      ['bg-gradient-to-tr', 'bg-linear-to-tr'],
+      ['bg-gradient-to-r', 'bg-linear-to-r'],
+      ['bg-gradient-to-br', 'bg-linear-to-br'],
+      ['bg-gradient-to-b', 'bg-linear-to-b'],
+      ['bg-gradient-to-bl', 'bg-linear-to-bl'],
+      ['bg-gradient-to-l', 'bg-linear-to-l'],
+      ['bg-gradient-to-tl', 'bg-linear-to-tl'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
     let deprecated: [string, string][] = [
       ['order-none', 'order-0'],
       ['break-words', 'wrap-break-word'],
