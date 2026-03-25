@@ -650,8 +650,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       )
       .join('\n')
 
-    for (let [candidate, expected] of deprecated) {
-      test(`\`${candidate}\` → \`${expected}\` (%#)`, { timeout }, async () => {
+    for (let [idx, [candidate, expected]] of deprecated.entries()) {
+      test(`\`${candidate}\` → \`${expected}\` (${idx})`, { timeout }, async () => {
         let input = css`
           @import 'tailwindcss';
         `
@@ -660,7 +660,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       })
 
       test(
-        `\`${candidate}\` → \`${candidate}\` because of custom implementation (%#)`,
+        `\`${candidate}\` → \`${candidate}\` because of custom implementation (${idx})`,
         { timeout },
         async () => {
           let input = css`
