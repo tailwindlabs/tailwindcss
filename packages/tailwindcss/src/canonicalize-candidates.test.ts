@@ -612,7 +612,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   })
 
   describe('deprecated utilities', () => {
-    let deprecated = [
+    let deprecated: [string, string][] = [
       ['order-none', 'order-0'],
       ['break-words', 'wrap-break-word'],
       ['overflow-ellipsis', 'text-ellipsis'],
@@ -638,41 +638,42 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['-end-123', '-inset-e-123'], // Outside of default spacing scale
     ]
 
-    // Creating a shared CSS file such that we can re-use the same design system
-    // for all of these.
-    let customImplementations = deprecated
-      .map(
-        ([candidate]) => css`
+    test.each(deprecated)(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    describe('With custom implementation', () => {
+      // Creating a shared CSS file such that we can re-use the same design
+      // system for all of these.
+      let customImplementations = deprecated
+        .map(
+          ([candidate]) => css`
           @utility ${candidate} {
             --custom-${randomUUID()}: implementation;
           }
         `,
-      )
-      .join('\n')
+        )
+        .join('\n')
 
-    for (let [idx, [candidate, expected]] of deprecated.entries()) {
-      test(`\`${candidate}\` → \`${expected}\` (${idx})`, { timeout }, async () => {
-        let input = css`
-          @import 'tailwindcss';
-        `
-
-        await expectCanonicalization(input, candidate, expected)
-      })
-
-      test(
-        `\`${candidate}\` → \`${candidate}\` because of custom implementation (${idx})`,
+      // Keep the current utility because of the custom implementation
+      test.each(deprecated.map(([candidate]) => [candidate, candidate]))(
+        testName,
         { timeout },
-        async () => {
+        async (candidate, expected) => {
           let input = css`
             @import 'tailwindcss';
 
             ${customImplementations}
           `
 
-          await expectCanonicalization(input, candidate, candidate)
+          await expectCanonicalization(input, candidate, expected)
         },
       )
-    }
+    })
   })
 
   describe('arbitrary variants', () => {
