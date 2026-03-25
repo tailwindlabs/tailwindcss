@@ -618,14 +618,24 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['overflow-ellipsis', 'text-ellipsis'],
 
       ['start-full', 'inset-s-full'],
+      ['-start-full', '-inset-s-full'],
       ['start-auto', 'inset-s-auto'],
+      ['start-px', 'inset-s-px'],
+      ['-start-px', '-inset-s-px'],
       ['start-8', 'inset-s-8'], // Within default spacing scale
+      ['-start-8', '-inset-s-8'], // Within default spacing scale
       ['start-123', 'inset-s-123'], // Outside of default spacing scale
+      ['-start-123', '-inset-s-123'], // Outside of default spacing scale
 
       ['end-full', 'inset-e-full'],
+      ['-end-full', '-inset-e-full'],
       ['end-auto', 'inset-e-auto'],
+      ['end-px', 'inset-e-px'],
+      ['-end-px', '-inset-e-px'],
       ['end-8', 'inset-e-8'], // Within default spacing scale
+      ['-end-8', '-inset-e-8'], // Within default spacing scale
       ['end-123', 'inset-e-123'], // Outside of default spacing scale
+      ['-end-123', '-inset-e-123'], // Outside of default spacing scale
     ]
 
     // Creating a shared CSS file such that we can re-use the same design system
