@@ -446,6 +446,28 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Arbitrary percentage value must be a whole number. Should not migrate to
       // a bare value.
       ['from-[2.5%]', 'from-[2.5%]'],
+
+      // Negative arbitrary values can be simplified
+      // 1. Try to move the sign _inside_ the arbitrary value
+      // 2. Try to move the sign _out_ of the arbitrary value
+      ['-mt-[12rem]', '-mt-48'], // Arbitrary value → bare value
+      ['-mt-[-12rem]', 'mt-48'], // Double negation
+      ['-mt-[12.34rem]', 'mt-[-12.34rem]'], // Move `-` inside
+      ['-mt-[-12.34rem]', 'mt-[12.34rem]'], // Move `-` inside, double negation
+      ['-mt-[12.34px]', 'mt-[-12.34px]'],
+      ['-mt-[-12.34px]', 'mt-[12.34px]'],
+      ['-mt-[492px]', '-mt-123'], // Moving inside, allows us to migrate to a bare value
+      ['-mt-[calc(-1*492px)]', 'mt-123'], // Double negation and constant folding into bare value
+      ['-mt-[-492px]', 'mt-123'],
+      ['-mt-[calc(-1*-492px)]', '-mt-123'], // Constant folding with calc expressions
+      ['-mt-(--my-var)', '-mt-(--my-var)'], // Keep as-is
+      ['-mt-[var(--my-var)]', '-mt-(--my-var)'], // Keep as-is, but convert to shorthand
+      ['mt-[calc(var(--my-var)*-1)]', '-mt-(--my-var)'], // Move `-` out
+      ['mt-[calc(-1*var(--my-var))]', '-mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(var(--my-var)*-1)]', 'mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(-1*var(--my-var))]', 'mt-(--my-var)'], // Move `-` out
+      ['mt-[calc(-1*calc(-1*var(--my-var)))]', 'mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(-1*calc(-1*var(--my-var)))]', '-mt-(--my-var)'], // Move `-` out
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
