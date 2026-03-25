@@ -118,6 +118,89 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
   /// ----------------------------------
 
+  describe('deprecated utilities', () => {
+    test.each([
+      /// Legacy bg-gradient-* → bg-linear-*
+      ['bg-gradient-to-t', 'bg-linear-to-t'],
+      ['bg-gradient-to-tr', 'bg-linear-to-tr'],
+      ['bg-gradient-to-r', 'bg-linear-to-r'],
+      ['bg-gradient-to-br', 'bg-linear-to-br'],
+      ['bg-gradient-to-b', 'bg-linear-to-b'],
+      ['bg-gradient-to-bl', 'bg-linear-to-bl'],
+      ['bg-gradient-to-l', 'bg-linear-to-l'],
+      ['bg-gradient-to-tl', 'bg-linear-to-tl'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    let deprecated: [string, string][] = [
+      ['order-none', 'order-0'],
+      ['break-words', 'wrap-break-word'],
+      ['overflow-ellipsis', 'text-ellipsis'],
+
+      ['start-full', 'inset-s-full'],
+      ['-start-full', '-inset-s-full'],
+      ['start-auto', 'inset-s-auto'],
+      ['start-px', 'inset-s-px'],
+      ['-start-px', '-inset-s-px'],
+      ['start-8', 'inset-s-8'], // Within default spacing scale
+      ['-start-8', '-inset-s-8'], // Within default spacing scale
+      ['start-123', 'inset-s-123'], // Outside of default spacing scale
+      ['-start-123', '-inset-s-123'], // Outside of default spacing scale
+
+      ['end-full', 'inset-e-full'],
+      ['-end-full', '-inset-e-full'],
+      ['end-auto', 'inset-e-auto'],
+      ['end-px', 'inset-e-px'],
+      ['-end-px', '-inset-e-px'],
+      ['end-8', 'inset-e-8'], // Within default spacing scale
+      ['-end-8', '-inset-e-8'], // Within default spacing scale
+      ['end-123', 'inset-e-123'], // Outside of default spacing scale
+      ['-end-123', '-inset-e-123'], // Outside of default spacing scale
+    ]
+
+    test.each(deprecated)(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    describe('With custom implementation', () => {
+      // Creating a shared CSS file such that we can re-use the same design
+      // system for all of these.
+      let customImplementations = deprecated
+        .map(
+          ([candidate]) => css`
+          @utility ${candidate} {
+            --custom-${randomUUID()}: implementation;
+          }
+        `,
+        )
+        .join('\n')
+
+      // Keep the current utility because of the custom implementation
+      test.each(deprecated.map(([candidate]) => [candidate, candidate]))(
+        testName,
+        { timeout },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+
+            ${customImplementations}
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+    })
+  })
+
   describe('arbitrary properties', () => {
     test.each([
       /// theme(…) to `var(…)`
@@ -587,89 +670,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['tab-8', 'tab-github'],
     ])(testName, { timeout }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
-    })
-  })
-
-  describe('deprecated utilities', () => {
-    test.each([
-      /// Legacy bg-gradient-* → bg-linear-*
-      ['bg-gradient-to-t', 'bg-linear-to-t'],
-      ['bg-gradient-to-tr', 'bg-linear-to-tr'],
-      ['bg-gradient-to-r', 'bg-linear-to-r'],
-      ['bg-gradient-to-br', 'bg-linear-to-br'],
-      ['bg-gradient-to-b', 'bg-linear-to-b'],
-      ['bg-gradient-to-bl', 'bg-linear-to-bl'],
-      ['bg-gradient-to-l', 'bg-linear-to-l'],
-      ['bg-gradient-to-tl', 'bg-linear-to-tl'],
-    ])(testName, { timeout }, async (candidate, expected) => {
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    let deprecated: [string, string][] = [
-      ['order-none', 'order-0'],
-      ['break-words', 'wrap-break-word'],
-      ['overflow-ellipsis', 'text-ellipsis'],
-
-      ['start-full', 'inset-s-full'],
-      ['-start-full', '-inset-s-full'],
-      ['start-auto', 'inset-s-auto'],
-      ['start-px', 'inset-s-px'],
-      ['-start-px', '-inset-s-px'],
-      ['start-8', 'inset-s-8'], // Within default spacing scale
-      ['-start-8', '-inset-s-8'], // Within default spacing scale
-      ['start-123', 'inset-s-123'], // Outside of default spacing scale
-      ['-start-123', '-inset-s-123'], // Outside of default spacing scale
-
-      ['end-full', 'inset-e-full'],
-      ['-end-full', '-inset-e-full'],
-      ['end-auto', 'inset-e-auto'],
-      ['end-px', 'inset-e-px'],
-      ['-end-px', '-inset-e-px'],
-      ['end-8', 'inset-e-8'], // Within default spacing scale
-      ['-end-8', '-inset-e-8'], // Within default spacing scale
-      ['end-123', 'inset-e-123'], // Outside of default spacing scale
-      ['-end-123', '-inset-e-123'], // Outside of default spacing scale
-    ]
-
-    test.each(deprecated)(testName, { timeout }, async (candidate, expected) => {
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    describe('With custom implementation', () => {
-      // Creating a shared CSS file such that we can re-use the same design
-      // system for all of these.
-      let customImplementations = deprecated
-        .map(
-          ([candidate]) => css`
-          @utility ${candidate} {
-            --custom-${randomUUID()}: implementation;
-          }
-        `,
-        )
-        .join('\n')
-
-      // Keep the current utility because of the custom implementation
-      test.each(deprecated.map(([candidate]) => [candidate, candidate]))(
-        testName,
-        { timeout },
-        async (candidate, expected) => {
-          let input = css`
-            @import 'tailwindcss';
-
-            ${customImplementations}
-          `
-
-          await expectCanonicalization(input, candidate, expected)
-        },
-      )
     })
   })
 
