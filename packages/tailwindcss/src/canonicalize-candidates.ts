@@ -11,6 +11,7 @@ import {
   type NamedUtilityValue,
   type Variant,
 } from './candidate'
+import { canonicalizeCalcExpressionsAst } from './canonicalize-calc-expressions'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
 import { constantFoldDeclaration } from './constant-fold-declaration'
 import type { DesignSystem as BaseDesignSystem } from './design-system'
@@ -2274,6 +2275,8 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
           node.value = resolveVariablesInValue(node.value, designSystem)
         }
 
+        let valueAst = ValueParser.parse(node.value)
+
         // Very basic `calc(…)` constant folding to handle the spacing scale
         // multiplier:
         //
@@ -2282,7 +2285,17 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
         //       → `calc(0.25rem * 4)`       ← this is the case we will see
         //                                     after inlining the variable
         //       → `1rem`
-        node.value = constantFoldDeclaration(node.value, rem)
+        let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst, rem)
+
+        // Normalize `calc(…)` expressions such that arguments that are
+        // associatively equivalent are rendered in the same way.
+        //
+        // `calc(var(--foo) * -1)` === `calc(-1 * var(--foo))`
+        let [normalized, canonicalizedValueAst] = canonicalizeCalcExpressionsAst(foldedValueAst)
+
+        if (folded || normalized) {
+          node.value = ValueParser.toCss(canonicalizedValueAst)
+        }
 
         // We will normalize the `node.value`, this is the same kind of logic
         // we use when printing arbitrary values. It will remove unnecessary
