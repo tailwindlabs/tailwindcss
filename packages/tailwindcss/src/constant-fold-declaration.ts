@@ -48,10 +48,14 @@ export function constantFoldDeclarationAst(
         //   { kind: 'word', value: '256' }                 4
         // ]
         if (valueNode.nodes.length !== 5) return
+        if (valueNode.nodes[2].kind !== 'word') return
 
-        let lhs = dimensions.get(valueNode.nodes[0].value)
+        let lhsNode = valueNode.nodes[0]
         let operator = valueNode.nodes[2].value
-        let rhs = dimensions.get(valueNode.nodes[4].value)
+        let rhsNode = valueNode.nodes[4]
+
+        let lhs = lhsNode.kind === 'word' ? dimensions.get(lhsNode.value) : null
+        let rhs = rhsNode.kind === 'word' ? dimensions.get(rhsNode.value) : null
 
         // Nullify entire expression when multiplying by `0`, e.g.: `calc(0 * 100vw)` -> `0`
         //
@@ -63,6 +67,81 @@ export function constantFoldDeclarationAst(
         ) {
           folded = true
           return WalkAction.ReplaceSkip(ValueParser.word('0'))
+        }
+
+        if (operator === '*') {
+          // Multiplying by `1` can always unwrap the other side, even when that
+          // side is an expression like `var(--foo)` that we can't fully fold.
+          if (lhs?.[0] === 1 && lhs?.[1] === null) {
+            folded = true
+            return WalkAction.ReplaceSkip(rhsNode)
+          }
+
+          if (rhs?.[0] === 1 && rhs?.[1] === null) {
+            folded = true
+            return WalkAction.ReplaceSkip(lhsNode)
+          }
+
+          // If only one side is known, and the unknown side is itself another
+          // multiplication, try to combine the two known factors and keep the
+          // unknown part in place.
+          let constant = lhs ?? rhs
+          let nestedNode = lhs === null ? lhsNode : rhs === null ? rhsNode : null
+
+          if (
+            constant !== null &&
+            nestedNode !== null &&
+            nestedNode.kind === 'function' &&
+            (nestedNode.value === 'calc' || nestedNode.value === '') &&
+            nestedNode.nodes.length === 5 &&
+            nestedNode.nodes[2].kind === 'word' &&
+            nestedNode.nodes[2].value === '*'
+          ) {
+            let nestedLhsNode = nestedNode.nodes[0]
+            let nestedRhsNode = nestedNode.nodes[4]
+            let nestedLhs =
+              nestedLhsNode.kind === 'word' ? dimensions.get(nestedLhsNode.value) : null
+            let nestedRhs =
+              nestedRhsNode.kind === 'word' ? dimensions.get(nestedRhsNode.value) : null
+
+            let known = nestedLhs ?? nestedRhs
+            let unknown =
+              nestedLhs === null ? nestedLhsNode : nestedRhs === null ? nestedRhsNode : null
+
+            if (
+              known !== null &&
+              unknown !== null &&
+              (constant[1] === known[1] || constant[1] === null || known[1] === null)
+            ) {
+              // Re-associate nested multiplication so we can still fold the
+              // constant part of `x * (y * z)` when `z` is unknown.
+              //
+              // Examples:
+              // - `calc(2 * calc(3 * var(--foo)))` -> `calc(6 * var(--foo))`
+              // - `calc(-1 * calc(-1 * var(--foo)))` -> `var(--foo)`
+              let combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
+
+              folded = true
+
+              if (combined === '1') {
+                return WalkAction.ReplaceSkip(unknown)
+              }
+
+              let replacement: ValueParser.ValueFunctionNode = {
+                kind: 'function',
+                value: valueNode.value,
+                nodes: [
+                  ValueParser.word(combined),
+                  valueNode.nodes[1],
+                  valueNode.nodes[2],
+                  valueNode.nodes[3],
+                  unknown,
+                ],
+              }
+
+              return WalkAction.ReplaceSkip(replacement)
+            }
+          }
         }
 
         // We're not dealing with dimensions, so we can't fold this

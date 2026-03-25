@@ -31,6 +31,19 @@ it.each([
   // Nested partial evaluation
   ['calc(calc(1 + 2) + 2rem)', 'calc(3 + 2rem)'],
 
+  // Nested multiplication with unknown values
+  ['calc(2 * calc(3 * var(--foo)))', 'calc(6 * var(--foo))'],
+  ['calc(calc(3 * var(--foo)) * 2)', 'calc(6 * var(--foo))'],
+  ['calc(2rem * calc(3 * var(--foo)))', 'calc(6rem * var(--foo))'],
+
+  // Nested multiplication can collapse away entirely
+  ['calc(-1 * calc(-1 * var(--foo)))', 'var(--foo)'],
+  ['calc(calc(-1 * var(--foo)) * -1)', 'var(--foo)'],
+  ['calc(-1 * calc(var(--foo) * -1))', 'var(--foo)'],
+  ['calc(-1 * (-1 * var(--foo)))', 'var(--foo)'],
+  ['calc(1 * var(--foo))', 'var(--foo)'],
+  ['calc(var(--foo) * 1)', 'var(--foo)'],
+
   // Evaluation only handles two operands right now, this can change in the future
   ['calc(1 + 2 + 3)', 'calc(1 + 2 + 3)'],
 ])('should constant fold `%s` into `%s`', (input, expected) => {
@@ -44,6 +57,7 @@ it.each([
   ['calc(3rem * 3dvw)'],
   ['calc(3rem * 2dvh)'],
   ['calc(5rem / 17px)'],
+  ['calc(2rem * calc(3px * var(--foo)))'],
 ])('should not constant fold different units `%s`', (input) => {
   expect(constantFoldDeclaration(input)).toBe(input)
 })
