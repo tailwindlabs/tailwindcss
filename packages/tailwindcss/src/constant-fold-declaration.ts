@@ -81,10 +81,20 @@ export function constantFoldDeclarationAst(
             folded = true
             return WalkAction.ReplaceSkip(lhsNode)
           }
+        }
 
+        if (operator === '*' || operator === '+') {
           // If only one side is known, and the unknown side is itself another
-          // multiplication, try to combine the two known factors and keep the
-          // unknown part in place.
+          // binary expression with the same operator, try to combine the two
+          // known parts and keep the unknown part in place.
+          //
+          // E.g.:
+          //
+          // - `calc(2rem * calc(3    * var(--foo)))` → `calc(6rem * var(--foo))`
+          // - `calc(2rem + calc(3rem + var(--foo)))` → `calc(5rem + var(--foo))`
+          //
+          // At this point `lhs` and `rhs` are dimensions ([value, unit] |
+          // null). The `null` one is the unknown node.
           let constant = lhs ?? rhs
           let nestedNode = lhs === null ? lhsNode : rhs === null ? rhsNode : null
 
@@ -95,7 +105,7 @@ export function constantFoldDeclarationAst(
             (nestedNode.value === 'calc' || nestedNode.value === '') &&
             nestedNode.nodes.length === 5 &&
             nestedNode.nodes[2].kind === 'word' &&
-            nestedNode.nodes[2].value === '*'
+            nestedNode.nodes[2].value === operator
           ) {
             let nestedLhsNode = nestedNode.nodes[0]
             let nestedRhsNode = nestedNode.nodes[4]
@@ -108,22 +118,65 @@ export function constantFoldDeclarationAst(
             let unknown =
               nestedLhs === null ? nestedLhsNode : nestedRhs === null ? nestedRhsNode : null
 
-            if (
-              known !== null &&
-              unknown !== null &&
-              (constant[1] === known[1] || constant[1] === null || known[1] === null)
-            ) {
-              // Re-associate nested multiplication so we can still fold the
-              // constant part of `x * (y * z)` when `z` is unknown.
+            if (known !== null && unknown !== null) {
+              // `*` requires both values being unitless, or one of them. Both
+              // values having a unit is invalid.
+              //
+              // - `2    * 3`     → valid
+              // - `4rem * 5`     → valid
+              // - `6    * 7rem`  → valid
+              // - `8rem * 9rem`  → invalid
+              if (
+                operator === '*' &&
+                !(
+                  (constant[1] === null && known[1] === null) || // Both can be unitless
+                  (constant[1] === null && known[1] !== null) || // One of them can be unitless, but the other can't
+                  (constant[1] !== null && known[1] === null) // One of them can be unitless, but the other can't
+                )
+              ) {
+                return
+              }
+
+              // `+` requires that the units are the same. Adding a unitless
+              // value to a value with a unit is not allowed.
+              //
+              // - `2    + 3`     → valid
+              // - `4rem + 5`     → invalid
+              // - `6    + 7rem`  → invalid
+              // - `8rem + 9rem`  → valid
+              if (
+                operator === '+' &&
+                !(
+                  (constant[1] === known[1]) // Only same unit is allowed
+                )
+              ) {
+                return
+              }
+
+              // Re-associate nested expressions so we can still fold the known
+              // part of `x op (y op z)` when `z` is unknown.
               //
               // Examples:
               // - `calc(2 * calc(3 * var(--foo)))` -> `calc(6 * var(--foo))`
-              // - `calc(-1 * calc(-1 * var(--foo)))` -> `var(--foo)`
-              let combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
+              // - `calc(1rem + calc(2rem + var(--foo)))` -> `calc(3rem + var(--foo))`
+              let combined: string
+              switch (operator) {
+                case '*': {
+                  combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
+                  break
+                }
+                case '+': {
+                  combined = `${constant[0] + known[0]}${constant[1] ?? known[1] ?? ''}`
+                  break
+                }
+
+                default:
+                  return
+              }
 
               folded = true
 
-              if (combined === '1') {
+              if (operator === '*' && combined === '1') {
                 return WalkAction.ReplaceSkip(unknown)
               }
 

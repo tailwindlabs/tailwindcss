@@ -36,6 +36,10 @@ it.each([
   ['calc(calc(3 * var(--foo)) * 2)', 'calc(6 * var(--foo))'],
   ['calc(2rem * calc(3 * var(--foo)))', 'calc(6rem * var(--foo))'],
 
+  // Nested addition with unknown values
+  ['calc(1rem + calc(2rem + var(--foo)))', 'calc(3rem + var(--foo))'],
+  ['calc(calc(2rem + var(--foo)) + 1rem)', 'calc(3rem + var(--foo))'],
+
   // Nested multiplication can collapse away entirely
   ['calc(-1 * calc(-1 * var(--foo)))', 'var(--foo)'],
   ['calc(calc(-1 * var(--foo)) * -1)', 'var(--foo)'],
