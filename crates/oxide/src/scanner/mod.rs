@@ -474,7 +474,7 @@ pub fn pre_process_input(content: Vec<u8>, extension: &str) -> Vec<u8> {
         "heex" | "eex" | "ex" | "exs" => Elixir.process(&content),
         "cshtml" | "razor" => Razor.process(&content),
         "haml" => Haml.process(&content),
-        "json" => Json.process(&content),
+        "json" | "jsonl" | "ndjson" => Json.process(&content),
         "md" | "mdx" => Markdown.process(&content),
         "pug" => Pug.process(&content),
         "rb" | "erb" => Ruby.process(&content),
