@@ -77,6 +77,6 @@ function shouldSwap(lhs: ValueParser.ValueAstNode, rhs: ValueParser.ValueAstNode
     }
   }
 
-  // Both nodes are not non-dimensions, sort them as strings
+  // Both nodes are unknown values (not dimensions), sort them as strings
   return ValueParser.toCss([lhs]).localeCompare(ValueParser.toCss([rhs])) > 0
 }
