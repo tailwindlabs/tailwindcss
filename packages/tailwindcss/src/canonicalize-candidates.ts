@@ -2154,13 +2154,10 @@ function optimizeArbitraryValueExpressions(
   }
 
   // Move `-` sign out of the arbitrary value
-  //
-  // calc(arg * -1)
-  // calc(-1  * arg)
   if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
     let calcArgs = valueAst[0].nodes
 
-    // Handle `something * -1` and `-1 * something`
+    // `calc(arg * -1)` or `calc(-1  * arg)`
     if (
       calcArgs.length === 5 &&
       calcArgs[1].kind === 'separator' &&
