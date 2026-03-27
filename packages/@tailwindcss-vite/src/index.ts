@@ -122,7 +122,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       config!.root,
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
-      config?.css.devSourcemap ?? false,
+      config?.css?.devSourcemap ?? false,
       customCssResolver,
       customJsResolver,
     )
