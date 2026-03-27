@@ -2392,7 +2392,7 @@ test(
           border-color: inherit;
           border-collapse: collapse;
         }
-        :-moz-focusring {
+        :-moz-focusring:where(:not(iframe)) {
           outline: auto;
         }
         progress {
