@@ -18,7 +18,7 @@ import { walk, WalkAction } from '../walk'
 import type { ResolvedConfig, UserConfig } from './config/types'
 import { createThemeFn } from './plugin-functions'
 
-export type Config = UserConfig
+export interface Config extends UserConfig {}
 export type PluginFn = (api: PluginAPI) => void
 export type PluginWithConfig = {
   handler: PluginFn
