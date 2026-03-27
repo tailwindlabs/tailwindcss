@@ -414,10 +414,24 @@ export function createUtilities(theme: Theme) {
           value = candidate.value.value
           dataType = candidate.value.dataType
         } else {
-          value = theme.resolve(
-            candidate.value.fraction ?? candidate.value.value,
-            desc.themeKeys ?? [],
-          )
+          let resolvedValue = candidate.value.fraction ?? candidate.value.value
+
+          // First try resolving against just the primary theme key.
+          value = theme.resolve(resolvedValue, desc.themeKeys?.slice(0, 1) ?? [])
+
+          // If the primary theme key didn't match, check static values before
+          // falling back to secondary theme keys (like `--spacing`). This
+          // ensures e.g. `leading-none` produces `line-height: 1` even when
+          // `--spacing-none` is defined in the theme.
+          if (value === null && !negative && desc.staticValues && !candidate.modifier) {
+            let fallback = desc.staticValues[candidate.value.value]
+            if (fallback) return fallback.map(cloneAstNode)
+          }
+
+          // Fall back to the full set of theme keys.
+          if (value === null) {
+            value = theme.resolve(resolvedValue, desc.themeKeys ?? [])
+          }
 
           // Automatically handle things like `w-1/2` without requiring `1/2` to
           // exist as a theme value.
@@ -438,11 +452,6 @@ export function createUtilities(theme: Theme) {
           if (value === null && desc.handleBareValue) {
             value = desc.handleBareValue(candidate.value)
             if (!value?.includes('/') && candidate.modifier) return
-          }
-
-          if (value === null && !negative && desc.staticValues && !candidate.modifier) {
-            let fallback = desc.staticValues[candidate.value.value]
-            if (fallback) return fallback.map(cloneAstNode)
           }
         }
 
