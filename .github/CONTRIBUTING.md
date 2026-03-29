@@ -100,4 +100,4 @@ When a pull request is created, Tailwind CSS maintainers will be notified automa
 
 - **GitHub discussions**: For feature ideas and general questions
 - **GitHub issues**: For bug reports
-- **GitHub pull requests**: For code contributions
+- **GitHub pull requests**: For code contributions and documentation fixes
