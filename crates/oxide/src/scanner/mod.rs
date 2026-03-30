@@ -656,28 +656,16 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                     other_roots.insert(base);
                 }
 
-                if !pattern.contains("**") {
-                    // Ensure that the pattern is pinned to the base path.
-                    if !pattern.starts_with("/") {
-                        pattern = format!("/{pattern}");
-                    }
-
-                    // Specific patterns should take precedence even over git-ignored files:
-                    ignores
-                        .entry(base)
-                        .or_default()
-                        .insert(format!("!{}", pattern));
-                } else {
-                    // Assumption: the pattern we receive will already be brace expanded. So
-                    // `*.{html,jsx}` will result in two separate patterns: `*.html` and `*.jsx`.
-                    if let Some(extension) = Path::new(&pattern).extension() {
-                        // Extend auto source detection to include the extension
-                        ignores
-                            .entry(base)
-                            .or_default()
-                            .insert(format!("!*.{}", extension.to_string_lossy()));
-                    }
+                // Ensure that the pattern is pinned to the base path.
+                if !pattern.starts_with("/") {
+                    pattern = format!("/{pattern}");
                 }
+
+                // Specific patterns should take precedence even over git-ignored files:
+                ignores
+                    .entry(base)
+                    .or_default()
+                    .insert(format!("!{}", pattern));
             }
             SourceEntry::Ignored { base, pattern } => {
                 let mut pattern = pattern.to_string();
