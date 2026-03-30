@@ -11,8 +11,9 @@ import {
   type NamedUtilityValue,
   type Variant,
 } from './candidate'
+import { canonicalizeCalcExpressionsAst } from './canonicalize-calc-expressions'
 import { keyPathToCssProperty } from './compat/apply-config-to-theme'
-import { constantFoldDeclaration } from './constant-fold-declaration'
+import { constantFoldDeclaration, constantFoldDeclarationAst } from './constant-fold-declaration'
 import type { DesignSystem as BaseDesignSystem } from './design-system'
 import { CompileAstFlags } from './design-system'
 import { expandDeclaration } from './expand-declaration'
@@ -77,6 +78,10 @@ interface DesignSystem extends BaseDesignSystem {
       number | null, // Rem value
       DefaultMap<SignatureFeatures, SignatureOptions>
     >
+    [COMPARE_CANDIDATES_KEY]: DefaultMap<
+      SignatureOptions,
+      (a: Candidate | string, b: Candidate | string) => boolean
+    >
     [INTERNAL_OPTIONS_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<Features, InternalCanonicalizeOptions>
@@ -126,6 +131,7 @@ export function prepareDesignSystemStorage(
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
   designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
+  designSystem.storage[COMPARE_CANDIDATES_KEY] ??= createSignatureComparison(designSystem)
 
   return designSystem
 }
@@ -136,6 +142,25 @@ function createSignatureOptionsCache(): DesignSystem['storage'][typeof SIGNATURE
     return new DefaultMap((features: SignatureFeatures) => {
       return { rem, features } satisfies SignatureOptions
     })
+  })
+}
+
+const COMPARE_CANDIDATES_KEY = Symbol()
+function createSignatureComparison(designSystem: DesignSystem) {
+  return new DefaultMap((options: SignatureOptions) => {
+    let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options)
+
+    return function hasSameSignature(a: Candidate | string, b: Candidate | string): boolean {
+      let aCandidateString = typeof a === 'string' ? a : designSystem.printCandidate(a)
+      let aSignature = signatures.get(aCandidateString)
+      if (typeof aSignature !== 'string') return false
+
+      let bCandidateString = typeof b === 'string' ? b : designSystem.printCandidate(b)
+      let bSignature = signatures.get(bCandidateString)
+      if (typeof bSignature !== 'string') return false
+
+      return aSignature === bSignature
+    }
   })
 }
 
@@ -198,7 +223,6 @@ export function canonicalizeCandidates(
 }
 
 function collapseCandidates(options: InternalCanonicalizeOptions, candidates: string[]): string[] {
-  if (candidates.length <= 1) return candidates
   let designSystem = options.designSystem
 
   // To keep things simple, we group candidates such that we only collapse
@@ -321,10 +345,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       if (relevantProperties.size === 0) return result
 
       for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
-        if (
-          parsedCandidate.kind !== 'functional' ||
-          parsedCandidate.value?.kind !== 'named' // Necessary for bare values
-        ) {
+        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
           continue
         }
 
@@ -578,6 +599,7 @@ const UTILITY_CANONICALIZATIONS: UtilityCanonicalizationFunction[] = [
   bgGradientToLinear,
   themeToVarUtility,
   calcToSpacingFunction,
+  optimizeArbitraryValueExpressions,
   arbitraryUtilities,
   bareValueUtilities,
   deprecatedUtilities,
@@ -1096,6 +1118,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
   let designSystem = options.designSystem
   let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1105,9 +1128,7 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   // Try a few options to find a suitable replacement utility
   for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
-    let replacementString = designSystem.printCandidate(replacementCandidate)
-    let replacementSignature = signatures.get(replacementString)
-    if (replacementSignature !== targetSignature) {
+    if (!hasSameSignature(candidate, replacementCandidate)) {
       continue
     }
 
@@ -1128,11 +1149,29 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
@@ -1326,6 +1365,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
   let designSystem = options.designSystem
   let utilities = designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(options.signatureOptions)
   let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = designSystem.printCandidate(candidate)
 
@@ -1335,9 +1375,7 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 
   // Try a few options to find a suitable replacement utility
   for (let replacementCandidate of tryReplacements(targetSignature, candidate)) {
-    let replacementString = designSystem.printCandidate(replacementCandidate)
-    let replacementSignature = signatures.get(replacementString)
-    if (replacementSignature !== targetSignature) {
+    if (!hasSameSignature(candidate, replacementCandidate)) {
       continue
     }
 
@@ -1353,11 +1391,29 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
     // Find a corresponding utility for the same signature
     let replacements = utilities.get(targetSignature)
 
-    // Multiple utilities can map to the same signature. Not sure how to migrate
-    // this one so let's just skip it for now.
-    //
-    // TODO: Do we just migrate to the first one?
-    if (replacements.length > 1) return
+    // Multiple utilities can map to the same signature.
+    if (replacements.length > 1) {
+      // Prefer positive values over negative values
+      let maybeReplacement: string | undefined = undefined
+      for (let replacement of replacements) {
+        if (replacement[0] === '-') continue // Skip negative values
+
+        // If multiple non-negative replacements exists then we are unsure
+        // what to do, so let's bail.
+        if (maybeReplacement) return
+
+        // Consider this replacement
+        maybeReplacement = replacement
+      }
+
+      if (maybeReplacement) {
+        for (let replacementCandidate of parseCandidate(designSystem, maybeReplacement)) {
+          yield replacementCandidate
+        }
+      }
+
+      return
+    }
 
     // If we didn't find any replacement utilities, let's try to strip the
     // modifier and find a replacement then. If we do, we can try to re-add the
@@ -1395,31 +1451,47 @@ function bareValueUtilities(candidate: Candidate, options: InternalCanonicalizeO
 const DEPRECATION_MAP = new Map([
   ['order-none', 'order-0'],
   ['break-words', 'wrap-break-word'],
+  ['overflow-ellipsis', 'text-ellipsis'],
 ])
+
+const DEPRECATION_TRANSFORMATION_MAP = new Map([
+  [/^(-)?start-(.*?)$/, '$1inset-s-$2'],
+  [/^(-)?end-(.*?)$/, '$1inset-e-$2'],
+])
+
+function* tryDeprecatedUtilities(candidate: string) {
+  // Try static replacements
+  let replacement = DEPRECATION_MAP.get(candidate)
+  if (replacement) yield replacement
+
+  // Try dynamic replacements
+  for (let [searchValue, replaceValue] of DEPRECATION_TRANSFORMATION_MAP) {
+    let replacement = candidate.replace(searchValue, replaceValue)
+    if (replacement === candidate) continue
+
+    yield replacement
+  }
+}
 
 function deprecatedUtilities(
   candidate: Candidate,
   options: InternalCanonicalizeOptions,
 ): Candidate {
   let designSystem = options.designSystem
-  let signatures = designSystem.storage[UTILITY_SIGNATURE_KEY].get(options.signatureOptions)
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
 
   let targetCandidateString = printUnprefixedCandidate(designSystem, candidate)
 
-  let replacementString = DEPRECATION_MAP.get(targetCandidateString) ?? null
-  if (replacementString === null) return candidate
+  for (let replacementString of tryDeprecatedUtilities(targetCandidateString)) {
+    if (!hasSameSignature(candidate, replacementString)) {
+      continue
+    }
 
-  let legacySignature = signatures.get(targetCandidateString)
-  if (typeof legacySignature !== 'string') return candidate
+    let [replacement] = parseCandidate(designSystem, replacementString)
+    return replacement
+  }
 
-  let replacementSignature = signatures.get(replacementString)
-  if (typeof replacementSignature !== 'string') return candidate
-
-  // Not the same signature, not safe to migrate
-  if (legacySignature !== replacementSignature) return candidate
-
-  let [replacement] = parseCandidate(designSystem, replacementString)
-  return replacement
+  return candidate
 }
 
 // ----
@@ -2028,6 +2100,95 @@ function modernizeArbitraryValuesVariant(
   return result
 }
 
+// ---
+
+function optimizeArbitraryValueExpressions(
+  candidate: Candidate,
+  options: InternalCanonicalizeOptions,
+): Candidate {
+  if (candidate.kind !== 'functional' || candidate.value?.kind !== 'arbitrary') {
+    return candidate
+  }
+
+  let designSystem = options.designSystem
+  let hasSameSignature = designSystem.storage[COMPARE_CANDIDATES_KEY].get(options.signatureOptions)
+
+  let valueAst = ValueParser.parse(candidate.value.value)
+
+  // Start by constant folding the value expression, when dealing with `calc(…)`
+  if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
+    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst)
+    if (folded) {
+      let replacement = cloneCandidate(candidate)
+      replacement.value!.value = ValueParser.toCss(foldedValueAst)
+
+      if (hasSameSignature(candidate, replacement)) {
+        candidate = replacement
+        valueAst = foldedValueAst
+      }
+    }
+  }
+
+  // Move `-` sign into the arbitrary value itself
+  if (candidate.root[0] === '-') {
+    // We're dealing with a `var(…)`, keep as-is
+    if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'var') {
+      return candidate
+    }
+
+    // Move `* -1` inside, and try to constant fold to see if it's even worth
+    // updating the candidate or not.
+    let expressionAst = ValueParser.parse(`calc(${candidate.value!.value} * -1)`)
+    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst)
+    if (folded) {
+      let replacement = cloneCandidate(candidate)
+
+      replacement.root = replacement.root.slice(1) // Drop the leading `-`
+      replacement.value!.value = ValueParser.toCss(foldedExpressionAst)
+
+      if (hasSameSignature(candidate, replacement)) {
+        candidate = replacement
+        valueAst = foldedExpressionAst
+      }
+    }
+  }
+
+  // Move `-` sign out of the arbitrary value
+  if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
+    let calcArgs = valueAst[0].nodes
+
+    // `calc(arg * -1)` or `calc(-1  * arg)`
+    if (
+      calcArgs.length === 5 &&
+      calcArgs[1].kind === 'separator' &&
+      calcArgs[1].value === ' ' &&
+      calcArgs[2].kind === 'word' &&
+      calcArgs[2].value === '*' &&
+      calcArgs[3].kind === 'separator' &&
+      calcArgs[3].value === ' '
+    ) {
+      let arg =
+        calcArgs[4].kind === 'word' && calcArgs[4].value === '-1'
+          ? calcArgs[0]
+          : calcArgs[0].kind === 'word' && calcArgs[0].value === '-1'
+            ? calcArgs[4]
+            : null
+
+      if (arg) {
+        let replacement = cloneCandidate(candidate)
+        replacement.root = `-${candidate.root}`
+        replacement.value!.value = ValueParser.toCss([arg])
+
+        if (hasSameSignature(candidate, replacement)) {
+          candidate = replacement
+        }
+      }
+    }
+  }
+
+  return candidate
+}
+
 // ----
 
 // Optimize the modifier
@@ -2221,6 +2382,8 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
           node.value = resolveVariablesInValue(node.value, designSystem)
         }
 
+        let valueAst = ValueParser.parse(node.value)
+
         // Very basic `calc(…)` constant folding to handle the spacing scale
         // multiplier:
         //
@@ -2229,7 +2392,17 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
         //       → `calc(0.25rem * 4)`       ← this is the case we will see
         //                                     after inlining the variable
         //       → `1rem`
-        node.value = constantFoldDeclaration(node.value, rem)
+        let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst, rem)
+
+        // Normalize `calc(…)` expressions such that arguments that are
+        // associatively equivalent are rendered in the same way.
+        //
+        // `calc(var(--foo) * -1)` === `calc(-1 * var(--foo))`
+        let [normalized, canonicalizedValueAst] = canonicalizeCalcExpressionsAst(foldedValueAst)
+
+        if (folded || normalized) {
+          node.value = ValueParser.toCss(canonicalizedValueAst)
+        }
 
         // We will normalize the `node.value`, this is the same kind of logic
         // we use when printing arbitrary values. It will remove unnecessary

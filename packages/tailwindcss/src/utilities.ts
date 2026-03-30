@@ -3960,7 +3960,7 @@ export function createUtilities(theme: Theme) {
   ])
 
   colorUtility('placeholder', {
-    themeKeys: ['--background-color', '--color'],
+    themeKeys: ['--placeholder-color', '--color'],
     handle: (value) => [
       styleRule('&::placeholder', [decl('--tw-sort', 'placeholder-color'), decl('color', value)]),
     ],

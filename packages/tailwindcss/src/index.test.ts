@@ -1501,6 +1501,14 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19786
+  test('out-of-range escaped CSS variable candidates do not crash the build', async () => {
+    // Shouldn't crash
+    await run([
+      String.raw`--Coding-Projects-CharacterMapper-Master-Workspace\d8819554-4725-4235-9d22-2d0ed572e924`,
+    ])
+  })
+
   test('`@keyframes` in `@theme` are hoisted', async () => {
     expect(
       await compileCss(
