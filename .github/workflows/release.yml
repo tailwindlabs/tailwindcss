@@ -1,9 +1,20 @@
 name: Release
 
 on:
+  push:
+    branches: [main]
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      channel:
+        description: Release channel to publish
+        required: true
+        default: insiders
+        type: choice
+        options:
+          - insiders
+          - release
 
 permissions:
   contents: read
@@ -11,7 +22,12 @@ permissions:
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 24
+  PNPM_VERSION: 10
   OXIDE_LOCATION: ./crates/node
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -74,6 +90,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -170,7 +188,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
+            sudo npm install -g pnpm@${{ env.PNPM_VERSION }} --unsafe-perm=true
             curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
@@ -194,7 +212,7 @@ jobs:
   release:
     runs-on: macos-14
     timeout-minutes: 15
-    name: Build and release Tailwind CSS
+    name: Build and publish Tailwind CSS
 
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
@@ -210,7 +228,30 @@ jobs:
         with:
           fetch-depth: 20
 
+      # npm trusted publishing validates the caller workflow filename, so all npm publishes live here.
+      # This workflow rebuilds the publish artifacts instead of depending on prepare-release.yml.
+      - name: Resolve release metadata
+        env:
+          INPUT_CHANNEL: ${{ github.event.inputs.channel || '' }}
+        run: |
+          if [[ "${{ github.event_name }}" == "release" || "$INPUT_CHANNEL" == "release" ]]; then
+            release_channel=$(node ./scripts/release-channel.js)
+
+            echo "RELEASE_KIND=release" >> $GITHUB_ENV
+            echo "RELEASE_CHANNEL=$release_channel" >> $GITHUB_ENV
+            echo "FEATURES_ENV=stable" >> $GITHUB_ENV
+          else
+            sha_short=$(git rev-parse --short HEAD)
+
+            echo "RELEASE_KIND=insiders" >> $GITHUB_ENV
+            echo "RELEASE_CHANNEL=insiders" >> $GITHUB_ENV
+            echo "SHA_SHORT=$sha_short" >> $GITHUB_ENV
+            echo "INSIDERS_VERSION=0.0.0-insiders.$sha_short" >> $GITHUB_ENV
+          fi
+
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -274,10 +315,19 @@ jobs:
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
           cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
 
+      - name: 'Version based on commit: ${{ env.INSIDERS_VERSION }}'
+        if: env.RELEASE_KIND == 'insiders'
+        run: pnpm run version-packages ${{ env.INSIDERS_VERSION }}
+
       - name: Build Tailwind CSS
+        if: env.RELEASE_KIND == 'insiders'
+        run: pnpm run build
+
+      - name: Build Tailwind CSS
+        if: env.RELEASE_KIND == 'release'
         run: pnpm run build
         env:
-          FEATURES_ENV: stable
+          FEATURES_ENV: ${{ env.FEATURES_ENV }}
 
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
@@ -285,21 +335,19 @@ jobs:
       - name: Lock pre-release versions
         run: node ./scripts/lock-pre-release-versions.mjs
 
-      - name: Calculate environment variables
-        run: |
-          echo "RELEASE_CHANNEL=$(node ./scripts/release-channel.js)" >> $GITHUB_ENV
-          echo "TAILWINDCSS_VERSION=$(node -e 'console.log(require(`./packages/tailwindcss/package.json`).version);')" >> $GITHUB_ENV
+      - name: Upload npm package tarballs
+        uses: actions/upload-artifact@v6
+        with:
+          name: npm-package-tarballs
+          path: dist/*.tgz
 
       - name: Publish
         run: |
           pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
           pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks; popd;
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Trigger Tailwind Play update
-        if: env.RELEASE_CHANNEL == 'latest'
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
