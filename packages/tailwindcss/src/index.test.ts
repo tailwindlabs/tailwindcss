@@ -5588,6 +5588,46 @@ describe('@variant', () => {
       `)
     })
 
+    it('should handle missing variants (trailing comma)', async () => {
+      await expect(
+        compileCss(
+          css`
+            .btn {
+              background: black;
+
+              @variant hover,focus, {
+                background: red;
+              }
+            }
+            @tailwind utilities;
+          `,
+          [],
+        ),
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Cannot use \`@variant\` with empty variant]`,
+      )
+    })
+
+    it('should handle missing variants (gap in the middle)', async () => {
+      await expect(
+        compileCss(
+          css`
+            .btn {
+              background: black;
+
+              @variant hover,,focus {
+                background: red;
+              }
+            }
+            @tailwind utilities;
+          `,
+          [],
+        ),
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Cannot use \`@variant\` with empty variant]`,
+      )
+    })
+
     it('should handle nested comma-separated variants', async () => {
       await expect(
         compileCss(
@@ -5628,6 +5668,68 @@ describe('@variant', () => {
 
         .btn:focus:active, .btn:focus:disabled {
           background: #00f;
+        }"
+      `)
+    })
+  })
+
+  describe('compound `@variant` rules', () => {
+    it('should handle compound variants', async () => {
+      await expect(
+        compileCss(
+          css`
+            .btn {
+              background: black;
+
+              @variant hover:focus {
+                background: red;
+              }
+            }
+            @tailwind utilities;
+          `,
+          [],
+        ),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
+          }
+        }"
+      `)
+    })
+
+    it('should handle compound variants & comma-separated variants', async () => {
+      await expect(
+        compileCss(
+          css`
+            .btn {
+              background: black;
+
+              @variant hover:focus, disabled {
+                background: red;
+              }
+            }
+            @tailwind utilities;
+          `,
+          [],
+        ),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
+          }
+        }
+        
+        .btn:disabled {
+          background: red;
         }"
       `)
     })
