@@ -231,8 +231,7 @@ video {
 /*
   1. Inherit font styles in all browsers.
   2. Remove border radius in all browsers.
-  3. Remove background color in all browsers.
-  4. Ensure consistent opacity for disabled states in all browsers.
+  3. Ensure consistent opacity for disabled states in all browsers.
 */
 
 button,
@@ -247,8 +246,7 @@ textarea,
   letter-spacing: inherit; /* 1 */
   color: inherit; /* 1 */
   border-radius: 0; /* 2 */
-  background-color: transparent; /* 3 */
-  opacity: 1; /* 4 */
+  opacity: 1; /* 3 */
 }
 
 /*
@@ -366,13 +364,15 @@ textarea {
 }
 
 /*
-  Correct the inability to style the border radius in iOS Safari.
+  1. Remove the default background color of buttons.
+  2. Correct the inability to style the border radius in iOS Safari.
 */
 
 button,
 input:where([type='button'], [type='reset'], [type='submit']),
 ::file-selector-button {
-  appearance: button;
+  background-color: transparent; /* 1 */
+  appearance: button; /* 2 */
 }
 
 /*
