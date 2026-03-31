@@ -1,5 +1,168 @@
 import { describe } from 'vitest'
-import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
+import {
+  candidate,
+  css,
+  fetchStyles,
+  html,
+  js,
+  json,
+  retryAssertion,
+  test,
+  ts,
+  txt,
+} from '../utils'
+
+test(
+  'resolves tsconfig paths in production build',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'tsconfig.json': json`
+        {
+          "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+              "@/*": ["./src/*"]
+            }
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+          resolve: {
+            tsconfigPaths: true,
+          },
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline custom-underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import '@/styles/base.css';
+        @plugin '@/plugin.js';
+      `,
+      'src/styles/base.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+      'src/plugin.js': js`
+        export default function ({ addUtilities }) {
+          addUtilities({ '.custom-underline': { 'border-bottom': '1px solid green' } })
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`underline`, candidate`custom-underline`])
+  },
+)
+
+test(
+  'resolves tsconfig paths in dev mode',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'tsconfig.json': json`
+        {
+          "compilerOptions": {
+            "baseUrl": ".",
+            "paths": {
+              "@/*": ["./src/*"]
+            }
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+          resolve: {
+            tsconfigPaths: true,
+          },
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline custom-underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import '@/styles/base.css';
+        @plugin '@/plugin.js';
+      `,
+      'src/styles/base.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+      'src/plugin.js': js`
+        export default function ({ addUtilities }) {
+          addUtilities({ '.custom-underline': { 'border-bottom': '1px solid green' } })
+        }
+      `,
+    },
+  },
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain(candidate`custom-underline`)
+    })
+  },
+)
 
 describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(

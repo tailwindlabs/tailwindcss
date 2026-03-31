@@ -16,6 +16,7 @@ import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import {
   inferDataType,
   isPositiveInteger,
@@ -390,6 +391,8 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
+    if (desc.staticValues) desc.staticValues = Object.assign(Object.create(null), desc.staticValues)
+
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
@@ -421,7 +424,7 @@ export function createUtilities(theme: Theme) {
           if (value === null && desc.supportsFractions && candidate.value.fraction) {
             let [lhs, rhs] = segment(candidate.value.fraction, '/')
             if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
-            value = `calc(${candidate.value.fraction} * 100%)`
+            value = `calc(${lhs} / ${rhs} * 100%)`
           }
 
           // If there is still no value but the utility supports bare values,
@@ -624,8 +627,10 @@ export function createUtilities(theme: Theme) {
     ['inset', 'inset'],
     ['inset-x', 'inset-inline'],
     ['inset-y', 'inset-block'],
-    ['start', 'inset-inline-start'],
-    ['end', 'inset-inline-end'],
+    ['inset-s', 'inset-inline-start'],
+    ['inset-e', 'inset-inline-end'],
+    ['inset-bs', 'inset-block-start'],
+    ['inset-be', 'inset-block-end'],
     ['top', 'top'],
     ['right', 'right'],
     ['bottom', 'bottom'],
@@ -888,6 +893,8 @@ export function createUtilities(theme: Theme) {
     ['my', 'margin-block'],
     ['ms', 'margin-inline-start'],
     ['me', 'margin-inline-end'],
+    ['mbs', 'margin-block-start'],
+    ['mbe', 'margin-block-end'],
     ['mt', 'margin-top'],
     ['mr', 'margin-right'],
     ['mb', 'margin-bottom'],
@@ -977,7 +984,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      if (!isValidSpacingMultiplier(lhs) || !isValidSpacingMultiplier(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -1061,6 +1068,82 @@ export function createUtilities(theme: Theme) {
     ['h', ['--height', '--spacing'], 'height'],
     ['min-h', ['--min-height', '--height', '--spacing'], 'min-height'],
     ['max-h', ['--max-height', '--height', '--spacing'], 'max-height'],
+  ] as [string, ThemeKey[], string][]) {
+    spacingUtility(name, namespaces, (value) => [decl(property, value)], {
+      supportsFractions: true,
+    })
+  }
+
+  /**
+   * @css `inline-size`
+   * @css `min-inline-size`
+   * @css `max-inline-size`
+   * @css `block-size`
+   * @css `min-block-size`
+   * @css `max-block-size`
+   */
+  for (let [key, value] of [
+    ['full', '100%'],
+    ['min', 'min-content'],
+    ['max', 'max-content'],
+    ['fit', 'fit-content'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  // inline-size viewport units (like width)
+  for (let [key, value] of [
+    ['svw', '100svw'],
+    ['lvw', '100lvw'],
+    ['dvw', '100dvw'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+  }
+
+  // block-size viewport units (like height)
+  for (let [key, value] of [
+    ['svh', '100svh'],
+    ['lvh', '100lvh'],
+    ['dvh', '100dvh'],
+  ]) {
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  staticUtility(`inline-auto`, [['inline-size', 'auto']])
+  staticUtility(`block-auto`, [['block-size', 'auto']])
+  staticUtility(`min-inline-auto`, [['min-inline-size', 'auto']])
+  staticUtility(`min-block-auto`, [['min-block-size', 'auto']])
+
+  staticUtility(`block-lh`, [['block-size', '1lh']])
+  staticUtility(`min-block-lh`, [['min-block-size', '1lh']])
+  staticUtility(`max-block-lh`, [['max-block-size', '1lh']])
+
+  staticUtility(`inline-screen`, [['inline-size', '100vw']])
+  staticUtility(`min-inline-screen`, [['min-inline-size', '100vw']])
+  staticUtility(`max-inline-screen`, [['max-inline-size', '100vw']])
+  staticUtility(`block-screen`, [['block-size', '100vh']])
+  staticUtility(`min-block-screen`, [['min-block-size', '100vh']])
+  staticUtility(`max-block-screen`, [['max-block-size', '100vh']])
+
+  staticUtility(`max-inline-none`, [['max-inline-size', 'none']])
+  staticUtility(`max-block-none`, [['max-block-size', 'none']])
+
+  for (let [name, namespaces, property] of [
+    ['inline', ['--spacing', '--container'], 'inline-size'],
+    ['min-inline', ['--spacing', '--container'], 'min-inline-size'],
+    ['max-inline', ['--spacing', '--container'], 'max-inline-size'],
+    ['block', ['--spacing'], 'block-size'],
+    ['min-block', ['--spacing'], 'min-block-size'],
+    ['max-block', ['--spacing'], 'max-block-size'],
   ] as [string, ThemeKey[], string][]) {
     spacingUtility(name, namespaces, (value) => [decl(property, value)], {
       supportsFractions: true,
@@ -1774,6 +1857,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-my', 'scroll-margin-block'],
     ['scroll-ms', 'scroll-margin-inline-start'],
     ['scroll-me', 'scroll-margin-inline-end'],
+    ['scroll-mbs', 'scroll-margin-block-start'],
+    ['scroll-mbe', 'scroll-margin-block-end'],
     ['scroll-mt', 'scroll-margin-top'],
     ['scroll-mr', 'scroll-margin-right'],
     ['scroll-mb', 'scroll-margin-bottom'],
@@ -1798,6 +1883,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-py', 'scroll-padding-block'],
     ['scroll-ps', 'scroll-padding-inline-start'],
     ['scroll-pe', 'scroll-padding-inline-end'],
+    ['scroll-pbs', 'scroll-padding-block-start'],
+    ['scroll-pbe', 'scroll-padding-block-end'],
     ['scroll-pt', 'scroll-padding-top'],
     ['scroll-pr', 'scroll-padding-right'],
     ['scroll-pb', 'scroll-padding-bottom'],
@@ -2342,6 +2429,22 @@ export function createUtilities(theme: Theme) {
         decl('border-inline-end-width', value),
       ],
       color: (value) => [decl('border-inline-end-color', value)],
+    })
+
+    borderSideUtility('border-bs', {
+      width: (value) => [
+        decl('border-block-start-style', 'var(--tw-border-style)'),
+        decl('border-block-start-width', value),
+      ],
+      color: (value) => [decl('border-block-start-color', value)],
+    })
+
+    borderSideUtility('border-be', {
+      width: (value) => [
+        decl('border-block-end-style', 'var(--tw-border-style)'),
+        decl('border-block-end-width', value),
+      ],
+      color: (value) => [decl('border-block-end-color', value)],
     })
 
     borderSideUtility('border-t', {
@@ -3706,6 +3809,8 @@ export function createUtilities(theme: Theme) {
     ['py', 'padding-block'],
     ['ps', 'padding-inline-start'],
     ['pe', 'padding-inline-end'],
+    ['pbs', 'padding-block-start'],
+    ['pbe', 'padding-block-end'],
     ['pt', 'padding-top'],
     ['pr', 'padding-right'],
     ['pb', 'padding-bottom'],
@@ -3807,6 +3912,14 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  /**
+   * @css `font-feature-settings`
+   */
+  functionalUtility('font-features', {
+    themeKeys: [],
+    handle: (value) => [decl('font-feature-settings', value)],
+  })
+
   staticUtility('uppercase', [['text-transform', 'uppercase']])
   staticUtility('lowercase', [['text-transform', 'lowercase']])
   staticUtility('capitalize', [['text-transform', 'capitalize']])
@@ -3847,7 +3960,7 @@ export function createUtilities(theme: Theme) {
   ])
 
   colorUtility('placeholder', {
-    themeKeys: ['--background-color', '--color'],
+    themeKeys: ['--placeholder-color', '--color'],
     handle: (value) => [
       styleRule('&::placeholder', [decl('--tw-sort', 'placeholder-color'), decl('color', value)]),
     ],
@@ -5497,7 +5610,7 @@ export function createUtilities(theme: Theme) {
                 value,
                 alpha,
                 (color) => `var(--tw-inset-shadow-color, ${color})`,
-                'inset ',
+                'inset',
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -5829,7 +5942,11 @@ export const BARE_VALUE_DATA_TYPES = [
 ]
 
 export function createCssUtility(node: AtRule) {
-  let name = node.params
+  // Allow escaped characters in the name for compatibility with formatters and
+  // other parsers, to ensure valid CSS syntax. E.g.: `@utility foo-1\/2`.
+  //
+  // Note: the actual utility will be `foo-1/2`
+  let name = unescape(node.params)
 
   // Functional utilities. E.g.: `tab-size-*`
   if (isValidFunctionalUtilityName(name)) {
@@ -6267,7 +6384,7 @@ function resolveValueFunction(
 
       // Ratio must be a valid fraction, e.g.: <integer>/<integer>
       if (type === 'ratio') {
-        let [lhs, rhs] = segment(resolved, '/')
+        let [lhs, rhs] = segment(resolved, '/').map(Number)
         if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
       }
 
@@ -6282,7 +6399,12 @@ function resolveValueFunction(
         continue
       }
 
-      return { nodes: ValueParser.parse(resolved), ratio: type === 'ratio' }
+      if (type === 'ratio') {
+        let [lhs, rhs] = segment(resolved, '/')
+        return { nodes: ValueParser.parse(`${lhs.trim()} / ${rhs.trim()}`), ratio: true }
+      }
+
+      return { nodes: ValueParser.parse(resolved), ratio: false }
     }
 
     // Arbitrary value, e.g.: `--value([integer])`
@@ -6361,8 +6483,8 @@ function alphaReplacedShadowProperties(
   function applyPrefix(x: string) {
     if (!prefix) return x
     return segment(x, ',')
-      .map((value) => prefix + value)
-      .join(',')
+      .map((value) => prefix.trim() + ' ' + value.trim())
+      .join(', ')
   }
 
   if (requiresFallback) {
@@ -6539,22 +6661,21 @@ export function isValidFunctionalUtilityName(name: string): boolean {
   let root = match[0]
   let value = name.slice(root.length)
 
-  // Root should not end in `-` if there is no value
-  //
-  // `tab-size--*`
-  //  ---------     Root
-  //           --   Suffix
-  //
-  // Because with default values, this could match `tab-size-` which is invalid.
-  if (value.length === 0 && root.endsWith('-')) {
-    return false
-  }
-
   // No remaining value is valid
   //
   // `tab-size-*`
   //  --------    Root
   //          --  Suffix
+  //
+  // Backwards compatibility: a root ending in `-` was valid and correctly
+  // scanned by Oxide. This means that custom utilities can result in candidates
+  // such as `foo--bar`.
+  //
+  // We might want to revisit this for Tailwind CSS v5, but for now we have to
+  // make it backwards compatible.
+  //
+  // PR: https://github.com/tailwindlabs/tailwindcss/pull/19696
+  //
   if (value.length === 0) {
     return true
   }

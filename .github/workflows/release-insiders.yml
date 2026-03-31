@@ -13,6 +13,10 @@ env:
   OXIDE_LOCATION: ./crates/node
   RELEASE_CHANNEL: insiders
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     strategy:
@@ -259,7 +263,7 @@ jobs:
         run: pnpm --filter=!./playgrounds/* install
 
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           path: ${{ env.OXIDE_LOCATION }}
 

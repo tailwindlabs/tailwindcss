@@ -13,10 +13,10 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/tailwindlabs/tailwindcss/actions"><img src="https://img.shields.io/github/actions/workflow/status/tailwindlabs/tailwindcss/ci.yml?branch=next" alt="Build Status"></a>
+    <a href="https://github.com/tailwindlabs/tailwindcss/actions"><img src="https://img.shields.io/github/actions/workflow/status/tailwindlabs/tailwindcss/ci.yml?branch=main" alt="Build Status"></a>
     <a href="https://www.npmjs.com/package/tailwindcss"><img src="https://img.shields.io/npm/dt/tailwindcss.svg" alt="Total Downloads"></a>
-    <a href="https://github.com/tailwindcss/tailwindcss/releases"><img src="https://img.shields.io/npm/v/tailwindcss.svg" alt="Latest Release"></a>
-    <a href="https://github.com/tailwindcss/tailwindcss/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/tailwindcss.svg" alt="License"></a>
+    <a href="https://github.com/tailwindlabs/tailwindcss/releases"><img src="https://img.shields.io/npm/v/tailwindcss.svg" alt="Latest Release"></a>
+    <a href="https://github.com/tailwindlabs/tailwindcss/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/tailwindcss.svg" alt="License"></a>
 </p>
 
 ---
@@ -29,11 +29,11 @@ For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
 For help, discussion about best practices, or feature ideas:
 
-[Discuss Tailwind CSS on GitHub](https://github.com/tailwindcss/tailwindcss/discussions)
+[Discuss Tailwind CSS on GitHub](https://github.com/tailwindlabs/tailwindcss/discussions)
 
 ## Contributing
 
-If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindcss/tailwindcss/blob/next/.github/CONTRIBUTING.md) **before submitting a pull request**.
+If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md) **before submitting a pull request**.
 
 ---
 
@@ -44,14 +44,14 @@ If you're interested in contributing to Tailwind CSS, please read our [contribut
 You can use the `base` option (defaults to the current working directory) to change the directory in which the plugin searches for source files:
 
 ```js
-import tailwindcss from "@tailwindcss/postcss"
+import tailwindcss from '@tailwindcss/postcss'
 
 export default {
- plugins: [
-  tailwindcss({
-    base: path.resolve(__dirname, "./path")
-  })
- ]
+  plugins: [
+    tailwindcss({
+      base: path.resolve(__dirname, './path'),
+    }),
+  ],
 }
 ```
 

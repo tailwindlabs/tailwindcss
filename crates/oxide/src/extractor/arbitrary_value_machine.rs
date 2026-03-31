@@ -32,7 +32,7 @@ impl Machine for ArbitraryValueMachine {
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         // An arbitrary value must start with an open bracket
-        if Class::OpenBracket != cursor.curr.into() {
+        if Class::OpenBracket != cursor.curr().into() {
             return MachineState::Idle;
         }
 
@@ -42,8 +42,8 @@ impl Machine for ArbitraryValueMachine {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
-                Class::Escape => match cursor.next.into() {
+            match cursor.curr().into() {
+                Class::Escape => match cursor.next().into() {
                     // An escaped whitespace character is not allowed
                     //
                     // E.g.: `[color:var(--my-\ color)]`
@@ -61,7 +61,7 @@ impl Machine for ArbitraryValueMachine {
                 },
 
                 Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
-                    if !self.bracket_stack.push(cursor.curr) {
+                    if !self.bracket_stack.push(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -70,7 +70,7 @@ impl Machine for ArbitraryValueMachine {
                 Class::CloseParen | Class::CloseBracket | Class::CloseCurly
                     if !self.bracket_stack.is_empty() =>
                 {
-                    if !self.bracket_stack.pop(cursor.curr) {
+                    if !self.bracket_stack.pop(cursor.curr()) {
                         return self.restart();
                     }
                     cursor.advance();
@@ -96,7 +96,7 @@ impl Machine for ArbitraryValueMachine {
                 Class::Whitespace => return self.restart(),
 
                 // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
-                Class::Dollar if matches!(cursor.next.into(), Class::OpenCurly) => {
+                Class::Dollar if matches!(cursor.next().into(), Class::OpenCurly) => {
                     return self.restart()
                 }
 

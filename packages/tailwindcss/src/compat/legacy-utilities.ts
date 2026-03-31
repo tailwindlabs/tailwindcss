@@ -1,6 +1,7 @@
 import { decl } from '../ast'
 import type { DesignSystem } from '../design-system'
-import { isPositiveInteger } from '../utils/infer-data-type'
+import { isPositiveInteger, isValidSpacingMultiplier } from '../utils/infer-data-type'
+import { segment } from '../utils/segment'
 
 export function registerLegacyUtilities(designSystem: DesignSystem) {
   for (let [value, direction] of [
@@ -111,4 +112,68 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
 
   designSystem.utilities.suggest('break-words', () => [])
   designSystem.utilities.static('break-words', () => [decl('overflow-wrap', 'break-word')])
+
+  // Legacy `start` and `end` inset utilities, replaced by `inset-s` and `inset-e`
+  for (let [name, property] of [
+    ['start', 'inset-inline-start'],
+    ['end', 'inset-inline-end'],
+  ] as const) {
+    designSystem.utilities.static(`${name}-auto`, () => [decl(property, 'auto')])
+    designSystem.utilities.static(`${name}-full`, () => [decl(property, '100%')])
+    designSystem.utilities.static(`-${name}-full`, () => [decl(property, '-100%')])
+    designSystem.utilities.static(`${name}-px`, () => [decl(property, '1px')])
+    designSystem.utilities.static(`-${name}-px`, () => [decl(property, '-1px')])
+
+    function handleInset({ negative }: { negative: boolean }) {
+      return (candidate: Extract<import('../candidate').Candidate, { kind: 'functional' }>) => {
+        if (!candidate.value) {
+          if (candidate.modifier) return
+          let value = designSystem.theme.resolve(null, ['--inset', '--spacing'])
+          if (value === null) return
+          return [decl(property, negative ? `calc(${value} * -1)` : value)]
+        }
+
+        if (candidate.value.kind === 'arbitrary') {
+          if (candidate.modifier) return
+          let value = candidate.value.value
+          return [decl(property, negative ? `calc(${value} * -1)` : value)]
+        }
+
+        let value = designSystem.theme.resolve(candidate.value.fraction ?? candidate.value.value, [
+          '--inset',
+          '--spacing',
+        ])
+
+        // Handle fractions like `start-1/2`
+        if (value === null && candidate.value.fraction) {
+          let [lhs, rhs] = segment(candidate.value.fraction, '/')
+          if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
+          value = `calc(${candidate.value.fraction} * 100%)`
+        }
+
+        // Handle bare spacing multiplier values like `start-4`
+        if (value === null && negative) {
+          let multiplier = designSystem.theme.resolve(null, ['--spacing'])
+          if (multiplier && isValidSpacingMultiplier(candidate.value.value)) {
+            value = `calc(${multiplier} * -${candidate.value.value})`
+            if (value !== null) return [decl(property, value)]
+          }
+        }
+
+        if (value === null) {
+          let multiplier = designSystem.theme.resolve(null, ['--spacing'])
+          if (multiplier && isValidSpacingMultiplier(candidate.value.value)) {
+            value = `calc(${multiplier} * ${candidate.value.value})`
+          }
+        }
+
+        if (value === null) return
+
+        return [decl(property, negative ? `calc(${value} * -1)` : value)]
+      }
+    }
+
+    designSystem.utilities.functional(`-${name}`, handleInset({ negative: true }))
+    designSystem.utilities.functional(name, handleInset({ negative: false }))
+  }
 }

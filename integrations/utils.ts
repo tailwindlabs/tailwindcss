@@ -16,7 +16,7 @@ const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((na
 )
 
 interface SpawnedProcess {
-  dispose: () => void
+  dispose: () => Promise<void>
   flush: () => void
   onStdout: (predicate: (message: string) => boolean) => Promise<void>
   onStderr: (predicate: (message: string) => boolean) => Promise<void>
@@ -194,6 +194,7 @@ export function test(
             return disposePromise
           }
           disposables.push(dispose)
+
           function onExit() {
             resolveDisposal?.()
           }
@@ -498,6 +499,7 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
       json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
       json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
       json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+      json.pnpm.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {
       json.pnpm.overrides[pkg] = resolveVersion(pkg)
     }
@@ -568,7 +570,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9/_.?=%-]+)"/gi
   let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
   let stylesheets: string[] = []

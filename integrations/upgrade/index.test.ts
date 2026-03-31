@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { isRepoDirty } from '../../packages/@tailwindcss-upgrade/src/utils/git'
-import { candidate, css, html, js, json, test, ts, yaml } from '../utils'
+import { candidate, css, html, js, json, test, ts, txt, yaml } from '../utils'
 
 test(
   'error when no CSS file with @tailwind is used',
@@ -168,6 +168,56 @@ test(
       candidate`max-w-(--breakpoint-md)`,
       candidate`ml-(--breakpoint-md)`,
     ])
+  },
+)
+
+test(
+  'only migrates files matched by `config.content` when upgrading from v3 to v4',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.html'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="order-[0] bg-[--my-red]"></div>
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'templates/email.php': html`
+        <div class="order-[0] bg-[--my-red]"></div>
+      `,
+      'notes/unrelated.txt': `order-[0] bg-[--my-red]`,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./**/*.{html,php,txt}')).toMatchInlineSnapshot(`
+      "
+      --- notes/unrelated.txt ---
+      order-[0] bg-[--my-red]
+
+      --- src/index.html ---
+      <div class="order-0 bg-(--my-red)"></div>
+
+      --- templates/email.php ---
+      <div class="order-[0] bg-[--my-red]"></div>
+      "
+    `)
   },
 )
 
@@ -2969,6 +3019,198 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'v4 ignores .env files during template migration',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/app.css': css`@import 'tailwindcss';`,
+      'src/index.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'src/.env': `TW_TEST_CLASS=order-[0]`,
+      'src/.env.production': `TW_TEST_CLASS=order-[0]`,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./src/**/{*,.env,.env.*}')).toMatchInlineSnapshot(`
+      "
+      --- ./src/index.html ---
+      <div class="order-0"></div>
+
+      --- ./src/.env ---
+      TW_TEST_CLASS=order-[0]
+
+      --- ./src/.env.production ---
+      TW_TEST_CLASS=order-[0]
+
+      --- ./src/app.css ---
+      @import 'tailwindcss';
+      "
+    `)
+  },
+)
+
+test(
+  'v4 linked configs respect `content` and still ignore gitignored files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/*.html', './src/*.less'],
+        }
+      `,
+      'src/app.css': css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.js';
+      `,
+
+      // Ignore all .html files
+      'src/.gitignore': txt`
+        *.html
+      `,
+
+      // HTML files are in .gitignore, even though they are explicitly mentioned
+      // in the `content` array. Still ignore them
+      'src/do-not-migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+
+      // Should be picked up by auto-content detection
+      'templates/migrate-me.php': html`
+        <div class="order-[0]"></div>
+      `,
+
+      // Does not get picked up by auto content detection (because it's a less
+      // file), but was explicitly listed in the `content` array.
+      //
+      // A bit of a hacky way, I admit, but it allows us to differentiate
+      // between git ignored files, auto content detection and explicitly listed
+      // files.
+      'src/migrate-me.less': html`
+        <div class="order-[0]"></div>
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('npx @tailwindcss/upgrade')
+
+    expect(await fs.dumpFiles('./{src,templates}/**/*')).toMatchInlineSnapshot(`
+      "
+      --- ./src/app.css ---
+      @import 'tailwindcss';
+      @config '../tailwind.config.js';
+
+      --- ./src/do-not-migrate-me.html ---
+      <div class="order-[0]"></div>
+
+      --- ./src/migrate-me.less ---
+      <div class="order-0"></div>
+
+      --- ./templates/migrate-me.php ---
+      <div class="order-0"></div>
+      "
+    `)
+  },
+)
+
+test(
+  'interrupting template migration does not truncate files',
+  {
+    timeout: 180_000,
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'src/app.css': css` @import 'tailwindcss'; `,
+      'src/index.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'hook.cjs': js`
+        let fs = require('node:fs/promises')
+        let path = require('node:path')
+        let originalWriteFile = fs.writeFile.bind(fs)
+
+        fs.writeFile = async (file, contents, ...rest) => {
+          // Mimic a bad write
+          await originalWriteFile(file, '') // As-if we truncated first
+          console.error('__TRUNCATED_TARGET__')
+          await new Promise((r) => setTimeout(r, 50)) // Wait 50ms to allow us to kill the process
+          await originalWriteFile(file, contents, ...rest) // Write the actual contents
+        }
+      `,
+      'src/keep.php': `
+        <?php
+
+        return [
+          'keep' => 'this file should never be truncated',
+        ];
+      `,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let repeatedCandidates = Array.from(
+      { length: 250 },
+      () => '<div class="order-[0]"></div>',
+    ).join('\n')
+
+    for (let i = 0; i < 100; i++) {
+      await fs.write(
+        `src/templates/template-${i}.php`,
+        `<?php\n\n${repeatedCandidates}\n\nreturn ['template' => ${i}];\n`,
+      )
+    }
+
+    let originalKeepFile = await fs.read('src/keep.php')
+    let originalTemplate = await fs.read('src/templates/template-0.php')
+
+    let process = await spawn('npx @tailwindcss/upgrade --force', {
+      env: {
+        NODE_OPTIONS: '--require=./hook.cjs',
+      },
+    })
+
+    // We're only interested once we start migrating the templates
+    await process.onStderr((message) => message.includes('Migrating templates'))
+
+    // Wait for the trigger that we are mid-write
+    await process.onStderr((message) => message === '__TRUNCATED_TARGET__')
+
+    // Kill the process
+    await process.dispose()
+
+    expect(await fs.read('src/keep.php')).toBe(originalKeepFile)
+    expect(await fs.read('src/templates/template-0.php')).toBe(originalTemplate)
+
+    for (let [file, contents] of await fs.glob('src/**/*.{html,php,css}')) {
+      expect(contents.trim(), `${file} should not be empty after interruption`).not.toBe('')
+    }
   },
 )
 

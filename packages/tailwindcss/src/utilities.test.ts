@@ -480,7 +480,7 @@ test('inset-y', async () => {
   ).toEqual('')
 })
 
-test('start', async () => {
+test('inset-s', async () => {
   expect(
     await compileCss(
       css`
@@ -491,14 +491,14 @@ test('start', async () => {
         @tailwind utilities;
       `,
       [
-        'start-shadowned',
-        'start-auto',
-        '-start-full',
-        'start-full',
-        'start-3/4',
-        'start-4',
-        '-start-4',
-        'start-[4px]',
+        'inset-s-shadowned',
+        'inset-s-auto',
+        '-inset-s-full',
+        'inset-s-full',
+        'inset-s-3/4',
+        'inset-s-4',
+        '-inset-s-4',
+        'inset-s-[4px]',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -507,35 +507,35 @@ test('start', async () => {
       --inset-shadowned: 1940px;
     }
 
-    .-start-4 {
+    .-inset-s-4 {
       inset-inline-start: calc(var(--spacing-4) * -1);
     }
 
-    .-start-full {
+    .-inset-s-full {
       inset-inline-start: -100%;
     }
 
-    .start-3\\/4 {
+    .inset-s-3\\/4 {
       inset-inline-start: 75%;
     }
 
-    .start-4 {
+    .inset-s-4 {
       inset-inline-start: var(--spacing-4);
     }
 
-    .start-\\[4px\\] {
+    .inset-s-\\[4px\\] {
       inset-inline-start: 4px;
     }
 
-    .start-auto {
+    .inset-s-auto {
       inset-inline-start: auto;
     }
 
-    .start-full {
+    .inset-s-full {
       inset-inline-start: 100%;
     }
 
-    .start-shadowned {
+    .inset-s-shadowned {
       inset-inline-start: var(--inset-shadowned);
     }"
   `)
@@ -549,25 +549,25 @@ test('start', async () => {
         @tailwind utilities;
       `,
       [
-        'start-shadow-sm',
-        'start',
-        'start--1',
-        'start--1/2',
-        'start--1/-2',
-        'start-1/-2',
-        'start-auto/foo',
-        '-start-full/foo',
-        'start-full/foo',
-        'start-3/4/foo',
-        'start-4/foo',
-        '-start-4/foo',
-        'start-[4px]/foo',
+        'inset-s-shadow-sm',
+        'inset-s',
+        'inset-s--1',
+        'inset-s--1/2',
+        'inset-s--1/-2',
+        'inset-s-1/-2',
+        'inset-s-auto/foo',
+        '-inset-s-full/foo',
+        'inset-s-full/foo',
+        'inset-s-3/4/foo',
+        'inset-s-4/foo',
+        '-inset-s-4/foo',
+        'inset-s-[4px]/foo',
       ],
     ),
   ).toEqual('')
 })
 
-test('end', async () => {
+test('inset-e', async () => {
   expect(
     await compileCss(
       css`
@@ -578,14 +578,14 @@ test('end', async () => {
         @tailwind utilities;
       `,
       [
-        'end-shadowned',
-        'end-auto',
-        '-end-full',
-        'end-full',
-        'end-3/4',
-        'end-4',
-        '-end-4',
-        'end-[4px]',
+        'inset-e-shadowned',
+        'inset-e-auto',
+        '-inset-e-full',
+        'inset-e-full',
+        'inset-e-3/4',
+        'inset-e-4',
+        '-inset-e-4',
+        'inset-e-[4px]',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -594,35 +594,35 @@ test('end', async () => {
       --inset-shadowned: 1940px;
     }
 
-    .-end-4 {
+    .-inset-e-4 {
       inset-inline-end: calc(var(--spacing-4) * -1);
     }
 
-    .-end-full {
+    .-inset-e-full {
       inset-inline-end: -100%;
     }
 
-    .end-3\\/4 {
+    .inset-e-3\\/4 {
       inset-inline-end: 75%;
     }
 
-    .end-4 {
+    .inset-e-4 {
       inset-inline-end: var(--spacing-4);
     }
 
-    .end-\\[4px\\] {
+    .inset-e-\\[4px\\] {
       inset-inline-end: 4px;
     }
 
-    .end-auto {
+    .inset-e-auto {
       inset-inline-end: auto;
     }
 
-    .end-full {
+    .inset-e-full {
       inset-inline-end: 100%;
     }
 
-    .end-shadowned {
+    .inset-e-shadowned {
       inset-inline-end: var(--inset-shadowned);
     }"
   `)
@@ -636,19 +636,193 @@ test('end', async () => {
         @tailwind utilities;
       `,
       [
-        'end-shadow-sm',
-        'end',
-        'end--1',
-        'end--1/2',
-        'end--1/-2',
-        'end-1/-2',
-        'end-auto/foo',
-        '-end-full/foo',
-        'end-full/foo',
-        'end-3/4/foo',
-        'end-4/foo',
-        '-end-4/foo',
-        'end-[4px]/foo',
+        'inset-e-shadow-sm',
+        'inset-e',
+        'inset-e--1',
+        'inset-e--1/2',
+        'inset-e--1/-2',
+        'inset-e-1/-2',
+        'inset-e-auto/foo',
+        '-inset-e-full/foo',
+        'inset-e-full/foo',
+        'inset-e-3/4/foo',
+        'inset-e-4/foo',
+        '-inset-e-4/foo',
+        'inset-e-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('inset-bs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-bs-shadowned',
+        'inset-bs-auto',
+        '-inset-bs-full',
+        'inset-bs-full',
+        'inset-bs-3/4',
+        'inset-bs-4',
+        '-inset-bs-4',
+        'inset-bs-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-bs-4 {
+      inset-block-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-bs-full {
+      inset-block-start: -100%;
+    }
+
+    .inset-bs-3\\/4 {
+      inset-block-start: 75%;
+    }
+
+    .inset-bs-4 {
+      inset-block-start: var(--spacing-4);
+    }
+
+    .inset-bs-\\[4px\\] {
+      inset-block-start: 4px;
+    }
+
+    .inset-bs-auto {
+      inset-block-start: auto;
+    }
+
+    .inset-bs-full {
+      inset-block-start: 100%;
+    }
+
+    .inset-bs-shadowned {
+      inset-block-start: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-bs-shadow-sm',
+        'inset-bs',
+        'inset-bs--1',
+        'inset-bs--1/2',
+        'inset-bs--1/-2',
+        'inset-bs-1/-2',
+        'inset-bs-auto/foo',
+        '-inset-bs-full/foo',
+        'inset-bs-full/foo',
+        'inset-bs-3/4/foo',
+        'inset-bs-4/foo',
+        '-inset-bs-4/foo',
+        'inset-bs-[4px]/foo',
+      ],
+    ),
+  ).toEqual('')
+})
+
+test('inset-be', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-be-shadowned',
+        'inset-be-auto',
+        '-inset-be-full',
+        'inset-be-full',
+        'inset-be-3/4',
+        'inset-be-4',
+        '-inset-be-4',
+        'inset-be-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --inset-shadowned: 1940px;
+    }
+
+    .-inset-be-4 {
+      inset-block-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-inset-be-full {
+      inset-block-end: -100%;
+    }
+
+    .inset-be-3\\/4 {
+      inset-block-end: 75%;
+    }
+
+    .inset-be-4 {
+      inset-block-end: var(--spacing-4);
+    }
+
+    .inset-be-\\[4px\\] {
+      inset-block-end: 4px;
+    }
+
+    .inset-be-auto {
+      inset-block-end: auto;
+    }
+
+    .inset-be-full {
+      inset-block-end: 100%;
+    }
+
+    .inset-be-shadowned {
+      inset-block-end: var(--inset-shadowned);
+    }"
+  `)
+  expect(
+    await compileCss(
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inset-be-shadow-sm',
+        'inset-be',
+        'inset-be--1',
+        'inset-be--1/2',
+        'inset-be--1/-2',
+        'inset-be-1/-2',
+        'inset-be-auto/foo',
+        '-inset-be-full/foo',
+        'inset-be-full/foo',
+        'inset-be-3/4/foo',
+        'inset-be-4/foo',
+        '-inset-be-4/foo',
+        'inset-be-[4px]/foo',
       ],
     ),
   ).toEqual('')
@@ -1472,6 +1646,13 @@ test('row', async () => {
       'row-span-full/foo',
       'row-[span_123/span_123]/foo',
       'row-span-[var(--my-variable)]/foo',
+
+      // Candidates matching Object.prototype properties should not crash or
+      // produce output (see: https://github.com/tailwindlabs/tailwindcss/issues/19721)
+      'row-constructor',
+      'row-hasOwnProperty',
+      'row-toString',
+      'row-valueOf',
     ]),
   ).toEqual('')
 
@@ -2216,6 +2397,178 @@ test('me', async () => {
   ).toEqual('')
 })
 
+test('mbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mbs-1',
+        'mbs-99',
+        'mbs-2.5',
+        'mbs-big',
+        'mbs-[4px]',
+        '-mbs-4',
+        '-mbs-2.5',
+        '-mbs-big',
+        '-mbs-[4px]',
+        'mbs-[var(--my-var)]',
+        '-mbs-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mbs-2\\.5 {
+      margin-block-start: calc(var(--spacing) * -2.5);
+    }
+
+    .-mbs-4 {
+      margin-block-start: calc(var(--spacing) * -4);
+    }
+
+    .-mbs-\\[4px\\] {
+      margin-block-start: -4px;
+    }
+
+    .-mbs-\\[var\\(--my-var\\)\\] {
+      margin-block-start: calc(var(--my-var) * -1);
+    }
+
+    .-mbs-big {
+      margin-block-start: calc(var(--spacing-big) * -1);
+    }
+
+    .mbs-1 {
+      margin-block-start: calc(var(--spacing) * 1);
+    }
+
+    .mbs-2\\.5 {
+      margin-block-start: calc(var(--spacing) * 2.5);
+    }
+
+    .mbs-99 {
+      margin-block-start: calc(var(--spacing) * 99);
+    }
+
+    .mbs-\\[4px\\] {
+      margin-block-start: 4px;
+    }
+
+    .mbs-\\[var\\(--my-var\\)\\] {
+      margin-block-start: var(--my-var);
+    }
+
+    .mbs-big {
+      margin-block-start: var(--spacing-big);
+    }"
+  `)
+  expect(
+    await run([
+      'mbs',
+      'mbs-auto/foo',
+      'mbs-4/foo',
+      'mbs-[4px]/foo',
+      '-mbs-4/foo',
+      '-mbs-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('mbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'mbe-1',
+        'mbe-99',
+        'mbe-2.5',
+        'mbe-big',
+        'mbe-[4px]',
+        '-mbe-4',
+        '-mbe-2.5',
+        '-mbe-big',
+        '-mbe-[4px]',
+        'mbe-[var(--my-var)]',
+        '-mbe-[var(--my-var)]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .-mbe-2\\.5 {
+      margin-block-end: calc(var(--spacing) * -2.5);
+    }
+
+    .-mbe-4 {
+      margin-block-end: calc(var(--spacing) * -4);
+    }
+
+    .-mbe-\\[4px\\] {
+      margin-block-end: -4px;
+    }
+
+    .-mbe-\\[var\\(--my-var\\)\\] {
+      margin-block-end: calc(var(--my-var) * -1);
+    }
+
+    .-mbe-big {
+      margin-block-end: calc(var(--spacing-big) * -1);
+    }
+
+    .mbe-1 {
+      margin-block-end: calc(var(--spacing) * 1);
+    }
+
+    .mbe-2\\.5 {
+      margin-block-end: calc(var(--spacing) * 2.5);
+    }
+
+    .mbe-99 {
+      margin-block-end: calc(var(--spacing) * 99);
+    }
+
+    .mbe-\\[4px\\] {
+      margin-block-end: 4px;
+    }
+
+    .mbe-\\[var\\(--my-var\\)\\] {
+      margin-block-end: var(--my-var);
+    }
+
+    .mbe-big {
+      margin-block-end: var(--spacing-big);
+    }"
+  `)
+  expect(
+    await run([
+      'mbe',
+      'mbe-auto/foo',
+      'mbe-4/foo',
+      'mbe-[4px]/foo',
+      '-mbe-4/foo',
+      '-mbe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('mr', async () => {
   expect(
     await compileCss(
@@ -2810,7 +3163,7 @@ test('aspect-ratio', async () => {
         }
         @tailwind utilities;
       `,
-      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3'],
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3', 'aspect-8.5/11'],
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
@@ -2819,6 +3172,10 @@ test('aspect-ratio', async () => {
 
     .aspect-4\\/3 {
       aspect-ratio: 4 / 3;
+    }
+
+    .aspect-8\\.5\\/11 {
+      aspect-ratio: 8.5 / 11;
     }
 
     .aspect-\\[10\\/9\\] {
@@ -2842,6 +3199,7 @@ test('aspect-ratio', async () => {
       'aspect--4/3',
       'aspect--4/-3',
       'aspect-4/-3',
+      'aspect-1.23/4.56',
     ]),
   ).toEqual('')
 })
@@ -3486,6 +3844,569 @@ test('max-height', async () => {
       'max-h-fit/foo',
       'max-h-4/foo',
       'max-h-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'inline-full',
+        'inline-auto',
+        'inline-screen',
+        'inline-svw',
+        'inline-lvw',
+        'inline-dvw',
+        'inline-min',
+        'inline-max',
+        'inline-fit',
+        'inline-4',
+        'inline-xl',
+        'inline-1/2',
+        'inline-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --container-xl: 36rem;
+    }
+
+    .inline-1\\/2 {
+      inline-size: 50%;
+    }
+
+    .inline-4 {
+      inline-size: var(--spacing-4);
+    }
+
+    .inline-\\[4px\\] {
+      inline-size: 4px;
+    }
+
+    .inline-auto {
+      inline-size: auto;
+    }
+
+    .inline-dvw {
+      inline-size: 100dvw;
+    }
+
+    .inline-fit {
+      inline-size: fit-content;
+    }
+
+    .inline-full {
+      inline-size: 100%;
+    }
+
+    .inline-lvw {
+      inline-size: 100lvw;
+    }
+
+    .inline-max {
+      inline-size: max-content;
+    }
+
+    .inline-min {
+      inline-size: min-content;
+    }
+
+    .inline-screen {
+      inline-size: 100vw;
+    }
+
+    .inline-svw {
+      inline-size: 100svw;
+    }
+
+    .inline-xl {
+      inline-size: var(--container-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'inline--1',
+      'inline--1/2',
+      'inline--1/-2',
+      'inline-1/-2',
+      '-inline-4',
+      '-inline-1/2',
+      '-inline-[4px]',
+      'inline-full/foo',
+      'inline-auto/foo',
+      'inline-screen/foo',
+      'inline-svw/foo',
+      'inline-lvw/foo',
+      'inline-dvw/foo',
+      'inline-min/foo',
+      'inline-max/foo',
+      'inline-fit/foo',
+      'inline-4/foo',
+      'inline-xl/foo',
+      'inline-1/2/foo',
+      'inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('min-inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'min-inline-full',
+        'min-inline-auto',
+        'min-inline-min',
+        'min-inline-max',
+        'min-inline-fit',
+        'min-inline-4',
+        'min-inline-xl',
+        'min-inline-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --container-xl: 36rem;
+    }
+
+    .min-inline-4 {
+      min-inline-size: var(--spacing-4);
+    }
+
+    .min-inline-\\[4px\\] {
+      min-inline-size: 4px;
+    }
+
+    .min-inline-auto {
+      min-inline-size: auto;
+    }
+
+    .min-inline-fit {
+      min-inline-size: fit-content;
+    }
+
+    .min-inline-full {
+      min-inline-size: 100%;
+    }
+
+    .min-inline-max {
+      min-inline-size: max-content;
+    }
+
+    .min-inline-min {
+      min-inline-size: min-content;
+    }
+
+    .min-inline-xl {
+      min-inline-size: var(--container-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'min-inline',
+      '-min-inline-4',
+      '-min-inline-[4px]',
+      'min-inline-auto/foo',
+      'min-inline-full/foo',
+      'min-inline-min/foo',
+      'min-inline-max/foo',
+      'min-inline-fit/foo',
+      'min-inline-4/foo',
+      'min-inline-xl/foo',
+      'min-inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('max-inline-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'max-inline-none',
+        'max-inline-full',
+        'max-inline-max',
+        'max-inline-fit',
+        'max-inline-4',
+        'max-inline-xl',
+        'max-inline-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+      --container-xl: 36rem;
+    }
+
+    .max-inline-4 {
+      max-inline-size: var(--spacing-4);
+    }
+
+    .max-inline-\\[4px\\] {
+      max-inline-size: 4px;
+    }
+
+    .max-inline-fit {
+      max-inline-size: fit-content;
+    }
+
+    .max-inline-full {
+      max-inline-size: 100%;
+    }
+
+    .max-inline-max {
+      max-inline-size: max-content;
+    }
+
+    .max-inline-none {
+      max-inline-size: none;
+    }
+
+    .max-inline-xl {
+      max-inline-size: var(--container-xl);
+    }"
+  `)
+  expect(
+    await run([
+      'max-inline',
+      'max-inline-auto',
+      '-max-inline-4',
+      '-max-inline-[4px]',
+      'max-inline-none/foo',
+      'max-inline-full/foo',
+      'max-inline-max/foo',
+      'max-inline-max/foo',
+      'max-inline-fit/foo',
+      'max-inline-4/foo',
+      'max-inline-xl/foo',
+      'max-inline-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'block-full',
+        'block-auto',
+        'block-screen',
+        'block-svh',
+        'block-lvh',
+        'block-dvh',
+        'block-min',
+        'block-lh',
+        'block-max',
+        'block-fit',
+        'block-4',
+        'block-1/2',
+        'block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .block-1\\/2 {
+      block-size: 50%;
+    }
+
+    .block-4 {
+      block-size: var(--spacing-4);
+    }
+
+    .block-\\[4px\\] {
+      block-size: 4px;
+    }
+
+    .block-auto {
+      block-size: auto;
+    }
+
+    .block-dvh {
+      block-size: 100dvh;
+    }
+
+    .block-fit {
+      block-size: fit-content;
+    }
+
+    .block-full {
+      block-size: 100%;
+    }
+
+    .block-lh {
+      block-size: 1lh;
+    }
+
+    .block-lvh {
+      block-size: 100lvh;
+    }
+
+    .block-max {
+      block-size: max-content;
+    }
+
+    .block-min {
+      block-size: min-content;
+    }
+
+    .block-screen {
+      block-size: 100vh;
+    }
+
+    .block-svh {
+      block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      '-block-4',
+      'block--1',
+      'block--1/2',
+      'block--1/-2',
+      'block-1/-2',
+      '-block-1/2',
+      '-block-[4px]',
+      'block-full/foo',
+      'block-auto/foo',
+      'block-screen/foo',
+      'block-svh/foo',
+      'block-lvh/foo',
+      'block-dvh/foo',
+      'block-lh/foo',
+      'block-min/foo',
+      'block-max/foo',
+      'block-fit/foo',
+      'block-4/foo',
+      'block-1/2/foo',
+      'block-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('min-block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'min-block-full',
+        'min-block-auto',
+        'min-block-screen',
+        'min-block-svh',
+        'min-block-lvh',
+        'min-block-dvh',
+        'min-block-min',
+        'min-block-lh',
+        'min-block-max',
+        'min-block-fit',
+        'min-block-4',
+        'min-block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .min-block-4 {
+      min-block-size: var(--spacing-4);
+    }
+
+    .min-block-\\[4px\\] {
+      min-block-size: 4px;
+    }
+
+    .min-block-auto {
+      min-block-size: auto;
+    }
+
+    .min-block-dvh {
+      min-block-size: 100dvh;
+    }
+
+    .min-block-fit {
+      min-block-size: fit-content;
+    }
+
+    .min-block-full {
+      min-block-size: 100%;
+    }
+
+    .min-block-lh {
+      min-block-size: 1lh;
+    }
+
+    .min-block-lvh {
+      min-block-size: 100lvh;
+    }
+
+    .min-block-max {
+      min-block-size: max-content;
+    }
+
+    .min-block-min {
+      min-block-size: min-content;
+    }
+
+    .min-block-screen {
+      min-block-size: 100vh;
+    }
+
+    .min-block-svh {
+      min-block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      'min-block',
+      '-min-block-4',
+      '-min-block-[4px]',
+      'min-block-auto/foo',
+      'min-block-full/foo',
+      'min-block-screen/foo',
+      'min-block-svh/foo',
+      'min-block-lvh/foo',
+      'min-block-dvh/foo',
+      'min-block-lh/foo',
+      'min-block-min/foo',
+      'min-block-max/foo',
+      'min-block-fit/foo',
+      'min-block-4/foo',
+      'min-block-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('max-block-size', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'max-block-none',
+        'max-block-full',
+        'max-block-screen',
+        'max-block-svh',
+        'max-block-lvh',
+        'max-block-dvh',
+        'max-block-lh',
+        'max-block-min',
+        'max-block-max',
+        'max-block-fit',
+        'max-block-4',
+        'max-block-[4px]',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .max-block-4 {
+      max-block-size: var(--spacing-4);
+    }
+
+    .max-block-\\[4px\\] {
+      max-block-size: 4px;
+    }
+
+    .max-block-dvh {
+      max-block-size: 100dvh;
+    }
+
+    .max-block-fit {
+      max-block-size: fit-content;
+    }
+
+    .max-block-full {
+      max-block-size: 100%;
+    }
+
+    .max-block-lh {
+      max-block-size: 1lh;
+    }
+
+    .max-block-lvh {
+      max-block-size: 100lvh;
+    }
+
+    .max-block-max {
+      max-block-size: max-content;
+    }
+
+    .max-block-min {
+      max-block-size: min-content;
+    }
+
+    .max-block-none {
+      max-block-size: none;
+    }
+
+    .max-block-screen {
+      max-block-size: 100vh;
+    }
+
+    .max-block-svh {
+      max-block-size: 100svh;
+    }"
+  `)
+  expect(
+    await run([
+      'max-block',
+      'max-block-auto',
+      '-max-block-4',
+      '-max-block-[4px]',
+      'max-block-none/foo',
+      'max-block-full/foo',
+      'max-block-screen/foo',
+      'max-block-svh/foo',
+      'max-block-lvh/foo',
+      'max-block-dvh/foo',
+      'max-block-lh/foo',
+      'max-block-min/foo',
+      'max-block-max/foo',
+      'max-block-fit/foo',
+      'max-block-4/foo',
+      'max-block-[4px]/foo',
     ]),
   ).toEqual('')
 })
@@ -5646,7 +6567,7 @@ test('transform', async () => {
     }
 
     .transform-\\[scaleZ\\(2\\)_rotateY\\(45deg\\)\\] {
-      transform: scaleZ(2)rotateY(45deg);
+      transform: scaleZ(2) rotateY(45deg);
     }
 
     .transform-cpu {
@@ -6669,6 +7590,92 @@ test('scroll-me', async () => {
   ).toEqual('')
 })
 
+test('scroll-mbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .-scroll-mbs-4 {
+      scroll-margin-block-start: calc(var(--spacing-4) * -1);
+    }
+
+    .-scroll-mbs-\\[var\\(--value\\)\\] {
+      scroll-margin-block-start: calc(var(--value) * -1);
+    }
+
+    .scroll-mbs-4 {
+      scroll-margin-block-start: var(--spacing-4);
+    }
+
+    .scroll-mbs-\\[4px\\] {
+      scroll-margin-block-start: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-mbs',
+      'scroll-mbs-4/foo',
+      'scroll-mbs-[4px]/foo',
+      '-scroll-mbs-4/foo',
+      '-scroll-mbs-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-mbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .-scroll-mbe-4 {
+      scroll-margin-block-end: calc(var(--spacing-4) * -1);
+    }
+
+    .-scroll-mbe-\\[var\\(--value\\)\\] {
+      scroll-margin-block-end: calc(var(--value) * -1);
+    }
+
+    .scroll-mbe-4 {
+      scroll-margin-block-end: var(--spacing-4);
+    }
+
+    .scroll-mbe-\\[4px\\] {
+      scroll-margin-block-end: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-mbe',
+      'scroll-mbe-4/foo',
+      'scroll-mbe-[4px]/foo',
+      '-scroll-mbe-4/foo',
+      '-scroll-mbe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('scroll-mt', async () => {
   expect(
     await compileCss(
@@ -7012,6 +8019,76 @@ test('scroll-pe', async () => {
       'scroll-pe-[4px]/foo',
       '-scroll-pe-4/foo',
       '-scroll-pe-[var(--value)]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-pbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .scroll-pbs-4 {
+      scroll-padding-block-start: var(--spacing-4);
+    }
+
+    .scroll-pbs-\\[4px\\] {
+      scroll-padding-block-start: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-pbs',
+      'scroll-pbs-4/foo',
+      'scroll-pbs-[4px]/foo',
+      '-scroll-pbs-4',
+      '-scroll-pbs-[var(--value)]',
+    ]),
+  ).toEqual('')
+})
+
+test('scroll-pbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .scroll-pbe-4 {
+      scroll-padding-block-end: var(--spacing-4);
+    }
+
+    .scroll-pbe-\\[4px\\] {
+      scroll-padding-block-end: 4px;
+    }"
+  `)
+  expect(
+    await run([
+      'scroll-pbe',
+      'scroll-pbe-4/foo',
+      'scroll-pbe-[4px]/foo',
+      '-scroll-pbe-4',
+      '-scroll-pbe-[var(--value)]',
     ]),
   ).toEqual('')
 })
@@ -11119,6 +12196,8 @@ const prefixes = [
   'border-y',
   'border-s',
   'border-e',
+  'border-bs',
+  'border-be',
   'border-t',
   'border-r',
   'border-b',
@@ -20693,6 +21772,88 @@ test('pe', async () => {
   expect(await run(['pe', '-pe-4', '-pe-[4px]', 'pe-4/foo', 'pe-[4px]/foo'])).toEqual('')
 })
 
+test('pbs', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pbs-1 {
+      padding-block-start: calc(var(--spacing) * 1);
+    }
+
+    .pbs-4 {
+      padding-block-start: calc(var(--spacing) * 4);
+    }
+
+    .pbs-99 {
+      padding-block-start: calc(var(--spacing) * 99);
+    }
+
+    .pbs-\\[4px\\] {
+      padding-block-start: 4px;
+    }
+
+    .pbs-big {
+      padding-block-start: var(--spacing-big);
+    }"
+  `)
+  expect(await run(['pbs', '-pbs-4', '-pbs-[4px]', 'pbs-4/foo', 'pbs-[4px]/foo'])).toEqual('')
+})
+
+test('pbe', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
+      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing: .25rem;
+      --spacing-big: 100rem;
+    }
+
+    .pbe-1 {
+      padding-block-end: calc(var(--spacing) * 1);
+    }
+
+    .pbe-4 {
+      padding-block-end: calc(var(--spacing) * 4);
+    }
+
+    .pbe-99 {
+      padding-block-end: calc(var(--spacing) * 99);
+    }
+
+    .pbe-\\[4px\\] {
+      padding-block-end: 4px;
+    }
+
+    .pbe-big {
+      padding-block-end: var(--spacing-big);
+    }"
+  `)
+  expect(await run(['pbe', '-pbe-4', '-pbe-[4px]', 'pbe-4/foo', 'pbe-[4px]/foo'])).toEqual('')
+})
+
 test('pr', async () => {
   expect(
     await compileCss(
@@ -20990,7 +22151,8 @@ test('font', async () => {
     }
 
     :root, :host {
-      --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+                "Segoe UI Symbol", "Noto Color Emoji";
       --font-weight-bold: 650;
     }
 
@@ -21066,6 +22228,41 @@ test('font', async () => {
         'font-[number:var(--my-weight)]/foo',
       ],
     ),
+  ).toEqual('')
+})
+
+test('font-features', async () => {
+  expect(
+    await run([
+      'font-features-["smcp"]',
+      'font-features-["c2sc","smcp"]',
+      'font-features-[var(--my-features)]',
+      'font-features-(--my-features)',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".font-features-\\(--my-features\\) {
+      font-feature-settings: var(--my-features);
+    }
+
+    .font-features-\\[\\"c2sc\\"\\,\\"smcp\\"\\] {
+      font-feature-settings: "c2sc","smcp";
+    }
+
+    .font-features-\\[\\"smcp\\"\\] {
+      font-feature-settings: "smcp";
+    }
+
+    .font-features-\\[var\\(--my-features\\)\\] {
+      font-feature-settings: var(--my-features);
+    }"
+  `)
+  expect(
+    await run([
+      'font-features',
+      '-font-features-["smcp"]',
+      'font-features-smcp',
+      'font-features-["smcp"]/foo',
+    ]),
   ).toEqual('')
 })
 
@@ -21857,7 +23054,7 @@ test('filter', async () => {
     }
 
     .blur-none {
-      --tw-blur: ;
+      --tw-blur:  ;
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -21918,7 +23115,7 @@ test('filter', async () => {
     }
 
     .drop-shadow-none {
-      --tw-drop-shadow: ;
+      --tw-drop-shadow:  ;
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -22378,7 +23575,7 @@ test('backdrop-filter', async () => {
     }
 
     .backdrop-blur-none {
-      --tw-backdrop-blur: ;
+      --tw-backdrop-blur:  ;
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
@@ -25970,7 +27167,7 @@ test('ring', async () => {
     }
 
     .ring-\\[length\\:var\\(--my-width\\)\\] {
-      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(var(--my-width)  + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      --tw-ring-shadow: var(--tw-ring-inset, ) 0 0 0 calc(var(--my-width) + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -27238,7 +28435,7 @@ describe('custom utilities', () => {
   test.each([
     ['foo', false], // Simple name, missing '-*' suffix
     ['foo-*', true], // Simple name
-    ['foo--*', false], // Root should not end in `-`
+    ['foo--*', true], // Root ending in `-` is valid (e.g. `border--*`)
     ['-foo-*', true], // Simple name (negative)
     ['foo-bar-*', true], // With dashes
     ['foo_bar-*', true], // With underscores
@@ -27415,7 +28612,7 @@ describe('custom utilities', () => {
         .text-sm {
           font-size: var(--text-sm, .8755rem);
           line-height: var(--text-sm--line-height, 1.255rem);
-          text-rendering: optimizeLegibility;
+          text-rendering: optimizelegibility;
           font-size: var(--text-sm, .875rem);
           line-height: var(--tw-leading, var(--text-sm--line-height, 1.25rem));
         }
@@ -27708,6 +28905,38 @@ describe('custom utilities', () => {
           }"
         `)
       expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+    })
+
+    test('functional utility with double-dash separator', async () => {
+      let input = css`
+        @theme reference {
+          --color-border-0: #e5e7eb;
+          --color-border-1: #d1d5db;
+          --color-border-2: #9ca3af;
+        }
+
+        @utility border--* {
+          border-color: --value(--color-border-*, [color]);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['border--0', 'border--1', 'border--2']))
+        .toMatchInlineSnapshot(`
+          ".border--0 {
+            border-color: var(--color-border-0, #e5e7eb);
+          }
+
+          .border--1 {
+            border-color: var(--color-border-1, #d1d5db);
+          }
+
+          .border--2 {
+            border-color: var(--color-border-2, #9ca3af);
+          }"
+        `)
+      expect(await compileCss(input, ['border--3'])).toEqual('')
     })
 
     test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
@@ -28398,7 +29627,7 @@ describe('custom utilities', () => {
           }
 
           .example-\\[7\\/9\\] {
-            --value: 7 / 9;
+            --value: 7/9;
           }
 
           .example-video {

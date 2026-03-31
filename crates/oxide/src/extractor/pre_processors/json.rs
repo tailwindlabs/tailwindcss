@@ -11,13 +11,13 @@ impl PreProcessor for Json {
         let mut cursor = cursor::Cursor::new(content);
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Consume strings as-is
                 b'"' => {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
