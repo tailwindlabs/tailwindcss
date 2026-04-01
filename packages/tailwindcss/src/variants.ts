@@ -1212,13 +1212,13 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
   walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
-    let selectors = segment(variantNode.params, ',').map((variants: string) =>
+    let stacks = segment(variantNode.params, ',').map((variants: string) =>
       segment(variants, ':')
         .map((variant) => variant.trim())
         .reverse(),
     )
     let nodes: AstNode[] = []
-    for (let variants of selectors) {
+    for (let variants of stacks) {
       // Starting with the `&` rule node
       let node = styleRule('&', variantNode.nodes.map(cloneAstNode))
 

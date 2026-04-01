@@ -5673,8 +5673,8 @@ describe('@variant', () => {
     })
   })
 
-  describe('compound `@variant` rules', () => {
-    it('should handle compound variants', async () => {
+  describe('stacked `@variant` rules', () => {
+    it('should handle stacked variants', async () => {
       await expect(
         compileCss(
           css`
@@ -5702,7 +5702,7 @@ describe('@variant', () => {
       `)
     })
 
-    it('should handle compound variants & comma-separated variants', async () => {
+    it('should handle stacked variants & comma-separated variants', async () => {
       await expect(
         compileCss(
           css`
