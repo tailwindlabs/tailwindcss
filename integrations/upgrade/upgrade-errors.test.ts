@@ -51,7 +51,7 @@ test(
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
         return Promise.reject(
-          stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0')),
+          stripNpmWarnings(stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0'))),
         )
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
@@ -140,7 +140,7 @@ test(
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
         return Promise.reject(
-          stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0')),
+          stripNpmWarnings(stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0'))),
         )
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
@@ -228,7 +228,7 @@ test(
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
         return Promise.reject(
-          stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0')),
+          stripNpmWarnings(stripVTControlCharacters(e.message.replace(/\d+\.\d+\.\d+/g, '4.0.0'))),
         )
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
@@ -250,3 +250,7 @@ test(
     `)
   },
 )
+
+function stripNpmWarnings(input: string) {
+  return input.replace(/npm warn.*?\n/g, '')
+}
