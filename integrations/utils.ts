@@ -454,7 +454,7 @@ export function test(
       try {
         return await testCallback(context)
       } catch (err) {
-        Error.captureStackTrace(test)
+        Error.captureStackTrace(testCallback)
         throw err
       }
     },
