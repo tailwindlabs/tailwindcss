@@ -442,7 +442,7 @@ export function test(
         try {
           await context.exec('git init', { cwd: root })
           await context.exec('git add --all', { cwd: root })
-          await context.exec('git commit -m "before migration"', { cwd: root })
+          await context.exec('git commit -m "before migration" || true', { cwd: root })
         } catch (error: any) {
           console.error(error)
           console.error(error.stdout?.toString())

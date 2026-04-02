@@ -36,7 +36,7 @@ test(
     // Ensure we are in a git repo
     await exec('git init')
     await exec('git add --all')
-    await exec('git commit -m "before migration"')
+    await exec('git commit -m "before migration" || true')
 
     // Fully upgrade to v4
     await exec('npx @tailwindcss/upgrade')
@@ -124,7 +124,7 @@ test(
     // Ensure we are in a git repo
     await exec('git init')
     await exec('git add --all')
-    await exec('git commit -m "before migration"')
+    await exec('git commit -m "before migration" || true')
 
     // Fully upgrade to v4
     await exec('npx @tailwindcss/upgrade')
@@ -212,7 +212,7 @@ test(
     // Ensure we are in a git repo
     await exec('git init')
     await exec('git add --all')
-    await exec('git commit -m "before migration"')
+    await exec('git commit -m "before migration" || true')
 
     // Fully upgrade to v4
     await exec('npx @tailwindcss/upgrade')
