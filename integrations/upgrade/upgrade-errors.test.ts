@@ -110,6 +110,7 @@ test(
     // Use `bun` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
     try {
+      await exec('npm rebuild bun') // Run postinstall of bun
       await exec('npx bun install', {}, { ignoreStdErr: true })
     } catch (e) {
       // When preparing for a release, the version in `package.json` will point
