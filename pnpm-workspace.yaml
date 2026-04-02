@@ -1,3 +1,5 @@
+minimumReleaseAge: 10080 # 7 days in minutes
+
 packages:
   - 'crates/node'
   - 'crates/node/npm/*'
