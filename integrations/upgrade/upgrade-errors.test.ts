@@ -43,7 +43,8 @@ test(
 
     // Undo all changes to the current repo. This will bring the repo back to a
     // v3 state, but the `node_modules` will now have v4 installed.
-    await exec('git reset --hard HEAD')
+    await exec('git reset --hard')
+    await exec('git clean -df')
 
     // Re-running the upgrade should result in an error
     return expect(() => {
@@ -132,7 +133,8 @@ test(
 
     // Undo all changes to the current repo. This will bring the repo back to a
     // v3 state, but the `node_modules` will now have v4 installed.
-    await exec('git reset --hard HEAD')
+    await exec('git reset --hard')
+    await exec('git clean -df')
 
     // Re-running the upgrade should result in an error
     return expect(() => {
@@ -220,7 +222,8 @@ test(
 
     // Undo all changes to the current repo. This will bring the repo back to a
     // v3 state, but the `node_modules` will now have v4 installed.
-    await exec('git reset --hard HEAD')
+    await exec('git reset --hard')
+    await exec('git clean -df')
 
     // Re-running the upgrade should result in an error
     return expect(() => {
