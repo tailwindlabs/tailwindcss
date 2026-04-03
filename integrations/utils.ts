@@ -91,7 +91,7 @@ export function test(
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
       skip,
-      concurrent: true,
+      concurrent: false,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -451,12 +451,7 @@ export function test(
         }
       }
 
-      try {
-        return await testCallback(context)
-      } catch (err) {
-        Error.captureStackTrace(testCallback)
-        throw err
-      }
+      return testCallback(context)
     },
   )
 }
