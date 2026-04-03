@@ -30,7 +30,7 @@
     "@tailwindcss/node": "workspace:*",
     "@tailwindcss/oxide": "workspace:*",
     "dedent": "1.7.1",
-    "enhanced-resolve": "^5.19.0",
+    "enhanced-resolve": "^5.20.1",
     "globby": "^15.0.0",
     "jiti": "^2.0.0-beta.3",
     "mri": "^1.2.0",
