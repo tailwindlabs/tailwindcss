@@ -29,7 +29,7 @@
   "dependencies": {
     "@tailwindcss/node": "workspace:*",
     "@tailwindcss/oxide": "workspace:*",
-    "dedent": "1.7.1",
+    "dedent": "1.7.2",
     "enhanced-resolve": "^5.19.0",
     "globby": "^15.0.0",
     "jiti": "^2.0.0-beta.3",
