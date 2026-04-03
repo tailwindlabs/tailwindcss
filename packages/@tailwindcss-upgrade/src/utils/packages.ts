@@ -9,9 +9,13 @@ import { error, warn } from './renderer'
 const execFile = promisify(execFileCb)
 
 async function run(packageManager: string, args: string[], cwd: string) {
-  // if (process.platform === 'win32' && packageManager !== 'bun') {
-  //   return await execFile(`${packageManager}.cmd`, args, { cwd })
-  // }
+  if (process.platform === 'win32' && packageManager !== 'bun') {
+    return await execFile(
+      process.env.ComSpec || 'cmd.exe',
+      ['/d', '/s', '/c', packageManager, ...args],
+      { cwd },
+    )
+  }
 
   return await execFile(packageManager, args, { cwd })
 }
