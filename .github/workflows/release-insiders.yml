@@ -174,7 +174,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
+            sudo npm install -g pnpm@10.33.0 --unsafe-perm=true
             curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
