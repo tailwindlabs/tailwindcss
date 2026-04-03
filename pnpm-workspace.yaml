@@ -1,4 +1,4 @@
-minimumReleaseAge: 10080 # 7 days in minutes
+minimumReleaseAge: 2880 # 2 days in minutes
 
 # Allow postinstall scripts during installation
 # https://pnpm.io/settings#onlybuiltdependencies
