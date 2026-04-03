@@ -1,4 +1,4 @@
-import { exec as execCb } from 'node:child_process'
+import { execFile as execFileCb } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
@@ -6,7 +6,15 @@ import { promisify } from 'node:util'
 import { DefaultMap } from '../../../tailwindcss/src/utils/default-map'
 import { error, warn } from './renderer'
 
-const exec = promisify(execCb)
+const execFile = promisify(execFileCb)
+
+async function run(packageManager: string, args: string[], cwd: string) {
+  // if (process.platform === 'win32' && packageManager !== 'bun') {
+  //   return await execFile(`${packageManager}.cmd`, args, { cwd })
+  // }
+
+  return await execFile(packageManager, args, { cwd })
+}
 
 const SAVE_DEV: Record<string, string> = {
   default: '-D',
@@ -43,7 +51,7 @@ export function pkg(base: string) {
 
       let command = `${packageManager} add ${args.join(' ')}`
       try {
-        return await exec(command, { cwd: base })
+        return await run(packageManager, ['add', ...args], base)
       } catch (e: any) {
         error(`An error occurred while running \`${command}\`\n\n${e.stdout}\n${e.stderr}`, {
           prefix: '↳ ',
@@ -60,7 +68,7 @@ export function pkg(base: string) {
       let packageManager = await packageManagerForBase.get(base)
       let command = `${packageManager} remove ${packages.join(' ')}`
       try {
-        return await exec(command, { cwd: base })
+        return await run(packageManager, ['remove', ...packages], base)
       } catch (e: any) {
         error(`An error occurred while running \`${command}\`\n\n${e.stdout}\n${e.stderr}`, {
           prefix: '↳ ',
