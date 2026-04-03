@@ -31,7 +31,9 @@ test(
         @tailwind utilities;
       `,
     },
+    retry: 0,
   },
+
   async ({ exec, expect }) => {
     // Ensure we are in a git repo
     await exec('git init')
