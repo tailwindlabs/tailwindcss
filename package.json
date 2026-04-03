@@ -60,7 +60,7 @@
     "typescript": "^5.5.4",
     "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.16.0",
+  "packageManager": "pnpm@9.6.0",
   "pnpm": {
     "patchedDependencies": {
       "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch",
