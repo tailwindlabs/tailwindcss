@@ -5956,6 +5956,8 @@ export function createCssUtility(node: AtRule) {
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(--default(4))`      resolves to a default value when only the
+    //                                root of the functional utility was used.
     // - `--value(number, [number])`  resolves a bare value of type number or an
     //                                arbitrary value of type number in order.
     //
@@ -6069,7 +6071,7 @@ export function createCssUtility(node: AtRule) {
             arg = arg.replace(/(-\*){2,}/g, '-*')
 
             // Ensure trailing `-*` exists if `-*` isn't present yet
-            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('(') && !arg.includes('-*')) {
               arg += '-*'
             }
 
@@ -6135,9 +6137,8 @@ export function createCssUtility(node: AtRule) {
         let value = candidate.value
         let modifier = candidate.modifier
 
-        // A value is required for functional utilities, if you want to accept
-        // just `tab-size`, you'd have to use a static utility.
-        if (value === null) return
+        // Functional CSS utilities must resolve at least one `--value(…)`.
+        // Use `--default(…)` inside `--value(…)` for the omitted-value case.
 
         // Whether `--value(…)` was used
         let usedValueFn = false
@@ -6185,7 +6186,9 @@ export function createCssUtility(node: AtRule) {
             if (valueNode.value === '--value') {
               usedValueFn = true
 
-              let resolved = resolveValueFunction(value, valueNode, designSystem)
+              let resolved = value
+                ? resolveValueFunction(value, valueNode, designSystem)
+                : resolveDefaultValueFunction(valueNode)
               if (resolved) {
                 resolvedValueFn = true
                 if (resolved.ratio) {
@@ -6233,8 +6236,9 @@ export function createCssUtility(node: AtRule) {
           node.value = ValueParser.toCss(valueAst)
         })
 
-        // Used `--value(…)` but nothing resolved
-        if (usedValueFn && !resolvedValueFn) return null
+        // Functional CSS utilities require `--value(…)`, and one of those
+        // branches must resolve for the candidate to be valid.
+        if (!usedValueFn || !resolvedValueFn) return null
 
         // Used `--modifier(…)` but nothing resolved
         if (usedModifierFn && !resolvedModifierFn) return null
@@ -6447,6 +6451,16 @@ function resolveValueFunction(
       if (type !== null) {
         return { nodes: ValueParser.parse(value.value) }
       }
+    }
+  }
+}
+
+function resolveDefaultValueFunction(
+  fn: ValueParser.ValueFunctionNode,
+): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  for (let arg of fn.nodes) {
+    if (arg.kind === 'function' && arg.value === '--default') {
+      return { nodes: arg.nodes }
     }
   }
 }
