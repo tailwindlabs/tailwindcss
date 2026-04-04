@@ -5956,6 +5956,8 @@ export function createCssUtility(node: AtRule) {
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(--default(4))`      resolves to a default value when only the
+    //                                root of the functional utility was used.
     // - `--value(number, [number])`  resolves a bare value of type number or an
     //                                arbitrary value of type number in order.
     //
@@ -6069,7 +6071,7 @@ export function createCssUtility(node: AtRule) {
             arg = arg.replace(/(-\*){2,}/g, '-*')
 
             // Ensure trailing `-*` exists if `-*` isn't present yet
-            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('(') && !arg.includes('-*')) {
               arg += '-*'
             }
 
@@ -6135,9 +6137,8 @@ export function createCssUtility(node: AtRule) {
         let value = candidate.value
         let modifier = candidate.modifier
 
-        // A value is required for functional utilities, if you want to accept
-        // just `tab-size`, you'd have to use a static utility.
-        if (value === null) return
+        // Functional CSS utilities must resolve at least one `--value(…)`.
+        // Use `--default(…)` inside `--value(…)` for the omitted-value case.
 
         // Whether `--value(…)` was used
         let usedValueFn = false
@@ -6309,13 +6310,23 @@ export function createCssUtility(node: AtRule) {
 }
 
 function resolveValueFunction(
-  value: NonNullable<
+  value:
     | Extract<Candidate, { kind: 'functional' }>['value']
-    | Extract<Candidate, { kind: 'functional' }>['modifier']
-  >,
+    | Extract<Candidate, { kind: 'functional' }>['modifier'],
   fn: ValueParser.ValueFunctionNode,
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  // No value provided, we can try `--default(…)`
+  if (value === null) {
+    for (let arg of fn.nodes) {
+      // Resolve default value, e.g.: `--default(…)`
+      if (arg.kind === 'function' && arg.value === '--default') {
+        return { nodes: arg.nodes }
+      }
+    }
+    return
+  }
+
   for (let arg of fn.nodes) {
     // Resolve literal value, e.g.: `--modifier('closest-side')`
     if (
