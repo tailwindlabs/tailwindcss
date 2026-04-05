@@ -585,6 +585,174 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 
   test(
+    'css-like scanned file changes do not force a full reload when another plugin handles CSS HMR',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+              "vite": "^8"
+            }
+          }
+        `,
+        'project-a/vite.config.ts': ts`
+          import fs from 'node:fs'
+          import fsp from 'node:fs/promises'
+          import path from 'node:path'
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig, normalizePath } from 'vite'
+
+          function appendLog(file, payload) {
+            fs.appendFileSync(file, JSON.stringify(payload) + '\\n', 'utf8')
+          }
+
+          function hmrWiretap(logFile) {
+            return {
+              name: 'hmr-wiretap',
+              configureServer(server) {
+                fs.writeFileSync(logFile, '', 'utf8')
+
+                const originalWsSend = server.ws.send.bind(server.ws)
+                server.ws.send = ((payload, ...args) => {
+                  appendLog(logFile, { source: 'server.ws.send', payload })
+                  return originalWsSend(payload, ...args)
+                }) as typeof server.ws.send
+
+                for (const [environmentName, environment] of Object.entries(server.environments)) {
+                  const originalHotSend = environment.hot.send.bind(environment.hot)
+                  environment.hot.send = ((payload) => {
+                    appendLog(logFile, {
+                      source: 'environment.hot.send',
+                      environmentName,
+                      payload,
+                    })
+                    return originalHotSend(payload)
+                  }) as typeof environment.hot.send
+                }
+              },
+            }
+          }
+
+          function componentStylePlugin() {
+            let probeFile = ''
+            let wrapperFile = ''
+
+            return {
+              name: 'component-style-plugin',
+              enforce: 'post',
+              configResolved(config) {
+                probeFile = normalizePath(path.resolve(config.root, 'src/probe.component.css'))
+                wrapperFile = normalizePath(path.resolve(config.root, 'src/component-wrapper.css'))
+              },
+              async transform(_, id) {
+                if (normalizePath(id.split('?')[0]) !== wrapperFile) return
+
+                this.addWatchFile(probeFile)
+                const content = await fsp.readFile(probeFile, 'utf8')
+                return [
+                  "@import 'tailwindcss';",
+                  "@source './probe.component.css';",
+                  content,
+                ].join('\\n')
+              },
+              hotUpdate({ file }) {
+                if (normalizePath(file) !== probeFile) return
+
+                const modules = this.environment.moduleGraph.getModulesByFile(wrapperFile)
+                if (!modules) return []
+
+                return [...modules]
+              },
+            }
+          }
+
+          export default defineConfig({
+            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+            build: { cssMinify: false },
+            logLevel: 'info',
+            plugins: [
+              tailwindcss(),
+              componentStylePlugin(),
+              hmrWiretap(path.resolve(__dirname, 'hmr.log')),
+            ],
+          })
+        `,
+        'project-a/index.html': html`
+          <html>
+            <head>
+              <link rel="stylesheet" href="./src/component-wrapper.css" />
+            </head>
+            <body>
+              <div class="probe font-bold">Hello</div>
+            </body>
+          </html>
+        `,
+        'project-a/src/component-wrapper.css': css`
+          /* transformed by componentStylePlugin */
+        `,
+        'project-a/src/probe.component.css': css`
+          .probe {
+            @apply bg-blue-500;
+          }
+        `,
+      },
+    },
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev --debug hmr', {
+        cwd: path.join(root, 'project-a'),
+      })
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`bg-blue-500`)
+        expect(styles).toContain(candidate`font-bold`)
+      })
+
+      await fs.write('project-a/hmr.log', '')
+      await fs.write(
+        'project-a/src/probe.component.css',
+        css`
+          .probe {
+            @apply bg-red-500;
+          }
+        `,
+      )
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`bg-red-500`)
+        expect(styles).toContain(candidate`font-bold`)
+      })
+
+      await retryAssertion(async () => {
+        let log = await fs.read('project-a/hmr.log')
+        expect(log).toContain('"type":"update"')
+        expect(log).not.toContain('"type":"full-reload"')
+      })
+    },
+  )
+
+  test(
     `source(none) disables looking at the module graph`,
     {
       fs: {
