@@ -612,6 +612,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           import fsp from 'node:fs/promises'
           import path from 'node:path'
           import tailwindcss from '@tailwindcss/vite'
+          import { fileURLToPath } from 'node:url'
           import { defineConfig, normalizePath } from 'vite'
 
           function appendLog(file, payload) {
@@ -694,7 +695,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             plugins: [
               tailwindcss(),
               componentStylePlugin(),
-              hmrWiretap(path.resolve(__dirname, 'hmr.log')),
+              hmrWiretap(path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'hmr.log')),
             ],
           })
         `,

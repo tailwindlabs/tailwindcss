@@ -223,13 +223,6 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
 
-          // CSS-like files may still be handled by another plugin's stylesheet
-          // HMR pipeline even when the module graph only exposes asset-like
-          // placeholder modules during this pass. In that case, forcing a full
-          // reload here is too aggressive and can race against a later
-          // targeted CSS update.
-          if (isPotentialCssRootFile(file)) return
-
           // Skip if the module exists in other environments. SSR framework has
           // its own server side hmr/reload mechanism when handling server
           // only modules. See https://v6.vite.dev/guide/migration.html
@@ -266,6 +259,16 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
                 timestamp,
                 true,
               )
+            }
+
+            // CSS-like files may still be handled by another plugin's stylesheet
+            // HMR pipeline even when the module graph only exposes asset-like
+            // placeholder modules during this pass. We still need to invalidate
+            // the watched modules so Tailwind rebuilds, but we should not force
+            // a full page reload that can race against a later targeted
+            // css-update payload.
+            if (isPotentialCssRootFile(file)) {
+              return []
             }
 
             if (env === this.environment.name) {
