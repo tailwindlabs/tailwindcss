@@ -64,7 +64,7 @@ async function createCompiler() {
   // The stylesheets may have changed causing a full rebuild so we'll need to
   // gather the latest list of stylesheets.
   let stylesheets: Iterable<HTMLStyleElement> = document.querySelectorAll(
-    `style[type="${STYLE_TYPE}"]`,
+    'style[type="text/tailwindcss"]',
   )
 
   let css = ''
