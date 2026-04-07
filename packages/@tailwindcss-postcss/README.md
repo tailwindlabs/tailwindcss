@@ -110,7 +110,7 @@ export default {
 }
 ```
 
-You may also pass options to `optimize` to enable Lighting CSS but prevent minification:
+You may also pass options to `optimize` to enable Lightning CSS but prevent minification:
 
 ```js
 import tailwindcss from '@tailwindcss/postcss'
