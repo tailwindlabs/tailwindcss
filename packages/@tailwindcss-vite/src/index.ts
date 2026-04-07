@@ -77,7 +77,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       ) => Promise<string | undefined>
 
       // There are cases where Environment API is available,
-      // but `createResolver` is still overriden (for example astro v5)
+      // but `createResolver` is still overridden (for example astro v5)
       //
       // Copied as-is from vite, because this function is not a part of public API
       //

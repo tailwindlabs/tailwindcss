@@ -199,7 +199,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             if (
               rebuildStrategy === 'full' &&
-              // We can re-use the compiler if it was created during the
+              // We can reuse the compiler if it was created during the
               // initial build. If it wasn't, we need to create a new one.
               !isInitialBuild
             ) {
