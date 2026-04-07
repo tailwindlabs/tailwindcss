@@ -1,6 +1,6 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import { exec, spawn } from 'node:child_process'
+import { execFile, spawn } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
@@ -37,6 +37,7 @@ interface TestConfig {
     [filePath: string]: string | Uint8Array
   }
 
+  retry?: number
   timeout?: number
   installDependencies?: boolean
 }
@@ -70,6 +71,9 @@ type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void
 
 export const IS_WINDOWS = platform() === 'win32'
 
+const SHELL_EXECUTABLE = IS_WINDOWS ? process.env.ComSpec || 'cmd.exe' : '/bin/sh'
+const SHELL_ARGS = IS_WINDOWS ? ['/d', '/s', '/c'] : ['-c']
+
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
@@ -88,10 +92,10 @@ export function test(
     name,
     {
       timeout: config.timeout ?? TEST_TIMEOUT,
-      retry: process.env.CI ? 2 : 0,
+      retry: config.retry ?? (process.env.CI ? 2 : 0),
       only: only || (!process.env.CI && debug),
       skip,
-      concurrent: true,
+      concurrent: false,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -122,8 +126,9 @@ export function test(
           }
           if (debug) console.log(`> ${command}`)
           return new Promise((resolve, reject) => {
-            let child = exec(
-              command,
+            let child = execFile(
+              SHELL_EXECUTABLE,
+              [...SHELL_ARGS, command],
               {
                 cwd,
                 ...childProcessOptions,
@@ -134,6 +139,10 @@ export function test(
               },
               (error, stdout, stderr) => {
                 if (error) {
+                  error.message = error.message.replace(/^Command failed:.*?(\r?\n|$)/, (match) => {
+                    let newline = match.endsWith('\r\n') ? '\r\n' : '\n'
+                    return `Command failed: ${command}${newline}`
+                  })
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   if (only || debug) {
                     console.error(stdout)
@@ -442,7 +451,7 @@ export function test(
         try {
           await context.exec('git init', { cwd: root })
           await context.exec('git add --all', { cwd: root })
-          await context.exec('git commit -m "before migration"', { cwd: root })
+          await context.exec('git commit -m "before migration" --allow-empty', { cwd: root })
         } catch (error: any) {
           console.error(error)
           console.error(error.stdout?.toString())
@@ -451,7 +460,7 @@ export function test(
         }
       }
 
-      return await testCallback(context)
+      return testCallback(context)
     },
   )
 }

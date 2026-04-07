@@ -3,7 +3,9 @@ import { execSync } from 'node:child_process'
 export function isRepoDirty(cwd?: string) {
   try {
     let stdout = execSync('git status --porcelain', { encoding: 'utf-8', cwd })
-    return stdout.trim() !== ''
+    let isDirty = stdout.trim() !== ''
+
+    return isDirty
   } catch (error) {
     // If it's not a git repository we don't know if it's dirty or not. But we
     // also don't want to block the migration. Maybe we can still fail and

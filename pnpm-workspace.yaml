@@ -1,3 +1,16 @@
+minimumReleaseAge: 2880 # 2 days in minutes
+
+# Allow postinstall scripts during installation
+# https://pnpm.io/settings#onlybuiltdependencies
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - bun
+  - esbuild
+  - sharp
+  - tree-sitter
+  - tree-sitter-javascript
+  - tree-sitter-typescript
+
 packages:
   - 'crates/node'
   - 'crates/node/npm/*'
