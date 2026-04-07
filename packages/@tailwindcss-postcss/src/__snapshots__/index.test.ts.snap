@@ -142,7 +142,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     letter-spacing: inherit;
     color: inherit;
     opacity: 1;
-    background-color: #0000;
     border-radius: 0;
   }
 
@@ -153,7 +152,6 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     letter-spacing: inherit;
     color: inherit;
     opacity: 1;
-    background-color: #0000;
     border-radius: 0;
   }
 
@@ -252,10 +250,12 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
 
   button, input:where([type="button"], [type="reset"], [type="submit"]) {
     appearance: button;
+    background-color: #0000;
   }
 
   ::file-selector-button {
     appearance: button;
+    background-color: #0000;
   }
 
   ::-webkit-inner-spin-button {
