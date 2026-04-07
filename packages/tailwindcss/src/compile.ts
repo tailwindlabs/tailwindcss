@@ -287,7 +287,14 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
-    if (compiledNodes === null) return asts
+    if (compiledNodes === null) {
+      // For typed plugin utilities (matchUtilities with explicit types),
+      // null means the value was invalid for this type - stop trying.
+      // For CSS @utility definitions (no types), null means the value
+      // didn't match this handler - try the next one.
+      if (utility.options?.types?.length) return asts
+      continue
+    }
     asts.push(compiledNodes)
   }
 
@@ -299,7 +306,10 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
-    if (compiledNodes === null) return asts
+    if (compiledNodes === null) {
+      if (utility.options?.types?.length) return asts
+      continue
+    }
     asts.push(compiledNodes)
   }
 
