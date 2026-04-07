@@ -24618,6 +24618,38 @@ test('leading', async () => {
   `)
 })
 
+test('leading-none is not shadowed by --spacing-none', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-none: 0;
+        }
+        @tailwind utilities;
+      `,
+      ['leading-none'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "@layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    .leading-none {
+      --tw-leading: 1;
+      line-height: 1;
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }"
+  `)
+})
+
 test('tracking', async () => {
   expect(
     await compileCss(
