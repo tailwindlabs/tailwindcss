@@ -219,8 +219,8 @@ importers:
         specifier: workspace:*
         version: link:../../crates/node
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       mri:
         specifier: ^1.2.0
         version: 1.2.0
@@ -237,8 +237,8 @@ importers:
         specifier: ^2.3.5
         version: 2.3.5
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
@@ -307,8 +307,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       tailwindcss:
         specifier: workspace:*
         version: link:../tailwindcss
@@ -374,8 +374,8 @@ importers:
         specifier: 1.7.1
         version: 1.7.1
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       globby:
         specifier: ^15.0.0
         version: 15.0.0
@@ -2818,8 +2818,8 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  enhanced-resolve@5.19.0:
-    resolution: {integrity: sha512-phv3E1Xl4tQOShqSte26C7Fl84EwUdZsyOuSSk9qtAGyyQs2s3jJzComh+Abf4g187lUUAvH+H26omrqia2aGg==}
+  enhanced-resolve@5.20.1:
+    resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
     engines: {node: '>=10.13.0'}
 
   es-module-lexer@1.7.0:
@@ -5814,7 +5814,7 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
-  enhanced-resolve@5.19.0:
+  enhanced-resolve@5.20.1:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.0
@@ -7012,7 +7012,7 @@ snapshots:
       acorn-import-phases: 1.0.4(acorn@8.15.0)
       browserslist: 4.28.1
       chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.19.0
+      enhanced-resolve: 5.20.1
       es-module-lexer: 2.0.0
       eslint-scope: 5.1.1
       events: 3.3.0
