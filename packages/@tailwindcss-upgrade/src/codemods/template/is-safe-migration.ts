@@ -20,6 +20,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // shadcn/ui variants
   /variant\s*[:=]\s*\{?['"`]$/,
 ]
+const INLINE_STYLE_ATTRIBUTE = /(?:^|\s):?style\s*=\s*['"]$/i
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
 
@@ -138,6 +139,12 @@ export function isSafeMigration(
       break
     }
     currentLineAfterCandidate += char
+  }
+
+  // Inline `style="..."` attributes can contain CSS property names that look
+  // like valid utility candidates, such as `flex-grow`.
+  if (INLINE_STYLE_ATTRIBUTE.test(currentLineBeforeCandidate)) {
+    return false
   }
 
   // Heuristic: Require the candidate to be inside quotes
