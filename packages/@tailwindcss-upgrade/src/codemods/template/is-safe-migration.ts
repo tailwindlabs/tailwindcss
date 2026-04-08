@@ -67,6 +67,29 @@ export function isSafeMigration(
     }
   }
 
+  let currentLineBeforeCandidate = ''
+  for (let i = location.start - 1; i >= 0; i--) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineBeforeCandidate = char + currentLineBeforeCandidate
+  }
+  let currentLineAfterCandidate = ''
+  for (let i = location.end; i < location.contents.length; i++) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineAfterCandidate += char
+  }
+
+  // Inline `style="..."` attributes can contain CSS property names that look
+  // like valid utility candidates, such as `flex-grow`.
+  if (INLINE_STYLE_ATTRIBUTE.test(currentLineBeforeCandidate)) {
+    return false
+  }
+
   let [candidate] = parseCandidate(rawCandidate, designSystem)
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
@@ -122,29 +145,6 @@ export function isSafeMigration(
     if (candidate.kind === 'functional' && candidate.modifier) {
       return true
     }
-  }
-
-  let currentLineBeforeCandidate = ''
-  for (let i = location.start - 1; i >= 0; i--) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineBeforeCandidate = char + currentLineBeforeCandidate
-  }
-  let currentLineAfterCandidate = ''
-  for (let i = location.end; i < location.contents.length; i++) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineAfterCandidate += char
-  }
-
-  // Inline `style="..."` attributes can contain CSS property names that look
-  // like valid utility candidates, such as `flex-grow`.
-  if (INLINE_STYLE_ATTRIBUTE.test(currentLineBeforeCandidate)) {
-    return false
   }
 
   // Heuristic: Require the candidate to be inside quotes
