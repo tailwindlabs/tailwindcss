@@ -20,6 +20,7 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // shadcn/ui variants
   /variant\s*[:=]\s*\{?['"`]$/,
 ]
+const INLINE_STYLE_ATTRIBUTE = /(?:^|\s):?style\s*=\s*['"]$/i
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
 
@@ -64,6 +65,29 @@ export function isSafeMigration(
         return false
       }
     }
+  }
+
+  let currentLineBeforeCandidate = ''
+  for (let i = location.start - 1; i >= 0; i--) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineBeforeCandidate = char + currentLineBeforeCandidate
+  }
+  let currentLineAfterCandidate = ''
+  for (let i = location.end; i < location.contents.length; i++) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineAfterCandidate += char
+  }
+
+  // Inline `style="..."` attributes can contain CSS property names that look
+  // like valid utility candidates, such as `flex-grow`.
+  if (INLINE_STYLE_ATTRIBUTE.test(currentLineBeforeCandidate)) {
+    return false
   }
 
   let [candidate] = parseCandidate(rawCandidate, designSystem)
@@ -121,23 +145,6 @@ export function isSafeMigration(
     if (candidate.kind === 'functional' && candidate.modifier) {
       return true
     }
-  }
-
-  let currentLineBeforeCandidate = ''
-  for (let i = location.start - 1; i >= 0; i--) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineBeforeCandidate = char + currentLineBeforeCandidate
-  }
-  let currentLineAfterCandidate = ''
-  for (let i = location.end; i < location.contents.length; i++) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineAfterCandidate += char
   }
 
   // Heuristic: Require the candidate to be inside quotes
