@@ -570,6 +570,101 @@ export function createUtilities(theme: Theme) {
     ])
   }
 
+  type SafeAreaInset = 'top' | 'right' | 'bottom' | 'left'
+
+  function safeAreaValue(inset: SafeAreaInset) {
+    return `var(--tw-safe-area-${inset}, env(safe-area-inset-${inset}))`
+  }
+
+  function safeAreaDeclarations(
+    properties: [string, SafeAreaInset][],
+    value?: string,
+    negative = false,
+  ) {
+    return properties.map(([property, inset]) => {
+      let safeArea = safeAreaValue(inset)
+
+      if (value === undefined) {
+        return decl(property, negative ? `calc(${safeArea} * -1)` : safeArea)
+      }
+
+      return decl(
+        property,
+        negative ? `calc((${safeArea} + ${value}) * -1)` : `calc(${safeArea} + ${value})`,
+      )
+    })
+  }
+
+  function resolveSpacingUtilityValue(
+    candidate: Extract<Candidate, { kind: 'functional' }>,
+    themeKeys: ThemeKey[],
+    supportsFractions = false,
+  ) {
+    if (candidate.modifier || !candidate.value) return null
+
+    if (candidate.value.kind === 'arbitrary') {
+      return candidate.value.value
+    }
+
+    let value = theme.resolve(candidate.value.fraction ?? candidate.value.value, themeKeys)
+
+    if (value === null && supportsFractions && candidate.value.fraction) {
+      let [lhs, rhs] = segment(candidate.value.fraction, '/')
+      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      value = `calc(${lhs} / ${rhs} * 100%)`
+    }
+
+    if (value === null) {
+      let multiplier = theme.resolve(null, ['--spacing'])
+      if (multiplier && isValidSpacingMultiplier(candidate.value.value)) {
+        value = `calc(${multiplier} * ${candidate.value.value})`
+      }
+    }
+
+    return value
+  }
+
+  function safeAreaSpacingUtility(
+    name: string,
+    themeKeys: ThemeKey[],
+    properties: [string, SafeAreaInset][],
+    {
+      supportsNegative = false,
+      supportsFractions = false,
+    }: {
+      supportsNegative?: boolean
+      supportsFractions?: boolean
+    } = {},
+  ) {
+    utilities.static(name, () => safeAreaDeclarations(properties))
+    utilities.static(`${name}-px`, () => safeAreaDeclarations(properties, '1px'))
+
+    utilities.functional(name, (candidate) => {
+      let value = resolveSpacingUtilityValue(candidate, themeKeys, supportsFractions)
+      if (value === null) return
+      return safeAreaDeclarations(properties, value)
+    })
+
+    if (supportsNegative) {
+      utilities.static(`-${name}`, () => safeAreaDeclarations(properties, undefined, true))
+      utilities.static(`-${name}-px`, () => safeAreaDeclarations(properties, '1px', true))
+      utilities.functional(`-${name}`, (candidate) => {
+        let value = resolveSpacingUtilityValue(candidate, themeKeys, supportsFractions)
+        if (value === null) return
+        return safeAreaDeclarations(properties, value, true)
+      })
+    }
+
+    suggest(name, () => [
+      {
+        values: theme.get(['--spacing']) ? DEFAULT_SPACING_SUGGESTIONS : [],
+        supportsNegative,
+        supportsFractions,
+        valueThemeKeys: themeKeys,
+      },
+    ])
+  }
+
   /**
    * ----------------
    * Utility matchers
@@ -620,6 +715,38 @@ export function createUtilities(theme: Theme) {
   staticUtility('relative', [['position', 'relative']])
   staticUtility('sticky', [['position', 'sticky']])
 
+  for (let [name, insets] of [
+    ['safe', ['top', 'right', 'bottom', 'left']],
+    ['safe-x', ['right', 'left']],
+    ['safe-y', ['top', 'bottom']],
+    ['safe-t', ['top']],
+    ['safe-r', ['right']],
+    ['safe-b', ['bottom']],
+    ['safe-l', ['left']],
+  ] as [string, SafeAreaInset[]][]) {
+    staticUtility(
+      name,
+      insets.map(
+        (inset) => [`--tw-safe-area-${inset}`, `env(safe-area-inset-${inset})`] as [string, string],
+      ),
+    )
+  }
+
+  for (let [name, insets] of [
+    ['safe-none', ['top', 'right', 'bottom', 'left']],
+    ['safe-x-none', ['right', 'left']],
+    ['safe-y-none', ['top', 'bottom']],
+    ['safe-t-none', ['top']],
+    ['safe-r-none', ['right']],
+    ['safe-b-none', ['bottom']],
+    ['safe-l-none', ['left']],
+  ] as [string, SafeAreaInset[]][]) {
+    staticUtility(
+      name,
+      insets.map((inset) => [`--tw-safe-area-${inset}`, '0px'] as [string, string]),
+    )
+  }
+
   /**
    * @css `inset`
    */
@@ -640,6 +767,41 @@ export function createUtilities(theme: Theme) {
     staticUtility(`${name}-full`, [[property, '100%']])
     staticUtility(`-${name}-full`, [[property, '-100%']])
     spacingUtility(name, ['--inset', '--spacing'], (value) => [decl(property, value)], {
+      supportsNegative: true,
+      supportsFractions: true,
+    })
+  }
+
+  for (let [name, properties] of [
+    [
+      'inset-safe',
+      [
+        ['top', 'top'],
+        ['right', 'right'],
+        ['bottom', 'bottom'],
+        ['left', 'left'],
+      ],
+    ],
+    [
+      'inset-x-safe',
+      [
+        ['right', 'right'],
+        ['left', 'left'],
+      ],
+    ],
+    [
+      'inset-y-safe',
+      [
+        ['top', 'top'],
+        ['bottom', 'bottom'],
+      ],
+    ],
+    ['top-safe', [['top', 'top']]],
+    ['right-safe', [['right', 'right']]],
+    ['bottom-safe', [['bottom', 'bottom']]],
+    ['left-safe', [['left', 'left']]],
+  ] as [string, [string, SafeAreaInset][]][]) {
+    safeAreaSpacingUtility(name, ['--inset', '--spacing'], properties, {
       supportsNegative: true,
       supportsFractions: true,
     })
@@ -906,6 +1068,40 @@ export function createUtilities(theme: Theme) {
     })
   }
 
+  for (let [name, properties] of [
+    [
+      'm-safe',
+      [
+        ['margin-top', 'top'],
+        ['margin-right', 'right'],
+        ['margin-bottom', 'bottom'],
+        ['margin-left', 'left'],
+      ],
+    ],
+    [
+      'mx-safe',
+      [
+        ['margin-right', 'right'],
+        ['margin-left', 'left'],
+      ],
+    ],
+    [
+      'my-safe',
+      [
+        ['margin-top', 'top'],
+        ['margin-bottom', 'bottom'],
+      ],
+    ],
+    ['mt-safe', [['margin-top', 'top']]],
+    ['mr-safe', [['margin-right', 'right']]],
+    ['mb-safe', [['margin-bottom', 'bottom']]],
+    ['ml-safe', [['margin-left', 'left']]],
+  ] as [string, [string, SafeAreaInset][]][]) {
+    safeAreaSpacingUtility(name, ['--margin', '--spacing'], properties, {
+      supportsNegative: true,
+    })
+  }
+
   /**
    * @css `box-sizing`
    */
@@ -1048,6 +1244,23 @@ export function createUtilities(theme: Theme) {
   staticUtility(`h-screen`, [['height', '100vh']])
   staticUtility(`min-h-screen`, [['min-height', '100vh']])
   staticUtility(`max-h-screen`, [['max-height', '100vh']])
+
+  for (let [name, property] of [
+    ['h', 'height'],
+    ['min-h', 'min-height'],
+    ['max-h', 'max-height'],
+  ] as const) {
+    for (let [viewport, value] of [
+      ['screen', '100vh'],
+      ['svh', '100svh'],
+      ['lvh', '100lvh'],
+      ['dvh', '100dvh'],
+    ] as const) {
+      staticUtility(`${name}-${viewport}-safe`, [
+        [property, `calc(${value} - (${safeAreaValue('top')} + ${safeAreaValue('bottom')}))`],
+      ])
+    }
+  }
 
   staticUtility(`max-w-none`, [['max-width', 'none']])
   staticUtility(`max-h-none`, [['max-height', 'none']])
@@ -1874,6 +2087,40 @@ export function createUtilities(theme: Theme) {
     )
   }
 
+  for (let [name, properties] of [
+    [
+      'scroll-m-safe',
+      [
+        ['scroll-margin-top', 'top'],
+        ['scroll-margin-right', 'right'],
+        ['scroll-margin-bottom', 'bottom'],
+        ['scroll-margin-left', 'left'],
+      ],
+    ],
+    [
+      'scroll-mx-safe',
+      [
+        ['scroll-margin-right', 'right'],
+        ['scroll-margin-left', 'left'],
+      ],
+    ],
+    [
+      'scroll-my-safe',
+      [
+        ['scroll-margin-top', 'top'],
+        ['scroll-margin-bottom', 'bottom'],
+      ],
+    ],
+    ['scroll-mt-safe', [['scroll-margin-top', 'top']]],
+    ['scroll-mr-safe', [['scroll-margin-right', 'right']]],
+    ['scroll-mb-safe', [['scroll-margin-bottom', 'bottom']]],
+    ['scroll-ml-safe', [['scroll-margin-left', 'left']]],
+  ] as [string, [string, SafeAreaInset][]][]) {
+    safeAreaSpacingUtility(name, ['--scroll-margin', '--spacing'], properties, {
+      supportsNegative: true,
+    })
+  }
+
   /**
    * @css `scroll-padding`
    */
@@ -1891,6 +2138,38 @@ export function createUtilities(theme: Theme) {
     ['scroll-pl', 'scroll-padding-left'],
   ] as const) {
     spacingUtility(namespace, ['--scroll-padding', '--spacing'], (value) => [decl(property, value)])
+  }
+
+  for (let [name, properties] of [
+    [
+      'scroll-p-safe',
+      [
+        ['scroll-padding-top', 'top'],
+        ['scroll-padding-right', 'right'],
+        ['scroll-padding-bottom', 'bottom'],
+        ['scroll-padding-left', 'left'],
+      ],
+    ],
+    [
+      'scroll-px-safe',
+      [
+        ['scroll-padding-right', 'right'],
+        ['scroll-padding-left', 'left'],
+      ],
+    ],
+    [
+      'scroll-py-safe',
+      [
+        ['scroll-padding-top', 'top'],
+        ['scroll-padding-bottom', 'bottom'],
+      ],
+    ],
+    ['scroll-pt-safe', [['scroll-padding-top', 'top']]],
+    ['scroll-pr-safe', [['scroll-padding-right', 'right']]],
+    ['scroll-pb-safe', [['scroll-padding-bottom', 'bottom']]],
+    ['scroll-pl-safe', [['scroll-padding-left', 'left']]],
+  ] as [string, [string, SafeAreaInset][]][]) {
+    safeAreaSpacingUtility(name, ['--scroll-padding', '--spacing'], properties)
   }
 
   staticUtility('list-inside', [['list-style-position', 'inside']])
@@ -3817,6 +4096,38 @@ export function createUtilities(theme: Theme) {
     ['pl', 'padding-left'],
   ] as const) {
     spacingUtility(name, ['--padding', '--spacing'], (value) => [decl(property, value)])
+  }
+
+  for (let [name, properties] of [
+    [
+      'p-safe',
+      [
+        ['padding-top', 'top'],
+        ['padding-right', 'right'],
+        ['padding-bottom', 'bottom'],
+        ['padding-left', 'left'],
+      ],
+    ],
+    [
+      'px-safe',
+      [
+        ['padding-right', 'right'],
+        ['padding-left', 'left'],
+      ],
+    ],
+    [
+      'py-safe',
+      [
+        ['padding-top', 'top'],
+        ['padding-bottom', 'bottom'],
+      ],
+    ],
+    ['pt-safe', [['padding-top', 'top']]],
+    ['pr-safe', [['padding-right', 'right']]],
+    ['pb-safe', [['padding-bottom', 'bottom']]],
+    ['pl-safe', [['padding-left', 'left']]],
+  ] as [string, [string, SafeAreaInset][]][]) {
+    safeAreaSpacingUtility(name, ['--padding', '--spacing'], properties)
   }
 
   staticUtility('text-left', [['text-align', 'left']])
