@@ -607,7 +607,7 @@ export function createUtilities(theme: Theme) {
       return candidate.value.value
     }
 
-    if (candidate.modifier && !candidate.value.fraction) return null
+    if (candidate.modifier && (!candidate.value.fraction || !supportsFractions)) return null
 
     let value = theme.resolve(candidate.value.fraction ?? candidate.value.value, themeKeys)
 
