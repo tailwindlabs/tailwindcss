@@ -317,11 +317,14 @@ test('safe area utilities', async () => {
       `,
       [
         'safe',
+        'safe-none',
         'safe-x-none',
         'safe-b',
         'inset-safe',
         '-inset-safe',
+        '-inset-safe-1/2',
         'top-safe-4',
+        'top-safe-1/2',
         '-left-safe-px',
         'm-safe',
         '-mt-safe',
@@ -348,11 +351,22 @@ test('safe area utilities', async () => {
       left: calc(var(--tw-safe-area-left, env(safe-area-inset-left)) * -1);
     }
 
+    .-inset-safe-1\\/2 {
+      top: calc((var(--tw-safe-area-top, env(safe-area-inset-top)) + calc(1 / 2 * 100%)) * -1);
+      right: calc((var(--tw-safe-area-right, env(safe-area-inset-right)) + calc(1 / 2 * 100%)) * -1);
+      bottom: calc((var(--tw-safe-area-bottom, env(safe-area-inset-bottom)) + calc(1 / 2 * 100%)) * -1);
+      left: calc((var(--tw-safe-area-left, env(safe-area-inset-left)) + calc(1 / 2 * 100%)) * -1);
+    }
+
     .inset-safe {
       top: var(--tw-safe-area-top, env(safe-area-inset-top));
       right: var(--tw-safe-area-right, env(safe-area-inset-right));
       bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
       left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .top-safe-1\\/2 {
+      top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) + calc(1 / 2 * 100%));
     }
 
     .top-safe-4 {
@@ -425,6 +439,13 @@ test('safe area utilities', async () => {
       --tw-safe-area-right: env(safe-area-inset-right);
       --tw-safe-area-bottom: env(safe-area-inset-bottom);
       --tw-safe-area-left: env(safe-area-inset-left);
+    }
+
+    .safe-none {
+      --tw-safe-area-top: 0px;
+      --tw-safe-area-right: 0px;
+      --tw-safe-area-bottom: 0px;
+      --tw-safe-area-left: 0px;
     }
 
     .safe-x-none {

@@ -600,11 +600,14 @@ export function createUtilities(theme: Theme) {
     themeKeys: ThemeKey[],
     supportsFractions = false,
   ) {
-    if (candidate.modifier || !candidate.value) return null
+    if (!candidate.value) return null
 
     if (candidate.value.kind === 'arbitrary') {
+      if (candidate.modifier) return null
       return candidate.value.value
     }
+
+    if (candidate.modifier && !candidate.value.fraction) return null
 
     let value = theme.resolve(candidate.value.fraction ?? candidate.value.value, themeKeys)
 
