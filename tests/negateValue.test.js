@@ -12,3 +12,7 @@ test('values that cannot be negated become undefined', () => {
   expect(negateValue('auto')).toBeUndefined()
   expect(negateValue('cover')).toBeUndefined()
 })
+
+test('it negates theme() function calls', () => {
+  expect(negateValue('theme(margin.1)')).toEqual('calc(theme(margin.1) * -1)')
+})
