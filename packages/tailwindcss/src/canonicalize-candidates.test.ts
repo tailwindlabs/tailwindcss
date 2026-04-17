@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
@@ -93,30 +94,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
   async function expectCanonicalization(
     input: string,
-    candidate: string,
-    expected: string,
-    options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
-  ) {
-    candidate = prepare(candidate)
-    expected = prepare(expected)
-
-    if (strategy === 'prefix') {
-      input = input.replace("@import 'tailwindcss';", "@import 'tailwindcss' prefix(tw);")
-    }
-
-    let designSystem = await designSystems.get(__dirname).get(input)
-    let [actual] = designSystem.canonicalizeCandidates([candidate], options)
-
-    try {
-      expect(actual).toBe(expected)
-    } catch (err) {
-      if (err instanceof Error) Error.captureStackTrace(err, expectCanonicalization)
-      throw err
-    }
-  }
-
-  async function expectCombinedCanonicalization(
-    input: string,
     candidates: string,
     expected: string,
     options: CanonicalizeOptions = DEFAULT_CANONICALIZATION_OPTIONS,
@@ -134,165 +111,190 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     try {
       expect(actual).toEqual(preparedExpected)
     } catch (err) {
-      if (err instanceof Error) Error.captureStackTrace(err, expectCombinedCanonicalization)
+      if (err instanceof Error) Error.captureStackTrace(err, expectCanonicalization)
       throw err
     }
   }
 
   /// ----------------------------------
 
-  test.each([
-    /// Legacy bg-gradient-* → bg-linear-*
-    ['bg-gradient-to-t', 'bg-linear-to-t'],
-    ['bg-gradient-to-tr', 'bg-linear-to-tr'],
-    ['bg-gradient-to-r', 'bg-linear-to-r'],
-    ['bg-gradient-to-br', 'bg-linear-to-br'],
-    ['bg-gradient-to-b', 'bg-linear-to-b'],
-    ['bg-gradient-to-bl', 'bg-linear-to-bl'],
-    ['bg-gradient-to-l', 'bg-linear-to-l'],
-    ['bg-gradient-to-tl', 'bg-linear-to-tl'],
-
-    /// theme(…) to `var(…)`
-    // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
-    ['[color:red]', 'text-[red]'],
-
-    // Handle special cases around `.1` in the `theme(…)`
-    ['[--value:theme(spacing.1)]', '[--value:--spacing(1)]'],
-    ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-xs--line-height)]'],
-    ['[--value:theme(spacing[1.25])]', '[--value:--spacing(1.25)]'],
-
-    // Should not convert invalid spacing values to calc
-    ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
-
-    // Convert to `var(…)` if we can resolve the path
-    ['[color:theme(colors.red.500)]', 'text-red-500'], // Arbitrary property
-    ['[color:theme(colors.red.500)]/50', 'text-red-500/50'], // Arbitrary property + modifier
-    ['bg-[theme(colors.red.500)]', 'bg-red-500'], // Arbitrary value
-    ['bg-[size:theme(spacing.4)]', 'bg-size-[--spacing(4)]'], // Arbitrary value + data type hint
-
-    // Pretty print CSS functions preceded by an operator to prevent consecutive
-    // operator characters.
-    ['w-[calc(100dvh-theme(spacing.2))]', 'w-[calc(100dvh-(--spacing(2)))]'],
-    ['w-[calc(100dvh+theme(spacing.2))]', 'w-[calc(100dvh+(--spacing(2)))]'],
-    ['w-[calc(100dvh/theme(spacing.2))]', 'w-[calc(100dvh/(--spacing(2)))]'],
-    ['w-[calc(100dvh*theme(spacing.2))]', 'w-[calc(100dvh*(--spacing(2)))]'],
-
-    // Convert to `var(…)` if we can resolve the path, but keep fallback values
-    ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
-
-    // Keep `theme(…)` if we can't resolve the path
-    ['bg-[theme(colors.foo.1000)]', 'bg-[theme(colors.foo.1000)]'],
-
-    // Keep `theme(…)` if we can't resolve the path, but still try to convert the
-    // fallback value.
-    ['bg-[theme(colors.foo.1000,theme(colors.red.500))]', 'bg-red-500'],
-
-    // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
-    ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--text-xs)*2)]'],
-
-    // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
-    // - Can't convert to `var(…)` because that would lose the modifier.
-    // - Can't convert to a candidate modifier because there are multiple
-    //   `theme(…)` calls.
-    //
-    //   If we really want to, we can make a fancy migration that tries to move it
-    //   to a candidate modifier _if_ all `theme(…)` calls use the same modifier.
-    [
-      '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]',
-      'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]',
-    ],
-    [
-      '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]/50',
-      'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]/50',
-    ],
-
-    // Convert the `theme(…)`, but try to move the inline modifier (e.g. `50%`),
-    // to a candidate modifier.
-    // Arbitrary property, with simple percentage modifier
-    ['[color:theme(colors.red.500/75%)]', 'text-red-500/75'],
-
-    // Arbitrary property, with numbers (0-1) without a unit
-    ['[color:theme(colors.red.500/.12)]', 'text-red-500/12'],
-    ['[color:theme(colors.red.500/0.12)]', 'text-red-500/12'],
-
-    // Arbitrary property, with more complex modifier (we only allow whole numbers
-    // as bare modifiers). Convert the complex numbers to arbitrary values instead.
-    ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
-    ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
-    ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
-    ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
-
-    // Arbitrary value
-    ['bg-[theme(colors.red.500/75%)]', 'bg-red-500/75'],
-    ['bg-[theme(colors.red.500/12.34%)]', 'bg-red-500/[12.34%]'],
-
-    // Arbitrary property that already contains a modifier
-    ['[color:theme(colors.red.500/50%)]/50', 'text-[--theme(--color-red-500/50%)]/50'],
-
-    // Values that don't contain only `theme(…)` calls should not be converted to
-    // use a modifier since the color is not the whole value.
-    [
-      'shadow-[shadow:inset_0px_1px_theme(colors.white/15%)]',
-      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
-    ],
-
-    // Arbitrary value, where the candidate already contains a modifier
-    // This should still migrate the `theme(…)` syntax to the modern syntax.
-    ['bg-[theme(colors.red.500/50%)]/50', 'bg-[--theme(--color-red-500/50%)]/50'],
-
-    // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
-    // still upgrade the `theme(…)` to the modern syntax.
-    ['max-[theme(screens.lg)]:flex', 'max-[--theme(--breakpoint-lg)]:flex'],
-    // There are no variables for `--spacing` multiples, so we can't convert this
-    ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
-
-    // This test in itself doesn't make much sense. But we need to make sure
-    // that this doesn't end up as the modifier in the candidate itself.
-    ['max-[theme(spacing.4/50)]:flex', 'max-[theme(spacing.4/50)]:flex'],
-
-    // `theme(…)` calls in another CSS function is replaced correctly.
-    // Additionally we remove unnecessary whitespace.
-    ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
-
-    // `theme(…)` calls valid in v3, but not in v4 should still be converted.
-    ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
-
-    // Renamed theme keys
-    ['max-w-[theme(screens.md)]', 'max-w-(--breakpoint-md)'],
-    ['w-[theme(maxWidth.md)]', 'w-md'],
-
-    // Invalid cases
-    ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
-    ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:theme(colors.red.500/50/50)]/50'],
-
-    // Partially invalid cases
-    [
-      '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]',
-      '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]',
-    ],
-    [
-      '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
-      '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
-    ],
-
-    // If a utility sets `property` and `--tw-{property}` with the same value,
-    // we can ignore the `--tw-{property}`. This is just here for composition.
-    // This means that we should be able to upgrade the one _without_ to the one
-    // _with_ the variable
-    ['[font-weight:400]', 'font-normal'],
-    ['[line-height:0]', 'leading-0'],
-    ['[border-style:solid]', 'border-solid'],
-  ])(testName, { timeout }, async (candidate, expected) => {
-    await expectCanonicalization(
-      css`
+  describe('deprecated utilities', () => {
+    test.each([
+      /// Legacy bg-gradient-* → bg-linear-*
+      ['bg-gradient-to-t', 'bg-linear-to-t'],
+      ['bg-gradient-to-tr', 'bg-linear-to-tr'],
+      ['bg-gradient-to-r', 'bg-linear-to-r'],
+      ['bg-gradient-to-br', 'bg-linear-to-br'],
+      ['bg-gradient-to-b', 'bg-linear-to-b'],
+      ['bg-gradient-to-bl', 'bg-linear-to-bl'],
+      ['bg-gradient-to-l', 'bg-linear-to-l'],
+      ['bg-gradient-to-tl', 'bg-linear-to-tl'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
         @import 'tailwindcss';
-      `,
-      candidate,
-      expected,
-    )
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    let deprecated: [string, string][] = [
+      ['order-none', 'order-0'],
+      ['break-words', 'wrap-break-word'],
+      ['overflow-ellipsis', 'text-ellipsis'],
+
+      ['start-full', 'inset-s-full'],
+      ['-start-full', '-inset-s-full'],
+      ['start-auto', 'inset-s-auto'],
+      ['start-px', 'inset-s-px'],
+      ['-start-px', '-inset-s-px'],
+      ['start-8', 'inset-s-8'], // Within default spacing scale
+      ['-start-8', '-inset-s-8'], // Within default spacing scale
+      ['start-123', 'inset-s-123'], // Outside of default spacing scale
+      ['-start-123', '-inset-s-123'], // Outside of default spacing scale
+
+      ['end-full', 'inset-e-full'],
+      ['-end-full', '-inset-e-full'],
+      ['end-auto', 'inset-e-auto'],
+      ['end-px', 'inset-e-px'],
+      ['-end-px', '-inset-e-px'],
+      ['end-8', 'inset-e-8'], // Within default spacing scale
+      ['-end-8', '-inset-e-8'], // Within default spacing scale
+      ['end-123', 'inset-e-123'], // Outside of default spacing scale
+      ['-end-123', '-inset-e-123'], // Outside of default spacing scale
+    ]
+
+    test.each(deprecated)(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    describe('With custom implementation', () => {
+      // Creating a shared CSS file such that we can re-use the same design
+      // system for all of these.
+      let customImplementations = deprecated
+        .map(
+          ([candidate]) => css`
+          @utility ${candidate} {
+            --custom-${randomUUID()}: implementation;
+          }
+        `,
+        )
+        .join('\n')
+
+      // Keep the current utility because of the custom implementation
+      test.each(deprecated.map(([candidate]) => [candidate, candidate]))(
+        testName,
+        { timeout },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+
+            ${customImplementations}
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+    })
   })
 
-  describe('arbitrary utilities', () => {
+  describe('arbitrary properties', () => {
+    test.each([
+      /// theme(…) to `var(…)`
+      // Keep candidates that don't contain `theme(…)` or `theme(…, …)`
+      ['[color:red]', 'text-[red]'],
+
+      // Handle special cases around `.1` in the `theme(…)`
+      ['[--value:theme(spacing.1)]', '[--value:--spacing(1)]'],
+      ['[--value:theme(fontSize.xs.1.lineHeight)]', '[--value:var(--text-xs--line-height)]'],
+      ['[--value:theme(spacing[1.25])]', '[--value:--spacing(1.25)]'],
+
+      // Should not convert invalid spacing values to calc
+      ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
+
+      // Convert to `var(…)` if we can resolve the path
+      ['[color:theme(colors.red.500)]', 'text-red-500'], // Arbitrary property
+      ['[color:theme(colors.red.500)]/50', 'text-red-500/50'], // Arbitrary property + modifier
+
+      // Multiple `theme(… / …)` calls should result in modern syntax of `theme(…)`
+      // - Can't convert to `var(…)` because that would lose the modifier.
+      // - Can't convert to a candidate modifier because there are multiple
+      //   `theme(…)` calls.
+      //
+      //   If we really want to, we can make a fancy migration that tries to move it
+      //   to a candidate modifier _if_ all `theme(…)` calls use the same modifier.
+      [
+        '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]',
+        'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]',
+      ],
+      [
+        '[color:theme(colors.red.500/50,theme(colors.blue.500/50))]/50',
+        'text-[--theme(--color-red-500/50,--theme(--color-blue-500/50))]/50',
+      ],
+
+      // Convert the `theme(…)`, but try to move the inline modifier (e.g. `50%`),
+      // to a candidate modifier.
+      // Arbitrary property, with simple percentage modifier
+      ['[color:theme(colors.red.500/75%)]', 'text-red-500/75'],
+
+      // Arbitrary property, with numbers (0-1) without a unit
+      ['[color:theme(colors.red.500/.12)]', 'text-red-500/12'],
+      ['[color:theme(colors.red.500/0.12)]', 'text-red-500/12'],
+
+      // Arbitrary property, with more complex modifier (we only allow whole numbers
+      // as bare modifiers). Convert the complex numbers to arbitrary values instead.
+      ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
+      ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
+      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
+      ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
+
+      // Arbitrary property that already contains a modifier
+      ['[color:theme(colors.red.500/50%)]/50', 'text-[--theme(--color-red-500/50%)]/50'],
+
+      // `calc(var(--spacing)*…)` to `--spacing(…)`
+      ['[padding-top:min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+      [
+        '[padding-top:min(20%,calc(var(--spacing)*var(--other)))]',
+        'pt-[min(20%,--spacing(var(--other)))]',
+      ],
+      ['[padding-top:calc(var(--spacing)*8)]', 'pt-8'],
+      ['[padding-top:calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
+      // `theme(…)` calls valid in v3, but not in v4 should still be converted.
+      ['[--foo:theme(transitionDuration.500)]', '[--foo:theme(transitionDuration.500)]'],
+
+      // Invalid cases
+      ['[--foo:theme(colors.red.500/50/50)]', '[--foo:theme(colors.red.500/50/50)]'],
+      ['[--foo:theme(colors.red.500/50/50)]/50', '[--foo:theme(colors.red.500/50/50)]/50'],
+
+      // Partially invalid cases
+      [
+        '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]',
+        '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]',
+      ],
+      [
+        '[--foo:theme(colors.red.500/50/50)_theme(colors.blue.200)]/50',
+        '[--foo:theme(colors.red.500/50/50)_var(--color-blue-200)]/50',
+      ],
+
+      // If a utility sets `property` and `--tw-{property}` with the same value,
+      // we can ignore the `--tw-{property}`. This is just here for composition.
+      // This means that we should be able to upgrade the one _without_ to the one
+      // _with_ the variable
+      ['[font-weight:400]', 'font-normal'],
+      ['[line-height:0]', 'leading-0'],
+      ['[border-style:solid]', 'border-solid'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
     test.each([
       // Arbitrary property to static utility
       ['[text-wrap:balance]', 'text-balance'],
@@ -302,10 +304,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[display:_flex_]', 'flex'],
       ['[display:_flex]', 'flex'],
       ['[display:flex_]', 'flex'],
-
-      // Arbitrary property to static utility
-      // Map number to keyword-like value
-      ['leading-[1]', 'leading-none'],
 
       // Arbitrary property to named functional utility
       ['[color:var(--color-red-500)]', 'text-red-500'],
@@ -334,20 +332,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[grid-column:2]', 'col-2'],
       ['[grid-column:1234]', 'col-1234'],
 
-      // Arbitrary value to bare value
-      ['border-[2px]', 'border-2'],
-      ['border-[1234px]', 'border-1234'],
-
-      // Arbitrary value with data type, to more specific arbitrary value
-      ['bg-[position:123px]', 'bg-position-[123px]'],
-      ['bg-[size:123px]', 'bg-size-[123px]'],
-
-      // Arbitrary value with inferred data type, to more specific arbitrary value
-      ['bg-[123px]', 'bg-position-[123px]'],
-
-      // Arbitrary value with spacing mul
-      ['w-[64rem]', 'w-256'],
-
       // Complex arbitrary property to arbitrary value
       [
         '[grid-template-columns:repeat(2,minmax(100px,1fr))]',
@@ -355,13 +339,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ],
       // Complex arbitrary property to bare value
       ['[grid-template-columns:repeat(2,minmax(0,1fr))]', 'grid-cols-2'],
-
-      // Arbitrary value to bare value with percentage
-      ['from-[25%]', 'from-25%'],
-
-      // Arbitrary percentage value must be a whole number. Should not migrate to
-      // a bare value.
-      ['from-[2.5%]', 'from-[2.5%]'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
@@ -378,7 +355,129 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       await expectCanonicalization(input, candidate, expected)
     })
+  })
 
+  describe('arbitrary values', () => {
+    test.each([
+      // Convert to `var(…)` if we can resolve the path
+      ['bg-[theme(colors.red.500)]', 'bg-red-500'], // Arbitrary value
+      ['bg-[size:theme(spacing.4)]', 'bg-size-[--spacing(4)]'], // Arbitrary value + data type hint
+
+      // Pretty print CSS functions preceded by an operator to prevent consecutive
+      // operator characters.
+      ['w-[calc(100dvh-theme(spacing.2))]', 'w-[calc(100dvh-(--spacing(2)))]'],
+      ['w-[calc(100dvh+theme(spacing.2))]', 'w-[calc(100dvh+(--spacing(2)))]'],
+      ['w-[calc(100dvh/theme(spacing.2))]', 'w-[calc(100dvh/(--spacing(2)))]'],
+      ['w-[calc(100dvh*theme(spacing.2))]', 'w-[calc(100dvh*(--spacing(2)))]'],
+
+      // Convert to `var(…)` if we can resolve the path, but keep fallback values
+      ['bg-[theme(colors.red.500,red)]', 'bg-(--color-red-500,red)'],
+
+      // Keep `theme(…)` if we can't resolve the path
+      ['bg-[theme(colors.foo.1000)]', 'bg-[theme(colors.foo.1000)]'],
+
+      // Keep `theme(…)` if we can't resolve the path, but still try to convert the
+      // fallback value.
+      ['bg-[theme(colors.foo.1000,theme(colors.red.500))]', 'bg-red-500'],
+
+      // Use `theme(…)` (deeply nested) inside of a `calc(…)` function
+      ['text-[calc(theme(fontSize.xs)*2)]', 'text-[calc(var(--text-xs)*2)]'],
+
+      // Arbitrary value
+      ['bg-[theme(colors.red.500/75%)]', 'bg-red-500/75'],
+      ['bg-[theme(colors.red.500/12.34%)]', 'bg-red-500/[12.34%]'],
+
+      // Values that don't contain only `theme(…)` calls should not be converted to
+      // use a modifier since the color is not the whole value.
+      [
+        'shadow-[shadow:inset_0px_1px_theme(colors.white/15%)]',
+        'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
+      ],
+
+      // Arbitrary value, where the candidate already contains a modifier
+      // This should still migrate the `theme(…)` syntax to the modern syntax.
+      ['bg-[theme(colors.red.500/50%)]/50', 'bg-[--theme(--color-red-500/50%)]/50'],
+
+      // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
+      // still upgrade the `theme(…)` to the modern syntax.
+      ['max-[theme(screens.lg)]:flex', 'max-[--theme(--breakpoint-lg)]:flex'],
+      // There are no variables for `--spacing` multiples, so we can't convert this
+      ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
+
+      // This test in itself doesn't make much sense. But we need to make sure
+      // that this doesn't end up as the modifier in the candidate itself.
+      ['max-[theme(spacing.4/50)]:flex', 'max-[theme(spacing.4/50)]:flex'],
+
+      // `theme(…)` calls in another CSS function is replaced correctly.
+      // Additionally we remove unnecessary whitespace.
+      ['grid-cols-[min(50%_,_theme(spacing.80))_auto]', 'grid-cols-[min(50%,--spacing(80))_auto]'],
+
+      // `calc(var(--spacing)*…)` to `--spacing(…)`
+      ['pt-[min(20%,calc(var(--spacing)*8))]', 'pt-[min(20%,--spacing(8))]'],
+      ['pt-[min(20%,calc(var(--spacing)*var(--other)))]', 'pt-[min(20%,--spacing(var(--other)))]'],
+      ['pt-[calc(var(--spacing)*8)]', 'pt-8'],
+      ['pt-[calc(var(--spacing)*var(--other))]', 'pt-[--spacing(var(--other))]'],
+
+      // Renamed theme keys
+      ['max-w-[theme(screens.md)]', 'max-w-(--breakpoint-md)'],
+      ['w-[theme(maxWidth.md)]', 'w-md'],
+
+      // Arbitrary property to static utility
+      // Map number to keyword-like value
+      ['leading-[1]', 'leading-none'],
+
+      // Arbitrary value to bare value
+      ['border-[2px]', 'border-2'],
+      ['border-[1234px]', 'border-1234'],
+
+      // Arbitrary value with data type, to more specific arbitrary value
+      ['bg-[position:123px]', 'bg-position-[123px]'],
+      ['bg-[size:123px]', 'bg-size-[123px]'],
+
+      // Arbitrary value with inferred data type, to more specific arbitrary value
+      ['bg-[123px]', 'bg-position-[123px]'],
+
+      // Arbitrary value with spacing mul
+      ['w-[64rem]', 'w-256'],
+
+      // Arbitrary value to bare value with percentage
+      ['from-[25%]', 'from-25%'],
+
+      // Arbitrary percentage value must be a whole number. Should not migrate to
+      // a bare value.
+      ['from-[2.5%]', 'from-[2.5%]'],
+
+      // Negative arbitrary values can be simplified
+      // 1. Try to move the sign _inside_ the arbitrary value
+      // 2. Try to move the sign _out_ of the arbitrary value
+      ['-mt-[12rem]', '-mt-48'], // Arbitrary value → bare value
+      ['-mt-[-12rem]', 'mt-48'], // Double negation
+      ['-mt-[12.34rem]', 'mt-[-12.34rem]'], // Move `-` inside
+      ['-mt-[-12.34rem]', 'mt-[12.34rem]'], // Move `-` inside, double negation
+      ['-mt-[12.34px]', 'mt-[-12.34px]'],
+      ['-mt-[-12.34px]', 'mt-[12.34px]'],
+      ['-mt-[492px]', '-mt-123'], // Moving inside, allows us to migrate to a bare value
+      ['-mt-[calc(-1*492px)]', 'mt-123'], // Double negation and constant folding into bare value
+      ['-mt-[-492px]', 'mt-123'],
+      ['-mt-[calc(-1*-492px)]', '-mt-123'], // Constant folding with calc expressions
+      ['-mt-(--my-var)', '-mt-(--my-var)'], // Keep as-is
+      ['-mt-[var(--my-var)]', '-mt-(--my-var)'], // Keep as-is, but convert to shorthand
+      ['mt-[calc(var(--my-var)*-1)]', '-mt-(--my-var)'], // Move `-` out
+      ['mt-[calc(-1*var(--my-var))]', '-mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(var(--my-var)*-1)]', 'mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(-1*var(--my-var))]', 'mt-(--my-var)'], // Move `-` out
+      ['mt-[calc(-1*calc(-1*var(--my-var)))]', 'mt-(--my-var)'], // Move `-` out
+      ['-mt-[calc(-1*calc(-1*var(--my-var)))]', '-mt-(--my-var)'], // Move `-` out
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
+
+  describe('arbitrary utilities', () => {
     test('migrate with custom static utility `@utility custom {…}`', { timeout }, async () => {
       let candidate = '[--key:value]'
       let expected = 'custom'
@@ -592,71 +691,6 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Custom utility with bare value integer
       ['tab-8', 'tab-github'],
     ])(testName, { timeout }, async (candidate, expected) => {
-      await expectCanonicalization(input, candidate, expected)
-    })
-  })
-
-  describe('deprecated utilities', () => {
-    test('`order-none` → `order-0`', { timeout }, async () => {
-      let candidate = 'order-none'
-      let expected = 'order-0'
-
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`order-none` → `order-none` with custom implementation', { timeout }, async () => {
-      let candidate = 'order-none'
-      let expected = 'order-none'
-
-      let input = css`
-        @import 'tailwindcss';
-
-        @utility order-none {
-          order: none; /* imagine this exists */
-        }
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`break-words` → `wrap-break-word`', { timeout }, async () => {
-      let candidate = 'break-words'
-      let expected = 'wrap-break-word'
-
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`[overflow-wrap:break-word]` → `wrap-break-word`', { timeout }, async () => {
-      let candidate = '[overflow-wrap:break-word]'
-      let expected = 'wrap-break-word'
-
-      let input = css`
-        @import 'tailwindcss';
-      `
-
-      await expectCanonicalization(input, candidate, expected)
-    })
-
-    test('`break-words` → `break-words` with custom implementation', { timeout }, async () => {
-      let candidate = 'break-words'
-      let expected = 'break-words'
-
-      let input = css`
-        @import 'tailwindcss';
-
-        @utility break-words {
-          break: words; /* imagine this exists */
-        }
-      `
-
       await expectCanonicalization(input, candidate, expected)
     })
   })
@@ -1030,15 +1064,44 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     test.each([
       // 4 to 1
       ['mt-1 mr-1 mb-1 ml-1', 'm-1'],
+      ['border-t-123 border-r-123 border-b-123 border-l-123', 'border-123'],
+      ['border-t-1 border-r-1 border-b-1 border-l-1', 'border'], // `border` is shorter than `border-1`
+      ['border-t-red-500 border-r-red-500 border-b-red-500 border-l-red-500', 'border-red-500'],
+      ['scroll-mt-1 scroll-mr-1 scroll-mb-1 scroll-ml-1', 'scroll-m-1'],
+      ['scroll-pt-1 scroll-pr-1 scroll-pb-1 scroll-pl-1', 'scroll-p-1'],
 
       // 2 to 1
       ['mt-1 mb-1', 'my-1'],
+      ['border-t-123 border-b-123', 'border-y-123'],
+      ['border-t-1 border-b-1', 'border-y'], // `border-y` is shorter than `border-y-1`
+      ['border-t-red-500 border-b-red-500', 'border-y-red-500'],
+      ['scroll-mt-1 scroll-mb-1', 'scroll-my-1'],
+      ['scroll-pt-1 scroll-pb-1', 'scroll-py-1'],
+      ['overflow-x-hidden overflow-y-hidden', 'overflow-hidden'],
+      ['overscroll-x-contain overscroll-y-contain', 'overscroll-contain'],
 
       // Different order as above
       ['mb-1 mt-1', 'my-1'],
 
       // To completely different utility
       ['w-4 h-4', 'size-4'],
+
+      // Goes beyond the default spacing scale that's being used in intellisense
+      // for code completion. Since it's about bare values, we should still be
+      // able to combine them.
+      ['w-123 h-123', 'size-123'],
+      ['w-128 h-128', 'size-128'], // `w-128` on its own would become `w-lg`
+      ['mt-123 mb-123', 'my-123'],
+
+      // Collapse duplicates into themselves
+      ['w-8 w-8', 'w-8'],
+
+      // `w-*` and `h-*` would canonicalize to `size-5`
+      // `size-5` and `size-5` should then canonicalize to `size-5`
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5', 'size-5'],
+
+      // Same as above, but with an additional unrelated class
+      ['w-[calc(1rem+0.25rem)] h-[calc(1rem+0.25rem)] size-5 flex', 'size-5 flex'],
 
       // Do not touch if not operating on the same variants
       ['hover:w-4 h-4', 'hover:w-4 h-4'],
@@ -1052,7 +1115,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       let input = css`
         @import 'tailwindcss';
       `
-      await expectCombinedCanonicalization(input, candidates, expected)
+      await expectCanonicalization(input, candidates, expected)
     })
   })
 
@@ -1086,8 +1149,42 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       let input = css`
         @import 'tailwindcss';
       `
-      await expectCombinedCanonicalization(input, candidates.trim(), expected)
+      await expectCanonicalization(input, candidates.trim(), expected)
     })
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1558
+  test.each([
+    ['tracking-[-0.05em]', 'tracking-tighter'],
+    ['tracking-[-0.025em]', 'tracking-tight'],
+    ['tracking-[0em]', 'tracking-normal'],
+    ['tracking-[0.025em]', 'tracking-wide'],
+    ['tracking-[0.05em]', 'tracking-wider'],
+    ['tracking-[0.1em]', 'tracking-widest'],
+
+    // Negative values that don't make sense
+    // See: https://tailwindcss.com/docs/letter-spacing#using-negative-values
+    ['-tracking-tighter', 'tracking-wider'],
+    ['-tracking-tight', 'tracking-wide'],
+    ['-tracking-normal', 'tracking-normal'],
+    ['-tracking-wide', 'tracking-tight'],
+    ['-tracking-wider', 'tracking-tighter'],
+  ])(testName, { timeout }, async (candidate, expected) => {
+    await expectCanonicalization(
+      css`
+        @import 'tailwindcss';
+        @theme {
+          --tracking-tighter: -0.05em;
+          --tracking-tight: -0.025em;
+          --tracking-normal: 0em;
+          --tracking-wide: 0.025em;
+          --tracking-wider: 0.05em;
+          --tracking-widest: 0.1em;
+        }
+      `,
+      candidate,
+      expected,
+    )
   })
 })
 
@@ -1162,4 +1259,122 @@ describe('options', () => {
     expect(designSystem.canonicalizeCandidates(['m-[16px]'], { rem: 64 })).toEqual(['m-1'])
     expect(designSystem.canonicalizeCandidates(['m-[16px]'])).toEqual(['m-[16px]']) // Ensure options don't influence shared state
   })
+})
+
+describe('regressions', () => {
+  // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
+  {
+    test('a subset of classes should be canonicalizable', { timeout }, async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(
+        designSystem.canonicalizeCandidates(['underline', 'h-4', 'w-4', 'text-sm'], options),
+      ).toEqual(['underline', 'text-sm', 'size-4'])
+    })
+
+    test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      let target = ['underline', 'h-4', 'w-4']
+
+      expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+
+      designSystem.canonicalizeCandidates(['mb-4', 'text-sm'], options)
+      designSystem.canonicalizeCandidates(['underline', 'mb-4'], options)
+
+      expect(designSystem.canonicalizeCandidates(target, options)).toEqual(['underline', 'size-4'])
+      expect(designSystem.canonicalizeCandidates(target.concat('text-sm'), options)).toEqual([
+        'underline',
+        'text-sm',
+        'size-4',
+      ])
+    })
+  }
+
+  // https://github.com/tailwindlabs/tailwindcss/pull/19727
+  test(
+    'collapse does not crash when utilities with no standard properties are present',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // Shadow utilities use CSS custom properties and @property rules but may
+      // produce empty property maps in the collapse algorithm. This should not
+      // crash with "Cannot read properties of null" or "X is not iterable".
+      expect(() =>
+        designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options),
+      ).not.toThrow()
+
+      expect(() => designSystem.canonicalizeCandidates(['shadow-md', 'p-4'], options)).not.toThrow()
+
+      expect(() =>
+        designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options),
+      ).not.toThrow()
+
+      // Verify the candidates are returned (not collapsed, since shadows can't
+      // meaningfully collapse with unrelated utilities)
+      expect(designSystem.canonicalizeCandidates(['shadow-sm', 'border'], options)).toEqual(
+        expect.arrayContaining(['shadow-sm', 'border']),
+      )
+
+      expect(designSystem.canonicalizeCandidates(['shadow-sm', 'shadow-md'], options)).toEqual(
+        expect.arrayContaining(['shadow-sm', 'shadow-md']),
+      )
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19835
+  test.each([
+    // Arbitrary values should be collapsed to another arbitrary value
+    [
+      ['px-[1.2rem]', 'py-[1.2rem]', 'text-left'],
+      ['text-left', 'p-[1.2rem]'],
+    ],
+
+    // Arbitrary values could also be collapsed into a bare value
+    [
+      ['px-[30.75rem]', 'py-[30.75rem]', 'text-left'],
+      ['text-left', 'p-123'],
+    ],
+  ])(
+    'collapse canonicalization works for arbitrary values',
+    { timeout },
+    async (candidates, expected) => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
 })

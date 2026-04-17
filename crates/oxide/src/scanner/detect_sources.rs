@@ -30,11 +30,9 @@ fn sort_by_dir_and_name(a: &DirEntry, z: &DirEntry) -> Ordering {
 
 pub fn resolve_globs(
     base: PathBuf,
-    dirs: &[PathBuf],
+    dirs: &FxHashSet<PathBuf>,
     extensions: &FxHashSet<String>,
 ) -> Vec<GlobEntry> {
-    let allowed_paths: FxHashSet<PathBuf> = FxHashSet::from_iter(dirs.iter().cloned());
-
     // A list of known extensions + a list of extensions we found in the project.
     let mut found_extensions: FxHashSet<String> =
         FxHashSet::from_iter(KNOWN_EXTENSIONS.iter().map(|x| x.to_string()));
@@ -72,7 +70,7 @@ pub fn resolve_globs(
             continue;
         }
 
-        if !allowed_paths.contains(path) {
+        if !dirs.contains(path) {
             let mut path = path;
             while let Some(parent) = path.parent() {
                 if parent == base {
@@ -113,7 +111,7 @@ pub fn resolve_globs(
             continue;
         }
 
-        if !allowed_paths.contains(path) {
+        if !dirs.contains(path) {
             continue;
         }
 

@@ -1501,6 +1501,14 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19786
+  test('out-of-range escaped CSS variable candidates do not crash the build', async () => {
+    // Shouldn't crash
+    await run([
+      String.raw`--Coding-Projects-CharacterMapper-Master-Workspace\d8819554-4725-4235-9d22-2d0ed572e924`,
+    ])
+  })
+
   test('`@keyframes` in `@theme` are hoisted', async () => {
     expect(
       await compileCss(
@@ -1561,7 +1569,8 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       ":root, :host {
-        --animate-very-long-animation-name: very-long-animation-name var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+        --animate-very-long-animation-name: very-long-animation-name
+                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
       }
 
       .animate-very-long-animation-name {
@@ -3097,7 +3106,7 @@ describe('plugins', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: \`@plugin\` must have a path.]`)
   })
 
-  test('@plugin can not have an empty path', () => {
+  test('@plugin cannot have an empty path', () => {
     return expect(
       compile(
         css`
@@ -4558,6 +4567,97 @@ describe('@custom-variant', () => {
     `)
   })
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            @slot;
+          }
+
+          @custom-variant b {
+            @variant a {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex, .b\\:flex, .a\\:b\\:flex, .b\\:a\\:flex {
+        display: flex;
+      }"
+    `)
+  })
+
+  test('@custom-variant can use a @variant that eventually uses another @custom-variant (2)', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant a {
+            .a {
+              @slot;
+            }
+          }
+
+          @custom-variant b {
+            .b {
+              @variant a {
+                .a-inside-b {
+                  @slot;
+                }
+              }
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".a\\:flex .a, .b\\:flex .b .a .a-inside-b, .a\\:b\\:flex .a .b .a .a-inside-b, .b\\:a\\:flex .b .a .a-inside-b .a {
+        display: flex;
+      }"
+    `)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/19618#issuecomment-3830775912
+  test('@custom-variant can use existing @slot @variants', async () => {
+    expect(
+      await compileCss(
+        css`
+          @custom-variant hocus {
+            @variant hover {
+              @variant focus {
+                @slot;
+              }
+            }
+          }
+
+          @custom-variant hover {
+            &:hover {
+              @slot;
+            }
+
+            &[data-hover] {
+              @slot;
+            }
+          }
+
+          @tailwind utilities;
+        `,
+        ['hocus:flex'],
+      ),
+    ).toMatchInlineSnapshot(`
+      ".hocus\\:flex:hover:focus, .hocus\\:flex[data-hover]:focus {
+        display: flex;
+      }"
+    `)
+  })
+
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
       await compileCss(
@@ -4635,6 +4735,31 @@ describe('@utility', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: \`@utility 💨\` defines an invalid utility name. Utilities should be alphanumeric and start with a lowercase letter.]`,
     )
+  })
+
+  test('@utility can handle escape sequences correctly', async () => {
+    let { build } = await compile(css`
+      @layer utilities {
+        @tailwind utilities;
+      }
+
+      @utility push-1\/2 {
+        right: 50%;
+      }
+
+      @utility push-50\% {
+        right: 50%;
+      }
+    `)
+    let compiled = build(['push-1/2', 'push-50%'])
+
+    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
+      "@layer utilities {
+        .push-1\\/2, .push-50\\% {
+          right: 50%;
+        }
+      }"
+    `)
   })
 
   test('A functional @utility must end in -*', () => {
@@ -5559,7 +5684,7 @@ describe('`color-mix(…)` polyfill', () => {
 
       @supports (color: color-mix(in lab, red, red)) {
         .text-red-500\\/50 {
-          color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
+          color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }"
     `)

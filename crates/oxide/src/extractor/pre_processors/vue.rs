@@ -14,13 +14,12 @@ pub struct Vue;
 impl PreProcessor for Vue {
     fn process(&self, content: &[u8]) -> Vec<u8> {
         let mut result = content.to_vec();
-
         let content_as_str = std::str::from_utf8(content).unwrap();
         for (_, [lang, body]) in TEMPLATE_REGEX
             .captures_iter(content_as_str)
             .map(|c| c.extract())
         {
-            let replaced = pre_process_input(body.as_bytes(), lang);
+            let replaced = pre_process_input(body.as_bytes().to_vec(), lang);
             result = result.replace(body, replaced);
         }
 

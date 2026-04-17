@@ -86,7 +86,7 @@ impl<'a> Extractor<'a> {
         {
             let cursor = &mut self.cursor.clone();
             while cursor.pos < len {
-                if cursor.curr.is_ascii_whitespace() {
+                if cursor.curr().is_ascii_whitespace() {
                     cursor.advance();
                     continue;
                 }
@@ -104,7 +104,7 @@ impl<'a> Extractor<'a> {
             let cursor = &mut self.cursor.clone();
 
             while cursor.pos < len {
-                if cursor.curr.is_ascii_whitespace() {
+                if cursor.curr().is_ascii_whitespace() {
                     cursor.advance();
                     continue;
                 }
@@ -147,7 +147,7 @@ impl<'a> Extractor<'a> {
 
         let cursor = &mut self.cursor.clone();
         while cursor.pos < len {
-            if cursor.curr.is_ascii_whitespace() {
+            if cursor.curr().is_ascii_whitespace() {
                 cursor.advance();
                 continue;
             }
@@ -238,7 +238,7 @@ mod tests {
     use std::hint::black_box;
 
     fn pre_process_input(input: &str, extension: &str) -> String {
-        let input = crate::scanner::pre_process_input(input.as_bytes(), extension);
+        let input = crate::scanner::pre_process_input(input.as_bytes().to_vec(), extension);
         String::from_utf8(input).unwrap()
     }
 

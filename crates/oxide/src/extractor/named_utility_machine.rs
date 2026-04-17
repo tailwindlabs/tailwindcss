@@ -52,8 +52,8 @@ impl Machine for NamedUtilityMachine<IdleState> {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
-            Class::AlphaLower => match cursor.next.into() {
+        match cursor.curr().into() {
+            Class::AlphaLower => match cursor.next().into() {
                 // Valid single character utility in between quotes
                 //
                 // E.g.: `<div class="a"></div>`
@@ -90,7 +90,7 @@ impl Machine for NamedUtilityMachine<IdleState> {
             //
             // E.g.: `-mx-2.5`
             //        ^^
-            Class::Dash => match cursor.next.into() {
+            Class::Dash => match cursor.next().into() {
                 Class::AlphaLower => {
                     self.start_pos = cursor.pos;
                     cursor.advance();
@@ -118,7 +118,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
         let len = cursor.input.len();
 
         while cursor.pos < len {
-            match cursor.curr.into() {
+            match cursor.curr().into() {
                 // Followed by a boundary character, we are at the end of the utility.
                 //
                 // E.g.: `'flex'`
@@ -132,14 +132,14 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                 //                    ^
                 Class::AlphaLower | Class::AlphaUpper => {
-                    if is_valid_after_boundary(&cursor.next) || {
+                    if is_valid_after_boundary(&cursor.next()) || {
                         // Or any of these characters
                         //
                         // - `:`, because of JS object keys
                         // - `/`, because of modifiers
                         // - `!`, because of important
                         matches!(
-                            cursor.next.into(),
+                            cursor.next().into(),
                             Class::Colon | Class::Slash | Class::Exclamation
                         )
                     } {
@@ -150,7 +150,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                     cursor.advance()
                 }
 
-                Class::Dash => match cursor.next.into() {
+                Class::Dash => match cursor.next().into() {
                     // Start of an arbitrary value
                     //
                     // E.g.: `bg-[#0088cc]`
@@ -196,7 +196,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                     _ => return self.restart(),
                 },
 
-                Class::Underscore => match cursor.next.into() {
+                Class::Underscore => match cursor.next().into() {
                     // Valid characters _if_ followed by another valid character. These characters are
                     // only valid inside of the utility but not at the end of the utility.
                     //
@@ -225,14 +225,14 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                     //                   ^
                     // E.g.: `:div="{ flex: true }"` (JavaScript object syntax)
                     //                    ^
-                    _ if is_valid_after_boundary(&cursor.next) || {
+                    _ if is_valid_after_boundary(&cursor.next()) || {
                         // Or any of these characters
                         //
                         // - `:`, because of JS object keys
                         // - `/`, because of modifiers
                         // - `!`, because of important
                         matches!(
-                            cursor.next.into(),
+                            cursor.next().into(),
                             Class::Colon | Class::Slash | Class::Exclamation
                         )
                     } =>
@@ -249,11 +249,11 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 // E.g.: `px-2.5`
                 //           ^^^
                 Class::Dot => {
-                    if !matches!(cursor.prev.into(), Class::Number) {
+                    if !matches!(cursor.prev().into(), Class::Number) {
                         return self.restart();
                     }
 
-                    if !matches!(cursor.next.into(), Class::Number) {
+                    if !matches!(cursor.next().into(), Class::Number) {
                         return self.restart();
                     }
 
@@ -278,7 +278,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 //
                 Class::Number => {
                     if !matches!(
-                        cursor.prev.into(),
+                        cursor.prev().into(),
                         Class::Dash
                             | Class::Underscore
                             | Class::Dot
@@ -290,7 +290,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                     }
 
                     if !matches!(
-                        cursor.next.into(),
+                        cursor.next().into(),
                         Class::Dot
                             | Class::Number
                             | Class::AlphaLower
@@ -314,7 +314,7 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                 //       ^^
                 // ```
                 Class::Percent => {
-                    if !matches!(cursor.prev.into(), Class::Number) {
+                    if !matches!(cursor.prev().into(), Class::Number) {
                         return self.restart();
                     }
 

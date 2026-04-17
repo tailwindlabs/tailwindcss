@@ -6,10 +6,18 @@ import { walk, WalkAction } from './walk'
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
 export function constantFoldDeclaration(input: string, rem: number | null = null): string {
-  let folded = false
-  let valueAst = ValueParser.parse(input)
+  let [folded, valueAst] = constantFoldDeclarationAst(ValueParser.parse(input), rem)
 
-  walk(valueAst, {
+  return folded ? ValueParser.toCss(valueAst) : input
+}
+
+export function constantFoldDeclarationAst(
+  ast: ValueParser.ValueAstNode[],
+  rem: number | null = null,
+): [folded: boolean, ast: ValueParser.ValueAstNode[]] {
+  let folded = false
+
+  walk(ast, {
     exit(valueNode) {
       // Canonicalize dimensions to their simplest form. This includes:
       // - Convert `-0`, `+0`, `0.0`, … to `0`
@@ -40,10 +48,14 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
         //   { kind: 'word', value: '256' }                 4
         // ]
         if (valueNode.nodes.length !== 5) return
+        if (valueNode.nodes[2].kind !== 'word') return
 
-        let lhs = dimensions.get(valueNode.nodes[0].value)
+        let lhsNode = valueNode.nodes[0]
         let operator = valueNode.nodes[2].value
-        let rhs = dimensions.get(valueNode.nodes[4].value)
+        let rhsNode = valueNode.nodes[4]
+
+        let lhs = lhsNode.kind === 'word' ? dimensions.get(lhsNode.value) : null
+        let rhs = rhsNode.kind === 'word' ? dimensions.get(rhsNode.value) : null
 
         // Nullify entire expression when multiplying by `0`, e.g.: `calc(0 * 100vw)` -> `0`
         //
@@ -55,6 +67,134 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
         ) {
           folded = true
           return WalkAction.ReplaceSkip(ValueParser.word('0'))
+        }
+
+        if (operator === '*') {
+          // Multiplying by `1` can always unwrap the other side, even when that
+          // side is an expression like `var(--foo)` that we can't fully fold.
+          if (lhs?.[0] === 1 && lhs?.[1] === null) {
+            folded = true
+            return WalkAction.ReplaceSkip(rhsNode)
+          }
+
+          if (rhs?.[0] === 1 && rhs?.[1] === null) {
+            folded = true
+            return WalkAction.ReplaceSkip(lhsNode)
+          }
+        }
+
+        if (operator === '*' || operator === '+') {
+          // If only one side is known, and the unknown side is itself another
+          // binary expression with the same operator, try to combine the two
+          // known parts and keep the unknown part in place.
+          //
+          // E.g.:
+          //
+          // - `calc(2rem * calc(3    * var(--foo)))` → `calc(6rem * var(--foo))`
+          // - `calc(2rem + calc(3rem + var(--foo)))` → `calc(5rem + var(--foo))`
+          //
+          // At this point `lhs` and `rhs` are dimensions ([value, unit] |
+          // null). The `null` one is the unknown node.
+          let constant = lhs ?? rhs
+          let nestedNode = lhs === null ? lhsNode : rhs === null ? rhsNode : null
+
+          if (
+            constant !== null &&
+            nestedNode !== null &&
+            nestedNode.kind === 'function' &&
+            (nestedNode.value === 'calc' || nestedNode.value === '') &&
+            nestedNode.nodes.length === 5 &&
+            nestedNode.nodes[2].kind === 'word' &&
+            nestedNode.nodes[2].value === operator
+          ) {
+            let nestedLhsNode = nestedNode.nodes[0]
+            let nestedRhsNode = nestedNode.nodes[4]
+            let nestedLhs =
+              nestedLhsNode.kind === 'word' ? dimensions.get(nestedLhsNode.value) : null
+            let nestedRhs =
+              nestedRhsNode.kind === 'word' ? dimensions.get(nestedRhsNode.value) : null
+
+            let known = nestedLhs ?? nestedRhs
+            let unknown =
+              nestedLhs === null ? nestedLhsNode : nestedRhs === null ? nestedRhsNode : null
+
+            if (known !== null && unknown !== null) {
+              // `*` requires both values being unitless, or one of them. Both
+              // values having a unit is invalid.
+              //
+              // - `2    * 3`     → valid
+              // - `4rem * 5`     → valid
+              // - `6    * 7rem`  → valid
+              // - `8rem * 9rem`  → invalid
+              if (
+                operator === '*' &&
+                !(
+                  (constant[1] === null && known[1] === null) || // Both can be unitless
+                  (constant[1] === null && known[1] !== null) || // One of them can be unitless, but the other can't
+                  (constant[1] !== null && known[1] === null) // One of them can be unitless, but the other can't
+                )
+              ) {
+                return
+              }
+
+              // `+` requires that the units are the same. Adding a unitless
+              // value to a value with a unit is not allowed.
+              //
+              // - `2    + 3`     → valid
+              // - `4rem + 5`     → invalid
+              // - `6    + 7rem`  → invalid
+              // - `8rem + 9rem`  → valid
+              if (
+                operator === '+' &&
+                !(
+                  (constant[1] === known[1]) // Only same unit is allowed
+                )
+              ) {
+                return
+              }
+
+              // Re-associate nested expressions so we can still fold the known
+              // part of `x op (y op z)` when `z` is unknown.
+              //
+              // Examples:
+              // - `calc(2 * calc(3 * var(--foo)))` -> `calc(6 * var(--foo))`
+              // - `calc(1rem + calc(2rem + var(--foo)))` -> `calc(3rem + var(--foo))`
+              let combined: string
+              switch (operator) {
+                case '*': {
+                  combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
+                  break
+                }
+                case '+': {
+                  combined = `${constant[0] + known[0]}${constant[1] ?? known[1] ?? ''}`
+                  break
+                }
+
+                default:
+                  return
+              }
+
+              folded = true
+
+              if (operator === '*' && combined === '1') {
+                return WalkAction.ReplaceSkip(unknown)
+              }
+
+              let replacement: ValueParser.ValueFunctionNode = {
+                kind: 'function',
+                value: valueNode.value,
+                nodes: [
+                  ValueParser.word(combined),
+                  valueNode.nodes[1],
+                  valueNode.nodes[2],
+                  valueNode.nodes[3],
+                  unknown,
+                ],
+              }
+
+              return WalkAction.ReplaceSkip(replacement)
+            }
+          }
         }
 
         // We're not dealing with dimensions, so we can't fold this
@@ -70,7 +210,9 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
               (lhs[1] !== null && rhs[1] === null) // Unit * Unitless, e.g.: `1rem * 2`
             ) {
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(
+                ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? rhs[1] ?? ''}`),
+              )
             }
             break
           }
@@ -111,7 +253,7 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
     },
   })
 
-  return folded ? ValueParser.toCss(valueAst) : input
+  return [folded, ast]
 }
 
 function canonicalizeDimension(input: string, rem: number | null = null): string | null {

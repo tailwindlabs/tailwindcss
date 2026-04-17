@@ -8,7 +8,7 @@ It's never a fun experience to have your pull request declined after investing a
 
 For more info, check out the contributing guide:
 
-https://github.com/tailwindcss/tailwindcss/blob/main/.github/CONTRIBUTING.md
+https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md
 
 -->
 
