@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: Add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
+## [4.2.3] - 2026-04-20
+
 ### Fixed
 
 - Canonicalization: improve canonicalizations for `tracking-*` utilities by preferring non-negative utilities (e.g. `-tracking-tighter` → `tracking-wider`) ([#19827](https://github.com/tailwindlabs/tailwindcss/pull/19827))
@@ -3985,7 +3987,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.3...HEAD
+[4.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...v4.2.3
 [4.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.1...v4.2.2
 [4.2.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.1.18...v4.2.0
