@@ -9,6 +9,7 @@ on:
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 24
+  PNPM_VERSION: 10
   OXIDE_LOCATION: ./crates/node
 
 permissions:
@@ -79,6 +80,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
@@ -175,7 +178,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
+            sudo npm install -g pnpm@${{ env.PNPM_VERSION }} --unsafe-perm=true
             curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
@@ -223,6 +226,8 @@ jobs:
           echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v6
