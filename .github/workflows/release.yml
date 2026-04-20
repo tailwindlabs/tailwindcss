@@ -228,6 +228,17 @@ jobs:
         with:
           fetch-depth: 20
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
       # npm trusted publishing validates the caller workflow filename, so all npm publishes live here.
       # This workflow rebuilds the publish artifacts instead of depending on prepare-release.yml.
       - name: Resolve release metadata
@@ -248,17 +259,6 @@ jobs:
             echo "SHA_SHORT=$sha_short" >> $GITHUB_ENV
             echo "INSIDERS_VERSION=0.0.0-insiders.$sha_short" >> $GITHUB_ENV
           fi
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
