@@ -10,7 +10,69 @@ import {
   test,
   ts,
   txt,
+  yaml,
 } from '../utils'
+
+const browserCssPluginFixture = {
+  'package.json': json`
+    {
+      "type": "module",
+      "dependencies": {
+        "@tailwindcss/vite": "workspace:^",
+        "plugin-browser-css": "workspace:*",
+        "tailwindcss": "workspace:^"
+      },
+      "devDependencies": {
+        "vite": "^8"
+      }
+    }
+  `,
+  'pnpm-workspace.yaml': yaml`
+    packages:
+      - packages/*
+  `,
+  'packages/plugin-browser-css/package.json': json`
+    {
+      "name": "plugin-browser-css",
+      "version": "1.0.0",
+      "type": "module",
+      "main": "./index.js",
+      "module": "./index.js",
+      "browser": "./browser.css"
+    }
+  `,
+  'packages/plugin-browser-css/index.js': js`
+    export default function ({ addUtilities }) {
+      addUtilities({ '.browser-css-plugin': { 'border-bottom': '1px solid green' } })
+    }
+  `,
+  'packages/plugin-browser-css/browser.css': css`
+    .should-not-be-loaded-as-a-plugin {
+      display: none;
+    }
+  `,
+  'vite.config.ts': ts`
+    import tailwindcss from '@tailwindcss/vite'
+    import { defineConfig } from 'vite'
+
+    export default defineConfig({
+      build: { cssMinify: false },
+      plugins: [tailwindcss()],
+    })
+  `,
+  'index.html': html`
+    <head>
+      <link rel="stylesheet" href="./src/index.css" />
+    </head>
+    <body>
+      <div class="browser-css-plugin">Hello, world!</div>
+    </body>
+  `,
+  'src/index.css': css`
+    @import 'tailwindcss';
+    @plugin 'plugin-browser-css';
+  `,
+}
 
 test(
   'resolves tsconfig paths in production build',
@@ -285,6 +347,45 @@ test(
       candidate`scrollbar-thumb-red-500`,
       candidate`motion-preset-fade`,
     ])
+  },
+)
+
+test(
+  'resolves package plugins to JS entries in production build when browser points to CSS',
+  {
+    fs: browserCssPluginFixture,
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`browser-css-plugin`])
+  },
+)
+
+test(
+  'resolves package plugins to JS entries in dev mode when browser points to CSS',
+  {
+    fs: browserCssPluginFixture,
+  },
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`browser-css-plugin`)
+    })
   },
 )
 

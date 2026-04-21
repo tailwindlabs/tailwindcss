@@ -25,6 +25,18 @@ const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
+const JS_EXTENSIONS = new Set([
+  'js',
+  'cjs',
+  'mjs',
+  'ts',
+  'cts',
+  'mts',
+  'jsx',
+  'tsx',
+  'json',
+  'node',
+])
 
 export type PluginOptions = {
   /**
@@ -75,6 +87,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
+        if (!isPotentialJsRootFile(resolved)) return
         return resolved
       }
     } else {
@@ -131,6 +144,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
+        if (!isPotentialJsRootFile(resolved)) return
         return resolved
       }
     }
@@ -357,6 +371,10 @@ function isPotentialCssRootFile(id: string) {
   let isCssFile = extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)
 
   return isCssFile
+}
+
+function isPotentialJsRootFile(id: string) {
+  return JS_EXTENSIONS.has(getExtension(id))
 }
 
 function idToPath(id: string) {
