@@ -64,10 +64,19 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       customCssResolver = async (id: string, base: string) => {
         let resolved = await cssResolver(id, base, false, isSSR)
-        if (resolved && !resolved.endsWith('.css')) return undefined
+        if (!resolved) return
+        if (resolved === id) return
+        if (!path.isAbsolute(resolved)) return
+        if (!resolved.endsWith('.css')) return
         return resolved
       }
-      customJsResolver = (id: string, base: string) => jsResolver(id, base, false, isSSR)
+      customJsResolver = async (id: string, base: string) => {
+        let resolved = await jsResolver(id, base, false, isSSR)
+        if (!resolved) return
+        if (resolved === id) return
+        if (!path.isAbsolute(resolved)) return
+        return resolved
+      }
     } else {
       type ResolveIdFn = (
         environment: Environment,
@@ -111,10 +120,19 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       customCssResolver = async (id: string, base: string) => {
         let resolved = await cssResolver(env, id, base, false)
-        if (resolved && !resolved.endsWith('.css')) return undefined
+        if (!resolved) return
+        if (resolved === id) return
+        if (!path.isAbsolute(resolved)) return
+        if (!resolved.endsWith('.css')) return
         return resolved
       }
-      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, false)
+      customJsResolver = async (id: string, base: string) => {
+        let resolved = await jsResolver(env, id, base, false)
+        if (!resolved) return
+        if (resolved === id) return
+        if (!path.isAbsolute(resolved)) return
+        return resolved
+      }
     }
 
     return new Root(

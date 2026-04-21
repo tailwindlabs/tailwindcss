@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 
+### Fixed
+
+- Ensure imports in `@import` and `@plugin` still resolve correctly when using Vite aliases in `@tailwindcss/vite` ([#19947](https://github.com/tailwindlabs/tailwindcss/pull/19947))
+
 ## [4.2.3] - 2026-04-20
 
 ### Fixed
