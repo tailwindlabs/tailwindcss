@@ -164,6 +164,130 @@ test(
   },
 )
 
+test(
+  'resolves at-sign aliases in production build',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+        import { fileURLToPath } from 'node:url'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+          resolve: {
+            alias: [{ find: '@', replacement: fileURLToPath(new URL('.', import.meta.url)) }],
+          },
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline custom-underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import '@/src/styles/base.css';
+        @plugin '@/src/plugin.js';
+      `,
+      'src/styles/base.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+      'src/plugin.js': js`
+        export default function ({ addUtilities }) {
+          addUtilities({ '.custom-underline': { 'border-bottom': '1px solid green' } })
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`underline`, candidate`custom-underline`])
+  },
+)
+
+test(
+  'resolves package plugins in production build with at-sign aliases',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "tailwind-scrollbar": "^4.0.2",
+            "tailwindcss-motion": "^1.1.1",
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+        import { fileURLToPath } from 'node:url'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+          resolve: {
+            alias: [{ find: '@', replacement: fileURLToPath(new URL('.', import.meta.url)) }],
+          },
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="scrollbar scrollbar-thumb-red-500 motion-preset-fade">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin 'tailwind-scrollbar';
+        @plugin 'tailwindcss-motion';
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [
+      candidate`scrollbar`,
+      candidate`scrollbar-thumb-red-500`,
+      candidate`motion-preset-fade`,
+    ])
+  },
+)
+
 describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     'resolves aliases in production build',
