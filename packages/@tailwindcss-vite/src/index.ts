@@ -25,18 +25,6 @@ const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
-const JS_EXTENSIONS = new Set([
-  'js',
-  'cjs',
-  'mjs',
-  'ts',
-  'cts',
-  'mts',
-  'jsx',
-  'tsx',
-  'json',
-  'node',
-])
 
 export type PluginOptions = {
   /**
@@ -83,11 +71,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         return resolved
       }
       customJsResolver = async (id: string, base: string) => {
-        let resolved = await jsResolver(id, base, false, isSSR)
+        // Resolve Vite aliases first so `@plugin "@/foo"` keeps working, but
+        // let bare package specifiers fall through to Node-style resolution.
+        let resolved = await jsResolver(id, base, true, isSSR)
+        if (resolved && resolved !== id) {
+          if (path.isAbsolute(resolved)) return resolved
+          if (resolved[0] === '.') return path.resolve(base, resolved)
+        }
+
+        // Fall back to Vite's full resolver for features like tsconfigPaths,
+        // but reject CSS results since plugins must resolve to executable code.
+        resolved = await jsResolver(id, base, false, isSSR)
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
-        if (!isPotentialJsRootFile(resolved)) return
+        if (resolved.endsWith('.css')) return
         return resolved
       }
     } else {
@@ -140,11 +138,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         return resolved
       }
       customJsResolver = async (id: string, base: string) => {
-        let resolved = await jsResolver(env, id, base, false)
+        // Resolve Vite aliases first so `@plugin "@/foo"` keeps working, but
+        // let bare package specifiers fall through to Node-style resolution.
+        let resolved = await jsResolver(env, id, base, true)
+        if (resolved && resolved !== id) {
+          if (path.isAbsolute(resolved)) return resolved
+          if (resolved[0] === '.') return path.resolve(base, resolved)
+        }
+
+        // Fall back to Vite's full resolver for features like tsconfigPaths,
+        // but reject CSS results since plugins must resolve to executable code.
+        resolved = await jsResolver(env, id, base, false)
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
-        if (!isPotentialJsRootFile(resolved)) return
+        if (resolved.endsWith('.css')) return
         return resolved
       }
     }
@@ -371,10 +379,6 @@ function isPotentialCssRootFile(id: string) {
   let isCssFile = extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)
 
   return isCssFile
-}
-
-function isPotentialJsRootFile(id: string) {
-  return JS_EXTENSIONS.has(getExtension(id))
 }
 
 function idToPath(id: string) {
