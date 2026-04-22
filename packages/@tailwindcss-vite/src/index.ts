@@ -71,10 +71,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         return resolved
       }
       customJsResolver = async (id: string, base: string) => {
-        let resolved = await jsResolver(id, base, false, isSSR)
+        // Resolve Vite aliases first so `@plugin "@/foo"` keeps working, but
+        // let bare package specifiers fall through to Node-style resolution.
+        let resolved = await jsResolver(id, base, true, isSSR)
+        if (resolved && resolved !== id) {
+          if (path.isAbsolute(resolved)) return resolved
+          if (resolved[0] === '.') return path.resolve(base, resolved)
+        }
+
+        // Fall back to Vite's full resolver for features like tsconfigPaths,
+        // but reject CSS results since plugins must resolve to executable code.
+        resolved = await jsResolver(id, base, false, isSSR)
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
+        if (resolved.endsWith('.css')) return
         return resolved
       }
     } else {
@@ -127,10 +138,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         return resolved
       }
       customJsResolver = async (id: string, base: string) => {
-        let resolved = await jsResolver(env, id, base, false)
+        // Resolve Vite aliases first so `@plugin "@/foo"` keeps working, but
+        // let bare package specifiers fall through to Node-style resolution.
+        let resolved = await jsResolver(env, id, base, true)
+        if (resolved && resolved !== id) {
+          if (path.isAbsolute(resolved)) return resolved
+          if (resolved[0] === '.') return path.resolve(base, resolved)
+        }
+
+        // Fall back to Vite's full resolver for features like tsconfigPaths,
+        // but reject CSS results since plugins must resolve to executable code.
+        resolved = await jsResolver(env, id, base, false)
         if (!resolved) return
         if (resolved === id) return
         if (!path.isAbsolute(resolved)) return
+        if (resolved.endsWith('.css')) return
         return resolved
       }
     }
