@@ -452,6 +452,67 @@ test(
   },
 )
 
+test(
+  'resolves package plugins in dev mode when package exports CSS files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "daisyui": "^5",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <button class="btn btn-primary">Hello, world!</button>
+          </body>
+        </html>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin 'daisyui';
+      `,
+    },
+  },
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain('.btn')
+      expect(styles).toContain('.btn-primary')
+    })
+  },
+)
+
 describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     'resolves aliases in production build',
