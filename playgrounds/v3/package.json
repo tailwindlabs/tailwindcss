@@ -18,8 +18,8 @@
     "@types/node": "catalog:",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "autoprefixer": "^10.4.24",
-    "typescript": "^5.9.3"
+    "autoprefixer": "^10.5.0",
+    "typescript": "^6.0.3"
   },
   "pnpm": {
     "overrides": {
