@@ -3,7 +3,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
-import { commandExists, hasDefaultCargoBin, readInstalledRustTargets, rustEnv } from './rust-env.mjs'
+import {
+  cargoBin,
+  commandExists,
+  hasDetectedCargoBin,
+  readInstalledRustTargets,
+  rustEnv,
+} from './rust-env.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -95,8 +101,8 @@ if (context.needsRust) {
         formatList(missingRustTools),
         'How to fix:',
         '1. Install Rustup from https://rustup.rs/',
-        hasDefaultCargoBin()
-          ? '2. Rust appears to be installed in the default cargo directory, so rerun the command through the repo scripts such as `pnpm build` or `pnpm run check:env`.'
+        hasDetectedCargoBin()
+          ? `2. Rust appears to be installed in the detected Cargo bin directory (${cargoBin}), so rerun the command through the repo scripts such as \`pnpm build\` or \`pnpm run check:env\`.`
           : '2. If you installed Rustup to a custom location, make sure `CARGO_HOME`, `RUSTUP_HOME`, or your PATH points at the installation.',
         '3. Run `rustup default stable`.',
         `4. Run \`rustup target add ${wasmTarget}\`.`,

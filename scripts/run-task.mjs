@@ -27,20 +27,25 @@ const predefinedCommands = {
   nextjs: [['pnpm', ['run', '--filter=nextjs-playground', 'dev']]],
 }
 
+if (!task || !predefinedCommands[task]) {
+  console.error(`Unknown task: ${task ?? '(missing)'}`)
+  process.exit(1)
+}
+
 let commands = predefinedCommands[task]
 
 if (passthrough[0] === '--') {
+  if (!passthrough[1]) {
+    console.error('Missing command after `--`.')
+    process.exit(1)
+  }
+
   commands = [[passthrough[1], passthrough.slice(2)]]
 } else if (commands && passthrough.length > 0) {
   commands = commands.map((entry, index) => {
     if (index !== commands.length - 1) return entry
     return [entry[0], [...entry[1], ...passthrough]]
   })
-}
-
-if (!task || !commands) {
-  console.error(`Unknown task: ${task ?? '(missing)'}`)
-  process.exit(1)
 }
 
 let preflight = spawnSync(process.execPath, [path.join(root, 'scripts', 'preflight.mjs'), task], {

@@ -20,12 +20,6 @@ export const rustEnv = {
   ...(cargoHome ? { CARGO_HOME: cargoHome } : {}),
   ...(rustupHome ? { RUSTUP_HOME: rustupHome } : {}),
   PATH: mergedPath,
-  ...(isWindows
-    ? {
-        RUSTUP_TOOLCHAIN:
-          process.env.RUSTUP_TOOLCHAIN ?? 'stable-x86_64-pc-windows-msvc',
-      }
-    : {}),
 }
 
 export function commandExists(command, { cwd = process.cwd() } = {}) {
@@ -55,6 +49,6 @@ export function readInstalledRustTargets({ cwd = process.cwd() } = {}) {
   return new Set(result.stdout.split(/\r?\n/).filter(Boolean))
 }
 
-export function hasDefaultCargoBin() {
+export function hasDetectedCargoBin() {
   return Boolean(cargoBin) && fs.existsSync(cargoBin)
 }
