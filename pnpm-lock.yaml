@@ -219,8 +219,8 @@ importers:
         specifier: workspace:*
         version: link:../../crates/node
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       mri:
         specifier: ^1.2.0
         version: 1.2.0
