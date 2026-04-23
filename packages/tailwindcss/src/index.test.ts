@@ -604,11 +604,11 @@ describe('@apply', () => {
         }
 
         .foo {
-          @apply hocus:hover:pocus:bg-red-500;
+          @apply hocus:hover:pocus:mocus:bg-red-500;
         }
       `),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `[Error: Cannot apply utility class \`hocus:hover:pocus:bg-red-500\` because the \`hocus\` and \`pocus\` variants do not exist.]`,
+      `[Error: Cannot apply utility class \`hocus:hover:pocus:mocus:bg-red-500\` because the \`pocus\` and \`mocus\` variants do not exist.]`,
     )
   })
 

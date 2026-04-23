@@ -714,6 +714,14 @@ export function createVariants(theme: Theme): Variants {
   variants.static('hover', (r) => {
     r.nodes = [styleRule('&:hover', [atRule('@media', '(hover: hover)', r.nodes)])]
   })
+  variants.static('hocus', (r) => {
+    let nodes = r.nodes
+
+    r.nodes = [
+      styleRule('&:focus', nodes),
+      styleRule('&:hover', [atRule('@media', '(hover: hover)', nodes)]),
+    ]
+  })
   staticVariant('focus', ['&:focus'])
   staticVariant('focus-visible', ['&:focus-visible'])
   staticVariant('active', ['&:active'])

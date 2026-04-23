@@ -451,6 +451,41 @@ test('hover', async () => {
   expect(await run(['hover/foo:flex'])).toEqual('')
 })
 
+test('hocus', async () => {
+  expect(await run(['hocus:flex', 'group-hocus:flex', 'peer-hocus:flex'])).toMatchInlineSnapshot(`
+    ".group-hocus\\:flex:is(:where(.group):focus *) {
+      display: flex;
+    }
+
+    @media (hover: hover) {
+      .group-hocus\\:flex:is(:where(.group):hover *) {
+        display: flex;
+      }
+    }
+
+    .peer-hocus\\:flex:is(:where(.peer):focus ~ *) {
+      display: flex;
+    }
+
+    @media (hover: hover) {
+      .peer-hocus\\:flex:is(:where(.peer):hover ~ *) {
+        display: flex;
+      }
+    }
+
+    .hocus\\:flex:focus {
+      display: flex;
+    }
+
+    @media (hover: hover) {
+      .hocus\\:flex:hover {
+        display: flex;
+      }
+    }"
+  `)
+  expect(await run(['hocus/foo:flex'])).toEqual('')
+})
+
 test('focus', async () => {
   expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
     ".group-focus\\:flex:is(:where(.group):focus *), .peer-focus\\:flex:is(:where(.peer):focus ~ *), .focus\\:flex:focus {
