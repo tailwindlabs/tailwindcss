@@ -478,8 +478,8 @@ importers:
         specifier: 'catalog:'
         version: 22.19.17
       dedent:
-        specifier: 1.7.1
-        version: 1.7.1
+        specifier: 1.7.2
+        version: 1.7.2
       lightningcss:
         specifier: 'catalog:'
         version: 1.32.0(patch_hash=mz3chiqe2jbihxa25xumd4ogum)
