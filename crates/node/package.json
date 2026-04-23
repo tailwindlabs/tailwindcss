@@ -50,12 +50,12 @@
   },
   "scripts": {
     "build": "pnpm run build:platform && pnpm run build:wasm",
-    "build:platform": "napi build --platform --release",
+    "build:platform": "node ../../scripts/run-task.mjs build -- napi build --platform --release",
     "postbuild:platform": "node ./scripts/move-artifacts.mjs",
-    "build:wasm": "napi build --release --target wasm32-wasip1-threads",
+    "build:wasm": "node ../../scripts/run-task.mjs build -- napi build --release --target wasm32-wasip1-threads",
     "postbuild:wasm": "node ./scripts/move-artifacts.mjs",
     "dev": "cargo watch --quiet --shell 'npm run build'",
-    "build:debug": "napi build --platform",
+    "build:debug": "node ../../scripts/run-task.mjs build -- napi build --platform",
     "version": "napi version"
   },
   "optionalDependencies": {
