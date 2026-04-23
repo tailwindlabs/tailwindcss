@@ -237,8 +237,8 @@ importers:
         specifier: ^2.3.5
         version: 2.3.5
       enhanced-resolve:
-        specifier: ^5.19.0
-        version: 5.19.0
+        specifier: ^5.20.1
+        version: 5.20.1
       jiti:
         specifier: ^2.6.1
         version: 2.6.1
