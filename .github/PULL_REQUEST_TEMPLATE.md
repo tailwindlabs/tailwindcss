@@ -8,7 +8,7 @@ It's never a fun experience to have your pull request declined after investing a
 
 For more info, check out the contributing guide:
 
-https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md
+./CONTRIBUTING.md
 
 -->
 
@@ -17,6 +17,16 @@ https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md
 <!--
 
 Provide a summary of the issue and the changes you're making. How does your change solve the problem?
+If relevant, mention which package or layer owns the behavior (`tailwindcss`, `@tailwindcss/node`, adapter package, or oxide).
+
+-->
+
+## Impacted areas
+
+<!--
+
+List the packages, integrations, or workflows you intentionally changed.
+If something looks related but was deliberately left alone, call that out too.
 
 -->
 
