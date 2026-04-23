@@ -57,7 +57,7 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "tsup": "^8.5.1",
     "turbo": "^2.9.6",
-    "typescript": "^6.0.3",
+    "typescript": "^5.9.3",
     "vitest": "^4.1.5"
   },
   "packageManager": "pnpm@9.6.0",
