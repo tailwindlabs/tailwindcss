@@ -28,13 +28,14 @@ Run commands from the repository root.
 ```sh
 corepack enable
 pnpm install
-
-rustup default stable
-rustup target add wasm32-wasip1-threads
+rustup toolchain install 1.85.0
+rustup target add wasm32-wasip1-threads --toolchain 1.85.0
 
 pnpm run check:env
 pnpm build
 ```
+
+The repository selects Rust 1.85.0 via [rust-toolchain.toml](../rust-toolchain.toml), so contributors do not need to change their global Rust default.
 
 If you do not use Corepack, install pnpm manually:
 

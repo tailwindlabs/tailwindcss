@@ -29,9 +29,11 @@ npm install -g pnpm@9.6.0
 Confirm the repository toolchain and target are installed:
 
 ```sh
-rustup default stable
-rustup target add wasm32-wasip1-threads
+rustup toolchain install 1.85.0
+rustup target add wasm32-wasip1-threads --toolchain 1.85.0
 ```
+
+The repository uses [../rust-toolchain.toml](../rust-toolchain.toml) to select Rust 1.85.0 locally, so you should not need to change your global Rust default to recover from setup issues.
 
 If the failure is inside the scanner or N-API binding, rerun `cargo test` before the full workspace build so you can isolate the Rust error earlier.
 

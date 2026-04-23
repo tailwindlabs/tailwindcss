@@ -24,10 +24,12 @@ From the repository root:
 ```sh
 corepack enable
 pnpm install
-rustup default stable
-rustup target add wasm32-wasip1-threads
+rustup toolchain install 1.85.0
+rustup target add wasm32-wasip1-threads --toolchain 1.85.0
 pnpm build
 ```
+
+The repository selects Rust 1.85.0 via [../rust-toolchain.toml](../rust-toolchain.toml), so there is no need to change your global Rust default before building.
 
 Optional tools:
 

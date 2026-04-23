@@ -51,12 +51,14 @@ Run commands from the repository root:
 ```sh
 corepack enable
 pnpm install
-rustup default stable
-rustup target add wasm32-wasip1-threads
+rustup toolchain install 1.85.0
+rustup target add wasm32-wasip1-threads --toolchain 1.85.0
 pnpm run check:env
 pnpm build
 pnpm test
 ```
+
+The repository pins Rust 1.85.0 in [rust-toolchain.toml](rust-toolchain.toml), so you do not need to change your global Rust default.
 
 If your shell cannot see Rust yet, run `pnpm run check:env` before the full build. That is a fast preflight for Cargo, Rustup, and the required WASM target.
 
