@@ -380,7 +380,7 @@ importers:
         specifier: ^16.2.0
         version: 16.2.0
       jiti:
-        specifier: ^2.0.0-beta.3
+        specifier: ^2.6.1
         version: 2.6.1
       mri:
         specifier: ^1.2.0
