@@ -537,7 +537,11 @@ class Root {
     if (
       !(
         this.compiler.features &
-        (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
+        (Features.AtApply |
+          Features.JsPluginCompat |
+          Features.ThemeFunction |
+          Features.Utilities |
+          Features.Variants)
       )
     ) {
       return false
