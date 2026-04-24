@@ -513,6 +513,148 @@ test(
   },
 )
 
+test(
+  'resolve relative CSS files correctly',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body></body>
+        </html>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+        @import './themes/glow.css';
+      `,
+      // References a file in the current folder, which names happens to match a
+      // file in the parent folder as well.
+      'src/themes/glow.css': css`@import './entry.css';`,
+      'src/themes/entry.css': css`
+        .do-include-me {
+          color: green;
+        }
+      `,
+
+      // Never rerefenced, so should not be included
+      'src/entry.css': css`
+        .do-not-include-me {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('pnpm vite build')
+
+    expect((await fs.dumpFiles('./dist/**/*.css')).replace(/-([a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+      "
+      --- ./dist/assets/index-<hash>.css ---
+      .do-include-me {
+        color: green;
+      }
+      "
+    `)
+  },
+)
+
+test(
+  'resolve relative JS files correctly',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body></body>
+        </html>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+        @import './themes/glow.css';
+      `,
+      // References a file in the current folder, which names happens to match a
+      // file in the parent folder as well.
+      'src/themes/glow.css': css`@plugin "./my-plugin.js";`,
+      'src/themes/my-plugin.js': ts`
+        export default function ({ addBase }) {
+          addBase({ '.do-include-me': { color: 'green' } })
+        }
+      `,
+
+      // Never rerefenced, so should not be included
+      'src/my-plugin.js': css`
+        export default function ({ addBase }) {
+          addBase({ '.do-not-include-me': { 'color': 'red' } })
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('pnpm vite build')
+
+    expect((await fs.dumpFiles('./dist/**/*.css')).replace(/-([a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+        "
+        --- ./dist/assets/index-<hash>.css ---
+        @layer base {
+          .do-include-me {
+            color: green;
+          }
+        }
+        "
+      `)
+  },
+)
+
 describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   test(
     'resolves aliases in production build',
