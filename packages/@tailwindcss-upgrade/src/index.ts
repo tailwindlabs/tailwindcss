@@ -367,7 +367,9 @@ async function run() {
                   break
                 }
 
-                parent = path.dirname(parent)
+                let nextParent = path.dirname(parent)
+                if (nextParent === parent) break
+                parent = nextParent
               } while (parent)
 
               if (ignoredPaths.has(culprit)) continue // Already logged, skip
