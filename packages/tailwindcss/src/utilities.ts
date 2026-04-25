@@ -2209,6 +2209,37 @@ export function createUtilities(theme: Theme) {
   staticUtility('scroll-auto', [['scroll-behavior', 'auto']])
   staticUtility('scroll-smooth', [['scroll-behavior', 'smooth']])
 
+  staticUtility('scrollbar-auto', [['scrollbar-width', 'auto']])
+  staticUtility('scrollbar-thin', [['scrollbar-width', 'thin']])
+  staticUtility('scrollbar-none', [['scrollbar-width', 'none']])
+
+  {
+    let scrollbarColorProperties = () => {
+      return atRoot([
+        property('--tw-scrollbar-thumb', '#0000', '<color>'),
+        property('--tw-scrollbar-track', '#0000', '<color>'),
+      ])
+    }
+
+    colorUtility('scrollbar-thumb', {
+      themeKeys: ['--scrollbar-thumb-color', '--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-thumb', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+
+    colorUtility('scrollbar-track', {
+      themeKeys: ['--scrollbar-track-color', '--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-track', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+  }
+
   staticUtility('truncate', [
     ['overflow', 'hidden'],
     ['text-overflow', 'ellipsis'],
