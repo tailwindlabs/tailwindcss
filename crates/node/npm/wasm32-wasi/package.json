@@ -27,7 +27,7 @@
   },
   "browser": "tailwindcss-oxide.wasi-browser.js",
   "dependencies": {
-    "@napi-rs/wasm-runtime": "^1.1.1",
+    "@napi-rs/wasm-runtime": "^1.1.4",
     "@emnapi/core": "^1.8.1",
     "@emnapi/runtime": "^1.8.1",
     "@tybys/wasm-util": "^0.10.1",
