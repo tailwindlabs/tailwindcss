@@ -140,6 +140,22 @@ describe('processing without specifying a base path', () => {
   })
 })
 
+test('processing input without a `from` option falls back to the plugin `base`', async () => {
+  // PostCSS may invoke plugins without `result.opts.from` (some bundlers,
+  // including Turbopack, do this for certain CSS inputs). When that happens
+  // `path.dirname(path.resolve(''))` yields the *parent* of CWD, which made
+  // `@import 'tailwindcss'` resolution walk above the project root and fail
+  // with "Can't resolve 'tailwindcss' in '<parent of CWD>'". The fallback
+  // should be the plugin-level `base` (which itself defaults to CWD).
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(`@import 'tailwindcss'`)
+
+  expect(result.css.length).toBeGreaterThan(0)
+})
+
 describe('plugins', () => {
   test('local CJS plugin', async () => {
     let processor = postcss([

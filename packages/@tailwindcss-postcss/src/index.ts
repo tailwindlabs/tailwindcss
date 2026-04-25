@@ -115,7 +115,16 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           let context = getContextFromCache(postcss, inputFile, opts)
-          let inputBasePath = path.dirname(path.resolve(inputFile))
+          // When PostCSS is invoked without `from` (some bundlers, including
+          // Turbopack, do this for certain inputs), `inputFile` is `''`.
+          // `path.resolve('')` returns `process.cwd()`, so `path.dirname(...)`
+          // would fall back to the *parent* of CWD — wrong, and breaks
+          // `@import 'tailwindcss'` resolution against the project's
+          // `node_modules`. Fall back to the plugin-level `base` (which
+          // already defaults to `process.cwd()` and respects `opts.base`).
+          let inputBasePath = inputFile
+            ? path.dirname(path.resolve(inputFile))
+            : base
 
           // Whether this is the first build or not, if it is, then we can
           // optimize the build by not creating the compiler until we need it.
