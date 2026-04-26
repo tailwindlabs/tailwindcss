@@ -3,8 +3,8 @@ import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
+import type { ValueFunctionNode } from './value-parser'
 import * as ValueParser from './value-parser'
-import { ValueFunctionNode } from './value-parser'
 import { walk, WalkAction } from './walk'
 
 const COLON = 0x3a
