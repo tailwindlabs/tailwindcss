@@ -122,9 +122,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // `@import 'tailwindcss'` resolution against the project's
           // `node_modules`. Fall back to the plugin-level `base` (which
           // already defaults to `process.cwd()` and respects `opts.base`).
-          let inputBasePath = inputFile
-            ? path.dirname(path.resolve(inputFile))
-            : base
+          let inputBasePath = inputFile ? path.dirname(path.resolve(inputFile)) : base
 
           // Whether this is the first build or not, if it is, then we can
           // optimize the build by not creating the compiler until we need it.
