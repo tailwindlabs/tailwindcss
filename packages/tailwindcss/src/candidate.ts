@@ -1035,25 +1035,50 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
   let drop = new Set<ValueParser.ValueAstNode>()
 
+  let symbols = new Set([
+    // Selectors
+    '~', // Subsequent sibling combinator
+    '>', // Child combinator
+
+    // Math operators
+    '+', // or next sibling combinator
+    '-',
+    '*', // or universal selector
+    '/',
+  ])
   walk(ast, (node, ctx) => {
     let parentArray = ctx.parent === null ? ast : (ctx.parent.nodes ?? [])
 
     // Handle operators (e.g.: inside of `calc(…)`)
-    if (
-      node.kind === 'word' &&
-      // Operators
-      (node.value === '+' || node.value === '-' || node.value === '*' || node.value === '/')
-    ) {
+    if (node.kind === 'word' && symbols.has(node.value)) {
       let idx = parentArray.indexOf(node) ?? -1
 
       // This should not be possible
       if (idx === -1) return
 
+      // a + b
+      //   ^ node
+      //  ^ previous (whitespace)
       let previous = parentArray[idx - 1]
       if (previous?.kind !== 'separator' || previous.value !== ' ') return
 
+      // a + b
+      //   ^ node
+      //    ^ next (whitespace)
       let next = parentArray[idx + 1]
       if (next?.kind !== 'separator' || next.value !== ' ') return
+
+      // a + b
+      //   ^ node
+      // ^ previous (node)
+      let previousPrevious = parentArray[idx - 2]
+      if (previousPrevious && symbols.has(previousPrevious.value)) return
+
+      // a + b
+      //   ^ node
+      //     ^ next (node)
+      let nextNext = parentArray[idx + 2]
+      if (nextNext && symbols.has(nextNext.value)) return
 
       drop.add(previous)
       drop.add(next)
