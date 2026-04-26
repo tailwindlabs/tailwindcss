@@ -1186,6 +1186,17 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       expected,
     )
   })
+
+  test.each([
+    // Keep whitespace characters that are significant
+    ['[&:has(~_*_*:checked)]:flex', '[&:has(~_*_*:checked)]:flex'],
+  ])(testName, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
+  })
 })
 
 describe('theme to var', () => {
