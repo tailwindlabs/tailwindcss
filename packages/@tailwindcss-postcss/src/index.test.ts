@@ -140,6 +140,16 @@ describe('processing without specifying a base path', () => {
   })
 })
 
+test('fallback to `base` directory when `result.opts.from` is not provided', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(`@import 'tailwindcss'`)
+
+  expect(result.css.length).toBeGreaterThan(0)
+})
+
 describe('plugins', () => {
   test('local CJS plugin', async () => {
     let processor = postcss([
