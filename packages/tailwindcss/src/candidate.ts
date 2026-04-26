@@ -4,6 +4,7 @@ import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
+import { ValueFunctionNode } from './value-parser'
 import { walk, WalkAction } from './walk'
 
 const COLON = 0x3a
@@ -1095,6 +1096,41 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
     // E.g.: `min(1px , 2px)` -> `min(1px,2px)`
     else if (node.kind === 'separator' && node.value.trim() === ',') {
       node.value = ','
+    }
+
+    // Wrap custom functions starting with `--`, in parentheses if preceeded by
+    // a symbol. E.g.: `calc(100%---spacing(2))` → `calc(100%-(--spacing(2)))`
+    else if (node.kind === 'function' && node.value.startsWith('--')) {
+      let idx = parentArray.indexOf(node) ?? -1
+
+      // When it's the first argument, then we don't have to wrap it in `(…)`
+      //
+      // E.g.: `--spacing(…)`, no need to wrap
+      //       `calc(100%---spacing(…))`, we want to wrap
+      //
+      if (idx <= 0) return
+
+      // When it's not the first argument, we likely want to wrap it. However,
+      // when it's separated by a `,` then it's readable enough.
+      //
+      // E.g.: `min(100%,--spacing(2))` is readable, in fact
+      //       `min(100%,(--spacing(2)))` would make it worse
+      let previous = parentArray[idx - 1]
+      if (previous?.kind === 'separator' && previous.value === ',') return
+
+      // When it's part of a bigger list, aka no special symbols were used, then
+      // we don't have to wrap it either.
+      //
+      // E.g.: `shadow-[inset_0px_1px_--theme(--color-white/15%)]`, wrapping would look unnecessary:
+      //       `shadow-[inset_0px_1px_(--theme(--color-white/15%))]`
+      let previousPrevious = parentArray[idx - 2]
+      if (previousPrevious && !symbols.has(previousPrevious.value)) return
+
+      return WalkAction.ReplaceSkip({
+        kind: 'function',
+        value: '', // Unnamed, so will result in `(…)`
+        nodes: [node],
+      } satisfies ValueFunctionNode)
     }
   })
 
