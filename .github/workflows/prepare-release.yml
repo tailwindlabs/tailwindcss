@@ -57,15 +57,15 @@ jobs:
             build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            strip: llvm-strip
+            strip: aarch64-linux-gnu-strip
             build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            strip: llvm-strip
+            strip: arm-linux-gnueabihf-strip
             build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            strip: llvm-strip
+            strip-zig: true
             build-flags: -x
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
@@ -92,6 +92,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
+
+      - name: Install binutils-aarch64-linux-gnu
+        if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install binutils-aarch64-linux-gnu -y
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
@@ -149,8 +155,20 @@ jobs:
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
 
       - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
-        if: ${{ matrix.strip }}
-        run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
+        if: ${{ matrix.strip || matrix.strip-zig }}
+        env:
+          STRIP_COMMAND: ${{ matrix.strip }}
+          STRIP_ZIG: ${{ matrix.strip-zig }}
+        run: |
+          if [ "$STRIP_ZIG" = "true" ]; then
+            for file in ${{ env.OXIDE_LOCATION }}/*.node; do
+              zig objcopy --strip-all "$file" "$file.stripped"
+              mv "$file.stripped" "$file"
+            done
+            exit 0
+          fi
+
+          eval "$STRIP_COMMAND ${{ env.OXIDE_LOCATION }}/*.node"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
