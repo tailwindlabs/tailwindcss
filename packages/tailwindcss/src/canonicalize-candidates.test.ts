@@ -1186,6 +1186,30 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       expected,
     )
   })
+
+  test.each([
+    // Keep whitespace characters that are significant
+    ['[&:has(~_*_*:checked)]:flex', '[&:has(~_*_*:checked)]:flex'],
+    [
+      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
+      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
+    ],
+
+    // Improve readability when whitespace was used for readability
+    ['w-[calc(100%_-_calc(var(--spacing)*60))]', 'w-[calc(100%-(--spacing(60)))]'],
+    ['w-[calc(100%_-_--spacing(60))]', 'w-[calc(100%-(--spacing(60)))]'],
+
+    // No need to to wrap in `(…)` after a `,`
+    ['m-[min(100%,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+    ['m-[min(100%_,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+    ['m-[min(100%,--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+  ])(testName, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
+  })
 })
 
 describe('theme to var', () => {
