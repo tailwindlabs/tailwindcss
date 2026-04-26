@@ -2,6 +2,12 @@ name: Prepare Release
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Skip creating the draft GitHub release
+        required: false
+        default: true
+        type: boolean
   push:
     tags:
       - 'v*'
@@ -319,6 +325,7 @@ jobs:
           path: dist/*.tgz
 
       - name: Prepare GitHub Release
+        if: ${{ !inputs.dry_run }}
         uses: softprops/action-gh-release@v2
         with:
           draft: true
