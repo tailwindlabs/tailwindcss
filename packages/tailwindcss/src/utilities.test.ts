@@ -11012,8 +11012,7 @@ test('scroll-behavior', async () => {
 })
 
 test('scrollbar-width', async () => {
-  expect(await run(['scrollbar-auto', 'scrollbar-thin', 'scrollbar-none']))
-    .toMatchInlineSnapshot(`
+  expect(await run(['scrollbar-auto', 'scrollbar-thin', 'scrollbar-none'])).toMatchInlineSnapshot(`
       ".scrollbar-auto {
         scrollbar-width: auto;
       }
