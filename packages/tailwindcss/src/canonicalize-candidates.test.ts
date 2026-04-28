@@ -1210,6 +1210,19 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     await expectCanonicalization(input, candidate, expected)
   })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1573
+  test.each([
+    ['-mt-[0.04in]', 'mt-[-0.04in]'],
+    ['mt-[-0.04in]', 'mt-[-0.04in]'],
+    ['-mt-[-0.04in]', 'mt-[0.04in]'],
+  ])(testName, { timeout }, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
+  })
 })
 
 describe('theme to var', () => {

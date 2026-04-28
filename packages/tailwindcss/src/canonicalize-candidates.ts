@@ -2117,7 +2117,7 @@ function optimizeArbitraryValueExpressions(
 
   // Start by constant folding the value expression, when dealing with `calc(…)`
   if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
-    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst)
+    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst, null, false)
     if (folded) {
       let replacement = cloneCandidate(candidate)
       replacement.value!.value = ValueParser.toCss(foldedValueAst)
@@ -2139,7 +2139,7 @@ function optimizeArbitraryValueExpressions(
     // Move `* -1` inside, and try to constant fold to see if it's even worth
     // updating the candidate or not.
     let expressionAst = ValueParser.parse(`calc(${candidate.value!.value} * -1)`)
-    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst)
+    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst, null, false)
     if (folded) {
       let replacement = cloneCandidate(candidate)
 
