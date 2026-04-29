@@ -29979,4 +29979,38 @@ describe('custom utilities', () => {
       }"
     `)
   })
+
+  test('multiple @utility definitions with the same name but different value types', async () => {
+    let input = css`
+      @theme {
+        --color-red-500: #ef4444;
+        --spacing: 0.25rem;
+      }
+
+      @utility foo-* {
+        color: --value(--color-*);
+      }
+
+      @utility foo-* {
+        font-size: --spacing(--value(number));
+      }
+
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input, ['foo-red-500', 'foo-123'])).toMatchInlineSnapshot(`
+      ":root, :host {
+        --color-red-500: #ef4444;
+        --spacing: .25rem;
+      }
+
+      .foo-123 {
+        font-size: calc(var(--spacing) * 123);
+      }
+
+      .foo-red-500 {
+        color: var(--color-red-500);
+      }"
+    `)
+  })
 })
