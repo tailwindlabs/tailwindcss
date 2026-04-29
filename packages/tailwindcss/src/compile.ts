@@ -288,11 +288,16 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
     if (compiledNodes === null) {
-      // For typed plugin utilities (matchUtilities with explicit types),
-      // null means the value was invalid for this type - stop trying.
-      // For CSS @utility definitions (no types), null means the value
-      // didn't match this handler - try the next one.
+      // `null` means that the result is invalid and that this plugin should not
+      // result in any CSS, but that doesn't mean that subsequent plugins are
+      // invalid as well.
+      //
+      // However, for backwards compatibility with `matchUtilities` this means
+      // that we do need to bail entirely: plugins that handle a specific
+      // arbitrary value type prevent falling through to other plugins if the
+      // result is invalid for that plugin
       if (utility.options?.types?.length) return asts
+
       continue
     }
     asts.push(compiledNodes)
@@ -307,7 +312,16 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
     if (compiledNodes === null) {
+      // `null` means that the result is invalid and that this plugin should not
+      // result in any CSS, but that doesn't mean that subsequent plugins are
+      // invalid as well.
+      //
+      // However, for backwards compatibility with `matchUtilities` this means
+      // that we do need to bail entirely: plugins that handle a specific
+      // arbitrary value type prevent falling through to other plugins if the
+      // result is invalid for that plugin
       if (utility.options?.types?.length) return asts
+
       continue
     }
     asts.push(compiledNodes)
