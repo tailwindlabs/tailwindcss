@@ -1796,6 +1796,28 @@ function modernizeArbitraryValuesVariant(
         continue
       }
 
+      // `[&:has(…)]` can be replaced with `has-[…]`
+      if (
+        // Only top-level, so `group-[&:has(…)]` is not covered
+
+        parent === null &&
+        // [&:has(…)]:flex
+        //  ^ ^^^^^^
+        ast.length === 2 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value === '&' &&
+        ast[1].kind === 'function' &&
+        ast[1].value === ':has' &&
+        ast[1].nodes.length === 1 &&
+        ast[1].nodes[0].kind === 'selector'
+      ) {
+        replaceObject(
+          variant,
+          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[1].nodes)}]`),
+        )
+        continue
+      }
+
       // `in-*` variant. If the selector ends with ` &`, we can convert it to an
       // `in-*` variant.
       //
