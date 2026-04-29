@@ -33,6 +33,44 @@ export type PluginOptions = {
   optimize?: boolean | { minify?: boolean }
 }
 
+function createCustomResolver(
+  resolvers: ((id: string, importer: string) => Promise<string | undefined>)[],
+  filter = (_path: string) => true,
+) {
+  return async (id: string, base: string) => {
+    // The resolver expects an `importer` file. We don't really know where the
+    // current `id` was imported from, but Vite will essentially do a
+    // `path.dirname(importer)` so it doesn't really matter.
+    //
+    // It does matter that this is a file, otherwise we would go up a directory,
+    // which means that we would be resolving files from a parent folder first,
+    // instead of the current folder we are in.
+    let importer = path.resolve(base, '__placeholder__.css')
+
+    for (let resolver of resolvers) {
+      let resolved = await resolver(id, importer)
+
+      // If we didn't resolve, we don't have to bail immediately, but we can try
+      // the next resolver
+      if (!resolved) continue
+
+      if (resolved === id) continue
+
+      // Looks like a relative file, let's resolve it to an absolute path
+      if (resolved[0] === '.') resolved = path.resolve(base, resolved)
+
+      // Must adhere to additional filters (e.g.: must be a .css file)
+      if (!filter(resolved)) continue
+
+      // If it's not an absolute path, then we don't really know how to read
+      // the file from disk.
+      if (!path.isAbsolute(resolved)) continue
+
+      return resolved
+    }
+  }
+}
+
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
@@ -62,12 +100,20 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = config!.createResolver(config!.resolve)
 
-      customCssResolver = async (id: string, base: string) => {
-        let resolved = await cssResolver(id, base, false, isSSR)
-        if (resolved && !resolved.endsWith('.css')) return undefined
-        return resolved
-      }
-      customJsResolver = (id: string, base: string) => jsResolver(id, base, false, isSSR)
+      customCssResolver = createCustomResolver(
+        [
+          (id, importer) => cssResolver(id, importer, true, isSSR),
+          (id, importer) => cssResolver(id, importer, false, isSSR),
+        ],
+        (path) => path.endsWith('.css'),
+      )
+      customJsResolver = createCustomResolver(
+        [
+          (id, importer) => jsResolver(id, importer, true, isSSR),
+          (id, importer) => jsResolver(id, importer, false, isSSR),
+        ],
+        (path) => !path.endsWith('.css'),
+      )
     } else {
       type ResolveIdFn = (
         environment: Environment,
@@ -109,12 +155,20 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       let jsResolver = createBackCompatIdResolver(env.config, env.config.resolve)
 
-      customCssResolver = async (id: string, base: string) => {
-        let resolved = await cssResolver(env, id, base, false)
-        if (resolved && !resolved.endsWith('.css')) return undefined
-        return resolved
-      }
-      customJsResolver = (id: string, base: string) => jsResolver(env, id, base, false)
+      customCssResolver = createCustomResolver(
+        [
+          (id, importer) => cssResolver(env, id, importer, true),
+          (id, importer) => cssResolver(env, id, importer, false),
+        ],
+        (path) => path.endsWith('.css'),
+      )
+      customJsResolver = createCustomResolver(
+        [
+          (id, importer) => jsResolver(env, id, importer, true),
+          (id, importer) => jsResolver(env, id, importer, false),
+        ],
+        (path) => !path.endsWith('.css'),
+      )
     }
 
     return new Root(
@@ -483,7 +537,11 @@ class Root {
     if (
       !(
         this.compiler.features &
-        (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
+        (Features.AtApply |
+          Features.JsPluginCompat |
+          Features.ThemeFunction |
+          Features.Utilities |
+          Features.Variants)
       )
     ) {
       return false

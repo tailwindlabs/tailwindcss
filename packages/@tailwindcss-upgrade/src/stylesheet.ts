@@ -265,23 +265,26 @@ export class Stylesheet {
     return false
   }
 
+  #compiler?: Promise<Awaited<ReturnType<typeof compileAst>> | null>
+  #designSystem?: Promise<Awaited<ReturnType<typeof __unstable__loadDesignSystem>> | null>
+
   async compiler(): Promise<Awaited<ReturnType<typeof compileAst>> | null> {
     if (!this.isTailwindRoot) return null
     if (!this.file) return null
 
-    return compileAst(postCssAstToCssAst(this.root), {
+    return (this.#compiler ??= compileAst(postCssAstToCssAst(this.root), {
       base: path.dirname(this.file),
       onDependency() {},
-    })
+    }))
   }
 
   async designSystem(): Promise<Awaited<ReturnType<typeof __unstable__loadDesignSystem>> | null> {
     if (!this.isTailwindRoot) return null
     if (!this.file) return null
 
-    return __unstable__loadDesignSystem(this.root.toString(), {
+    return (this.#designSystem ??= __unstable__loadDesignSystem(this.root.toString(), {
       base: path.dirname(this.file),
-    })
+    }))
   }
 
   [util.inspect.custom]() {

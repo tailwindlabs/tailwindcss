@@ -115,7 +115,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           let context = getContextFromCache(postcss, inputFile, opts)
-          let inputBasePath = path.dirname(path.resolve(inputFile))
+          let inputBasePath = inputFile ? path.dirname(path.resolve(inputFile)) : base
 
           // Whether this is the first build or not, if it is, then we can
           // optimize the build by not creating the compiler until we need it.

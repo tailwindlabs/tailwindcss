@@ -5,8 +5,12 @@ import { walk, WalkAction } from './walk'
 
 // Assumption: We already assume that we receive somewhat valid `calc()`
 // expressions. So we will see `calc(1 + 1)` and not `calc(1+1)`
-export function constantFoldDeclaration(input: string, rem: number | null = null): string {
-  let [folded, valueAst] = constantFoldDeclarationAst(ValueParser.parse(input), rem)
+export function constantFoldDeclaration(
+  input: string,
+  rem: number | null = null,
+  normalizeUnit = true,
+): string {
+  let [folded, valueAst] = constantFoldDeclarationAst(ValueParser.parse(input), rem, normalizeUnit)
 
   return folded ? ValueParser.toCss(valueAst) : input
 }
@@ -14,6 +18,7 @@ export function constantFoldDeclaration(input: string, rem: number | null = null
 export function constantFoldDeclarationAst(
   ast: ValueParser.ValueAstNode[],
   rem: number | null = null,
+  normalizeUnit = true,
 ): [folded: boolean, ast: ValueParser.ValueAstNode[]] {
   let folded = false
 
@@ -27,7 +32,7 @@ export function constantFoldDeclarationAst(
         valueNode.kind === 'word' &&
         valueNode.value !== '0' // Already `0`, nothing to do
       ) {
-        let canonical = canonicalizeDimension(valueNode.value, rem)
+        let canonical = canonicalizeDimension(valueNode.value, rem, normalizeUnit)
         if (canonical === null) return // Couldn't be canonicalized, nothing to do
         if (canonical === valueNode.value) return // Already in canonical form, nothing to do
 
@@ -256,7 +261,11 @@ export function constantFoldDeclarationAst(
   return [folded, ast]
 }
 
-function canonicalizeDimension(input: string, rem: number | null = null): string | null {
+function canonicalizeDimension(
+  input: string,
+  rem: number | null = null,
+  normalizeUnit = true,
+): string | null {
   let dimension = dimensions.get(input)
   if (dimension === null) return null // This shouldn't happen
 
@@ -265,6 +274,9 @@ function canonicalizeDimension(input: string, rem: number | null = null): string
 
   // Replace `0<length>` units with just `0`
   if (value === 0 && isLength(input)) return '0'
+
+  // Only normalize into base units when necessary
+  if (!normalizeUnit) return `${input}`
 
   // prettier-ignore
   switch (unit.toLowerCase()) {

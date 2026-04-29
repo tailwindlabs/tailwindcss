@@ -199,6 +199,13 @@ async function run() {
             }
           }
 
+          // Prime the compiler/designSystem cache against the pre-migration AST
+          // so the later template-migration phase sees the same v4 state. After
+          // this point, `sheet.root` may be mutated by `migrateStylesheet`.
+          if (!version.isMajor(3) && sheet.isTailwindRoot) {
+            await Promise.all([sheet.compiler(), sheet.designSystem()])
+          }
+
           await migrateStylesheet(sheet, {
             newPrefix: config?.newPrefix ?? null,
             designSystem: config?.designSystem ?? (await sheet.designSystem()),
@@ -367,7 +374,9 @@ async function run() {
                   break
                 }
 
-                parent = path.dirname(parent)
+                let nextParent = path.dirname(parent)
+                if (nextParent === parent) break
+                parent = nextParent
               } while (parent)
 
               if (ignoredPaths.has(culprit)) continue // Already logged, skip
