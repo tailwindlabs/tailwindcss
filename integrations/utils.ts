@@ -1,10 +1,11 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import { exec, spawn } from 'node:child_process'
+import { exec, execFile, spawn, type ChildProcess } from 'node:child_process'
 import fs from 'node:fs/promises'
+import { createServer } from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { stripVTControlCharacters } from 'node:util'
+import { promisify, stripVTControlCharacters } from 'node:util'
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
 import { createLineTable } from '../packages/tailwindcss/src/source-maps/line-table'
@@ -69,6 +70,8 @@ interface TestFlags {
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
 export const IS_WINDOWS = platform() === 'win32'
+
+const execFileAsync = promisify(execFile)
 
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
@@ -170,6 +173,7 @@ export function test(
           if (debug) console.log(`>& ${command}`)
           let child = spawn(command, {
             cwd,
+            detached: !IS_WINDOWS,
             shell: true,
             ...childProcessOptions,
             env: {
@@ -178,19 +182,22 @@ export function test(
             },
           })
 
-          function dispose() {
-            if (!child.kill()) {
-              child.kill('SIGKILL')
-            }
+          let disposed = false
 
-            let timer = setTimeout(
-              () =>
-                rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
-              ASSERTION_TIMEOUT,
+          async function dispose() {
+            if (disposed) return disposePromise
+            disposed = true
+
+            await killProcessTree(child)
+
+            let timer = setTimeout(() => {
+              forceKillProcessTree(child)
+              rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`))
+            }, ASSERTION_TIMEOUT)
+            disposePromise.then(
+              () => clearTimeout(timer),
+              () => clearTimeout(timer),
             )
-            disposePromise.finally(() => {
-              clearTimeout(timer)
-            })
             return disposePromise
           }
           disposables.push(dispose)
@@ -605,6 +612,65 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
     acc += css
     return acc
   }, '')
+}
+
+export async function getRandomPort() {
+  return new Promise<number>((resolve, reject) => {
+    let server = createServer()
+    server.unref()
+    server.on('error', reject)
+    server.listen(0, '127.0.0.1', () => {
+      let address = server.address()
+      server.close(() => {
+        if (address && typeof address === 'object') {
+          resolve(address.port)
+        } else {
+          reject(new Error('Unable to allocate random port'))
+        }
+      })
+    })
+  })
+}
+
+async function killProcessTree(child: ChildProcess) {
+  if (child.exitCode !== null || child.signalCode !== null || child.pid === undefined) {
+    return
+  }
+
+  if (IS_WINDOWS) {
+    await execFileAsync('taskkill', ['/pid', String(child.pid), '/T', '/F'], {
+      timeout: ASSERTION_TIMEOUT,
+      windowsHide: true,
+    }).catch(() => {})
+    return
+  }
+
+  try {
+    process.kill(-child.pid, 'SIGTERM')
+  } catch (error: any) {
+    if (error?.code !== 'ESRCH') {
+      child.kill()
+    }
+  }
+}
+
+function forceKillProcessTree(child: ChildProcess) {
+  if (child.exitCode !== null || child.signalCode !== null || child.pid === undefined) {
+    return
+  }
+
+  if (IS_WINDOWS) {
+    execFile('taskkill', ['/pid', String(child.pid), '/T', '/F'], { windowsHide: true }, () => {})
+    return
+  }
+
+  try {
+    process.kill(-child.pid, 'SIGKILL')
+  } catch (error: any) {
+    if (error?.code !== 'ESRCH') {
+      child.kill('SIGKILL')
+    }
+  }
 }
 
 async function gracefullyRemove(dir: string) {
