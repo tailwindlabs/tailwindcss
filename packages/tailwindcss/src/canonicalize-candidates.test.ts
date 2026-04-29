@@ -1022,6 +1022,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
 
       ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
+
+      // Arbitrary variant to compound + arbitrary variants
+      ['[&:has([role=checkbox])]:flex', 'has-[[role=checkbox]]:flex'],
+      ['[&:has([aria-visible="true"])]:flex', 'has-aria-visible:flex'],
+      ['[&:has([data-slot=description])]:flex', 'has-data-[slot=description]:flex'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
