@@ -50,7 +50,7 @@
   "devDependencies": {
     "@playwright/test": "^1.59.1",
     "@types/node": "catalog:",
-    "postcss": "8.5.10",
+    "postcss": "8.5.12",
     "postcss-import": "^16.1.1",
     "prettier": "catalog:",
     "prettier-plugin-embed": "^0.5.1",
@@ -60,11 +60,23 @@
     "typescript": "^5.9.3",
     "vitest": "^4.1.5"
   },
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
   "pnpm": {
     "patchedDependencies": {
-      "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch",
       "lightningcss@1.32.0": "patches/lightningcss@1.32.0.patch"
+    },
+    "overrides": {
+      "micromatch@<4.0.8": ">=4.0.8",
+      "brace-expansion@>=2.0.0 <=2.0.1": ">=2.0.2",
+      "glob@>=10.2.0 <10.5.0": ">=10.5.0",
+      "js-yaml@>=4.0.0 <4.1.1": ">=4.1.1",
+      "minimatch@>=9.0.0 <9.0.6": ">=9.0.6",
+      "minimatch@>=9.0.0 <9.0.7": ">=9.0.7",
+      "ajv@>=7.0.0-alpha.0 <8.18.0": ">=8.18.0",
+      "brace-expansion@>=2.0.0 <2.0.3": ">=2.0.3",
+      "picomatch@<2.3.2": ">=2.3.2",
+      "yaml@>=2.0.0 <2.8.3": ">=2.8.3",
+      "postcss@<8.5.10": ">=8.5.10"
     }
   }
 }
