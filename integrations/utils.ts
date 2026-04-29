@@ -65,6 +65,7 @@ interface TestFlags {
   only?: boolean
   skip?: boolean
   debug?: boolean
+  concurrent?: boolean
 }
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
@@ -85,7 +86,7 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, skip = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, debug = false, concurrent = false }: TestFlags = {},
 ) {
   return defaultTest(
     name,
@@ -94,7 +95,7 @@ export function test(
       retry: process.env.CI ? 2 : 0,
       only: only || (!process.env.CI && debug),
       skip,
-      concurrent: true,
+      concurrent,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -435,10 +436,17 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
-        await Promise.all(disposables.map((dispose) => dispose()))
+        let results = await Promise.allSettled(disposables.map((dispose) => dispose()))
 
         if (!debug) {
           await gracefullyRemove(root)
+        }
+
+        let errors = results.flatMap((result) =>
+          result.status === 'rejected' ? [result.reason] : [],
+        )
+        if (errors.length > 0) {
+          throw new AggregateError(errors, 'Failed to clean up spawned processes')
         }
       }
 
@@ -467,6 +475,9 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
 }
 test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { skip: true })
+}
+test.concurrent = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { concurrent: true })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
