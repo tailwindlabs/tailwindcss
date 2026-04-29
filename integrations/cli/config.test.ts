@@ -126,6 +126,72 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/19706
+test(
+  'Config files (TS, valid types)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          },
+          "devDependencies": {
+            "typescript": "^5.9.3"
+          }
+        }
+      `,
+      'tsconfig.json': json`
+        {
+          "compilerOptions": {
+            "target": "ES2022",
+            "module": "NodeNext",
+            "moduleResolution": "NodeNext",
+            "declaration": true,
+            "composite": true,
+            "outDir": "./.build",
+            "skipLibCheck": true
+          },
+          "include": ["tailwind.config.ts"]
+        }
+      `,
+      'index.html': html`
+        <div class="text-primary"></div>
+      `,
+      'tailwind.config.ts': ts`
+        import type { Config } from 'tailwindcss'
+
+        function defineConfig(config: Config): Config {
+          return config
+        }
+
+        export default defineConfig({
+          theme: {
+            extend: {
+              colors: {
+                primary: 'blue',
+              },
+            },
+          },
+        })
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.ts';
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    // We expect that these commands don't crash:
+    await exec('pnpm tsc -b')
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [candidate`text-primary`])
+  },
+)
+
 test(
   'Config files (CJS, watch mode)',
   {
