@@ -193,6 +193,42 @@ test('visualizes multiple sources', () => {
   `)
 })
 
+test('visualizes unmapped source ranges', () => {
+  expect(
+    visualizeSourceMapRanges(
+      {
+        // prettier-ignore
+        'input.css': css`.foo { color: red; }`,
+      },
+      css`
+        .foo {
+          color: red;
+        }
+      `,
+      [
+        {
+          original: {
+            source: 'input.css',
+            start: [1, 7],
+            end: [1, 17],
+          },
+          generated: null,
+        },
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+       output.css |    input.css
+                  | 
+       unmapped A | 1  .foo { color: red; }
+                  |           ^^^^^^^^^^ A @ 1:7-17
+    1  .foo {     | 
+    2    color... | 
+    3  }          | 
+    "
+  `)
+})
+
 test('visualizes source-map points as generated segments', () => {
   let generated = css`
     /*! foo
@@ -224,6 +260,27 @@ test('visualizes source-map points as generated segments', () => {
        ^^^^^^^ A @ 1:0-2:0 |    ^^^^^^^ A @ 1:0-2:0
     2   bar */             | 2   bar */
        ^^^^^^^ B @ 2:0-7   |    ^^^^^^^ B @ 2:0-7
+    "
+  `)
+})
+
+test('visualizes final source-map point through end of line', () => {
+  expect(
+    visualizeSourceMap(
+      sourceMap({
+        sources: {
+          'input.css': css`aaaa`,
+        },
+        mappings: [{ source: 'input.css', original: [1, 0], generated: [1, 0] }],
+      }),
+      css`aaaa`,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+       output.css       |    input.css
+                        | 
+    1  aaaa             | 1  aaaa
+       ^^^^ A @ 1:0-2:0 |    ^ A @ 1:0
     "
   `)
 })

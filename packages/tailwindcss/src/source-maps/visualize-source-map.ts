@@ -9,8 +9,12 @@ type Range = { start: [number, number]; end: [number, number] }
 
 interface Annotation {
   original: Range
-  generated: Range
+  generated: Range | null
   source: string
+}
+
+interface MappedAnnotation extends Annotation {
+  generated: Range
 }
 
 interface SourceMapPoint {
@@ -70,8 +74,6 @@ export function visualizeSourceMapRanges(
   let annotations: Annotation[] = []
 
   for (let range of ranges) {
-    if (range.generated === null) continue
-
     annotations.push({
       generated: range.generated,
       original: range.original,
@@ -98,26 +100,26 @@ function buildSourceContents(sources: string[], contents: (string | null)[]) {
 
 function buildAnnotationsFromSourceMapPoints(points: SourceMapPoint[]) {
   let annotations: Annotation[] = []
-  let current: Annotation | null = null
+  let current: MappedAnnotation | null = null
 
   function finish(next: SourceMapPoint | null) {
     if (current === null) return
 
-    if (
-      samePosition(current.generated.start, current.generated.end) &&
-      next !== null &&
-      next.generated[0] > current.generated.start[0]
-    ) {
-      current.generated.end = [current.generated.start[0] + 1, 0]
+    if (samePosition(current.generated.start, current.generated.end)) {
+      if (next === null) {
+        current.generated.end = [current.generated.start[0] + 1, 0]
+      } else if (next.generated[0] > current.generated.start[0]) {
+        current.generated.end = [current.generated.start[0] + 1, 0]
 
-      if (
-        next.source === current.source &&
-        next.generated[0] === current.generated.start[0] + 1 &&
-        next.generated[1] === 0 &&
-        next.original[0] === current.original.start[0] + 1 &&
-        next.original[1] === 0
-      ) {
-        current.original.end = next.original
+        if (
+          next.source === current.source &&
+          next.generated[0] === current.generated.start[0] + 1 &&
+          next.generated[1] === 0 &&
+          next.original[0] === current.original.start[0] + 1 &&
+          next.original[1] === 0
+        ) {
+          current.original.end = next.original
+        }
       }
     }
 
@@ -180,6 +182,11 @@ function renderVisualization(
       withLineNumber(generatedLineWidth, 'output.css').length,
       ...annotationsList.map((annotation, idx) => {
         let label = labels[idx]
+
+        if (annotation.generated === null) {
+          return withoutLineNumber(generatedLineWidth, `unmapped ${label}`).length
+        }
+
         let line = withLineNumber(
           generatedLineWidth,
           generatedLines[annotation.generated.start[0] - 1] ?? '',
@@ -225,6 +232,41 @@ function renderVisualization(
 
   for (let idx = 0; idx < annotationsList.length; idx++) {
     let annotation = annotationsList[idx]
+    let label = labels[idx]
+
+    if (annotation.generated === null) {
+      let source = visualizeSource(
+        sourceContents,
+        lastSourceLine,
+        renderedSources,
+        sourceLineWidth,
+        annotation.source,
+        annotation.original,
+        label,
+      )
+
+      if (sources.size > 1 && source.line !== '' && annotation.source !== lastSource) {
+        add(
+          withoutLineNumber(generatedLineWidth, ''),
+          withoutLineNumber(sourceLineWidth, `--- ${annotation.source} ---`),
+        )
+        lastSource = annotation.source
+      }
+
+      for (let line of source.before) {
+        add(withoutLineNumber(generatedLineWidth, ''), line)
+      }
+
+      add(withoutLineNumber(generatedLineWidth, `unmapped ${label}`), source.line)
+      add(withoutLineNumber(generatedLineWidth, ''), source.marker)
+
+      for (let line of source.after) {
+        add(withoutLineNumber(generatedLineWidth, ''), line)
+      }
+
+      continue
+    }
+
     let lineNumber = annotation.generated.start[0]
 
     for (let i = lastLine + 1; i < lineNumber; i++) {
@@ -234,7 +276,6 @@ function renderVisualization(
       )
     }
 
-    let label = labels[idx]
     let endLine = coveredEndLine(annotation.generated)
     let generatedAfter = visualizeGeneratedRangeContinuation(
       generatedLines,

@@ -807,14 +807,14 @@ test('license comments with new lines preserve source locations', async ({ expec
 
   expect(annotations).toMatchInlineSnapshot(`
     "
-       output.css            |    input.css
-                             | 
-    1  /*! some              | 1  /*! some 
-       ^ A @ 1:0             |    ^ A @ 1:0
-    1  /*! some              | 2   comment */
-       ^^^^^^^^^ B @ 1:0-2:0 |    ^ B @ 2:0
-    2   comment */           | 2   comment */
-                  ^ C @ 2:11 |               ^ C @ 2:11
+       output.css                |    input.css
+                                 | 
+    1  /*! some                  | 1  /*! some 
+       ^ A @ 1:0                 |    ^ A @ 1:0
+    1  /*! some                  | 2   comment */
+       ^^^^^^^^^ B @ 1:0-2:0     |    ^ B @ 2:0
+    2   comment */               | 2   comment */
+                  ^ C @ 2:11-3:0 |               ^ C @ 2:11
     "
   `)
 })
