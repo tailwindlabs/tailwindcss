@@ -677,6 +677,7 @@ test('@apply generates source maps', async ({ expect }) => {
         color: blue;
         @apply text-[#000] hover:text-[#f00];
         @apply underline;
+        @apply --my-mixin-1 --my-mixin-2();
         color: red;
       }
     `,
@@ -686,29 +687,31 @@ test('@apply generates source maps', async ({ expect }) => {
 
   expect(annotations).toMatchInlineSnapshot(`
     "
-        output.css                                   |    input.css
-                                                     | 
-     1  .foo {                                       | 1  .foo {
-        ^^^^^ A @ 1:0-5                              |    ^^^^^ A @ 1:0-5
-     2    color: blue;                               | 2    color: blue;
-          ^^^^^^^^^^^ B @ 2:2-13                     |      ^^^^^^^^^^^ B @ 2:2-13
-     3    color: #000;                               | 3    @apply text-[#000] hover:text-[#f00];
-          ^^^^^^^^^^^ C @ 3:2-13                     |             ^^^^^^^^^^^ C @ 3:9-20
-     4    &:hover {                                  | 3    @apply text-[#000] hover:text-[#f00];
-          ^^^^^^^^ D @ 4:2-10                        |                         ^^^^^^^^^^^^^^^^^ D @ 3:21-38
-     5      @media (hover: hover) {                  | 
-            ^^^^^^^^^^^^^^^^^^^^^^ D @ 5:4-26        | 
-     6        color: #f00;                           | 
-              ^^^^^^^^^^^ D @ 6:6-17                 | 
-     7      }                                        | 
-     8    }                                          | 
-     9    text-decoration-line: underline;           | 4    @apply underline;
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E @ 9:2-33 |             ^^^^^^^^^ E @ 4:9-18
-    10    color: red;                                | 5    color: red;
-          ^^^^^^^^^^ F @ 10:2-12                     |      ^^^^^^^^^^ F @ 5:2-12
-                                                     | 6  }
-    11  }                                            | 
-    12                                               | 
+        output.css                                       |    input.css
+                                                         | 
+     1  .foo {                                           | 1  .foo {
+        ^^^^^ A @ 1:0-5                                  |    ^^^^^ A @ 1:0-5
+     2    color: blue;                                   | 2    color: blue;
+          ^^^^^^^^^^^ B @ 2:2-13                         |      ^^^^^^^^^^^ B @ 2:2-13
+     3    color: #000;                                   | 3    @apply text-[#000] hover:text-[#f00];
+          ^^^^^^^^^^^ C @ 3:2-13                         |             ^^^^^^^^^^^ C @ 3:9-20
+     4    &:hover {                                      | 3    @apply text-[#000] hover:text-[#f00];
+          ^^^^^^^^ D @ 4:2-10                            |                         ^^^^^^^^^^^^^^^^^ D @ 3:21-38
+     5      @media (hover: hover) {                      | 
+            ^^^^^^^^^^^^^^^^^^^^^^ D @ 5:4-26            | 
+     6        color: #f00;                               | 
+              ^^^^^^^^^^^ D @ 6:6-17                     | 
+     7      }                                            | 
+     8    }                                              | 
+     9    text-decoration-line: underline;               | 4    @apply underline;
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E @ 9:2-33     |             ^^^^^^^^^ E @ 4:9-18
+    10    @apply --my-mixin-1 --my-mixin-2();            | 5    @apply --my-mixin-1 --my-mixin-2();
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 10:2-36 |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 5:2-36
+    11    color: red;                                    | 6    color: red;
+          ^^^^^^^^^^ G @ 11:2-12                         |      ^^^^^^^^^^ G @ 6:2-12
+                                                         | 7  }
+    12  }                                                | 
+    13                                                   | 
     "
   `)
 })
