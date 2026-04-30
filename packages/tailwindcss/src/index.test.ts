@@ -3888,10 +3888,10 @@ describe('@custom-variant', () => {
     [`@custom-variant foo_ (&);`],
     [`@custom-variant foo__ (&);`],
   ])('@custom-variant must have a valid name', (input) => {
-    return expect(compileCss(input)).rejects.toThrowError()
+    return expect(compileCss(input)).rejects.toThrow()
   })
 
-  test('@custom-variant must not container special characters', () => {
+  test('@custom-variant must not contain special characters', () => {
     return expect(
       compileCss(css`
         .foo {
@@ -6612,7 +6612,7 @@ describe('feature detection', () => {
   test('using `@reference`', async () => {
     let compiler = await compile(
       css`
-        @import 'tailwindcss/preflight';
+        @reference 'tailwindcss/preflight';
       `,
       { loadStylesheet: async (_, base) => ({ base, path: '', content: '' }) },
     )

@@ -1513,7 +1513,7 @@ test('blocklisted candidates cannot be used with `@apply`', async () => {
 })
 
 test('old theme values are merged with their renamed counterparts in the CSS theme', async () => {
-  let didCallPluginFn = vi.fn()
+  using didCallPluginFn = vi.fn()
 
   await compile(
     css`

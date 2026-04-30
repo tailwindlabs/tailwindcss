@@ -445,7 +445,7 @@ test('updates the base when loading modules inside nested files', async () => {
       base: '/root/foo',
       path: '',
     })
-  let loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
+  using loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
     (
@@ -500,7 +500,7 @@ test('emits the right base for @source found inside JS configs and plugins from 
       base: '/root/foo',
       path: '',
     })
-  let loadModule = vi.fn().mockImplementation((id: string) => {
+  using loadModule = vi.fn().mockImplementation((id: string) => {
     let base = id.includes('nested') ? '/root/foo' : '/root'
     if (id.includes('config')) {
       let glob = id.includes('nested') ? './nested-config/*.html' : './root-config/*.html'

@@ -388,7 +388,7 @@ test('user-invalid', async () => {
         display: flex;
       }"
     `)
-  expect(await run(['invalid/foo:flex'])).toEqual('')
+  expect(await run(['user-invalid/foo:flex'])).toEqual('')
 })
 
 test('in-range', async () => {
