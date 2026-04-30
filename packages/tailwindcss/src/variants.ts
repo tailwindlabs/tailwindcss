@@ -1212,24 +1212,46 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
   walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
-    // Starting with the `&` rule node
-    let node = styleRule('&', variantNode.nodes)
+    let nodes: AstNode[] = []
+    let compoundVariants = segment(variantNode.params, ',')
+    for (let [idx, compoundVariant] of compoundVariants.entries()) {
+      // Starting with the `&` rule node
+      //
+      // Only clone the nodes when we have multiple compound variants to deal
+      // with. The last one can use the original nodes. We do need unique AST
+      // nodes for sourcemap `dst` location information.
+      let node = styleRule(
+        '&',
+        idx === compoundVariants.length - 1
+          ? variantNode.nodes
+          : variantNode.nodes.map(cloneAstNode),
+      )
 
-    let variant = variantNode.params
+      let stackedVariants = segment(compoundVariant, ':')
+      for (let i = stackedVariants.length - 1; i >= 0; --i) {
+        let variant = stackedVariants[i].trim()
 
-    let variantAst = designSystem.parseVariant(variant)
-    if (variantAst === null) {
-      throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-    }
+        if (!variant) {
+          throw new Error(`Cannot use \`@variant\` with empty variant`)
+        }
 
-    let result = applyVariant(node, variantAst, designSystem.variants)
-    if (result === null) {
-      throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+        let variantAst = designSystem.parseVariant(variant)
+        if (variantAst === null) {
+          throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+        }
+
+        let result = applyVariant(node, variantAst, designSystem.variants)
+        if (result === null) {
+          throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+        }
+      }
+
+      nodes.push(node)
     }
 
     // Update the variant at-rule node, to be the `&` rule node
     features |= Features.Variants
-    return WalkAction.Replace(node)
+    return WalkAction.Replace(nodes)
   })
   return features
 }

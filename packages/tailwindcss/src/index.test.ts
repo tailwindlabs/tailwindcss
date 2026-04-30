@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile, Features, Polyfills } from '.'
+import { cartesian } from './cartesian'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -5457,6 +5458,427 @@ describe('@variant', () => {
         text-decoration-line: underline;
       }"
     `)
+  })
+
+  describe('comma-separated `@variant` rules', () => {
+    it('should be possible to use comma-separated `@variant` rules', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover, focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover {
+            background: red;
+          }
+        }
+
+        .btn:focus {
+          background: red;
+        }"
+      `)
+
+      expect(
+        await compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover, focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).toEqual(
+        await compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover {
+              background: red;
+            }
+            @variant focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      )
+    })
+
+    it.each(
+      Array.from(
+        cartesian(
+          ['', ' ', '  ', '\t', '\t\t'], // Before
+          ['', ' ', '  ', '\t', '\t\t'], // After
+        ),
+      ),
+    )(
+      "should handle optional whitespace ('%s', '%s') between `@variant` variants",
+      async (before, after) => {
+        await expect(
+          compileCss(css`
+            .btn {
+              background: black;
+
+              @variant hover${before},${after}focus {
+                background: red;
+              }
+            }
+            @tailwind utilities;
+          `),
+        ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover {
+            background: red;
+          }
+        }
+
+        .btn:focus {
+          background: red;
+        }"
+      `)
+      },
+    )
+
+    it('should handle variants containing a `,` inside', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant [&:is(:hover,:focus)], disabled {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        .btn:is(:hover, :focus), .btn:disabled {
+          background: red;
+        }"
+      `)
+    })
+
+    it('should handle nested comma-separated variants', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover, focus {
+              background: red;
+
+              @variant active, disabled {
+                background: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover {
+            background: red;
+          }
+
+          .btn:hover:active, .btn:hover:disabled {
+            background: #00f;
+          }
+        }
+
+        .btn:focus {
+          background: red;
+        }
+
+        .btn:focus:active, .btn:focus:disabled {
+          background: #00f;
+        }"
+      `)
+
+      expect(
+        await compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover, focus {
+              background: red;
+
+              @variant active, disabled {
+                background: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).toEqual(
+        await compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover {
+              background: red;
+
+              @variant active {
+                background: blue;
+              }
+
+              @variant disabled {
+                background: blue;
+              }
+            }
+
+            @variant focus {
+              background: red;
+
+              @variant active {
+                background: blue;
+              }
+
+              @variant disabled {
+                background: blue;
+              }
+            }
+          }
+          @tailwind utilities;
+        `),
+      )
+    })
+
+    it('should error on invalid variants (trailing comma)', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover,focus, {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Cannot use \`@variant\` with empty variant]`,
+      )
+    })
+
+    it('should error on invalid variants (double comma)', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover,,focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Cannot use \`@variant\` with empty variant]`,
+      )
+    })
+  })
+
+  describe('stacked `@variant` rules', () => {
+    it('should handle stacked variants', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover:focus {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
+          }
+        }"
+      `)
+    })
+
+    it('should handle stacked variants & comma-separated variants', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant hover:focus, disabled {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
+          }
+        }
+        
+        .btn:disabled {
+          background: red;
+        }"
+      `)
+    })
+
+    it('should handle variants containing a `:` inside', async () => {
+      await expect(
+        compileCss(css`
+          .btn {
+            background: black;
+
+            @variant [&:is(:hover,:focus)]:disabled, aria-disabled:hover {
+              background: red;
+            }
+          }
+          @tailwind utilities;
+        `),
+      ).resolves.toMatchInlineSnapshot(`
+        ".btn {
+          background: #000;
+        }
+
+        .btn:is(:hover, :focus):disabled {
+          background: red;
+        }
+
+        @media (hover: hover) {
+          .btn[aria-disabled="true"]:hover {
+            background: red;
+          }
+        }"
+      `)
+    })
+  })
+
+  it('should be possible to use compound and stacked variants in `@variant`', async () => {
+    await expect(
+      compileCss(css`
+        .btn {
+          background: black;
+
+          @variant data-a, data-b:data-c {
+            background: red;
+
+            @variant data-d, data-e:data-f {
+              background: blue;
+            }
+          }
+        }
+        @tailwind utilities;
+      `),
+    ).resolves.toMatchInlineSnapshot(`
+      ".btn {
+        background: #000;
+      }
+
+      .btn[data-a] {
+        background: red;
+      }
+
+      .btn[data-a][data-d], .btn[data-a][data-e][data-f] {
+        background: #00f;
+      }
+
+      .btn[data-b][data-c] {
+        background: red;
+      }
+
+      .btn[data-b][data-c][data-d], .btn[data-b][data-c][data-e][data-f] {
+        background: #00f;
+      }"
+    `)
+
+    expect(
+      await compileCss(css`
+        .btn {
+          background: black;
+
+          @variant data-a, data-b:data-c {
+            background: red;
+
+            @variant data-d, data-e:data-f {
+              background: blue;
+            }
+          }
+        }
+        @tailwind utilities;
+      `),
+    ).toEqual(
+      await compileCss(css`
+        .btn {
+          background: black;
+
+          @variant data-a {
+            background: red;
+
+            @variant data-d {
+              background: blue;
+            }
+
+            @variant data-e {
+              @variant data-f {
+                background: blue;
+              }
+            }
+          }
+
+          @variant data-b {
+            @variant data-c {
+              background: red;
+
+              @variant data-d {
+                background: blue;
+              }
+
+              @variant data-e {
+                @variant data-f {
+                  background: blue;
+                }
+              }
+            }
+          }
+        }
+        @tailwind utilities;
+      `),
+    )
   })
 
   it('should be possible to use `@variant` with a funky looking variants', async () => {

@@ -395,6 +395,31 @@ test('@apply generates source maps', async ({ expect }) => {
   ])
 })
 
+test('@variant generates source maps', async ({ expect }) => {
+  let { sources, annotations } = await run({
+    input: css`
+      .foo {
+        @variant hover {
+          color: red;
+        }
+
+        @variant focus:disabled, hover:aria-expanded {
+          color: blue;
+        }
+      }
+    `,
+  })
+
+  expect(sources).toEqual(['input.css'])
+
+  expect(annotations).toEqual([
+    'input.css: 1:0-5 <- 1:0-5',
+    'input.css: 4:6-16 <- 3:4-14',
+    'input.css: 9:6-17 <- 7:4-15',
+    'input.css: 15:8-19 <- 7:4-15',
+  ])
+})
+
 test('license comments preserve source locations', async ({ expect }) => {
   let { sources, annotations } = await run({
     input: `/*! some comment */`,
