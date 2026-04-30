@@ -3891,7 +3891,7 @@ describe('@custom-variant', () => {
     return expect(compileCss(input)).rejects.toThrowError()
   })
 
-  test('@custom-variant must not container special characters', () => {
+  test('@custom-variant must not contain special characters', () => {
     return expect(
       compileCss(css`
         .foo {
