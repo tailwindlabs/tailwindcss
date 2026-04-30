@@ -1213,11 +1213,21 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
     let nodes: AstNode[] = []
-    for (let compoundVariants of segment(variantNode.params, ',')) {
+    let compoundVariants = segment(variantNode.params, ',')
+    for (let [idx, compoundVariant] of compoundVariants.entries()) {
       // Starting with the `&` rule node
-      let node = styleRule('&', variantNode.nodes.map(cloneAstNode))
+      //
+      // Only clone the nodes when we have multiple compound variants to deal
+      // with. The last one can use the original nodes. We do need unique AST
+      // nodes for sourcemap `dst` location information.
+      let node = styleRule(
+        '&',
+        idx === compoundVariants.length - 1
+          ? variantNode.nodes
+          : variantNode.nodes.map(cloneAstNode),
+      )
 
-      let stackedVariants = segment(compoundVariants, ':')
+      let stackedVariants = segment(compoundVariant, ':')
       for (let i = stackedVariants.length - 1; i >= 0; --i) {
         let variant = stackedVariants[i].trim()
 
