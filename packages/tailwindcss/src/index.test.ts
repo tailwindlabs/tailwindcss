@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
 import { compile, Features, Polyfills } from '.'
+import { cartesian } from './cartesian'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
 import { compileCss, optimizeCss, run } from './test-utils/run'
@@ -5516,22 +5517,28 @@ describe('@variant', () => {
       )
     })
 
-    it('should handle optional whitespace between `@variant` variants', async () => {
-      let before = ['', ' ', '\t'][(Math.random() * 3) | 0].repeat((Math.random() * 3) | 0)
-      let after = ['', ' ', '\t'][(Math.random() * 3) | 0].repeat((Math.random() * 3) | 0)
+    it.each(
+      Array.from(
+        cartesian(
+          ['', ' ', '  ', '\t', '\t\t'], // Before
+          ['', ' ', '  ', '\t', '\t\t'], // After
+        ),
+      ),
+    )(
+      "should handle optional whitespace ('%s', '%s') between `@variant` variants",
+      async (before, after) => {
+        await expect(
+          compileCss(css`
+            .btn {
+              background: black;
 
-      await expect(
-        compileCss(css`
-          .btn {
-            background: black;
-
-            @variant hover${before},${after}focus {
-              background: red;
+              @variant hover${before},${after}focus {
+                background: red;
+              }
             }
-          }
-          @tailwind utilities;
-        `),
-      ).resolves.toMatchInlineSnapshot(`
+            @tailwind utilities;
+          `),
+        ).resolves.toMatchInlineSnapshot(`
         ".btn {
           background: #000;
         }
@@ -5546,7 +5553,8 @@ describe('@variant', () => {
           background: red;
         }"
       `)
-    })
+      },
+    )
 
     it('should handle variants containing a `,` inside', async () => {
       await expect(
