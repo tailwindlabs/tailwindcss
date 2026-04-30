@@ -2419,7 +2419,6 @@ test(
           letter-spacing: inherit;
           color: inherit;
           border-radius: 0;
-          background-color: transparent;
           opacity: 1;
         }
         :where(select:is([multiple], [size])) optgroup {
@@ -2468,6 +2467,7 @@ test(
           box-shadow: none;
         }
         button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
+          background-color: transparent;
           appearance: button;
         }
         ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
