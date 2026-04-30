@@ -717,12 +717,14 @@ test('@variant generates source maps', async ({ expect }) => {
   let { sources, annotations } = await run({
     input: css`
       .foo {
-        @variant hover {
-          color: red;
-        }
+        color: red;
 
-        @variant focus:disabled, hover:aria-expanded {
-          color: blue;
+        @variant data-a, data-b:data-c {
+          color: green;
+
+          @variant data-d, data-e:data-f {
+            color: blue;
+          }
         }
       }
     `,
@@ -732,37 +734,49 @@ test('@variant generates source maps', async ({ expect }) => {
 
   expect(annotations).toMatchInlineSnapshot(`
     "
-        output.css                      |    input.css
-                                        | 
-     1  .foo {                          | 1  .foo {
-        ^^^^^ A @ 1:0-5                 |    ^^^^^ A @ 1:0-5
-     2    &:hover {                     | 
-     3      @media (hover: hover) {     | 
-                                        | 2    @variant hover {
-     4        color: red;               | 3      color: red;
-              ^^^^^^^^^^ B @ 4:6-16     |        ^^^^^^^^^^ B @ 3:4-14
-                                        | 4    }
-     5      }                           | 
-     6    }                             | 
-     7    &:focus {                     | 
-     8      &:disabled {                | 
-                                        | 6    @variant focus:disabled, hover:aria-expanded {
-     9        color: blue;              | 7      color: blue;
-              ^^^^^^^^^^^ C @ 9:6-17    |        ^^^^^^^^^^^ C @ 7:4-15
-                                        | 8    }
-                                        | 9  }
-    10      }                           | 
-    11    }                             | 
-    12    &:hover {                     | 
-    13      @media (hover: hover) {     | 
-    14        &[aria-expanded="true"] { | 
-    15          color: blue;            | 
-                ^^^^^^^^^^^ C @ 15:8-19 | 
-    16        }                         | 
-    17      }                           | 
-    18    }                             | 
-    19  }                               | 
-    20                                  | 
+        output.css                         |     input.css
+                                           | 
+     1  .foo {                             |  1  .foo {
+        ^^^^^ A @ 1:0-5                    |     ^^^^^ A @ 1:0-5
+     2    color: red;                      |  2    color: red;
+          ^^^^^^^^^^ B @ 2:2-12            |       ^^^^^^^^^^ B @ 2:2-12
+     3    &[data-a] {                      | 
+                                           |  4    @variant data-a, data-b:data-c {
+     4      color: green;                  |  5      color: green;
+            ^^^^^^^^^^^^ C @ 4:4-16        |         ^^^^^^^^^^^^ C @ 5:4-16
+     5      &[data-d] {                    | 
+                                           |  7      @variant data-d, data-e:data-f {
+     6        color: blue;                 |  8        color: blue;
+              ^^^^^^^^^^^ D @ 6:6-17       |           ^^^^^^^^^^^ D @ 8:6-17
+                                           |  9      }
+                                           | 10    }
+                                           | 11  }
+     7      }                              | 
+     8      &[data-e] {                    | 
+     9        &[data-f] {                  | 
+    10          color: blue;               | 
+                ^^^^^^^^^^^ D @ 10:8-19    | 
+    11        }                            | 
+    12      }                              | 
+    13    }                                | 
+    14    &[data-b] {                      | 
+    15      &[data-c] {                    | 
+    16        color: green;                | 
+              ^^^^^^^^^^^^ C @ 16:6-18     | 
+    17        &[data-d] {                  | 
+    18          color: blue;               | 
+                ^^^^^^^^^^^ D @ 18:8-19    | 
+    19        }                            | 
+    20        &[data-e] {                  | 
+    21          &[data-f] {                | 
+    22            color: blue;             | 
+                  ^^^^^^^^^^^ D @ 22:10-21 | 
+    23          }                          | 
+    24        }                            | 
+    25      }                              | 
+    26    }                                | 
+    27  }                                  | 
+    28                                     | 
     "
   `)
 })
