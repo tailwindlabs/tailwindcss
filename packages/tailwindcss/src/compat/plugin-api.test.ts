@@ -3133,7 +3133,7 @@ describe('addUtilities()', () => {
           },
         },
       )
-    }).rejects.toThrowError(/invalid utility selector/)
+    }).rejects.toThrow(/invalid utility selector/)
   })
 
   test('supports multiple selector names', async () => {
@@ -4305,7 +4305,7 @@ describe('matchUtilities()', () => {
           },
         },
       )
-    }).rejects.toThrowError(/invalid utility name/)
+    }).rejects.toThrow(/invalid utility name/)
   })
 
   test('replaces the class name with variants in nested selectors', async () => {

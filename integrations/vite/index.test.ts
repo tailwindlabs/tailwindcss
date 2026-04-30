@@ -836,7 +836,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ root, fs, exec, expect }) => {
       await expect(() =>
         exec('pnpm vite build', { cwd: path.join(root, 'project-a') }, { ignoreStdErr: true }),
-      ).rejects.toThrowError('The `source(../i-do-not-exist)` does not exist')
+      ).rejects.toThrow('The `source(../i-do-not-exist)` does not exist')
 
       let files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(0)

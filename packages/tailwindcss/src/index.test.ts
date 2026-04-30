@@ -3888,7 +3888,7 @@ describe('@custom-variant', () => {
     [`@custom-variant foo_ (&);`],
     [`@custom-variant foo__ (&);`],
   ])('@custom-variant must have a valid name', (input) => {
-    return expect(compileCss(input)).rejects.toThrowError()
+    return expect(compileCss(input)).rejects.toThrow()
   })
 
   test('@custom-variant must not contain special characters', () => {

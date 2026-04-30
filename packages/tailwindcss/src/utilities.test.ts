@@ -28693,7 +28693,7 @@ describe('custom utilities', () => {
           right: 100%;
         }
       `),
-    ).rejects.toThrowError(/should be alphanumeric/)
+    ).rejects.toThrow(/should be alphanumeric/)
 
     await expect(() =>
       compile(css`
@@ -28701,7 +28701,7 @@ describe('custom utilities', () => {
           right: 100%;
         }
       `),
-    ).rejects.toThrowError(/should be alphanumeric/)
+    ).rejects.toThrow(/should be alphanumeric/)
 
     await expect(() =>
       compile(css`
@@ -28709,7 +28709,7 @@ describe('custom utilities', () => {
           right: 100%;
         }
       `),
-    ).rejects.toThrowError(/should be alphanumeric/)
+    ).rejects.toThrow(/should be alphanumeric/)
   })
 
   test('custom utilities work with `@apply`', async () => {
