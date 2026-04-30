@@ -120,7 +120,7 @@ describe('processing without specifying a base path', () => {
   afterEach(() => unlink(filepath))
 
   test('the current working directory is used by default', async () => {
-    const spy = vi.spyOn(process, 'cwd')
+    using spy = vi.spyOn(process, 'cwd')
     spy.mockReturnValue(dir)
 
     let processor = postcss([tailwindcss({ optimize: { minify: false } })])
@@ -389,7 +389,7 @@ describe('concurrent builds', () => {
   afterEach(() => rm(dir, { recursive: true, force: true }))
 
   test('does experience a race-condition when calling the plugin two times for the same change', async () => {
-    const spy = vi.spyOn(process, 'cwd')
+    using spy = vi.spyOn(process, 'cwd')
     spy.mockReturnValue(dir)
 
     let from = path.join(dir, 'index.css')

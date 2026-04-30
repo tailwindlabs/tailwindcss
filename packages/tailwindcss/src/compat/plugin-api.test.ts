@@ -667,7 +667,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    using fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -951,7 +951,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    using fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -994,7 +994,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    using fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -1026,7 +1026,7 @@ describe('theme', async () => {
       }
     `
 
-    let fn = vi.fn()
+    using fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -1055,7 +1055,7 @@ describe('theme', async () => {
       @plugin "my-plugin";
     `
 
-    let fn = vi.fn()
+    using fn = vi.fn()
 
     await compile(input, {
       loadModule: async (id, base) => {
@@ -4494,7 +4494,7 @@ describe('matchComponents()', () => {
 
 describe('prefix()', () => {
   test('is an identity function', async () => {
-    let fn = vi.fn()
+    using fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4518,7 +4518,7 @@ describe('prefix()', () => {
 
 describe('config()', () => {
   test('can return the resolved config when passed no arguments', async () => {
-    let fn = vi.fn()
+    using fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4546,7 +4546,7 @@ describe('config()', () => {
   })
 
   test('can return part of the config', async () => {
-    let fn = vi.fn()
+    using fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
@@ -4572,7 +4572,7 @@ describe('config()', () => {
   })
 
   test('falls back to default value if requested path does not exist', async () => {
-    let fn = vi.fn()
+    using fn = vi.fn()
     await compile(
       css`
         @plugin "my-plugin";
