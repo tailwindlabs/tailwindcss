@@ -6612,7 +6612,7 @@ describe('feature detection', () => {
   test('using `@reference`', async () => {
     let compiler = await compile(
       css`
-        @import 'tailwindcss/preflight';
+        @reference 'tailwindcss/preflight';
       `,
       { loadStylesheet: async (_, base) => ({ base, path: '', content: '' }) },
     )
