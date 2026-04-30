@@ -1212,17 +1212,15 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
   walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
-    let stacks = segment(variantNode.params, ',').map((variants: string) =>
-      segment(variants, ':')
-        .map((variant) => variant.trim())
-        .reverse(),
-    )
     let nodes: AstNode[] = []
-    for (let variants of stacks) {
+    for (let compoundVariants of segment(variantNode.params, ',')) {
       // Starting with the `&` rule node
       let node = styleRule('&', variantNode.nodes.map(cloneAstNode))
 
-      for (let variant of variants) {
+      let stackedVariants = segment(compoundVariants, ':')
+      for (let i = stackedVariants.length - 1; i >= 0; --i) {
+        let variant = stackedVariants[i].trim()
+
         if (!variant) {
           throw new Error(`Cannot use \`@variant\` with empty variant`)
         }
