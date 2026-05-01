@@ -856,6 +856,95 @@ describe('@apply', () => {
       }"
     `)
   })
+
+  it('should be usable with CSS mixins', async () => {
+    let input = css`
+      .foo {
+        /* Utility usage */
+        @apply underline;
+
+        /* CSS mixin usage */
+        @apply --my-mixin-1;
+        @apply --my-mixin-1();
+        @apply --my-mixin-1 --my-mixin-2;
+        @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-3 {
+          color: red;
+        }
+      }
+    `
+
+    let compiler = await compile(input)
+    expect(compiler.build([])).toMatchInlineSnapshot(`
+      ".foo {
+        text-decoration-line: underline;
+        @apply --my-mixin-1;
+        @apply --my-mixin-1();
+        @apply --my-mixin-1 --my-mixin-2;
+        @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-3 {
+          color: red;
+        }
+      }
+      "
+    `)
+
+    // TODO: This output is currently broken because Lightning CSS doesn't
+    // handle this case correctly yet
+    expect(await compileCss(input)).toMatchInlineSnapshot(`
+      ".foo {
+        text-decoration-line: underline;
+      }
+
+      @apply --my-mixin-1;
+
+      @apply --my-mixin-1();
+
+      @apply --my-mixin-1 --my-mixin-2;
+
+      @apply --my-mixin-1() --my-mixin-2();
+
+      @apply --my-mixin-3 {
+        color: red;
+      }"
+    `)
+  })
+
+  it('should error when trying to use mixins and utilities together', async () => {
+    await expect(
+      compile(css`
+        .foo {
+          @apply underline --my-mixin-1;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1\` into a separate rule.]`,
+    )
+
+    await expect(
+      compile(css`
+        .foo {
+          @apply --my-mixin-1 underline;
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1\` into a separate rule.]`,
+    )
+  })
+
+  it('should error when used with a body', async () => {
+    await expect(
+      compile(css`
+        .foo {
+          @apply underline {
+            color: red;
+          }
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: The rule \`@apply underline\` must not have a body.]`,
+    )
+  })
 })
 
 describe('arbitrary variants', () => {
