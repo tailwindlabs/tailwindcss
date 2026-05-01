@@ -315,6 +315,16 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
               )
             }
 
+            // CSS-like files may still be handled by another plugin's stylesheet
+            // HMR pipeline even when the module graph only exposes asset-like
+            // placeholder modules during this pass. We still need to invalidate
+            // the watched modules so Tailwind rebuilds, but we should not force
+            // a full page reload that can race against a later targeted
+            // css-update payload.
+            if (isPotentialCssRootFile(file)) {
+              return []
+            }
+
             if (env === this.environment.name) {
               this.environment.hot.send({ type: 'full-reload' })
             } else if (server.hot.send) {
