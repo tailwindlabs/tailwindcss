@@ -217,7 +217,7 @@ test('start', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
@@ -235,12 +235,12 @@ test('start', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
       --inset-shadowned: 1940px;
     }
 
     .-start-4 {
-      inset-inline-start: calc(var(--spacing-4) * -1);
+      inset-inline-start: calc(var(--spacing) * -4);
     }
 
     .-start-full {
@@ -252,7 +252,7 @@ test('start', async () => {
     }
 
     .start-4 {
-      inset-inline-start: var(--spacing-4);
+      inset-inline-start: calc(var(--spacing) * 4);
     }
 
     .start-\\[4px\\] {
@@ -275,7 +275,7 @@ test('start', async () => {
     await compileCss(
       css`
         @theme reference {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
@@ -304,7 +304,7 @@ test('end', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
@@ -322,12 +322,12 @@ test('end', async () => {
     ),
   ).toMatchInlineSnapshot(`
     ":root, :host {
-      --spacing-4: 1rem;
+      --spacing: .25rem;
       --inset-shadowned: 1940px;
     }
 
     .-end-4 {
-      inset-inline-end: calc(var(--spacing-4) * -1);
+      inset-inline-end: calc(var(--spacing) * -4);
     }
 
     .-end-full {
@@ -339,7 +339,7 @@ test('end', async () => {
     }
 
     .end-4 {
-      inset-inline-end: var(--spacing-4);
+      inset-inline-end: calc(var(--spacing) * 4);
     }
 
     .end-\\[4px\\] {
@@ -362,7 +362,7 @@ test('end', async () => {
     await compileCss(
       css`
         @theme reference {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
