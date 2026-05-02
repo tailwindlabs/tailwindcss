@@ -6205,19 +6205,19 @@ export function createCssUtility(node: AtRule) {
 
             // Modifier function, e.g.: `--modifier(integer)`
             else if (fnNode.value === '--modifier') {
-              // If there is no modifier present in the candidate, then the
-              // declaration can be removed.
+              usedModifierFn = true
+
+              let resolved = resolveValueFunction(modifier, fnNode, designSystem)
+              if (resolved) {
+                resolvedModifierFn = true
+                return WalkAction.ReplaceSkip(resolved.nodes)
+              }
+
+              // If there is no modifier present in the candidate and no default
+              // value resolved, then the declaration can be removed.
               if (modifier === null) {
                 shouldRemoveDeclaration = true
                 return WalkAction.Stop
-              }
-
-              usedModifierFn = true
-
-              let replacement = resolveValueFunction(modifier, fnNode, designSystem)
-              if (replacement) {
-                resolvedModifierFn = true
-                return WalkAction.ReplaceSkip(replacement.nodes)
               }
 
               // Drop the declaration in case we couldn't resolve the value
@@ -6239,7 +6239,7 @@ export function createCssUtility(node: AtRule) {
         if (!usedValueFn || !resolvedValueFn) return null
 
         // Used `--modifier(…)` but nothing resolved
-        if (usedModifierFn && !resolvedModifierFn) return null
+        if (usedModifierFn && !resolvedModifierFn && modifier !== null) return null
 
         // Resolved `--value(ratio)` and `--modifier(…)`, which is invalid
         if (resolvedRatioValue && resolvedModifierFn) return null
