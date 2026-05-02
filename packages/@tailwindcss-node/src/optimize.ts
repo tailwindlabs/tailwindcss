@@ -1,5 +1,5 @@
 import remapping from '@jridgewell/remapping'
-import { Features, transform } from 'lightningcss'
+import { Features, transform, type Drafts, type NonStandard, type Targets } from 'lightningcss'
 import MagicString from 'magic-string'
 
 export interface OptimizeOptions {
@@ -12,6 +12,31 @@ export interface OptimizeOptions {
    * Enabled minified output
    */
   minify?: boolean
+
+  /**
+   * The browser targets for the generated code.
+   */
+  targets?: Targets
+
+  /**
+   * Features that should always be compiled, even when supported by targets.
+   */
+  include?: number
+
+  /**
+   * Features that should never be compiled, even when unsupported by targets.
+   */
+  exclude?: number
+
+  /**
+   * Whether to enable parsing various draft syntax.
+   */
+  drafts?: Drafts
+
+  /**
+   * Whether to enable various non-standard syntax.
+   */
+  nonStandard?: NonStandard
 
   /**
    * The output source map before optimization
@@ -28,7 +53,16 @@ export interface TransformResult {
 
 export function optimize(
   input: string,
-  { file = 'input.css', minify = false, map }: OptimizeOptions = {},
+  {
+    file = 'input.css',
+    minify = false,
+    map,
+    drafts,
+    nonStandard,
+    include,
+    exclude,
+    targets,
+  }: OptimizeOptions = {},
 ): TransformResult {
   function optimize(code: Buffer | Uint8Array, map: string | undefined) {
     return transform({
@@ -37,15 +71,11 @@ export function optimize(
       minify,
       sourceMap: typeof map !== 'undefined',
       inputSourceMap: map,
-      drafts: {
-        customMedia: true,
-      },
-      nonStandard: {
-        deepSelectorCombinator: true,
-      },
-      include: Features.Nesting | Features.MediaQueries,
-      exclude: Features.LogicalProperties | Features.DirSelector | Features.LightDark,
-      targets: {
+      drafts: { customMedia: true, ...drafts },
+      nonStandard: { deepSelectorCombinator: true, ...nonStandard },
+      include: include ?? Features.Nesting | Features.MediaQueries,
+      exclude: exclude ?? Features.LogicalProperties | Features.DirSelector | Features.LightDark,
+      targets: targets ?? {
         safari: (16 << 16) | (4 << 8),
         ios_saf: (16 << 16) | (4 << 8),
         firefox: 128 << 16,

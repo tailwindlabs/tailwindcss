@@ -74,3 +74,24 @@ export default defineConfig({
   ],
 })
 ```
+
+Additional Lightning CSS options can be configured through the `optimize` object, for example `drafts`, `nonStandard`, `include`, `exclude`, and `targets`.
+
+## Controlling Tailwind polyfills
+
+By default, Tailwind emits all supported CSS polyfills. You can customize this behavior using the `polyfills` option:
+
+```js
+import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+import { Polyfills } from 'tailwindcss'
+
+export default defineConfig({
+  plugins: [
+    tailwindcss({
+      // Disable all Tailwind polyfills
+      polyfills: Polyfills.None,
+    }),
+  ],
+})
+```

@@ -1217,6 +1217,199 @@ test(
 )
 
 test(
+  'optimize option: advanced Lightning CSS settings',
+  {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "lightningcss": "^1",
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { Features } from 'lightningcss'
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [
+            tailwindcss({
+              optimize: {
+                include: Features.Nesting,
+                targets: { chrome: 999 << 16 },
+                drafts: { customMedia: false },
+                nonStandard: { deepSelectorCombinator: true },
+              },
+            }),
+          ],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="hover:flex min-[700px]:grid custom">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+
+        @custom-media --viewport-medium (width >= 700px);
+
+        @media (--viewport-medium) {
+          .custom {
+            display: flex;
+          }
+        }
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    let content = await fs.read(filename)
+    expect(content).toContain('.hover\\:flex:hover {')
+    expect(content).toContain('@media (width >= 700px) {')
+    expect(content).toContain('@custom-media --viewport-medium (width >= 700px);')
+    expect(content).toContain('@media (--viewport-medium) {')
+  },
+)
+
+test(
+  'optimize option: advanced Lightning CSS exclude',
+  {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "lightningcss": "^1",
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { Features } from 'lightningcss'
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [
+            tailwindcss({
+              optimize: {
+                minify: false,
+                include: Features.MediaQueries,
+                exclude: Features.Nesting,
+              },
+            }),
+          ],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="hover:flex">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    let content = await fs.read(filename)
+    expect(content).toContain('.hover\\:flex {')
+    expect(content).toContain('&:hover {')
+  },
+)
+
+test(
+  'polyfills option: disabled',
+  {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { Polyfills } from 'tailwindcss'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss({ optimize: false, polyfills: Polyfills.None })],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+
+        @property --no-inherit-value {
+          syntax: '*';
+          inherits: false;
+          initial-value: red;
+        }
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    let content = await fs.read(filename)
+    expect(content).toContain('@property --no-inherit-value')
+    expect(content).not.toContain('@layer properties')
+  },
+)
+
+test(
   `the plugin works when using the environment API`,
   {
     fs: {
