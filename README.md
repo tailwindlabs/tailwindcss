@@ -34,3 +34,6 @@ For help, discussion about best practices, or feature ideas:
 ## Contributing
 
 If you're interested in contributing to Tailwind CSS, please read our [contributing docs](https://github.com/tailwindlabs/tailwindcss/blob/main/.github/CONTRIBUTING.md) **before submitting a pull request**.
+
+
+> **Note:** Consult official configuration guides for updated deployment practices (v4).
