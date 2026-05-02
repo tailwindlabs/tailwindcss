@@ -6178,14 +6178,14 @@ export function createCssUtility(node: AtRule) {
           let shouldRemoveDeclaration = false
 
           let valueAst = ValueParser.parse(node.value)
-          walk(valueAst, (valueNode) => {
-            if (valueNode.kind !== 'function') return
+          walk(valueAst, (fnNode) => {
+            if (fnNode.kind !== 'function') return
 
             // Value function, e.g.: `--value(integer)`
-            if (valueNode.value === '--value') {
+            if (fnNode.value === '--value') {
               usedValueFn = true
 
-              let resolved = resolveValueFunction(value, valueNode, designSystem)
+              let resolved = resolveValueFunction(value, fnNode, designSystem)
               if (resolved) {
                 resolvedValueFn = true
                 if (resolved.ratio) {
@@ -6203,7 +6203,7 @@ export function createCssUtility(node: AtRule) {
             }
 
             // Modifier function, e.g.: `--modifier(integer)`
-            else if (valueNode.value === '--modifier') {
+            else if (fnNode.value === '--modifier') {
               // If there is no modifier present in the candidate, then the
               // declaration can be removed.
               if (modifier === null) {
@@ -6213,7 +6213,7 @@ export function createCssUtility(node: AtRule) {
 
               usedModifierFn = true
 
-              let replacement = resolveValueFunction(modifier, valueNode, designSystem)
+              let replacement = resolveValueFunction(modifier, fnNode, designSystem)
               if (replacement) {
                 resolvedModifierFn = true
                 return WalkAction.ReplaceSkip(replacement.nodes)
