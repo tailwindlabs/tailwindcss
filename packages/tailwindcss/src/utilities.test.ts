@@ -29642,6 +29642,66 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab/foo'])).toEqual('')
     })
 
+    test('functional utilities can use `--default(…)` in `--modifier(…)`', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value(integer);
+          line-height: --modifier(integer, --default(1));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-123', 'tab-123/25'])).toMatchInlineSnapshot(`
+        ".tab-123 {
+          tab-size: 123;
+          line-height: 1;
+        }
+
+        .tab-123\\/25 {
+          tab-size: 123;
+          line-height: 25;
+        }"
+      `)
+
+      expect(await compileCss(input, ['tab-123/foo'])).toEqual('')
+    })
+
+    test('functional utilities can use `--default(…)` in `--value(…)` and `--modifier(…)`', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value(integer, --default(12));
+          line-height: --modifier(integer, --default(34));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab', 'tab/1', 'tab-1', 'tab-1/1'])).toMatchInlineSnapshot(`
+        ".tab {
+          tab-size: 12;
+          line-height: 34;
+        }
+
+        .tab-1 {
+          tab-size: 1;
+          line-height: 34;
+        }
+
+        .tab-1\\/1 {
+          tab-size: 1;
+          line-height: 1;
+        }
+
+        .tab\\/1 {
+          tab-size: 12;
+          line-height: 1;
+        }"
+      `)
+
+      expect(await compileCss(input, ['tab-123/foo'])).toEqual('')
+    })
+
     test('modifiers', async () => {
       let input = css`
         @theme reference {
