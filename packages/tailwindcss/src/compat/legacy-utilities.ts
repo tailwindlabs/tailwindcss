@@ -126,12 +126,7 @@ export function registerLegacyUtilities(designSystem: DesignSystem) {
 
     function handleInset({ negative }: { negative: boolean }) {
       return (candidate: Extract<import('../candidate').Candidate, { kind: 'functional' }>) => {
-        if (!candidate.value) {
-          if (candidate.modifier) return
-          let value = designSystem.theme.resolve(null, ['--inset', '--spacing'])
-          if (value === null) return
-          return [decl(property, negative ? `calc(${value} * -1)` : value)]
-        }
+        if (candidate.value === null) return
 
         if (candidate.value.kind === 'arbitrary') {
           if (candidate.modifier) return
