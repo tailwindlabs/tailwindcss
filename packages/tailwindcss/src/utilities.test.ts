@@ -306,6 +306,185 @@ test('inset', async () => {
   ).toEqual('')
 })
 
+test('safe area utilities', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
+      [
+        'safe',
+        'safe-none',
+        'safe-x-none',
+        'safe-b',
+        'inset-safe',
+        '-inset-safe',
+        '-inset-safe-1/2',
+        'top-safe-4',
+        'top-safe-1/2',
+        '-left-safe-px',
+        'm-safe',
+        '-mt-safe',
+        'mx-safe-4',
+        '-mb-safe-[var(--offset)]',
+        'p-safe',
+        'pt-safe-4',
+        'pl-safe-[4px]',
+        'scroll-m-safe',
+        '-scroll-mt-safe-4',
+        'scroll-p-safe',
+        'scroll-pl-safe-px',
+      ],
+    ),
+  ).toMatchInlineSnapshot(`
+    ":root, :host {
+      --spacing-4: 1rem;
+    }
+
+    .-inset-safe {
+      top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) * -1);
+      right: calc(var(--tw-safe-area-right, env(safe-area-inset-right)) * -1);
+      bottom: calc(var(--tw-safe-area-bottom, env(safe-area-inset-bottom)) * -1);
+      left: calc(var(--tw-safe-area-left, env(safe-area-inset-left)) * -1);
+    }
+
+    .-inset-safe-1\\/2 {
+      top: calc((var(--tw-safe-area-top, env(safe-area-inset-top)) + calc(1 / 2 * 100%)) * -1);
+      right: calc((var(--tw-safe-area-right, env(safe-area-inset-right)) + calc(1 / 2 * 100%)) * -1);
+      bottom: calc((var(--tw-safe-area-bottom, env(safe-area-inset-bottom)) + calc(1 / 2 * 100%)) * -1);
+      left: calc((var(--tw-safe-area-left, env(safe-area-inset-left)) + calc(1 / 2 * 100%)) * -1);
+    }
+
+    .inset-safe {
+      top: var(--tw-safe-area-top, env(safe-area-inset-top));
+      right: var(--tw-safe-area-right, env(safe-area-inset-right));
+      bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
+      left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .top-safe-1\\/2 {
+      top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) + calc(1 / 2 * 100%));
+    }
+
+    .top-safe-4 {
+      top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--spacing-4));
+    }
+
+    .-left-safe-px {
+      left: calc((var(--tw-safe-area-left, env(safe-area-inset-left)) + 1px) * -1);
+    }
+
+    .m-safe {
+      margin-top: var(--tw-safe-area-top, env(safe-area-inset-top));
+      margin-right: var(--tw-safe-area-right, env(safe-area-inset-right));
+      margin-bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
+      margin-left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .-mt-safe {
+      margin-top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) * -1);
+    }
+
+    .mx-safe-4 {
+      margin-right: calc(var(--tw-safe-area-right, env(safe-area-inset-right)) + var(--spacing-4));
+      margin-left: calc(var(--tw-safe-area-left, env(safe-area-inset-left)) + var(--spacing-4));
+    }
+
+    .-mb-safe-\\[var\\(--offset\\)\\] {
+      margin-bottom: calc((var(--tw-safe-area-bottom, env(safe-area-inset-bottom)) + var(--offset)) * -1);
+    }
+
+    .scroll-m-safe {
+      scroll-margin-top: var(--tw-safe-area-top, env(safe-area-inset-top));
+      scroll-margin-right: var(--tw-safe-area-right, env(safe-area-inset-right));
+      scroll-margin-bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
+      scroll-margin-left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .-scroll-mt-safe-4 {
+      scroll-margin-top: calc((var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--spacing-4)) * -1);
+    }
+
+    .scroll-p-safe {
+      scroll-padding-top: var(--tw-safe-area-top, env(safe-area-inset-top));
+      scroll-padding-right: var(--tw-safe-area-right, env(safe-area-inset-right));
+      scroll-padding-bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
+      scroll-padding-left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .scroll-pl-safe-px {
+      scroll-padding-left: calc(var(--tw-safe-area-left, env(safe-area-inset-left)) + 1px);
+    }
+
+    .p-safe {
+      padding-top: var(--tw-safe-area-top, env(safe-area-inset-top));
+      padding-right: var(--tw-safe-area-right, env(safe-area-inset-right));
+      padding-bottom: var(--tw-safe-area-bottom, env(safe-area-inset-bottom));
+      padding-left: var(--tw-safe-area-left, env(safe-area-inset-left));
+    }
+
+    .pt-safe-4 {
+      padding-top: calc(var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--spacing-4));
+    }
+
+    .pl-safe-\\[4px\\] {
+      padding-left: calc(var(--tw-safe-area-left, env(safe-area-inset-left)) + 4px);
+    }
+
+    .safe {
+      --tw-safe-area-top: env(safe-area-inset-top);
+      --tw-safe-area-right: env(safe-area-inset-right);
+      --tw-safe-area-bottom: env(safe-area-inset-bottom);
+      --tw-safe-area-left: env(safe-area-inset-left);
+    }
+
+    .safe-none {
+      --tw-safe-area-top: 0px;
+      --tw-safe-area-right: 0px;
+      --tw-safe-area-bottom: 0px;
+      --tw-safe-area-left: 0px;
+    }
+
+    .safe-x-none {
+      --tw-safe-area-right: 0px;
+      --tw-safe-area-left: 0px;
+    }
+
+    .safe-b {
+      --tw-safe-area-bottom: env(safe-area-inset-bottom);
+    }"
+  `)
+
+  expect(
+    await run([
+      '-safe',
+      'safe/foo',
+      'safe-4',
+      'safe-x-none/foo',
+      'inset-safe/foo',
+      'top-safe/foo',
+      '-left-safe/foo',
+      '-p-safe',
+      'p-safe/foo',
+      'm-safe-1/2',
+      'p-safe-1/2',
+      'scroll-m-safe-1/2',
+      'scroll-p-safe-1/2',
+      '-pt-safe-4',
+      'scroll-p-safe/foo',
+      '-scroll-p-safe',
+      'scroll-pl-safe/foo',
+      'm-safe/foo',
+      '-mt-safe/foo',
+      'mx-safe-4/foo',
+      '-mb-safe-[var(--offset)]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('inset-x', async () => {
   expect(
     await compileCss(
@@ -3844,6 +4023,64 @@ test('max-height', async () => {
       'max-h-fit/foo',
       'max-h-4/foo',
       'max-h-[4px]/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('safe area height utilities', async () => {
+  expect(
+    await run([
+      'h-screen-safe',
+      'h-svh-safe',
+      'h-lvh-safe',
+      'h-dvh-safe',
+      'min-h-screen-safe',
+      'min-h-dvh-safe',
+      'max-h-screen-safe',
+      'max-h-lvh-safe',
+    ]),
+  ).toMatchInlineSnapshot(`
+    ".h-dvh-safe {
+      height: calc(100dvh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .h-lvh-safe {
+      height: calc(100lvh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .h-screen-safe {
+      height: calc(100vh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .h-svh-safe {
+      height: calc(100svh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .max-h-lvh-safe {
+      max-height: calc(100lvh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .max-h-screen-safe {
+      max-height: calc(100vh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .min-h-dvh-safe {
+      min-height: calc(100dvh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }
+
+    .min-h-screen-safe {
+      min-height: calc(100vh - (var(--tw-safe-area-top, env(safe-area-inset-top)) + var(--tw-safe-area-bottom, env(safe-area-inset-bottom))));
+    }"
+  `)
+
+  expect(
+    await run([
+      'h-safe',
+      'min-h-safe',
+      'max-h-safe',
+      'h-screen-safe/foo',
+      'min-h-dvh-safe/foo',
+      'max-h-lvh-safe/foo',
     ]),
   ).toEqual('')
 })
