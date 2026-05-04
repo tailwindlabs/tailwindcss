@@ -28870,6 +28870,18 @@ describe('custom utilities', () => {
   })
 
   describe('functional utilities', () => {
+    test('functional utilities require a `--value(…)`', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: 4;
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab', 'tab-foo'])).toEqual('')
+    })
+
     test('resolving values from `@theme`', async () => {
       let input = css`
         @theme reference {
