@@ -6212,13 +6212,6 @@ export function createCssUtility(node: AtRule) {
                 return WalkAction.ReplaceSkip(resolved.nodes)
               }
 
-              // If there is no modifier present in the candidate and no default
-              // value resolved, then the declaration can be removed.
-              if (modifier === null) {
-                shouldRemoveDeclaration = true
-                return WalkAction.Stop
-              }
-
               // Drop the declaration in case we couldn't resolve the value
               shouldRemoveDeclaration = true
               return WalkAction.Stop
