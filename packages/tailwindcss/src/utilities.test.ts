@@ -28882,6 +28882,28 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['tab', 'tab-foo'])).toEqual('')
     })
 
+    test('functional utilities must resolve at least one `--value(…)`', async () => {
+      let input = css`
+        @utility tab-* {
+          tab-size: --value(integer);
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input, ['tab-1', 'tab-2'])).toMatchInlineSnapshot(`
+        ".tab-1 {
+          tab-size: 1;
+        }
+
+        .tab-2 {
+          tab-size: 2;
+        }"
+      `)
+
+      expect(await compileCss(input, ['tab', 'tab-foo', 'tab-2.5'])).toEqual('')
+    })
+
     test('resolving values from `@theme`', async () => {
       let input = css`
         @theme reference {
