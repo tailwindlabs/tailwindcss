@@ -6198,7 +6198,6 @@ export function createCssUtility(node: AtRule) {
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedValueFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
@@ -6221,7 +6220,6 @@ export function createCssUtility(node: AtRule) {
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedModifierFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
