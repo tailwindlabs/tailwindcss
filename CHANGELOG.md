@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - _Experimental_: add `@container-size` utility ([#18901](https://github.com/tailwindlabs/tailwindcss/pull/18901))
 - _Experimental_: add `scrollbar-{auto,thin,none}` utilities for `scrollbar-width`, and `scrollbar-thumb-*` / `scrollbar-track-*` color utilities for `scrollbar-color` ([#19981](https://github.com/tailwindlabs/tailwindcss/pull/19981))
+
+## [4.2.5] - 2026-05-05
+
+### Added
+
 - Allow using `@variant` with stacked variants (e.g. `@variant hover:focus { … }`) ([#19996](https://github.com/tailwindlabs/tailwindcss/pull/19996))
 - Allow using `@variant` with compound variants (e.g. `@variant hover, focus { … }`) ([#19996](https://github.com/tailwindlabs/tailwindcss/pull/19996))
 - Support `--default(…)` in `--value(…)` and `--modifier(…)` for functional `@utility` definitions ([#19989](https://github.com/tailwindlabs/tailwindcss/pull/19989))
@@ -4014,7 +4019,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.5...HEAD
+[4.2.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.4...v4.2.5
 [4.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.3...v4.2.4
 [4.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...v4.2.3
 [4.2.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.1...v4.2.2
