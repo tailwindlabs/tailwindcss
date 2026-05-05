@@ -24,6 +24,7 @@ import {
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
+import { addWhitespaceAroundMathOperators } from './utils/math-operators'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
@@ -450,7 +451,10 @@ export function createUtilities(theme: Theme) {
         if (value === null) return
 
         // Negate the value if the candidate has a negative prefix.
-        return desc.handle(negative ? `calc(${value} * -1)` : value, dataType)
+        return desc.handle(
+          negative ? addWhitespaceAroundMathOperators(`calc(${value} * -1)`) : value,
+          dataType,
+        )
       }
     }
 
