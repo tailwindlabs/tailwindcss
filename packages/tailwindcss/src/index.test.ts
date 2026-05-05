@@ -254,7 +254,7 @@ describe('arbitrary properties', () => {
   })
 
   it('should not generate arbitrary properties with invalid modifiers', async () => {
-    expect(await run(['[color:red]/not-a-percentage'])).toMatchInlineSnapshot(`""`)
+    expect(await run(['[color:red]/not-a-percentage'])).toEqual('')
   })
 
   it('should generate arbitrary properties with variables and with modifiers', async () => {
@@ -3766,7 +3766,7 @@ describe('@source', () => {
         { base: '/root' },
       )
 
-      expect(build([])).toMatchInlineSnapshot(`""`)
+      expect(build([])).toEqual('')
     })
 
     test('can be negated', async () => {
@@ -3785,7 +3785,7 @@ describe('@source', () => {
         { base: '/root' },
       )
 
-      expect(build(['container'])).toMatchInlineSnapshot(`""`)
+      expect(build(['container'])).toEqual('')
     })
 
     test('applies brace expansion to negated sources', async () => {
@@ -3810,7 +3810,7 @@ describe('@source', () => {
         { base: '/root' },
       )
 
-      expect(build(['bg-red-500', 'bg-red-700'])).toMatchInlineSnapshot(`""`)
+      expect(build(['bg-red-500', 'bg-red-700'])).toEqual('')
     })
 
     test('works with whitespace around the argument', async () => {
@@ -5024,7 +5024,7 @@ describe('`@reference "…" imports`', () => {
       { loadStylesheet },
     )
 
-    expect(build(['text-underline', 'border']).trim()).toMatchInlineSnapshot(`""`)
+    expect(build(['text-underline', 'border'])).toEqual('')
   })
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {

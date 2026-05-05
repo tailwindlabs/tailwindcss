@@ -29366,7 +29366,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['paint-#0088cc', 'paint-red'])).toMatchInlineSnapshot(`""`)
+      expect(await compileCss(input, ['paint-#0088cc', 'paint-red'])).toEqual('')
       expect(spy.mock.calls).toMatchInlineSnapshot(`
         [
           [

@@ -841,7 +841,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`""`)
+    expect(pretty(compiler.build(['font-sans']))).toEqual('')
   })
 
   test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
@@ -1057,7 +1057,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`""`)
+    expect(pretty(compiler.build(['font-mono']))).toEqual('')
   })
 })
 

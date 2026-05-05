@@ -263,7 +263,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
@@ -330,7 +330,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
 })
 
 test('a prefix must be letters only', async () => {
