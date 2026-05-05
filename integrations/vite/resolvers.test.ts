@@ -571,8 +571,9 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('pnpm vite build')
 
-    expect((await fs.dumpFiles('./dist/**/*.css')).replace(/-([a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
-      .toMatchInlineSnapshot(`
+    expect(
+      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
+    ).toMatchInlineSnapshot(`
       "
       --- ./dist/assets/index-<hash>.css ---
       .do-include-me {
@@ -641,8 +642,9 @@ test(
   async ({ exec, fs, expect }) => {
     await exec('pnpm vite build')
 
-    expect((await fs.dumpFiles('./dist/**/*.css')).replace(/-([a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
-      .toMatchInlineSnapshot(`
+    expect(
+      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
+    ).toMatchInlineSnapshot(`
         "
         --- ./dist/assets/index-<hash>.css ---
         @layer base {
