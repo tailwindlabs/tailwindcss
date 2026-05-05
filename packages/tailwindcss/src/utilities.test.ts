@@ -1109,6 +1109,9 @@ test('left', async () => {
         'left-4',
         '-left-4',
         'left-[4px]',
+
+        // https://github.com/tailwindlabs/tailwindcss/issues/20010
+        '-left-[(var(--my-var1)+var(--my-var2))]',
       ],
     ),
   ).toMatchInlineSnapshot(`
@@ -1119,6 +1122,10 @@ test('left', async () => {
 
     .-left-4 {
       left: calc(var(--spacing-4) * -1);
+    }
+
+    .-left-\\[\\(var\\(--my-var1\\)\\+var\\(--my-var2\\)\\)\\] {
+      left: calc((var(--my-var1) + var(--my-var2)) * -1);
     }
 
     .-left-full {
