@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
-import { optimizeCss } from '../test-utils/run'
+import { optimizeCss, pretty } from '../test-utils/run'
 import defaultTheme from './default-theme'
 import type { CssInJs, PluginAPI } from './plugin-api'
 
@@ -53,8 +53,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      "@layer base {
+    expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+      "
+      @layer base {
         @keyframes enter {
           from {
             opacity: var(--tw-enter-opacity, 1);
@@ -96,8 +97,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      "@keyframes enter {
+    expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+      "
+      @keyframes enter {
         from {
           opacity: var(--tw-enter-opacity, 1);
         }
@@ -145,15 +147,17 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['scrollbar-red-500', 'scrollbar-russet-700'])).toMatchInlineSnapshot(`
-      ".scrollbar-red-500 {
-        scrollbar-color: #ef4444;
-      }
-      .scrollbar-russet-700 {
-        scrollbar-color: #7a4724;
-      }
-      "
-    `)
+    expect(pretty(compiler.build(['scrollbar-red-500', 'scrollbar-russet-700'])))
+      .toMatchInlineSnapshot(`
+        "
+        .scrollbar-red-500 {
+          scrollbar-color: #ef4444;
+        }
+        .scrollbar-russet-700 {
+          scrollbar-color: #7a4724;
+        }
+        "
+      `)
   })
 
   test('plugin theme values can reference legacy theme keys that have been replaced with bare value support', async ({
@@ -196,8 +200,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animate-duration-316'])).toMatchInlineSnapshot(`
-      ".animate-duration-316 {
+    expect(pretty(compiler.build(['animate-duration-316']))).toMatchInlineSnapshot(`
+      "
+      .animate-duration-316 {
         animation-duration: 316ms;
       }
       "
@@ -246,9 +251,10 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animate-duration-316', 'animate-duration-slow']))
+    expect(pretty(compiler.build(['animate-duration-316', 'animate-duration-slow'])))
       .toMatchInlineSnapshot(`
-        ".animate-duration-316 {
+        "
+        .animate-duration-316 {
           animation-duration: 316ms;
         }
         .animate-duration-slow {
@@ -289,8 +295,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['percentage', 'fraction', 'variable'])).toMatchInlineSnapshot(`
-      ".fraction {
+    expect(pretty(compiler.build(['percentage', 'fraction', 'variable']))).toMatchInlineSnapshot(`
+      "
+      .fraction {
         color: color-mix(in oklab, #ef4444 50%, transparent);
       }
       .percentage {
@@ -358,17 +365,20 @@ describe('theme', async () => {
     })
 
     expect(
-      compiler.build([
-        'bg-custom',
-        'css-percentage',
-        'css-fraction',
-        'css-variable',
-        'js-percentage',
-        'js-fraction',
-        'js-variable',
-      ]),
+      pretty(
+        compiler.build([
+          'bg-custom',
+          'css-percentage',
+          'css-fraction',
+          'css-variable',
+          'js-percentage',
+          'js-fraction',
+          'js-variable',
+        ]),
+      ),
     ).toMatchInlineSnapshot(`
-      ".css-fraction {
+      "
+      .css-fraction {
         color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) 50%, transparent);
       }
       .css-percentage {
@@ -440,15 +450,17 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animate-delay-316', 'animate-delay-slow'])).toMatchInlineSnapshot(`
-      ".animate-delay-316 {
-        animation-delay: 316ms;
-      }
-      .animate-delay-slow {
-        animation-delay: 800ms;
-      }
-      "
-    `)
+    expect(pretty(compiler.build(['animate-delay-316', 'animate-delay-slow'])))
+      .toMatchInlineSnapshot(`
+        "
+        .animate-delay-316 {
+          animation-delay: 316ms;
+        }
+        .animate-delay-slow {
+          animation-delay: 800ms;
+        }
+        "
+      `)
   })
 
   test('plugins can override the default key', async () => {
@@ -487,8 +499,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animate-duration'])).toMatchInlineSnapshot(`
-      ".animate-duration {
+    expect(pretty(compiler.build(['animate-duration']))).toMatchInlineSnapshot(`
+      "
+      .animate-duration {
         animation-delay: 1500ms;
       }
       "
@@ -536,22 +549,24 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist']))
-      .toMatchInlineSnapshot(`
-        ".animation {
-          animation: pulse 1s linear infinite;
-        }
-        .animation-spin {
-          animation: spin 1s linear infinite;
-        }
-        .animation2 {
-          animation: pulse 1s linear infinite;
-        }
-        .animation2-twist {
-          animation: spin 1s linear infinite;
-        }
-        "
-      `)
+    expect(
+      pretty(compiler.build(['animation-spin', 'animation', 'animation2', 'animation2-twist'])),
+    ).toMatchInlineSnapshot(`
+      "
+      .animation {
+        animation: pulse 1s linear infinite;
+      }
+      .animation-spin {
+        animation: spin 1s linear infinite;
+      }
+      .animation2 {
+        animation: pulse 1s linear infinite;
+      }
+      .animation2-twist {
+        animation: spin 1s linear infinite;
+      }
+      "
+    `)
   })
 
   test('CSS theme values are merged with JS theme values', async () => {
@@ -594,9 +609,10 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animation', 'animation-spin', 'animation-bounce']))
+    expect(pretty(compiler.build(['animation', 'animation-spin', 'animation-bounce'])))
       .toMatchInlineSnapshot(`
-        ".animation {
+        "
+        .animation {
           --animation: pulse 1s linear infinite;
         }
         .animation-bounce {
@@ -649,8 +665,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['animation'])).toMatchInlineSnapshot(`
-      ".animation {
+    expect(pretty(compiler.build(['animation']))).toMatchInlineSnapshot(`
+      "
+      .animation {
         --animation: pulse 1s linear infinite;
       }
       "
@@ -810,8 +827,9 @@ describe('theme', async () => {
       'my-z-index-1',
     ])
 
-    expect(output).toMatchInlineSnapshot(`
-      ".my-aspect-2\\/5 {
+    expect(pretty(output)).toMatchInlineSnapshot(`
+      "
+      .my-aspect-2\\/5 {
         --value: 2/5;
       }
       .my-backdrop-brightness-1 {
@@ -1120,8 +1138,9 @@ describe('theme', async () => {
       },
     })
 
-    expect(build(['foo-bar'])).toMatchInlineSnapshot(`
-      ".foo-bar {
+    expect(pretty(build(['foo-bar']))).toMatchInlineSnapshot(`
+      "
+      .foo-bar {
         background-color: red;
       }
       .foo-bar {
@@ -1249,8 +1268,9 @@ describe('theme', async () => {
       'my-z-index-1',
     ])
 
-    expect(output).toMatchInlineSnapshot(`
-      ".my-aspect-2\\/5 {
+    expect(pretty(output)).toMatchInlineSnapshot(`
+      "
+      .my-aspect-2\\/5 {
         --value: 2/5;
       }
       .my-border-width-1 {
@@ -1388,9 +1408,12 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['my-width-1', 'my-width-1/2', 'my-width-1.5'])).toMatchInlineSnapshot(
+    expect(
+      pretty(compiler.build(['my-width-1', 'my-width-1/2', 'my-width-1.5'])),
+    ).toMatchInlineSnapshot(
       `
-      ".my-width-1 {
+      "
+      .my-width-1 {
         width: 0.25rem;
       }
       .my-width-1\\.5 {
@@ -1433,9 +1456,10 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+    expect(pretty(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'])))
       .toMatchInlineSnapshot(`
-        ".my-width-1 {
+        "
+        .my-width-1 {
           width: 0.25rem;
         }
         .my-width-1\\.5 {
@@ -1485,9 +1509,10 @@ describe('theme', async () => {
       },
     })
 
-    expect(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5']))
+    expect(pretty(compiler.build(['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'])))
       .toMatchInlineSnapshot(`
-        ".my-width-1 {
+        "
+        .my-width-1 {
           width: 0.25rem;
         }
         .my-width-1\\.5 {
@@ -1542,8 +1567,9 @@ describe('addBase', () => {
       },
     })
 
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      "@layer base {
+    expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+      "
+      @layer base {
         outside {
           color: red;
         }
@@ -1573,8 +1599,9 @@ describe('addBase', () => {
       }),
     })
 
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      "@layer base {
+    expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+      "
+      @layer base {
         :root {
           --PascalCase: 1;
           --camelCase: 1;
@@ -1609,8 +1636,9 @@ describe('addVariant', () => {
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
           display: flex;
         }
@@ -1618,7 +1646,8 @@ describe('addVariant', () => {
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1645,8 +1674,9 @@ describe('addVariant', () => {
 
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
           display: flex;
         }
@@ -1654,7 +1684,8 @@ describe('addVariant', () => {
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1683,8 +1714,9 @@ describe('addVariant', () => {
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
           display: flex;
         }
@@ -1692,7 +1724,8 @@ describe('addVariant', () => {
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1723,8 +1756,9 @@ describe('addVariant', () => {
     )
     let compiled = build(['hocus:underline', 'group-hocus:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (hover: hover) {
           .group-hocus\\:flex:is(:where(.group):hover *) {
             display: flex;
@@ -1744,7 +1778,8 @@ describe('addVariant', () => {
         .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1773,8 +1808,9 @@ describe('addVariant', () => {
     )
     let compiled = build(['potato:underline', 'potato:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (max-width: 400px) {
           @supports (font: bold) {
             .potato\\:flex:large-potato {
@@ -1786,7 +1822,8 @@ describe('addVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1818,8 +1855,9 @@ describe('addVariant', () => {
     )
     let compiled = build(['hocus:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .hocus\\:underline {
           --custom-property: @slot;
         }
@@ -1827,7 +1865,8 @@ describe('addVariant', () => {
         .hocus\\:underline:hover, .hocus\\:underline:focus {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1860,12 +1899,14 @@ describe('addVariant', () => {
       'group-optional/foo:flex',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .group-optional\\:flex:is(:where(.group):optional *), .group-optional\\/foo\\:flex:is(:where(.group\\/foo):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
           display: flex;
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -1893,8 +1934,9 @@ describe('matchVariant', () => {
     )
     let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .potato-baked .potato-\\[baked\\]\\:flex {
           display: flex;
         }
@@ -1902,7 +1944,8 @@ describe('matchVariant', () => {
         .potato-yellow .potato-\\[yellow\\]\\:underline {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1928,8 +1971,9 @@ describe('matchVariant', () => {
     )
     let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (potato: baked) {
           .potato-\\[baked\\]\\:flex {
             display: flex;
@@ -1941,7 +1985,8 @@ describe('matchVariant', () => {
             text-decoration-line: underline;
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1971,8 +2016,9 @@ describe('matchVariant', () => {
     )
     let compiled = build(['potato-[yellow]:underline', 'potato-[baked]:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (potato: baked) {
           @supports (font: bold) {
             .potato-\\[baked\\]\\:flex:large-potato {
@@ -1988,7 +2034,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2019,8 +2066,9 @@ describe('matchVariant', () => {
     )
     let compiled = build(['tooltip-bottom:underline', 'tooltip-top:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .tooltip-bottom\\:underline[data-location="bottom"] {
           text-decoration-line: underline;
         }
@@ -2028,7 +2076,8 @@ describe('matchVariant', () => {
         .tooltip-top\\:flex[data-location="top"] {
           display: flex;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2066,12 +2115,14 @@ describe('matchVariant', () => {
       'alphabet-b:underline',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .alphabet-d\\:underline[data-order="1"], .alphabet-a\\:underline[data-order="2"], .alphabet-c\\:underline[data-order="3"], .alphabet-b\\:underline[data-order="4"] {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2099,12 +2150,14 @@ describe('matchVariant', () => {
     )
     let compiled = build(['test-[a,b,c]:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .test-\\[a\\,b\\,c\\]\\:underline.a > *, .test-\\[a\\,b\\,c\\]\\:underline.b > *, .test-\\[a\\,b\\,c\\]\\:underline.c > * {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2138,8 +2191,9 @@ describe('matchVariant', () => {
       'testmin-[700px]:italic',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 500px) {
           .testmin-\\[500px\\]\\:underline {
             text-decoration-line: underline;
@@ -2157,7 +2211,8 @@ describe('matchVariant', () => {
             font-style: italic;
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2194,8 +2249,9 @@ describe('matchVariant', () => {
       'testmin-[500px]:italic',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 500px) {
           .testmin-\\[500px\\]\\:italic {
             font-style: italic;
@@ -2213,7 +2269,8 @@ describe('matchVariant', () => {
             font-style: italic;
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2255,8 +2312,9 @@ describe('matchVariant', () => {
       'testmin-[100px]:testmax-[400px]:order-1',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 100px) {
           @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
@@ -2286,7 +2344,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2326,8 +2385,9 @@ describe('matchVariant', () => {
     ])
 
     // Expect :focus to come after :hover
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 100px) {
           @media (max-width: 200px) {
             @media (hover: hover) {
@@ -2341,7 +2401,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2381,8 +2442,9 @@ describe('matchVariant', () => {
       'testmin-[100px]:testmax-[300px]:order-3',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 100px) {
           @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
@@ -2414,7 +2476,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2454,8 +2517,9 @@ describe('matchVariant', () => {
       'testmax-[300px]:testmin-[100px]:underline',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (max-width: 400px) {
           @media (min-width: 100px) {
             .testmax-\\[400px\\]\\:testmin-\\[100px\\]\\:underline {
@@ -2483,7 +2547,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2531,8 +2596,9 @@ describe('matchVariant', () => {
       'testmin-[100px]:testmax-[300px]:order-3',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         @media (min-width: 100px) {
           @media (max-width: 400px) {
             .testmin-\\[100px\\]\\:testmax-\\[400px\\]\\:order-1 {
@@ -2564,7 +2630,8 @@ describe('matchVariant', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2594,12 +2661,14 @@ describe('matchVariant', () => {
     )
     let compiled = build(['foo:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo.bar .foo\\:underline {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2625,7 +2694,11 @@ describe('matchVariant', () => {
     )
     let compiled = build(['foo:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`"@layer utilities;"`)
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities;
+      "
+    `)
   })
 
   test('should be possible to use `null` as a DEFAULT value', async () => {
@@ -2652,12 +2725,14 @@ describe('matchVariant', () => {
     )
     let compiled = build(['foo:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo-good .foo\\:underline {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2685,12 +2760,14 @@ describe('matchVariant', () => {
     )
     let compiled = build(['foo:underline'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo-good .foo\\:underline {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2726,8 +2803,9 @@ describe('matchVariant', () => {
       'my-container-[250px]:underline',
       'my-container-[250px]/placement:underline',
     ])
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@container (min-width: 250px) {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @container (min-width: 250px) {
         .my-container-\\[250px\\]\\:underline {
           text-decoration-line: underline;
         }
@@ -2737,7 +2815,8 @@ describe('matchVariant', () => {
         .my-container-\\[250px\\]\\/placement\\:underline {
           text-decoration-line: underline;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2770,12 +2849,14 @@ describe('matchVariant', () => {
       'group-optional-[test]/foo:flex',
     ])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .group-optional-\\[test\\]\\:flex:is(:where(.group):optional:has(test) :where(.group) *), .group-optional-\\[test\\]\\/foo\\:flex:is(:where(.group\\/foo):optional:has(test) :where(.group\\/foo) *), .peer-optional-\\[test\\]\\:flex:is(:where(.peer):optional:has(test) :where(.peer) ~ *), .optional-\\[test\\]\\:flex:optional:has(test) .optional-\\[test\\]\\:flex {
           display: flex;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2806,12 +2887,14 @@ describe('matchVariant', () => {
 
     let compiled = build(['foo-[test]:flex', 'foo-known:flex', 'foo-unknown:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo-known\\:flex:is(known), .foo-\\[test\\]\\:flex:is(test) {
           display: flex;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -2843,12 +2926,14 @@ describe('matchVariant', () => {
 
     let compiled = build(['foo-[test]:flex', 'foo-string:flex', 'foo-object:flex'])
 
-    expect(optimizeCss(compiled).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo-string\\:flex:is(some string), .foo-\\[test\\]\\:flex:is(test) {
           display: flex;
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -2884,22 +2969,23 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['text-trim', 'lg:text-trim'])).trim())
-      .toMatchInlineSnapshot(`
-        "@layer utilities {
-          .text-trim {
+    expect(optimizeCss(compiled.build(['text-trim', 'lg:text-trim']))).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
+        .text-trim {
+          text-box-trim: both;
+          text-box-edge: cap alphabetic;
+        }
+
+        @media (min-width: 1024px) {
+          .lg\\:text-trim {
             text-box-trim: both;
             text-box-edge: cap alphabetic;
           }
-
-          @media (min-width: 1024px) {
-            .lg\\:text-trim {
-              text-box-trim: both;
-              text-box-edge: cap alphabetic;
-            }
-          }
-        }"
-      `)
+        }
+      }
+      "
+    `)
   })
 
   test('return multiple rule objects from a custom utility', async () => {
@@ -2928,11 +3014,13 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['text-trim'])).trim()).toMatchInlineSnapshot(`
-      ".text-trim {
+    expect(optimizeCss(compiled.build(['text-trim']))).toMatchInlineSnapshot(`
+      "
+      .text-trim {
         text-box-trim: both;
         text-box-edge: cap alphabetic;
-      }"
+      }
+      "
     `)
   })
 
@@ -2968,11 +3056,13 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['text-trim', 'text-trim-2'])).trim()).toMatchInlineSnapshot(`
-      ".text-trim, .text-trim-2 {
+    expect(optimizeCss(compiled.build(['text-trim', 'text-trim-2']))).toMatchInlineSnapshot(`
+      "
+      .text-trim, .text-trim-2 {
         text-box-trim: both;
         text-box-edge: cap alphabetic;
-      }"
+      }
+      "
     `)
   })
 
@@ -3001,11 +3091,13 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['outlined'])).trim()).toMatchInlineSnapshot(`
-      ".outlined {
+    expect(optimizeCss(compiled.build(['outlined']))).toMatchInlineSnapshot(`
+      "
+      .outlined {
         outline: 1px solid buttontext;
         outline: 1px auto -webkit-focus-ring-color;
-      }"
+      }
+      "
     `)
   })
 
@@ -3036,14 +3128,16 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['text-trim'])).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled.build(['text-trim']))).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .text-trim {
           -webkit-appearance: none;
           text-box-trim: both;
           text-box-edge: cap alphabetic;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -3076,8 +3170,9 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['foo', 'lg:foo'])).trim()).toMatchInlineSnapshot(`
-      "@layer utilities {
+    expect(optimizeCss(compiled.build(['foo', 'lg:foo']))).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
         .foo {
           display: flex;
         }
@@ -3099,7 +3194,8 @@ describe('addUtilities()', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -3164,20 +3260,21 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea'])).trim())
-      .toMatchInlineSnapshot(`
-        ".form-input {
+    expect(optimizeCss(compiled.build(['form-input', 'lg:form-textarea']))).toMatchInlineSnapshot(`
+      "
+      .form-input {
+        appearance: none;
+        background-color: #fff;
+      }
+
+      @media (min-width: 1024px) {
+        .lg\\:form-textarea {
           appearance: none;
           background-color: #fff;
         }
-
-        @media (min-width: 1024px) {
-          .lg\\:form-textarea {
-            appearance: none;
-            background-color: #fff;
-          }
-        }"
-      `)
+      }
+      "
+    `)
   })
 
   test('supports pseudo classes and pseudo elements', async () => {
@@ -3207,8 +3304,9 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['form-input', 'lg:form-textarea']).trim()).toMatchInlineSnapshot(`
-      ".form-input {
+    expect(pretty(compiled.build(['form-input', 'lg:form-textarea']))).toMatchInlineSnapshot(`
+      "
+      .form-input {
         background-color: red;
         &::placeholder {
           background-color: red;
@@ -3220,7 +3318,8 @@ describe('addUtilities()', () => {
             background-color: red;
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -3262,10 +3361,11 @@ describe('addUtilities()', () => {
     )
 
     expect(
-      compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']).trim(),
+      pretty(compiled.build(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'])),
     ).toMatchInlineSnapshot(
       `
-      "@layer utilities {
+      "
+      @layer utilities {
         .j {
           &.j {
             color: red;
@@ -3314,7 +3414,8 @@ describe('addUtilities()', () => {
             color: red;
           }
         }
-      }"
+      }
+      "
     `,
     )
   })
@@ -3346,9 +3447,10 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['tw:a', 'tw:b', 'tw:c', 'tw:d']).trim()).toMatchInlineSnapshot(
+    expect(pretty(compiled.build(['tw:a', 'tw:b', 'tw:c', 'tw:d']))).toMatchInlineSnapshot(
       `
-      "@layer utilities {
+      "
+      @layer utilities {
         .tw\\:a {
           & .tw\\:b:hover .tw\\:c.tw\\:d {
             color: red;
@@ -3369,7 +3471,8 @@ describe('addUtilities()', () => {
             color: red;
           }
         }
-      }"
+      }
+      "
     `,
     )
   })
@@ -3402,8 +3505,9 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['foo', 'md:foo', 'not-hover:md:foo']).trim()).toMatchInlineSnapshot(`
-      ".foo {
+    expect(pretty(compiled.build(['foo', 'md:foo', 'not-hover:md:foo']))).toMatchInlineSnapshot(`
+      "
+      .foo {
         :where(.foo > :first-child) {
           color: red;
         }
@@ -3430,7 +3534,8 @@ describe('addUtilities()', () => {
             }
           }
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -3465,11 +3570,13 @@ describe('addUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['foo']).trim()).toMatchInlineSnapshot(`
-      ".foo {
+    expect(pretty(compiled.build(['foo']))).toMatchInlineSnapshot(`
+      "
+      .foo {
         a: red;
         z-index: 0;
-      }"
+      }
+      "
     `)
   })
 })
@@ -3523,9 +3630,10 @@ describe('matchUtilities()', () => {
           'border-block-[var(--foo)]',
           'lg:border-block-2',
         ]),
-      ).trim(),
+      ),
     ).toMatchInlineSnapshot(`
-      ".border-block {
+      "
+      .border-block {
         border-block-width: 1px;
       }
 
@@ -3545,7 +3653,8 @@ describe('matchUtilities()', () => {
         .lg\\:border-block-2 {
           border-block-width: 2px;
         }
-      }"
+      }
+      "
     `)
 
     expect(
@@ -3557,7 +3666,7 @@ describe('matchUtilities()', () => {
           'border-block-unknown',
           'border-block/1',
         ]),
-      ).trim(),
+      ),
     ).toEqual('')
   })
 
@@ -3592,8 +3701,9 @@ describe('matchUtilities()', () => {
       return compiled.build(candidates)
     }
 
-    expect(optimizeCss(await run(['@w-1', 'hover:@w-1'])).trim()).toMatchInlineSnapshot(`
-      ".\\@w-1 {
+    expect(optimizeCss(await run(['@w-1', 'hover:@w-1']))).toMatchInlineSnapshot(`
+      "
+      .\\@w-1 {
         width: 1px;
       }
 
@@ -3601,7 +3711,8 @@ describe('matchUtilities()', () => {
         .hover\\:\\@w-1:hover {
           width: 1px;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -3638,13 +3749,15 @@ describe('matchUtilities()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['all-but-order-bottom-left-radius'])).trim())
+    expect(optimizeCss(compiled.build(['all-but-order-bottom-left-radius'])))
       .toMatchInlineSnapshot(`
-        ".all-but-order-bottom-left-radius {
+        "
+        .all-but-order-bottom-left-radius {
           border-top-left-radius: 1px;
           border-top-right-radius: 1px;
           border-bottom-right-radius: 1px;
-        }"
+        }
+        "
       `)
   })
 
@@ -3695,9 +3808,10 @@ describe('matchUtilities()', () => {
     expect(
       optimizeCss(
         await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
-      ).trim(),
+      ),
     ).toMatchInlineSnapshot(`
-      ".border-block {
+      "
+      .border-block {
         --my-modifier: none;
         border-block-width: 1px;
       }
@@ -3715,7 +3829,8 @@ describe('matchUtilities()', () => {
       .border-block\\/foo {
         --my-modifier: foo;
         border-block-width: 1px;
-      }"
+      }
+      "
     `)
   })
 
@@ -3768,9 +3883,10 @@ describe('matchUtilities()', () => {
     expect(
       optimizeCss(
         await run(['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo']),
-      ).trim(),
+      ),
     ).toMatchInlineSnapshot(`
-      ".border-block {
+      "
+      .border-block {
         --my-modifier: none;
         border-block-width: 1px;
       }
@@ -3788,12 +3904,11 @@ describe('matchUtilities()', () => {
       .border-block\\/foo {
         --my-modifier: foo;
         border-block-width: 1px;
-      }"
+      }
+      "
     `)
 
-    expect(
-      optimizeCss(await run(['border-block/unknown', 'border-block-2/unknown'])).trim(),
-    ).toEqual('')
+    expect(optimizeCss(await run(['border-block/unknown', 'border-block-2/unknown']))).toEqual('')
   })
 
   // We're not married to this behavior — if there's a good reason to do this differently in the
@@ -3835,24 +3950,23 @@ describe('matchUtilities()', () => {
         return compiled.build(candidates)
       }
 
-      expect(
-        optimizeCss(
-          await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50']),
-        ).trim(),
-      ).toMatchInlineSnapshot(`
-        ".scrollbar-\\[\\#08c\\] {
-          scrollbar-color: #08c;
-        }
+      expect(optimizeCss(await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'])))
+        .toMatchInlineSnapshot(`
+          "
+          .scrollbar-\\[\\#08c\\] {
+            scrollbar-color: #08c;
+          }
 
-        .scrollbar-\\[\\#08c\\]\\/50 {
-          scrollbar-color: oklab(59.9824% -.067 -.124 / .5);
-        }
+          .scrollbar-\\[\\#08c\\]\\/50 {
+            scrollbar-color: oklab(59.9824% -.067 -.124 / .5);
+          }
 
-        .scrollbar-\\[2px\\] {
-          scrollbar-width: 2px;
-        }"
-      `)
-      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+          .scrollbar-\\[2px\\] {
+            scrollbar-width: 2px;
+          }
+          "
+        `)
+      expect(optimizeCss(await run(['scrollbar-[2px]/50']))).toEqual('')
     })
 
     test('no modifiers are supported by the plugins', async () => {
@@ -3891,7 +4005,7 @@ describe('matchUtilities()', () => {
         return compiled.build(candidates)
       }
 
-      expect(optimizeCss(await run(['scrollbar-[2px]/50'])).trim()).toEqual('')
+      expect(optimizeCss(await run(['scrollbar-[2px]/50']))).toEqual('')
     })
 
     test('invalid named modifier', async () => {
@@ -3930,7 +4044,7 @@ describe('matchUtilities()', () => {
         return compiled.build(candidates)
       }
 
-      expect(optimizeCss(await run(['scrollbar-[2px]/foo'])).trim()).toEqual('')
+      expect(optimizeCss(await run(['scrollbar-[2px]/foo']))).toEqual('')
     })
   })
 
@@ -4000,9 +4114,10 @@ describe('matchUtilities()', () => {
           'scrollbar-[color:var(--my-color)]/50',
           'scrollbar-[length:var(--my-width)]',
         ]),
-      ).trim(),
+      ),
     ).toMatchInlineSnapshot(`
-      ".scrollbar-2 {
+      "
+      .scrollbar-2 {
         scrollbar-width: 2px;
       }
 
@@ -4048,7 +4163,8 @@ describe('matchUtilities()', () => {
 
       .scrollbar-black\\/50 {
         scrollbar-color: oklab(0% none none / .5);
-      }"
+      }
+      "
     `)
 
     expect(
@@ -4058,7 +4174,7 @@ describe('matchUtilities()', () => {
           'scrollbar-[2px]/50',
           'scrollbar-[length:var(--my-width)]/50',
         ]),
-      ).trim(),
+      ),
     ).toEqual('')
   })
 
@@ -4111,9 +4227,10 @@ describe('matchUtilities()', () => {
           'scrollbar-black/[50%]',
           'scrollbar-[var(--my-color)]/[25%]',
         ]),
-      ).trim(),
+      ),
     ).toMatchInlineSnapshot(`
-      ".scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
+      "
+      .scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
         scrollbar-color: var(--my-color);
       }
 
@@ -4143,7 +4260,8 @@ describe('matchUtilities()', () => {
         .scrollbar-current\\/45 {
           scrollbar-color: color-mix(in oklab, currentcolor 45%, transparent);
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -4192,11 +4310,10 @@ describe('matchUtilities()', () => {
     }
 
     expect(
-      optimizeCss(
-        await run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar']),
-      ).trim(),
+      optimizeCss(await run(['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar'])),
     ).toMatchInlineSnapshot(`
-      ".scrollbar-\\[12px\\] {
+      "
+      .scrollbar-\\[12px\\] {
         --modifier: none;
         scrollbar-width: 12px;
       }
@@ -4204,7 +4321,8 @@ describe('matchUtilities()', () => {
       .scrollbar-\\[12px\\]\\/foo {
         --modifier: foo;
         scrollbar-width: 12px;
-      }"
+      }
+      "
     `)
   })
 
@@ -4245,33 +4363,34 @@ describe('matchUtilities()', () => {
       },
     )
 
-    expect(
-      optimizeCss(compiled.build(['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'])).trim(),
-    ).toMatchInlineSnapshot(`
-      "@layer utilities {
-        .foo-\\[12px\\] {
-          --foo: 12px;
-          display: flex;
-        }
-
-        .foo-bar {
-          --foo: bar;
-          display: flex;
-        }
-
-        @media (min-width: 1024px) {
-          .lg\\:foo-\\[12px\\] {
+    expect(optimizeCss(compiled.build(['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'])))
+      .toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          .foo-\\[12px\\] {
             --foo: 12px;
             display: flex;
           }
 
-          .lg\\:foo-bar {
+          .foo-bar {
             --foo: bar;
             display: flex;
           }
+
+          @media (min-width: 1024px) {
+            .lg\\:foo-\\[12px\\] {
+              --foo: 12px;
+              display: flex;
+            }
+
+            .lg\\:foo-bar {
+              --foo: bar;
+              display: flex;
+            }
+          }
         }
-      }"
-    `)
+        "
+      `)
   })
 
   test('throws on custom utilities with an invalid name', async () => {
@@ -4343,9 +4462,10 @@ describe('matchUtilities()', () => {
       },
     )
 
-    expect(compiled.build(['foo-red', 'md:foo-red', 'not-hover:md:foo-red']).trim())
+    expect(pretty(compiled.build(['foo-red', 'md:foo-red', 'not-hover:md:foo-red'])))
       .toMatchInlineSnapshot(`
-        ".foo-red {
+        "
+        .foo-red {
           :where(.foo-red > :first-child) {
             color: red;
           }
@@ -4372,7 +4492,8 @@ describe('matchUtilities()', () => {
               }
             }
           }
-        }"
+        }
+        "
       `)
   })
 })
@@ -4417,32 +4538,33 @@ describe('addComponents()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['btn', 'btn-blue', 'btn-red'])).trim())
-      .toMatchInlineSnapshot(`
-        ".btn {
-          border-radius: .25rem;
-          padding: .5rem 1rem;
-          font-weight: 600;
-        }
+    expect(optimizeCss(compiled.build(['btn', 'btn-blue', 'btn-red']))).toMatchInlineSnapshot(`
+      "
+      .btn {
+        border-radius: .25rem;
+        padding: .5rem 1rem;
+        font-weight: 600;
+      }
 
-        .btn-blue {
-          color: #fff;
-          background-color: #3490dc;
-        }
+      .btn-blue {
+        color: #fff;
+        background-color: #3490dc;
+      }
 
-        .btn-blue:hover {
-          background-color: #2779bd;
-        }
+      .btn-blue:hover {
+        background-color: #2779bd;
+      }
 
-        .btn-red {
-          color: #fff;
-          background-color: #e3342f;
-        }
+      .btn-red {
+        color: #fff;
+        background-color: #e3342f;
+      }
 
-        .btn-red:hover {
-          background-color: #cc1f1a;
-        }"
-      `)
+      .btn-red:hover {
+        background-color: #cc1f1a;
+      }
+      "
+    `)
   })
 })
 
@@ -4477,9 +4599,10 @@ describe('matchComponents()', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])).trim())
+    expect(optimizeCss(compiled.build(['prose', 'sm:prose-sm', 'hover:prose-lg'])))
       .toMatchInlineSnapshot(`
-        ".prose {
+        "
+        .prose {
           --container-size: normal;
         }
 
@@ -4487,7 +4610,8 @@ describe('matchComponents()', () => {
           .hover\\:prose-lg:hover {
             --container-size: lg;
           }
-        }"
+        }
+        "
       `)
   })
 })
@@ -4633,7 +4757,7 @@ describe('config()', () => {
           'test-valueOf',
           'test-__proto__',
         ]),
-      ).trim(),
+      ),
     ).toEqual('')
   })
 })

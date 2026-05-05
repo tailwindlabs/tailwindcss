@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import { compile } from '..'
+import { pretty } from '../test-utils/run'
 
 const css = String.raw
 
@@ -31,8 +32,9 @@ test('creates a custom utility to extend the built-in container', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -90,8 +92,9 @@ test('allows padding to be defined at custom breakpoints', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -152,8 +155,9 @@ test('allows breakpoints to be overwritten', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -219,8 +223,9 @@ test('padding applies to custom `container` screens', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -283,8 +288,9 @@ test("an empty `screen` config will undo all custom media screens and won't appl
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;
@@ -349,8 +355,9 @@ test('legacy container component does not interfere with new --container variabl
     }),
   })
 
-  expect(compiler.build(['max-w-sm'])).toMatchInlineSnapshot(`
-    ":root, :host {
+  expect(pretty(compiler.build(['max-w-sm']))).toMatchInlineSnapshot(`
+    "
+    :root, :host {
       --container-sm: 24rem;
     }
     .max-w-sm {
@@ -396,8 +403,9 @@ test('combines custom padding and screen overwrites', async () => {
     }),
   })
 
-  expect(compiler.build(['container', '!container'])).toMatchInlineSnapshot(`
-    ".\\!container {
+  expect(pretty(compiler.build(['container', '!container']))).toMatchInlineSnapshot(`
+    "
+    .\\!container {
       width: 100% !important;
       @media (width >= 40rem) {
         max-width: 40rem !important;
@@ -509,8 +517,9 @@ test('filters out complex breakpoints', async () => {
     }),
   })
 
-  expect(compiler.build(['container'])).toMatchInlineSnapshot(`
-    ".container {
+  expect(pretty(compiler.build(['container']))).toMatchInlineSnapshot(`
+    "
+    .container {
       width: 100%;
       @media (width >= 40rem) {
         max-width: 40rem;

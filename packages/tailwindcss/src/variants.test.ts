@@ -1,50 +1,58 @@
-import dedent from 'dedent'
 import { expect, test } from 'vitest'
 import createPlugin from './plugin'
-import { compileCss, run } from './test-utils/run'
+import { compileCss, pretty, run } from './test-utils/run'
 import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
 
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
-    ":is(.\\*\\:flex > *) {
+    "
+    :is(.\\*\\:flex > *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['*/foo:flex'])).toEqual('')
 })
 
 test('**', async () => {
   expect(await run(['**:flex'])).toMatchInlineSnapshot(`
-    ":is(.\\*\\*\\:flex *) {
+    "
+    :is(.\\*\\*\\:flex *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['**/foo:flex'])).toEqual('')
 })
 
 test('first-letter', async () => {
   expect(await run(['first-letter:flex'])).toMatchInlineSnapshot(`
-    ".first-letter\\:flex:first-letter {
+    "
+    .first-letter\\:flex:first-letter {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['first-letter/foo:flex'])).toEqual('')
 })
 
 test('first-line', async () => {
   expect(await run(['first-line:flex'])).toMatchInlineSnapshot(`
-    ".first-line\\:flex:first-line {
+    "
+    .first-line\\:flex:first-line {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['first-line/foo:flex'])).toEqual('')
 })
 
 test('marker', async () => {
   expect(await run(['marker:flex'])).toMatchInlineSnapshot(`
-    ".marker\\:flex ::marker {
+    "
+    .marker\\:flex ::marker {
       display: flex;
     }
 
@@ -58,63 +66,75 @@ test('marker', async () => {
 
     .marker\\:flex::-webkit-details-marker {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['marker/foo:flex'])).toEqual('')
 })
 
 test('selection', async () => {
   expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
-    ".selection\\:flex ::selection {
+    "
+    .selection\\:flex ::selection {
       display: flex;
     }
 
     .selection\\:flex::selection {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['selection/foo:flex'])).toEqual('')
 })
 
 test('file', async () => {
   expect(await run(['file:flex'])).toMatchInlineSnapshot(`
-    ".file\\:flex::file-selector-button {
+    "
+    .file\\:flex::file-selector-button {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['file/foo:flex'])).toEqual('')
 })
 
 test('placeholder', async () => {
   expect(await run(['placeholder:flex'])).toMatchInlineSnapshot(`
-    ".placeholder\\:flex::placeholder {
+    "
+    .placeholder\\:flex::placeholder {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['placeholder/foo:flex'])).toEqual('')
 })
 
 test('backdrop', async () => {
   expect(await run(['backdrop:flex'])).toMatchInlineSnapshot(`
-    ".backdrop\\:flex::backdrop {
+    "
+    .backdrop\\:flex::backdrop {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['backdrop/foo:flex'])).toEqual('')
 })
 
 test('details-content', async () => {
   expect(await run(['details-content:flex'])).toMatchInlineSnapshot(`
-    ".details-content\\:flex::details-content {
+    "
+    .details-content\\:flex::details-content {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['details-content/foo:flex'])).toEqual('')
 })
 
 test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -131,14 +151,16 @@ test('before', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
   expect(await run(['before/foo:flex'])).toEqual('')
 })
 
 test('after', async () => {
   expect(await run(['after:flex'])).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -155,52 +177,63 @@ test('after', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
   expect(await run(['after/foo:flex'])).toEqual('')
 })
 
 test('first', async () => {
   expect(await run(['first:flex', 'group-first:flex', 'peer-first:flex'])).toMatchInlineSnapshot(`
-    ".group-first\\:flex:is(:where(.group):first-child *), .peer-first\\:flex:is(:where(.peer):first-child ~ *), .first\\:flex:first-child {
+    "
+    .group-first\\:flex:is(:where(.group):first-child *), .peer-first\\:flex:is(:where(.peer):first-child ~ *), .first\\:flex:first-child {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['first/foo:flex'])).toEqual('')
 })
 
 test('last', async () => {
   expect(await run(['last:flex', 'group-last:flex', 'peer-last:flex'])).toMatchInlineSnapshot(`
-    ".group-last\\:flex:is(:where(.group):last-child *), .peer-last\\:flex:is(:where(.peer):last-child ~ *), .last\\:flex:last-child {
+    "
+    .group-last\\:flex:is(:where(.group):last-child *), .peer-last\\:flex:is(:where(.peer):last-child ~ *), .last\\:flex:last-child {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['last/foo:flex'])).toEqual('')
 })
 
 test('only', async () => {
   expect(await run(['only:flex', 'group-only:flex', 'peer-only:flex'])).toMatchInlineSnapshot(`
-    ".group-only\\:flex:is(:where(.group):only-child *), .peer-only\\:flex:is(:where(.peer):only-child ~ *), .only\\:flex:only-child {
+    "
+    .group-only\\:flex:is(:where(.group):only-child *), .peer-only\\:flex:is(:where(.peer):only-child ~ *), .only\\:flex:only-child {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['only/foo:flex'])).toEqual('')
 })
 
 test('odd', async () => {
   expect(await run(['odd:flex', 'group-odd:flex', 'peer-odd:flex'])).toMatchInlineSnapshot(`
-    ".group-odd\\:flex:is(:where(.group):nth-child(odd) *), .peer-odd\\:flex:is(:where(.peer):nth-child(odd) ~ *), .odd\\:flex:nth-child(odd) {
+    "
+    .group-odd\\:flex:is(:where(.group):nth-child(odd) *), .peer-odd\\:flex:is(:where(.peer):nth-child(odd) ~ *), .odd\\:flex:nth-child(odd) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['odd/foo:flex'])).toEqual('')
 })
 
 test('even', async () => {
   expect(await run(['even:flex', 'group-even:flex', 'peer-even:flex'])).toMatchInlineSnapshot(`
-    ".group-even\\:flex:is(:where(.group):nth-child(2n) *), .peer-even\\:flex:is(:where(.peer):nth-child(2n) ~ *), .even\\:flex:nth-child(2n) {
+    "
+    .group-even\\:flex:is(:where(.group):nth-child(2n) *), .peer-even\\:flex:is(:where(.peer):nth-child(2n) ~ *), .even\\:flex:nth-child(2n) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['even/foo:flex'])).toEqual('')
 })
@@ -208,9 +241,11 @@ test('even', async () => {
 test('first-of-type', async () => {
   expect(await run(['first-of-type:flex', 'group-first-of-type:flex', 'peer-first-of-type:flex']))
     .toMatchInlineSnapshot(`
-      ".group-first-of-type\\:flex:is(:where(.group):first-of-type *), .peer-first-of-type\\:flex:is(:where(.peer):first-of-type ~ *), .first-of-type\\:flex:first-of-type {
+      "
+      .group-first-of-type\\:flex:is(:where(.group):first-of-type *), .peer-first-of-type\\:flex:is(:where(.peer):first-of-type ~ *), .first-of-type\\:flex:first-of-type {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['first-of-type/foo:flex'])).toEqual('')
 })
@@ -218,9 +253,11 @@ test('first-of-type', async () => {
 test('last-of-type', async () => {
   expect(await run(['last-of-type:flex', 'group-last-of-type:flex', 'peer-last-of-type:flex']))
     .toMatchInlineSnapshot(`
-      ".group-last-of-type\\:flex:is(:where(.group):last-of-type *), .peer-last-of-type\\:flex:is(:where(.peer):last-of-type ~ *), .last-of-type\\:flex:last-of-type {
+      "
+      .group-last-of-type\\:flex:is(:where(.group):last-of-type *), .peer-last-of-type\\:flex:is(:where(.peer):last-of-type ~ *), .last-of-type\\:flex:last-of-type {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['last-of-type/foo:flex'])).toEqual('')
 })
@@ -228,9 +265,11 @@ test('last-of-type', async () => {
 test('only-of-type', async () => {
   expect(await run(['only-of-type:flex', 'group-only-of-type:flex', 'peer-only-of-type:flex']))
     .toMatchInlineSnapshot(`
-      ".group-only-of-type\\:flex:is(:where(.group):only-of-type *), .peer-only-of-type\\:flex:is(:where(.peer):only-of-type ~ *), .only-of-type\\:flex:only-of-type {
+      "
+      .group-only-of-type\\:flex:is(:where(.group):only-of-type *), .peer-only-of-type\\:flex:is(:where(.peer):only-of-type ~ *), .only-of-type\\:flex:only-of-type {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['only-of-type/foo:flex'])).toEqual('')
 })
@@ -238,9 +277,11 @@ test('only-of-type', async () => {
 test('visited', async () => {
   expect(await run(['visited:flex', 'group-visited:flex', 'peer-visited:flex']))
     .toMatchInlineSnapshot(`
-      ".group-visited\\:flex:is(:where(.group):visited *), .peer-visited\\:flex:is(:where(.peer):visited ~ *), .visited\\:flex:visited {
+      "
+      .group-visited\\:flex:is(:where(.group):visited *), .peer-visited\\:flex:is(:where(.peer):visited ~ *), .visited\\:flex:visited {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['visited/foo:flex'])).toEqual('')
 })
@@ -248,9 +289,11 @@ test('visited', async () => {
 test('target', async () => {
   expect(await run(['target:flex', 'group-target:flex', 'peer-target:flex']))
     .toMatchInlineSnapshot(`
-      ".group-target\\:flex:is(:where(.group):target *), .peer-target\\:flex:is(:where(.peer):target ~ *), .target\\:flex:target {
+      "
+      .group-target\\:flex:is(:where(.group):target *), .peer-target\\:flex:is(:where(.peer):target ~ *), .target\\:flex:target {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['target/foo:flex'])).toEqual('')
 })
@@ -258,9 +301,11 @@ test('target', async () => {
 test('open', async () => {
   expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex', 'not-open:flex']))
     .toMatchInlineSnapshot(`
-      ".not-open\\:flex:not(:is([open], :popover-open, :open)), .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
+      "
+      .not-open\\:flex:not(:is([open], :popover-open, :open)), .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['open/foo:flex'])).toEqual('')
 })
@@ -268,9 +313,11 @@ test('open', async () => {
 test('default', async () => {
   expect(await run(['default:flex', 'group-default:flex', 'peer-default:flex']))
     .toMatchInlineSnapshot(`
-      ".group-default\\:flex:is(:where(.group):default *), .peer-default\\:flex:is(:where(.peer):default ~ *), .default\\:flex:default {
+      "
+      .group-default\\:flex:is(:where(.group):default *), .peer-default\\:flex:is(:where(.peer):default ~ *), .default\\:flex:default {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['default/foo:flex'])).toEqual('')
 })
@@ -278,9 +325,11 @@ test('default', async () => {
 test('checked', async () => {
   expect(await run(['checked:flex', 'group-checked:flex', 'peer-checked:flex']))
     .toMatchInlineSnapshot(`
-      ".group-checked\\:flex:is(:where(.group):checked *), .peer-checked\\:flex:is(:where(.peer):checked ~ *), .checked\\:flex:checked {
+      "
+      .group-checked\\:flex:is(:where(.group):checked *), .peer-checked\\:flex:is(:where(.peer):checked ~ *), .checked\\:flex:checked {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['checked/foo:flex'])).toEqual('')
 })
@@ -288,9 +337,11 @@ test('checked', async () => {
 test('indeterminate', async () => {
   expect(await run(['indeterminate:flex', 'group-indeterminate:flex', 'peer-indeterminate:flex']))
     .toMatchInlineSnapshot(`
-      ".group-indeterminate\\:flex:is(:where(.group):indeterminate *), .peer-indeterminate\\:flex:is(:where(.peer):indeterminate ~ *), .indeterminate\\:flex:indeterminate {
+      "
+      .group-indeterminate\\:flex:is(:where(.group):indeterminate *), .peer-indeterminate\\:flex:is(:where(.peer):indeterminate ~ *), .indeterminate\\:flex:indeterminate {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['indeterminate/foo:flex'])).toEqual('')
 })
@@ -303,9 +354,11 @@ test('placeholder-shown', async () => {
       'peer-placeholder-shown:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-placeholder-shown\\:flex:is(:where(.group):placeholder-shown *), .peer-placeholder-shown\\:flex:is(:where(.peer):placeholder-shown ~ *), .placeholder-shown\\:flex:placeholder-shown {
+    "
+    .group-placeholder-shown\\:flex:is(:where(.group):placeholder-shown *), .peer-placeholder-shown\\:flex:is(:where(.peer):placeholder-shown ~ *), .placeholder-shown\\:flex:placeholder-shown {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['placeholder-shown/foo:flex'])).toEqual('')
 })
@@ -313,13 +366,15 @@ test('placeholder-shown', async () => {
 test('autofill', async () => {
   expect(await run(['autofill:flex', 'group-autofill:flex', 'peer-autofill:flex']))
     .toMatchInlineSnapshot(`
-      ".group-autofill\\:flex:is(:where(.group):autofill *), .peer-autofill\\:flex:is(:where(.peer):autofill ~ *) {
+      "
+      .group-autofill\\:flex:is(:where(.group):autofill *), .peer-autofill\\:flex:is(:where(.peer):autofill ~ *) {
         display: flex;
       }
 
       .autofill\\:flex:autofill {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['autofill/foo:flex'])).toEqual('')
 })
@@ -327,9 +382,11 @@ test('autofill', async () => {
 test('optional', async () => {
   expect(await run(['optional:flex', 'group-optional:flex', 'peer-optional:flex']))
     .toMatchInlineSnapshot(`
-      ".group-optional\\:flex:is(:where(.group):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
+      "
+      .group-optional\\:flex:is(:where(.group):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['optional/foo:flex'])).toEqual('')
 })
@@ -337,18 +394,22 @@ test('optional', async () => {
 test('required', async () => {
   expect(await run(['required:flex', 'group-required:flex', 'peer-required:flex']))
     .toMatchInlineSnapshot(`
-      ".group-required\\:flex:is(:where(.group):required *), .peer-required\\:flex:is(:where(.peer):required ~ *), .required\\:flex:required {
+      "
+      .group-required\\:flex:is(:where(.group):required *), .peer-required\\:flex:is(:where(.peer):required ~ *), .required\\:flex:required {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['required/foo:flex'])).toEqual('')
 })
 
 test('valid', async () => {
   expect(await run(['valid:flex', 'group-valid:flex', 'peer-valid:flex'])).toMatchInlineSnapshot(`
-    ".group-valid\\:flex:is(:where(.group):valid *), .peer-valid\\:flex:is(:where(.peer):valid ~ *), .valid\\:flex:valid {
+    "
+    .group-valid\\:flex:is(:where(.group):valid *), .peer-valid\\:flex:is(:where(.peer):valid ~ *), .valid\\:flex:valid {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['valid/foo:flex'])).toEqual('')
 })
@@ -356,9 +417,11 @@ test('valid', async () => {
 test('invalid', async () => {
   expect(await run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex']))
     .toMatchInlineSnapshot(`
-      ".group-invalid\\:flex:is(:where(.group):invalid *), .peer-invalid\\:flex:is(:where(.peer):invalid ~ *), .invalid\\:flex:invalid {
+      "
+      .group-invalid\\:flex:is(:where(.group):invalid *), .peer-invalid\\:flex:is(:where(.peer):invalid ~ *), .invalid\\:flex:invalid {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['invalid/foo:flex'])).toEqual('')
 })
@@ -366,13 +429,15 @@ test('invalid', async () => {
 test('user-valid', async () => {
   expect(await run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']))
     .toMatchInlineSnapshot(`
-      ".group-user-valid\\:flex:is(:where(.group):user-valid *), .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+      "
+      .group-user-valid\\:flex:is(:where(.group):user-valid *), .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
         display: flex;
       }
 
       .user-valid\\:flex:user-valid {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['user-valid/foo:flex'])).toEqual('')
 })
@@ -380,13 +445,15 @@ test('user-valid', async () => {
 test('user-invalid', async () => {
   expect(await run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']))
     .toMatchInlineSnapshot(`
-      ".group-user-invalid\\:flex:is(:where(.group):user-invalid *), .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+      "
+      .group-user-invalid\\:flex:is(:where(.group):user-invalid *), .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
         display: flex;
       }
 
       .user-invalid\\:flex:user-invalid {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['user-invalid/foo:flex'])).toEqual('')
 })
@@ -394,9 +461,11 @@ test('user-invalid', async () => {
 test('in-range', async () => {
   expect(await run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
     .toMatchInlineSnapshot(`
-      ".group-in-range\\:flex:is(:where(.group):in-range *), .peer-in-range\\:flex:is(:where(.peer):in-range ~ *), .in-range\\:flex:in-range {
+      "
+      .group-in-range\\:flex:is(:where(.group):in-range *), .peer-in-range\\:flex:is(:where(.peer):in-range ~ *), .in-range\\:flex:in-range {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['in-range/foo:flex'])).toEqual('')
 })
@@ -404,9 +473,11 @@ test('in-range', async () => {
 test('out-of-range', async () => {
   expect(await run(['out-of-range:flex', 'group-out-of-range:flex', 'peer-out-of-range:flex']))
     .toMatchInlineSnapshot(`
-      ".group-out-of-range\\:flex:is(:where(.group):out-of-range *), .peer-out-of-range\\:flex:is(:where(.peer):out-of-range ~ *), .out-of-range\\:flex:out-of-range {
+      "
+      .group-out-of-range\\:flex:is(:where(.group):out-of-range *), .peer-out-of-range\\:flex:is(:where(.peer):out-of-range ~ *), .out-of-range\\:flex:out-of-range {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['out-of-range/foo:flex'])).toEqual('')
 })
@@ -414,18 +485,22 @@ test('out-of-range', async () => {
 test('read-only', async () => {
   expect(await run(['read-only:flex', 'group-read-only:flex', 'peer-read-only:flex']))
     .toMatchInlineSnapshot(`
-      ".group-read-only\\:flex:is(:where(.group):read-only *), .peer-read-only\\:flex:is(:where(.peer):read-only ~ *), .read-only\\:flex:read-only {
+      "
+      .group-read-only\\:flex:is(:where(.group):read-only *), .peer-read-only\\:flex:is(:where(.peer):read-only ~ *), .read-only\\:flex:read-only {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['read-only/foo:flex'])).toEqual('')
 })
 
 test('empty', async () => {
   expect(await run(['empty:flex', 'group-empty:flex', 'peer-empty:flex'])).toMatchInlineSnapshot(`
-    ".group-empty\\:flex:is(:where(.group):empty *), .peer-empty\\:flex:is(:where(.peer):empty ~ *), .empty\\:flex:empty {
+    "
+    .group-empty\\:flex:is(:where(.group):empty *), .peer-empty\\:flex:is(:where(.peer):empty ~ *), .empty\\:flex:empty {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['empty/foo:flex'])).toEqual('')
 })
@@ -433,36 +508,43 @@ test('empty', async () => {
 test('focus-within', async () => {
   expect(await run(['focus-within:flex', 'group-focus-within:flex', 'peer-focus-within:flex']))
     .toMatchInlineSnapshot(`
-      ".group-focus-within\\:flex:is(:where(.group):focus-within *), .peer-focus-within\\:flex:is(:where(.peer):focus-within ~ *), .focus-within\\:flex:focus-within {
+      "
+      .group-focus-within\\:flex:is(:where(.group):focus-within *), .peer-focus-within\\:flex:is(:where(.peer):focus-within ~ *), .focus-within\\:flex:focus-within {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['focus-within/foo:flex'])).toEqual('')
 })
 
 test('hover', async () => {
   expect(await run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "
+    @media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *), .hover\\:flex:hover {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['hover/foo:flex'])).toEqual('')
 })
 
 test('focus', async () => {
   expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
-    ".group-focus\\:flex:is(:where(.group):focus *), .peer-focus\\:flex:is(:where(.peer):focus ~ *), .focus\\:flex:focus {
+    "
+    .group-focus\\:flex:is(:where(.group):focus *), .peer-focus\\:flex:is(:where(.peer):focus ~ *), .focus\\:flex:focus {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['focus/foo:flex'])).toEqual('')
 })
 
 test('group-hover group-focus sorting', async () => {
   expect(await run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "
+    @media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
@@ -470,10 +552,12 @@ test('group-hover group-focus sorting', async () => {
 
     .group-focus\\:flex:is(:where(.group):focus *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "
+    @media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
@@ -481,16 +565,19 @@ test('group-hover group-focus sorting', async () => {
 
     .group-focus\\:flex:is(:where(.group):focus *) {
       display: flex;
-    }"
+    }
+    "
   `)
 })
 
 test('focus-visible', async () => {
   expect(await run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
-      ".group-focus-visible\\:flex:is(:where(.group):focus-visible *), .peer-focus-visible\\:flex:is(:where(.peer):focus-visible ~ *), .focus-visible\\:flex:focus-visible {
+      "
+      .group-focus-visible\\:flex:is(:where(.group):focus-visible *), .peer-focus-visible\\:flex:is(:where(.peer):focus-visible ~ *), .focus-visible\\:flex:focus-visible {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['focus-visible/foo:flex'])).toEqual('')
 })
@@ -498,9 +585,11 @@ test('focus-visible', async () => {
 test('active', async () => {
   expect(await run(['active:flex', 'group-active:flex', 'peer-active:flex']))
     .toMatchInlineSnapshot(`
-      ".group-active\\:flex:is(:where(.group):active *), .peer-active\\:flex:is(:where(.peer):active ~ *), .active\\:flex:active {
+      "
+      .group-active\\:flex:is(:where(.group):active *), .peer-active\\:flex:is(:where(.peer):active ~ *), .active\\:flex:active {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['active/foo:flex'])).toEqual('')
 })
@@ -508,9 +597,11 @@ test('active', async () => {
 test('enabled', async () => {
   expect(await run(['enabled:flex', 'group-enabled:flex', 'peer-enabled:flex']))
     .toMatchInlineSnapshot(`
-      ".group-enabled\\:flex:is(:where(.group):enabled *), .peer-enabled\\:flex:is(:where(.peer):enabled ~ *), .enabled\\:flex:enabled {
+      "
+      .group-enabled\\:flex:is(:where(.group):enabled *), .peer-enabled\\:flex:is(:where(.peer):enabled ~ *), .enabled\\:flex:enabled {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['enabled/foo:flex'])).toEqual('')
 })
@@ -518,18 +609,22 @@ test('enabled', async () => {
 test('disabled', async () => {
   expect(await run(['disabled:flex', 'group-disabled:flex', 'peer-disabled:flex']))
     .toMatchInlineSnapshot(`
-      ".group-disabled\\:flex:is(:where(.group):disabled *), .peer-disabled\\:flex:is(:where(.peer):disabled ~ *), .disabled\\:flex:disabled {
+      "
+      .group-disabled\\:flex:is(:where(.group):disabled *), .peer-disabled\\:flex:is(:where(.peer):disabled ~ *), .disabled\\:flex:disabled {
         display: flex;
-      }"
+      }
+      "
     `)
   expect(await run(['disabled/foo:flex'])).toEqual('')
 })
 
 test('inert', async () => {
   expect(await run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
-    ".group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *), .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *), .inert\\:flex:is([inert], [inert] *) {
+    "
+    .group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *), .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *), .inert\\:flex:is([inert], [inert] *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['inert/foo:flex'])).toEqual('')
 })
@@ -544,7 +639,8 @@ test('group-[...]', async () => {
       'group-[&:hover]:group-[&_p]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-\\[\\&_p\\]\\:flex:is(:where(.group) p *), .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group) p *) {
+    "
+    .group-\\[\\&_p\\]\\:flex:is(:where(.group) p *), .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group) p *) {
       display: flex;
     }
 
@@ -558,7 +654,8 @@ test('group-[...]', async () => {
           display: flex;
         }
       }
-    }"
+    }
+    "
   `)
 
   expect(
@@ -593,7 +690,8 @@ test('group-*', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "
+    @media (hover: hover) {
       .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
@@ -611,7 +709,8 @@ test('group-*', async () => {
 
     .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
       display: flex;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -642,7 +741,8 @@ test('peer-[...]', async () => {
       'peer-[&:hover]:peer-[&_p]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *), .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer) p ~ *) {
+    "
+    .peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *), .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer) p ~ *) {
       display: flex;
     }
 
@@ -650,7 +750,8 @@ test('peer-[...]', async () => {
       .hover\\:peer-\\[\\&_p\\]\\:flex:hover:is(:where(.peer) p ~ *), .peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *):hover, .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover:is(:where(.peer) p ~ *):focus {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 
   expect(
@@ -684,7 +785,8 @@ test('peer-*', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (hover: hover) {
+    "
+    @media (hover: hover) {
       .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }
@@ -702,7 +804,8 @@ test('peer-*', async () => {
 
     .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
       display: flex;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -725,73 +828,87 @@ test('peer-*', async () => {
 
 test('ltr', async () => {
   expect(await run(['ltr:flex'])).toMatchInlineSnapshot(`
-    ".ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    "
+    .ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['ltr/foo:flex'])).toEqual('')
 })
 
 test('rtl', async () => {
   expect(await run(['rtl:flex'])).toMatchInlineSnapshot(`
-    ".rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+    "
+    .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['rtl/foo:flex'])).toEqual('')
 })
 
 test('motion-safe', async () => {
   expect(await run(['motion-safe:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-reduced-motion: no-preference) {
+    "
+    @media (prefers-reduced-motion: no-preference) {
       .motion-safe\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['motion-safe/foo:flex'])).toEqual('')
 })
 
 test('motion-reduce', async () => {
   expect(await run(['motion-reduce:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-reduced-motion: reduce) {
+    "
+    @media (prefers-reduced-motion: reduce) {
       .motion-reduce\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['motion-reduce/foo:flex'])).toEqual('')
 })
 
 test('dark', async () => {
   expect(await run(['dark:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-color-scheme: dark) {
+    "
+    @media (prefers-color-scheme: dark) {
       .dark\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['dark/foo:flex'])).toEqual('')
 })
 
 test('starting', async () => {
   expect(await run(['starting:opacity-0'])).toMatchInlineSnapshot(`
-    "@starting-style {
+    "
+    @starting-style {
       .starting\\:opacity-0 {
         opacity: 0;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['starting/foo:flex'])).toEqual('')
 })
 
 test('print', async () => {
   expect(await run(['print:flex'])).toMatchInlineSnapshot(`
-    "@media print {
+    "
+    @media print {
       .print\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['print/foo:flex'])).toEqual('')
 })
@@ -813,7 +930,8 @@ test('default breakpoints', async () => {
       ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 640px) {
+    "
+    @media (min-width: 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -841,7 +959,8 @@ test('default breakpoints', async () => {
       .\\32 xl\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -873,11 +992,13 @@ test('custom breakpoint', async () => {
       ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 5000px) {
+    "
+    @media (min-width: 5000px) {
       .\\31 0xl\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -896,7 +1017,8 @@ test('max-*', async () => {
       ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media not all and (min-width: 1024px) {
+    "
+    @media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -912,7 +1034,8 @@ test('max-*', async () => {
       .max-sm\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -945,7 +1068,8 @@ test('min-*', async () => {
       ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 640px) {
+    "
+    @media (min-width: 640px) {
       .min-sm\\:flex {
         display: flex;
       }
@@ -961,7 +1085,8 @@ test('min-*', async () => {
       .min-lg\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -996,7 +1121,8 @@ test('sorting stacked min-* and max-* variants', async () => {
       ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 280px) {
+    "
+    @media (min-width: 280px) {
       @media not all and (min-width: 640px) {
         .min-xs\\:max-sm\\:flex {
           display: flex;
@@ -1024,7 +1150,8 @@ test('sorting stacked min-* and max-* variants', async () => {
           display: flex;
         }
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -1043,7 +1170,8 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
       ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
-    "@media (min-width: 640px) {
+    "
+    @media (min-width: 640px) {
       .sm\\:flex {
         display: flex;
       }
@@ -1065,7 +1193,8 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
           display: flex;
         }
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -1099,7 +1228,8 @@ test('min, max and unprefixed breakpoints', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@media not all and (min-width: 1024px) {
+    "
+    @media not all and (min-width: 1024px) {
       .max-lg\\:flex {
         display: flex;
       }
@@ -1145,7 +1275,8 @@ test('min, max and unprefixed breakpoints', async () => {
       .lg\\:flex, .min-lg\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -1174,7 +1305,8 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       'max-[12vh]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    "@media not all and (min-width: calc(1000px + 12em)) {
+    "
+    @media not all and (min-width: calc(1000px + 12em)) {
       .max-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
@@ -1292,7 +1424,8 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
       .min-\\[12vh\\]\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -1309,7 +1442,8 @@ test('supports', async () => {
       'supports-[--test]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    "@supports (gap: var(--tw)) {
+    "
+    @supports (gap: var(--tw)) {
       .supports-gap\\:grid {
         display: grid;
       }
@@ -1355,7 +1489,8 @@ test('supports', async () => {
       .supports-\\[var\\(--test\\)\\]\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -1479,7 +1614,8 @@ test('not', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown) {
+    "
+    .not-first\\:flex:not(:first-child), .not-last\\:flex:not(:last-child), .not-only\\:flex:not(:only-child), .not-odd\\:flex:not(:nth-child(odd)), .not-even\\:flex:not(:nth-child(2n)), .not-first-of-type\\:flex:not(:first-of-type), .not-last-of-type\\:flex:not(:last-of-type), .not-only-of-type\\:flex:not(:only-of-type), .not-visited\\:flex:not(:visited), .not-target\\:flex:not(:target), .not-open\\:flex:not(:is([open], :popover-open, :open)), .not-default\\:flex:not(:default), .not-checked\\:flex:not(:checked), .not-indeterminate\\:flex:not(:indeterminate), .not-placeholder-shown\\:flex:not(:placeholder-shown) {
       display: flex;
     }
 
@@ -1635,7 +1771,8 @@ test('not', async () => {
 
     .group-not-checked\\:flex:is(:where(.group):not(:checked) *), .group-not-hocus\\:flex:is(:where(.group):not(:hover, :focus) *), .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover, :focus) *), .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(:checked) *), .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:checked) *), .peer-not-checked\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-hocus\\:flex:is(:where(.peer):not(:hover, :focus) ~ *), .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ *), .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:checked) ~ *) {
       display: flex;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -1739,9 +1876,11 @@ test('in', async () => {
       'in-data-visible:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".not-in-\\[\\.group\\]\\:flex:not(:where(.group) *), .not-in-\\[p\\]\\:flex:not(:where(:is(p)) *), :where([data-visible]) .in-data-visible\\:flex, :where(.group) .in-\\[\\.group\\]\\:flex, :where(:is(p)) .in-\\[p\\]\\:flex {
+    "
+    .not-in-\\[\\.group\\]\\:flex:not(:where(.group) *), .not-in-\\[p\\]\\:flex:not(:where(:is(p)) *), :where([data-visible]) .in-data-visible\\:flex, :where(.group) .in-\\[\\.group\\]\\:flex, :where(:is(p)) .in-\\[p\\]\\:flex {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['in-p:flex', 'in-foo-bar:flex'])).toEqual('')
 })
@@ -1795,9 +1934,11 @@ test('has', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".group-has-checked\\:flex:is(:where(.group):has(:checked) *), .group-has-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-hocus\\:flex:is(:where(.group):has(:hover, :focus) *), .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *), .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(:checked) *), .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-\\[\\&\\>img\\]\\:flex:is(:where(.group):has(* > img) *), .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(* > img) *), .group-has-\\[\\+img\\]\\:flex:is(:where(.group):has( + img) *), .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *), .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *), .group-has-\\[\\~img\\]\\:flex:is(:where(.group):has( ~ img) *), .peer-has-checked\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-hocus\\:flex:is(:where(.peer):has(:hover, :focus) ~ *), .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ *), .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-\\[\\&\\>img\\]\\:flex:is(:where(.peer):has(* > img) ~ *), .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(* > img) ~ *), .peer-has-\\[\\+img\\]\\:flex:is(:where(.peer):has( + img) ~ *), .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *), .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *), .peer-has-\\[\\~img\\]\\:flex:is(:where(.peer):has( ~ img) ~ *), .has-checked\\:flex:has(:checked), .has-hocus\\:flex:has(:hover, :focus), .has-\\[\\:checked\\]\\:flex:has(:checked), .has-\\[\\&\\>img\\]\\:flex:has(* > img), .has-\\[\\+img\\]\\:flex:has( + img), .has-\\[\\>img\\]\\:flex:has( > img), .has-\\[\\~img\\]\\:flex:has( ~ img) {
+    "
+    .group-has-checked\\:flex:is(:where(.group):has(:checked) *), .group-has-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-hocus\\:flex:is(:where(.group):has(:hover, :focus) *), .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *), .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(:checked) *), .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-\\[\\&\\>img\\]\\:flex:is(:where(.group):has(* > img) *), .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(* > img) *), .group-has-\\[\\+img\\]\\:flex:is(:where(.group):has( + img) *), .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *), .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *), .group-has-\\[\\~img\\]\\:flex:is(:where(.group):has( ~ img) *), .peer-has-checked\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-hocus\\:flex:is(:where(.peer):has(:hover, :focus) ~ *), .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ *), .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-\\[\\&\\>img\\]\\:flex:is(:where(.peer):has(* > img) ~ *), .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(* > img) ~ *), .peer-has-\\[\\+img\\]\\:flex:is(:where(.peer):has( + img) ~ *), .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *), .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *), .peer-has-\\[\\~img\\]\\:flex:is(:where(.peer):has( ~ img) ~ *), .has-checked\\:flex:has(:checked), .has-hocus\\:flex:has(:hover, :focus), .has-\\[\\:checked\\]\\:flex:has(:checked), .has-\\[\\&\\>img\\]\\:flex:has(* > img), .has-\\[\\+img\\]\\:flex:has( + img), .has-\\[\\>img\\]\\:flex:has( > img), .has-\\[\\~img\\]\\:flex:has( ~ img) {
       display: flex;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -1846,9 +1987,11 @@ test('aria', async () => {
       'peer-aria-[valuenow=1]/sibling-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *), .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *), .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *), .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *), .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *), .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *), .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *), .peer-aria-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *), .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *), .peer-aria-\\[modal\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-modal] ~ *), .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *), .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *), .aria-checked\\:flex[aria-checked="true"], .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"], .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"], .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
+    "
+    .group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *), .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *), .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *), .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *), .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *), .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *), .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *), .peer-aria-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *), .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *), .peer-aria-\\[modal\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-modal] ~ *), .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *), .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *), .aria-checked\\:flex[aria-checked="true"], .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"], .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"], .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(await run(['aria-checked/foo:flex', 'aria-[invalid=spelling]/foo:flex'])).toEqual('')
 })
@@ -1883,9 +2026,11 @@ test('data', async () => {
       'peer-data-[foo$=bar_baz_i]/sibling-name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *), .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *), .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *), .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *), .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *), .group-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="1"] *), .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="bar baz"] *), .peer-data-\\[disabled\\]\\:flex:is(:where(.peer)[data-disabled] ~ *), .peer-data-\\[disabled\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-disabled] ~ *), .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar" i] ~ *), .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *), .peer-data-\\[foo\\=1\\]\\:flex:is(:where(.peer)[data-foo="1"] ~ *), .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *), .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *), .data-disabled\\:flex[data-disabled], .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i], .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i], .data-\\[foo\\=1\\]\\:flex[data-foo="1"], .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"], .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato="salad"], .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"], .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="], .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+    "
+    .group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *), .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *), .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *), .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *), .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *), .group-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="1"] *), .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="bar baz"] *), .peer-data-\\[disabled\\]\\:flex:is(:where(.peer)[data-disabled] ~ *), .peer-data-\\[disabled\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-disabled] ~ *), .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar" i] ~ *), .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *), .peer-data-\\[foo\\=1\\]\\:flex:is(:where(.peer)[data-foo="1"] ~ *), .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *), .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *), .data-disabled\\:flex[data-disabled], .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i], .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i], .data-\\[foo\\=1\\]\\:flex[data-foo="1"], .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"], .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato="salad"], .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"], .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="], .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
       display: flex;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -1899,136 +2044,162 @@ test('data', async () => {
 
 test('portrait', async () => {
   expect(await run(['portrait:flex'])).toMatchInlineSnapshot(`
-    "@media (orientation: portrait) {
+    "
+    @media (orientation: portrait) {
       .portrait\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['portrait/foo:flex'])).toEqual('')
 })
 
 test('landscape', async () => {
   expect(await run(['landscape:flex'])).toMatchInlineSnapshot(`
-    "@media (orientation: landscape) {
+    "
+    @media (orientation: landscape) {
       .landscape\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['landscape/foo:flex'])).toEqual('')
 })
 
 test('contrast-more', async () => {
   expect(await run(['contrast-more:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-contrast: more) {
+    "
+    @media (prefers-contrast: more) {
       .contrast-more\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['contrast-more/foo:flex'])).toEqual('')
 })
 
 test('contrast-less', async () => {
   expect(await run(['contrast-less:flex'])).toMatchInlineSnapshot(`
-    "@media (prefers-contrast: less) {
+    "
+    @media (prefers-contrast: less) {
       .contrast-less\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['contrast-less/foo:flex'])).toEqual('')
 })
 
 test('forced-colors', async () => {
   expect(await run(['forced-colors:flex'])).toMatchInlineSnapshot(`
-    "@media (forced-colors: active) {
+    "
+    @media (forced-colors: active) {
       .forced-colors\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(await run(['forced-colors/foo:flex'])).toEqual('')
 })
 
 test('inverted-colors', async () => {
   expect(await run(['inverted-colors:flex'])).toMatchInlineSnapshot(`
-    "@media (inverted-colors: inverted) {
+    "
+    @media (inverted-colors: inverted) {
       .inverted-colors\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('pointer-none', async () => {
   expect(await run(['pointer-none:flex'])).toMatchInlineSnapshot(`
-    "@media (pointer: none) {
+    "
+    @media (pointer: none) {
       .pointer-none\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('pointer-coarse', async () => {
   expect(await run(['pointer-coarse:flex'])).toMatchInlineSnapshot(`
-    "@media (pointer: coarse) {
+    "
+    @media (pointer: coarse) {
       .pointer-coarse\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('pointer-fine', async () => {
   expect(await run(['pointer-fine:flex'])).toMatchInlineSnapshot(`
-    "@media (pointer: fine) {
+    "
+    @media (pointer: fine) {
       .pointer-fine\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('any-pointer-none', async () => {
   expect(await run(['any-pointer-none:flex'])).toMatchInlineSnapshot(`
-    "@media (any-pointer: none) {
+    "
+    @media (any-pointer: none) {
       .any-pointer-none\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('any-pointer-coarse', async () => {
   expect(await run(['any-pointer-coarse:flex'])).toMatchInlineSnapshot(`
-    "@media (any-pointer: coarse) {
+    "
+    @media (any-pointer: coarse) {
       .any-pointer-coarse\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('any-pointer-fine', async () => {
   expect(await run(['any-pointer-fine:flex'])).toMatchInlineSnapshot(`
-    "@media (any-pointer: fine) {
+    "
+    @media (any-pointer: fine) {
       .any-pointer-fine\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
 test('scripting-none', async () => {
   expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
-    "@media (scripting: none) {
+    "
+    @media (scripting: none) {
       .noscript\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -2047,9 +2218,11 @@ test('nth', async () => {
       'nth-last-of-type-[2n+1]:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".nth-3\\:flex:nth-child(3), .nth-\\[2n\\+1\\]\\:flex:nth-child(odd), .nth-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-child(odd of .foo), .nth-last-3\\:flex:nth-last-child(3), .nth-last-\\[2n\\+1\\]\\:flex:nth-last-child(odd), .nth-last-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-last-child(odd of .foo), .nth-of-type-3\\:flex:nth-of-type(3), .nth-of-type-\\[2n\\+1\\]\\:flex:nth-of-type(odd), .nth-last-of-type-3\\:flex:nth-last-of-type(3), .nth-last-of-type-\\[2n\\+1\\]\\:flex:nth-last-of-type(odd) {
+    "
+    .nth-3\\:flex:nth-child(3), .nth-\\[2n\\+1\\]\\:flex:nth-child(odd), .nth-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-child(odd of .foo), .nth-last-3\\:flex:nth-last-child(3), .nth-last-\\[2n\\+1\\]\\:flex:nth-last-child(odd), .nth-last-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-last-child(odd of .foo), .nth-of-type-3\\:flex:nth-of-type(3), .nth-of-type-\\[2n\\+1\\]\\:flex:nth-of-type(odd), .nth-last-of-type-3\\:flex:nth-last-of-type(3), .nth-last-of-type-\\[2n\\+1\\]\\:flex:nth-last-of-type(odd) {
       display: flex;
-    }"
+    }
+    "
   `)
 
   expect(
@@ -2114,7 +2287,8 @@ test('container queries', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@container name not (min-width: 1440px) {
+    "
+    @container name not (min-width: 1440px) {
       .\\@max-foo-bar\\/name\\:flex {
         display: flex;
       }
@@ -2208,7 +2382,8 @@ test('container queries', async () => {
       .\\@min-foo-bar\\:flex {
         display: flex;
       }
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
@@ -2336,7 +2511,8 @@ test('variant order', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
+    "
+    @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-content: "";
@@ -2519,7 +2695,8 @@ test('variant order', async () => {
       syntax: "*";
       inherits: false;
       initial-value: "";
-    }"
+    }
+    "
   `)
 })
 
@@ -2547,13 +2724,13 @@ test('variants with the same root are sorted deterministically', async () => {
   for (let classList of classLists) {
     let output = await compileCss('@tailwind utilities;', classList)
 
-    expect(output.trim()).toEqual(
-      dedent(`
-        .data-active\\:flex[data-active], .data-focus\\:flex[data-focus], .data-hover\\:flex[data-hover], .data-\\[bar\\]\\:flex[data-bar], .data-\\[baz\\]\\:flex[data-baz], .data-\\[foo\\]\\:flex[data-foo] {
-          display: flex;
-        }
-      `),
-    )
+    expect(pretty(output)).toMatchInlineSnapshot(`
+      "
+      .data-active\\:flex[data-active], .data-focus\\:flex[data-focus], .data-hover\\:flex[data-hover], .data-\\[bar\\]\\:flex[data-bar], .data-\\[baz\\]\\:flex[data-baz], .data-\\[foo\\]\\:flex[data-foo] {
+        display: flex;
+      }
+      "
+    `)
   }
 })
 
@@ -2596,13 +2773,13 @@ test('matchVariant sorts deterministically', async () => {
       },
     })
 
-    expect(output.trim()).toEqual(
-      dedent(`
-        .is-data\\:flex[data-default], .is-data-foo\\:flex[data-foo], .is-data-bar\\:flex[data-bar], .is-data-\\[potato\\]\\:flex[data-potato], .is-data-\\[sandwich\\]\\:flex[data-sandwich] {
-          display: flex;
-        }
-      `),
-    )
+    expect(pretty(output)).toMatchInlineSnapshot(`
+      "
+      .is-data\\:flex[data-default], .is-data-foo\\:flex[data-foo], .is-data-bar\\:flex[data-bar], .is-data-\\[potato\\]\\:flex[data-potato], .is-data-\\[sandwich\\]\\:flex[data-sandwich] {
+        display: flex;
+      }
+      "
+    `)
   }
 })
 
@@ -2618,9 +2795,11 @@ test('move modifier of compound variant to sub-variant if its also a compound va
       'group-peer-focus/name:flex',
     ]),
   ).toMatchInlineSnapshot(`
-    ".not-group-focus\\/name\\:flex:not(:is(:where(.group\\/name):focus *)), .group-peer-focus\\/name\\:flex:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *), :where(:is(:where(.group\\/name):focus *)) .in-group-focus\\/name\\:flex, .has-group-focus\\/name\\:flex:has(:is(:where(.group\\/name):focus *)) {
+    "
+    .not-group-focus\\/name\\:flex:not(:is(:where(.group\\/name):focus *)), .group-peer-focus\\/name\\:flex:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *), :where(:is(:where(.group\\/name):focus *)) .in-group-focus\\/name\\:flex, .has-group-focus\\/name\\:flex:has(:is(:where(.group\\/name):focus *)) {
       display: flex;
-    }"
+    }
+    "
   `)
 })
 

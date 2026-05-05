@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`border-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -182,11 +183,13 @@ exports[`border-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-b-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -367,11 +370,13 @@ exports[`border-b-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-be-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -552,11 +557,13 @@ exports[`border-be-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-bs-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -737,11 +744,13 @@ exports[`border-bs-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-e-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -922,11 +931,13 @@ exports[`border-e-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-l-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -1107,11 +1118,13 @@ exports[`border-l-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-r-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -1292,11 +1305,13 @@ exports[`border-r-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-s-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -1477,11 +1492,13 @@ exports[`border-s-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-t-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -1662,11 +1679,13 @@ exports[`border-t-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-x-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -1847,11 +1866,13 @@ exports[`border-x-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;
 
 exports[`border-y-* 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-border-style: solid;
@@ -2032,5 +2053,6 @@ exports[`border-y-* 1`] = `
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}"
+}
+"
 `;

@@ -4,6 +4,7 @@ import postcss from 'postcss'
 import atImport from 'postcss-import'
 import { describe, expect, test } from 'vitest'
 import fixRelativePathsPlugin from '.'
+import { pretty } from '../../../tailwindcss/src/test-utils/run'
 
 describe('fixRelativePathsPlugin', () => {
   test('rewrites @source and @plugin to be relative to the initial css file', async () => {
@@ -14,11 +15,13 @@ describe('fixRelativePathsPlugin', () => {
 
     let result = await processor.process(css, { from: cssPath })
 
-    expect(result.css.trim()).toMatchInlineSnapshot(`
-      "@source "../../example-project/src/**/*.ts";
+    expect(pretty(result.css)).toMatchInlineSnapshot(`
+      "
+      @source "../../example-project/src/**/*.ts";
       @source "!../../example-project/src/**/*.ts";
       @plugin "../../example-project/src/plugin.js";
-      @plugin "../../example-project/src/what\\"s-this.js";"
+      @plugin "../../example-project/src/what\\"s-this.js";
+      "
     `)
   })
 
@@ -30,11 +33,13 @@ describe('fixRelativePathsPlugin', () => {
 
     let result = await processor.process(css, { from: cssPath })
 
-    expect(result.css.trim()).toMatchInlineSnapshot(`
-      "@plugin "/absolute/paths";
+    expect(pretty(result.css)).toMatchInlineSnapshot(`
+      "
+      @plugin "/absolute/paths";
       @plugin "C:\\Program Files\\HAL 9000";
       @plugin "\\\\Media\\Pictures\\Worth\\1000 words";
-      @plugin "some-node-dep";"
+      @plugin "some-node-dep";
+      "
     `)
   })
 
@@ -46,13 +51,15 @@ describe('fixRelativePathsPlugin', () => {
 
     let result = await processor.process(css, { from: cssPath })
 
-    expect(result.css.trim()).toMatchInlineSnapshot(`
-      "@plugin './plugin-in-sibling.ts';
+    expect(pretty(result.css)).toMatchInlineSnapshot(`
+      "
+      @plugin './plugin-in-sibling.ts';
       @plugin '../plugin-in-sibling.ts';
       @plugin 'plugin-in-sibling';
       @plugin './plugin-in-root.ts';
       @plugin '../plugin-in-root.ts';
-      @plugin 'plugin-in-root';"
+      @plugin 'plugin-in-root';
+      "
     `)
   })
 })

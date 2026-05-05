@@ -3,7 +3,7 @@ import { expect, test, vi } from 'vitest'
 import type { Plugin } from './compat/plugin-api'
 import { compile, type Config } from './index'
 import plugin from './plugin'
-import { optimizeCss } from './test-utils/run'
+import { optimizeCss, pretty } from './test-utils/run'
 
 const css = dedent
 
@@ -30,7 +30,7 @@ async function run(
 ) {
   let compiler = await compile(css, { base: '/root', loadStylesheet, loadModule })
   let result = compiler.build(candidates)
-  return optimize ? optimizeCss(result) : result
+  return optimize ? optimizeCss(result) : pretty(result)
 }
 
 test('can resolve relative @imports', async () => {
@@ -56,7 +56,8 @@ test('can resolve relative @imports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".foo {
+    "
+    .foo {
       color: red;
     }
     "
@@ -96,7 +97,8 @@ test('can recursively resolve relative @imports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".baz {
+    "
+    .baz {
       color: #00f;
     }
     "
@@ -126,7 +128,8 @@ test('extracts path from @import nodes', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "a {
+    "
+    a {
       color: red;
     }
     "
@@ -140,7 +143,8 @@ test('extracts path from @import nodes', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "a {
+    "
+    a {
       color: red;
     }
     "
@@ -154,7 +158,8 @@ test('extracts path from @import nodes', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "a {
+    "
+    a {
       color: red;
     }
     "
@@ -169,7 +174,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url('example.css');"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url('example.css');
+    "
+  `)
 
   await expect(
     run(
@@ -178,7 +187,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url('./example.css');"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url('./example.css');
+    "
+  `)
 
   await expect(
     run(
@@ -187,7 +200,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url('/example.css');"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url('/example.css');
+    "
+  `)
 
   await expect(
     run(
@@ -196,7 +213,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url(example.css);"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url(example.css);
+    "
+  `)
 
   await expect(
     run(
@@ -205,7 +226,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url(./example.css);"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url(./example.css);
+    "
+  `)
 
   await expect(
     run(
@@ -214,7 +239,11 @@ test('url() imports are passed-through', async () => {
       `,
       { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
     ),
-  ).resolves.toMatchInlineSnapshot(`"@import url(/example.css);"`)
+  ).resolves.toMatchInlineSnapshot(`
+    "
+    @import url(/example.css);
+    "
+  `)
 })
 
 test('handles case-insensitive @import directive', async () => {
@@ -226,7 +255,8 @@ test('handles case-insensitive @import directive', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "a {
+    "
+    a {
       color: red;
     }
     "
@@ -242,7 +272,8 @@ test('@media', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@media print {
+    "
+    @media print {
       a {
         color: red;
       }
@@ -258,7 +289,8 @@ test('@media', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@media print, screen {
+    "
+    @media print, screen {
       a {
         color: red;
       }
@@ -274,7 +306,8 @@ test('@media', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@media screen and (orientation: landscape) {
+    "
+    @media screen and (orientation: landscape) {
       a {
         color: red;
       }
@@ -290,7 +323,8 @@ test('@media', async () => {
       { loadStylesheet, optimize: false },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@media foo(bar) {
+    "
+    @media foo(bar) {
       a {
         color: red;
       }
@@ -308,7 +342,8 @@ test('@supports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@supports (display: grid) {
+    "
+    @supports (display: grid) {
       a {
         color: red;
       }
@@ -324,7 +359,8 @@ test('@supports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@supports (display: grid) {
+    "
+    @supports (display: grid) {
       @media screen and (max-width: 400px) {
         a {
           color: red;
@@ -343,7 +379,8 @@ test('@supports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@supports (not (display: grid)) and (display: flex) {
+    "
+    @supports (not (display: grid)) and (display: flex) {
       @media screen and (max-width: 400px) {
         a {
           color: red;
@@ -363,7 +400,8 @@ test('@supports', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@supports selector(h2 > p) and font-tech(color-COLRv1) {
+    "
+    @supports selector(h2 > p) and font-tech(color-COLRv1) {
       a {
         color: red;
       }
@@ -381,7 +419,8 @@ test('@layer', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@layer utilities {
+    "
+    @layer utilities {
       a {
         color: red;
       }
@@ -397,7 +436,8 @@ test('@layer', async () => {
       { loadStylesheet },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    "@layer {
+    "
+    @layer {
       a {
         color: red;
       }
@@ -428,7 +468,8 @@ test('supports theme(reference) imports', async () => {
       },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".text-red-500 {
+    "
+    .text-red-500 {
       color: var(--color-red-500, red);
     }
     "
@@ -448,16 +489,14 @@ test('updates the base when loading modules inside nested files', async () => {
   using loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
-    (
-      await run(
-        css`
-          @import './foo/bar.css';
-          @config './root-config.js';
-          @plugin './root-plugin.js';
-        `,
-        { loadStylesheet, loadModule },
-      )
-    ).trim(),
+    await run(
+      css`
+        @import './foo/bar.css';
+        @config './root-config.js';
+        @plugin './root-plugin.js';
+      `,
+      { loadStylesheet, loadModule },
+    ),
   ).toBe('')
 
   expect(loadModule).toHaveBeenNthCalledWith(1, './nested-config.js', '/root/foo', 'config')
@@ -595,7 +634,8 @@ test('resolves @reference as `@import "…" reference`', async () => {
       { loadStylesheet, candidates: ['text-red-500'] },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".text-red-500 {
+    "
+    .text-red-500 {
       color: var(--color-red-500, red);
     }
     "
@@ -628,7 +668,8 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
       { loadStylesheet, candidates: ['dark:flex'] },
     ),
   ).resolves.toMatchInlineSnapshot(`
-    ".dark\\:flex:where([data-theme="dark"] *) {
+    "
+    .dark\\:flex:where([data-theme="dark"] *) {
       display: flex;
     }
     "
