@@ -19,21 +19,37 @@
   ],
   "publishConfig": {
     "provenance": true,
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js"
+      },
+      "./require-cache": {
+        "types": "./dist/require-cache.d.ts",
+        "default": "./dist/require-cache.js"
+      },
+      "./esm-cache-loader": {
+        "types": "./dist/esm-cache.loader.d.mts",
+        "default": "./dist/esm-cache.loader.mjs"
+      }
+    }
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.cts"
     },
     "./require-cache": {
-      "types": "./dist/require-cache.d.ts",
-      "default": "./dist/require-cache.js"
+      "types": "./src/require-cache.ts",
+      "import": "./src/require-cache.ts",
+      "require": "./src/require-cache.cts"
     },
     "./esm-cache-loader": {
-      "types": "./dist/esm-cache.loader.d.mts",
-      "default": "./dist/esm-cache.loader.mjs"
+      "types": "./src/esm-cache.loader.mts",
+      "default": "./src/esm-cache.loader.mts"
     }
   },
   "dependencies": {
