@@ -44,8 +44,11 @@ If you're interested in contributing to Tailwind CSS, please read our [contribut
 You can use the `base` option (defaults to the current working directory) to change the directory in which the plugin searches for source files:
 
 ```js
+import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import tailwindcss from '@tailwindcss/postcss'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default {
   plugins: [
