@@ -30148,6 +30148,7 @@ describe('custom utilities', () => {
     })
 
     test('resolving unsupported bare values', async () => {
+      using spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       let input = css`
         @utility tab-* {
           tab-size: --value(color);
@@ -30157,6 +30158,22 @@ describe('custom utilities', () => {
       `
 
       expect(await compileCss(input, ['tab-#0088cc', 'tab-foo'])).toEqual('')
+      expect(
+        `\n${spy.mock.calls
+          .map((c) => c.join(' '))
+          .join('\n')
+          .trim()}\n`,
+      ).toMatchInlineSnapshot(`
+        "
+        Unsupported bare value data type: "color".
+        Only valid data types are: "number", "integer", "ratio", "percentage".
+
+        \`\`\`css
+        --value(color)
+                ^^^^^
+        \`\`\`
+        "
+      `)
     })
 
     test('resolving arbitrary values', async () => {

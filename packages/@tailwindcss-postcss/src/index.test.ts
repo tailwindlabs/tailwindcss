@@ -146,6 +146,8 @@ describe('processing without specifying a base path', () => {
 })
 
 test('fallback to `base` directory when `result.opts.from` is not provided', async () => {
+  using _ = vi.spyOn(console, 'warn').mockImplementation(() => {})
+
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
   ])
