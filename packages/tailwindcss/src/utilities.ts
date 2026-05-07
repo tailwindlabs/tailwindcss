@@ -2218,6 +2218,10 @@ export function createUtilities(theme: Theme) {
     staticUtility('scrollbar-thin', [['scrollbar-width', 'thin']])
     staticUtility('scrollbar-none', [['scrollbar-width', 'none']])
 
+    staticUtility('scrollbar-gutter-auto', [['scrollbar-gutter', 'auto']])
+    staticUtility('scrollbar-gutter-stable', [['scrollbar-gutter', 'stable']])
+    staticUtility('scrollbar-gutter-both', [['scrollbar-gutter', 'stable both-edges']])
+
     {
       let scrollbarColorProperties = () => {
         return atRoot([

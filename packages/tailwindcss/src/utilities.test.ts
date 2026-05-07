@@ -11439,6 +11439,36 @@ test('scrollbar-width', async () => {
   ).toEqual('')
 })
 
+test('scrollbar-gutter', async () => {
+  expect(await run(['scrollbar-gutter-auto', 'scrollbar-gutter-stable', 'scrollbar-gutter-both']))
+    .toMatchInlineSnapshot(`
+    "
+    .scrollbar-gutter-auto {
+      scrollbar-gutter: auto;
+    }
+
+    .scrollbar-gutter-both {
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .scrollbar-gutter-stable {
+      scrollbar-gutter: stable;
+    }
+    "
+  `)
+  expect(
+    await run([
+      'scrollbar-gutter',
+      '-scrollbar-gutter-auto',
+      '-scrollbar-gutter-stable',
+      '-scrollbar-gutter-both',
+      'scrollbar-gutter-auto/foo',
+      'scrollbar-gutter-stable/foo',
+      'scrollbar-gutter-both/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('scrollbar-thumb', async () => {
   expect(
     await compileCss(

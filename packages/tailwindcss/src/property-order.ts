@@ -133,6 +133,7 @@ export default [
 
   'scrollbar-width',
   'scrollbar-color',
+  'scrollbar-gutter',
 
   'list-style-position',
   'list-style-type',
