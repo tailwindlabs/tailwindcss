@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "h3": "^1.15.11",
-    "listhen": "^1.9.1",
+    "listhen": "^1.10.0",
     "tailwindcss": "workspace:*"
   }
 }
