@@ -2294,6 +2294,22 @@ export function createUtilities(theme: Theme) {
   staticUtility('whitespace-pre-wrap', [['white-space', 'pre-wrap']])
   staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']])
 
+  functionalUtility('tab', {
+    themeKeys: ['--tab-size'],
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('tab-size', value)],
+  })
+
+  suggest('tab', () => [
+    {
+      values: ['2', '4', '8'],
+      valueThemeKeys: ['--tab-size'],
+    },
+  ])
+
   staticUtility('text-wrap', [['text-wrap', 'wrap']])
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])
   staticUtility('text-balance', [['text-wrap', 'balance']])

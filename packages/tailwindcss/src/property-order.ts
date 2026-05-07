@@ -360,6 +360,7 @@ export default [
   'text-overflow',
   'hyphens',
   'white-space',
+  'tab-size',
 
   'color',
   'text-transform',

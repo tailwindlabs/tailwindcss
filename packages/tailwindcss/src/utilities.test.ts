@@ -11865,6 +11865,58 @@ test('whitespace', async () => {
   ).toEqual('')
 })
 
+test('tab', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --tab-size-github: 8;
+        }
+
+        @tailwind utilities;
+      `,
+      ['tab-2', 'tab-8', 'tab-[12px]', 'tab-[3]', 'tab-github'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --tab-size-github: 8;
+    }
+
+    .tab-2 {
+      tab-size: 2;
+    }
+
+    .tab-8 {
+      tab-size: 8;
+    }
+
+    .tab-\\[3\\] {
+      tab-size: 3;
+    }
+
+    .tab-\\[12px\\] {
+      tab-size: 12px;
+    }
+
+    .tab-github {
+      tab-size: var(--tab-size-github);
+    }
+    "
+  `)
+  expect(
+    await run([
+      'tab',
+      '-tab-2',
+      'tab-2.5',
+      'tab-1/2',
+      'tab-unknown',
+      'tab-2/foo',
+      'tab-[12px]/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('text-wrap', async () => {
   expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
     .toMatchInlineSnapshot(`
