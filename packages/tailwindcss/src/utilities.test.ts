@@ -6899,6 +6899,45 @@ test('transform', async () => {
   ).toEqual('')
 })
 
+test('zoom', async () => {
+  expect(
+    await compileCss(
+      css`
+        @theme {
+          --zoom-compact: 80%;
+        }
+        @tailwind utilities;
+      `,
+      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]', 'zoom-compact'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --zoom-compact: 80%;
+    }
+
+    .zoom-50 {
+      zoom: 50%;
+    }
+
+    .zoom-100 {
+      zoom: 100%;
+    }
+
+    .zoom-\\[var\\(--zoom\\)\\] {
+      zoom: var(--zoom);
+    }
+
+    .zoom-compact {
+      zoom: var(--zoom-compact);
+    }
+    "
+  `)
+  expect(
+    await run(['zoom', '-zoom-50', 'zoom--50', 'zoom-1.5', 'zoom-unknown', 'zoom-50/foo']),
+  ).toEqual('')
+})
+
 test('perspective', async () => {
   expect(
     await compileCss(

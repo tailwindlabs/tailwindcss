@@ -92,6 +92,8 @@ export default [
   '--tw-skew-y',
   'transform',
 
+  'zoom',
+
   'animation',
 
   'cursor',

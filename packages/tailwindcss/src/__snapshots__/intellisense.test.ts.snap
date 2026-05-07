@@ -12244,6 +12244,16 @@ exports[`getClassList 1`] = `
   "z-40",
   "z-50",
   "z-auto",
+  "zoom-50",
+  "zoom-75",
+  "zoom-90",
+  "zoom-95",
+  "zoom-100",
+  "zoom-105",
+  "zoom-110",
+  "zoom-125",
+  "zoom-150",
+  "zoom-200",
 ]
 `;
 
