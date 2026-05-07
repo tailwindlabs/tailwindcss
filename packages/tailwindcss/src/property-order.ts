@@ -131,6 +131,8 @@ export default [
   'scroll-padding-bottom',
   'scroll-padding-left',
 
+  'scrollbar-width',
+  'scrollbar-color',
   'scrollbar-gutter',
 
   'list-style-position',
