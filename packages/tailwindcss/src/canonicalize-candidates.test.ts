@@ -520,16 +520,16 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       'migrate with custom functional utility `@utility custom-* {…}` that supports bare values',
       { timeout },
       async () => {
-        let candidate = '[tab-size:4]'
-        let expected = 'tab-4'
+        let candidate = '[--resolved-value:4]'
+        let expected = 'example-4'
 
         let input = css`
           @import 'tailwindcss';
           @theme {
             --*: initial;
           }
-          @utility tab-* {
-            tab-size: --value(integer);
+          @utility example-* {
+            --resolved-value: --value(integer);
           }
         `
 
@@ -538,12 +538,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     )
 
     test.each([
-      ['[tab-size:0]', 'tab-0'],
-      ['[tab-size:4]', 'tab-4'],
-      ['[tab-size:8]', 'tab-github'],
-      ['tab-[0]', 'tab-0'],
-      ['tab-[4]', 'tab-4'],
-      ['tab-[8]', 'tab-github'],
+      ['[--resolved-value:0]', 'example-0'],
+      ['[--resolved-value:4]', 'example-4'],
+      ['[--resolved-value:8]', 'example-a'],
+      ['example-[0]', 'example-0'],
+      ['example-[4]', 'example-4'],
+      ['example-[8]', 'example-a'],
     ])(
       'migrate custom @utility from arbitrary values to bare values and named values (based on theme)',
       async (candidate, expected) => {
@@ -551,11 +551,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
           @import 'tailwindcss';
           @theme {
             --*: initial;
-            --tab-size-github: 8;
+            --example-a: 8;
           }
 
-          @utility tab-* {
-            tab-size: --value(--tab-size, integer, [integer]);
+          @utility example-* {
+            --resolved-value: --value(--example, integer, [integer]);
           }
         `
 
@@ -676,11 +676,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
         --*: initial;
         --spacing: 0.25rem;
         --aspect-video: 16 / 9;
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size, integer);
+      @utility example-* {
+        --resolved-value: --value(--example, integer);
       }
     `
 
@@ -689,7 +689,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['aspect-16/9', 'aspect-video'],
 
       // Custom utility with bare value integer
-      ['tab-8', 'tab-github'],
+      ['example-8', 'example-a'],
     ])(testName, { timeout }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })

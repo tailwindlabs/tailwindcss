@@ -29842,77 +29842,77 @@ describe('custom utilities', () => {
   describe('functional utilities', () => {
     test('functional utilities require a `--value(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: 4;
+        @utility example-* {
+          --resolved-value: 4;
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab', 'tab-foo'])).toEqual('')
+      expect(await compileCss(input, ['example', 'example-foo'])).toEqual('')
     })
 
     test('functional utilities must resolve at least one `--value(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer);
+        @utility example-* {
+          --resolved-value: --value(integer);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-1', 'tab-2'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-1', 'example-2'])).toMatchInlineSnapshot(`
         "
-        .tab-1 {
-          tab-size: 1;
+        .example-1 {
+          --resolved-value: 1;
         }
 
-        .tab-2 {
-          tab-size: 2;
+        .example-2 {
+          --resolved-value: 2;
         }
         "
       `)
 
-      expect(await compileCss(input, ['tab', 'tab-foo', 'tab-2.5'])).toEqual('')
+      expect(await compileCss(input, ['example', 'example-foo', 'example-2.5'])).toEqual('')
     })
 
     test('resolving values from `@theme`', async () => {
       let input = css`
         @theme reference {
-          --tab-size-1: 1;
-          --tab-size-2: 2;
-          --tab-size-4: 4;
-          --tab-size-github: 8;
+          --example-1: 1;
+          --example-2: 2;
+          --example-4: 4;
+          --example-a: 8;
         }
 
-        @utility tab-* {
-          tab-size: --value(--tab-size);
+        @utility example-* {
+          --resolved-value: --value(--example);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
         .toMatchInlineSnapshot(`
           "
-          .tab-1 {
-            tab-size: var(--tab-size-1, 1);
+          .example-1 {
+            --resolved-value: var(--example-1, 1);
           }
 
-          .tab-2 {
-            tab-size: var(--tab-size-2, 2);
+          .example-2 {
+            --resolved-value: var(--example-2, 2);
           }
 
-          .tab-4 {
-            tab-size: var(--tab-size-4, 4);
+          .example-4 {
+            --resolved-value: var(--example-4, 4);
           }
 
-          .tab-github {
-            tab-size: var(--tab-size-github, 8);
+          .example-a {
+            --resolved-value: var(--example-a, 8);
           }
           "
         `)
-      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
     })
 
     test('functional utility with double-dash separator', async () => {
@@ -29949,113 +29949,114 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['border--3'])).toEqual('')
     })
 
-    test('resolving values from `@theme`, with `--tab-size-*` syntax', async () => {
+    test('resolving values from `@theme`, with `--example-*` syntax', async () => {
       let input =
         // Explicitly not using the css tagged template literal so that
-        // Prettier doesn't format the `value(--tab-size-*)` as
-        // `value(--tab-size- *)`
+        // Prettier doesn't format the `value(--example-*)` as
+        // `value(--example- *)`
         `
           @theme reference {
-            --tab-size-1: 1;
-            --tab-size-2: 2;
-            --tab-size-4: 4;
-            --tab-size-github: 8;
+            --example-1: 1;
+            --example-2: 2;
+            --example-4: 4;
+            --example-a: 8;
           }
 
-          @utility tab-* {
-            tab-size: --value(--tab-size-*);
+          @utility example-* {
+            --resolved-value: --value(--example-*);
           }
 
           @tailwind utilities;
         `
 
-      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
         .toMatchInlineSnapshot(`
           "
-          .tab-1 {
-            tab-size: var(--tab-size-1, 1);
+          .example-1 {
+            --resolved-value: var(--example-1, 1);
           }
 
-          .tab-2 {
-            tab-size: var(--tab-size-2, 2);
+          .example-2 {
+            --resolved-value: var(--example-2, 2);
           }
 
-          .tab-4 {
-            tab-size: var(--tab-size-4, 4);
+          .example-4 {
+            --resolved-value: var(--example-4, 4);
           }
 
-          .tab-github {
-            tab-size: var(--tab-size-github, 8);
+          .example-a {
+            --resolved-value: var(--example-a, 8);
           }
           "
         `)
-      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
     })
 
-    test('resolving values from `@theme`, with `--tab-size-\\*` syntax (prettier friendly)', async () => {
+    test('resolving values from `@theme`, with `--example-\\*` syntax (prettier friendly)', async () => {
       let input = css`
         @theme reference {
-          --tab-size-1: 1;
-          --tab-size-2: 2;
-          --tab-size-4: 4;
-          --tab-size-github: 8;
+          --example-1: 1;
+          --example-2: 2;
+          --example-4: 4;
+          --example-a: 8;
         }
 
-        @utility tab-* {
-          tab-size: --value(--tab-size-\*);
+        @utility example-* {
+          --resolved-value: --value(--example-\*);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-1', 'tab-2', 'tab-4', 'tab-github']))
+      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
         .toMatchInlineSnapshot(`
           "
-          .tab-1 {
-            tab-size: var(--tab-size-1, 1);
+          .example-1 {
+            --resolved-value: var(--example-1, 1);
           }
 
-          .tab-2 {
-            tab-size: var(--tab-size-2, 2);
+          .example-2 {
+            --resolved-value: var(--example-2, 2);
           }
 
-          .tab-4 {
-            tab-size: var(--tab-size-4, 4);
+          .example-4 {
+            --resolved-value: var(--example-4, 4);
           }
 
-          .tab-github {
-            tab-size: var(--tab-size-github, 8);
+          .example-a {
+            --resolved-value: var(--example-a, 8);
           }
           "
         `)
-      expect(await compileCss(input, ['tab-3', 'tab-gitlab'])).toEqual('')
+      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
     })
 
     test('resolving bare values', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer);
+        @utility example-* {
+          --resolved-value: --value(integer);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-1', 'tab-76', 'tab-971'])).toMatchInlineSnapshot(`
-        "
-        .tab-1 {
-          tab-size: 1;
-        }
+      expect(await compileCss(input, ['example-1', 'example-76', 'example-971']))
+        .toMatchInlineSnapshot(`
+          "
+          .example-1 {
+            --resolved-value: 1;
+          }
 
-        .tab-76 {
-          tab-size: 76;
-        }
+          .example-76 {
+            --resolved-value: 76;
+          }
 
-        .tab-971 {
-          tab-size: 971;
-        }
-        "
-      `)
-      expect(await compileCss(input, ['tab-foo'])).toEqual('')
+          .example-971 {
+            --resolved-value: 971;
+          }
+          "
+        `)
+      expect(await compileCss(input, ['example-foo'])).toEqual('')
     })
 
     test('bare values with unsupported data types should result in a warning', async () => {
@@ -30088,21 +30089,21 @@ describe('custom utilities', () => {
 
     test('resolve literal values', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value('revert');
+        @utility example-* {
+          --resolved-value: --value('revert');
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-revert'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-revert'])).toMatchInlineSnapshot(`
         "
-        .tab-revert {
-          tab-size: revert;
+        .example-revert {
+          --resolved-value: revert;
         }
         "
       `)
-      expect(await compileCss(input, ['tab-initial'])).toEqual('')
+      expect(await compileCss(input, ['example-initial'])).toEqual('')
     })
 
     test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
@@ -30150,14 +30151,14 @@ describe('custom utilities', () => {
     test('resolving unsupported bare values', async () => {
       using spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       let input = css`
-        @utility tab-* {
-          tab-size: --value(color);
+        @utility example-* {
+          --resolved-value: --value(color);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-#0088cc', 'tab-foo'])).toEqual('')
+      expect(await compileCss(input, ['example-#0088cc', 'example-foo'])).toEqual('')
       expect(
         `\n${spy.mock.calls
           .map((c) => c.join(' '))
@@ -30178,8 +30179,8 @@ describe('custom utilities', () => {
 
     test('resolving arbitrary values', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value([integer]);
+        @utility example-* {
+          --resolved-value: --value([integer]);
         }
 
         @tailwind utilities;
@@ -30187,47 +30188,47 @@ describe('custom utilities', () => {
 
       expect(
         await compileCss(input, [
-          'tab-[1]',
-          'tab-[76]',
-          'tab-[971]',
-          'tab-[integer:var(--my-value)]',
-          'tab-(integer:my-value)',
+          'example-[1]',
+          'example-[76]',
+          'example-[971]',
+          'example-[integer:var(--my-value)]',
+          'example-(integer:my-value)',
         ]),
       ).toMatchInlineSnapshot(`
         "
-        .tab-\\[1\\] {
-          tab-size: 1;
+        .example-\\[1\\] {
+          --resolved-value: 1;
         }
 
-        .tab-\\[76\\] {
-          tab-size: 76;
+        .example-\\[76\\] {
+          --resolved-value: 76;
         }
 
-        .tab-\\[971\\] {
-          tab-size: 971;
+        .example-\\[971\\] {
+          --resolved-value: 971;
         }
 
-        .tab-\\[integer\\:var\\(--my-value\\)\\] {
-          tab-size: var(--my-value);
+        .example-\\[integer\\:var\\(--my-value\\)\\] {
+          --resolved-value: var(--my-value);
         }
         "
       `)
       expect(
         await compileCss(input, [
-          'tab-[#0088cc]',
-          'tab-[1px]',
-          'tab-[var(--my-value)]',
-          'tab-(--my-value)',
-          'tab-[color:var(--my-value)]',
-          'tab-(color:--my-value)',
+          'example-[#0088cc]',
+          'example-[1px]',
+          'example-[var(--my-value)]',
+          'example-(--my-value)',
+          'example-[color:var(--my-value)]',
+          'example-(color:--my-value)',
         ]),
       ).toEqual('')
     })
 
     test('resolving any arbitrary values', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value([*]);
+        @utility example-* {
+          --resolved-value: --value([*]);
         }
 
         @tailwind utilities;
@@ -30235,32 +30236,32 @@ describe('custom utilities', () => {
 
       expect(
         await compileCss(input, [
-          'tab-[1]',
-          'tab-[76]',
-          'tab-[971]',
-          'tab-[var(--my-value)]',
-          'tab-(--my-value)',
+          'example-[1]',
+          'example-[76]',
+          'example-[971]',
+          'example-[var(--my-value)]',
+          'example-(--my-value)',
         ]),
       ).toMatchInlineSnapshot(`
         "
-        .tab-\\(--my-value\\) {
-          tab-size: var(--my-value);
+        .example-\\(--my-value\\) {
+          --resolved-value: var(--my-value);
         }
 
-        .tab-\\[1\\] {
-          tab-size: 1;
+        .example-\\[1\\] {
+          --resolved-value: 1;
         }
 
-        .tab-\\[76\\] {
-          tab-size: 76;
+        .example-\\[76\\] {
+          --resolved-value: 76;
         }
 
-        .tab-\\[971\\] {
-          tab-size: 971;
+        .example-\\[971\\] {
+          --resolved-value: 971;
         }
 
-        .tab-\\[var\\(--my-value\\)\\] {
-          tab-size: var(--my-value);
+        .example-\\[var\\(--my-value\\)\\] {
+          --resolved-value: var(--my-value);
         }
         "
       `)
@@ -30268,8 +30269,8 @@ describe('custom utilities', () => {
 
     test('resolving any arbitrary values (without space)', async () => {
       let input = `
-        @utility tab-* {
-          tab-size: --value([*]);
+        @utility example-* {
+          --resolved-value: --value([*]);
         }
 
         @tailwind utilities;
@@ -30277,32 +30278,32 @@ describe('custom utilities', () => {
 
       expect(
         await compileCss(input, [
-          'tab-[1]',
-          'tab-[76]',
-          'tab-[971]',
-          'tab-[var(--my-value)]',
-          'tab-(--my-value)',
+          'example-[1]',
+          'example-[76]',
+          'example-[971]',
+          'example-[var(--my-value)]',
+          'example-(--my-value)',
         ]),
       ).toMatchInlineSnapshot(`
         "
-        .tab-\\(--my-value\\) {
-          tab-size: var(--my-value);
+        .example-\\(--my-value\\) {
+          --resolved-value: var(--my-value);
         }
 
-        .tab-\\[1\\] {
-          tab-size: 1;
+        .example-\\[1\\] {
+          --resolved-value: 1;
         }
 
-        .tab-\\[76\\] {
-          tab-size: 76;
+        .example-\\[76\\] {
+          --resolved-value: 76;
         }
 
-        .tab-\\[971\\] {
-          tab-size: 971;
+        .example-\\[971\\] {
+          --resolved-value: 971;
         }
 
-        .tab-\\[var\\(--my-value\\)\\] {
-          tab-size: var(--my-value);
+        .example-\\[var\\(--my-value\\)\\] {
+          --resolved-value: var(--my-value);
         }
         "
       `)
@@ -30310,8 +30311,8 @@ describe('custom utilities', () => {
 
     test('resolving any arbitrary values (with escaped `*`)', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value([\*]);
+        @utility example-* {
+          --resolved-value: --value([\*]);
         }
 
         @tailwind utilities;
@@ -30319,32 +30320,32 @@ describe('custom utilities', () => {
 
       expect(
         await compileCss(input, [
-          'tab-[1]',
-          'tab-[76]',
-          'tab-[971]',
-          'tab-[var(--my-value)]',
-          'tab-(--my-value)',
+          'example-[1]',
+          'example-[76]',
+          'example-[971]',
+          'example-[var(--my-value)]',
+          'example-(--my-value)',
         ]),
       ).toMatchInlineSnapshot(`
         "
-        .tab-\\(--my-value\\) {
-          tab-size: var(--my-value);
+        .example-\\(--my-value\\) {
+          --resolved-value: var(--my-value);
         }
 
-        .tab-\\[1\\] {
-          tab-size: 1;
+        .example-\\[1\\] {
+          --resolved-value: 1;
         }
 
-        .tab-\\[76\\] {
-          tab-size: 76;
+        .example-\\[76\\] {
+          --resolved-value: 76;
         }
 
-        .tab-\\[971\\] {
-          tab-size: 971;
+        .example-\\[971\\] {
+          --resolved-value: 971;
         }
 
-        .tab-\\[var\\(--my-value\\)\\] {
-          tab-size: var(--my-value);
+        .example-\\[var\\(--my-value\\)\\] {
+          --resolved-value: var(--my-value);
         }
         "
       `)
@@ -30353,34 +30354,35 @@ describe('custom utilities', () => {
     test('resolving theme, bare and arbitrary values all at once', async () => {
       let input = css`
         @theme reference {
-          --tab-size-github: 8;
+          --example-a: 8;
         }
 
-        @utility tab-* {
-          tab-size: --value([integer]);
-          tab-size: --value(integer);
-          tab-size: --value(--tab-size);
+        @utility example-* {
+          --resolved-value: --value([integer]);
+          --resolved-value: --value(integer);
+          --resolved-value: --value(--example);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-github', 'tab-76', 'tab-[123]'])).toMatchInlineSnapshot(`
-        "
-        .tab-76 {
-          tab-size: 76;
-        }
+      expect(await compileCss(input, ['example-a', 'example-76', 'example-[123]']))
+        .toMatchInlineSnapshot(`
+          "
+          .example-76 {
+            --resolved-value: 76;
+          }
 
-        .tab-\\[123\\] {
-          tab-size: 123;
-        }
+          .example-\\[123\\] {
+            --resolved-value: 123;
+          }
 
-        .tab-github {
-          tab-size: var(--tab-size-github, 8);
-        }
-        "
-      `)
-      expect(await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]'])).toEqual('')
+          .example-a {
+            --resolved-value: var(--example-a, 8);
+          }
+          "
+        `)
+      expect(await compileCss(input, ['example-[#0088cc]', 'example-[1px]'])).toEqual('')
     })
 
     test('in combination with calc to produce different data types of values', async () => {
@@ -30390,9 +30392,9 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: --value([percentage]);
-          --value: calc(--value(integer) * 1%);
-          --value: --value(--example);
+          --resolved-value: --value([percentage]);
+          --resolved-value: calc(--value(integer) * 1%);
+          --resolved-value: --value(--example);
         }
 
         @tailwind utilities;
@@ -30402,15 +30404,15 @@ describe('custom utilities', () => {
         .toMatchInlineSnapshot(`
           "
           .example-12 {
-            --value: calc(12 * 1%);
+            --resolved-value: calc(12 * 1%);
           }
 
           .example-\\[20\\%\\] {
-            --value: 20%;
+            --resolved-value: 20%;
           }
 
           .example-full {
-            --value: var(--example-full, 100%);
+            --resolved-value: var(--example-full, 100%);
           }
           "
         `)
@@ -30420,61 +30422,34 @@ describe('custom utilities', () => {
     test('shorthand if resulting values are of the same type', async () => {
       let input = css`
         @theme reference {
-          --tab-size-github: 8;
           --example-full: 100%;
         }
 
-        @utility tab-* {
-          tab-size: --value(--tab-size, integer, [integer]);
-        }
-
         @utility example-* {
-          --value: calc(--value(integer) * 1%);
-          --value: --value(--example, [percentage]);
+          --resolved-value: calc(--value(integer) * 1%);
+          --resolved-value: --value(--example, [percentage]);
         }
 
         @tailwind utilities;
       `
 
-      expect(
-        await compileCss(input, [
-          'tab-github',
-          'tab-76',
-          'tab-[123]',
-          'example-37',
-          'example-[50%]',
-          'example-full',
-        ]),
-      ).toMatchInlineSnapshot(`
-        "
-        .example-37 {
-          --value: calc(37 * 1%);
-        }
+      expect(await compileCss(input, ['example-37', 'example-[50%]', 'example-full']))
+        .toMatchInlineSnapshot(`
+          "
+          .example-37 {
+            --resolved-value: calc(37 * 1%);
+          }
 
-        .example-\\[50\\%\\] {
-          --value: 50%;
-        }
+          .example-\\[50\\%\\] {
+            --resolved-value: 50%;
+          }
 
-        .example-full {
-          --value: var(--example-full, 100%);
-        }
-
-        .tab-76 {
-          tab-size: 76;
-        }
-
-        .tab-\\[123\\] {
-          tab-size: 123;
-        }
-
-        .tab-github {
-          tab-size: var(--tab-size-github, 8);
-        }
-        "
-      `)
-      expect(
-        await compileCss(input, ['tab-[#0088cc]', 'tab-[1px]', 'example-foo', 'example-[13px]']),
-      ).toEqual('')
+          .example-full {
+            --resolved-value: var(--example-full, 100%);
+          }
+          "
+        `)
+      expect(await compileCss(input, ['example-foo', 'example-[13px]'])).toEqual('')
     })
 
     test('negative values', async () => {
@@ -30484,11 +30459,11 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: --value(--example, [percentage], [length]);
+          --resolved-value: --value(--example, [percentage], [length]);
         }
 
         @utility -example-* {
-          --value: calc(--value(--example, [percentage], [length]) * -1);
+          --resolved-value: calc(--value(--example, [percentage], [length]) * -1);
         }
 
         @tailwind utilities;
@@ -30506,27 +30481,27 @@ describe('custom utilities', () => {
       ).toMatchInlineSnapshot(`
         "
         .-example-\\[10px\\] {
-          --value: calc(10px * -1);
+          --resolved-value: calc(10px * -1);
         }
 
         .-example-\\[20\\%\\] {
-          --value: calc(20% * -1);
+          --resolved-value: calc(20% * -1);
         }
 
         .-example-full {
-          --value: calc(var(--example-full, 100%) * -1);
+          --resolved-value: calc(var(--example-full, 100%) * -1);
         }
 
         .example-\\[10px\\] {
-          --value: 10px;
+          --resolved-value: 10px;
         }
 
         .example-\\[20\\%\\] {
-          --value: 20%;
+          --resolved-value: 20%;
         }
 
         .example-full {
-          --value: var(--example-full, 100%);
+          --resolved-value: var(--example-full, 100%);
         }
         "
       `)
@@ -30536,7 +30511,8 @@ describe('custom utilities', () => {
     test('using the same value multiple times', async () => {
       let input = css`
         @utility example-* {
-          --value: calc(var(--spacing) * --value(number)) calc(var(--spacing) * --value(number));
+          --resolved-value: calc(var(--spacing) * --value(number))
+            calc(var(--spacing) * --value(number));
         }
 
         @tailwind utilities;
@@ -30545,7 +30521,8 @@ describe('custom utilities', () => {
       expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
         "
         .example-12 {
-          --value: calc(var(--spacing) * 12) calc(var(--spacing) * 12);
+          --resolved-value: calc(var(--spacing) * 12)
+                    calc(var(--spacing) * 12);
         }
         "
       `)
@@ -30601,140 +30578,141 @@ describe('custom utilities', () => {
 
     test('functional utilities can use `--default(…)` in `--value(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer, --default(4));
+        @utility example-* {
+          --resolved-value: --value(integer, --default(4));
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab', 'tab-123'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example', 'example-123'])).toMatchInlineSnapshot(`
         "
-        .tab {
-          tab-size: 4;
+        .example {
+          --resolved-value: 4;
         }
 
-        .tab-123 {
-          tab-size: 123;
+        .example-123 {
+          --resolved-value: 123;
         }
         "
       `)
 
-      expect(await compileCss(input, ['tab-foo'])).toEqual('')
+      expect(await compileCss(input, ['example-foo'])).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in complex expressions', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: calc(--value(integer, --default(4)) * 2);
+        @utility example-* {
+          --resolved-value: calc(--value(integer, --default(4)) * 2);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab', 'tab-123'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example', 'example-123'])).toMatchInlineSnapshot(`
         "
-        .tab {
-          tab-size: 8;
+        .example {
+          --resolved-value: calc(4 * 2);
         }
 
-        .tab-123 {
-          tab-size: 246;
+        .example-123 {
+          --resolved-value: calc(123 * 2);
         }
         "
       `)
 
-      expect(await compileCss(input, ['tab-foo'])).toEqual('')
+      expect(await compileCss(input, ['example-foo'])).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` with `--modifier(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer, --default(4));
-          line-height: --modifier(integer);
+        @utility example-* {
+          --resolved-value: --value(integer, --default(4));
+          --resolved-modifier: --modifier(integer);
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab', 'tab/25'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example', 'example/25'])).toMatchInlineSnapshot(`
         "
-        .tab\\/25 {
-          tab-size: 4;
-          line-height: 25;
+        .example\\/25 {
+          --resolved-value: 4;
+          --resolved-modifier: 25;
         }
 
-        .tab {
-          tab-size: 4;
+        .example {
+          --resolved-value: 4;
         }
         "
       `)
 
-      expect(await compileCss(input, ['tab/foo'])).toEqual('')
+      expect(await compileCss(input, ['example/foo'])).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in `--modifier(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer);
-          line-height: --modifier(integer, --default(1));
+        @utility example-* {
+          --resolved-value: --value(integer);
+          --resolved-modifier: --modifier(integer, --default(1));
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab-123', 'tab-123/25'])).toMatchInlineSnapshot(`
+      expect(await compileCss(input, ['example-123', 'example-123/25'])).toMatchInlineSnapshot(`
         "
-        .tab-123 {
-          tab-size: 123;
-          line-height: 1;
+        .example-123 {
+          --resolved-value: 123;
+          --resolved-modifier: 1;
         }
 
-        .tab-123\\/25 {
-          tab-size: 123;
-          line-height: 25;
+        .example-123\\/25 {
+          --resolved-value: 123;
+          --resolved-modifier: 25;
         }
         "
       `)
 
-      expect(await compileCss(input, ['tab-123/foo'])).toEqual('')
+      expect(await compileCss(input, ['example-123/foo'])).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in `--value(…)` and `--modifier(…)`', async () => {
       let input = css`
-        @utility tab-* {
-          tab-size: --value(integer, --default(12));
-          line-height: --modifier(integer, --default(34));
+        @utility example-* {
+          --resolved-value: --value(integer, --default(12));
+          --resolved-modifier: --modifier(integer, --default(34));
         }
 
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['tab', 'tab/1', 'tab-1', 'tab-1/1'])).toMatchInlineSnapshot(`
-        "
-        .tab {
-          tab-size: 12;
-          line-height: 34;
-        }
+      expect(await compileCss(input, ['example', 'example/1', 'example-1', 'example-1/1']))
+        .toMatchInlineSnapshot(`
+          "
+          .example {
+            --resolved-value: 12;
+            --resolved-modifier: 34;
+          }
 
-        .tab-1 {
-          tab-size: 1;
-          line-height: 34;
-        }
+          .example-1 {
+            --resolved-value: 1;
+            --resolved-modifier: 34;
+          }
 
-        .tab-1\\/1 {
-          tab-size: 1;
-          line-height: 1;
-        }
+          .example-1\\/1 {
+            --resolved-value: 1;
+            --resolved-modifier: 1;
+          }
 
-        .tab\\/1 {
-          tab-size: 12;
-          line-height: 1;
-        }
-        "
-      `)
+          .example\\/1 {
+            --resolved-value: 12;
+            --resolved-modifier: 1;
+          }
+          "
+        `)
 
-      expect(await compileCss(input, ['tab-123/foo'])).toEqual('')
+      expect(await compileCss(input, ['example-123/foo'])).toEqual('')
     })
 
     test('modifiers', async () => {
@@ -30745,10 +30723,10 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: --value(--value, [length]);
-          --modifier: --modifier(--modifier, [length]);
-          --modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
-          --modifier-literals: --modifier('literal', 'literal-2');
+          --resolved-value: --value(--value, [length]);
+          --resolved-modifier: --modifier(--modifier, [length]);
+          --resolved-modifier-with-calc: calc(--modifier(--modifier, [length]) * 2);
+          --resolved-modifier-literals: --modifier('literal', 'literal-2');
         }
 
         @tailwind utilities;
@@ -30766,33 +30744,33 @@ describe('custom utilities', () => {
       ).toMatchInlineSnapshot(`
         "
         .example-\\[12px\\]\\/\\[16px\\] {
-          --value: 12px;
-          --modifier: 16px;
-          --modifier-with-calc: calc(16px * 2);
+          --resolved-value: 12px;
+          --resolved-modifier: 16px;
+          --resolved-modifier-with-calc: calc(16px * 2);
         }
 
         .example-sm\\/7 {
-          --value: var(--value-sm, 14px);
-          --modifier: var(--modifier-7, 28px);
-          --modifier-with-calc: calc(var(--modifier-7, 28px) * 2);
+          --resolved-value: var(--value-sm, 14px);
+          --resolved-modifier: var(--modifier-7, 28px);
+          --resolved-modifier-with-calc: calc(var(--modifier-7, 28px) * 2);
         }
 
         .example-sm\\/literal {
-          --value: var(--value-sm, 14px);
-          --modifier-literals: literal;
+          --resolved-value: var(--value-sm, 14px);
+          --resolved-modifier-literals: literal;
         }
 
         .example-sm\\/literal-2 {
-          --value: var(--value-sm, 14px);
-          --modifier-literals: literal-2;
+          --resolved-value: var(--value-sm, 14px);
+          --resolved-modifier-literals: literal-2;
         }
 
         .example-\\[12px\\] {
-          --value: 12px;
+          --resolved-value: 12px;
         }
 
         .example-sm {
-          --value: var(--value-sm, 14px);
+          --resolved-value: var(--value-sm, 14px);
         }
         "
       `)
@@ -30813,7 +30791,7 @@ describe('custom utilities', () => {
         }
 
         @utility example-* {
-          --value: --value(--example, ratio, [ratio]);
+          --resolved-value: --value(--example, ratio, [ratio]);
         }
 
         @tailwind utilities;
@@ -30823,15 +30801,15 @@ describe('custom utilities', () => {
         .toMatchInlineSnapshot(`
           "
           .example-1\\/1 {
-            --value: 1 / 1;
+            --resolved-value: 1 / 1;
           }
 
           .example-\\[7\\/9\\] {
-            --value: 7/9;
+            --resolved-value: 7/9;
           }
 
           .example-video {
-            --value: var(--example-video, 16 / 9);
+            --resolved-value: var(--example-video, 16 / 9);
           }
           "
         `)
@@ -31062,24 +31040,24 @@ describe('custom utilities', () => {
   test('resolve value based on `@theme`', async () => {
     let input = css`
       @theme {
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size);
+      @utility example-* {
+        --resolved-value: --value(--example);
       }
 
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      .tab-github {
-        tab-size: var(--tab-size-github);
+      .example-a {
+        --resolved-value: var(--example-a);
       }
       "
     `)
@@ -31088,20 +31066,20 @@ describe('custom utilities', () => {
   test('resolve value based on `@theme reference`', async () => {
     let input = css`
       @theme reference {
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size);
+      @utility example-* {
+        --resolved-value: --value(--example);
       }
 
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
       "
-      .tab-github {
-        tab-size: var(--tab-size-github, 8);
+      .example-a {
+        --resolved-value: var(--example-a, 8);
       }
       "
     `)
@@ -31110,20 +31088,20 @@ describe('custom utilities', () => {
   test('resolve value based on `@theme inline`', async () => {
     let input = css`
       @theme inline {
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size);
+      @utility example-* {
+        --resolved-value: --value(--example);
       }
 
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
       "
-      .tab-github {
-        tab-size: 8;
+      .example-a {
+        --resolved-value: 8;
       }
       "
     `)
@@ -31132,20 +31110,20 @@ describe('custom utilities', () => {
   test('resolve value based on `@theme inline reference`', async () => {
     let input = css`
       @theme inline reference {
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size);
+      @utility example-* {
+        --resolved-value: --value(--example);
       }
 
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['tab-github'])).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
       "
-      .tab-github {
-        tab-size: 8;
+      .example-a {
+        --resolved-value: 8;
       }
       "
     `)
