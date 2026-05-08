@@ -3953,16 +3953,16 @@ describe('matchUtilities()', () => {
       expect(optimizeCss(await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'])))
         .toMatchInlineSnapshot(`
           "
+          .scrollbar-\\[2px\\] {
+            scrollbar-width: 2px;
+          }
+
           .scrollbar-\\[\\#08c\\] {
             scrollbar-color: #08c;
           }
 
           .scrollbar-\\[\\#08c\\]\\/50 {
             scrollbar-color: oklab(59.9824% -.067 -.124 / .5);
-          }
-
-          .scrollbar-\\[2px\\] {
-            scrollbar-width: 2px;
           }
           "
         `)
@@ -4117,8 +4117,12 @@ describe('matchUtilities()', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .scrollbar-2 {
+      .scrollbar-2, .scrollbar-\\[2px\\] {
         scrollbar-width: 2px;
+      }
+
+      .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
+        scrollbar-width: var(--my-width);
       }
 
       .scrollbar-\\[\\#fff\\] {
@@ -4129,10 +4133,6 @@ describe('matchUtilities()', () => {
         scrollbar-color: oklab(100% 0 5.96046e-8 / .5);
       }
 
-      .scrollbar-\\[2px\\] {
-        scrollbar-width: 2px;
-      }
-
       .scrollbar-\\[color\\:var\\(--my-color\\)\\], .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
         scrollbar-color: var(--my-color);
       }
@@ -4141,10 +4141,6 @@ describe('matchUtilities()', () => {
         .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
           scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
-      }
-
-      .scrollbar-\\[length\\:var\\(--my-width\\)\\] {
-        scrollbar-width: var(--my-width);
       }
 
       .scrollbar-\\[var\\(--my-color\\)\\], .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {

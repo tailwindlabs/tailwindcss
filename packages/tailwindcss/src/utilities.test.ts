@@ -6899,6 +6899,34 @@ test('transform', async () => {
   ).toEqual('')
 })
 
+test('zoom', async () => {
+  expect(
+    await compileCss(
+      css`
+        @tailwind utilities;
+      `,
+      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .zoom-50 {
+      zoom: 50%;
+    }
+
+    .zoom-100 {
+      zoom: 100%;
+    }
+
+    .zoom-\\[var\\(--zoom\\)\\] {
+      zoom: var(--zoom);
+    }
+    "
+  `)
+  expect(
+    await run(['zoom', '-zoom-50', 'zoom--50', 'zoom-1.5', 'zoom-unknown', 'zoom-50/foo']),
+  ).toEqual('')
+})
+
 test('perspective', async () => {
   expect(
     await compileCss(
@@ -11439,6 +11467,36 @@ test('scrollbar-width', async () => {
   ).toEqual('')
 })
 
+test('scrollbar-gutter', async () => {
+  expect(await run(['scrollbar-gutter-auto', 'scrollbar-gutter-stable', 'scrollbar-gutter-both']))
+    .toMatchInlineSnapshot(`
+    "
+    .scrollbar-gutter-auto {
+      scrollbar-gutter: auto;
+    }
+
+    .scrollbar-gutter-both {
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .scrollbar-gutter-stable {
+      scrollbar-gutter: stable;
+    }
+    "
+  `)
+  expect(
+    await run([
+      'scrollbar-gutter',
+      '-scrollbar-gutter-auto',
+      '-scrollbar-gutter-stable',
+      '-scrollbar-gutter-both',
+      'scrollbar-gutter-auto/foo',
+      'scrollbar-gutter-stable/foo',
+      'scrollbar-gutter-both/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('scrollbar-thumb', async () => {
   expect(
     await compileCss(
@@ -11803,6 +11861,39 @@ test('whitespace', async () => {
       'whitespace-pre-line/foo',
       'whitespace-pre-wrap/foo',
       'whitespace-break-spaces/foo',
+    ]),
+  ).toEqual('')
+})
+
+test('tab', async () => {
+  expect(await run(['tab-2', 'tab-8', 'tab-[12px]', 'tab-[3]'])).toMatchInlineSnapshot(`
+    "
+    .tab-2 {
+      tab-size: 2;
+    }
+
+    .tab-8 {
+      tab-size: 8;
+    }
+
+    .tab-\\[3\\] {
+      tab-size: 3;
+    }
+
+    .tab-\\[12px\\] {
+      tab-size: 12px;
+    }
+    "
+  `)
+  expect(
+    await run([
+      'tab',
+      '-tab-2',
+      'tab-2.5',
+      'tab-1/2',
+      'tab-unknown',
+      'tab-2/foo',
+      'tab-[12px]/foo',
     ]),
   ).toEqual('')
 })

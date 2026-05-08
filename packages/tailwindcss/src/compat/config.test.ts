@@ -215,11 +215,11 @@ test('Config files can affect the theme', async () => {
 
   expect(pretty(compiler.build(['bg-primary', 'scrollbar-primary']))).toMatchInlineSnapshot(`
     "
-    .bg-primary {
-      background-color: #c0ffee;
-    }
     .scrollbar-primary {
       scrollbar-color: #c0ffee;
+    }
+    .bg-primary {
+      background-color: #c0ffee;
     }
     "
   `)

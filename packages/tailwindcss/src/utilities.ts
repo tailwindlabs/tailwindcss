@@ -1706,6 +1706,21 @@ export function createUtilities(theme: Theme) {
   }
 
   /**
+   * @css `zoom`
+   */
+  functionalUtility('zoom', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return `${value}%`
+    },
+    handle: (value) => [decl('zoom', value)],
+  })
+
+  suggest('zoom', () => [
+    { values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'] },
+  ])
+
+  /**
    * @css `transform-style`
    */
   staticUtility('transform-flat', [['transform-style', 'flat']])
@@ -2243,6 +2258,10 @@ export function createUtilities(theme: Theme) {
     })
   }
 
+  staticUtility('scrollbar-gutter-auto', [['scrollbar-gutter', 'auto']])
+  staticUtility('scrollbar-gutter-stable', [['scrollbar-gutter', 'stable']])
+  staticUtility('scrollbar-gutter-both', [['scrollbar-gutter', 'stable both-edges']])
+
   staticUtility('truncate', [
     ['overflow', 'hidden'],
     ['text-overflow', 'ellipsis'],
@@ -2271,6 +2290,16 @@ export function createUtilities(theme: Theme) {
   staticUtility('whitespace-pre-line', [['white-space', 'pre-line']])
   staticUtility('whitespace-pre-wrap', [['white-space', 'pre-wrap']])
   staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']])
+
+  functionalUtility('tab', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('tab-size', value)],
+  })
+
+  suggest('tab', () => [{ values: ['2', '4', '8'] }])
 
   staticUtility('text-wrap', [['text-wrap', 'wrap']])
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])
