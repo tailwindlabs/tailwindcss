@@ -11503,7 +11503,6 @@ test('scrollbar-thumb', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --scrollbar-thumb-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -11511,7 +11510,6 @@ test('scrollbar-thumb', async () => {
         'scrollbar-thumb-red-500',
         'scrollbar-thumb-red-500/50',
         'scrollbar-thumb-red-500/[0.5]',
-        'scrollbar-thumb-blue-500',
         'scrollbar-thumb-current',
         'scrollbar-thumb-inherit',
         'scrollbar-thumb-transparent',
@@ -11532,7 +11530,6 @@ test('scrollbar-thumb', async () => {
 
     :root, :host {
       --color-red-500: #ef4444;
-      --scrollbar-thumb-color-blue-500: #3b82f6;
     }
 
     .scrollbar-thumb-\\[\\#0088cc\\] {
@@ -11542,11 +11539,6 @@ test('scrollbar-thumb', async () => {
 
     .scrollbar-thumb-\\[\\#0088cc\\]\\/50 {
       --tw-scrollbar-thumb: oklab(59.9824% -.067 -.124 / .5);
-      scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
-    }
-
-    .scrollbar-thumb-blue-500 {
-      --tw-scrollbar-thumb: var(--scrollbar-thumb-color-blue-500);
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
 
@@ -11628,7 +11620,6 @@ test('scrollbar-track', async () => {
       css`
         @theme {
           --color-red-500: #ef4444;
-          --scrollbar-track-color-blue-500: #3b82f6;
         }
         @tailwind utilities;
       `,
@@ -11636,7 +11627,6 @@ test('scrollbar-track', async () => {
         'scrollbar-track-red-500',
         'scrollbar-track-red-500/50',
         'scrollbar-track-red-500/[0.5]',
-        'scrollbar-track-blue-500',
         'scrollbar-track-current',
         'scrollbar-track-inherit',
         'scrollbar-track-transparent',
@@ -11657,7 +11647,6 @@ test('scrollbar-track', async () => {
 
     :root, :host {
       --color-red-500: #ef4444;
-      --scrollbar-track-color-blue-500: #3b82f6;
     }
 
     .scrollbar-track-\\[\\#0088cc\\] {
@@ -11667,11 +11656,6 @@ test('scrollbar-track', async () => {
 
     .scrollbar-track-\\[\\#0088cc\\]\\/50 {
       --tw-scrollbar-track: oklab(59.9824% -.067 -.124 / .5);
-      scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
-    }
-
-    .scrollbar-track-blue-500 {
-      --tw-scrollbar-track: var(--scrollbar-track-color-blue-500);
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
 

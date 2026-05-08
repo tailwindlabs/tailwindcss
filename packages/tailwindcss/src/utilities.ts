@@ -2240,7 +2240,7 @@ export function createUtilities(theme: Theme) {
     }
 
     colorUtility('scrollbar-thumb', {
-      themeKeys: ['--scrollbar-thumb-color', '--color'],
+      themeKeys: ['--color'],
       handle: (value) => [
         scrollbarColorProperties(),
         decl('--tw-scrollbar-thumb', value),
@@ -2249,7 +2249,7 @@ export function createUtilities(theme: Theme) {
     })
 
     colorUtility('scrollbar-track', {
-      themeKeys: ['--scrollbar-track-color', '--color'],
+      themeKeys: ['--color'],
       handle: (value) => [
         scrollbarColorProperties(),
         decl('--tw-scrollbar-track', value),
