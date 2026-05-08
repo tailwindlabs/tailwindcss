@@ -456,6 +456,9 @@ importers:
       '@alloc/quick-lru':
         specifier: ^5.2.0
         version: 5.2.0
+      '@rspack/core':
+        specifier: ^1.0.0 || ^2.0.0
+        version: 2.0.2(@swc/helpers@0.5.15)
       '@tailwindcss/node':
         specifier: workspace:*
         version: link:../@tailwindcss-node
@@ -1981,6 +1984,70 @@ packages:
     resolution: {integrity: sha512-QVTUovf40zgTqlFVrKA1uXMVvU2QWEFWfAH8Wdc48IxLvrJMQVMBRjuQyUpzZCDkakImib9eVazbWlC6ksWtJw==}
     cpu: [x64]
     os: [win32]
+
+  '@rspack/binding-darwin-arm64@2.0.2':
+    resolution: {integrity: sha512-0o7lbgBBsDlICWdjIH0q3e0BsSco4GRiImHWVfZSVEG+q2+ykZJvSvYCVhPM1Co375Z0S3VMPa/8SjcY1FHwlw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rspack/binding-darwin-x64@2.0.2':
+    resolution: {integrity: sha512-tOwxZpoPlTlRs/w6UyUinXJ4TYRVHMlR7+eQxO1R3muKpixvhXQjtvoaY16HuFyTVky5F0IfOoWr3x9FEsgdLg==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@rspack/binding-linux-arm64-gnu@2.0.2':
+    resolution: {integrity: sha512-1ZD4YFhG1rmgqj+W8hfwHyKV8xDxGsc/3KgU0FwmiVEX7JfzhCkgBO/xlCG79kRKSrzuVzt4icO/G3cCKn0pag==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/binding-linux-arm64-musl@2.0.2':
+    resolution: {integrity: sha512-/PtTkM/DsDLjeuXTmeJeRfbjCDbcL9jvoVgZrgxYFZ28y2cdLvbChbW9uigOzs5dQEs1CIBQXMTTj7KhdBTuQg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@rspack/binding-linux-x64-gnu@2.0.2':
+    resolution: {integrity: sha512-bBjsZxMHRaPo6X9SokApm6ucs+UhXtAJFyJJyuk2BH4XJsLeCU9Dz1vMwioeohFbJUUeTASVPm6/BL+RhSaunw==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/binding-linux-x64-musl@2.0.2':
+    resolution: {integrity: sha512-HjlpInqzabDNkhVsUJpsHPqa9QYVWBViJoyWNjzXCAW0vKMDvwaphyUvokSinX8FGTlZi/sr5UEaHJo6XtQ35g==}
+    cpu: [x64]
+    os: [linux]
+
+  '@rspack/binding-wasm32-wasi@2.0.2':
+    resolution: {integrity: sha512-YaRYNFLJRpkGfYjSWR7n9f+nQKtrlmrrffpAn/blc2geHcRvXoBc5SCs1idPtsLhj7H9qWWhs7ucjyHy4csWFg==}
+    cpu: [wasm32]
+
+  '@rspack/binding-win32-arm64-msvc@2.0.2':
+    resolution: {integrity: sha512-d/3kTEKq+asLjRFPO96t+wfWiM7DLN76VQEPDD9bc1kdsZXlVJBuvyXfsgK8bbEvKplWXYcSsokhmEnuXrLOpg==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@rspack/binding-win32-ia32-msvc@2.0.2':
+    resolution: {integrity: sha512-161cWineq3RW+Jdm1FAfSpXeUtYWvhB3kAbm46vNT9h/YYz+spwsFMvveAZ1nsVSVL0IC5lDBGUte7yUAY8K2g==}
+    cpu: [ia32]
+    os: [win32]
+
+  '@rspack/binding-win32-x64-msvc@2.0.2':
+    resolution: {integrity: sha512-y7Q0S1FE+OlkL5GMqLG0PwxrPw6E1r892KhGrGKE1Vdufe5YTEx6xTPxzZ+b7N2KPD7s9G1/iJmWHQxb1+Bjkg==}
+    cpu: [x64]
+    os: [win32]
+
+  '@rspack/binding@2.0.2':
+    resolution: {integrity: sha512-0kZPplW9GWx8mfC6DfsaRY3QBIYPuUs42JfmSM6aSb8tMHZAXQeLeMB8M+h8i4SeI+aFtCgO6UuYGtyWf7+L+A==}
+
+  '@rspack/core@2.0.2':
+    resolution: {integrity: sha512-VM3UHOo26uC+4QSqY5tU1ybI7KuXY5rTof8nhFOaBY9SYau0Smvr+hMSAPmrmHwknB6dXT8yaNVxrj7I+qxE1Q==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@module-federation/runtime-tools': ^0.24.1 || ^2.0.0
+      '@swc/helpers': '>=0.5.1'
+    peerDependenciesMeta:
+      '@module-federation/runtime-tools':
+        optional: true
+      '@swc/helpers':
+        optional: true
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
@@ -4388,6 +4455,59 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.60.4':
     optional: true
+
+  '@rspack/binding-darwin-arm64@2.0.2':
+    optional: true
+
+  '@rspack/binding-darwin-x64@2.0.2':
+    optional: true
+
+  '@rspack/binding-linux-arm64-gnu@2.0.2':
+    optional: true
+
+  '@rspack/binding-linux-arm64-musl@2.0.2':
+    optional: true
+
+  '@rspack/binding-linux-x64-gnu@2.0.2':
+    optional: true
+
+  '@rspack/binding-linux-x64-musl@2.0.2':
+    optional: true
+
+  '@rspack/binding-wasm32-wasi@2.0.2':
+    dependencies:
+      '@emnapi/core': 1.10.0
+      '@emnapi/runtime': 1.10.0
+      '@napi-rs/wasm-runtime': 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
+    optional: true
+
+  '@rspack/binding-win32-arm64-msvc@2.0.2':
+    optional: true
+
+  '@rspack/binding-win32-ia32-msvc@2.0.2':
+    optional: true
+
+  '@rspack/binding-win32-x64-msvc@2.0.2':
+    optional: true
+
+  '@rspack/binding@2.0.2':
+    optionalDependencies:
+      '@rspack/binding-darwin-arm64': 2.0.2
+      '@rspack/binding-darwin-x64': 2.0.2
+      '@rspack/binding-linux-arm64-gnu': 2.0.2
+      '@rspack/binding-linux-arm64-musl': 2.0.2
+      '@rspack/binding-linux-x64-gnu': 2.0.2
+      '@rspack/binding-linux-x64-musl': 2.0.2
+      '@rspack/binding-wasm32-wasi': 2.0.2
+      '@rspack/binding-win32-arm64-msvc': 2.0.2
+      '@rspack/binding-win32-ia32-msvc': 2.0.2
+      '@rspack/binding-win32-x64-msvc': 2.0.2
+
+  '@rspack/core@2.0.2(@swc/helpers@0.5.15)':
+    dependencies:
+      '@rspack/binding': 2.0.2
+    optionalDependencies:
+      '@swc/helpers': 0.5.15
 
   '@sindresorhus/merge-streams@4.0.0': {}
 

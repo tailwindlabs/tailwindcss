@@ -1,7 +1,7 @@
 {
   "name": "@tailwindcss/webpack",
   "version": "4.3.0",
-  "description": "A webpack loader for Tailwind CSS v4.",
+  "description": "A webpack / Rspack loader for Tailwind CSS v4.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -41,6 +41,15 @@
     "webpack": "catalog:"
   },
   "peerDependencies": {
-    "webpack": "^5"
+    "@rspack/core": "^1.0.0 || ^2.0.0",
+    "webpack": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@rspack/core": {
+      "optional": true
+    },
+    "webpack": {
+      "optional": true
+    }
   }
 }
