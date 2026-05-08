@@ -6903,19 +6903,12 @@ test('zoom', async () => {
   expect(
     await compileCss(
       css`
-        @theme {
-          --zoom-compact: 80%;
-        }
         @tailwind utilities;
       `,
-      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]', 'zoom-compact'],
+      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
-    :root, :host {
-      --zoom-compact: 80%;
-    }
-
     .zoom-50 {
       zoom: 50%;
     }
@@ -6926,10 +6919,6 @@ test('zoom', async () => {
 
     .zoom-\\[var\\(--zoom\\)\\] {
       zoom: var(--zoom);
-    }
-
-    .zoom-compact {
-      zoom: var(--zoom-compact);
     }
     "
   `)

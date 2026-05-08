@@ -1710,7 +1710,6 @@ export function createUtilities(theme: Theme) {
    * @css `zoom`
    */
   functionalUtility('zoom', {
-    themeKeys: ['--zoom'],
     handleBareValue: ({ value }) => {
       if (!isPositiveInteger(value)) return null
       return `${value}%`
@@ -1719,10 +1718,7 @@ export function createUtilities(theme: Theme) {
   })
 
   suggest('zoom', () => [
-    {
-      values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'],
-      valueThemeKeys: ['--zoom'],
-    },
+    { values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'] },
   ])
 
   /**
