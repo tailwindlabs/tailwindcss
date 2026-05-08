@@ -71,8 +71,8 @@ module.exports = {
 - Rspack:
 
 ```javascript
-// rspack.config.js
-import { rspack } from '@rspack/core';
+// rspack.config.mjs
+import { rspack } from '@rspack/core'
 
 export default {
   plugins: [new rspack.CssExtractRspackPlugin()],
