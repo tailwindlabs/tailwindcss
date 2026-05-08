@@ -2295,7 +2295,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']])
 
   functionalUtility('tab', {
-    themeKeys: ['--tab-size'],
     handleBareValue: ({ value }) => {
       if (!isPositiveInteger(value)) return null
       return value
@@ -2303,12 +2302,7 @@ export function createUtilities(theme: Theme) {
     handle: (value) => [decl('tab-size', value)],
   })
 
-  suggest('tab', () => [
-    {
-      values: ['2', '4', '8'],
-      valueThemeKeys: ['--tab-size'],
-    },
-  ])
+  suggest('tab', () => [{ values: ['2', '4', '8'] }])
 
   staticUtility('text-wrap', [['text-wrap', 'wrap']])
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])

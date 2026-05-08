@@ -11875,14 +11875,10 @@ test('tab', async () => {
 
         @tailwind utilities;
       `,
-      ['tab-2', 'tab-8', 'tab-[12px]', 'tab-[3]', 'tab-github'],
+      ['tab-2', 'tab-8', 'tab-[12px]', 'tab-[3]'],
     ),
   ).toMatchInlineSnapshot(`
     "
-    :root, :host {
-      --tab-size-github: 8;
-    }
-
     .tab-2 {
       tab-size: 2;
     }
@@ -11897,10 +11893,6 @@ test('tab', async () => {
 
     .tab-\\[12px\\] {
       tab-size: 12px;
-    }
-
-    .tab-github {
-      tab-size: var(--tab-size-github);
     }
     "
   `)
