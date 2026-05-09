@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
+import { pretty } from './test-utils/run'
 
 const css = String.raw
 
@@ -18,15 +19,18 @@ test('utilities must be prefixed', async () => {
 
   // Prefixed utilities are generated
   expect(
-    compiler.build([
-      'tw:underline',
-      'tw:hover:line-through',
-      'tw:custom',
-      'tw:group-hover:flex',
-      'tw:peer-hover:flex',
-    ]),
+    pretty(
+      compiler.build([
+        'tw:underline',
+        'tw:hover:line-through',
+        'tw:custom',
+        'tw:group-hover:flex',
+        'tw:peer-hover:flex',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".tw\\:custom {
+    "
+    .tw\\:custom {
       color: red;
     }
     .tw\\:underline {
@@ -72,8 +76,9 @@ test('utilities used in @apply must be prefixed', async () => {
   `)
 
   // Prefixed utilities are generated
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    ".my-underline {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    .my-underline {
       text-decoration-line: underline;
     }
     "
@@ -105,8 +110,9 @@ test('CSS variables output by the theme are prefixed', async () => {
   `)
 
   // Prefixed utilities are generated
-  expect(compiler.build(['tw:text-red'])).toMatchInlineSnapshot(`
-    ":root, :host {
+  expect(pretty(compiler.build(['tw:text-red']))).toMatchInlineSnapshot(`
+    "
+    :root, :host {
       --tw-color-red: #f00;
     }
     .tw\\:text-red {
@@ -127,9 +133,10 @@ test('CSS theme functions do not use the prefix', async () => {
     @tailwind utilities;
   `)
 
-  expect(compiler.build(['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]']))
+  expect(pretty(compiler.build(['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]'])))
     .toMatchInlineSnapshot(`
-      ".tw\\:\\[color\\:theme\\(--color-red\\)\\] {
+      "
+      .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
         color: #f00;
       }
       .tw\\:text-\\[theme\\(--color-red\\)\\] {
@@ -186,8 +193,9 @@ test('JS theme functions do not use the prefix', async () => {
     },
   )
 
-  expect(compiler.build(['tw:my-custom'])).toMatchInlineSnapshot(`
-    ".tw\\:my-custom {
+  expect(pretty(compiler.build(['tw:my-custom']))).toMatchInlineSnapshot(`
+    "
+    .tw\\:my-custom {
       color: #f00;
     }
     "
@@ -220,16 +228,19 @@ test('a prefix can be configured via @import theme(…)', async () => {
 
   // Prefixed utilities are generated
   expect(
-    compiler.build([
-      'tw:underline',
-      'tw:bg-potato',
-      'tw:hover:line-through',
-      'tw:custom',
-      'flex',
-      'text-potato',
-    ]),
+    pretty(
+      compiler.build([
+        'tw:underline',
+        'tw:bg-potato',
+        'tw:hover:line-through',
+        'tw:custom',
+        'flex',
+        'text-potato',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".tw\\:bg-potato {
+    "
+    .tw\\:bg-potato {
       background-color: var(--tw-color-potato, #7a4724);
     }
     .tw\\:custom {
@@ -263,7 +274,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
@@ -290,9 +301,11 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     },
   })
 
-  expect(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom']))
-    .toMatchInlineSnapshot(`
-      ":root, :host {
+  expect(
+    pretty(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'])),
+  ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
         --tw-color-potato: #7a4724;
       }
       .tw\\:bg-potato {
@@ -330,7 +343,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     },
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`""`)
+  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
 })
 
 test('a prefix must be letters only', async () => {
@@ -351,8 +364,9 @@ test('a candidate matching the prefix does not crash', async () => {
 
   let compiler = await compile(input)
 
-  expect(compiler.build(['tomato', 'tomato:flex'])).toMatchInlineSnapshot(`
-    ".tomato\\:flex {
+  expect(pretty(compiler.build(['tomato', 'tomato:flex']))).toMatchInlineSnapshot(`
+    "
+    .tomato\\:flex {
       display: flex;
     }
     "

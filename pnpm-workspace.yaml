@@ -6,10 +6,10 @@ packages:
   - 'integrations'
 
 catalog:
-  '@types/node': ^20.19.0
-  prettier: 3.8.1
-  vite: ^8.0.0
-  webpack: ^5
+  '@types/node': ^22.19.17
+  prettier: 3.8.3
+  vite: ^8.0.10
+  webpack: ^5.106.2
   lightningcss: 1.32.0
   lightningcss-darwin-arm64: 1.32.0
   lightningcss-darwin-x64: 1.32.0

@@ -16,9 +16,11 @@ describe('--alpha(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo {
+      "
+      .foo {
         margin: oklab(62.7955% .224 .125 / .5);
-      }"
+      }
+      "
     `)
   })
 
@@ -72,13 +74,15 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "
+      :root, :host {
         --spacing: .25rem;
       }
 
       .foo {
         margin: calc(var(--spacing) * 4);
-      }"
+      }
+      "
     `)
   })
 
@@ -94,9 +98,11 @@ describe('--spacing(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".foo {
+      "
+      .foo {
         margin: 1rem;
-      }"
+      }
+      "
     `)
   })
 
@@ -153,13 +159,15 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "
+      :root, :host {
         --color-red-500: red;
       }
 
       .red {
         color: var(--color-red-500);
-      }"
+      }
+      "
     `)
   })
 
@@ -174,9 +182,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -191,7 +201,8 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "
+      :root, :host {
         --color-red-500: red;
       }
 
@@ -203,7 +214,8 @@ describe('--theme(…)', () => {
         .red {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -218,9 +230,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         color: oklab(62.7955% .224863 .125846);
-      }"
+      }
+      "
     `)
   })
 
@@ -235,9 +249,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
-      }"
+      }
+      "
     `)
   })
 
@@ -252,9 +268,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         font-family: var(--tw-default-font-family, Potato Sans, sans-serif);
-      }"
+      }
+      "
     `)
   })
 
@@ -269,9 +287,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         font-family: Potato Sans, sans-serif;
-      }"
+      }
+      "
     `)
   })
 
@@ -286,9 +306,11 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      ".red {
+      "
+      .red {
         font-family: Potato Sans, sans-serif;
-      }"
+      }
+      "
     `)
   })
 
@@ -312,7 +334,8 @@ describe('--theme(…)', () => {
         ['tw:font-sans'],
       ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "
+      :root, :host {
         --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
                     "Segoe UI Symbol", "Noto Color Emoji";
         --tw-default-font-family: var(--tw-font-sans);
@@ -326,7 +349,8 @@ describe('--theme(…)', () => {
 
       .tw\\:font-sans {
         font-family: var(--tw-font-sans);
-      }"
+      }
+      "
     `)
   })
 
@@ -350,7 +374,8 @@ describe('--theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (min-width: 48rem) {
+      "
+      @media (min-width: 48rem) {
         .blue {
           color: #00f;
         }
@@ -360,7 +385,8 @@ describe('--theme(…)', () => {
         .red {
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -420,7 +446,8 @@ describe('--theme(…)', () => {
         },
       ),
     ).toMatchInlineSnapshot(`
-      "@layer base {
+      "
+      @layer base {
         html, :host {
           font-family: var(--default-font-family, system-ui);
         }
@@ -431,7 +458,8 @@ describe('--theme(…)', () => {
           --font-sans: sans-serif;
           --default-font-family: var(--font-sans);
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -450,9 +478,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -467,9 +497,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -484,9 +516,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -501,9 +535,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -518,9 +554,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -535,9 +573,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -552,9 +592,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .75);
-          }"
+          }
+          "
         `)
       })
 
@@ -569,9 +611,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .75);
-          }"
+          }
+          "
         `)
       })
 
@@ -586,9 +630,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .75);
-          }"
+          }
+          "
         `)
       })
 
@@ -603,7 +649,8 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
           }
 
@@ -611,7 +658,8 @@ describe('theme(…)', () => {
             .red {
               color: color-mix(in oklab, red var(--opacity), transparent);
             }
-          }"
+          }
+          "
         `)
       })
 
@@ -627,7 +675,8 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
           }
 
@@ -635,7 +684,8 @@ describe('theme(…)', () => {
             .red {
               color: color-mix(in oklab, red var(--opacity, 50%), transparent);
             }
-          }"
+          }
+          "
         `)
       })
 
@@ -650,9 +700,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".space-on-the-left {
+          "
+          .space-on-the-left {
             margin-left: 3rem;
-          }"
+          }
+          "
         `)
       })
 
@@ -667,9 +719,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".space-on-the-left {
+          "
+          .space-on-the-left {
             margin-left: .625rem;
-          }"
+          }
+          "
         `)
       })
 
@@ -684,9 +738,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".space-on-the-left {
+          "
+          .space-on-the-left {
             margin-left: calc(100vh - .625rem);
-          }"
+          }
+          "
         `)
       })
 
@@ -701,9 +757,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".radius {
+          "
+          .radius {
             border-radius: .5rem;
-          }"
+          }
+          "
         `)
       })
 
@@ -719,9 +777,11 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ".default-blur {
+            "
+            .default-blur {
               filter: blur(8px);
-            }"
+            }
+            "
           `)
         })
 
@@ -738,10 +798,12 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ".text {
+            "
+            .text {
               font-size: 1337.75rem;
               line-height: 1337rem;
-            }"
+            }
+            "
           `)
         })
 
@@ -758,9 +820,11 @@ describe('theme(…)', () => {
               }
             `),
           ).toMatchInlineSnapshot(`
-            ".fam {
+            "
+            .fam {
               font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-            }"
+            }
+            "
           `)
         })
 
@@ -781,10 +845,12 @@ describe('theme(…)', () => {
             },
           )
 
-          expect(optimizeCss(compiled.build([])).trim()).toMatchInlineSnapshot(`
-            ".fam {
+          expect(optimizeCss(compiled.build([]))).toMatchInlineSnapshot(`
+            "
+            .fam {
               font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-            }"
+            }
+            "
           `)
         })
       })
@@ -810,9 +876,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -827,9 +895,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .25);
-          }"
+          }
+          "
         `)
       })
 
@@ -841,9 +911,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".fam {
+          "
+          .fam {
             font-family: Helvetica Neue, Helvetica, sans-serif;
-          }"
+          }
+          "
         `)
       })
 
@@ -861,9 +933,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".fam {
+          "
+          .fam {
             font-family: Helvetica Neue, Helvetica, sans-serif;
-          }"
+          }
+          "
         `)
       })
     })
@@ -881,9 +955,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -899,9 +975,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .25);
-          }"
+          }
+          "
         `)
       })
     })
@@ -918,9 +996,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
 
@@ -935,9 +1015,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: oklab(62.7955% .224 .125 / .5);
-          }"
+          }
+          "
         `)
       })
 
@@ -952,9 +1034,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".red {
+          "
+          .red {
             color: red;
-          }"
+          }
+          "
         `)
       })
     })
@@ -971,9 +1055,11 @@ describe('theme(…)', () => {
             }
           `),
         ).toMatchInlineSnapshot(`
-          ".blur {
+          "
+          .blur {
             filter: blur(8px);
-          }"
+          }
+          "
         `)
       })
     })
@@ -1026,11 +1112,13 @@ describe('theme(…)', () => {
           ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
-        "@media (min-width: 40rem) {
+        "
+        @media (min-width: 40rem) {
           .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
             --color: red;
           }
-        }"
+        }
+        "
       `)
     })
 
@@ -1051,9 +1139,11 @@ describe('theme(…)', () => {
           ],
         ),
       ).toMatchInlineSnapshot(`
-        ".rounded-\\[theme\\(--radius-sm\\)\\] {
+        "
+        .rounded-\\[theme\\(--radius-sm\\)\\] {
           border-radius: 2rem;
-        }"
+        }
+        "
       `)
 
       // This guarantees no output for the following candidates
@@ -1087,11 +1177,13 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (min-width: 48rem) and (max-width: 64rem) {
+        "
+        @media (min-width: 48rem) and (max-width: 64rem) {
           .red {
             color: red;
           }
-        }"
+        }
+        "
       `)
     })
 
@@ -1109,11 +1201,13 @@ describe('theme(…)', () => {
           }
         `),
       ).toMatchInlineSnapshot(`
-        "@media (min-width: 48rem) and (not (min-width: 64rem)) {
+        "
+        @media (min-width: 48rem) and (not (min-width: 64rem)) {
           .red {
             color: red;
           }
-        }"
+        }
+        "
       `)
     })
   })
@@ -1132,11 +1226,13 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@media (min-width: 48rem) {
+      "
+      @media (min-width: 48rem) {
         .red {
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1153,11 +1249,13 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@container not (max-width: 48rem) {
+      "
+      @container not (max-width: 48rem) {
         .red {
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -1174,11 +1272,13 @@ describe('theme(…)', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "@supports (text-stroke: 0.75rem) {
+      "
+      @supports (text-stroke: 0.75rem) {
         .red {
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -1225,8 +1325,9 @@ describe('in plugins', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
-      "@layer base {
+    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+      "
+      @layer base {
         .my-base-rule {
           color: oklch(62% .25 30);
           background-color: oklch(45% .31 264);
@@ -1239,7 +1340,8 @@ describe('in plugins', () => {
         .my-utility {
           color: oklch(62% .25 30);
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -1292,8 +1394,9 @@ describe('in JS config files', () => {
       },
     )
 
-    expect(optimizeCss(compiled.build(['my-utility'])).trim()).toMatchInlineSnapshot(`
-      "@layer base {
+    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+      "
+      @layer base {
         .my-base-rule {
           color: orange;
           background: red;
@@ -1304,7 +1407,8 @@ describe('in JS config files', () => {
         .my-utility {
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 })
@@ -1334,9 +1438,11 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
       },
     ),
   ).toMatchInlineSnapshot(`
-    ".red {
+    "
+    .red {
       color: red;
-    }"
+    }
+    "
   `)
 })
 
@@ -1355,9 +1461,11 @@ test('resolves paths ending with a 1', async () => {
       [],
     ),
   ).toMatchInlineSnapshot(`
-    ".foo {
+    "
+    .foo {
       margin: .25rem;
-    }"
+    }
+    "
   `)
 })
 
@@ -1372,8 +1480,10 @@ test('upgrades to a full JS compat theme lookup if a value cannot be mapped to a
       [],
     ),
   ).toMatchInlineSnapshot(`
-    ".semi {
+    "
+    .semi {
       font-weight: 600;
-    }"
+    }
+    "
   `)
 })

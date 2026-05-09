@@ -66,6 +66,38 @@ export function isSafeMigration(
     }
   }
 
+  let currentLineBeforeCandidate = ''
+  for (let i = location.start - 1; i >= 0; i--) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineBeforeCandidate = char + currentLineBeforeCandidate
+  }
+  let currentLineAfterCandidate = ''
+  for (let i = location.end; i < location.contents.length; i++) {
+    let char = location.contents.at(i)!
+    if (char === '\n') {
+      break
+    }
+    currentLineAfterCandidate += char
+  }
+
+  // Inline `style="..."` attributes can contain CSS property names that look
+  // like valid utility candidates, such as `flex-grow`.
+  {
+    let ranges = inlineStyleAttributeValueRanges.get(location.contents)
+
+    for (let i = 0; i < ranges.length; i += 2) {
+      let start = ranges[i]
+      let end = ranges[i + 1]
+
+      if (location.start >= start && location.end <= end) {
+        return false
+      }
+    }
+  }
+
   let [candidate] = parseCandidate(rawCandidate, designSystem)
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
@@ -121,23 +153,6 @@ export function isSafeMigration(
     if (candidate.kind === 'functional' && candidate.modifier) {
       return true
     }
-  }
-
-  let currentLineBeforeCandidate = ''
-  for (let i = location.start - 1; i >= 0; i--) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineBeforeCandidate = char + currentLineBeforeCandidate
-  }
-  let currentLineAfterCandidate = ''
-  for (let i = location.end; i < location.contents.length; i++) {
-    let char = location.contents.at(i)!
-    if (char === '\n') {
-      break
-    }
-    currentLineAfterCandidate += char
   }
 
   // Heuristic: Require the candidate to be inside quotes
@@ -218,6 +233,14 @@ const BACKSLASH = 0x5c
 const DOUBLE_QUOTE = 0x22
 const SINGLE_QUOTE = 0x27
 const BACKTICK = 0x60
+const TAB = 0x09
+const NEWLINE = 0x0a
+const FORM_FEED = 0x0c
+const CARRIAGE_RETURN = 0x0d
+const SPACE = 0x20
+const SLASH = 0x2f
+const EQUALS = 0x3d
+const GREATER_THAN = 0x3e
 
 function isMiddleOfString(line: string): boolean {
   let currentQuote: number | null = null
@@ -248,3 +271,97 @@ function isMiddleOfString(line: string): boolean {
 
   return currentQuote !== null
 }
+
+const inlineStyleAttributeValueRanges = new DefaultMap((source: string) => {
+  let ranges: number[] = []
+  let offset = 0
+
+  while (true) {
+    let tagStart = source.indexOf('<', offset)
+    if (tagStart === -1) return ranges
+
+    let tagEnd = source.indexOf('>', tagStart + 1)
+    if (tagEnd === -1) return ranges
+
+    offset = tagEnd + 1
+
+    for (let i = tagStart + 1; i < tagEnd; i++) {
+      let char = source.charCodeAt(i)
+
+      if (
+        char === SPACE ||
+        char === TAB ||
+        char === NEWLINE ||
+        char === CARRIAGE_RETURN ||
+        char === FORM_FEED
+      ) {
+        continue
+      }
+
+      let start = i
+      while (i < tagEnd) {
+        let char = source.charCodeAt(i)
+        if (
+          char === SPACE ||
+          char === TAB ||
+          char === NEWLINE ||
+          char === CARRIAGE_RETURN ||
+          char === FORM_FEED ||
+          char === EQUALS ||
+          char === GREATER_THAN ||
+          char === SLASH
+        ) {
+          break
+        }
+
+        i++
+      }
+
+      let attribute = source.slice(start, i).toLowerCase()
+      if (attribute !== 'style' && attribute !== ':style') continue
+
+      while (i < tagEnd) {
+        let char = source.charCodeAt(i)
+        if (
+          char !== SPACE &&
+          char !== TAB &&
+          char !== NEWLINE &&
+          char !== CARRIAGE_RETURN &&
+          char !== FORM_FEED
+        ) {
+          break
+        }
+
+        i++
+      }
+
+      if (source[i] !== '=') continue
+
+      i++
+      while (i < tagEnd) {
+        let char = source.charCodeAt(i)
+        if (
+          char !== SPACE &&
+          char !== TAB &&
+          char !== NEWLINE &&
+          char !== CARRIAGE_RETURN &&
+          char !== FORM_FEED
+        ) {
+          break
+        }
+
+        i++
+      }
+
+      let quote = source[i]
+      if (quote !== '"' && quote !== "'") continue
+
+      let valueStart = i + 1
+      let valueEnd = source.indexOf(quote, valueStart)
+      if (valueEnd === -1 || valueEnd > tagEnd) break
+
+      ranges.push(valueStart, valueEnd)
+      i = valueEnd
+    }
+  }
+})

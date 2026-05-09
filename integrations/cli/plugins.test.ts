@@ -1,4 +1,4 @@
-import { candidate, css, html, json, test } from '../utils'
+import { candidate, css, html, json, test, ts } from '../utils'
 
 test(
   'builds the `@tailwindcss/typography` plugin utilities',
@@ -205,5 +205,90 @@ test(
       'animation-duration: 350ms',
       '@keyframes enter {',
     ])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/15844
+test(
+  'builds CSS with a custom plugin compiled from TypeScript',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          },
+          "devDependencies": {
+            "typescript": "^5.7.2"
+          }
+        }
+      `,
+      'tsconfig.json': json`
+        {
+          "compilerOptions": {
+            "target": "ES2022",
+            "module": "NodeNext",
+            "moduleResolution": "NodeNext",
+            "declaration": true,
+            "composite": true,
+            "rootDir": "./src",
+            "outDir": "./.build",
+            "skipLibCheck": true
+          },
+          "include": ["src/**/*.ts"]
+        }
+      `,
+      'index.html': html`
+        <div class="test-red"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin '../.build/plugin.js';
+      `,
+      'src/plugin.ts': ts`
+        import plugin from 'tailwindcss/plugin'
+
+        export const typedPlugin = plugin(() => {
+          return ({ matchComponents }) => {
+            matchComponents(
+              {
+                test: (content: string) => ({
+                  color: content,
+                }),
+              },
+              {
+                values: {
+                  red: 'red',
+                },
+              },
+            )
+          }
+        })
+
+        export default plugin(({ matchComponents }) => {
+          matchComponents(
+            {
+              test: (content: string) => ({
+                color: content,
+              }),
+            },
+            {
+              values: {
+                red: 'red',
+              },
+            },
+          )
+        })
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    // We expect that these commands don't crash:
+    await exec('pnpm tsc -b')
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [candidate`test-red`])
   },
 )

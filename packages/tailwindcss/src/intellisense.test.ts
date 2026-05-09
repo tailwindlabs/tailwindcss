@@ -497,11 +497,6 @@ test('Custom functional @utility', async () => {
     @import 'tailwindcss/utilities';
 
     @theme reference {
-      --tab-size-1: 1;
-      --tab-size-2: 2;
-      --tab-size-4: 4;
-      --tab-size-github: 8;
-
       --text-xs: 0.75rem;
       --text-xs--line-height: calc(1 / 0.75);
 
@@ -510,10 +505,11 @@ test('Custom functional @utility', async () => {
 
       --spacing: 0.25rem;
       --spacing-custom: 123px;
-    }
 
-    @utility tab-* {
-      tab-size: --value(--tab-size, 'revert', 'initial');
+      --negative-1: 1;
+      --negative-2: 2;
+      --negative-4: 4;
+      --negative-a: 8;
     }
 
     @utility example-* {
@@ -535,7 +531,7 @@ test('Custom functional @utility', async () => {
     }
 
     @utility -negative-* {
-      margin: --value(--tab-size-*);
+      margin: --value(--negative-*);
     }
   `
 
@@ -549,18 +545,6 @@ test('Custom functional @utility', async () => {
 
   let classMap = new Map(design.getClassList())
   let classNames = Array.from(classMap.keys())
-
-  expect(classNames).toContain('tab-1')
-  expect(classNames).toContain('tab-2')
-  expect(classNames).toContain('tab-4')
-  expect(classNames).toContain('tab-github')
-  expect(classNames).toContain('tab-revert')
-  expect(classNames).toContain('tab-initial')
-
-  expect(classNames).not.toContain('-tab-1')
-  expect(classNames).not.toContain('-tab-2')
-  expect(classNames).not.toContain('-tab-4')
-  expect(classNames).not.toContain('-tab-github')
 
   expect(classNames).toContain('with-custom-spacing-custom')
   expect(classNames).not.toContain('with-custom-spacing-0')
@@ -583,12 +567,12 @@ test('Custom functional @utility', async () => {
   expect(classNames).toContain('-negative-1')
   expect(classNames).toContain('-negative-2')
   expect(classNames).toContain('-negative-4')
-  expect(classNames).toContain('-negative-github')
+  expect(classNames).toContain('-negative-a')
 
   expect(classNames).not.toContain('--negative-1')
   expect(classNames).not.toContain('--negative-2')
   expect(classNames).not.toContain('--negative-4')
-  expect(classNames).not.toContain('--negative-github')
+  expect(classNames).not.toContain('--negative-a')
 
   expect(classNames).toContain('example-xs')
   expect(classMap.get('example-xs')?.modifiers).toEqual(['normal', 'foo', 'bar'])

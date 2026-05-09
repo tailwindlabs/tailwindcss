@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { compile } from '..'
+import { pretty } from '../test-utils/run'
 
 const css = String.raw
 
@@ -36,18 +37,21 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
   })
 
   expect(
-    compiler.build([
-      'sm:flex',
-      'md:flex',
-      'lg:flex',
-      'min-sm:max-md:underline',
-      'min-md:max-lg:underline',
-      'max-w-screen-sm',
-      // Ensure other core variants appear at the end
-      'print:items-end',
-    ]),
+    pretty(
+      compiler.build([
+        'sm:flex',
+        'md:flex',
+        'lg:flex',
+        'min-sm:max-md:underline',
+        'min-md:max-lg:underline',
+        'max-w-screen-sm',
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".max-w-screen-sm {
+    "
+    .max-w-screen-sm {
       max-width: 44rem;
     }
     .sm\\:flex {
@@ -121,22 +125,25 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
   })
 
   expect(
-    compiler.build([
-      // Order is messed up on purpose
-      'md:flex',
-      'sm:flex',
-      'lg:flex',
-      'xs:flex',
-      'min-md:max-lg:underline',
-      'min-sm:max-md:underline',
-      'min-xs:flex',
-      'min-xs:max-md:underline',
+    pretty(
+      compiler.build([
+        // Order is messed up on purpose
+        'md:flex',
+        'sm:flex',
+        'lg:flex',
+        'xs:flex',
+        'min-md:max-lg:underline',
+        'min-sm:max-md:underline',
+        'min-xs:flex',
+        'min-xs:max-md:underline',
 
-      // Ensure other core variants appear at the end
-      'print:items-end',
-    ]),
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".min-xs\\:flex {
+    "
+    .min-xs\\:flex {
       @media (width >= 30rem) {
         display: flex;
       }
@@ -214,19 +221,22 @@ test('JS config `screens` only setup, even if those match the default-theme expo
   })
 
   expect(
-    compiler.build([
-      // Order is messed up on purpose
-      'md:flex',
-      'sm:flex',
-      'lg:flex',
-      'min-md:max-lg:underline',
-      'min-sm:max-md:underline',
+    pretty(
+      compiler.build([
+        // Order is messed up on purpose
+        'md:flex',
+        'sm:flex',
+        'lg:flex',
+        'min-md:max-lg:underline',
+        'min-sm:max-md:underline',
 
-      // Ensure other core variants appear at the end
-      'print:items-end',
-    ]),
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".sm\\:flex {
+    "
+    .sm\\:flex {
       @media (width >= 40rem) {
         display: flex;
       }
@@ -296,22 +306,25 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
   })
 
   expect(
-    compiler.build([
-      'sm:flex',
-      'md:flex',
-      'mini:flex',
-      'midi:flex',
-      'maxi:flex',
-      'min-md:max-lg:underline',
-      'min-sm:max-md:underline',
-      'min-midi:max-maxi:underline',
-      'min-mini:max-midi:underline',
+    pretty(
+      compiler.build([
+        'sm:flex',
+        'md:flex',
+        'mini:flex',
+        'midi:flex',
+        'maxi:flex',
+        'min-md:max-lg:underline',
+        'min-sm:max-md:underline',
+        'min-midi:max-maxi:underline',
+        'min-mini:max-midi:underline',
 
-      // Ensure other core variants appear at the end
-      'print:items-end',
-    ]),
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".mini\\:flex {
+    "
+    .mini\\:flex {
       @media (width >= 40rem) {
         display: flex;
       }
@@ -402,18 +415,21 @@ test('JS config with `theme: { extends }` should not include the `default-config
   ).toBe('')
 
   expect(
-    compiler.build([
-      'mini:flex',
-      'midi:flex',
-      'maxi:flex',
-      'min-midi:max-maxi:underline',
-      'min-mini:max-midi:underline',
+    pretty(
+      compiler.build([
+        'mini:flex',
+        'midi:flex',
+        'maxi:flex',
+        'min-midi:max-maxi:underline',
+        'min-mini:max-midi:underline',
 
-      // Ensure other core variants appear at the end
-      'print:items-end',
-    ]),
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".mini\\:flex {
+    "
+    .mini\\:flex {
       @media (width >= 40rem) {
         display: flex;
       }
@@ -485,19 +501,22 @@ describe('complex screen configs', () => {
     expect(compiler.build(['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'])).toBe('')
 
     expect(
-      compiler.build([
-        'sm:flex',
-        'md:flex',
-        'lg:flex',
-        'min-lg:flex',
-        'xl:flex',
-        'tall:flex',
+      pretty(
+        compiler.build([
+          'sm:flex',
+          'md:flex',
+          'lg:flex',
+          'min-lg:flex',
+          'xl:flex',
+          'tall:flex',
 
-        // Ensure other core variants appear at the end
-        'print:items-end',
-      ]),
+          // Ensure other core variants appear at the end
+          'print:items-end',
+        ]),
+      ),
     ).toMatchInlineSnapshot(`
-      ".lg\\:flex {
+      "
+      .lg\\:flex {
         @media (width >= 868px) {
           display: flex;
         }
@@ -564,18 +583,21 @@ describe('complex screen configs', () => {
     })
 
     expect(
-      compiler.build([
-        'sm:flex',
-        'md:flex',
-        'portrait:flex',
-        'min-sm:flex',
-        'min-md:flex',
-        'min-portrait:flex',
-        // Ensure other core variants appear at the end
-        'print:items-end',
-      ]),
+      pretty(
+        compiler.build([
+          'sm:flex',
+          'md:flex',
+          'portrait:flex',
+          'min-sm:flex',
+          'min-md:flex',
+          'min-portrait:flex',
+          // Ensure other core variants appear at the end
+          'print:items-end',
+        ]),
+      ),
     ).toMatchInlineSnapshot(`
-      ".min-sm\\:flex {
+      "
+      .min-sm\\:flex {
         @media (width >= 40rem) {
           display: flex;
         }
@@ -644,5 +666,5 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
   // currently.
   expect(
     compiler.build(['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex']),
-  ).toMatchInlineSnapshot(`""`)
+  ).toEqual('')
 })

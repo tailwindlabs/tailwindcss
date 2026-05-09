@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile, type Config } from '..'
 import { default as plugin } from '../plugin'
+import { pretty } from '../test-utils/run'
 import flattenColorPalette from './flatten-color-palette'
 
 const css = String.raw
@@ -28,8 +29,9 @@ test('Config files can change dark mode (media)', async () => {
     loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root', path: '' }),
   })
 
-  expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       @media (prefers-color-scheme: dark) {
         text-decoration-line: underline;
       }
@@ -48,8 +50,9 @@ test('Config files can change dark mode (selector)', async () => {
     loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root', path: '' }),
   })
 
-  expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       &:where(.dark, .dark *) {
         text-decoration-line: underline;
       }
@@ -72,8 +75,9 @@ test('Config files can change dark mode (variant)', async () => {
     }),
   })
 
-  expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       &:where(:not(.light)) {
         text-decoration-line: underline;
       }
@@ -106,8 +110,9 @@ test('Config files can add plugins', async () => {
     }),
   })
 
-  expect(compiler.build(['no-scrollbar'])).toMatchInlineSnapshot(`
-    ".no-scrollbar {
+  expect(pretty(compiler.build(['no-scrollbar']))).toMatchInlineSnapshot(`
+    "
+    .no-scrollbar {
       scrollbar-width: none;
     }
     "
@@ -134,8 +139,9 @@ test('Plugins loaded from config files can contribute to the config', async () =
     }),
   })
 
-  expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       &:where(:not(.light)) {
         text-decoration-line: underline;
       }
@@ -164,8 +170,9 @@ test('Config file presets can contribute to the config', async () => {
     }),
   })
 
-  expect(compiler.build(['dark:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       &:where(:not(.light)) {
         text-decoration-line: underline;
       }
@@ -206,12 +213,13 @@ test('Config files can affect the theme', async () => {
     }),
   })
 
-  expect(compiler.build(['bg-primary', 'scrollbar-primary'])).toMatchInlineSnapshot(`
-    ".bg-primary {
-      background-color: #c0ffee;
-    }
+  expect(pretty(compiler.build(['bg-primary', 'scrollbar-primary']))).toMatchInlineSnapshot(`
+    "
     .scrollbar-primary {
       scrollbar-color: #c0ffee;
+    }
+    .bg-primary {
+      background-color: #c0ffee;
     }
     "
   `)
@@ -250,8 +258,9 @@ test('Accessing a default color if a sub-color exists via CSS should work as exp
     }),
   })
 
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    ".example {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    .example {
       color: var(--foo-foo-bar);
       border-color: var(--foo-foo);
     }
@@ -282,8 +291,9 @@ test('Variants in CSS overwrite variants from plugins', async () => {
     }),
   })
 
-  expect(compiler.build(['dark:underline', 'light:underline'])).toMatchInlineSnapshot(`
-    ".dark\\:underline {
+  expect(pretty(compiler.build(['dark:underline', 'light:underline']))).toMatchInlineSnapshot(`
+    "
+    .dark\\:underline {
       &:is(.my-dark) {
         text-decoration-line: underline;
       }
@@ -369,9 +379,10 @@ describe('theme callbacks', () => {
       }),
     })
 
-    expect(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose']))
+    expect(pretty(compiler.build(['leading-base', 'leading-md', 'leading-xl', 'prose'])))
       .toMatchInlineSnapshot(`
-        "@layer properties;
+        "
+        @layer properties;
         .prose {
           [class~=lead-base] {
             font-size: 100rem;
@@ -444,8 +455,9 @@ describe('theme overrides order', () => {
       }),
     })
 
-    expect(compiler.build(['bg-red', 'bg-blue'])).toMatchInlineSnapshot(`
-      ":root, :host {
+    expect(pretty(compiler.build(['bg-red', 'bg-blue']))).toMatchInlineSnapshot(`
+      "
+      :root, :host {
         --color-blue: blue;
       }
       .bg-blue {
@@ -518,22 +530,25 @@ describe('theme overrides order', () => {
     })
 
     expect(
-      compiler.build([
-        'bg-slate-100',
-        'bg-slate-200',
-        'bg-slate-300',
-        'bg-slate-400',
-        'bg-slate-500',
-        'bg-slate-600',
-        'hover-bg-slate-100',
-        'hover-bg-slate-200',
-        'hover-bg-slate-300',
-        'hover-bg-slate-400',
-        'hover-bg-slate-500',
-        'hover-bg-slate-600',
-      ]),
+      pretty(
+        compiler.build([
+          'bg-slate-100',
+          'bg-slate-200',
+          'bg-slate-300',
+          'bg-slate-400',
+          'bg-slate-500',
+          'bg-slate-600',
+          'hover-bg-slate-100',
+          'hover-bg-slate-200',
+          'hover-bg-slate-300',
+          'hover-bg-slate-400',
+          'hover-bg-slate-500',
+          'hover-bg-slate-600',
+        ]),
+      ),
     ).toMatchInlineSnapshot(`
-      ":root, :host {
+      "
+      :root, :host {
         --color-slate-100: #000100;
         --color-slate-300: #000300;
         --color-slate-400: #100400;
@@ -618,8 +633,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ".font-sans {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      .font-sans {
         font-family: Potato Sans;
       }
       "
@@ -653,8 +669,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ".font-sans {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      .font-sans {
         font-family: Potato Sans;
         font-feature-settings: "cv06";
       }
@@ -689,8 +706,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ".font-sans {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      .font-sans {
         font-family: Potato Sans;
         font-variation-settings: "XHGT" 0.7;
       }
@@ -728,8 +746,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ".font-sans {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      .font-sans {
         font-family: Potato Sans;
         font-feature-settings: "cv06";
         font-variation-settings: "XHGT" 0.7;
@@ -768,8 +787,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ":root, :host {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      :root, :host {
         --font-sans: Sandwich Sans;
       }
       .font-sans {
@@ -806,8 +826,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`
-      ".font-sans {
+    expect(pretty(compiler.build(['font-sans']))).toMatchInlineSnapshot(`
+      "
+      .font-sans {
         font-family: Inter, system-ui, sans-serif;
       }
       "
@@ -841,7 +862,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-sans'])).toMatchInlineSnapshot(`""`)
+    expect(pretty(compiler.build(['font-sans']))).toEqual('')
   })
 
   test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
@@ -869,8 +890,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ".font-mono {
+    expect(pretty(compiler.build(['font-mono']))).toMatchInlineSnapshot(`
+      "
+      .font-mono {
         font-family: Potato Mono;
       }
       "
@@ -904,8 +926,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ".font-mono {
+    expect(pretty(compiler.build(['font-mono']))).toMatchInlineSnapshot(`
+      "
+      .font-mono {
         font-family: Potato Mono;
         font-feature-settings: "cv06";
       }
@@ -940,8 +963,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ".font-mono {
+    expect(pretty(compiler.build(['font-mono']))).toMatchInlineSnapshot(`
+      "
+      .font-mono {
         font-family: Potato Mono;
         font-variation-settings: "XHGT" 0.7;
       }
@@ -979,8 +1003,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ".font-mono {
+    expect(pretty(compiler.build(['font-mono']))).toMatchInlineSnapshot(`
+      "
+      .font-mono {
         font-family: Potato Mono;
         font-feature-settings: "cv06";
         font-variation-settings: "XHGT" 0.7;
@@ -1019,8 +1044,9 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`
-      ":root, :host {
+    expect(pretty(compiler.build(['font-mono']))).toMatchInlineSnapshot(`
+      "
+      :root, :host {
         --font-mono: Sandwich Mono;
       }
       .font-mono {
@@ -1057,7 +1083,7 @@ describe('default font family compatibility', () => {
       }),
     })
 
-    expect(compiler.build(['font-mono'])).toMatchInlineSnapshot(`""`)
+    expect(pretty(compiler.build(['font-mono']))).toEqual('')
   })
 })
 
@@ -1091,23 +1117,26 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
   })
 
   expect(
-    compiler.build([
-      'aria-polite:underline',
-      'supports-child-combinator:underline',
-      'supports-foo:underline',
-      'data-checked:underline',
+    pretty(
+      compiler.build([
+        'aria-polite:underline',
+        'supports-child-combinator:underline',
+        'supports-foo:underline',
+        'data-checked:underline',
 
-      // Ensure core variants still work
-      'aria-hidden:flex',
-      'supports-grid:flex',
-      'data-foo:flex',
+        // Ensure core variants still work
+        'aria-hidden:flex',
+        'supports-grid:flex',
+        'data-foo:flex',
 
-      // The `print` variant should still be sorted last, even after registering
-      // the other custom variants.
-      'print:flex',
-    ]),
+        // The `print` variant should still be sorted last, even after registering
+        // the other custom variants.
+        'print:flex',
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".aria-hidden\\:flex {
+    "
+    .aria-hidden\\:flex {
       &[aria-hidden="true"] {
         display: flex;
       }
@@ -1183,9 +1212,10 @@ test('merges css breakpoints with js config screens', async () => {
     }),
   })
 
-  expect(compiler.build(['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline']))
+  expect(pretty(compiler.build(['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline'])))
     .toMatchInlineSnapshot(`
-      ".sm\\:flex {
+      "
+      .sm\\:flex {
         @media (width >= 44rem) {
           display: flex;
         }
@@ -1230,9 +1260,10 @@ test('utilities must be prefixed', async () => {
   })
 
   // Prefixed utilities are generated
-  expect(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom']))
+  expect(pretty(compiler.build(['tw:underline', 'tw:hover:line-through', 'tw:custom'])))
     .toMatchInlineSnapshot(`
-      ".tw\\:custom {
+      "
+      .tw\\:custom {
         color: red;
       }
       .tw\\:underline {
@@ -1279,8 +1310,9 @@ test('utilities used in @apply must be prefixed', async () => {
   )
 
   // Prefixed utilities are generated
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    ".my-underline {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    .my-underline {
       text-decoration-line: underline;
     }
     "
@@ -1338,8 +1370,9 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
     },
   )
 
-  expect(compiler.build(['wat:custom'])).toMatchInlineSnapshot(`
-    ".wat\\:custom {
+  expect(pretty(compiler.build(['wat:custom']))).toMatchInlineSnapshot(`
+    "
+    .wat\\:custom {
       color: red;
     }
     "
@@ -1385,24 +1418,26 @@ test('important: `#app`', async () => {
     }),
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
-    "#app {
-      .custom {
-        color: red;
-      }
-      .underline {
-        text-decoration-line: underline;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
+  expect(pretty(compiler.build(['underline', 'hover:line-through', 'custom'])))
+    .toMatchInlineSnapshot(`
+      "
+      #app {
+        .custom {
+          color: red;
+        }
+        .underline {
+          text-decoration-line: underline;
+        }
+        .hover\\:line-through {
+          &:hover {
+            @media (hover: hover) {
+              text-decoration-line: line-through;
+            }
           }
         }
       }
-    }
-    "
-  `)
+      "
+    `)
 })
 
 test('important: true', async () => {
@@ -1423,22 +1458,24 @@ test('important: true', async () => {
     }),
   })
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toMatchInlineSnapshot(`
-    ".custom {
-      color: red !important;
-    }
-    .underline {
-      text-decoration-line: underline !important;
-    }
-    .hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
+  expect(pretty(compiler.build(['underline', 'hover:line-through', 'custom'])))
+    .toMatchInlineSnapshot(`
+      "
+      .custom {
+        color: red !important;
+      }
+      .underline {
+        text-decoration-line: underline !important;
+      }
+      .hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through !important;
+          }
         }
       }
-    }
-    "
-  `)
+      "
+    `)
 })
 
 test('blocklisted candidates are not generated', async () => {
@@ -1468,8 +1505,9 @@ test('blocklisted candidates are not generated', async () => {
   expect(compiler.build(['bg-white'])).toEqual('')
 
   // underline will as will md:bg-white
-  expect(compiler.build(['underline', 'bg-white', 'md:bg-white'])).toMatchInlineSnapshot(`
-    ".underline {
+  expect(pretty(compiler.build(['underline', 'bg-white', 'md:bg-white']))).toMatchInlineSnapshot(`
+    "
+    .underline {
       text-decoration-line: underline;
     }
     .md\\:bg-white {
@@ -1513,7 +1551,7 @@ test('blocklisted candidates cannot be used with `@apply`', async () => {
 })
 
 test('old theme values are merged with their renamed counterparts in the CSS theme', async () => {
-  let didCallPluginFn = vi.fn()
+  using didCallPluginFn = vi.fn()
 
   await compile(
     css`
@@ -1669,8 +1707,9 @@ test('handles setting theme keys to null', async () => {
     },
   )
 
-  expect(compiler.build(['bg-red-50', 'bg-red-100', 'bg-red-200'])).toMatchInlineSnapshot(`
-    ":root, :host {
+  expect(pretty(compiler.build(['bg-red-50', 'bg-red-100', 'bg-red-200']))).toMatchInlineSnapshot(`
+    "
+    :root, :host {
       --color-red-50: oklch(0.971 0.013 17.38);
       --color-red-100: oklch(0.936 0.032 17.717);
       --color-red-200: oklch(0.885 0.062 18.334);
@@ -1709,8 +1748,9 @@ test('The theme() function does not try indexing into strings', async () => {
     @tailwind utilities;
   `)
 
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    ":root, :host {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    :root, :host {
       --color-what: light-dark(#f00, #f00);
     }
     .text-what {
@@ -1749,17 +1789,20 @@ test('camel case keys are preserved', async () => {
   )
 
   expect(
-    compiler.build([
-      // From CSS
-      'bg-blue-green', // should be output
-      'bg-blueGreen', // should not
+    pretty(
+      compiler.build([
+        // From CSS
+        'bg-blue-green', // should be output
+        'bg-blueGreen', // should not
 
-      // From JS config
-      'bg-light-green', // should not be output
-      'bg-lightGreen', // should be
-    ]),
+        // From JS config
+        'bg-light-green', // should not be output
+        'bg-lightGreen', // should be
+      ]),
+    ),
   ).toMatchInlineSnapshot(`
-    ".bg-blue-green {
+    "
+    .bg-blue-green {
       background-color: var(--color-blue-green);
     }
     .bg-lightGreen {

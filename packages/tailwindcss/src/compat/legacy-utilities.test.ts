@@ -21,7 +21,8 @@ test('bg-gradient-*', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ".bg-gradient-to-b {
+    "
+    .bg-gradient-to-b {
       --tw-gradient-position: to bottom in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
@@ -59,7 +60,8 @@ test('bg-gradient-*', async () => {
     .bg-gradient-to-tr {
       --tw-gradient-position: to top right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
-    }"
+    }
+    "
   `)
 })
 
@@ -85,7 +87,8 @@ test('max-w-screen', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
+    "
+    :root, :host {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
       --breakpoint-lg: 64rem;
@@ -111,7 +114,8 @@ test('max-w-screen', async () => {
 
     .max-w-screen-xl {
       max-width: var(--breakpoint-xl);
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -134,7 +138,8 @@ test('max-w-screen', async () => {
 
 test('box-decoration', async () => {
   expect(await run(['decoration-slice', 'decoration-clone'])).toMatchInlineSnapshot(`
-    ".decoration-clone {
+    "
+    .decoration-clone {
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
     }
@@ -142,21 +147,25 @@ test('box-decoration', async () => {
     .decoration-slice {
       -webkit-box-decoration-break: slice;
       box-decoration-break: slice;
-    }"
+    }
+    "
   `)
 })
 
 test('overflow-ellipsis', async () => {
   expect(await run(['overflow-ellipsis'])).toMatchInlineSnapshot(`
-    ".overflow-ellipsis {
+    "
+    .overflow-ellipsis {
       text-overflow: ellipsis;
-    }"
+    }
+    "
   `)
 })
 
 test('flex-grow', async () => {
   expect(await run(['flex-grow', 'flex-grow-0', 'flex-grow-[123]'])).toMatchInlineSnapshot(`
-    ".flex-grow {
+    "
+    .flex-grow {
       flex-grow: 1;
     }
 
@@ -166,7 +175,8 @@ test('flex-grow', async () => {
 
     .flex-grow-\\[123\\] {
       flex-grow: 123;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -185,7 +195,8 @@ test('flex-grow', async () => {
 
 test('flex-shrink', async () => {
   expect(await run(['flex-shrink', 'flex-shrink-0', 'flex-shrink-[123]'])).toMatchInlineSnapshot(`
-    ".flex-shrink {
+    "
+    .flex-shrink {
       flex-shrink: 1;
     }
 
@@ -195,7 +206,8 @@ test('flex-shrink', async () => {
 
     .flex-shrink-\\[123\\] {
       flex-shrink: 123;
-    }"
+    }
+    "
   `)
   expect(
     await run([
@@ -217,7 +229,7 @@ test('start', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
@@ -234,13 +246,14 @@ test('start', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-4: 1rem;
+    "
+    :root, :host {
+      --spacing: .25rem;
       --inset-shadowned: 1940px;
     }
 
     .-start-4 {
-      inset-inline-start: calc(var(--spacing-4) * -1);
+      inset-inline-start: calc(var(--spacing) * -4);
     }
 
     .-start-full {
@@ -252,7 +265,7 @@ test('start', async () => {
     }
 
     .start-4 {
-      inset-inline-start: var(--spacing-4);
+      inset-inline-start: calc(var(--spacing) * 4);
     }
 
     .start-\\[4px\\] {
@@ -269,13 +282,14 @@ test('start', async () => {
 
     .start-shadowned {
       inset-inline-start: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
       css`
         @theme reference {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
@@ -304,7 +318,7 @@ test('end', async () => {
     await compileCss(
       css`
         @theme {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadowned: 1940px;
         }
         @tailwind utilities;
@@ -321,13 +335,14 @@ test('end', async () => {
       ],
     ),
   ).toMatchInlineSnapshot(`
-    ":root, :host {
-      --spacing-4: 1rem;
+    "
+    :root, :host {
+      --spacing: .25rem;
       --inset-shadowned: 1940px;
     }
 
     .-end-4 {
-      inset-inline-end: calc(var(--spacing-4) * -1);
+      inset-inline-end: calc(var(--spacing) * -4);
     }
 
     .-end-full {
@@ -339,7 +354,7 @@ test('end', async () => {
     }
 
     .end-4 {
-      inset-inline-end: var(--spacing-4);
+      inset-inline-end: calc(var(--spacing) * 4);
     }
 
     .end-\\[4px\\] {
@@ -356,13 +371,14 @@ test('end', async () => {
 
     .end-shadowned {
       inset-inline-end: var(--inset-shadowned);
-    }"
+    }
+    "
   `)
   expect(
     await compileCss(
       css`
         @theme reference {
-          --spacing-4: 1rem;
+          --spacing: 0.25rem;
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
