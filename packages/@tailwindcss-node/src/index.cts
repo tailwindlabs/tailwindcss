@@ -21,6 +21,6 @@ if (!process.versions.bun) {
   if (Module.registerHooks) {
     Module.registerHooks({ resolve: resolveSync })
   } else {
-    Module.register?.('./esm-cache.loader.mjs', pathToFileURL(__filename))
+    Module.register?.(pathToFileURL(require.resolve('@tailwindcss/node/esm-cache-loader')))
   }
 }

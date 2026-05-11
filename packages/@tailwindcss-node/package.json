@@ -29,6 +29,10 @@
       "./require-cache": {
         "types": "./dist/require-cache.d.ts",
         "default": "./dist/require-cache.js"
+      },
+      "./esm-cache-loader": {
+        "types": "./dist/esm-cache.loader.d.mts",
+        "default": "./dist/esm-cache.loader.mjs"
       }
     }
   },
@@ -42,6 +46,10 @@
       "types": "./src/require-cache.ts",
       "import": "./src/require-cache.ts",
       "require": "./src/require-cache.cts"
+    },
+    "./esm-cache-loader": {
+      "types": "./src/esm-cache.loader.mts",
+      "default": "./src/esm-cache.loader.mts"
     }
   },
   "dependencies": {
