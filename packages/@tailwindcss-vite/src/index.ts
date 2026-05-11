@@ -5,6 +5,7 @@ import {
   Instrumentation,
   normalizePath,
   optimize,
+  Polyfills,
   toSourceMap,
 } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
@@ -27,6 +28,13 @@ const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
 
 export type PluginOptions = {
+  /**
+   * Control CSS polyfills emitted by Tailwind.
+   *
+   * Defaults to `Polyfills.All`.
+   */
+  polyfills?: Polyfills
+
   /**
    * Optimize and minify the output CSS.
    */
@@ -177,6 +185,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
       config?.css.devSourcemap ?? false,
+      opts.polyfills ?? Polyfills.All,
       customCssResolver,
       customJsResolver,
     )
@@ -443,6 +452,7 @@ class Root {
     private base: string,
 
     private enableSourceMaps: boolean,
+    private polyfills: Polyfills,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
     private customJsResolver: (id: string, base: string) => Promise<string | false | undefined>,
   ) {}
@@ -492,12 +502,17 @@ class Root {
 
       this.addBuildDependency(idToPath(inputPath))
 
+      // CSS Modules cannot safely receive the `@property` fallback polyfill
+      // because it emits global `*` rules, which Vite treats as non-pure.
       DEBUG && I.start('Setup compiler')
       let addBuildDependenciesPromises: Promise<void>[] = []
       this.compiler = await compile(content, {
         from: this.enableSourceMaps ? this.id : undefined,
         base: inputBase,
         shouldRewriteUrls: true,
+        polyfills: inputPath.endsWith('.module.css')
+          ? this.polyfills & ~Polyfills.AtProperty
+          : this.polyfills,
         onDependency: (path) => {
           addWatchFile(path)
           addBuildDependenciesPromises.push(this.addBuildDependency(path))

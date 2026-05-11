@@ -1217,6 +1217,64 @@ test(
 )
 
 test(
+  'polyfills option: disabled',
+  {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { Polyfills } from 'tailwindcss'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss({ optimize: false, polyfills: Polyfills.None })],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+
+        @property --no-inherit-value {
+          syntax: '*';
+          inherits: false;
+          initial-value: red;
+        }
+      `,
+    },
+  },
+  async ({ exec, expect, fs }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    let content = await fs.read(filename)
+    expect(content).toContain('@property --no-inherit-value')
+    expect(content).not.toContain('@layer properties')
+  },
+)
+
+test(
   `the plugin works when using the environment API`,
   {
     fs: {
