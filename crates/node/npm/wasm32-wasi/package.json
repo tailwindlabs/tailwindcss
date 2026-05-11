@@ -30,7 +30,7 @@
     "@napi-rs/wasm-runtime": "^1.1.4",
     "@emnapi/core": "^1.10.0",
     "@emnapi/runtime": "^1.10.0",
-    "@tybys/wasm-util": "^0.10.1",
+    "@tybys/wasm-util": "^0.10.2",
     "@emnapi/wasi-threads": "^1.2.1",
     "tslib": "^2.8.1"
   },
