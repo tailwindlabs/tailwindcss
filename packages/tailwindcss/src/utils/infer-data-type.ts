@@ -184,7 +184,7 @@ function isPercentage(value: string): boolean {
 
 /* -------------------------------------------------------------------------- */
 
-const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\s*/\s*${HAS_NUMBER.source}$`)
+const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\\s*/\\s*${HAS_NUMBER.source}$`)
 
 function isFraction(value: string): boolean {
   return IS_FRACTION.test(value) || hasMathFn(value)

@@ -50,7 +50,7 @@ If you open a pull request for a new feature, we're likely to close it not becau
 
 ## Coding standards
 
-Our code formatting rules are defined in the `"prettier"` section of [package.json](https://github.com/tailwindcss/tailwindcss/blob/main/package.json). You can check your code against these standards by running:
+Our code formatting rules are defined in the `"prettier"` section of [package.json](https://github.com/tailwindlabs/tailwindcss/blob/main/package.json). You can check your code against these standards by running:
 
 ```sh
 pnpm run lint
@@ -76,7 +76,7 @@ To run the integration tests, use:
 pnpm build && pnpm test:integrations
 ```
 
-Additionally, some features require testing in browsers (i.e to ensure CSS variable resolution works as expected). These can be run via:
+Additionally, some features require testing in browsers (i.e. to ensure CSS variable resolution works as expected). These can be run via:
 
 ```sh
 pnpm build && pnpm test:ui

@@ -33,7 +33,7 @@ impl Rust {
         let mut bracket_stack = bracket_stack::BracketStack::default();
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Escaped character, skip ahead to the next character
                 b'\\' => {
                     cursor.advance_twice();
@@ -46,7 +46,7 @@ impl Rust {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -89,7 +89,7 @@ impl Rust {
                     // digit.
                     // E.g.: `bg-red-500.2xl:flex`
                     //                 ^^^
-                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                    if cursor.prev().is_ascii_digit() && cursor.next().is_ascii_digit() {
                         let mut next_cursor = cursor.clone();
                         next_cursor.advance();
 
@@ -103,11 +103,11 @@ impl Rust {
                 }
 
                 b'[' => {
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b']' if !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
+                    bracket_stack.pop(cursor.curr());
                 }
 
                 // Consume everything else

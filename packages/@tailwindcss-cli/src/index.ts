@@ -3,46 +3,80 @@
 import { args, type Arg } from './utils/args'
 
 import * as build from './commands/build'
+import * as canonicalize from './commands/canonicalize'
 import { help } from './commands/help'
 
 const sharedOptions = {
   '--help': { type: 'boolean', description: 'Display usage information', alias: '-h' },
 } satisfies Arg
 
-const flags = args({
-  ...build.options(),
-  ...sharedOptions,
-})
-const command = flags._[0]
-
-// Right now we don't support any sub-commands. Let's show the help message
-// instead.
-if (command) {
-  help({
-    invalid: command,
-    usage: ['tailwindcss [options]'],
-    options: { ...build.options(), ...sharedOptions },
-  })
-  process.exit(1)
+function buildUsage(command = 'tailwindcss') {
+  return `${command} [--input input.css] [--output output.css] [--watch] [options…]`
 }
 
-// Display main help message if no command is being used.
-//
-// E.g.:
-//
-//   - `tailwindcss`                // should show the help message
-//
-// E.g.: implicit `build` command
-//
-//   - `tailwindcss -o output.css`  // should run the build command, not show the help message
-//   - `tailwindcss > output.css`   // should run the build command, not show the help message
-if ((process.stdout.isTTY && process.argv[2] === undefined) || flags['--help']) {
+function rootHelp({ invalid }: { invalid?: string } = {}) {
   help({
-    usage: ['tailwindcss [--input input.css] [--output output.css] [--watch] [options…]'],
+    invalid,
+    usage: [buildUsage('tailwindcss'), buildUsage('tailwindcss build'), canonicalize.usage()],
+    commands: {
+      build: 'Build your CSS',
+      canonicalize: 'Canonicalize candidate lists',
+    },
     options: { ...build.options(), ...sharedOptions },
   })
-  process.exit(0)
 }
 
-// Handle the build command
-build.handle(flags)
+async function run() {
+  let argv = process.argv.slice(2)
+  let command = argv[0]
+  let rootFlags = args({ ...build.options(), ...sharedOptions }, argv)
+
+  if (command === 'build') {
+    let flags = args({ ...build.options(), ...sharedOptions }, argv.slice(1))
+
+    if ((process.stdout.isTTY && argv.length === 1) || flags['--help']) {
+      help({
+        usage: [buildUsage('tailwindcss build')],
+        options: { ...build.options(), ...sharedOptions },
+      })
+      process.exit(0)
+    }
+
+    await build.handle(flags)
+    return
+  }
+
+  if (command === 'canonicalize') {
+    let result = await canonicalize.runCommandLine({ argv: argv.slice(1) })
+
+    if (result.stdout.length > 0) {
+      process.stdout.write(`${result.stdout}\n`)
+    }
+
+    if (result.stderr.length > 0) {
+      process.stderr.write(`${result.stderr}\n`)
+    }
+
+    process.exitCode = result.exitCode
+    return
+  }
+
+  if ((process.stdout.isTTY && command === undefined) || rootFlags['--help']) {
+    rootHelp()
+    process.exit(0)
+  }
+
+  if (command && !command.startsWith('-')) {
+    rootHelp({ invalid: command })
+    process.exit(1)
+  }
+
+  let flags = args({
+    ...build.options(),
+    ...sharedOptions,
+  })
+
+  await build.handle(flags)
+}
+
+await run()

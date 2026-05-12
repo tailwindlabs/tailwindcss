@@ -16,7 +16,7 @@ impl Machine for VariantMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match cursor.curr.into() {
+        match cursor.curr().into() {
             // Start of an arbitrary variant
             //
             // E.g.: `[&:hover]:`
@@ -48,7 +48,7 @@ impl VariantMachine {
         start_pos: usize,
         cursor: &mut cursor::Cursor<'_>,
     ) -> MachineState {
-        match cursor.next.into() {
+        match cursor.next().into() {
             // End of an arbitrary value, must be followed by a `:`
             //
             // E.g.: `[&:hover]:`

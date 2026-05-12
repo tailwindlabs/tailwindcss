@@ -1,5 +1,5 @@
 @reference "./globals.css";
 
 .heading {
-  @apply skew-7;
+  @apply text-red-500;
 }

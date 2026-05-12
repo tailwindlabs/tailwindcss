@@ -32,14 +32,14 @@ impl Machine for CandidateMachine {
         while cursor.pos < len {
             // Skip ahead for known characters that will never be part of a candidate. No need to
             // run any sub-machines.
-            if cursor.curr.is_ascii_whitespace() {
+            if cursor.curr().is_ascii_whitespace() {
                 self.reset();
                 cursor.advance();
                 continue;
             }
 
             // Candidates don't start with these characters, so we can skip ahead.
-            if matches!(cursor.curr, b':' | b'"' | b'\'' | b'`') {
+            if matches!(cursor.curr(), b':' | b'"' | b'\'' | b'`') {
                 self.reset();
                 cursor.advance();
                 continue;
@@ -56,7 +56,7 @@ impl Machine for CandidateMachine {
             // E.g.: `Some Class`
             //        ^    ^       Invalid, we can jump ahead to the next boundary
             //
-            if matches!(cursor.curr, b'<' | b'A'..=b'Z') {
+            if matches!(cursor.curr(), b'<' | b'A'..=b'Z') {
                 if let Some(offset) = cursor.input[cursor.pos..]
                     .iter()
                     .position(|&c| is_valid_before_boundary(&c))

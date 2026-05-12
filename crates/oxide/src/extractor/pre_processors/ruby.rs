@@ -68,7 +68,8 @@ impl PreProcessor for Ruby {
                 }
 
                 let body = &content_as_str[body_start..body_end];
-                let replaced = pre_process_input(body.as_bytes(), &lang.to_ascii_lowercase());
+                let replaced =
+                    pre_process_input(body.as_bytes().to_vec(), &lang.to_ascii_lowercase());
 
                 result.replace_range(body_start..body_end, replaced);
                 break;
@@ -77,12 +78,12 @@ impl PreProcessor for Ruby {
 
         // Ruby extraction
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 b'"' => {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -102,7 +103,7 @@ impl PreProcessor for Ruby {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -119,12 +120,18 @@ impl PreProcessor for Ruby {
                 }
 
                 // Replace comments in Ruby files
-                b'#' => {
+                //
+                // Except for strict locals, these are defined in a `<%# locals: … %>`. Checking if
+                // the comment is preceded by a `%` should be enough without having to perform more
+                // parsing logic. Worst case we _do_ scan a few comments.
+                //
+                // We also want to skip interpolation syntax, which look like `#{…}`.
+                b'#' if !matches!(cursor.prev(), b'%') && !matches!(cursor.next(), b'{') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // End of the comment
                             b'\n' => break,
 
@@ -144,7 +151,7 @@ impl PreProcessor for Ruby {
             }
 
             // Looking for `%w`, `%W`, or `%p`
-            if cursor.curr != b'%' || !matches!(cursor.next, b'w' | b'W' | b'p') {
+            if cursor.curr() != b'%' || !matches!(cursor.next(), b'w' | b'W' | b'p') {
                 cursor.advance();
                 continue;
             }
@@ -152,7 +159,7 @@ impl PreProcessor for Ruby {
             cursor.advance_twice();
 
             // Boundary character
-            let boundary = match cursor.curr {
+            let boundary = match cursor.curr() {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
@@ -173,11 +180,11 @@ impl PreProcessor for Ruby {
             cursor.advance();
 
             while cursor.pos < len {
-                match cursor.curr {
+                match cursor.curr() {
                     // Skip escaped characters
                     b'\\' => {
                         // Use backslash to embed spaces in the strings.
-                        if cursor.next == b' ' {
+                        if cursor.next() == b' ' {
                             result[cursor.pos] = b' ';
                         }
 
@@ -186,19 +193,19 @@ impl PreProcessor for Ruby {
 
                     // Start of a nested bracket
                     b'[' | b'(' | b'{' => {
-                        bracket_stack.push(cursor.curr);
+                        bracket_stack.push(cursor.curr());
                     }
 
                     // End of a nested bracket
                     b']' | b')' | b'}' if !bracket_stack.is_empty() => {
-                        if !bracket_stack.pop(cursor.curr) {
+                        if !bracket_stack.pop(cursor.curr()) {
                             // Unbalanced
                             cursor.advance();
                         }
                     }
 
                     // End of the pattern, replace the boundary character with a space
-                    _ if cursor.curr == boundary => {
+                    _ if cursor.curr() == boundary => {
                         if boundary != b'\n' {
                             result[cursor.pos] = b' ';
                         }
@@ -381,5 +388,60 @@ mod tests {
             end
         "#;
         Ruby::test_extract_contains(input, vec!["z-1", "z-2", "z-3"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19728
+    #[test]
+    fn test_interpolated_expressions() {
+        let input = r#"
+            def width_class(width = nil)
+              <<~STYLE_CLASS
+                #{width || 'w-100'}
+              STYLE_CLASS
+            end
+        "#;
+
+        Ruby::test_extract_contains(input, vec!["w-100"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19239
+    #[test]
+    fn test_skip_comments() {
+        let input = r#"
+          # From activerecord-8.1.1/lib/active_record/errors.rb:147
+          # Rails uses RDoc cross-reference syntax in inline documentation:
+          # {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]
+        "#;
+
+        // Nothing should be extracted from comments, so expect an empty array.
+        Ruby::test_extract_exact(input, vec![]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/19481
+    #[test]
+    fn test_strict_locals() {
+        // Strict locals are defined in a `<%# locals: … %>`, but the `#` looks like a comment
+        // which we should not ignore in this case.
+        let input = r#"
+          <%# locals: (css: "text-amber-600") %>
+          <% more_css = "text-sky-500" %>
+
+          <p class="text-green-500">
+            In a partial
+          </p>
+
+          <p class="<%= css %>">
+            In a partial using explicit local variables
+          </p>
+
+          <p class="<%= more_css %>">
+            In a partial using explicit local variables
+          </p>
+        "#;
+
+        Ruby::test_extract_contains(
+            input,
+            vec!["text-amber-600", "text-sky-500", "text-green-500"],
+        );
     }
 }

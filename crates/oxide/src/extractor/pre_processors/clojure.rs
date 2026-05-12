@@ -32,14 +32,14 @@ impl PreProcessor for Clojure {
         let mut cursor = cursor::Cursor::new(&content);
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Consume strings as-is
                 b'"' => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // Escaped character, skip ahead to the next character
                             b'\\' => cursor.advance_twice(),
 
@@ -57,8 +57,8 @@ impl PreProcessor for Clojure {
 
                 // Discard line comments until the end of the line.
                 // Comments start with `;;`
-                b';' if matches!(cursor.next, b';') => {
-                    while cursor.pos < len && cursor.curr != b'\n' {
+                b';' if matches!(cursor.next(), b';') => {
+                    while cursor.pos < len && cursor.curr() != b'\n' {
                         result[cursor.pos] = b' ';
                         cursor.advance();
                     }
@@ -70,7 +70,7 @@ impl PreProcessor for Clojure {
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // A `.` surrounded by digits is a decimal number, so we don't want to replace it.
                             //
                             // E.g.:
@@ -78,8 +78,8 @@ impl PreProcessor for Clojure {
                             // gap-1.5
                             //      ^
                             // ```
-                            b'.' if cursor.prev.is_ascii_digit()
-                                && cursor.next.is_ascii_digit() =>
+                            b'.' if cursor.prev().is_ascii_digit()
+                                && cursor.next().is_ascii_digit() =>
                             {
                                 // Keep the `.` as-is
                             }
@@ -95,7 +95,7 @@ impl PreProcessor for Clojure {
                                 result[cursor.pos] = b' ';
                             }
                             // End of keyword.
-                            _ if !is_keyword_character(cursor.curr) => {
+                            _ if !is_keyword_character(cursor.curr()) => {
                                 result[cursor.pos] = b' ';
                                 break;
                             }
@@ -110,11 +110,11 @@ impl PreProcessor for Clojure {
 
                 // Handle quote with a list, e.g.: `'(…)`
                 // and with a vector, e.g.: `'[…]`
-                b'\'' if matches!(cursor.next, b'[' | b'(') => {
+                b'\'' if matches!(cursor.next(), b'[' | b'(') => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
                     result[cursor.pos] = b' ';
-                    let end = match cursor.curr {
+                    let end = match cursor.curr() {
                         b'[' => b']',
                         b'(' => b')',
                         _ => unreachable!(),
@@ -122,7 +122,7 @@ impl PreProcessor for Clojure {
 
                     // Consume until the closing `]`
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             x if x == end => {
                                 result[cursor.pos] = b' ';
                                 break;
@@ -134,7 +134,7 @@ impl PreProcessor for Clojure {
                                 cursor.advance();
 
                                 while cursor.pos < len {
-                                    match cursor.curr {
+                                    match cursor.curr() {
                                         // Escaped character, skip ahead to the next character
                                         b'\\' => cursor.advance_twice(),
 
@@ -157,14 +157,14 @@ impl PreProcessor for Clojure {
                 }
 
                 // Handle quote with a keyword, e.g.: `'bg-white`
-                b'\'' if !cursor.next.is_ascii_whitespace() => {
+                b'\'' if !cursor.next().is_ascii_whitespace() => {
                     result[cursor.pos] = b' ';
                     cursor.advance();
 
                     while cursor.pos < len {
-                        match cursor.curr {
+                        match cursor.curr() {
                             // End of keyword.
-                            _ if !is_keyword_character(cursor.curr) => {
+                            _ if !is_keyword_character(cursor.curr()) => {
                                 result[cursor.pos] = b' ';
                                 break;
                             }

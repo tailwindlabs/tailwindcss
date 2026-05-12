@@ -115,7 +115,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           }
 
           let context = getContextFromCache(postcss, inputFile, opts)
-          let inputBasePath = path.dirname(path.resolve(inputFile))
+          let inputBasePath = inputFile ? path.dirname(path.resolve(inputFile)) : base
 
           // Whether this is the first build or not, if it is, then we can
           // optimize the build by not creating the compiler until we need it.
@@ -199,7 +199,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 
             if (
               rebuildStrategy === 'full' &&
-              // We can re-use the compiler if it was created during the
+              // We can reuse the compiler if it was created during the
               // initial build. If it wasn't, we need to create a new one.
               !isInitialBuild
             ) {

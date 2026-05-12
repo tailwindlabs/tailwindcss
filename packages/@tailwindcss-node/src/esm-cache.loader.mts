@@ -1,8 +1,22 @@
-import { isBuiltin, type ResolveHook } from 'node:module'
+import {
+  isBuiltin,
+  type ResolveFnOutput,
+  type ResolveHook,
+  type ResolveHookContext,
+  type ResolveHookSync,
+} from 'node:module'
 
 export let resolve: ResolveHook = async (specifier, context, nextResolve) => {
   let result = await nextResolve(specifier, context)
+  return processResolve(context, result)
+}
 
+export let resolveSync: ResolveHookSync = (specifier, context, nextResolve) => {
+  let result = nextResolve(specifier, context)
+  return processResolve(context, result)
+}
+
+function processResolve(context: ResolveHookContext, result: ResolveFnOutput) {
   if (result.url === import.meta.url) return result
   if (isBuiltin(result.url)) return result
   if (!context.parentURL) return result

@@ -12,10 +12,10 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import {
   inferDataType,
   isPositiveInteger,
@@ -23,13 +23,11 @@ import {
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
+import { addWhitespaceAroundMathOperators } from './utils/math-operators'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
-
-const IS_VALID_STATIC_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*$/
-const IS_VALID_FUNCTIONAL_UTILITY_NAME = /^-?[a-z][a-zA-Z0-9/%._-]*-\*$/
 
 const DEFAULT_SPACING_SUGGESTIONS = [
   '0',
@@ -393,6 +391,8 @@ export function createUtilities(theme: Theme) {
    * user's theme.
    */
   function functionalUtility(classRoot: string, desc: UtilityDescription) {
+    if (desc.staticValues) desc.staticValues = Object.assign(Object.create(null), desc.staticValues)
+
     function handleFunctionalUtility({ negative }: { negative: boolean }) {
       return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
         let value: string | null = null
@@ -424,7 +424,7 @@ export function createUtilities(theme: Theme) {
           if (value === null && desc.supportsFractions && candidate.value.fraction) {
             let [lhs, rhs] = segment(candidate.value.fraction, '/')
             if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return
-            value = `calc(${candidate.value.fraction} * 100%)`
+            value = `calc(${lhs} / ${rhs} * 100%)`
           }
 
           // If there is still no value but the utility supports bare values,
@@ -450,7 +450,10 @@ export function createUtilities(theme: Theme) {
         if (value === null) return
 
         // Negate the value if the candidate has a negative prefix.
-        return desc.handle(negative ? `calc(${value} * -1)` : value, dataType)
+        return desc.handle(
+          negative ? addWhitespaceAroundMathOperators(`calc(${value} * -1)`) : value,
+          dataType,
+        )
       }
     }
 
@@ -627,8 +630,10 @@ export function createUtilities(theme: Theme) {
     ['inset', 'inset'],
     ['inset-x', 'inset-inline'],
     ['inset-y', 'inset-block'],
-    ['start', 'inset-inline-start'],
-    ['end', 'inset-inline-end'],
+    ['inset-s', 'inset-inline-start'],
+    ['inset-e', 'inset-inline-end'],
+    ['inset-bs', 'inset-block-start'],
+    ['inset-be', 'inset-block-end'],
     ['top', 'top'],
     ['right', 'right'],
     ['bottom', 'bottom'],
@@ -891,6 +896,8 @@ export function createUtilities(theme: Theme) {
     ['my', 'margin-block'],
     ['ms', 'margin-inline-start'],
     ['me', 'margin-inline-end'],
+    ['mbs', 'margin-block-start'],
+    ['mbe', 'margin-block-end'],
     ['mt', 'margin-top'],
     ['mr', 'margin-right'],
     ['mb', 'margin-bottom'],
@@ -980,7 +987,7 @@ export function createUtilities(theme: Theme) {
     handleBareValue: ({ fraction }) => {
       if (fraction === null) return null
       let [lhs, rhs] = segment(fraction, '/')
-      if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) return null
+      if (!isValidSpacingMultiplier(lhs) || !isValidSpacingMultiplier(rhs)) return null
       return fraction
     },
     handle: (value) => [decl('aspect-ratio', value)],
@@ -1064,6 +1071,82 @@ export function createUtilities(theme: Theme) {
     ['h', ['--height', '--spacing'], 'height'],
     ['min-h', ['--min-height', '--height', '--spacing'], 'min-height'],
     ['max-h', ['--max-height', '--height', '--spacing'], 'max-height'],
+  ] as [string, ThemeKey[], string][]) {
+    spacingUtility(name, namespaces, (value) => [decl(property, value)], {
+      supportsFractions: true,
+    })
+  }
+
+  /**
+   * @css `inline-size`
+   * @css `min-inline-size`
+   * @css `max-inline-size`
+   * @css `block-size`
+   * @css `min-block-size`
+   * @css `max-block-size`
+   */
+  for (let [key, value] of [
+    ['full', '100%'],
+    ['min', 'min-content'],
+    ['max', 'max-content'],
+    ['fit', 'fit-content'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  // inline-size viewport units (like width)
+  for (let [key, value] of [
+    ['svw', '100svw'],
+    ['lvw', '100lvw'],
+    ['dvw', '100dvw'],
+  ]) {
+    staticUtility(`inline-${key}`, [['inline-size', value]])
+    staticUtility(`min-inline-${key}`, [['min-inline-size', value]])
+    staticUtility(`max-inline-${key}`, [['max-inline-size', value]])
+  }
+
+  // block-size viewport units (like height)
+  for (let [key, value] of [
+    ['svh', '100svh'],
+    ['lvh', '100lvh'],
+    ['dvh', '100dvh'],
+  ]) {
+    staticUtility(`block-${key}`, [['block-size', value]])
+    staticUtility(`min-block-${key}`, [['min-block-size', value]])
+    staticUtility(`max-block-${key}`, [['max-block-size', value]])
+  }
+
+  staticUtility(`inline-auto`, [['inline-size', 'auto']])
+  staticUtility(`block-auto`, [['block-size', 'auto']])
+  staticUtility(`min-inline-auto`, [['min-inline-size', 'auto']])
+  staticUtility(`min-block-auto`, [['min-block-size', 'auto']])
+
+  staticUtility(`block-lh`, [['block-size', '1lh']])
+  staticUtility(`min-block-lh`, [['min-block-size', '1lh']])
+  staticUtility(`max-block-lh`, [['max-block-size', '1lh']])
+
+  staticUtility(`inline-screen`, [['inline-size', '100vw']])
+  staticUtility(`min-inline-screen`, [['min-inline-size', '100vw']])
+  staticUtility(`max-inline-screen`, [['max-inline-size', '100vw']])
+  staticUtility(`block-screen`, [['block-size', '100vh']])
+  staticUtility(`min-block-screen`, [['min-block-size', '100vh']])
+  staticUtility(`max-block-screen`, [['max-block-size', '100vh']])
+
+  staticUtility(`max-inline-none`, [['max-inline-size', 'none']])
+  staticUtility(`max-block-none`, [['max-block-size', 'none']])
+
+  for (let [name, namespaces, property] of [
+    ['inline', ['--spacing', '--container'], 'inline-size'],
+    ['min-inline', ['--spacing', '--container'], 'min-inline-size'],
+    ['max-inline', ['--spacing', '--container'], 'max-inline-size'],
+    ['block', ['--spacing'], 'block-size'],
+    ['min-block', ['--spacing'], 'min-block-size'],
+    ['max-block', ['--spacing'], 'max-block-size'],
   ] as [string, ThemeKey[], string][]) {
     spacingUtility(name, namespaces, (value) => [decl(property, value)], {
       supportsFractions: true,
@@ -1623,6 +1706,21 @@ export function createUtilities(theme: Theme) {
   }
 
   /**
+   * @css `zoom`
+   */
+  functionalUtility('zoom', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return `${value}%`
+    },
+    handle: (value) => [decl('zoom', value)],
+  })
+
+  suggest('zoom', () => [
+    { values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'] },
+  ])
+
+  /**
    * @css `transform-style`
    */
   staticUtility('transform-flat', [['transform-style', 'flat']])
@@ -1777,6 +1875,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-my', 'scroll-margin-block'],
     ['scroll-ms', 'scroll-margin-inline-start'],
     ['scroll-me', 'scroll-margin-inline-end'],
+    ['scroll-mbs', 'scroll-margin-block-start'],
+    ['scroll-mbe', 'scroll-margin-block-end'],
     ['scroll-mt', 'scroll-margin-top'],
     ['scroll-mr', 'scroll-margin-right'],
     ['scroll-mb', 'scroll-margin-bottom'],
@@ -1801,6 +1901,8 @@ export function createUtilities(theme: Theme) {
     ['scroll-py', 'scroll-padding-block'],
     ['scroll-ps', 'scroll-padding-inline-start'],
     ['scroll-pe', 'scroll-padding-inline-end'],
+    ['scroll-pbs', 'scroll-padding-block-start'],
+    ['scroll-pbe', 'scroll-padding-block-end'],
     ['scroll-pt', 'scroll-padding-top'],
     ['scroll-pr', 'scroll-padding-right'],
     ['scroll-pb', 'scroll-padding-bottom'],
@@ -2125,6 +2227,41 @@ export function createUtilities(theme: Theme) {
   staticUtility('scroll-auto', [['scroll-behavior', 'auto']])
   staticUtility('scroll-smooth', [['scroll-behavior', 'smooth']])
 
+  staticUtility('scrollbar-auto', [['scrollbar-width', 'auto']])
+  staticUtility('scrollbar-thin', [['scrollbar-width', 'thin']])
+  staticUtility('scrollbar-none', [['scrollbar-width', 'none']])
+
+  {
+    let scrollbarColorProperties = () => {
+      return atRoot([
+        property('--tw-scrollbar-thumb', '#0000', '<color>'),
+        property('--tw-scrollbar-track', '#0000', '<color>'),
+      ])
+    }
+
+    colorUtility('scrollbar-thumb', {
+      themeKeys: ['--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-thumb', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+
+    colorUtility('scrollbar-track', {
+      themeKeys: ['--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-track', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+  }
+
+  staticUtility('scrollbar-gutter-auto', [['scrollbar-gutter', 'auto']])
+  staticUtility('scrollbar-gutter-stable', [['scrollbar-gutter', 'stable']])
+  staticUtility('scrollbar-gutter-both', [['scrollbar-gutter', 'stable both-edges']])
+
   staticUtility('truncate', [
     ['overflow', 'hidden'],
     ['text-overflow', 'ellipsis'],
@@ -2153,6 +2290,16 @@ export function createUtilities(theme: Theme) {
   staticUtility('whitespace-pre-line', [['white-space', 'pre-line']])
   staticUtility('whitespace-pre-wrap', [['white-space', 'pre-wrap']])
   staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']])
+
+  functionalUtility('tab', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('tab-size', value)],
+  })
+
+  suggest('tab', () => [{ values: ['2', '4', '8'] }])
 
   staticUtility('text-wrap', [['text-wrap', 'wrap']])
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])
@@ -2345,6 +2492,22 @@ export function createUtilities(theme: Theme) {
         decl('border-inline-end-width', value),
       ],
       color: (value) => [decl('border-inline-end-color', value)],
+    })
+
+    borderSideUtility('border-bs', {
+      width: (value) => [
+        decl('border-block-start-style', 'var(--tw-border-style)'),
+        decl('border-block-start-width', value),
+      ],
+      color: (value) => [decl('border-block-start-color', value)],
+    })
+
+    borderSideUtility('border-be', {
+      width: (value) => [
+        decl('border-block-end-style', 'var(--tw-border-style)'),
+        decl('border-block-end-width', value),
+      ],
+      color: (value) => [decl('border-block-end-color', value)],
     })
 
     borderSideUtility('border-t', {
@@ -3709,6 +3872,8 @@ export function createUtilities(theme: Theme) {
     ['py', 'padding-block'],
     ['ps', 'padding-inline-start'],
     ['pe', 'padding-inline-end'],
+    ['pbs', 'padding-block-start'],
+    ['pbe', 'padding-block-end'],
     ['pt', 'padding-top'],
     ['pr', 'padding-right'],
     ['pb', 'padding-bottom'],
@@ -3810,6 +3975,14 @@ export function createUtilities(theme: Theme) {
     },
   ])
 
+  /**
+   * @css `font-feature-settings`
+   */
+  functionalUtility('font-features', {
+    themeKeys: [],
+    handle: (value) => [decl('font-feature-settings', value)],
+  })
+
   staticUtility('uppercase', [['text-transform', 'uppercase']])
   staticUtility('lowercase', [['text-transform', 'lowercase']])
   staticUtility('capitalize', [['text-transform', 'capitalize']])
@@ -3850,7 +4023,7 @@ export function createUtilities(theme: Theme) {
   ])
 
   colorUtility('placeholder', {
-    themeKeys: ['--background-color', '--color'],
+    themeKeys: ['--placeholder-color', '--color'],
     handle: (value) => [
       styleRule('&::placeholder', [decl('--tw-sort', 'placeholder-color'), decl('color', value)]),
     ],
@@ -5500,7 +5673,7 @@ export function createUtilities(theme: Theme) {
                 value,
                 alpha,
                 (color) => `var(--tw-inset-shadow-color, ${color})`,
-                'inset ',
+                'inset',
               ),
               decl('box-shadow', cssBoxShadowValue),
             ]
@@ -5793,11 +5966,7 @@ export function createUtilities(theme: Theme) {
       value = candidate.value.value
     } else if (candidate.value.kind === 'named' && candidate.value.value === 'normal') {
       value = 'normal'
-    } else if (
-      enableContainerSizeUtility &&
-      candidate.value.kind === 'named' &&
-      candidate.value.value === 'size'
-    ) {
+    } else if (candidate.value.kind === 'named' && candidate.value.value === 'size') {
       value = 'size'
     }
 
@@ -5832,16 +6001,22 @@ export const BARE_VALUE_DATA_TYPES = [
 ]
 
 export function createCssUtility(node: AtRule) {
-  let name = node.params
+  // Allow escaped characters in the name for compatibility with formatters and
+  // other parsers, to ensure valid CSS syntax. E.g.: `@utility foo-1\/2`.
+  //
+  // Note: the actual utility will be `foo-1/2`
+  let name = unescape(node.params)
 
   // Functional utilities. E.g.: `tab-size-*`
-  if (IS_VALID_FUNCTIONAL_UTILITY_NAME.test(name)) {
+  if (isValidFunctionalUtilityName(name)) {
     // API:
     //
     // - `--value('literal')`         resolves a literal named value
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(--default(4))`      resolves to a default value when only the
+    //                                root of the functional utility was used.
     // - `--value(number, [number])`  resolves a bare value of type number or an
     //                                arbitrary value of type number in order.
     //
@@ -5955,7 +6130,7 @@ export function createCssUtility(node: AtRule) {
             arg = arg.replace(/(-\*){2,}/g, '-*')
 
             // Ensure trailing `-*` exists if `-*` isn't present yet
-            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('(') && !arg.includes('-*')) {
               arg += '-*'
             }
 
@@ -6021,9 +6196,8 @@ export function createCssUtility(node: AtRule) {
         let value = candidate.value
         let modifier = candidate.modifier
 
-        // A value is required for functional utilities, if you want to accept
-        // just `tab-size`, you'd have to use a static utility.
-        if (value === null) return
+        // Functional CSS utilities must resolve at least one `--value(…)`.
+        // Use `--default(…)` inside `--value(…)` for the omitted-value case.
 
         // Whether `--value(…)` was used
         let usedValueFn = false
@@ -6064,14 +6238,14 @@ export function createCssUtility(node: AtRule) {
           let shouldRemoveDeclaration = false
 
           let valueAst = ValueParser.parse(node.value)
-          walk(valueAst, (valueNode) => {
-            if (valueNode.kind !== 'function') return
+          walk(valueAst, (fnNode) => {
+            if (fnNode.kind !== 'function') return
 
             // Value function, e.g.: `--value(integer)`
-            if (valueNode.value === '--value') {
+            if (fnNode.value === '--value') {
               usedValueFn = true
 
-              let resolved = resolveValueFunction(value, valueNode, designSystem)
+              let resolved = resolveValueFunction(value, fnNode, designSystem)
               if (resolved) {
                 resolvedValueFn = true
                 if (resolved.ratio) {
@@ -6083,30 +6257,21 @@ export function createCssUtility(node: AtRule) {
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedValueFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
 
             // Modifier function, e.g.: `--modifier(integer)`
-            else if (valueNode.value === '--modifier') {
-              // If there is no modifier present in the candidate, then the
-              // declaration can be removed.
-              if (modifier === null) {
-                shouldRemoveDeclaration = true
-                return WalkAction.Stop
-              }
-
+            else if (fnNode.value === '--modifier') {
               usedModifierFn = true
 
-              let replacement = resolveValueFunction(modifier, valueNode, designSystem)
-              if (replacement) {
+              let resolved = resolveValueFunction(modifier, fnNode, designSystem)
+              if (resolved) {
                 resolvedModifierFn = true
-                return WalkAction.ReplaceSkip(replacement.nodes)
+                return WalkAction.ReplaceSkip(resolved.nodes)
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedModifierFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
@@ -6119,11 +6284,12 @@ export function createCssUtility(node: AtRule) {
           node.value = ValueParser.toCss(valueAst)
         })
 
-        // Used `--value(…)` but nothing resolved
-        if (usedValueFn && !resolvedValueFn) return null
+        // Functional CSS utilities require `--value(…)`, and one of those
+        // branches must resolve for the candidate to be valid.
+        if (!usedValueFn || !resolvedValueFn) return null
 
         // Used `--modifier(…)` but nothing resolved
-        if (usedModifierFn && !resolvedModifierFn) return null
+        if (usedModifierFn && !resolvedModifierFn && modifier !== null) return null
 
         // Resolved `--value(ratio)` and `--modifier(…)`, which is invalid
         if (resolvedRatioValue && resolvedModifierFn) return null
@@ -6184,7 +6350,7 @@ export function createCssUtility(node: AtRule) {
     }
   }
 
-  if (IS_VALID_STATIC_UTILITY_NAME.test(name)) {
+  if (isValidStaticUtilityName(name)) {
     return (designSystem: DesignSystem) => {
       designSystem.utilities.static(name, () => node.nodes.map(cloneAstNode))
     }
@@ -6194,13 +6360,23 @@ export function createCssUtility(node: AtRule) {
 }
 
 function resolveValueFunction(
-  value: NonNullable<
+  value:
     | Extract<Candidate, { kind: 'functional' }>['value']
-    | Extract<Candidate, { kind: 'functional' }>['modifier']
-  >,
+    | Extract<Candidate, { kind: 'functional' }>['modifier'],
   fn: ValueParser.ValueFunctionNode,
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  // No value provided, we can try `--default(…)`
+  if (value === null) {
+    for (let arg of fn.nodes) {
+      // Resolve default value, e.g.: `--default(…)`
+      if (arg.kind === 'function' && arg.value === '--default') {
+        return { nodes: arg.nodes }
+      }
+    }
+    return
+  }
+
   for (let arg of fn.nodes) {
     // Resolve literal value, e.g.: `--modifier('closest-side')`
     if (
@@ -6270,7 +6446,7 @@ function resolveValueFunction(
 
       // Ratio must be a valid fraction, e.g.: <integer>/<integer>
       if (type === 'ratio') {
-        let [lhs, rhs] = segment(resolved, '/')
+        let [lhs, rhs] = segment(resolved, '/').map(Number)
         if (!isPositiveInteger(lhs) || !isPositiveInteger(rhs)) continue
       }
 
@@ -6285,7 +6461,12 @@ function resolveValueFunction(
         continue
       }
 
-      return { nodes: ValueParser.parse(resolved), ratio: type === 'ratio' }
+      if (type === 'ratio') {
+        let [lhs, rhs] = segment(resolved, '/')
+        return { nodes: ValueParser.parse(`${lhs.trim()} / ${rhs.trim()}`), ratio: true }
+      }
+
+      return { nodes: ValueParser.parse(resolved), ratio: false }
     }
 
     // Arbitrary value, e.g.: `--value([integer])`
@@ -6364,8 +6545,8 @@ function alphaReplacedShadowProperties(
   function applyPrefix(x: string) {
     if (!prefix) return x
     return segment(x, ',')
-      .map((value) => prefix + value)
-      .join(',')
+      .map((value) => prefix.trim() + ' ' + value.trim())
+      .join(', ')
   }
 
   if (requiresFallback) {
@@ -6427,4 +6608,144 @@ function alphaReplacedDropShadowProperties(
   } else {
     return [decl(property, prefix + replacedValue)]
   }
+}
+
+const UTILITY_ROOT = /^-?[a-z][a-zA-Z0-9_-]*/
+
+const PERCENT = 37
+const SLASH = 47
+const DOT = 46
+const LOWER_A = 97
+const LOWER_Z = 122
+const UPPER_A = 65
+const UPPER_Z = 90
+const ZERO = 48
+const NINE = 57
+const UNDERSCORE = 95
+const DASH = 45
+
+export function isValidStaticUtilityName(name: string): boolean {
+  let match = UTILITY_ROOT.exec(name)
+  if (match === null) return false // Invalid root
+
+  let root = match[0]
+  let value = name.slice(root.length)
+
+  // Root should not end in `-` if there is no value
+  //
+  // `tab-size-`
+  //  ---------     Root
+  if (value.length === 0 && root.endsWith('-')) {
+    return false
+  }
+
+  // No remaining value is valid
+  //
+  // `tab-size`
+  //  --------    Root
+  if (value.length === 0) {
+    return true
+  }
+
+  // Any valid (static) utility should be valid including:
+  // - Bare values with `.`: `p-1.5`
+  // - Bare values with `%`: `w-50%`
+  // - With an embedded modifier: `text-xs/8`
+
+  let seenSlash = false
+  for (let i = 0; i < value.length; i++) {
+    let charCode = value.charCodeAt(i)
+    switch (charCode) {
+      case PERCENT: {
+        // A percentage is only valid at the end of the value
+        if (i !== value.length - 1) return false
+
+        // A percent is only valid when preceded by a digit. E.g.: `w-%` is invalid
+        let previousChar = value[i - 1] || root[root.length - 1] || ''
+        let previousCharCode = previousChar.charCodeAt(0)
+        if (previousCharCode < ZERO || previousCharCode > NINE) return false
+        break
+      }
+
+      case SLASH: {
+        // A slash must be followed by at least 1 character. E.g.: `foo/` is invalid
+        if (i === value.length - 1) return false
+
+        // A slash can only appear once. E.g.: `foo/bar/baz` is invalid
+        if (seenSlash) return false
+        seenSlash = true
+        break
+      }
+
+      case DOT: {
+        // Dots are only allowed between digits. E.g.: `p-1.a` is invalid
+        let previousChar = value[i - 1] || root[root.length - 1] || ''
+        let previousCharCode = previousChar.charCodeAt(0)
+        if (previousCharCode < ZERO || previousCharCode > NINE) return false
+
+        let nextChar = value[i + 1] || ''
+        let nextCharCode = nextChar.charCodeAt(0)
+        if (nextCharCode < ZERO || nextCharCode > NINE) return false
+        break
+      }
+
+      // Allowed special characters
+      case UNDERSCORE:
+      case DASH: {
+        continue
+      }
+
+      default: {
+        if (
+          (charCode >= LOWER_A && charCode <= LOWER_Z) || // Allow a-z
+          (charCode >= UPPER_A && charCode <= UPPER_Z) || // Allow A-Z
+          (charCode >= ZERO && charCode <= NINE) // Allow 0-9
+        ) {
+          continue
+        }
+
+        // Everything else is invalid
+        return false
+      }
+    }
+  }
+
+  return true
+}
+
+export function isValidFunctionalUtilityName(name: string): boolean {
+  if (!name.endsWith('-*')) return false // Missing '-*' suffix
+  name = name.slice(0, -2)
+
+  let match = UTILITY_ROOT.exec(name)
+  if (match === null) return false // Invalid root
+
+  let root = match[0]
+  let value = name.slice(root.length)
+
+  // No remaining value is valid
+  //
+  // `tab-size-*`
+  //  --------    Root
+  //          --  Suffix
+  //
+  // Backwards compatibility: a root ending in `-` was valid and correctly
+  // scanned by Oxide. This means that custom utilities can result in candidates
+  // such as `foo--bar`.
+  //
+  // We might want to revisit this for Tailwind CSS v5, but for now we have to
+  // make it backwards compatible.
+  //
+  // PR: https://github.com/tailwindlabs/tailwindcss/pull/19696
+  //
+  if (value.length === 0) {
+    return true
+  }
+
+  // But if there is a value remaining, it's invalid.
+  //
+  // E.g.: `tab-size-[…]-*`
+  //
+  // If we allow more characters, we can extend the validation here
+  return false
 }

@@ -1,8 +1,8 @@
 diff --git a/node/index.js b/node/index.js
-index 011d04b450687083e7a0ec9023c41ee79104831c..ef26db49d98c60b5b31f3601f6ad045f0b0e8f4f 100644
+index 6fe25aef457aa5448f9ee6204da1e253f5534800..742be0229b94450b631b6e069ffc372d2b35df47 100644
 --- a/node/index.js
 +++ b/node/index.js
-@@ -1,28 +1,41 @@
+@@ -1,25 +1,40 @@
 -let parts = [process.platform, process.arch];
 -if (process.platform === 'linux') {
 -  const { MUSL, familySync } = require('detect-libc');
@@ -11,12 +11,8 @@ index 011d04b450687083e7a0ec9023c41ee79104831c..ef26db49d98c60b5b31f3601f6ad045f
 -    parts.push('musl');
 -  } else if (process.arch === 'arm') {
 -    parts.push('gnueabihf');
--  } else {
--    parts.push('gnu');
--  }
--} else if (process.platform === 'win32') {
--  parts.push('msvc');
--}
++// We need to take the `process.env.PLATFORM_LIBC` into account, and we also
++// need static analysis, so we can't make use of the `parts.push(…)` approach.
 +function loadPackage() {
 +  if (process.platform === 'linux') {
 +    if (process.env.PLATFORM_LIBC === 'musl') {
@@ -28,19 +24,8 @@ index 011d04b450687083e7a0ec9023c41ee79104831c..ef26db49d98c60b5b31f3601f6ad045f
 +        return require(`lightningcss-${process.platform}-${process.arch}-gnu`)
 +      }
 +    } else {
-+      let { MUSL, GLIBC, family, familySync } = require('detect-libc')
-
--if (process.env.CSS_TRANSFORMER_WASM) {
--  module.exports = require(`../pkg`);
--} else {
--  try {
--    module.exports = require(`lightningcss-${parts.join('-')}`);
--  } catch (err) {
--    module.exports = require(`../lightningcss.${parts.join('-')}.node`);
-+      // Bun polyfills `detect-libc` in compiled binaries. We rely on
-+      // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
-+      // there is a `familySync` function that we can use instead.
-+      if (typeof familySync === 'function') family = familySync()
++      let { MUSL, GLIBC, familySync } = require('detect-libc')
++      let family = familySync()
 +
 +      if (family === MUSL) {
 +        return require(`lightningcss-${process.platform}-${process.arch}-musl`)
@@ -56,15 +41,22 @@ index 011d04b450687083e7a0ec9023c41ee79104831c..ef26db49d98c60b5b31f3601f6ad045f
 +    }
 +  } else if (process.platform === 'win32') {
 +    return require(`lightningcss-${process.platform}-${process.arch}-msvc`)
-+  } else {
+   } else {
+-    parts.push('gnu');
 +    return require(`lightningcss-${process.platform}-${process.arch}`)
    }
+-} else if (process.platform === 'win32') {
+-  parts.push('msvc');
  }
-
--module.exports.browserslistToTargets = require('./browserslistToTargets');
--module.exports.composeVisitors = require('./composeVisitors');
--module.exports.Features = require('./flags').Features;
-+module.exports = loadPackage()
-+module.exports.browserslistToTargets = require('./browserslistToTargets')
-+module.exports.composeVisitors = require('./composeVisitors')
-+module.exports.Features = require('./flags').Features
+ 
+-let native;
+-try {
+-  native = require(`lightningcss-${parts.join('-')}`);
+-} catch (err) {
+-  native = require(`../lightningcss.${parts.join('-')}.node`);
+-}
+ 
++let native = loadPackage();
+ module.exports.transform = wrap(native.transform);
+ module.exports.transformStyleAttribute = wrap(native.transformStyleAttribute);
+ module.exports.bundle = wrap(native.bundle);

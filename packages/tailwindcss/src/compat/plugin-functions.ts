@@ -223,19 +223,16 @@ function get(obj: any, path: string[]) {
   for (let i = 0; i < path.length; ++i) {
     let key = path[i]
 
-    // The key does not exist so concatenate it with the next key
-    if (obj?.[key] === undefined) {
+    // The key does not exist so concatenate it with the next key.
+    // We use Object.hasOwn to avoid matching inherited prototype properties
+    // (e.g. "constructor", "toString") when traversing config objects.
+    if (obj === null || obj === undefined || typeof obj !== 'object' || !Object.hasOwn(obj, key)) {
       if (path[i + 1] === undefined) {
         return undefined
       }
 
       path[i + 1] = `${key}-${path[i + 1]}`
       continue
-    }
-
-    // We never want to index into strings
-    if (typeof obj === 'string') {
-      return undefined
     }
 
     obj = obj[key]

@@ -74,8 +74,24 @@ export function escape(value: string) {
 
 export function unescape(escaped: string) {
   return escaped.replace(/\\([\dA-Fa-f]{1,6}[\t\n\f\r ]?|[\S\s])/g, (match) => {
-    return match.length > 2
-      ? String.fromCodePoint(Number.parseInt(match.slice(1).trim(), 16))
-      : match[1]
+    if (match.length <= 2) {
+      return match[1]
+    }
+
+    let codePoint = Number.parseInt(match.slice(1).trim(), 16)
+
+    if (
+      // Invalid codepoint: https://infra.spec.whatwg.org/#code-point
+      codePoint === 0x0000 ||
+      codePoint > 0x10ffff ||
+      // Is surrogate: https://infra.spec.whatwg.org/#leading-surrogate
+      //  - A leading surrogate is a code point that is in the range U+D800 to U+DBFF, inclusive.
+      //  - A trailing surrogate is a code point that is in the range U+DC00 to U+DFFF, inclusive.
+      (codePoint >= 0xd800 && codePoint <= 0xdfff)
+    ) {
+      return '\uFFFD'
+    }
+
+    return String.fromCodePoint(codePoint)
   })
 }

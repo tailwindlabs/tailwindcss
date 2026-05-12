@@ -75,12 +75,10 @@ Bun.plugin({
       'tailwindcss/plugin': await import('tailwindcss/plugin'),
       'tailwindcss/plugin.js': await import('tailwindcss/plugin'),
       'tailwindcss/package.json': await import('tailwindcss/package.json'),
-      'tailwindcss/lib/util/flattenColorPalette': await import(
-        'tailwindcss/lib/util/flattenColorPalette'
-      ),
-      'tailwindcss/lib/util/flattenColorPalette.js': await import(
-        'tailwindcss/lib/util/flattenColorPalette'
-      ),
+      'tailwindcss/lib/util/flattenColorPalette':
+        await import('tailwindcss/lib/util/flattenColorPalette'),
+      'tailwindcss/lib/util/flattenColorPalette.js':
+        await import('tailwindcss/lib/util/flattenColorPalette'),
       'tailwindcss/defaultTheme': await import('tailwindcss/defaultTheme'),
       'tailwindcss/defaultTheme.js': await import('tailwindcss/defaultTheme'),
     }

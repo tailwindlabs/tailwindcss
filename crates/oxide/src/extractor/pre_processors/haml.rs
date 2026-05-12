@@ -101,7 +101,7 @@ impl PreProcessor for Haml {
         let mut last_newline_position = 0;
 
         while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Escape the next character
                 b'\\' => {
                     cursor.advance_twice();
@@ -119,7 +119,7 @@ impl PreProcessor for Haml {
                 b'-' if cursor.input[last_newline_position..cursor.pos]
                     .iter()
                     .all(u8::is_ascii_whitespace)
-                    && matches!(cursor.next, b'#') =>
+                    && matches!(cursor.next(), b'#') =>
                 {
                     // Just consume the comment
                     let updated_last_newline_position =
@@ -159,7 +159,7 @@ impl PreProcessor for Haml {
                     // Override the last known newline position
                     last_newline_position = end;
 
-                    let replaced = pre_process_input(ruby_code, "rb");
+                    let replaced = pre_process_input(ruby_code.to_vec(), "rb");
                     result.replace_range(start..end, replaced);
                 }
 
@@ -190,7 +190,7 @@ impl PreProcessor for Haml {
                     // digit.
                     // E.g.: `bg-red-500.2xl:flex`
                     //                 ^^^
-                    if cursor.prev.is_ascii_digit() && cursor.next.is_ascii_digit() {
+                    if cursor.prev().is_ascii_digit() && cursor.next().is_ascii_digit() {
                         let mut next_cursor = cursor.clone();
                         next_cursor.advance();
 
@@ -213,11 +213,11 @@ impl PreProcessor for Haml {
                     if bracket_stack.is_empty() {
                         result[cursor.pos] = b' ';
                     }
-                    bracket_stack.push(cursor.curr);
+                    bracket_stack.push(cursor.curr());
                 }
 
                 b')' | b']' | b'}' if !bracket_stack.is_empty() => {
-                    bracket_stack.pop(cursor.curr);
+                    bracket_stack.pop(cursor.curr());
 
                     // Replace closing bracket with a space
                     if bracket_stack.is_empty() {
@@ -257,7 +257,7 @@ impl Haml {
         //     :url => { :action => "add", :id => product.id },
         //     :update => { :success => "cart", :failure => "error" }
         // ```
-        let evaluation_type = cursor.curr;
+        let evaluation_type = cursor.curr();
 
         let block_indentation_level = cursor
             .pos
@@ -267,17 +267,17 @@ impl Haml {
         let mut last_newline_position = last_known_newline_position;
 
         // Consume until the end of the line first
-        while cursor.pos < len && cursor.curr != b'\n' {
+        while cursor.pos < len && cursor.curr() != b'\n' {
             cursor.advance();
         }
 
         // Block is already done, aka just a line
-        if evaluation_type == b'=' && cursor.prev != b',' {
+        if evaluation_type == b'=' && cursor.prev() != b',' {
             return cursor.pos;
         }
 
         'outer: while cursor.pos < len {
-            match cursor.curr {
+            match cursor.curr() {
                 // Escape the next character
                 b'\\' => {
                     cursor.advance_twice();
@@ -289,7 +289,7 @@ impl Haml {
                     last_newline_position = cursor.pos;
 
                     // We are done with this block
-                    if evaluation_type == b'=' && cursor.prev != b',' {
+                    if evaluation_type == b'=' && cursor.prev() != b',' {
                         break;
                     }
 
@@ -300,11 +300,11 @@ impl Haml {
                 // Skip whitespace and compute the indentation level
                 x if x.is_ascii_whitespace() => {
                     // Find first non-whitespace character
-                    while cursor.pos < len && cursor.curr.is_ascii_whitespace() {
-                        if cursor.curr == b'\n' {
+                    while cursor.pos < len && cursor.curr().is_ascii_whitespace() {
+                        if cursor.curr() == b'\n' {
                             last_newline_position = cursor.pos;
 
-                            if evaluation_type == b'=' && cursor.prev != b',' {
+                            if evaluation_type == b'=' && cursor.prev() != b',' {
                                 // We are done with this block
                                 break 'outer;
                             }

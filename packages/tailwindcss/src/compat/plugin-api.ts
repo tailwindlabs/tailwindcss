@@ -202,6 +202,9 @@ export function buildPluginApi({
                 ruleNodes.nodes,
               )
             } else if (variant.value.kind === 'named' && options?.values) {
+              if (!Object.hasOwn(options.values, variant.value.value)) {
+                return null
+              }
               let defaultValue = options.values[variant.value.value]
               if (typeof defaultValue !== 'string') {
                 return null
@@ -223,8 +226,14 @@ export function buildPluginApi({
           let aValueKey = a.value ? a.value.value : 'DEFAULT'
           let zValueKey = z.value ? z.value.value : 'DEFAULT'
 
-          let aValue = options?.values?.[aValueKey] ?? aValueKey
-          let zValue = options?.values?.[zValueKey] ?? zValueKey
+          let aValue =
+            (options?.values && Object.hasOwn(options.values, aValueKey)
+              ? options.values[aValueKey]
+              : undefined) ?? aValueKey
+          let zValue =
+            (options?.values && Object.hasOwn(options.values, zValueKey)
+              ? options.values[zValueKey]
+              : undefined) ?? zValueKey
 
           if (options && typeof options.sort === 'function') {
             return options.sort(
@@ -406,10 +415,13 @@ export function buildPluginApi({
                 value = values.DEFAULT ?? null
               } else if (candidate.value.kind === 'arbitrary') {
                 value = candidate.value.value
-              } else if (candidate.value.fraction && values[candidate.value.fraction]) {
+              } else if (
+                candidate.value.fraction &&
+                Object.hasOwn(values, candidate.value.fraction)
+              ) {
                 value = values[candidate.value.fraction]
                 ignoreModifier = true
-              } else if (values[candidate.value.value]) {
+              } else if (Object.hasOwn(values, candidate.value.value)) {
                 value = values[candidate.value.value]
               } else if (values.__BARE_VALUE__) {
                 value = values.__BARE_VALUE__(candidate.value) ?? null
@@ -430,7 +442,7 @@ export function buildPluginApi({
                 modifier = null
               } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
                 modifier = candidate.modifier.value
-              } else if (modifiers?.[candidate.modifier.value]) {
+              } else if (modifiers && Object.hasOwn(modifiers, candidate.modifier.value)) {
                 modifier = modifiers[candidate.modifier.value]
               } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
                 modifier = `${candidate.modifier.value}%`

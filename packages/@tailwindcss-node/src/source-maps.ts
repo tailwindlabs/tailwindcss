@@ -46,7 +46,7 @@ export function toSourceMap(map: DecodedSourceMap | string): SourceMap {
   let raw = typeof map === 'string' ? map : serializeSourceMap(map)
 
   function comment(url: string) {
-    return `/*# sourceMappingURL=${url} */\n`
+    return `/*# sourceMappingURL\x3d${url} */\n`
   }
 
   return {

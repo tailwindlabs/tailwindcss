@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
+import { pretty } from './test-utils/run'
 
 const css = String.raw
 
@@ -23,8 +24,9 @@ test('plugin', async () => {
     }),
   })
 
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    "@layer base {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    @layer base {
       body {
         margin: 0;
       }
@@ -54,8 +56,9 @@ test('plugin.withOptions', async () => {
     }),
   })
 
-  expect(compiler.build([])).toMatchInlineSnapshot(`
-    "@layer base {
+  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+    "
+    @layer base {
       body {
         margin: 1px;
       }
