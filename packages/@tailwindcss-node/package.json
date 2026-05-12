@@ -55,7 +55,7 @@
   "dependencies": {
     "@jridgewell/remapping": "^2.3.5",
     "enhanced-resolve": "^5.21.0",
-    "jiti": "^2.6.1",
+    "jiti": "^2.7.0",
     "lightningcss": "catalog:",
     "magic-string": "^0.30.21",
     "source-map-js": "^1.2.1",
