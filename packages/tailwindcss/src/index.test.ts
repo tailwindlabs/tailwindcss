@@ -5,7 +5,7 @@ import { compile, Features, Polyfills } from '.'
 import { cartesian } from './cartesian'
 import type { PluginAPI } from './compat/plugin-api'
 import plugin from './plugin'
-import { compileCss, optimizeCss, pretty, run } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -3103,38 +3103,39 @@ describe('Parsing theme values from CSS', () => {
   })
 
   test('`default` theme values can be overridden by plugin theme values', async () => {
-    let { build } = await compile(
-      css`
-        @theme default {
-          --color-red: red;
-        }
-        @theme {
-          --color-orange: orange;
-        }
-        @plugin "my-plugin";
-        @tailwind utilities;
-      `,
-      {
-        loadModule: async () => {
-          return {
-            path: '',
-            base: '/root',
-            module: plugin(({}) => {}, {
-              theme: {
-                extend: {
-                  colors: {
-                    red: 'tomato',
-                    orange: '#f28500',
+    expect(
+      await compileCss(
+        css`
+          @theme default {
+            --color-red: red;
+          }
+          @theme {
+            --color-orange: orange;
+          }
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+        ['text-red', 'text-orange'],
+        {
+          loadModule: async () => {
+            return {
+              path: '',
+              base: '/root',
+              module: plugin(({}) => {}, {
+                theme: {
+                  extend: {
+                    colors: {
+                      red: 'tomato',
+                      orange: '#f28500',
+                    },
                   },
                 },
-              },
-            }),
-          }
+              }),
+            }
+          },
         },
-      },
-    )
-
-    expect(optimizeCss(build(['text-red', 'text-orange']))).toMatchInlineSnapshot(`
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --color-orange: orange;
@@ -3152,38 +3153,39 @@ describe('Parsing theme values from CSS', () => {
   })
 
   test('`default` theme values can be overridden by config theme values', async () => {
-    let { build } = await compile(
-      css`
-        @theme default {
-          --color-red: red;
-        }
-        @theme {
-          --color-orange: orange;
-        }
-        @config "./my-config.js";
-        @tailwind utilities;
-      `,
-      {
-        loadModule: async () => {
-          return {
-            path: '',
-            base: '/root',
-            module: {
-              theme: {
-                extend: {
-                  colors: {
-                    red: 'tomato',
-                    orange: '#f28500',
+    expect(
+      await compileCss(
+        css`
+          @theme default {
+            --color-red: red;
+          }
+          @theme {
+            --color-orange: orange;
+          }
+          @config "./my-config.js";
+          @tailwind utilities;
+        `,
+        ['text-red', 'text-orange'],
+        {
+          loadModule: async () => {
+            return {
+              path: '',
+              base: '/root',
+              module: {
+                theme: {
+                  extend: {
+                    colors: {
+                      red: 'tomato',
+                      orange: '#f28500',
+                    },
                   },
                 },
               },
-            },
-          }
+            }
+          },
         },
-      },
-    )
-
-    expect(optimizeCss(build(['text-red', 'text-orange']))).toMatchInlineSnapshot(`
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --color-orange: orange;
@@ -3201,34 +3203,34 @@ describe('Parsing theme values from CSS', () => {
   })
 
   test('only emits theme variables that are used outside of being defined by another variable', async () => {
-    let { build } = await compile(
-      css`
-        @theme {
-          --var-a: var(--var-b);
-          --var-b: var(--var-c);
-          --var-c: var(--var-d);
-          --var-d: red;
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --var-a: var(--var-b);
+            --var-b: var(--var-c);
+            --var-c: var(--var-d);
+            --var-d: red;
 
-          --var-four: green;
-          --var-three: var(--var-four);
-          --var-two: var(--var-three);
-          --var-one: var(--var-two);
+            --var-four: green;
+            --var-three: var(--var-four);
+            --var-two: var(--var-three);
+            --var-one: var(--var-two);
 
-          --var-eins: var(--var-zwei);
-          --var-zwei: var(--var-drei);
-          --var-drei: var(--var-vier);
-          --var-vier: blue;
-        }
+            --var-eins: var(--var-zwei);
+            --var-zwei: var(--var-drei);
+            --var-drei: var(--var-vier);
+            --var-vier: blue;
+          }
 
-        @utility get-var-* {
-          color: --value(--var-\*);
-        }
-        @tailwind utilities;
-      `,
-      {},
-    )
-
-    expect(optimizeCss(build(['get-var-b', 'get-var-two']))).toMatchInlineSnapshot(`
+          @utility get-var-* {
+            color: --value(--var-\*);
+          }
+          @tailwind utilities;
+        `,
+        ['get-var-b', 'get-var-two'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --var-b: var(--var-c);
@@ -3314,37 +3316,36 @@ describe('plugins', () => {
   test('@plugin can accept options', async () => {
     expect.hasAssertions()
 
-    let { build } = await compile(
-      css`
-        @tailwind utilities;
-        @plugin "my-plugin" {
-          color: red;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: plugin.withOptions((options) => {
-            expect(options).toEqual({
-              color: 'red',
-            })
-
-            return ({ addUtilities }) => {
-              addUtilities({
-                '.text-primary': {
-                  color: options.color,
-                },
+    expect(
+      await compileCss(
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin" {
+            color: red;
+          }
+        `,
+        ['text-primary'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: plugin.withOptions((options) => {
+              expect(options).toEqual({
+                color: 'red',
               })
-            }
+
+              return ({ addUtilities }) => {
+                addUtilities({
+                  '.text-primary': {
+                    color: options.color,
+                  },
+                })
+              }
+            }),
           }),
-        }),
-      },
-    )
-
-    let compiled = build(['text-primary'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       .text-primary {
         color: red;
@@ -3528,26 +3529,26 @@ describe('plugins', () => {
   })
 
   test('addVariant with string selector', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', '&:hover, &:focus')
-          },
-        }),
-      },
-    )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['hocus:underline', 'group-hocus:flex'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', '&:hover, &:focus')
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
@@ -3563,27 +3564,26 @@ describe('plugins', () => {
   })
 
   test('addVariant with array of selectors', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', ['&:hover', '&:focus'])
-          },
-        }),
-      },
-    )
-
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['hocus:underline', 'group-hocus:flex'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', ['&:hover', '&:focus'])
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
@@ -3599,29 +3599,29 @@ describe('plugins', () => {
   })
 
   test('addVariant with object syntax and @slot', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '&:hover': '@slot',
-              '&:focus': '@slot',
-            })
-          },
-        }),
-      },
-    )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['hocus:underline', 'group-hocus:flex'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '&:hover': '@slot',
+                '&:focus': '@slot',
+              })
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
@@ -3637,31 +3637,31 @@ describe('plugins', () => {
   })
 
   test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '@media (hover: hover)': {
-                '&:hover': '@slot',
-              },
-              '&:focus': '@slot',
-            })
-          },
-        }),
-      },
-    )
-    let compiled = build(['hocus:underline', 'group-hocus:flex'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['hocus:underline', 'group-hocus:flex'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '@media (hover: hover)': {
+                  '&:hover': '@slot',
+                },
+                '&:focus': '@slot',
+              })
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         @media (hover: hover) {
@@ -3689,32 +3689,32 @@ describe('plugins', () => {
   })
 
   test('@slot is preserved when used as a custom property value', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('hocus', {
-              '&': {
-                '--custom-property': '@slot',
-                '&:hover': '@slot',
-                '&:focus': '@slot',
-              },
-            })
-          },
-        }),
-      },
-    )
-    let compiled = build(['hocus:underline'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['hocus:underline'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('hocus', {
+                '&': {
+                  '--custom-property': '@slot',
+                  '&:hover': '@slot',
+                  '&:focus': '@slot',
+                },
+              })
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .hocus\\:underline {
@@ -3730,30 +3730,28 @@ describe('plugins', () => {
   })
 
   test('built-in variants can be overridden while keeping their order', async () => {
-    let { build } = await compile(
-      css`
-        @plugin "my-plugin";
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: ({ addVariant }: PluginAPI) => {
-            addVariant('dark', '&:is([data-theme=dark] *)')
-          },
-        }),
-      },
-    )
-    let compiled = build(
-      // Make sure the order does not change by including the variants
-      // immediately before and after `dark`
-      ['rtl:flex', 'dark:flex', 'starting:flex'],
-    )
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        // Make sure the order does not change by including the variants
+        // immediately before and after `dark`
+        ['rtl:flex', 'dark:flex', 'starting:flex'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: ({ addVariant }: PluginAPI) => {
+              addVariant('dark', '&:is([data-theme=dark] *)')
+            },
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
@@ -3815,15 +3813,16 @@ describe('@source', () => {
 
   describe('@source inline(…)', () => {
     test('always includes the candidate', async () => {
-      let { build } = await compile(
-        css`
-          @source inline("underline");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(pretty(build([]))).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(
+          css`
+            @source inline("underline");
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toMatchInlineSnapshot(`
         "
         .underline {
           text-decoration-line: underline;
@@ -3833,72 +3832,84 @@ describe('@source', () => {
     })
 
     test('applies brace expansion', async () => {
-      let { build } = await compile(
-        css`
-          @theme {
-            --color-red-50: oklch(0.971 0.013 17.38);
-            --color-red-100: oklch(0.936 0.032 17.717);
-            --color-red-200: oklch(0.885 0.062 18.334);
-            --color-red-300: oklch(0.808 0.114 19.571);
-            --color-red-400: oklch(0.704 0.191 22.216);
-            --color-red-500: oklch(0.637 0.237 25.331);
-            --color-red-600: oklch(0.577 0.245 27.325);
-            --color-red-700: oklch(0.505 0.213 27.518);
-            --color-red-800: oklch(0.444 0.177 26.899);
-            --color-red-900: oklch(0.396 0.141 25.723);
-            --color-red-950: oklch(0.258 0.092 26.042);
-          }
-          @source inline("bg-red-{50,{100..900..100},950}");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(pretty(build([]))).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(
+          css`
+            @theme {
+              --color-red-50: oklch(0.971 0.013 17.38);
+              --color-red-100: oklch(0.936 0.032 17.717);
+              --color-red-200: oklch(0.885 0.062 18.334);
+              --color-red-300: oklch(0.808 0.114 19.571);
+              --color-red-400: oklch(0.704 0.191 22.216);
+              --color-red-500: oklch(0.637 0.237 25.331);
+              --color-red-600: oklch(0.577 0.245 27.325);
+              --color-red-700: oklch(0.505 0.213 27.518);
+              --color-red-800: oklch(0.444 0.177 26.899);
+              --color-red-900: oklch(0.396 0.141 25.723);
+              --color-red-950: oklch(0.258 0.092 26.042);
+            }
+            @source inline("bg-red-{50,{100..900..100},950}");
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toMatchInlineSnapshot(`
         "
         :root, :host {
-          --color-red-50: oklch(0.971 0.013 17.38);
-          --color-red-100: oklch(0.936 0.032 17.717);
-          --color-red-200: oklch(0.885 0.062 18.334);
-          --color-red-300: oklch(0.808 0.114 19.571);
-          --color-red-400: oklch(0.704 0.191 22.216);
-          --color-red-500: oklch(0.637 0.237 25.331);
-          --color-red-600: oklch(0.577 0.245 27.325);
-          --color-red-700: oklch(0.505 0.213 27.518);
-          --color-red-800: oklch(0.444 0.177 26.899);
-          --color-red-900: oklch(0.396 0.141 25.723);
-          --color-red-950: oklch(0.258 0.092 26.042);
+          --color-red-50: oklch(97.1% .013 17.38);
+          --color-red-100: oklch(93.6% .032 17.717);
+          --color-red-200: oklch(88.5% .062 18.334);
+          --color-red-300: oklch(80.8% .114 19.571);
+          --color-red-400: oklch(70.4% .191 22.216);
+          --color-red-500: oklch(63.7% .237 25.331);
+          --color-red-600: oklch(57.7% .245 27.325);
+          --color-red-700: oklch(50.5% .213 27.518);
+          --color-red-800: oklch(44.4% .177 26.899);
+          --color-red-900: oklch(39.6% .141 25.723);
+          --color-red-950: oklch(25.8% .092 26.042);
         }
+
         .bg-red-50 {
           background-color: var(--color-red-50);
         }
+
         .bg-red-100 {
           background-color: var(--color-red-100);
         }
+
         .bg-red-200 {
           background-color: var(--color-red-200);
         }
+
         .bg-red-300 {
           background-color: var(--color-red-300);
         }
+
         .bg-red-400 {
           background-color: var(--color-red-400);
         }
+
         .bg-red-500 {
           background-color: var(--color-red-500);
         }
+
         .bg-red-600 {
           background-color: var(--color-red-600);
         }
+
         .bg-red-700 {
           background-color: var(--color-red-700);
         }
+
         .bg-red-800 {
           background-color: var(--color-red-800);
         }
+
         .bg-red-900 {
           background-color: var(--color-red-900);
         }
+
         .bg-red-950 {
           background-color: var(--color-red-950);
         }
@@ -3907,30 +3918,34 @@ describe('@source', () => {
     })
 
     test('adds multiple inline sources separated by spaces', async () => {
-      let { build } = await compile(
-        css`
-          @theme {
-            --color-red-100: oklch(0.936 0.032 17.717);
-            --color-red-200: oklch(0.885 0.062 18.334);
-          }
-          @source inline("block bg-red-{100..200..100}");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(pretty(build([]))).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(
+          css`
+            @theme {
+              --color-red-100: oklch(0.936 0.032 17.717);
+              --color-red-200: oklch(0.885 0.062 18.334);
+            }
+            @source inline("block bg-red-{100..200..100}");
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toMatchInlineSnapshot(`
         "
         :root, :host {
-          --color-red-100: oklch(0.936 0.032 17.717);
-          --color-red-200: oklch(0.885 0.062 18.334);
+          --color-red-100: oklch(93.6% .032 17.717);
+          --color-red-200: oklch(88.5% .062 18.334);
         }
+
         .block {
           display: block;
         }
+
         .bg-red-100 {
           background-color: var(--color-red-100);
         }
+
         .bg-red-200 {
           background-color: var(--color-red-200);
         }
@@ -3939,72 +3954,76 @@ describe('@source', () => {
     })
 
     test('ignores invalid inline candidates', async () => {
-      let { build } = await compile(
-        css`
-          @source inline("my-cucumber");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(build([])).toEqual('')
+      expect(
+        await compileCss(
+          css`
+            @source inline("my-cucumber");
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toEqual('')
     })
 
     test('can be negated', async () => {
-      let { build } = await compile(
-        css`
-          @theme {
-            --breakpoint-sm: 40rem;
-            --breakpoint-md: 48rem;
-            --breakpoint-lg: 64rem;
-            --breakpoint-xl: 80rem;
-            --breakpoint-2xl: 96rem;
-          }
-          @source not inline("container");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(build(['container'])).toEqual('')
+      expect(
+        await compileCss(
+          css`
+            @theme {
+              --breakpoint-sm: 40rem;
+              --breakpoint-md: 48rem;
+              --breakpoint-lg: 64rem;
+              --breakpoint-xl: 80rem;
+              --breakpoint-2xl: 96rem;
+            }
+            @source not inline("container");
+            @tailwind utilities;
+          `,
+          ['container'],
+          { base: '/root' },
+        ),
+      ).toEqual('')
     })
 
     test('applies brace expansion to negated sources', async () => {
-      let { build } = await compile(
-        css`
-          @theme {
-            --color-red-50: oklch(0.971 0.013 17.38);
-            --color-red-100: oklch(0.936 0.032 17.717);
-            --color-red-200: oklch(0.885 0.062 18.334);
-            --color-red-300: oklch(0.808 0.114 19.571);
-            --color-red-400: oklch(0.704 0.191 22.216);
-            --color-red-500: oklch(0.637 0.237 25.331);
-            --color-red-600: oklch(0.577 0.245 27.325);
-            --color-red-700: oklch(0.505 0.213 27.518);
-            --color-red-800: oklch(0.444 0.177 26.899);
-            --color-red-900: oklch(0.396 0.141 25.723);
-            --color-red-950: oklch(0.258 0.092 26.042);
-          }
-          @source not inline("bg-red-{50,{100..900..100},950}");
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(build(['bg-red-500', 'bg-red-700'])).toEqual('')
+      expect(
+        await compileCss(
+          css`
+            @theme {
+              --color-red-50: oklch(0.971 0.013 17.38);
+              --color-red-100: oklch(0.936 0.032 17.717);
+              --color-red-200: oklch(0.885 0.062 18.334);
+              --color-red-300: oklch(0.808 0.114 19.571);
+              --color-red-400: oklch(0.704 0.191 22.216);
+              --color-red-500: oklch(0.637 0.237 25.331);
+              --color-red-600: oklch(0.577 0.245 27.325);
+              --color-red-700: oklch(0.505 0.213 27.518);
+              --color-red-800: oklch(0.444 0.177 26.899);
+              --color-red-900: oklch(0.396 0.141 25.723);
+              --color-red-950: oklch(0.258 0.092 26.042);
+            }
+            @source not inline("bg-red-{50,{100..900..100},950}");
+            @tailwind utilities;
+          `,
+          ['bg-red-500', 'bg-red-700'],
+          { base: '/root' },
+        ),
+      ).toEqual('')
     })
 
     test('works with whitespace around the argument', async () => {
-      let { build } = await compile(
-        css`
-          /* prettier-ignore */
-          @source inline( "underline" );
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(pretty(build([]))).toMatchInlineSnapshot(`
+      expect(
+        await compileCss(
+          css`
+            /* prettier-ignore */
+            @source inline( "underline" );
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toMatchInlineSnapshot(`
         "
         .underline {
           text-decoration-line: underline;
@@ -4014,18 +4033,19 @@ describe('@source', () => {
     })
 
     test('works with newlines around the argument', async () => {
-      let { build } = await compile(
-        css`
-          /* prettier-ignore */
-          @source inline(
+      expect(
+        await compileCss(
+          css`
+            /* prettier-ignore */
+            @source inline(
             "underline"
           );
-          @tailwind utilities;
-        `,
-        { base: '/root' },
-      )
-
-      expect(pretty(build([]))).toMatchInlineSnapshot(`
+            @tailwind utilities;
+          `,
+          [],
+          { base: '/root' },
+        ),
+      ).toMatchInlineSnapshot(`
         "
         .underline {
           text-decoration-line: underline;
@@ -4141,16 +4161,18 @@ describe('@custom-variant', () => {
 
   describe('body-less syntax', () => {
     test('selector variant', async () => {
-      let { build } = await compile(css`
-        @custom-variant hocus (&:hover, &:focus);
+      expect(
+        await compileCss(
+          css`
+            @custom-variant hocus (&:hover, &:focus);
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['hocus:underline', 'group-hocus:flex'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['hocus:underline', 'group-hocus:flex'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
@@ -4166,16 +4188,18 @@ describe('@custom-variant', () => {
     })
 
     test('at-rule variant', async () => {
-      let { build } = await compile(css`
-        @custom-variant any-hover (@media (any-hover: hover));
+      expect(
+        await compileCss(
+          css`
+            @custom-variant any-hover (@media (any-hover: hover));
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['any-hover:hover:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['any-hover:hover:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (any-hover: hover) {
@@ -4191,16 +4215,18 @@ describe('@custom-variant', () => {
     })
 
     test('style-rules and at-rules', async () => {
-      let { build } = await compile(css`
-        @custom-variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
+      expect(
+        await compileCss(
+          css`
+            @custom-variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['cant-hover:focus:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['cant-hover:focus:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           :is(.cant-hover\\:focus\\:underline:not(:hover), .cant-hover\\:focus\\:underline:not(:active)):focus {
@@ -4226,20 +4252,22 @@ describe('@custom-variant', () => {
 
   describe('body with @slot syntax', () => {
     test('selector with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant selected {
-          &[data-selected] {
-            @slot;
-          }
-        }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant selected {
+              &[data-selected] {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['selected:underline', 'group-selected:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['selected:underline', 'group-selected:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .group-selected\\:underline:is(:where(.group)[data-selected] *), .selected\\:underline[data-selected] {
@@ -4251,21 +4279,23 @@ describe('@custom-variant', () => {
     })
 
     test('grouped selectors with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant hocus {
-          &:hover,
-          &:focus {
-            @slot;
-          }
-        }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant hocus {
+              &:hover,
+              &:focus {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['hocus:underline', 'group-hocus:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['hocus:underline', 'group-hocus:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\:underline:hover, .hocus\\:underline:focus {
@@ -4277,24 +4307,26 @@ describe('@custom-variant', () => {
     })
 
     test('multiple selectors with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant hocus {
-          &:hover {
-            @slot;
-          }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant hocus {
+              &:hover {
+                @slot;
+              }
 
-          &:focus {
-            @slot;
-          }
-        }
+              &:focus {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['hocus:underline', 'group-hocus:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['hocus:underline', 'group-hocus:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *), .hocus\\:underline:hover, .hocus\\:underline:focus {
@@ -4306,23 +4338,25 @@ describe('@custom-variant', () => {
     })
 
     test('nested selector with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant custom-before {
-          & {
-            --has-before: 1;
-            &::before {
-              @slot;
+      expect(
+        await compileCss(
+          css`
+            @custom-variant custom-before {
+              & {
+                --has-before: 1;
+                &::before {
+                  @slot;
+                }
+              }
             }
-          }
-        }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['custom-before:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['custom-before:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .custom-before\\:underline {
@@ -4338,26 +4372,28 @@ describe('@custom-variant', () => {
     })
 
     test('grouped nested selectors with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant custom-before {
-          & {
-            --has-before: 1;
-            &::before {
-              &:hover,
-              &:focus {
-                @slot;
+      expect(
+        await compileCss(
+          css`
+            @custom-variant custom-before {
+              & {
+                --has-before: 1;
+                &::before {
+                  &:hover,
+                  &:focus {
+                    @slot;
+                  }
+                }
               }
             }
-          }
-        }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['custom-before:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['custom-before:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           .custom-before\\:underline {
@@ -4373,26 +4409,28 @@ describe('@custom-variant', () => {
     })
 
     test('nested multiple selectors with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant hocus {
-          &:hover {
-            @media (hover: hover) {
-              @slot;
+      expect(
+        await compileCss(
+          css`
+            @custom-variant hocus {
+              &:hover {
+                @media (hover: hover) {
+                  @slot;
+                }
+              }
+
+              &:focus {
+                @slot;
+              }
             }
-          }
 
-          &:focus {
-            @slot;
-          }
-        }
-
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['hocus:underline', 'group-hocus:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['hocus:underline', 'group-hocus:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (hover: hover) {
@@ -4420,22 +4458,24 @@ describe('@custom-variant', () => {
     })
 
     test('selector nested under at-rule with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant hocus {
-          @media (hover: hover) {
-            &:hover {
-              @slot;
+      expect(
+        await compileCss(
+          css`
+            @custom-variant hocus {
+              @media (hover: hover) {
+                &:hover {
+                  @slot;
+                }
+              }
             }
-          }
-        }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['hocus:underline', 'group-hocus:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['hocus:underline', 'group-hocus:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (hover: hover) {
@@ -4449,20 +4489,22 @@ describe('@custom-variant', () => {
     })
 
     test('at-rule with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant any-hover {
-          @media (any-hover: hover) {
-            @slot;
-          }
-        }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant any-hover {
+              @media (any-hover: hover) {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['any-hover:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['any-hover:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (any-hover: hover) {
@@ -4476,24 +4518,26 @@ describe('@custom-variant', () => {
     })
 
     test('multiple at-rules with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant desktop {
-          @media (any-hover: hover) {
-            @slot;
-          }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant desktop {
+              @media (any-hover: hover) {
+                @slot;
+              }
 
-          @media (pointer: fine) {
-            @slot;
-          }
-        }
+              @media (pointer: fine) {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['desktop:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['desktop:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (any-hover: hover) {
@@ -4513,26 +4557,28 @@ describe('@custom-variant', () => {
     })
 
     test('nested at-rules with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant custom-variant {
-          @media (orientation: landscape) {
-            @media screen {
-              @slot;
+      expect(
+        await compileCss(
+          css`
+            @custom-variant custom-variant {
+              @media (orientation: landscape) {
+                @media screen {
+                  @slot;
+                }
+
+                @media print {
+                  display: none;
+                }
+              }
             }
 
-            @media print {
-              display: none;
+            @layer utilities {
+              @tailwind utilities;
             }
-          }
-        }
-
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['custom-variant:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          `,
+          ['custom-variant:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (orientation: landscape) {
@@ -4554,23 +4600,25 @@ describe('@custom-variant', () => {
     })
 
     test('at-rule and selector with @slot', async () => {
-      let { build } = await compile(css`
-        @custom-variant custom-dark {
-          @media (prefers-color-scheme: dark) {
-            @slot;
-          }
-          &:is(.dark *) {
-            @slot;
-          }
-        }
+      expect(
+        await compileCss(
+          css`
+            @custom-variant custom-dark {
+              @media (prefers-color-scheme: dark) {
+                @slot;
+              }
+              &:is(.dark *) {
+                @slot;
+              }
+            }
 
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `)
-      let compiled = build(['custom-dark:underline'])
-
-      expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+          ['custom-dark:underline'],
+        ),
+      ).toMatchInlineSnapshot(`
         "
         @layer utilities {
           @media (prefers-color-scheme: dark) {
@@ -4968,22 +5016,24 @@ describe('@utility', () => {
   })
 
   test('@utility can handle escape sequences correctly', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @utility push-1\/2 {
-        right: 50%;
-      }
+          @utility push-1\/2 {
+            right: 50%;
+          }
 
-      @utility push-50\% {
-        right: 50%;
-      }
-    `)
-    let compiled = build(['push-1/2', 'push-50%'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility push-50\% {
+            right: 50%;
+          }
+        `,
+        ['push-1/2', 'push-50%'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .push-1\\/2, .push-50\\% {
@@ -5057,32 +5107,31 @@ describe('@utility', () => {
 })
 
 test('addBase', async () => {
-  let { build } = await compile(
-    css`
-      @plugin "my-plugin";
-      @layer base, utilities;
-      @layer utilities {
-        @tailwind utilities;
-      }
-    `,
-    {
-      loadModule: async () => ({
-        path: '',
-        base: '/root',
-        module: ({ addBase }: PluginAPI) => {
-          addBase({
-            body: {
-              'font-feature-settings': '"tnum"',
-            },
-          })
-        },
-      }),
-    },
-  )
-
-  let compiled = build(['underline'])
-
-  expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @plugin "my-plugin";
+        @layer base, utilities;
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      ['underline'],
+      {
+        loadModule: async () => ({
+          path: '',
+          base: '/root',
+          module: ({ addBase }: PluginAPI) => {
+            addBase({
+              body: {
+                'font-feature-settings': '"tnum"',
+              },
+            })
+          },
+        }),
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     @layer base {
       body {
@@ -5100,33 +5149,32 @@ test('addBase', async () => {
 })
 
 test('JS APIs support @variant', async () => {
-  let { build } = await compile(
-    css`
-      @plugin "my-plugin";
-      @layer base, utilities;
-      @layer utilities {
-        @tailwind utilities;
-      }
-    `,
-    {
-      loadModule: async () => ({
-        path: '',
-        base: '/root',
-        module: ({ addBase, addUtilities, matchUtilities }: PluginAPI) => {
-          addBase({ body: { '@variant dark': { color: 'red' } } })
-          addUtilities({ '.foo': { '@variant dark': { '--foo': 'foo' } } })
-          matchUtilities(
-            { bar: (value) => ({ '@variant dark': { '--bar': value } }) },
-            { values: { one: '1' } },
-          )
-        },
-      }),
-    },
-  )
-
-  let compiled = build(['underline', 'foo', 'bar-one'])
-
-  expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @plugin "my-plugin";
+        @layer base, utilities;
+        @layer utilities {
+          @tailwind utilities;
+        }
+      `,
+      ['underline', 'foo', 'bar-one'],
+      {
+        loadModule: async () => ({
+          path: '',
+          base: '/root',
+          module: ({ addBase, addUtilities, matchUtilities }: PluginAPI) => {
+            addBase({ body: { '@variant dark': { color: 'red' } } })
+            addUtilities({ '.foo': { '@variant dark': { '--foo': 'foo' } } })
+            matchUtilities(
+              { bar: (value) => ({ '@variant dark': { '--bar': value } }) },
+              { values: { one: '1' } },
+            )
+          },
+        }),
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     @layer base {
       @media (prefers-color-scheme: dark) {
@@ -5235,35 +5283,36 @@ describe('`@reference "…" imports`', () => {
   })
 
   test('does not generate utilities', async () => {
-    let loadStylesheet = async (id: string, base = '/root/foo') => {
-      if (id === './foo/baz.css') {
-        return {
-          base,
-          path: '',
-          content: css`
-            @layer utilities {
-              @tailwind utilities;
-            }
-          `,
-        }
-      }
-      return {
-        path: '',
-        base: '/root/foo',
-        content: css`
-          @import './foo/baz.css';
+    expect(
+      await compileCss(
+        css`
+          @reference './foo/bar.css';
         `,
-      }
-    }
-
-    let { build } = await compile(
-      css`
-        @reference './foo/bar.css';
-      `,
-      { loadStylesheet },
-    )
-
-    expect(build(['text-underline', 'border'])).toEqual('')
+        ['text-underline', 'border'],
+        {
+          loadStylesheet: async (id: string, base = '/root/foo') => {
+            if (id === './foo/baz.css') {
+              return {
+                base,
+                path: '',
+                content: css`
+                  @layer utilities {
+                    @tailwind utilities;
+                  }
+                `,
+              }
+            }
+            return {
+              path: '',
+              base: '/root/foo',
+              content: css`
+                @import './foo/baz.css';
+              `,
+            }
+          },
+        },
+      ),
+    ).toEqual('')
   })
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {

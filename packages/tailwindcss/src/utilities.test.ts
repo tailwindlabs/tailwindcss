@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
-import { compileCss, optimizeCss, run } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 import { isValidFunctionalUtilityName, isValidStaticUtilityName } from './utilities'
 
 const css = String.raw
@@ -29302,16 +29302,18 @@ test('@container', async () => {
 
 describe('spacing utilities', () => {
   test('`--spacing: initial` disables the spacing multiplier', async () => {
-    let { build } = await compile(css`
-      @theme {
-        --spacing: initial;
-        --spacing-4: 1rem;
-      }
-      @tailwind utilities;
-    `)
-    let compiled = build(['px-1', 'px-4'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing: initial;
+            --spacing-4: 1rem;
+          }
+          @tailwind utilities;
+        `,
+        ['px-1', 'px-4'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --spacing-4: 1rem;
@@ -29325,16 +29327,18 @@ describe('spacing utilities', () => {
   })
 
   test('`--spacing-*: initial` disables the spacing multiplier', async () => {
-    let { build } = await compile(css`
-      @theme {
-        --spacing-*: initial;
-        --spacing-4: 1rem;
-      }
-      @tailwind utilities;
-    `)
-    let compiled = build(['px-1', 'px-4'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-*: initial;
+            --spacing-4: 1rem;
+          }
+          @tailwind utilities;
+        `,
+        ['px-1', 'px-4'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --spacing-4: 1rem;
@@ -29348,15 +29352,17 @@ describe('spacing utilities', () => {
   })
 
   test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
-    let { build } = await compile(css`
-      @theme {
-        --spacing: 4px;
-      }
-      @tailwind utilities;
-    `)
-    let compiled = build(['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing: 4px;
+          }
+          @tailwind utilities;
+        `,
+        ['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --spacing: 4px;
@@ -29378,28 +29384,32 @@ describe('spacing utilities', () => {
   })
 
   test('spacing utilities must have a value', async () => {
-    let { build } = await compile(css`
-      @theme reference {
-        --spacing: 4px;
-      }
-      @tailwind utilities;
-    `)
-    let compiled = build(['px'])
-
-    expect(optimizeCss(compiled)).toEqual('')
+    expect(
+      await compileCss(
+        css`
+          @theme reference {
+            --spacing: 4px;
+          }
+          @tailwind utilities;
+        `,
+        ['px'],
+      ),
+    ).toEqual('')
   })
 
   test('--spacing-* variables take precedence over --container-* variables', async () => {
-    let { build } = await compile(css`
-      @theme {
-        --spacing-sm: 8px;
-        --container-sm: 256px;
-      }
-      @tailwind utilities;
-    `)
-    let compiled = build(['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss(
+        css`
+          @theme {
+            --spacing-sm: 8px;
+            --container-sm: 256px;
+          }
+          @tailwind utilities;
+        `,
+        ['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       :root, :host {
         --spacing-sm: 8px;
@@ -29469,23 +29479,25 @@ describe('custom utilities', () => {
   })
 
   test('custom static utility', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @theme reference {
-        --breakpoint-lg: 1024px;
-      }
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
 
-      @utility text-trim {
-        text-box-trim: both;
-        text-box-edge: cap alphabetic;
-      }
-    `)
-    let compiled = build(['text-trim', 'lg:text-trim'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility text-trim {
+            text-box-trim: both;
+            text-box-edge: cap alphabetic;
+          }
+        `,
+        ['text-trim', 'lg:text-trim'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .text-trim {
@@ -29505,7 +29517,7 @@ describe('custom utilities', () => {
   })
 
   test('custom static utility emit CSS variables if the utility is used', async () => {
-    let { build } = await compile(css`
+    let input = css`
       @layer utilities {
         @tailwind utilities;
       }
@@ -29517,19 +29529,17 @@ describe('custom utilities', () => {
       @utility foo {
         value: var(--example-foo);
       }
-    `)
-    let compiled = build([])
+    `
 
     // `foo` is not used yet:
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(await compileCss(input, [])).toMatchInlineSnapshot(`
       "
       @layer utilities;
       "
     `)
 
     // `foo` is used, and the CSS variable is emitted:
-    compiled = build(['foo'])
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+    expect(await compileCss(input, ['foo'])).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .foo {
@@ -29545,18 +29555,20 @@ describe('custom utilities', () => {
   })
 
   test('custom static utility (negative)', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @utility -example {
-        value: -1;
-      }
-    `)
-    let compiled = build(['-example', 'lg:-example'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility -example {
+            value: -1;
+          }
+        `,
+        ['-example', 'lg:-example'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .-example {
@@ -29568,23 +29580,25 @@ describe('custom utilities', () => {
   })
 
   test('Multiple static utilities are merged', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @utility really-round {
-        --custom-prop: hi;
-        border-radius: 50rem;
-      }
+          @utility really-round {
+            --custom-prop: hi;
+            border-radius: 50rem;
+          }
 
-      @utility really-round {
-        border-radius: 30rem;
-      }
-    `)
-    let compiled = build(['really-round'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility really-round {
+            border-radius: 30rem;
+          }
+        `,
+        ['really-round'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .really-round {
@@ -29597,22 +29611,24 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities support some special characters', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @utility push-1/2 {
-        right: 50%;
-      }
+          @utility push-1/2 {
+            right: 50%;
+          }
 
-      @utility push-50% {
-        right: 50%;
-      }
-    `)
-    let compiled = build(['push-1/2', 'push-50%'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility push-50% {
+            right: 50%;
+          }
+        `,
+        ['push-1/2', 'push-50%'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .push-1\\/2, .push-50\\% {
@@ -29624,25 +29640,27 @@ describe('custom utilities', () => {
   })
 
   test('can override specific versions of a functional utility with a static utility', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @theme reference {
-        --text-sm: 0.875rem;
-        --text-sm--line-height: 1.25rem;
-      }
+          @theme reference {
+            --text-sm: 0.875rem;
+            --text-sm--line-height: 1.25rem;
+          }
 
-      @utility text-sm {
-        font-size: var(--text-sm, 0.8755rem);
-        line-height: var(--text-sm--line-height, 1.255rem);
-        text-rendering: optimizeLegibility;
-      }
-    `)
-    let compiled = build(['text-sm'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility text-sm {
+            font-size: var(--text-sm, 0.8755rem);
+            line-height: var(--text-sm--line-height, 1.255rem);
+            text-rendering: optimizeLegibility;
+          }
+        `,
+        ['text-sm'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .text-sm {
@@ -29658,22 +29676,24 @@ describe('custom utilities', () => {
   })
 
   test('can override the default value of a functional utility', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @theme reference {
-        --radius-xl: 16px;
-      }
+          @theme reference {
+            --radius-xl: 16px;
+          }
 
-      @utility rounded {
-        border-radius: 50rem;
-      }
-    `)
-    let compiled = build(['rounded', 'rounded-xl', 'rounded-[33px]'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility rounded {
+            border-radius: 50rem;
+          }
+        `,
+        ['rounded', 'rounded-xl', 'rounded-[33px]'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .rounded {
@@ -29693,18 +29713,20 @@ describe('custom utilities', () => {
   })
 
   test('custom utilities are sorted by used properties', async () => {
-    let { build } = await compile(css`
-      @layer utilities {
-        @tailwind utilities;
-      }
+    expect(
+      await compileCss(
+        css`
+          @layer utilities {
+            @tailwind utilities;
+          }
 
-      @utility push-left {
-        right: 100%;
-      }
-    `)
-    let compiled = build(['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'])
-
-    expect(optimizeCss(compiled)).toMatchInlineSnapshot(`
+          @utility push-left {
+            right: 100%;
+          }
+        `,
+        ['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'],
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .top-\\[100px\\] {

@@ -1,9 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { compile } from '.'
 import plugin from './plugin'
-import { compileCss, optimizeCss } from './test-utils/run'
+import { compileCss } from './test-utils/run'
 
 const css = String.raw
 
@@ -829,23 +828,18 @@ describe('theme(…)', () => {
         })
 
         test('theme(fontFamily.sans) (config)', async () => {
-          let compiled = await compile(
-            css`
-              @config "./my-config.js";
-              .fam {
-                font-family: theme(fontFamily.sans);
-              }
-            `,
-            {
-              loadModule: async () => ({
-                path: '',
-                base: '/root',
-                module: {},
-              }),
-            },
-          )
-
-          expect(optimizeCss(compiled.build([]))).toMatchInlineSnapshot(`
+          expect(
+            await compileCss(
+              css`
+                @config "./my-config.js";
+                .fam {
+                  font-family: theme(fontFamily.sans);
+                }
+              `,
+              [],
+              { loadModule: async () => ({ path: '', base: '/root', module: {} }) },
+            ),
+          ).toMatchInlineSnapshot(`
             "
             .fam {
               font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
@@ -1285,47 +1279,48 @@ describe('theme(…)', () => {
 
 describe('in plugins', () => {
   test('CSS theme functions in plugins are properly evaluated', async () => {
-    let compiled = await compile(
-      css`
-        @layer base, utilities;
-        @plugin "my-plugin";
-        @theme reference {
-          --color-red: oklch(62% 0.25 30);
-          --color-orange: oklch(79% 0.17 70);
-          --color-blue: oklch(45% 0.31 264);
-          --color-pink: oklch(87% 0.07 7);
-        }
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        async loadModule() {
-          return {
-            path: '',
-            base: '/root',
-            module: plugin(({ addBase, addUtilities }) => {
-              addBase({
-                '.my-base-rule': {
-                  color: 'theme(colors.red)',
-                  'outline-color': 'theme(colors.orange / 15%)',
-                  'background-color': 'theme(--color-blue)',
-                  'border-color': 'theme(--color-pink / 10%)',
-                },
-              })
-
-              addUtilities({
-                '.my-utility': {
-                  color: 'theme(colors.red)',
-                },
-              })
-            }),
+    expect(
+      await compileCss(
+        css`
+          @layer base, utilities;
+          @plugin "my-plugin";
+          @theme reference {
+            --color-red: oklch(62% 0.25 30);
+            --color-orange: oklch(79% 0.17 70);
+            --color-blue: oklch(45% 0.31 264);
+            --color-pink: oklch(87% 0.07 7);
           }
-        },
-      },
-    )
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['my-utility'],
+        {
+          async loadModule() {
+            return {
+              path: '',
+              base: '/root',
+              module: plugin(({ addBase, addUtilities }) => {
+                addBase({
+                  '.my-base-rule': {
+                    color: 'theme(colors.red)',
+                    'outline-color': 'theme(colors.orange / 15%)',
+                    'background-color': 'theme(--color-blue)',
+                    'border-color': 'theme(--color-pink / 10%)',
+                  },
+                })
 
-    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+                addUtilities({
+                  '.my-utility': {
+                    color: 'theme(colors.red)',
+                  },
+                })
+              }),
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer base {
         .my-base-rule {
@@ -1348,53 +1343,54 @@ describe('in plugins', () => {
 
 describe('in JS config files', () => {
   test('CSS theme functions in config files are properly evaluated', async () => {
-    let compiled = await compile(
-      css`
-        @layer base, utilities;
-        @config "./my-config.js";
-        @theme reference {
-          --color-red: red;
-          --color-orange: orange;
-        }
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: {
-            theme: {
-              extend: {
-                colors: {
-                  primary: 'theme(colors.red)',
-                  secondary: 'theme(--color-orange)',
+    expect(
+      await compileCss(
+        css`
+          @layer base, utilities;
+          @config "./my-config.js";
+          @theme reference {
+            --color-red: red;
+            --color-orange: orange;
+          }
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        ['my-utility'],
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: 'theme(colors.red)',
+                    secondary: 'theme(--color-orange)',
+                  },
                 },
               },
+              plugins: [
+                plugin(({ addBase, addUtilities }) => {
+                  addBase({
+                    '.my-base-rule': {
+                      background: 'theme(colors.primary)',
+                      color: 'theme(colors.secondary)',
+                    },
+                  })
+
+                  addUtilities({
+                    '.my-utility': {
+                      color: 'theme(colors.red)',
+                    },
+                  })
+                }),
+              ],
             },
-            plugins: [
-              plugin(({ addBase, addUtilities }) => {
-                addBase({
-                  '.my-base-rule': {
-                    background: 'theme(colors.primary)',
-                    color: 'theme(colors.secondary)',
-                  },
-                })
-
-                addUtilities({
-                  '.my-utility': {
-                    color: 'theme(colors.red)',
-                  },
-                })
-              }),
-            ],
-          },
-        }),
-      },
-    )
-
-    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer base {
         .my-base-rule {
