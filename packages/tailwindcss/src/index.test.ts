@@ -310,8 +310,7 @@ describe('@apply', () => {
 
   it('@apply referencing theme values with `@tailwind utilities` should work', async () => {
     return expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @import 'tailwindcss';
 
@@ -349,8 +348,7 @@ describe('@apply', () => {
 
   it('@apply referencing theme values with `@reference` should work', async () => {
     return expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @reference "style.css";
 
@@ -491,8 +489,7 @@ describe('@apply', () => {
 
   it('should replace @apply with the correct result inside imported stylesheets', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @import './bar.css';
           @tailwind utilities;
@@ -2185,18 +2182,15 @@ describe('Parsing theme values from CSS', () => {
 
   test('custom properties are generated when used from a CSS var with a prefixed setup', async () => {
     expect(
-      await run(
-        [],
-        css`
-          @theme prefix(tw) {
-            --color-tomato: #e10c04;
-          }
-          @tailwind utilities;
-          .red {
-            color: var(--tw-color-tomato);
-          }
-        `,
-      ),
+      await compileCss(css`
+        @theme prefix(tw) {
+          --color-tomato: #e10c04;
+        }
+        @tailwind utilities;
+        .red {
+          color: var(--tw-color-tomato);
+        }
+      `),
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
@@ -2343,30 +2337,27 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in user CSS', async () => {
     expect(
-      await run(
-        [],
-        css`
-          @theme {
-            @keyframes used {
-              to {
-                opacity: 1;
-              }
-            }
-
-            @keyframes unused {
-              to {
-                opacity: 0;
-              }
+      await compileCss(css`
+        @theme {
+          @keyframes used {
+            to {
+              opacity: 1;
             }
           }
 
-          .foo {
-            animation: used 1s infinite;
+          @keyframes unused {
+            to {
+              opacity: 0;
+            }
           }
+        }
 
-          @tailwind utilities;
-        `,
-      ),
+        .foo {
+          animation: used 1s infinite;
+        }
+
+        @tailwind utilities;
+      `),
     ).toMatchInlineSnapshot(`
       "
       .foo {
@@ -2429,30 +2420,27 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes outside of `@theme are always preserved', async () => {
     expect(
-      await run(
-        [],
-        css`
-          @theme {
-            @keyframes used {
-              to {
-                opacity: 1;
-              }
-            }
-          }
-
-          @keyframes unused {
+      await compileCss(css`
+        @theme {
+          @keyframes used {
             to {
-              opacity: 0;
+              opacity: 1;
             }
           }
+        }
 
-          .foo {
-            animation: used 1s infinite;
+        @keyframes unused {
+          to {
+            opacity: 0;
           }
+        }
 
-          @tailwind utilities;
-        `,
-      ),
+        .foo {
+          animation: used 1s infinite;
+        }
+
+        @tailwind utilities;
+      `),
     ).toMatchInlineSnapshot(`
       "
       @keyframes unused {
@@ -5170,8 +5158,7 @@ test('JS APIs support @variant', async () => {
 
 it("should error when `layer(…)` is used, but it's not the first param", async () => {
   await expect(async () => {
-    return await run(
-      [],
+    return await compileCss(
       css`
         @import './bar.css' supports(display: grid) layer(utilities);
       `,
@@ -5225,8 +5212,7 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      run(
-        [],
+      compileCss(
         css`
           @reference './foo/bar.css';
 
@@ -5420,8 +5406,7 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      run(
-        [],
+      compileCss(
         css`
           @reference './one.css';
           .bar {
@@ -5471,8 +5456,7 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      run(
-        [],
+      compileCss(
         css`
           @import './foo/bar.css' reference;
 
@@ -5495,29 +5479,26 @@ describe('`@reference "…" imports`', () => {
 
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @media reference {
-            @layer theme {
-              @theme {
-                --breakpoint-md: 48rem;
-              }
-              .foo {
-                color: red;
-              }
+      compileCss(css`
+        @media reference {
+          @layer theme {
+            @theme {
+              --breakpoint-md: 48rem;
             }
-            @utility foo {
+            .foo {
               color: red;
             }
-            @custom-variant hocus (&:hover, &:focus);
           }
+          @utility foo {
+            color: red;
+          }
+          @custom-variant hocus (&:hover, &:focus);
+        }
 
-          .bar {
-            @apply md:hocus:foo;
-          }
-        `,
-      ),
+        .bar {
+          @apply md:hocus:foo;
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       @media (min-width: 48rem) {
@@ -5577,50 +5558,47 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` in your CSS', async () => {
     await expect(
-      run(
-        [],
-        css`
-          .btn {
-            background: black;
+      compileCss(css`
+        .btn {
+          background: black;
 
-            @variant dark {
-              background: white;
-            }
+          @variant dark {
+            background: white;
           }
+        }
 
-          @variant hover {
-            @variant landscape {
-              .btn2 {
-                color: red;
-              }
-            }
-          }
-
-          @variant hover {
-            .foo {
+        @variant hover {
+          @variant landscape {
+            .btn2 {
               color: red;
             }
-            @variant landscape {
-              .bar {
-                color: blue;
-              }
-            }
-            .baz {
-              @variant portrait {
-                color: green;
-              }
-            }
           }
+        }
 
-          @media something {
-            @variant landscape {
-              @page {
-                color: red;
-              }
+        @variant hover {
+          .foo {
+            color: red;
+          }
+          @variant landscape {
+            .bar {
+              color: blue;
             }
           }
-        `,
-      ),
+          .baz {
+            @variant portrait {
+              color: green;
+            }
+          }
+        }
+
+        @media something {
+          @variant landscape {
+            @page {
+              color: red;
+            }
+          }
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       .btn {
@@ -5670,20 +5648,17 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` in your CSS with a `@custom-variant` that is defined later', async () => {
     await expect(
-      run(
-        [],
-        css`
-          .btn {
-            background: black;
+      compileCss(css`
+        .btn {
+          background: black;
 
-            @variant hocus {
-              background: white;
-            }
+          @variant hocus {
+            background: white;
           }
+        }
 
-          @custom-variant hocus (&:hover, &:focus);
-        `,
-      ),
+        @custom-variant hocus (&:hover, &:focus);
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       .btn {
@@ -6170,24 +6145,21 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` with a funky looking variants', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @theme inline reference {
-            --container-md: 768px;
-          }
+      compileCss(css`
+        @theme inline reference {
+          --container-md: 768px;
+        }
 
-          .btn {
-            background: black;
+        .btn {
+          background: black;
 
-            @variant @md {
-              @variant [&.foo] {
-                background: white;
-              }
+          @variant @md {
+            @variant [&.foo] {
+              background: white;
             }
           }
-        `,
-      ),
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       .btn {
@@ -6269,19 +6241,16 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works for color values in the first and second position', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @theme {
-            --color-red-500: oklch(63.7% 0.237 25.331);
-            --color-orange-500: oklch(70.5% 0.213 47.604);
-          }
-          @tailwind utilities;
-          .mixed {
-            color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
-          }
-        `,
-      ),
+      compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+          --color-orange-500: oklch(70.5% 0.213 47.604);
+        }
+        @tailwind utilities;
+        .mixed {
+          color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       :root, :host {
@@ -6304,22 +6273,19 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works for nested `color-mix(…)` calls', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @theme {
-            --color-red-500: oklch(63.7% 0.237 25.331);
-          }
-          @tailwind utilities;
-          .stacked {
-            color: color-mix(
-              in lch,
-              color-mix(in lch, var(--color-red-500) 50%, transparent) 50%,
-              transparent
-            );
-          }
-        `,
-      ),
+      compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+        @tailwind utilities;
+        .stacked {
+          color: color-mix(
+            in lch,
+            color-mix(in lch, var(--color-red-500) 50%, transparent) 50%,
+            transparent
+          );
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       :root, :host {
@@ -6341,24 +6307,21 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works with multiple `color-mix(…)` functions in one declaration', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @theme {
-            --color-red-500: oklch(63.7% 0.237 25.331);
-            --color-orange-500: oklch(70.5% 0.213 47.604);
-          }
-          @tailwind utilities;
-          .gradient {
-            background: linear-gradient(
-              90deg,
-              color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%,
-              color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%,
-              100%
-            );
-          }
-        `,
-      ),
+      compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+          --color-orange-500: oklch(70.5% 0.213 47.604);
+        }
+        @tailwind utilities;
+        .gradient {
+          background: linear-gradient(
+            90deg,
+            color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%,
+            color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%,
+            100%
+          );
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       :root, :host {
@@ -6517,20 +6480,17 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('uses the first color value of the inner most `color-mix(…)` function as the fallback when nested `color-mix(…)` function all contain non-theme variables', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @tailwind utilities;
-          .stacked {
-            color: color-mix(
-              in oklab,
-              color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent)
-                var(--my-outer-opacity),
-              transparent
-            );
-          }
-        `,
-      ),
+      compileCss(css`
+        @tailwind utilities;
+        .stacked {
+          color: color-mix(
+            in oklab,
+            color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent)
+              var(--my-outer-opacity),
+            transparent
+          );
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       .stacked {
@@ -6775,31 +6735,28 @@ describe('`color-mix(…)` polyfill', () => {
 describe('`@property` polyfill', async () => {
   it('emits fallbacks', async () => {
     await expect(
-      run(
-        [],
-        css`
-          @tailwind utilities;
+      compileCss(css`
+        @tailwind utilities;
 
-          @property --no-inherit-no-value {
-            syntax: '*';
-            inherits: false;
-          }
-          @property --no-inherit-value {
-            syntax: '*';
-            inherits: false;
-            initial-value: red;
-          }
-          @property --inherit-no-value {
-            syntax: '*';
-            inherits: true;
-          }
-          @property --inherit-value {
-            syntax: '*';
-            inherits: true;
-            initial-value: red;
-          }
-        `,
-      ),
+        @property --no-inherit-no-value {
+          syntax: '*';
+          inherits: false;
+        }
+        @property --no-inherit-value {
+          syntax: '*';
+          inherits: false;
+          initial-value: red;
+        }
+        @property --inherit-no-value {
+          syntax: '*';
+          inherits: true;
+        }
+        @property --inherit-value {
+          syntax: '*';
+          inherits: true;
+          initial-value: red;
+        }
+      `),
     ).resolves.toMatchInlineSnapshot(`
       "
       @layer properties {
@@ -6843,8 +6800,7 @@ describe('`@property` polyfill', async () => {
 
   it('emitting fallbacks can be disabled (necessary for CSS modules)', async () => {
     await expect(
-      run(
-        [],
+      compileCss(
         css`
           @tailwind utilities;
 

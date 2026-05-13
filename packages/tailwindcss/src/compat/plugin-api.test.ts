@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
-import { run } from '../test-utils/run'
+import { compileCss, run } from '../test-utils/run'
 import defaultTheme from './default-theme'
 import type { CssInJs, PluginAPI } from './plugin-api'
 
@@ -10,8 +10,7 @@ const css = String.raw
 describe('theme', async () => {
   test('plugin theme can contain objects', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -78,8 +77,7 @@ describe('theme', async () => {
 
   test('keyframes added via addUtilities are appended to the AST', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -1405,8 +1403,7 @@ describe('theme', async () => {
 describe('addBase', () => {
   test('does not create rules when imported via `@import "…" reference`', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @tailwind utilities;
           @plugin "outside";
@@ -1455,8 +1452,7 @@ describe('addBase', () => {
 
   test('does not modify CSS variables', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @plugin "my-plugin";
         `,

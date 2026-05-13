@@ -229,8 +229,7 @@ test('Config files can affect the theme', async () => {
 // https://github.com/tailwindlabs/tailwindcss/issues/19091
 test('Accessing a default color if a sub-color exists via CSS should work as expected', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -1342,8 +1341,7 @@ test('utilities must be prefixed', async () => {
 test('utilities used in @apply must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @config "./config.js";
 

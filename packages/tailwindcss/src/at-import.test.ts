@@ -2,7 +2,7 @@ import dedent from 'dedent'
 import { expect, test, vi } from 'vitest'
 import { compile, type Config } from './index'
 import plugin from './plugin'
-import { run } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = dedent
 
@@ -22,8 +22,7 @@ test('can resolve relative @imports', async () => {
   }
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import './foo/bar.css';
       `,
@@ -64,8 +63,7 @@ test('can recursively resolve relative @imports', async () => {
   }
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import './foo/bar.css';
       `,
@@ -96,8 +94,7 @@ let loadStylesheet = async (id: string) => {
 
 test('extracts path from @import nodes', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css';
       `,
@@ -112,8 +109,7 @@ test('extracts path from @import nodes', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import './example.css';
       `,
@@ -128,8 +124,7 @@ test('extracts path from @import nodes', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import '/example.css';
       `,
@@ -146,8 +141,7 @@ test('extracts path from @import nodes', async () => {
 
 test('url() imports are passed-through', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url('example.css');
       `,
@@ -160,8 +154,7 @@ test('url() imports are passed-through', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url('./example.css');
       `,
@@ -174,8 +167,7 @@ test('url() imports are passed-through', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url('/example.css');
       `,
@@ -188,8 +180,7 @@ test('url() imports are passed-through', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url(example.css);
       `,
@@ -202,8 +193,7 @@ test('url() imports are passed-through', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url(./example.css);
       `,
@@ -216,8 +206,7 @@ test('url() imports are passed-through', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import url(/example.css);
       `,
@@ -232,8 +221,7 @@ test('url() imports are passed-through', async () => {
 
 test('handles case-insensitive @import directive', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css';
       `,
@@ -250,8 +238,7 @@ test('handles case-insensitive @import directive', async () => {
 
 test('@media', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' print;
       `,
@@ -268,8 +255,7 @@ test('@media', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' print, screen;
       `,
@@ -286,8 +272,7 @@ test('@media', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' screen and (orientation: landscape);
       `,
@@ -304,8 +289,7 @@ test('@media', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' foo(bar);
       `,
@@ -324,8 +308,7 @@ test('@media', async () => {
 
 test('@supports', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' supports(display: grid);
       `,
@@ -342,8 +325,7 @@ test('@supports', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' supports(display: grid) screen and (max-width: 400px);
       `,
@@ -362,8 +344,7 @@ test('@supports', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' supports((not (display: grid)) and (display: flex)) screen and
           (max-width: 400px);
@@ -383,13 +364,12 @@ test('@supports', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       // prettier-ignore
       css`
-        @import 'example.css'
-        supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
-      `,
+      @import 'example.css'
+      supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
+    `,
       { base: '/root', loadStylesheet },
     ),
   ).toMatchInlineSnapshot(`
@@ -405,8 +385,7 @@ test('@supports', async () => {
 
 test('@layer', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' layer(utilities);
       `,
@@ -423,8 +402,7 @@ test('@layer', async () => {
   `)
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import 'example.css' layer();
       `,
@@ -485,8 +463,7 @@ test('updates the base when loading modules inside nested files', async () => {
   using loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @import './foo/bar.css';
         @config './root-config.js';
@@ -593,8 +570,7 @@ test('it crashes when inside a cycle', async () => {
     })
 
   await expect(
-    run(
-      [],
+    compileCss(
       css`
         @import 'foo.css';
       `,

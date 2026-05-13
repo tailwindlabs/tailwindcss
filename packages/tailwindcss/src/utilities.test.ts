@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
-import { run } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 import { isValidFunctionalUtilityName, isValidStaticUtilityName } from './utilities'
 
 const css = String.raw
@@ -29531,7 +29531,7 @@ describe('custom utilities', () => {
     `
 
     // `foo` is not used yet:
-    expect(await run([], input)).toMatchInlineSnapshot(`
+    expect(await compileCss(input)).toMatchInlineSnapshot(`
       "
       @layer utilities;
       "

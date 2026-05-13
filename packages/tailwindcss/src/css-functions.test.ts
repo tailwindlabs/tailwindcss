@@ -419,8 +419,7 @@ describe('--theme(…)', () => {
 
   test('--theme(…) function still works as expected, even when a plugin is imported', async () => {
     expect(
-      await run(
-        [],
+      await compileCss(
         css`
           @layer base {
             html,
@@ -829,8 +828,7 @@ describe('theme(…)', () => {
 
         test('theme(fontFamily.sans) (config)', async () => {
           expect(
-            await run(
-              [],
+            await compileCss(
               css`
                 @config "./my-config.js";
                 .fam {
@@ -1411,8 +1409,7 @@ describe('in JS config files', () => {
 
 test('replaces CSS theme() function with values inside imported stylesheets', async () => {
   expect(
-    await run(
-      [],
+    await compileCss(
       css`
         @theme {
           --color-red-500: #f00;
@@ -1444,18 +1441,15 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
 
 test('resolves paths ending with a 1', async () => {
   expect(
-    await run(
-      [],
-      css`
-        @theme {
-          --spacing-1: 0.25rem;
-        }
+    await compileCss(css`
+      @theme {
+        --spacing-1: 0.25rem;
+      }
 
-        .foo {
-          margin: theme(spacing.1);
-        }
-      `,
-    ),
+      .foo {
+        margin: theme(spacing.1);
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "
     .foo {
@@ -1467,14 +1461,11 @@ test('resolves paths ending with a 1', async () => {
 
 test('upgrades to a full JS compat theme lookup if a value cannot be mapped to a CSS variable', async () => {
   expect(
-    await run(
-      [],
-      css`
-        .semi {
-          font-weight: theme(fontWeight.semibold);
-        }
-      `,
-    ),
+    await compileCss(css`
+      .semi {
+        font-weight: theme(fontWeight.semibold);
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "
     .semi {
