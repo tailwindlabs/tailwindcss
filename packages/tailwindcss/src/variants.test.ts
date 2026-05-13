@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import createPlugin from './plugin'
-import { compileCss, pretty, run } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
@@ -2722,9 +2722,7 @@ test('variants with the same root are sorted deterministically', async () => {
   ])
 
   for (let classList of classLists) {
-    let output = await compileCss('@tailwind utilities;', classList)
-
-    expect(pretty(output)).toMatchInlineSnapshot(`
+    expect(await compileCss('@tailwind utilities;', classList)).toMatchInlineSnapshot(`
       "
       .data-active\\:flex[data-active], .data-focus\\:flex[data-focus], .data-hover\\:flex[data-hover], .data-\\[bar\\]\\:flex[data-bar], .data-\\[baz\\]\\:flex[data-baz], .data-\\[foo\\]\\:flex[data-foo] {
         display: flex;
@@ -2755,25 +2753,25 @@ test('matchVariant sorts deterministically', async () => {
   ])
 
   for (let classList of classLists) {
-    let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
-      async loadModule(id: string) {
-        return {
-          path: '',
-          base: '/',
-          module: createPlugin(({ matchVariant }) => {
-            matchVariant('is-data', (value) => `&:is([data-${value}])`, {
-              values: {
-                DEFAULT: 'default',
-                foo: 'foo',
-                bar: 'bar',
-              },
-            })
-          }),
-        }
-      },
-    })
-
-    expect(pretty(output)).toMatchInlineSnapshot(`
+    expect(
+      await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
+        async loadModule(_id: string) {
+          return {
+            path: '',
+            base: '/',
+            module: createPlugin(({ matchVariant }) => {
+              matchVariant('is-data', (value) => `&:is([data-${value}])`, {
+                values: {
+                  DEFAULT: 'default',
+                  foo: 'foo',
+                  bar: 'bar',
+                },
+              })
+            }),
+          }
+        },
+      }),
+    ).toMatchInlineSnapshot(`
       "
       .is-data\\:flex[data-default], .is-data-foo\\:flex[data-foo], .is-data-bar\\:flex[data-bar], .is-data-\\[potato\\]\\:flex[data-potato], .is-data-\\[sandwich\\]\\:flex[data-sandwich] {
         display: flex;

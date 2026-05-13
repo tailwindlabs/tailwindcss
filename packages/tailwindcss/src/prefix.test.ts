@@ -1,82 +1,79 @@
 import { expect, test } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
-import { pretty } from './test-utils/run'
+import { compileCss } from './test-utils/run'
 
 const css = String.raw
 
 test('utilities must be prefixed', async () => {
-  let input = css`
-    @theme reference prefix(tw);
-    @tailwind utilities;
-
-    @utility custom {
-      color: red;
-    }
-  `
-
-  let compiler = await compile(input)
-
   // Prefixed utilities are generated
   expect(
-    pretty(
-      compiler.build([
+    await compileCss(
+      css`
+        @theme reference prefix(tw);
+        @tailwind utilities;
+
+        @utility custom {
+          color: red;
+        }
+      `,
+      [
         'tw:underline',
         'tw:hover:line-through',
         'tw:custom',
         'tw:group-hover:flex',
         'tw:peer-hover:flex',
-      ]),
+      ],
     ),
   ).toMatchInlineSnapshot(`
     "
     .tw\\:custom {
       color: red;
     }
+
     .tw\\:underline {
       text-decoration-line: underline;
     }
-    .tw\\:group-hover\\:flex {
-      &:is(:where(.tw\\:group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
+
+    @media (hover: hover) {
+      .tw\\:group-hover\\:flex:is(:where(.tw\\:group):hover *), .tw\\:peer-hover\\:flex:is(:where(.tw\\:peer):hover ~ *) {
+        display: flex;
       }
-    }
-    .tw\\:peer-hover\\:flex {
-      &:is(:where(.tw\\:peer):hover ~ *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "
   `)
 
   // Non-prefixed utilities are ignored
-  compiler = await compile(input)
+  expect(
+    await compileCss(
+      css`
+        @theme reference prefix(tw);
+        @tailwind utilities;
 
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+        @utility custom {
+          color: red;
+        }
+      `,
+      ['underline', 'hover:line-through', 'custom'],
+    ),
+  ).toEqual('')
 })
 
 test('utilities used in @apply must be prefixed', async () => {
-  let compiler = await compile(css`
-    @theme reference prefix(tw);
-
-    .my-underline {
-      @apply tw:underline;
-    }
-  `)
-
   // Prefixed utilities are generated
-  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(css`
+      @theme reference prefix(tw);
+
+      .my-underline {
+        @apply tw:underline;
+      }
+    `),
+  ).toMatchInlineSnapshot(`
     "
     .my-underline {
       text-decoration-line: underline;
@@ -99,22 +96,26 @@ test('utilities used in @apply must be prefixed', async () => {
 })
 
 test('CSS variables output by the theme are prefixed', async () => {
-  let compiler = await compile(css`
-    @theme prefix(tw) {
-      --color-red: #f00;
-      --color-green: #0f0;
-      --breakpoint-sm: 640px;
-    }
-
-    @tailwind utilities;
-  `)
-
   // Prefixed utilities are generated
-  expect(pretty(compiler.build(['tw:text-red']))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @theme prefix(tw) {
+          --color-red: #f00;
+          --color-green: #0f0;
+          --breakpoint-sm: 640px;
+        }
+
+        @tailwind utilities;
+      `,
+      ['tw:text-red'],
+    ),
+  ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --tw-color-red: #f00;
+      --tw-color-red: red;
     }
+
     .tw\\:text-red {
       color: var(--tw-color-red);
     }
@@ -123,80 +124,81 @@ test('CSS variables output by the theme are prefixed', async () => {
 })
 
 test('CSS theme functions do not use the prefix', async () => {
-  let compiler = await compile(css`
-    @theme prefix(tw) {
-      --color-red: #f00;
-      --color-green: #0f0;
-      --breakpoint-sm: 640px;
+  expect(
+    await compileCss(
+      css`
+        @theme prefix(tw) {
+          --color-red: #f00;
+          --color-green: #0f0;
+          --breakpoint-sm: 640px;
+        }
+
+        @tailwind utilities;
+      `,
+      ['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .tw\\:\\[color\\:theme\\(--color-red\\)\\], .tw\\:text-\\[theme\\(--color-red\\)\\] {
+      color: red;
     }
-
-    @tailwind utilities;
-  `)
-
-  expect(pretty(compiler.build(['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]'])))
-    .toMatchInlineSnapshot(`
-      "
-      .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
-        color: #f00;
-      }
-      .tw\\:text-\\[theme\\(--color-red\\)\\] {
-        color: #f00;
-      }
-      "
-    `)
-
-  compiler = await compile(css`
-    @theme reference prefix(tw) {
-      --color-red: #f00;
-      --color-green: #0f0;
-      --breakpoint-sm: 640px;
-    }
-
-    @tailwind utilities;
+    "
   `)
 
   expect(
-    compiler.build(['tw:[color:theme(--tw-color-red)]', 'tw:text-[theme(--tw-color-red)]']),
+    await compileCss(
+      css`
+        @theme reference prefix(tw) {
+          --color-red: #f00;
+          --color-green: #0f0;
+          --breakpoint-sm: 640px;
+        }
+
+        @tailwind utilities;
+      `,
+      ['tw:[color:theme(--tw-color-red)]', 'tw:text-[theme(--tw-color-red)]'],
+    ),
   ).toEqual('')
 })
 
 test('JS theme functions do not use the prefix', async () => {
-  let compiler = await compile(
-    css`
-      @theme prefix(tw) {
-        --color-red: #f00;
-        --color-green: #0f0;
-        --breakpoint-sm: 640px;
-      }
-
-      @plugin "./plugin.js";
-
-      @tailwind utilities;
-    `,
-    {
-      async loadModule(id, base) {
-        return {
-          path: '',
-          base,
-          module: plugin(({ addUtilities, theme }) => {
-            addUtilities({
-              '.my-custom': {
-                color: theme('--color-red'),
-              },
-            })
-
-            // The theme function does not use the prefix
-            expect(theme('--tw-color-red')).toEqual(undefined)
-          }),
+  expect(
+    await compileCss(
+      css`
+        @theme prefix(tw) {
+          --color-red: #f00;
+          --color-green: #0f0;
+          --breakpoint-sm: 640px;
         }
-      },
-    },
-  )
 
-  expect(pretty(compiler.build(['tw:my-custom']))).toMatchInlineSnapshot(`
+        @plugin "./plugin.js";
+
+        @tailwind utilities;
+      `,
+      ['tw:my-custom'],
+      {
+        async loadModule(_id, base) {
+          return {
+            path: '',
+            base,
+            module: plugin(({ addUtilities, theme }) => {
+              addUtilities({
+                '.my-custom': {
+                  color: theme('--color-red'),
+                },
+              })
+
+              // The theme function does not use the prefix
+              expect(theme('--tw-color-red')).toEqual(undefined)
+            }),
+          }
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     .tw\\:my-custom {
-      color: #f00;
+      color: red;
     }
     "
   `)
@@ -212,69 +214,63 @@ test('a prefix can be configured via @import theme(…)', async () => {
     }
   `
 
-  let compiler = await compile(input, {
-    async loadStylesheet(id, base) {
-      return {
-        path: '',
-        base,
-        content: css`
-          @theme {
-            --color-potato: #7a4724;
-          }
-        `,
-      }
-    },
-  })
-
   // Prefixed utilities are generated
   expect(
-    pretty(
-      compiler.build([
-        'tw:underline',
-        'tw:bg-potato',
-        'tw:hover:line-through',
-        'tw:custom',
-        'flex',
-        'text-potato',
-      ]),
+    await compileCss(
+      input,
+      ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom', 'flex', 'text-potato'],
+      {
+        async loadStylesheet(_id, base) {
+          return {
+            path: '',
+            base,
+            content: css`
+              @theme {
+                --color-potato: #7a4724;
+              }
+            `,
+          }
+        },
+      },
     ),
   ).toMatchInlineSnapshot(`
     "
     .tw\\:bg-potato {
       background-color: var(--tw-color-potato, #7a4724);
     }
+
     .tw\\:custom {
       color: red;
     }
+
     .tw\\:underline {
       text-decoration-line: underline;
     }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+
+    @media (hover: hover) {
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "
   `)
 
   // Non-prefixed utilities are ignored
-  compiler = await compile(input, {
-    async loadStylesheet(id, base) {
-      return {
-        path: '',
-        base,
-        content: css`
-          @theme {
-            --color-potato: #7a4724;
-          }
-        `,
-      }
-    },
-  })
-
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+  expect(
+    await compileCss(input, ['underline', 'hover:line-through', 'custom'], {
+      async loadStylesheet(_id, base) {
+        return {
+          path: '',
+          base,
+          content: css`
+            @theme {
+              --color-potato: #7a4724;
+            }
+          `,
+        }
+      },
+    }),
+  ).toEqual('')
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
@@ -286,64 +282,68 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     }
   `
 
-  let compiler = await compile(input, {
-    async loadStylesheet(id, base) {
-      return {
-        path: '',
-        base,
-        content: css`
-          @theme {
-            --color-potato: #7a4724;
-          }
-          @tailwind utilities;
-        `,
-      }
-    },
-  })
-
   expect(
-    pretty(compiler.build(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'])),
-  ).toMatchInlineSnapshot(`
-      "
-      :root, :host {
-        --tw-color-potato: #7a4724;
-      }
-      .tw\\:bg-potato {
-        background-color: var(--tw-color-potato);
-      }
-      .tw\\:custom {
-        color: red;
-      }
-      .tw\\:underline {
-        text-decoration-line: underline;
-      }
-      .tw\\:hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
+    await compileCss(
+      input,
+      ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'],
+      {
+        async loadStylesheet(_id, base) {
+          return {
+            path: '',
+            base,
+            content: css`
+              @theme {
+                --color-potato: #7a4724;
+              }
+              @tailwind utilities;
+            `,
           }
-        }
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    :root, :host {
+      --tw-color-potato: #7a4724;
+    }
+
+    .tw\\:bg-potato {
+      background-color: var(--tw-color-potato);
+    }
+
+    .tw\\:custom {
+      color: red;
+    }
+
+    .tw\\:underline {
+      text-decoration-line: underline;
+    }
+
+    @media (hover: hover) {
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
-      "
-    `)
+    }
+    "
+  `)
 
   // Non-prefixed utilities are ignored
-  compiler = await compile(input, {
-    async loadStylesheet(id, base) {
-      return {
-        path: '',
-        base,
-        content: css`
-          @theme {
-            --color-potato: #7a4724;
-          }
-          @tailwind utilities;
-        `,
-      }
-    },
-  })
-
-  expect(compiler.build(['underline', 'hover:line-through', 'custom'])).toEqual('')
+  expect(
+    await compileCss(input, ['underline', 'hover:line-through', 'custom'], {
+      async loadStylesheet(_id, base) {
+        return {
+          path: '',
+          base,
+          content: css`
+            @theme {
+              --color-potato: #7a4724;
+            }
+            @tailwind utilities;
+          `,
+        }
+      },
+    }),
+  ).toEqual('')
 })
 
 test('a prefix must be letters only', async () => {
@@ -357,14 +357,15 @@ test('a prefix must be letters only', async () => {
 })
 
 test('a candidate matching the prefix does not crash', async () => {
-  let input = css`
-    @theme reference prefix(tomato);
-    @tailwind utilities;
-  `
-
-  let compiler = await compile(input)
-
-  expect(pretty(compiler.build(['tomato', 'tomato:flex']))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @theme reference prefix(tomato);
+        @tailwind utilities;
+      `,
+      ['tomato', 'tomato:flex'],
+    ),
+  ).toMatchInlineSnapshot(`
     "
     .tomato\\:flex {
       display: flex;

@@ -1,31 +1,28 @@
 import { expect, test } from 'vitest'
-import { compile } from '.'
-import { compileCss, pretty } from './test-utils/run'
+import { compileCss } from './test-utils/run'
 
 const css = String.raw
 
 test('Utilities can be wrapped in a selector', async () => {
   // This is the v4 equivalent of `important: "#app"` from v3
-  let input = css`
-    #app {
-      @tailwind utilities;
-    }
-  `
-
-  let compiler = await compile(input)
-
-  expect(pretty(compiler.build(['underline', 'hover:line-through']))).toMatchInlineSnapshot(`
-    "
-    #app {
-      .underline {
-        text-decoration-line: underline;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
-          }
+  expect(
+    await compileCss(
+      css`
+        #app {
+          @tailwind utilities;
         }
+      `,
+      ['underline', 'hover:line-through'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    #app .underline {
+      text-decoration-line: underline;
+    }
+
+    @media (hover: hover) {
+      #app .hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "
@@ -34,28 +31,29 @@ test('Utilities can be wrapped in a selector', async () => {
 
 test('Utilities can be marked with important', async () => {
   // This is the v4 equivalent of `important: true` from v3
-  let input = css`
-    @import 'tailwindcss/utilities' important;
-  `
-
-  let compiler = await compile(input, {
-    loadStylesheet: async (id: string, base: string) => ({
-      base,
-      content: '@tailwind utilities;',
-      path: '',
-    }),
-  })
-
-  expect(pretty(compiler.build(['underline', 'hover:line-through']))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @import 'tailwindcss/utilities' important;
+      `,
+      ['underline', 'hover:line-through'],
+      {
+        loadStylesheet: async (id: string, base: string) => ({
+          base,
+          content: '@tailwind utilities;',
+          path: '',
+        }),
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     .underline {
       text-decoration-line: underline !important;
     }
-    .hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+
+    @media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     "
@@ -65,28 +63,26 @@ test('Utilities can be marked with important', async () => {
 test('Utilities can be wrapped with a selector and marked as important', async () => {
   // This does not have a direct equivalent in v3 but works as a consequence of
   // the new APIs
-  let input = css`
-    @media important {
-      #app {
-        @tailwind utilities;
-      }
-    }
-  `
-
-  let compiler = await compile(input)
-
-  expect(pretty(compiler.build(['underline', 'hover:line-through']))).toMatchInlineSnapshot(`
-    "
-    #app {
-      .underline {
-        text-decoration-line: underline !important;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through !important;
+  expect(
+    await compileCss(
+      css`
+        @media important {
+          #app {
+            @tailwind utilities;
           }
         }
+      `,
+      ['underline', 'hover:line-through'],
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    #app .underline {
+      text-decoration-line: underline !important;
+    }
+
+    @media (hover: hover) {
+      #app .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     "
