@@ -3814,14 +3814,10 @@ describe('@source', () => {
   describe('@source inline(…)', () => {
     test('always includes the candidate', async () => {
       expect(
-        await compileCss(
-          css`
-            @source inline("underline");
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+        await compileCss(css`
+          @source inline("underline");
+          @tailwind utilities;
+        `),
       ).toMatchInlineSnapshot(`
         "
         .underline {
@@ -3833,27 +3829,23 @@ describe('@source', () => {
 
     test('applies brace expansion', async () => {
       expect(
-        await compileCss(
-          css`
-            @theme {
-              --color-red-50: oklch(0.971 0.013 17.38);
-              --color-red-100: oklch(0.936 0.032 17.717);
-              --color-red-200: oklch(0.885 0.062 18.334);
-              --color-red-300: oklch(0.808 0.114 19.571);
-              --color-red-400: oklch(0.704 0.191 22.216);
-              --color-red-500: oklch(0.637 0.237 25.331);
-              --color-red-600: oklch(0.577 0.245 27.325);
-              --color-red-700: oklch(0.505 0.213 27.518);
-              --color-red-800: oklch(0.444 0.177 26.899);
-              --color-red-900: oklch(0.396 0.141 25.723);
-              --color-red-950: oklch(0.258 0.092 26.042);
-            }
-            @source inline("bg-red-{50,{100..900..100},950}");
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+        await compileCss(css`
+          @theme {
+            --color-red-50: oklch(0.971 0.013 17.38);
+            --color-red-100: oklch(0.936 0.032 17.717);
+            --color-red-200: oklch(0.885 0.062 18.334);
+            --color-red-300: oklch(0.808 0.114 19.571);
+            --color-red-400: oklch(0.704 0.191 22.216);
+            --color-red-500: oklch(0.637 0.237 25.331);
+            --color-red-600: oklch(0.577 0.245 27.325);
+            --color-red-700: oklch(0.505 0.213 27.518);
+            --color-red-800: oklch(0.444 0.177 26.899);
+            --color-red-900: oklch(0.396 0.141 25.723);
+            --color-red-950: oklch(0.258 0.092 26.042);
+          }
+          @source inline("bg-red-{50,{100..900..100},950}");
+          @tailwind utilities;
+        `),
       ).toMatchInlineSnapshot(`
         "
         :root, :host {
@@ -3919,18 +3911,14 @@ describe('@source', () => {
 
     test('adds multiple inline sources separated by spaces', async () => {
       expect(
-        await compileCss(
-          css`
-            @theme {
-              --color-red-100: oklch(0.936 0.032 17.717);
-              --color-red-200: oklch(0.885 0.062 18.334);
-            }
-            @source inline("block bg-red-{100..200..100}");
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+        await compileCss(css`
+          @theme {
+            --color-red-100: oklch(0.936 0.032 17.717);
+            --color-red-200: oklch(0.885 0.062 18.334);
+          }
+          @source inline("block bg-red-{100..200..100}");
+          @tailwind utilities;
+        `),
       ).toMatchInlineSnapshot(`
         "
         :root, :host {
@@ -3955,14 +3943,10 @@ describe('@source', () => {
 
     test('ignores invalid inline candidates', async () => {
       expect(
-        await compileCss(
-          css`
-            @source inline("my-cucumber");
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+        await compileCss(css`
+          @source inline("my-cucumber");
+          @tailwind utilities;
+        `),
       ).toEqual('')
     })
 
@@ -3981,7 +3965,6 @@ describe('@source', () => {
             @tailwind utilities;
           `,
           ['container'],
-          { base: '/root' },
         ),
       ).toEqual('')
     })
@@ -4007,22 +3990,17 @@ describe('@source', () => {
             @tailwind utilities;
           `,
           ['bg-red-500', 'bg-red-700'],
-          { base: '/root' },
         ),
       ).toEqual('')
     })
 
     test('works with whitespace around the argument', async () => {
       expect(
-        await compileCss(
-          css`
-            /* prettier-ignore */
-            @source inline( "underline" );
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+        await compileCss(css`
+          /* prettier-ignore */
+          @source inline( "underline" );
+          @tailwind utilities;
+        `),
       ).toMatchInlineSnapshot(`
         "
         .underline {
@@ -4034,17 +4012,13 @@ describe('@source', () => {
 
     test('works with newlines around the argument', async () => {
       expect(
-        await compileCss(
-          css`
-            /* prettier-ignore */
-            @source inline(
+        await compileCss(css`
+          /* prettier-ignore */
+          @source inline(
             "underline"
           );
-            @tailwind utilities;
-          `,
-          [],
-          { base: '/root' },
-        ),
+          @tailwind utilities;
+        `),
       ).toMatchInlineSnapshot(`
         "
         .underline {
