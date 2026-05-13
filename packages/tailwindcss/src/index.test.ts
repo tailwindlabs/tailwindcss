@@ -227,14 +227,7 @@ describe('compiling CSS', () => {
   })
 
   test('adds vendor prefixes', async () => {
-    expect(
-      await run(
-        ['[text-size-adjust:none]'],
-        css`
-          @tailwind utilities;
-        `,
-      ),
-    ).toMatchInlineSnapshot(`
+    expect(await run(['[text-size-adjust:none]'])).toMatchInlineSnapshot(`
       "
       .\\[text-size-adjust\\:none\\] {
         -webkit-text-size-adjust: none;
