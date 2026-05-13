@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '.'
-import { compileCss, run } from './test-utils/run'
+import { run } from './test-utils/run'
 import { isValidFunctionalUtilityName, isValidStaticUtilityName } from './utilities'
 
 const css = String.raw
@@ -134,15 +134,7 @@ test('position', async () => {
 
 test('inset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-auto',
         'inset-shadow-sm',
@@ -154,6 +146,14 @@ test('inset', async () => {
         '-inset-4',
         'inset-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -320,14 +320,7 @@ test('inset', async () => {
 
 test('inset-x', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-x-shadowned',
         'inset-x-auto',
@@ -338,6 +331,13 @@ test('inset-x', async () => {
         '-inset-x-4',
         'inset-x-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -380,14 +380,7 @@ test('inset-x', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px #0000000d;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-x-shadow-sm',
         'inset-x',
@@ -403,20 +396,20 @@ test('inset-x', async () => {
         '-inset-x-4/foo',
         'inset-x-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px #0000000d;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-y', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-y-shadowned',
         'inset-y-auto',
@@ -427,6 +420,13 @@ test('inset-y', async () => {
         '-inset-y-4',
         'inset-y-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -469,14 +469,7 @@ test('inset-y', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-y-shadow-sm',
         'inset-y',
@@ -492,20 +485,20 @@ test('inset-y', async () => {
         '-inset-y-4/foo',
         'inset-y-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-s', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-s-shadowned',
         'inset-s-auto',
@@ -516,6 +509,13 @@ test('inset-s', async () => {
         '-inset-s-4',
         'inset-s-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -558,14 +558,7 @@ test('inset-s', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-s-shadow-sm',
         'inset-s',
@@ -581,20 +574,20 @@ test('inset-s', async () => {
         '-inset-s-4/foo',
         'inset-s-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-e', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-e-shadowned',
         'inset-e-auto',
@@ -605,6 +598,13 @@ test('inset-e', async () => {
         '-inset-e-4',
         'inset-e-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -647,14 +647,7 @@ test('inset-e', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-e-shadow-sm',
         'inset-e',
@@ -670,20 +663,20 @@ test('inset-e', async () => {
         '-inset-e-4/foo',
         'inset-e-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-bs', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-bs-shadowned',
         'inset-bs-auto',
@@ -694,6 +687,13 @@ test('inset-bs', async () => {
         '-inset-bs-4',
         'inset-bs-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -736,14 +736,7 @@ test('inset-bs', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-bs-shadow-sm',
         'inset-bs',
@@ -759,20 +752,20 @@ test('inset-bs', async () => {
         '-inset-bs-4/foo',
         'inset-bs-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('inset-be', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-be-shadowned',
         'inset-be-auto',
@@ -783,6 +776,13 @@ test('inset-be', async () => {
         '-inset-be-4',
         'inset-be-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -825,14 +825,7 @@ test('inset-be', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inset-be-shadow-sm',
         'inset-be',
@@ -848,21 +841,20 @@ test('inset-be', async () => {
         '-inset-be-4/foo',
         'inset-be-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('top', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
-
+    await run(
       [
         'top-shadowned',
         'top-auto',
@@ -873,6 +865,13 @@ test('top', async () => {
         '-top-4',
         'top-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -915,14 +914,7 @@ test('top', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'top-shadow-sm',
         'top',
@@ -938,20 +930,20 @@ test('top', async () => {
         '-top-4/foo',
         'top-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('right', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'right-shadowned',
         'right-auto',
@@ -962,6 +954,13 @@ test('right', async () => {
         '-right-4',
         'right-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1004,14 +1003,7 @@ test('right', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'right-shadow-sm',
         'right',
@@ -1027,20 +1019,20 @@ test('right', async () => {
         '-right-4/foo',
         'right-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('bottom', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'bottom-shadowned',
         'bottom-auto',
@@ -1051,6 +1043,13 @@ test('bottom', async () => {
         '-bottom-4',
         'bottom-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1093,14 +1092,7 @@ test('bottom', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'bottom-shadow-sm',
         'bottom',
@@ -1116,20 +1108,20 @@ test('bottom', async () => {
         '-bottom-4/foo',
         'bottom-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('left', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'left-shadowned',
         'left-auto',
@@ -1143,6 +1135,13 @@ test('left', async () => {
         // https://github.com/tailwindlabs/tailwindcss/issues/20010
         '-left-[(var(--my-var1)+var(--my-var2))]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1189,14 +1188,7 @@ test('left', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing-4: 1rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'left-shadow-sm',
         'left',
@@ -1212,6 +1204,13 @@ test('left', async () => {
         '-left-4/foo',
         'left-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing-4: 1rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
@@ -1274,14 +1273,14 @@ test('z-index', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['z-auto'],
       css`
         @theme {
           --z-index-auto: 42;
         }
         @tailwind utilities;
       `,
-      ['z-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1358,14 +1357,14 @@ test('order', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['order-first'],
       css`
         @theme {
           --order-first: 1;
         }
         @tailwind utilities;
       `,
-      ['order-first'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1380,14 +1379,14 @@ test('order', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['order-last'],
       css`
         @theme {
           --order-last: -1;
         }
         @tailwind utilities;
       `,
-      ['order-last'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1466,14 +1465,14 @@ test('col', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-auto'],
       css`
         @theme {
           --grid-column-auto: 5;
         }
         @tailwind utilities;
       `,
-      ['col-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1490,13 +1489,7 @@ test('col', async () => {
 
 test('col-start', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --grid-column-start-custom: 1 column-start;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'col-start-auto',
         'col-start-4',
@@ -1505,6 +1498,12 @@ test('col-start', async () => {
         '-col-start-4',
         'col-start-custom',
       ],
+      css`
+        @theme {
+          --grid-column-start-custom: 1 column-start;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1551,14 +1550,14 @@ test('col-start', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-start-auto'],
       css`
         @theme {
           --grid-column-start-auto: 7;
         }
         @tailwind utilities;
       `,
-      ['col-start-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1575,14 +1574,14 @@ test('col-start', async () => {
 
 test('col-end', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
       css`
         @theme {
           --grid-column-end-custom: 1 column-end;
         }
         @tailwind utilities;
       `,
-      ['col-end-auto', 'col-end-4', 'col-end-99', 'col-end-[123]', '-col-end-4', 'col-end-custom'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1629,14 +1628,14 @@ test('col-end', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['col-end-auto'],
       css`
         @theme {
           --grid-column-end-auto: 3;
         }
         @tailwind utilities;
       `,
-      ['col-end-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1722,14 +1721,14 @@ test('row', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-auto'],
       css`
         @theme {
           --grid-row-auto: 9;
         }
         @tailwind utilities;
       `,
-      ['row-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1746,13 +1745,7 @@ test('row', async () => {
 
 test('row-start', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --grid-row-start-custom: 1 row-start;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'row-start-auto',
         'row-start-4',
@@ -1761,6 +1754,12 @@ test('row-start', async () => {
         '-row-start-4',
         'row-start-custom',
       ],
+      css`
+        @theme {
+          --grid-row-start-custom: 1 row-start;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1807,14 +1806,14 @@ test('row-start', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-start-auto'],
       css`
         @theme {
           --grid-row-start-auto: 11;
         }
         @tailwind utilities;
       `,
-      ['row-start-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1831,14 +1830,14 @@ test('row-start', async () => {
 
 test('row-end', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
       css`
         @theme {
           --grid-row-end-custom: 1 row-end;
         }
         @tailwind utilities;
       `,
-      ['row-end-auto', 'row-end-4', 'row-end-99', 'row-end-[123]', '-row-end-4', 'row-end-custom'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1885,14 +1884,14 @@ test('row-end', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['row-end-auto'],
       css`
         @theme {
           --grid-row-end-auto: 13;
         }
         @tailwind utilities;
       `,
-      ['row-end-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2007,14 +2006,14 @@ test('clear', async () => {
 
 test('margin', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['m-auto', 'm-4', 'm-[4px]', '-m-4', '-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2050,14 +2049,7 @@ test('margin', async () => {
 
 test('mx', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mx-auto',
         'mx-1',
@@ -2071,6 +2063,13 @@ test('mx', async () => {
         'mx-[var(--my-var)]',
         '-mx-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2138,14 +2137,7 @@ test('mx', async () => {
 
 test('my', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'my-1',
         'my-99',
@@ -2159,6 +2151,13 @@ test('my', async () => {
         'my-[var(--my-var)]',
         '-my-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2226,14 +2225,7 @@ test('my', async () => {
 
 test('mt', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mt-1',
         'mt-99',
@@ -2247,6 +2239,13 @@ test('mt', async () => {
         'mt-[var(--my-var)]',
         '-mt-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2314,14 +2313,7 @@ test('mt', async () => {
 
 test('ms', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'ms-1',
         'ms-99',
@@ -2335,6 +2327,13 @@ test('ms', async () => {
         'ms-[var(--my-var)]',
         '-ms-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2402,14 +2401,7 @@ test('ms', async () => {
 
 test('me', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'me-1',
         'me-99',
@@ -2423,6 +2415,13 @@ test('me', async () => {
         'me-[var(--my-var)]',
         '-me-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2490,14 +2489,7 @@ test('me', async () => {
 
 test('mbs', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mbs-1',
         'mbs-99',
@@ -2511,6 +2503,13 @@ test('mbs', async () => {
         'mbs-[var(--my-var)]',
         '-mbs-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2578,14 +2577,7 @@ test('mbs', async () => {
 
 test('mbe', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mbe-1',
         'mbe-99',
@@ -2599,6 +2591,13 @@ test('mbe', async () => {
         'mbe-[var(--my-var)]',
         '-mbe-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2666,14 +2665,7 @@ test('mbe', async () => {
 
 test('mr', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mr-1',
         'mr-99',
@@ -2687,6 +2679,13 @@ test('mr', async () => {
         'mr-[var(--my-var)]',
         '-mr-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2754,14 +2753,7 @@ test('mr', async () => {
 
 test('mb', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mb-1',
         'mb-99',
@@ -2775,6 +2767,13 @@ test('mb', async () => {
         'mb-[var(--my-var)]',
         '-mb-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2842,14 +2841,7 @@ test('mb', async () => {
 
 test('ml', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --spacing-big: 100rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'ml-1',
         'ml-99',
@@ -2863,6 +2855,13 @@ test('ml', async () => {
         'ml-[var(--my-var)]',
         '-ml-[var(--my-var)]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --spacing-big: 100rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2930,14 +2929,14 @@ test('ml', async () => {
 
 test('margin sort order', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['mb-4', 'me-4', 'mx-4', 'ml-4', 'ms-4', 'm-4', 'mr-4', 'mt-4', 'my-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3065,14 +3064,14 @@ test('line-clamp', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['line-clamp-none'],
       css`
         @theme {
           --line-clamp-none: 0;
         }
         @tailwind utilities;
       `,
-      ['line-clamp-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3269,14 +3268,14 @@ test('field-sizing', async () => {
 
 test('aspect-ratio', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3', 'aspect-8.5/11'],
       css`
         @theme {
           --aspect-video: 16 / 9;
         }
         @tailwind utilities;
       `,
-      ['aspect-video', 'aspect-[10/9]', 'aspect-4/3', 'aspect-8.5/11'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3321,13 +3320,7 @@ test('aspect-ratio', async () => {
 
 test('size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'size-auto',
         'size-full',
@@ -3338,6 +3331,12 @@ test('size', async () => {
         'size-1/2',
         'size-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3410,14 +3409,7 @@ test('size', async () => {
 
 test('width', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --width-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'w-full',
         'w-auto',
@@ -3433,6 +3425,13 @@ test('width', async () => {
         'w-1/2',
         'w-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --width-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3523,14 +3522,7 @@ test('width', async () => {
 
 test('min-width', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-w-full',
         'min-w-auto',
@@ -3541,6 +3533,13 @@ test('min-width', async () => {
         'min-w-xl',
         'min-w-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3601,7 +3600,8 @@ test('min-width', async () => {
 
 test('max-width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
@@ -3609,7 +3609,6 @@ test('max-width', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-w-none', 'max-w-full', 'max-w-max', 'max-w-fit', 'max-w-4', 'max-w-xl', 'max-w-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3667,13 +3666,7 @@ test('max-width', async () => {
 
 test('height', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'h-full',
         'h-auto',
@@ -3689,6 +3682,12 @@ test('height', async () => {
         'h-1/2',
         'h-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3778,13 +3777,7 @@ test('height', async () => {
 
 test('min-height', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-h-full',
         'min-h-auto',
@@ -3799,6 +3792,12 @@ test('min-height', async () => {
         'min-h-4',
         'min-h-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3878,13 +3877,7 @@ test('min-height', async () => {
 
 test('max-height', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-h-none',
         'max-h-full',
@@ -3899,6 +3892,12 @@ test('max-height', async () => {
         'max-h-4',
         'max-h-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -3979,14 +3978,7 @@ test('max-height', async () => {
 
 test('inline-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'inline-full',
         'inline-auto',
@@ -4002,6 +3994,13 @@ test('inline-size', async () => {
         'inline-1/2',
         'inline-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4091,14 +4090,7 @@ test('inline-size', async () => {
 
 test('min-inline-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-inline-full',
         'min-inline-auto',
@@ -4109,6 +4101,13 @@ test('min-inline-size', async () => {
         'min-inline-xl',
         'min-inline-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4169,14 +4168,7 @@ test('min-inline-size', async () => {
 
 test('max-inline-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-          --container-xl: 36rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-inline-none',
         'max-inline-full',
@@ -4186,6 +4178,13 @@ test('max-inline-size', async () => {
         'max-inline-xl',
         'max-inline-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+          --container-xl: 36rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4243,13 +4242,7 @@ test('max-inline-size', async () => {
 
 test('block-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'block-full',
         'block-auto',
@@ -4265,6 +4258,12 @@ test('block-size', async () => {
         'block-1/2',
         'block-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4353,13 +4352,7 @@ test('block-size', async () => {
 
 test('min-block-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'min-block-full',
         'min-block-auto',
@@ -4374,6 +4367,12 @@ test('min-block-size', async () => {
         'min-block-4',
         'min-block-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4453,13 +4452,7 @@ test('min-block-size', async () => {
 
 test('max-block-size', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-4: 1rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-block-none',
         'max-block-full',
@@ -4474,6 +4467,12 @@ test('max-block-size', async () => {
         'max-block-4',
         'max-block-[4px]',
       ],
+      css`
+        @theme {
+          --spacing-4: 1rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -4555,7 +4554,8 @@ test('max-block-size', async () => {
 describe('container', () => {
   test('creates the right media queries and sorts it before width', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
         css`
           @theme {
             --breakpoint-sm: 40rem;
@@ -4566,7 +4566,6 @@ describe('container', () => {
           }
           @tailwind utilities;
         `,
-        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4621,7 +4620,8 @@ describe('container', () => {
 
   test('sorts breakpoints based on unit and then in ascending aOrder', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['container'],
         css`
           @theme reference {
             --breakpoint-lg: 64rem;
@@ -4634,7 +4634,6 @@ describe('container', () => {
           }
           @tailwind utilities;
         `,
-        ['container'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4689,7 +4688,8 @@ describe('container', () => {
 
   test('custom `@utility container` always follow the core utility ', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
         css`
           @theme {
             --breakpoint-sm: 40rem;
@@ -4709,7 +4709,6 @@ describe('container', () => {
             }
           }
         `,
-        ['w-1/2', 'container', 'max-w-[var(--breakpoint-sm)]'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4903,14 +4902,14 @@ test('flex-grow', async () => {
 
 test('flex-basis', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
       css`
         @theme {
           --container-xl: 36rem;
         }
         @tailwind utilities;
       `,
-      ['basis-auto', 'basis-full', 'basis-xl', 'basis-11/12', 'basis-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5015,14 +5014,14 @@ test('border-collapse', async () => {
 
 test('border-spacing', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-1', 'border-spacing-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-1', 'border-spacing-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5077,14 +5076,14 @@ test('border-spacing', async () => {
 
 test('border-spacing-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-x-1', 'border-spacing-x-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5137,14 +5136,14 @@ test('border-spacing-x', async () => {
 
 test('border-spacing-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
       css`
         @theme {
           --spacing-1: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['border-spacing-y-1', 'border-spacing-y-[123px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5276,14 +5275,14 @@ test('origin', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['origin-top'],
       css`
         @theme {
           --transform-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-      ['origin-top'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5379,14 +5378,14 @@ test('perspective-origin', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['perspective-origin-top'],
       css`
         @theme {
           --perspective-origin-top: 10px 20px;
         }
         @tailwind utilities;
       `,
-      ['perspective-origin-top'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5562,14 +5561,14 @@ test('translate-x', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['translate-x-full', '-translate-x-full', 'translate-x-px', '-translate-x-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -5710,14 +5709,14 @@ test('translate-y', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
-      ['translate-y-full', '-translate-y-full', 'translate-y-px', '-translate-y-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -6901,11 +6900,11 @@ test('transform', async () => {
 
 test('zoom', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
       css`
         @tailwind utilities;
       `,
-      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -6929,7 +6928,8 @@ test('zoom', async () => {
 
 test('perspective', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
       css`
         @theme {
           --perspective-dramatic: 100px;
@@ -6937,7 +6937,6 @@ test('perspective', async () => {
         }
         @tailwind utilities;
       `,
-      ['perspective-normal', 'perspective-dramatic', 'perspective-none', 'perspective-[456px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -6977,14 +6976,14 @@ test('perspective', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['perspective-none'],
       css`
         @theme {
           --perspective-none: 400px;
         }
         @tailwind utilities;
       `,
-      ['perspective-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7001,13 +7000,7 @@ test('perspective', async () => {
 
 test('cursor', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --cursor-custom: url(/my-cursor.png);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'cursor-auto',
         'cursor-default',
@@ -7048,6 +7041,12 @@ test('cursor', async () => {
         'cursor-[var(--value)]',
         'cursor-custom',
       ],
+      css`
+        @theme {
+          --cursor-custom: url(/my-cursor.png);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7648,14 +7647,14 @@ test('scroll-snap-stop', async () => {
 
 test('scroll-m', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-m-4', 'scroll-m-[4px]', '-scroll-m-4', '-scroll-m-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7693,14 +7692,14 @@ test('scroll-m', async () => {
 
 test('scroll-mx', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mx-4', 'scroll-mx-[4px]', '-scroll-mx-4', '-scroll-mx-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7738,14 +7737,14 @@ test('scroll-mx', async () => {
 
 test('scroll-my', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-my-4', 'scroll-my-[4px]', '-scroll-my-4', '-scroll-my-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7783,14 +7782,14 @@ test('scroll-my', async () => {
 
 test('scroll-ms', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ms-4', 'scroll-ms-[4px]', '-scroll-ms-4', '-scroll-ms-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7828,14 +7827,14 @@ test('scroll-ms', async () => {
 
 test('scroll-me', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-me-4', 'scroll-me-[4px]', '-scroll-me-4', '-scroll-me-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7873,14 +7872,14 @@ test('scroll-me', async () => {
 
 test('scroll-mbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mbs-4', 'scroll-mbs-[4px]', '-scroll-mbs-4', '-scroll-mbs-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7918,14 +7917,14 @@ test('scroll-mbs', async () => {
 
 test('scroll-mbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mbe-4', 'scroll-mbe-[4px]', '-scroll-mbe-4', '-scroll-mbe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -7963,14 +7962,14 @@ test('scroll-mbe', async () => {
 
 test('scroll-mt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mt-4', 'scroll-mt-[4px]', '-scroll-mt-4', '-scroll-mt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8008,14 +8007,14 @@ test('scroll-mt', async () => {
 
 test('scroll-mr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mr-4', 'scroll-mr-[4px]', '-scroll-mr-4', '-scroll-mr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8053,14 +8052,14 @@ test('scroll-mr', async () => {
 
 test('scroll-mb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-mb-4', 'scroll-mb-[4px]', '-scroll-mb-4', '-scroll-mb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8098,14 +8097,14 @@ test('scroll-mb', async () => {
 
 test('scroll-ml', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ml-4', 'scroll-ml-[4px]', '-scroll-ml-4', '-scroll-ml-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8143,14 +8142,14 @@ test('scroll-ml', async () => {
 
 test('scroll-p', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-p-4', 'scroll-p-[4px]', '-scroll-p-4', '-scroll-p-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8180,14 +8179,14 @@ test('scroll-p', async () => {
 
 test('scroll-px', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-px-4', 'scroll-px-[4px]', '-scroll-px-4', '-scroll-px-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8217,14 +8216,14 @@ test('scroll-px', async () => {
 
 test('scroll-py', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-py-4', 'scroll-py-[4px]', '-scroll-py-4', '-scroll-py-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8254,14 +8253,14 @@ test('scroll-py', async () => {
 
 test('scroll-ps', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-ps-4', 'scroll-ps-[4px]', '-scroll-ps-4', '-scroll-ps-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8291,14 +8290,14 @@ test('scroll-ps', async () => {
 
 test('scroll-pe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pe-4', 'scroll-pe-[4px]', '-scroll-pe-4', '-scroll-pe-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8328,14 +8327,14 @@ test('scroll-pe', async () => {
 
 test('scroll-pbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pbs-4', 'scroll-pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8365,14 +8364,14 @@ test('scroll-pbs', async () => {
 
 test('scroll-pbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pbe-4', 'scroll-pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8402,14 +8401,14 @@ test('scroll-pbe', async () => {
 
 test('scroll-pt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pt-4', 'scroll-pt-[4px]', '-scroll-pt-4', '-scroll-pt-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8439,14 +8438,14 @@ test('scroll-pt', async () => {
 
 test('scroll-pr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pr-4', 'scroll-pr-[4px]', '-scroll-pr-4', '-scroll-pr-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8476,14 +8475,14 @@ test('scroll-pr', async () => {
 
 test('scroll-pb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pb-4', 'scroll-pb-[4px]', '-scroll-pb-4', '-scroll-pb-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8513,14 +8512,14 @@ test('scroll-pb', async () => {
 
 test('scroll-pl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['scroll-pl-4', 'scroll-pl-[4px]', '-scroll-pl-4', '-scroll-pl-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8600,14 +8599,14 @@ test('list', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['list-none'],
       css`
         @theme {
           --list-style-type-none: disc;
         }
         @tailwind utilities;
       `,
-      ['list-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8645,14 +8644,14 @@ test('list-image', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['list-image-none'],
       css`
         @theme {
           --list-style-image-none: url(../foo.png);
         }
         @tailwind utilities;
       `,
-      ['list-image-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8741,14 +8740,7 @@ test('color-scheme', async () => {
 
 test('columns', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --container-3xs: 16rem;
-          --container-7xl: 80rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'columns-auto',
         'columns-3xs',
@@ -8758,6 +8750,13 @@ test('columns', async () => {
         'columns-[123]',
         'columns-[var(--value)]',
       ],
+      css`
+        @theme {
+          --container-3xs: 16rem;
+          --container-7xl: 80rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -8814,14 +8813,14 @@ test('columns', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['columns-auto'],
       css`
         @theme {
           --columns-auto: 3;
         }
         @tailwind utilities;
       `,
-      ['columns-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9064,14 +9063,14 @@ test('auto-cols', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['auto-cols-auto'],
       css`
         @theme {
           --grid-auto-columns-auto: 2fr;
         }
         @tailwind utilities;
       `,
-      ['auto-cols-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9181,14 +9180,14 @@ test('auto-rows', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['auto-rows-auto'],
       css`
         @theme {
           --grid-auto-rows-auto: 2fr;
         }
         @tailwind utilities;
       `,
-      ['auto-rows-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9254,14 +9253,14 @@ test('grid-cols', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['grid-cols-none'],
       css`
         @theme {
           --grid-template-columns-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-      ['grid-cols-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9327,14 +9326,14 @@ test('grid-rows', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['grid-rows-none'],
       css`
         @theme {
           --grid-template-rows-none: 200px 1fr;
         }
         @tailwind utilities;
       `,
-      ['grid-rows-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9838,14 +9837,14 @@ test('justify-items', async () => {
 
 test('gap', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-4', 'gap-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-4', 'gap-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9867,14 +9866,14 @@ test('gap', async () => {
 
 test('gap-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-x-4', 'gap-x-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-x-4', 'gap-x-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9898,14 +9897,14 @@ test('gap-x', async () => {
 
 test('gap-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['gap-y-4', 'gap-y-[4px]'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['gap-y-4', 'gap-y-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9929,14 +9928,14 @@ test('gap-y', async () => {
 
 test('space-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -9982,14 +9981,14 @@ test('space-x', async () => {
 
 test('space-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
       css`
         @theme {
           --spacing-4: 1rem;
         }
         @tailwind utilities;
       `,
-      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10085,11 +10084,11 @@ test('space-y-reverse', async () => {
 
 test('divide-x', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
       css`
         @tailwind utilities;
       `,
-      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10160,14 +10159,14 @@ test('divide-x', async () => {
 
 test('divide-x with custom default border width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['divide-x'],
       css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['divide-x'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10205,11 +10204,11 @@ test('divide-x with custom default border width', async () => {
 
 test('divide-y', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
       css`
         @tailwind utilities;
       `,
-      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10284,14 +10283,14 @@ test('divide-y', async () => {
 
 test('divide-y with custom default border width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['divide-y'],
       css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['divide-y'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10428,14 +10427,7 @@ test('divide-style', async () => {
 
 test('accent', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --accent-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'accent-red-500',
         'accent-red-500/50',
@@ -10456,6 +10448,13 @@ test('accent', async () => {
         'accent-[#0088cc]/[0.5]',
         'accent-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --accent-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10618,14 +10617,7 @@ test('accent', async () => {
 
 test('caret', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --caret-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'caret-red-500',
         'caret-red-500/50',
@@ -10646,6 +10638,13 @@ test('caret', async () => {
         'caret-[#0088cc]/[0.5]',
         'caret-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --caret-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -10806,14 +10805,7 @@ test('caret', async () => {
 
 test('divide-color', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --border-color-best-blue: #6495ed;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'divide-red-500',
         'divide-red-500/50',
@@ -10834,6 +10826,13 @@ test('divide-color', async () => {
         'divide-[#0088cc]/[0.5]',
         'divide-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --border-color-best-blue: #6495ed;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -11499,13 +11498,7 @@ test('scrollbar-gutter', async () => {
 
 test('scrollbar-thumb', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'scrollbar-thumb-red-500',
         'scrollbar-thumb-red-500/50',
@@ -11516,6 +11509,12 @@ test('scrollbar-thumb', async () => {
         'scrollbar-thumb-[#0088cc]',
         'scrollbar-thumb-[#0088cc]/50',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -11616,13 +11615,7 @@ test('scrollbar-thumb', async () => {
 
 test('scrollbar-track', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'scrollbar-track-red-500',
         'scrollbar-track-red-500/50',
@@ -11633,6 +11626,12 @@ test('scrollbar-track', async () => {
         'scrollbar-track-[#0088cc]',
         'scrollbar-track-[#0088cc]/50',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -11983,7 +11982,8 @@ test('overflow-wrap', async () => {
 
 test('rounded', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
       css`
         @theme {
           --radius-sm: 0.125rem;
@@ -11991,7 +11991,6 @@ test('rounded', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded', 'rounded-full', 'rounded-none', 'rounded-sm', 'rounded-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12022,14 +12021,14 @@ test('rounded', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['rounded-full'],
       css`
         @theme {
           --radius-full: 99999px;
         }
         @tailwind utilities;
       `,
-      ['rounded-full'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12060,7 +12059,8 @@ test('rounded', async () => {
 
 test('rounded-s', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12070,7 +12070,6 @@ test('rounded-s', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-s', 'rounded-s-full', 'rounded-s-none', 'rounded-s-sm', 'rounded-s-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12125,7 +12124,8 @@ test('rounded-s', async () => {
 
 test('rounded-e', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12135,7 +12135,6 @@ test('rounded-e', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-e', 'rounded-e-full', 'rounded-e-none', 'rounded-e-sm', 'rounded-e-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12190,7 +12189,8 @@ test('rounded-e', async () => {
 
 test('rounded-t', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12200,7 +12200,6 @@ test('rounded-t', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-t', 'rounded-t-full', 'rounded-t-none', 'rounded-t-sm', 'rounded-t-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12255,7 +12254,8 @@ test('rounded-t', async () => {
 
 test('rounded-r', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12265,7 +12265,6 @@ test('rounded-r', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-r', 'rounded-r-full', 'rounded-r-none', 'rounded-r-sm', 'rounded-r-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12320,7 +12319,8 @@ test('rounded-r', async () => {
 
 test('rounded-b', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12330,7 +12330,6 @@ test('rounded-b', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-b', 'rounded-b-full', 'rounded-b-none', 'rounded-b-sm', 'rounded-b-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12385,7 +12384,8 @@ test('rounded-b', async () => {
 
 test('rounded-l', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12395,7 +12395,6 @@ test('rounded-l', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-l', 'rounded-l-full', 'rounded-l-none', 'rounded-l-sm', 'rounded-l-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12450,7 +12449,8 @@ test('rounded-l', async () => {
 
 test('rounded-ss', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12460,7 +12460,6 @@ test('rounded-ss', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ss', 'rounded-ss-full', 'rounded-ss-none', 'rounded-ss-sm', 'rounded-ss-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12510,7 +12509,8 @@ test('rounded-ss', async () => {
 
 test('rounded-se', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12520,7 +12520,6 @@ test('rounded-se', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-se', 'rounded-se-full', 'rounded-se-none', 'rounded-se-sm', 'rounded-se-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12570,7 +12569,8 @@ test('rounded-se', async () => {
 
 test('rounded-ee', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12580,7 +12580,6 @@ test('rounded-ee', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-ee', 'rounded-ee-full', 'rounded-ee-none', 'rounded-ee-sm', 'rounded-ee-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12630,7 +12629,8 @@ test('rounded-ee', async () => {
 
 test('rounded-es', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12640,7 +12640,6 @@ test('rounded-es', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-es', 'rounded-es-full', 'rounded-es-none', 'rounded-es-sm', 'rounded-es-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12690,7 +12689,8 @@ test('rounded-es', async () => {
 
 test('rounded-tl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12700,7 +12700,6 @@ test('rounded-tl', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tl', 'rounded-tl-full', 'rounded-tl-none', 'rounded-tl-sm', 'rounded-tl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12750,7 +12749,8 @@ test('rounded-tl', async () => {
 
 test('rounded-tr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12760,7 +12760,6 @@ test('rounded-tr', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-tr', 'rounded-tr-full', 'rounded-tr-none', 'rounded-tr-sm', 'rounded-tr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12810,7 +12809,8 @@ test('rounded-tr', async () => {
 
 test('rounded-br', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12820,7 +12820,6 @@ test('rounded-br', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-br', 'rounded-br-full', 'rounded-br-none', 'rounded-br-sm', 'rounded-br-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -12870,7 +12869,8 @@ test('rounded-br', async () => {
 
 test('rounded-bl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
       css`
         @theme {
           --radius-none: 0px;
@@ -12880,7 +12880,6 @@ test('rounded-bl', async () => {
         }
         @tailwind utilities;
       `,
-      ['rounded-bl', 'rounded-bl-full', 'rounded-bl-none', 'rounded-bl-sm', 'rounded-bl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -13049,7 +13048,8 @@ for (let prefix of prefixes) {
     classes.push(`${prefix}-[color:var(--my-color)]/50`)
 
     expect(
-      await compileCss(
+      await run(
+        classes,
         css`
           @theme {
             --radius-none: 0px;
@@ -13060,7 +13060,6 @@ for (let prefix of prefixes) {
           }
           @tailwind utilities;
         `,
-        classes,
       ),
     ).toMatchSnapshot()
 
@@ -13086,14 +13085,14 @@ for (let prefix of prefixes) {
 
 test('border with custom default border width', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['border'],
       css`
         @theme {
           --default-border-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['border'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -13122,14 +13121,7 @@ test('border with custom default border width', async () => {
 
 test('bg', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --background-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // background-color
         'bg-red-500',
@@ -13271,6 +13263,13 @@ test('bg', async () => {
         'bg-repeat-round',
         'bg-repeat-space',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --background-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -14188,7 +14187,8 @@ test('bg', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
       css`
         @theme reference {
           --opacity-half: 0.5;
@@ -14196,7 +14196,6 @@ test('bg', async () => {
         }
         @tailwind utilities;
       `,
-      ['bg-current/half', 'bg-current/custom', '[color:red]/half'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -14235,14 +14234,14 @@ test('bg', async () => {
 
 test('bg-position', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['bg-position-[120px]', 'bg-position-[120px_120px]', 'bg-position-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -14276,14 +14275,14 @@ test('bg-position', async () => {
 
 test('bg-size', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['bg-size-[120px]', 'bg-size-[120px_120px]', 'bg-size-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -14317,13 +14316,7 @@ test('bg-size', async () => {
 
 test('from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // --tw-gradient-from
         'from-red-500',
@@ -14358,6 +14351,12 @@ test('from', async () => {
         'from-[length:var(--my-position)]',
         'from-[percentage:var(--my-position)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -14702,13 +14701,7 @@ test('from', async () => {
 
 test('via', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // --tw-gradient-stops
         'via-red-500',
@@ -14743,6 +14736,12 @@ test('via', async () => {
         'via-[length:var(--my-position)]',
         'via-[percentage:var(--my-position)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15105,13 +15104,7 @@ test('via', async () => {
 
 test('to', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // --tw-gradient-to
         'to-red-500',
@@ -15146,6 +15139,12 @@ test('to', async () => {
         'to-[length:var(--my-position)]',
         'to-[percentage:var(--my-position)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15488,13 +15487,7 @@ test('to', async () => {
 
 test('mask', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // mask-image
         'mask-none',
@@ -15552,6 +15545,12 @@ test('mask', async () => {
         'mask-repeat-round',
         'mask-repeat-space',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15841,7 +15840,8 @@ test('mask', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['mask-current/half', 'mask-current/custom', '[color:red]/half'],
       css`
         @theme reference {
           --opacity-half: 0.5;
@@ -15849,7 +15849,6 @@ test('mask', async () => {
         }
         @tailwind utilities;
       `,
-      ['mask-current/half', 'mask-current/custom', '[color:red]/half'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15868,14 +15867,14 @@ test('mask', async () => {
 
 test('mask-position', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mask-position-[120px]', 'mask-position-[120px_120px]', 'mask-position-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['mask-position-[120px]', 'mask-position-[120px_120px]', 'mask-position-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15913,14 +15912,14 @@ test('mask-position', async () => {
 
 test('mask-size', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mask-size-[120px]', 'mask-size-[120px_120px]', 'mask-size-[var(--some-var)]'],
       css`
         @theme {
           --color-red-500: #ef4444;
         }
         @tailwind utilities;
       `,
-      ['mask-size-[120px]', 'mask-size-[120px_120px]', 'mask-size-[var(--some-var)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -15958,13 +15957,7 @@ test('mask-size', async () => {
 
 test('mask-t-from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-t-from-0',
         'mask-t-from-1.5',
@@ -15977,6 +15970,12 @@ test('mask-t-from', async () => {
         'mask-t-from-(color:--my-var)',
         'mask-t-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16178,13 +16177,7 @@ test('mask-t-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-t-from',
         'mask-t-from-2.8175',
@@ -16215,19 +16208,19 @@ test('mask-t-from', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-t-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-t-to', async () => {
+  expect(
+    await run(
       [
         'mask-t-to-0',
         'mask-t-to-1.5',
@@ -16240,6 +16233,12 @@ test('mask-t-to', async () => {
         'mask-t-to-(color:--my-var)',
         'mask-t-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16441,13 +16440,7 @@ test('mask-t-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-t-to',
         'mask-t-to-2.8175',
@@ -16478,19 +16471,19 @@ test('mask-t-to', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-r-from', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-r-from', async () => {
+  expect(
+    await run(
       [
         'mask-r-from-0',
         'mask-r-from-1.5',
@@ -16504,6 +16497,12 @@ test('mask-r-from', async () => {
         'mask-r-from-(color:--my-var)',
         'mask-r-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16705,13 +16704,7 @@ test('mask-r-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-from',
         'mask-r-from-2.8175',
@@ -16742,19 +16735,19 @@ test('mask-r-from', async () => {
         '-mask-r-from-[25%]/foo',
         '-mask-r-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-r-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-r-to', async () => {
+  expect(
+    await run(
       [
         'mask-r-to-0',
         'mask-r-to-1.5',
@@ -16768,6 +16761,12 @@ test('mask-r-to', async () => {
         'mask-r-to-(color:--my-var)',
         'mask-r-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16969,13 +16968,7 @@ test('mask-r-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-r-to',
         'mask-r-to-2.8175',
@@ -17006,19 +16999,19 @@ test('mask-r-to', async () => {
         '-mask-r-to-[25%]/foo',
         '-mask-r-to-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-b-from', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-b-from', async () => {
+  expect(
+    await run(
       [
         'mask-b-from-0',
         'mask-b-from-1.5',
@@ -17032,6 +17025,12 @@ test('mask-b-from', async () => {
         'mask-b-from-(color:--my-var)',
         'mask-b-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17233,13 +17232,7 @@ test('mask-b-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-b-from',
         'mask-b-from-2.8175',
@@ -17270,19 +17263,19 @@ test('mask-b-from', async () => {
         '-mask-b-from-[25%]/foo',
         '-mask-b-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-b-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-b-to', async () => {
+  expect(
+    await run(
       [
         'mask-b-to-0',
         'mask-b-to-1.5',
@@ -17296,6 +17289,12 @@ test('mask-b-to', async () => {
         'mask-b-to-(color:--my-var)',
         'mask-b-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17497,13 +17496,7 @@ test('mask-b-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-b-to',
         'mask-b-to-2.8175',
@@ -17534,19 +17527,19 @@ test('mask-b-to', async () => {
         '-mask-b-to-[25%]/foo',
         '-mask-b-to-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-l-from', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-l-from', async () => {
+  expect(
+    await run(
       [
         'mask-l-from-0',
         'mask-l-from-1.5',
@@ -17560,6 +17553,12 @@ test('mask-l-from', async () => {
         'mask-l-from-(color:--my-var)',
         'mask-l-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17761,13 +17760,7 @@ test('mask-l-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-l-from',
         'mask-l-from-2.8175',
@@ -17798,19 +17791,19 @@ test('mask-l-from', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-l-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-l-to', async () => {
+  expect(
+    await run(
       [
         'mask-l-to-0',
         'mask-l-to-1.5',
@@ -17824,6 +17817,12 @@ test('mask-l-to', async () => {
         'mask-l-to-(color:--my-var)',
         'mask-l-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18025,13 +18024,7 @@ test('mask-l-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-l-to',
         'mask-l-to-2.8175',
@@ -18062,19 +18055,19 @@ test('mask-l-to', async () => {
         '-mask-l-to-[25%]/foo',
         '-mask-l-to-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-x-from', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-x-from', async () => {
+  expect(
+    await run(
       [
         'mask-x-from-0',
         'mask-x-from-1.5',
@@ -18088,6 +18081,12 @@ test('mask-x-from', async () => {
         'mask-x-from-(color:--my-var)',
         'mask-x-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18335,13 +18334,7 @@ test('mask-x-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-x-from',
         'mask-x-from-2.8175',
@@ -18372,19 +18365,19 @@ test('mask-x-from', async () => {
         '-mask-x-from-[25%]/foo',
         '-mask-x-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-x-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-x-to', async () => {
+  expect(
+    await run(
       [
         'mask-x-to-0',
         'mask-x-to-1.5',
@@ -18398,6 +18391,12 @@ test('mask-x-to', async () => {
         'mask-x-to-(color:--my-var)',
         'mask-x-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18645,13 +18644,7 @@ test('mask-x-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-x-to',
         'mask-x-to-2.8175',
@@ -18682,19 +18675,19 @@ test('mask-x-to', async () => {
         '-mask-x-to-[25%]/foo',
         '-mask-x-to-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-y-from', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-y-from', async () => {
+  expect(
+    await run(
       [
         'mask-y-from-0',
         'mask-y-from-1.5',
@@ -18708,6 +18701,12 @@ test('mask-y-from', async () => {
         'mask-y-from-(color:--my-var)',
         'mask-y-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18955,13 +18954,7 @@ test('mask-y-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-y-from',
         'mask-y-from-2.8175',
@@ -18992,19 +18985,19 @@ test('mask-y-from', async () => {
         '-mask-y-from-[25%]/foo',
         '-mask-y-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-y-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-y-to', async () => {
+  expect(
+    await run(
       [
         'mask-y-to-0',
         'mask-y-to-1.5',
@@ -19018,6 +19011,12 @@ test('mask-y-to', async () => {
         'mask-y-to-(color:--my-var)',
         'mask-y-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19265,13 +19264,7 @@ test('mask-y-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-y-to',
         'mask-y-to-2.8175',
@@ -19302,17 +19295,23 @@ test('mask-y-to', async () => {
         '-mask-y-to-[25%]/foo',
         '-mask-y-to-[-25%]/foo',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('mask-linear', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45'],
       css`
         @tailwind utilities;
       `,
-      ['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19434,13 +19433,7 @@ test('mask-linear', async () => {
 
 test('mask-linear-from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-linear-from-0',
         'mask-linear-from-1.5',
@@ -19454,6 +19447,12 @@ test('mask-linear-from', async () => {
         'mask-linear-from-(color:--my-var)',
         'mask-linear-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19634,13 +19633,7 @@ test('mask-linear-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-linear-from',
         'mask-linear-from-2.8175',
@@ -19671,19 +19664,19 @@ test('mask-linear-from', async () => {
         '-mask-linear-from-[25%]/foo',
         '-mask-linear-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-linear-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-linear-to', async () => {
+  expect(
+    await run(
       [
         'mask-linear-to-0',
         'mask-linear-to-1.5',
@@ -19697,6 +19690,12 @@ test('mask-linear-to', async () => {
         'mask-linear-to-(color:--my-var)',
         'mask-linear-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19877,13 +19876,7 @@ test('mask-linear-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-linear-to',
         'mask-linear-to-2.8175',
@@ -19914,16 +19907,19 @@ test('mask-linear-to', async () => {
         '-mask-linear-to-[25%]/foo',
         '-mask-linear-to-[-25%]/foo',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('mask-radial', async () => {
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-circle',
         'mask-ellipse',
@@ -19933,6 +19929,9 @@ test('mask-radial', async () => {
         'mask-radial-farthest-corner',
         'mask-radial-[25%_25%]',
       ],
+      css`
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20071,13 +20070,7 @@ test('mask-radial', async () => {
 
 test('mask-radial-at', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-radial-at-top',
         'mask-radial-at-top-left',
@@ -20089,6 +20082,12 @@ test('mask-radial-at', async () => {
         'mask-radial-at-right',
         'mask-radial-at-[25%]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20172,13 +20171,7 @@ test('mask-radial-at', async () => {
 
 test('mask-radial-from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-radial-from-0',
         'mask-radial-from-1.5',
@@ -20192,6 +20185,12 @@ test('mask-radial-from', async () => {
         'mask-radial-from-(color:--my-var)',
         'mask-radial-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20386,13 +20385,7 @@ test('mask-radial-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-radial-from',
         'mask-radial-from-2.8175',
@@ -20423,19 +20416,19 @@ test('mask-radial-from', async () => {
         '-mask-radial-from-[25%]/foo',
         '-mask-radial-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-radial-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-radial-to', async () => {
+  expect(
+    await run(
       [
         'mask-radial-to-0',
         'mask-radial-to-1.5',
@@ -20449,6 +20442,12 @@ test('mask-radial-to', async () => {
         'mask-radial-to-(color:--my-var)',
         'mask-radial-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20643,13 +20642,7 @@ test('mask-radial-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-radial-to',
         'mask-radial-to-2.8175',
@@ -20680,17 +20673,23 @@ test('mask-radial-to', async () => {
         '-mask-radial-to-[25%]/foo',
         '-mask-radial-to-[-25%]/foo',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('mask-conic', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
       css`
         @tailwind utilities;
       `,
-      ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20812,13 +20811,7 @@ test('mask-conic', async () => {
 
 test('mask-conic-from', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-conic-from-0',
         'mask-conic-from-1.5',
@@ -20832,6 +20825,12 @@ test('mask-conic-from', async () => {
         'mask-conic-from-(color:--my-var)',
         'mask-conic-from-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -21012,13 +21011,7 @@ test('mask-conic-from', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-conic-from',
         'mask-conic-from-2.8175',
@@ -21049,19 +21042,19 @@ test('mask-conic-from', async () => {
         '-mask-conic-from-[25%]/foo',
         '-mask-conic-from-[-25%]/foo',
       ],
-    ),
-  ).toEqual('')
-})
-
-test('mask-conic-to', async () => {
-  expect(
-    await compileCss(
       css`
         @theme {
           --spacing: 0.25rem;
         }
         @tailwind utilities;
       `,
+    ),
+  ).toEqual('')
+})
+
+test('mask-conic-to', async () => {
+  expect(
+    await run(
       [
         'mask-conic-to-0',
         'mask-conic-to-1.5',
@@ -21075,6 +21068,12 @@ test('mask-conic-to', async () => {
         'mask-conic-to-(color:--my-var)',
         'mask-conic-to-(length:--my-var)',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -21255,13 +21254,7 @@ test('mask-conic-to', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mask-conic-to',
         'mask-conic-to-2.8175',
@@ -21292,6 +21285,12 @@ test('mask-conic-to', async () => {
         '-mask-conic-to-[25%]/foo',
         '-mask-conic-to-[-25%]/foo',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
@@ -21788,14 +21787,7 @@ test('mix-blend', async () => {
 
 test('fill', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --fill-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'fill-red-500',
         'fill-red-500/50',
@@ -21816,6 +21808,13 @@ test('fill', async () => {
         'fill-[#0088cc]/[0.5]',
         'fill-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --fill-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -21963,14 +21962,7 @@ test('fill', async () => {
 
 test('stroke', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --stroke-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Color
         'stroke-red-500',
@@ -22012,6 +22004,13 @@ test('stroke', async () => {
         'stroke-[length:var(--my-width)]',
         'stroke-[percentage:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --stroke-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22395,14 +22394,14 @@ test('object', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['object-center'],
       css`
         @theme {
           --object-position-center: top left;
         }
         @tailwind utilities;
       `,
-      ['object-center'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22419,7 +22418,8 @@ test('object', async () => {
 
 test('p', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22427,7 +22427,6 @@ test('p', async () => {
         }
         @tailwind utilities;
       `,
-      ['p-1', 'p-4', 'p-99', 'p-big', 'p-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22462,7 +22461,8 @@ test('p', async () => {
 
 test('px', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22470,7 +22470,6 @@ test('px', async () => {
         }
         @tailwind utilities;
       `,
-      ['px-1', 'px-99', 'px-2.5', 'px-big', 'px-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22505,7 +22504,8 @@ test('px', async () => {
 
 test('py', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22513,7 +22513,6 @@ test('py', async () => {
         }
         @tailwind utilities;
       `,
-      ['py-1', 'py-4', 'py-99', 'py-big', 'py-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22548,7 +22547,8 @@ test('py', async () => {
 
 test('pt', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22556,7 +22556,6 @@ test('pt', async () => {
         }
         @tailwind utilities;
       `,
-      ['pt-1', 'pt-4', 'pt-99', 'pt-big', 'pt-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22591,7 +22590,8 @@ test('pt', async () => {
 
 test('ps', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22599,7 +22599,6 @@ test('ps', async () => {
         }
         @tailwind utilities;
       `,
-      ['ps-1', 'ps-4', 'ps-99', 'ps-big', 'ps-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22634,7 +22633,8 @@ test('ps', async () => {
 
 test('pe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22642,7 +22642,6 @@ test('pe', async () => {
         }
         @tailwind utilities;
       `,
-      ['pe-1', 'pe-4', 'pe-99', 'pe-big', 'pe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22677,7 +22676,8 @@ test('pe', async () => {
 
 test('pbs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22685,7 +22685,6 @@ test('pbs', async () => {
         }
         @tailwind utilities;
       `,
-      ['pbs-1', 'pbs-4', 'pbs-99', 'pbs-big', 'pbs-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22720,7 +22719,8 @@ test('pbs', async () => {
 
 test('pbe', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22728,7 +22728,6 @@ test('pbe', async () => {
         }
         @tailwind utilities;
       `,
-      ['pbe-1', 'pbe-4', 'pbe-99', 'pbe-big', 'pbe-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22763,7 +22762,8 @@ test('pbe', async () => {
 
 test('pr', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22771,7 +22771,6 @@ test('pr', async () => {
         }
         @tailwind utilities;
       `,
-      ['pr-1', 'pr-4', 'pr-99', 'pr-big', 'pr-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22806,7 +22805,8 @@ test('pr', async () => {
 
 test('pb', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22814,7 +22814,6 @@ test('pb', async () => {
         }
         @tailwind utilities;
       `,
-      ['pb-1', 'pb-4', 'pb-99', 'pb-big', 'pb-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -22849,7 +22848,8 @@ test('pb', async () => {
 
 test('pl', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
       css`
         @theme {
           --spacing: 0.25rem;
@@ -22857,7 +22857,6 @@ test('pl', async () => {
         }
         @tailwind utilities;
       `,
-      ['pl-1', 'pl-4', 'pl-99', 'pl-big', 'pl-[4px]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23035,16 +23034,7 @@ test('align', async () => {
 
 test('font', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --font-sans:
-            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-            'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-weight-bold: 650;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // font-family
         'font-sans',
@@ -23059,6 +23049,15 @@ test('font', async () => {
         'font-[100]',
         'font-[number:var(--my-weight)]',
       ],
+      css`
+        @theme {
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23119,16 +23118,7 @@ test('font', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --font-sans:
-            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-            'Segoe UI Symbol', 'Noto Color Emoji';
-          --font-weight-bold: 650;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'font',
         // font-family
@@ -23148,6 +23138,15 @@ test('font', async () => {
         'font-[100]/foo',
         'font-[number:var(--my-weight)]/foo',
       ],
+      css`
+        @theme reference {
+          --font-sans:
+            ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+            'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-weight-bold: 650;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
@@ -23307,13 +23306,7 @@ test('text-decoration-line', async () => {
 
 test('placeholder', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'placeholder-red-500',
         'placeholder-red-500/50',
@@ -23333,6 +23326,12 @@ test('placeholder', async () => {
         'placeholder-[#0088cc]/[0.5]',
         'placeholder-[#0088cc]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23474,14 +23473,7 @@ test('placeholder', async () => {
 
 test('decoration', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --text-decoration-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // text-decoration-color
         'decoration-red-500',
@@ -23528,6 +23520,13 @@ test('decoration', async () => {
         'decoration-[length:var(--my-thickness)]',
         'decoration-[percentage:var(--my-thickness)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --text-decoration-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23840,14 +23839,14 @@ test('decoration', async () => {
 
 test('animate', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
       css`
         @theme {
           --animate-spin: spin 1s linear infinite;
         }
         @tailwind utilities;
       `,
-      ['animate-spin', 'animate-none', 'animate-[bounce_1s_infinite]', 'animate-not-found'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23883,14 +23882,14 @@ test('animate', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['animate-none'],
       css`
         @theme {
           --animate-none: bounce 1s infinite;
         }
         @tailwind utilities;
       `,
-      ['animate-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -23907,19 +23906,7 @@ test('animate', async () => {
 
 test('filter', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --blur-xl: 24px;
-          --color-red-500: #ef4444;
-          --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
-          --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
-        }
-        @theme inline {
-          --drop-shadow-multi: 0 1px 1px rgb(0 0 0 / 0.05), 0 9px 7px rgb(0 0 0 / 0.1);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'filter',
         'filter-none',
@@ -23958,6 +23945,18 @@ test('filter', async () => {
         'sepia-[50%]',
         'sepia-[var(--value)]',
       ],
+      css`
+        @theme {
+          --blur-xl: 24px;
+          --color-red-500: #ef4444;
+          --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+          --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
+        }
+        @theme inline {
+          --drop-shadow-multi: 0 1px 1px rgb(0 0 0 / 0.05), 0 9px 7px rgb(0 0 0 / 0.1);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -24336,14 +24335,14 @@ test('filter', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['blur-none'],
       css`
         @theme {
           --blur-none: 2px;
         }
         @tailwind utilities;
       `,
-      ['blur-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -24447,13 +24446,7 @@ test('filter', async () => {
 
 test('backdrop-filter', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --blur-xl: 24px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'backdrop-filter',
         'backdrop-filter-none',
@@ -24489,6 +24482,12 @@ test('backdrop-filter', async () => {
         'backdrop-sepia-[50%]',
         'backdrop-sepia-[var(--value)]',
       ],
+      css`
+        @theme {
+          --blur-xl: 24px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -24827,14 +24826,14 @@ test('backdrop-filter', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['backdrop-blur-none'],
       css`
         @theme {
           --backdrop-blur-none: 2px;
         }
         @tailwind utilities;
       `,
-      ['backdrop-blur-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -24914,7 +24913,17 @@ test('backdrop-filter', async () => {
 
 test('transition', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'transition',
+        'transition-none',
+        'transition-all',
+        'transition-transform',
+        'transition-shadow',
+        'transition-colors',
+        'transition-opacity',
+        'transition-[var(--value)]',
+      ],
       css`
         @theme {
           --default-transition-timing-function: ease;
@@ -24926,16 +24935,6 @@ test('transition', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'transition',
-        'transition-none',
-        'transition-all',
-        'transition-transform',
-        'transition-shadow',
-        'transition-colors',
-        'transition-opacity',
-        'transition-[var(--value)]',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -24994,7 +24993,8 @@ test('transition', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['transition', 'transition-all', 'transition-colors'],
       css`
         @theme inline {
           --default-transition-timing-function: ease;
@@ -25002,7 +25002,6 @@ test('transition', async () => {
         }
         @tailwind utilities;
       `,
-      ['transition', 'transition-all', 'transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25027,11 +25026,11 @@ test('transition', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['transition-all'],
       css`
         @tailwind utilities;
       `,
-      ['transition-all'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25062,14 +25061,14 @@ test('transition', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['transition-colors'],
       css`
         @theme {
           --transition-property-colors: transform;
         }
         @tailwind utilities;
       `,
-      ['transition-colors'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25179,7 +25178,8 @@ test('duration', async () => {
 
 test('ease', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['ease-in', 'ease-out', 'ease-[var(--value)]'],
       css`
         @theme {
           --ease-in: cubic-bezier(0.4, 0, 1, 1);
@@ -25187,7 +25187,6 @@ test('ease', async () => {
         }
         @tailwind utilities;
       `,
-      ['ease-in', 'ease-out', 'ease-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25237,14 +25236,14 @@ test('ease', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['ease-linear'],
       css`
         @theme {
           --ease-linear: steps(4);
         }
         @tailwind utilities;
       `,
-      ['ease-linear'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25427,14 +25426,14 @@ test('contain', async () => {
 
 test('content', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['content-slash', 'content-["hello_world"]'],
       css`
         @theme {
           --content-slash: '/';
         }
         @tailwind utilities;
       `,
-      ['content-slash', 'content-["hello_world"]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25500,7 +25499,8 @@ test('forced-color-adjust', async () => {
 
 test('leading', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
       css`
         @theme {
           --leading-tight: 1.25;
@@ -25508,7 +25508,6 @@ test('leading', async () => {
         }
         @tailwind utilities;
       `,
-      ['leading-tight', 'leading-6', 'leading-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25559,14 +25558,14 @@ test('leading', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['leading-none'],
       css`
         @theme {
           --leading-none: 2;
         }
         @tailwind utilities;
       `,
-      ['leading-none'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25597,7 +25596,8 @@ test('leading', async () => {
 
 test('tracking', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
       css`
         @theme {
           --tracking-normal: 0em;
@@ -25605,7 +25605,6 @@ test('tracking', async () => {
         }
         @tailwind utilities;
       `,
-      ['tracking-normal', 'tracking-wide', 'tracking-[var(--value)]', '-tracking-[var(--value)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -25806,14 +25805,7 @@ test('font-variant-numeric', async () => {
 
 test('outline', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --outline-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'outline',
         'outline-hidden',
@@ -25863,6 +25855,13 @@ test('outline', async () => {
         'outline-[length:var(--my-width)]',
         'outline-[percentage:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --outline-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -26114,14 +26113,14 @@ test('outline', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['outline'],
       css`
         @theme {
           --default-outline-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['outline'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -26274,12 +26273,7 @@ test('opacity', async () => {
 
 test('underline-offset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'underline-offset-auto',
         'underline-offset-4',
@@ -26289,6 +26283,11 @@ test('underline-offset', async () => {
         'underline-offset-[var(--value)]',
         '-underline-offset-[var(--value)]',
       ],
+      css`
+        @theme {
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -26338,14 +26337,14 @@ test('underline-offset', async () => {
   ).toEqual('')
 
   expect(
-    await compileCss(
+    await run(
+      ['underline-offset-auto'],
       css`
         @theme {
           --text-underline-offset-auto: 4px;
         }
         @tailwind utilities;
       `,
-      ['underline-offset-auto'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -26362,18 +26361,7 @@ test('underline-offset', async () => {
 
 test('text', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --color-red-500: #ef4444;
-          --text-color-blue-500: #3b82f6;
-          --text-sm: 0.875rem;
-          --text-sm--line-height: 1.25rem;
-          --leading-snug: 1.375;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // color
         'text-red-500',
@@ -26427,6 +26415,17 @@ test('text', async () => {
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --color-red-500: #ef4444;
+          --text-color-blue-500: #3b82f6;
+          --text-sm: 0.875rem;
+          --text-sm--line-height: 1.25rem;
+          --leading-snug: 1.375;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -26702,13 +26701,7 @@ test('text', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme inline reference {
-          --text-sm: 0.875rem;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'text',
         // color
@@ -26734,21 +26727,19 @@ test('text', async () => {
         '-text-sm/[4px]',
         'text-[10px]/foo',
       ],
+      css`
+        @theme inline reference {
+          --text-sm: 0.875rem;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('text-shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
-          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'text-shadow-2xs',
@@ -26788,6 +26779,14 @@ test('text-shadow', async () => {
         'text-shadow-[color:var(--value)]/[0.5]',
         'text-shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --text-shadow-2xs: 0px 1px 0px rgb(0 0 0 / 0.1);
+          --text-shadow-sm: 0px 1px 2px rgb(0 0 0 / 0.06), 0px 2px 2px rgb(0 0 0 / 0.06);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -27105,16 +27104,7 @@ test('text-shadow', async () => {
 
 test('shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --box-shadow-color-blue-500: #3b82f6;
-          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'shadow-sm',
@@ -27155,6 +27145,15 @@ test('shadow', async () => {
         'shadow-[color:var(--value)]/[0.5]',
         'shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --box-shadow-color-blue-500: #3b82f6;
+          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+          --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -27580,15 +27579,7 @@ test('shadow', async () => {
 
 test('inset-shadow', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --inset-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Shadows
         'inset-shadow',
@@ -27630,6 +27621,14 @@ test('inset-shadow', async () => {
         'inset-shadow-[color:var(--value)]/[0.5]',
         'inset-shadow-[color:var(--value)]/[50%]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --inset-shadow: inset 0 2px 4px rgb(0 0 0 / 0.05);
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -28064,14 +28063,7 @@ test('inset-shadow', async () => {
 
 test('ring', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --ring-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'ring-inset',
@@ -28111,6 +28103,13 @@ test('ring', async () => {
         'ring-[12px]',
         'ring-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --ring-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -28434,14 +28433,14 @@ test('ring', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['ring'],
       css`
         @theme {
           --default-ring-width: 2px;
         }
         @tailwind utilities;
       `,
-      ['ring'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -28591,13 +28590,7 @@ test('ring', async () => {
 
 test('inset-ring', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'inset-ring-red-500',
@@ -28635,6 +28628,12 @@ test('inset-ring', async () => {
         'inset-ring-[12px]',
         'inset-ring-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -28987,14 +28986,7 @@ test('inset-ring', async () => {
 
 test('ring-offset', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --color-red-500: #ef4444;
-          --ring-offset-color-blue-500: #3b82f6;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         // ring color
         'ring-offset-inset',
@@ -29031,6 +29023,13 @@ test('ring-offset', async () => {
         'ring-offset-[12px]',
         'ring-offset-[length:var(--my-width)]',
       ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+          --ring-offset-color-blue-500: #3b82f6;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -29303,7 +29302,8 @@ test('@container', async () => {
 describe('spacing utilities', () => {
   test('`--spacing: initial` disables the spacing multiplier', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['px-1', 'px-4'],
         css`
           @theme {
             --spacing: initial;
@@ -29311,7 +29311,6 @@ describe('spacing utilities', () => {
           }
           @tailwind utilities;
         `,
-        ['px-1', 'px-4'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29328,7 +29327,8 @@ describe('spacing utilities', () => {
 
   test('`--spacing-*: initial` disables the spacing multiplier', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['px-1', 'px-4'],
         css`
           @theme {
             --spacing-*: initial;
@@ -29336,7 +29336,6 @@ describe('spacing utilities', () => {
           }
           @tailwind utilities;
         `,
-        ['px-1', 'px-4'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29353,14 +29352,14 @@ describe('spacing utilities', () => {
 
   test('only multiples of 0.25 with no trailing zeroes are supported with the spacing multiplier', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'],
         css`
           @theme {
             --spacing: 4px;
           }
           @tailwind utilities;
         `,
-        ['px-0.25', 'px-1.5', 'px-2.75', 'px-0.375', 'px-2.50', 'px-.75'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29385,21 +29384,22 @@ describe('spacing utilities', () => {
 
   test('spacing utilities must have a value', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['px'],
         css`
           @theme reference {
             --spacing: 4px;
           }
           @tailwind utilities;
         `,
-        ['px'],
       ),
     ).toEqual('')
   })
 
   test('--spacing-* variables take precedence over --container-* variables', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'],
         css`
           @theme {
             --spacing-sm: 8px;
@@ -29407,7 +29407,6 @@ describe('spacing utilities', () => {
           }
           @tailwind utilities;
         `,
-        ['w-sm', 'max-w-sm', 'min-w-sm', 'basis-sm'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29480,7 +29479,8 @@ describe('custom utilities', () => {
 
   test('custom static utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-trim', 'lg:text-trim'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29495,7 +29495,6 @@ describe('custom utilities', () => {
             text-box-edge: cap alphabetic;
           }
         `,
-        ['text-trim', 'lg:text-trim'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29532,14 +29531,14 @@ describe('custom utilities', () => {
     `
 
     // `foo` is not used yet:
-    expect(await compileCss(input, [])).toMatchInlineSnapshot(`
+    expect(await run([], input)).toMatchInlineSnapshot(`
       "
       @layer utilities;
       "
     `)
 
     // `foo` is used, and the CSS variable is emitted:
-    expect(await compileCss(input, ['foo'])).toMatchInlineSnapshot(`
+    expect(await run(['foo'], input)).toMatchInlineSnapshot(`
       "
       @layer utilities {
         .foo {
@@ -29556,7 +29555,8 @@ describe('custom utilities', () => {
 
   test('custom static utility (negative)', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['-example', 'lg:-example'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29566,7 +29566,6 @@ describe('custom utilities', () => {
             value: -1;
           }
         `,
-        ['-example', 'lg:-example'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29581,7 +29580,8 @@ describe('custom utilities', () => {
 
   test('Multiple static utilities are merged', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['really-round'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29596,7 +29596,6 @@ describe('custom utilities', () => {
             border-radius: 30rem;
           }
         `,
-        ['really-round'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29612,7 +29611,8 @@ describe('custom utilities', () => {
 
   test('custom utilities support some special characters', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['push-1/2', 'push-50%'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29626,7 +29626,6 @@ describe('custom utilities', () => {
             right: 50%;
           }
         `,
-        ['push-1/2', 'push-50%'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29641,7 +29640,8 @@ describe('custom utilities', () => {
 
   test('can override specific versions of a functional utility with a static utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-sm'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29658,7 +29658,6 @@ describe('custom utilities', () => {
             text-rendering: optimizeLegibility;
           }
         `,
-        ['text-sm'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29677,7 +29676,8 @@ describe('custom utilities', () => {
 
   test('can override the default value of a functional utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['rounded', 'rounded-xl', 'rounded-[33px]'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29691,7 +29691,6 @@ describe('custom utilities', () => {
             border-radius: 50rem;
           }
         `,
-        ['rounded', 'rounded-xl', 'rounded-[33px]'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29714,7 +29713,8 @@ describe('custom utilities', () => {
 
   test('custom utilities are sorted by used properties', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -29724,7 +29724,6 @@ describe('custom utilities', () => {
             right: 100%;
           }
         `,
-        ['top-[100px]', 'push-left', 'right-[100px]', 'bottom-[100px]'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29777,7 +29776,8 @@ describe('custom utilities', () => {
 
   test('custom utilities work with `@apply`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo', 'hover:foo', 'bar'],
         css`
           @utility foo {
             @apply flex flex-col underline;
@@ -29793,7 +29793,6 @@ describe('custom utilities', () => {
 
           @tailwind utilities;
         `,
-        ['foo', 'hover:foo', 'bar'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29824,7 +29823,8 @@ describe('custom utilities', () => {
 
   test('referencing custom utilities in custom utilities via `@apply` should work', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bar'],
         css`
           @utility foo {
             @apply flex flex-col underline;
@@ -29836,7 +29836,6 @@ describe('custom utilities', () => {
 
           @tailwind utilities;
         `,
-        ['bar'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -29857,7 +29856,8 @@ describe('custom utilities', () => {
 
   test('custom utilities with `@apply` causing circular dependencies should error', async () => {
     await expect(() =>
-      compileCss(
+      run(
+        ['foo', 'bar'],
         css`
           @utility foo {
             @apply flex-wrap hover:bar;
@@ -29869,7 +29869,6 @@ describe('custom utilities', () => {
 
           @tailwind utilities;
         `,
-        ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
@@ -29878,7 +29877,8 @@ describe('custom utilities', () => {
 
   test('custom utilities with `@apply` causing circular dependencies should error (deeply nesting)', async () => {
     await expect(() =>
-      compileCss(
+      run(
+        ['foo', 'bar'],
         css`
           @utility foo {
             .bar {
@@ -29900,7 +29900,6 @@ describe('custom utilities', () => {
 
           @tailwind utilities;
         `,
-        ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
@@ -29909,7 +29908,8 @@ describe('custom utilities', () => {
 
   test('custom utilities with `@apply` causing circular dependencies should error (multiple levels)', async () => {
     await expect(() =>
-      compileCss(
+      run(
+        ['foo', 'bar'],
         css`
           body {
             @apply foo;
@@ -29929,7 +29929,6 @@ describe('custom utilities', () => {
 
           @tailwind utilities;
         `,
-        ['foo', 'bar'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot \`@apply\` the \`hover:bar\` utility here because it creates a circular dependency.]`,
@@ -29946,7 +29945,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example', 'example-foo'])).toEqual('')
+      expect(await run(['example', 'example-foo'], input)).toEqual('')
     })
 
     test('functional utilities must resolve at least one `--value(…)`', async () => {
@@ -29958,7 +29957,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-1', 'example-2'])).toMatchInlineSnapshot(`
+      expect(await run(['example-1', 'example-2'], input)).toMatchInlineSnapshot(`
         "
         .example-1 {
           --resolved-value: 1;
@@ -29970,7 +29969,7 @@ describe('custom utilities', () => {
         "
       `)
 
-      expect(await compileCss(input, ['example', 'example-foo', 'example-2.5'])).toEqual('')
+      expect(await run(['example', 'example-foo', 'example-2.5'], input)).toEqual('')
     })
 
     test('resolving values from `@theme`', async () => {
@@ -29989,7 +29988,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
+      expect(await run(['example-1', 'example-2', 'example-4', 'example-a'], input))
         .toMatchInlineSnapshot(`
           "
           .example-1 {
@@ -30009,7 +30008,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
+      expect(await run(['example-3', 'example-gitlab'], input)).toEqual('')
     })
 
     test('functional utility with double-dash separator', async () => {
@@ -30027,8 +30026,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['border--0', 'border--1', 'border--2']))
-        .toMatchInlineSnapshot(`
+      expect(await run(['border--0', 'border--1', 'border--2'], input)).toMatchInlineSnapshot(`
           "
           .border--0 {
             border-color: var(--color-border-0, #e5e7eb);
@@ -30043,7 +30041,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['border--3'])).toEqual('')
+      expect(await run(['border--3'], input)).toEqual('')
     })
 
     test('resolving values from `@theme`, with `--example-*` syntax', async () => {
@@ -30066,7 +30064,7 @@ describe('custom utilities', () => {
           @tailwind utilities;
         `
 
-      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
+      expect(await run(['example-1', 'example-2', 'example-4', 'example-a'], input))
         .toMatchInlineSnapshot(`
           "
           .example-1 {
@@ -30086,7 +30084,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
+      expect(await run(['example-3', 'example-gitlab'], input)).toEqual('')
     })
 
     test('resolving values from `@theme`, with `--example-\\*` syntax (prettier friendly)', async () => {
@@ -30105,7 +30103,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-1', 'example-2', 'example-4', 'example-a']))
+      expect(await run(['example-1', 'example-2', 'example-4', 'example-a'], input))
         .toMatchInlineSnapshot(`
           "
           .example-1 {
@@ -30125,7 +30123,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-3', 'example-gitlab'])).toEqual('')
+      expect(await run(['example-3', 'example-gitlab'], input)).toEqual('')
     })
 
     test('resolving bare values', async () => {
@@ -30137,8 +30135,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-1', 'example-76', 'example-971']))
-        .toMatchInlineSnapshot(`
+      expect(await run(['example-1', 'example-76', 'example-971'], input)).toMatchInlineSnapshot(`
           "
           .example-1 {
             --resolved-value: 1;
@@ -30153,7 +30150,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-foo'])).toEqual('')
+      expect(await run(['example-foo'], input)).toEqual('')
     })
 
     test('bare values with unsupported data types should result in a warning', async () => {
@@ -30166,7 +30163,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['paint-#0088cc', 'paint-red'])).toEqual('')
+      expect(await run(['paint-#0088cc', 'paint-red'], input)).toEqual('')
       expect(spy.mock.calls).toMatchInlineSnapshot(`
         [
           [
@@ -30193,14 +30190,14 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-revert'])).toMatchInlineSnapshot(`
+      expect(await run(['example-revert'], input)).toMatchInlineSnapshot(`
         "
         .example-revert {
           --resolved-value: revert;
         }
         "
       `)
-      expect(await compileCss(input, ['example-initial'])).toEqual('')
+      expect(await run(['example-initial'], input)).toEqual('')
     })
 
     test('resolving bare values with constraints for integer, percentage, and ratio', async () => {
@@ -30214,7 +30211,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-1', 'example-0.5', 'example-20%', 'example-2/3']))
+      expect(await run(['example-1', 'example-0.5', 'example-20%', 'example-2/3'], input))
         .toMatchInlineSnapshot(`
           "
           .example-0\\.5 {
@@ -30235,13 +30232,10 @@ describe('custom utilities', () => {
           "
         `)
       expect(
-        await compileCss(input, [
-          'example-1.23',
-          'example-12.34%',
-          'example-1.2/3',
-          'example-1/2.3',
-          'example-1.2/3.4',
-        ]),
+        await run(
+          ['example-1.23', 'example-12.34%', 'example-1.2/3', 'example-1/2.3', 'example-1.2/3.4'],
+          input,
+        ),
       ).toEqual('')
     })
 
@@ -30255,7 +30249,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-#0088cc', 'example-foo'])).toEqual('')
+      expect(await run(['example-#0088cc', 'example-foo'], input)).toEqual('')
       expect(
         `\n${spy.mock.calls
           .map((c) => c.join(' '))
@@ -30284,13 +30278,16 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-[1]',
-          'example-[76]',
-          'example-[971]',
-          'example-[integer:var(--my-value)]',
-          'example-(integer:my-value)',
-        ]),
+        await run(
+          [
+            'example-[1]',
+            'example-[76]',
+            'example-[971]',
+            'example-[integer:var(--my-value)]',
+            'example-(integer:my-value)',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .example-\\[1\\] {
@@ -30311,14 +30308,17 @@ describe('custom utilities', () => {
         "
       `)
       expect(
-        await compileCss(input, [
-          'example-[#0088cc]',
-          'example-[1px]',
-          'example-[var(--my-value)]',
-          'example-(--my-value)',
-          'example-[color:var(--my-value)]',
-          'example-(color:--my-value)',
-        ]),
+        await run(
+          [
+            'example-[#0088cc]',
+            'example-[1px]',
+            'example-[var(--my-value)]',
+            'example-(--my-value)',
+            'example-[color:var(--my-value)]',
+            'example-(color:--my-value)',
+          ],
+          input,
+        ),
       ).toEqual('')
     })
 
@@ -30332,13 +30332,16 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-[1]',
-          'example-[76]',
-          'example-[971]',
-          'example-[var(--my-value)]',
-          'example-(--my-value)',
-        ]),
+        await run(
+          [
+            'example-[1]',
+            'example-[76]',
+            'example-[971]',
+            'example-[var(--my-value)]',
+            'example-(--my-value)',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .example-\\(--my-value\\) {
@@ -30374,13 +30377,16 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-[1]',
-          'example-[76]',
-          'example-[971]',
-          'example-[var(--my-value)]',
-          'example-(--my-value)',
-        ]),
+        await run(
+          [
+            'example-[1]',
+            'example-[76]',
+            'example-[971]',
+            'example-[var(--my-value)]',
+            'example-(--my-value)',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .example-\\(--my-value\\) {
@@ -30416,13 +30422,16 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-[1]',
-          'example-[76]',
-          'example-[971]',
-          'example-[var(--my-value)]',
-          'example-(--my-value)',
-        ]),
+        await run(
+          [
+            'example-[1]',
+            'example-[76]',
+            'example-[971]',
+            'example-[var(--my-value)]',
+            'example-(--my-value)',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .example-\\(--my-value\\) {
@@ -30463,8 +30472,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-a', 'example-76', 'example-[123]']))
-        .toMatchInlineSnapshot(`
+      expect(await run(['example-a', 'example-76', 'example-[123]'], input)).toMatchInlineSnapshot(`
           "
           .example-76 {
             --resolved-value: 76;
@@ -30479,7 +30487,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-[#0088cc]', 'example-[1px]'])).toEqual('')
+      expect(await run(['example-[#0088cc]', 'example-[1px]'], input)).toEqual('')
     })
 
     test('in combination with calc to produce different data types of values', async () => {
@@ -30497,7 +30505,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-full', 'example-12', 'example-[20%]']))
+      expect(await run(['example-full', 'example-12', 'example-[20%]'], input))
         .toMatchInlineSnapshot(`
           "
           .example-12 {
@@ -30513,7 +30521,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-half', 'example-[#0088cc]'])).toEqual('')
+      expect(await run(['example-half', 'example-[#0088cc]'], input)).toEqual('')
     })
 
     test('shorthand if resulting values are of the same type', async () => {
@@ -30530,7 +30538,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-37', 'example-[50%]', 'example-full']))
+      expect(await run(['example-37', 'example-[50%]', 'example-full'], input))
         .toMatchInlineSnapshot(`
           "
           .example-37 {
@@ -30546,7 +30554,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-foo', 'example-[13px]'])).toEqual('')
+      expect(await run(['example-foo', 'example-[13px]'], input)).toEqual('')
     })
 
     test('negative values', async () => {
@@ -30567,14 +30575,17 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-full',
-          '-example-full',
-          'example-[10px]',
-          '-example-[10px]',
-          'example-[20%]',
-          '-example-[20%]',
-        ]),
+        await run(
+          [
+            'example-full',
+            '-example-full',
+            'example-[10px]',
+            '-example-[10px]',
+            'example-[20%]',
+            '-example-[20%]',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .-example-\\[10px\\] {
@@ -30602,7 +30613,7 @@ describe('custom utilities', () => {
         }
         "
       `)
-      expect(await compileCss(input, ['example-10'])).toEqual('')
+      expect(await run(['example-10'], input)).toEqual('')
     })
 
     test('using the same value multiple times', async () => {
@@ -30615,7 +30626,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+      expect(await run(['example-12'], input)).toMatchInlineSnapshot(`
         "
         .example-12 {
           --resolved-value: calc(var(--spacing) * 12)
@@ -30638,7 +30649,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+      expect(await run(['example-12'], input)).toMatchInlineSnapshot(`
         "
         :root, :host {
           --spacing: 4px;
@@ -30664,7 +30675,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-12'])).toMatchInlineSnapshot(`
+      expect(await run(['example-12'], input)).toMatchInlineSnapshot(`
         "
         .example-12 {
           margin: 48px;
@@ -30682,7 +30693,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example', 'example-123'])).toMatchInlineSnapshot(`
+      expect(await run(['example', 'example-123'], input)).toMatchInlineSnapshot(`
         "
         .example {
           --resolved-value: 4;
@@ -30694,7 +30705,7 @@ describe('custom utilities', () => {
         "
       `)
 
-      expect(await compileCss(input, ['example-foo'])).toEqual('')
+      expect(await run(['example-foo'], input)).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in complex expressions', async () => {
@@ -30706,7 +30717,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example', 'example-123'])).toMatchInlineSnapshot(`
+      expect(await run(['example', 'example-123'], input)).toMatchInlineSnapshot(`
         "
         .example {
           --resolved-value: calc(4 * 2);
@@ -30718,7 +30729,7 @@ describe('custom utilities', () => {
         "
       `)
 
-      expect(await compileCss(input, ['example-foo'])).toEqual('')
+      expect(await run(['example-foo'], input)).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` with `--modifier(…)`', async () => {
@@ -30731,7 +30742,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example', 'example/25'])).toMatchInlineSnapshot(`
+      expect(await run(['example', 'example/25'], input)).toMatchInlineSnapshot(`
         "
         .example\\/25 {
           --resolved-value: 4;
@@ -30744,7 +30755,7 @@ describe('custom utilities', () => {
         "
       `)
 
-      expect(await compileCss(input, ['example/foo'])).toEqual('')
+      expect(await run(['example/foo'], input)).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in `--modifier(…)`', async () => {
@@ -30757,7 +30768,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-123', 'example-123/25'])).toMatchInlineSnapshot(`
+      expect(await run(['example-123', 'example-123/25'], input)).toMatchInlineSnapshot(`
         "
         .example-123 {
           --resolved-value: 123;
@@ -30771,7 +30782,7 @@ describe('custom utilities', () => {
         "
       `)
 
-      expect(await compileCss(input, ['example-123/foo'])).toEqual('')
+      expect(await run(['example-123/foo'], input)).toEqual('')
     })
 
     test('functional utilities can use `--default(…)` in `--value(…)` and `--modifier(…)`', async () => {
@@ -30784,7 +30795,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example', 'example/1', 'example-1', 'example-1/1']))
+      expect(await run(['example', 'example/1', 'example-1', 'example-1/1'], input))
         .toMatchInlineSnapshot(`
           "
           .example {
@@ -30809,7 +30820,7 @@ describe('custom utilities', () => {
           "
         `)
 
-      expect(await compileCss(input, ['example-123/foo'])).toEqual('')
+      expect(await run(['example-123/foo'], input)).toEqual('')
     })
 
     test('modifiers', async () => {
@@ -30830,14 +30841,17 @@ describe('custom utilities', () => {
       `
 
       expect(
-        await compileCss(input, [
-          'example-sm',
-          'example-sm/7',
-          'example-[12px]',
-          'example-[12px]/[16px]',
-          'example-sm/literal',
-          'example-sm/literal-2',
-        ]),
+        await run(
+          [
+            'example-sm',
+            'example-sm/7',
+            'example-[12px]',
+            'example-[12px]/[16px]',
+            'example-sm/literal',
+            'example-sm/literal-2',
+          ],
+          input,
+        ),
       ).toMatchInlineSnapshot(`
         "
         .example-\\[12px\\]\\/\\[16px\\] {
@@ -30872,12 +30886,10 @@ describe('custom utilities', () => {
         "
       `)
       expect(
-        await compileCss(input, [
-          'example-foo',
-          'example-foo/[12px]',
-          'example-foo/12',
-          'example-sm/unknown-literal',
-        ]),
+        await run(
+          ['example-foo', 'example-foo/[12px]', 'example-foo/12', 'example-sm/unknown-literal'],
+          input,
+        ),
       ).toEqual('')
     })
 
@@ -30894,7 +30906,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-video', 'example-1/1', 'example-[7/9]']))
+      expect(await run(['example-video', 'example-1/1', 'example-[7/9]'], input))
         .toMatchInlineSnapshot(`
           "
           .example-1\\/1 {
@@ -30910,7 +30922,7 @@ describe('custom utilities', () => {
           }
           "
         `)
-      expect(await compileCss(input, ['example-foo'])).toEqual('')
+      expect(await run(['example-foo'], input)).toEqual('')
     })
 
     test('resolve theme values with sub-namespace (--text- * --line-height)', async () => {
@@ -30929,7 +30941,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+      expect(await run(['example-xs', 'example-xs/6'], input)).toMatchInlineSnapshot(`
         "
         .example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
@@ -30943,7 +30955,7 @@ describe('custom utilities', () => {
         }
         "
       `)
-      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+      expect(await run(['example-foo', 'example-xs/foo'], input)).toEqual('')
     })
 
     test('resolve theme values with sub-namespace (--text-\\* --line-height)', async () => {
@@ -30962,7 +30974,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+      expect(await run(['example-xs', 'example-xs/6'], input)).toMatchInlineSnapshot(`
         "
         .example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
@@ -30976,7 +30988,7 @@ describe('custom utilities', () => {
         }
         "
       `)
-      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+      expect(await run(['example-foo', 'example-xs/foo'], input)).toEqual('')
     })
 
     test('resolve theme values with sub-namespace (--value(--text --line-height))', async () => {
@@ -30995,7 +31007,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+      expect(await run(['example-xs', 'example-xs/6'], input)).toMatchInlineSnapshot(`
         "
         .example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
@@ -31009,7 +31021,7 @@ describe('custom utilities', () => {
         }
         "
       `)
-      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+      expect(await run(['example-foo', 'example-xs/foo'], input)).toEqual('')
     })
 
     test('resolve theme values with sub-namespace (--value(--text-*--line-height))', async () => {
@@ -31028,7 +31040,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-xs', 'example-xs/6'])).toMatchInlineSnapshot(`
+      expect(await run(['example-xs', 'example-xs/6'], input)).toMatchInlineSnapshot(`
         "
         .example-xs\\/6 {
           font-size: var(--text-xs, .75rem);
@@ -31042,7 +31054,7 @@ describe('custom utilities', () => {
         }
         "
       `)
-      expect(await compileCss(input, ['example-foo', 'example-xs/foo'])).toEqual('')
+      expect(await run(['example-foo', 'example-xs/foo'], input)).toEqual('')
     })
 
     test('variables used in `@utility` will not be emitted if the utility is not used', async () => {
@@ -31060,7 +31072,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['flex'])).toMatchInlineSnapshot(`
+      expect(await run(['flex'], input)).toMatchInlineSnapshot(`
         "
         .flex {
           display: flex;
@@ -31084,7 +31096,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['example-foo'])).toMatchInlineSnapshot(`
+      expect(await run(['example-foo'], input)).toMatchInlineSnapshot(`
         "
         :root, :host {
           --example-foo: red;
@@ -31121,7 +31133,7 @@ describe('custom utilities', () => {
         @tailwind utilities;
       `
 
-      expect(await compileCss(input, ['mask-r-20%'])).toMatchInlineSnapshot(`
+      expect(await run(['mask-r-20%'], input)).toMatchInlineSnapshot(`
         "
         .mask-r-20\\% {
           --mask-right: linear-gradient(to left, transparent, black 20%);
@@ -31147,7 +31159,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
+    expect(await run(['example-a'], input)).toMatchInlineSnapshot(`
       "
       :root, :host {
         --example-a: 8;
@@ -31173,7 +31185,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
+    expect(await run(['example-a'], input)).toMatchInlineSnapshot(`
       "
       .example-a {
         --resolved-value: var(--example-a, 8);
@@ -31195,7 +31207,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
+    expect(await run(['example-a'], input)).toMatchInlineSnapshot(`
       "
       .example-a {
         --resolved-value: 8;
@@ -31217,7 +31229,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-a'])).toMatchInlineSnapshot(`
+    expect(await run(['example-a'], input)).toMatchInlineSnapshot(`
       "
       .example-a {
         --resolved-value: 8;
@@ -31244,7 +31256,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+    expect(await run(['example-xs'], input)).toMatchInlineSnapshot(`
       "
       .example-xs {
         font-size: var(--text-xs, .75rem);
@@ -31272,7 +31284,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['example-xs'])).toMatchInlineSnapshot(`
+    expect(await run(['example-xs'], input)).toMatchInlineSnapshot(`
       "
       .example-xs {
         font-size: .75rem;
@@ -31300,7 +31312,7 @@ describe('custom utilities', () => {
       @tailwind utilities;
     `
 
-    expect(await compileCss(input, ['foo-red-500', 'foo-123'])).toMatchInlineSnapshot(`
+    expect(await run(['foo-red-500', 'foo-123'], input)).toMatchInlineSnapshot(`
       "
       :root, :host {
         --color-red-500: #ef4444;

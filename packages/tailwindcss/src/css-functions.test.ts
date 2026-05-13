@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
 import plugin from './plugin'
-import { compileCss } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -315,7 +315,8 @@ describe('--theme(…)', () => {
 
   test('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['tw:font-sans'],
         css`
           @theme prefix(tw) {
             --font-sans:
@@ -330,7 +331,6 @@ describe('--theme(…)', () => {
           }
           @tailwind utilities;
         `,
-        ['tw:font-sans'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -419,7 +419,8 @@ describe('--theme(…)', () => {
 
   test('--theme(…) function still works as expected, even when a plugin is imported', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @layer base {
             html,
@@ -435,7 +436,6 @@ describe('--theme(…)', () => {
           }
           @plugin "my-plugin.js";
         `,
-        [],
         {
           loadModule: async () => ({
             path: '',
@@ -829,14 +829,14 @@ describe('theme(…)', () => {
 
         test('theme(fontFamily.sans) (config)', async () => {
           expect(
-            await compileCss(
+            await run(
+              [],
               css`
                 @config "./my-config.js";
                 .fam {
                   font-family: theme(fontFamily.sans);
                 }
               `,
-              [],
               { loadModule: async () => ({ path: '', base: '/root', module: {} }) },
             ),
           ).toMatchInlineSnapshot(`
@@ -1095,7 +1095,8 @@ describe('theme(…)', () => {
   describe('in candidates', () => {
     test('sm:[--color:theme(colors.red[500])]', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['sm:[--color:theme(colors.red[500])]'],
           css`
             @tailwind utilities;
             @theme {
@@ -1103,7 +1104,6 @@ describe('theme(…)', () => {
               --color-red-500: #f00;
             }
           `,
-          ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -1119,18 +1119,18 @@ describe('theme(…)', () => {
     test("values that don't exist don't produce candidates", async () => {
       // This guarantees that valid candidates still make it through when some are invalid
       expect(
-        await compileCss(
+        await run(
+          [
+            'rounded-[theme(--radius-sm)]',
+            'rounded-[theme(i.do.not.exist)]',
+            'rounded-[theme(--i-do-not-exist)]',
+          ],
           css`
             @tailwind utilities;
             @theme reference {
               --radius-sm: 2rem;
             }
           `,
-          [
-            'rounded-[theme(--radius-sm)]',
-            'rounded-[theme(i.do.not.exist)]',
-            'rounded-[theme(--i-do-not-exist)]',
-          ],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -1142,14 +1142,14 @@ describe('theme(…)', () => {
 
       // This guarantees no output for the following candidates
       expect(
-        await compileCss(
+        await run(
+          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
           css`
             @tailwind utilities;
             @theme reference {
               --radius-sm: 2rem;
             }
           `,
-          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
         ),
       ).toEqual('')
     })
@@ -1280,7 +1280,8 @@ describe('theme(…)', () => {
 describe('in plugins', () => {
   test('CSS theme functions in plugins are properly evaluated', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-utility'],
         css`
           @layer base, utilities;
           @plugin "my-plugin";
@@ -1294,7 +1295,6 @@ describe('in plugins', () => {
             @tailwind utilities;
           }
         `,
-        ['my-utility'],
         {
           async loadModule() {
             return {
@@ -1344,7 +1344,8 @@ describe('in plugins', () => {
 describe('in JS config files', () => {
   test('CSS theme functions in config files are properly evaluated', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-utility'],
         css`
           @layer base, utilities;
           @config "./my-config.js";
@@ -1356,7 +1357,6 @@ describe('in JS config files', () => {
             @tailwind utilities;
           }
         `,
-        ['my-utility'],
         {
           loadModule: async () => ({
             path: '',
@@ -1411,14 +1411,14 @@ describe('in JS config files', () => {
 
 test('replaces CSS theme() function with values inside imported stylesheets', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @theme {
           --color-red-500: #f00;
         }
         @import './bar.css';
       `,
-      [],
       {
         async loadStylesheet() {
           return {
@@ -1444,7 +1444,8 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
 
 test('resolves paths ending with a 1', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @theme {
           --spacing-1: 0.25rem;
@@ -1454,7 +1455,6 @@ test('resolves paths ending with a 1', async () => {
           margin: theme(spacing.1);
         }
       `,
-      [],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1467,13 +1467,13 @@ test('resolves paths ending with a 1', async () => {
 
 test('upgrades to a full JS compat theme lookup if a value cannot be mapped to a CSS variable', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         .semi {
           font-weight: theme(fontWeight.semibold);
         }
       `,
-      [],
     ),
   ).toMatchInlineSnapshot(`
     "

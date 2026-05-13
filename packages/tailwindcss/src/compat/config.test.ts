@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile, type Config } from '..'
 import { default as plugin } from '../plugin'
-import { compileCss } from '../test-utils/run'
+import { compileCss, run } from '../test-utils/run'
 import flattenColorPalette from './flatten-color-palette'
 
 const css = String.raw
@@ -21,12 +21,12 @@ test('Config files can add content', async () => {
 
 test('Config files can change dark mode (media)', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['dark:underline'],
       {
         loadModule: async () => ({ module: { darkMode: 'media' }, base: '/root', path: '' }),
       },
@@ -44,12 +44,12 @@ test('Config files can change dark mode (media)', async () => {
 
 test('Config files can change dark mode (selector)', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['dark:underline'],
       {
         loadModule: async () => ({ module: { darkMode: 'selector' }, base: '/root', path: '' }),
       },
@@ -65,12 +65,12 @@ test('Config files can change dark mode (selector)', async () => {
 
 test('Config files can change dark mode (variant)', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['dark:underline'],
       {
         loadModule: async () => ({
           module: { darkMode: ['variant', '&:where(:not(.light))'] },
@@ -90,12 +90,12 @@ test('Config files can change dark mode (variant)', async () => {
 
 test('Config files can add plugins', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['no-scrollbar'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['no-scrollbar'],
       {
         loadModule: async () => ({
           module: {
@@ -125,12 +125,12 @@ test('Config files can add plugins', async () => {
 
 test('Plugins loaded from config files can contribute to the config', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['dark:underline'],
       {
         loadModule: async () => ({
           module: {
@@ -156,12 +156,12 @@ test('Plugins loaded from config files can contribute to the config', async () =
 
 test('Config file presets can contribute to the config', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['dark:underline'],
       {
         loadModule: async () => ({
           module: { presets: [{ darkMode: ['variant', '&:where(:not(.light))'] }] },
@@ -181,12 +181,12 @@ test('Config file presets can contribute to the config', async () => {
 
 test('Config files can affect the theme', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-primary', 'scrollbar-primary'],
       css`
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['bg-primary', 'scrollbar-primary'],
       {
         loadModule: async () => ({
           module: {
@@ -229,7 +229,8 @@ test('Config files can affect the theme', async () => {
 // https://github.com/tailwindlabs/tailwindcss/issues/19091
 test('Accessing a default color if a sub-color exists via CSS should work as expected', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -239,7 +240,6 @@ test('Accessing a default color if a sub-color exists via CSS should work as exp
           border-color: theme('colors.foo');
         }
       `,
-      [],
       {
         loadModule: async () => ({
           module: {
@@ -273,14 +273,14 @@ test('Accessing a default color if a sub-color exists via CSS should work as exp
 
 test('Variants in CSS overwrite variants from plugins', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['dark:underline', 'light:underline'],
       css`
         @tailwind utilities;
         @config "./config.js";
         @custom-variant dark (&:is(.my-dark));
         @custom-variant light (&:is(.my-light));
       `,
-      ['dark:underline', 'light:underline'],
       {
         loadModule: async () => ({
           module: {
@@ -310,7 +310,8 @@ describe('theme callbacks', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['leading-base', 'leading-md', 'leading-xl', 'prose'],
         css`
           @theme default {
             --text-base: 0rem;
@@ -327,7 +328,6 @@ describe('theme callbacks', () => {
           @tailwind utilities;
           @config "./config.js";
         `,
-        ['leading-base', 'leading-md', 'leading-xl', 'prose'],
         {
           loadModule: async () => ({
             module: {
@@ -431,7 +431,8 @@ describe('theme callbacks', () => {
 describe('theme overrides order', () => {
   test('user theme > js config > default theme', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-red', 'bg-blue'],
         css`
           @theme default {
             --color-red: red;
@@ -442,7 +443,6 @@ describe('theme overrides order', () => {
           @tailwind utilities;
           @config "./config.js";
         `,
-        ['bg-red', 'bg-blue'],
         {
           loadModule: async () => ({
             module: {
@@ -479,21 +479,7 @@ describe('theme overrides order', () => {
 
   test('user theme > js config > default theme (with nested object)', async () => {
     expect(
-      await compileCss(
-        css`
-          @theme default {
-            --color-slate-100: #000100;
-            --color-slate-200: #000200;
-            --color-slate-300: #000300;
-          }
-          @theme {
-            --color-slate-400: #100400;
-            --color-slate-500: #100500;
-          }
-          @tailwind utilities;
-          @config "./config.js";
-          @plugin "./plugin.js";
-        `,
+      await run(
         [
           'bg-slate-100',
           'bg-slate-200',
@@ -508,6 +494,20 @@ describe('theme overrides order', () => {
           'hover-bg-slate-500',
           'hover-bg-slate-600',
         ],
+        css`
+          @theme default {
+            --color-slate-100: #000100;
+            --color-slate-200: #000200;
+            --color-slate-300: #000300;
+          }
+          @theme {
+            --color-slate-400: #100400;
+            --color-slate-500: #100500;
+          }
+          @tailwind utilities;
+          @config "./config.js";
+          @plugin "./plugin.js";
+        `,
         {
           loadModule: async (id) => {
             if (id.includes('config.js')) {
@@ -615,7 +615,8 @@ describe('theme overrides order', () => {
 describe('default font family compatibility', () => {
   test('overriding `fontFamily.sans` sets `--default-font-family`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -625,7 +626,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -653,7 +653,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -663,7 +664,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -692,7 +692,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -702,7 +703,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -731,7 +731,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -741,7 +742,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -774,7 +774,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -787,7 +788,6 @@ describe('default font family compatibility', () => {
           }
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -819,7 +819,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -829,7 +830,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -857,7 +857,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-sans'],
         css`
           @theme default {
             --default-font-family: var(--font-family-sans);
@@ -867,7 +868,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-sans'],
         {
           loadModule: async () => ({
             module: {
@@ -887,7 +887,8 @@ describe('default font family compatibility', () => {
 
   test('overriding `fontFamily.mono` sets `--default-mono-font-family`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-family-mono);
@@ -899,7 +900,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -927,7 +927,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-family-mono);
@@ -939,7 +940,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -968,7 +968,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-family-mono);
@@ -980,7 +981,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -1009,7 +1009,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-mono);
@@ -1019,7 +1020,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -1052,7 +1052,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-mono);
@@ -1065,7 +1066,6 @@ describe('default font family compatibility', () => {
           }
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -1097,7 +1097,8 @@ describe('default font family compatibility', () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @theme default {
             --default-mono-font-family: var(--font-family-mono);
@@ -1109,7 +1110,6 @@ describe('default font family compatibility', () => {
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           loadModule: async () => ({
             module: {
@@ -1130,11 +1130,7 @@ describe('default font family compatibility', () => {
 
 test('creates variants for `data`, `supports`, and `aria` theme options at the same level as the core utility ', async () => {
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-        @config "./config.js";
-      `,
+    await run(
       [
         'aria-polite:underline',
         'supports-child-combinator:underline',
@@ -1150,6 +1146,10 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
         // the other custom variants.
         'print:flex',
       ],
+      css`
+        @tailwind utilities;
+        @config "./config.js";
+      `,
       {
         loadModule: async () => ({
           module: {
@@ -1216,7 +1216,8 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
 
 test('merges css breakpoints with js config screens', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -1231,7 +1232,6 @@ test('merges css breakpoints with js config screens', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['sm:flex', 'md:flex', 'lg:flex', 'min-sm:max-md:underline'],
       {
         loadModule: async () => ({
           module: {
@@ -1280,7 +1280,8 @@ test('merges css breakpoints with js config screens', async () => {
 test('utilities must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(
-    await compileCss(
+    await run(
+      ['tw:underline', 'tw:hover:line-through', 'tw:custom'],
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -1289,7 +1290,6 @@ test('utilities must be prefixed', async () => {
           color: red;
         }
       `,
-      ['tw:underline', 'tw:hover:line-through', 'tw:custom'],
       {
         loadModule: async (_id, base) => ({
           path: '',
@@ -1318,7 +1318,8 @@ test('utilities must be prefixed', async () => {
 
   // Non-prefixed utilities are ignored
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through', 'custom'],
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -1327,7 +1328,6 @@ test('utilities must be prefixed', async () => {
           color: red;
         }
       `,
-      ['underline', 'hover:line-through', 'custom'],
       {
         loadModule: async (_id, base) => ({
           path: '',
@@ -1342,7 +1342,8 @@ test('utilities must be prefixed', async () => {
 test('utilities used in @apply must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @config "./config.js";
 
@@ -1350,7 +1351,6 @@ test('utilities used in @apply must be prefixed', async () => {
           @apply tw:underline;
         }
       `,
-      [],
       {
         loadModule: async (_id, base) => ({
           path: '',
@@ -1393,7 +1393,8 @@ test('utilities used in @apply must be prefixed', async () => {
 
 test('Prefixes configured in CSS take precedence over those defined in JS configs', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['wat:custom'],
       css`
         @theme prefix(wat) {
           --color-red: #f00;
@@ -1409,7 +1410,6 @@ test('Prefixes configured in CSS take precedence over those defined in JS config
           color: red;
         }
       `,
-      ['wat:custom'],
       {
         async loadModule(_id, base) {
           return {
@@ -1452,7 +1452,8 @@ test('a prefix must be letters only', async () => {
 
 test('important: `#app`', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through', 'custom'],
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -1461,7 +1462,6 @@ test('important: `#app`', async () => {
           color: red;
         }
       `,
-      ['underline', 'hover:line-through', 'custom'],
       {
         loadModule: async (_id, base) => ({
           path: '',
@@ -1491,7 +1491,8 @@ test('important: `#app`', async () => {
 
 test('important: true', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through', 'custom'],
       css`
         @tailwind utilities;
         @config "./config.js";
@@ -1500,7 +1501,6 @@ test('important: true', async () => {
           color: red;
         }
       `,
-      ['underline', 'hover:line-through', 'custom'],
       {
         loadModule: async (_id, base) => ({
           path: '',
@@ -1531,7 +1531,8 @@ test('important: true', async () => {
 test('blocklisted candidates are not generated', async () => {
   // bg-white will not get generated
   expect(
-    await compileCss(
+    await run(
+      ['bg-white'],
       css`
         @theme reference {
           --color-white: #fff;
@@ -1540,7 +1541,6 @@ test('blocklisted candidates are not generated', async () => {
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['bg-white'],
       {
         async loadModule(_id, base) {
           return {
@@ -1557,7 +1557,8 @@ test('blocklisted candidates are not generated', async () => {
 
   // underline will as will md:bg-white
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'bg-white', 'md:bg-white'],
       css`
         @theme reference {
           --color-white: #fff;
@@ -1566,7 +1567,6 @@ test('blocklisted candidates are not generated', async () => {
         @tailwind utilities;
         @config "./config.js";
       `,
-      ['underline', 'bg-white', 'md:bg-white'],
       {
         async loadModule(_id, base) {
           return {
@@ -1751,7 +1751,8 @@ test('old theme values are merged with their renamed counterparts in the CSS the
 
 test('handles setting theme keys to null', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['bg-red-50', 'bg-red-100', 'bg-red-200'],
       css`
         @theme default {
           --color-red-50: oklch(0.971 0.013 17.38);
@@ -1764,7 +1765,6 @@ test('handles setting theme keys to null', async () => {
           --color-red-200: oklch(0.885 0.062 18.334);
         }
       `,
-      ['bg-red-50', 'bg-red-100', 'bg-red-200'],
       {
         loadModule: async () => {
           return {
@@ -1842,14 +1842,7 @@ test('The theme() function does not try indexing into strings', async () => {
 
 test('camel case keys are preserved', async () => {
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-        @theme {
-          --color-blue-green: slate;
-        }
-        @config "./plugin.js";
-      `,
+    await run(
       [
         // From CSS
         'bg-blue-green', // should be output
@@ -1859,6 +1852,13 @@ test('camel case keys are preserved', async () => {
         'bg-light-green', // should not be output
         'bg-lightGreen', // should be
       ],
+      css`
+        @tailwind utilities;
+        @theme {
+          --color-blue-green: slate;
+        }
+        @config "./plugin.js";
+      `,
       {
         loadModule: async () => {
           return {

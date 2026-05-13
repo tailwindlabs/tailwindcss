@@ -1,14 +1,21 @@
 import { expect, test } from 'vitest'
 import { compile } from '.'
 import plugin from './plugin'
-import { compileCss } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = String.raw
 
 test('utilities must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(
-    await compileCss(
+    await run(
+      [
+        'tw:underline',
+        'tw:hover:line-through',
+        'tw:custom',
+        'tw:group-hover:flex',
+        'tw:peer-hover:flex',
+      ],
       css`
         @theme reference prefix(tw);
         @tailwind utilities;
@@ -17,13 +24,6 @@ test('utilities must be prefixed', async () => {
           color: red;
         }
       `,
-      [
-        'tw:underline',
-        'tw:hover:line-through',
-        'tw:custom',
-        'tw:group-hover:flex',
-        'tw:peer-hover:flex',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -49,7 +49,8 @@ test('utilities must be prefixed', async () => {
 
   // Non-prefixed utilities are ignored
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through', 'custom'],
       css`
         @theme reference prefix(tw);
         @tailwind utilities;
@@ -58,7 +59,6 @@ test('utilities must be prefixed', async () => {
           color: red;
         }
       `,
-      ['underline', 'hover:line-through', 'custom'],
     ),
   ).toEqual('')
 })
@@ -98,7 +98,8 @@ test('utilities used in @apply must be prefixed', async () => {
 test('CSS variables output by the theme are prefixed', async () => {
   // Prefixed utilities are generated
   expect(
-    await compileCss(
+    await run(
+      ['tw:text-red'],
       css`
         @theme prefix(tw) {
           --color-red: #f00;
@@ -108,7 +109,6 @@ test('CSS variables output by the theme are prefixed', async () => {
 
         @tailwind utilities;
       `,
-      ['tw:text-red'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -125,7 +125,8 @@ test('CSS variables output by the theme are prefixed', async () => {
 
 test('CSS theme functions do not use the prefix', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]'],
       css`
         @theme prefix(tw) {
           --color-red: #f00;
@@ -135,7 +136,6 @@ test('CSS theme functions do not use the prefix', async () => {
 
         @tailwind utilities;
       `,
-      ['tw:[color:theme(--color-red)]', 'tw:text-[theme(--color-red)]'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -146,7 +146,8 @@ test('CSS theme functions do not use the prefix', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['tw:[color:theme(--tw-color-red)]', 'tw:text-[theme(--tw-color-red)]'],
       css`
         @theme reference prefix(tw) {
           --color-red: #f00;
@@ -156,14 +157,14 @@ test('CSS theme functions do not use the prefix', async () => {
 
         @tailwind utilities;
       `,
-      ['tw:[color:theme(--tw-color-red)]', 'tw:text-[theme(--tw-color-red)]'],
     ),
   ).toEqual('')
 })
 
 test('JS theme functions do not use the prefix', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['tw:my-custom'],
       css`
         @theme prefix(tw) {
           --color-red: #f00;
@@ -175,7 +176,6 @@ test('JS theme functions do not use the prefix', async () => {
 
         @tailwind utilities;
       `,
-      ['tw:my-custom'],
       {
         async loadModule(_id, base) {
           return {
@@ -216,9 +216,9 @@ test('a prefix can be configured via @import theme(…)', async () => {
 
   // Prefixed utilities are generated
   expect(
-    await compileCss(
-      input,
+    await run(
       ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom', 'flex', 'text-potato'],
+      input,
       {
         async loadStylesheet(_id, base) {
           return {
@@ -257,7 +257,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
 
   // Non-prefixed utilities are ignored
   expect(
-    await compileCss(input, ['underline', 'hover:line-through', 'custom'], {
+    await run(['underline', 'hover:line-through', 'custom'], input, {
       async loadStylesheet(_id, base) {
         return {
           path: '',
@@ -283,24 +283,20 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   `
 
   expect(
-    await compileCss(
-      input,
-      ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'],
-      {
-        async loadStylesheet(_id, base) {
-          return {
-            path: '',
-            base,
-            content: css`
-              @theme {
-                --color-potato: #7a4724;
-              }
-              @tailwind utilities;
-            `,
-          }
-        },
+    await run(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'], input, {
+      async loadStylesheet(_id, base) {
+        return {
+          path: '',
+          base,
+          content: css`
+            @theme {
+              --color-potato: #7a4724;
+            }
+            @tailwind utilities;
+          `,
+        }
       },
-    ),
+    }),
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
@@ -329,7 +325,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
 
   // Non-prefixed utilities are ignored
   expect(
-    await compileCss(input, ['underline', 'hover:line-through', 'custom'], {
+    await run(['underline', 'hover:line-through', 'custom'], input, {
       async loadStylesheet(_id, base) {
         return {
           path: '',
@@ -358,12 +354,12 @@ test('a prefix must be letters only', async () => {
 
 test('a candidate matching the prefix does not crash', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['tomato', 'tomato:flex'],
       css`
         @theme reference prefix(tomato);
         @tailwind utilities;
       `,
-      ['tomato', 'tomato:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "

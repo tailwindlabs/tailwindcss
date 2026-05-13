@@ -1,16 +1,16 @@
 import { expect, test } from 'vitest'
 import plugin from './plugin'
-import { compileCss } from './test-utils/run'
+import { run } from './test-utils/run'
 
 const css = String.raw
 
 test('plugin', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @plugin "my-plugin";
       `,
-      [],
       {
         loadModule: async () => ({
           module: plugin(function ({ addBase }) {
@@ -38,11 +38,11 @@ test('plugin', async () => {
 
 test('plugin.withOptions', async () => {
   expect(
-    await compileCss(
+    await run(
+      [],
       css`
         @plugin "my-plugin";
       `,
-      [],
       {
         loadModule: async () => ({
           module: plugin.withOptions(function (opts = { foo: '1px' }) {

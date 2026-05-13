@@ -12,7 +12,8 @@ const css = String.raw
 describe('compiling CSS', () => {
   test('`@tailwind utilities` is replaced with the generated utility classes', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['flex', 'md:grid', 'hover:underline', 'dark:bg-black'],
         css`
           @theme {
             --color-black: #000;
@@ -23,7 +24,6 @@ describe('compiling CSS', () => {
             @tailwind utilities;
           }
         `,
-        ['flex', 'md:grid', 'hover:underline', 'dark:bg-black'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -60,7 +60,8 @@ describe('compiling CSS', () => {
 
   test('that only CSS variables are allowed', () => {
     return expect(
-      compileCss(
+      run(
+        ['bg-primary'],
         css`
           @theme {
             --color-primary: red;
@@ -70,7 +71,6 @@ describe('compiling CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-primary'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`
       [Error: \`@theme\` blocks must only contain custom properties or \`@keyframes\`.
@@ -86,12 +86,12 @@ describe('compiling CSS', () => {
 
   test('`@tailwind utilities` is only processed once', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['flex', 'grid'],
         css`
           @tailwind utilities;
           @tailwind utilities;
         `,
-        ['flex', 'grid'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -110,24 +110,24 @@ describe('compiling CSS', () => {
     let defaultTheme = fs.readFileSync(path.resolve(__dirname, '..', 'theme.css'), 'utf-8')
 
     expect(
-      await compileCss(
+      await run(
+        ['bg-red-500', 'w-4', 'sm:flex', 'shadow-sm'],
         css`
           ${defaultTheme}
           @tailwind utilities;
         `,
-        ['bg-red-500', 'w-4', 'sm:flex', 'shadow-sm'],
       ),
     ).toMatchSnapshot()
   })
 
   test('prefix all CSS variables inside preflight', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['font-mono'],
         css`
           @import 'tailwindcss' prefix(tw);
           @tailwind utilities;
         `,
-        ['font-mono'],
         {
           async loadStylesheet(id) {
             return {
@@ -146,7 +146,12 @@ describe('compiling CSS', () => {
 
   test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()` and `theme()`', async () => {
     expect(
-      await compileCss(
+      await run(
+        [
+          'bg-[no-repeat_url(./my_file.jpg)]',
+          'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]',
+          'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]',
+        ],
         css`
           @theme {
             --spacing-1_5: 1.5rem;
@@ -154,11 +159,6 @@ describe('compiling CSS', () => {
           }
           @tailwind utilities;
         `,
-        [
-          'bg-[no-repeat_url(./my_file.jpg)]',
-          'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]',
-          'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]',
-        ],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -184,7 +184,8 @@ describe('compiling CSS', () => {
 
   test('unescapes theme variables and handles dots as underscore', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
         css`
           @theme {
             --spacing-*: initial;
@@ -196,7 +197,6 @@ describe('compiling CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['m-1.5', 'm-2.5', 'm-2_5', 'm-3.5', 'm-foo/bar'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -228,11 +228,11 @@ describe('compiling CSS', () => {
 
   test('adds vendor prefixes', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['[text-size-adjust:none]'],
         css`
           @tailwind utilities;
         `,
-        ['[text-size-adjust:none]'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -317,7 +317,8 @@ describe('@apply', () => {
 
   it('@apply referencing theme values with `@tailwind utilities` should work', async () => {
     return expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @import 'tailwindcss';
 
@@ -325,7 +326,6 @@ describe('@apply', () => {
             @apply p-2;
           }
         `,
-        [],
         {
           async loadStylesheet() {
             return {
@@ -356,7 +356,8 @@ describe('@apply', () => {
 
   it('@apply referencing theme values with `@reference` should work', async () => {
     return expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @reference "style.css";
 
@@ -364,7 +365,6 @@ describe('@apply', () => {
             @apply p-2;
           }
         `,
-        [],
         {
           async loadStylesheet() {
             return {
@@ -498,12 +498,12 @@ describe('@apply', () => {
 
   it('should replace @apply with the correct result inside imported stylesheets', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @import './bar.css';
           @tailwind utilities;
         `,
-        [],
         {
           async loadStylesheet() {
             return {
@@ -696,7 +696,8 @@ describe('@apply', () => {
 
   it('should recursively apply with custom `@utility`, which is used before it is defined', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['a', 'b', 'c', 'flex', 'my-flex'],
         css`
           @tailwind utilities;
 
@@ -722,7 +723,6 @@ describe('@apply', () => {
             @apply flex;
           }
         `,
-        ['a', 'b', 'c', 'flex', 'my-flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -746,7 +746,8 @@ describe('@apply', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/16935
   it('should not swallow @utility declarations when @apply is used in nested rules', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['custom-utility'],
         css`
           @tailwind utilities;
 
@@ -761,7 +762,6 @@ describe('@apply', () => {
             @apply flex;
           }
         `,
-        ['custom-utility'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -783,7 +783,8 @@ describe('@apply', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/17924
   it('should correctly apply nested usages of @apply when one @utility applies another', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo', 'test', 'test2'],
         css`
           @theme {
             --color-green-500: green;
@@ -811,7 +812,6 @@ describe('@apply', () => {
             @apply test2;
           }
         `,
-        ['foo', 'test', 'test2'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -863,7 +863,8 @@ describe('@apply', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/18400
   it('should ignore the design systems `important` flag when using @apply', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['flex'],
         css`
           @import 'tailwindcss/utilities' important;
           .flex-explicitly-important {
@@ -873,7 +874,6 @@ describe('@apply', () => {
             @apply flex;
           }
         `,
-        ['flex'],
         {
           async loadStylesheet(_, base) {
             return {
@@ -1022,7 +1022,8 @@ describe('important', () => {
 
   it('should not mark declarations inside of @keyframes as important', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-spin!'],
         css`
           @theme {
             --animate-spin: spin 1s linear infinite;
@@ -1035,7 +1036,6 @@ describe('important', () => {
           }
           @tailwind utilities;
         `,
-        ['animate-spin!'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1070,14 +1070,14 @@ describe('important', () => {
 describe('sorting', () => {
   it('should sort utilities based on their property order', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['pointer-events-none', 'flex', 'p-1', 'px-1', 'pl-1'].sort(() => Math.random() - 0.5),
         css`
           @theme {
             --spacing-1: 0.25rem;
           }
           @tailwind utilities;
         `,
-        ['pointer-events-none', 'flex', 'p-1', 'px-1', 'pl-1'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1135,7 +1135,8 @@ describe('sorting', () => {
    */
   it('should sort utilities with a custom internal --tw-sort correctly', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
         css`
           @theme {
             --spacing-0: 0px;
@@ -1144,7 +1145,6 @@ describe('sorting', () => {
           }
           @tailwind utilities;
         `,
-        ['mx-0', 'gap-4', 'space-x-2'].sort(() => Math.random() - 0.5),
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1187,15 +1187,7 @@ describe('sorting', () => {
 
   it('should sort individual logical properties later than left/right pairs', async () => {
     expect(
-      await compileCss(
-        css`
-          @theme {
-            --spacing-1: 1px;
-            --spacing-2: 2px;
-            --spacing-3: 3px;
-          }
-          @tailwind utilities;
-        `,
+      await run(
         [
           // scroll-margin
           'scroll-ms-1',
@@ -1217,6 +1209,14 @@ describe('sorting', () => {
           'pe-2',
           'px-3',
         ].sort(() => Math.random() - 0.5),
+        css`
+          @theme {
+            --spacing-1: 1px;
+            --spacing-2: 2px;
+            --spacing-3: 3px;
+          }
+          @tailwind utilities;
+        `,
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1436,7 +1436,8 @@ describe('sorting', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/16973
   it('should not take undefined values into account when sorting', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['fancy-text', 'text-sm'],
         css`
           @theme {
             --text-sm: 0.875rem;
@@ -1449,7 +1450,6 @@ describe('sorting', () => {
             font-weight: var(--font-weight-bold);
           }
         `,
-        ['fancy-text', 'text-sm'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1476,14 +1476,14 @@ describe('sorting', () => {
 describe('Parsing theme values from CSS', () => {
   test('Can read values from `@theme`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red-500'],
         css`
           @theme {
             --color-red-500: #f00;
           }
           @tailwind utilities;
         `,
-        ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1500,7 +1500,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('Later values from `@theme` override earlier ones', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red-500'],
         css`
           @theme {
             --color-red-500: #f00;
@@ -1508,7 +1509,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red-500'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1525,7 +1525,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('Multiple `@theme` blocks are merged', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red-500', 'accent-blue-500'],
         css`
           @theme {
             --color-red-500: #f00;
@@ -1535,7 +1536,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red-500', 'accent-blue-500'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1557,7 +1557,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@theme` values with escaped forward slashes map to unescaped slashes in candidate values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['w-1/2', 'w-75%'],
         css`
           @theme {
             /* Cursed but we want this to work */
@@ -1566,7 +1567,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['w-1/2', 'w-75%'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1596,7 +1596,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@keyframes` in `@theme` are hoisted', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red', 'text-lg'],
         css`
           @theme {
             --color-red: red;
@@ -1612,7 +1613,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red', 'text-lg'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1634,7 +1634,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@keyframes` in `@theme` are generated when name contains a new line', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-very-long-animation-name'],
         css`
           @theme {
             --animate-very-long-animation-name: very-long-animation-name
@@ -1652,7 +1653,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-very-long-animation-name'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1676,7 +1676,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@theme` values can be unset', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
         css`
           @theme {
             --color-red: #f00;
@@ -1703,7 +1704,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1725,7 +1725,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@theme` values can be unset (using the escaped syntax)', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
         css`
           @theme {
             --color-red: #f00;
@@ -1752,7 +1753,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1774,7 +1774,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('all `@theme` values can be unset at once', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
         css`
           @theme {
             --color-red: #f00;
@@ -1790,7 +1791,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['accent-red', 'accent-blue', 'accent-green', 'text-sm', 'text-md'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1807,7 +1807,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('unsetting `--font-*` does not unset `--font-weight-*`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['font-bold', 'font-sans', 'font-serif', 'font-body'],
         css`
           @theme {
             --font-weight-bold: bold;
@@ -1820,7 +1821,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['font-bold', 'font-sans', 'font-serif', 'font-body'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1856,7 +1856,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('unsetting `--inset-*` does not unset `--inset-shadow-*`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
         css`
           @theme {
             --inset-shadow-sm: inset 0 2px 4px rgb(0 0 0 / 0.05);
@@ -1869,7 +1870,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['inset-shadow-sm', 'inset-ring-thick', 'inset-lg', 'inset-sm', 'inset-md'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -1991,7 +1991,15 @@ describe('Parsing theme values from CSS', () => {
 
   test('unsetting `--text-*` does not unset `--text-color-*`, `--text-underline-offset-*`, `--text-indent-*`, `--text-decoration-thickness-*` or `--text-decoration-color-*`', async () => {
     expect(
-      await compileCss(
+      await run(
+        [
+          'text-potato',
+          'underline-offset-potato',
+          'indent-potato',
+          'decoration-potato',
+          'decoration-salad',
+          'text-lg',
+        ],
         css`
           @theme {
             --text-color-potato: brown;
@@ -2007,14 +2015,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        [
-          'text-potato',
-          'underline-offset-potato',
-          'indent-potato',
-          'decoration-potato',
-          'decoration-salad',
-          'text-lg',
-        ],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2058,7 +2058,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('unused keyframes are removed when an animation is unset', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-foo', 'animate-foobar'],
         css`
           @theme {
             --animate-foo: foo 1s infinite;
@@ -2081,7 +2082,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['animate-foo', 'animate-foobar'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2104,7 +2104,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in an animation', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-foo'],
         css`
           @theme {
             --animate-foo: used 1s infinite;
@@ -2125,7 +2126,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2148,7 +2148,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in an animation within a prefixed setup', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['tw:animate-foo'],
         css`
           @theme prefix(tw) {
             --animate-foo: used 1s infinite;
@@ -2169,7 +2170,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['tw:animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2192,7 +2192,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('custom properties are generated when used from a CSS var with a prefixed setup', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @theme prefix(tw) {
             --color-tomato: #e10c04;
@@ -2202,7 +2203,6 @@ describe('Parsing theme values from CSS', () => {
             color: var(--tw-color-tomato);
           }
         `,
-        [],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2220,7 +2220,8 @@ describe('Parsing theme values from CSS', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/16374
   test('custom properties in keyframes preserved', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-foo'],
         css`
           @theme {
             --animate-foo: used 1s infinite;
@@ -2235,7 +2236,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2259,7 +2259,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in an animation using `@theme inline`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-foo'],
         css`
           @theme inline {
             --animate-foo: used 1s infinite;
@@ -2280,7 +2281,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2299,7 +2299,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in an animation using `@theme static`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-foo'],
         css`
           @theme static {
             --animate-foo: used 1s infinite;
@@ -2320,7 +2321,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2350,7 +2350,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes are generated when used in user CSS', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @theme {
             @keyframes used {
@@ -2372,7 +2373,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        [],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2392,7 +2392,8 @@ describe('Parsing theme values from CSS', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/17332
   test('extracts keyframe names followed by comma', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-test'],
         css`
           @theme {
             --animate-test: 500ms both fade-in, 1000ms linear 500ms spin infinite;
@@ -2409,7 +2410,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['animate-test'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2436,7 +2436,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('keyframes outside of `@theme are always preserved', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @theme {
             @keyframes used {
@@ -2458,7 +2459,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        [],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2483,7 +2483,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('theme values added as reference are not included in the output as variables but emit fallback values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato'],
         css`
           @theme {
             --color-tomato: #e10c04;
@@ -2493,7 +2494,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2514,7 +2514,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@keyframes` added in `@theme reference` should not be emitted', async () => {
     return expect(
-      await compileCss(
+      await run(
+        ['animate-foo'],
         css`
           @theme reference {
             --animate-foo: foo 1s infinite;
@@ -2531,7 +2532,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2554,7 +2554,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@keyframes` added in `@theme reference` should not be emitted, even if another `@theme` block exists', async () => {
     return expect(
-      await compileCss(
+      await run(
+        ['bg-pink', 'animate-foo'],
         css`
           @theme reference {
             --animate-foo: foo 1s infinite;
@@ -2576,7 +2577,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-pink', 'animate-foo'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2607,7 +2607,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('theme values added as reference that override existing theme value suppress the output of the original theme value as a variable', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme {
             --color-potato: #ac855b;
@@ -2617,7 +2618,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2630,7 +2630,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('overriding a reference theme value with a non-reference theme value includes it in the output as a variable', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme reference {
             --color-potato: #ac855b;
@@ -2640,7 +2641,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2657,7 +2657,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('wrapping `@theme` with `@media reference` behaves like `@theme reference` to support `@import` statements', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato', 'bg-avocado'],
         css`
           @theme {
             --color-tomato: #e10c04;
@@ -2672,7 +2673,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2697,11 +2697,11 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@import "tailwindcss" theme(static)` will always generate theme values, regardless of whether they were used or not', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato'],
         css`
           @import 'tailwindcss' theme(static);
         `,
-        ['bg-tomato'],
         {
           async loadStylesheet() {
             return {
@@ -2737,7 +2737,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@media theme(reference)` can only contain `@theme` rules', () => {
     return expect(
-      compileCss(
+      run(
+        ['bg-tomato', 'bg-potato', 'bg-avocado'],
         css`
           @media theme(reference) {
             .not-a-theme-rule {
@@ -2746,7 +2747,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-avocado'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `
@@ -2758,7 +2758,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
         css`
           @theme inline {
             --color-tomato: #e10c04;
@@ -2768,7 +2769,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2789,11 +2789,11 @@ describe('Parsing theme values from CSS', () => {
 
   test('`@import "tailwindcss" theme(inline)` theme values added as `inline` are not wrapped in `var(…)` when used as utility values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato'],
         css`
           @import 'tailwindcss' theme(inline);
         `,
-        ['bg-tomato'],
         {
           async loadStylesheet() {
             return {
@@ -2823,7 +2823,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('theme values added as `static` will always be generated, regardless of whether they were used or not', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato'],
         css`
           @theme static {
             --color-tomato: #e10c04;
@@ -2833,7 +2834,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-tomato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2852,7 +2852,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('when no theme values are emitted, empty layers can be removed', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['underline'],
         css`
           @layer theme1 {
             @layer theme2 {
@@ -2865,7 +2866,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['underline'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2878,7 +2878,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('wrapping `@theme` with `@media theme(inline)` behaves like `@theme inline` to support `@import` statements', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
         css`
           @media theme(inline) {
             @theme {
@@ -2890,7 +2891,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2911,7 +2911,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`inline` and `reference` can be used together', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
         css`
           @theme reference inline {
             --color-tomato: #e10c04;
@@ -2921,7 +2922,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2942,7 +2942,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`inline` and `reference` can be used together in `media(…)`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-tomato', 'bg-potato', 'bg-primary'],
         css`
           @media theme(reference inline) {
             @theme {
@@ -2954,7 +2955,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-tomato', 'bg-potato', 'bg-primary'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -2975,7 +2975,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` theme values can be overridden by regular theme values`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme {
             --color-potato: #ac855b;
@@ -2986,7 +2987,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3003,7 +3003,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` and `inline` can be used together', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme default inline {
             --color-potato: #efb46b;
@@ -3011,7 +3012,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3024,7 +3024,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` and `reference` can be used together', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme default reference {
             --color-potato: #efb46b;
@@ -3032,7 +3033,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3045,7 +3045,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default`, `inline`, and `reference` can be used together', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato'],
         css`
           @theme default reference inline {
             --color-potato: #efb46b;
@@ -3053,7 +3054,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-potato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3066,7 +3066,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` can be used in `media(…)`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['bg-potato', 'bg-tomato'],
         css`
           @media theme() {
             @theme {
@@ -3082,7 +3083,6 @@ describe('Parsing theme values from CSS', () => {
 
           @tailwind utilities;
         `,
-        ['bg-potato', 'bg-tomato'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3104,7 +3104,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` theme values can be overridden by plugin theme values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-red', 'text-orange'],
         css`
           @theme default {
             --color-red: red;
@@ -3115,7 +3116,6 @@ describe('Parsing theme values from CSS', () => {
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['text-red', 'text-orange'],
         {
           loadModule: async () => {
             return {
@@ -3154,7 +3154,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('`default` theme values can be overridden by config theme values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-red', 'text-orange'],
         css`
           @theme default {
             --color-red: red;
@@ -3165,7 +3166,6 @@ describe('Parsing theme values from CSS', () => {
           @config "./my-config.js";
           @tailwind utilities;
         `,
-        ['text-red', 'text-orange'],
         {
           loadModule: async () => {
             return {
@@ -3204,7 +3204,8 @@ describe('Parsing theme values from CSS', () => {
 
   test('only emits theme variables that are used outside of being defined by another variable', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['get-var-b', 'get-var-two'],
         css`
           @theme {
             --var-a: var(--var-b);
@@ -3228,7 +3229,6 @@ describe('Parsing theme values from CSS', () => {
           }
           @tailwind utilities;
         `,
-        ['get-var-b', 'get-var-two'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -3317,14 +3317,14 @@ describe('plugins', () => {
     expect.hasAssertions()
 
     expect(
-      await compileCss(
+      await run(
+        ['text-primary'],
         css`
           @tailwind utilities;
           @plugin "my-plugin" {
             color: red;
           }
         `,
-        ['text-primary'],
         {
           loadModule: async () => ({
             path: '',
@@ -3530,14 +3530,14 @@ describe('plugins', () => {
 
   test('addVariant with string selector', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async () => ({
             path: '',
@@ -3565,14 +3565,14 @@ describe('plugins', () => {
 
   test('addVariant with array of selectors', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async () => ({
             path: '',
@@ -3600,14 +3600,14 @@ describe('plugins', () => {
 
   test('addVariant with object syntax and @slot', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async () => ({
             path: '',
@@ -3638,14 +3638,14 @@ describe('plugins', () => {
 
   test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async () => ({
             path: '',
@@ -3690,14 +3690,14 @@ describe('plugins', () => {
 
   test('@slot is preserved when used as a custom property value', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline'],
         {
           loadModule: async () => ({
             path: '',
@@ -3952,7 +3952,8 @@ describe('@source', () => {
 
     test('can be negated', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['container'],
           css`
             @theme {
               --breakpoint-sm: 40rem;
@@ -3964,14 +3965,14 @@ describe('@source', () => {
             @source not inline("container");
             @tailwind utilities;
           `,
-          ['container'],
         ),
       ).toEqual('')
     })
 
     test('applies brace expansion to negated sources', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['bg-red-500', 'bg-red-700'],
           css`
             @theme {
               --color-red-50: oklch(0.971 0.013 17.38);
@@ -3989,7 +3990,6 @@ describe('@source', () => {
             @source not inline("bg-red-{50,{100..900..100},950}");
             @tailwind utilities;
           `,
-          ['bg-red-500', 'bg-red-700'],
         ),
       ).toEqual('')
     })
@@ -4136,7 +4136,8 @@ describe('@custom-variant', () => {
   describe('body-less syntax', () => {
     test('selector variant', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['hocus:underline', 'group-hocus:flex'],
           css`
             @custom-variant hocus (&:hover, &:focus);
 
@@ -4144,7 +4145,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['hocus:underline', 'group-hocus:flex'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4163,7 +4163,8 @@ describe('@custom-variant', () => {
 
     test('at-rule variant', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['any-hover:hover:underline'],
           css`
             @custom-variant any-hover (@media (any-hover: hover));
 
@@ -4171,7 +4172,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['any-hover:hover:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4190,7 +4190,8 @@ describe('@custom-variant', () => {
 
     test('style-rules and at-rules', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['cant-hover:focus:underline'],
           css`
             @custom-variant cant-hover (&:not(:hover), &:not(:active), @media not (any-hover: hover), @media not (pointer: fine));
 
@@ -4198,7 +4199,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['cant-hover:focus:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4227,7 +4227,8 @@ describe('@custom-variant', () => {
   describe('body with @slot syntax', () => {
     test('selector with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['selected:underline', 'group-selected:underline'],
           css`
             @custom-variant selected {
               &[data-selected] {
@@ -4239,7 +4240,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['selected:underline', 'group-selected:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4254,7 +4254,8 @@ describe('@custom-variant', () => {
 
     test('grouped selectors with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['hocus:underline', 'group-hocus:underline'],
           css`
             @custom-variant hocus {
               &:hover,
@@ -4267,7 +4268,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['hocus:underline', 'group-hocus:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4282,7 +4282,8 @@ describe('@custom-variant', () => {
 
     test('multiple selectors with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['hocus:underline', 'group-hocus:underline'],
           css`
             @custom-variant hocus {
               &:hover {
@@ -4298,7 +4299,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['hocus:underline', 'group-hocus:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4313,7 +4313,8 @@ describe('@custom-variant', () => {
 
     test('nested selector with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['custom-before:underline'],
           css`
             @custom-variant custom-before {
               & {
@@ -4328,7 +4329,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['custom-before:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4347,7 +4347,8 @@ describe('@custom-variant', () => {
 
     test('grouped nested selectors with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['custom-before:underline'],
           css`
             @custom-variant custom-before {
               & {
@@ -4365,7 +4366,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['custom-before:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4384,7 +4384,8 @@ describe('@custom-variant', () => {
 
     test('nested multiple selectors with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['hocus:underline', 'group-hocus:underline'],
           css`
             @custom-variant hocus {
               &:hover {
@@ -4402,7 +4403,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['hocus:underline', 'group-hocus:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4433,7 +4433,8 @@ describe('@custom-variant', () => {
 
     test('selector nested under at-rule with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['hocus:underline', 'group-hocus:underline'],
           css`
             @custom-variant hocus {
               @media (hover: hover) {
@@ -4447,7 +4448,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['hocus:underline', 'group-hocus:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4464,7 +4464,8 @@ describe('@custom-variant', () => {
 
     test('at-rule with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['any-hover:underline'],
           css`
             @custom-variant any-hover {
               @media (any-hover: hover) {
@@ -4476,7 +4477,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['any-hover:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4493,7 +4493,8 @@ describe('@custom-variant', () => {
 
     test('multiple at-rules with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['desktop:underline'],
           css`
             @custom-variant desktop {
               @media (any-hover: hover) {
@@ -4509,7 +4510,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['desktop:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4532,7 +4532,8 @@ describe('@custom-variant', () => {
 
     test('nested at-rules with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['custom-variant:underline'],
           css`
             @custom-variant custom-variant {
               @media (orientation: landscape) {
@@ -4550,7 +4551,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['custom-variant:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4575,7 +4575,8 @@ describe('@custom-variant', () => {
 
     test('at-rule and selector with @slot', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['custom-dark:underline'],
           css`
             @custom-variant custom-dark {
               @media (prefers-color-scheme: dark) {
@@ -4590,7 +4591,6 @@ describe('@custom-variant', () => {
               @tailwind utilities;
             }
           `,
-          ['custom-dark:underline'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -4643,7 +4643,8 @@ describe('@custom-variant', () => {
 
   test('at-rule-only variants cannot be used with compound variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo:flex', 'group-foo:flex', 'peer-foo:flex', 'has-foo:flex', 'not-foo:flex'],
         css`
           @custom-variant foo (@media foo);
 
@@ -4651,8 +4652,6 @@ describe('@custom-variant', () => {
             @tailwind utilities;
           }
         `,
-
-        ['foo:flex', 'group-foo:flex', 'peer-foo:flex', 'has-foo:flex', 'not-foo:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4675,7 +4674,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant can reuse existing @variant in the definition', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:flex'],
         css`
           @custom-variant hocus {
             @variant hover {
@@ -4687,7 +4687,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['hocus:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4702,7 +4701,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant can reuse @custom-variant that is defined later', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:flex'],
         css`
           @custom-variant hocus {
             @variant custom-hover {
@@ -4716,7 +4716,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['hocus:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4729,7 +4728,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant can reuse existing @variant that is overwritten later', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:flex'],
         css`
           @custom-variant hocus {
             @variant hover {
@@ -4743,7 +4743,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['hocus:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4756,7 +4755,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant cannot use @variant that eventually results in a circular dependency', async () => {
     return expect(() =>
-      compileCss(
+      run(
+        ['foo:flex'],
         css`
           @custom-variant custom-variant {
             @variant foo {
@@ -4790,7 +4790,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['foo:flex'],
       ),
     ).rejects.toThrowErrorMatchingInlineSnapshot(`
       [Error: Circular dependency detected in custom variants:
@@ -4814,7 +4813,8 @@ describe('@custom-variant', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/19618
   test('@custom-variant can use a @variant that eventually uses another @custom-variant', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
         css`
           @custom-variant a {
             @slot;
@@ -4828,7 +4828,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4841,7 +4840,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant can use a @variant that eventually uses another @custom-variant (2)', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
         css`
           @custom-variant a {
             .a {
@@ -4861,7 +4861,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['a:flex', 'b:flex', 'a:b:flex', 'b:a:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4875,7 +4874,8 @@ describe('@custom-variant', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/19618#issuecomment-3830775912
   test('@custom-variant can use existing @slot @variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:flex'],
         css`
           @custom-variant hocus {
             @variant hover {
@@ -4897,7 +4897,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['hocus:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4910,7 +4909,8 @@ describe('@custom-variant', () => {
 
   test('@custom-variant setup that results in a circular dependency error can be solved', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['baz:flex'],
         css`
           @custom-variant foo {
             @variant hover {
@@ -4941,7 +4941,6 @@ describe('@custom-variant', () => {
 
           @tailwind utilities;
         `,
-        ['baz:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -4991,7 +4990,8 @@ describe('@utility', () => {
 
   test('@utility can handle escape sequences correctly', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['push-1/2', 'push-50%'],
         css`
           @layer utilities {
             @tailwind utilities;
@@ -5005,7 +5005,6 @@ describe('@utility', () => {
             right: 50%;
           }
         `,
-        ['push-1/2', 'push-50%'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -5045,7 +5044,8 @@ describe('@utility', () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/19505
   test('@utility name cannot contain multiple `/` characters', async () => {
     await expect(
-      compileCss(
+      run(
+        ['ui/button'],
         css`
           @utility ui/button {
             display: inline-flex;
@@ -5053,7 +5053,6 @@ describe('@utility', () => {
           }
           @tailwind utilities;
         `,
-        ['ui/button'],
       ),
     ).resolves.toMatchInlineSnapshot(
       `
@@ -5082,7 +5081,8 @@ describe('@utility', () => {
 
 test('addBase', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['underline'],
       css`
         @plugin "my-plugin";
         @layer base, utilities;
@@ -5090,7 +5090,6 @@ test('addBase', async () => {
           @tailwind utilities;
         }
       `,
-      ['underline'],
       {
         loadModule: async () => ({
           path: '',
@@ -5124,7 +5123,8 @@ test('addBase', async () => {
 
 test('JS APIs support @variant', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'foo', 'bar-one'],
       css`
         @plugin "my-plugin";
         @layer base, utilities;
@@ -5132,7 +5132,6 @@ test('JS APIs support @variant', async () => {
           @tailwind utilities;
         }
       `,
-      ['underline', 'foo', 'bar-one'],
       {
         loadModule: async () => ({
           path: '',
@@ -5179,11 +5178,11 @@ test('JS APIs support @variant', async () => {
 
 it("should error when `layer(…)` is used, but it's not the first param", async () => {
   await expect(async () => {
-    return await compileCss(
+    return await run(
+      [],
       css`
         @import './bar.css' supports(display: grid) layer(utilities);
       `,
-      [],
       {
         async loadStylesheet() {
           return {
@@ -5234,15 +5233,15 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      compileCss(
-        `
+      run(
+        [],
+        css`
           @reference './foo/bar.css';
 
           .bar {
             @apply md:hocus:foo;
           }
         `,
-        [],
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
@@ -5258,11 +5257,11 @@ describe('`@reference "…" imports`', () => {
 
   test('does not generate utilities', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-underline', 'border'],
         css`
           @reference './foo/bar.css';
         `,
-        ['text-underline', 'border'],
         {
           loadStylesheet: async (id: string, base = '/root/foo') => {
             if (id === './foo/baz.css') {
@@ -5291,7 +5290,8 @@ describe('`@reference "…" imports`', () => {
 
   test('removes all @keyframes, even those contributed by JavasScript plugins', async () => {
     await expect(
-      compileCss(
+      run(
+        ['animate-spin', 'match-utility-initial', 'match-components-initial'],
         css`
           @media reference {
             @layer theme, base, components, utilities;
@@ -5322,7 +5322,6 @@ describe('`@reference "…" imports`', () => {
             @apply animate-spin;
           }
         `,
-        ['animate-spin', 'match-utility-initial', 'match-components-initial'],
         {
           loadModule: async () => ({
             path: '',
@@ -5429,14 +5428,14 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      compileCss(
-        `
+      run(
+        [],
+        css`
           @reference './one.css';
           .bar {
             @apply text-red animate-wiggle;
           }
         `,
-        [],
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
@@ -5480,15 +5479,15 @@ describe('`@reference "…" imports`', () => {
     }
 
     await expect(
-      compileCss(
-        `
-            @import './foo/bar.css' reference;
-
-            .bar {
-              @apply md:hocus:foo;
-            }
-          `,
+      run(
         [],
+        css`
+          @import './foo/bar.css' reference;
+
+          .bar {
+            @apply md:hocus:foo;
+          }
+        `,
         { loadStylesheet },
       ),
     ).resolves.toMatchInlineSnapshot(`
@@ -5504,8 +5503,9 @@ describe('`@reference "…" imports`', () => {
 
   test('removes styles when the import resolver was handled outside of Tailwind CSS', async () => {
     await expect(
-      compileCss(
-        `
+      run(
+        [],
+        css`
           @media reference {
             @layer theme {
               @theme {
@@ -5525,7 +5525,6 @@ describe('`@reference "…" imports`', () => {
             @apply md:hocus:foo;
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -5542,12 +5541,12 @@ describe('`@reference "…" imports`', () => {
 describe('@variant', () => {
   it('should convert legacy body-less `@variant` as a `@custom-variant`', async () => {
     await expect(
-      compileCss(
+      run(
+        ['hocus:underline'],
         css`
           @variant hocus (&:hover, &:focus);
           @tailwind utilities;
         `,
-        ['hocus:underline'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -5560,7 +5559,8 @@ describe('@variant', () => {
 
   it('should convert legacy `@variant` with `@slot` as a `@custom-variant`', async () => {
     await expect(
-      compileCss(
+      run(
+        ['hocus:underline'],
         css`
           @variant hocus {
             &:hover {
@@ -5573,7 +5573,6 @@ describe('@variant', () => {
           }
           @tailwind utilities;
         `,
-        ['hocus:underline'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -5586,7 +5585,8 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` in your CSS', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           .btn {
             background: black;
@@ -5628,7 +5628,6 @@ describe('@variant', () => {
             }
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -5679,7 +5678,8 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` in your CSS with a `@custom-variant` that is defined later', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           .btn {
             background: black;
@@ -5691,7 +5691,6 @@ describe('@variant', () => {
 
           @custom-variant hocus (&:hover, &:focus);
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -5708,7 +5707,8 @@ describe('@variant', () => {
 
   it('should be possible to use nested `@variant` rules', async () => {
     await expect(
-      compileCss(
+      run(
+        ['disabled:focus:underline'],
         css`
           .btn {
             background: black;
@@ -5721,7 +5721,6 @@ describe('@variant', () => {
           }
           @tailwind utilities;
         `,
-        ['disabled:focus:underline'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6179,7 +6178,8 @@ describe('@variant', () => {
 
   it('should be possible to use `@variant` with a funky looking variants', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @theme inline reference {
             --container-md: 768px;
@@ -6195,7 +6195,6 @@ describe('@variant', () => {
             }
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6216,14 +6215,14 @@ describe('@variant', () => {
 describe('`color-mix(…)` polyfill', () => {
   it('creates an inlined variable version of the color-mix(…) usages', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red-500/50'],
         css`
           @theme {
             --color-red-500: oklch(63.7% 0.237 25.331);
           }
           @tailwind utilities;
         `,
-        ['text-red-500/50'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6246,7 +6245,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('creates an inlined variable version of the color-mix(…) usages when it resolves to a var(…) containing another theme variable', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red/50'],
         css`
           @theme {
             --color-red: var(--color-red-500);
@@ -6254,7 +6254,6 @@ describe('`color-mix(…)` polyfill', () => {
           }
           @tailwind utilities;
         `,
-        ['text-red/50'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6278,7 +6277,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works for color values in the first and second position', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @theme {
             --color-red-500: oklch(63.7% 0.237 25.331);
@@ -6289,7 +6289,6 @@ describe('`color-mix(…)` polyfill', () => {
             color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6313,7 +6312,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works for nested `color-mix(…)` calls', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @theme {
             --color-red-500: oklch(63.7% 0.237 25.331);
@@ -6327,7 +6327,6 @@ describe('`color-mix(…)` polyfill', () => {
             );
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6350,7 +6349,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('works with multiple `color-mix(…)` functions in one declaration', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @theme {
             --color-red-500: oklch(63.7% 0.237 25.331);
@@ -6366,7 +6366,6 @@ describe('`color-mix(…)` polyfill', () => {
             );
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6424,14 +6423,14 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('uses the first color value as the fallback when the `color-mix(…)` function contains non-theme variables', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-(--my-color)/50', 'text-red-500/(--my-opacity)', 'text-(--my-color)/(--my-opacity)'],
         css`
           @theme {
             --color-red-500: oklch(63.7% 0.237 25.331);
           }
           @tailwind utilities;
         `,
-        ['text-(--my-color)/50', 'text-red-500/(--my-opacity)', 'text-(--my-color)/(--my-opacity)'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6474,11 +6473,11 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('uses the first color value as the fallback when the `color-mix(…)` function contains currentcolor', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-current/50'],
         css`
           @tailwind utilities;
         `,
-        ['text-current/50'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6497,14 +6496,14 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('uses the first color value as the fallback when the `color-mix(…)` function contains theme variables that resolves to other variables', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red/50'],
         css`
           @tailwind utilities;
           @theme {
             --color-red: var(--my-red);
           }
         `,
-        ['text-red/50'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6527,7 +6526,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('uses the first color value of the inner most `color-mix(…)` function as the fallback when nested `color-mix(…)` function all contain non-theme variables', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @tailwind utilities;
           .stacked {
@@ -6539,7 +6539,6 @@ describe('`color-mix(…)` polyfill', () => {
             );
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6558,14 +6557,14 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('does not create a fallback when all color values are statically analyzable (lightningcss will flatten this)', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red-500/50'],
         css`
           @theme inline {
             --color-red-500: oklch(63.7% 0.237 25.331);
           }
           @tailwind utilities;
         `,
-        ['text-red-500/50'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6578,7 +6577,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('also replaces eventual variables in opacity values', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red-500/(--my-half)'],
         css`
           @theme {
             --my-half: 50%;
@@ -6586,7 +6586,6 @@ describe('`color-mix(…)` polyfill', () => {
           }
           @tailwind utilities;
         `,
-        ['text-red-500/(--my-half)'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6610,7 +6609,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('does not delete theme variables from the output', async () => {
     await expect(
-      compileCss(
+      run(
+        ['text-red-500', 'shadow-xl', 'opacity-disabled'],
         css`
           @layer theme {
             @theme {
@@ -6621,7 +6621,6 @@ describe('`color-mix(…)` polyfill', () => {
           }
           @tailwind utilities;
         `,
-        ['text-red-500', 'shadow-xl', 'opacity-disabled'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6759,7 +6758,8 @@ describe('`color-mix(…)` polyfill', () => {
 
   it('does not apply optimizations when already inside a @supports (color: color-mix... block', async () => {
     await expect(
-      compileCss(
+      run(
+        ['mixed'],
         css`
           @tailwind utilities;
           @utility mixed {
@@ -6768,7 +6768,6 @@ describe('`color-mix(…)` polyfill', () => {
             }
           }
         `,
-        ['mixed'],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6785,7 +6784,8 @@ describe('`color-mix(…)` polyfill', () => {
 describe('`@property` polyfill', async () => {
   it('emits fallbacks', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @tailwind utilities;
 
@@ -6808,7 +6808,6 @@ describe('`@property` polyfill', async () => {
             initial-value: red;
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
@@ -6853,7 +6852,8 @@ describe('`@property` polyfill', async () => {
 
   it('emitting fallbacks can be disabled (necessary for CSS modules)', async () => {
     await expect(
-      compileCss(
+      run(
+        [],
         css`
           @tailwind utilities;
 
@@ -6876,7 +6876,6 @@ describe('`@property` polyfill', async () => {
             initial-value: red;
           }
         `,
-        [],
         {
           polyfills: Polyfills.None,
         },

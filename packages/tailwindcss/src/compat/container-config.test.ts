@@ -1,11 +1,12 @@
 import { expect, test } from 'vitest'
-import { compileCss } from '../test-utils/run'
+import { run } from '../test-utils/run'
 
 const css = String.raw
 
 test('creates a custom utility to extend the built-in container', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -17,7 +18,6 @@ test('creates a custom utility to extend the built-in container', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {
@@ -79,7 +79,8 @@ test('creates a custom utility to extend the built-in container', async () => {
 
 test('allows padding to be defined at custom breakpoints', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -91,7 +92,6 @@ test('allows padding to be defined at custom breakpoints', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {
@@ -168,7 +168,8 @@ test('allows padding to be defined at custom breakpoints', async () => {
 
 test('allows breakpoints to be overwritten', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -180,7 +181,6 @@ test('allows breakpoints to be overwritten', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {
@@ -257,7 +257,8 @@ test('allows breakpoints to be overwritten', async () => {
 
 test('padding applies to custom `container` screens', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -269,7 +270,6 @@ test('padding applies to custom `container` screens', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {
@@ -344,7 +344,8 @@ test('padding applies to custom `container` screens', async () => {
 
 test("an empty `screen` config will undo all custom media screens and won't apply any breakpoint-specific padding", async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -356,7 +357,6 @@ test("an empty `screen` config will undo all custom media screens and won't appl
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {
@@ -427,7 +427,8 @@ test("an empty `screen` config will undo all custom media screens and won't appl
 
 test('legacy container component does not interfere with new --container variables', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['max-w-sm'],
       css`
         @theme default {
           --container-3xs: 16rem;
@@ -448,7 +449,6 @@ test('legacy container component does not interfere with new --container variabl
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['max-w-sm'],
       {
         loadModule: async () => ({
           module: {
@@ -479,7 +479,8 @@ test('legacy container component does not interfere with new --container variabl
 
 test('combines custom padding and screen overwrites', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container', '!container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -491,7 +492,6 @@ test('combines custom padding and screen overwrites', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container', '!container'],
       {
         loadModule: async () => ({
           module: {
@@ -650,7 +650,8 @@ test('combines custom padding and screen overwrites', async () => {
 
 test('filters out complex breakpoints', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['container'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -662,7 +663,6 @@ test('filters out complex breakpoints', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['container'],
       {
         loadModule: async () => ({
           module: {

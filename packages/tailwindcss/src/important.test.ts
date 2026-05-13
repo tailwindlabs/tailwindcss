@@ -1,18 +1,18 @@
 import { expect, test } from 'vitest'
-import { compileCss } from './test-utils/run'
+import { run } from './test-utils/run'
 
 const css = String.raw
 
 test('Utilities can be wrapped in a selector', async () => {
   // This is the v4 equivalent of `important: "#app"` from v3
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through'],
       css`
         #app {
           @tailwind utilities;
         }
       `,
-      ['underline', 'hover:line-through'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -32,13 +32,13 @@ test('Utilities can be wrapped in a selector', async () => {
 test('Utilities can be marked with important', async () => {
   // This is the v4 equivalent of `important: true` from v3
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through'],
       css`
         @import 'tailwindcss/utilities' important;
       `,
-      ['underline', 'hover:line-through'],
       {
-        loadStylesheet: async (id: string, base: string) => ({
+        loadStylesheet: async (_id: string, base: string) => ({
           base,
           content: '@tailwind utilities;',
           path: '',
@@ -64,7 +64,8 @@ test('Utilities can be wrapped with a selector and marked as important', async (
   // This does not have a direct equivalent in v3 but works as a consequence of
   // the new APIs
   expect(
-    await compileCss(
+    await run(
+      ['underline', 'hover:line-through'],
       css`
         @media important {
           #app {
@@ -72,7 +73,6 @@ test('Utilities can be wrapped with a selector and marked as important', async (
           }
         }
       `,
-      ['underline', 'hover:line-through'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -91,14 +91,14 @@ test('Utilities can be wrapped with a selector and marked as important', async (
 
 test('variables in utilities should not be marked as important', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['ease-out!', 'z-10!'],
       css`
         @theme {
           --ease-out: cubic-bezier(0, 0, 0.2, 1);
         }
         @tailwind utilities;
       `,
-      ['ease-out!', 'z-10!'],
     ),
   ).toMatchInlineSnapshot(`
     "

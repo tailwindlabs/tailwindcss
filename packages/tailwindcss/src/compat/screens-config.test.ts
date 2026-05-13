@@ -1,11 +1,21 @@
 import { describe, expect, test } from 'vitest'
-import { compileCss } from '../test-utils/run'
+import { run } from '../test-utils/run'
 
 const css = String.raw
 
 test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'sm:flex',
+        'md:flex',
+        'lg:flex',
+        'min-sm:max-md:underline',
+        'min-md:max-lg:underline',
+        'max-w-screen-sm',
+        // Ensure other core variants appear at the end
+        'print:items-end',
+      ],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -20,16 +30,6 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
         @config "./config.js";
         @tailwind utilities;
       `,
-      [
-        'sm:flex',
-        'md:flex',
-        'lg:flex',
-        'min-sm:max-md:underline',
-        'min-md:max-lg:underline',
-        'max-w-screen-sm',
-        // Ensure other core variants appear at the end
-        'print:items-end',
-      ],
       {
         loadModule: async () => ({
           module: {
@@ -93,18 +93,7 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
 
 test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme default {
-          --breakpoint-xs: 39rem;
-          --breakpoint-md: 49rem;
-        }
-        @theme {
-          --breakpoint-md: 50rem;
-        }
-        @config "./config.js";
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Order is messed up on purpose
         'md:flex',
@@ -119,6 +108,17 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
         // Ensure other core variants appear at the end
         'print:items-end',
       ],
+      css`
+        @theme default {
+          --breakpoint-xs: 39rem;
+          --breakpoint-md: 49rem;
+        }
+        @theme {
+          --breakpoint-md: 50rem;
+        }
+        @config "./config.js";
+        @tailwind utilities;
+      `,
       {
         loadModule: async () => ({
           module: {
@@ -193,11 +193,7 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
 
 test('JS config `screens` only setup, even if those match the default-theme export', async () => {
   expect(
-    await compileCss(
-      css`
-        @config "./config.js";
-        @tailwind utilities;
-      `,
+    await run(
       [
         // Order is messed up on purpose
         'md:flex',
@@ -209,6 +205,10 @@ test('JS config `screens` only setup, even if those match the default-theme expo
         // Ensure other core variants appear at the end
         'print:items-end',
       ],
+      css`
+        @config "./config.js";
+        @tailwind utilities;
+      `,
       {
         loadModule: async () => ({
           module: {
@@ -268,18 +268,7 @@ test('JS config `screens` only setup, even if those match the default-theme expo
 
 test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme default {
-          --breakpoint-sm: 40rem;
-          --breakpoint-md: 48rem;
-          --breakpoint-lg: 64rem;
-          --breakpoint-xl: 80rem;
-          --breakpoint-2xl: 96rem;
-        }
-        @config "./config.js";
-        @tailwind utilities;
-      `,
+    await run(
       [
         'sm:flex',
         'md:flex',
@@ -294,6 +283,17 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
         // Ensure other core variants appear at the end
         'print:items-end',
       ],
+      css`
+        @theme default {
+          --breakpoint-sm: 40rem;
+          --breakpoint-md: 48rem;
+          --breakpoint-lg: 64rem;
+          --breakpoint-xl: 80rem;
+          --breakpoint-2xl: 96rem;
+        }
+        @config "./config.js";
+        @tailwind utilities;
+      `,
       {
         loadModule: async () => ({
           module: {
@@ -355,12 +355,12 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
 
 test('JS config with `theme: { extends }` should not include the `default-config` values', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['sm:flex', 'md:flex', 'min-md:max-lg:underline', 'min-sm:max-md:underline'],
       css`
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['sm:flex', 'md:flex', 'min-md:max-lg:underline', 'min-sm:max-md:underline'],
       {
         loadModule: async () => ({
           module: {
@@ -382,11 +382,7 @@ test('JS config with `theme: { extends }` should not include the `default-config
   ).toBe('')
 
   expect(
-    await compileCss(
-      css`
-        @config "./config.js";
-        @tailwind utilities;
-      `,
+    await run(
       [
         'mini:flex',
         'midi:flex',
@@ -397,6 +393,10 @@ test('JS config with `theme: { extends }` should not include the `default-config
         // Ensure other core variants appear at the end
         'print:items-end',
       ],
+      css`
+        @config "./config.js";
+        @tailwind utilities;
+      `,
       {
         loadModule: async () => ({
           module: {
@@ -459,12 +459,12 @@ test('JS config with `theme: { extends }` should not include the `default-config
 describe('complex screen configs', () => {
   test('generates utilities', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'],
         css`
           @config "./config.js";
           @tailwind utilities;
         `,
-        ['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'],
         {
           loadModule: async () => ({
             module: {
@@ -492,11 +492,7 @@ describe('complex screen configs', () => {
     ).toBe('')
 
     expect(
-      await compileCss(
-        css`
-          @config "./config.js";
-          @tailwind utilities;
-        `,
+      await run(
         [
           'sm:flex',
           'md:flex',
@@ -508,6 +504,10 @@ describe('complex screen configs', () => {
           // Ensure other core variants appear at the end
           'print:items-end',
         ],
+        css`
+          @config "./config.js";
+          @tailwind utilities;
+        `,
         {
           loadModule: async () => ({
             module: {
@@ -575,15 +575,7 @@ describe('complex screen configs', () => {
 
   test("don't interfere with `min-*` and `max-*` variants of non-complex screen configs", async () => {
     expect(
-      await compileCss(
-        css`
-          @theme default {
-            --breakpoint-sm: 39rem;
-            --breakpoint-md: 48rem;
-          }
-          @config "./config.js";
-          @tailwind utilities;
-        `,
+      await run(
         [
           'sm:flex',
           'md:flex',
@@ -594,6 +586,14 @@ describe('complex screen configs', () => {
           // Ensure other core variants appear at the end
           'print:items-end',
         ],
+        css`
+          @theme default {
+            --breakpoint-sm: 39rem;
+            --breakpoint-md: 48rem;
+          }
+          @config "./config.js";
+          @tailwind utilities;
+        `,
         {
           loadModule: async () => ({
             module: {
@@ -646,7 +646,8 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
   // created before the compat layer can intercept. We do not remove them
   // currently.
   expect(
-    await compileCss(
+    await run(
+      ['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex'],
       css`
         @theme default {
           --breakpoint-sm: 40rem;
@@ -658,7 +659,6 @@ test('JS config `screens` can overwrite default CSS `--breakpoint-*`', async () 
         @config "./config.js";
         @tailwind utilities;
       `,
-      ['min-sm:flex', 'min-md:flex', 'min-lg:flex', 'min-xl:flex', 'min-2xl:flex'],
       {
         loadModule: async () => ({
           module: {

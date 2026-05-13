@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 import { compile } from '..'
 import plugin from '../plugin'
-import { compileCss } from '../test-utils/run'
+import { run } from '../test-utils/run'
 import defaultTheme from './default-theme'
 import type { CssInJs, PluginAPI } from './plugin-api'
 
@@ -10,12 +10,12 @@ const css = String.raw
 describe('theme', async () => {
   test('plugin theme can contain objects', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        [],
         {
           loadModule: async (_id, base) => {
             return {
@@ -78,12 +78,12 @@ describe('theme', async () => {
 
   test('keyframes added via addUtilities are appended to the AST', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        [],
         {
           loadModule: async (_id, base) => {
             return {
@@ -111,7 +111,8 @@ describe('theme', async () => {
 
   test('plugin theme can extend colors', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['scrollbar-red-500', 'scrollbar-russet-700'],
         css`
           @theme reference {
             --color-red-500: #ef4444;
@@ -119,7 +120,6 @@ describe('theme', async () => {
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['scrollbar-red-500', 'scrollbar-russet-700'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -155,12 +155,12 @@ describe('theme', async () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-duration-316'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['animate-duration-316'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -200,12 +200,12 @@ describe('theme', async () => {
     expect,
   }) => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-duration-316', 'animate-duration-slow'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['animate-duration-316', 'animate-duration-slow'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -248,7 +248,8 @@ describe('theme', async () => {
 
   test('plugin theme can have opacity modifiers', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['percentage', 'fraction', 'variable'],
         css`
           @tailwind utilities;
           @theme {
@@ -256,7 +257,6 @@ describe('theme', async () => {
           }
           @plugin "my-plugin";
         `,
-        ['percentage', 'fraction', 'variable'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -294,15 +294,7 @@ describe('theme', async () => {
 
   test('plugin theme colors can use <alpha-value>', async () => {
     expect(
-      await compileCss(
-        css`
-          @tailwind utilities;
-          @theme {
-            /* This should not work */
-            --color-custom-css: rgba(255 0 0 / <alpha-value>);
-          }
-          @plugin "my-plugin";
-        `,
+      await run(
         [
           'bg-custom',
           'css-percentage',
@@ -312,6 +304,14 @@ describe('theme', async () => {
           'js-fraction',
           'js-variable',
         ],
+        css`
+          @tailwind utilities;
+          @theme {
+            /* This should not work */
+            --color-custom-css: rgba(255 0 0 / <alpha-value>);
+          }
+          @plugin "my-plugin";
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -376,12 +376,12 @@ describe('theme', async () => {
 
   test('theme value functions are resolved correctly regardless of order', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-delay-316', 'animate-delay-slow'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['animate-delay-316', 'animate-delay-slow'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -427,12 +427,12 @@ describe('theme', async () => {
 
   test('plugins can override the default key', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animate-duration'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['animate-duration'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -462,7 +462,8 @@ describe('theme', async () => {
 
   test('plugins can read CSS theme keys using the old theme key notation', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animation-spin', 'animation', 'animation2', 'animation2-twist'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -471,7 +472,6 @@ describe('theme', async () => {
             --animate-spin: spin 1s linear infinite;
           }
         `,
-        ['animation-spin', 'animation', 'animation2', 'animation2-twist'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -517,7 +517,8 @@ describe('theme', async () => {
 
   test('CSS theme values are merged with JS theme values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animation', 'animation-spin', 'animation-bounce'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -526,7 +527,6 @@ describe('theme', async () => {
             --animate-spin: spin 1s linear infinite;
           }
         `,
-        ['animation', 'animation-spin', 'animation-bounce'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -564,7 +564,8 @@ describe('theme', async () => {
 
   test('CSS theme defaults take precedence over JS theme defaults', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['animation'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -573,7 +574,6 @@ describe('theme', async () => {
             --animate-spin: spin 1s linear infinite;
           }
         `,
-        ['animation'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -639,11 +639,7 @@ describe('theme', async () => {
 
   test('all necessary theme keys support bare values', async () => {
     expect(
-      await compileCss(
-        css`
-          @tailwind utilities;
-          @plugin "my-plugin";
-        `,
+      await run(
         [
           'my-aspect-2/5',
           'my-backdrop-brightness-1',
@@ -688,6 +684,10 @@ describe('theme', async () => {
           'my-transition-duration-1',
           'my-z-index-1',
         ],
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -996,12 +996,12 @@ describe('theme', async () => {
 
   test('Candidates can match multiple utility definitions', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo-bar'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['foo-bar'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1032,11 +1032,7 @@ describe('theme', async () => {
 
   test('spreading `tailwindcss/defaultTheme` exports keeps bare values', async () => {
     expect(
-      await compileCss(
-        css`
-          @tailwind utilities;
-          @plugin "my-plugin";
-        `,
+      await run(
         [
           'my-aspect-2/5',
           // 'my-backdrop-brightness-1',
@@ -1081,6 +1077,10 @@ describe('theme', async () => {
           'my-transition-duration-1',
           'my-z-index-1',
         ],
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -1240,12 +1240,12 @@ describe('theme', async () => {
 
   test('can use escaped JS variables in theme values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-width-1', 'my-width-1/2', 'my-width-1.5'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
         `,
-        ['my-width-1', 'my-width-1/2', 'my-width-1.5'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1294,7 +1294,8 @@ describe('theme', async () => {
 
   test('can use escaped CSS variables in theme values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -1307,7 +1308,6 @@ describe('theme', async () => {
             --width-2_5: 0.625rem;
           }
         `,
-        ['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1346,7 +1346,8 @@ describe('theme', async () => {
 
   test('can use escaped CSS variables in referenced theme namespace', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'],
         css`
           @tailwind utilities;
           @plugin "my-plugin";
@@ -1359,7 +1360,6 @@ describe('theme', async () => {
             --width-2_5: 0.625rem;
           }
         `,
-        ['my-width-1', 'my-width-1.5', 'my-width-1/2', 'my-width-2.5'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1405,13 +1405,13 @@ describe('theme', async () => {
 describe('addBase', () => {
   test('does not create rules when imported via `@import "…" reference`', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @tailwind utilities;
           @plugin "outside";
           @import './inside.css' reference;
         `,
-        [],
         {
           loadModule: async (_id, base) => {
             if (_id === 'inside') {
@@ -1455,11 +1455,11 @@ describe('addBase', () => {
 
   test('does not modify CSS variables', async () => {
     expect(
-      await compileCss(
+      await run(
+        [],
         css`
           @plugin "my-plugin";
         `,
-        [],
         {
           loadModule: async () => ({
             path: '',
@@ -1487,14 +1487,14 @@ describe('addBase', () => {
 describe('addVariant', () => {
   test('addVariant with string selector', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1524,14 +1524,14 @@ describe('addVariant', () => {
 
   test('addVariant with array of selectors', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1561,14 +1561,14 @@ describe('addVariant', () => {
 
   test('addVariant with object syntax and @slot', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1601,14 +1601,14 @@ describe('addVariant', () => {
 
   test('addVariant with object syntax, media, nesting and multiple @slot', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline', 'group-hocus:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline', 'group-hocus:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1655,14 +1655,14 @@ describe('addVariant', () => {
 
   test('addVariant with at-rules and placeholder', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['potato:underline', 'potato:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['potato:underline', 'potato:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1699,14 +1699,14 @@ describe('addVariant', () => {
 
   test('@slot is preserved when used as a custom property value', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['hocus:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['hocus:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1742,14 +1742,14 @@ describe('addVariant', () => {
 
   test('ignores variants that use :merge(…) and ensures `peer-*` and `group-*` rules work out of the box', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['optional:flex', 'group-optional:flex', 'peer-optional:flex', 'group-optional/foo:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['optional:flex', 'group-optional:flex', 'peer-optional:flex', 'group-optional/foo:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1779,14 +1779,14 @@ describe('addVariant', () => {
 describe('matchVariant', () => {
   test('partial arbitrary variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1816,14 +1816,14 @@ describe('matchVariant', () => {
 
   test('partial arbitrary variants with at-rules', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1857,14 +1857,14 @@ describe('matchVariant', () => {
 
   test('partial arbitrary variants with at-rules and placeholder', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['potato-[yellow]:underline', 'potato-[baked]:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1904,14 +1904,14 @@ describe('matchVariant', () => {
 
   test('partial arbitrary variants with default values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['tooltip-bottom:underline', 'tooltip-top:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['tooltip-bottom:underline', 'tooltip-top:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -1946,19 +1946,19 @@ describe('matchVariant', () => {
 
   test('matched variant values maintain the sort order they are registered in', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'alphabet-c:underline',
           'alphabet-a:underline',
           'alphabet-d:underline',
           'alphabet-b:underline',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -1991,14 +1991,14 @@ describe('matchVariant', () => {
 
   test('matchVariant can return an array of format strings from the function', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['test-[a,b,c]:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['test-[a,b,c]:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2026,14 +2026,14 @@ describe('matchVariant', () => {
 
   test('should be possible to sort variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['testmin-[600px]:flex', 'testmin-[500px]:underline', 'testmin-[700px]:italic'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['testmin-[600px]:flex', 'testmin-[500px]:underline', 'testmin-[700px]:italic'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2077,14 +2077,14 @@ describe('matchVariant', () => {
 
   test('should be possible to compare arbitrary variants and hardcoded variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['testmin-[700px]:italic', 'testmin-example:italic', 'testmin-[500px]:italic'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['testmin-[700px]:italic', 'testmin-example:italic', 'testmin-[500px]:italic'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2129,19 +2129,19 @@ describe('matchVariant', () => {
 
   test('should be possible to sort stacked arbitrary variants correctly', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'testmin-[150px]:testmax-[400px]:order-2',
           'testmin-[100px]:testmax-[350px]:order-3',
           'testmin-[100px]:testmax-[300px]:order-4',
           'testmin-[100px]:testmax-[400px]:order-1',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -2204,17 +2204,17 @@ describe('matchVariant', () => {
   test('should maintain sort from other variants, if sort functions of arbitrary variants return 0', async () => {
     // Expect :focus to come after :hover
     expect(
-      await compileCss(
+      await run(
+        [
+          'testmin-[100px]:testmax-[200px]:focus:underline',
+          'testmin-[100px]:testmax-[200px]:hover:underline',
+        ],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        [
-          'testmin-[100px]:testmax-[200px]:focus:underline',
-          'testmin-[100px]:testmax-[200px]:hover:underline',
-        ],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2260,19 +2260,19 @@ describe('matchVariant', () => {
 
   test('should sort arbitrary variants left to right (1)', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'testmin-[200px]:testmax-[400px]:order-2',
           'testmin-[200px]:testmax-[300px]:order-4',
           'testmin-[100px]:testmax-[400px]:order-1',
           'testmin-[100px]:testmax-[300px]:order-3',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -2335,19 +2335,19 @@ describe('matchVariant', () => {
 
   test('should sort arbitrary variants left to right (2)', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'testmax-[400px]:testmin-[200px]:underline',
           'testmax-[300px]:testmin-[200px]:underline',
           'testmax-[400px]:testmin-[100px]:underline',
           'testmax-[300px]:testmin-[100px]:underline',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -2406,19 +2406,19 @@ describe('matchVariant', () => {
 
   test('should guarantee that we are not passing values from other variants to the wrong function', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'testmin-[200px]:testmax-[400px]:order-2',
           'testmin-[200px]:testmax-[300px]:order-4',
           'testmin-[100px]:testmax-[400px]:order-1',
           'testmin-[100px]:testmax-[300px]:order-3',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -2489,14 +2489,14 @@ describe('matchVariant', () => {
 
   test('should default to the DEFAULT value for variants', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2524,14 +2524,14 @@ describe('matchVariant', () => {
 
   test('should not generate anything if the matchVariant does not have a DEFAULT value configured', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2553,14 +2553,14 @@ describe('matchVariant', () => {
 
   test('should be possible to use `null` as a DEFAULT value', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2588,14 +2588,14 @@ describe('matchVariant', () => {
 
   test('should be possible to use `undefined` as a DEFAULT value', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo:underline'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2623,12 +2623,12 @@ describe('matchVariant', () => {
 
   test('should be called with eventual modifiers', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['my-container-[250px]:underline', 'my-container-[250px]/placement:underline'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['my-container-[250px]:underline', 'my-container-[250px]/placement:underline'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2670,19 +2670,19 @@ describe('matchVariant', () => {
 
   test('ignores variants that use :merge(…)', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-          @layer utilities {
-            @tailwind utilities;
-          }
-        `,
+      await run(
         [
           'optional-[test]:flex',
           'group-optional-[test]:flex',
           'peer-optional-[test]:flex',
           'group-optional-[test]/foo:flex',
         ],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
         {
           loadModule: async (_id, base) => {
             return {
@@ -2716,14 +2716,14 @@ describe('matchVariant', () => {
 
   test('ignores variants that use unknown values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo-[test]:flex', 'foo-known:flex', 'foo-unknown:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo-[test]:flex', 'foo-known:flex', 'foo-unknown:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2751,14 +2751,14 @@ describe('matchVariant', () => {
 
   test('ignores variants that produce non-string values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo-[test]:flex', 'foo-string:flex', 'foo-object:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['foo-[test]:flex', 'foo-string:flex', 'foo-object:flex'],
         {
           loadModule: async (_id, base) => {
             return {
@@ -2791,7 +2791,8 @@ describe('matchVariant', () => {
 describe('addUtilities()', () => {
   test('custom static utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-trim', 'lg:text-trim'],
         css`
           @plugin "my-plugin";
           @layer utilities {
@@ -2802,7 +2803,6 @@ describe('addUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['text-trim', 'lg:text-trim'],
         {
           async loadModule(_id, base) {
             return {
@@ -2841,12 +2841,12 @@ describe('addUtilities()', () => {
 
   test('return multiple rule objects from a custom utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-trim'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['text-trim'],
         {
           async loadModule(_id, base) {
             return {
@@ -2878,12 +2878,12 @@ describe('addUtilities()', () => {
 
   test('define multiple utilities with array syntax', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-trim', 'text-trim-2'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['text-trim', 'text-trim-2'],
         {
           async loadModule(_id, base) {
             return {
@@ -2921,12 +2921,12 @@ describe('addUtilities()', () => {
 
   test('utilities can use arrays for fallback declaration values', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['outlined'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['outlined'],
         {
           async loadModule(_id, base) {
             return {
@@ -2957,14 +2957,14 @@ describe('addUtilities()', () => {
 
   test('camel case properties are converted to kebab-case', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['text-trim'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['text-trim'],
         {
           async loadModule(_id, base) {
             return {
@@ -2998,7 +2998,8 @@ describe('addUtilities()', () => {
 
   test('custom static utilities support `@apply`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo', 'lg:foo'],
         css`
           @plugin "my-plugin";
           @layer utilities {
@@ -3009,7 +3010,6 @@ describe('addUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['foo', 'lg:foo'],
         {
           async loadModule(_id, base) {
             return {
@@ -3090,7 +3090,8 @@ describe('addUtilities()', () => {
 
   test('supports multiple selector names', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['form-input', 'lg:form-textarea'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
@@ -3099,7 +3100,6 @@ describe('addUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['form-input', 'lg:form-textarea'],
         {
           async loadModule(_id, base) {
             return {
@@ -3136,7 +3136,8 @@ describe('addUtilities()', () => {
 
   test('supports pseudo classes and pseudo elements', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['form-input', 'lg:form-textarea'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
@@ -3145,7 +3146,6 @@ describe('addUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['form-input', 'lg:form-textarea'],
         {
           async loadModule(_id, base) {
             return {
@@ -3179,14 +3179,14 @@ describe('addUtilities()', () => {
 
   test('nests complex utility names', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
         {
           async loadModule(_id, base) {
             return {
@@ -3218,7 +3218,8 @@ describe('addUtilities()', () => {
 
   test('prefixes nested class names with the configured theme prefix', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['tw:a', 'tw:b', 'tw:c', 'tw:d'],
         css`
           @plugin "my-plugin";
           @layer utilities {
@@ -3227,7 +3228,6 @@ describe('addUtilities()', () => {
           @theme prefix(tw) {
           }
         `,
-        ['tw:a', 'tw:b', 'tw:c', 'tw:d'],
         {
           async loadModule(_id, base) {
             return {
@@ -3253,7 +3253,8 @@ describe('addUtilities()', () => {
 
   test('replaces the class name with variants in nested selectors', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo', 'md:foo', 'not-hover:md:foo'],
         css`
           @plugin "my-plugin";
           @theme {
@@ -3261,7 +3262,6 @@ describe('addUtilities()', () => {
           }
           @tailwind utilities;
         `,
-        ['foo', 'md:foo', 'not-hover:md:foo'],
         {
           async loadModule(_id, base) {
             return {
@@ -3299,12 +3299,12 @@ describe('addUtilities()', () => {
 
   test('values that are `false`, `null`, or `undefined` are discarded from CSS object ASTs', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['foo'],
         {
           async loadModule(_id, base) {
             return {
@@ -3343,7 +3343,14 @@ describe('addUtilities()', () => {
 describe('matchUtilities()', () => {
   test('custom functional utility', async () => {
     expect(
-      await compileCss(
+      await run(
+        [
+          'border-block',
+          'border-block-2',
+          'border-block-[35px]',
+          'border-block-[var(--foo)]',
+          'lg:border-block-2',
+        ],
         css`
           @plugin "my-plugin";
 
@@ -3353,13 +3360,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        [
-          'border-block',
-          'border-block-2',
-          'border-block-[35px]',
-          'border-block-[var(--foo)]',
-          'lg:border-block-2',
-        ],
         {
           async loadModule(_id, base) {
             return {
@@ -3402,7 +3402,14 @@ describe('matchUtilities()', () => {
     `)
 
     expect(
-      await compileCss(
+      await run(
+        [
+          '-border-block',
+          '-border-block-2',
+          'lg:-border-block-2',
+          'border-block-unknown',
+          'border-block/1',
+        ],
         css`
           @plugin "my-plugin";
 
@@ -3412,13 +3419,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        [
-          '-border-block',
-          '-border-block-2',
-          'lg:-border-block-2',
-          'border-block-unknown',
-          'border-block/1',
-        ],
         {
           async loadModule(_id, base) {
             return {
@@ -3439,12 +3439,12 @@ describe('matchUtilities()', () => {
 
   test('custom functional utilities can start with @', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['@w-1', 'hover:@w-1'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['@w-1', 'hover:@w-1'],
         {
           async loadModule(_id, base) {
             return {
@@ -3474,12 +3474,12 @@ describe('matchUtilities()', () => {
 
   test('custom functional utilities can return an array of rules', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['all-but-order-bottom-left-radius'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['all-but-order-bottom-left-radius'],
         {
           async loadModule(_id, base) {
             return {
@@ -3515,7 +3515,8 @@ describe('matchUtilities()', () => {
 
   test('custom functional utility with any modifier', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo'],
         css`
           @plugin "my-plugin";
 
@@ -3525,7 +3526,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo'],
         {
           async loadModule(_id, base) {
             return {
@@ -3573,7 +3573,8 @@ describe('matchUtilities()', () => {
 
   test('custom functional utility with known modifier', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo'],
         css`
           @plugin "my-plugin";
 
@@ -3583,7 +3584,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo'],
         {
           async loadModule(_id, base) {
             return {
@@ -3632,7 +3632,8 @@ describe('matchUtilities()', () => {
     `)
 
     expect(
-      await compileCss(
+      await run(
+        ['border-block/unknown', 'border-block-2/unknown'],
         css`
           @plugin "my-plugin";
 
@@ -3642,7 +3643,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['border-block/unknown', 'border-block-2/unknown'],
         {
           async loadModule(_id, base) {
             return {
@@ -3674,12 +3674,12 @@ describe('matchUtilities()', () => {
   describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
     test('implicit color modifier', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'],
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
-          ['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'],
           {
             async loadModule(_id, base) {
               return {
@@ -3715,12 +3715,12 @@ describe('matchUtilities()', () => {
         "
       `)
       expect(
-        await compileCss(
+        await run(
+          ['scrollbar-[2px]/50'],
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
-          ['scrollbar-[2px]/50'],
           {
             async loadModule(_id, base) {
               return {
@@ -3745,12 +3745,12 @@ describe('matchUtilities()', () => {
 
     test('no modifiers are supported by the plugins', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['scrollbar-[2px]/50'],
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
-          ['scrollbar-[2px]/50'],
           {
             async loadModule(_id, base) {
               return {
@@ -3776,12 +3776,12 @@ describe('matchUtilities()', () => {
 
     test('invalid named modifier', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['scrollbar-[2px]/foo'],
           css`
             @tailwind utilities;
             @plugin "my-plugin";
           `,
-          ['scrollbar-[2px]/foo'],
           {
             async loadModule(_id, base) {
               return {
@@ -3808,16 +3808,7 @@ describe('matchUtilities()', () => {
 
   test('custom functional utilities with different types', async () => {
     expect(
-      await compileCss(
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+      await run(
         [
           'scrollbar-black',
           'scrollbar-black/50',
@@ -3831,6 +3822,15 @@ describe('matchUtilities()', () => {
           'scrollbar-[color:var(--my-color)]/50',
           'scrollbar-[length:var(--my-width)]',
         ],
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+
+          @theme reference {
+            --breakpoint-lg: 1024px;
+          }
+        `,
         {
           async loadModule(_id, base) {
             return {
@@ -3900,7 +3900,8 @@ describe('matchUtilities()', () => {
     `)
 
     expect(
-      await compileCss(
+      await run(
+        ['scrollbar-2/50', 'scrollbar-[2px]/50', 'scrollbar-[length:var(--my-width)]/50'],
         css`
           @plugin "my-plugin";
 
@@ -3910,7 +3911,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['scrollbar-2/50', 'scrollbar-[2px]/50', 'scrollbar-[length:var(--my-width)]/50'],
         {
           async loadModule(_id, base) {
             return {
@@ -3936,7 +3936,15 @@ describe('matchUtilities()', () => {
 
   test('functional utilities with `type: color` automatically support opacity', async () => {
     expect(
-      await compileCss(
+      await run(
+        [
+          'scrollbar-current',
+          'scrollbar-current/45',
+          'scrollbar-black',
+          'scrollbar-black/33',
+          'scrollbar-black/[50%]',
+          'scrollbar-[var(--my-color)]/[25%]',
+        ],
         css`
           @plugin "my-plugin";
 
@@ -3946,14 +3954,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        [
-          'scrollbar-current',
-          'scrollbar-current/45',
-          'scrollbar-black',
-          'scrollbar-black/33',
-          'scrollbar-black/[50%]',
-          'scrollbar-[var(--my-color)]/[25%]',
-        ],
         {
           async loadModule(_id, base) {
             return {
@@ -4008,7 +4008,8 @@ describe('matchUtilities()', () => {
 
   test('functional utilities with explicit modifiers', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar'],
         css`
           @plugin "my-plugin";
 
@@ -4019,7 +4020,6 @@ describe('matchUtilities()', () => {
             --opacity-my-opacity: 0.5;
           }
         `,
-        ['scrollbar-[12px]', 'scrollbar-[12px]/foo', 'scrollbar-[12px]/bar'],
         {
           async loadModule(_id, base) {
             return {
@@ -4057,7 +4057,8 @@ describe('matchUtilities()', () => {
 
   test('functional utilities support `@apply`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'],
         css`
           @plugin "my-plugin";
           @layer utilities {
@@ -4068,7 +4069,6 @@ describe('matchUtilities()', () => {
             --breakpoint-lg: 1024px;
           }
         `,
-        ['foo-bar', 'lg:foo-bar', 'foo-[12px]', 'lg:foo-[12px]'],
         {
           async loadModule(_id, base) {
             return {
@@ -4149,7 +4149,8 @@ describe('matchUtilities()', () => {
 
   test('replaces the class name with variants in nested selectors', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['foo-red', 'md:foo-red', 'not-hover:md:foo-red'],
         css`
           @plugin "my-plugin";
           @theme {
@@ -4157,7 +4158,6 @@ describe('matchUtilities()', () => {
           }
           @tailwind utilities;
         `,
-        ['foo-red', 'md:foo-red', 'not-hover:md:foo-red'],
         {
           async loadModule(base) {
             return {
@@ -4200,12 +4200,12 @@ describe('matchUtilities()', () => {
 describe('addComponents()', () => {
   test('is an alias for addUtilities', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['btn', 'btn-blue', 'btn-red'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['btn', 'btn-blue', 'btn-red'],
         {
           async loadModule(_id, base) {
             return {
@@ -4271,12 +4271,12 @@ describe('addComponents()', () => {
 describe('matchComponents()', () => {
   test('is an alias for matchUtilities', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['prose', 'sm:prose-sm', 'hover:prose-lg'],
         css`
           @plugin "my-plugin";
           @tailwind utilities;
         `,
-        ['prose', 'sm:prose-sm', 'hover:prose-lg'],
         {
           async loadModule(_id, base) {
             return {
@@ -4415,11 +4415,7 @@ describe('config()', () => {
   }) => {
     // These should not crash or produce output
     expect(
-      await compileCss(
-        css`
-          @tailwind utilities;
-          @plugin "my-plugin";
-        `,
+      await run(
         [
           'test-constructor',
           'test-hasOwnProperty',
@@ -4427,6 +4423,10 @@ describe('config()', () => {
           'test-valueOf',
           'test-__proto__',
         ],
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+        `,
         {
           loadModule: async (_id, base) => {
             return {
