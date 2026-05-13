@@ -6899,14 +6899,7 @@ test('transform', async () => {
 })
 
 test('zoom', async () => {
-  expect(
-    await run(
-      ['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['zoom-50', 'zoom-100', 'zoom-[var(--zoom)]'])).toMatchInlineSnapshot(`
     "
     .zoom-50 {
       zoom: 50%;
@@ -10083,14 +10076,8 @@ test('space-y-reverse', async () => {
 })
 
 test('divide-x', async () => {
-  expect(
-    await run(
-      ['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]']))
+    .toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -10203,14 +10190,8 @@ test('divide-x with custom default border width', async () => {
 })
 
 test('divide-y', async () => {
-  expect(
-    await run(
-      ['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]']))
+    .toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -19306,14 +19287,8 @@ test('mask-y-to', async () => {
 })
 
 test('mask-linear', async () => {
-  expect(
-    await run(
-      ['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45']))
+    .toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -19919,20 +19894,15 @@ test('mask-linear-to', async () => {
 
 test('mask-radial', async () => {
   expect(
-    await run(
-      [
-        'mask-circle',
-        'mask-ellipse',
-        'mask-radial-closest-side',
-        'mask-radial-farthest-side',
-        'mask-radial-closest-corner',
-        'mask-radial-farthest-corner',
-        'mask-radial-[25%_25%]',
-      ],
-      css`
-        @tailwind utilities;
-      `,
-    ),
+    await run([
+      'mask-circle',
+      'mask-ellipse',
+      'mask-radial-closest-side',
+      'mask-radial-farthest-side',
+      'mask-radial-closest-corner',
+      'mask-radial-farthest-corner',
+      'mask-radial-[25%_25%]',
+    ]),
   ).toMatchInlineSnapshot(`
     "
     @layer properties {
@@ -20684,14 +20654,8 @@ test('mask-radial-to', async () => {
 })
 
 test('mask-conic', async () => {
-  expect(
-    await run(
-      ['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45']))
+    .toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -25025,14 +24989,7 @@ test('transition', async () => {
     "
   `)
 
-  expect(
-    await run(
-      ['transition-all'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['transition-all'])).toMatchInlineSnapshot(`
     "
     .transition-all {
       transition-property: all;

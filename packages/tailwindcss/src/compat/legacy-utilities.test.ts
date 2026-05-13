@@ -5,21 +5,16 @@ const css = String.raw
 
 test('bg-gradient-*', async () => {
   expect(
-    await run(
-      [
-        'bg-gradient-to-t',
-        'bg-gradient-to-tr',
-        'bg-gradient-to-r',
-        'bg-gradient-to-br',
-        'bg-gradient-to-b',
-        'bg-gradient-to-bl',
-        'bg-gradient-to-l',
-        'bg-gradient-to-tl',
-      ],
-      css`
-        @tailwind utilities;
-      `,
-    ),
+    await run([
+      'bg-gradient-to-t',
+      'bg-gradient-to-tr',
+      'bg-gradient-to-r',
+      'bg-gradient-to-br',
+      'bg-gradient-to-b',
+      'bg-gradient-to-bl',
+      'bg-gradient-to-l',
+      'bg-gradient-to-tl',
+    ]),
   ).toMatchInlineSnapshot(`
     "
     .bg-gradient-to-b {

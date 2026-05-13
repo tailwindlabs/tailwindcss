@@ -659,12 +659,12 @@ test('group-[...]', async () => {
   `)
 
   expect(
-    await run(
-      ['group-[]:flex', 'group-hover/[]:flex', 'group-[@media_foo]:flex', 'group-[>img]:flex'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
+    await run([
+      'group-[]:flex',
+      'group-hover/[]:flex',
+      'group-[@media_foo]:flex',
+      'group-[>img]:flex',
+    ]),
   ).toEqual('')
 })
 
@@ -755,12 +755,7 @@ test('peer-[...]', async () => {
   `)
 
   expect(
-    await run(
-      ['peer-[]:flex', 'peer-hover/[]:flex', 'peer-[@media_foo]:flex', 'peer-[>img]:flex'],
-      css`
-        @tailwind utilities;
-      `,
-    ),
+    await run(['peer-[]:flex', 'peer-hover/[]:flex', 'peer-[@media_foo]:flex', 'peer-[>img]:flex']),
   ).toEqual('')
 })
 
@@ -2722,7 +2717,7 @@ test('variants with the same root are sorted deterministically', async () => {
   ])
 
   for (let classList of classLists) {
-    expect(await run(classList, '@tailwind utilities;')).toMatchInlineSnapshot(`
+    expect(await run(classList)).toMatchInlineSnapshot(`
       "
       .data-active\\:flex[data-active], .data-focus\\:flex[data-focus], .data-hover\\:flex[data-hover], .data-\\[bar\\]\\:flex[data-bar], .data-\\[baz\\]\\:flex[data-baz], .data-\\[foo\\]\\:flex[data-foo] {
         display: flex;

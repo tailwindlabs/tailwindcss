@@ -6426,14 +6426,7 @@ describe('`color-mix(…)` polyfill', () => {
   })
 
   it('uses the first color value as the fallback when the `color-mix(…)` function contains currentcolor', async () => {
-    expect(
-      await run(
-        ['text-current/50'],
-        css`
-          @tailwind utilities;
-        `,
-      ),
-    ).toMatchInlineSnapshot(`
+    expect(await run(['text-current/50'])).toMatchInlineSnapshot(`
       "
       .text-current\\/50 {
         color: currentColor;
