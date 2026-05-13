@@ -23,10 +23,6 @@ export async function run(
   return pretty(optimize(build(candidates)).code)
 }
 
-export function optimizeCss(input: string) {
-  return pretty(optimize(input).code)
-}
-
 export function pretty(input: string) {
   input = input.trim()
   if (input === '') return ''
