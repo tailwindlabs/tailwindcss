@@ -12,4 +12,5 @@
 .yarn
 __pycache__
 node_modules
+vendor
 venv

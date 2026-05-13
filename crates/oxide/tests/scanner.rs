@@ -1475,6 +1475,44 @@ mod scanner {
     }
 
     #[test]
+    fn test_allow_explicit_vendor_paths() {
+        let dir = tempdir().unwrap().into_path();
+
+        create_files_in(
+            &dir,
+            &[
+                (
+                    ".gitignore",
+                    "*\n!/app\n!/app/design/**",
+                ),
+                (
+                    "app/design/index.html",
+                    "content-['app/design/index.html']",
+                ),
+                (
+                    "vendor/acme/theme/index.html",
+                    "content-['vendor/acme/theme/index.html']",
+                ),
+            ],
+        );
+
+        let sources = vec![
+            public_source_entry_from_pattern(dir.clone(), "@source './app/design'"),
+            public_source_entry_from_pattern(dir.clone(), "@source './vendor/acme/theme'"),
+        ];
+
+        let candidates = Scanner::new(sources).scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['app/design/index.html']",
+                "content-['vendor/acme/theme/index.html']",
+            ]
+        );
+    }
+
+    #[test]
     fn test_ignore_node_modules_without_gitignore() {
         let ScanResult {
             candidates,
