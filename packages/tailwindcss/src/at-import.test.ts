@@ -7,7 +7,7 @@ import { compileCss, run } from './test-utils/run'
 const css = dedent
 
 test('can resolve relative @imports', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -38,7 +38,7 @@ test('can resolve relative @imports', async () => {
 })
 
 test('can recursively resolve relative @imports', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     if (base === '/root' && id === './foo/bar.css') {
       return {
         content: css`
@@ -83,7 +83,7 @@ let exampleCSS = css`
     color: red;
   }
 `
-let loadStylesheet = async (id: string) => {
+async function loadStylesheet(id: string) {
   if (!id.endsWith('example.css')) throw new Error('Unexpected import: ' + id)
   return {
     content: exampleCSS,
@@ -451,15 +451,16 @@ test('supports theme(reference) imports', async () => {
 })
 
 test('updates the base when loading modules inside nested files', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @config './nested-config.js';
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
   using loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
@@ -480,14 +481,15 @@ test('updates the base when loading modules inside nested files', async () => {
 })
 
 test('emits the right base for @source directives inside nested files', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @source './nested/**/*.css';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
 
   let compiler = await compile(
     css`
@@ -504,15 +506,17 @@ test('emits the right base for @source directives inside nested files', async ()
 })
 
 test('emits the right base for @source found inside JS configs and plugins from nested imports', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @config './nested-config.js';
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
+
   using loadModule = vi.fn().mockImplementation((id: string) => {
     let base = id.includes('nested') ? '/root/foo' : '/root'
     if (id.includes('config')) {
@@ -564,12 +568,13 @@ test('it crashes when inside a cycle', async () => {
     @import 'foo.css';
   `
 
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: input,
       base: '/root',
       path: '',
-    })
+    }
+  }
 
   await expect(compileCss(input, { base: '/root', loadStylesheet })).rejects.toMatchInlineSnapshot(
     `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
@@ -577,7 +582,7 @@ test('it crashes when inside a cycle', async () => {
 })
 
 test('resolves @reference as `@import "…" reference`', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -613,7 +618,7 @@ test('resolves @reference as `@import "…" reference`', async () => {
 })
 
 test('resolves `@variant` used as `@custom-variant` inside `@reference`', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
