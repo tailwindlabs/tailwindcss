@@ -3658,7 +3658,7 @@ describe('matchUtilities()', () => {
         @plugin "my-plugin";
       `
 
-      let options = {
+      let options: Partial<Parameters<typeof compile>[1]> = {
         async loadModule(_id, base) {
           return {
             path: '',

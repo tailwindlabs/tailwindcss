@@ -204,7 +204,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
     }
   `
 
-  let options = {
+  let options: Partial<Parameters<typeof compile>[1]> = {
     async loadStylesheet(_id, base) {
       return {
         path: '',
@@ -260,7 +260,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     }
   `
 
-  let options = {
+  let options: Partial<Parameters<typeof compile>[1]> = {
     async loadStylesheet(_id, base) {
       return {
         path: '',

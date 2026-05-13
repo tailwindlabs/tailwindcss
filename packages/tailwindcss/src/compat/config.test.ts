@@ -1286,7 +1286,7 @@ test('utilities must be prefixed', async () => {
     }
   `
 
-  let options = {
+  let options: Partial<Parameters<typeof compile>[1]> = {
     loadModule: async (_id, base) => ({
       path: '',
       base,
@@ -1516,7 +1516,7 @@ test('blocklisted candidates are not generated', async () => {
     @config "./config.js";
   `
 
-  let options = {
+  let options: Partial<Parameters<typeof compile>[1]> = {
     async loadModule(_id, base) {
       return {
         path: '',
