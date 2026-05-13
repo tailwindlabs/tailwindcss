@@ -3724,16 +3724,16 @@ describe('plugins', () => {
 
   test('built-in variants can be overridden while keeping their order', async () => {
     expect(
-      await compileCss(
+      await run(
+        // Make sure the order does not change by including the variants
+        // immediately before and after `dark`
+        ['rtl:flex', 'dark:flex', 'starting:flex'],
         css`
           @plugin "my-plugin";
           @layer utilities {
             @tailwind utilities;
           }
         `,
-        // Make sure the order does not change by including the variants
-        // immediately before and after `dark`
-        ['rtl:flex', 'dark:flex', 'starting:flex'],
         {
           loadModule: async () => ({
             path: '',
@@ -4605,17 +4605,16 @@ describe('@custom-variant', () => {
 
   test('built-in variants can be overridden while keeping their order', async () => {
     expect(
-      await compileCss(
+      await run(
+        // Make sure the order does not change by including the variants
+        // immediately before and after `dark`
+        ['rtl:flex', 'dark:flex', 'starting:flex'],
         css`
           @custom-variant dark (&:is([data-theme='dark'] *));
           @layer utilities {
             @tailwind utilities;
           }
         `,
-
-        // Make sure the order does not change by including the variants
-        // immediately before and after `dark`
-        ['rtl:flex', 'dark:flex', 'starting:flex'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -6393,7 +6392,6 @@ describe('`color-mix(…)` polyfill', () => {
             color: color-mix(in oklab,var(--color-red-500)50%,transparent);
           }
         `,
-        [],
       ),
     ).resolves.toMatchInlineSnapshot(`
       "
