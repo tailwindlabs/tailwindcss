@@ -11,8 +11,8 @@
     "@tailwindcss/postcss": "workspace:^",
     "fast-glob": "^3.3.3",
     "next": "16.2.6",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "tailwindcss": "workspace:^"
   },
   "devDependencies": {
