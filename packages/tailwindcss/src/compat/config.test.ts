@@ -1277,27 +1277,26 @@ test('merges css breakpoints with js config screens', async () => {
 })
 
 test('utilities must be prefixed', async () => {
-  // Prefixed utilities are generated
-  expect(
-    await run(
-      ['tw:underline', 'tw:hover:line-through', 'tw:custom'],
-      css`
-        @tailwind utilities;
-        @config "./config.js";
+  let input = css`
+    @tailwind utilities;
+    @config "./config.js";
 
-        @utility custom {
-          color: red;
-        }
-      `,
-      {
-        loadModule: async (_id, base) => ({
-          path: '',
-          base,
-          module: { prefix: 'tw' },
-        }),
-      },
-    ),
-  ).toMatchInlineSnapshot(`
+    @utility custom {
+      color: red;
+    }
+  `
+
+  let options = {
+    loadModule: async (_id, base) => ({
+      path: '',
+      base,
+      module: { prefix: 'tw' },
+    }),
+  }
+
+  // Prefixed utilities are generated
+  expect(await run(['tw:underline', 'tw:hover:line-through', 'tw:custom'], input, options))
+    .toMatchInlineSnapshot(`
     "
     .tw\\:custom {
       color: red;
@@ -1316,26 +1315,7 @@ test('utilities must be prefixed', async () => {
   `)
 
   // Non-prefixed utilities are ignored
-  expect(
-    await run(
-      ['underline', 'hover:line-through', 'custom'],
-      css`
-        @tailwind utilities;
-        @config "./config.js";
-
-        @utility custom {
-          color: red;
-        }
-      `,
-      {
-        loadModule: async (_id, base) => ({
-          path: '',
-          base,
-          module: { prefix: 'tw' },
-        }),
-      },
-    ),
-  ).toEqual('')
+  expect(await run(['underline', 'hover:line-through', 'custom'], input, options)).toEqual('')
 })
 
 test('utilities used in @apply must be prefixed', async () => {
@@ -1527,57 +1507,33 @@ test('important: true', async () => {
 })
 
 test('blocklisted candidates are not generated', async () => {
-  // bg-white will not get generated
-  expect(
-    await run(
-      ['bg-white'],
-      css`
-        @theme reference {
-          --color-white: #fff;
-          --breakpoint-md: 48rem;
-        }
-        @tailwind utilities;
-        @config "./config.js";
-      `,
-      {
-        async loadModule(_id, base) {
-          return {
-            path: '',
-            base,
-            module: {
-              blocklist: ['bg-white'],
-            },
-          }
+  let input = css`
+    @theme reference {
+      --color-white: #fff;
+      --breakpoint-md: 48rem;
+    }
+    @tailwind utilities;
+    @config "./config.js";
+  `
+
+  let options = {
+    async loadModule(_id, base) {
+      return {
+        path: '',
+        base,
+        module: {
+          blocklist: ['bg-white'],
         },
-      },
-    ),
-  ).toEqual('')
+      }
+    },
+  }
+
+  // bg-white will not get generated
+  expect(await run(['bg-white'], input, options)).toEqual('')
 
   // underline will as will md:bg-white
-  expect(
-    await run(
-      ['underline', 'bg-white', 'md:bg-white'],
-      css`
-        @theme reference {
-          --color-white: #fff;
-          --breakpoint-md: 48rem;
-        }
-        @tailwind utilities;
-        @config "./config.js";
-      `,
-      {
-        async loadModule(_id, base) {
-          return {
-            path: '',
-            base,
-            module: {
-              blocklist: ['bg-white'],
-            },
-          }
-        },
-      },
-    ),
-  ).toMatchInlineSnapshot(`
+  expect(await run(['underline', 'bg-white', 'md:bg-white'], input, options))
+    .toMatchInlineSnapshot(`
     "
     .underline {
       text-decoration-line: underline;

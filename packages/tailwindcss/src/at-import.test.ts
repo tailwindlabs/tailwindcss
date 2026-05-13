@@ -560,23 +560,18 @@ test('emits the right base for @source found inside JS configs and plugins from 
 })
 
 test('it crashes when inside a cycle', async () => {
+  let input = css`
+    @import 'foo.css';
+  `
+
   let loadStylesheet = () =>
     Promise.resolve({
-      content: css`
-        @import 'foo.css';
-      `,
+      content: input,
       base: '/root',
       path: '',
     })
 
-  await expect(
-    compileCss(
-      css`
-        @import 'foo.css';
-      `,
-      { base: '/root', loadStylesheet },
-    ),
-  ).rejects.toMatchInlineSnapshot(
+  await expect(compileCss(input, { base: '/root', loadStylesheet })).rejects.toMatchInlineSnapshot(
     `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
   )
 })

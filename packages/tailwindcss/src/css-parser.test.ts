@@ -1198,49 +1198,37 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should error when an unterminated string is used', () => {
-      expect(() =>
-        parse(css`
+      let input = css`
           .foo {
             content: "Hello world!
             /*                    ^ missing " */
             font-weight: bold;
           }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: "Hello world!"]`)
+        `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            content: "Hello world!
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: "Hello world!"]`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
         `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!"]`,
       )
     })
 
     it('should error when an unterminated string is used with a `;`', () => {
-      expect(() =>
-        parse(css`
+      let input = css`
           .foo {
             content: "Hello world!;
             /*                    ^ missing " */
             font-weight: bold;
           }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: "Hello world!;"]`)
+        `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            content: "Hello world!;
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: "Hello world!;"]`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
         `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!;"]`,
       )
     })
@@ -1266,23 +1254,19 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should error when an unterminated string is used in a custom property', () => {
-      expect(() =>
-        parse(css`
+      // prettier-ignore
+      let input = css`
           .foo {
             --bar: 'Hello world!
             /*                  ^ missing ' * /;
           }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: 'Hello world!']`)
+        `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            --bar: 'Hello world!
-            /*                  ^ missing ' * /;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: 'Hello world!']`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
         `[CssSyntaxError: input.css:3:20: Unterminated string: 'Hello world!']`,
       )
     })

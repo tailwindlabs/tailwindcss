@@ -5708,18 +5708,18 @@ describe('@variant', () => {
 
   describe('comma-separated `@variant` rules', () => {
     it('should be possible to use comma-separated `@variant` rules', async () => {
-      expect(
-        await compileCss(css`
-          .btn {
-            background: black;
+      let input = css`
+        .btn {
+          background: black;
 
-            @variant hover, focus {
-              background: red;
-            }
+          @variant hover, focus {
+            background: red;
           }
-          @tailwind utilities;
-        `),
-      ).toMatchInlineSnapshot(`
+        }
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input)).toMatchInlineSnapshot(`
         "
         .btn {
           background: #000;
@@ -5737,18 +5737,7 @@ describe('@variant', () => {
         "
       `)
 
-      expect(
-        await compileCss(css`
-          .btn {
-            background: black;
-
-            @variant hover, focus {
-              background: red;
-            }
-          }
-          @tailwind utilities;
-        `),
-      ).toEqual(
+      expect(await compileCss(input)).toEqual(
         await compileCss(css`
           .btn {
             background: black;
@@ -5832,22 +5821,22 @@ describe('@variant', () => {
     })
 
     it('should handle nested comma-separated variants', async () => {
-      expect(
-        await compileCss(css`
-          .btn {
-            background: black;
+      let input = css`
+        .btn {
+          background: black;
 
-            @variant hover, focus {
-              background: red;
+          @variant hover, focus {
+            background: red;
 
-              @variant active, disabled {
-                background: blue;
-              }
+            @variant active, disabled {
+              background: blue;
             }
           }
-          @tailwind utilities;
-        `),
-      ).toMatchInlineSnapshot(`
+        }
+        @tailwind utilities;
+      `
+
+      expect(await compileCss(input)).toMatchInlineSnapshot(`
         "
         .btn {
           background: #000;
@@ -5873,22 +5862,7 @@ describe('@variant', () => {
         "
       `)
 
-      expect(
-        await compileCss(css`
-          .btn {
-            background: black;
-
-            @variant hover, focus {
-              background: red;
-
-              @variant active, disabled {
-                background: blue;
-              }
-            }
-          }
-          @tailwind utilities;
-        `),
-      ).toEqual(
+      expect(await compileCss(input)).toEqual(
         await compileCss(css`
           .btn {
             background: black;
@@ -6049,22 +6023,22 @@ describe('@variant', () => {
   })
 
   it('should be possible to use compound and stacked variants in `@variant`', async () => {
-    expect(
-      await compileCss(css`
-        .btn {
-          background: black;
+    let input = css`
+      .btn {
+        background: black;
 
-          @variant data-a, data-b:data-c {
-            background: red;
+        @variant data-a, data-b:data-c {
+          background: red;
 
-            @variant data-d, data-e:data-f {
-              background: blue;
-            }
+          @variant data-d, data-e:data-f {
+            background: blue;
           }
         }
-        @tailwind utilities;
-      `),
-    ).toMatchInlineSnapshot(`
+      }
+      @tailwind utilities;
+    `
+
+    expect(await compileCss(input)).toMatchInlineSnapshot(`
       "
       .btn {
         background: #000;
@@ -6088,22 +6062,7 @@ describe('@variant', () => {
       "
     `)
 
-    expect(
-      await compileCss(css`
-        .btn {
-          background: black;
-
-          @variant data-a, data-b:data-c {
-            background: red;
-
-            @variant data-d, data-e:data-f {
-              background: blue;
-            }
-          }
-        }
-        @tailwind utilities;
-      `),
-    ).toEqual(
+    expect(await compileCss(input)).toEqual(
       await compileCss(css`
         .btn {
           background: black;

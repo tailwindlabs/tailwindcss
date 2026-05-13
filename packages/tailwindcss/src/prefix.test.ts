@@ -6,6 +6,15 @@ import { compileCss, run } from './test-utils/run'
 const css = String.raw
 
 test('utilities must be prefixed', async () => {
+  let input = css`
+    @theme reference prefix(tw);
+    @tailwind utilities;
+
+    @utility custom {
+      color: red;
+    }
+  `
+
   // Prefixed utilities are generated
   expect(
     await run(
@@ -16,14 +25,7 @@ test('utilities must be prefixed', async () => {
         'tw:group-hover:flex',
         'tw:peer-hover:flex',
       ],
-      css`
-        @theme reference prefix(tw);
-        @tailwind utilities;
-
-        @utility custom {
-          color: red;
-        }
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -48,19 +50,7 @@ test('utilities must be prefixed', async () => {
   `)
 
   // Non-prefixed utilities are ignored
-  expect(
-    await run(
-      ['underline', 'hover:line-through', 'custom'],
-      css`
-        @theme reference prefix(tw);
-        @tailwind utilities;
-
-        @utility custom {
-          color: red;
-        }
-      `,
-    ),
-  ).toEqual('')
+  expect(await run(['underline', 'hover:line-through', 'custom'], input)).toEqual('')
 })
 
 test('utilities used in @apply must be prefixed', async () => {
@@ -214,24 +204,26 @@ test('a prefix can be configured via @import theme(…)', async () => {
     }
   `
 
+  let options = {
+    async loadStylesheet(_id, base) {
+      return {
+        path: '',
+        base,
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+        `,
+      }
+    },
+  }
+
   // Prefixed utilities are generated
   expect(
     await run(
       ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom', 'flex', 'text-potato'],
       input,
-      {
-        async loadStylesheet(_id, base) {
-          return {
-            path: '',
-            base,
-            content: css`
-              @theme {
-                --color-potato: #7a4724;
-              }
-            `,
-          }
-        },
-      },
+      options,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -256,21 +248,7 @@ test('a prefix can be configured via @import theme(…)', async () => {
   `)
 
   // Non-prefixed utilities are ignored
-  expect(
-    await run(['underline', 'hover:line-through', 'custom'], input, {
-      async loadStylesheet(_id, base) {
-        return {
-          path: '',
-          base,
-          content: css`
-            @theme {
-              --color-potato: #7a4724;
-            }
-          `,
-        }
-      },
-    }),
-  ).toEqual('')
+  expect(await run(['underline', 'hover:line-through', 'custom'], input, options)).toEqual('')
 })
 
 test('a prefix can be configured via @import prefix(…)', async () => {
@@ -282,21 +260,27 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     }
   `
 
+  let options = {
+    async loadStylesheet(_id, base) {
+      return {
+        path: '',
+        base,
+        content: css`
+          @theme {
+            --color-potato: #7a4724;
+          }
+          @tailwind utilities;
+        `,
+      }
+    },
+  }
+
   expect(
-    await run(['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'], input, {
-      async loadStylesheet(_id, base) {
-        return {
-          path: '',
-          base,
-          content: css`
-            @theme {
-              --color-potato: #7a4724;
-            }
-            @tailwind utilities;
-          `,
-        }
-      },
-    }),
+    await run(
+      ['tw:underline', 'tw:bg-potato', 'tw:hover:line-through', 'tw:custom'],
+      input,
+      options,
+    ),
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
@@ -324,22 +308,7 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   `)
 
   // Non-prefixed utilities are ignored
-  expect(
-    await run(['underline', 'hover:line-through', 'custom'], input, {
-      async loadStylesheet(_id, base) {
-        return {
-          path: '',
-          base,
-          content: css`
-            @theme {
-              --color-potato: #7a4724;
-            }
-            @tailwind utilities;
-          `,
-        }
-      },
-    }),
-  ).toEqual('')
+  expect(await run(['underline', 'hover:line-through', 'custom'], input, options)).toEqual('')
 })
 
 test('a prefix must be letters only', async () => {

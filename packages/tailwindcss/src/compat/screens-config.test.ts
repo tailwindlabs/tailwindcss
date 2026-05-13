@@ -354,31 +354,29 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
 })
 
 test('JS config with `theme: { extends }` should not include the `default-config` values', async () => {
+  let input = css`
+    @config "./config.js";
+    @tailwind utilities;
+  `
+
   expect(
-    await run(
-      ['sm:flex', 'md:flex', 'min-md:max-lg:underline', 'min-sm:max-md:underline'],
-      css`
-        @config "./config.js";
-        @tailwind utilities;
-      `,
-      {
-        loadModule: async () => ({
-          module: {
-            theme: {
-              extend: {
-                screens: {
-                  mini: '40rem',
-                  midi: '48rem',
-                  maxi: '64rem',
-                },
+    await run(['sm:flex', 'md:flex', 'min-md:max-lg:underline', 'min-sm:max-md:underline'], input, {
+      loadModule: async () => ({
+        module: {
+          theme: {
+            extend: {
+              screens: {
+                mini: '40rem',
+                midi: '48rem',
+                maxi: '64rem',
               },
             },
           },
-          base: '/root',
-          path: '',
-        }),
-      },
-    ),
+        },
+        base: '/root',
+        path: '',
+      }),
+    }),
   ).toBe('')
 
   expect(
@@ -393,10 +391,7 @@ test('JS config with `theme: { extends }` should not include the `default-config
         // Ensure other core variants appear at the end
         'print:items-end',
       ],
-      css`
-        @config "./config.js";
-        @tailwind utilities;
-      `,
+      input,
       {
         loadModule: async () => ({
           module: {
@@ -458,37 +453,35 @@ test('JS config with `theme: { extends }` should not include the `default-config
 
 describe('complex screen configs', () => {
   test('generates utilities', async () => {
+    let input = css`
+      @config "./config.js";
+      @tailwind utilities;
+    `
+
     expect(
-      await run(
-        ['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'],
-        css`
-          @config "./config.js";
-          @tailwind utilities;
-        `,
-        {
-          loadModule: async () => ({
-            module: {
-              theme: {
-                extend: {
-                  screens: {
-                    sm: { max: '639px' },
-                    md: [
-                      //
-                      { min: '668px', max: '767px' },
-                      '868px',
-                    ],
-                    lg: { min: '868px' },
-                    xl: { min: '1024px', max: '1279px' },
-                    tall: { raw: '(min-height: 800px)' },
-                  },
+      await run(['min-sm:flex', 'min-md:flex', 'min-xl:flex', 'min-tall:flex'], input, {
+        loadModule: async () => ({
+          module: {
+            theme: {
+              extend: {
+                screens: {
+                  sm: { max: '639px' },
+                  md: [
+                    //
+                    { min: '668px', max: '767px' },
+                    '868px',
+                  ],
+                  lg: { min: '868px' },
+                  xl: { min: '1024px', max: '1279px' },
+                  tall: { raw: '(min-height: 800px)' },
                 },
               },
             },
-            base: '/root',
-            path: '',
-          }),
-        },
-      ),
+          },
+          base: '/root',
+          path: '',
+        }),
+      }),
     ).toBe('')
 
     expect(
@@ -504,10 +497,7 @@ describe('complex screen configs', () => {
           // Ensure other core variants appear at the end
           'print:items-end',
         ],
-        css`
-          @config "./config.js";
-          @tailwind utilities;
-        `,
+        input,
         {
           loadModule: async () => ({
             module: {

@@ -2249,6 +2249,14 @@ test('nth', async () => {
 })
 
 test('container queries', async () => {
+  let input = css`
+    @theme {
+      --container-lg: 1024px;
+      --container-foo-bar: 1440px;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -2273,13 +2281,7 @@ test('container queries', async () => {
         '@max-foo-bar:flex',
         '@max-foo-bar/name:flex',
       ],
-      css`
-        @theme {
-          --container-lg: 1024px;
-          --container-foo-bar: 1440px;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2404,13 +2406,7 @@ test('container queries', async () => {
         '@-max-foo-bar:flex',
         '@-max-foo-bar/name:flex',
       ],
-      css`
-        @theme {
-          --container-lg: 1024px;
-          --container-foo-bar: 1440px;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })

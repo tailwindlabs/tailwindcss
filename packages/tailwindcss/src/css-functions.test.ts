@@ -1115,6 +1115,13 @@ describe('theme(…)', () => {
     })
 
     test("values that don't exist don't produce candidates", async () => {
+      let input = css`
+        @tailwind utilities;
+        @theme reference {
+          --radius-sm: 2rem;
+        }
+      `
+
       // This guarantees that valid candidates still make it through when some are invalid
       expect(
         await run(
@@ -1123,12 +1130,7 @@ describe('theme(…)', () => {
             'rounded-[theme(i.do.not.exist)]',
             'rounded-[theme(--i-do-not-exist)]',
           ],
-          css`
-            @tailwind utilities;
-            @theme reference {
-              --radius-sm: 2rem;
-            }
-          `,
+          input,
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -1140,15 +1142,7 @@ describe('theme(…)', () => {
 
       // This guarantees no output for the following candidates
       expect(
-        await run(
-          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
-          css`
-            @tailwind utilities;
-            @theme reference {
-              --radius-sm: 2rem;
-            }
-          `,
-        ),
+        await run(['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'], input),
       ).toEqual('')
     })
   })

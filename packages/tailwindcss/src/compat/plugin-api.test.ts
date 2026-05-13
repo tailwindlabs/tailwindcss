@@ -3338,6 +3338,16 @@ describe('addUtilities()', () => {
 
 describe('matchUtilities()', () => {
   test('custom functional utility', async () => {
+    let input = css`
+      @plugin "my-plugin";
+
+      @tailwind utilities;
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
+    `
+
     expect(
       await run(
         [
@@ -3347,15 +3357,7 @@ describe('matchUtilities()', () => {
           'border-block-[var(--foo)]',
           'lg:border-block-2',
         ],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+        input,
         {
           async loadModule(_id, base) {
             return {
@@ -3406,15 +3408,7 @@ describe('matchUtilities()', () => {
           'border-block-unknown',
           'border-block/1',
         ],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+        input,
         {
           async loadModule(_id, base) {
             return {
@@ -3568,18 +3562,20 @@ describe('matchUtilities()', () => {
   })
 
   test('custom functional utility with known modifier', async () => {
+    let input = css`
+      @plugin "my-plugin";
+
+      @tailwind utilities;
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
+    `
+
     expect(
       await run(
         ['border-block', 'border-block-2', 'border-block/foo', 'border-block-2/foo'],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+        input,
         {
           async loadModule(_id, base) {
             return {
@@ -3628,40 +3624,28 @@ describe('matchUtilities()', () => {
     `)
 
     expect(
-      await run(
-        ['border-block/unknown', 'border-block-2/unknown'],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
+      await run(['border-block/unknown', 'border-block-2/unknown'], input, {
+        async loadModule(_id, base) {
+          return {
+            path: '',
+            base,
+            module: ({ matchUtilities }: PluginAPI) => {
+              matchUtilities(
+                {
+                  'border-block': (value, { modifier }) => ({
+                    '--my-modifier': modifier ?? 'none',
+                    'border-block-width': value,
+                  }),
+                },
+                {
+                  values: { DEFAULT: '1px', '2': '2px' },
+                  modifiers: { foo: 'foo' },
+                },
+              )
+            },
           }
-        `,
-        {
-          async loadModule(_id, base) {
-            return {
-              path: '',
-              base,
-              module: ({ matchUtilities }: PluginAPI) => {
-                matchUtilities(
-                  {
-                    'border-block': (value, { modifier }) => ({
-                      '--my-modifier': modifier ?? 'none',
-                      'border-block-width': value,
-                    }),
-                  },
-                  {
-                    values: { DEFAULT: '1px', '2': '2px' },
-                    modifiers: { foo: 'foo' },
-                  },
-                )
-              },
-            }
-          },
         },
-      ),
+      }),
     ).toEqual('')
   })
 
@@ -3669,32 +3653,32 @@ describe('matchUtilities()', () => {
   // future don't be afraid to change what should happen in this scenario.
   describe('plugins that handle a specific arbitrary value type prevent falling through to other plugins if the result is invalid for that plugin', () => {
     test('implicit color modifier', async () => {
-      expect(
-        await run(
-          ['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'],
-          css`
-            @tailwind utilities;
-            @plugin "my-plugin";
-          `,
-          {
-            async loadModule(_id, base) {
-              return {
-                path: '',
-                base,
-                module: ({ matchUtilities }: PluginAPI) => {
-                  matchUtilities(
-                    { scrollbar: (value) => ({ 'scrollbar-color': value }) },
-                    { type: ['color', 'any'] },
-                  )
-                  matchUtilities(
-                    { scrollbar: (value) => ({ 'scrollbar-width': value }) },
-                    { type: ['length'] },
-                  )
-                },
-              }
+      let input = css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `
+
+      let options = {
+        async loadModule(_id, base) {
+          return {
+            path: '',
+            base,
+            module: ({ matchUtilities }: PluginAPI) => {
+              matchUtilities(
+                { scrollbar: (value) => ({ 'scrollbar-color': value }) },
+                { type: ['color', 'any'] },
+              )
+              matchUtilities(
+                { scrollbar: (value) => ({ 'scrollbar-width': value }) },
+                { type: ['length'] },
+              )
             },
-          },
-        ),
+          }
+        },
+      }
+
+      expect(
+        await run(['scrollbar-[2px]', 'scrollbar-[#08c]', 'scrollbar-[#08c]/50'], input, options),
       ).toMatchInlineSnapshot(`
         "
         .scrollbar-\\[2px\\] {
@@ -3710,33 +3694,7 @@ describe('matchUtilities()', () => {
         }
         "
       `)
-      expect(
-        await run(
-          ['scrollbar-[2px]/50'],
-          css`
-            @tailwind utilities;
-            @plugin "my-plugin";
-          `,
-          {
-            async loadModule(_id, base) {
-              return {
-                path: '',
-                base,
-                module: ({ matchUtilities }: PluginAPI) => {
-                  matchUtilities(
-                    { scrollbar: (value) => ({ 'scrollbar-color': value }) },
-                    { type: ['color', 'any'] },
-                  )
-                  matchUtilities(
-                    { scrollbar: (value) => ({ 'scrollbar-width': value }) },
-                    { type: ['length'] },
-                  )
-                },
-              }
-            },
-          },
-        ),
-      ).toEqual('')
+      expect(await run(['scrollbar-[2px]/50'], input, options)).toEqual('')
     })
 
     test('no modifiers are supported by the plugins', async () => {
@@ -3803,6 +3761,16 @@ describe('matchUtilities()', () => {
   })
 
   test('custom functional utilities with different types', async () => {
+    let input = css`
+      @plugin "my-plugin";
+
+      @tailwind utilities;
+
+      @theme reference {
+        --breakpoint-lg: 1024px;
+      }
+    `
+
     expect(
       await run(
         [
@@ -3818,15 +3786,7 @@ describe('matchUtilities()', () => {
           'scrollbar-[color:var(--my-color)]/50',
           'scrollbar-[length:var(--my-width)]',
         ],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+        input,
         {
           async loadModule(_id, base) {
             return {
@@ -3898,15 +3858,7 @@ describe('matchUtilities()', () => {
     expect(
       await run(
         ['scrollbar-2/50', 'scrollbar-[2px]/50', 'scrollbar-[length:var(--my-width)]/50'],
-        css`
-          @plugin "my-plugin";
-
-          @tailwind utilities;
-
-          @theme reference {
-            --breakpoint-lg: 1024px;
-          }
-        `,
+        input,
         {
           async loadModule(_id, base) {
             return {

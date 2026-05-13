@@ -15937,6 +15937,13 @@ test('mask-size', async () => {
 })
 
 test('mask-t-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -15951,12 +15958,7 @@ test('mask-t-from', async () => {
         'mask-t-from-(color:--my-var)',
         'mask-t-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16189,17 +16191,19 @@ test('mask-t-from', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-t-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -16214,12 +16218,7 @@ test('mask-t-to', async () => {
         'mask-t-to-(color:--my-var)',
         'mask-t-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16452,17 +16451,19 @@ test('mask-t-to', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-r-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -16478,12 +16479,7 @@ test('mask-r-from', async () => {
         'mask-r-from-(color:--my-var)',
         'mask-r-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16716,17 +16712,19 @@ test('mask-r-from', async () => {
         '-mask-r-from-[25%]/foo',
         '-mask-r-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-r-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -16742,12 +16740,7 @@ test('mask-r-to', async () => {
         'mask-r-to-(color:--my-var)',
         'mask-r-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -16980,17 +16973,19 @@ test('mask-r-to', async () => {
         '-mask-r-to-[25%]/foo',
         '-mask-r-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-b-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -17006,12 +17001,7 @@ test('mask-b-from', async () => {
         'mask-b-from-(color:--my-var)',
         'mask-b-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17244,17 +17234,19 @@ test('mask-b-from', async () => {
         '-mask-b-from-[25%]/foo',
         '-mask-b-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-b-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -17270,12 +17262,7 @@ test('mask-b-to', async () => {
         'mask-b-to-(color:--my-var)',
         'mask-b-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17508,17 +17495,19 @@ test('mask-b-to', async () => {
         '-mask-b-to-[25%]/foo',
         '-mask-b-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-l-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -17534,12 +17523,7 @@ test('mask-l-from', async () => {
         'mask-l-from-(color:--my-var)',
         'mask-l-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -17772,17 +17756,19 @@ test('mask-l-from', async () => {
         '-mask-l-from-[25%]/foo',
         '-mask-l-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-l-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -17798,12 +17784,7 @@ test('mask-l-to', async () => {
         'mask-l-to-(color:--my-var)',
         'mask-l-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18036,17 +18017,19 @@ test('mask-l-to', async () => {
         '-mask-l-to-[25%]/foo',
         '-mask-l-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-x-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -18062,12 +18045,7 @@ test('mask-x-from', async () => {
         'mask-x-from-(color:--my-var)',
         'mask-x-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18346,17 +18324,19 @@ test('mask-x-from', async () => {
         '-mask-x-from-[25%]/foo',
         '-mask-x-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-x-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -18372,12 +18352,7 @@ test('mask-x-to', async () => {
         'mask-x-to-(color:--my-var)',
         'mask-x-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18656,17 +18631,19 @@ test('mask-x-to', async () => {
         '-mask-x-to-[25%]/foo',
         '-mask-x-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-y-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -18682,12 +18659,7 @@ test('mask-y-from', async () => {
         'mask-y-from-(color:--my-var)',
         'mask-y-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -18966,17 +18938,19 @@ test('mask-y-from', async () => {
         '-mask-y-from-[25%]/foo',
         '-mask-y-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-y-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -18992,12 +18966,7 @@ test('mask-y-to', async () => {
         'mask-y-to-(color:--my-var)',
         'mask-y-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19276,12 +19245,7 @@ test('mask-y-to', async () => {
         '-mask-y-to-[25%]/foo',
         '-mask-y-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
@@ -19407,6 +19371,13 @@ test('mask-linear', async () => {
 })
 
 test('mask-linear-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -19422,12 +19393,7 @@ test('mask-linear-from', async () => {
         'mask-linear-from-(color:--my-var)',
         'mask-linear-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19639,17 +19605,19 @@ test('mask-linear-from', async () => {
         '-mask-linear-from-[25%]/foo',
         '-mask-linear-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-linear-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -19665,12 +19633,7 @@ test('mask-linear-to', async () => {
         'mask-linear-to-(color:--my-var)',
         'mask-linear-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -19882,12 +19845,7 @@ test('mask-linear-to', async () => {
         '-mask-linear-to-[25%]/foo',
         '-mask-linear-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
@@ -20140,6 +20098,13 @@ test('mask-radial-at', async () => {
 })
 
 test('mask-radial-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -20155,12 +20120,7 @@ test('mask-radial-from', async () => {
         'mask-radial-from-(color:--my-var)',
         'mask-radial-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20386,17 +20346,19 @@ test('mask-radial-from', async () => {
         '-mask-radial-from-[25%]/foo',
         '-mask-radial-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-radial-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -20412,12 +20374,7 @@ test('mask-radial-to', async () => {
         'mask-radial-to-(color:--my-var)',
         'mask-radial-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -20643,12 +20600,7 @@ test('mask-radial-to', async () => {
         '-mask-radial-to-[25%]/foo',
         '-mask-radial-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
@@ -20774,6 +20726,13 @@ test('mask-conic', async () => {
 })
 
 test('mask-conic-from', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -20789,12 +20748,7 @@ test('mask-conic-from', async () => {
         'mask-conic-from-(color:--my-var)',
         'mask-conic-from-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -21006,17 +20960,19 @@ test('mask-conic-from', async () => {
         '-mask-conic-from-[25%]/foo',
         '-mask-conic-from-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
 
 test('mask-conic-to', async () => {
+  let input = css`
+    @theme {
+      --spacing: 0.25rem;
+    }
+    @tailwind utilities;
+  `
+
   expect(
     await run(
       [
@@ -21032,12 +20988,7 @@ test('mask-conic-to', async () => {
         'mask-conic-to-(color:--my-var)',
         'mask-conic-to-(length:--my-var)',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -21249,12 +21200,7 @@ test('mask-conic-to', async () => {
         '-mask-conic-to-[25%]/foo',
         '-mask-conic-to-[-25%]/foo',
       ],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
+      input,
     ),
   ).toEqual('')
 })
