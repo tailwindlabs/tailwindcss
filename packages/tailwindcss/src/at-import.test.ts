@@ -367,9 +367,9 @@ test('@supports', async () => {
     await compileCss(
       // prettier-ignore
       css`
-      @import 'example.css'
-      supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
-    `,
+        @import 'example.css'
+        supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
+      `,
       { base: '/root', loadStylesheet },
     ),
   ).toMatchInlineSnapshot(`
