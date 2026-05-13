@@ -11,6 +11,7 @@ import {
 } from './ast'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
+import { pretty } from './test-utils/run'
 import { Theme } from './theme'
 import { walk, WalkAction } from './walk'
 
@@ -18,9 +19,13 @@ const css = String.raw
 const defaultDesignSystem = buildDesignSystem(new Theme())
 
 it('should pretty print an AST', () => {
-  expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'), defaultDesignSystem)))
-    .toMatchInlineSnapshot(`
-    ".foo {
+  expect(
+    pretty(
+      toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'), defaultDesignSystem)),
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
       &:hover {
         color: blue;
@@ -68,8 +73,9 @@ it('allows the placement of context nodes', () => {
   expect(blueContext).toEqual({ context: 'a' })
   expect(greenContext).toEqual({ context: 'b' })
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
     }
     .bar {
@@ -159,8 +165,9 @@ it('should not emit empty rules once optimized', () => {
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
   `)
 
-  expect(toCss(ast)).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(ast))).toMatchInlineSnapshot(`
+    "
+    .foo {
     }
     .foo {
       .bar {
@@ -193,8 +200,9 @@ it('should not emit empty rules once optimized', () => {
     "
   `)
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    "@charset "UTF-8";
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    @charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
@@ -235,8 +243,9 @@ it('should not emit exact duplicate declarations in the same rule', () => {
     }
   `)
 
-  expect(toCss(ast)).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(ast))).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
       .bar {
         color: green;
@@ -267,8 +276,9 @@ it('should not emit exact duplicate declarations in the same rule', () => {
     "
   `)
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    .foo {
       .bar {
         color: blue;
         color: green;
@@ -307,8 +317,9 @@ it('should not emit color-mix() fallbacks inside @keyframes', () => {
 
   let design = buildDesignSystem(theme)
 
-  expect(toCss(optimizeAst(ast, design))).toMatchInlineSnapshot(`
-    "@keyframes my-animation {
+  expect(pretty(toCss(optimizeAst(ast, design)))).toMatchInlineSnapshot(`
+    "
+    @keyframes my-animation {
       0% {
         color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
       }
