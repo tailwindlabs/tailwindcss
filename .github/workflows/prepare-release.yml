@@ -227,8 +227,6 @@ jobs:
 
     permissions:
       contents: write # for softprops/action-gh-release to create GitHub release
-      # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-      id-token: write
 
     needs:
       - build

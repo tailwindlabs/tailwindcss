@@ -230,7 +230,7 @@ jobs:
     name: Build and publish Tailwind CSS
 
     permissions:
-      contents: write # for softprops/action-gh-release to create GitHub release
+      contents: read
       # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
       id-token: write
 
