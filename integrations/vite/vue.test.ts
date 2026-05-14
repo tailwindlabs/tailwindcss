@@ -234,7 +234,7 @@ test(
     expect.assertions(1)
 
     try {
-      await exec('pnpm vite build')
+      await exec('pnpm vite build', {}, { ignoreStdErr: true })
     } catch (error) {
       let [, message] =
         /error during build:([\s\S]*?)file:/g.exec(
