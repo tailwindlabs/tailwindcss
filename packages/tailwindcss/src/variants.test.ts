@@ -1770,6 +1770,30 @@ test('not', async () => {
     "
   `)
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20058
+  expect(
+    await run(
+      ['not-has-a:flex'],
+      css`
+        @custom-variant has-a {
+          @container style(--a) {
+            @slot;
+          }
+        }
+
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @container not style(--a) {
+      .not-has-a\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+
   expect(
     await run(
       [
