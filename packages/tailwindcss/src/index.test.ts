@@ -904,22 +904,25 @@ describe('@apply', () => {
       }
     `
 
-    let compiler = await compile(input)
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      ".foo {
-        text-decoration-line: underline;
-        @apply --my-mixin-1;
-        @apply --my-mixin-1();
-        @apply --my-mixin-1 --my-mixin-2;
-        @apply --my-mixin-1() --my-mixin-2();
-        @apply --my-mixin-3 {
-          color: red;
+    // TODO: once Lightning CSS properly supports it, then we can drop this section:
+    {
+      let compiler = await compile(input)
+      expect(compiler.build([])).toMatchInlineSnapshot(`
+        ".foo {
+          text-decoration-line: underline;
+          @apply --my-mixin-1;
+          @apply --my-mixin-1();
+          @apply --my-mixin-1 --my-mixin-2;
+          @apply --my-mixin-1() --my-mixin-2();
+          @apply --my-mixin-3 {
+            color: red;
+          }
         }
-      }
-      "
-    `)
+        "
+      `)
+    }
 
-    // TODO: This output is currently broken because Lightning CSS doesn't
+    // TODO: this output is currently broken because Lightning CSS doesn't
     // handle this case correctly yet
     expect(await compileCss(input)).toMatchInlineSnapshot(`
       ".foo {
