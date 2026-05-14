@@ -5,6 +5,7 @@ import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
+import plugin from './plugin'
 import { DefaultMap } from './utils/default-map'
 
 const css = String.raw
@@ -1417,6 +1418,58 @@ describe('regressions', () => {
       }
 
       expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20051
+  test(
+    'does not crash when plugin matchComponents rejects speculative values during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ matchComponents }) => {
+                matchComponents(
+                  {
+                    myicon: ({ fullPath }: { fullPath?: string }) => {
+                      fs.readFileSync(fullPath as string, 'utf8')
+                      return {}
+                    },
+                  },
+                  {
+                    values: {
+                      icon: { fullPath: __filename },
+                    } as any,
+                  },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['border-[1.5px]', 'flex'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
     },
   )
 })

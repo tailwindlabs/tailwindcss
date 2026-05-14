@@ -357,7 +357,12 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             root,
           })
 
-          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          let propertyValues: DefaultMap<string, Set<string>>
+          try {
+            propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          } catch {
+            continue
+          }
           for (let [property, values] of propertyValues) {
             if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
 
