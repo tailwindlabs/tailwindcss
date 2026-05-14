@@ -1,40 +1,13 @@
 import dedent from 'dedent'
 import { expect, test, vi } from 'vitest'
-import type { Plugin } from './compat/plugin-api'
 import { compile, type Config } from './index'
 import plugin from './plugin'
-import { optimizeCss, pretty } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = dedent
 
-async function run(
-  css: string,
-  {
-    loadStylesheet = () => Promise.reject(new Error('Unexpected stylesheet')),
-    loadModule = () => Promise.reject(new Error('Unexpected module')),
-    candidates = [],
-    optimize = true,
-  }: {
-    loadStylesheet?: (
-      id: string,
-      base: string,
-    ) => Promise<{ content: string; base: string; path: string }>
-    loadModule?: (
-      id: string,
-      base: string,
-      resourceHint: 'plugin' | 'config',
-    ) => Promise<{ module: Config | Plugin; base: string; path: string }>
-    candidates?: string[]
-    optimize?: boolean
-  },
-) {
-  let compiler = await compile(css, { base: '/root', loadStylesheet, loadModule })
-  let result = compiler.build(candidates)
-  return optimize ? optimizeCss(result) : pretty(result)
-}
-
 test('can resolve relative @imports', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -48,14 +21,14 @@ test('can resolve relative @imports', async () => {
     }
   }
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import './foo/bar.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     .foo {
       color: red;
@@ -65,7 +38,7 @@ test('can resolve relative @imports', async () => {
 })
 
 test('can recursively resolve relative @imports', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     if (base === '/root' && id === './foo/bar.css') {
       return {
         content: css`
@@ -89,14 +62,14 @@ test('can recursively resolve relative @imports', async () => {
     throw new Error(`Unexpected import: ${id}`)
   }
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import './foo/bar.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     .baz {
       color: #00f;
@@ -110,7 +83,7 @@ let exampleCSS = css`
     color: red;
   }
 `
-let loadStylesheet = async (id: string) => {
+async function loadStylesheet(id: string) {
   if (!id.endsWith('example.css')) throw new Error('Unexpected import: ' + id)
   return {
     content: exampleCSS,
@@ -120,14 +93,14 @@ let loadStylesheet = async (id: string) => {
 }
 
 test('extracts path from @import nodes', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     a {
       color: red;
@@ -135,14 +108,14 @@ test('extracts path from @import nodes', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import './example.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     a {
       color: red;
@@ -150,14 +123,14 @@ test('extracts path from @import nodes', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import '/example.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     a {
       color: red;
@@ -167,94 +140,94 @@ test('extracts path from @import nodes', async () => {
 })
 
 test('url() imports are passed-through', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url('example.css');
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url('example.css');
+    @import "example.css";
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url('./example.css');
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url('./example.css');
+    @import "./example.css";
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url('/example.css');
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url('/example.css');
+    @import "/example.css";
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url(example.css);
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url(example.css);
+    @import "example.css";
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url(./example.css);
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url(./example.css);
+    @import "./example.css";
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import url(/example.css);
       `,
-      { loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')), optimize: false },
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
-    @import url(/example.css);
+    @import "/example.css";
     "
   `)
 })
 
 test('handles case-insensitive @import directive', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css';
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     a {
       color: red;
@@ -264,14 +237,14 @@ test('handles case-insensitive @import directive', async () => {
 })
 
 test('@media', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' print;
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @media print {
       a {
@@ -281,14 +254,14 @@ test('@media', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' print, screen;
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @media print, screen {
       a {
@@ -298,14 +271,14 @@ test('@media', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' screen and (orientation: landscape);
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @media screen and (orientation: landscape) {
       a {
@@ -315,14 +288,14 @@ test('@media', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' foo(bar);
       `,
-      { loadStylesheet, optimize: false },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @media foo(bar) {
       a {
@@ -334,14 +307,14 @@ test('@media', async () => {
 })
 
 test('@supports', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' supports(display: grid);
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @supports (display: grid) {
       a {
@@ -351,14 +324,14 @@ test('@supports', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' supports(display: grid) screen and (max-width: 400px);
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @supports (display: grid) {
       @media screen and (max-width: 400px) {
@@ -370,15 +343,15 @@ test('@supports', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' supports((not (display: grid)) and (display: flex)) screen and
           (max-width: 400px);
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @supports (not (display: grid)) and (display: flex) {
       @media screen and (max-width: 400px) {
@@ -390,16 +363,16 @@ test('@supports', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       // prettier-ignore
       css`
         @import 'example.css'
         supports((selector(h2 > p)) and (font-tech(color-COLRv1)));
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @supports selector(h2 > p) and font-tech(color-COLRv1) {
       a {
@@ -411,14 +384,14 @@ test('@supports', async () => {
 })
 
 test('@layer', async () => {
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' layer(utilities);
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @layer utilities {
       a {
@@ -428,14 +401,14 @@ test('@layer', async () => {
     "
   `)
 
-  await expect(
-    run(
+  expect(
+    await compileCss(
       css`
         @import 'example.css' layer();
       `,
-      { loadStylesheet },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     @layer {
       a {
@@ -447,13 +420,15 @@ test('@layer', async () => {
 })
 
 test('supports theme(reference) imports', async () => {
-  await expect(
-    run(
+  expect(
+    await run(
+      ['text-red-500'],
       css`
         @tailwind utilities;
         @import 'example.css' theme(reference);
       `,
       {
+        base: '/root',
         loadStylesheet: () =>
           Promise.resolve({
             content: css`
@@ -464,10 +439,9 @@ test('supports theme(reference) imports', async () => {
             base: '',
             path: '',
           }),
-        candidates: ['text-red-500'],
       },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     .text-red-500 {
       color: var(--color-red-500, red);
@@ -477,25 +451,26 @@ test('supports theme(reference) imports', async () => {
 })
 
 test('updates the base when loading modules inside nested files', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @config './nested-config.js';
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
   using loadModule = vi.fn().mockResolvedValue({ base: '', path: '', module: () => {} })
 
   expect(
-    await run(
+    await compileCss(
       css`
         @import './foo/bar.css';
         @config './root-config.js';
         @plugin './root-plugin.js';
       `,
-      { loadStylesheet, loadModule },
+      { base: '/root', loadStylesheet, loadModule },
     ),
   ).toBe('')
 
@@ -506,14 +481,15 @@ test('updates the base when loading modules inside nested files', async () => {
 })
 
 test('emits the right base for @source directives inside nested files', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @source './nested/**/*.css';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
 
   let compiler = await compile(
     css`
@@ -530,15 +506,17 @@ test('emits the right base for @source directives inside nested files', async ()
 })
 
 test('emits the right base for @source found inside JS configs and plugins from nested imports', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
+  async function loadStylesheet() {
+    return {
       content: css`
         @config './nested-config.js';
         @plugin './nested-plugin.js';
       `,
       base: '/root/foo',
       path: '',
-    })
+    }
+  }
+
   using loadModule = vi.fn().mockImplementation((id: string) => {
     let base = id.includes('nested') ? '/root/foo' : '/root'
     if (id.includes('config')) {
@@ -586,29 +564,25 @@ test('emits the right base for @source found inside JS configs and plugins from 
 })
 
 test('it crashes when inside a cycle', async () => {
-  let loadStylesheet = () =>
-    Promise.resolve({
-      content: css`
-        @import 'foo.css';
-      `,
+  let input = css`
+    @import 'foo.css';
+  `
+
+  async function loadStylesheet() {
+    return {
+      content: input,
       base: '/root',
       path: '',
-    })
+    }
+  }
 
-  await expect(
-    run(
-      css`
-        @import 'foo.css';
-      `,
-      { loadStylesheet },
-    ),
-  ).rejects.toMatchInlineSnapshot(
+  await expect(compileCss(input, { base: '/root', loadStylesheet })).rejects.toMatchInlineSnapshot(
     `[Error: Exceeded maximum recursion depth while resolving \`foo.css\` in \`/root\`)]`,
   )
 })
 
 test('resolves @reference as `@import "…" reference`', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -625,15 +599,16 @@ test('resolves @reference as `@import "…" reference`', async () => {
     }
   }
 
-  await expect(
-    run(
+  expect(
+    await run(
+      ['text-red-500'],
       css`
         @reference './foo/bar.css';
         @tailwind utilities;
       `,
-      { loadStylesheet, candidates: ['text-red-500'] },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     .text-red-500 {
       color: var(--color-red-500, red);
@@ -643,7 +618,7 @@ test('resolves @reference as `@import "…" reference`', async () => {
 })
 
 test('resolves `@variant` used as `@custom-variant` inside `@reference`', async () => {
-  let loadStylesheet = async (id: string, base: string) => {
+  async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
     expect(id).toBe('./foo/bar.css')
     return {
@@ -659,15 +634,16 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
     }
   }
 
-  await expect(
-    run(
+  expect(
+    await run(
+      ['dark:flex'],
       css`
         @reference './foo/bar.css';
         @tailwind utilities;
       `,
-      { loadStylesheet, candidates: ['dark:flex'] },
+      { base: '/root', loadStylesheet },
     ),
-  ).resolves.toMatchInlineSnapshot(`
+  ).toMatchInlineSnapshot(`
     "
     .dark\\:flex:where([data-theme="dark"] *) {
       display: flex;

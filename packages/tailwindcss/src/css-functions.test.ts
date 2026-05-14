@@ -1,9 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
-import { compile } from '.'
 import plugin from './plugin'
-import { compileCss, optimizeCss } from './test-utils/run'
+import { compileCss, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -316,7 +315,8 @@ describe('--theme(…)', () => {
 
   test('--theme(…) does not inject the fallback if the fallback is `initial`', async () => {
     expect(
-      await compileCss(
+      await run(
+        ['tw:font-sans'],
         css`
           @theme prefix(tw) {
             --font-sans:
@@ -331,7 +331,6 @@ describe('--theme(…)', () => {
           }
           @tailwind utilities;
         `,
-        ['tw:font-sans'],
       ),
     ).toMatchInlineSnapshot(`
       "
@@ -436,7 +435,6 @@ describe('--theme(…)', () => {
           }
           @plugin "my-plugin.js";
         `,
-        [],
         {
           loadModule: async () => ({
             path: '',
@@ -829,23 +827,17 @@ describe('theme(…)', () => {
         })
 
         test('theme(fontFamily.sans) (config)', async () => {
-          let compiled = await compile(
-            css`
-              @config "./my-config.js";
-              .fam {
-                font-family: theme(fontFamily.sans);
-              }
-            `,
-            {
-              loadModule: async () => ({
-                path: '',
-                base: '/root',
-                module: {},
-              }),
-            },
-          )
-
-          expect(optimizeCss(compiled.build([]))).toMatchInlineSnapshot(`
+          expect(
+            await compileCss(
+              css`
+                @config "./my-config.js";
+                .fam {
+                  font-family: theme(fontFamily.sans);
+                }
+              `,
+              { loadModule: async () => ({ path: '', base: '/root', module: {} }) },
+            ),
+          ).toMatchInlineSnapshot(`
             "
             .fam {
               font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
@@ -1101,7 +1093,8 @@ describe('theme(…)', () => {
   describe('in candidates', () => {
     test('sm:[--color:theme(colors.red[500])]', async () => {
       expect(
-        await compileCss(
+        await run(
+          ['sm:[--color:theme(colors.red[500])]'],
           css`
             @tailwind utilities;
             @theme {
@@ -1109,7 +1102,6 @@ describe('theme(…)', () => {
               --color-red-500: #f00;
             }
           `,
-          ['sm:[--color:theme(colors.red[500])]'],
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -1123,20 +1115,22 @@ describe('theme(…)', () => {
     })
 
     test("values that don't exist don't produce candidates", async () => {
+      let input = css`
+        @tailwind utilities;
+        @theme reference {
+          --radius-sm: 2rem;
+        }
+      `
+
       // This guarantees that valid candidates still make it through when some are invalid
       expect(
-        await compileCss(
-          css`
-            @tailwind utilities;
-            @theme reference {
-              --radius-sm: 2rem;
-            }
-          `,
+        await run(
           [
             'rounded-[theme(--radius-sm)]',
             'rounded-[theme(i.do.not.exist)]',
             'rounded-[theme(--i-do-not-exist)]',
           ],
+          input,
         ),
       ).toMatchInlineSnapshot(`
         "
@@ -1148,15 +1142,7 @@ describe('theme(…)', () => {
 
       // This guarantees no output for the following candidates
       expect(
-        await compileCss(
-          css`
-            @tailwind utilities;
-            @theme reference {
-              --radius-sm: 2rem;
-            }
-          `,
-          ['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'],
-        ),
+        await run(['rounded-[theme(i.do.not.exist)]', 'rounded-[theme(--i-do-not-exist)]'], input),
       ).toEqual('')
     })
   })
@@ -1285,47 +1271,48 @@ describe('theme(…)', () => {
 
 describe('in plugins', () => {
   test('CSS theme functions in plugins are properly evaluated', async () => {
-    let compiled = await compile(
-      css`
-        @layer base, utilities;
-        @plugin "my-plugin";
-        @theme reference {
-          --color-red: oklch(62% 0.25 30);
-          --color-orange: oklch(79% 0.17 70);
-          --color-blue: oklch(45% 0.31 264);
-          --color-pink: oklch(87% 0.07 7);
-        }
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        async loadModule() {
-          return {
-            path: '',
-            base: '/root',
-            module: plugin(({ addBase, addUtilities }) => {
-              addBase({
-                '.my-base-rule': {
-                  color: 'theme(colors.red)',
-                  'outline-color': 'theme(colors.orange / 15%)',
-                  'background-color': 'theme(--color-blue)',
-                  'border-color': 'theme(--color-pink / 10%)',
-                },
-              })
-
-              addUtilities({
-                '.my-utility': {
-                  color: 'theme(colors.red)',
-                },
-              })
-            }),
+    expect(
+      await run(
+        ['my-utility'],
+        css`
+          @layer base, utilities;
+          @plugin "my-plugin";
+          @theme reference {
+            --color-red: oklch(62% 0.25 30);
+            --color-orange: oklch(79% 0.17 70);
+            --color-blue: oklch(45% 0.31 264);
+            --color-pink: oklch(87% 0.07 7);
           }
-        },
-      },
-    )
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          async loadModule() {
+            return {
+              path: '',
+              base: '/root',
+              module: plugin(({ addBase, addUtilities }) => {
+                addBase({
+                  '.my-base-rule': {
+                    color: 'theme(colors.red)',
+                    'outline-color': 'theme(colors.orange / 15%)',
+                    'background-color': 'theme(--color-blue)',
+                    'border-color': 'theme(--color-pink / 10%)',
+                  },
+                })
 
-    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+                addUtilities({
+                  '.my-utility': {
+                    color: 'theme(colors.red)',
+                  },
+                })
+              }),
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer base {
         .my-base-rule {
@@ -1348,53 +1335,54 @@ describe('in plugins', () => {
 
 describe('in JS config files', () => {
   test('CSS theme functions in config files are properly evaluated', async () => {
-    let compiled = await compile(
-      css`
-        @layer base, utilities;
-        @config "./my-config.js";
-        @theme reference {
-          --color-red: red;
-          --color-orange: orange;
-        }
-        @layer utilities {
-          @tailwind utilities;
-        }
-      `,
-      {
-        loadModule: async () => ({
-          path: '',
-          base: '/root',
-          module: {
-            theme: {
-              extend: {
-                colors: {
-                  primary: 'theme(colors.red)',
-                  secondary: 'theme(--color-orange)',
+    expect(
+      await run(
+        ['my-utility'],
+        css`
+          @layer base, utilities;
+          @config "./my-config.js";
+          @theme reference {
+            --color-red: red;
+            --color-orange: orange;
+          }
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: {
+              theme: {
+                extend: {
+                  colors: {
+                    primary: 'theme(colors.red)',
+                    secondary: 'theme(--color-orange)',
+                  },
                 },
               },
+              plugins: [
+                plugin(({ addBase, addUtilities }) => {
+                  addBase({
+                    '.my-base-rule': {
+                      background: 'theme(colors.primary)',
+                      color: 'theme(colors.secondary)',
+                    },
+                  })
+
+                  addUtilities({
+                    '.my-utility': {
+                      color: 'theme(colors.red)',
+                    },
+                  })
+                }),
+              ],
             },
-            plugins: [
-              plugin(({ addBase, addUtilities }) => {
-                addBase({
-                  '.my-base-rule': {
-                    background: 'theme(colors.primary)',
-                    color: 'theme(colors.secondary)',
-                  },
-                })
-
-                addUtilities({
-                  '.my-utility': {
-                    color: 'theme(colors.red)',
-                  },
-                })
-              }),
-            ],
-          },
-        }),
-      },
-    )
-
-    expect(optimizeCss(compiled.build(['my-utility']))).toMatchInlineSnapshot(`
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
       "
       @layer base {
         .my-base-rule {
@@ -1422,7 +1410,6 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
         }
         @import './bar.css';
       `,
-      [],
       {
         async loadStylesheet() {
           return {
@@ -1448,18 +1435,15 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
 
 test('resolves paths ending with a 1', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing-1: 0.25rem;
-        }
+    await compileCss(css`
+      @theme {
+        --spacing-1: 0.25rem;
+      }
 
-        .foo {
-          margin: theme(spacing.1);
-        }
-      `,
-      [],
-    ),
+      .foo {
+        margin: theme(spacing.1);
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "
     .foo {
@@ -1471,14 +1455,11 @@ test('resolves paths ending with a 1', async () => {
 
 test('upgrades to a full JS compat theme lookup if a value cannot be mapped to a CSS variable', async () => {
   expect(
-    await compileCss(
-      css`
-        .semi {
-          font-weight: theme(fontWeight.semibold);
-        }
-      `,
-      [],
-    ),
+    await compileCss(css`
+      .semi {
+        font-weight: theme(fontWeight.semibold);
+      }
+    `),
   ).toMatchInlineSnapshot(`
     "
     .semi {

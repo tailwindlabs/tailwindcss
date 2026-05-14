@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import createPlugin from './plugin'
-import { compileCss, pretty, run } from './test-utils/run'
+import { run } from './test-utils/run'
 import { Compounds, compoundsForSelectors } from './variants'
 
 const css = String.raw
@@ -659,18 +659,26 @@ test('group-[...]', async () => {
   `)
 
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
-      ['group-[]:flex', 'group-hover/[]:flex', 'group-[@media_foo]:flex', 'group-[>img]:flex'],
-    ),
+    await run([
+      'group-[]:flex',
+      'group-hover/[]:flex',
+      'group-[@media_foo]:flex',
+      'group-[>img]:flex',
+    ]),
   ).toEqual('')
 })
 
 test('group-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'group-hover:flex',
+        'group-focus:flex',
+        'group-hocus:flex',
+
+        'group-hover:group-focus:flex',
+        'group-focus:group-hover:flex',
+      ],
       css`
         @custom-variant hocus {
           &:hover,
@@ -680,14 +688,6 @@ test('group-*', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'group-hover:flex',
-        'group-focus:flex',
-        'group-hocus:flex',
-
-        'group-hover:group-focus:flex',
-        'group-focus:group-hover:flex',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -714,7 +714,8 @@ test('group-*', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['group-custom-at-rule:flex', 'group-nested-selectors:flex'],
       css`
         @custom-variant custom-at-rule (@media foo);
         @custom-variant nested-selectors {
@@ -726,7 +727,6 @@ test('group-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['group-custom-at-rule:flex', 'group-nested-selectors:flex'],
     ),
   ).toEqual('')
 })
@@ -755,18 +755,20 @@ test('peer-[...]', async () => {
   `)
 
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
-      ['peer-[]:flex', 'peer-hover/[]:flex', 'peer-[@media_foo]:flex', 'peer-[>img]:flex'],
-    ),
+    await run(['peer-[]:flex', 'peer-hover/[]:flex', 'peer-[@media_foo]:flex', 'peer-[>img]:flex']),
   ).toEqual('')
 })
 
 test('peer-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'peer-hover:flex',
+        'peer-focus:flex',
+        'peer-hocus:flex',
+        'peer-hover:peer-focus:flex',
+        'peer-focus:peer-hover:flex',
+      ],
       css`
         @custom-variant hocus {
           &:hover,
@@ -776,13 +778,6 @@ test('peer-*', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'peer-hover:flex',
-        'peer-focus:flex',
-        'peer-hocus:flex',
-        'peer-hover:peer-focus:flex',
-        'peer-focus:peer-hover:flex',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -809,7 +804,8 @@ test('peer-*', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      ['peer-custom-at-rule:flex', 'peer-nested-selectors:flex'],
       css`
         @custom-variant custom-at-rule (@media foo);
         @custom-variant nested-selectors {
@@ -821,7 +817,6 @@ test('peer-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['peer-custom-at-rule:flex', 'peer-nested-selectors:flex'],
     ),
   ).toEqual('')
 })
@@ -915,7 +910,8 @@ test('print', async () => {
 
 test('default breakpoints', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
       css`
         @theme {
           /* Breakpoints */
@@ -927,7 +923,6 @@ test('default breakpoints', async () => {
         }
         @tailwind utilities;
       `,
-      ['sm:flex', 'md:flex', 'lg:flex', 'xl:flex', '2xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -963,7 +958,8 @@ test('default breakpoints', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['sm/foo:flex', 'md/foo:flex', 'lg/foo:flex', 'xl/foo:flex', '2xl/foo:flex'],
       css`
         @theme reference {
           /* Breakpoints */
@@ -975,21 +971,20 @@ test('default breakpoints', async () => {
         }
         @tailwind utilities;
       `,
-      ['sm/foo:flex', 'md/foo:flex', 'lg/foo:flex', 'xl/foo:flex', '2xl/foo:flex'],
     ),
   ).toEqual('')
 })
 
 test('custom breakpoint', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['10xl:flex'],
       css`
         @theme {
           --breakpoint-10xl: 5000px;
         }
         @tailwind utilities;
       `,
-      ['10xl:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1004,7 +999,8 @@ test('custom breakpoint', async () => {
 
 test('max-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1014,7 +1010,6 @@ test('max-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-lg:flex', 'max-sm:flex', 'max-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1038,7 +1033,8 @@ test('max-*', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['max-lg/foo:flex', 'max-sm/foo:flex', 'max-md/foo:flex'],
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -1048,14 +1044,14 @@ test('max-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['max-lg/foo:flex', 'max-sm/foo:flex', 'max-md/foo:flex'],
     ),
   ).toEqual('')
 })
 
 test('min-*', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1065,7 +1061,6 @@ test('min-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-lg:flex', 'min-sm:flex', 'min-md:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1089,7 +1084,8 @@ test('min-*', async () => {
     "
   `)
   expect(
-    await compileCss(
+    await run(
+      ['min-lg/foo:flex', 'min-sm/foo:flex', 'min-md/foo:flex'],
       css`
         @theme reference {
           /* Explicitly ordered in a strange way */
@@ -1099,14 +1095,14 @@ test('min-*', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-lg/foo:flex', 'min-sm/foo:flex', 'min-md/foo:flex'],
     ),
   ).toEqual('')
 })
 
 test('sorting stacked min-* and max-* variants', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1118,7 +1114,6 @@ test('sorting stacked min-* and max-* variants', async () => {
         }
         @tailwind utilities;
       `,
-      ['min-sm:max-lg:flex', 'min-sm:max-xl:flex', 'min-md:max-lg:flex', 'min-xs:max-sm:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1157,7 +1152,8 @@ test('sorting stacked min-* and max-* variants', async () => {
 
 test('stacked min-* and max-* variants should come after unprefixed variants', async () => {
   expect(
-    await compileCss(
+    await run(
+      ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
       css`
         @theme {
           /* Explicitly ordered in a strange way */
@@ -1167,7 +1163,6 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
         }
         @tailwind utilities;
       `,
-      ['sm:flex', 'min-sm:max-lg:flex', 'md:flex', 'min-md:max-lg:flex'],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1200,16 +1195,7 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
 
 test('min, max and unprefixed breakpoints', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          /* Explicitly ordered in a strange way */
-          --breakpoint-sm: 640px;
-          --breakpoint-lg: 1024px;
-          --breakpoint-md: 768px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'max-lg-sm-potato:flex',
         'min-lg-sm-potato:flex',
@@ -1226,6 +1212,15 @@ test('min, max and unprefixed breakpoints', async () => {
         'sm:flex',
         'lg:flex',
       ],
+      css`
+        @theme {
+          /* Explicitly ordered in a strange way */
+          --breakpoint-sm: 640px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-md: 768px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1507,30 +1502,7 @@ test('supports', async () => {
 
 test('not', async () => {
   expect(
-    await compileCss(
-      css`
-        @custom-variant hocus {
-          &:hover,
-          &:focus {
-            @slot;
-          }
-        }
-
-        @custom-variant device-hocus {
-          @media (hover: hover) {
-            &:hover,
-            &:focus {
-              @slot;
-            }
-          }
-        }
-
-        @theme {
-          --breakpoint-sm: 640px;
-        }
-
-        @tailwind utilities;
-      `,
+    await run(
       [
         'not-[:checked]:flex',
         'not-[@media_print]:flex',
@@ -1612,6 +1584,29 @@ test('not', async () => {
         'not-max-sm:flex',
         'not-max-[130px]:flex',
       ],
+      css`
+        @custom-variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+
+        @custom-variant device-hocus {
+          @media (hover: hover) {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1776,7 +1771,46 @@ test('not', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      [
+        'not-[>img]:flex',
+        'not-[+img]:flex',
+        'not-[~img]:flex',
+        'not-[:checked]/foo:flex',
+        'not-[@media_screen,print]:flex',
+        'not-[@media_not_screen,print]:flex',
+        'not-[@media_not_screen,not_print]:flex',
+
+        'not-nested-at-rules:flex',
+        'not-nested-style-rules:flex',
+        'not-multiple-media-conditions:flex',
+        'not-starting:flex',
+
+        'not-parallel-style-rules:flex',
+        'not-parallel-at-rules:flex',
+        'not-parallel-mixed-rules:flex',
+
+        // The following built-in variants don't have not-* versions because
+        // there is no sensible negative version of them.
+
+        // These just don't make sense as not-*
+        'not-force:flex',
+        'not-*:flex',
+
+        // These contain pseudo-elements
+        'not-first-letter:flex',
+        'not-first-line:flex',
+        'not-marker:flex',
+        'not-selection:flex',
+        'not-file:flex',
+        'not-placeholder:flex',
+        'not-backdrop:flex',
+        'not-before:flex',
+        'not-after:flex',
+
+        // This is not a conditional at rule
+        'not-starting:flex',
+      ],
       css`
         @custom-variant nested-at-rules {
           @media foo {
@@ -1823,45 +1857,6 @@ test('not', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'not-[>img]:flex',
-        'not-[+img]:flex',
-        'not-[~img]:flex',
-        'not-[:checked]/foo:flex',
-        'not-[@media_screen,print]:flex',
-        'not-[@media_not_screen,print]:flex',
-        'not-[@media_not_screen,not_print]:flex',
-
-        'not-nested-at-rules:flex',
-        'not-nested-style-rules:flex',
-        'not-multiple-media-conditions:flex',
-        'not-starting:flex',
-
-        'not-parallel-style-rules:flex',
-        'not-parallel-at-rules:flex',
-        'not-parallel-mixed-rules:flex',
-
-        // The following built-in variants don't have not-* versions because
-        // there is no sensible negative version of them.
-
-        // These just don't make sense as not-*
-        'not-force:flex',
-        'not-*:flex',
-
-        // These contain pseudo-elements
-        'not-first-letter:flex',
-        'not-first-line:flex',
-        'not-marker:flex',
-        'not-selection:flex',
-        'not-file:flex',
-        'not-placeholder:flex',
-        'not-backdrop:flex',
-        'not-before:flex',
-        'not-after:flex',
-
-        // This is not a conditional at rule
-        'not-starting:flex',
-      ],
     ),
   ).toEqual('')
 })
@@ -1887,16 +1882,7 @@ test('in', async () => {
 
 test('has', async () => {
   expect(
-    await compileCss(
-      css`
-        @custom-variant hocus {
-          &:hover,
-          &:focus {
-            @slot;
-          }
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'has-checked:flex',
         'has-[:checked]:flex',
@@ -1932,6 +1918,15 @@ test('has', async () => {
         'peer-has-hocus:flex',
         'peer-has-hocus/sibling-name:flex',
       ],
+      css`
+        @custom-variant hocus {
+          &:hover,
+          &:focus {
+            @slot;
+          }
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -1942,7 +1937,13 @@ test('has', async () => {
   `)
 
   expect(
-    await compileCss(
+    await run(
+      [
+        'has-[:checked]/foo:flex',
+        'has-[@media_print]:flex',
+        'has-custom-at-rule:flex',
+        'has-nested-selectors:flex',
+      ],
       css`
         @custom-variant custom-at-rule (@media foo);
         @custom-variant nested-selectors {
@@ -1954,12 +1955,6 @@ test('has', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'has-[:checked]/foo:flex',
-        'has-[@media_print]:flex',
-        'has-custom-at-rule:flex',
-        'has-nested-selectors:flex',
-      ],
     ),
   ).toEqual('')
 })
@@ -2254,15 +2249,16 @@ test('nth', async () => {
 })
 
 test('container queries', async () => {
+  let input = css`
+    @theme {
+      --container-lg: 1024px;
+      --container-foo-bar: 1440px;
+    }
+    @tailwind utilities;
+  `
+
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --container-lg: 1024px;
-          --container-foo-bar: 1440px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         '@lg:flex',
         '@lg/name:flex',
@@ -2285,6 +2281,7 @@ test('container queries', async () => {
         '@max-foo-bar:flex',
         '@max-foo-bar/name:flex',
       ],
+      input,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2386,14 +2383,7 @@ test('container queries', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --container-lg: 1024px;
-          --container-foo-bar: 1440px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         '@-lg:flex',
         '@-lg/name:flex',
@@ -2416,23 +2406,14 @@ test('container queries', async () => {
         '@-max-foo-bar:flex',
         '@-max-foo-bar/name:flex',
       ],
+      input,
     ),
   ).toEqual('')
 })
 
 test('variant order', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --breakpoint-sm: 640px;
-          --breakpoint-md: 768px;
-          --breakpoint-lg: 1024px;
-          --breakpoint-xl: 1280px;
-          --breakpoint-2xl: 1536px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         '[&_p]:flex',
         '2xl:flex',
@@ -2509,6 +2490,16 @@ test('variant order', async () => {
         'visited:flex',
         'xl:flex',
       ],
+      css`
+        @theme {
+          --breakpoint-sm: 640px;
+          --breakpoint-md: 768px;
+          --breakpoint-lg: 1024px;
+          --breakpoint-xl: 1280px;
+          --breakpoint-2xl: 1536px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -2722,9 +2713,7 @@ test('variants with the same root are sorted deterministically', async () => {
   ])
 
   for (let classList of classLists) {
-    let output = await compileCss('@tailwind utilities;', classList)
-
-    expect(pretty(output)).toMatchInlineSnapshot(`
+    expect(await run(classList)).toMatchInlineSnapshot(`
       "
       .data-active\\:flex[data-active], .data-focus\\:flex[data-focus], .data-hover\\:flex[data-hover], .data-\\[bar\\]\\:flex[data-bar], .data-\\[baz\\]\\:flex[data-baz], .data-\\[foo\\]\\:flex[data-foo] {
         display: flex;
@@ -2755,25 +2744,25 @@ test('matchVariant sorts deterministically', async () => {
   ])
 
   for (let classList of classLists) {
-    let output = await compileCss('@tailwind utilities; @plugin "./plugin.js";', classList, {
-      async loadModule(id: string) {
-        return {
-          path: '',
-          base: '/',
-          module: createPlugin(({ matchVariant }) => {
-            matchVariant('is-data', (value) => `&:is([data-${value}])`, {
-              values: {
-                DEFAULT: 'default',
-                foo: 'foo',
-                bar: 'bar',
-              },
-            })
-          }),
-        }
-      },
-    })
-
-    expect(pretty(output)).toMatchInlineSnapshot(`
+    expect(
+      await run(classList, '@tailwind utilities; @plugin "./plugin.js";', {
+        async loadModule(_id: string) {
+          return {
+            path: '',
+            base: '/',
+            module: createPlugin(({ matchVariant }) => {
+              matchVariant('is-data', (value) => `&:is([data-${value}])`, {
+                values: {
+                  DEFAULT: 'default',
+                  foo: 'foo',
+                  bar: 'bar',
+                },
+              })
+            }),
+          }
+        },
+      }),
+    ).toMatchInlineSnapshot(`
       "
       .is-data\\:flex[data-default], .is-data-foo\\:flex[data-foo], .is-data-bar\\:flex[data-bar], .is-data-\\[potato\\]\\:flex[data-potato], .is-data-\\[sandwich\\]\\:flex[data-sandwich] {
         display: flex;

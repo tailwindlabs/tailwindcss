@@ -1,30 +1,30 @@
 import { expect, test } from 'vitest'
-import { compile } from '.'
 import plugin from './plugin'
-import { pretty } from './test-utils/run'
+import { compileCss } from './test-utils/run'
 
 const css = String.raw
 
 test('plugin', async () => {
-  let input = css`
-    @plugin "my-plugin";
-  `
-
-  let compiler = await compile(input, {
-    loadModule: async () => ({
-      module: plugin(function ({ addBase }) {
-        addBase({
-          body: {
-            margin: '0',
-          },
-        })
-      }),
-      base: '/root',
-      path: '',
-    }),
-  })
-
-  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        loadModule: async () => ({
+          module: plugin(function ({ addBase }) {
+            addBase({
+              body: {
+                margin: '0',
+              },
+            })
+          }),
+          base: '/root',
+          path: '',
+        }),
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     @layer base {
       body {
@@ -36,27 +36,28 @@ test('plugin', async () => {
 })
 
 test('plugin.withOptions', async () => {
-  let input = css`
-    @plugin "my-plugin";
-  `
-
-  let compiler = await compile(input, {
-    loadModule: async () => ({
-      module: plugin.withOptions(function (opts = { foo: '1px' }) {
-        return function ({ addBase }) {
-          addBase({
-            body: {
-              margin: opts.foo,
-            },
-          })
-        }
-      }),
-      base: '/root',
-      path: '',
-    }),
-  })
-
-  expect(pretty(compiler.build([]))).toMatchInlineSnapshot(`
+  expect(
+    await compileCss(
+      css`
+        @plugin "my-plugin";
+      `,
+      {
+        loadModule: async () => ({
+          module: plugin.withOptions(function (opts = { foo: '1px' }) {
+            return function ({ addBase }) {
+              addBase({
+                body: {
+                  margin: opts.foo,
+                },
+              })
+            }
+          }),
+          base: '/root',
+          path: '',
+        }),
+      },
+    ),
+  ).toMatchInlineSnapshot(`
     "
     @layer base {
       body {

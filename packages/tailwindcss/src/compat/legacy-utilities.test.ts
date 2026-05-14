@@ -1,25 +1,20 @@
 import { expect, test } from 'vitest'
-import { compileCss, run } from '../test-utils/run'
+import { run } from '../test-utils/run'
 
 const css = String.raw
 
 test('bg-gradient-*', async () => {
   expect(
-    await compileCss(
-      css`
-        @tailwind utilities;
-      `,
-      [
-        'bg-gradient-to-t',
-        'bg-gradient-to-tr',
-        'bg-gradient-to-r',
-        'bg-gradient-to-br',
-        'bg-gradient-to-b',
-        'bg-gradient-to-bl',
-        'bg-gradient-to-l',
-        'bg-gradient-to-tl',
-      ],
-    ),
+    await run([
+      'bg-gradient-to-t',
+      'bg-gradient-to-tr',
+      'bg-gradient-to-r',
+      'bg-gradient-to-br',
+      'bg-gradient-to-b',
+      'bg-gradient-to-bl',
+      'bg-gradient-to-l',
+      'bg-gradient-to-tl',
+    ]),
   ).toMatchInlineSnapshot(`
     "
     .bg-gradient-to-b {
@@ -67,7 +62,14 @@ test('bg-gradient-*', async () => {
 
 test('max-w-screen', async () => {
   expect(
-    await compileCss(
+    await run(
+      [
+        'max-w-screen-sm',
+        'max-w-screen-md',
+        'max-w-screen-lg',
+        'max-w-screen-xl',
+        'max-w-screen-2xl',
+      ],
       css`
         @theme {
           --breakpoint-sm: 40rem;
@@ -78,13 +80,6 @@ test('max-w-screen', async () => {
         }
         @tailwind utilities;
       `,
-      [
-        'max-w-screen-sm',
-        'max-w-screen-md',
-        'max-w-screen-lg',
-        'max-w-screen-xl',
-        'max-w-screen-2xl',
-      ],
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -226,14 +221,7 @@ test('flex-shrink', async () => {
 
 test('start', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'start-shadowned',
         'start-auto',
@@ -244,6 +232,13 @@ test('start', async () => {
         '-start-4',
         'start-[4px]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -286,14 +281,7 @@ test('start', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing: 0.25rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'start-shadow-sm',
         'start',
@@ -309,20 +297,20 @@ test('start', async () => {
         '-start-4/foo',
         'start-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing: 0.25rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
 
 test('end', async () => {
   expect(
-    await compileCss(
-      css`
-        @theme {
-          --spacing: 0.25rem;
-          --inset-shadowned: 1940px;
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'end-shadowned',
         'end-auto',
@@ -333,6 +321,13 @@ test('end', async () => {
         '-end-4',
         'end-[4px]',
       ],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+          --inset-shadowned: 1940px;
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toMatchInlineSnapshot(`
     "
@@ -375,14 +370,7 @@ test('end', async () => {
     "
   `)
   expect(
-    await compileCss(
-      css`
-        @theme reference {
-          --spacing: 0.25rem;
-          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
-        }
-        @tailwind utilities;
-      `,
+    await run(
       [
         'end-shadow-sm',
         'end',
@@ -398,6 +386,13 @@ test('end', async () => {
         '-end-4/foo',
         'end-[4px]/foo',
       ],
+      css`
+        @theme reference {
+          --spacing: 0.25rem;
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
     ),
   ).toEqual('')
 })
