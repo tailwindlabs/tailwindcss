@@ -1773,7 +1773,7 @@ test('not', async () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/20058
   expect(
     await run(
-      ['not-has-a:flex', 'not-has-b:flex'],
+      ['not-has-a:flex', 'not-has-b:flex', 'not-has-c:flex', 'not-has-d:flex'],
       css`
         @custom-variant has-a {
           @container style(--a) {
@@ -1784,6 +1784,20 @@ test('not', async () => {
         /* Already negated case */
         @custom-variant has-b {
           @container not style(--b) {
+            @slot;
+          }
+        }
+
+        /* Named @container */
+        @custom-variant has-c {
+          @container foo style(--c) {
+            @slot;
+          }
+        }
+
+        /* Named @container, that's already negated case */
+        @custom-variant has-d {
+          @container bar not style(--d) {
             @slot;
           }
         }
@@ -1801,6 +1815,18 @@ test('not', async () => {
 
     @container style(--b) {
       .not-has-b\\:flex {
+        display: flex;
+      }
+    }
+
+    @container foo not style(--c) {
+      .not-has-c\\:flex {
+        display: flex;
+      }
+    }
+
+    @container bar style(--d) {
+      .not-has-d\\:flex {
         display: flex;
       }
     }
