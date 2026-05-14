@@ -383,14 +383,19 @@ export function createVariants(theme: Theme): Variants {
           // @container {query}
           //            ^^^^^^^
           // ast        0
-          if (ast[0].kind === 'function') {
+          if (ast.length >= 1 && ast[0].kind === 'function') {
             return `not ${condition}`
           }
 
           // @container not   {query}
           //            ^^^ ^ ^^^^^^^
           // ast        0   1 2
-          else if (ast[0].kind === 'word' && ast[0].value === 'not' && ast[2].kind === 'function') {
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value === 'not' &&
+            ast[2].kind === 'function'
+          ) {
             // Drop the leading `not` (ast[0]) and separator (ast[1])
             ast.splice(0, 2)
 
@@ -401,6 +406,7 @@ export function createVariants(theme: Theme): Variants {
           //            ^^^^^^ ^ ^^^ ^ ^^^^^^^
           // ast        0      1 2   3 4
           else if (
+            ast.length >= 5 &&
             ast[0].kind === 'word' &&
             ast[2].kind === 'word' &&
             ast[2].value === 'not' &&
@@ -415,7 +421,12 @@ export function createVariants(theme: Theme): Variants {
           // @container {name}   {query}
           //            ^^^^^^ ^ ^^^^^^^
           // ast        0      1 2
-          else if (ast[0].kind === 'word' && ast[0].value !== 'not' && ast[2].kind === 'function') {
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value !== 'not' &&
+            ast[2].kind === 'function'
+          ) {
             // Inject a separator and a `not`, after the `name` (ast[0])
             ast.splice(1, 0, { kind: 'separator', value: ' ' }, { kind: 'word', value: 'not' })
 
