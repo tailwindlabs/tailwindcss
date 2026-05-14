@@ -18,6 +18,7 @@ use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
+use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
@@ -646,6 +647,12 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 } else {
                     other_roots.insert(base);
                 }
+                if is_ignored_by_allowlist_gitignore(base) {
+                    ignores
+                        .entry(base)
+                        .or_default()
+                        .insert("!/**/*".to_string());
+                }
             }
             SourceEntry::Pattern { base, pattern } => {
                 let mut pattern = pattern.to_string();
@@ -846,6 +853,60 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     });
 
     Some(builder)
+}
+
+fn is_ignored_by_allowlist_gitignore(path: &Path) -> bool {
+    let Some(root) = path.ancestors().find(|parent| parent.join(".git").exists()) else {
+        return false;
+    };
+
+    let ignore_file = root.join(".gitignore");
+    if !ignore_file.exists() {
+        return false;
+    }
+
+    let Ok(ignore_content) = fs::read_to_string(&ignore_file) else {
+        return false;
+    };
+    if !gitignore_is_allowlist(&ignore_content) {
+        return false;
+    }
+
+    let mut builder = GitignoreBuilder::new(root);
+    if builder.add(&ignore_file).is_some() {
+        return false;
+    }
+
+    let Ok(ignore) = builder.build() else {
+        return false;
+    };
+    let matched = ignore.matched_path_or_any_parents(path, true);
+    matched.is_ignore()
+}
+
+fn gitignore_is_allowlist(contents: &str) -> bool {
+    let mut has_star = false;
+    for line in contents.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+
+        if line.starts_with('!') {
+            if has_star {
+                return true;
+            }
+
+            continue;
+        }
+
+        if line == "*" {
+            has_star = true;
+            continue;
+        }
+    }
+
+    false
 }
 
 #[cfg(test)]

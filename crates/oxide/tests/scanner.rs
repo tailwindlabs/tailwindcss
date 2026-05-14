@@ -1413,6 +1413,29 @@ mod scanner {
     }
 
     #[test]
+    fn test_explicit_source_can_override_allowlist_with_unwhitelisted_vendor() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "*\n!/app\n!/app/design/**"),
+                ("app/design/index.html", "content-['app/design/index.html']"),
+                (
+                    "vendor/acme/theme/templates/component.phtml",
+                    "content-['vendor/acme/theme/templates/component.phtml']",
+                ),
+            ],
+            vec!["@source './vendor/acme/theme'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['vendor/acme/theme/templates/component.phtml']"]
+        );
+        assert_eq!(files, vec!["vendor/acme/theme/templates/component.phtml"]);
+    }
+
+    #[test]
     fn test_allow_explicit_node_modules_paths() {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
