@@ -1446,16 +1446,11 @@ describe('regressions', () => {
               module: plugin(({ matchComponents }) => {
                 matchComponents(
                   {
-                    myicon: ({ fullPath }: { fullPath?: string }) => {
-                      fs.readFileSync(fullPath as string, 'utf8')
-                      return {}
+                    myicon: () => {
+                      throw new Error('Mimic as-if a custom plugin failed for some reason')
                     },
                   },
-                  {
-                    values: {
-                      icon: { fullPath: __filename },
-                    } as any,
-                  },
+                  { values: { icon: __filename } },
                 )
               }),
             }
