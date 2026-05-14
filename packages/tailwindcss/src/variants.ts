@@ -435,7 +435,6 @@ export function createVariants(theme: Theme): Variants {
 
           // @media not {query}
           // @supports not {query}
-          // @container not {query}
           if (parts[0] === 'not') {
             return parts.slice(1).join(' ')
           }
