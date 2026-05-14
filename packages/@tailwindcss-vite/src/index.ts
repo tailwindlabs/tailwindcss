@@ -68,6 +68,24 @@ function createCustomResolver(
 
       return resolved
     }
+
+    // Vite can treat a local CSS import without `./` as a package import.
+    // If all resolvers failed, try the importing directory as a final fallback.
+    let localCssFile = path.resolve(base, id)
+    if (
+      id.endsWith('.css') &&
+      !id.startsWith('.') &&
+      !path.isAbsolute(id) &&
+      !id.includes('/') &&
+      !id.includes('\\') &&
+      filter(localCssFile) &&
+      (await fs.stat(localCssFile).then(
+        (s) => s.isFile(),
+        () => false,
+      ))
+    ) {
+      return localCssFile
+    }
   }
 }
 

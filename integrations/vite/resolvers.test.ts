@@ -585,6 +585,67 @@ test(
 )
 
 test(
+  'resolve bare CSS imports in the same folder',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body></body>
+        </html>
+      `,
+      'src/index.css': css`
+        @reference 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+        @import 'components.css';
+      `,
+      'src/components.css': css`
+        .component-style {
+          color: green;
+        }
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('pnpm vite build')
+
+    expect(
+      (await fs.dumpFiles('./dist/**/*.css')).replace(/-[^/]*\.css/g, '-<hash>.css'),
+    ).toMatchInlineSnapshot(`
+      "
+      --- ./dist/assets/index-<hash>.css ---
+      .component-style {
+        color: green;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'resolve relative JS files correctly',
   {
     fs: {
