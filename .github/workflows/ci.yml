@@ -88,7 +88,7 @@ jobs:
         run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm run build

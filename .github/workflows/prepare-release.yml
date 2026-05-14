@@ -146,7 +146,7 @@ jobs:
         run: rustup target add ${{ matrix.target }}
 
       - name: Install dependencies
-        run: pnpm install --ignore-scripts --filter=!./playgrounds/*
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/*
 
       - name: Build release
         run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=${{ matrix.target }} ${{ matrix.build-flags }}
@@ -204,7 +204,7 @@ jobs:
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
             source "$HOME/.cargo/env"
-            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
+            pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/* || true
             echo "~~~~ rustc --version ~~~~"
             rustc --version
             echo "~~~~ node -v ~~~~"
@@ -289,7 +289,7 @@ jobs:
         run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
-        run: pnpm --filter=!./playgrounds/* install
+        run: pnpm --filter=!./playgrounds/* install --frozen-lockfile
 
       - name: Download artifacts
         uses: actions/download-artifact@v7
