@@ -925,7 +925,8 @@ describe('@apply', () => {
     // TODO: this output is currently broken because Lightning CSS doesn't
     // handle this case correctly yet
     expect(await compileCss(input)).toMatchInlineSnapshot(`
-      ".foo {
+      "
+      .foo {
         text-decoration-line: underline;
       }
 
@@ -939,7 +940,8 @@ describe('@apply', () => {
 
       @apply --my-mixin-3 {
         color: red;
-      }"
+      }
+      "
     `)
   })
 
