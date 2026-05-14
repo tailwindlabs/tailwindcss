@@ -1773,10 +1773,17 @@ test('not', async () => {
   // https://github.com/tailwindlabs/tailwindcss/issues/20058
   expect(
     await run(
-      ['not-has-a:flex'],
+      ['not-has-a:flex', 'not-has-b:flex'],
       css`
         @custom-variant has-a {
           @container style(--a) {
+            @slot;
+          }
+        }
+
+        /* Already negated case */
+        @custom-variant has-b {
+          @container not style(--b) {
             @slot;
           }
         }
@@ -1788,6 +1795,12 @@ test('not', async () => {
     "
     @container not style(--a) {
       .not-has-a\\:flex {
+        display: flex;
+      }
+    }
+
+    @container style(--b) {
+      .not-has-b\\:flex {
         display: flex;
       }
     }
