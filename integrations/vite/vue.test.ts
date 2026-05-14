@@ -170,6 +170,8 @@ test(
         candidate`component-0`,
         candidate`content-['component-99']`,
         candidate`component-99`,
+        candidate`content-['component-999']`,
+        candidate`component-999`,
       ])
     },
   )
