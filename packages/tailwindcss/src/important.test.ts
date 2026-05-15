@@ -16,13 +16,16 @@ test('Utilities can be wrapped in a selector', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    #app .underline {
-      text-decoration-line: underline;
-    }
-
-    @media (hover: hover) {
-      #app .hover\\:line-through:hover {
-        text-decoration-line: line-through;
+    #app {
+      .underline {
+        text-decoration-line: underline;
+      }
+      .hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through;
+          }
+        }
       }
     }
     "
@@ -50,10 +53,11 @@ test('Utilities can be marked with important', async () => {
     .underline {
       text-decoration-line: underline !important;
     }
-
-    @media (hover: hover) {
-      .hover\\:line-through:hover {
-        text-decoration-line: line-through !important;
+    .hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through !important;
+        }
       }
     }
     "
@@ -76,13 +80,16 @@ test('Utilities can be wrapped with a selector and marked as important', async (
     ),
   ).toMatchInlineSnapshot(`
     "
-    #app .underline {
-      text-decoration-line: underline !important;
-    }
-
-    @media (hover: hover) {
-      #app .hover\\:line-through:hover {
-        text-decoration-line: line-through !important;
+    #app {
+      .underline {
+        text-decoration-line: underline !important;
+      }
+      .hover\\:line-through {
+        &:hover {
+          @media (hover: hover) {
+            text-decoration-line: line-through !important;
+          }
+        }
       }
     }
     "
@@ -102,30 +109,27 @@ test('variables in utilities should not be marked as important', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @layer properties {
-      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-        *, :before, :after, ::backdrop {
-          --tw-ease: initial;
-        }
-      }
-    }
-
+    @layer properties;
     :root, :host {
-      --ease-out: cubic-bezier(0, 0, .2, 1);
+      --ease-out: cubic-bezier(0, 0, 0.2, 1);
     }
-
     .z-10\\! {
       z-index: 10 !important;
     }
-
     .ease-out\\! {
       --tw-ease: var(--ease-out) !important;
       transition-timing-function: var(--ease-out) !important;
     }
-
     @property --tw-ease {
       syntax: "*";
-      inherits: false
+      inherits: false;
+    }
+    @layer properties {
+      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        *, ::before, ::after, ::backdrop {
+          --tw-ease: initial;
+        }
+      }
     }
     "
   `)

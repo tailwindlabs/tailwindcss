@@ -21,37 +21,30 @@ test('bg-gradient-*', async () => {
       --tw-gradient-position: to bottom in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-bl {
       --tw-gradient-position: to bottom left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-br {
       --tw-gradient-position: to bottom right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-l {
       --tw-gradient-position: to left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-r {
       --tw-gradient-position: to right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-t {
       --tw-gradient-position: to top in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-tl {
       --tw-gradient-position: to top left in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
-
     .bg-gradient-to-tr {
       --tw-gradient-position: to top right in oklab;
       background-image: linear-gradient(var(--tw-gradient-stops));
@@ -90,23 +83,18 @@ test('max-w-screen', async () => {
       --breakpoint-xl: 80rem;
       --breakpoint-2xl: 96rem;
     }
-
     .max-w-screen-2xl {
       max-width: var(--breakpoint-2xl);
     }
-
     .max-w-screen-lg {
       max-width: var(--breakpoint-lg);
     }
-
     .max-w-screen-md {
       max-width: var(--breakpoint-md);
     }
-
     .max-w-screen-sm {
       max-width: var(--breakpoint-sm);
     }
-
     .max-w-screen-xl {
       max-width: var(--breakpoint-xl);
     }
@@ -138,7 +126,6 @@ test('box-decoration', async () => {
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
     }
-
     .decoration-slice {
       -webkit-box-decoration-break: slice;
       box-decoration-break: slice;
@@ -163,11 +150,9 @@ test('flex-grow', async () => {
     .flex-grow {
       flex-grow: 1;
     }
-
     .flex-grow-0 {
       flex-grow: 0;
     }
-
     .flex-grow-\\[123\\] {
       flex-grow: 123;
     }
@@ -194,11 +179,9 @@ test('flex-shrink', async () => {
     .flex-shrink {
       flex-shrink: 1;
     }
-
     .flex-shrink-0 {
       flex-shrink: 0;
     }
-
     .flex-shrink-\\[123\\] {
       flex-shrink: 123;
     }
@@ -243,38 +226,30 @@ test('start', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --spacing: .25rem;
+      --spacing: 0.25rem;
       --inset-shadowned: 1940px;
     }
-
     .-start-4 {
       inset-inline-start: calc(var(--spacing) * -4);
     }
-
     .-start-full {
       inset-inline-start: -100%;
     }
-
     .start-3\\/4 {
-      inset-inline-start: 75%;
+      inset-inline-start: calc(3/4 * 100%);
     }
-
     .start-4 {
       inset-inline-start: calc(var(--spacing) * 4);
     }
-
     .start-\\[4px\\] {
       inset-inline-start: 4px;
     }
-
     .start-auto {
       inset-inline-start: auto;
     }
-
     .start-full {
       inset-inline-start: 100%;
     }
-
     .start-shadowned {
       inset-inline-start: var(--inset-shadowned);
     }
@@ -332,38 +307,30 @@ test('end', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --spacing: .25rem;
+      --spacing: 0.25rem;
       --inset-shadowned: 1940px;
     }
-
     .-end-4 {
       inset-inline-end: calc(var(--spacing) * -4);
     }
-
     .-end-full {
       inset-inline-end: -100%;
     }
-
     .end-3\\/4 {
-      inset-inline-end: 75%;
+      inset-inline-end: calc(3/4 * 100%);
     }
-
     .end-4 {
       inset-inline-end: calc(var(--spacing) * 4);
     }
-
     .end-\\[4px\\] {
       inset-inline-end: 4px;
     }
-
     .end-auto {
       inset-inline-end: auto;
     }
-
     .end-full {
       inset-inline-end: 100%;
     }
-
     .end-shadowned {
       inset-inline-end: var(--inset-shadowned);
     }

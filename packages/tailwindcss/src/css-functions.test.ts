@@ -17,7 +17,7 @@ describe('--alpha(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       .foo {
-        margin: oklab(62.7955% .224 .125 / .5);
+        margin: color-mix(in oklab, red 50%, transparent);
       }
       "
     `)
@@ -75,9 +75,8 @@ describe('--spacing(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --spacing: .25rem;
+        --spacing: 0.25rem;
       }
-
       .foo {
         margin: calc(var(--spacing) * 4);
       }
@@ -99,7 +98,7 @@ describe('--spacing(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       .foo {
-        margin: 1rem;
+        margin: calc(0.25rem * 4);
       }
       "
     `)
@@ -160,9 +159,8 @@ describe('--theme(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: red;
+        --color-red-500: #f00;
       }
-
       .red {
         color: var(--color-red-500);
       }
@@ -183,7 +181,7 @@ describe('--theme(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       .red {
-        color: red;
+        color: #f00;
       }
       "
     `)
@@ -202,15 +200,11 @@ describe('--theme(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: red;
+        --color-red-500: #f00;
       }
-
       .red {
-        color: #ff000080;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .red {
+        color: color-mix(in srgb, #f00 50%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
       }
@@ -231,7 +225,7 @@ describe('--theme(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       .red {
-        color: oklab(62.7955% .224863 .125846);
+        color: color-mix(in oklab, #f00 5000%, transparent);
       }
       "
     `)
@@ -335,17 +329,15 @@ describe('--theme(…)', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-                    "Segoe UI Symbol", "Noto Color Emoji";
+        --tw-font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+                    'Segoe UI Symbol', 'Noto Color Emoji';
         --tw-default-font-family: var(--tw-font-sans);
       }
-
       @layer base {
         html {
           font-family: var(--tw-default-font-family, sans-serif);
         }
       }
-
       .tw\\:font-sans {
         font-family: var(--tw-font-sans);
       }
@@ -374,13 +366,13 @@ describe('--theme(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 48rem) {
+      @custom-media --md (width >= 48rem);
+      @media (--md) {
         .blue {
-          color: #00f;
+          color: blue;
         }
       }
-
-      @media (min-width: 64rem) {
+      @media (width >= 64rem) {
         .red {
           color: red;
         }
@@ -450,7 +442,6 @@ describe('--theme(…)', () => {
           font-family: var(--default-font-family, system-ui);
         }
       }
-
       @layer theme {
         :root, :host {
           --font-sans: sans-serif;
@@ -478,7 +469,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -497,7 +488,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -516,7 +507,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -535,7 +526,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -554,7 +545,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -573,7 +564,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -592,7 +583,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .75);
+            color: color-mix(in oklab, #f00 75%, transparent);
           }
           "
         `)
@@ -611,7 +602,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .75);
+            color: color-mix(in oklab, #f00 75%, transparent);
           }
           "
         `)
@@ -630,7 +621,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .75);
+            color: color-mix(in oklab, #f00 75%, transparent);
           }
           "
         `)
@@ -649,12 +640,9 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: color-mix(in oklab, red var(--opacity), transparent);
+            color: #f00;
+            @supports (color: color-mix(in lab, red, red)) {
+              color: color-mix(in oklab, #f00 var(--opacity), transparent);
             }
           }
           "
@@ -675,12 +663,9 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
-          }
-
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
-              color: color-mix(in oklab, red var(--opacity, 50%), transparent);
+            color: #f00;
+            @supports (color: color-mix(in lab, red, red)) {
+              color: color-mix(in oklab, #f00 var(--opacity,50%), transparent);
             }
           }
           "
@@ -719,7 +704,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .space-on-the-left {
-            margin-left: .625rem;
+            margin-left: 0.625rem;
           }
           "
         `)
@@ -738,7 +723,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .space-on-the-left {
-            margin-left: calc(100vh - .625rem);
+            margin-left: calc(100vh - 0.625rem);
           }
           "
         `)
@@ -757,7 +742,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .radius {
-            border-radius: .5rem;
+            border-radius: 0.5rem;
           }
           "
         `)
@@ -820,7 +805,7 @@ describe('theme(…)', () => {
           ).toMatchInlineSnapshot(`
             "
             .fam {
-              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+              font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             }
             "
           `)
@@ -840,7 +825,7 @@ describe('theme(…)', () => {
           ).toMatchInlineSnapshot(`
             "
             .fam {
-              font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+              font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             }
             "
           `)
@@ -870,7 +855,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -889,7 +874,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .25);
+            color: color-mix(in oklab, #f00 25%, transparent);
           }
           "
         `)
@@ -949,7 +934,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -969,7 +954,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .25);
+            color: color-mix(in oklab, color-mix(in oklab, #f00 50%, transparent) 50%, transparent);
           }
           "
         `)
@@ -990,7 +975,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -1009,7 +994,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: oklab(62.7955% .224 .125 / .5);
+            color: color-mix(in oklab, #f00 50%, transparent);
           }
           "
         `)
@@ -1028,7 +1013,7 @@ describe('theme(…)', () => {
         ).toMatchInlineSnapshot(`
           "
           .red {
-            color: red;
+            color: #f00;
           }
           "
         `)
@@ -1105,9 +1090,9 @@ describe('theme(…)', () => {
         ),
       ).toMatchInlineSnapshot(`
         "
-        @media (min-width: 40rem) {
-          .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
-            --color: red;
+        .sm\\:\\[--color\\:theme\\(colors\\.red\\[500\\]\\)\\] {
+          @media (width >= 40rem) {
+            --color: #f00;
           }
         }
         "
@@ -1164,7 +1149,7 @@ describe('theme(…)', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        @media (min-width: 48rem) and (max-width: 64rem) {
+        @media (min-width:48rem) and (max-width: 64rem) {
           .red {
             color: red;
           }
@@ -1188,7 +1173,7 @@ describe('theme(…)', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        @media (min-width: 48rem) and (not (min-width: 64rem)) {
+        @media (width >= 48rem) and (width<64rem) {
           .red {
             color: red;
           }
@@ -1213,7 +1198,8 @@ describe('theme(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 48rem) {
+      @custom-media --my-media (min-width: 48rem);
+      @media (--my-media) {
         .red {
           color: red;
         }
@@ -1236,7 +1222,7 @@ describe('theme(…)', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @container not (max-width: 48rem) {
+      @container (width > 48rem) {
         .red {
           color: red;
         }
@@ -1314,18 +1300,18 @@ describe('in plugins', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @layer base {
-        .my-base-rule {
-          color: oklch(62% .25 30);
-          background-color: oklch(45% .31 264);
-          border-color: oklab(87% .069 .008 / .1);
-          outline-color: oklab(79% .058 .159 / .15);
-        }
-      }
-
+      @layer base, utilities;
       @layer utilities {
         .my-utility {
-          color: oklch(62% .25 30);
+          color: oklch(62% 0.25 30);
+        }
+      }
+      @layer base {
+        .my-base-rule {
+          color: oklch(62% 0.25 30);
+          outline-color: color-mix(in oklab, oklch(79% 0.17 70) 15%, transparent);
+          background-color: oklch(45% 0.31 264);
+          border-color: color-mix(in oklab, oklch(87% 0.07 7) 10%, transparent);
         }
       }
       "
@@ -1384,16 +1370,16 @@ describe('in JS config files', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @layer base {
-        .my-base-rule {
-          color: orange;
-          background: red;
-        }
-      }
-
+      @layer base, utilities;
       @layer utilities {
         .my-utility {
           color: red;
+        }
+      }
+      @layer base {
+        .my-base-rule {
+          background: red;
+          color: orange;
         }
       }
       "
@@ -1427,7 +1413,7 @@ test('replaces CSS theme() function with values inside imported stylesheets', as
   ).toMatchInlineSnapshot(`
     "
     .red {
-      color: red;
+      color: #f00;
     }
     "
   `)
@@ -1447,7 +1433,7 @@ test('resolves paths ending with a 1', async () => {
   ).toMatchInlineSnapshot(`
     "
     .foo {
-      margin: .25rem;
+      margin: 0.25rem;
     }
     "
   `)
