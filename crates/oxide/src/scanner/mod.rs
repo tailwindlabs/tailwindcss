@@ -648,10 +648,9 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                     other_roots.insert(base);
                 }
                 if is_ignored_by_allowlist_gitignore(base) {
-                    ignores
-                        .entry(base)
-                        .or_default()
-                        .insert("!/**/*".to_string());
+                    let patterns = ignores.entry(base).or_default();
+                    patterns.insert("!/**/*".to_string());
+                    patterns.insert(BINARY_EXTENSIONS_GLOB.clone());
                 }
             }
             SourceEntry::Pattern { base, pattern } => {
@@ -855,6 +854,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     Some(builder)
 }
 
+/// Returns whether a path is ignored by a root `.gitignore` that starts as an allow-list.
 fn is_ignored_by_allowlist_gitignore(path: &Path) -> bool {
     let Some(root) = path.ancestors().find(|parent| parent.join(".git").exists()) else {
         return false;
@@ -873,8 +873,10 @@ fn is_ignored_by_allowlist_gitignore(path: &Path) -> bool {
     }
 
     let mut builder = GitignoreBuilder::new(root);
-    if builder.add(&ignore_file).is_some() {
-        return false;
+    for line in ignore_content.lines() {
+        if builder.add_line(Some(ignore_file.clone()), line).is_err() {
+            return false;
+        }
     }
 
     let Ok(ignore) = builder.build() else {
@@ -884,6 +886,7 @@ fn is_ignored_by_allowlist_gitignore(path: &Path) -> bool {
     matched.is_ignore()
 }
 
+/// Returns whether a `.gitignore` uses a bare `*` followed by negated allow-list rules.
 fn gitignore_is_allowlist(contents: &str) -> bool {
     let mut has_star = false;
     for line in contents.lines() {

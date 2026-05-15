@@ -1424,6 +1424,10 @@ mod scanner {
                     "vendor/acme/theme/templates/component.phtml",
                     "content-['vendor/acme/theme/templates/component.phtml']",
                 ),
+                (
+                    "vendor/acme/theme/templates/image.png",
+                    "content-['vendor/acme/theme/templates/image.png']",
+                ),
             ],
             vec!["@source './vendor/acme/theme'"],
         );
