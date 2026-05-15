@@ -30,26 +30,24 @@ describe('compiling CSS', () => {
       :root, :host {
         --color-black: #000;
       }
-
       @layer utilities {
         .flex {
           display: flex;
         }
-
-        @media (hover: hover) {
-          .hover\\:underline:hover {
-            text-decoration-line: underline;
+        .hover\\:underline {
+          &:hover {
+            @media (hover: hover) {
+              text-decoration-line: underline;
+            }
           }
         }
-
-        @media (min-width: 768px) {
-          .md\\:grid {
+        .md\\:grid {
+          @media (width >= 768px) {
             display: grid;
           }
         }
-
-        @media (prefers-color-scheme: dark) {
-          .dark\\:bg-black {
+        .dark\\:bg-black {
+          @media (prefers-color-scheme: dark) {
             background-color: var(--color-black);
           }
         }
@@ -98,7 +96,6 @@ describe('compiling CSS', () => {
       .flex {
         display: flex;
       }
-
       .grid {
         display: grid;
       }
@@ -166,17 +163,14 @@ describe('compiling CSS', () => {
         --spacing-1_5: 1.5rem;
         --spacing-2_5: 2.5rem;
       }
-
       .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
         margin-left: 1.5rem;
       }
-
       .ml-\\[var\\(--spacing-1_5\\,_var\\(--spacing-2_5\\,_1rem\\)\\)\\] {
         margin-left: var(--spacing-1_5, var(--spacing-2_5, 1rem));
       }
-
       .bg-\\[no-repeat_url\\(\\.\\/my_file\\.jpg\\)\\] {
-        background-color: no-repeat url("./my_file.jpg");
+        background-color: no-repeat url(./my_file.jpg);
       }
       "
     `)
@@ -206,19 +200,18 @@ describe('compiling CSS', () => {
         --spacing-3\\.5: 3.5px;
         --spacing-foo\\/bar: 3rem;
       }
-
       .m-1\\.5 {
         margin: var(--spacing-1\\.5);
       }
-
-      .m-2\\.5, .m-2_5 {
+      .m-2\\.5 {
         margin: var(--spacing-2_5);
       }
-
+      .m-2_5 {
+        margin: var(--spacing-2_5);
+      }
       .m-3\\.5 {
         margin: var(--spacing-3\\.5);
       }
-
       .m-foo\\/bar {
         margin: var(--spacing-foo\\/bar);
       }
@@ -230,8 +223,6 @@ describe('compiling CSS', () => {
     expect(await run(['[text-size-adjust:none]'])).toMatchInlineSnapshot(`
       "
       .\\[text-size-adjust\\:none\\] {
-        -webkit-text-size-adjust: none;
-        -moz-text-size-adjust: none;
         text-size-adjust: none;
       }
       "
@@ -254,7 +245,7 @@ describe('arbitrary properties', () => {
     expect(await run(['[color:red]/50'])).toMatchInlineSnapshot(`
       "
       .\\[color\\:red\\]\\/50 {
-        color: oklab(62.7955% .224 .125 / .5);
+        color: color-mix(in oklab, red 50%, transparent);
       }
       "
     `)
@@ -269,10 +260,7 @@ describe('arbitrary properties', () => {
       "
       .\\[color\\:var\\(--my-color\\)\\]\\/50 {
         color: var(--my-color);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .\\[color\\:var\\(--my-color\\)\\]\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
@@ -336,9 +324,8 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --spacing: .25rem;
+        --spacing: 0.25rem;
       }
-
       .foo {
         padding: calc(var(--spacing) * 2);
       }
@@ -374,7 +361,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       .foo {
-        padding: calc(var(--spacing, .25rem) * 2);
+        padding: calc(var(--spacing, 0.25rem) * 2);
       }
       "
     `)
@@ -411,16 +398,7 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-translate-x: 0;
-            --tw-translate-y: 0;
-            --tw-translate-z: 0;
-          }
-        }
-      }
-
+      @layer properties;
       :root, :host {
         --color-red-200: #fecaca;
         --color-red-500: #ef4444;
@@ -429,58 +407,54 @@ describe('@apply', () => {
         --color-green-500: #22c55e;
         --animate-spin: spin 1s linear infinite;
       }
-
       .foo {
         --tw-translate-x: 100%;
         translate: var(--tw-translate-x) var(--tw-translate-y);
         animation: var(--animate-spin);
         background-color: var(--color-red-500);
         text-decoration-line: underline;
-      }
-
-      @media (hover: hover) {
-        .foo:hover {
-          background-color: var(--color-blue-500);
+        &:hover {
+          @media (hover: hover) {
+            background-color: var(--color-blue-500);
+          }
         }
-      }
-
-      @media (min-width: 768px) {
-        .foo {
+        @media (width >= 768px) {
           background-color: var(--color-green-500);
         }
-      }
-
-      .foo:hover:focus {
-        background-color: var(--color-red-200);
-      }
-
-      @media (min-width: 768px) {
-        .foo:hover:focus {
-          background-color: var(--color-green-200);
+        &:hover:focus {
+          background-color: var(--color-red-200);
+          @media (width >= 768px) {
+            background-color: var(--color-green-200);
+          }
         }
       }
-
       @property --tw-translate-x {
         syntax: "*";
         inherits: false;
         initial-value: 0;
       }
-
       @property --tw-translate-y {
         syntax: "*";
         inherits: false;
         initial-value: 0;
       }
-
       @property --tw-translate-z {
         syntax: "*";
         inherits: false;
         initial-value: 0;
       }
-
       @keyframes spin {
         to {
           transform: rotate(360deg);
+        }
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+          }
         }
       }
       "
@@ -532,23 +506,28 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-content: "";
-          }
-        }
-      }
-
-      .foo, .bar {
+      @layer properties;
+      .foo {
+        --tw-content: "a";
         --tw-content: "b";
         content: var(--tw-content);
       }
-
+      .bar {
+        --tw-content: "a";
+        --tw-content: "b";
+        content: var(--tw-content);
+      }
       @property --tw-content {
         syntax: "*";
         inherits: false;
         initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
@@ -569,32 +548,29 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-leading: initial;
-          }
-        }
-      }
-
+      @layer properties;
       .c1 {
         --tw-leading: 1;
         line-height: 1;
       }
-
       .c2 {
         --tw-leading: 1 !important;
         line-height: 1 !important;
       }
-
       .c3 {
         --tw-leading: 1;
         line-height: 1;
       }
-
       @property --tw-leading {
         syntax: "*";
-        inherits: false
+        inherits: false;
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-leading: initial;
+          }
+        }
       }
       "
     `)
@@ -673,12 +649,13 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      .foo:before {
-        content: "bar";
-      }
-
-      .foo:after {
-        content: "baz";
+      .foo {
+        &:before {
+          content: 'bar';
+        }
+        &:after {
+          content: 'baz';
+        }
       }
       "
     `)
@@ -716,17 +693,30 @@ describe('@apply', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a:focus, .b:focus, .c {
+      .a {
+        &:focus {
+          display: flex !important;
+        }
+      }
+      .b {
+        &:focus {
+          display: flex !important;
+        }
+      }
+      .c {
         display: flex !important;
       }
-
-      .flex, .my-flex {
+      .flex {
         display: flex;
       }
-
+      .my-flex {
+        display: flex;
+      }
       @layer base {
-        body:focus {
-          display: flex !important;
+        body {
+          &:focus {
+            display: flex !important;
+          }
         }
       }
       "
@@ -758,13 +748,11 @@ describe('@apply', () => {
       .custom-utility {
         display: flex;
       }
-
       .ignore-me {
         text-decoration-line: underline;
-      }
-
-      .ignore-me div {
-        display: flex;
+        div {
+          display: flex;
+        }
       }
       "
     `)
@@ -810,41 +798,32 @@ describe('@apply', () => {
         --color-red-500: red;
         --color-indigo-500: indigo;
       }
-
       .test {
         background-color: var(--color-green-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
-
-      .test:hover {
-        background-color: var(--color-red-500);
-      }
-
-      .test:disabled {
-        background-color: var(--color-indigo-500);
-      }
-
       .test2 {
         background-color: var(--color-green-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
-
-      .test2:hover {
-        background-color: var(--color-red-500);
-      }
-
-      .test2:disabled {
-        background-color: var(--color-indigo-500);
-      }
-
       .foo {
         background-color: var(--color-green-500);
-      }
-
-      .foo:hover {
-        background-color: var(--color-red-500);
-      }
-
-      .foo:disabled {
-        background-color: var(--color-indigo-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
       "
     `)
@@ -876,10 +855,12 @@ describe('@apply', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .flex, .flex-explicitly-important {
+      .flex {
         display: flex !important;
       }
-
+      .flex-explicitly-important {
+        display: flex !important;
+      }
       .flex-not-important {
         display: flex;
       }
@@ -928,18 +909,13 @@ describe('@apply', () => {
       "
       .foo {
         text-decoration-line: underline;
-      }
-
-      @apply --my-mixin-1;
-
-      @apply --my-mixin-1();
-
-      @apply --my-mixin-1 --my-mixin-2;
-
-      @apply --my-mixin-1() --my-mixin-2();
-
-      @apply --my-mixin-3 {
-        color: red;
+        @apply --my-mixin-1;
+        @apply --my-mixin-1();
+        @apply --my-mixin-1 --my-mixin-2;
+        @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-3 {
+          color: red;
+        }
       }
       "
     `)
@@ -986,8 +962,10 @@ describe('arbitrary variants', () => {
   it('should generate arbitrary variants', async () => {
     expect(await run(['[&_p]:flex'])).toMatchInlineSnapshot(`
       "
-      .\\[\\&_p\\]\\:flex p {
-        display: flex;
+      .\\[\\&_p\\]\\:flex {
+        & p {
+          display: flex;
+        }
       }
       "
     `)
@@ -996,8 +974,8 @@ describe('arbitrary variants', () => {
   it('should generate arbitrary at-rule variants', async () => {
     expect(await run(['[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "
-      @media (min-width: 123px) {
-        .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
+      .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
+        @media (width>=123px) {
           display: flex;
         }
       }
@@ -1014,9 +992,13 @@ describe('variant stacking', () => {
   it('should stack simple variants', async () => {
     expect(await run(['focus:hover:flex'])).toMatchInlineSnapshot(`
       "
-      @media (hover: hover) {
-        .focus\\:hover\\:flex:focus:hover {
-          display: flex;
+      .focus\\:hover\\:flex {
+        &:focus {
+          &:hover {
+            @media (hover: hover) {
+              display: flex;
+            }
+          }
         }
       }
       "
@@ -1026,9 +1008,13 @@ describe('variant stacking', () => {
   it('should stack arbitrary variants and simple variants', async () => {
     expect(await run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
       "
-      @media (hover: hover) {
-        .\\[\\&_p\\]\\:hover\\:flex p:hover {
-          display: flex;
+      .\\[\\&_p\\]\\:hover\\:flex {
+        & p {
+          &:hover {
+            @media (hover: hover) {
+              display: flex;
+            }
+          }
         }
       }
       "
@@ -1038,9 +1024,11 @@ describe('variant stacking', () => {
   it('should stack multiple arbitrary variants', async () => {
     expect(await run(['[&_p]:[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "
-      @media (min-width: 123px) {
-        .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex p {
-          display: flex;
+      .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
+        & p {
+          @media (width>=123px) {
+            display: flex;
+          }
         }
       }
       "
@@ -1050,33 +1038,38 @@ describe('variant stacking', () => {
   it('pseudo element variants are re-ordered', async () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-content: "";
+      @layer properties;
+      .before\\:hover\\:flex {
+        &::before {
+          content: var(--tw-content);
+          &:hover {
+            @media (hover: hover) {
+              display: flex;
+            }
           }
         }
       }
-
-      .before\\:hover\\:flex:before {
-        content: var(--tw-content);
-      }
-
-      @media (hover: hover) {
-        .before\\:hover\\:flex:before:hover {
-          display: flex;
-        }
-
-        .hover\\:before\\:flex:hover:before {
-          content: var(--tw-content);
-          display: flex;
+      .hover\\:before\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            &::before {
+              content: var(--tw-content);
+              display: flex;
+            }
+          }
         }
       }
-
       @property --tw-content {
         syntax: "*";
-        inherits: false;
         initial-value: "";
+        inherits: false;
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
       }
       "
     `)
@@ -1126,11 +1119,9 @@ describe('important', () => {
       :root, :host {
         --animate-spin: spin 1s linear infinite;
       }
-
       .animate-spin\\! {
         animation: var(--animate-spin) !important;
       }
-
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -1166,25 +1157,20 @@ describe('sorting', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --spacing-1: .25rem;
+        --spacing-1: 0.25rem;
       }
-
       .pointer-events-none {
         pointer-events: none;
       }
-
       .flex {
         display: flex;
       }
-
       .p-1 {
         padding: var(--spacing-1);
       }
-
       .px-1 {
         padding-inline: var(--spacing-1);
       }
-
       .pl-1 {
         padding-left: var(--spacing-1);
       }
@@ -1196,15 +1182,13 @@ describe('sorting', () => {
     expect(await run(['text-clip', 'truncate', 'overflow-scroll'])).toMatchInlineSnapshot(`
       "
       .truncate {
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        overflow: hidden;
       }
-
       .overflow-scroll {
         overflow: scroll;
       }
-
       .text-clip {
         text-overflow: clip;
       }
@@ -1232,38 +1216,36 @@ describe('sorting', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-space-x-reverse: 0;
-          }
-        }
-      }
-
+      @layer properties;
       :root, :host {
         --spacing-0: 0px;
-        --spacing-2: .5rem;
+        --spacing-2: 0.5rem;
         --spacing-4: 1rem;
       }
-
       .mx-0 {
         margin-inline: var(--spacing-0);
       }
-
       .gap-4 {
         gap: var(--spacing-4);
       }
-
-      :where(.space-x-2 > :not(:last-child)) {
-        --tw-space-x-reverse: 0;
-        margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
-        margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
+      .space-x-2 {
+        :where(& > :not(:last-child)) {
+          --tw-space-x-reverse: 0;
+          margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
+          margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
+        }
       }
-
       @property --tw-space-x-reverse {
         syntax: "*";
         inherits: false;
         initial-value: 0;
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-space-x-reverse: 0;
+          }
+        }
       }
       "
     `)
@@ -1309,51 +1291,39 @@ describe('sorting', () => {
         --spacing-2: 2px;
         --spacing-3: 3px;
       }
-
       .mx-3 {
         margin-inline: var(--spacing-3);
       }
-
       .ms-1 {
         margin-inline-start: var(--spacing-1);
       }
-
       .me-2 {
         margin-inline-end: var(--spacing-2);
       }
-
       .scroll-mx-3 {
         scroll-margin-inline: var(--spacing-3);
       }
-
       .scroll-ms-1 {
         scroll-margin-inline-start: var(--spacing-1);
       }
-
       .scroll-me-2 {
         scroll-margin-inline-end: var(--spacing-2);
       }
-
       .scroll-px-3 {
         scroll-padding-inline: var(--spacing-3);
       }
-
       .scroll-ps-1 {
         scroll-padding-inline-start: var(--spacing-1);
       }
-
       .scroll-pe-2 {
         scroll-padding-inline-end: var(--spacing-2);
       }
-
       .px-3 {
         padding-inline: var(--spacing-3);
       }
-
       .ps-1 {
         padding-inline-start: var(--spacing-1);
       }
-
       .pe-2 {
         padding-inline-end: var(--spacing-2);
       }
@@ -1373,19 +1343,20 @@ describe('sorting', () => {
       .pointer-events-none {
         pointer-events: none;
       }
-
       .flex {
         display: flex;
       }
-
-      @media (hover: hover) {
-        .hover\\:flex:hover {
-          display: flex;
+      .hover\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            display: flex;
+          }
         }
       }
-
-      .focus\\:pointer-events-none:focus {
-        pointer-events: none;
+      .focus\\:pointer-events-none {
+        &:focus {
+          pointer-events: none;
+        }
       }
       "
     `)
@@ -1418,25 +1389,31 @@ describe('sorting', () => {
       .flex {
         display: flex;
       }
-
-      @media (hover: hover) {
-        .hover\\:flex:hover {
+      .hover\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            display: flex;
+          }
+        }
+      }
+      .focus\\:flex {
+        &:focus {
           display: flex;
         }
       }
-
-      .focus\\:flex:focus {
-        display: flex;
-      }
-
-      @media (hover: hover) {
-        .hover\\:focus\\:flex:hover:focus {
-          display: flex;
+      .hover\\:focus\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            &:focus {
+              display: flex;
+            }
+          }
         }
       }
-
-      .disabled\\:flex:disabled {
-        display: flex;
+      .disabled\\:flex {
+        &:disabled {
+          display: flex;
+        }
       }
       "
     `)
@@ -1468,49 +1445,107 @@ describe('sorting', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (hover: hover) {
-        .group-hover\\:flex:is(:where(.group):hover *) {
-          display: flex;
-        }
-      }
-
-      .group-focus\\:flex:is(:where(.group):focus *) {
-        display: flex;
-      }
-
-      @media (hover: hover) {
-        .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
-          display: flex;
-        }
-
-        @media (hover: hover) {
-          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *), .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
+      .group-hover\\:flex {
+        &:is(:where(.group):hover *) {
+          @media (hover: hover) {
             display: flex;
           }
         }
-
-        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *), .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+      }
+      .group-focus\\:flex {
+        &:is(:where(.group):focus *) {
           display: flex;
         }
       }
-
-      .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
-        display: flex;
+      .peer-hover\\:flex {
+        &:is(:where(.peer):hover ~ *) {
+          @media (hover: hover) {
+            display: flex;
+          }
+        }
       }
-
-      @media (hover: hover) {
-        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *), .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
+      .group-hover\\:peer-hover\\:flex {
+        &:is(:where(.group):hover *) {
+          @media (hover: hover) {
+            &:is(:where(.peer):hover ~ *) {
+              @media (hover: hover) {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+      .peer-hover\\:group-hover\\:flex {
+        &:is(:where(.peer):hover ~ *) {
+          @media (hover: hover) {
+            &:is(:where(.group):hover *) {
+              @media (hover: hover) {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+      .group-focus\\:peer-hover\\:flex {
+        &:is(:where(.group):focus *) {
+          &:is(:where(.peer):hover ~ *) {
+            @media (hover: hover) {
+              display: flex;
+            }
+          }
+        }
+      }
+      .peer-hover\\:group-focus\\:flex {
+        &:is(:where(.peer):hover ~ *) {
+          @media (hover: hover) {
+            &:is(:where(.group):focus *) {
+              display: flex;
+            }
+          }
+        }
+      }
+      .peer-focus\\:flex {
+        &:is(:where(.peer):focus ~ *) {
           display: flex;
         }
       }
-
-      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *), .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
-        display: flex;
+      .group-hover\\:peer-focus\\:flex {
+        &:is(:where(.group):hover *) {
+          @media (hover: hover) {
+            &:is(:where(.peer):focus ~ *) {
+              display: flex;
+            }
+          }
+        }
       }
-
-      @media (hover: hover) {
-        .hover\\:flex:hover {
-          display: flex;
+      .peer-focus\\:group-hover\\:flex {
+        &:is(:where(.peer):focus ~ *) {
+          &:is(:where(.group):hover *) {
+            @media (hover: hover) {
+              display: flex;
+            }
+          }
+        }
+      }
+      .group-focus\\:peer-focus\\:flex {
+        &:is(:where(.group):focus *) {
+          &:is(:where(.peer):focus ~ *) {
+            display: flex;
+          }
+        }
+      }
+      .peer-focus\\:group-focus\\:flex {
+        &:is(:where(.peer):focus ~ *) {
+          &:is(:where(.group):focus *) {
+            display: flex;
+          }
+        }
+      }
+      .hover\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            display: flex;
+          }
         }
       }
       "
@@ -1538,16 +1573,14 @@ describe('sorting', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --text-sm: .875rem;
-        --text-sm--line-height: calc(1.25 / .875);
+        --text-sm: 0.875rem;
+        --text-sm--line-height: calc(1.25 / 0.875);
       }
-
       .fancy-text {
         font-size: var(--text-4xl);
         line-height: var(--text-4xl--line-height);
         font-weight: var(--font-weight-bold);
       }
-
       .text-sm {
         font-size: var(--text-sm);
         line-height: var(--tw-leading, var(--text-sm--line-height));
@@ -1572,9 +1605,8 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: red;
+        --color-red-500: #f00;
       }
-
       .accent-red-500 {
         accent-color: var(--color-red-500);
       }
@@ -1599,7 +1631,6 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-red-500: #f10;
       }
-
       .accent-red-500 {
         accent-color: var(--color-red-500);
       }
@@ -1624,14 +1655,12 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: red;
+        --color-red-500: #f00;
         --color-blue-500: #00f;
       }
-
       .accent-blue-500 {
         accent-color: var(--color-blue-500);
       }
-
       .accent-red-500 {
         accent-color: var(--color-red-500);
       }
@@ -1658,11 +1687,9 @@ describe('Parsing theme values from CSS', () => {
         --width-1\\/2: 75%;
         --width-75\\%: 50%;
       }
-
       .w-1\\/2 {
         width: var(--width-1\\/2);
       }
-
       .w-75\\% {
         width: var(--width-75\\%);
       }
@@ -1704,11 +1731,9 @@ describe('Parsing theme values from CSS', () => {
         --color-red: red;
         --text-lg: 20px;
       }
-
       .text-lg {
         font-size: var(--text-lg);
       }
-
       .accent-red {
         accent-color: var(--color-red);
       }
@@ -1742,13 +1767,14 @@ describe('Parsing theme values from CSS', () => {
       "
       :root, :host {
         --animate-very-long-animation-name: very-long-animation-name
-                    var(--very-long-animation-name-configuration, 2.5s ease-in-out 0s infinite normal none running);
+                    var(
+                      --very-long-animation-name-configuration,
+                      2.5s ease-in-out 0s infinite normal none running
+                    );
       }
-
       .animate-very-long-animation-name {
         animation: var(--animate-very-long-animation-name);
       }
-
       @keyframes very-long-animation-name {
         to {
           opacity: 1;
@@ -1795,11 +1821,9 @@ describe('Parsing theme values from CSS', () => {
         --text-sm: 13px;
         --color-green: #0f0;
       }
-
       .text-sm {
         font-size: var(--text-sm);
       }
-
       .accent-green {
         accent-color: var(--color-green);
       }
@@ -1844,11 +1868,9 @@ describe('Parsing theme values from CSS', () => {
         --text-sm: 13px;
         --color-green: #0f0;
       }
-
       .text-sm {
         font-size: var(--text-sm);
       }
-
       .accent-green {
         accent-color: var(--color-green);
       }
@@ -1881,7 +1903,6 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-green: #0f0;
       }
-
       .accent-green {
         accent-color: var(--color-green);
       }
@@ -1908,31 +1929,28 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
-            --tw-font-weight: initial;
-          }
-        }
-      }
-
+      @layer properties;
       :root, :host {
         --font-weight-bold: bold;
         --font-body: Inter;
       }
-
       .font-body {
         font-family: var(--font-body);
       }
-
       .font-bold {
         --tw-font-weight: var(--font-weight-bold);
         font-weight: var(--font-weight-bold);
       }
-
       @property --tw-font-weight {
         syntax: "*";
-        inherits: false
+        inherits: false;
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-font-weight: initial;
+          }
+        }
       }
       "
     `)
@@ -1957,9 +1975,85 @@ describe('Parsing theme values from CSS', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
+      @layer properties;
+      :root, :host {
+        --inset-md: 50px;
+      }
+      .inset-md {
+        inset: var(--inset-md);
+      }
+      .inset-shadow-sm {
+        --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, rgb(0 0 0 / 0.05));
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+      @property --tw-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-shadow-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-inset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-shadow-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-inset-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-ring-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-ring-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-inset-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-ring-inset {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-ring-offset-width {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --tw-ring-offset-color {
+        syntax: "*";
+        inherits: false;
+        initial-value: #fff;
+      }
+      @property --tw-ring-offset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
             --tw-shadow-alpha: 100%;
@@ -1976,98 +2070,6 @@ describe('Parsing theme values from CSS', () => {
             --tw-ring-offset-shadow: 0 0 #0000;
           }
         }
-      }
-
-      :root, :host {
-        --inset-md: 50px;
-      }
-
-      .inset-md {
-        inset: var(--inset-md);
-      }
-
-      .inset-shadow-sm {
-        --tw-inset-shadow: inset 0 2px 4px var(--tw-inset-shadow-color, #0000000d);
-        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      }
-
-      @property --tw-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-shadow-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-shadow-alpha {
-        syntax: "<percentage>";
-        inherits: false;
-        initial-value: 100%;
-      }
-
-      @property --tw-inset-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-inset-shadow-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-inset-shadow-alpha {
-        syntax: "<percentage>";
-        inherits: false;
-        initial-value: 100%;
-      }
-
-      @property --tw-ring-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-ring-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-inset-ring-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-inset-ring-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-ring-inset {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-ring-offset-width {
-        syntax: "<length>";
-        inherits: false;
-        initial-value: 0;
-      }
-
-      @property --tw-ring-offset-color {
-        syntax: "*";
-        inherits: false;
-        initial-value: #fff;
-      }
-
-      @property --tw-ring-offset-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
       }
       "
     `)
@@ -2110,29 +2112,21 @@ describe('Parsing theme values from CSS', () => {
         --text-decoration-color-salad: yellow;
         --text-lg: 20px;
       }
-
       .indent-potato {
         text-indent: var(--text-indent-potato);
       }
-
       .text-lg {
         font-size: var(--text-lg);
       }
-
       .text-potato {
         color: var(--text-color-potato);
       }
-
       .decoration-salad {
-        -webkit-text-decoration-color: var(--text-decoration-color-salad);
-        -webkit-text-decoration-color: var(--text-decoration-color-salad);
         text-decoration-color: var(--text-decoration-color-salad);
       }
-
       .decoration-potato {
         text-decoration-thickness: var(--text-decoration-thickness-potato);
       }
-
       .underline-offset-potato {
         text-underline-offset: var(--text-underline-offset-potato);
       }
@@ -2172,11 +2166,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --animate-foobar: foobar 1s infinite;
       }
-
       .animate-foobar {
         animation: var(--animate-foobar);
       }
-
       @keyframes foobar {
         to {
           opacity: 0;
@@ -2216,11 +2208,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --animate-foo: used 1s infinite;
       }
-
       .animate-foo {
         animation: var(--animate-foo);
       }
-
       @keyframes used {
         to {
           opacity: 1;
@@ -2260,11 +2250,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --tw-animate-foo: used 1s infinite;
       }
-
       .tw\\:animate-foo {
         animation: var(--tw-animate-foo);
       }
-
       @keyframes used {
         to {
           opacity: 1;
@@ -2290,7 +2278,6 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --tw-color-tomato: #e10c04;
       }
-
       .red {
         color: var(--tw-color-tomato);
       }
@@ -2323,11 +2310,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --animate-foo: used 1s infinite;
       }
-
       .animate-foo {
         animation: var(--animate-foo);
       }
-
       @keyframes used {
         to {
           --other: var(--angle);
@@ -2366,9 +2351,8 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       .animate-foo {
-        animation: 1s infinite used;
+        animation: used 1s infinite;
       }
-
       @keyframes used {
         to {
           opacity: 1;
@@ -2409,17 +2393,14 @@ describe('Parsing theme values from CSS', () => {
         --animate-foo: used 1s infinite;
         --animate-bar: unused-but-kept 1s infinite;
       }
-
       .animate-foo {
         animation: var(--animate-foo);
       }
-
       @keyframes used {
         to {
           opacity: 1;
         }
       }
-
       @keyframes unused-but-kept {
         to {
           opacity: 0;
@@ -2455,9 +2436,8 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       .foo {
-        animation: 1s infinite used;
+        animation: used 1s infinite;
       }
-
       @keyframes used {
         to {
           opacity: 1;
@@ -2492,20 +2472,17 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --animate-test: .5s both fade-in, 1s linear .5s spin infinite;
+        --animate-test: 500ms both fade-in, 1000ms linear 500ms spin infinite;
       }
-
       .animate-test {
         animation: var(--animate-test);
       }
-
       @keyframes fade-in {
         from {
-          opacity: 0;
+          opacity: 0%;
         }
-
         to {
-          opacity: 1;
+          opacity: 100%;
         }
       }
       "
@@ -2542,11 +2519,9 @@ describe('Parsing theme values from CSS', () => {
           opacity: 0;
         }
       }
-
       .foo {
-        animation: 1s infinite used;
+        animation: used 1s infinite;
       }
-
       @keyframes used {
         to {
           opacity: 1;
@@ -2575,11 +2550,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-tomato: #e10c04;
       }
-
       .bg-potato {
         background-color: var(--color-potato, #ac855b);
       }
-
       .bg-tomato {
         background-color: var(--color-tomato);
       }
@@ -2613,14 +2586,12 @@ describe('Parsing theme values from CSS', () => {
       .animate-foo {
         animation: var(--animate-foo, foo 1s infinite);
       }
-
       @keyframes foo {
         0%, 100% {
           color: red;
         }
-
         50% {
-          color: #00f;
+          color: blue;
         }
       }
       "
@@ -2658,22 +2629,18 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-pink: pink;
       }
-
       .animate-foo {
         animation: var(--animate-foo, foo 1s infinite);
       }
-
       .bg-pink {
         background-color: var(--color-pink);
       }
-
       @keyframes foo {
         0%, 100% {
           color: red;
         }
-
         50% {
-          color: #00f;
+          color: blue;
         }
       }
       "
@@ -2722,7 +2689,6 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-potato: #c794aa;
       }
-
       .bg-potato {
         background-color: var(--color-potato);
       }
@@ -2754,15 +2720,12 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-tomato: #e10c04;
       }
-
       .bg-avocado {
         background-color: var(--color-avocado, #c0cc6d);
       }
-
       .bg-potato {
         background-color: var(--color-potato, #ac855b);
       }
-
       .bg-tomato {
         background-color: var(--color-tomato);
       }
@@ -2802,7 +2765,6 @@ describe('Parsing theme values from CSS', () => {
         --color-potato: #ac855b;
         --color-primary: var(--primary);
       }
-
       .bg-tomato {
         background-color: var(--color-tomato);
       }
@@ -2850,11 +2812,9 @@ describe('Parsing theme values from CSS', () => {
       .bg-potato {
         background-color: #ac855b;
       }
-
       .bg-primary {
         background-color: var(--primary);
       }
-
       .bg-tomato {
         background-color: #e10c04;
       }
@@ -2917,7 +2877,6 @@ describe('Parsing theme values from CSS', () => {
         --color-potato: #ac855b;
         --color-primary: var(--primary);
       }
-
       .bg-tomato {
         background-color: var(--color-tomato);
       }
@@ -2972,11 +2931,9 @@ describe('Parsing theme values from CSS', () => {
       .bg-potato {
         background-color: #ac855b;
       }
-
       .bg-primary {
         background-color: var(--primary);
       }
-
       .bg-tomato {
         background-color: #e10c04;
       }
@@ -3003,11 +2960,9 @@ describe('Parsing theme values from CSS', () => {
       .bg-potato {
         background-color: #ac855b;
       }
-
       .bg-primary {
         background-color: var(--primary);
       }
-
       .bg-tomato {
         background-color: #e10c04;
       }
@@ -3036,11 +2991,9 @@ describe('Parsing theme values from CSS', () => {
       .bg-potato {
         background-color: #ac855b;
       }
-
       .bg-primary {
         background-color: var(--primary);
       }
-
       .bg-tomato {
         background-color: #e10c04;
       }
@@ -3068,7 +3021,6 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-potato: #ac855b;
       }
-
       .bg-potato {
         background-color: var(--color-potato);
       }
@@ -3165,11 +3117,9 @@ describe('Parsing theme values from CSS', () => {
         --color-potato: #ac855b;
         --color-tomato: tomato;
       }
-
       .bg-potato {
         background-color: var(--color-potato);
       }
-
       .bg-tomato {
         background-color: var(--color-tomato);
       }
@@ -3215,11 +3165,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-orange: orange;
       }
-
       .text-orange {
         color: var(--color-orange);
       }
-
       .text-red {
         color: tomato;
       }
@@ -3265,11 +3213,9 @@ describe('Parsing theme values from CSS', () => {
       :root, :host {
         --color-orange: orange;
       }
-
       .text-orange {
         color: var(--color-orange);
       }
-
       .text-red {
         color: tomato;
       }
@@ -3315,11 +3261,9 @@ describe('Parsing theme values from CSS', () => {
         --var-three: var(--var-four);
         --var-two: var(--var-three);
       }
-
       .get-var-b {
         color: var(--var-b);
       }
-
       .get-var-two {
         color: var(--var-two);
       }
@@ -3626,12 +3570,15 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
-          display: flex;
+        .group-hocus\\:flex {
+          &:is(:is(:where(.group):hover, :where(.group):focus) *) {
+            display: flex;
+          }
         }
-
-        .hocus\\:underline:hover, .hocus\\:underline:focus {
-          text-decoration-line: underline;
+        .hocus\\:underline {
+          &:hover, &:focus {
+            text-decoration-line: underline;
+          }
         }
       }
       "
@@ -3661,12 +3608,21 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
-          display: flex;
+        .group-hocus\\:flex {
+          &:is(:where(.group):hover *) {
+            display: flex;
+          }
+          &:is(:where(.group):focus *) {
+            display: flex;
+          }
         }
-
-        .hocus\\:underline:hover, .hocus\\:underline:focus {
-          text-decoration-line: underline;
+        .hocus\\:underline {
+          &:hover {
+            text-decoration-line: underline;
+          }
+          &:focus {
+            text-decoration-line: underline;
+          }
         }
       }
       "
@@ -3699,12 +3655,21 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
-          display: flex;
+        .group-hocus\\:flex {
+          &:is(:where(.group):hover *) {
+            display: flex;
+          }
+          &:is(:where(.group):focus *) {
+            display: flex;
+          }
         }
-
-        .hocus\\:underline:hover, .hocus\\:underline:focus {
-          text-decoration-line: underline;
+        .hocus\\:underline {
+          &:hover {
+            text-decoration-line: underline;
+          }
+          &:focus {
+            text-decoration-line: underline;
+          }
         }
       }
       "
@@ -3739,24 +3704,25 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        @media (hover: hover) {
-          .group-hocus\\:flex:is(:where(.group):hover *) {
+        .group-hocus\\:flex {
+          @media (hover: hover) {
+            &:is(:where(.group):hover *) {
+              display: flex;
+            }
+          }
+          &:is(:where(.group):focus *) {
             display: flex;
           }
         }
-
-        .group-hocus\\:flex:is(:where(.group):focus *) {
-          display: flex;
-        }
-
-        @media (hover: hover) {
-          .hocus\\:underline:hover {
+        .hocus\\:underline {
+          @media (hover: hover) {
+            &:hover {
+              text-decoration-line: underline;
+            }
+          }
+          &:focus {
             text-decoration-line: underline;
           }
-        }
-
-        .hocus\\:underline:focus {
-          text-decoration-line: underline;
         }
       }
       "
@@ -3794,10 +3760,12 @@ describe('plugins', () => {
       @layer utilities {
         .hocus\\:underline {
           --custom-property: @slot;
-        }
-
-        .hocus\\:underline:hover, .hocus\\:underline:focus {
-          text-decoration-line: underline;
+          &:hover {
+            text-decoration-line: underline;
+          }
+          &:focus {
+            text-decoration-line: underline;
+          }
         }
       }
       "
@@ -3829,12 +3797,18 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
-          display: flex;
+        .rtl\\:flex {
+          &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+            display: flex;
+          }
         }
-
-        @starting-style {
-          .starting\\:flex {
+        .dark\\:flex {
+          &:is([data-theme=dark] *) {
+            display: flex;
+          }
+        }
+        .starting\\:flex {
+          @starting-style {
             display: flex;
           }
         }
@@ -3924,59 +3898,48 @@ describe('@source', () => {
       ).toMatchInlineSnapshot(`
         "
         :root, :host {
-          --color-red-50: oklch(97.1% .013 17.38);
-          --color-red-100: oklch(93.6% .032 17.717);
-          --color-red-200: oklch(88.5% .062 18.334);
-          --color-red-300: oklch(80.8% .114 19.571);
-          --color-red-400: oklch(70.4% .191 22.216);
-          --color-red-500: oklch(63.7% .237 25.331);
-          --color-red-600: oklch(57.7% .245 27.325);
-          --color-red-700: oklch(50.5% .213 27.518);
-          --color-red-800: oklch(44.4% .177 26.899);
-          --color-red-900: oklch(39.6% .141 25.723);
-          --color-red-950: oklch(25.8% .092 26.042);
+          --color-red-50: oklch(0.971 0.013 17.38);
+          --color-red-100: oklch(0.936 0.032 17.717);
+          --color-red-200: oklch(0.885 0.062 18.334);
+          --color-red-300: oklch(0.808 0.114 19.571);
+          --color-red-400: oklch(0.704 0.191 22.216);
+          --color-red-500: oklch(0.637 0.237 25.331);
+          --color-red-600: oklch(0.577 0.245 27.325);
+          --color-red-700: oklch(0.505 0.213 27.518);
+          --color-red-800: oklch(0.444 0.177 26.899);
+          --color-red-900: oklch(0.396 0.141 25.723);
+          --color-red-950: oklch(0.258 0.092 26.042);
         }
-
         .bg-red-50 {
           background-color: var(--color-red-50);
         }
-
         .bg-red-100 {
           background-color: var(--color-red-100);
         }
-
         .bg-red-200 {
           background-color: var(--color-red-200);
         }
-
         .bg-red-300 {
           background-color: var(--color-red-300);
         }
-
         .bg-red-400 {
           background-color: var(--color-red-400);
         }
-
         .bg-red-500 {
           background-color: var(--color-red-500);
         }
-
         .bg-red-600 {
           background-color: var(--color-red-600);
         }
-
         .bg-red-700 {
           background-color: var(--color-red-700);
         }
-
         .bg-red-800 {
           background-color: var(--color-red-800);
         }
-
         .bg-red-900 {
           background-color: var(--color-red-900);
         }
-
         .bg-red-950 {
           background-color: var(--color-red-950);
         }
@@ -3997,18 +3960,15 @@ describe('@source', () => {
       ).toMatchInlineSnapshot(`
         "
         :root, :host {
-          --color-red-100: oklch(93.6% .032 17.717);
-          --color-red-200: oklch(88.5% .062 18.334);
+          --color-red-100: oklch(0.936 0.032 17.717);
+          --color-red-200: oklch(0.885 0.062 18.334);
         }
-
         .block {
           display: block;
         }
-
         .bg-red-100 {
           background-color: var(--color-red-100);
         }
-
         .bg-red-200 {
           background-color: var(--color-red-200);
         }
@@ -4224,12 +4184,15 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
-            display: flex;
+          .group-hocus\\:flex {
+            &:is(:is(:where(.group):hover, :where(.group):focus) *) {
+              display: flex;
+            }
           }
-
-          .hocus\\:underline:hover, .hocus\\:underline:focus {
-            text-decoration-line: underline;
+          .hocus\\:underline {
+            &:hover, &:focus {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4251,10 +4214,12 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (any-hover: hover) {
-            @media (hover: hover) {
-              .any-hover\\:hover\\:underline:hover {
-                text-decoration-line: underline;
+          .any-hover\\:hover\\:underline {
+            @media (any-hover: hover) {
+              &:hover {
+                @media (hover: hover) {
+                  text-decoration-line: underline;
+                }
               }
             }
           }
@@ -4278,19 +4243,21 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          :is(.cant-hover\\:focus\\:underline:not(:hover), .cant-hover\\:focus\\:underline:not(:active)):focus {
-            text-decoration-line: underline;
-          }
-
-          @media not all and (any-hover: hover) {
-            .cant-hover\\:focus\\:underline:focus {
-              text-decoration-line: underline;
+          .cant-hover\\:focus\\:underline {
+            &:not(:hover), &:not(:active) {
+              &:focus {
+                text-decoration-line: underline;
+              }
             }
-          }
-
-          @media not all and (pointer: fine) {
-            .cant-hover\\:focus\\:underline:focus {
-              text-decoration-line: underline;
+            @media not (any-hover: hover) {
+              &:focus {
+                text-decoration-line: underline;
+              }
+            }
+            @media not (pointer: fine) {
+              &:focus {
+                text-decoration-line: underline;
+              }
             }
           }
         }
@@ -4319,8 +4286,15 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-selected\\:underline:is(:where(.group)[data-selected] *), .selected\\:underline[data-selected] {
-            text-decoration-line: underline;
+          .group-selected\\:underline {
+            &:is(:where(.group)[data-selected] *) {
+              text-decoration-line: underline;
+            }
+          }
+          .selected\\:underline {
+            &[data-selected] {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4347,8 +4321,15 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\:underline:hover, .hocus\\:underline:focus {
-            text-decoration-line: underline;
+          .group-hocus\\:underline {
+            &:is(:is(:where(.group):hover, :where(.group):focus) *) {
+              text-decoration-line: underline;
+            }
+          }
+          .hocus\\:underline {
+            &:hover, &:focus {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4378,8 +4359,21 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *), .hocus\\:underline:hover, .hocus\\:underline:focus {
-            text-decoration-line: underline;
+          .group-hocus\\:underline {
+            &:is(:where(.group):hover *) {
+              text-decoration-line: underline;
+            }
+            &:is(:where(.group):focus *) {
+              text-decoration-line: underline;
+            }
+          }
+          .hocus\\:underline {
+            &:hover {
+              text-decoration-line: underline;
+            }
+            &:focus {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4410,10 +4404,9 @@ describe('@custom-variant', () => {
         @layer utilities {
           .custom-before\\:underline {
             --has-before: 1;
-          }
-
-          .custom-before\\:underline:before {
-            text-decoration-line: underline;
+            &::before {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4447,10 +4440,11 @@ describe('@custom-variant', () => {
         @layer utilities {
           .custom-before\\:underline {
             --has-before: 1;
-          }
-
-          .custom-before\\:underline:before:hover, .custom-before\\:underline:before:focus {
-            text-decoration-line: underline;
+            &::before {
+              &:hover, &:focus {
+                text-decoration-line: underline;
+              }
+            }
           }
         }
         "
@@ -4482,24 +4476,25 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *) {
+          .group-hocus\\:underline {
+            &:is(:where(.group):hover *) {
+              @media (hover: hover) {
+                text-decoration-line: underline;
+              }
+            }
+            &:is(:where(.group):focus *) {
               text-decoration-line: underline;
             }
           }
-
-          .group-hocus\\:underline:is(:where(.group):focus *) {
-            text-decoration-line: underline;
-          }
-
-          @media (hover: hover) {
-            .hocus\\:underline:hover {
+          .hocus\\:underline {
+            &:hover {
+              @media (hover: hover) {
+                text-decoration-line: underline;
+              }
+            }
+            &:focus {
               text-decoration-line: underline;
             }
-          }
-
-          .hocus\\:underline:focus {
-            text-decoration-line: underline;
           }
         }
         "
@@ -4527,9 +4522,18 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *), .hocus\\:underline:hover {
-              text-decoration-line: underline;
+          .group-hocus\\:underline {
+            @media (hover: hover) {
+              &:is(:where(.group):hover *) {
+                text-decoration-line: underline;
+              }
+            }
+          }
+          .hocus\\:underline {
+            @media (hover: hover) {
+              &:hover {
+                text-decoration-line: underline;
+              }
             }
           }
         }
@@ -4556,8 +4560,8 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (any-hover: hover) {
-            .any-hover\\:underline {
+          .any-hover\\:underline {
+            @media (any-hover: hover) {
               text-decoration-line: underline;
             }
           }
@@ -4589,14 +4593,11 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (any-hover: hover) {
-            .desktop\\:underline {
+          .desktop\\:underline {
+            @media (any-hover: hover) {
               text-decoration-line: underline;
             }
-          }
-
-          @media (pointer: fine) {
-            .desktop\\:underline {
+            @media (pointer: fine) {
               text-decoration-line: underline;
             }
           }
@@ -4630,15 +4631,12 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (orientation: landscape) {
-            @media screen {
-              .custom-variant\\:underline {
+          .custom-variant\\:underline {
+            @media (orientation: landscape) {
+              @media screen {
                 text-decoration-line: underline;
               }
-            }
-
-            @media print {
-              .custom-variant\\:underline {
+              @media print {
                 display: none;
               }
             }
@@ -4670,14 +4668,13 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          @media (prefers-color-scheme: dark) {
-            .custom-dark\\:underline {
+          .custom-dark\\:underline {
+            @media (prefers-color-scheme: dark) {
               text-decoration-line: underline;
             }
-          }
-
-          .custom-dark\\:underline:is(.dark *) {
-            text-decoration-line: underline;
+            &:is(.dark *) {
+              text-decoration-line: underline;
+            }
           }
         }
         "
@@ -4701,12 +4698,18 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *), .dark\\:flex:is([data-theme="dark"] *) {
-          display: flex;
+        .rtl\\:flex {
+          &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+            display: flex;
+          }
         }
-
-        @starting-style {
-          .starting\\:flex {
+        .dark\\:flex {
+          &:is([data-theme='dark'] *) {
+            display: flex;
+          }
+        }
+        .starting\\:flex {
+          @starting-style {
             display: flex;
           }
         }
@@ -4730,14 +4733,13 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        @media not foo {
-          .not-foo\\:flex {
+        .not-foo\\:flex {
+          @media not foo {
             display: flex;
           }
         }
-
-        @media foo {
-          .foo\\:flex {
+        .foo\\:flex {
+          @media foo {
             display: flex;
           }
         }
@@ -4764,9 +4766,13 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (hover: hover) {
-        .hocus\\:flex:hover:focus {
-          display: flex;
+      .hocus\\:flex {
+        &:hover {
+          @media (hover: hover) {
+            &:focus {
+              display: flex;
+            }
+          }
         }
       }
       "
@@ -4793,8 +4799,12 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex:hover:focus {
-        display: flex;
+      .hocus\\:flex {
+        &:hover {
+          &:focus {
+            display: flex;
+          }
+        }
       }
       "
     `)
@@ -4820,8 +4830,12 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex:hover:focus {
-        display: flex;
+      .hocus\\:flex {
+        &:hover {
+          &:focus {
+            display: flex;
+          }
+        }
       }
       "
     `)
@@ -4905,7 +4919,16 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a\\:flex, .b\\:flex, .a\\:b\\:flex, .b\\:a\\:flex {
+      .a\\:flex {
+        display: flex;
+      }
+      .b\\:flex {
+        display: flex;
+      }
+      .a\\:b\\:flex {
+        display: flex;
+      }
+      .b\\:a\\:flex {
         display: flex;
       }
       "
@@ -4938,8 +4961,41 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a\\:flex .a, .b\\:flex .b .a .a-inside-b, .a\\:b\\:flex .a .b .a .a-inside-b, .b\\:a\\:flex .b .a .a-inside-b .a {
-        display: flex;
+      .a\\:flex {
+        .a {
+          display: flex;
+        }
+      }
+      .b\\:flex {
+        .b {
+          .a {
+            .a-inside-b {
+              display: flex;
+            }
+          }
+        }
+      }
+      .a\\:b\\:flex {
+        .a {
+          .b {
+            .a {
+              .a-inside-b {
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+      .b\\:a\\:flex {
+        .b {
+          .a {
+            .a-inside-b {
+              .a {
+                display: flex;
+              }
+            }
+          }
+        }
       }
       "
     `)
@@ -4974,8 +5030,17 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex:hover:focus, .hocus\\:flex[data-hover]:focus {
-        display: flex;
+      .hocus\\:flex {
+        &:hover {
+          &:focus {
+            display: flex;
+          }
+        }
+        &[data-hover] {
+          &:focus {
+            display: flex;
+          }
+        }
       }
       "
     `)
@@ -5018,8 +5083,12 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      [data-broken-circle] .baz\\:flex:active {
-        display: flex;
+      .baz\\:flex {
+        &:active {
+          [data-broken-circle] & {
+            display: flex;
+          }
+        }
       }
       "
     `)
@@ -5083,7 +5152,10 @@ describe('@utility', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .push-1\\/2, .push-50\\% {
+        .push-1\\/2 {
+          right: 50%;
+        }
+        .push-50\\% {
           right: 50%;
         }
       }
@@ -5132,8 +5204,8 @@ describe('@utility', () => {
       `
       "
       .ui\\/button {
-        background: #00f;
         display: inline-flex;
+        background: blue;
       }
       "
     `,
@@ -5180,15 +5252,15 @@ test('addBase', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @layer base {
-      body {
-        font-feature-settings: "tnum";
-      }
-    }
-
+    @layer base, utilities;
     @layer utilities {
       .underline {
         text-decoration-line: underline;
+      }
+    }
+    @layer base {
+      body {
+        font-feature-settings: "tnum";
       }
     }
     "
@@ -5223,26 +5295,26 @@ test('JS APIs support @variant', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @layer base {
-      @media (prefers-color-scheme: dark) {
-        body {
-          color: red;
-        }
-      }
-    }
-
+    @layer base, utilities;
     @layer utilities {
       .underline {
         text-decoration-line: underline;
       }
-
-      @media (prefers-color-scheme: dark) {
-        .bar-one {
+      .bar-one {
+        @media (prefers-color-scheme: dark) {
           --bar: 1;
         }
-
-        .foo {
+      }
+      .foo {
+        @media (prefers-color-scheme: dark) {
           --foo: foo;
+        }
+      }
+    }
+    @layer base {
+      body {
+        @media (prefers-color-scheme: dark) {
+          color: red;
         }
       }
     }
@@ -5318,9 +5390,11 @@ describe('`@reference "…" imports`', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 768px) {
-        .bar:hover, .bar:focus {
-          color: red;
+      .bar {
+        @media (width >= 768px) {
+          &:hover, &:focus {
+            color: red;
+          }
         }
       }
       "
@@ -5439,7 +5513,6 @@ describe('`@reference "…" imports`', () => {
       .bar {
         animation: var(--animate-spin, spin 1s linear infinite);
       }
-
       @keyframes spin {
         to {
           transform: rotate(360deg);
@@ -5515,12 +5588,10 @@ describe('`@reference "…" imports`', () => {
         animation: var(--animate-wiggle, wiggle 1s ease-in-out infinite);
         color: var(--color-red, red);
       }
-
       @keyframes wiggle {
         0%, 100% {
           transform: rotate(-3deg);
         }
-
         50% {
           transform: rotate(3deg);
         }
@@ -5562,9 +5633,11 @@ describe('`@reference "…" imports`', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 768px) {
-        .bar:hover, .bar:focus {
-          color: red;
+      .bar {
+        @media (width >= 768px) {
+          &:hover, &:focus {
+            color: red;
+          }
         }
       }
       "
@@ -5595,9 +5668,11 @@ describe('`@reference "…" imports`', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 48rem) {
-        .bar:hover, .bar:focus {
-          color: red;
+      .bar {
+        @media (width >= 48rem) {
+          &:hover, &:focus {
+            color: red;
+          }
         }
       }
       "
@@ -5617,8 +5692,10 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:underline:hover, .hocus\\:underline:focus {
-        text-decoration-line: underline;
+      .hocus\\:underline {
+        &:hover, &:focus {
+          text-decoration-line: underline;
+        }
       }
       "
     `)
@@ -5643,8 +5720,13 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:underline:hover, .hocus\\:underline:focus {
-        text-decoration-line: underline;
+      .hocus\\:underline {
+        &:hover {
+          text-decoration-line: underline;
+        }
+        &:focus {
+          text-decoration-line: underline;
+        }
       }
       "
     `)
@@ -5696,39 +5778,37 @@ describe('@variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .btn {
-        background: #000;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        .btn {
-          background: #fff;
+        background: black;
+        @media (prefers-color-scheme: dark) {
+          background: white;
         }
       }
-
-      @media (hover: hover) {
-        @media (orientation: landscape) {
-          :scope:hover .btn2 {
+      &:hover {
+        @media (hover: hover) {
+          @media (orientation: landscape) {
+            .btn2 {
+              color: red;
+            }
+          }
+        }
+      }
+      &:hover {
+        @media (hover: hover) {
+          .foo {
             color: red;
           }
-        }
-
-        :scope:hover .foo {
-          color: red;
-        }
-
-        @media (orientation: landscape) {
-          :scope:hover .bar {
-            color: #00f;
+          @media (orientation: landscape) {
+            .bar {
+              color: blue;
+            }
           }
-        }
-
-        @media (orientation: portrait) {
-          :scope:hover .baz {
-            color: green;
+          .baz {
+            @media (orientation: portrait) {
+              color: green;
+            }
           }
         }
       }
-
       @media something {
         @media (orientation: landscape) {
           @page {
@@ -5756,11 +5836,10 @@ describe('@variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .btn {
-        background: #000;
-      }
-
-      .btn:hover, .btn:focus {
-        background: #fff;
+        background: black;
+        &:hover, &:focus {
+          background: white;
+        }
       }
       "
     `)
@@ -5786,15 +5865,19 @@ describe('@variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .btn {
-        background: #000;
+        background: black;
+        &:disabled {
+          &:focus {
+            background: white;
+          }
+        }
       }
-
-      .btn:disabled:focus {
-        background: #fff;
-      }
-
-      .disabled\\:focus\\:underline:disabled:focus {
-        text-decoration-line: underline;
+      .disabled\\:focus\\:underline {
+        &:disabled {
+          &:focus {
+            text-decoration-line: underline;
+          }
+        }
       }
       "
     `)
@@ -5816,17 +5899,15 @@ describe('@variant', () => {
       expect(await compileCss(input)).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        @media (hover: hover) {
-          .btn:hover {
+          background: black;
+          &:hover {
+            @media (hover: hover) {
+              background: red;
+            }
+          }
+          &:focus {
             background: red;
           }
-        }
-
-        .btn:focus {
-          background: red;
         }
         "
       `)
@@ -5872,17 +5953,15 @@ describe('@variant', () => {
         ).toMatchInlineSnapshot(`
           "
           .btn {
-            background: #000;
-          }
-
-          @media (hover: hover) {
-            .btn:hover {
+            background: black;
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+              }
+            }
+            &:focus {
               background: red;
             }
-          }
-
-          .btn:focus {
-            background: red;
           }
           "
         `)
@@ -5904,11 +5983,13 @@ describe('@variant', () => {
       ).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        .btn:is(:hover, :focus), .btn:disabled {
-          background: red;
+          background: black;
+          &:is(:hover,:focus) {
+            background: red;
+          }
+          &:disabled {
+            background: red;
+          }
         }
         "
       `)
@@ -5933,25 +6014,27 @@ describe('@variant', () => {
       expect(await compileCss(input)).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        @media (hover: hover) {
-          .btn:hover {
+          background: black;
+          &:hover {
+            @media (hover: hover) {
+              background: red;
+              &:active {
+                background: blue;
+              }
+              &:disabled {
+                background: blue;
+              }
+            }
+          }
+          &:focus {
             background: red;
+            &:active {
+              background: blue;
+            }
+            &:disabled {
+              background: blue;
+            }
           }
-
-          .btn:hover:active, .btn:hover:disabled {
-            background: #00f;
-          }
-        }
-
-        .btn:focus {
-          background: red;
-        }
-
-        .btn:focus:active, .btn:focus:disabled {
-          background: #00f;
         }
         "
       `)
@@ -6041,12 +6124,13 @@ describe('@variant', () => {
       ).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        @media (hover: hover) {
-          .btn:hover:focus {
-            background: red;
+          background: black;
+          &:hover {
+            @media (hover: hover) {
+              &:focus {
+                background: red;
+              }
+            }
           }
         }
         "
@@ -6068,17 +6152,17 @@ describe('@variant', () => {
       ).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        @media (hover: hover) {
-          .btn:hover:focus {
+          background: black;
+          &:hover {
+            @media (hover: hover) {
+              &:focus {
+                background: red;
+              }
+            }
+          }
+          &:disabled {
             background: red;
           }
-        }
-
-        .btn:disabled {
-          background: red;
         }
         "
       `)
@@ -6099,16 +6183,18 @@ describe('@variant', () => {
       ).toMatchInlineSnapshot(`
         "
         .btn {
-          background: #000;
-        }
-
-        .btn:is(:hover, :focus):disabled {
-          background: red;
-        }
-
-        @media (hover: hover) {
-          .btn[aria-disabled="true"]:hover {
-            background: red;
+          background: black;
+          &:is(:hover,:focus) {
+            &:disabled {
+              background: red;
+            }
+          }
+          &[aria-disabled="true"] {
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+              }
+            }
           }
         }
         "
@@ -6135,23 +6221,31 @@ describe('@variant', () => {
     expect(await compileCss(input)).toMatchInlineSnapshot(`
       "
       .btn {
-        background: #000;
-      }
-
-      .btn[data-a] {
-        background: red;
-      }
-
-      .btn[data-a][data-d], .btn[data-a][data-e][data-f] {
-        background: #00f;
-      }
-
-      .btn[data-b][data-c] {
-        background: red;
-      }
-
-      .btn[data-b][data-c][data-d], .btn[data-b][data-c][data-e][data-f] {
-        background: #00f;
+        background: black;
+        &[data-a] {
+          background: red;
+          &[data-d] {
+            background: blue;
+          }
+          &[data-e] {
+            &[data-f] {
+              background: blue;
+            }
+          }
+        }
+        &[data-b] {
+          &[data-c] {
+            background: red;
+            &[data-d] {
+              background: blue;
+            }
+            &[data-e] {
+              &[data-f] {
+                background: blue;
+              }
+            }
+          }
+        }
       }
       "
     `)
@@ -6216,12 +6310,11 @@ describe('@variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .btn {
-        background: #000;
-      }
-
-      @container (min-width: 768px) {
-        .btn.foo {
-          background: #fff;
+        background: black;
+        @container (width >= 768px) {
+          &.foo {
+            background: white;
+          }
         }
       }
       "
@@ -6244,15 +6337,11 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .text-red-500\\/50 {
-        color: #fb2c3680;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/50 {
+        color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
       }
@@ -6276,15 +6365,11 @@ describe('`color-mix(…)` polyfill', () => {
       "
       :root, :host {
         --color-red: var(--color-red-500);
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .text-red\\/50 {
-        color: #fb2c3680;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red\\/50 {
+        color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
@@ -6307,16 +6392,12 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
-        --color-orange-500: oklch(70.5% .213 47.604);
+        --color-red-500: oklch(63.7% 0.237 25.331);
+        --color-orange-500: oklch(70.5% 0.213 47.604);
       }
-
       .mixed {
-        color: #fc4d1b;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .mixed {
+        color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, oklch(70.5% 0.213 47.604));
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
         }
       }
@@ -6342,16 +6423,12 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .stacked {
-        color: lch(55.5764% 89.7903 33.1932 / .25098);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .stacked {
-          color: color-mix(in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent);
+        color: color-mix( in lch, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 50%, transparent );
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix( in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent );
         }
       }
       "
@@ -6378,17 +6455,13 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
-        --color-orange-500: oklch(70.5% .213 47.604);
+        --color-red-500: oklch(63.7% 0.237 25.331);
+        --color-orange-500: oklch(70.5% 0.213 47.604);
       }
-
       .gradient {
-        background: linear-gradient(90deg, #fb2c3680 0%, #fe6e0080 0%, 100%);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .gradient {
-          background: linear-gradient(90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100%);
+        background: linear-gradient( 90deg, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 0%, color-mix(in srgb, oklch(70.5% 0.213 47.604) 50%, transparent) 0%, 100% );
+        @supports (color: color-mix(in lab, red, red)) {
+          background: linear-gradient( 90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100% );
         }
       }
       "
@@ -6412,15 +6485,11 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .text-red-500\\/50 {
-        color: #fb2c3680;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/50 {
+        color: color-mix(in srgb,oklch(63.7% 0.237 25.331)50%,transparent);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }
@@ -6442,35 +6511,23 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       :root, :host {
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
         color: var(--my-color);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) var(--my-opacity), transparent);
         }
       }
-
       .text-\\(--my-color\\)\\/50 {
         color: var(--my-color);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-\\(--my-color\\)\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
-
       .text-red-500\\/\\(--my-opacity\\) {
-        color: oklch(63.7% .237 25.331);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/\\(--my-opacity\\) {
+        color: oklch(63.7% 0.237 25.331);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-opacity), transparent);
         }
       }
@@ -6482,11 +6539,8 @@ describe('`color-mix(…)` polyfill', () => {
     expect(await run(['text-current/50'])).toMatchInlineSnapshot(`
       "
       .text-current\\/50 {
-        color: currentColor;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-current\\/50 {
+        color: currentcolor;
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
       }
@@ -6509,14 +6563,10 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .text-red\\/50 {
         color: var(--color-red);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
-
       :root, :host {
         --color-red: var(--my-red);
       }
@@ -6541,11 +6591,8 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .stacked {
         color: var(--my-color);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .stacked {
-          color: color-mix(in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent);
+        @supports (color: color-mix(in lab, red, red)) {
+          color: color-mix( in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent );
         }
       }
       "
@@ -6566,7 +6613,7 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       .text-red-500\\/50 {
-        color: oklab(63.7% .214 .101 / .5);
+        color: color-mix(in oklab, oklch(63.7% 0.237 25.331) 50%, transparent);
       }
       "
     `)
@@ -6588,15 +6635,11 @@ describe('`color-mix(…)` polyfill', () => {
       "
       :root, :host {
         --my-half: 50%;
-        --color-red-500: oklch(63.7% .237 25.331);
+        --color-red-500: oklch(63.7% 0.237 25.331);
       }
-
       .text-red-500\\/\\(--my-half\\) {
-        color: #fb2c3680;
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/\\(--my-half\\) {
+        color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);
         }
       }
@@ -6621,9 +6664,94 @@ describe('`color-mix(…)` polyfill', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
+      @layer properties;
+      @layer theme {
+        :root, :host {
+          --color-red-500: red;
+          --opacity-disabled: 50%;
+        }
+      }
+      .text-red-500 {
+        color: var(--color-red-500);
+      }
+      .opacity-disabled {
+        opacity: var(--opacity-disabled);
+      }
+      .shadow-xl {
+        --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in srgb, red 25%, transparent));
+        @supports (color: color-mix(in lab, red, red)) {
+          --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
+        }
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+      }
+      @property --tw-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-shadow-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-inset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-shadow-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-inset-shadow-alpha {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-ring-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-ring-color {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-inset-ring-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-ring-inset {
+        syntax: "*";
+        inherits: false;
+      }
+      @property --tw-ring-offset-width {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --tw-ring-offset-color {
+        syntax: "*";
+        inherits: false;
+        initial-value: #fff;
+      }
+      @property --tw-ring-offset-shadow {
+        syntax: "*";
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
-          *, :before, :after, ::backdrop {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
             --tw-shadow-alpha: 100%;
@@ -6640,114 +6768,6 @@ describe('`color-mix(…)` polyfill', () => {
             --tw-ring-offset-shadow: 0 0 #0000;
           }
         }
-      }
-
-      @layer theme {
-        :root, :host {
-          --color-red-500: red;
-          --opacity-disabled: 50%;
-        }
-      }
-
-      .text-red-500 {
-        color: var(--color-red-500);
-      }
-
-      .opacity-disabled {
-        opacity: var(--opacity-disabled);
-      }
-
-      .shadow-xl {
-        --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, #ff000040);
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .shadow-xl {
-          --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
-        }
-      }
-
-      .shadow-xl {
-        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-      }
-
-      @property --tw-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-shadow-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-shadow-alpha {
-        syntax: "<percentage>";
-        inherits: false;
-        initial-value: 100%;
-      }
-
-      @property --tw-inset-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-inset-shadow-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-inset-shadow-alpha {
-        syntax: "<percentage>";
-        inherits: false;
-        initial-value: 100%;
-      }
-
-      @property --tw-ring-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-ring-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-inset-ring-color {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-inset-ring-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
-      }
-
-      @property --tw-ring-inset {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --tw-ring-offset-width {
-        syntax: "<length>";
-        inherits: false;
-        initial-value: 0;
-      }
-
-      @property --tw-ring-offset-color {
-        syntax: "*";
-        inherits: false;
-        initial-value: #fff;
-      }
-
-      @property --tw-ring-offset-shadow {
-        syntax: "*";
-        inherits: false;
-        initial-value: 0 0 #0000;
       }
       "
     `)
@@ -6768,8 +6788,8 @@ describe('`color-mix(…)` polyfill', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @supports (color: color-mix(in lab, red, red)) {
-        .mixed {
+      .mixed {
+        @supports (color: color-mix(in lab, red, red)) {
           background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }
@@ -6805,40 +6825,36 @@ describe('`@property` polyfill', async () => {
       `),
     ).toMatchInlineSnapshot(`
       "
+      @layer properties;
+      @property --no-inherit-no-value {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --no-inherit-value {
+        syntax: '*';
+        inherits: false;
+        initial-value: red;
+      }
+      @property --inherit-no-value {
+        syntax: '*';
+        inherits: true;
+      }
+      @property --inherit-value {
+        syntax: '*';
+        inherits: true;
+        initial-value: red;
+      }
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           :root, :host {
             --inherit-no-value: initial;
             --inherit-value: red;
           }
-
-          *, :before, :after, ::backdrop {
+          *, ::before, ::after, ::backdrop {
             --no-inherit-no-value: initial;
             --no-inherit-value: red;
           }
         }
-      }
-
-      @property --no-inherit-no-value {
-        syntax: "*";
-        inherits: false
-      }
-
-      @property --no-inherit-value {
-        syntax: "*";
-        inherits: false;
-        initial-value: red;
-      }
-
-      @property --inherit-no-value {
-        syntax: "*";
-        inherits: true
-      }
-
-      @property --inherit-value {
-        syntax: "*";
-        inherits: true;
-        initial-value: red;
       }
       "
     `)
@@ -6876,23 +6892,20 @@ describe('`@property` polyfill', async () => {
     ).toMatchInlineSnapshot(`
       "
       @property --no-inherit-no-value {
-        syntax: "*";
-        inherits: false
+        syntax: '*';
+        inherits: false;
       }
-
       @property --no-inherit-value {
-        syntax: "*";
+        syntax: '*';
         inherits: false;
         initial-value: red;
       }
-
       @property --inherit-no-value {
-        syntax: "*";
-        inherits: true
+        syntax: '*';
+        inherits: true;
       }
-
       @property --inherit-value {
-        syntax: "*";
+        syntax: '*';
         inherits: true;
         initial-value: red;
       }

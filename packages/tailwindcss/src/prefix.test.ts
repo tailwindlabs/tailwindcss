@@ -32,18 +32,28 @@ test('utilities must be prefixed', async () => {
     .tw\\:custom {
       color: red;
     }
-
     .tw\\:underline {
       text-decoration-line: underline;
     }
-
-    @media (hover: hover) {
-      .tw\\:group-hover\\:flex:is(:where(.tw\\:group):hover *), .tw\\:peer-hover\\:flex:is(:where(.tw\\:peer):hover ~ *) {
-        display: flex;
+    .tw\\:group-hover\\:flex {
+      &:is(:where(.tw\\:group):hover *) {
+        @media (hover: hover) {
+          display: flex;
+        }
       }
-
-      .tw\\:hover\\:line-through:hover {
-        text-decoration-line: line-through;
+    }
+    .tw\\:peer-hover\\:flex {
+      &:is(:where(.tw\\:peer):hover ~ *) {
+        @media (hover: hover) {
+          display: flex;
+        }
+      }
+    }
+    .tw\\:hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
       }
     }
     "
@@ -103,9 +113,8 @@ test('CSS variables output by the theme are prefixed', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --tw-color-red: red;
+      --tw-color-red: #f00;
     }
-
     .tw\\:text-red {
       color: var(--tw-color-red);
     }
@@ -129,8 +138,11 @@ test('CSS theme functions do not use the prefix', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .tw\\:\\[color\\:theme\\(--color-red\\)\\], .tw\\:text-\\[theme\\(--color-red\\)\\] {
-      color: red;
+    .tw\\:\\[color\\:theme\\(--color-red\\)\\] {
+      color: #f00;
+    }
+    .tw\\:text-\\[theme\\(--color-red\\)\\] {
+      color: #f00;
     }
     "
   `)
@@ -188,7 +200,7 @@ test('JS theme functions do not use the prefix', async () => {
   ).toMatchInlineSnapshot(`
     "
     .tw\\:my-custom {
-      color: red;
+      color: #f00;
     }
     "
   `)
@@ -230,18 +242,17 @@ test('a prefix can be configured via @import theme(…)', async () => {
     .tw\\:bg-potato {
       background-color: var(--tw-color-potato, #7a4724);
     }
-
     .tw\\:custom {
       color: red;
     }
-
     .tw\\:underline {
       text-decoration-line: underline;
     }
-
-    @media (hover: hover) {
-      .tw\\:hover\\:line-through:hover {
-        text-decoration-line: line-through;
+    .tw\\:hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
       }
     }
     "
@@ -286,22 +297,20 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     :root, :host {
       --tw-color-potato: #7a4724;
     }
-
     .tw\\:bg-potato {
       background-color: var(--tw-color-potato);
     }
-
     .tw\\:custom {
       color: red;
     }
-
     .tw\\:underline {
       text-decoration-line: underline;
     }
-
-    @media (hover: hover) {
-      .tw\\:hover\\:line-through:hover {
-        text-decoration-line: line-through;
+    .tw\\:hover\\:line-through {
+      &:hover {
+        @media (hover: hover) {
+          text-decoration-line: line-through;
+        }
       }
     }
     "

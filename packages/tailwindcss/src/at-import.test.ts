@@ -72,7 +72,7 @@ test('can recursively resolve relative @imports', async () => {
   ).toMatchInlineSnapshot(`
     "
     .baz {
-      color: #00f;
+      color: blue;
     }
     "
   `)
@@ -149,7 +149,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "example.css";
+    @import url('example.css');
     "
   `)
 
@@ -162,7 +162,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "./example.css";
+    @import url('./example.css');
     "
   `)
 
@@ -175,7 +175,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "/example.css";
+    @import url('/example.css');
     "
   `)
 
@@ -188,7 +188,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "example.css";
+    @import url(example.css);
     "
   `)
 
@@ -201,7 +201,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "./example.css";
+    @import url(./example.css);
     "
   `)
 
@@ -214,7 +214,7 @@ test('url() imports are passed-through', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @import "/example.css";
+    @import url(/example.css);
     "
   `)
 })
@@ -374,7 +374,7 @@ test('@supports', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @supports selector(h2 > p) and font-tech(color-COLRv1) {
+    @supports (selector(h2 > p)) and (font-tech(color-COLRv1)) {
       a {
         color: red;
       }
@@ -645,8 +645,10 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:flex:where([data-theme="dark"] *) {
-      display: flex;
+    .dark\\:flex {
+      &:where([data-theme='dark'] *) {
+        display: flex;
+      }
     }
     "
   `)

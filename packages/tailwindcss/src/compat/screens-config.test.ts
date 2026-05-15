@@ -51,39 +51,37 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
     .max-w-screen-sm {
       max-width: 44rem;
     }
-
-    @media (min-width: 44rem) {
-      .sm\\:flex {
+    .sm\\:flex {
+      @media (width >= 44rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 50rem) {
-        .min-sm\\:max-md\\:underline {
+    }
+    .min-sm\\:max-md\\:underline {
+      @media (width >= 44rem) {
+        @media (width < 50rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 50rem) {
-      .md\\:flex {
+    .md\\:flex {
+      @media (width >= 50rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 64rem) {
-        .min-md\\:max-lg\\:underline {
+    }
+    .min-md\\:max-lg\\:underline {
+      @media (width >= 50rem) {
+        @media (width < 64rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 64rem) {
-      .lg\\:flex {
+    .lg\\:flex {
+      @media (width >= 64rem) {
         display: flex;
       }
     }
-
-    @media print {
-      .print\\:items-end {
+    .print\\:items-end {
+      @media print {
         align-items: flex-end;
       }
     }
@@ -140,50 +138,54 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (min-width: 30rem) {
-      .min-xs\\:flex, .xs\\:flex {
+    .min-xs\\:flex {
+      @media (width >= 30rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 50rem) {
-        .min-xs\\:max-md\\:underline {
+    }
+    .xs\\:flex {
+      @media (width >= 30rem) {
+        display: flex;
+      }
+    }
+    .min-xs\\:max-md\\:underline {
+      @media (width >= 30rem) {
+        @media (width < 50rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 40rem) {
-      .sm\\:flex {
+    .sm\\:flex {
+      @media (width >= 40rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 50rem) {
-        .min-sm\\:max-md\\:underline {
+    }
+    .min-sm\\:max-md\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 50rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 50rem) {
-      .md\\:flex {
+    .md\\:flex {
+      @media (width >= 50rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 60rem) {
-        .min-md\\:max-lg\\:underline {
+    }
+    .min-md\\:max-lg\\:underline {
+      @media (width >= 50rem) {
+        @media (width < 60rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 60rem) {
-      .lg\\:flex {
+    .lg\\:flex {
+      @media (width >= 60rem) {
         display: flex;
       }
     }
-
-    @media print {
-      .print\\:items-end {
+    .print\\:items-end {
+      @media print {
         align-items: flex-end;
       }
     }
@@ -227,38 +229,37 @@ test('JS config `screens` only setup, even if those match the default-theme expo
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (min-width: 40rem) {
-      .sm\\:flex {
+    .sm\\:flex {
+      @media (width >= 40rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 48rem) {
-        .min-sm\\:max-md\\:underline {
+    }
+    .min-sm\\:max-md\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 48rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 48rem) {
-      .md\\:flex {
+    .md\\:flex {
+      @media (width >= 48rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 64rem) {
-        .min-md\\:max-lg\\:underline {
+    }
+    .min-md\\:max-lg\\:underline {
+      @media (width >= 48rem) {
+        @media (width < 64rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 64rem) {
-      .lg\\:flex {
+    .lg\\:flex {
+      @media (width >= 64rem) {
         display: flex;
       }
     }
-
-    @media print {
-      .print\\:items-end {
+    .print\\:items-end {
+      @media print {
         align-items: flex-end;
       }
     }
@@ -314,38 +315,61 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (min-width: 40rem) {
-      .mini\\:flex, .sm\\:flex {
+    .mini\\:flex {
+      @media (width >= 40rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 48rem) {
-        .min-mini\\:max-midi\\:underline, .min-sm\\:max-md\\:underline {
+    }
+    .sm\\:flex {
+      @media (width >= 40rem) {
+        display: flex;
+      }
+    }
+    .min-mini\\:max-midi\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 48rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 48rem) {
-      .md\\:flex, .midi\\:flex {
-        display: flex;
-      }
-
-      @media not all and (min-width: 64rem) {
-        .min-md\\:max-lg\\:underline, .min-midi\\:max-maxi\\:underline {
+    .min-sm\\:max-md\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 48rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 64rem) {
-      .maxi\\:flex {
+    .md\\:flex {
+      @media (width >= 48rem) {
         display: flex;
       }
     }
-
-    @media print {
-      .print\\:items-end {
+    .midi\\:flex {
+      @media (width >= 48rem) {
+        display: flex;
+      }
+    }
+    .min-md\\:max-lg\\:underline {
+      @media (width >= 48rem) {
+        @media (width < 64rem) {
+          text-decoration-line: underline;
+        }
+      }
+    }
+    .min-midi\\:max-maxi\\:underline {
+      @media (width >= 48rem) {
+        @media (width < 64rem) {
+          text-decoration-line: underline;
+        }
+      }
+    }
+    .maxi\\:flex {
+      @media (width >= 64rem) {
+        display: flex;
+      }
+    }
+    .print\\:items-end {
+      @media print {
         align-items: flex-end;
       }
     }
@@ -412,38 +436,37 @@ test('JS config with `theme: { extends }` should not include the `default-config
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (min-width: 40rem) {
-      .mini\\:flex {
+    .mini\\:flex {
+      @media (width >= 40rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 48rem) {
-        .min-mini\\:max-midi\\:underline {
+    }
+    .min-mini\\:max-midi\\:underline {
+      @media (width >= 40rem) {
+        @media (width < 48rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 48rem) {
-      .midi\\:flex {
+    .midi\\:flex {
+      @media (width >= 48rem) {
         display: flex;
       }
-
-      @media not all and (min-width: 64rem) {
-        .min-midi\\:max-maxi\\:underline {
+    }
+    .min-midi\\:max-maxi\\:underline {
+      @media (width >= 48rem) {
+        @media (width < 64rem) {
           text-decoration-line: underline;
         }
       }
     }
-
-    @media (min-width: 64rem) {
-      .maxi\\:flex {
+    .maxi\\:flex {
+      @media (width >= 64rem) {
         display: flex;
       }
     }
-
-    @media print {
-      .print\\:items-end {
+    .print\\:items-end {
+      @media print {
         align-items: flex-end;
       }
     }
@@ -524,38 +547,38 @@ describe('complex screen configs', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 868px) {
-        .lg\\:flex, .min-lg\\:flex {
+      .lg\\:flex {
+        @media (width >= 868px) {
           display: flex;
         }
       }
-
-      @media (max-width: 639px) {
-        .sm\\:flex {
+      .min-lg\\:flex {
+        @media (width >= 868px) {
           display: flex;
         }
       }
-
-      @media (max-width: 767px) and (min-width: 668px), (min-width: 868px) {
-        .md\\:flex {
+      .sm\\:flex {
+        @media (639px >= width) {
           display: flex;
         }
       }
-
-      @media (max-width: 1279px) and (min-width: 1024px) {
-        .xl\\:flex {
+      .md\\:flex {
+        @media (767px >= width >= 668px), (width >= 868px) {
           display: flex;
         }
       }
-
-      @media (min-height: 800px) {
-        .tall\\:flex {
+      .xl\\:flex {
+        @media (1279px >= width >= 1024px) {
           display: flex;
         }
       }
-
-      @media print {
-        .print\\:items-end {
+      .tall\\:flex {
+        @media (min-height: 800px) {
+          display: flex;
+        }
+      }
+      .print\\:items-end {
+        @media print {
           align-items: flex-end;
         }
       }
@@ -603,26 +626,33 @@ describe('complex screen configs', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (min-width: 40rem) {
-        .min-sm\\:flex, .sm\\:flex {
+      .min-sm\\:flex {
+        @media (width >= 40rem) {
           display: flex;
         }
       }
-
-      @media (min-width: 48rem) {
-        .md\\:flex, .min-md\\:flex {
+      .sm\\:flex {
+        @media (width >= 40rem) {
           display: flex;
         }
       }
-
-      @media screen and (orientation: portrait) {
-        .portrait\\:flex {
+      .md\\:flex {
+        @media (width >= 48rem) {
           display: flex;
         }
       }
-
-      @media print {
-        .print\\:items-end {
+      .min-md\\:flex {
+        @media (width >= 48rem) {
+          display: flex;
+        }
+      }
+      .portrait\\:flex {
+        @media screen and (orientation: portrait) {
+          display: flex;
+        }
+      }
+      .print\\:items-end {
+        @media print {
           align-items: flex-end;
         }
       }
