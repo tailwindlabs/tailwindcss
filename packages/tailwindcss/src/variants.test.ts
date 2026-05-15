@@ -3156,7 +3156,9 @@ test('data', async () => {
   expect(
     await run([
       'data-[]:flex',
-      'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
+      // TODO: Re-enable when Lightning CSS is enabled again. We don't validate
+      // the CSS, we just expect a valid looking syntax.
+      // 'data-[foo_^_=_"bar"]:flex', // Can't have spaces between `^` and `=`
       'data-disabled/foo:flex',
       'data-[potato=salad]/foo:flex',
     ]),
