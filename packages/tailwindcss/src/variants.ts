@@ -19,6 +19,7 @@ import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
 export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*(?<![_-])$/
@@ -375,35 +376,83 @@ export function createVariants(theme: Theme): Variants {
 
   function negateConditions(ruleName: string, conditions: string[]) {
     return conditions.map((condition) => {
-      condition = condition.trim()
+      switch (ruleName) {
+        case '@container': {
+          let ast = ValueParser.parse(condition.trim())
 
-      let parts = segment(condition, ' ')
+          // @container {query}
+          //            ^^^^^^^
+          // ast        0
+          if (ast.length >= 1 && ast[0].kind === 'function') {
+            return `not ${condition}`
+          }
 
-      // @media not {query}
-      // @supports not {query}
-      // @container not {query}
-      if (parts[0] === 'not') {
-        return parts.slice(1).join(' ')
-      }
+          // @container not   {query}
+          //            ^^^ ^ ^^^^^^^
+          // ast        0   1 2
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value === 'not' &&
+            ast[2].kind === 'function'
+          ) {
+            // Drop the leading `not` (ast[0]) and separator (ast[1])
+            ast.splice(0, 2)
 
-      if (ruleName === '@container') {
-        // @container {query}
-        if (parts[0][0] === '(') {
+            return ValueParser.toCss(ast)
+          }
+
+          // @container {name}   not   {query}
+          //            ^^^^^^ ^ ^^^ ^ ^^^^^^^
+          // ast        0      1 2   3 4
+          else if (
+            ast.length >= 5 &&
+            ast[0].kind === 'word' &&
+            ast[2].kind === 'word' &&
+            ast[2].value === 'not' &&
+            ast[4].kind === 'function'
+          ) {
+            // Drop the `not` (ast[2]) and separator (ast[3])
+            ast.splice(2, 2)
+
+            return ValueParser.toCss(ast)
+          }
+
+          // @container {name}   {query}
+          //            ^^^^^^ ^ ^^^^^^^
+          // ast        0      1 2
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value !== 'not' &&
+            ast[2].kind === 'function'
+          ) {
+            // Inject a separator and a `not`, after the `name` (ast[0])
+            ast.splice(1, 0, { kind: 'separator', value: ' ' }, { kind: 'word', value: 'not' })
+
+            return ValueParser.toCss(ast)
+          }
+
+          // Fallback
+          else {
+            return `not ${condition}`
+          }
+        }
+
+        default: {
+          condition = condition.trim()
+
+          let parts = segment(condition, ' ')
+
+          // @media not {query}
+          // @supports not {query}
+          if (parts[0] === 'not') {
+            return parts.slice(1).join(' ')
+          }
+
           return `not ${condition}`
         }
-
-        // @container {name} not {query}
-        else if (parts[1] === 'not') {
-          return `${parts[0]} ${parts.slice(2).join(' ')}`
-        }
-
-        // @container {name} {query}
-        else {
-          return `${parts[0]} not ${parts.slice(1).join(' ')}`
-        }
       }
-
-      return `not ${condition}`
     })
   }
 
