@@ -25,6 +25,11 @@ describe('without replacer', () => {
     expect(parsed).toMatchInlineSnapshot(`"0 0 0 var(--tw-shadow-color, var(--my-color))"`)
   })
 
+  it('should handle var color with exotic zero offsets', () => {
+    let parsed = replaceShadowColors('-0 0e9 0.00 var(--my-color)', replacer)
+    expect(parsed).toMatchInlineSnapshot(`"-0 0e9 0.00 var(--tw-shadow-color, var(--my-color))"`)
+  })
+
   it('should handle two values with currentcolor', () => {
     let parsed = replaceShadowColors('1px 2px', replacer)
     expect(parsed).toMatchInlineSnapshot(`"1px 2px var(--tw-shadow-color, currentcolor)"`)
@@ -48,6 +53,11 @@ describe('without replacer', () => {
     expect(parsed).toMatchInlineSnapshot(
       `"var(--my-shadow), 1px 1px var(--tw-shadow-color, var(--my-color)), 0 0 1px var(--tw-shadow-color, var(--my-color))"`,
     )
+  })
+
+  it('should handle calc()', () => {
+    let parsed = replaceShadowColors('0 0 calc(1 * var(--spacing)) black', replacer)
+    expect(parsed).toMatchInlineSnapshot(`"0 0 calc(1 * var(--spacing)) var(--tw-shadow-color, black)"`)
   })
 })
 

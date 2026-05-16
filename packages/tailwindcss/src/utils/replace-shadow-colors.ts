@@ -1,7 +1,8 @@
+import { isLength } from './infer-data-type'
 import { segment } from './segment'
 
 const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
-const LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
+const IS_ZERO = /[+-]?0*\.?0+(?:[eE][+-]?\d+)?/
 
 export function replaceShadowColors(input: string, replacement: (color: string) => string) {
   let shadows = segment(input, ',').map((shadow) => {
@@ -14,7 +15,7 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
     for (let part of parts) {
       if (KEYWORDS.has(part)) {
         continue
-      } else if (LENGTH.test(part)) {
+      } else if (isLength(part) || IS_ZERO.test(part)) {
         if (offsetX === null) {
           offsetX = part
         } else if (offsetY === null) {
@@ -22,7 +23,7 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
         }
 
         // Reset index, since the regex is stateful.
-        LENGTH.lastIndex = 0
+        IS_ZERO.lastIndex = 0
       } else if (color === null) {
         color = part
       }
