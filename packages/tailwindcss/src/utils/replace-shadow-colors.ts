@@ -2,7 +2,7 @@ import { isLength } from './infer-data-type'
 import { segment } from './segment'
 
 const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
-const IS_ZERO = /[+-]?0*\.?0+(?:[eE][+-]?\d+)?/
+const IS_ZERO = /^-?0*\.?0+(?:[eE][+-]?\d+)?$/
 
 export function replaceShadowColors(input: string, replacement: (color: string) => string) {
   let shadows = segment(input, ',').map((shadow) => {
