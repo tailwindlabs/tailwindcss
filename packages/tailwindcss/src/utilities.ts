@@ -12,7 +12,6 @@ import {
 } from './ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from './candidate'
 import type { DesignSystem } from './design-system'
-import { enableContainerSizeUtility } from './feature-flags'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
@@ -24,6 +23,7 @@ import {
   isValidOpacityValue,
   isValidSpacingMultiplier,
 } from './utils/infer-data-type'
+import { addWhitespaceAroundMathOperators } from './utils/math-operators'
 import { replaceShadowColors } from './utils/replace-shadow-colors'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
@@ -450,7 +450,10 @@ export function createUtilities(theme: Theme) {
         if (value === null) return
 
         // Negate the value if the candidate has a negative prefix.
-        return desc.handle(negative ? `calc(${value} * -1)` : value, dataType)
+        return desc.handle(
+          negative ? addWhitespaceAroundMathOperators(`calc(${value} * -1)`) : value,
+          dataType,
+        )
       }
     }
 
@@ -1919,6 +1922,21 @@ export function createUtilities(theme: Theme) {
   }
 
   /**
+   * @css `zoom`
+   */
+  functionalUtility('zoom', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return `${value}%`
+    },
+    handle: (value) => [decl('zoom', value)],
+  })
+
+  suggest('zoom', () => [
+    { values: ['50', '75', '90', '95', '100', '105', '110', '125', '150', '200'] },
+  ])
+
+  /**
    * @css `transform-style`
    */
   staticUtility('transform-flat', [['transform-style', 'flat']])
@@ -2491,6 +2509,41 @@ export function createUtilities(theme: Theme) {
   staticUtility('scroll-auto', [['scroll-behavior', 'auto']])
   staticUtility('scroll-smooth', [['scroll-behavior', 'smooth']])
 
+  staticUtility('scrollbar-auto', [['scrollbar-width', 'auto']])
+  staticUtility('scrollbar-thin', [['scrollbar-width', 'thin']])
+  staticUtility('scrollbar-none', [['scrollbar-width', 'none']])
+
+  {
+    let scrollbarColorProperties = () => {
+      return atRoot([
+        property('--tw-scrollbar-thumb', '#0000', '<color>'),
+        property('--tw-scrollbar-track', '#0000', '<color>'),
+      ])
+    }
+
+    colorUtility('scrollbar-thumb', {
+      themeKeys: ['--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-thumb', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+
+    colorUtility('scrollbar-track', {
+      themeKeys: ['--color'],
+      handle: (value) => [
+        scrollbarColorProperties(),
+        decl('--tw-scrollbar-track', value),
+        decl('scrollbar-color', 'var(--tw-scrollbar-thumb) var(--tw-scrollbar-track)'),
+      ],
+    })
+  }
+
+  staticUtility('scrollbar-gutter-auto', [['scrollbar-gutter', 'auto']])
+  staticUtility('scrollbar-gutter-stable', [['scrollbar-gutter', 'stable']])
+  staticUtility('scrollbar-gutter-both', [['scrollbar-gutter', 'stable both-edges']])
+
   staticUtility('truncate', [
     ['overflow', 'hidden'],
     ['text-overflow', 'ellipsis'],
@@ -2519,6 +2572,16 @@ export function createUtilities(theme: Theme) {
   staticUtility('whitespace-pre-line', [['white-space', 'pre-line']])
   staticUtility('whitespace-pre-wrap', [['white-space', 'pre-wrap']])
   staticUtility('whitespace-break-spaces', [['white-space', 'break-spaces']])
+
+  functionalUtility('tab', {
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return value
+    },
+    handle: (value) => [decl('tab-size', value)],
+  })
+
+  suggest('tab', () => [{ values: ['2', '4', '8'] }])
 
   staticUtility('text-wrap', [['text-wrap', 'wrap']])
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])
@@ -6217,11 +6280,7 @@ export function createUtilities(theme: Theme) {
       value = candidate.value.value
     } else if (candidate.value.kind === 'named' && candidate.value.value === 'normal') {
       value = 'normal'
-    } else if (
-      enableContainerSizeUtility &&
-      candidate.value.kind === 'named' &&
-      candidate.value.value === 'size'
-    ) {
+    } else if (candidate.value.kind === 'named' && candidate.value.value === 'size') {
       value = 'size'
     }
 
@@ -6270,6 +6329,8 @@ export function createCssUtility(node: AtRule) {
     // - `--value(number)`            resolves a bare value of type number
     // - `--value([number])`          resolves an arbitrary value of type number
     // - `--value(--color)`           resolves a theme value in the `color` namespace
+    // - `--value(--default(4))`      resolves to a default value when only the
+    //                                root of the functional utility was used.
     // - `--value(number, [number])`  resolves a bare value of type number or an
     //                                arbitrary value of type number in order.
     //
@@ -6383,7 +6444,7 @@ export function createCssUtility(node: AtRule) {
             arg = arg.replace(/(-\*){2,}/g, '-*')
 
             // Ensure trailing `-*` exists if `-*` isn't present yet
-            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('-*')) {
+            if (arg[0] === '-' && arg[1] === '-' && !arg.includes('(') && !arg.includes('-*')) {
               arg += '-*'
             }
 
@@ -6449,9 +6510,8 @@ export function createCssUtility(node: AtRule) {
         let value = candidate.value
         let modifier = candidate.modifier
 
-        // A value is required for functional utilities, if you want to accept
-        // just `tab-size`, you'd have to use a static utility.
-        if (value === null) return
+        // Functional CSS utilities must resolve at least one `--value(…)`.
+        // Use `--default(…)` inside `--value(…)` for the omitted-value case.
 
         // Whether `--value(…)` was used
         let usedValueFn = false
@@ -6492,14 +6552,14 @@ export function createCssUtility(node: AtRule) {
           let shouldRemoveDeclaration = false
 
           let valueAst = ValueParser.parse(node.value)
-          walk(valueAst, (valueNode) => {
-            if (valueNode.kind !== 'function') return
+          walk(valueAst, (fnNode) => {
+            if (fnNode.kind !== 'function') return
 
             // Value function, e.g.: `--value(integer)`
-            if (valueNode.value === '--value') {
+            if (fnNode.value === '--value') {
               usedValueFn = true
 
-              let resolved = resolveValueFunction(value, valueNode, designSystem)
+              let resolved = resolveValueFunction(value, fnNode, designSystem)
               if (resolved) {
                 resolvedValueFn = true
                 if (resolved.ratio) {
@@ -6511,30 +6571,21 @@ export function createCssUtility(node: AtRule) {
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedValueFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
 
             // Modifier function, e.g.: `--modifier(integer)`
-            else if (valueNode.value === '--modifier') {
-              // If there is no modifier present in the candidate, then the
-              // declaration can be removed.
-              if (modifier === null) {
-                shouldRemoveDeclaration = true
-                return WalkAction.Stop
-              }
-
+            else if (fnNode.value === '--modifier') {
               usedModifierFn = true
 
-              let replacement = resolveValueFunction(modifier, valueNode, designSystem)
-              if (replacement) {
+              let resolved = resolveValueFunction(modifier, fnNode, designSystem)
+              if (resolved) {
                 resolvedModifierFn = true
-                return WalkAction.ReplaceSkip(replacement.nodes)
+                return WalkAction.ReplaceSkip(resolved.nodes)
               }
 
               // Drop the declaration in case we couldn't resolve the value
-              usedModifierFn ||= false
               shouldRemoveDeclaration = true
               return WalkAction.Stop
             }
@@ -6547,11 +6598,12 @@ export function createCssUtility(node: AtRule) {
           node.value = ValueParser.toCss(valueAst)
         })
 
-        // Used `--value(…)` but nothing resolved
-        if (usedValueFn && !resolvedValueFn) return null
+        // Functional CSS utilities require `--value(…)`, and one of those
+        // branches must resolve for the candidate to be valid.
+        if (!usedValueFn || !resolvedValueFn) return null
 
         // Used `--modifier(…)` but nothing resolved
-        if (usedModifierFn && !resolvedModifierFn) return null
+        if (usedModifierFn && !resolvedModifierFn && modifier !== null) return null
 
         // Resolved `--value(ratio)` and `--modifier(…)`, which is invalid
         if (resolvedRatioValue && resolvedModifierFn) return null
@@ -6622,13 +6674,23 @@ export function createCssUtility(node: AtRule) {
 }
 
 function resolveValueFunction(
-  value: NonNullable<
+  value:
     | Extract<Candidate, { kind: 'functional' }>['value']
-    | Extract<Candidate, { kind: 'functional' }>['modifier']
-  >,
+    | Extract<Candidate, { kind: 'functional' }>['modifier'],
   fn: ValueParser.ValueFunctionNode,
   designSystem: DesignSystem,
 ): { nodes: ValueParser.ValueAstNode[]; ratio?: boolean } | undefined {
+  // No value provided, we can try `--default(…)`
+  if (value === null) {
+    for (let arg of fn.nodes) {
+      // Resolve default value, e.g.: `--default(…)`
+      if (arg.kind === 'function' && arg.value === '--default') {
+        return { nodes: arg.nodes }
+      }
+    }
+    return
+  }
+
   for (let arg of fn.nodes) {
     // Resolve literal value, e.g.: `--modifier('closest-side')`
     if (

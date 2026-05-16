@@ -41,5 +41,6 @@ export type {
   PluginFn as PluginCreator,
   Plugin as PluginsConfig,
   PluginUtils,
+  PluginWithConfig,
   ThemeConfig,
 }

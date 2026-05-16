@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
-"@layer properties {
+"
+@layer properties {
   @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-shadow: 0 0 #0000;
@@ -123,11 +124,13 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
-}"
+}
+"
 `;
 
 exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
-"@layer theme {
+"
+@layer theme {
   :root, :host {
     --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Noto Color Emoji";
@@ -385,5 +388,6 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   }
 }
 
-@layer components, utilities;"
+@layer components, utilities;
+"
 `;

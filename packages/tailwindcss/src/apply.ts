@@ -163,11 +163,50 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
 
       let parts = child.params.split(/(\s+)/g)
       let candidateOffsets: Record<string, number> = {}
+      let normalIdents: string[] = []
+      let dashedIdents: string[] = []
 
       let offset = 0
       for (let [idx, part] of parts.entries()) {
-        if (idx % 2 === 0) candidateOffsets[part] = offset
+        if (idx % 2 === 0) {
+          if (part[0] === '-' && part[1] === '-') {
+            dashedIdents.push(part)
+          } else {
+            normalIdents.push(part)
+          }
+
+          candidateOffsets[part] = offset
+        }
+
         offset += part.length
+      }
+
+      if (dashedIdents.length) {
+        // If we have an `@apply` that only consists of dashed idents then the
+        // user is intending to use a CSS mixin:
+        // https://drafts.csswg.org/css-mixins-1/#apply-rule
+        //
+        // These are not considered utilities and need to be emitted literally.
+        if (normalIdents.length === 0) return WalkAction.Skip
+
+        // If we find a dashed ident *here* it means that someone is trying
+        // to use mixins and our `@apply` behavior together.
+        //
+        // This is invalid and the rules must be written separately. Let the
+        // user know they need to move them into a separate rule.
+        let list = dashedIdents.join(' ')
+
+        throw new Error(
+          `You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply ${list}\` into a separate rule.`,
+        )
+      }
+
+      let hasBody = child.nodes.length > 0
+
+      if (hasBody && normalIdents.length) {
+        let list = normalIdents.join(' ')
+
+        throw new Error(`The rule \`@apply ${list}\` must not have a body.`)
       }
 
       // Replace the `@apply` rule with the actual utility classes

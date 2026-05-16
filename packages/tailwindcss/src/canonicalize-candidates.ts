@@ -1796,6 +1796,28 @@ function modernizeArbitraryValuesVariant(
         continue
       }
 
+      // `[&:has(…)]` can be replaced with `has-[…]`
+      if (
+        // Only top-level, so `group-[&:has(…)]` is not covered
+
+        parent === null &&
+        // [&:has(…)]:flex
+        //  ^ ^^^^^^
+        ast.length === 2 &&
+        ast[0].kind === 'selector' &&
+        ast[0].value === '&' &&
+        ast[1].kind === 'function' &&
+        ast[1].value === ':has' &&
+        ast[1].nodes.length === 1 &&
+        ast[1].nodes[0].kind === 'selector'
+      ) {
+        replaceObject(
+          variant,
+          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[1].nodes)}]`),
+        )
+        continue
+      }
+
       // `in-*` variant. If the selector ends with ` &`, we can convert it to an
       // `in-*` variant.
       //
@@ -2117,7 +2139,7 @@ function optimizeArbitraryValueExpressions(
 
   // Start by constant folding the value expression, when dealing with `calc(…)`
   if (valueAst.length === 1 && valueAst[0].kind === 'function' && valueAst[0].value === 'calc') {
-    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst)
+    let [folded, foldedValueAst] = constantFoldDeclarationAst(valueAst, null, false)
     if (folded) {
       let replacement = cloneCandidate(candidate)
       replacement.value!.value = ValueParser.toCss(foldedValueAst)
@@ -2139,7 +2161,7 @@ function optimizeArbitraryValueExpressions(
     // Move `* -1` inside, and try to constant fold to see if it's even worth
     // updating the candidate or not.
     let expressionAst = ValueParser.parse(`calc(${candidate.value!.value} * -1)`)
-    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst)
+    let [folded, foldedExpressionAst] = constantFoldDeclarationAst(expressionAst, null, false)
     if (folded) {
       let replacement = cloneCandidate(candidate)
 
@@ -2592,13 +2614,9 @@ function createUtilityPropertiesCache(
       let parsed = designSystem.parseCandidate(className)
       if (parsed.length === 0) return localPropertyValueLookup
 
-      walk(
-        canonicalizeAst(
-          designSystem,
-          designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node)),
-          options,
-        ),
-        (node) => {
+      try {
+        let ast = designSystem.compileAstNodes(parsed[0]).map((x) => cloneAstNode(x.node))
+        walk(canonicalizeAst(designSystem, ast, options), (node) => {
           if (node.kind === 'declaration') {
             localPropertyValueLookup.get(node.property).add(node.value!)
             designSystem.storage[STATIC_UTILITIES_KEY].get(options)
@@ -2606,8 +2624,12 @@ function createUtilityPropertiesCache(
               .get(node.value!)
               .add(className)
           }
-        },
-      )
+        })
+      } catch {
+        // Ignore errors, this could happen when we call a plugin with a value
+        // it didn't expect. But since plugins are functions, we can't know
+        // ahead of time what it expects.
+      }
 
       return localPropertyValueLookup
     })

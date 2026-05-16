@@ -5,6 +5,7 @@ import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
+import plugin from './plugin'
 import { DefaultMap } from './utils/default-map'
 
 const css = String.raw
@@ -520,16 +521,16 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       'migrate with custom functional utility `@utility custom-* {…}` that supports bare values',
       { timeout },
       async () => {
-        let candidate = '[tab-size:4]'
-        let expected = 'tab-4'
+        let candidate = '[--resolved-value:4]'
+        let expected = 'example-4'
 
         let input = css`
           @import 'tailwindcss';
           @theme {
             --*: initial;
           }
-          @utility tab-* {
-            tab-size: --value(integer);
+          @utility example-* {
+            --resolved-value: --value(integer);
           }
         `
 
@@ -538,12 +539,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     )
 
     test.each([
-      ['[tab-size:0]', 'tab-0'],
-      ['[tab-size:4]', 'tab-4'],
-      ['[tab-size:8]', 'tab-github'],
-      ['tab-[0]', 'tab-0'],
-      ['tab-[4]', 'tab-4'],
-      ['tab-[8]', 'tab-github'],
+      ['[--resolved-value:0]', 'example-0'],
+      ['[--resolved-value:4]', 'example-4'],
+      ['[--resolved-value:8]', 'example-a'],
+      ['example-[0]', 'example-0'],
+      ['example-[4]', 'example-4'],
+      ['example-[8]', 'example-a'],
     ])(
       'migrate custom @utility from arbitrary values to bare values and named values (based on theme)',
       async (candidate, expected) => {
@@ -551,11 +552,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
           @import 'tailwindcss';
           @theme {
             --*: initial;
-            --tab-size-github: 8;
+            --example-a: 8;
           }
 
-          @utility tab-* {
-            tab-size: --value(--tab-size, integer, [integer]);
+          @utility example-* {
+            --resolved-value: --value(--example, integer, [integer]);
           }
         `
 
@@ -676,11 +677,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
         --*: initial;
         --spacing: 0.25rem;
         --aspect-video: 16 / 9;
-        --tab-size-github: 8;
+        --example-a: 8;
       }
 
-      @utility tab-* {
-        tab-size: --value(--tab-size, integer);
+      @utility example-* {
+        --resolved-value: --value(--example, integer);
       }
     `
 
@@ -689,7 +690,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['aspect-16/9', 'aspect-video'],
 
       // Custom utility with bare value integer
-      ['tab-8', 'tab-github'],
+      ['example-8', 'example-a'],
     ])(testName, { timeout }, async (candidate, expected) => {
       await expectCanonicalization(input, candidate, expected)
     })
@@ -1022,6 +1023,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['has-[[aria-visible]]:flex', 'has-aria-[visible]:flex'],
 
       ['has-[&:not(:nth-child(even))]:flex', 'has-odd:flex'],
+
+      // Arbitrary variant to compound + arbitrary variants
+      ['[&:has([role=checkbox])]:flex', 'has-[[role=checkbox]]:flex'],
+      ['[&:has([aria-visible="true"])]:flex', 'has-aria-visible:flex'],
+      ['[&:has([data-slot=description])]:flex', 'has-data-[slot=description]:flex'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
@@ -1185,6 +1191,43 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       candidate,
       expected,
     )
+  })
+
+  test.each([
+    // Keep whitespace characters that are significant
+    ['[&:has(~_*_*:checked)]:flex', '[&:has(~_*_*:checked)]:flex'],
+    [
+      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
+      'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
+    ],
+
+    // Improve readability when whitespace was used for readability
+    ['w-[calc(100%_-_calc(var(--spacing)*60))]', 'w-[calc(100%-(--spacing(60)))]'],
+    ['w-[calc(100%_-_--spacing(60))]', 'w-[calc(100%-(--spacing(60)))]'],
+
+    // No need to to wrap in `(…)` after a `,`
+    ['m-[min(100%,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+    ['m-[min(100%_,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+    ['m-[min(100%,--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
+  ])(testName, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1573
+  test.each([
+    ['-mt-[0.04in]', 'mt-[-0.04in]'],
+    ['mt-[-0.04in]', 'mt-[-0.04in]'],
+    ['-mt-[-0.04in]', 'mt-[0.04in]'],
+  ])(testName, { timeout }, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
   })
 })
 
@@ -1375,6 +1418,53 @@ describe('regressions', () => {
       }
 
       expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20051
+  test(
+    'does not crash when plugin matchComponents rejects speculative values during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ matchComponents }) => {
+                matchComponents(
+                  {
+                    myicon: () => {
+                      throw new Error('Mimic as-if a custom plugin failed for some reason')
+                    },
+                  },
+                  { values: { icon: __filename } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['border-[1.5px]', 'flex'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
     },
   )
 })
