@@ -21,9 +21,6 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
         } else if (offsetY === null) {
           offsetY = part
         }
-
-        // Reset index, since the regex is stateful.
-        IS_ZERO.lastIndex = 0
       } else if (color === null) {
         color = part
       }
