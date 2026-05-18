@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { cartesian } from '../cartesian'
 import { replaceAlpha } from '../utilities'
 import { replaceShadowColors } from './replace-shadow-colors'
 
@@ -38,6 +39,59 @@ describe('without replacer', () => {
   it('should handle four values with currentcolor', () => {
     let parsed = replaceShadowColors('1px 2px 3px 4px', replacer)
     expect(parsed).toMatchInlineSnapshot(`"1px 2px 3px 4px var(--tw-shadow-color, currentcolor)"`)
+  })
+
+  it('should find the color regardless of its position', () => {
+    for (let [x, y, blur, spread, color] of cartesian(
+      ['calc(var(--spacing) * 1)', '1', '--spacing(1)'], // x
+      ['calc(var(--spacing) * 2)', '2', '--spacing(2)'], // y
+      ['calc(var(--spacing) * 3)', '3', '--spacing(3)'], // blur
+      ['calc(var(--spacing) * 4)', '4', '--spacing(4)'], // spread
+      ['black', 'rgb(0, 0, 0)', '#000', '--alpha(var(--color) / 50%)', 'var(--uknown-color)'], // color
+    )) {
+      let expectedColor = `var(--tw-shadow-color, ${color})`
+
+      {
+        let input = `${x} ${color} ${y} ${blur} ${spread}`
+        expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+      }
+
+      {
+        let input = `${x} ${y} ${color} ${blur} ${spread}`
+        expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+      }
+
+      {
+        let input = `${x} ${y} ${blur} ${color} ${spread}`
+        expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+      }
+    }
+  })
+
+  // When using `var(…)`, we don't know the types of the used variables, but we
+  // might be able to find the color itself.
+  it.each([
+    'black', // Named color
+    '#000', // Hex color
+    'rgb(0, 0, 0)', // Color functions
+    '--alpha(var(--color) / 50%)', // Known custom functions
+  ])('should find the color (%s)', (color) => {
+    let expectedColor = `var(--tw-shadow-color, ${color})`
+
+    {
+      let input = `var(--x) var(--y) ${color}`
+      expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+    }
+
+    {
+      let input = `var(--x) var(--y) var(--blur) ${color}`
+      expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+    }
+
+    {
+      let input = `var(--x) var(--y) var(--blur) var(--spread) ${color}`
+      expect(replaceShadowColors(input, replacer)).toEqual(input.replace(color, expectedColor))
+    }
   })
 
   it('should handle multiple shadows', () => {
