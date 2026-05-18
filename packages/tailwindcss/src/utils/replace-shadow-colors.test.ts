@@ -40,6 +40,13 @@ describe('without replacer', () => {
     expect(parsed).toMatchInlineSnapshot(`"1px 2px 3px 4px var(--tw-shadow-color, currentcolor)"`)
   })
 
+  it('should handle CSS math functions as lengths', () => {
+    let parsed = replaceShadowColors('0 0 calc(1 * var(--spacing)) black', replacer)
+    expect(parsed).toMatchInlineSnapshot(
+      `"0 0 calc(1 * var(--spacing)) var(--tw-shadow-color, black)"`,
+    )
+  })
+
   it('should handle multiple shadows', () => {
     let parsed = replaceShadowColors(
       ['var(--my-shadow)', '1px 1px var(--my-color)', '0 0 1px var(--my-color)'].join(', '),

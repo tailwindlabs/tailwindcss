@@ -1,7 +1,7 @@
 import { segment } from './segment'
 
 const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
-const LENGTH = /^-?(\d+|\.\d+)(.*?)$/g
+const LENGTH = /^-?(?:(?:\d+|\.\d+).*|(?:calc|min|max|clamp)\(.*\))$/
 
 export function replaceShadowColors(input: string, replacement: (color: string) => string) {
   let shadows = segment(input, ',').map((shadow) => {
@@ -20,9 +20,6 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
         } else if (offsetY === null) {
           offsetY = part
         }
-
-        // Reset index, since the regex is stateful.
-        LENGTH.lastIndex = 0
       } else if (color === null) {
         color = part
       }
