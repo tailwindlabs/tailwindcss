@@ -45,6 +45,15 @@ describe('without replacer', () => {
     expect(parsed).toMatchInlineSnapshot(
       `"0 0 calc(1 * var(--spacing)) var(--tw-shadow-color, black)"`,
     )
+
+    parsed = replaceShadowColors('0 0 min(1px, 2px) black', replacer)
+    expect(parsed).toMatchInlineSnapshot(`"0 0 min(1px, 2px) var(--tw-shadow-color, black)"`)
+
+    parsed = replaceShadowColors('0 0 max(1px, 2px) black', replacer)
+    expect(parsed).toMatchInlineSnapshot(`"0 0 max(1px, 2px) var(--tw-shadow-color, black)"`)
+
+    parsed = replaceShadowColors('0 0 clamp(1px, 2px, 3px) black', replacer)
+    expect(parsed).toMatchInlineSnapshot(`"0 0 clamp(1px, 2px, 3px) var(--tw-shadow-color, black)"`)
   })
 
   it('should handle multiple shadows', () => {
