@@ -99,6 +99,15 @@ export function toCss(ast: SelectorAstNode[]) {
       }
       case 'function': {
         css += node.value + '(' + toCss(node.nodes) + ')'
+        break
+      }
+      case 'group': {
+        css += toCss(node.nodes)
+        break
+      }
+      case 'list': {
+        css += node.nodes.map((node) => toCss([node])).join(',')
+        break
       }
     }
   }
