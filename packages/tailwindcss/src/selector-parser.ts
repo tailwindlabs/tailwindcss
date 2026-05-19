@@ -29,18 +29,12 @@ export type SelectorValueNode = {
   value: string
 }
 
-export type SelectorSeparatorNode = {
-  kind: 'separator'
-  value: string
-}
-
 export type SelectorAstNode =
   | SelectorCombinatorNode
   | SelectorFunctionNode
   | SelectorGroupNode
   | SelectorListNode
   | SelectorNode
-  | SelectorSeparatorNode
   | SelectorValueNode
 
 function combinator(value: string): SelectorCombinatorNode {
@@ -92,7 +86,6 @@ export function toCss(ast: SelectorAstNode[]) {
     switch (node.kind) {
       case 'combinator':
       case 'selector':
-      case 'separator':
       case 'value': {
         css += node.value
         break
@@ -218,7 +211,6 @@ export function parse(input: string) {
         for (; end < input.length; end++) {
           peekChar = input.charCodeAt(end)
           if (
-            peekChar !== COMMA &&
             peekChar !== GREATER_THAN &&
             peekChar !== NEWLINE &&
             peekChar !== SPACE &&
