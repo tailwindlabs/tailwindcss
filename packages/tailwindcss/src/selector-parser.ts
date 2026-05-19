@@ -1,3 +1,9 @@
+type Combinator =
+  | ' ' // Descendant combinator
+  | '>' // Child combinator
+  | '+' // Next-sibling combinator
+  | '~' // Subsequent-sibling combinator
+
 export type SelectorListNode = {
   kind: 'list'
   nodes: SelectorAstNode[]
@@ -5,7 +11,7 @@ export type SelectorListNode = {
 
 export type SelectorCombinatorNode = {
   kind: 'combinator'
-  value: string
+  value: Combinator
 }
 
 export type SelectorComplexNode = {
@@ -43,7 +49,7 @@ export type SelectorAstNode =
   | SelectorNode
   | SelectorValueNode
 
-function combinator(value: string): SelectorCombinatorNode {
+function combinator(value: Combinator): SelectorCombinatorNode {
   return {
     kind: 'combinator',
     value,
@@ -276,7 +282,7 @@ export function parse(input: string) {
           break
         }
 
-        target.push(combinator(value === '' ? ' ' : value))
+        target.push(combinator((value === '' ? ' ' : value) as Combinator))
         containsCombinator = true
 
         break
