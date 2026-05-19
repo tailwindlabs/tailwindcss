@@ -470,12 +470,19 @@ describe('toCss', () => {
   })
 
   it('should print a selector list', () => {
-    expect(toCss(parse('.foo,.bar'))).toBe('.foo, .bar')
+    expect(toCss(parse('.foo, .bar'))).toBe('.foo, .bar')
   })
 
   it('should print a selector list with normalized commas', () => {
     expect(toCss(parse('.foo, .bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo , .bar'))).toBe('.foo, .bar')
+    expect(toCss(parse('.foo ,.bar'))).toBe('.foo, .bar')
+  })
+
+  it('should print a selector list but minimized', () => {
+    expect(toCss(parse('.foo, .bar'), true)).toBe('.foo,.bar')
+    expect(toCss(parse('.foo , .bar'), true)).toBe('.foo,.bar')
+    expect(toCss(parse('.foo ,.bar'), true)).toBe('.foo,.bar')
   })
 
   it('should print an attribute selectors', () => {

@@ -93,9 +93,9 @@ function value(value: string): SelectorValueNode {
   }
 }
 
-export function toCss(ast: SelectorAstNode[]) {
+export function toCss(ast: SelectorAstNode[], minify = false) {
   let css = ''
-  for (const node of ast) {
+  for (let node of ast) {
     switch (node.kind) {
       case 'selector':
       case 'value': {
@@ -103,7 +103,7 @@ export function toCss(ast: SelectorAstNode[]) {
         break
       }
       case 'combinator': {
-        if (node.value === ' ') {
+        if (minify || node.value === ' ') {
           css += node.value
         } else {
           css += ` ${node.value} `
@@ -112,16 +112,16 @@ export function toCss(ast: SelectorAstNode[]) {
       }
 
       case 'function': {
-        css += node.value + '(' + toCss(node.nodes) + ')'
+        css += `${node.value}(${toCss(node.nodes, minify)})`
         break
       }
       case 'complex':
       case 'compound': {
-        css += node.nodes.map((node) => toCss([node])).join('')
+        css += toCss(node.nodes, minify)
         break
       }
       case 'list': {
-        css += node.nodes.map((node) => toCss([node])).join(', ')
+        css += node.nodes.map((node) => toCss([node], minify)).join(minify ? ',' : ', ')
         break
       }
     }

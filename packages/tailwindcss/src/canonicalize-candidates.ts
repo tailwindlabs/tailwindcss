@@ -1821,7 +1821,7 @@ function modernizeArbitraryValuesVariant(
       ) {
         replaceObject(
           variant,
-          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[0].nodes[1].nodes)}]`),
+          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[0].nodes[1].nodes, true)}]`),
         )
         continue
       }
@@ -1850,7 +1850,7 @@ function modernizeArbitraryValuesVariant(
         // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
         //
         // Later this gets converted to `in-data-visible`.
-        replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast)}]`))
+        replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast, true)}]`))
         continue
       }
 
@@ -1868,7 +1868,7 @@ function modernizeArbitraryValuesVariant(
       ) {
         let targetSignature = signatures.get(designSystem.printVariant(variant))
 
-        let parsed = ValueParser.parse(SelectorParser.toCss(ast))
+        let parsed = ValueParser.parse(SelectorParser.toCss(ast, true))
         let containsNot = false
         walk(parsed, (node) => {
           if (node.kind === 'word' && node.value === 'not') {
@@ -2042,7 +2042,7 @@ function modernizeArbitraryValuesVariant(
                 return `${variantName}-${targetNode.nodes[0].value}`
               }
 
-              return `${variantName}-[${SelectorParser.toCss(targetNode.nodes)}]`
+              return `${variantName}-[${SelectorParser.toCss(targetNode.nodes, true)}]`
             }
           }
 
@@ -2809,7 +2809,7 @@ function createVariantSignatureCache(
           })
 
           if (changed) {
-            node.selector = SelectorParser.toCss(selectorAst)
+            node.selector = SelectorParser.toCss(selectorAst, true)
           }
         }
       })
