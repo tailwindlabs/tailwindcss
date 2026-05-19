@@ -18,9 +18,110 @@ describe('parse', () => {
 
   it('should parse a selector list', () => {
     expect(parse('.foo,.bar')).toEqual([
-      { kind: 'selector', value: '.foo' },
-      { kind: 'separator', value: ',' },
-      { kind: 'selector', value: '.bar' },
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+  })
+
+  it('should parse selector lists with whitespace around the comma', () => {
+    expect(parse('.foo, .bar')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+
+    expect(parse('.foo , .bar')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+
+    expect(parse('.foo ,.bar')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+  })
+
+  it('should parse a list of attribute selectors', () => {
+    expect(parse('[foo],[bar]')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '[foo]' },
+          { kind: 'selector', value: '[bar]' },
+        ],
+      },
+    ])
+  })
+
+  it('should parse a list of selectors with just functions', () => {
+    expect(parse(':is(.a),:is(.b)')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'function', value: ':is', nodes: [{ kind: 'selector', value: '.a' }] },
+          { kind: 'function', value: ':is', nodes: [{ kind: 'selector', value: '.b' }] },
+        ],
+      },
+    ])
+  })
+
+  it('should parse selector lists with more than two selectors', () => {
+    expect(parse('.foo,.bar,.baz')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+          { kind: 'selector', value: '.baz' },
+        ],
+      },
+    ])
+  })
+
+  it('should group complex selectors in a selector list', () => {
+    expect(parse('.a+.b, .c .d[attr], .e')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          {
+            kind: 'group',
+            nodes: [
+              { kind: 'selector', value: '.a' },
+              { kind: 'combinator', value: '+' },
+              { kind: 'selector', value: '.b' },
+            ],
+          },
+          {
+            kind: 'group',
+            nodes: [
+              { kind: 'selector', value: '.c' },
+              { kind: 'combinator', value: ' ' },
+              { kind: 'selector', value: '.d' },
+              { kind: 'selector', value: '[attr]' },
+            ],
+          },
+          { kind: 'selector', value: '.e' },
+        ],
+      },
     ])
   })
 
@@ -48,6 +149,24 @@ describe('parse', () => {
           },
         ],
         value: ':not',
+      },
+    ])
+  })
+
+  it('should parse selector lists in functions', () => {
+    expect(parse(':is(.foo, .bar)')).toEqual([
+      {
+        kind: 'function',
+        value: ':is',
+        nodes: [
+          {
+            kind: 'list',
+            nodes: [
+              { kind: 'selector', value: '.foo' },
+              { kind: 'selector', value: '.bar' },
+            ],
+          },
+        ],
       },
     ])
   })
@@ -173,6 +292,11 @@ describe('toCss', () => {
 
   it('should print a selector list', () => {
     expect(toCss(parse('.foo,.bar'))).toBe('.foo,.bar')
+  })
+
+  it('should print a selector list with normalized commas', () => {
+    expect(toCss(parse('.foo, .bar'))).toBe('.foo,.bar')
+    expect(toCss(parse('.foo , .bar'))).toBe('.foo,.bar')
   })
 
   it('should print an attribute selectors', () => {
