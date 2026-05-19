@@ -238,22 +238,16 @@ describe('parse', () => {
           { kind: 'selector', value: ':hover' },
           {
             kind: 'function',
+            value: ':not',
             nodes: [
               {
                 kind: 'compound',
                 nodes: [
-                  {
-                    kind: 'selector',
-                    value: '.bar',
-                  },
-                  {
-                    kind: 'selector',
-                    value: ':focus',
-                  },
+                  { kind: 'selector', value: '.bar' },
+                  { kind: 'selector', value: ':focus' },
                 ],
               },
             ],
-            value: ':not',
           },
         ],
       },
@@ -286,6 +280,30 @@ describe('parse', () => {
           { kind: 'selector', value: '.foo' },
           { kind: 'combinator', value: '+' },
           { kind: 'selector', value: 'p' },
+        ],
+      },
+    ])
+  })
+
+  it('should normalize combinators', () => {
+    expect(parse('.foo + .bar')).toEqual([
+      {
+        kind: 'complex',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'combinator', value: '+' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+
+    expect(parse('.foo  \n\t .bar')).toEqual([
+      {
+        kind: 'complex',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'combinator', value: ' ' },
+          { kind: 'selector', value: '.bar' },
         ],
       },
     ])

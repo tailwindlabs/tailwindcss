@@ -268,15 +268,14 @@ export function parse(input: string) {
         }
         i = end - 1
 
-        let contents = input.slice(start, end)
+        let value = input.slice(start, end).trim()
         if (
-          contents.trim() === '' &&
+          value === '' &&
           (target.length === 0 || end >= input.length || input.charCodeAt(end) === COMMA)
         ) {
           break
         }
 
-        let value = contents.trim()
         target.push(combinator(value === '' ? ' ' : value))
         containsCombinator = true
 
