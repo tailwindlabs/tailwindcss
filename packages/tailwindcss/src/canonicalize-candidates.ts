@@ -2759,9 +2759,12 @@ function createVariantSignatureCache(
             // want to mark this as changed because this will be re-printed as
             // `.foo,.bar`.
             //
+            // Similarly, when we receive a combinator like `.foo + .bar`, this
+            // will be printed as `.foo+.bar`.
+            //
             // It could be that this was already optimal, but then this would be
             // a no-op situation.
-            if (node.kind === 'list') {
+            if (node.kind === 'list' || node.kind === 'combinator') {
               changed = true
             }
 
