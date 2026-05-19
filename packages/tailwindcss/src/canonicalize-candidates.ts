@@ -1776,7 +1776,7 @@ function modernizeArbitraryValuesVariant(
         ast[0].kind === 'selector' &&
         ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '>' &&
+        ast[1].value === '>' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '*'
       ) {
@@ -1794,7 +1794,7 @@ function modernizeArbitraryValuesVariant(
         ast[0].kind === 'selector' &&
         ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '*'
       ) {
@@ -1838,7 +1838,7 @@ function modernizeArbitraryValuesVariant(
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '&'
       ) {
@@ -1908,9 +1908,9 @@ function modernizeArbitraryValuesVariant(
         //  ^ ^ ^^^^^^^^^^^^^^
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
-        ast[0].value.trim() === '&' &&
+        ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '>' &&
+        ast[1].value === '>' &&
         ast[2].kind === 'selector' &&
         (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
@@ -1926,9 +1926,9 @@ function modernizeArbitraryValuesVariant(
         //  ^ ^^^^^^^^^^^^^^
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
-        ast[0].value.trim() === '&' &&
+        ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
