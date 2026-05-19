@@ -43,12 +43,12 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
       switch (node.kind) {
         case 'word': {
           // Skip known keywords
-          if (KEYWORDS.has(node.value)) {
+          if (KEYWORDS.has(node.value.toLowerCase())) {
             return WalkAction.Continue
           }
 
           // Must be a length
-          if (LENGTH.test(node.value)) {
+          if (LENGTH.test(node.value.toLowerCase())) {
             lengths++
             return WalkAction.Continue
           }
@@ -67,13 +67,13 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
 
         case 'function': {
           // Must be a color
-          if (COLOR_FUNCTIONS.has(node.value)) {
+          if (COLOR_FUNCTIONS.has(node.value.toLowerCase())) {
             replaced = true
             return WalkAction.ReplaceStop(replaceAst(node))
           }
 
           // Must be a length
-          if (LENGTH_FUNCTIONS.has(node.value)) {
+          if (LENGTH_FUNCTIONS.has(node.value.toLowerCase())) {
             lengths++
             return WalkAction.Skip
           }
