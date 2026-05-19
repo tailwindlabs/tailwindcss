@@ -139,9 +139,13 @@ export function parse(input: string) {
 
   let ast: SelectorAstNode[] = []
 
-  let stack: (SelectorFunctionNode | null)[] = []
+  let target = ast
 
-  let parent = null as SelectorFunctionNode | null
+  let targetStack: SelectorAstNode[][] = []
+
+  let listStack: (SelectorListNode | null)[] = []
+
+  let currentList: SelectorListNode | null = null
 
   let buffer = ''
 
@@ -160,7 +164,42 @@ export function parse(input: string) {
       // .foo > .bar
       //     ^^^
       // ```
-      case COMMA:
+      case COMMA: {
+        // Flush remaining buffer, mark it as a selector
+        //
+        // Combinators are handled separately, and functions end with `)` which
+        // means that the `buffer` will be empty at that point.
+        if (buffer.length > 0) {
+          target.push(selector(buffer))
+          buffer = ''
+        }
+
+        // Skip whitespace
+        for (; i + 1 < input.length; i++) {
+          peekChar = input.charCodeAt(i + 1)
+          if (peekChar !== NEWLINE && peekChar !== SPACE && peekChar !== TAB) {
+            break
+          }
+        }
+
+        // Add nodes to the current list
+        if (currentList) {
+          currentList.nodes.push(target.length === 1 ? target[0] : group(target))
+          target = []
+        }
+
+        // Start a new list
+        else {
+          let item = target.length === 1 ? target.pop()! : group(target.splice(0))
+          let node = list([item])
+          target.push(node)
+          currentList = node
+          target = []
+        }
+
+        break
+      }
+
       case GREATER_THAN:
       case NEWLINE:
       case SPACE:
@@ -169,12 +208,7 @@ export function parse(input: string) {
       case TILDE: {
         // 1. Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          let node = selector(buffer)
-          if (parent) {
-            parent.nodes.push(node)
-          } else {
-            ast.push(node)
-          }
+          target.push(selector(buffer))
           buffer = ''
         }
 
@@ -198,12 +232,11 @@ export function parse(input: string) {
         i = end - 1
 
         let contents = input.slice(start, end)
-        let node = contents.trim() === ',' ? separator(contents) : combinator(contents)
-        if (parent) {
-          parent.nodes.push(node)
-        } else {
-          ast.push(node)
+        if (contents.trim() === '' && input.charCodeAt(end) === COMMA) {
+          break
         }
+
+        target.push(combinator(contents))
 
         break
       }
@@ -253,22 +286,16 @@ export function parse(input: string) {
           buffer = ''
           i = end
 
-          if (parent) {
-            parent.nodes.push(node)
-          } else {
-            ast.push(node)
-          }
+          target.push(node)
 
           break
         }
 
-        if (parent) {
-          parent.nodes.push(node)
-        } else {
-          ast.push(node)
-        }
-        stack.push(node)
-        parent = node
+        target.push(node)
+        targetStack.push(target)
+        listStack.push(currentList)
+        target = node.nodes
+        currentList = null
 
         break
       }
@@ -282,20 +309,18 @@ export function parse(input: string) {
       //             ^
       // ```
       case CLOSE_PAREN: {
-        let tail = stack.pop()
-
         // Handle everything before the closing paren a selector
         if (buffer.length > 0) {
-          let node = selector(buffer)
-          tail!.nodes.push(node)
+          target.push(selector(buffer))
           buffer = ''
         }
 
-        if (stack.length > 0) {
-          parent = stack[stack.length - 1]
-        } else {
-          parent = null
+        if (currentList) {
+          currentList.nodes.push(target.length === 1 ? target[0] : group(target))
         }
+
+        target = targetStack.pop() ?? ast
+        currentList = listStack.pop() ?? null
 
         break
       }
@@ -314,12 +339,7 @@ export function parse(input: string) {
         // Handle everything before the combinator as a selector and
         // start a new selector
         if (buffer.length > 0) {
-          let node = selector(buffer)
-          if (parent) {
-            parent.nodes.push(node)
-          } else {
-            ast.push(node)
-          }
+          target.push(selector(buffer))
         }
         buffer = input[i]
         break
@@ -336,12 +356,7 @@ export function parse(input: string) {
       case OPEN_BRACKET: {
         // Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          let node = selector(buffer)
-          if (parent) {
-            parent.nodes.push(node)
-          } else {
-            ast.push(node)
-          }
+          target.push(selector(buffer))
         }
         buffer = ''
 
@@ -408,21 +423,12 @@ export function parse(input: string) {
       case ASTERISK: {
         // 1. Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          let node = selector(buffer)
-          if (parent) {
-            parent.nodes.push(node)
-          } else {
-            ast.push(node)
-          }
+          target.push(selector(buffer))
           buffer = ''
         }
 
         // 2. Handle the `&` or `*` as a selector on its own
-        if (parent) {
-          parent.nodes.push(selector(input[i]))
-        } else {
-          ast.push(selector(input[i]))
-        }
+        target.push(selector(input[i]))
         break
       }
 
@@ -442,7 +448,11 @@ export function parse(input: string) {
 
   // Collect the remainder as a word
   if (buffer.length > 0) {
-    ast.push(selector(buffer))
+    target.push(selector(buffer))
+  }
+
+  if (currentList) {
+    currentList.nodes.push(target.length === 1 ? target[0] : group(target))
   }
 
   return ast
