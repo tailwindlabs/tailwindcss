@@ -23847,6 +23847,7 @@ test('filter', async () => {
         'drop-shadow-red-500/50',
         'drop-shadow-none',
         'drop-shadow-inherit',
+        'drop-shadow-calc',
         'saturate-0',
         'saturate-[1.75]',
         'saturate-[var(--value)]',
@@ -23857,10 +23858,12 @@ test('filter', async () => {
       ],
       css`
         @theme {
+          --spacing: 0.25rem;
           --blur-xl: 24px;
           --color-red-500: #ef4444;
           --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
           --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
+          --drop-shadow-calc: 0 0 calc(1 * var(--spacing)) black;
         }
         @theme inline {
           --drop-shadow-multi: 0 1px 1px rgb(0 0 0 / 0.05), 0 9px 7px rgb(0 0 0 / 0.1);
@@ -23891,10 +23894,12 @@ test('filter', async () => {
     }
 
     :root, :host {
+      --spacing: .25rem;
       --blur-xl: 24px;
       --color-red-500: #ef4444;
       --drop-shadow: 0 1px 1px #0000000d;
       --drop-shadow-xl: 0 9px 7px #0000001a;
+      --drop-shadow-calc: 0 0 calc(1 * var(--spacing)) black;
     }
 
     .blur-\\[4px\\] {
@@ -23948,6 +23953,12 @@ test('filter', async () => {
     .drop-shadow-\\[0_0_red\\] {
       --tw-drop-shadow-size: drop-shadow(0 0 var(--tw-drop-shadow-color, red));
       --tw-drop-shadow: var(--tw-drop-shadow-size);
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow-calc {
+      --tw-drop-shadow-size: drop-shadow(0 0 calc(1 * var(--spacing)) var(--tw-drop-shadow-color, black));
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow-calc));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
