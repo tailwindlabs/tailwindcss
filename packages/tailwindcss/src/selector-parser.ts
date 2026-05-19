@@ -387,6 +387,11 @@ export function parse(input: string) {
       case FULL_STOP:
       case COLON:
       case NUMBER_SIGN: {
+        if (currentChar === COLON && buffer === ':') {
+          buffer += input[i]
+          break
+        }
+
         // Handle everything before the combinator as a selector and
         // start a new selector
         if (buffer.length > 0) {
