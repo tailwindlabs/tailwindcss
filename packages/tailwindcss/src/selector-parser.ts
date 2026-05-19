@@ -9,6 +9,16 @@ export type SelectorFunctionNode = {
   nodes: SelectorAstNode[]
 }
 
+export type SelectorGroupNode = {
+  kind: 'group'
+  nodes: SelectorAstNode[]
+}
+
+export type SelectorListNode = {
+  kind: 'list'
+  nodes: SelectorAstNode[]
+}
+
 export type SelectorNode = {
   kind: 'selector'
   value: string
@@ -27,6 +37,8 @@ export type SelectorSeparatorNode = {
 export type SelectorAstNode =
   | SelectorCombinatorNode
   | SelectorFunctionNode
+  | SelectorGroupNode
+  | SelectorListNode
   | SelectorNode
   | SelectorSeparatorNode
   | SelectorValueNode
@@ -46,16 +58,23 @@ function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
   }
 }
 
-function selector(value: string): SelectorNode {
+function group(nodes: SelectorAstNode[]): SelectorGroupNode {
   return {
-    kind: 'selector',
-    value,
+    kind: 'group',
+    nodes,
   }
 }
 
-function separator(value: string): SelectorSeparatorNode {
+function list(nodes: SelectorAstNode[]): SelectorListNode {
   return {
-    kind: 'separator',
+    kind: 'list',
+    nodes,
+  }
+}
+
+function selector(value: string): SelectorNode {
+  return {
+    kind: 'selector',
     value,
   }
 }
