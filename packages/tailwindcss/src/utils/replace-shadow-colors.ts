@@ -1,5 +1,6 @@
 import * as ValueParser from '../value-parser'
 import { walk, WalkAction } from '../walk'
+import { isNamedColor } from './is-color'
 import { segment } from './segment'
 
 const KEYWORDS = new Set(['inset', 'inherit', 'initial', 'revert', 'unset'])
@@ -50,6 +51,12 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
           if (LENGTH.test(node.value)) {
             lengths++
             return WalkAction.Continue
+          }
+
+          // Must be a color
+          if (node.value[0] === '#' || isNamedColor(node.value)) {
+            replaced = true
+            return WalkAction.ReplaceStop(replaceAst(node))
           }
 
           // We're not sure yet
