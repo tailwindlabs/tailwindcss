@@ -8,6 +8,8 @@ const LENGTH_FUNCTIONS = new Set(['calc', 'clamp', 'max', 'min', '--spacing'])
 const COLOR_FUNCTIONS = new Set([
   'color',
   'color-mix',
+  'contrast-color',
+  'device-cmyk',
   'hsl',
   'hsla',
   'hwb',
