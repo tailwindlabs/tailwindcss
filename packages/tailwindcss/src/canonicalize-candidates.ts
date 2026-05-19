@@ -1719,12 +1719,12 @@ function* tryValueReplacements(
 // ----
 
 function isSingleSelector(ast: SelectorParser.SelectorAstNode[]): boolean {
-  return !ast.some((node) => node.kind === 'separator' && node.value.trim() === ',')
+  if (ast.length === 1 && ast[0].kind === 'list') return false
+  return true
 }
 
-function isAttributeSelector(node: SelectorParser.SelectorAstNode): boolean {
-  let value = node.value.trim()
-  return node.kind === 'selector' && value[0] === '[' && value[value.length - 1] === ']'
+function isAttributeSelector(node: SelectorParser.SelectorNode): boolean {
+  return node.value[0] === '[' && node.value[node.value.length - 1] === ']'
 }
 
 function modernizeArbitraryValuesVariant(
@@ -1755,10 +1755,16 @@ function modernizeArbitraryValuesVariant(
       // Expecting a non-relative arbitrary variant
       if (variant.relative) continue
 
-      let ast = SelectorParser.parse(variant.selector.trim())
+      let ast = SelectorParser.parse(variant.selector)
 
       // Expecting a single selector node
       if (!isSingleSelector(ast)) continue
+
+      // Keep the existing arbitrary variant modernizations working on a flat
+      // selector sequence while the parser exposes complex selectors as a node.
+      if (ast.length === 1 && ast[0].kind === 'complex') {
+        ast = ast[0].nodes
+      }
 
       // `[&>*]` can be replaced with `*`
       if (
@@ -1803,17 +1809,19 @@ function modernizeArbitraryValuesVariant(
         parent === null &&
         // [&:has(…)]:flex
         //  ^ ^^^^^^
-        ast.length === 2 &&
-        ast[0].kind === 'selector' &&
-        ast[0].value === '&' &&
-        ast[1].kind === 'function' &&
-        ast[1].value === ':has' &&
-        ast[1].nodes.length === 1 &&
-        ast[1].nodes[0].kind === 'selector'
+        ast.length === 1 &&
+        ast[0].kind === 'compound' &&
+        ast[0].nodes.length === 2 &&
+        ast[0].nodes[0].kind === 'selector' &&
+        ast[0].nodes[0].value === '&' &&
+        ast[0].nodes[1].kind === 'function' &&
+        ast[0].nodes[1].value === ':has' &&
+        ast[0].nodes[1].nodes.length === 1 &&
+        ast[0].nodes[1].nodes[0].kind === 'selector'
       ) {
         replaceObject(
           variant,
-          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[1].nodes)}]`),
+          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[0].nodes[1].nodes)}]`),
         )
         continue
       }
@@ -1828,6 +1836,7 @@ function modernizeArbitraryValuesVariant(
         // [[data-visible]___&]:flex
         //  ^^^^^^^^^^^^^^ ^ ^
         ast.length === 3 &&
+        ast[0].kind === 'selector' &&
         ast[1].kind === 'combinator' &&
         ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
         ast[2].kind === 'selector' &&
@@ -1903,7 +1912,7 @@ function modernizeArbitraryValuesVariant(
         ast[1].kind === 'combinator' &&
         ast[1].value.trim() === '>' &&
         ast[2].kind === 'selector' &&
-        (isAttributeSelector(ast[2]) || ast[2].value[0] === ':')
+        (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
         ast = [ast[2]]
         prefixedVariant = designSystem.parseVariant('*')
@@ -1921,16 +1930,30 @@ function modernizeArbitraryValuesVariant(
         ast[1].kind === 'combinator' &&
         ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
         ast[2].kind === 'selector' &&
-        (isAttributeSelector(ast[2]) || ast[2].value[0] === ':')
+        (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
         ast = [ast[2]]
         prefixedVariant = designSystem.parseVariant('**')
       }
 
-      // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
-      let selectorNodes = ast.filter(
-        (node) => !(node.kind === 'selector' && node.value.trim() === '&'),
-      )
+      let selectorNodes = ast
+      walk(selectorNodes, {
+        enter(node) {
+          // Filter out `&`. E.g.: `&[data-foo]` => `[data-foo]`
+          if (node.kind === 'selector' && node.value === '&') {
+            return WalkAction.Replace([])
+          }
+
+          if (node.kind === 'function') {
+            return WalkAction.Skip
+          }
+        },
+        exit(node) {
+          if (node.kind === 'compound' && node.nodes.length <= 1) {
+            return WalkAction.ReplaceSkip(node.nodes)
+          }
+        },
+      })
 
       // Expecting a single selector (normal selector or attribute selector)
       if (selectorNodes.length !== 1) continue
@@ -1947,7 +1970,7 @@ function modernizeArbitraryValuesVariant(
         }
 
         // Expecting a single attribute selector
-        if (!isAttributeSelector(target.nodes[0])) continue
+        if (target.nodes[0].kind === 'selector' && !isAttributeSelector(target.nodes[0])) continue
 
         // Unwrap the selector from inside `&:is(…)`
         target = target.nodes[0]
@@ -2060,7 +2083,7 @@ function modernizeArbitraryValuesVariant(
       }
 
       // Expecting an attribute selector
-      else if (isAttributeSelector(target)) {
+      else if (target.kind === 'selector' && isAttributeSelector(target)) {
         let attributeSelector = AttributeSelectorParser.parse(target.value)
         if (attributeSelector === null) continue // Invalid attribute selector
 
@@ -2732,8 +2755,13 @@ function createVariantSignatureCache(
           let selectorAst = SelectorParser.parse(node.selector)
           let changed = false
           walk(selectorAst, (node) => {
-            if (node.kind === 'separator' && node.value !== ' ') {
-              node.value = node.value.trim()
+            // Assumption: when we have a list of selectors: `.foo, .bar` we
+            // want to mark this as changed because this will be re-printed as
+            // `.foo,.bar`.
+            //
+            // It could be that this was already optimal, but then this would be
+            // a no-op situation.
+            if (node.kind === 'list') {
               changed = true
             }
 
