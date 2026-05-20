@@ -492,6 +492,7 @@ describe('toCss', () => {
   })
 
   it('should print a selector list with normalized commas', () => {
+    expect(toCss(parse('.foo,.bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo, .bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo , .bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo ,.bar'))).toBe('.foo, .bar')
