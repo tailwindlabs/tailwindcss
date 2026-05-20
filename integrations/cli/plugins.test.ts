@@ -42,8 +42,8 @@ test(
 
     await fs.expectFileToContain('dist/out.css', [
       candidate`prose`,
-      ':where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *))',
-      ':where(tbody td, tfoot td):not(:where([class~="not-prose"],[class~="not-prose"] *))',
+      ':where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *))',
+      ':where(tbody td, tfoot td):not(:where([class~="not-prose"], [class~="not-prose"] *))',
     ])
   },
 )
