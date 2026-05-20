@@ -519,6 +519,15 @@ describe('toCss', () => {
   it('should print :nth-child()', () => {
     expect(toCss(parse(':nth-child(n+1)'))).toBe(':nth-child(n+1)')
   })
+
+  it('should pretty print a complex selector', () => {
+    expect(toCss(parse('.a+.b, .c .d[attr], .e'))).toBe('.a + .b, .c .d[attr], .e')
+  })
+
+  it('should minify a complex selector during printing', () => {
+    expect(toCss(parse('.a+.b, .c .d[attr], .e'), true)).toBe('.a+.b,.c .d[attr],.e')
+    //                                                                 ^ This space is significant to indicate a descendant combinator
+  })
 })
 
 describe('walk', () => {
