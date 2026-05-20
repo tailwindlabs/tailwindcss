@@ -98,11 +98,19 @@ export function toCss(ast: SelectorAstNode[]) {
   for (const node of ast) {
     switch (node.kind) {
       case 'selector':
-      case 'combinator':
       case 'value': {
         css += node.value
         break
       }
+      case 'combinator': {
+        if (node.value === ' ') {
+          css += node.value
+        } else {
+          css += ` ${node.value} `
+        }
+        break
+      }
+
       case 'function': {
         css += node.value + '(' + toCss(node.nodes) + ')'
         break
@@ -113,7 +121,7 @@ export function toCss(ast: SelectorAstNode[]) {
         break
       }
       case 'list': {
-        css += node.nodes.map((node) => toCss([node])).join(',')
+        css += node.nodes.map((node) => toCss([node])).join(', ')
         break
       }
     }
