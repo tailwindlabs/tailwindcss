@@ -37,21 +37,39 @@ test('creates a custom utility to extend the built-in container', async () => {
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
+    }
+
+    .container {
       margin-inline: auto;
       padding-inline: 2rem;
     }
@@ -97,26 +115,50 @@ test('allows padding to be defined at custom breakpoints', async () => {
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
+    }
+
+    .container {
       padding-inline: 1rem;
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         padding-inline: 2rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         padding-inline: 3rem;
       }
     }
@@ -160,33 +202,51 @@ test('allows breakpoints to be overwritten', async () => {
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
     }
-    @media (width >= 40rem) {
+
+    @media (min-width: 40rem) {
       .container {
         max-width: none;
       }
     }
-    @media (width >= 1280px) {
+
+    @media (min-width: 1280px) {
       .container {
         max-width: 1280px;
       }
     }
-    @media (width >= 1536px) {
+
+    @media (min-width: 1536px) {
       .container {
         max-width: 1536px;
       }
@@ -234,28 +294,45 @@ test('padding applies to custom `container` screens', async () => {
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
     }
-    @media (width >= 40rem) {
+
+    @media (min-width: 40rem) {
       .container {
         max-width: none;
       }
     }
-    @media (width >= 48rem) {
+
+    @media (min-width: 48rem) {
       .container {
         max-width: 48rem;
         padding-inline: 3rem;
@@ -303,23 +380,44 @@ test("an empty `screen` config will undo all custom media screens and won't appl
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
+    }
+
+    .container {
       padding-inline: 1rem;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: none;
       }
     }
@@ -371,6 +469,7 @@ test('legacy container component does not interfere with new --container variabl
     :root, :host {
       --container-sm: 24rem;
     }
+
     .max-w-sm {
       max-width: var(--container-sm);
     }
@@ -420,70 +519,127 @@ test('combines custom padding and screen overwrites', async () => {
     "
     .\\!container {
       width: 100% !important;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .\\!container {
         max-width: 40rem !important;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .\\!container {
         max-width: 48rem !important;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .\\!container {
         max-width: 64rem !important;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .\\!container {
         max-width: 80rem !important;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .\\!container {
         max-width: 96rem !important;
       }
     }
+
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
     }
+
     .\\!container {
       margin-inline: auto !important;
       padding-inline: 2rem !important;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .\\!container {
         max-width: none !important;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .\\!container {
         max-width: 48rem !important;
       }
-      @media (width >= 1280px) {
+    }
+
+    @media (min-width: 1280px) {
+      .\\!container {
         max-width: 1280px !important;
       }
-      @media (width >= 1536px) {
+    }
+
+    @media (min-width: 1536px) {
+      .\\!container {
         max-width: 1536px !important;
         padding-inline: 4rem !important;
       }
     }
+
     .container {
       margin-inline: auto;
       padding-inline: 2rem;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: none;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 1280px) {
+    }
+
+    @media (min-width: 1280px) {
+      .container {
         max-width: 1280px;
       }
-      @media (width >= 1536px) {
+    }
+
+    @media (min-width: 1536px) {
+      .container {
         max-width: 1536px;
         padding-inline: 4rem;
       }
@@ -536,33 +692,63 @@ test('filters out complex breakpoints', async () => {
     "
     .container {
       width: 100%;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: 40rem;
       }
-      @media (width >= 48rem) {
+    }
+
+    @media (min-width: 48rem) {
+      .container {
         max-width: 48rem;
       }
-      @media (width >= 64rem) {
+    }
+
+    @media (min-width: 64rem) {
+      .container {
         max-width: 64rem;
       }
-      @media (width >= 80rem) {
+    }
+
+    @media (min-width: 80rem) {
+      .container {
         max-width: 80rem;
       }
-      @media (width >= 96rem) {
+    }
+
+    @media (min-width: 96rem) {
+      .container {
         max-width: 96rem;
       }
+    }
+
+    .container {
       margin-inline: auto;
       padding-inline: 2rem;
-      @media (width >= 40rem) {
+    }
+
+    @media (min-width: 40rem) {
+      .container {
         max-width: none;
       }
-      @media (width >= 20px) {
+    }
+
+    @media (min-width: 20px) {
+      .container {
         max-width: 20px;
       }
-      @media (width >= 100px) {
+    }
+
+    @media (min-width: 100px) {
+      .container {
         max-width: 100px;
       }
-      @media (width >= 300px) {
+    }
+
+    @media (min-width: 300px) {
+      .container {
         max-width: 300px;
       }
     }

@@ -51,31 +51,37 @@ test('CSS `--breakpoint-*` merge with JS config `screens`', async () => {
     .max-w-screen-sm {
       max-width: 44rem;
     }
-    @media (width >= 44rem) {
+
+    @media (min-width: 44rem) {
       .sm\\:flex {
         display: flex;
       }
-      @media (width < 50rem) {
+
+      @media not all and (min-width: 50rem) {
         .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 50rem) {
+
+    @media (min-width: 50rem) {
       .md\\:flex {
         display: flex;
       }
-      @media (width < 64rem) {
+
+      @media not all and (min-width: 64rem) {
         .min-md\\:max-lg\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 64rem) {
+
+    @media (min-width: 64rem) {
       .lg\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:items-end {
         align-items: flex-end;
@@ -134,44 +140,48 @@ test('JS config `screens` extend CSS `--breakpoint-*`', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (width >= 30rem) {
-      .min-xs\\:flex {
+    @media (min-width: 30rem) {
+      .min-xs\\:flex, .xs\\:flex {
         display: flex;
       }
-      .xs\\:flex {
-        display: flex;
-      }
-      @media (width < 50rem) {
+
+      @media not all and (min-width: 50rem) {
         .min-xs\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 40rem) {
+
+    @media (min-width: 40rem) {
       .sm\\:flex {
         display: flex;
       }
-      @media (width < 50rem) {
+
+      @media not all and (min-width: 50rem) {
         .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 50rem) {
+
+    @media (min-width: 50rem) {
       .md\\:flex {
         display: flex;
       }
-      @media (width < 60rem) {
+
+      @media not all and (min-width: 60rem) {
         .min-md\\:max-lg\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 60rem) {
+
+    @media (min-width: 60rem) {
       .lg\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:items-end {
         align-items: flex-end;
@@ -217,31 +227,36 @@ test('JS config `screens` only setup, even if those match the default-theme expo
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (width >= 40rem) {
+    @media (min-width: 40rem) {
       .sm\\:flex {
         display: flex;
       }
-      @media (width < 48rem) {
+
+      @media not all and (min-width: 48rem) {
         .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 48rem) {
+
+    @media (min-width: 48rem) {
       .md\\:flex {
         display: flex;
       }
-      @media (width < 64rem) {
+
+      @media not all and (min-width: 64rem) {
         .min-md\\:max-lg\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 64rem) {
+
+    @media (min-width: 64rem) {
       .lg\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:items-end {
         align-items: flex-end;
@@ -299,43 +314,36 @@ test('JS config `screens` overwrite CSS `--breakpoint-*`', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (width >= 40rem) {
-      .mini\\:flex {
+    @media (min-width: 40rem) {
+      .mini\\:flex, .sm\\:flex {
         display: flex;
       }
-      .sm\\:flex {
-        display: flex;
-      }
-      @media (width < 48rem) {
-        .min-mini\\:max-midi\\:underline {
-          text-decoration-line: underline;
-        }
-        .min-sm\\:max-md\\:underline {
+
+      @media not all and (min-width: 48rem) {
+        .min-mini\\:max-midi\\:underline, .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 48rem) {
-      .md\\:flex {
+
+    @media (min-width: 48rem) {
+      .md\\:flex, .midi\\:flex {
         display: flex;
       }
-      .midi\\:flex {
-        display: flex;
-      }
-      @media (width < 64rem) {
-        .min-md\\:max-lg\\:underline {
-          text-decoration-line: underline;
-        }
-        .min-midi\\:max-maxi\\:underline {
+
+      @media not all and (min-width: 64rem) {
+        .min-md\\:max-lg\\:underline, .min-midi\\:max-maxi\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 64rem) {
+
+    @media (min-width: 64rem) {
       .maxi\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:items-end {
         align-items: flex-end;
@@ -404,31 +412,36 @@ test('JS config with `theme: { extends }` should not include the `default-config
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (width >= 40rem) {
+    @media (min-width: 40rem) {
       .mini\\:flex {
         display: flex;
       }
-      @media (width < 48rem) {
+
+      @media not all and (min-width: 48rem) {
         .min-mini\\:max-midi\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 48rem) {
+
+    @media (min-width: 48rem) {
       .midi\\:flex {
         display: flex;
       }
-      @media (width < 64rem) {
+
+      @media not all and (min-width: 64rem) {
         .min-midi\\:max-maxi\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 64rem) {
+
+    @media (min-width: 64rem) {
       .maxi\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:items-end {
         align-items: flex-end;
@@ -511,34 +524,36 @@ describe('complex screen configs', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (width >= 868px) {
-        .lg\\:flex {
-          display: flex;
-        }
-        .min-lg\\:flex {
+      @media (min-width: 868px) {
+        .lg\\:flex, .min-lg\\:flex {
           display: flex;
         }
       }
-      @media (639px >= width) {
+
+      @media (max-width: 639px) {
         .sm\\:flex {
           display: flex;
         }
       }
-      @media (767px >= width >= 668px), (width >= 868px) {
+
+      @media (max-width: 767px) and (min-width: 668px), (min-width: 868px) {
         .md\\:flex {
           display: flex;
         }
       }
-      @media (1279px >= width >= 1024px) {
+
+      @media (max-width: 1279px) and (min-width: 1024px) {
         .xl\\:flex {
           display: flex;
         }
       }
+
       @media (min-height: 800px) {
         .tall\\:flex {
           display: flex;
         }
       }
+
       @media print {
         .print\\:items-end {
           align-items: flex-end;
@@ -588,27 +603,24 @@ describe('complex screen configs', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @media (width >= 40rem) {
-        .min-sm\\:flex {
-          display: flex;
-        }
-        .sm\\:flex {
+      @media (min-width: 40rem) {
+        .min-sm\\:flex, .sm\\:flex {
           display: flex;
         }
       }
-      @media (width >= 48rem) {
-        .md\\:flex {
-          display: flex;
-        }
-        .min-md\\:flex {
+
+      @media (min-width: 48rem) {
+        .md\\:flex, .min-md\\:flex {
           display: flex;
         }
       }
+
       @media screen and (orientation: portrait) {
         .portrait\\:flex {
           display: flex;
         }
       }
+
       @media print {
         .print\\:items-end {
           align-items: flex-end;
