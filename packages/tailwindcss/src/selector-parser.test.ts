@@ -33,6 +33,63 @@ describe('parse', () => {
     ])
   })
 
+  // We've got 3 options here:
+  //
+  // 1. We could throw, but then it becomes more annoying when you don't have
+  //    control over the CSS (for example when it's coming from a package).
+  // 2. We could parse it and ignore the invalid cases as-if they weren't there.
+  //    Re-printing the AST would turn it into a valid situation.
+  // 3. We could parse the invalid case and turn it into a `compound` such that
+  //    it stays invalid. When we re-print we would re-introduce the error.
+  //
+  // Before this change, we would keep the errors, and pass it along:
+  // - In a browser environment, these would be ignored
+  // - In Lightning CSS, these are thrown out
+  //
+  // For that reason alone, let's go with option 3 for now, such that the
+  // behavior is the same as before. This does mean that we see "weird" empty
+  // compound nodes.
+  it('should safely parse an invalid selector list', () => {
+    expect(parse('.foo,')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'compound', nodes: [] },
+        ],
+      },
+    ])
+    expect(parse(',.foo')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'compound', nodes: [] },
+          { kind: 'selector', value: '.foo' },
+        ],
+      },
+    ])
+    expect(parse(',.foo,')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'compound', nodes: [] },
+          { kind: 'selector', value: '.foo' },
+          { kind: 'compound', nodes: [] },
+        ],
+      },
+    ])
+    expect(parse('.foo,,.bar')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'compound', nodes: [] },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+  })
+
   it('should parse selector lists with whitespace around the comma', () => {
     expect(parse('.foo, .bar')).toEqual([
       {

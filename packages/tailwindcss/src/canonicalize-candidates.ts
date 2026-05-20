@@ -1949,7 +1949,7 @@ function modernizeArbitraryValuesVariant(
           }
         },
         exit(node) {
-          if (node.kind === 'compound' && node.nodes.length <= 1) {
+          if (node.kind === 'compound' && node.nodes.length === 1) {
             return WalkAction.ReplaceSkip(node.nodes)
           }
         },
