@@ -9,10 +9,15 @@ describe('parse', () => {
 
   it('should parse a compound selector', () => {
     expect(parse('.foo.bar:hover#id')).toEqual([
-      { kind: 'selector', value: '.foo' },
-      { kind: 'selector', value: '.bar' },
-      { kind: 'selector', value: ':hover' },
-      { kind: 'selector', value: '#id' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '.bar' },
+          { kind: 'selector', value: ':hover' },
+          { kind: 'selector', value: '#id' },
+        ],
+      },
     ])
   })
 
@@ -103,20 +108,25 @@ describe('parse', () => {
         kind: 'list',
         nodes: [
           {
-            kind: 'group',
+            kind: 'complex',
+            combinator: '+',
             nodes: [
               { kind: 'selector', value: '.a' },
-              { kind: 'combinator', value: '+' },
               { kind: 'selector', value: '.b' },
             ],
           },
           {
-            kind: 'group',
+            kind: 'complex',
+            combinator: ' ',
             nodes: [
               { kind: 'selector', value: '.c' },
-              { kind: 'combinator', value: ' ' },
-              { kind: 'selector', value: '.d' },
-              { kind: 'selector', value: '[attr]' },
+              {
+                kind: 'compound',
+                nodes: [
+                  { kind: 'selector', value: '.d' },
+                  { kind: 'selector', value: '[attr]' },
+                ],
+              },
             ],
           },
           { kind: 'selector', value: '.e' },
@@ -127,28 +137,43 @@ describe('parse', () => {
 
   it('should combine everything within attribute selectors', () => {
     expect(parse('.foo[bar="baz"]')).toEqual([
-      { kind: 'selector', value: '.foo' },
-      { kind: 'selector', value: '[bar="baz"]' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '[bar="baz"]' },
+        ],
+      },
     ])
   })
 
   it('should parse functions', () => {
     expect(parse('.foo:hover:not(.bar:focus)')).toEqual([
-      { kind: 'selector', value: '.foo' },
-      { kind: 'selector', value: ':hover' },
       {
-        kind: 'function',
+        kind: 'compound',
         nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: ':hover' },
           {
-            kind: 'selector',
-            value: '.bar',
-          },
-          {
-            kind: 'selector',
-            value: ':focus',
+            kind: 'function',
+            nodes: [
+              {
+                kind: 'compound',
+                nodes: [
+                  {
+                    kind: 'selector',
+                    value: '.bar',
+                  },
+                  {
+                    kind: 'selector',
+                    value: ':focus',
+                  },
+                ],
+              },
+            ],
+            value: ':not',
           },
         ],
-        value: ':not',
       },
     ])
   })
@@ -173,9 +198,14 @@ describe('parse', () => {
 
   it('should handle next-children combinator', () => {
     expect(parse('.foo + p')).toEqual([
-      { kind: 'selector', value: '.foo' },
-      { kind: 'combinator', value: ' + ' },
-      { kind: 'selector', value: 'p' },
+      {
+        kind: 'complex',
+        combinator: '+',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: 'p' },
+        ],
+      },
     ])
   })
 
@@ -201,24 +231,34 @@ describe('parse', () => {
   it('parses &:has(.child:nth-child(2))', () => {
     expect(parse('&:has(.child:nth-child(2))')).toEqual([
       {
-        kind: 'selector',
-        value: '&',
-      },
-      {
-        kind: 'function',
-        value: ':has',
+        kind: 'compound',
         nodes: [
           {
             kind: 'selector',
-            value: '.child',
+            value: '&',
           },
           {
             kind: 'function',
-            value: ':nth-child',
+            value: ':has',
             nodes: [
               {
-                kind: 'value',
-                value: '2',
+                kind: 'compound',
+                nodes: [
+                  {
+                    kind: 'selector',
+                    value: '.child',
+                  },
+                  {
+                    kind: 'function',
+                    value: ':nth-child',
+                    nodes: [
+                      {
+                        kind: 'value',
+                        value: '2',
+                      },
+                    ],
+                  },
+                ],
               },
             ],
           },
@@ -230,20 +270,25 @@ describe('parse', () => {
   it('parses &:has(:nth-child(2))', () => {
     expect(parse('&:has(:nth-child(2))')).toEqual([
       {
-        kind: 'selector',
-        value: '&',
-      },
-      {
-        kind: 'function',
-        value: ':has',
+        kind: 'compound',
         nodes: [
           {
+            kind: 'selector',
+            value: '&',
+          },
+          {
             kind: 'function',
-            value: ':nth-child',
+            value: ':has',
             nodes: [
               {
-                kind: 'value',
-                value: '2',
+                kind: 'function',
+                value: ':nth-child',
+                nodes: [
+                  {
+                    kind: 'value',
+                    value: '2',
+                  },
+                ],
               },
             ],
           },
@@ -254,29 +299,81 @@ describe('parse', () => {
 
   it('parses nesting selector before attribute selector', () => {
     expect(parse('&[data-foo]')).toEqual([
-      { kind: 'selector', value: '&' },
-      { kind: 'selector', value: '[data-foo]' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '&' },
+          { kind: 'selector', value: '[data-foo]' },
+        ],
+      },
     ])
   })
 
   it('parses nesting selector after an attribute selector', () => {
     expect(parse('[data-foo]&')).toEqual([
-      { kind: 'selector', value: '[data-foo]' },
-      { kind: 'selector', value: '&' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '[data-foo]' },
+          { kind: 'selector', value: '&' },
+        ],
+      },
     ])
   })
 
   it('parses universal selector before attribute selector', () => {
     expect(parse('*[data-foo]')).toEqual([
-      { kind: 'selector', value: '*' },
-      { kind: 'selector', value: '[data-foo]' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '*' },
+          { kind: 'selector', value: '[data-foo]' },
+        ],
+      },
     ])
   })
 
   it('parses universal selector after an attribute selector', () => {
     expect(parse('[data-foo]*')).toEqual([
-      { kind: 'selector', value: '[data-foo]' },
-      { kind: 'selector', value: '*' },
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '[data-foo]' },
+          { kind: 'selector', value: '*' },
+        ],
+      },
+    ])
+  })
+
+  it('should parse selector lists as real selectors', () => {
+    expect(parse('.foo[attr], .bar#id, .baz + .qux')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          {
+            kind: 'compound',
+            nodes: [
+              { kind: 'selector', value: '.foo' },
+              { kind: 'selector', value: '[attr]' },
+            ],
+          },
+          {
+            kind: 'compound',
+            nodes: [
+              { kind: 'selector', value: '.bar' },
+              { kind: 'selector', value: '#id' },
+            ],
+          },
+          {
+            kind: 'complex',
+            combinator: '+',
+            nodes: [
+              { kind: 'selector', value: '.baz' },
+              { kind: 'selector', value: '.qux' },
+            ],
+          },
+        ],
+      },
     ])
   })
 })

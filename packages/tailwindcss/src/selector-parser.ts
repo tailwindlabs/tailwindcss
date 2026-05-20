@@ -1,5 +1,21 @@
-export type SelectorCombinatorNode = {
-  kind: 'combinator'
+export type SelectorListNode = {
+  kind: 'list'
+  nodes: SelectorAstNode[]
+}
+
+export type SelectorComplexNode = {
+  kind: 'complex'
+  combinator: string
+  nodes: SelectorAstNode[]
+}
+
+export type SelectorCompoundNode = {
+  kind: 'compound'
+  nodes: SelectorAstNode[]
+}
+
+export type SelectorNode = {
+  kind: 'selector'
   value: string
 }
 
@@ -9,52 +25,38 @@ export type SelectorFunctionNode = {
   nodes: SelectorAstNode[]
 }
 
-export type SelectorGroupNode = {
-  kind: 'group'
-  nodes: SelectorAstNode[]
-}
-
-export type SelectorListNode = {
-  kind: 'list'
-  nodes: SelectorAstNode[]
-}
-
-export type SelectorNode = {
-  kind: 'selector'
-  value: string
-}
-
 export type SelectorValueNode = {
   kind: 'value'
   value: string
 }
 
 export type SelectorAstNode =
-  | SelectorCombinatorNode
   | SelectorFunctionNode
-  | SelectorGroupNode
+  | SelectorComplexNode
+  | SelectorCompoundNode
   | SelectorListNode
   | SelectorNode
   | SelectorValueNode
 
-function combinator(value: string): SelectorCombinatorNode {
+function complex(combinator: string, nodes: SelectorAstNode[]): SelectorComplexNode {
   return {
-    kind: 'combinator',
-    value,
+    kind: 'complex',
+    combinator,
+    nodes,
+  }
+}
+
+function compound(nodes: SelectorAstNode[]): SelectorCompoundNode {
+  return {
+    kind: 'compound',
+    nodes,
   }
 }
 
 function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
   return {
     kind: 'function',
-    value: value,
-    nodes,
-  }
-}
-
-function group(nodes: SelectorAstNode[]): SelectorGroupNode {
-  return {
-    kind: 'group',
+    value,
     nodes,
   }
 }
@@ -84,7 +86,6 @@ export function toCss(ast: SelectorAstNode[]) {
   let css = ''
   for (const node of ast) {
     switch (node.kind) {
-      case 'combinator':
       case 'selector':
       case 'value': {
         css += node.value
@@ -94,8 +95,12 @@ export function toCss(ast: SelectorAstNode[]) {
         css += node.value + '(' + toCss(node.nodes) + ')'
         break
       }
-      case 'group': {
-        css += toCss(node.nodes)
+      case 'complex': {
+        css += node.nodes.map((node) => toCss([node])).join(node.combinator)
+        break
+      }
+      case 'compound': {
+        css += node.nodes.map((node) => toCss([node])).join('')
         break
       }
       case 'list': {
@@ -144,6 +149,27 @@ export function parse(input: string) {
 
   let peekChar
 
+  function append(node: SelectorAstNode) {
+    let current = target[target.length - 1]
+
+    if (current?.kind === 'complex') {
+      let right = current.nodes[1]
+      if (right === undefined) {
+        current.nodes.push(node)
+      } else if (right.kind === 'compound') {
+        right.nodes.push(node)
+      } else {
+        current.nodes[1] = compound([right, node])
+      }
+    } else if (current?.kind === 'compound') {
+      current.nodes.push(node)
+    } else if (current && current.kind !== 'list') {
+      target[target.length - 1] = compound([current, node])
+    } else {
+      target.push(node)
+    }
+  }
+
   for (let i = 0; i < input.length; i++) {
     let currentChar = input.charCodeAt(i)
 
@@ -163,7 +189,7 @@ export function parse(input: string) {
         // Combinators are handled separately, and functions end with `)` which
         // means that the `buffer` will be empty at that point.
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
           buffer = ''
         }
 
@@ -177,13 +203,13 @@ export function parse(input: string) {
 
         // Add nodes to the current list
         if (currentList) {
-          currentList.nodes.push(target.length === 1 ? target[0] : group(target))
+          currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
           target = []
         }
 
         // Start a new list
         else {
-          let item = target.length === 1 ? target.pop()! : group(target.splice(0))
+          let item = target.length === 1 ? target.pop()! : compound(target.splice(0))
           let node = list([item])
           target.push(node)
           currentList = node
@@ -201,7 +227,7 @@ export function parse(input: string) {
       case TILDE: {
         // 1. Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
           buffer = ''
         }
 
@@ -228,7 +254,8 @@ export function parse(input: string) {
           break
         }
 
-        target.push(combinator(contents))
+        let combinator = contents.trim()
+        target.push(complex(combinator === '' ? ' ' : combinator, [target.pop()!]))
 
         break
       }
@@ -278,12 +305,12 @@ export function parse(input: string) {
           buffer = ''
           i = end
 
-          target.push(node)
+          append(node)
 
           break
         }
 
-        target.push(node)
+        append(node)
         targetStack.push(target)
         listStack.push(currentList)
         target = node.nodes
@@ -303,12 +330,12 @@ export function parse(input: string) {
       case CLOSE_PAREN: {
         // Handle everything before the closing paren a selector
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
           buffer = ''
         }
 
         if (currentList) {
-          currentList.nodes.push(target.length === 1 ? target[0] : group(target))
+          currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
         }
 
         target = targetStack.pop() ?? ast
@@ -331,7 +358,7 @@ export function parse(input: string) {
         // Handle everything before the combinator as a selector and
         // start a new selector
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
         }
         buffer = input[i]
         break
@@ -348,7 +375,7 @@ export function parse(input: string) {
       case OPEN_BRACKET: {
         // Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
         }
         buffer = ''
 
@@ -415,12 +442,12 @@ export function parse(input: string) {
       case ASTERISK: {
         // 1. Handle everything before the combinator as a selector
         if (buffer.length > 0) {
-          target.push(selector(buffer))
+          append(selector(buffer))
           buffer = ''
         }
 
         // 2. Handle the `&` or `*` as a selector on its own
-        target.push(selector(input[i]))
+        append(selector(input[i]))
         break
       }
 
@@ -440,11 +467,11 @@ export function parse(input: string) {
 
   // Collect the remainder as a word
   if (buffer.length > 0) {
-    target.push(selector(buffer))
+    append(selector(buffer))
   }
 
   if (currentList) {
-    currentList.nodes.push(target.length === 1 ? target[0] : group(target))
+    currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
   }
 
   return ast
