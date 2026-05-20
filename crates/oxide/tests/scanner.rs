@@ -1762,6 +1762,25 @@ mod scanner {
     }
 
     #[test]
+    fn test_source_not_can_ignore_symlinked_directory() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[("directory_a/a.html", "content-['directory_a/a.html']")],
+        );
+        let _ = symlink(dir.join("directory_a"), dir.join("symlink"));
+
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(dir.clone(), "@source './'"),
+            public_source_entry_from_pattern(dir.clone(), "@source not './symlink'"),
+            public_source_entry_from_pattern(dir.clone(), "@source not './directory_a'"),
+        ]);
+        let candidates = scanner.scan();
+
+        assert!(candidates.is_empty());
+    }
+
+    #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
         create_files_in(

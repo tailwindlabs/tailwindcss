@@ -1,7 +1,7 @@
 use crate::glob::split_pattern;
 use crate::GlobEntry;
 use bexpand::Expression;
-use std::path::PathBuf;
+use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
@@ -116,12 +116,12 @@ impl PublicSourceEntry {
                 PathBuf::from(&self.base).join(&self.pattern)
             };
 
-            match dunce::canonicalize(combined_path) {
-                Ok(resolved_path) if resolved_path.is_dir() => {
+            match resolve_path(&combined_path, self.negated) {
+                Ok(resolved_path) if combined_path.is_dir() => {
                     self.base = resolved_path.to_string_lossy().to_string();
                     self.pattern = "**/*".to_owned();
                 }
-                Ok(resolved_path) if resolved_path.is_file() => {
+                Ok(resolved_path) if combined_path.is_file() => {
                     self.base = resolved_path
                         .parent()
                         .unwrap()
@@ -144,7 +144,7 @@ impl PublicSourceEntry {
             Some(static_part) => {
                 // TODO: If the base does not exist on disk, try removing the last slash and try
                 // again.
-                match dunce::canonicalize(base.join(static_part)) {
+                match resolve_path(&base.join(static_part), self.negated) {
                     Ok(base) => base,
                     Err(err) => {
                         event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
@@ -169,6 +169,31 @@ impl PublicSourceEntry {
         self.base = base.to_string_lossy().to_string();
         self.pattern = pattern;
     }
+}
+
+fn resolve_path(path: &Path, preserve_symlinks: bool) -> std::io::Result<PathBuf> {
+    if preserve_symlinks {
+        path.metadata()?;
+        return Ok(normalize_path_lexically(path));
+    }
+
+    dunce::canonicalize(path)
+}
+
+fn normalize_path_lexically(path: &Path) -> PathBuf {
+    let mut normalized = PathBuf::new();
+
+    for component in path.components() {
+        match component {
+            Component::CurDir => {}
+            Component::ParentDir => {
+                normalized.pop();
+            }
+            component => normalized.push(component.as_os_str()),
+        }
+    }
+
+    normalized
 }
 
 /// For each public source entry:
