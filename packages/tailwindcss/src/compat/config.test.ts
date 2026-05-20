@@ -218,6 +218,7 @@ test('Config files can affect the theme', async () => {
     .scrollbar-primary {
       scrollbar-color: #c0ffee;
     }
+
     .bg-primary {
       background-color: #c0ffee;
     }
@@ -296,10 +297,7 @@ test('Variants in CSS overwrite variants from plugins', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline.my-dark {
-      text-decoration-line: underline;
-    }
-    .light\\:underline.my-light {
+    .dark\\:underline.my-dark, .light\\:underline.my-light {
       text-decoration-line: underline;
     }
     "
@@ -382,41 +380,47 @@ describe('theme callbacks', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      @layer properties;
-      .prose [class~=lead-base] {
+      @layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *, :before, :after, ::backdrop {
+            --tw-leading: initial;
+          }
+        }
+      }
+
+      .prose [class~="lead-base"] {
         font-size: 100rem;
         line-height: 201rem;
       }
-      .prose [class~=lead-md] {
+
+      .prose [class~="lead-md"] {
         font-size: 200rem;
         line-height: 101rem;
       }
-      .prose [class~=lead-xl] {
+
+      .prose [class~="lead-xl"] {
         font-size: 200rem;
         line-height: 201rem;
       }
+
       .leading-base {
         --tw-leading: 201rem;
         line-height: 201rem;
       }
+
       .leading-md {
         --tw-leading: 101rem;
         line-height: 101rem;
       }
+
       .leading-xl {
         --tw-leading: 201rem;
         line-height: 201rem;
       }
+
       @property --tw-leading {
         syntax: "*";
-        inherits: false;
-      }
-      @layer properties {
-        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-          *, ::before, ::after, ::backdrop {
-            --tw-leading: initial;
-          }
-        }
+        inherits: false
       }
       "
     `)
@@ -460,9 +464,11 @@ describe('theme overrides order', () => {
       :root, :host {
         --color-blue: blue;
       }
+
       .bg-blue {
         background-color: var(--color-blue);
       }
+
       .bg-red {
         background-color: very-red;
       }
@@ -552,39 +558,51 @@ describe('theme overrides order', () => {
         --color-slate-400: #100400;
         --color-slate-500: #100500;
       }
+
       .bg-slate-100 {
         background-color: var(--color-slate-100);
       }
+
       .bg-slate-200 {
         background-color: #200200;
       }
+
       .bg-slate-300 {
         background-color: var(--color-slate-300);
       }
+
       .bg-slate-400 {
         background-color: var(--color-slate-400);
       }
+
       .bg-slate-500 {
         background-color: var(--color-slate-500);
       }
+
       .bg-slate-600 {
         background-color: #200600;
       }
+
       .hover-bg-slate-100:hover {
         background-color: #000100;
       }
+
       .hover-bg-slate-200:hover {
         background-color: #200200;
       }
+
       .hover-bg-slate-300:hover {
         background-color: #000300;
       }
+
       .hover-bg-slate-400:hover {
         background-color: #100400;
       }
+
       .hover-bg-slate-500:hover {
         background-color: #100500;
       }
+
       .hover-bg-slate-600:hover {
         background-color: #200600;
       }
@@ -662,8 +680,8 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-sans {
-        font-family: Potato Sans;
         font-feature-settings: "cv06";
+        font-family: Potato Sans;
       }
       "
     `)
@@ -701,8 +719,8 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-sans {
+        font-variation-settings: "XHGT" .7;
         font-family: Potato Sans;
-        font-variation-settings: "XHGT" 0.7;
       }
       "
     `)
@@ -743,9 +761,9 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-sans {
-        font-family: Potato Sans;
         font-feature-settings: "cv06";
-        font-variation-settings: "XHGT" 0.7;
+        font-variation-settings: "XHGT" .7;
+        font-family: Potato Sans;
       }
       "
     `)
@@ -788,6 +806,7 @@ describe('default font family compatibility', () => {
       :root, :host {
         --font-sans: Sandwich Sans;
       }
+
       .font-sans {
         font-family: var(--font-sans);
       }
@@ -937,8 +956,8 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-mono {
-        font-family: Potato Mono;
         font-feature-settings: "cv06";
+        font-family: Potato Mono;
       }
       "
     `)
@@ -978,8 +997,8 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-mono {
+        font-variation-settings: "XHGT" .7;
         font-family: Potato Mono;
-        font-variation-settings: "XHGT" 0.7;
       }
       "
     `)
@@ -1020,9 +1039,9 @@ describe('default font family compatibility', () => {
     ).toMatchInlineSnapshot(`
       "
       .font-mono {
-        font-family: Potato Mono;
         font-feature-settings: "cv06";
-        font-variation-settings: "XHGT" 0.7;
+        font-variation-settings: "XHGT" .7;
+        font-family: Potato Mono;
       }
       "
     `)
@@ -1065,6 +1084,7 @@ describe('default font family compatibility', () => {
       :root, :host {
         --font-mono: Sandwich Mono;
       }
+
       .font-mono {
         font-family: var(--font-mono);
       }
@@ -1157,30 +1177,33 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
     .aria-hidden\\:flex[aria-hidden="true"] {
       display: flex;
     }
-    .aria-polite\\:underline[aria-live="polite"] {
+
+    .aria-polite\\:underline[aria-live="polite"], .data-checked\\:underline[data-ui~="checked"] {
       text-decoration-line: underline;
     }
-    .data-checked\\:underline[data-ui~="checked"] {
-      text-decoration-line: underline;
-    }
+
     .data-foo\\:flex[data-foo] {
       display: flex;
     }
+
     @supports selector(h2 > p) {
       .supports-child-combinator\\:underline {
         text-decoration-line: underline;
       }
     }
+
     @supports (bar: var(--tw)) {
       .supports-foo\\:underline {
         text-decoration-line: underline;
       }
     }
+
     @supports (grid: var(--tw)) {
       .supports-grid\\:flex {
         display: flex;
       }
     }
+
     @media print {
       .print\\:flex {
         display: flex;
@@ -1226,22 +1249,25 @@ test('merges css breakpoints with js config screens', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @media (width >= 44rem) {
+    @media (min-width: 44rem) {
       .sm\\:flex {
         display: flex;
       }
-      @media (width < 50rem) {
+
+      @media not all and (min-width: 50rem) {
         .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    @media (width >= 50rem) {
+
+    @media (min-width: 50rem) {
       .md\\:flex {
         display: flex;
       }
     }
-    @media (width >= 64rem) {
+
+    @media (min-width: 64rem) {
       .lg\\:flex {
         display: flex;
       }
@@ -1275,9 +1301,11 @@ test('utilities must be prefixed', async () => {
       .tw\\:custom {
         color: red;
       }
+
       .tw\\:underline {
         text-decoration-line: underline;
       }
+
       @media (hover: hover) {
         .tw\\:hover\\:line-through:hover {
           text-decoration-line: line-through;
@@ -1425,9 +1453,11 @@ test('important: `#app`', async () => {
     #app .custom {
       color: red;
     }
+
     #app .underline {
       text-decoration-line: underline;
     }
+
     @media (hover: hover) {
       :is(#app .hover\\:line-through):hover {
         text-decoration-line: line-through;
@@ -1462,9 +1492,11 @@ test('important: true', async () => {
     .custom {
       color: red !important;
     }
+
     .underline {
       text-decoration-line: underline !important;
     }
+
     @media (hover: hover) {
       .hover\\:line-through:hover {
         text-decoration-line: line-through !important;
@@ -1506,7 +1538,8 @@ test('blocklisted candidates are not generated', async () => {
       .underline {
         text-decoration-line: underline;
       }
-      @media (width >= 48rem) {
+
+      @media (min-width: 48rem) {
         .md\\:bg-white {
           background-color: var(--color-white, #fff);
         }
@@ -1707,16 +1740,19 @@ test('handles setting theme keys to null', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --color-red-50: oklch(0.971 0.013 17.38);
-      --color-red-100: oklch(0.936 0.032 17.717);
-      --color-red-200: oklch(0.885 0.062 18.334);
+      --color-red-50: oklch(97.1% .013 17.38);
+      --color-red-100: oklch(93.6% .032 17.717);
+      --color-red-200: oklch(88.5% .062 18.334);
     }
+
     .bg-red-50 {
       background-color: var(--color-red-50);
     }
+
     .bg-red-100 {
       background-color: var(--color-red-100);
     }
+
     .bg-red-200 {
       background-color: var(--color-red-200);
     }
@@ -1748,8 +1784,9 @@ test('The theme() function does not try indexing into strings', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --color-what: light-dark(#f00, #f00);
+      --color-what: light-dark(red, red);
     }
+
     .text-what {
       color: var(--color-what);
     }
@@ -1799,9 +1836,11 @@ test('camel case keys are preserved', async () => {
     .bg-blue-green {
       background-color: var(--color-blue-green);
     }
+
     .bg-lightGreen {
       background-color: #c0ffee;
     }
+
     :root, :host {
       --color-blue-green: slate;
     }

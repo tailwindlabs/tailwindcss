@@ -2,1815 +2,2057 @@
 
 exports[`border-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border {
   border-style: var(--tw-border-style);
   border-width: 1px;
 }
+
 .border-0 {
   border-style: var(--tw-border-style);
-  border-width: 0px;
+  border-width: 0;
 }
+
 .border-2 {
   border-style: var(--tw-border-style);
   border-width: 2px;
 }
+
 .border-4 {
   border-style: var(--tw-border-style);
   border-width: 4px;
 }
+
 .border-123 {
   border-style: var(--tw-border-style);
   border-width: 123px;
 }
+
 .border-\\[0_1\\] {
   border-style: var(--tw-border-style);
-  border-width: 0 1;
+  border-width: 0 1px;
 }
+
 .border-\\[0_2px_0_2px\\] {
   border-style: var(--tw-border-style);
-  border-width: 0 2px 0 2px;
+  border-width: 0 2px;
 }
+
 .border-\\[12px\\] {
   border-style: var(--tw-border-style);
   border-width: 12px;
 }
+
 .border-\\[12px_8px\\] {
   border-style: var(--tw-border-style);
   border-width: 12px 8px;
 }
-.border-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-\\[length\\:var\\(--my-width\\)\\], .border-\\[line-width\\:var\\(--my-width\\)\\] {
   border-style: var(--tw-border-style);
   border-width: var(--my-width);
 }
-.border-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-style: var(--tw-border-style);
-  border-width: var(--my-width);
-}
+
 .border-\\[medium\\] {
   border-style: var(--tw-border-style);
   border-width: medium;
 }
+
 .border-\\[thick\\] {
   border-style: var(--tw-border-style);
   border-width: thick;
 }
+
 .border-\\[thin\\] {
   border-style: var(--tw-border-style);
   border-width: thin;
 }
+
 .border-\\[thin_2px\\] {
   border-style: var(--tw-border-style);
   border-width: thin 2px;
 }
+
 .border-\\[\\#0088cc\\] {
-  border-color: #0088cc;
+  border-color: #08c;
 }
+
 .border-\\[\\#0088cc\\]\\/50 {
-  border-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-\\[color\\:var\\(--my-color\\)\\], .border-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-color: var(--my-color);
 }
-.border-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-\\[var\\(--my-color\\)\\] {
+
+.border-\\[var\\(--my-color\\)\\], .border-\\[var\\(--my-color\\)\\]\\/50 {
   border-color: var(--my-color);
 }
-.border-\\[var\\(--my-color\\)\\]\\/50 {
-  border-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-\\[var\\(--my-color\\)\\]\\/50 {
     border-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-blue-500 {
   border-color: var(--border-color-blue-500);
 }
-.border-current {
-  border-color: currentcolor;
+
+.border-current, .border-current\\/50 {
+  border-color: currentColor;
 }
-.border-current\\/50 {
-  border-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-current\\/50 {
     border-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-inherit {
   border-color: inherit;
 }
+
 .border-red-500 {
   border-color: var(--color-red-500);
 }
+
 .border-red-500\\/2\\.5 {
-  border-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-red-500\\/2\\.5 {
     border-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-red-500\\/2\\.25 {
-  border-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-red-500\\/2\\.25 {
     border-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-red-500\\/2\\.75 {
-  border-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-red-500\\/2\\.75 {
     border-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-red-500\\/50 {
-  border-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-red-500\\/50 {
     border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-transparent {
-  border-color: transparent;
+  border-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-b-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-b {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 1px;
 }
+
 .border-b-0 {
   border-bottom-style: var(--tw-border-style);
-  border-bottom-width: 0px;
+  border-bottom-width: 0;
 }
+
 .border-b-2 {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 2px;
 }
+
 .border-b-4 {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 4px;
 }
+
 .border-b-123 {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 123px;
 }
+
 .border-b-\\[0_1\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 0 1;
 }
+
 .border-b-\\[0_2px_0_2px\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 0 2px 0 2px;
 }
+
 .border-b-\\[12px\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 12px;
 }
+
 .border-b-\\[12px_8px\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: 12px 8px;
 }
-.border-b-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-b-\\[length\\:var\\(--my-width\\)\\], .border-b-\\[line-width\\:var\\(--my-width\\)\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: var(--my-width);
 }
-.border-b-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-bottom-style: var(--tw-border-style);
-  border-bottom-width: var(--my-width);
-}
+
 .border-b-\\[medium\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: medium;
 }
+
 .border-b-\\[thick\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: thick;
 }
+
 .border-b-\\[thin\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: thin;
 }
+
 .border-b-\\[thin_2px\\] {
   border-bottom-style: var(--tw-border-style);
   border-bottom-width: thin 2px;
 }
+
 .border-b-\\[\\#0088cc\\] {
-  border-bottom-color: #0088cc;
+  border-bottom-color: #08c;
 }
+
 .border-b-\\[\\#0088cc\\]\\/50 {
-  border-bottom-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-bottom-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-b-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-b-\\[color\\:var\\(--my-color\\)\\], .border-b-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-bottom-color: var(--my-color);
 }
-.border-b-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-bottom-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-b-\\[var\\(--my-color\\)\\] {
+
+.border-b-\\[var\\(--my-color\\)\\], .border-b-\\[var\\(--my-color\\)\\]\\/50 {
   border-bottom-color: var(--my-color);
 }
-.border-b-\\[var\\(--my-color\\)\\]\\/50 {
-  border-bottom-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-\\[var\\(--my-color\\)\\]\\/50 {
     border-bottom-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-b-blue-500 {
   border-bottom-color: var(--border-color-blue-500);
 }
-.border-b-current {
-  border-bottom-color: currentcolor;
+
+.border-b-current, .border-b-current\\/50 {
+  border-bottom-color: currentColor;
 }
-.border-b-current\\/50 {
-  border-bottom-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-current\\/50 {
     border-bottom-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-b-inherit {
   border-bottom-color: inherit;
 }
+
 .border-b-red-500 {
   border-bottom-color: var(--color-red-500);
 }
+
 .border-b-red-500\\/2\\.5 {
-  border-bottom-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-bottom-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-red-500\\/2\\.5 {
     border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-b-red-500\\/2\\.25 {
-  border-bottom-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-bottom-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-red-500\\/2\\.25 {
     border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-b-red-500\\/2\\.75 {
-  border-bottom-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-bottom-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-red-500\\/2\\.75 {
     border-bottom-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-b-red-500\\/50 {
-  border-bottom-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-bottom-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-b-red-500\\/50 {
     border-bottom-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-b-transparent {
-  border-bottom-color: transparent;
+  border-bottom-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-be-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-be {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 1px;
 }
+
 .border-be-0 {
   border-block-end-style: var(--tw-border-style);
-  border-block-end-width: 0px;
+  border-block-end-width: 0;
 }
+
 .border-be-2 {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 2px;
 }
+
 .border-be-4 {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 4px;
 }
+
 .border-be-123 {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 123px;
 }
+
 .border-be-\\[0_1\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 0 1;
 }
+
 .border-be-\\[0_2px_0_2px\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 0 2px 0 2px;
 }
+
 .border-be-\\[12px\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 12px;
 }
+
 .border-be-\\[12px_8px\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: 12px 8px;
 }
-.border-be-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-be-\\[length\\:var\\(--my-width\\)\\], .border-be-\\[line-width\\:var\\(--my-width\\)\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: var(--my-width);
 }
-.border-be-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-block-end-style: var(--tw-border-style);
-  border-block-end-width: var(--my-width);
-}
+
 .border-be-\\[medium\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: medium;
 }
+
 .border-be-\\[thick\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: thick;
 }
+
 .border-be-\\[thin\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: thin;
 }
+
 .border-be-\\[thin_2px\\] {
   border-block-end-style: var(--tw-border-style);
   border-block-end-width: thin 2px;
 }
+
 .border-be-\\[\\#0088cc\\] {
-  border-block-end-color: #0088cc;
+  border-block-end-color: #08c;
 }
+
 .border-be-\\[\\#0088cc\\]\\/50 {
-  border-block-end-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-block-end-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-be-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-be-\\[color\\:var\\(--my-color\\)\\], .border-be-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-block-end-color: var(--my-color);
 }
-.border-be-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-block-end-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-block-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-be-\\[var\\(--my-color\\)\\] {
+
+.border-be-\\[var\\(--my-color\\)\\], .border-be-\\[var\\(--my-color\\)\\]\\/50 {
   border-block-end-color: var(--my-color);
 }
-.border-be-\\[var\\(--my-color\\)\\]\\/50 {
-  border-block-end-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-\\[var\\(--my-color\\)\\]\\/50 {
     border-block-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-be-blue-500 {
   border-block-end-color: var(--border-color-blue-500);
 }
-.border-be-current {
-  border-block-end-color: currentcolor;
+
+.border-be-current, .border-be-current\\/50 {
+  border-block-end-color: currentColor;
 }
-.border-be-current\\/50 {
-  border-block-end-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-current\\/50 {
     border-block-end-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-be-inherit {
   border-block-end-color: inherit;
 }
+
 .border-be-red-500 {
   border-block-end-color: var(--color-red-500);
 }
+
 .border-be-red-500\\/2\\.5 {
-  border-block-end-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-block-end-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-red-500\\/2\\.5 {
     border-block-end-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-be-red-500\\/2\\.25 {
-  border-block-end-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-block-end-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-red-500\\/2\\.25 {
     border-block-end-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-be-red-500\\/2\\.75 {
-  border-block-end-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-block-end-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-red-500\\/2\\.75 {
     border-block-end-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-be-red-500\\/50 {
-  border-block-end-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-block-end-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-be-red-500\\/50 {
     border-block-end-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-be-transparent {
-  border-block-end-color: transparent;
+  border-block-end-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-bs-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-bs {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 1px;
 }
+
 .border-bs-0 {
   border-block-start-style: var(--tw-border-style);
-  border-block-start-width: 0px;
+  border-block-start-width: 0;
 }
+
 .border-bs-2 {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 2px;
 }
+
 .border-bs-4 {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 4px;
 }
+
 .border-bs-123 {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 123px;
 }
+
 .border-bs-\\[0_1\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 0 1;
 }
+
 .border-bs-\\[0_2px_0_2px\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 0 2px 0 2px;
 }
+
 .border-bs-\\[12px\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 12px;
 }
+
 .border-bs-\\[12px_8px\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: 12px 8px;
 }
-.border-bs-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-bs-\\[length\\:var\\(--my-width\\)\\], .border-bs-\\[line-width\\:var\\(--my-width\\)\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: var(--my-width);
 }
-.border-bs-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-block-start-style: var(--tw-border-style);
-  border-block-start-width: var(--my-width);
-}
+
 .border-bs-\\[medium\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: medium;
 }
+
 .border-bs-\\[thick\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: thick;
 }
+
 .border-bs-\\[thin\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: thin;
 }
+
 .border-bs-\\[thin_2px\\] {
   border-block-start-style: var(--tw-border-style);
   border-block-start-width: thin 2px;
 }
+
 .border-bs-\\[\\#0088cc\\] {
-  border-block-start-color: #0088cc;
+  border-block-start-color: #08c;
 }
+
 .border-bs-\\[\\#0088cc\\]\\/50 {
-  border-block-start-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-block-start-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-bs-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-bs-\\[color\\:var\\(--my-color\\)\\], .border-bs-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-block-start-color: var(--my-color);
 }
-.border-bs-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-block-start-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-block-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-bs-\\[var\\(--my-color\\)\\] {
+
+.border-bs-\\[var\\(--my-color\\)\\], .border-bs-\\[var\\(--my-color\\)\\]\\/50 {
   border-block-start-color: var(--my-color);
 }
-.border-bs-\\[var\\(--my-color\\)\\]\\/50 {
-  border-block-start-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-\\[var\\(--my-color\\)\\]\\/50 {
     border-block-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-bs-blue-500 {
   border-block-start-color: var(--border-color-blue-500);
 }
-.border-bs-current {
-  border-block-start-color: currentcolor;
+
+.border-bs-current, .border-bs-current\\/50 {
+  border-block-start-color: currentColor;
 }
-.border-bs-current\\/50 {
-  border-block-start-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-current\\/50 {
     border-block-start-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-bs-inherit {
   border-block-start-color: inherit;
 }
+
 .border-bs-red-500 {
   border-block-start-color: var(--color-red-500);
 }
+
 .border-bs-red-500\\/2\\.5 {
-  border-block-start-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-block-start-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-red-500\\/2\\.5 {
     border-block-start-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-bs-red-500\\/2\\.25 {
-  border-block-start-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-block-start-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-red-500\\/2\\.25 {
     border-block-start-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-bs-red-500\\/2\\.75 {
-  border-block-start-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-block-start-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-red-500\\/2\\.75 {
     border-block-start-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-bs-red-500\\/50 {
-  border-block-start-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-block-start-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-bs-red-500\\/50 {
     border-block-start-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-bs-transparent {
-  border-block-start-color: transparent;
+  border-block-start-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-e-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-e {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 1px;
 }
+
 .border-e-0 {
   border-inline-end-style: var(--tw-border-style);
-  border-inline-end-width: 0px;
+  border-inline-end-width: 0;
 }
+
 .border-e-2 {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 2px;
 }
+
 .border-e-4 {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 4px;
 }
+
 .border-e-123 {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 123px;
 }
+
 .border-e-\\[0_1\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 0 1;
 }
+
 .border-e-\\[0_2px_0_2px\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 0 2px 0 2px;
 }
+
 .border-e-\\[12px\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 12px;
 }
+
 .border-e-\\[12px_8px\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: 12px 8px;
 }
-.border-e-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-e-\\[length\\:var\\(--my-width\\)\\], .border-e-\\[line-width\\:var\\(--my-width\\)\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: var(--my-width);
 }
-.border-e-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-inline-end-style: var(--tw-border-style);
-  border-inline-end-width: var(--my-width);
-}
+
 .border-e-\\[medium\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: medium;
 }
+
 .border-e-\\[thick\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: thick;
 }
+
 .border-e-\\[thin\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: thin;
 }
+
 .border-e-\\[thin_2px\\] {
   border-inline-end-style: var(--tw-border-style);
   border-inline-end-width: thin 2px;
 }
+
 .border-e-\\[\\#0088cc\\] {
-  border-inline-end-color: #0088cc;
+  border-inline-end-color: #08c;
 }
+
 .border-e-\\[\\#0088cc\\]\\/50 {
-  border-inline-end-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-inline-end-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-e-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-e-\\[color\\:var\\(--my-color\\)\\], .border-e-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-inline-end-color: var(--my-color);
 }
-.border-e-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-inline-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-e-\\[var\\(--my-color\\)\\] {
+
+.border-e-\\[var\\(--my-color\\)\\], .border-e-\\[var\\(--my-color\\)\\]\\/50 {
   border-inline-end-color: var(--my-color);
 }
-.border-e-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-end-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-\\[var\\(--my-color\\)\\]\\/50 {
     border-inline-end-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-e-blue-500 {
   border-inline-end-color: var(--border-color-blue-500);
 }
-.border-e-current {
-  border-inline-end-color: currentcolor;
+
+.border-e-current, .border-e-current\\/50 {
+  border-inline-end-color: currentColor;
 }
-.border-e-current\\/50 {
-  border-inline-end-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-current\\/50 {
     border-inline-end-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-e-inherit {
   border-inline-end-color: inherit;
 }
+
 .border-e-red-500 {
   border-inline-end-color: var(--color-red-500);
 }
+
 .border-e-red-500\\/2\\.5 {
-  border-inline-end-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-inline-end-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-red-500\\/2\\.5 {
     border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-e-red-500\\/2\\.25 {
-  border-inline-end-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-inline-end-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-red-500\\/2\\.25 {
     border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-e-red-500\\/2\\.75 {
-  border-inline-end-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-inline-end-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-red-500\\/2\\.75 {
     border-inline-end-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-e-red-500\\/50 {
-  border-inline-end-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-inline-end-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-e-red-500\\/50 {
     border-inline-end-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-e-transparent {
-  border-inline-end-color: transparent;
+  border-inline-end-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-l-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-l {
   border-left-style: var(--tw-border-style);
   border-left-width: 1px;
 }
+
 .border-l-0 {
   border-left-style: var(--tw-border-style);
-  border-left-width: 0px;
+  border-left-width: 0;
 }
+
 .border-l-2 {
   border-left-style: var(--tw-border-style);
   border-left-width: 2px;
 }
+
 .border-l-4 {
   border-left-style: var(--tw-border-style);
   border-left-width: 4px;
 }
+
 .border-l-123 {
   border-left-style: var(--tw-border-style);
   border-left-width: 123px;
 }
+
 .border-l-\\[0_1\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: 0 1;
 }
+
 .border-l-\\[0_2px_0_2px\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: 0 2px 0 2px;
 }
+
 .border-l-\\[12px\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: 12px;
 }
+
 .border-l-\\[12px_8px\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: 12px 8px;
 }
-.border-l-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-l-\\[length\\:var\\(--my-width\\)\\], .border-l-\\[line-width\\:var\\(--my-width\\)\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: var(--my-width);
 }
-.border-l-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-left-style: var(--tw-border-style);
-  border-left-width: var(--my-width);
-}
+
 .border-l-\\[medium\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: medium;
 }
+
 .border-l-\\[thick\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: thick;
 }
+
 .border-l-\\[thin\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: thin;
 }
+
 .border-l-\\[thin_2px\\] {
   border-left-style: var(--tw-border-style);
   border-left-width: thin 2px;
 }
+
 .border-l-\\[\\#0088cc\\] {
-  border-left-color: #0088cc;
+  border-left-color: #08c;
 }
+
 .border-l-\\[\\#0088cc\\]\\/50 {
-  border-left-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-left-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-l-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-l-\\[color\\:var\\(--my-color\\)\\], .border-l-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-left-color: var(--my-color);
 }
-.border-l-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-left-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-left-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-l-\\[var\\(--my-color\\)\\] {
+
+.border-l-\\[var\\(--my-color\\)\\], .border-l-\\[var\\(--my-color\\)\\]\\/50 {
   border-left-color: var(--my-color);
 }
-.border-l-\\[var\\(--my-color\\)\\]\\/50 {
-  border-left-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-\\[var\\(--my-color\\)\\]\\/50 {
     border-left-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-l-blue-500 {
   border-left-color: var(--border-color-blue-500);
 }
-.border-l-current {
-  border-left-color: currentcolor;
+
+.border-l-current, .border-l-current\\/50 {
+  border-left-color: currentColor;
 }
-.border-l-current\\/50 {
-  border-left-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-current\\/50 {
     border-left-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-l-inherit {
   border-left-color: inherit;
 }
+
 .border-l-red-500 {
   border-left-color: var(--color-red-500);
 }
+
 .border-l-red-500\\/2\\.5 {
-  border-left-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-left-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-red-500\\/2\\.5 {
     border-left-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-l-red-500\\/2\\.25 {
-  border-left-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-left-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-red-500\\/2\\.25 {
     border-left-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-l-red-500\\/2\\.75 {
-  border-left-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-left-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-red-500\\/2\\.75 {
     border-left-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-l-red-500\\/50 {
-  border-left-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-left-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-l-red-500\\/50 {
     border-left-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-l-transparent {
-  border-left-color: transparent;
+  border-left-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-r-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-r {
   border-right-style: var(--tw-border-style);
   border-right-width: 1px;
 }
+
 .border-r-0 {
   border-right-style: var(--tw-border-style);
-  border-right-width: 0px;
+  border-right-width: 0;
 }
+
 .border-r-2 {
   border-right-style: var(--tw-border-style);
   border-right-width: 2px;
 }
+
 .border-r-4 {
   border-right-style: var(--tw-border-style);
   border-right-width: 4px;
 }
+
 .border-r-123 {
   border-right-style: var(--tw-border-style);
   border-right-width: 123px;
 }
+
 .border-r-\\[0_1\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: 0 1;
 }
+
 .border-r-\\[0_2px_0_2px\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: 0 2px 0 2px;
 }
+
 .border-r-\\[12px\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: 12px;
 }
+
 .border-r-\\[12px_8px\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: 12px 8px;
 }
-.border-r-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-r-\\[length\\:var\\(--my-width\\)\\], .border-r-\\[line-width\\:var\\(--my-width\\)\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: var(--my-width);
 }
-.border-r-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-right-style: var(--tw-border-style);
-  border-right-width: var(--my-width);
-}
+
 .border-r-\\[medium\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: medium;
 }
+
 .border-r-\\[thick\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: thick;
 }
+
 .border-r-\\[thin\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: thin;
 }
+
 .border-r-\\[thin_2px\\] {
   border-right-style: var(--tw-border-style);
   border-right-width: thin 2px;
 }
+
 .border-r-\\[\\#0088cc\\] {
-  border-right-color: #0088cc;
+  border-right-color: #08c;
 }
+
 .border-r-\\[\\#0088cc\\]\\/50 {
-  border-right-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-right-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-r-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-r-\\[color\\:var\\(--my-color\\)\\], .border-r-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-right-color: var(--my-color);
 }
-.border-r-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-right-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-right-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-r-\\[var\\(--my-color\\)\\] {
+
+.border-r-\\[var\\(--my-color\\)\\], .border-r-\\[var\\(--my-color\\)\\]\\/50 {
   border-right-color: var(--my-color);
 }
-.border-r-\\[var\\(--my-color\\)\\]\\/50 {
-  border-right-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-\\[var\\(--my-color\\)\\]\\/50 {
     border-right-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-r-blue-500 {
   border-right-color: var(--border-color-blue-500);
 }
-.border-r-current {
-  border-right-color: currentcolor;
+
+.border-r-current, .border-r-current\\/50 {
+  border-right-color: currentColor;
 }
-.border-r-current\\/50 {
-  border-right-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-current\\/50 {
     border-right-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-r-inherit {
   border-right-color: inherit;
 }
+
 .border-r-red-500 {
   border-right-color: var(--color-red-500);
 }
+
 .border-r-red-500\\/2\\.5 {
-  border-right-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-right-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-red-500\\/2\\.5 {
     border-right-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-r-red-500\\/2\\.25 {
-  border-right-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-right-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-red-500\\/2\\.25 {
     border-right-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-r-red-500\\/2\\.75 {
-  border-right-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-right-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-red-500\\/2\\.75 {
     border-right-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-r-red-500\\/50 {
-  border-right-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-right-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-r-red-500\\/50 {
     border-right-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-r-transparent {
-  border-right-color: transparent;
+  border-right-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-s-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-s {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 1px;
 }
+
 .border-s-0 {
   border-inline-start-style: var(--tw-border-style);
-  border-inline-start-width: 0px;
+  border-inline-start-width: 0;
 }
+
 .border-s-2 {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 2px;
 }
+
 .border-s-4 {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 4px;
 }
+
 .border-s-123 {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 123px;
 }
+
 .border-s-\\[0_1\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 0 1;
 }
+
 .border-s-\\[0_2px_0_2px\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 0 2px 0 2px;
 }
+
 .border-s-\\[12px\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 12px;
 }
+
 .border-s-\\[12px_8px\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: 12px 8px;
 }
-.border-s-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-s-\\[length\\:var\\(--my-width\\)\\], .border-s-\\[line-width\\:var\\(--my-width\\)\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: var(--my-width);
 }
-.border-s-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-inline-start-style: var(--tw-border-style);
-  border-inline-start-width: var(--my-width);
-}
+
 .border-s-\\[medium\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: medium;
 }
+
 .border-s-\\[thick\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: thick;
 }
+
 .border-s-\\[thin\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: thin;
 }
+
 .border-s-\\[thin_2px\\] {
   border-inline-start-style: var(--tw-border-style);
   border-inline-start-width: thin 2px;
 }
+
 .border-s-\\[\\#0088cc\\] {
-  border-inline-start-color: #0088cc;
+  border-inline-start-color: #08c;
 }
+
 .border-s-\\[\\#0088cc\\]\\/50 {
-  border-inline-start-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-inline-start-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-s-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-s-\\[color\\:var\\(--my-color\\)\\], .border-s-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-inline-start-color: var(--my-color);
 }
-.border-s-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-inline-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-s-\\[var\\(--my-color\\)\\] {
+
+.border-s-\\[var\\(--my-color\\)\\], .border-s-\\[var\\(--my-color\\)\\]\\/50 {
   border-inline-start-color: var(--my-color);
 }
-.border-s-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-start-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-\\[var\\(--my-color\\)\\]\\/50 {
     border-inline-start-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-s-blue-500 {
   border-inline-start-color: var(--border-color-blue-500);
 }
-.border-s-current {
-  border-inline-start-color: currentcolor;
+
+.border-s-current, .border-s-current\\/50 {
+  border-inline-start-color: currentColor;
 }
-.border-s-current\\/50 {
-  border-inline-start-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-current\\/50 {
     border-inline-start-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-s-inherit {
   border-inline-start-color: inherit;
 }
+
 .border-s-red-500 {
   border-inline-start-color: var(--color-red-500);
 }
+
 .border-s-red-500\\/2\\.5 {
-  border-inline-start-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-inline-start-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-red-500\\/2\\.5 {
     border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-s-red-500\\/2\\.25 {
-  border-inline-start-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-inline-start-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-red-500\\/2\\.25 {
     border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-s-red-500\\/2\\.75 {
-  border-inline-start-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-inline-start-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-red-500\\/2\\.75 {
     border-inline-start-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-s-red-500\\/50 {
-  border-inline-start-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-inline-start-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-s-red-500\\/50 {
     border-inline-start-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-s-transparent {
-  border-inline-start-color: transparent;
+  border-inline-start-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-t-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-t {
   border-top-style: var(--tw-border-style);
   border-top-width: 1px;
 }
+
 .border-t-0 {
   border-top-style: var(--tw-border-style);
-  border-top-width: 0px;
+  border-top-width: 0;
 }
+
 .border-t-2 {
   border-top-style: var(--tw-border-style);
   border-top-width: 2px;
 }
+
 .border-t-4 {
   border-top-style: var(--tw-border-style);
   border-top-width: 4px;
 }
+
 .border-t-123 {
   border-top-style: var(--tw-border-style);
   border-top-width: 123px;
 }
+
 .border-t-\\[0_1\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: 0 1;
 }
+
 .border-t-\\[0_2px_0_2px\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: 0 2px 0 2px;
 }
+
 .border-t-\\[12px\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: 12px;
 }
+
 .border-t-\\[12px_8px\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: 12px 8px;
 }
-.border-t-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-t-\\[length\\:var\\(--my-width\\)\\], .border-t-\\[line-width\\:var\\(--my-width\\)\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: var(--my-width);
 }
-.border-t-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-top-style: var(--tw-border-style);
-  border-top-width: var(--my-width);
-}
+
 .border-t-\\[medium\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: medium;
 }
+
 .border-t-\\[thick\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: thick;
 }
+
 .border-t-\\[thin\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: thin;
 }
+
 .border-t-\\[thin_2px\\] {
   border-top-style: var(--tw-border-style);
   border-top-width: thin 2px;
 }
+
 .border-t-\\[\\#0088cc\\] {
-  border-top-color: #0088cc;
+  border-top-color: #08c;
 }
+
 .border-t-\\[\\#0088cc\\]\\/50 {
-  border-top-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-top-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-t-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-t-\\[color\\:var\\(--my-color\\)\\], .border-t-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-top-color: var(--my-color);
 }
-.border-t-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-top-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-top-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-t-\\[var\\(--my-color\\)\\] {
+
+.border-t-\\[var\\(--my-color\\)\\], .border-t-\\[var\\(--my-color\\)\\]\\/50 {
   border-top-color: var(--my-color);
 }
-.border-t-\\[var\\(--my-color\\)\\]\\/50 {
-  border-top-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-\\[var\\(--my-color\\)\\]\\/50 {
     border-top-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-t-blue-500 {
   border-top-color: var(--border-color-blue-500);
 }
-.border-t-current {
-  border-top-color: currentcolor;
+
+.border-t-current, .border-t-current\\/50 {
+  border-top-color: currentColor;
 }
-.border-t-current\\/50 {
-  border-top-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-current\\/50 {
     border-top-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-t-inherit {
   border-top-color: inherit;
 }
+
 .border-t-red-500 {
   border-top-color: var(--color-red-500);
 }
+
 .border-t-red-500\\/2\\.5 {
-  border-top-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-top-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-red-500\\/2\\.5 {
     border-top-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-t-red-500\\/2\\.25 {
-  border-top-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-top-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-red-500\\/2\\.25 {
     border-top-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-t-red-500\\/2\\.75 {
-  border-top-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-top-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-red-500\\/2\\.75 {
     border-top-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-t-red-500\\/50 {
-  border-top-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-top-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-t-red-500\\/50 {
     border-top-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-t-transparent {
-  border-top-color: transparent;
+  border-top-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-x-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-x {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 1px;
 }
+
 .border-x-0 {
   border-inline-style: var(--tw-border-style);
-  border-inline-width: 0px;
+  border-inline-width: 0;
 }
+
 .border-x-2 {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 2px;
 }
+
 .border-x-4 {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 4px;
 }
+
 .border-x-123 {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 123px;
 }
+
 .border-x-\\[0_1\\] {
   border-inline-style: var(--tw-border-style);
-  border-inline-width: 0 1;
+  border-inline-width: 0 1px;
 }
+
 .border-x-\\[0_2px_0_2px\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 0 2px 0 2px;
 }
+
 .border-x-\\[12px\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 12px;
 }
+
 .border-x-\\[12px_8px\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: 12px 8px;
 }
-.border-x-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-x-\\[length\\:var\\(--my-width\\)\\], .border-x-\\[line-width\\:var\\(--my-width\\)\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: var(--my-width);
 }
-.border-x-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-inline-style: var(--tw-border-style);
-  border-inline-width: var(--my-width);
-}
+
 .border-x-\\[medium\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: medium;
 }
+
 .border-x-\\[thick\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: thick;
 }
+
 .border-x-\\[thin\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: thin;
 }
+
 .border-x-\\[thin_2px\\] {
   border-inline-style: var(--tw-border-style);
   border-inline-width: thin 2px;
 }
+
 .border-x-\\[\\#0088cc\\] {
-  border-inline-color: #0088cc;
+  border-inline-color: #08c;
 }
+
 .border-x-\\[\\#0088cc\\]\\/50 {
-  border-inline-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-inline-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-x-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-x-\\[color\\:var\\(--my-color\\)\\], .border-x-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-inline-color: var(--my-color);
 }
-.border-x-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-inline-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-inline-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-x-\\[var\\(--my-color\\)\\] {
+
+.border-x-\\[var\\(--my-color\\)\\], .border-x-\\[var\\(--my-color\\)\\]\\/50 {
   border-inline-color: var(--my-color);
 }
-.border-x-\\[var\\(--my-color\\)\\]\\/50 {
-  border-inline-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-\\[var\\(--my-color\\)\\]\\/50 {
     border-inline-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-x-blue-500 {
   border-inline-color: var(--border-color-blue-500);
 }
-.border-x-current {
-  border-inline-color: currentcolor;
+
+.border-x-current, .border-x-current\\/50 {
+  border-inline-color: currentColor;
 }
-.border-x-current\\/50 {
-  border-inline-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-current\\/50 {
     border-inline-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-x-inherit {
   border-inline-color: inherit;
 }
+
 .border-x-red-500 {
   border-inline-color: var(--color-red-500);
 }
+
 .border-x-red-500\\/2\\.5 {
-  border-inline-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-inline-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-red-500\\/2\\.5 {
     border-inline-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-x-red-500\\/2\\.25 {
-  border-inline-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-inline-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-red-500\\/2\\.25 {
     border-inline-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-x-red-500\\/2\\.75 {
-  border-inline-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-inline-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-red-500\\/2\\.75 {
     border-inline-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-x-red-500\\/50 {
-  border-inline-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-inline-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-x-red-500\\/50 {
     border-inline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-x-transparent {
-  border-inline-color: transparent;
+  border-inline-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;
 
 exports[`border-y-* 1`] = `
 "
-@layer properties;
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, :before, :after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+
 :root, :host {
   --color-red-500: #ef4444;
   --border-color-blue-500: #3b82f6;
 }
+
 .border-y {
   border-block-style: var(--tw-border-style);
   border-block-width: 1px;
 }
+
 .border-y-0 {
   border-block-style: var(--tw-border-style);
-  border-block-width: 0px;
+  border-block-width: 0;
 }
+
 .border-y-2 {
   border-block-style: var(--tw-border-style);
   border-block-width: 2px;
 }
+
 .border-y-4 {
   border-block-style: var(--tw-border-style);
   border-block-width: 4px;
 }
+
 .border-y-123 {
   border-block-style: var(--tw-border-style);
   border-block-width: 123px;
 }
+
 .border-y-\\[0_1\\] {
   border-block-style: var(--tw-border-style);
-  border-block-width: 0 1;
+  border-block-width: 0 1px;
 }
+
 .border-y-\\[0_2px_0_2px\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: 0 2px 0 2px;
 }
+
 .border-y-\\[12px\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: 12px;
 }
+
 .border-y-\\[12px_8px\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: 12px 8px;
 }
-.border-y-\\[length\\:var\\(--my-width\\)\\] {
+
+.border-y-\\[length\\:var\\(--my-width\\)\\], .border-y-\\[line-width\\:var\\(--my-width\\)\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: var(--my-width);
 }
-.border-y-\\[line-width\\:var\\(--my-width\\)\\] {
-  border-block-style: var(--tw-border-style);
-  border-block-width: var(--my-width);
-}
+
 .border-y-\\[medium\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: medium;
 }
+
 .border-y-\\[thick\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: thick;
 }
+
 .border-y-\\[thin\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: thin;
 }
+
 .border-y-\\[thin_2px\\] {
   border-block-style: var(--tw-border-style);
   border-block-width: thin 2px;
 }
+
 .border-y-\\[\\#0088cc\\] {
-  border-block-color: #0088cc;
+  border-block-color: #08c;
 }
+
 .border-y-\\[\\#0088cc\\]\\/50 {
-  border-block-color: color-mix(in oklab, #0088cc 50%, transparent);
+  border-block-color: oklab(59.9824% -.067 -.124 / .5);
 }
-.border-y-\\[color\\:var\\(--my-color\\)\\] {
+
+.border-y-\\[color\\:var\\(--my-color\\)\\], .border-y-\\[color\\:var\\(--my-color\\)\\]\\/50 {
   border-block-color: var(--my-color);
 }
-.border-y-\\[color\\:var\\(--my-color\\)\\]\\/50 {
-  border-block-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-\\[color\\:var\\(--my-color\\)\\]\\/50 {
     border-block-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
-.border-y-\\[var\\(--my-color\\)\\] {
+
+.border-y-\\[var\\(--my-color\\)\\], .border-y-\\[var\\(--my-color\\)\\]\\/50 {
   border-block-color: var(--my-color);
 }
-.border-y-\\[var\\(--my-color\\)\\]\\/50 {
-  border-block-color: var(--my-color);
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-\\[var\\(--my-color\\)\\]\\/50 {
     border-block-color: color-mix(in oklab, var(--my-color) 50%, transparent);
   }
 }
+
 .border-y-blue-500 {
   border-block-color: var(--border-color-blue-500);
 }
-.border-y-current {
-  border-block-color: currentcolor;
+
+.border-y-current, .border-y-current\\/50 {
+  border-block-color: currentColor;
 }
-.border-y-current\\/50 {
-  border-block-color: currentcolor;
-}
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-current\\/50 {
     border-block-color: color-mix(in oklab, currentcolor 50%, transparent);
   }
 }
+
 .border-y-inherit {
   border-block-color: inherit;
 }
+
 .border-y-red-500 {
   border-block-color: var(--color-red-500);
 }
+
 .border-y-red-500\\/2\\.5 {
-  border-block-color: color-mix(in srgb, #ef4444 2.5%, transparent);
+  border-block-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-red-500\\/2\\.5 {
     border-block-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
   }
 }
+
 .border-y-red-500\\/2\\.25 {
-  border-block-color: color-mix(in srgb, #ef4444 2.25%, transparent);
+  border-block-color: #ef444406;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-red-500\\/2\\.25 {
     border-block-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
   }
 }
+
 .border-y-red-500\\/2\\.75 {
-  border-block-color: color-mix(in srgb, #ef4444 2.75%, transparent);
+  border-block-color: #ef444407;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-red-500\\/2\\.75 {
     border-block-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
   }
 }
+
 .border-y-red-500\\/50 {
-  border-block-color: color-mix(in srgb, #ef4444 50%, transparent);
+  border-block-color: #ef444480;
 }
+
 @supports (color: color-mix(in lab, red, red)) {
   .border-y-red-500\\/50 {
     border-block-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
   }
 }
+
 .border-y-transparent {
-  border-block-color: transparent;
+  border-block-color: #0000;
 }
+
 @property --tw-border-style {
   syntax: "*";
   inherits: false;
   initial-value: solid;
-}
-@layer properties {
-  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-    *, ::before, ::after, ::backdrop {
-      --tw-border-style: solid;
-    }
-  }
 }
 "
 `;

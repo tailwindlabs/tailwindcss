@@ -19,6 +19,7 @@ test('Utilities can be wrapped in a selector', async () => {
     #app .underline {
       text-decoration-line: underline;
     }
+
     @media (hover: hover) {
       :is(#app .hover\\:line-through):hover {
         text-decoration-line: line-through;
@@ -49,6 +50,7 @@ test('Utilities can be marked with important', async () => {
     .underline {
       text-decoration-line: underline !important;
     }
+
     @media (hover: hover) {
       .hover\\:line-through:hover {
         text-decoration-line: line-through !important;
@@ -77,6 +79,7 @@ test('Utilities can be wrapped with a selector and marked as important', async (
     #app .underline {
       text-decoration-line: underline !important;
     }
+
     @media (hover: hover) {
       :is(#app .hover\\:line-through):hover {
         text-decoration-line: line-through !important;
@@ -99,27 +102,30 @@ test('variables in utilities should not be marked as important', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    @layer properties;
-    :root, :host {
-      --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-ease: initial;
+        }
+      }
     }
+
+    :root, :host {
+      --ease-out: cubic-bezier(0, 0, .2, 1);
+    }
+
     .z-10\\! {
       z-index: 10 !important;
     }
+
     .ease-out\\! {
       --tw-ease: var(--ease-out) !important;
       transition-timing-function: var(--ease-out) !important;
     }
+
     @property --tw-ease {
       syntax: "*";
-      inherits: false;
-    }
-    @layer properties {
-      @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
-        *, ::before, ::after, ::backdrop {
-          --tw-ease: initial;
-        }
-      }
+      inherits: false
     }
     "
   `)

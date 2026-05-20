@@ -1,4 +1,5 @@
 import { compile } from '..'
+import { optimize } from '../../../@tailwindcss-node/src/optimize'
 
 const css = String.raw
 
@@ -10,7 +11,7 @@ export async function run(
   options: Parameters<typeof compile>[1] = {},
 ) {
   let { build } = await compile(input, options)
-  return pretty(build(candidates))
+  return pretty(optimize(build(candidates)).code)
 }
 
 export async function compileCss(css: string, options: Parameters<typeof compile>[1] = {}) {
