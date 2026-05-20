@@ -21,6 +21,18 @@ describe('parse', () => {
     ])
   })
 
+  it('should parse a pseudo-element selector with double ::', () => {
+    expect(parse('.foo::before')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'selector', value: '::before' },
+        ],
+      },
+    ])
+  })
+
   it('should parse a selector list', () => {
     expect(parse('.foo,.bar')).toEqual([
       {
