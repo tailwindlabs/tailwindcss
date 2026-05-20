@@ -21,7 +21,7 @@
 
 ---
 
-## Documentation
+## Documentation Edited
 
 For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
