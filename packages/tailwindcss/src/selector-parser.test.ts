@@ -238,22 +238,16 @@ describe('parse', () => {
           { kind: 'selector', value: ':hover' },
           {
             kind: 'function',
+            value: ':not',
             nodes: [
               {
                 kind: 'compound',
                 nodes: [
-                  {
-                    kind: 'selector',
-                    value: '.bar',
-                  },
-                  {
-                    kind: 'selector',
-                    value: ':focus',
-                  },
+                  { kind: 'selector', value: '.bar' },
+                  { kind: 'selector', value: ':focus' },
                 ],
               },
             ],
-            value: ':not',
           },
         ],
       },
@@ -286,6 +280,30 @@ describe('parse', () => {
           { kind: 'selector', value: '.foo' },
           { kind: 'combinator', value: '+' },
           { kind: 'selector', value: 'p' },
+        ],
+      },
+    ])
+  })
+
+  it('should normalize combinators', () => {
+    expect(parse('.foo + .bar')).toEqual([
+      {
+        kind: 'complex',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'combinator', value: '+' },
+          { kind: 'selector', value: '.bar' },
+        ],
+      },
+    ])
+
+    expect(parse('.foo  \n\t .bar')).toEqual([
+      {
+        kind: 'complex',
+        nodes: [
+          { kind: 'selector', value: '.foo' },
+          { kind: 'combinator', value: ' ' },
+          { kind: 'selector', value: '.bar' },
         ],
       },
     ])
@@ -470,12 +488,20 @@ describe('toCss', () => {
   })
 
   it('should print a selector list', () => {
-    expect(toCss(parse('.foo,.bar'))).toBe('.foo, .bar')
+    expect(toCss(parse('.foo, .bar'))).toBe('.foo, .bar')
   })
 
   it('should print a selector list with normalized commas', () => {
+    expect(toCss(parse('.foo,.bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo, .bar'))).toBe('.foo, .bar')
     expect(toCss(parse('.foo , .bar'))).toBe('.foo, .bar')
+    expect(toCss(parse('.foo ,.bar'))).toBe('.foo, .bar')
+  })
+
+  it('should print a selector list but minimized', () => {
+    expect(toCss(parse('.foo, .bar'), true)).toBe('.foo,.bar')
+    expect(toCss(parse('.foo , .bar'), true)).toBe('.foo,.bar')
+    expect(toCss(parse('.foo ,.bar'), true)).toBe('.foo,.bar')
   })
 
   it('should print an attribute selectors', () => {
@@ -492,6 +518,15 @@ describe('toCss', () => {
 
   it('should print :nth-child()', () => {
     expect(toCss(parse(':nth-child(n+1)'))).toBe(':nth-child(n+1)')
+  })
+
+  it('should pretty print a complex selector', () => {
+    expect(toCss(parse('.a+.b, .c .d[attr], .e'))).toBe('.a + .b, .c .d[attr], .e')
+  })
+
+  it('should minify a complex selector during printing', () => {
+    expect(toCss(parse('.a+.b, .c .d[attr], .e'), true)).toBe('.a+.b,.c .d[attr],.e')
+    //                                                                 ^ This space is significant to indicate a descendant combinator
   })
 })
 

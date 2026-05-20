@@ -1,3 +1,9 @@
+type Combinator =
+  | ' ' // Descendant combinator
+  | '>' // Child combinator
+  | '+' // Next-sibling combinator
+  | '~' // Subsequent-sibling combinator
+
 export type SelectorListNode = {
   kind: 'list'
   nodes: SelectorAstNode[]
@@ -5,7 +11,7 @@ export type SelectorListNode = {
 
 export type SelectorCombinatorNode = {
   kind: 'combinator'
-  value: string
+  value: Combinator
 }
 
 export type SelectorComplexNode = {
@@ -43,7 +49,7 @@ export type SelectorAstNode =
   | SelectorNode
   | SelectorValueNode
 
-function combinator(value: string): SelectorCombinatorNode {
+function combinator(value: Combinator): SelectorCombinatorNode {
   return {
     kind: 'combinator',
     value,
@@ -93,9 +99,9 @@ function value(value: string): SelectorValueNode {
   }
 }
 
-export function toCss(ast: SelectorAstNode[]) {
+export function toCss(ast: SelectorAstNode[], minify = false) {
   let css = ''
-  for (const node of ast) {
+  for (let node of ast) {
     switch (node.kind) {
       case 'selector':
       case 'value': {
@@ -103,7 +109,7 @@ export function toCss(ast: SelectorAstNode[]) {
         break
       }
       case 'combinator': {
-        if (node.value === ' ') {
+        if (minify || node.value === ' ') {
           css += node.value
         } else {
           css += ` ${node.value} `
@@ -112,16 +118,16 @@ export function toCss(ast: SelectorAstNode[]) {
       }
 
       case 'function': {
-        css += node.value + '(' + toCss(node.nodes) + ')'
+        css += `${node.value}(${toCss(node.nodes, minify)})`
         break
       }
       case 'complex':
       case 'compound': {
-        css += node.nodes.map((node) => toCss([node])).join('')
+        css += toCss(node.nodes, minify)
         break
       }
       case 'list': {
-        css += node.nodes.map((node) => toCss([node])).join(', ')
+        css += node.nodes.map((node) => toCss([node], minify)).join(minify ? ',' : ', ')
         break
       }
     }
@@ -268,16 +274,15 @@ export function parse(input: string) {
         }
         i = end - 1
 
-        let contents = input.slice(start, end)
+        let value = input.slice(start, end).trim()
         if (
-          contents.trim() === '' &&
+          value === '' &&
           (target.length === 0 || end >= input.length || input.charCodeAt(end) === COMMA)
         ) {
           break
         }
 
-        let value = contents.trim()
-        target.push(combinator(value === '' ? ' ' : value))
+        target.push(combinator((value === '' ? ' ' : value) as Combinator))
         containsCombinator = true
 
         break

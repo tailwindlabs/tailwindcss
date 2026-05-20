@@ -1776,7 +1776,7 @@ function modernizeArbitraryValuesVariant(
         ast[0].kind === 'selector' &&
         ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '>' &&
+        ast[1].value === '>' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '*'
       ) {
@@ -1794,7 +1794,7 @@ function modernizeArbitraryValuesVariant(
         ast[0].kind === 'selector' &&
         ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '*'
       ) {
@@ -1821,7 +1821,7 @@ function modernizeArbitraryValuesVariant(
       ) {
         replaceObject(
           variant,
-          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[0].nodes[1].nodes)}]`),
+          designSystem.parseVariant(`has-[${SelectorParser.toCss(ast[0].nodes[1].nodes, true)}]`),
         )
         continue
       }
@@ -1838,7 +1838,7 @@ function modernizeArbitraryValuesVariant(
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // Space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         ast[2].value === '&'
       ) {
@@ -1850,7 +1850,7 @@ function modernizeArbitraryValuesVariant(
         // that we can convert `[[data-visible]_&]` to `in-[[data-visible]]`.
         //
         // Later this gets converted to `in-data-visible`.
-        replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast)}]`))
+        replaceObject(variant, designSystem.parseVariant(`in-[${SelectorParser.toCss(ast, true)}]`))
         continue
       }
 
@@ -1868,7 +1868,7 @@ function modernizeArbitraryValuesVariant(
       ) {
         let targetSignature = signatures.get(designSystem.printVariant(variant))
 
-        let parsed = ValueParser.parse(SelectorParser.toCss(ast))
+        let parsed = ValueParser.parse(SelectorParser.toCss(ast, true))
         let containsNot = false
         walk(parsed, (node) => {
           if (node.kind === 'word' && node.value === 'not') {
@@ -1908,9 +1908,9 @@ function modernizeArbitraryValuesVariant(
         //  ^ ^ ^^^^^^^^^^^^^^
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
-        ast[0].value.trim() === '&' &&
+        ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '>' &&
+        ast[1].value === '>' &&
         ast[2].kind === 'selector' &&
         (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
@@ -1926,9 +1926,9 @@ function modernizeArbitraryValuesVariant(
         //  ^ ^^^^^^^^^^^^^^
         ast.length === 3 &&
         ast[0].kind === 'selector' &&
-        ast[0].value.trim() === '&' &&
+        ast[0].value === '&' &&
         ast[1].kind === 'combinator' &&
-        ast[1].value.trim() === '' && // space, but trimmed because there could be multiple spaces
+        ast[1].value === ' ' &&
         ast[2].kind === 'selector' &&
         (ast[2].value[0] === ':' || isAttributeSelector(ast[2]))
       ) {
@@ -2042,7 +2042,7 @@ function modernizeArbitraryValuesVariant(
                 return `${variantName}-${targetNode.nodes[0].value}`
               }
 
-              return `${variantName}-[${SelectorParser.toCss(targetNode.nodes)}]`
+              return `${variantName}-[${SelectorParser.toCss(targetNode.nodes, true)}]`
             }
           }
 
@@ -2759,9 +2759,12 @@ function createVariantSignatureCache(
             // want to mark this as changed because this will be re-printed as
             // `.foo,.bar`.
             //
+            // Similarly, when we receive a combinator like `.foo + .bar`, this
+            // will be printed as `.foo+.bar`.
+            //
             // It could be that this was already optimal, but then this would be
             // a no-op situation.
-            if (node.kind === 'list') {
+            if (node.kind === 'list' || node.kind === 'combinator') {
               changed = true
             }
 
@@ -2809,7 +2812,7 @@ function createVariantSignatureCache(
           })
 
           if (changed) {
-            node.selector = SelectorParser.toCss(selectorAst)
+            node.selector = SelectorParser.toCss(selectorAst, true)
           }
         }
       })
