@@ -3,9 +3,13 @@ export type SelectorListNode = {
   nodes: SelectorAstNode[]
 }
 
+export type SelectorCombinatorNode = {
+  kind: 'combinator'
+  value: string
+}
+
 export type SelectorComplexNode = {
   kind: 'complex'
-  combinator: string
   nodes: SelectorAstNode[]
 }
 
@@ -32,16 +36,23 @@ export type SelectorValueNode = {
 
 export type SelectorAstNode =
   | SelectorFunctionNode
+  | SelectorCombinatorNode
   | SelectorComplexNode
   | SelectorCompoundNode
   | SelectorListNode
   | SelectorNode
   | SelectorValueNode
 
-function complex(combinator: string, nodes: SelectorAstNode[]): SelectorComplexNode {
+function combinator(value: string): SelectorCombinatorNode {
+  return {
+    kind: 'combinator',
+    value,
+  }
+}
+
+function complex(nodes: SelectorAstNode[]): SelectorComplexNode {
   return {
     kind: 'complex',
-    combinator,
     nodes,
   }
 }
@@ -87,6 +98,7 @@ export function toCss(ast: SelectorAstNode[]) {
   for (const node of ast) {
     switch (node.kind) {
       case 'selector':
+      case 'combinator':
       case 'value': {
         css += node.value
         break
@@ -95,10 +107,7 @@ export function toCss(ast: SelectorAstNode[]) {
         css += node.value + '(' + toCss(node.nodes) + ')'
         break
       }
-      case 'complex': {
-        css += node.nodes.map((node) => toCss([node])).join(node.combinator)
-        break
-      }
+      case 'complex':
       case 'compound': {
         css += node.nodes.map((node) => toCss([node])).join('')
         break
@@ -139,9 +148,13 @@ export function parse(input: string) {
 
   let target = ast
 
-  let targetStack: SelectorAstNode[][] = []
+  let containsCombinator = false
 
-  let listStack: (SelectorListNode | null)[] = []
+  let contextStack: {
+    target: SelectorAstNode[]
+    currentList: SelectorListNode | null
+    containsCombinator: boolean
+  }[] = []
 
   let currentList: SelectorListNode | null = null
 
@@ -149,22 +162,17 @@ export function parse(input: string) {
 
   let peekChar
 
-  function append(node: SelectorAstNode) {
-    let current = target[target.length - 1]
+  function current(nodes = target): SelectorAstNode {
+    return nodes.length === 1 ? nodes[0] : containsCombinator ? complex(nodes) : compound(nodes)
+  }
 
-    if (current?.kind === 'complex') {
-      let right = current.nodes[1]
-      if (right === undefined) {
-        current.nodes.push(node)
-      } else if (right.kind === 'compound') {
-        right.nodes.push(node)
-      } else {
-        current.nodes[1] = compound([right, node])
-      }
-    } else if (current?.kind === 'compound') {
-      current.nodes.push(node)
-    } else if (current && current.kind !== 'list') {
-      target[target.length - 1] = compound([current, node])
+  function append(node: SelectorAstNode) {
+    let existing = target[target.length - 1]
+
+    if (existing?.kind === 'compound') {
+      existing.nodes.push(node)
+    } else if (existing && existing.kind !== 'list' && existing.kind !== 'combinator') {
+      target[target.length - 1] = compound([existing, node])
     } else {
       target.push(node)
     }
@@ -203,17 +211,20 @@ export function parse(input: string) {
 
         // Add nodes to the current list
         if (currentList) {
-          currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
+          currentList.nodes.push(current())
           target = []
+          containsCombinator = false
         }
 
         // Start a new list
         else {
-          let item = target.length === 1 ? target.pop()! : compound(target.splice(0))
+          let nodes = target.splice(0)
+          let item = current(nodes)
           let node = list([item])
           target.push(node)
           currentList = node
           target = []
+          containsCombinator = false
         }
 
         break
@@ -250,12 +261,16 @@ export function parse(input: string) {
         i = end - 1
 
         let contents = input.slice(start, end)
-        if (contents.trim() === '' && input.charCodeAt(end) === COMMA) {
+        if (
+          contents.trim() === '' &&
+          (target.length === 0 || end >= input.length || input.charCodeAt(end) === COMMA)
+        ) {
           break
         }
 
-        let combinator = contents.trim()
-        target.push(complex(combinator === '' ? ' ' : combinator, [target.pop()!]))
+        let value = contents.trim()
+        target.push(combinator(value === '' ? ' ' : value))
+        containsCombinator = true
 
         break
       }
@@ -311,9 +326,9 @@ export function parse(input: string) {
         }
 
         append(node)
-        targetStack.push(target)
-        listStack.push(currentList)
+        contextStack.push({ target, currentList, containsCombinator })
         target = node.nodes
+        containsCombinator = false
         currentList = null
 
         break
@@ -335,11 +350,15 @@ export function parse(input: string) {
         }
 
         if (currentList) {
-          currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
+          currentList.nodes.push(current())
+        } else if (containsCombinator) {
+          target.splice(0, target.length, complex(target.splice(0)))
         }
 
-        target = targetStack.pop() ?? ast
-        currentList = listStack.pop() ?? null
+        let context = contextStack.pop()
+        target = context?.target ?? ast
+        currentList = context?.currentList ?? null
+        containsCombinator = context?.containsCombinator ?? false
 
         break
       }
@@ -471,7 +490,9 @@ export function parse(input: string) {
   }
 
   if (currentList) {
-    currentList.nodes.push(target.length === 1 ? target[0] : compound(target))
+    currentList.nodes.push(current())
+  } else if (containsCombinator) {
+    target.splice(0, target.length, complex(target.splice(0)))
   }
 
   return ast

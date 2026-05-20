@@ -102,24 +102,24 @@ describe('parse', () => {
     ])
   })
 
-  it('should group complex selectors in a selector list', () => {
+  it('should group selectors with combinators in a selector list', () => {
     expect(parse('.a+.b, .c .d[attr], .e')).toEqual([
       {
         kind: 'list',
         nodes: [
           {
             kind: 'complex',
-            combinator: '+',
             nodes: [
               { kind: 'selector', value: '.a' },
+              { kind: 'combinator', value: '+' },
               { kind: 'selector', value: '.b' },
             ],
           },
           {
             kind: 'complex',
-            combinator: ' ',
             nodes: [
               { kind: 'selector', value: '.c' },
+              { kind: 'combinator', value: ' ' },
               {
                 kind: 'compound',
                 nodes: [
@@ -130,6 +130,31 @@ describe('parse', () => {
             ],
           },
           { kind: 'selector', value: '.e' },
+        ],
+      },
+    ])
+  })
+
+  it('should parse complex selectors in a selector list', () => {
+    expect(parse('#a.b > .c, .d')).toEqual([
+      {
+        kind: 'list',
+        nodes: [
+          {
+            kind: 'complex',
+            nodes: [
+              {
+                kind: 'compound',
+                nodes: [
+                  { kind: 'selector', value: '#a' },
+                  { kind: 'selector', value: '.b' },
+                ],
+              },
+              { kind: 'combinator', value: '>' },
+              { kind: 'selector', value: '.c' },
+            ],
+          },
+          { kind: 'selector', value: '.d' },
         ],
       },
     ])
@@ -200,9 +225,9 @@ describe('parse', () => {
     expect(parse('.foo + p')).toEqual([
       {
         kind: 'complex',
-        combinator: '+',
         nodes: [
           { kind: 'selector', value: '.foo' },
+          { kind: 'combinator', value: '+' },
           { kind: 'selector', value: 'p' },
         ],
       },
@@ -366,9 +391,9 @@ describe('parse', () => {
           },
           {
             kind: 'complex',
-            combinator: '+',
             nodes: [
               { kind: 'selector', value: '.baz' },
+              { kind: 'combinator', value: '+' },
               { kind: 'selector', value: '.qux' },
             ],
           },
