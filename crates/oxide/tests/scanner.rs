@@ -1773,6 +1773,24 @@ mod scanner {
         let mut scanner = Scanner::new(vec![
             public_source_entry_from_pattern(dir.clone(), "@source './'"),
             public_source_entry_from_pattern(dir.clone(), "@source not './symlink'"),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['directory_a/a.html']"]);
+
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(&dir).unwrap().display(), "/").replace('\\', "/");
+        let files = scanner
+            .get_files()
+            .iter()
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+
+        assert_eq!(files, vec!["directory_a/a.html"]);
+
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(dir.clone(), "@source './'"),
+            public_source_entry_from_pattern(dir.clone(), "@source not './symlink'"),
             public_source_entry_from_pattern(dir.clone(), "@source not './directory_a'"),
         ]);
         let candidates = scanner.scan();
