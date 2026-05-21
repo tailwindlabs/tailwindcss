@@ -80,16 +80,18 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          package-manager-cache: false
 
       - name: Install gcc-arm-linux-gnueabihf
         if: ${{ matrix.target == 'armv7-unknown-linux-gnueabihf' }}
@@ -103,42 +105,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install binutils-aarch64-linux-gnu -y
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            ~/.napi-rs
-            .cargo-cache
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
-
-      - uses: mlugg/setup-zig@v2
+      - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
         if: ${{ contains(matrix.target, 'musl') }}
         with:
           version: 0.14.1
+          use-cache: false
 
       - name: Install cargo-zigbuild
-        uses: taiki-e/install-action@v2
+        uses: taiki-e/install-action@65851e10cd6c377f11a60e600abc07cb08643468 # v2
         if: ${{ contains(matrix.target, 'musl') }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -174,7 +148,7 @@ jobs:
           eval "$STRIP_COMMAND ${{ env.OXIDE_LOCATION }}/*.node"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -184,9 +158,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
       - name: Build FreeBSD
-        uses: cross-platform-actions/action@v0.25.0
+        uses: cross-platform-actions/action@cdc9ee69ef84a5f2e59c9058335d9c57bcb4ac86 # v0.25.0
         env:
           DEBUG: napi:*
           RUSTUP_HOME: /usr/local/rustup
@@ -218,7 +194,7 @@ jobs:
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: bindings-x86_64-unknown-freebsd
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -238,20 +214,21 @@ jobs:
       - build-freebsd
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 20
+          persist-credentials: false
 
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
 
       # npm trusted publishing validates the caller workflow filename, so all npm publishes live here.
       # This workflow rebuilds the publish artifacts instead of depending on prepare-release.yml.
@@ -274,33 +251,6 @@ jobs:
             echo "INSIDERS_VERSION=0.0.0-insiders.$sha_short" >> $GITHUB_ENV
           fi
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
-
       - name: Setup WASM target
         run: rustup target add wasm32-wasip1-threads
 
@@ -308,7 +258,7 @@ jobs:
         run: pnpm --filter=!./playgrounds/* install --frozen-lockfile
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           path: ${{ env.OXIDE_LOCATION }}
 
@@ -330,7 +280,7 @@ jobs:
 
       - name: 'Version based on commit: ${{ env.INSIDERS_VERSION }}'
         if: env.RELEASE_KIND == 'insiders'
-        run: pnpm run version-packages ${{ env.INSIDERS_VERSION }}
+        run: pnpm run version-packages ${INSIDERS_VERSION}
 
       - name: Build Tailwind CSS
         if: env.RELEASE_KIND == 'insiders'
@@ -349,19 +299,19 @@ jobs:
         run: node ./scripts/lock-pre-release-versions.mjs
 
       - name: Upload npm package tarballs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: npm-package-tarballs
           path: dist/*.tgz
 
       - name: Publish
         run: |
-          pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+          pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${RELEASE_CHANNEL} --no-git-checks
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
-          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks; popd;
+          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks; popd;
 
       - name: Trigger Tailwind Play update
-        uses: actions/github-script@v8
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
           script: |
