@@ -30,6 +30,11 @@ catalog:
   prettier: 3.8.3
   vite: 8.0.14
   webpack: 5.107.0
+
 patchedDependencies:
   '@parcel/watcher@2.5.1': patches/@parcel__watcher@2.5.1.patch
   lightningcss@1.32.0: patches/lightningcss@1.32.0.patch
+
+packageConfigs:
+  '@tailwindcss/oxide-wasm32-wasi':
+    nodeLinker: hoisted
