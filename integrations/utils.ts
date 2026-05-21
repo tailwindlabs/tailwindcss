@@ -8,10 +8,14 @@ import path from 'node:path'
 import { promisify, stripVTControlCharacters } from 'node:util'
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
+import * as Yaml from 'yaml'
 import { createLineTable } from '../packages/tailwindcss/src/source-maps/line-table'
 import { escape } from '../packages/tailwindcss/src/utils/escape'
 
 const REPO_ROOT = path.join(__dirname, '..')
+const ROOT_PNPM_WORKSPACE = Yaml.parse(
+  await fs.readFile(path.join(REPO_ROOT, 'pnpm-workspace.yaml'), 'utf8'),
+)
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
   name.replace('tailwindcss-', '@tailwindcss/').replace('.tgz', ''),
 )
@@ -306,6 +310,8 @@ export function test(
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
+            } else if (filename.endsWith('pnpm-workspace.yaml')) {
+              content = overwriteVersionsInPnpmWorkspace(content)
             }
 
             // Ensure that files written on Windows use \r\n line ending
@@ -423,6 +429,7 @@ export function test(
       config.fs['.gitignore'] ??= txt`
         node_modules/
       `
+      config.fs['pnpm-workspace.yaml'] ??= ''
 
       for (let [filename, content] of Object.entries(config.fs)) {
         if (content.toString().startsWith('symlink:')) {
@@ -526,28 +533,35 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
     }
   }
 
+  return JSON.stringify(json, null, 2)
+}
+
+function overwriteVersionsInPnpmWorkspace(content: string): string {
+  let workspace = content.trim() === '' ? {} : Yaml.parse(content)
+
+  workspace.allowBuilds = ROOT_PNPM_WORKSPACE.allowBuilds
+  workspace.overrides ||= {}
+
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
   // @tailwindcss/oxide and we instead want to resolve it to the locally built
   // version.
-  json.pnpm ||= {}
-  json.pnpm.overrides ||= {}
   for (let pkg of PUBLIC_PACKAGES) {
     if (pkg === 'tailwindcss') {
       // We want to be explicit about the `tailwindcss` package so our tests can
       // also import v3 without conflicting v4 tarballs.
-      json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {
-      json.pnpm.overrides[pkg] = resolveVersion(pkg)
+      workspace.overrides[pkg] = resolveVersion(pkg)
     }
   }
 
-  return JSON.stringify(json, null, 2)
+  return Yaml.stringify(workspace)
 }
 
 function resolveVersion(dependency: string) {

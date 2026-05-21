@@ -202,6 +202,9 @@ importers:
       source-map-js:
         specifier: ^1.2.1
         version: 1.2.1
+      yaml:
+        specifier: ^2.6.0
+        version: 2.6.0
 
   packages/@tailwindcss-browser:
     devDependencies:
