@@ -87,7 +87,7 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          package-manager-cache: false
 
       - name: Install gcc-arm-linux-gnueabihf
         if: ${{ matrix.target == 'armv7-unknown-linux-gnueabihf' }}
@@ -136,6 +136,7 @@ jobs:
         if: ${{ contains(matrix.target, 'musl') }}
         with:
           version: 0.14.1
+          use-cache: false
 
       - name: Install cargo-zigbuild
         uses: taiki-e/install-action@65851e10cd6c377f11a60e600abc07cb08643468 # v2
@@ -258,8 +259,8 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
