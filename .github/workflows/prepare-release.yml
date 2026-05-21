@@ -101,37 +101,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install binutils-aarch64-linux-gnu -y
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            ~/.napi-rs
-            .cargo-cache
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          lookup-only: true
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
-          lookup-only: true
-
       - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
         if: ${{ contains(matrix.target, 'musl') }}
         with:
@@ -261,35 +230,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
           package-manager-cache: false
-
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: |
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          lookup-only: true
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
-          lookup-only: true
 
       - name: Setup WASM target
         run: rustup target add wasm32-wasip1-threads
