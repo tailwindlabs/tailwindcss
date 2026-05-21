@@ -180,6 +180,14 @@ fn resolve_path(path: &Path, preserve_symlinks: bool) -> std::io::Result<PathBuf
     dunce::canonicalize(path)
 }
 
+/// Lexically normalize an absolute path without resolving it through the
+/// filesystem.
+///
+/// This intentionally preserves symlink path shapes, so `..` segments after a
+/// symlinked component are collapsed without resolving to the symlink target.
+/// Current callers pass absolute paths; relative paths with leading `..`
+/// segments would lose those leading components because `PathBuf::pop` on an
+/// empty buffer is a no-op.
 fn normalize_path_lexically(path: &Path) -> PathBuf {
     let mut normalized = PathBuf::new();
 
