@@ -55,6 +55,7 @@
     "prettier": "catalog:",
     "prettier-plugin-embed": "^0.5.1",
     "prettier-plugin-organize-imports": "^4.3.0",
+    "tailwindcss": "workspace:*",
     "tsup": "^8.5.1",
     "turbo": "^2.9.18",
     "typescript": "^5.9.3",
