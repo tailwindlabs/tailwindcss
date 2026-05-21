@@ -35,6 +35,8 @@ patchedDependencies:
   '@parcel/watcher@2.5.1': patches/@parcel__watcher@2.5.1.patch
   lightningcss@1.32.0: patches/lightningcss@1.32.0.patch
 
-packageConfigs:
-  '@tailwindcss/oxide-wasm32-wasi':
-    nodeLinker: hoisted
+# TODO: Scope this just for the oxide-wasm32-wasi package
+nodeLinker: hoisted
+# packageConfigs:
+#   '@tailwindcss/oxide-wasm32-wasi':
+#     nodeLinker: hoisted
