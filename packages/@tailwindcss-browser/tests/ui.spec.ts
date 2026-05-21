@@ -9,6 +9,10 @@ test.beforeAll(async ({}, info) => {
   server = await createServer()
 })
 
+test.afterAll(async () => {
+  await server.close()
+})
+
 test('basic', async ({ page }) => {
   await server.render({
     page,
@@ -166,6 +170,7 @@ async function createServer() {
   return {
     app,
     url: listener.url,
+    close: listener.close,
     render,
   }
 }
