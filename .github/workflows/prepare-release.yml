@@ -232,7 +232,7 @@ jobs:
     name: Build and release Tailwind CSS
 
     permissions:
-      contents: write # for softprops/action-gh-release to create GitHub release
+      contents: write # Required for creating releases
 
     needs:
       - build
@@ -350,18 +350,18 @@ jobs:
 
       - name: Prepare GitHub Release
         if: ${{ !inputs.dry_run }}
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
-        with:
-          draft: true
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ env.RELEASE_NOTES }}
-          files: |
-            packages/@tailwindcss-standalone/dist/sha256sums.txt
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${TAG_NAME}" \
+              --draft \
+              --title "${TAG_NAME}" \
+              --notes "${RELEASE_NOTES}" \
+              packages/@tailwindcss-standalone/dist/sha256sums.txt \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl \
+              packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
