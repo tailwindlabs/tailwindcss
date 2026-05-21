@@ -20,7 +20,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['html', { open: 'never' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -36,10 +36,11 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // Playwright 1.60's Windows WebKit worker hangs on shutdown after all tests
+    // pass, causing CI to fail with a worker force-kill error.
+    ...(process.platform === 'win32'
+      ? []
+      : [{ name: 'webkit', use: { ...devices['Desktop Safari'] } }]),
     {
       name: 'firefox',
       use: {
