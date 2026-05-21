@@ -21,18 +21,22 @@ let workspaces = new Map()
 for (let path of paths) {
   let pkg = await fs.readFile(path, 'utf8').then(JSON.parse)
   if (pkg.private) continue
-  workspaces.set(pkg.name, { version: pkg.version ?? '', dir: dirname(path) })
+  workspaces.set(pkg.name, {
+    version: pkg.version ?? '',
+    dir: dirname(path),
+    hasBundledDependencies: Boolean(pkg.bundledDependencies?.length),
+  })
 }
 
 // Clean dist folder
 await fs.rm(path.join(root, 'dist'), { recursive: true, force: true })
 
 Promise.all(
-  [...workspaces.entries()].map(async ([name, { dir }]) => {
+  [...workspaces.entries()].map(async ([name, { dir, hasBundledDependencies }]) => {
     function pack() {
       return new Promise((resolve) => {
         exec(
-          `pnpm pack --pack-gzip-level=0 --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"`,
+          `pnpm pack --pack-gzip-level=0 --pack-destination="${path.join(root, 'dist').replace(/\\/g, '\\\\')}"${hasBundledDependencies ? ' --config.node-linker=hoisted' : ''}`,
           { cwd: dir },
           (err, stdout, stderr) => {
             if (err) {
