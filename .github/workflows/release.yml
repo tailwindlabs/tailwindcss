@@ -340,7 +340,7 @@ jobs:
 
       - name: 'Version based on commit: ${{ env.INSIDERS_VERSION }}'
         if: env.RELEASE_KIND == 'insiders'
-        run: pnpm run version-packages ${{ env.INSIDERS_VERSION }}
+        run: pnpm run version-packages ${INSIDERS_VERSION}
 
       - name: Build Tailwind CSS
         if: env.RELEASE_KIND == 'insiders'
@@ -366,9 +366,9 @@ jobs:
 
       - name: Publish
         run: |
-          pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks
+          pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${RELEASE_CHANNEL} --no-git-checks
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
-          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${{ env.RELEASE_CHANNEL }} --no-git-checks; popd;
+          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks; popd;
 
       - name: Trigger Tailwind Play update
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
