@@ -117,6 +117,7 @@ jobs:
             .cargo-cache
             target/
           key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          lookup-only: true
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
@@ -133,6 +134,7 @@ jobs:
             ./crates/node/wasi-worker-browser.mjs
             ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
+          lookup-only: true
 
       - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
         if: ${{ contains(matrix.target, 'musl') }}
@@ -289,6 +291,7 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          lookup-only: true
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
@@ -305,6 +308,7 @@ jobs:
             ./crates/node/wasi-worker-browser.mjs
             ./crates/node/wasi-worker.mjs
           key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
+          lookup-only: true
 
       - name: Setup WASM target
         run: rustup target add wasm32-wasip1-threads
