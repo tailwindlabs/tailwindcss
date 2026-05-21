@@ -5,6 +5,15 @@ packages:
   - 'playgrounds/*'
   - 'integrations'
 
+allowBuilds:
+  '@parcel/watcher': true
+  bun: true
+  esbuild: true
+  sharp: false
+  tree-sitter: true
+  tree-sitter-javascript: true
+  tree-sitter-typescript: true
+
 catalog:
   '@types/node': 22.19.19
   dedent: 1.7.2
