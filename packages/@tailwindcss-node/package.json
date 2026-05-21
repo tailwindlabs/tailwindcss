@@ -40,16 +40,15 @@
     ".": {
       "types": "./src/index.ts",
       "import": "./src/index.ts",
-      "require": "./src/index.cts"
+      "require": "./dist/index.js"
     },
     "./require-cache": {
-      "types": "./src/require-cache.ts",
-      "import": "./src/require-cache.ts",
-      "require": "./src/require-cache.cts"
+      "types": "./dist/require-cache.d.ts",
+      "default": "./dist/require-cache.js"
     },
     "./esm-cache-loader": {
-      "types": "./src/esm-cache.loader.mts",
-      "default": "./src/esm-cache.loader.mts"
+      "types": "./dist/esm-cache.loader.d.mts",
+      "default": "./dist/esm-cache.loader.mjs"
     }
   },
   "dependencies": {
