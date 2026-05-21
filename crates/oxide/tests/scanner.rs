@@ -1768,7 +1768,12 @@ mod scanner {
             &dir,
             &[("directory_a/a.html", "content-['directory_a/a.html']")],
         );
-        let _ = symlink(dir.join("directory_a"), dir.join("symlink"));
+        let symlink_path = dir.join("symlink");
+        symlink(dir.join("directory_a"), &symlink_path).unwrap();
+        assert!(fs::symlink_metadata(&symlink_path)
+            .unwrap()
+            .file_type()
+            .is_symlink());
 
         let mut scanner = Scanner::new(vec![
             public_source_entry_from_pattern(dir.clone(), "@source './'"),
