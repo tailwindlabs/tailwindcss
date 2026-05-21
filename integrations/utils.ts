@@ -539,7 +539,10 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
 function overwriteVersionsInPnpmWorkspace(content: string): string {
   let workspace = content.trim() === '' ? {} : Yaml.parse(content)
 
-  workspace.allowBuilds = ROOT_PNPM_WORKSPACE.allowBuilds
+  workspace.allowBuilds = {
+    ...ROOT_PNPM_WORKSPACE.allowBuilds,
+    ...workspace.allowBuilds,
+  }
   workspace.overrides ||= {}
 
   // Inject transitive dependency overwrite. This is necessary because

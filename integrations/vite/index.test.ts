@@ -1075,6 +1075,11 @@ test(
           }
         }
       `,
+      'pnpm-workspace.yaml': yaml`
+        #
+        allowBuilds:
+          es5-ext: true
+      `,
       'vite.config.ts': ts`
         import tailwindcss from '@tailwindcss/vite'
         import { defineConfig } from 'vite'
