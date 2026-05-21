@@ -6,11 +6,9 @@ packages:
   - 'integrations'
 
 catalog:
-  '@types/node': ^22.19.17
-  prettier: 3.8.3
-  vite: ^8.0.10
-  webpack: ^5.106.2
-  lightningcss: 1.32.0
+  '@types/node': 22.19.19
+  dedent: 1.7.2
+  enhanced-resolve: 5.21.6
   lightningcss-darwin-arm64: 1.32.0
   lightningcss-darwin-x64: 1.32.0
   lightningcss-linux-arm64-gnu: 1.32.0
@@ -18,3 +16,8 @@ catalog:
   lightningcss-linux-x64-gnu: 1.32.0
   lightningcss-linux-x64-musl: 1.32.0
   lightningcss-win32-x64-msvc: 1.32.0
+  lightningcss: 1.32.0
+  postcss: 8.5.15
+  prettier: 3.8.3
+  vite: 8.0.14
+  webpack: 5.107.0
