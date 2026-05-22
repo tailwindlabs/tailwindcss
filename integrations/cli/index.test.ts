@@ -2218,6 +2218,34 @@ test(
 )
 
 test(
+  '--quiet suppresses the "Done in" timing message',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': css` @import 'tailwindcss/utilities'; `,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    let output = await exec('pnpm tailwindcss --input index.css --output dist/loud.css')
+    expect(output).toContain('Done in')
+
+    let quietOutput = await exec('pnpm tailwindcss --input index.css --output dist/quiet.css -q')
+    expect(quietOutput).not.toContain('Done in')
+    expect(quietOutput).toContain('tailwindcss v')
+
+    await fs.expectFileToContain('dist/quiet.css', [candidate`flex`])
+  },
+)
+
+test(
   'changes to CSS files should pick up new CSS variables (if any)',
   {
     fs: {
