@@ -91,3 +91,67 @@ test(
     })
   },
 )
+
+// https://github.com/tailwindlabs/tailwindcss/issues/19930
+test(
+  'production build without Tailwind roots should not result in source map warnings',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [
+            tailwindcss(),
+            {
+              name: 'inspect-source-map-chain',
+              enforce: 'pre',
+              transform(_, id) {
+                if (id.includes('.css')) {
+                  // Force Rollup to collapse the sourcemap chain during this build.
+                  this.getCombinedSourcemap()
+                }
+              },
+            },
+          ],
+          css: {
+            devSourcemap: true,
+          },
+          build: {
+            sourcemap: true,
+          },
+        })
+      `,
+      'index.html': html`
+        <body>
+          <script type="module" src="./src/index.js"></script>
+          <div>Hello, world!</div>
+        </body>
+      `,
+      'src/index.js': ts` import './index.css' `,
+      'src/index.css': css`
+        body {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    let output = await exec('pnpm vite build')
+
+    expect(output).not.toContain('Sourcemap is likely to be incorrect')
+  },
+)
