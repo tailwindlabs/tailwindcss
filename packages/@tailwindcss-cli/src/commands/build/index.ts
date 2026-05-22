@@ -85,8 +85,8 @@ async function handleError<T>(fn: () => T): Promise<T> {
 }
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
-  eprintln(header())
-  eprintln()
+  if (!args['--silent']) eprintln(header())
+  if (!args['--silent']) eprintln()
 
   using I = new Instrumentation()
   DEBUG && I.start('[@tailwindcss/cli] (initial build)')
