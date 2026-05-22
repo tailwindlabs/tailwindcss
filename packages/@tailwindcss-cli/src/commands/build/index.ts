@@ -66,10 +66,9 @@ export function options() {
       description: 'Generate a source map',
       default: false,
     },
-    '--quiet': {
+    '--silent': {
       type: 'boolean',
       description: 'Suppress "Done in [x]" build timing messages',
-      alias: '-q',
     },
   } satisfies Arg
 }
@@ -353,7 +352,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // disk, and can return early.
             if (newCandidates.length <= 0) {
               let end = process.hrtime.bigint()
-              if (!args['--quiet']) eprintln(`Done in ${formatDuration(end - start)}`)
+              if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
               return
             }
 
@@ -371,7 +370,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           await write(compiledCss, compiledMap, args, I)
 
           let end = process.hrtime.bigint()
-          if (!args['--quiet']) eprintln(`Done in ${formatDuration(end - start)}`)
+          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         } catch (err) {
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
@@ -415,7 +414,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   await write(output, map, args, I)
 
   let end = process.hrtime.bigint()
-  if (!args['--quiet']) eprintln(`Done in ${formatDuration(end - start)}`)
+  if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
