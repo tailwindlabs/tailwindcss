@@ -2218,7 +2218,7 @@ test(
 )
 
 test(
-  '--quiet suppresses the "Done in" timing message',
+  'suppress output by using the --silent flag',
   {
     fs: {
       'package.json': json`
@@ -2229,7 +2229,7 @@ test(
           }
         }
       `,
-      'index.css': css` @import 'tailwindcss/utilities'; `,
+      'index.css': css` @import 'tailwindcss/utilities';`,
       'index.html': html`<div class="flex"></div>`,
     },
   },
@@ -2237,11 +2237,26 @@ test(
     let output = await exec('pnpm tailwindcss --input index.css --output dist/loud.css')
     expect(output).toContain('Done in')
 
-    let quietOutput = await exec('pnpm tailwindcss --input index.css --output dist/quiet.css -q')
-    expect(quietOutput).not.toContain('Done in')
-    expect(quietOutput).toContain('tailwindcss v')
+    let silentOutput = await exec(
+      'pnpm tailwindcss --input index.css --output dist/silent.css --silent',
+    )
+    expect(silentOutput).not.toContain('Done in')
+    expect(silentOutput).not.toContain('tailwindcss v')
 
-    await fs.expectFileToContain('dist/quiet.css', [candidate`flex`])
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/loud.css ---
+      .flex {
+        display: flex;
+      }
+
+
+      --- ./dist/silent.css ---
+      .flex {
+        display: flex;
+      }
+      "
+    `)
   },
 )
 
