@@ -68,7 +68,7 @@ export function options() {
     },
     '--silent': {
       type: 'boolean',
-      description: 'Suppress "Done in [x]" build timing messages',
+      description: 'Suppress non-error output',
     },
   } satisfies Arg
 }
