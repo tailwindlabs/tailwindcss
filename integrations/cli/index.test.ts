@@ -2218,6 +2218,49 @@ test(
 )
 
 test(
+  'suppress output by using the --silent flag',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': css` @import 'tailwindcss/utilities';`,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    let output = await exec('pnpm tailwindcss --input index.css --output dist/loud.css')
+    expect(output).toContain('Done in')
+
+    let silentOutput = await exec(
+      'pnpm tailwindcss --input index.css --output dist/silent.css --silent',
+    )
+    expect(silentOutput).not.toContain('Done in')
+    expect(silentOutput).not.toContain('tailwindcss v')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/loud.css ---
+      .flex {
+        display: flex;
+      }
+
+
+      --- ./dist/silent.css ---
+      .flex {
+        display: flex;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'changes to CSS files should pick up new CSS variables (if any)',
   {
     fs: {
