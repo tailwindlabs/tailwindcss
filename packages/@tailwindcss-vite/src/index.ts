@@ -241,7 +241,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           let result = await root.generate(src, (file) => this.addWatchFile(file), I)
           if (!result) {
             roots.delete(id)
-            return src
+            return
           }
 
           DEBUG && I.end('[@tailwindcss/vite] Generate CSS (serve)')
@@ -357,7 +357,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           let result = await root.generate(src, (file) => this.addWatchFile(file), I)
           if (!result) {
             roots.delete(id)
-            return src
+            return
           }
           DEBUG && I.end('[@tailwindcss/vite] Generate CSS (build)')
 
