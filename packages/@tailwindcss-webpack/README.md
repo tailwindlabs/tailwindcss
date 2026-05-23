@@ -39,7 +39,7 @@ If you're interested in contributing to Tailwind CSS, please read our [contribut
 
 ## @tailwindcss/webpack
 
-A webpack / Rspack loader for Tailwind CSS v4.
+A webpack loader for Tailwind CSS v4.
 
 ## Installation
 
@@ -48,8 +48,6 @@ npm install @tailwindcss/webpack
 ```
 
 ### Usage
-
-- webpack:
 
 ```javascript
 // webpack.config.js
@@ -62,25 +60,6 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
-      },
-    ],
-  },
-}
-```
-
-- Rspack:
-
-```javascript
-// rspack.config.mjs
-import { rspack } from '@rspack/core'
-
-export default {
-  plugins: [new rspack.CssExtractRspackPlugin()],
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [rspack.CssExtractRspackPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
       },
     ],
   },
