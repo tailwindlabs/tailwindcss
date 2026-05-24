@@ -190,6 +190,8 @@ export function cssContext(
 ): VisitContext<AstNode> & { context: Record<string, string | boolean> } {
   return {
     depth: ctx.depth,
+    index: ctx.index,
+    siblings: ctx.siblings,
     get context() {
       let context: Record<string, string | boolean> = {}
       for (let child of ctx.path()) {
