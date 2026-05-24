@@ -1048,11 +1048,9 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
     '/',
   ])
   walk(ast, (node, ctx) => {
-    let parentArray = ctx.parent === null ? ast : (ctx.parent.nodes ?? [])
-
     // Handle operators (e.g.: inside of `calc(…)`)
     if (node.kind === 'word' && symbols.has(node.value)) {
-      let idx = parentArray.indexOf(node) ?? -1
+      let idx = ctx.index
 
       // This should not be possible
       if (idx === -1) return
@@ -1060,25 +1058,25 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
       // a + b
       //   ^ node
       //  ^ previous (whitespace)
-      let previous = parentArray[idx - 1]
+      let previous = ctx.siblings[idx - 1]
       if (previous?.kind !== 'separator' || previous.value !== ' ') return
 
       // a + b
       //   ^ node
       //    ^ next (whitespace)
-      let next = parentArray[idx + 1]
+      let next = ctx.siblings[idx + 1]
       if (next?.kind !== 'separator' || next.value !== ' ') return
 
       // a + b
       //   ^ node
       // ^ previous (node)
-      let previousPrevious = parentArray[idx - 2]
+      let previousPrevious = ctx.siblings[idx - 2]
       if (previousPrevious && symbols.has(previousPrevious.value)) return
 
       // a + b
       //   ^ node
       //     ^ next (node)
-      let nextNext = parentArray[idx + 2]
+      let nextNext = ctx.siblings[idx + 2]
       if (nextNext && symbols.has(nextNext.value)) return
 
       drop.add(previous)
@@ -1087,7 +1085,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
     // Leading and trailing whitespace
     else if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
-      if (parentArray[0] === node || parentArray[parentArray.length - 1] === node) {
+      if (ctx.siblings[0] === node || ctx.siblings[ctx.siblings.length - 1] === node) {
         drop.add(node)
       }
     }
@@ -1101,7 +1099,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
     // Wrap custom functions starting with `--`, in parentheses if preceeded by
     // a symbol. E.g.: `calc(100%---spacing(2))` → `calc(100%-(--spacing(2)))`
     else if (node.kind === 'function' && node.value.startsWith('--')) {
-      let idx = parentArray.indexOf(node) ?? -1
+      let idx = ctx.index
 
       // When it's the first argument, then we don't have to wrap it in `(…)`
       //
@@ -1115,7 +1113,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
       //
       // E.g.: `min(100%,--spacing(2))` is readable, in fact
       //       `min(100%,(--spacing(2)))` would make it worse
-      let previous = parentArray[idx - 1]
+      let previous = ctx.siblings[idx - 1]
       if (previous?.kind === 'separator' && previous.value === ',') return
 
       // When it's part of a bigger list, aka no special symbols were used, then
@@ -1123,7 +1121,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
       //
       // E.g.: `shadow-[inset_0px_1px_--theme(--color-white/15%)]`, wrapping would look unnecessary:
       //       `shadow-[inset_0px_1px_(--theme(--color-white/15%))]`
-      let previousPrevious = parentArray[idx - 2]
+      let previousPrevious = ctx.siblings[idx - 2]
       if (previousPrevious && !symbols.has(previousPrevious.value)) return
 
       return WalkAction.ReplaceSkip({
