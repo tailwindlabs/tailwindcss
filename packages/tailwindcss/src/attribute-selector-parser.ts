@@ -23,6 +23,7 @@ const ZERO = 48
 const NINE = 57
 const DASH = 45
 const UNDERSCORE = 95
+const NON_ASCII = 128
 
 interface AttributeSelector {
   attribute: string
@@ -61,6 +62,8 @@ export function parse(input: string): AttributeSelector | null {
       if (currentChar >= LOWER_A && currentChar <= LOWER_Z) continue
       if (currentChar >= ZERO && currentChar <= NINE) continue
       if (currentChar === DASH || currentChar === UNDERSCORE) continue
+      // Non-ASCII code points are valid in a CSS ident, e.g.: `[data-état]`
+      if (currentChar >= NON_ASCII) continue
       break
     }
 
