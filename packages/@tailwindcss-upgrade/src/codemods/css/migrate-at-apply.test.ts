@@ -10,6 +10,29 @@ vi.spyOn(versions, 'isMajor').mockReturnValue(true)
 const css = dedent
 
 async function migrate(input: string, config: Config = {}) {
+  return postcss()
+    .use(
+      migrateAtApply({
+        designSystem: await loadDesignSystem(),
+        userConfig: config,
+      }),
+    )
+    .process(input, { from: expect.getState().testPath })
+    .then((result) => result.css)
+}
+
+async function migrateRoot(root: postcss.Root, config: Config = {}) {
+  let plugin = migrateAtApply({
+    designSystem: await loadDesignSystem(),
+    userConfig: config,
+  })
+
+  await plugin.OnceExit?.(root, { result: root.toResult() } as any)
+
+  return root.toString()
+}
+
+async function loadDesignSystem() {
   let designSystem = await __unstable__loadDesignSystem(
     css`
       @import 'tailwindcss';
@@ -22,15 +45,7 @@ async function migrate(input: string, config: Config = {}) {
     { base: __dirname },
   )
 
-  return postcss()
-    .use(
-      migrateAtApply({
-        designSystem,
-        userConfig: config,
-      }),
-    )
-    .process(input, { from: expect.getState().testPath })
-    .then((result) => result.css)
+  return designSystem
 }
 
 it('should not migrate `@apply`, when there are no issues', async () => {
@@ -61,15 +76,19 @@ it('should append `!` to each utility, when using `!important`', async () => {
   `)
 })
 
-// TODO: Handle SCSS syntax
-it.skip('should append `!` to each utility, when using `#{!important}`', async () => {
-  expect(
-    await migrate(css`
-      .foo {
-        @apply flex flex-col #{!important};
-      }
-    `),
-  ).toMatchInlineSnapshot(`
+it('should append `!` to each utility, when using `#{!important}`', async () => {
+  // PostCSS's CSS parser rejects SCSS interpolation, so build this fixture
+  // directly to exercise the codemod behavior.
+  let root = postcss.parse(css`
+    .foo {
+      @apply flex flex-col !important;
+    }
+  `)
+  root.walkAtRules('apply', (atRule) => {
+    atRule.params = 'flex flex-col #{!important}'
+  })
+
+  expect(await migrateRoot(root)).toMatchInlineSnapshot(`
     ".foo {
       @apply flex! flex-col!;
     }"
