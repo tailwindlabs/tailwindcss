@@ -36,6 +36,8 @@ type Parent<T> = T & { nodes: T[] }
 export interface VisitContext<T> {
   parent: Parent<T> | null
   depth: number
+  index: number
+  siblings: T[]
   path: () => T[]
 }
 
@@ -68,6 +70,8 @@ function walkImplementation<T extends { nodes?: T[] }>(
   let ctx: VisitContext<T> = {
     parent: null,
     depth: 0,
+    index: 0,
+    siblings: ast,
     path() {
       let path: T[] = []
 
@@ -99,9 +103,12 @@ function walkImplementation<T extends { nodes?: T[] }>(
     }
 
     ctx.parent = parent
+    ctx.siblings = nodes
 
     // Enter phase (offsets are positive)
     if (offset >= 0) {
+      ctx.index = offset
+
       let node = nodes[offset]
       let result = enter(node, ctx) ?? WalkAction.Continue
 
@@ -155,6 +162,7 @@ function walkImplementation<T extends { nodes?: T[] }>(
 
     // Exit phase for nodes[~offset]
     let index = ~offset // Two's complement to get original offset
+    ctx.index = index
     let node = nodes[index]
 
     let result = exit(node, ctx) ?? WalkAction.Continue

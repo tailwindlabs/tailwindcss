@@ -980,10 +980,10 @@ function substituteFunctionsInValue(
         fallbackValues.length > 0 ? handle(path, ValueParser.toCss(fallbackValues)) : handle(path)
       if (replacement === null) return
 
-      if (ctx.parent) {
-        let idx = ctx.parent.nodes.indexOf(node) - 1
+      {
+        let idx = ctx.index - 1
         while (idx !== -1) {
-          let previous = ctx.parent.nodes[idx]
+          let previous = ctx.siblings[idx]
           // Skip the space separator
           if (previous.kind === 'separator' && previous.value.trim() === '') {
             idx -= 1
@@ -2405,7 +2405,7 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
         // Ignore `--tw-{property}` if `{property}` exists with the same value
         if (node.property.startsWith('--tw-')) {
           if (
-            (ctx.parent?.nodes ?? []).some(
+            ctx.siblings.some(
               (sibling) =>
                 sibling.kind === 'declaration' &&
                 node.value === sibling.value &&
