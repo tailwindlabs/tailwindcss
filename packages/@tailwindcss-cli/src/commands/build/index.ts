@@ -492,8 +492,7 @@ async function createWatchers(dirs: string[], cb: (events: WatchEvent[]) => void
           // file does not influence the CSS output. However, tracked full
           // rebuild dependencies still need to be forwarded to the caller.
           if (event.type === 'delete') {
-            let existing = trackedEvents.get(event.path)
-            trackedEvents.set(event.path, existing ?? event.type)
+            trackedEvents.set(event.path, event.type)
             return
           }
 

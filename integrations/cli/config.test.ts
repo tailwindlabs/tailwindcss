@@ -299,6 +299,8 @@ test(
     await process.onStderr((m) => m.includes('ENOENT') && m.includes('my-color.js'))
 
     await fs.write('my-color.js', js`module.exports = 'red'`)
+    // Touch the input CSS to force a new full rebuild after the failed reload.
+    // At this point the missing dependency is no longer tracked yet.
     await fs.write(
       'src/index.css',
       css`
