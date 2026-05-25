@@ -249,6 +249,73 @@ test(
 )
 
 test(
+  'Config dependency deletion triggers a rebuild error in watch mode',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div class="text-primary"></div>
+      `,
+      'tailwind.config.js': js`
+        const myColor = require('./my-color')
+        module.exports = {
+          theme: {
+            extend: {
+              colors: {
+                primary: myColor,
+              },
+            },
+          },
+        }
+      `,
+      'my-color.js': js`module.exports = 'blue'`,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.js';
+      `,
+    },
+  },
+  async ({ fs, exec, spawn }) => {
+    let process = await spawn(
+      'pnpm tailwindcss --input src/index.css --output dist/out.css --watch',
+    )
+    await process.onStderr((m) => m.includes('Done in'))
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`text-primary`,
+      'color: blue',
+    ])
+
+    process.flush()
+    await exec(`node -e "require('node:fs').unlinkSync('my-color.js')"`)
+    await process.onStderr((m) => m.includes('ENOENT') && m.includes('my-color.js'))
+
+    await fs.write('my-color.js', js`module.exports = 'red'`)
+    await fs.write(
+      'src/index.css',
+      css`
+        @import 'tailwindcss';
+        @config '../tailwind.config.js';
+      `,
+    )
+
+    await fs.expectFileToContain('dist/out.css', [
+      //
+      candidate`text-primary`,
+      'color: red',
+    ])
+  },
+)
+
+test(
   'Config files (ESM, watch mode)',
   {
     fs: {

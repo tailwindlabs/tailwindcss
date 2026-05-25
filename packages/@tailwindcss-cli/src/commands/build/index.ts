@@ -27,6 +27,11 @@ import { drainStdin, outputFile } from './utils'
 const css = String.raw
 const DEBUG = env.DEBUG
 
+type WatchEvent = {
+  path: string
+  type: 'create' | 'update' | 'delete'
+}
+
 export function options() {
   return {
     '--input': {
@@ -257,11 +262,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   if (args['--watch']) {
     let cleanupWatchers: (() => Promise<void>)[] = []
     cleanupWatchers.push(
-      await createWatchers(watchDirectories(scanner), async function handle(files) {
+      await createWatchers(watchDirectories(scanner), async function handle(events) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
-          if (files.length === 1 && files[0] === args['--output']) return
+          if (events.length === 1 && events[0].path === args['--output']) return
 
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/cli] (watcher)')
@@ -274,11 +279,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           let resolvedFullRebuildPaths = fullRebuildPaths
 
-          for (let file of files) {
+          for (let event of events) {
             // If one of the changed files is related to the input CSS or JS
             // config/plugin files, then we need to do a full rebuild because
             // the theme might have changed.
-            if (resolvedFullRebuildPaths.includes(file)) {
+            if (resolvedFullRebuildPaths.includes(event.path)) {
               rebuildStrategy = 'full'
 
               // No need to check the rest of the events, because we already know we
@@ -286,10 +291,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
               break
             }
 
+            // We currently keep scanned candidates cached, so deleting a content
+            // file does not require an incremental rebuild.
+            if (event.type === 'delete') continue
+
             // Track new and updated files for incremental rebuilds.
             changedFiles.push({
-              file,
-              extension: path.extname(file).slice(1),
+              file: event.path,
+              extension: path.extname(event.path).slice(1),
             } satisfies ChangedContent)
           }
 
@@ -417,7 +426,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
 }
 
-async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+async function createWatchers(dirs: string[], cb: (events: WatchEvent[]) => void) {
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
@@ -447,8 +456,8 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   // we want to cleanup the old ones we captured here.
   let watchers = new Disposables()
 
-  // Track all files that were added or changed.
-  let files = new Set<string>()
+  // Track the latest relevant event for each path.
+  let trackedEvents = new Map<string, WatchEvent['type']>()
 
   // Keep track of the debounce queue to avoid multiple rebuilds.
   let debounceQueue = new Disposables()
@@ -462,8 +471,8 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
-      cb(Array.from(files))
-      files.clear()
+      cb(Array.from(trackedEvents, ([path, type]) => ({ path, type })))
+      trackedEvents.clear()
     })
   }
 
@@ -479,10 +488,14 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
       await Promise.all(
         events.map(async (event) => {
-          // We currently don't handle deleted files because it doesn't influence
-          // the CSS output. This is because we currently keep all scanned
-          // candidates in a cache for performance reasons.
-          if (event.type === 'delete') return
+          // We currently keep scanned candidates cached, so deleting a content
+          // file does not influence the CSS output. However, tracked full
+          // rebuild dependencies still need to be forwarded to the caller.
+          if (event.type === 'delete') {
+            let existing = trackedEvents.get(event.path)
+            trackedEvents.set(event.path, existing ?? event.type)
+            return
+          }
 
           // Ignore directory changes. We only care about file changes
           let stats: Stats | null = null
@@ -494,7 +507,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
           }
 
           // Track the changed file.
-          files.add(event.path)
+          trackedEvents.set(event.path, event.type)
         }),
       )
 
