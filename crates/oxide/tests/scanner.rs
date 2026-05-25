@@ -142,6 +142,20 @@ mod scanner {
         scan_with_globs(paths_with_content, vec!["@source '**/*'"])
     }
 
+    fn scanned_files(scanner: &mut Scanner, base: &Path) -> Vec<String> {
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+
+        let mut files = scanner
+            .get_files()
+            .iter()
+            // Normalize paths to use unix style separators
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+        files.sort();
+        files
+    }
+
     #[test]
     fn it_should_work_with_a_set_of_root_files() {
         let ScanResult {
@@ -838,6 +852,43 @@ mod scanner {
                 "content-['project-b/sub1/sub2/new.html']"
             ]
         );
+    }
+
+    #[test]
+    fn it_should_stop_tracking_deleted_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/assets/icon.svg", "<svg></svg>"),
+            ],
+        );
+
+        let sources = vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )];
+
+        let mut scanner = Scanner::new(sources);
+        let _ = scanner.scan();
+
+        assert_eq!(
+            scanned_files(&mut scanner, &dir),
+            vec!["src/assets/icon.svg", "src/index.html"]
+        );
+
+        fs::remove_file(dir.join("src/assets/icon.svg")).unwrap();
+
+        let _ = scanner.scan();
+
+        assert_eq!(scanned_files(&mut scanner, &dir), vec!["src/index.html"]);
     }
 
     #[test]

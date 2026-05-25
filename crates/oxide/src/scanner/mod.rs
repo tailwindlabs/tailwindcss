@@ -424,6 +424,11 @@ impl Scanner {
             }
         }
 
+        // Forget files that were tracked during a previous scan but no longer
+        // appear in the current source walk.
+        self.files.retain(|file| seen_files.contains(file));
+        self.mtimes.retain(|file, _| seen_files.contains(file));
+
         // Read + preprocess all discovered files in parallel
         let scanned_blobs: Vec<Vec<u8>> = content_paths
             .into_par_iter()
