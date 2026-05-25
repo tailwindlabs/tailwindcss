@@ -480,6 +480,7 @@ pub fn pre_process_input(content: Vec<u8>, extension: &str) -> Vec<u8> {
         "rb" | "erb" => Ruby.process(&content),
         "slim" | "slang" => Slim.process(&content),
         "svelte" => Svelte.process(&content),
+        "twig" => Twig.process(&content),
         "rs" => Rust.process(&content),
         "vue" => Vue.process(&content),
         _ => content,

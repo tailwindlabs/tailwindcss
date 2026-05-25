@@ -906,6 +906,17 @@ mod tests {
             r#"<div class="{% if true %}flex{% else %}block{% endif %}">"#,
             vec!["flex", "block"],
         );
+
+        // Symfony Live Components loading directives.
+        //
+        // https://github.com/tailwindlabs/tailwindcss/issues/19458
+        assert_extract_candidates_contains(
+            &pre_process_input(
+                r#"<div data-loading="addClass(opacity-50 pointer-events-none)|removeClass(hidden)"></div>"#,
+                "twig",
+            ),
+            vec!["opacity-50", "pointer-events-none", "hidden"],
+        );
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/17050
