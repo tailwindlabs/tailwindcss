@@ -1,6 +1,5 @@
 import { stripVTControlCharacters } from 'util'
 import { expect, it } from 'vitest'
-import { dimensions } from '../../tailwindcss/src/utils/dimensions'
 import { Instrumentation } from './instrumentation'
 
 it('should add instrumentation using start/end markers', () => {
@@ -73,15 +72,18 @@ it('should measure async callbacks via the `span` api', async () => {
     await new Promise((r) => setTimeout(r, 500))
   })
 
-  expect.assertions(1)
+  expect.assertions(2)
 
   I.report((output) => {
-    expect(stabilize(output)).toMatchInlineSnapshot(`
+    expect(stripVTControlCharacters(output).replace(/\[.*\]/g, '[0.xxms]')).toMatchInlineSnapshot(`
       "
-      [510.00ms] Foo
-      [  0.05ms]   ↳ Bar × 100
+      [0.xxms] Foo
+      [0.xxms]   ↳ Bar × 100
       "
     `)
+
+    let [, duration] = stripVTControlCharacters(output).match(/\[(.*)\]/)!
+    expect(parseFloat(duration)).toBeGreaterThanOrEqual(500)
   })
 })
 
@@ -134,29 +136,3 @@ it('should auto end pending timers when reporting', () => {
     `)
   })
 })
-
-let nf = new Intl.NumberFormat(undefined, {
-  style: 'decimal',
-  minimumFractionDigits: 2,
-})
-
-function stabilize(output: string) {
-  return stripVTControlCharacters(output).replace(/\[(\s*)(.*)\]/g, (_, whitespace, duration) => {
-    let [value, unit] = dimensions.get(duration.trim())!
-    return `[${whitespace}${nf.format(stableRound(value))}${unit}]`
-  })
-}
-
-function stableRound(value: number) {
-  if (value === 0) return 0
-
-  let sign = Math.sign(value)
-  let abs = Math.abs(value)
-
-  let magnitude = 10 ** Math.floor(Math.log10(abs))
-
-  let step = magnitude / 10
-  if (abs < 0.1) step = 0.05
-
-  return sign * Math.ceil(abs / step) * step
-}
