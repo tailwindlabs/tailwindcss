@@ -1,7 +1,8 @@
 import * as ValueParser from '../value-parser'
 import { walk, WalkAction } from '../walk'
+import { DefaultMap } from './default-map'
 
-export function extractUsedVariables(raw: string): string[] {
+let extractUsedVariablesCache = new DefaultMap((raw) => {
   let variables: string[] = []
   walk(ValueParser.parse(raw), (node) => {
     if (node.kind !== 'function' || node.value !== 'var') return
@@ -15,4 +16,8 @@ export function extractUsedVariables(raw: string): string[] {
     return WalkAction.Skip
   })
   return variables
+})
+
+export function extractUsedVariables(raw: string): string[] {
+  return extractUsedVariablesCache.get(raw)
 }
