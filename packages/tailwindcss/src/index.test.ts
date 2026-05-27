@@ -509,11 +509,13 @@ describe('@apply', () => {
       @layer properties;
       .foo {
         --tw-content: "a";
+        content: var(--tw-content);
         --tw-content: "b";
         content: var(--tw-content);
       }
       .bar {
         --tw-content: "a";
+        content: var(--tw-content);
         --tw-content: "b";
         content: var(--tw-content);
       }
@@ -3759,12 +3761,14 @@ describe('plugins', () => {
       "
       @layer utilities {
         .hocus\\:underline {
-          --custom-property: @slot;
-          &:hover {
-            text-decoration-line: underline;
-          }
-          &:focus {
-            text-decoration-line: underline;
+          & {
+            --custom-property: @slot;
+            &:hover {
+              text-decoration-line: underline;
+            }
+            &:focus {
+              text-decoration-line: underline;
+            }
           }
         }
       }
@@ -4403,9 +4407,11 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           .custom-before\\:underline {
-            --has-before: 1;
-            &::before {
-              text-decoration-line: underline;
+            & {
+              --has-before: 1;
+              &::before {
+                text-decoration-line: underline;
+              }
             }
           }
         }
@@ -4439,10 +4445,12 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           .custom-before\\:underline {
-            --has-before: 1;
-            &::before {
-              &:hover, &:focus {
-                text-decoration-line: underline;
+            & {
+              --has-before: 1;
+              &::before {
+                &:hover, &:focus {
+                  text-decoration-line: underline;
+                }
               }
             }
           }
@@ -4767,10 +4775,14 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .hocus\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            &:focus {
-              display: flex;
+        & {
+          &:hover {
+            @media (hover: hover) {
+              & {
+                &:focus {
+                  display: flex;
+                }
+              }
             }
           }
         }
@@ -4800,9 +4812,13 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .hocus\\:flex {
-        &:hover {
-          &:focus {
-            display: flex;
+        & {
+          &:hover {
+            & {
+              &:focus {
+                display: flex;
+              }
+            }
           }
         }
       }
@@ -4831,9 +4847,13 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .hocus\\:flex {
-        &:hover {
-          &:focus {
-            display: flex;
+        & {
+          &:hover {
+            & {
+              &:focus {
+                display: flex;
+              }
+            }
           }
         }
       }
@@ -4923,13 +4943,19 @@ describe('@custom-variant', () => {
         display: flex;
       }
       .b\\:flex {
-        display: flex;
+        & {
+          display: flex;
+        }
       }
       .a\\:b\\:flex {
-        display: flex;
+        & {
+          display: flex;
+        }
       }
       .b\\:a\\:flex {
-        display: flex;
+        & {
+          display: flex;
+        }
       }
       "
     `)
@@ -4968,16 +4994,7 @@ describe('@custom-variant', () => {
       }
       .b\\:flex {
         .b {
-          .a {
-            .a-inside-b {
-              display: flex;
-            }
-          }
-        }
-      }
-      .a\\:b\\:flex {
-        .a {
-          .b {
+          & {
             .a {
               .a-inside-b {
                 display: flex;
@@ -4986,12 +5003,27 @@ describe('@custom-variant', () => {
           }
         }
       }
+      .a\\:b\\:flex {
+        .a {
+          .b {
+            & {
+              .a {
+                .a-inside-b {
+                  display: flex;
+                }
+              }
+            }
+          }
+        }
+      }
       .b\\:a\\:flex {
         .b {
-          .a {
-            .a-inside-b {
-              .a {
-                display: flex;
+          & {
+            .a {
+              .a-inside-b {
+                .a {
+                  display: flex;
+                }
               }
             }
           }
@@ -5031,14 +5063,20 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .hocus\\:flex {
-        &:hover {
-          &:focus {
-            display: flex;
+        & {
+          &:hover {
+            & {
+              &:focus {
+                display: flex;
+              }
+            }
           }
-        }
-        &[data-hover] {
-          &:focus {
-            display: flex;
+          &[data-hover] {
+            & {
+              &:focus {
+                display: flex;
+              }
+            }
           }
         }
       }
@@ -5084,9 +5122,13 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       .baz\\:flex {
-        &:active {
-          [data-broken-circle] & {
-            display: flex;
+        & {
+          &:active {
+            & {
+              [data-broken-circle] & {
+                display: flex;
+              }
+            }
           }
         }
       }
@@ -5301,20 +5343,26 @@ test('JS APIs support @variant', async () => {
         text-decoration-line: underline;
       }
       .bar-one {
-        @media (prefers-color-scheme: dark) {
-          --bar: 1;
+        & {
+          @media (prefers-color-scheme: dark) {
+            --bar: 1;
+          }
         }
       }
       .foo {
-        @media (prefers-color-scheme: dark) {
-          --foo: foo;
+        & {
+          @media (prefers-color-scheme: dark) {
+            --foo: foo;
+          }
         }
       }
     }
     @layer base {
       body {
-        @media (prefers-color-scheme: dark) {
-          color: red;
+        & {
+          @media (prefers-color-scheme: dark) {
+            color: red;
+          }
         }
       }
     }
@@ -5779,40 +5827,54 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        @media (prefers-color-scheme: dark) {
-          background: white;
+        & {
+          @media (prefers-color-scheme: dark) {
+            background: white;
+          }
         }
       }
-      &:hover {
-        @media (hover: hover) {
-          @media (orientation: landscape) {
-            .btn2 {
+      & {
+        &:hover {
+          @media (hover: hover) {
+            & {
+              @media (orientation: landscape) {
+                .btn2 {
+                  color: red;
+                }
+              }
+            }
+          }
+        }
+      }
+      & {
+        &:hover {
+          @media (hover: hover) {
+            .foo {
               color: red;
             }
-          }
-        }
-      }
-      &:hover {
-        @media (hover: hover) {
-          .foo {
-            color: red;
-          }
-          @media (orientation: landscape) {
-            .bar {
-              color: blue;
+            & {
+              @media (orientation: landscape) {
+                .bar {
+                  color: blue;
+                }
+              }
             }
-          }
-          .baz {
-            @media (orientation: portrait) {
-              color: green;
+            .baz {
+              & {
+                @media (orientation: portrait) {
+                  color: green;
+                }
+              }
             }
           }
         }
       }
       @media something {
-        @media (orientation: landscape) {
-          @page {
-            color: red;
+        & {
+          @media (orientation: landscape) {
+            @page {
+              color: red;
+            }
           }
         }
       }
@@ -5837,8 +5899,10 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        &:hover, &:focus {
-          background: white;
+        & {
+          &:hover, &:focus {
+            background: white;
+          }
         }
       }
       "
@@ -5866,9 +5930,13 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        &:disabled {
-          &:focus {
-            background: white;
+        & {
+          &:disabled {
+            & {
+              &:focus {
+                background: white;
+              }
+            }
           }
         }
       }
@@ -5900,13 +5968,17 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:hover {
-            @media (hover: hover) {
-              background: red;
+          & {
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+              }
             }
           }
-          &:focus {
-            background: red;
+          & {
+            &:focus {
+              background: red;
+            }
           }
         }
         "
@@ -5954,13 +6026,17 @@ describe('@variant', () => {
           "
           .btn {
             background: black;
-            &:hover {
-              @media (hover: hover) {
-                background: red;
+            & {
+              &:hover {
+                @media (hover: hover) {
+                  background: red;
+                }
               }
             }
-            &:focus {
-              background: red;
+            & {
+              &:focus {
+                background: red;
+              }
             }
           }
           "
@@ -5984,11 +6060,15 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:is(:hover,:focus) {
-            background: red;
+          & {
+            &:is(:hover,:focus) {
+              background: red;
+            }
           }
-          &:disabled {
-            background: red;
+          & {
+            &:disabled {
+              background: red;
+            }
           }
         }
         "
@@ -6015,24 +6095,36 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:hover {
-            @media (hover: hover) {
-              background: red;
-              &:active {
-                background: blue;
-              }
-              &:disabled {
-                background: blue;
+          & {
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+                & {
+                  &:active {
+                    background: blue;
+                  }
+                }
+                & {
+                  &:disabled {
+                    background: blue;
+                  }
+                }
               }
             }
           }
-          &:focus {
-            background: red;
-            &:active {
-              background: blue;
-            }
-            &:disabled {
-              background: blue;
+          & {
+            &:focus {
+              background: red;
+              & {
+                &:active {
+                  background: blue;
+                }
+              }
+              & {
+                &:disabled {
+                  background: blue;
+                }
+              }
             }
           }
         }
@@ -6125,10 +6217,12 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:hover {
-            @media (hover: hover) {
-              &:focus {
-                background: red;
+          & {
+            &:hover {
+              @media (hover: hover) {
+                &:focus {
+                  background: red;
+                }
               }
             }
           }
@@ -6153,15 +6247,19 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:hover {
-            @media (hover: hover) {
-              &:focus {
-                background: red;
+          & {
+            &:hover {
+              @media (hover: hover) {
+                &:focus {
+                  background: red;
+                }
               }
             }
           }
-          &:disabled {
-            background: red;
+          & {
+            &:disabled {
+              background: red;
+            }
           }
         }
         "
@@ -6184,15 +6282,19 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          &:is(:hover,:focus) {
-            &:disabled {
-              background: red;
+          & {
+            &:is(:hover,:focus) {
+              &:disabled {
+                background: red;
+              }
             }
           }
-          &[aria-disabled="true"] {
-            &:hover {
-              @media (hover: hover) {
-                background: red;
+          & {
+            &[aria-disabled="true"] {
+              &:hover {
+                @media (hover: hover) {
+                  background: red;
+                }
               }
             }
           }
@@ -6222,26 +6324,38 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        &[data-a] {
-          background: red;
-          &[data-d] {
-            background: blue;
-          }
-          &[data-e] {
-            &[data-f] {
-              background: blue;
+        & {
+          &[data-a] {
+            background: red;
+            & {
+              &[data-d] {
+                background: blue;
+              }
+            }
+            & {
+              &[data-e] {
+                &[data-f] {
+                  background: blue;
+                }
+              }
             }
           }
         }
-        &[data-b] {
-          &[data-c] {
-            background: red;
-            &[data-d] {
-              background: blue;
-            }
-            &[data-e] {
-              &[data-f] {
-                background: blue;
+        & {
+          &[data-b] {
+            &[data-c] {
+              background: red;
+              & {
+                &[data-d] {
+                  background: blue;
+                }
+              }
+              & {
+                &[data-e] {
+                  &[data-f] {
+                    background: blue;
+                  }
+                }
               }
             }
           }
@@ -6311,9 +6425,13 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        @container (width >= 768px) {
-          &.foo {
-            background: white;
+        & {
+          @container (width >= 768px) {
+            & {
+              &.foo {
+                background: white;
+              }
+            }
           }
         }
       }

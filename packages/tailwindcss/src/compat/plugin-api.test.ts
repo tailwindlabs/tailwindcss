@@ -1570,18 +1570,24 @@ describe('addBase', () => {
       "
       @layer base {
         :root {
-          @media (width >= 128px) {
-            --PascalCase: 1;
-            --camelCase: 1;
-            --UPPERCASE: 1;
-          }
-          &[data-enabled] {
-            &:focus {
-              --x: 1;
+          & {
+            @media (width >= 128px) {
+              --PascalCase: 1;
+              --camelCase: 1;
+              --UPPERCASE: 1;
             }
           }
-          &:disabled {
-            --x: 1;
+          & {
+            &[data-enabled] {
+              &:focus {
+                --x: 1;
+              }
+            }
+          }
+          & {
+            &:disabled {
+              --x: 1;
+            }
           }
         }
       }
@@ -1617,8 +1623,10 @@ describe('addBase', () => {
       "
       @layer base {
         :root {
-          &.custom {
-            --x: 1;
+          & {
+            &.custom {
+              --x: 1;
+            }
           }
         }
       }
@@ -1901,12 +1909,14 @@ describe('addVariant', () => {
       "
       @layer utilities {
         .hocus\\:underline {
-          --custom-property: @slot;
-          &:hover {
-            text-decoration-line: underline;
-          }
-          &:focus {
-            text-decoration-line: underline;
+          & {
+            --custom-property: @slot;
+            &:hover {
+              text-decoration-line: underline;
+            }
+            &:focus {
+              text-decoration-line: underline;
+            }
           }
         }
       }
@@ -3607,17 +3617,19 @@ describe('addUtilities()', () => {
         }
       }
       .not-hover\\:md\\:foo {
-        &:not(*:hover) {
-          @media (width >= 768px) {
-            :where(.not-hover\\:md\\:foo > :first-child) {
-              color: red;
+        & {
+          &:not(*:hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo > :first-child) {
+                color: red;
+              }
             }
           }
-        }
-        @media not (hover: hover) {
-          @media (width >= 768px) {
-            :where(.not-hover\\:md\\:foo > :first-child) {
-              color: red;
+          @media not (hover: hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo > :first-child) {
+                color: red;
+              }
             }
           }
         }
@@ -4445,17 +4457,19 @@ describe('matchUtilities()', () => {
         }
       }
       .not-hover\\:md\\:foo-red {
-        &:not(*:hover) {
-          @media (width >= 768px) {
-            :where(.not-hover\\:md\\:foo-red > :first-child) {
-              color: red;
+        & {
+          &:not(*:hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo-red > :first-child) {
+                color: red;
+              }
             }
           }
-        }
-        @media not (hover: hover) {
-          @media (width >= 768px) {
-            :where(.not-hover\\:md\\:foo-red > :first-child) {
-              color: red;
+          @media not (hover: hover) {
+            @media (width >= 768px) {
+              :where(.not-hover\\:md\\:foo-red > :first-child) {
+                color: red;
+              }
             }
           }
         }

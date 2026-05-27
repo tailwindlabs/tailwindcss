@@ -255,18 +255,28 @@ it('should not emit exact duplicate declarations in the same rule', () => {
   expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
     "
     .foo {
+      color: red;
       .bar {
+        color: green;
         color: blue;
         color: green;
       }
       color: red;
     }
     .foo {
-      color: green;
-      color: blue;
       color: red;
+      & {
+        color: green;
+        & {
+          color: red;
+          color: green;
+          color: blue;
+        }
+        color: red;
+      }
       background: blue;
       .bar {
+        color: green;
         color: blue;
         color: green;
       }

@@ -2235,11 +2235,13 @@ test('not', async () => {
       }
     }
     .not-hover\\:flex {
-      &:not(*:hover) {
-        display: flex;
-      }
-      @media not (hover: hover) {
-        display: flex;
+      & {
+        &:not(*:hover) {
+          display: flex;
+        }
+        @media not (hover: hover) {
+          display: flex;
+        }
       }
     }
     .not-focus\\:flex {
@@ -2388,11 +2390,13 @@ test('not', async () => {
       }
     }
     .not-device-hocus\\:flex {
-      &:not(*:hover,  *:focus) {
-        display: flex;
-      }
-      @media not (hover: hover) {
-        display: flex;
+      & {
+        &:not(*:hover,  *:focus) {
+          display: flex;
+        }
+        @media not (hover: hover) {
+          display: flex;
+        }
       }
     }
     .not-\\[\\:checked\\]\\:flex {
