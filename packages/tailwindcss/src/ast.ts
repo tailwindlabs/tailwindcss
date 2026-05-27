@@ -707,10 +707,6 @@ export const DROPPABLE_IF_EMPTY_AT_RULES = new Set([
   '@view-transition',
 ])
 
-export function optimizeSelector(selector: string): string {
-  return selector
-}
-
 export function toCss(ast: AstNode[], track?: boolean) {
   let pos = 0
 
