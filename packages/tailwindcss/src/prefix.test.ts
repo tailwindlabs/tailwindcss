@@ -35,25 +35,15 @@ test('utilities must be prefixed', async () => {
     .tw\\:underline {
       text-decoration-line: underline;
     }
-    .tw\\:group-hover\\:flex {
-      &:is(:where(.tw\\:group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
+    @media (hover: hover) {
+      .tw\\:group-hover\\:flex:is(:where(.tw\\:group):hover *) {
+        display: flex;
       }
-    }
-    .tw\\:peer-hover\\:flex {
-      &:is(:where(.tw\\:peer):hover ~ *) {
-        @media (hover: hover) {
-          display: flex;
-        }
+      .tw\\:peer-hover\\:flex:is(:where(.tw\\:peer):hover ~ *) {
+        display: flex;
       }
-    }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "
@@ -248,11 +238,9 @@ test('a prefix can be configured via @import theme(…)', async () => {
     .tw\\:underline {
       text-decoration-line: underline;
     }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+    @media (hover: hover) {
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "
@@ -306,11 +294,9 @@ test('a prefix can be configured via @import prefix(…)', async () => {
     .tw\\:underline {
       text-decoration-line: underline;
     }
-    .tw\\:hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+    @media (hover: hover) {
+      .tw\\:hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     "

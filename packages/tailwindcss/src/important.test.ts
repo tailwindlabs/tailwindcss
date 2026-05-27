@@ -16,16 +16,12 @@ test('Utilities can be wrapped in a selector', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    #app {
-      .underline {
-        text-decoration-line: underline;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
-          }
-        }
+    #app .underline {
+      text-decoration-line: underline;
+    }
+    @media (hover: hover) {
+      :is(#app .hover\\:line-through):hover {
+        text-decoration-line: line-through;
       }
     }
     "
@@ -53,11 +49,9 @@ test('Utilities can be marked with important', async () => {
     .underline {
       text-decoration-line: underline !important;
     }
-    .hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+    @media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     "
@@ -80,16 +74,12 @@ test('Utilities can be wrapped with a selector and marked as important', async (
     ),
   ).toMatchInlineSnapshot(`
     "
-    #app {
-      .underline {
-        text-decoration-line: underline !important;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through !important;
-          }
-        }
+    #app .underline {
+      text-decoration-line: underline !important;
+    }
+    @media (hover: hover) {
+      :is(#app .hover\\:line-through):hover {
+        text-decoration-line: line-through !important;
       }
     }
     "

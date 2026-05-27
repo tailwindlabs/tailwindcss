@@ -8,10 +8,8 @@ const css = String.raw
 test('*', async () => {
   expect(await run(['*:flex'])).toMatchInlineSnapshot(`
     "
-    .\\*\\:flex {
-      :is(& > *) {
-        display: flex;
-      }
+    :is(.\\*\\:flex > *) {
+      display: flex;
     }
     "
   `)
@@ -21,10 +19,8 @@ test('*', async () => {
 test('**', async () => {
   expect(await run(['**:flex'])).toMatchInlineSnapshot(`
     "
-    .\\*\\*\\:flex {
-      :is(& *) {
-        display: flex;
-      }
+    :is(.\\*\\*\\:flex *) {
+      display: flex;
     }
     "
   `)
@@ -34,10 +30,8 @@ test('**', async () => {
 test('first-letter', async () => {
   expect(await run(['first-letter:flex'])).toMatchInlineSnapshot(`
     "
-    .first-letter\\:flex {
-      &::first-letter {
-        display: flex;
-      }
+    .first-letter\\:flex::first-letter {
+      display: flex;
     }
     "
   `)
@@ -47,10 +41,8 @@ test('first-letter', async () => {
 test('first-line', async () => {
   expect(await run(['first-line:flex'])).toMatchInlineSnapshot(`
     "
-    .first-line\\:flex {
-      &::first-line {
-        display: flex;
-      }
+    .first-line\\:flex::first-line {
+      display: flex;
     }
     "
   `)
@@ -60,19 +52,17 @@ test('first-line', async () => {
 test('marker', async () => {
   expect(await run(['marker:flex'])).toMatchInlineSnapshot(`
     "
-    .marker\\:flex {
-      & *::marker {
-        display: flex;
-      }
-      &::marker {
-        display: flex;
-      }
-      & *::-webkit-details-marker {
-        display: flex;
-      }
-      &::-webkit-details-marker {
-        display: flex;
-      }
+    .marker\\:flex *::marker {
+      display: flex;
+    }
+    .marker\\:flex::marker {
+      display: flex;
+    }
+    .marker\\:flex *::-webkit-details-marker {
+      display: flex;
+    }
+    .marker\\:flex::-webkit-details-marker {
+      display: flex;
     }
     "
   `)
@@ -82,13 +72,11 @@ test('marker', async () => {
 test('selection', async () => {
   expect(await run(['selection:flex'])).toMatchInlineSnapshot(`
     "
-    .selection\\:flex {
-      & *::selection {
-        display: flex;
-      }
-      &::selection {
-        display: flex;
-      }
+    .selection\\:flex *::selection {
+      display: flex;
+    }
+    .selection\\:flex::selection {
+      display: flex;
     }
     "
   `)
@@ -98,10 +86,8 @@ test('selection', async () => {
 test('file', async () => {
   expect(await run(['file:flex'])).toMatchInlineSnapshot(`
     "
-    .file\\:flex {
-      &::file-selector-button {
-        display: flex;
-      }
+    .file\\:flex::file-selector-button {
+      display: flex;
     }
     "
   `)
@@ -111,10 +97,8 @@ test('file', async () => {
 test('placeholder', async () => {
   expect(await run(['placeholder:flex'])).toMatchInlineSnapshot(`
     "
-    .placeholder\\:flex {
-      &::placeholder {
-        display: flex;
-      }
+    .placeholder\\:flex::placeholder {
+      display: flex;
     }
     "
   `)
@@ -124,10 +108,8 @@ test('placeholder', async () => {
 test('backdrop', async () => {
   expect(await run(['backdrop:flex'])).toMatchInlineSnapshot(`
     "
-    .backdrop\\:flex {
-      &::backdrop {
-        display: flex;
-      }
+    .backdrop\\:flex::backdrop {
+      display: flex;
     }
     "
   `)
@@ -137,10 +119,8 @@ test('backdrop', async () => {
 test('details-content', async () => {
   expect(await run(['details-content:flex'])).toMatchInlineSnapshot(`
     "
-    .details-content\\:flex {
-      &::details-content {
-        display: flex;
-      }
+    .details-content\\:flex::details-content {
+      display: flex;
     }
     "
   `)
@@ -151,11 +131,9 @@ test('before', async () => {
   expect(await run(['before:flex'])).toMatchInlineSnapshot(`
     "
     @layer properties;
-    .before\\:flex {
-      &::before {
-        content: var(--tw-content);
-        display: flex;
-      }
+    .before\\:flex::before {
+      content: var(--tw-content);
+      display: flex;
     }
     @property --tw-content {
       syntax: "*";
@@ -178,11 +156,9 @@ test('after', async () => {
   expect(await run(['after:flex'])).toMatchInlineSnapshot(`
     "
     @layer properties;
-    .after\\:flex {
-      &::after {
-        content: var(--tw-content);
-        display: flex;
-      }
+    .after\\:flex::after {
+      content: var(--tw-content);
+      display: flex;
     }
     @property --tw-content {
       syntax: "*";
@@ -204,20 +180,14 @@ test('after', async () => {
 test('first', async () => {
   expect(await run(['first:flex', 'group-first:flex', 'peer-first:flex'])).toMatchInlineSnapshot(`
     "
-    .group-first\\:flex {
-      &:is(:where(.group):first-child *) {
-        display: flex;
-      }
+    .group-first\\:flex:is(:where(.group):first-child *) {
+      display: flex;
     }
-    .peer-first\\:flex {
-      &:is(:where(.peer):first-child ~ *) {
-        display: flex;
-      }
+    .peer-first\\:flex:is(:where(.peer):first-child ~ *) {
+      display: flex;
     }
-    .first\\:flex {
-      &:first-child {
-        display: flex;
-      }
+    .first\\:flex:first-child {
+      display: flex;
     }
     "
   `)
@@ -227,20 +197,14 @@ test('first', async () => {
 test('last', async () => {
   expect(await run(['last:flex', 'group-last:flex', 'peer-last:flex'])).toMatchInlineSnapshot(`
     "
-    .group-last\\:flex {
-      &:is(:where(.group):last-child *) {
-        display: flex;
-      }
+    .group-last\\:flex:is(:where(.group):last-child *) {
+      display: flex;
     }
-    .peer-last\\:flex {
-      &:is(:where(.peer):last-child ~ *) {
-        display: flex;
-      }
+    .peer-last\\:flex:is(:where(.peer):last-child ~ *) {
+      display: flex;
     }
-    .last\\:flex {
-      &:last-child {
-        display: flex;
-      }
+    .last\\:flex:last-child {
+      display: flex;
     }
     "
   `)
@@ -250,20 +214,14 @@ test('last', async () => {
 test('only', async () => {
   expect(await run(['only:flex', 'group-only:flex', 'peer-only:flex'])).toMatchInlineSnapshot(`
     "
-    .group-only\\:flex {
-      &:is(:where(.group):only-child *) {
-        display: flex;
-      }
+    .group-only\\:flex:is(:where(.group):only-child *) {
+      display: flex;
     }
-    .peer-only\\:flex {
-      &:is(:where(.peer):only-child ~ *) {
-        display: flex;
-      }
+    .peer-only\\:flex:is(:where(.peer):only-child ~ *) {
+      display: flex;
     }
-    .only\\:flex {
-      &:only-child {
-        display: flex;
-      }
+    .only\\:flex:only-child {
+      display: flex;
     }
     "
   `)
@@ -273,20 +231,14 @@ test('only', async () => {
 test('odd', async () => {
   expect(await run(['odd:flex', 'group-odd:flex', 'peer-odd:flex'])).toMatchInlineSnapshot(`
     "
-    .group-odd\\:flex {
-      &:is(:where(.group):nth-child(odd) *) {
-        display: flex;
-      }
+    .group-odd\\:flex:is(:where(.group):nth-child(odd) *) {
+      display: flex;
     }
-    .peer-odd\\:flex {
-      &:is(:where(.peer):nth-child(odd) ~ *) {
-        display: flex;
-      }
+    .peer-odd\\:flex:is(:where(.peer):nth-child(odd) ~ *) {
+      display: flex;
     }
-    .odd\\:flex {
-      &:nth-child(odd) {
-        display: flex;
-      }
+    .odd\\:flex:nth-child(odd) {
+      display: flex;
     }
     "
   `)
@@ -296,20 +248,14 @@ test('odd', async () => {
 test('even', async () => {
   expect(await run(['even:flex', 'group-even:flex', 'peer-even:flex'])).toMatchInlineSnapshot(`
     "
-    .group-even\\:flex {
-      &:is(:where(.group):nth-child(even) *) {
-        display: flex;
-      }
+    .group-even\\:flex:is(:where(.group):nth-child(even) *) {
+      display: flex;
     }
-    .peer-even\\:flex {
-      &:is(:where(.peer):nth-child(even) ~ *) {
-        display: flex;
-      }
+    .peer-even\\:flex:is(:where(.peer):nth-child(even) ~ *) {
+      display: flex;
     }
-    .even\\:flex {
-      &:nth-child(even) {
-        display: flex;
-      }
+    .even\\:flex:nth-child(even) {
+      display: flex;
     }
     "
   `)
@@ -320,20 +266,14 @@ test('first-of-type', async () => {
   expect(await run(['first-of-type:flex', 'group-first-of-type:flex', 'peer-first-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-first-of-type\\:flex {
-        &:is(:where(.group):first-of-type *) {
-          display: flex;
-        }
+      .group-first-of-type\\:flex:is(:where(.group):first-of-type *) {
+        display: flex;
       }
-      .peer-first-of-type\\:flex {
-        &:is(:where(.peer):first-of-type ~ *) {
-          display: flex;
-        }
+      .peer-first-of-type\\:flex:is(:where(.peer):first-of-type ~ *) {
+        display: flex;
       }
-      .first-of-type\\:flex {
-        &:first-of-type {
-          display: flex;
-        }
+      .first-of-type\\:flex:first-of-type {
+        display: flex;
       }
       "
     `)
@@ -344,20 +284,14 @@ test('last-of-type', async () => {
   expect(await run(['last-of-type:flex', 'group-last-of-type:flex', 'peer-last-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-last-of-type\\:flex {
-        &:is(:where(.group):last-of-type *) {
-          display: flex;
-        }
+      .group-last-of-type\\:flex:is(:where(.group):last-of-type *) {
+        display: flex;
       }
-      .peer-last-of-type\\:flex {
-        &:is(:where(.peer):last-of-type ~ *) {
-          display: flex;
-        }
+      .peer-last-of-type\\:flex:is(:where(.peer):last-of-type ~ *) {
+        display: flex;
       }
-      .last-of-type\\:flex {
-        &:last-of-type {
-          display: flex;
-        }
+      .last-of-type\\:flex:last-of-type {
+        display: flex;
       }
       "
     `)
@@ -368,20 +302,14 @@ test('only-of-type', async () => {
   expect(await run(['only-of-type:flex', 'group-only-of-type:flex', 'peer-only-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-only-of-type\\:flex {
-        &:is(:where(.group):only-of-type *) {
-          display: flex;
-        }
+      .group-only-of-type\\:flex:is(:where(.group):only-of-type *) {
+        display: flex;
       }
-      .peer-only-of-type\\:flex {
-        &:is(:where(.peer):only-of-type ~ *) {
-          display: flex;
-        }
+      .peer-only-of-type\\:flex:is(:where(.peer):only-of-type ~ *) {
+        display: flex;
       }
-      .only-of-type\\:flex {
-        &:only-of-type {
-          display: flex;
-        }
+      .only-of-type\\:flex:only-of-type {
+        display: flex;
       }
       "
     `)
@@ -392,20 +320,14 @@ test('visited', async () => {
   expect(await run(['visited:flex', 'group-visited:flex', 'peer-visited:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-visited\\:flex {
-        &:is(:where(.group):visited *) {
-          display: flex;
-        }
+      .group-visited\\:flex:is(:where(.group):visited *) {
+        display: flex;
       }
-      .peer-visited\\:flex {
-        &:is(:where(.peer):visited ~ *) {
-          display: flex;
-        }
+      .peer-visited\\:flex:is(:where(.peer):visited ~ *) {
+        display: flex;
       }
-      .visited\\:flex {
-        &:visited {
-          display: flex;
-        }
+      .visited\\:flex:visited {
+        display: flex;
       }
       "
     `)
@@ -416,20 +338,14 @@ test('target', async () => {
   expect(await run(['target:flex', 'group-target:flex', 'peer-target:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-target\\:flex {
-        &:is(:where(.group):target *) {
-          display: flex;
-        }
+      .group-target\\:flex:is(:where(.group):target *) {
+        display: flex;
       }
-      .peer-target\\:flex {
-        &:is(:where(.peer):target ~ *) {
-          display: flex;
-        }
+      .peer-target\\:flex:is(:where(.peer):target ~ *) {
+        display: flex;
       }
-      .target\\:flex {
-        &:target {
-          display: flex;
-        }
+      .target\\:flex:target {
+        display: flex;
       }
       "
     `)
@@ -440,25 +356,17 @@ test('open', async () => {
   expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex', 'not-open:flex']))
     .toMatchInlineSnapshot(`
       "
-      .not-open\\:flex {
-        &:not(*:is([open], :popover-open, :open)) {
-          display: flex;
-        }
+      .not-open\\:flex:not(*:is([open], :popover-open, :open)) {
+        display: flex;
       }
-      .group-open\\:flex {
-        &:is(:where(.group):is([open], :popover-open, :open) *) {
-          display: flex;
-        }
+      .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *) {
+        display: flex;
       }
-      .peer-open\\:flex {
-        &:is(:where(.peer):is([open], :popover-open, :open) ~ *) {
-          display: flex;
-        }
+      .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *) {
+        display: flex;
       }
-      .open\\:flex {
-        &:is([open], :popover-open, :open) {
-          display: flex;
-        }
+      .open\\:flex:is([open], :popover-open, :open) {
+        display: flex;
       }
       "
     `)
@@ -469,20 +377,14 @@ test('default', async () => {
   expect(await run(['default:flex', 'group-default:flex', 'peer-default:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-default\\:flex {
-        &:is(:where(.group):default *) {
-          display: flex;
-        }
+      .group-default\\:flex:is(:where(.group):default *) {
+        display: flex;
       }
-      .peer-default\\:flex {
-        &:is(:where(.peer):default ~ *) {
-          display: flex;
-        }
+      .peer-default\\:flex:is(:where(.peer):default ~ *) {
+        display: flex;
       }
-      .default\\:flex {
-        &:default {
-          display: flex;
-        }
+      .default\\:flex:default {
+        display: flex;
       }
       "
     `)
@@ -493,20 +395,14 @@ test('checked', async () => {
   expect(await run(['checked:flex', 'group-checked:flex', 'peer-checked:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-checked\\:flex {
-        &:is(:where(.group):checked *) {
-          display: flex;
-        }
+      .group-checked\\:flex:is(:where(.group):checked *) {
+        display: flex;
       }
-      .peer-checked\\:flex {
-        &:is(:where(.peer):checked ~ *) {
-          display: flex;
-        }
+      .peer-checked\\:flex:is(:where(.peer):checked ~ *) {
+        display: flex;
       }
-      .checked\\:flex {
-        &:checked {
-          display: flex;
-        }
+      .checked\\:flex:checked {
+        display: flex;
       }
       "
     `)
@@ -517,20 +413,14 @@ test('indeterminate', async () => {
   expect(await run(['indeterminate:flex', 'group-indeterminate:flex', 'peer-indeterminate:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-indeterminate\\:flex {
-        &:is(:where(.group):indeterminate *) {
-          display: flex;
-        }
+      .group-indeterminate\\:flex:is(:where(.group):indeterminate *) {
+        display: flex;
       }
-      .peer-indeterminate\\:flex {
-        &:is(:where(.peer):indeterminate ~ *) {
-          display: flex;
-        }
+      .peer-indeterminate\\:flex:is(:where(.peer):indeterminate ~ *) {
+        display: flex;
       }
-      .indeterminate\\:flex {
-        &:indeterminate {
-          display: flex;
-        }
+      .indeterminate\\:flex:indeterminate {
+        display: flex;
       }
       "
     `)
@@ -546,20 +436,14 @@ test('placeholder-shown', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-placeholder-shown\\:flex {
-      &:is(:where(.group):placeholder-shown *) {
-        display: flex;
-      }
+    .group-placeholder-shown\\:flex:is(:where(.group):placeholder-shown *) {
+      display: flex;
     }
-    .peer-placeholder-shown\\:flex {
-      &:is(:where(.peer):placeholder-shown ~ *) {
-        display: flex;
-      }
+    .peer-placeholder-shown\\:flex:is(:where(.peer):placeholder-shown ~ *) {
+      display: flex;
     }
-    .placeholder-shown\\:flex {
-      &:placeholder-shown {
-        display: flex;
-      }
+    .placeholder-shown\\:flex:placeholder-shown {
+      display: flex;
     }
     "
   `)
@@ -570,20 +454,14 @@ test('autofill', async () => {
   expect(await run(['autofill:flex', 'group-autofill:flex', 'peer-autofill:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-autofill\\:flex {
-        &:is(:where(.group):autofill *) {
-          display: flex;
-        }
+      .group-autofill\\:flex:is(:where(.group):autofill *) {
+        display: flex;
       }
-      .peer-autofill\\:flex {
-        &:is(:where(.peer):autofill ~ *) {
-          display: flex;
-        }
+      .peer-autofill\\:flex:is(:where(.peer):autofill ~ *) {
+        display: flex;
       }
-      .autofill\\:flex {
-        &:autofill {
-          display: flex;
-        }
+      .autofill\\:flex:autofill {
+        display: flex;
       }
       "
     `)
@@ -594,20 +472,14 @@ test('optional', async () => {
   expect(await run(['optional:flex', 'group-optional:flex', 'peer-optional:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-optional\\:flex {
-        &:is(:where(.group):optional *) {
-          display: flex;
-        }
+      .group-optional\\:flex:is(:where(.group):optional *) {
+        display: flex;
       }
-      .peer-optional\\:flex {
-        &:is(:where(.peer):optional ~ *) {
-          display: flex;
-        }
+      .peer-optional\\:flex:is(:where(.peer):optional ~ *) {
+        display: flex;
       }
-      .optional\\:flex {
-        &:optional {
-          display: flex;
-        }
+      .optional\\:flex:optional {
+        display: flex;
       }
       "
     `)
@@ -618,20 +490,14 @@ test('required', async () => {
   expect(await run(['required:flex', 'group-required:flex', 'peer-required:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-required\\:flex {
-        &:is(:where(.group):required *) {
-          display: flex;
-        }
+      .group-required\\:flex:is(:where(.group):required *) {
+        display: flex;
       }
-      .peer-required\\:flex {
-        &:is(:where(.peer):required ~ *) {
-          display: flex;
-        }
+      .peer-required\\:flex:is(:where(.peer):required ~ *) {
+        display: flex;
       }
-      .required\\:flex {
-        &:required {
-          display: flex;
-        }
+      .required\\:flex:required {
+        display: flex;
       }
       "
     `)
@@ -641,20 +507,14 @@ test('required', async () => {
 test('valid', async () => {
   expect(await run(['valid:flex', 'group-valid:flex', 'peer-valid:flex'])).toMatchInlineSnapshot(`
     "
-    .group-valid\\:flex {
-      &:is(:where(.group):valid *) {
-        display: flex;
-      }
+    .group-valid\\:flex:is(:where(.group):valid *) {
+      display: flex;
     }
-    .peer-valid\\:flex {
-      &:is(:where(.peer):valid ~ *) {
-        display: flex;
-      }
+    .peer-valid\\:flex:is(:where(.peer):valid ~ *) {
+      display: flex;
     }
-    .valid\\:flex {
-      &:valid {
-        display: flex;
-      }
+    .valid\\:flex:valid {
+      display: flex;
     }
     "
   `)
@@ -665,20 +525,14 @@ test('invalid', async () => {
   expect(await run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-invalid\\:flex {
-        &:is(:where(.group):invalid *) {
-          display: flex;
-        }
+      .group-invalid\\:flex:is(:where(.group):invalid *) {
+        display: flex;
       }
-      .peer-invalid\\:flex {
-        &:is(:where(.peer):invalid ~ *) {
-          display: flex;
-        }
+      .peer-invalid\\:flex:is(:where(.peer):invalid ~ *) {
+        display: flex;
       }
-      .invalid\\:flex {
-        &:invalid {
-          display: flex;
-        }
+      .invalid\\:flex:invalid {
+        display: flex;
       }
       "
     `)
@@ -689,20 +543,14 @@ test('user-valid', async () => {
   expect(await run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-user-valid\\:flex {
-        &:is(:where(.group):user-valid *) {
-          display: flex;
-        }
+      .group-user-valid\\:flex:is(:where(.group):user-valid *) {
+        display: flex;
       }
-      .peer-user-valid\\:flex {
-        &:is(:where(.peer):user-valid ~ *) {
-          display: flex;
-        }
+      .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+        display: flex;
       }
-      .user-valid\\:flex {
-        &:user-valid {
-          display: flex;
-        }
+      .user-valid\\:flex:user-valid {
+        display: flex;
       }
       "
     `)
@@ -713,20 +561,14 @@ test('user-invalid', async () => {
   expect(await run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-user-invalid\\:flex {
-        &:is(:where(.group):user-invalid *) {
-          display: flex;
-        }
+      .group-user-invalid\\:flex:is(:where(.group):user-invalid *) {
+        display: flex;
       }
-      .peer-user-invalid\\:flex {
-        &:is(:where(.peer):user-invalid ~ *) {
-          display: flex;
-        }
+      .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+        display: flex;
       }
-      .user-invalid\\:flex {
-        &:user-invalid {
-          display: flex;
-        }
+      .user-invalid\\:flex:user-invalid {
+        display: flex;
       }
       "
     `)
@@ -737,20 +579,14 @@ test('in-range', async () => {
   expect(await run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-in-range\\:flex {
-        &:is(:where(.group):in-range *) {
-          display: flex;
-        }
+      .group-in-range\\:flex:is(:where(.group):in-range *) {
+        display: flex;
       }
-      .peer-in-range\\:flex {
-        &:is(:where(.peer):in-range ~ *) {
-          display: flex;
-        }
+      .peer-in-range\\:flex:is(:where(.peer):in-range ~ *) {
+        display: flex;
       }
-      .in-range\\:flex {
-        &:in-range {
-          display: flex;
-        }
+      .in-range\\:flex:in-range {
+        display: flex;
       }
       "
     `)
@@ -761,20 +597,14 @@ test('out-of-range', async () => {
   expect(await run(['out-of-range:flex', 'group-out-of-range:flex', 'peer-out-of-range:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-out-of-range\\:flex {
-        &:is(:where(.group):out-of-range *) {
-          display: flex;
-        }
+      .group-out-of-range\\:flex:is(:where(.group):out-of-range *) {
+        display: flex;
       }
-      .peer-out-of-range\\:flex {
-        &:is(:where(.peer):out-of-range ~ *) {
-          display: flex;
-        }
+      .peer-out-of-range\\:flex:is(:where(.peer):out-of-range ~ *) {
+        display: flex;
       }
-      .out-of-range\\:flex {
-        &:out-of-range {
-          display: flex;
-        }
+      .out-of-range\\:flex:out-of-range {
+        display: flex;
       }
       "
     `)
@@ -785,20 +615,14 @@ test('read-only', async () => {
   expect(await run(['read-only:flex', 'group-read-only:flex', 'peer-read-only:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-read-only\\:flex {
-        &:is(:where(.group):read-only *) {
-          display: flex;
-        }
+      .group-read-only\\:flex:is(:where(.group):read-only *) {
+        display: flex;
       }
-      .peer-read-only\\:flex {
-        &:is(:where(.peer):read-only ~ *) {
-          display: flex;
-        }
+      .peer-read-only\\:flex:is(:where(.peer):read-only ~ *) {
+        display: flex;
       }
-      .read-only\\:flex {
-        &:read-only {
-          display: flex;
-        }
+      .read-only\\:flex:read-only {
+        display: flex;
       }
       "
     `)
@@ -808,20 +632,14 @@ test('read-only', async () => {
 test('empty', async () => {
   expect(await run(['empty:flex', 'group-empty:flex', 'peer-empty:flex'])).toMatchInlineSnapshot(`
     "
-    .group-empty\\:flex {
-      &:is(:where(.group):empty *) {
-        display: flex;
-      }
+    .group-empty\\:flex:is(:where(.group):empty *) {
+      display: flex;
     }
-    .peer-empty\\:flex {
-      &:is(:where(.peer):empty ~ *) {
-        display: flex;
-      }
+    .peer-empty\\:flex:is(:where(.peer):empty ~ *) {
+      display: flex;
     }
-    .empty\\:flex {
-      &:empty {
-        display: flex;
-      }
+    .empty\\:flex:empty {
+      display: flex;
     }
     "
   `)
@@ -832,20 +650,14 @@ test('focus-within', async () => {
   expect(await run(['focus-within:flex', 'group-focus-within:flex', 'peer-focus-within:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-focus-within\\:flex {
-        &:is(:where(.group):focus-within *) {
-          display: flex;
-        }
+      .group-focus-within\\:flex:is(:where(.group):focus-within *) {
+        display: flex;
       }
-      .peer-focus-within\\:flex {
-        &:is(:where(.peer):focus-within ~ *) {
-          display: flex;
-        }
+      .peer-focus-within\\:flex:is(:where(.peer):focus-within ~ *) {
+        display: flex;
       }
-      .focus-within\\:flex {
-        &:focus-within {
-          display: flex;
-        }
+      .focus-within\\:flex:focus-within {
+        display: flex;
       }
       "
     `)
@@ -855,25 +667,15 @@ test('focus-within', async () => {
 test('hover', async () => {
   expect(await run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
     "
-    .group-hover\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
+        display: flex;
       }
-    }
-    .peer-hover\\:flex {
-      &:is(:where(.peer):hover ~ *) {
-        @media (hover: hover) {
-          display: flex;
-        }
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+        display: flex;
       }
-    }
-    .hover\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          display: flex;
-        }
+      .hover\\:flex:hover {
+        display: flex;
       }
     }
     "
@@ -884,20 +686,14 @@ test('hover', async () => {
 test('focus', async () => {
   expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
     "
-    .group-focus\\:flex {
-      &:is(:where(.group):focus *) {
-        display: flex;
-      }
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
     }
-    .peer-focus\\:flex {
-      &:is(:where(.peer):focus ~ *) {
-        display: flex;
-      }
+    .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
+      display: flex;
     }
-    .focus\\:flex {
-      &:focus {
-        display: flex;
-      }
+    .focus\\:flex:focus {
+      display: flex;
     }
     "
   `)
@@ -907,33 +703,25 @@ test('focus', async () => {
 test('group-hover group-focus sorting', async () => {
   expect(await run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
     "
-    .group-hover\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .group-focus\\:flex {
-      &:is(:where(.group):focus *) {
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
+    }
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
     }
     "
   `)
   expect(await run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
     "
-    .group-hover\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .group-focus\\:flex {
-      &:is(:where(.group):focus *) {
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
+    }
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
     }
     "
   `)
@@ -943,20 +731,14 @@ test('focus-visible', async () => {
   expect(await run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-focus-visible\\:flex {
-        &:is(:where(.group):focus-visible *) {
-          display: flex;
-        }
+      .group-focus-visible\\:flex:is(:where(.group):focus-visible *) {
+        display: flex;
       }
-      .peer-focus-visible\\:flex {
-        &:is(:where(.peer):focus-visible ~ *) {
-          display: flex;
-        }
+      .peer-focus-visible\\:flex:is(:where(.peer):focus-visible ~ *) {
+        display: flex;
       }
-      .focus-visible\\:flex {
-        &:focus-visible {
-          display: flex;
-        }
+      .focus-visible\\:flex:focus-visible {
+        display: flex;
       }
       "
     `)
@@ -967,20 +749,14 @@ test('active', async () => {
   expect(await run(['active:flex', 'group-active:flex', 'peer-active:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-active\\:flex {
-        &:is(:where(.group):active *) {
-          display: flex;
-        }
+      .group-active\\:flex:is(:where(.group):active *) {
+        display: flex;
       }
-      .peer-active\\:flex {
-        &:is(:where(.peer):active ~ *) {
-          display: flex;
-        }
+      .peer-active\\:flex:is(:where(.peer):active ~ *) {
+        display: flex;
       }
-      .active\\:flex {
-        &:active {
-          display: flex;
-        }
+      .active\\:flex:active {
+        display: flex;
       }
       "
     `)
@@ -991,20 +767,14 @@ test('enabled', async () => {
   expect(await run(['enabled:flex', 'group-enabled:flex', 'peer-enabled:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-enabled\\:flex {
-        &:is(:where(.group):enabled *) {
-          display: flex;
-        }
+      .group-enabled\\:flex:is(:where(.group):enabled *) {
+        display: flex;
       }
-      .peer-enabled\\:flex {
-        &:is(:where(.peer):enabled ~ *) {
-          display: flex;
-        }
+      .peer-enabled\\:flex:is(:where(.peer):enabled ~ *) {
+        display: flex;
       }
-      .enabled\\:flex {
-        &:enabled {
-          display: flex;
-        }
+      .enabled\\:flex:enabled {
+        display: flex;
       }
       "
     `)
@@ -1015,20 +785,14 @@ test('disabled', async () => {
   expect(await run(['disabled:flex', 'group-disabled:flex', 'peer-disabled:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-disabled\\:flex {
-        &:is(:where(.group):disabled *) {
-          display: flex;
-        }
+      .group-disabled\\:flex:is(:where(.group):disabled *) {
+        display: flex;
       }
-      .peer-disabled\\:flex {
-        &:is(:where(.peer):disabled ~ *) {
-          display: flex;
-        }
+      .peer-disabled\\:flex:is(:where(.peer):disabled ~ *) {
+        display: flex;
       }
-      .disabled\\:flex {
-        &:disabled {
-          display: flex;
-        }
+      .disabled\\:flex:disabled {
+        display: flex;
       }
       "
     `)
@@ -1038,20 +802,14 @@ test('disabled', async () => {
 test('inert', async () => {
   expect(await run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
     "
-    .group-inert\\:flex {
-      &:is(:where(.group):is([inert], [inert] *) *) {
-        display: flex;
-      }
+    .group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *) {
+      display: flex;
     }
-    .peer-inert\\:flex {
-      &:is(:where(.peer):is([inert], [inert] *) ~ *) {
-        display: flex;
-      }
+    .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *) {
+      display: flex;
     }
-    .inert\\:flex {
-      &:is([inert], [inert] *) {
-        display: flex;
-      }
+    .inert\\:flex:is([inert], [inert] *) {
+      display: flex;
     }
     "
   `)
@@ -1069,46 +827,22 @@ test('group-[...]', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-\\[\\&_p\\]\\:flex {
-      &:is(:where(.group) p *) {
+    .group-\\[\\&_p\\]\\:flex:is(:where(.group) p *) {
+      display: flex;
+    }
+    :is(.group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *)):is(:where(.group) p *) {
+      display: flex;
+    }
+    @media (hover: hover) {
+      :is(.group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *)):hover {
         display: flex;
       }
-    }
-    .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex {
-      &:is(:where(.group):hover *) {
-        &:is(:where(.group) p *) {
+      :is(.hover\\:group-\\[\\&_p\\]\\:flex:hover):is(:where(.group) p *) {
+        display: flex;
+      }
+      @media (hover: hover) {
+        :is(:is(.hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover):is(:where(.group) p *)):hover {
           display: flex;
-        }
-      }
-    }
-    .group-\\[\\&_p\\]\\:hover\\:flex {
-      &:is(:where(.group) p *) {
-        &:hover {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .hover\\:group-\\[\\&_p\\]\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          &:is(:where(.group) p *) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .hover\\:group-\\[\\&_p\\]\\:hover\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          &:is(:where(.group) p *) {
-            &:hover {
-              @media (hover: hover) {
-                display: flex;
-              }
-            }
-          }
         }
       }
     }
@@ -1148,40 +882,24 @@ test('group-*', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .group-hover\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .group-focus\\:flex {
-      &:is(:where(.group):focus *) {
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
     }
-    .group-focus\\:group-hover\\:flex {
-      &:is(:where(.group):focus *) {
-        &:is(:where(.group):hover *) {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
+    .group-focus\\:flex:is(:where(.group):focus *) {
+      display: flex;
     }
-    .group-hover\\:group-focus\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          &:is(:where(.group):focus *) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .group-hocus\\:flex {
-      &:is(:is(:where(.group):hover, :where(.group):focus) *) {
+    @media (hover: hover) {
+      :is(.group-focus\\:group-hover\\:flex:is(:where(.group):focus *)):is(:where(.group):hover *) {
         display: flex;
       }
+      :is(.group-hover\\:group-focus\\:flex:is(:where(.group):hover *)):is(:where(.group):focus *) {
+        display: flex;
+      }
+    }
+    .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+      display: flex;
     }
     "
   `)
@@ -1215,45 +933,21 @@ test('peer-[...]', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .peer-\\[\\&_p\\]\\:flex {
-      &:is(:where(.peer) p ~ *) {
+    .peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *) {
+      display: flex;
+    }
+    :is(.peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer):hover ~ *)):is(:where(.peer) p ~ *) {
+      display: flex;
+    }
+    @media (hover: hover) {
+      :is(.hover\\:peer-\\[\\&_p\\]\\:flex:hover):is(:where(.peer) p ~ *) {
         display: flex;
       }
-    }
-    .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex {
-      &:is(:where(.peer):hover ~ *) {
-        &:is(:where(.peer) p ~ *) {
-          display: flex;
-        }
+      :is(.peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *)):hover {
+        display: flex;
       }
-    }
-    .hover\\:peer-\\[\\&_p\\]\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          &:is(:where(.peer) p ~ *) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .peer-\\[\\&_p\\]\\:hover\\:flex {
-      &:is(:where(.peer) p ~ *) {
-        &:hover {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          &:is(:where(.peer) p ~ *) {
-            &:focus {
-              display: flex;
-            }
-          }
-        }
+      :is(:is(.hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover):is(:where(.peer) p ~ *)):focus {
+        display: flex;
       }
     }
     "
@@ -1286,40 +980,24 @@ test('peer-*', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .peer-hover\\:flex {
-      &:is(:where(.peer):hover ~ *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .peer-focus\\:flex {
-      &:is(:where(.peer):focus ~ *) {
+    @media (hover: hover) {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }
     }
-    .peer-focus\\:peer-hover\\:flex {
-      &:is(:where(.peer):focus ~ *) {
-        &:is(:where(.peer):hover ~ *) {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
+    .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
+      display: flex;
     }
-    .peer-hover\\:peer-focus\\:flex {
-      &:is(:where(.peer):hover ~ *) {
-        @media (hover: hover) {
-          &:is(:where(.peer):focus ~ *) {
-            display: flex;
-          }
-        }
-      }
-    }
-    .peer-hocus\\:flex {
-      &:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
+    @media (hover: hover) {
+      :is(.peer-focus\\:peer-hover\\:flex:is(:where(.peer):focus ~ *)):is(:where(.peer):hover ~ *) {
         display: flex;
       }
+      :is(.peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *)):is(:where(.peer):focus ~ *) {
+        display: flex;
+      }
+    }
+    .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
+      display: flex;
     }
     "
   `)
@@ -1345,10 +1023,8 @@ test('peer-*', async () => {
 test('ltr', async () => {
   expect(await run(['ltr:flex'])).toMatchInlineSnapshot(`
     "
-    .ltr\\:flex {
-      &:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
-        display: flex;
-      }
+    .ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+      display: flex;
     }
     "
   `)
@@ -1358,10 +1034,8 @@ test('ltr', async () => {
 test('rtl', async () => {
   expect(await run(['rtl:flex'])).toMatchInlineSnapshot(`
     "
-    .rtl\\:flex {
-      &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-        display: flex;
-      }
+    .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+      display: flex;
     }
     "
   `)
@@ -1371,8 +1045,8 @@ test('rtl', async () => {
 test('motion-safe', async () => {
   expect(await run(['motion-safe:flex'])).toMatchInlineSnapshot(`
     "
-    .motion-safe\\:flex {
-      @media (prefers-reduced-motion: no-preference) {
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:flex {
         display: flex;
       }
     }
@@ -1384,8 +1058,8 @@ test('motion-safe', async () => {
 test('motion-reduce', async () => {
   expect(await run(['motion-reduce:flex'])).toMatchInlineSnapshot(`
     "
-    .motion-reduce\\:flex {
-      @media (prefers-reduced-motion: reduce) {
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:flex {
         display: flex;
       }
     }
@@ -1397,8 +1071,8 @@ test('motion-reduce', async () => {
 test('dark', async () => {
   expect(await run(['dark:flex'])).toMatchInlineSnapshot(`
     "
-    .dark\\:flex {
-      @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: dark) {
+      .dark\\:flex {
         display: flex;
       }
     }
@@ -1410,8 +1084,8 @@ test('dark', async () => {
 test('starting', async () => {
   expect(await run(['starting:opacity-0'])).toMatchInlineSnapshot(`
     "
-    .starting\\:opacity-0 {
-      @starting-style {
+    @starting-style {
+      .starting\\:opacity-0 {
         opacity: 0%;
       }
     }
@@ -1423,8 +1097,8 @@ test('starting', async () => {
 test('print', async () => {
   expect(await run(['print:flex'])).toMatchInlineSnapshot(`
     "
-    .print\\:flex {
-      @media print {
+    @media print {
+      .print\\:flex {
         display: flex;
       }
     }
@@ -1451,28 +1125,28 @@ test('default breakpoints', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .sm\\:flex {
-      @media (width >= 640px) {
+    @media (width >= 640px) {
+      .sm\\:flex {
         display: flex;
       }
     }
-    .md\\:flex {
-      @media (width >= 768px) {
+    @media (width >= 768px) {
+      .md\\:flex {
         display: flex;
       }
     }
-    .lg\\:flex {
-      @media (width >= 1024px) {
+    @media (width >= 1024px) {
+      .lg\\:flex {
         display: flex;
       }
     }
-    .xl\\:flex {
-      @media (width >= 1280px) {
+    @media (width >= 1280px) {
+      .xl\\:flex {
         display: flex;
       }
     }
-    .\\32 xl\\:flex {
-      @media (width >= 1536px) {
+    @media (width >= 1536px) {
+      .\\32 xl\\:flex {
         display: flex;
       }
     }
@@ -1509,8 +1183,8 @@ test('custom breakpoint', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .\\31 0xl\\:flex {
-      @media (width >= 5000px) {
+    @media (width >= 5000px) {
+      .\\31 0xl\\:flex {
         display: flex;
       }
     }
@@ -1534,18 +1208,18 @@ test('max-*', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .max-lg\\:flex {
-      @media (width < 1024px) {
+    @media (width < 1024px) {
+      .max-lg\\:flex {
         display: flex;
       }
     }
-    .max-md\\:flex {
-      @media (width < 768px) {
+    @media (width < 768px) {
+      .max-md\\:flex {
         display: flex;
       }
     }
-    .max-sm\\:flex {
-      @media (width < 640px) {
+    @media (width < 640px) {
+      .max-sm\\:flex {
         display: flex;
       }
     }
@@ -1583,18 +1257,18 @@ test('min-*', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .min-sm\\:flex {
-      @media (width >= 640px) {
+    @media (width >= 640px) {
+      .min-sm\\:flex {
         display: flex;
       }
     }
-    .min-md\\:flex {
-      @media (width >= 768px) {
+    @media (width >= 768px) {
+      .min-md\\:flex {
         display: flex;
       }
     }
-    .min-lg\\:flex {
-      @media (width >= 1024px) {
+    @media (width >= 1024px) {
+      .min-lg\\:flex {
         display: flex;
       }
     }
@@ -1634,30 +1308,28 @@ test('sorting stacked min-* and max-* variants', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .min-xs\\:max-sm\\:flex {
-      @media (width >= 280px) {
-        @media (width < 640px) {
+    @media (width >= 280px) {
+      @media (width < 640px) {
+        .min-xs\\:max-sm\\:flex {
           display: flex;
         }
       }
     }
-    .min-sm\\:max-xl\\:flex {
-      @media (width >= 640px) {
-        @media (width < 1280px) {
+    @media (width >= 640px) {
+      @media (width < 1280px) {
+        .min-sm\\:max-xl\\:flex {
+          display: flex;
+        }
+      }
+      @media (width < 1024px) {
+        .min-sm\\:max-lg\\:flex {
           display: flex;
         }
       }
     }
-    .min-sm\\:max-lg\\:flex {
-      @media (width >= 640px) {
-        @media (width < 1024px) {
-          display: flex;
-        }
-      }
-    }
-    .min-md\\:max-lg\\:flex {
-      @media (width >= 768px) {
-        @media (width < 1024px) {
+    @media (width >= 768px) {
+      @media (width < 1024px) {
+        .min-md\\:max-lg\\:flex {
           display: flex;
         }
       }
@@ -1682,26 +1354,22 @@ test('stacked min-* and max-* variants should come after unprefixed variants', a
     ),
   ).toMatchInlineSnapshot(`
     "
-    .sm\\:flex {
-      @media (width >= 640px) {
+    @media (width >= 640px) {
+      .sm\\:flex {
         display: flex;
       }
-    }
-    .min-sm\\:max-lg\\:flex {
-      @media (width >= 640px) {
-        @media (width < 1024px) {
+      @media (width < 1024px) {
+        .min-sm\\:max-lg\\:flex {
           display: flex;
         }
       }
     }
-    .md\\:flex {
-      @media (width >= 768px) {
+    @media (width >= 768px) {
+      .md\\:flex {
         display: flex;
       }
-    }
-    .min-md\\:max-lg\\:flex {
-      @media (width >= 768px) {
-        @media (width < 1024px) {
+      @media (width < 1024px) {
+        .min-md\\:max-lg\\:flex {
           display: flex;
         }
       }
@@ -1741,58 +1409,52 @@ test('min, max and unprefixed breakpoints', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .max-lg\\:flex {
-      @media (width < 1024px) {
+    @media (width < 1024px) {
+      .max-lg\\:flex {
         display: flex;
       }
     }
-    .max-\\[1000px\\]\\:flex {
-      @media (width < 1000px) {
+    @media (width < 1000px) {
+      .max-\\[1000px\\]\\:flex {
         display: flex;
       }
     }
-    .max-md\\:flex {
-      @media (width < 768px) {
+    @media (width < 768px) {
+      .max-md\\:flex {
         display: flex;
       }
     }
-    .max-sm\\:flex {
-      @media (width < 640px) {
+    @media (width < 640px) {
+      .max-sm\\:flex {
         display: flex;
       }
     }
-    .min-sm\\:flex {
-      @media (width >= 640px) {
+    @media (width >= 640px) {
+      .min-sm\\:flex {
+        display: flex;
+      }
+      .sm\\:flex {
         display: flex;
       }
     }
-    .sm\\:flex {
-      @media (width >= 640px) {
+    @media (width >= 700px) {
+      .min-\\[700px\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[700px\\]\\:flex {
-      @media (width >= 700px) {
+    @media (width >= 768px) {
+      .md\\:flex {
+        display: flex;
+      }
+      .min-md\\:flex {
         display: flex;
       }
     }
-    .md\\:flex {
-      @media (width >= 768px) {
+    @media (width >= 1024px) {
+      .lg\\:flex {
         display: flex;
       }
-    }
-    .min-md\\:flex {
-      @media (width >= 768px) {
-        display: flex;
-      }
-    }
-    .lg\\:flex {
-      @media (width >= 1024px) {
-        display: flex;
-      }
-    }
-    .min-lg\\:flex {
-      @media (width >= 1024px) {
+      .min-lg\\:flex {
         display: flex;
       }
     }
@@ -1826,103 +1488,103 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .max-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
-      @media (width < calc(1000px + 12em)) {
+    @media (width < calc(1000px + 12em)) {
+      .max-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
-      @media (width < calc(50vh + 12em)) {
+    @media (width < calc(50vh + 12em)) {
+      .max-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[12em\\]\\:flex {
-      @media (width < 12em) {
+    @media (width < 12em) {
+      .max-\\[12em\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[10em\\]\\:flex {
-      @media (width < 10em) {
+    @media (width < 10em) {
+      .max-\\[10em\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[12px\\]\\:flex {
-      @media (width < 12px) {
+    @media (width < 12px) {
+      .max-\\[12px\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[10px\\]\\:flex {
-      @media (width < 10px) {
+    @media (width < 10px) {
+      .max-\\[10px\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[12rem\\]\\:flex {
-      @media (width < 12rem) {
+    @media (width < 12rem) {
+      .max-\\[12rem\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[10rem\\]\\:flex {
-      @media (width < 10rem) {
+    @media (width < 10rem) {
+      .max-\\[10rem\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[12vh\\]\\:flex {
-      @media (width < 12vh) {
+    @media (width < 12vh) {
+      .max-\\[12vh\\]\\:flex {
         display: flex;
       }
     }
-    .max-\\[10vh\\]\\:flex {
-      @media (width < 10vh) {
+    @media (width < 10vh) {
+      .max-\\[10vh\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
-      @media (width >= calc(1000px + 12em)) {
+    @media (width >= calc(1000px + 12em)) {
+      .min-\\[calc\\(1000px\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
-      @media (width >= calc(50vh + 12em)) {
+    @media (width >= calc(50vh + 12em)) {
+      .min-\\[calc\\(50vh\\+12em\\)\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[10em\\]\\:flex {
-      @media (width >= 10em) {
+    @media (width >= 10em) {
+      .min-\\[10em\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[12em\\]\\:flex {
-      @media (width >= 12em) {
+    @media (width >= 12em) {
+      .min-\\[12em\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[10px\\]\\:flex {
-      @media (width >= 10px) {
+    @media (width >= 10px) {
+      .min-\\[10px\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[12px\\]\\:flex {
-      @media (width >= 12px) {
+    @media (width >= 12px) {
+      .min-\\[12px\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[10rem\\]\\:flex {
-      @media (width >= 10rem) {
+    @media (width >= 10rem) {
+      .min-\\[10rem\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[12rem\\]\\:flex {
-      @media (width >= 12rem) {
+    @media (width >= 12rem) {
+      .min-\\[12rem\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[10vh\\]\\:flex {
-      @media (width >= 10vh) {
+    @media (width >= 10vh) {
+      .min-\\[10vh\\]\\:flex {
         display: flex;
       }
     }
-    .min-\\[12vh\\]\\:flex {
-      @media (width >= 12vh) {
+    @media (width >= 12vh) {
+      .min-\\[12vh\\]\\:flex {
         display: flex;
       }
     }
@@ -1944,43 +1606,43 @@ test('supports', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .supports-gap\\:grid {
-      @supports (gap: var(--tw)) {
+    @supports (gap: var(--tw)) {
+      .supports-gap\\:grid {
         display: grid;
       }
     }
-    .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
-      @supports (display:grid)  and  font-format(opentype) {
+    @supports (display:grid)  and  font-format(opentype) {
+      .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
         display: grid;
       }
     }
-    .supports-\\[--test\\]\\:flex {
-      @supports (--test: var(--tw)) {
+    @supports (--test: var(--tw)) {
+      .supports-\\[--test\\]\\:flex {
         display: flex;
       }
     }
-    .supports-\\[display\\:grid\\]\\:flex {
-      @supports (display:grid) {
+    @supports (display:grid) {
+      .supports-\\[display\\:grid\\]\\:flex {
         display: flex;
       }
     }
-    .supports-\\[font-format\\(opentype\\)\\]\\:grid {
-      @supports font-format(opentype) {
+    @supports font-format(opentype) {
+      .supports-\\[font-format\\(opentype\\)\\]\\:grid {
         display: grid;
       }
     }
-    .supports-\\[font-tech\\(color-COLRv1\\)\\]\\:flex {
-      @supports font-tech(color-COLRv1) {
+    @supports font-tech(color-COLRv1) {
+      .supports-\\[font-tech\\(color-COLRv1\\)\\]\\:flex {
         display: flex;
       }
     }
-    .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
-      @supports selector(A > B) {
+    @supports selector(A > B) {
+      .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
         display: flex;
       }
     }
-    .supports-\\[var\\(--test\\)\\]\\:flex {
-      @supports var(--test) {
+    @supports var(--test) {
+      .supports-\\[var\\(--test\\)\\]\\:flex {
         display: flex;
       }
     }
@@ -2109,366 +1771,266 @@ test('not', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .not-first\\:flex {
-      &:not(*:first-child) {
-        display: flex;
-      }
+    .not-first\\:flex:not(*:first-child) {
+      display: flex;
     }
-    .not-last\\:flex {
-      &:not(*:last-child) {
-        display: flex;
-      }
+    .not-last\\:flex:not(*:last-child) {
+      display: flex;
     }
-    .not-only\\:flex {
-      &:not(*:only-child) {
-        display: flex;
-      }
+    .not-only\\:flex:not(*:only-child) {
+      display: flex;
     }
-    .not-odd\\:flex {
-      &:not(*:nth-child(odd)) {
-        display: flex;
-      }
+    .not-odd\\:flex:not(*:nth-child(odd)) {
+      display: flex;
     }
-    .not-even\\:flex {
-      &:not(*:nth-child(even)) {
-        display: flex;
-      }
+    .not-even\\:flex:not(*:nth-child(even)) {
+      display: flex;
     }
-    .not-first-of-type\\:flex {
-      &:not(*:first-of-type) {
-        display: flex;
-      }
+    .not-first-of-type\\:flex:not(*:first-of-type) {
+      display: flex;
     }
-    .not-last-of-type\\:flex {
-      &:not(*:last-of-type) {
-        display: flex;
-      }
+    .not-last-of-type\\:flex:not(*:last-of-type) {
+      display: flex;
     }
-    .not-only-of-type\\:flex {
-      &:not(*:only-of-type) {
-        display: flex;
-      }
+    .not-only-of-type\\:flex:not(*:only-of-type) {
+      display: flex;
     }
-    .not-visited\\:flex {
-      &:not(*:visited) {
-        display: flex;
-      }
+    .not-visited\\:flex:not(*:visited) {
+      display: flex;
     }
-    .not-target\\:flex {
-      &:not(*:target) {
-        display: flex;
-      }
+    .not-target\\:flex:not(*:target) {
+      display: flex;
     }
-    .not-open\\:flex {
-      &:not(*:is([open], :popover-open, :open)) {
-        display: flex;
-      }
+    .not-open\\:flex:not(*:is([open], :popover-open, :open)) {
+      display: flex;
     }
-    .not-default\\:flex {
-      &:not(*:default) {
-        display: flex;
-      }
+    .not-default\\:flex:not(*:default) {
+      display: flex;
     }
-    .not-checked\\:flex {
-      &:not(*:checked) {
-        display: flex;
-      }
+    .not-checked\\:flex:not(*:checked) {
+      display: flex;
     }
-    .not-indeterminate\\:flex {
-      &:not(*:indeterminate) {
-        display: flex;
-      }
+    .not-indeterminate\\:flex:not(*:indeterminate) {
+      display: flex;
     }
-    .not-placeholder-shown\\:flex {
-      &:not(*:placeholder-shown) {
-        display: flex;
-      }
+    .not-placeholder-shown\\:flex:not(*:placeholder-shown) {
+      display: flex;
     }
-    .not-autofill\\:flex {
-      &:not(*:autofill) {
-        display: flex;
-      }
+    .not-autofill\\:flex:not(*:autofill) {
+      display: flex;
     }
-    .not-optional\\:flex {
-      &:not(*:optional) {
-        display: flex;
-      }
+    .not-optional\\:flex:not(*:optional) {
+      display: flex;
     }
-    .not-required\\:flex {
-      &:not(*:required) {
-        display: flex;
-      }
+    .not-required\\:flex:not(*:required) {
+      display: flex;
     }
-    .not-valid\\:flex {
-      &:not(*:valid) {
-        display: flex;
-      }
+    .not-valid\\:flex:not(*:valid) {
+      display: flex;
     }
-    .not-invalid\\:flex {
-      &:not(*:invalid) {
-        display: flex;
-      }
+    .not-invalid\\:flex:not(*:invalid) {
+      display: flex;
     }
-    .not-in-range\\:flex {
-      &:not(*:in-range) {
-        display: flex;
-      }
+    .not-in-range\\:flex:not(*:in-range) {
+      display: flex;
     }
-    .not-out-of-range\\:flex {
-      &:not(*:out-of-range) {
-        display: flex;
-      }
+    .not-out-of-range\\:flex:not(*:out-of-range) {
+      display: flex;
     }
-    .not-read-only\\:flex {
-      &:not(*:read-only) {
-        display: flex;
-      }
+    .not-read-only\\:flex:not(*:read-only) {
+      display: flex;
     }
-    .not-empty\\:flex {
-      &:not(*:empty) {
-        display: flex;
-      }
+    .not-empty\\:flex:not(*:empty) {
+      display: flex;
     }
-    .not-focus-within\\:flex {
-      &:not(*:focus-within) {
-        display: flex;
-      }
+    .not-focus-within\\:flex:not(*:focus-within) {
+      display: flex;
     }
-    .not-hover\\:flex {
-      &:not(*:hover) {
-        display: flex;
-      }
-      @media not (hover: hover) {
-        display: flex;
-      }
+    .not-hover\\:flex:not(*:hover) {
+      display: flex;
     }
-    .not-focus\\:flex {
-      &:not(*:focus) {
+    @media not (hover: hover) {
+      .not-hover\\:flex {
         display: flex;
       }
     }
-    .not-focus-visible\\:flex {
-      &:not(*:focus-visible) {
-        display: flex;
-      }
+    .not-focus\\:flex:not(*:focus) {
+      display: flex;
     }
-    .not-active\\:flex {
-      &:not(*:active) {
-        display: flex;
-      }
+    .not-focus-visible\\:flex:not(*:focus-visible) {
+      display: flex;
     }
-    .not-enabled\\:flex {
-      &:not(*:enabled) {
-        display: flex;
-      }
+    .not-active\\:flex:not(*:active) {
+      display: flex;
     }
-    .not-disabled\\:flex {
-      &:not(*:disabled) {
-        display: flex;
-      }
+    .not-enabled\\:flex:not(*:enabled) {
+      display: flex;
     }
-    .not-inert\\:flex {
-      &:not(*:is([inert], [inert] *)) {
-        display: flex;
-      }
+    .not-disabled\\:flex:not(*:disabled) {
+      display: flex;
     }
-    .not-has-checked\\:flex {
-      &:not(*:has(*:checked)) {
-        display: flex;
-      }
+    .not-inert\\:flex:not(*:is([inert], [inert] *)) {
+      display: flex;
     }
-    .not-aria-selected\\:flex {
-      &:not(*[aria-selected="true"]) {
-        display: flex;
-      }
+    .not-has-checked\\:flex:not(*:has(*:checked)) {
+      display: flex;
     }
-    .not-data-foo\\:flex {
-      &:not(*[data-foo]) {
-        display: flex;
-      }
+    .not-aria-selected\\:flex:not(*[aria-selected="true"]) {
+      display: flex;
     }
-    .not-nth-2\\:flex {
-      &:not(*:nth-child(2)) {
-        display: flex;
-      }
+    .not-data-foo\\:flex:not(*[data-foo]) {
+      display: flex;
     }
-    .not-supports-grid\\:flex {
-      @supports not (grid: var(--tw)) {
-        display: flex;
-      }
+    .not-nth-2\\:flex:not(*:nth-child(2)) {
+      display: flex;
     }
-    .not-motion-safe\\:flex {
-      @media not (prefers-reduced-motion: no-preference) {
+    @supports not (grid: var(--tw)) {
+      .not-supports-grid\\:flex {
         display: flex;
       }
     }
-    .not-motion-reduce\\:flex {
-      @media not (prefers-reduced-motion: reduce) {
+    @media not (prefers-reduced-motion: no-preference) {
+      .not-motion-safe\\:flex {
         display: flex;
       }
     }
-    .not-contrast-more\\:flex {
-      @media not (prefers-contrast: more) {
+    @media not (prefers-reduced-motion: reduce) {
+      .not-motion-reduce\\:flex {
         display: flex;
       }
     }
-    .not-contrast-less\\:flex {
-      @media not (prefers-contrast: less) {
+    @media not (prefers-contrast: more) {
+      .not-contrast-more\\:flex {
         display: flex;
       }
     }
-    .not-max-sm\\:flex {
-      @media not (width < 640px) {
+    @media not (prefers-contrast: less) {
+      .not-contrast-less\\:flex {
         display: flex;
       }
     }
-    .not-max-\\[130px\\]\\:flex {
-      @media not (width < 130px) {
+    @media not (width < 640px) {
+      .not-max-sm\\:flex {
         display: flex;
       }
     }
-    .not-min-\\[130px\\]\\:flex {
-      @media not (width >= 130px) {
+    @media not (width < 130px) {
+      .not-max-\\[130px\\]\\:flex {
         display: flex;
       }
     }
-    .not-min-sm\\:flex {
-      @media not (width >= 640px) {
+    @media not (width >= 130px) {
+      .not-min-\\[130px\\]\\:flex {
         display: flex;
       }
     }
-    .not-sm\\:flex {
-      @media not (width >= 640px) {
+    @media not (width >= 640px) {
+      .not-min-sm\\:flex {
         display: flex;
       }
-    }
-    .not-portrait\\:flex {
-      @media not (orientation: portrait) {
+      .not-sm\\:flex {
         display: flex;
       }
     }
-    .not-landscape\\:flex {
-      @media not (orientation: landscape) {
+    @media not (orientation: portrait) {
+      .not-portrait\\:flex {
         display: flex;
       }
     }
-    .not-ltr\\:flex {
-      &:not(*:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)) {
+    @media not (orientation: landscape) {
+      .not-landscape\\:flex {
         display: flex;
       }
     }
-    .not-rtl\\:flex {
-      &:not(*:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)) {
-        display: flex;
-      }
+    .not-ltr\\:flex:not(*:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *)) {
+      display: flex;
     }
-    .not-dark\\:flex {
-      @media not (prefers-color-scheme: dark) {
-        display: flex;
-      }
+    .not-rtl\\:flex:not(*:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *)) {
+      display: flex;
     }
-    .not-print\\:flex {
-      @media not print {
+    @media not (prefers-color-scheme: dark) {
+      .not-dark\\:flex {
         display: flex;
       }
     }
-    .not-forced-colors\\:flex {
-      @media not (forced-colors: active) {
+    @media not print {
+      .not-print\\:flex {
         display: flex;
       }
     }
-    .not-noscript\\:flex {
-      @media not (scripting: none) {
+    @media not (forced-colors: active) {
+      .not-forced-colors\\:flex {
         display: flex;
       }
     }
-    .not-hocus\\:flex {
-      &:not(*:hover,  *:focus) {
+    @media not (scripting: none) {
+      .not-noscript\\:flex {
         display: flex;
       }
     }
-    .not-device-hocus\\:flex {
-      &:not(*:hover,  *:focus) {
-        display: flex;
-      }
-      @media not (hover: hover) {
-        display: flex;
-      }
+    .not-hocus\\:flex:not(*:hover, *:focus) {
+      display: flex;
     }
-    .not-\\[\\:checked\\]\\:flex {
-      &:not(*:is(:checked)) {
-        display: flex;
-      }
+    .not-device-hocus\\:flex:not(*:hover, *:focus) {
+      display: flex;
     }
-    .not-\\[\\@media_\\(orientation\\:landscape\\)\\]\\:flex {
-      @media not (orientation:landscape) {
+    @media not (hover: hover) {
+      .not-device-hocus\\:flex {
         display: flex;
       }
     }
-    .not-\\[\\@media_not_\\(orientation\\:portrait\\)\\]\\:flex {
-      @media (orientation:portrait) {
-        display: flex;
-      }
+    .not-\\[\\:checked\\]\\:flex:not(*:checked) {
+      display: flex;
     }
-    .not-\\[\\@media_print\\]\\:flex {
-      @media not print {
+    @media not (orientation:landscape) {
+      .not-\\[\\@media_\\(orientation\\:landscape\\)\\]\\:flex {
         display: flex;
       }
     }
-    .not-\\[\\@media\\(orientation\\:portrait\\)\\]\\:flex {
-      @media not (orientation:portrait) {
+    @media (orientation:portrait) {
+      .not-\\[\\@media_not_\\(orientation\\:portrait\\)\\]\\:flex {
         display: flex;
       }
     }
-    .group-not-checked\\:flex {
-      &:is(:where(.group):not(*:checked) *) {
+    @media not print {
+      .not-\\[\\@media_print\\]\\:flex {
         display: flex;
       }
     }
-    .group-not-hocus\\:flex {
-      &:is(:where(.group):not(*:hover,  *:focus) *) {
+    @media not (orientation:portrait) {
+      .not-\\[\\@media\\(orientation\\:portrait\\)\\]\\:flex {
         display: flex;
       }
     }
-    .group-not-hocus\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):not(*:hover,  *:focus) *) {
-        display: flex;
-      }
+    .group-not-checked\\:flex:is(:where(.group):not(*:checked) *) {
+      display: flex;
     }
-    .group-not-\\[\\:checked\\]\\:flex {
-      &:is(:where(.group):not(*:is(:checked)) *) {
-        display: flex;
-      }
+    .group-not-hocus\\:flex:is(:where(.group):not(*:hover, *:focus) *) {
+      display: flex;
     }
-    .group-not-\\[\\:checked\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):not(*:is(:checked)) *) {
-        display: flex;
-      }
+    .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(*:hover, *:focus) *) {
+      display: flex;
     }
-    .peer-not-checked\\:flex {
-      &:is(:where(.peer):not(*:checked) ~ *) {
-        display: flex;
-      }
+    .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(*:checked) *) {
+      display: flex;
     }
-    .peer-not-hocus\\:flex {
-      &:is(:where(.peer):not(*:hover,  *:focus) ~ *) {
-        display: flex;
-      }
+    .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(*:checked) *) {
+      display: flex;
     }
-    .peer-not-hocus\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):not(*:hover,  *:focus) ~ *) {
-        display: flex;
-      }
+    .peer-not-checked\\:flex:is(:where(.peer):not(*:checked) ~ *) {
+      display: flex;
     }
-    .peer-not-\\[\\:checked\\]\\:flex {
-      &:is(:where(.peer):not(*:is(:checked)) ~ *) {
-        display: flex;
-      }
+    .peer-not-hocus\\:flex:is(:where(.peer):not(*:hover, *:focus) ~ *) {
+      display: flex;
     }
-    .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):not(*:is(:checked)) ~ *) {
-        display: flex;
-      }
+    .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(*:hover, *:focus) ~ *) {
+      display: flex;
+    }
+    .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(*:checked) ~ *) {
+      display: flex;
+    }
+    .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(*:checked) ~ *) {
+      display: flex;
     }
     "
   `)
@@ -2510,23 +2072,23 @@ test('not', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .not-has-a\\:flex {
-      @container not style(--a) {
+    @container not style(--a) {
+      .not-has-a\\:flex {
         display: flex;
       }
     }
-    .not-has-b\\:flex {
-      @container style(--b) {
+    @container style(--b) {
+      .not-has-b\\:flex {
         display: flex;
       }
     }
-    .not-has-c\\:flex {
-      @container foo not style(--c) {
+    @container foo not style(--c) {
+      .not-has-c\\:flex {
         display: flex;
       }
     }
-    .not-has-d\\:flex {
-      @container bar style(--d) {
+    @container bar style(--d) {
+      .not-has-d\\:flex {
         display: flex;
       }
     }
@@ -2635,30 +2197,20 @@ test('in', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .not-in-\\[\\.group\\]\\:flex {
-      &:not(:where(*:is(.group)) *) {
-        display: flex;
-      }
+    .not-in-\\[\\.group\\]\\:flex:not(:where(*.group) *) {
+      display: flex;
     }
-    .not-in-\\[p\\]\\:flex {
-      &:not(:where(*:is(p)) *) {
-        display: flex;
-      }
+    .not-in-\\[p\\]\\:flex:not(:where(p:is(*)) *) {
+      display: flex;
     }
-    .in-data-visible\\:flex {
-      :where(*[data-visible]) & {
-        display: flex;
-      }
+    :where(*[data-visible]) .in-data-visible\\:flex {
+      display: flex;
     }
-    .in-\\[\\.group\\]\\:flex {
-      :where(*:is(.group)) & {
-        display: flex;
-      }
+    :where(*.group) .in-\\[\\.group\\]\\:flex {
+      display: flex;
     }
-    .in-\\[p\\]\\:flex {
-      :where(*:is(p)) & {
-        display: flex;
-      }
+    :where(p:is(*)) .in-\\[p\\]\\:flex {
+      display: flex;
     }
     "
   `)
@@ -2715,160 +2267,98 @@ test('has', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .group-has-checked\\:flex {
-      &:is(:where(.group):has(*:checked) *) {
-        display: flex;
-      }
+    .group-has-checked\\:flex:is(:where(.group):has(*:checked) *) {
+      display: flex;
     }
-    .group-has-checked\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):has(*:checked) *) {
-        display: flex;
-      }
+    .group-has-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(*:checked) *) {
+      display: flex;
     }
-    .group-has-hocus\\:flex {
-      &:is(:where(.group):has(*:hover, *:focus) *) {
-        display: flex;
-      }
+    .group-has-hocus\\:flex:is(:where(.group):has(*:hover, *:focus) *) {
+      display: flex;
     }
-    .group-has-hocus\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):has(*:hover, *:focus) *) {
-        display: flex;
-      }
+    .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(*:hover, *:focus) *) {
+      display: flex;
     }
-    .group-has-\\[\\:checked\\]\\:flex {
-      &:is(:where(.group):has(*:is(:checked)) *) {
-        display: flex;
-      }
+    .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(*:checked) *) {
+      display: flex;
     }
-    .group-has-\\[\\:checked\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):has(*:is(:checked)) *) {
-        display: flex;
-      }
+    .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(*:checked) *) {
+      display: flex;
     }
-    .group-has-\\[\\&\\>img\\]\\:flex {
-      &:is(:where(.group):has(*>img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\&\\>img\\]\\:flex:is(:where(.group):has(* > img) *) {
+      display: flex;
     }
-    .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):has(*>img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(* > img) *) {
+      display: flex;
     }
-    .group-has-\\[\\+img\\]\\:flex {
-      &:is(:where(.group):has(+img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\+img\\]\\:flex:is(:where(.group):has( + img) *) {
+      display: flex;
     }
-    .group-has-\\[\\>img\\]\\:flex {
-      &:is(:where(.group):has(>img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *) {
+      display: flex;
     }
-    .group-has-\\[\\>img\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name):has(>img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *) {
+      display: flex;
     }
-    .group-has-\\[\\~img\\]\\:flex {
-      &:is(:where(.group):has(~img) *) {
-        display: flex;
-      }
+    .group-has-\\[\\~img\\]\\:flex:is(:where(.group):has( ~ img) *) {
+      display: flex;
     }
-    .peer-has-checked\\:flex {
-      &:is(:where(.peer):has(*:checked) ~ *) {
-        display: flex;
-      }
+    .peer-has-checked\\:flex:is(:where(.peer):has(*:checked) ~ *) {
+      display: flex;
     }
-    .peer-has-checked\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):has(*:checked) ~ *) {
-        display: flex;
-      }
+    .peer-has-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(*:checked) ~ *) {
+      display: flex;
     }
-    .peer-has-hocus\\:flex {
-      &:is(:where(.peer):has(*:hover, *:focus) ~ *) {
-        display: flex;
-      }
+    .peer-has-hocus\\:flex:is(:where(.peer):has(*:hover, *:focus) ~ *) {
+      display: flex;
     }
-    .peer-has-hocus\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):has(*:hover, *:focus) ~ *) {
-        display: flex;
-      }
+    .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(*:hover, *:focus) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\:checked\\]\\:flex {
-      &:is(:where(.peer):has(*:is(:checked)) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(*:checked) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):has(*:is(:checked)) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(*:checked) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\&\\>img\\]\\:flex {
-      &:is(:where(.peer):has(*>img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\&\\>img\\]\\:flex:is(:where(.peer):has(* > img) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):has(*>img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(* > img) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\+img\\]\\:flex {
-      &:is(:where(.peer):has(+img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\+img\\]\\:flex:is(:where(.peer):has( + img) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\>img\\]\\:flex {
-      &:is(:where(.peer):has(>img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\>img\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name):has(>img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *) {
+      display: flex;
     }
-    .peer-has-\\[\\~img\\]\\:flex {
-      &:is(:where(.peer):has(~img) ~ *) {
-        display: flex;
-      }
+    .peer-has-\\[\\~img\\]\\:flex:is(:where(.peer):has( ~ img) ~ *) {
+      display: flex;
     }
-    .has-checked\\:flex {
-      &:has(*:checked) {
-        display: flex;
-      }
+    .has-checked\\:flex:has(*:checked) {
+      display: flex;
     }
-    .has-hocus\\:flex {
-      &:has(*:hover, *:focus) {
-        display: flex;
-      }
+    .has-hocus\\:flex:has(*:hover, *:focus) {
+      display: flex;
     }
-    .has-\\[\\:checked\\]\\:flex {
-      &:has(*:is(:checked)) {
-        display: flex;
-      }
+    .has-\\[\\:checked\\]\\:flex:has(*:checked) {
+      display: flex;
     }
-    .has-\\[\\&\\>img\\]\\:flex {
-      &:has(*>img) {
-        display: flex;
-      }
+    .has-\\[\\&\\>img\\]\\:flex:has(* > img) {
+      display: flex;
     }
-    .has-\\[\\+img\\]\\:flex {
-      &:has(+img) {
-        display: flex;
-      }
+    .has-\\[\\+img\\]\\:flex:has( + img) {
+      display: flex;
     }
-    .has-\\[\\>img\\]\\:flex {
-      &:has(>img) {
-        display: flex;
-      }
+    .has-\\[\\>img\\]\\:flex:has( > img) {
+      display: flex;
     }
-    .has-\\[\\~img\\]\\:flex {
-      &:has(~img) {
-        display: flex;
-      }
+    .has-\\[\\~img\\]\\:flex:has( ~ img) {
+      display: flex;
     }
     "
   `)
@@ -2920,85 +2410,53 @@ test('aria', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-aria-checked\\:flex {
-      &:is(:where(.group)[aria-checked="true"] *) {
-        display: flex;
-      }
+    .group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *) {
+      display: flex;
     }
-    .group-aria-checked\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[aria-checked="true"] *) {
-        display: flex;
-      }
+    .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *) {
+      display: flex;
     }
-    .group-aria-\\[modal\\]\\:flex {
-      &:is(:where(.group)[aria-modal] *) {
-        display: flex;
-      }
+    .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *) {
+      display: flex;
     }
-    .group-aria-\\[modal\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[aria-modal] *) {
-        display: flex;
-      }
+    .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *) {
+      display: flex;
     }
-    .group-aria-\\[valuenow\\=1\\]\\:flex {
-      &:is(:where(.group)[aria-valuenow="1"] *) {
-        display: flex;
-      }
+    .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *) {
+      display: flex;
     }
-    .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[aria-valuenow="1"] *) {
-        display: flex;
-      }
+    .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *) {
+      display: flex;
     }
-    .peer-aria-checked\\:flex {
-      &:is(:where(.peer)[aria-checked="true"] ~ *) {
-        display: flex;
-      }
+    .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *) {
+      display: flex;
     }
-    .peer-aria-checked\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *) {
-        display: flex;
-      }
+    .peer-aria-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *) {
+      display: flex;
     }
-    .peer-aria-\\[modal\\]\\:flex {
-      &:is(:where(.peer)[aria-modal] ~ *) {
-        display: flex;
-      }
+    .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *) {
+      display: flex;
     }
-    .peer-aria-\\[modal\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[aria-modal] ~ *) {
-        display: flex;
-      }
+    .peer-aria-\\[modal\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-modal] ~ *) {
+      display: flex;
     }
-    .peer-aria-\\[valuenow\\=1\\]\\:flex {
-      &:is(:where(.peer)[aria-valuenow="1"] ~ *) {
-        display: flex;
-      }
+    .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *) {
+      display: flex;
     }
-    .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *) {
-        display: flex;
-      }
+    .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *) {
+      display: flex;
     }
-    .aria-checked\\:flex {
-      &[aria-checked="true"] {
-        display: flex;
-      }
+    .aria-checked\\:flex[aria-checked="true"] {
+      display: flex;
     }
-    .aria-\\[invalid\\=spelling\\]\\:flex {
-      &[aria-invalid="spelling"] {
-        display: flex;
-      }
+    .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"] {
+      display: flex;
     }
-    .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex {
-      &[aria-valuenow = "1"] {
-        display: flex;
-      }
+    .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow = "1"] {
+      display: flex;
     }
-    .aria-\\[valuenow\\=1\\]\\:flex {
-      &[aria-valuenow="1"] {
-        display: flex;
-      }
+    .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
+      display: flex;
     }
     "
   `)
@@ -3036,120 +2494,74 @@ test('data', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-data-\\[disabled\\]\\:flex {
-      &:is(:where(.group)[data-disabled] *) {
-        display: flex;
-      }
+    .group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *) {
+      display: flex;
     }
-    .group-data-\\[disabled\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[data-disabled] *) {
-        display: flex;
-      }
+    .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *) {
+      display: flex;
     }
-    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[data-foo$='bar' i] *) {
-        display: flex;
-      }
+    .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$='bar' i] *) {
+      display: flex;
     }
-    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
-        display: flex;
-      }
+    .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *) {
+      display: flex;
     }
-    .group-data-\\[foo\\=1\\]\\:flex {
-      &:is(:where(.group)[data-foo="1"] *) {
-        display: flex;
-      }
+    .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *) {
+      display: flex;
     }
-    .group-data-\\[foo\\=1\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[data-foo="1"] *) {
-        display: flex;
-      }
+    .group-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="1"] *) {
+      display: flex;
     }
-    .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex {
-      &:is(:where(.group\\/parent-name)[data-foo="bar baz"] *) {
-        display: flex;
-      }
+    .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="bar baz"] *) {
+      display: flex;
     }
-    .peer-data-\\[disabled\\]\\:flex {
-      &:is(:where(.peer)[data-disabled] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[disabled\\]\\:flex:is(:where(.peer)[data-disabled] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[disabled\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[data-disabled] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[disabled\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-disabled] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[data-foo$='bar' i] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$='bar' i] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[foo\\=1\\]\\:flex {
-      &:is(:where(.peer)[data-foo="1"] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[foo\\=1\\]\\:flex:is(:where(.peer)[data-foo="1"] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *) {
+      display: flex;
     }
-    .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex {
-      &:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *) {
-        display: flex;
-      }
+    .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *) {
+      display: flex;
     }
-    .data-disabled\\:flex {
-      &[data-disabled] {
-        display: flex;
-      }
+    .data-disabled\\:flex[data-disabled] {
+      display: flex;
     }
-    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex {
-      &[data-foo$='bar' i] {
-        display: flex;
-      }
+    .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$='bar' i] {
+      display: flex;
     }
-    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex {
-      &[data-foo$="bar baz" i] {
-        display: flex;
-      }
+    .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i] {
+      display: flex;
     }
-    .data-\\[foo\\=1\\]\\:flex {
-      &[data-foo="1"] {
-        display: flex;
-      }
+    .data-\\[foo\\=1\\]\\:flex[data-foo="1"] {
+      display: flex;
     }
-    .data-\\[foo\\=bar_baz\\]\\:flex {
-      &[data-foo="bar baz"] {
-        display: flex;
-      }
+    .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"] {
+      display: flex;
     }
-    .data-\\[potato_\\=_\\"salad\\"\\]\\:flex {
-      &[data-potato = "salad"] {
-        display: flex;
-      }
+    .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato = "salad"] {
+      display: flex;
     }
-    .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex {
-      &[data-potato ^= "salad"] {
-        display: flex;
-      }
+    .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato ^= "salad"] {
+      display: flex;
     }
-    .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex {
-      &[data-potato="^ ="] {
-        display: flex;
-      }
+    .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="] {
+      display: flex;
     }
-    .data-\\[potato\\=salad\\]\\:flex {
-      &[data-potato="salad"] {
-        display: flex;
-      }
+    .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+      display: flex;
     }
     "
   `)
@@ -3168,8 +2580,8 @@ test('data', async () => {
 test('portrait', async () => {
   expect(await run(['portrait:flex'])).toMatchInlineSnapshot(`
     "
-    .portrait\\:flex {
-      @media (orientation: portrait) {
+    @media (orientation: portrait) {
+      .portrait\\:flex {
         display: flex;
       }
     }
@@ -3181,8 +2593,8 @@ test('portrait', async () => {
 test('landscape', async () => {
   expect(await run(['landscape:flex'])).toMatchInlineSnapshot(`
     "
-    .landscape\\:flex {
-      @media (orientation: landscape) {
+    @media (orientation: landscape) {
+      .landscape\\:flex {
         display: flex;
       }
     }
@@ -3194,8 +2606,8 @@ test('landscape', async () => {
 test('contrast-more', async () => {
   expect(await run(['contrast-more:flex'])).toMatchInlineSnapshot(`
     "
-    .contrast-more\\:flex {
-      @media (prefers-contrast: more) {
+    @media (prefers-contrast: more) {
+      .contrast-more\\:flex {
         display: flex;
       }
     }
@@ -3207,8 +2619,8 @@ test('contrast-more', async () => {
 test('contrast-less', async () => {
   expect(await run(['contrast-less:flex'])).toMatchInlineSnapshot(`
     "
-    .contrast-less\\:flex {
-      @media (prefers-contrast: less) {
+    @media (prefers-contrast: less) {
+      .contrast-less\\:flex {
         display: flex;
       }
     }
@@ -3220,8 +2632,8 @@ test('contrast-less', async () => {
 test('forced-colors', async () => {
   expect(await run(['forced-colors:flex'])).toMatchInlineSnapshot(`
     "
-    .forced-colors\\:flex {
-      @media (forced-colors: active) {
+    @media (forced-colors: active) {
+      .forced-colors\\:flex {
         display: flex;
       }
     }
@@ -3233,8 +2645,8 @@ test('forced-colors', async () => {
 test('inverted-colors', async () => {
   expect(await run(['inverted-colors:flex'])).toMatchInlineSnapshot(`
     "
-    .inverted-colors\\:flex {
-      @media (inverted-colors: inverted) {
+    @media (inverted-colors: inverted) {
+      .inverted-colors\\:flex {
         display: flex;
       }
     }
@@ -3245,8 +2657,8 @@ test('inverted-colors', async () => {
 test('pointer-none', async () => {
   expect(await run(['pointer-none:flex'])).toMatchInlineSnapshot(`
     "
-    .pointer-none\\:flex {
-      @media (pointer: none) {
+    @media (pointer: none) {
+      .pointer-none\\:flex {
         display: flex;
       }
     }
@@ -3257,8 +2669,8 @@ test('pointer-none', async () => {
 test('pointer-coarse', async () => {
   expect(await run(['pointer-coarse:flex'])).toMatchInlineSnapshot(`
     "
-    .pointer-coarse\\:flex {
-      @media (pointer: coarse) {
+    @media (pointer: coarse) {
+      .pointer-coarse\\:flex {
         display: flex;
       }
     }
@@ -3269,8 +2681,8 @@ test('pointer-coarse', async () => {
 test('pointer-fine', async () => {
   expect(await run(['pointer-fine:flex'])).toMatchInlineSnapshot(`
     "
-    .pointer-fine\\:flex {
-      @media (pointer: fine) {
+    @media (pointer: fine) {
+      .pointer-fine\\:flex {
         display: flex;
       }
     }
@@ -3281,8 +2693,8 @@ test('pointer-fine', async () => {
 test('any-pointer-none', async () => {
   expect(await run(['any-pointer-none:flex'])).toMatchInlineSnapshot(`
     "
-    .any-pointer-none\\:flex {
-      @media (any-pointer: none) {
+    @media (any-pointer: none) {
+      .any-pointer-none\\:flex {
         display: flex;
       }
     }
@@ -3293,8 +2705,8 @@ test('any-pointer-none', async () => {
 test('any-pointer-coarse', async () => {
   expect(await run(['any-pointer-coarse:flex'])).toMatchInlineSnapshot(`
     "
-    .any-pointer-coarse\\:flex {
-      @media (any-pointer: coarse) {
+    @media (any-pointer: coarse) {
+      .any-pointer-coarse\\:flex {
         display: flex;
       }
     }
@@ -3305,8 +2717,8 @@ test('any-pointer-coarse', async () => {
 test('any-pointer-fine', async () => {
   expect(await run(['any-pointer-fine:flex'])).toMatchInlineSnapshot(`
     "
-    .any-pointer-fine\\:flex {
-      @media (any-pointer: fine) {
+    @media (any-pointer: fine) {
+      .any-pointer-fine\\:flex {
         display: flex;
       }
     }
@@ -3317,8 +2729,8 @@ test('any-pointer-fine', async () => {
 test('scripting-none', async () => {
   expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
     "
-    .noscript\\:flex {
-      @media (scripting: none) {
+    @media (scripting: none) {
+      .noscript\\:flex {
         display: flex;
       }
     }
@@ -3342,55 +2754,35 @@ test('nth', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .nth-3\\:flex {
-      &:nth-child(3) {
-        display: flex;
-      }
+    .nth-3\\:flex:nth-child(3) {
+      display: flex;
     }
-    .nth-\\[2n\\+1\\]\\:flex {
-      &:nth-child(2n+1) {
-        display: flex;
-      }
+    .nth-\\[2n\\+1\\]\\:flex:nth-child(2n+1) {
+      display: flex;
     }
-    .nth-\\[2n\\+1_of_\\.foo\\]\\:flex {
-      &:nth-child(2n+1 of .foo) {
-        display: flex;
-      }
+    .nth-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-child(2n+1 of .foo) {
+      display: flex;
     }
-    .nth-last-3\\:flex {
-      &:nth-last-child(3) {
-        display: flex;
-      }
+    .nth-last-3\\:flex:nth-last-child(3) {
+      display: flex;
     }
-    .nth-last-\\[2n\\+1\\]\\:flex {
-      &:nth-last-child(2n+1) {
-        display: flex;
-      }
+    .nth-last-\\[2n\\+1\\]\\:flex:nth-last-child(2n+1) {
+      display: flex;
     }
-    .nth-last-\\[2n\\+1_of_\\.foo\\]\\:flex {
-      &:nth-last-child(2n+1 of .foo) {
-        display: flex;
-      }
+    .nth-last-\\[2n\\+1_of_\\.foo\\]\\:flex:nth-last-child(2n+1 of .foo) {
+      display: flex;
     }
-    .nth-of-type-3\\:flex {
-      &:nth-of-type(3) {
-        display: flex;
-      }
+    .nth-of-type-3\\:flex:nth-of-type(3) {
+      display: flex;
     }
-    .nth-of-type-\\[2n\\+1\\]\\:flex {
-      &:nth-of-type(2n+1) {
-        display: flex;
-      }
+    .nth-of-type-\\[2n\\+1\\]\\:flex:nth-of-type(2n+1) {
+      display: flex;
     }
-    .nth-last-of-type-3\\:flex {
-      &:nth-last-of-type(3) {
-        display: flex;
-      }
+    .nth-last-of-type-3\\:flex:nth-last-of-type(3) {
+      display: flex;
     }
-    .nth-last-of-type-\\[2n\\+1\\]\\:flex {
-      &:nth-last-of-type(2n+1) {
-        display: flex;
-      }
+    .nth-last-of-type-\\[2n\\+1\\]\\:flex:nth-last-of-type(2n+1) {
+      display: flex;
     }
     "
   `)
@@ -3460,93 +2852,89 @@ test('container queries', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .\\@max-foo-bar\\/name\\:flex {
-      @container name (width < 1440px) {
+    @container name (width < 1440px) {
+      .\\@max-foo-bar\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@max-foo-bar\\:flex {
-      @container (width < 1440px) {
+    @container (width < 1440px) {
+      .\\@max-foo-bar\\:flex {
         display: flex;
       }
     }
-    .\\@max-lg\\/name\\:flex {
-      @container name (width < 1024px) {
+    @container name (width < 1024px) {
+      .\\@max-lg\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@max-lg\\:flex {
-      @container (width < 1024px) {
+    @container (width < 1024px) {
+      .\\@max-lg\\:flex {
         display: flex;
       }
     }
-    .\\@max-\\[456px\\]\\/name\\:flex {
-      @container name (width < 456px) {
+    @container name (width < 456px) {
+      .\\@max-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@max-\\[123px\\]\\:flex {
-      @container (width < 123px) {
+    @container (width < 123px) {
+      .\\@max-\\[123px\\]\\:flex {
         display: flex;
       }
     }
-    .\\@\\[123px\\]\\:flex {
-      @container (width >= 123px) {
+    @container (width >= 123px) {
+      .\\@\\[123px\\]\\:flex {
+        display: flex;
+      }
+      .\\@min-\\[123px\\]\\:flex {
         display: flex;
       }
     }
-    .\\@min-\\[123px\\]\\:flex {
-      @container (width >= 123px) {
+    @container name (width >= 456px) {
+      .\\@\\[456px\\]\\/name\\:flex {
+        display: flex;
+      }
+      .\\@min-\\[456px\\]\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@\\[456px\\]\\/name\\:flex {
-      @container name (width >= 456px) {
+    @container name (width >= 1024px) {
+      .\\@lg\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@min-\\[456px\\]\\/name\\:flex {
-      @container name (width >= 456px) {
+    @container (width >= 1024px) {
+      .\\@lg\\:flex {
         display: flex;
       }
     }
-    .\\@lg\\/name\\:flex {
-      @container name (width >= 1024px) {
+    @container name (width >= 1024px) {
+      .\\@min-lg\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@lg\\:flex {
-      @container (width >= 1024px) {
+    @container (width >= 1024px) {
+      .\\@min-lg\\:flex {
         display: flex;
       }
     }
-    .\\@min-lg\\/name\\:flex {
-      @container name (width >= 1024px) {
+    @container name (width >= 1440px) {
+      .\\@foo-bar\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@min-lg\\:flex {
-      @container (width >= 1024px) {
+    @container (width >= 1440px) {
+      .\\@foo-bar\\:flex {
         display: flex;
       }
     }
-    .\\@foo-bar\\/name\\:flex {
-      @container name (width >= 1440px) {
+    @container name (width >= 1440px) {
+      .\\@min-foo-bar\\/name\\:flex {
         display: flex;
       }
     }
-    .\\@foo-bar\\:flex {
-      @container (width >= 1440px) {
-        display: flex;
-      }
-    }
-    .\\@min-foo-bar\\/name\\:flex {
-      @container name (width >= 1440px) {
-        display: flex;
-      }
-    }
-    .\\@min-foo-bar\\:flex {
-      @container (width >= 1440px) {
+    @container (width >= 1440px) {
+      .\\@min-foo-bar\\:flex {
         display: flex;
       }
     }
@@ -3674,395 +3062,275 @@ test('variant order', async () => {
   ).toMatchInlineSnapshot(`
     "
     @layer properties;
-    .group-hover\\:flex {
-      &:is(:where(.group):hover *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .peer-hover\\:flex {
-      &:is(:where(.peer):hover ~ *) {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
-    }
-    .first-letter\\:flex {
-      &::first-letter {
+    @media (hover: hover) {
+      .group-hover\\:flex:is(:where(.group):hover *) {
         display: flex;
       }
-    }
-    .first-line\\:flex {
-      &::first-line {
+      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
         display: flex;
       }
     }
-    .marker\\:flex {
-      & *::marker {
-        display: flex;
-      }
-      &::marker {
-        display: flex;
-      }
-      & *::-webkit-details-marker {
-        display: flex;
-      }
-      &::-webkit-details-marker {
-        display: flex;
-      }
+    .first-letter\\:flex::first-letter {
+      display: flex;
     }
-    .selection\\:flex {
-      & *::selection {
-        display: flex;
-      }
-      &::selection {
-        display: flex;
-      }
+    .first-line\\:flex::first-line {
+      display: flex;
     }
-    .file\\:flex {
-      &::file-selector-button {
-        display: flex;
-      }
+    .marker\\:flex *::marker {
+      display: flex;
     }
-    .placeholder\\:flex {
-      &::placeholder {
-        display: flex;
-      }
+    .marker\\:flex::marker {
+      display: flex;
     }
-    .backdrop\\:flex {
-      &::backdrop {
-        display: flex;
-      }
+    .marker\\:flex *::-webkit-details-marker {
+      display: flex;
     }
-    .details-content\\:flex {
-      &::details-content {
-        display: flex;
-      }
+    .marker\\:flex::-webkit-details-marker {
+      display: flex;
     }
-    .before\\:flex {
-      &::before {
-        content: var(--tw-content);
-        display: flex;
-      }
+    .selection\\:flex *::selection {
+      display: flex;
     }
-    .after\\:flex {
-      &::after {
-        content: var(--tw-content);
-        display: flex;
-      }
+    .selection\\:flex::selection {
+      display: flex;
     }
-    .first\\:flex {
-      &:first-child {
-        display: flex;
-      }
+    .file\\:flex::file-selector-button {
+      display: flex;
     }
-    .last\\:flex {
-      &:last-child {
-        display: flex;
-      }
+    .placeholder\\:flex::placeholder {
+      display: flex;
     }
-    .only\\:flex {
-      &:only-child {
-        display: flex;
-      }
+    .backdrop\\:flex::backdrop {
+      display: flex;
     }
-    .odd\\:flex {
-      &:nth-child(odd) {
-        display: flex;
-      }
+    .details-content\\:flex::details-content {
+      display: flex;
     }
-    .even\\:flex {
-      &:nth-child(even) {
-        display: flex;
-      }
+    .before\\:flex::before {
+      content: var(--tw-content);
+      display: flex;
     }
-    .first-of-type\\:flex {
-      &:first-of-type {
-        display: flex;
-      }
+    .after\\:flex::after {
+      content: var(--tw-content);
+      display: flex;
     }
-    .last-of-type\\:flex {
-      &:last-of-type {
-        display: flex;
-      }
+    .first\\:flex:first-child {
+      display: flex;
     }
-    .only-of-type\\:flex {
-      &:only-of-type {
-        display: flex;
-      }
+    .last\\:flex:last-child {
+      display: flex;
     }
-    .visited\\:flex {
-      &:visited {
-        display: flex;
-      }
+    .only\\:flex:only-child {
+      display: flex;
     }
-    .target\\:flex {
-      &:target {
-        display: flex;
-      }
+    .odd\\:flex:nth-child(odd) {
+      display: flex;
     }
-    .open\\:flex {
-      &:is([open], :popover-open, :open) {
-        display: flex;
-      }
+    .even\\:flex:nth-child(even) {
+      display: flex;
     }
-    .default\\:flex {
-      &:default {
-        display: flex;
-      }
+    .first-of-type\\:flex:first-of-type {
+      display: flex;
     }
-    .checked\\:flex {
-      &:checked {
-        display: flex;
-      }
+    .last-of-type\\:flex:last-of-type {
+      display: flex;
     }
-    .indeterminate\\:flex {
-      &:indeterminate {
-        display: flex;
-      }
+    .only-of-type\\:flex:only-of-type {
+      display: flex;
     }
-    .placeholder-shown\\:flex {
-      &:placeholder-shown {
-        display: flex;
-      }
+    .visited\\:flex:visited {
+      display: flex;
     }
-    .autofill\\:flex {
-      &:autofill {
-        display: flex;
-      }
+    .target\\:flex:target {
+      display: flex;
     }
-    .optional\\:flex {
-      &:optional {
-        display: flex;
-      }
+    .open\\:flex:is([open], :popover-open, :open) {
+      display: flex;
     }
-    .required\\:flex {
-      &:required {
-        display: flex;
-      }
+    .default\\:flex:default {
+      display: flex;
     }
-    .valid\\:flex {
-      &:valid {
-        display: flex;
-      }
+    .checked\\:flex:checked {
+      display: flex;
     }
-    .invalid\\:flex {
-      &:invalid {
-        display: flex;
-      }
+    .indeterminate\\:flex:indeterminate {
+      display: flex;
     }
-    .in-range\\:flex {
-      &:in-range {
-        display: flex;
-      }
+    .placeholder-shown\\:flex:placeholder-shown {
+      display: flex;
     }
-    .out-of-range\\:flex {
-      &:out-of-range {
-        display: flex;
-      }
+    .autofill\\:flex:autofill {
+      display: flex;
     }
-    .read-only\\:flex {
-      &:read-only {
-        display: flex;
-      }
+    .optional\\:flex:optional {
+      display: flex;
     }
-    .empty\\:flex {
-      &:empty {
-        display: flex;
-      }
+    .required\\:flex:required {
+      display: flex;
     }
-    .focus-within\\:flex {
-      &:focus-within {
-        display: flex;
-      }
+    .valid\\:flex:valid {
+      display: flex;
     }
-    .hover\\:flex {
-      &:hover {
-        @media (hover: hover) {
-          display: flex;
-        }
-      }
+    .invalid\\:flex:invalid {
+      display: flex;
     }
-    .focus\\:flex {
-      &:focus {
-        display: flex;
-      }
+    .in-range\\:flex:in-range {
+      display: flex;
     }
-    .focus-visible\\:flex {
-      &:focus-visible {
-        display: flex;
-      }
+    .out-of-range\\:flex:out-of-range {
+      display: flex;
     }
-    .active\\:flex {
-      &:active {
-        display: flex;
-      }
+    .read-only\\:flex:read-only {
+      display: flex;
     }
-    .enabled\\:flex {
-      &:enabled {
-        display: flex;
-      }
+    .empty\\:flex:empty {
+      display: flex;
     }
-    .disabled\\:flex {
-      &:disabled {
-        display: flex;
-      }
+    .focus-within\\:flex:focus-within {
+      display: flex;
     }
-    .has-\\[\\:hover\\]\\:flex {
-      &:has(*:is(:hover)) {
+    @media (hover: hover) {
+      .hover\\:flex:hover {
         display: flex;
       }
     }
-    .aria-busy\\:flex {
-      &[aria-busy="true"] {
-        display: flex;
-      }
+    .focus\\:flex:focus {
+      display: flex;
     }
-    .aria-checked\\:flex {
-      &[aria-checked="true"] {
-        display: flex;
-      }
+    .focus-visible\\:flex:focus-visible {
+      display: flex;
     }
-    .aria-disabled\\:flex {
-      &[aria-disabled="true"] {
-        display: flex;
-      }
+    .active\\:flex:active {
+      display: flex;
     }
-    .aria-expanded\\:flex {
-      &[aria-expanded="true"] {
-        display: flex;
-      }
+    .enabled\\:flex:enabled {
+      display: flex;
     }
-    .aria-hidden\\:flex {
-      &[aria-hidden="true"] {
-        display: flex;
-      }
+    .disabled\\:flex:disabled {
+      display: flex;
     }
-    .aria-pressed\\:flex {
-      &[aria-pressed="true"] {
-        display: flex;
-      }
+    .has-\\[\\:hover\\]\\:flex:has(*:hover) {
+      display: flex;
     }
-    .aria-readonly\\:flex {
-      &[aria-readonly="true"] {
-        display: flex;
-      }
+    .aria-busy\\:flex[aria-busy="true"] {
+      display: flex;
     }
-    .aria-required\\:flex {
-      &[aria-required="true"] {
-        display: flex;
-      }
+    .aria-checked\\:flex[aria-checked="true"] {
+      display: flex;
     }
-    .aria-selected\\:flex {
-      &[aria-selected="true"] {
-        display: flex;
-      }
+    .aria-disabled\\:flex[aria-disabled="true"] {
+      display: flex;
     }
-    .aria-\\[custom\\=true\\]\\:flex {
-      &[aria-custom="true"] {
-        display: flex;
-      }
+    .aria-expanded\\:flex[aria-expanded="true"] {
+      display: flex;
     }
-    .data-custom\\:flex {
-      &[data-custom] {
-        display: flex;
-      }
+    .aria-hidden\\:flex[aria-hidden="true"] {
+      display: flex;
     }
-    .data-\\[custom\\=true\\]\\:flex {
-      &[data-custom="true"] {
-        display: flex;
-      }
+    .aria-pressed\\:flex[aria-pressed="true"] {
+      display: flex;
     }
-    .supports-\\[display\\:flex\\]\\:flex {
-      @supports (display:flex) {
-        display: flex;
-      }
+    .aria-readonly\\:flex[aria-readonly="true"] {
+      display: flex;
     }
-    .motion-safe\\:flex {
-      @media (prefers-reduced-motion: no-preference) {
-        display: flex;
-      }
+    .aria-required\\:flex[aria-required="true"] {
+      display: flex;
     }
-    .motion-reduce\\:flex {
-      @media (prefers-reduced-motion: reduce) {
-        display: flex;
-      }
+    .aria-selected\\:flex[aria-selected="true"] {
+      display: flex;
+    }
+    .aria-\\[custom\\=true\\]\\:flex[aria-custom="true"] {
+      display: flex;
+    }
+    .data-custom\\:flex[data-custom] {
+      display: flex;
     }
-    .contrast-more\\:flex {
-      @media (prefers-contrast: more) {
+    .data-\\[custom\\=true\\]\\:flex[data-custom="true"] {
+      display: flex;
+    }
+    @supports (display:flex) {
+      .supports-\\[display\\:flex\\]\\:flex {
         display: flex;
       }
     }
-    .contrast-less\\:flex {
-      @media (prefers-contrast: less) {
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-safe\\:flex {
         display: flex;
       }
     }
-    .sm\\:flex {
-      @media (width >= 640px) {
+    @media (prefers-reduced-motion: reduce) {
+      .motion-reduce\\:flex {
         display: flex;
       }
     }
-    .md\\:flex {
-      @media (width >= 768px) {
+    @media (prefers-contrast: more) {
+      .contrast-more\\:flex {
         display: flex;
       }
     }
-    .lg\\:flex {
-      @media (width >= 1024px) {
+    @media (prefers-contrast: less) {
+      .contrast-less\\:flex {
         display: flex;
       }
     }
-    .xl\\:flex {
-      @media (width >= 1280px) {
+    @media (width >= 640px) {
+      .sm\\:flex {
         display: flex;
       }
     }
-    .\\32 xl\\:flex {
-      @media (width >= 1536px) {
+    @media (width >= 768px) {
+      .md\\:flex {
         display: flex;
       }
     }
-    .portrait\\:flex {
-      @media (orientation: portrait) {
+    @media (width >= 1024px) {
+      .lg\\:flex {
         display: flex;
       }
     }
-    .landscape\\:flex {
-      @media (orientation: landscape) {
+    @media (width >= 1280px) {
+      .xl\\:flex {
         display: flex;
       }
     }
-    .ltr\\:flex {
-      &:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+    @media (width >= 1536px) {
+      .\\32 xl\\:flex {
         display: flex;
       }
     }
-    .rtl\\:flex {
-      &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+    @media (orientation: portrait) {
+      .portrait\\:flex {
         display: flex;
       }
     }
-    .dark\\:flex {
-      @media (prefers-color-scheme: dark) {
+    @media (orientation: landscape) {
+      .landscape\\:flex {
         display: flex;
       }
+    }
+    .ltr\\:flex:where(:dir(ltr), [dir="ltr"], [dir="ltr"] *) {
+      display: flex;
     }
-    .print\\:flex {
-      @media print {
+    .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+      display: flex;
+    }
+    @media (prefers-color-scheme: dark) {
+      .dark\\:flex {
         display: flex;
       }
     }
-    .forced-colors\\:flex {
-      @media (forced-colors: active) {
+    @media print {
+      .print\\:flex {
         display: flex;
       }
     }
-    .\\[\\&_p\\]\\:flex {
-      & p {
+    @media (forced-colors: active) {
+      .forced-colors\\:flex {
         display: flex;
       }
+    }
+    .\\[\\&_p\\]\\:flex p {
+      display: flex;
     }
     @property --tw-content {
       syntax: "*";
@@ -4104,35 +3372,23 @@ test('variants with the same root are sorted deterministically', async () => {
   for (let classList of classLists) {
     expect(await run(classList)).toMatchInlineSnapshot(`
       "
-      .data-active\\:flex {
-        &[data-active] {
-          display: flex;
-        }
+      .data-active\\:flex[data-active] {
+        display: flex;
       }
-      .data-focus\\:flex {
-        &[data-focus] {
-          display: flex;
-        }
+      .data-focus\\:flex[data-focus] {
+        display: flex;
       }
-      .data-hover\\:flex {
-        &[data-hover] {
-          display: flex;
-        }
+      .data-hover\\:flex[data-hover] {
+        display: flex;
       }
-      .data-\\[bar\\]\\:flex {
-        &[data-bar] {
-          display: flex;
-        }
+      .data-\\[bar\\]\\:flex[data-bar] {
+        display: flex;
       }
-      .data-\\[baz\\]\\:flex {
-        &[data-baz] {
-          display: flex;
-        }
+      .data-\\[baz\\]\\:flex[data-baz] {
+        display: flex;
       }
-      .data-\\[foo\\]\\:flex {
-        &[data-foo] {
-          display: flex;
-        }
+      .data-\\[foo\\]\\:flex[data-foo] {
+        display: flex;
       }
       "
     `)
@@ -4180,30 +3436,20 @@ test('matchVariant sorts deterministically', async () => {
       }),
     ).toMatchInlineSnapshot(`
       "
-      .is-data\\:flex {
-        &:is([data-default]) {
-          display: flex;
-        }
+      .is-data\\:flex[data-default] {
+        display: flex;
       }
-      .is-data-foo\\:flex {
-        &:is([data-foo]) {
-          display: flex;
-        }
+      .is-data-foo\\:flex[data-foo] {
+        display: flex;
       }
-      .is-data-bar\\:flex {
-        &:is([data-bar]) {
-          display: flex;
-        }
+      .is-data-bar\\:flex[data-bar] {
+        display: flex;
       }
-      .is-data-\\[potato\\]\\:flex {
-        &:is([data-potato]) {
-          display: flex;
-        }
+      .is-data-\\[potato\\]\\:flex[data-potato] {
+        display: flex;
       }
-      .is-data-\\[sandwich\\]\\:flex {
-        &:is([data-sandwich]) {
-          display: flex;
-        }
+      .is-data-\\[sandwich\\]\\:flex[data-sandwich] {
+        display: flex;
       }
       "
     `)
@@ -4223,25 +3469,17 @@ test('move modifier of compound variant to sub-variant if its also a compound va
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .not-group-focus\\/name\\:flex {
-      &:not(*:is(:where(.group\\/name):focus *)) {
-        display: flex;
-      }
+    .not-group-focus\\/name\\:flex:not(*:is(:where(.group\\/name):focus *)) {
+      display: flex;
     }
-    .group-peer-focus\\/name\\:flex {
-      &:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *) {
-        display: flex;
-      }
+    .group-peer-focus\\/name\\:flex:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *) {
+      display: flex;
     }
-    .in-group-focus\\/name\\:flex {
-      :where(*:is(:where(.group\\/name):focus *)) & {
-        display: flex;
-      }
+    :where(*:is(:where(.group\\/name):focus *)) .in-group-focus\\/name\\:flex {
+      display: flex;
     }
-    .has-group-focus\\/name\\:flex {
-      &:has(*:is(:where(.group\\/name):focus *)) {
-        display: flex;
-      }
+    .has-group-focus\\/name\\:flex:has(*:is(:where(.group\\/name):focus *)) {
+      display: flex;
     }
     "
   `)

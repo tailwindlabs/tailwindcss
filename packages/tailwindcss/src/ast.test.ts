@@ -7,6 +7,7 @@ import {
   cssContext,
   decl,
   DROPPABLE_IF_EMPTY_AT_RULES,
+  handleNesting,
   HOISTABLE_AT_RULES,
   optimizeAst,
   optimizeSelector,
@@ -84,9 +85,9 @@ it('allows the placement of context nodes', () => {
     }
     .bar {
       color: blue;
-      .baz {
-        color: green;
-      }
+    }
+    .bar .baz {
+      color: green;
     }
     "
   `)
@@ -255,21 +256,23 @@ it('should not emit exact duplicate declarations in the same rule', () => {
   expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
     "
     .foo {
-      .bar {
-        color: blue;
-        color: green;
-      }
       color: red;
+    }
+    .foo .bar {
+      color: blue;
+      color: green;
     }
     .foo {
       color: green;
       color: blue;
       color: red;
       background: blue;
-      .bar {
-        color: blue;
-        color: green;
-      }
+    }
+    .foo .bar {
+      color: blue;
+      color: green;
+    }
+    .foo {
       caret-color: orange;
     }
     "
@@ -311,9 +314,13 @@ describe('optimization', () => {
   function optimize(input: string) {
     let ast = CSS.parse(input)
 
-    let cssOracle = pretty(toCss(handleNestingOracle(ast)))
+    let cssOracle = pretty(toCss(handleNestingOracle(ast.map(cloneAstNode))))
+    let cssOptimized = pretty(toCss(handleNesting(ast.map(cloneAstNode))))
 
-    return cssOracle
+    // Ensure the results matches the slower oracle version
+    expect(cssOptimized).toEqual(cssOracle)
+
+    return cssOptimized
   }
 
   // See: https://drafts.csswg.org/css-nesting-1/

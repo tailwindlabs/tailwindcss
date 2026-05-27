@@ -33,8 +33,8 @@ test('Config files can change dark mode (media)', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: dark) {
+      .dark\\:underline {
         text-decoration-line: underline;
       }
     }
@@ -56,10 +56,8 @@ test('Config files can change dark mode (selector)', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      &:where(.dark, .dark *) {
-        text-decoration-line: underline;
-      }
+    .dark\\:underline:where(.dark, .dark *) {
+      text-decoration-line: underline;
     }
     "
   `)
@@ -83,10 +81,8 @@ test('Config files can change dark mode (variant)', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      &:where(:not(.light)) {
-        text-decoration-line: underline;
-      }
+    .dark\\:underline:where(:not(.light)) {
+      text-decoration-line: underline;
     }
     "
   `)
@@ -151,10 +147,8 @@ test('Plugins loaded from config files can contribute to the config', async () =
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      &:where(:not(.light)) {
-        text-decoration-line: underline;
-      }
+    .dark\\:underline:where(:not(.light)) {
+      text-decoration-line: underline;
     }
     "
   `)
@@ -178,10 +172,8 @@ test('Config file presets can contribute to the config', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      &:where(:not(.light)) {
-        text-decoration-line: underline;
-      }
+    .dark\\:underline:where(:not(.light)) {
+      text-decoration-line: underline;
     }
     "
   `)
@@ -304,15 +296,11 @@ test('Variants in CSS overwrite variants from plugins', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:underline {
-      &:is(.my-dark) {
-        text-decoration-line: underline;
-      }
+    .dark\\:underline.my-dark {
+      text-decoration-line: underline;
     }
-    .light\\:underline {
-      &:is(.my-light) {
-        text-decoration-line: underline;
-      }
+    .light\\:underline.my-light {
+      text-decoration-line: underline;
     }
     "
   `)
@@ -395,19 +383,17 @@ describe('theme callbacks', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties;
-      .prose {
-        [class~=lead-base] {
-          font-size: 100rem;
-          line-height: 201rem;
-        }
-        [class~=lead-md] {
-          font-size: 200rem;
-          line-height: 101rem;
-        }
-        [class~=lead-xl] {
-          font-size: 200rem;
-          line-height: 201rem;
-        }
+      .prose [class~=lead-base] {
+        font-size: 100rem;
+        line-height: 201rem;
+      }
+      .prose [class~=lead-md] {
+        font-size: 200rem;
+        line-height: 101rem;
+      }
+      .prose [class~=lead-xl] {
+        font-size: 200rem;
+        line-height: 201rem;
       }
       .leading-base {
         --tw-leading: 201rem;
@@ -584,35 +570,23 @@ describe('theme overrides order', () => {
       .bg-slate-600 {
         background-color: #200600;
       }
-      .hover-bg-slate-100 {
-        &:hover {
-          background-color: #000100;
-        }
+      .hover-bg-slate-100:hover {
+        background-color: #000100;
       }
-      .hover-bg-slate-200 {
-        &:hover {
-          background-color: #200200;
-        }
+      .hover-bg-slate-200:hover {
+        background-color: #200200;
       }
-      .hover-bg-slate-300 {
-        &:hover {
-          background-color: #000300;
-        }
+      .hover-bg-slate-300:hover {
+        background-color: #000300;
       }
-      .hover-bg-slate-400 {
-        &:hover {
-          background-color: #100400;
-        }
+      .hover-bg-slate-400:hover {
+        background-color: #100400;
       }
-      .hover-bg-slate-500 {
-        &:hover {
-          background-color: #100500;
-        }
+      .hover-bg-slate-500:hover {
+        background-color: #100500;
       }
-      .hover-bg-slate-600 {
-        &:hover {
-          background-color: #200600;
-        }
+      .hover-bg-slate-600:hover {
+        background-color: #200600;
       }
       "
     `)
@@ -1180,43 +1154,35 @@ test('creates variants for `data`, `supports`, and `aria` theme options at the s
     ),
   ).toMatchInlineSnapshot(`
     "
-    .aria-hidden\\:flex {
-      &[aria-hidden="true"] {
+    .aria-hidden\\:flex[aria-hidden="true"] {
+      display: flex;
+    }
+    .aria-polite\\:underline[aria-live="polite"] {
+      text-decoration-line: underline;
+    }
+    .data-checked\\:underline[data-ui~="checked"] {
+      text-decoration-line: underline;
+    }
+    .data-foo\\:flex[data-foo] {
+      display: flex;
+    }
+    @supports selector(h2 > p) {
+      .supports-child-combinator\\:underline {
+        text-decoration-line: underline;
+      }
+    }
+    @supports (bar: var(--tw)) {
+      .supports-foo\\:underline {
+        text-decoration-line: underline;
+      }
+    }
+    @supports (grid: var(--tw)) {
+      .supports-grid\\:flex {
         display: flex;
       }
     }
-    .aria-polite\\:underline {
-      &[aria-live="polite"] {
-        text-decoration-line: underline;
-      }
-    }
-    .data-checked\\:underline {
-      &[data-ui~="checked"] {
-        text-decoration-line: underline;
-      }
-    }
-    .data-foo\\:flex {
-      &[data-foo] {
-        display: flex;
-      }
-    }
-    .supports-child-combinator\\:underline {
-      @supports selector(h2 > p) {
-        text-decoration-line: underline;
-      }
-    }
-    .supports-foo\\:underline {
-      @supports (bar: var(--tw)) {
-        text-decoration-line: underline;
-      }
-    }
-    .supports-grid\\:flex {
-      @supports (grid: var(--tw)) {
-        display: flex;
-      }
-    }
-    .print\\:flex {
-      @media print {
+    @media print {
+      .print\\:flex {
         display: flex;
       }
     }
@@ -1260,25 +1226,23 @@ test('merges css breakpoints with js config screens', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .sm\\:flex {
-      @media (width >= 44rem) {
+    @media (width >= 44rem) {
+      .sm\\:flex {
         display: flex;
       }
-    }
-    .min-sm\\:max-md\\:underline {
-      @media (width >= 44rem) {
-        @media (width < 50rem) {
+      @media (width < 50rem) {
+        .min-sm\\:max-md\\:underline {
           text-decoration-line: underline;
         }
       }
     }
-    .md\\:flex {
-      @media (width >= 50rem) {
+    @media (width >= 50rem) {
+      .md\\:flex {
         display: flex;
       }
     }
-    .lg\\:flex {
-      @media (width >= 64rem) {
+    @media (width >= 64rem) {
+      .lg\\:flex {
         display: flex;
       }
     }
@@ -1314,11 +1278,9 @@ test('utilities must be prefixed', async () => {
       .tw\\:underline {
         text-decoration-line: underline;
       }
-      .tw\\:hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
-          }
+      @media (hover: hover) {
+        .tw\\:hover\\:line-through:hover {
+          text-decoration-line: line-through;
         }
       }
       "
@@ -1460,19 +1422,15 @@ test('important: `#app`', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    #app {
-      .custom {
-        color: red;
-      }
-      .underline {
-        text-decoration-line: underline;
-      }
-      .hover\\:line-through {
-        &:hover {
-          @media (hover: hover) {
-            text-decoration-line: line-through;
-          }
-        }
+    #app .custom {
+      color: red;
+    }
+    #app .underline {
+      text-decoration-line: underline;
+    }
+    @media (hover: hover) {
+      :is(#app .hover\\:line-through):hover {
+        text-decoration-line: line-through;
       }
     }
     "
@@ -1507,11 +1465,9 @@ test('important: true', async () => {
     .underline {
       text-decoration-line: underline !important;
     }
-    .hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+    @media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     "
@@ -1550,8 +1506,8 @@ test('blocklisted candidates are not generated', async () => {
       .underline {
         text-decoration-line: underline;
       }
-      .md\\:bg-white {
-        @media (width >= 48rem) {
+      @media (width >= 48rem) {
+        .md\\:bg-white {
           background-color: var(--color-white, #fff);
         }
       }
