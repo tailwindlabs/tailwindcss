@@ -286,9 +286,9 @@ export function optimizeAst(
       // found in the theme config.
       if (
         polyfills & Polyfills.ColorMix &&
-        node.value.includes('color-mix(') &&
         !context.supportsColorMix &&
-        !context.keyframes
+        !context.keyframes &&
+        node.value.includes('color-mix(')
       ) {
         colorMixDeclarations.get(parent).add(node)
       }
