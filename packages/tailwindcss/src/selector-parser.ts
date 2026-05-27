@@ -99,6 +99,37 @@ function value(value: string): SelectorValueNode {
   }
 }
 
+export function cloneAstNode<T extends SelectorAstNode>(node: T): T {
+  switch (node.kind) {
+    case 'combinator':
+    case 'selector':
+    case 'value':
+      return {
+        kind: node.kind,
+        value: node.value,
+      } as T
+
+    case 'complex':
+    case 'compound':
+    case 'list':
+      return {
+        kind: node.kind,
+        nodes: node.nodes.map(cloneAstNode),
+      } as T
+
+    case 'function':
+      return {
+        kind: node.kind,
+        value: node.value,
+        nodes: node.nodes.map(cloneAstNode),
+      } satisfies SelectorFunctionNode as T
+
+    default:
+      node satisfies never
+      throw new Error(`Unknown node kind: ${(node as any).kind}`)
+  }
+}
+
 export function toCss(ast: SelectorAstNode[], minify = false) {
   let css = ''
   for (let node of ast) {
