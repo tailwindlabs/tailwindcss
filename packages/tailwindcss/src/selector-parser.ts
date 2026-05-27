@@ -70,7 +70,7 @@ function compound(nodes: SelectorAstNode[]): SelectorCompoundNode {
   }
 }
 
-function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
+export function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
   return {
     kind: 'function',
     value,
@@ -85,7 +85,7 @@ function list(nodes: SelectorAstNode[]): SelectorListNode {
   }
 }
 
-function selector(value: string): SelectorNode {
+export function selector(value: string): SelectorNode {
   return {
     kind: 'selector',
     value,
