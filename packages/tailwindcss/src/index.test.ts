@@ -5732,6 +5732,7 @@ describe('@variant', () => {
       @media something {
         @media (orientation: landscape) {
           @page {
+            color: red;
           }
         }
       }

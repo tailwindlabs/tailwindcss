@@ -1302,7 +1302,11 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
         }
       }
 
-      nodes.push(node)
+      if (node.selector === '&') {
+        nodes.push(...node.nodes)
+      } else {
+        nodes.push(node)
+      }
     }
 
     // Update the variant at-rule node, to be the `&` rule node
