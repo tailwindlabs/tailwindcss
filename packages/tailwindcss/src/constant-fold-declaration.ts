@@ -23,10 +23,10 @@ export function constantFoldDeclarationAst(
   let folded = false
 
   walk(ast, {
-    exit(valueNode) {
+    exit(valueNode, ctx) {
       // Canonicalize dimensions to their simplest form. This includes:
       // - Convert `-0`, `+0`, `0.0`, … to `0`
-      // - Convert `-0px`, `+0em`, `0.0rem`, … to `0`
+      // - Convert `-0px`, `+0em`, `0.0rem`, … to `0<unit>`
       // - Convert units to an equivalent unit
       if (
         valueNode.kind === 'word' &&
@@ -35,6 +35,24 @@ export function constantFoldDeclarationAst(
         let canonical = canonicalizeDimension(valueNode.value, rem, normalizeUnit)
         if (canonical === null) return // Couldn't be canonicalized, nothing to do
         if (canonical === valueNode.value) return // Already in canonical form, nothing to do
+
+        // We need to be careful with `0` because `0<unit>` can only be
+        // converted to `0` if we're dealing with a `<length>` type.
+        if (canonical === '0') {
+          let withUnit = canonicalizeDimension(valueNode.value, rem, false)
+          if (withUnit === null) return
+
+          // When used inside of a function such as `calc(…)`, then this isn't
+          // always safe to convert to `0`.
+          //
+          // E.g.:
+          // - `calc(0px + 1rem)` → `calc(0 + 1rem)` this goes from valid to invalid
+          // - `calc(0px * 1rem)` → `calc(0 * 1rem)` this goes from invalid to valid
+          if (ctx.parent?.kind === 'function') {
+            folded = true
+            return WalkAction.ReplaceSkip(ValueParser.word(withUnit))
+          }
+        }
 
         folded = true
         return WalkAction.ReplaceSkip(ValueParser.word(canonical))
@@ -273,7 +291,10 @@ function canonicalizeDimension(
   if (unit === null) return `${value}` // Already unitless, nothing to do
 
   // Replace `0<length>` units with just `0`
-  if (value === 0 && isLength(input)) return '0'
+  if (value === 0 && isLength(input)) {
+    if (normalizeUnit) return '0'
+    else return `0${unit}` // Keep unit
+  }
 
   // Only normalize into base units when necessary
   if (!normalizeUnit) return `${input}`
