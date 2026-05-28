@@ -142,8 +142,8 @@ export function constantFoldDeclarationAst(
                 return
               }
 
-              // `+` requires that the units are the same. Adding a unitless
-              // value to a value with a unit is not allowed.
+              // `+` requires that both values being unitless, or both values
+              // have a unit. Mixed units are valid, but we won't fold these.
               //
               // - `2    + 3`     → valid
               // - `4rem + 5`     → invalid
