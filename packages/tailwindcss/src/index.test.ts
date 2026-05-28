@@ -5602,9 +5602,7 @@ describe('@variant', () => {
       @media something {
         @media (orientation: landscape) {
           @page {
-            :scope {
-              color: red;
-            }
+            color: red;
           }
         }
       }
