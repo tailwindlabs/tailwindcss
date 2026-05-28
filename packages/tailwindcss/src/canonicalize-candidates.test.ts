@@ -1467,4 +1467,21 @@ describe('regressions', () => {
       ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
     },
   )
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1579
+  test('does not suggest invalid alternative when canonicalizing calc expressions', async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual([
+      'px-[calc(1rem+0px)]',
+    ])
+  })
 })
