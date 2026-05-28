@@ -682,6 +682,35 @@ export function optimizeAst(
   return newAst
 }
 
+// A set of at-rules that can be hoisted to the top without any repercussions.
+// Typically at-rules that rely on the environment, not parent information and
+// contain other rules/declarations.
+export const HOISTABLE_AT_RULES = new Set([
+  '@container',
+  '@layer',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+// As set of at-rules that can be dropped if they don't contain any nodes. We
+// don't have the distinction between an at-rule with no body, or an at-rule
+// with a body that is empty right now.
+export const DROPPABLE_IF_EMPTY_AT_RULES = new Set([
+  '@container',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+export function optimizeSelector(selector: string): string {
+  return selector
+}
+
 export function toCss(ast: AstNode[], track?: boolean) {
   let pos = 0
 
