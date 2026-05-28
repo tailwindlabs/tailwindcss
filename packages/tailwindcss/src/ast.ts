@@ -1,4 +1,5 @@
 import { Polyfills } from '.'
+import * as SelectorParser from '../src/selector-parser'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import type { Source, SourceLocation } from './source-maps/source'
@@ -680,6 +681,99 @@ export function optimizeAst(
   }
 
   return newAst
+}
+
+// A set of at-rules that can be hoisted to the top without any repercussions.
+// Typically at-rules that rely on the environment, not parent information and
+// contain other rules/declarations.
+export const HOISTABLE_AT_RULES = new Set([
+  '@container',
+  '@layer',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+// As set of at-rules that can be dropped if they don't contain any nodes. We
+// don't have the distinction between an at-rule with no body, or an at-rule
+// with a body that is empty right now.
+export const DROPPABLE_IF_EMPTY_AT_RULES = new Set([
+  '@container',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+// An `element` and a `*` can only appear once, and if they do, they have
+// to be first. If multiple exist, a `:is(…)` should be used.
+//
+// - `div*` is invalid, must be `div:is(*)`
+// - `**` is invalid, must be `*:is(*)`
+// - `.classdiv` is invalid, must be `div.class`
+//
+function mustBeFirst(node: SelectorParser.SelectorAstNode | undefined) {
+  return node?.kind === 'selector' && (node.value === '*' || /^[a-zA-Z-]+$/.test(node.value))
+}
+
+export function optimizeSelector(selector: string): string {
+  let ast = SelectorParser.parse(selector)
+
+  let changed = false
+  walk(ast, {
+    exit(node, ctx) {
+      if (node.kind === 'compound') {
+        let idx = node.nodes.findIndex((child) => mustBeFirst(child))
+        if (idx >= 0) {
+          // Optimization: Already in the correct spot, nothing to do here
+          if (idx === ctx.index) return
+
+          changed = true
+          node.nodes.unshift(...node.nodes.splice(idx, 1))
+        }
+        return
+      }
+
+      if (node.kind !== 'function') return
+      if (node.value !== ':is') return
+      if (node.nodes.length !== 1) return
+
+      let current = node.nodes[0]
+      if (current.kind !== 'selector' && current.kind !== 'function') return
+
+      if (ctx.parent?.kind !== 'compound') {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      let existing = ctx.siblings.find((sibling) => sibling !== node && mustBeFirst(sibling))
+      if (!existing) {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      if (!mustBeFirst(current)) {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      if (
+        existing.kind === 'selector' &&
+        existing.value === '*' &&
+        current.kind === 'selector' &&
+        current.value !== '*'
+      ) {
+        changed = true
+        ctx.siblings[ctx.siblings.indexOf(existing)] = SelectorParser.fun(':is', [existing])
+        return WalkAction.Replace(current)
+      }
+    },
+  })
+
+  return changed ? SelectorParser.toCss(ast) : selector
 }
 
 export function toCss(ast: AstNode[], track?: boolean) {
