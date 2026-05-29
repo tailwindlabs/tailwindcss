@@ -4219,13 +4219,13 @@ describe('addComponents()', () => {
 })
 
 describe('matchComponents()', () => {
-  test('is an alias for matchUtilities', async () => {
+  test('outputs inside @layer components', async () => {
     expect(
       await run(
         ['prose', 'sm:prose-sm', 'hover:prose-lg'],
         css`
           @plugin "my-plugin";
-          @tailwind utilities;
+          @layer components;
         `,
         {
           async loadModule(_id, base) {
@@ -4244,13 +4244,15 @@ describe('matchComponents()', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .prose {
-        --container-size: normal;
-      }
+      @layer components {
+        .prose {
+          --container-size: normal;
+        }
 
-      @media (hover: hover) {
-        .hover\\:prose-lg:hover {
-          --container-size: lg;
+        @media (hover: hover) {
+          .hover\\:prose-lg:hover {
+            --container-size: lg;
+          }
         }
       }
       "
