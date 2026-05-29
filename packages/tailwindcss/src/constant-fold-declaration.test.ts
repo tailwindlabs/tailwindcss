@@ -88,15 +88,14 @@ it.each([
   ['+0'],
   ['-0.0rem'],
   ['+0.00rem'],
+
+  // Expressions
+  ['calc(-0px * -1)'],
 ])('should constant fold `%s` to `0` (%#)', (input) => {
   expect(constantFoldDeclaration(input)).toBe('0')
 })
 
 it.each([
-  // Expressions
-  ['calc(-0px * -1)', '0px'],
-
-  // Non-foldable units
   ['0deg', '0deg'],
   ['0rad', '0deg'],
   ['0%', '0%'],
