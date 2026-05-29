@@ -510,7 +510,30 @@ export function buildPluginApi({
     },
 
     addComponents(components, options) {
-      this.addUtilities(components, options)
+      if (referenceMode) return
+      let componentNodes = objectToAst(components)
+
+      // Prefix all class selectors with the configured theme prefix
+      if (designSystem.theme.prefix) {
+        walk(componentNodes, (node) => {
+          if (node.kind === 'rule') {
+            let selectorAst = SelectorParser.parse(node.selector)
+            walk(selectorAst, (node) => {
+              if (node.kind === 'selector' && node.value[0] === '.') {
+                node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
+              }
+            })
+            node.selector = SelectorParser.toCss(selectorAst)
+          }
+        })
+      }
+
+      featuresRef.current |= substituteFunctions(componentNodes, designSystem)
+      let rule = atRule('@layer', 'components', componentNodes)
+      walk([rule], (node) => {
+        node.src = src
+      })
+      ast.push(rule)
     },
 
     matchComponents(components, options) {
