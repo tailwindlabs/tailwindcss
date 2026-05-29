@@ -91,6 +91,7 @@ it.each([
 
   // Expressions
   ['calc(-0px * -1)'],
+  ['calc(-1 * -0px)'],
 ])('should constant fold `%s` to `0` (%#)', (input) => {
   expect(constantFoldDeclaration(input)).toBe('0')
 })
@@ -102,6 +103,7 @@ it.each([
   // that for any `0<unit>`. E.g.: `calc(0s + 1rem)` which is invalid, would
   // become valid if we just use `1rem`.
   ['calc(calc(0px * -1) + 1rem)', 'calc(0px + 1rem)'],
+  ['calc(calc(-1 * 0px) + 1rem)', 'calc(0px + 1rem)'],
 
   // Non-foldable units
   ['0deg', '0deg'],
