@@ -656,7 +656,11 @@ export function optimizeAst(
 
 export function handleNesting(ast: AstNode[]): AstNode[] {
   // Track `rule` selectors as we go
-  let selectorStack: string[] = []
+  let selectorStack: [
+    selector: string,
+    src: SourceLocation | undefined,
+    dst: SourceLocation | undefined,
+  ][] = []
 
   // Track `at-rule` information as we go. Tracking this separately from the
   // selector stack for rules such that we can hoist this above all the rules.
@@ -709,15 +713,15 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
               })
 
               if (changed) {
-                selectorStack.push(SelectorParser.toCss(ast))
+                selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
               } else {
-                selectorStack.push(node.selector)
+                selectorStack.push([node.selector, node.src, node.dst])
               }
             }
 
             // No nesting markers, track as-is
             else {
-              selectorStack.push(node.selector)
+              selectorStack.push([node.selector, node.src, node.dst])
             }
           }
 
@@ -732,7 +736,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             }
 
             // `&` is using `:is(…)` semantics
-            let parentSelector = `:is(${selectorStack[selectorStack.length - 1]})`
+            let parentSelector = `:is(${selectorStack[selectorStack.length - 1][0]})`
             let selector = segment(node.selector, ',')
               .map((selector) => {
                 // Slow path: we need to replace the `&` with the parent
@@ -762,7 +766,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                 }
               })
               .join(', ')
-            selectorStack.push(selector)
+            selectorStack.push([selector, node.src, node.dst])
           }
           break
         }
@@ -945,7 +949,8 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
       // Build up the rule
       if (selectorStack.length > 0) {
-        let selector = optimizeSelector(selectorStack[selectorStack.length - 1])
+        let [lastSelector, src, dst] = selectorStack[selectorStack.length - 1]
+        let selector = optimizeSelector(lastSelector)
 
         // Optimization: merge adjacent rules with the same selector
         //
@@ -979,7 +984,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
         // Can't push into existing node, create a new node
         root = rule(selector, nodes)
-        if (node.src || node.dst) Object.assign(root, { src: node.src, dst: node.dst })
+        if (src || dst) Object.assign(root, { src, dst })
       }
 
       // Wrap in at-rules, if we can push into an existing node then we can
