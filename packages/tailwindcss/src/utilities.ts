@@ -2340,7 +2340,7 @@ export function createUtilities(theme: Theme) {
         handle: (value) => properties.map((property) => decl(property, value)),
         staticValues: {
           none: properties.map((property) => decl(property, '0')),
-          full: properties.map((property) => decl(property, 'calc(infinity * 1px)')),
+          full: properties.map((property) => decl(property, '9999px')),
         },
       })
     }

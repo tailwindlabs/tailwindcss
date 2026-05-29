@@ -11989,7 +11989,7 @@ test('rounded', async () => {
     }
 
     .rounded-full {
-      border-radius: 3.40282e38px;
+      border-radius: 9999px;
     }
 
     .rounded-none {
