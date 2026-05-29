@@ -86,7 +86,9 @@ export function constantFoldDeclarationAst(
         if (
           operator === '*' &&
           ((lhs?.[0] === 0 && lhs?.[1] === null) || // 0 * something
-            (rhs?.[0] === 0 && rhs?.[1] === null)) // something * 0
+            (rhs?.[0] === 0 && rhs?.[1] === null) || // something * 0
+            (lhs?.[0] === 0 && lhs?.[1] !== null && rhs?.[1] === null) || // 0<unit> * something-without-unit
+            (rhs?.[0] === 0 && rhs?.[1] !== null && lhs?.[1] === null)) // something-without-unit * 0<unit>
         ) {
           folded = true
           return WalkAction.ReplaceSkip(ValueParser.word('0'))
