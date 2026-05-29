@@ -4146,7 +4146,7 @@ describe('matchUtilities()', () => {
 })
 
 describe('addComponents()', () => {
-  test('is an alias for addUtilities', async () => {
+  test('adds styles to @layer components', async () => {
     expect(
       await run(
         ['btn', 'btn-blue', 'btn-red'],
@@ -4188,28 +4188,30 @@ describe('addComponents()', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .btn {
-        border-radius: .25rem;
-        padding: .5rem 1rem;
-        font-weight: 600;
-      }
+      @layer components {
+        .btn {
+          border-radius: .25rem;
+          padding: .5rem 1rem;
+          font-weight: 600;
+        }
 
-      .btn-blue {
-        color: #fff;
-        background-color: #3490dc;
-      }
+        .btn-blue {
+          color: #fff;
+          background-color: #3490dc;
+        }
 
-      .btn-blue:hover {
-        background-color: #2779bd;
-      }
+        .btn-blue:hover {
+          background-color: #2779bd;
+        }
 
-      .btn-red {
-        color: #fff;
-        background-color: #e3342f;
-      }
+        .btn-red {
+          color: #fff;
+          background-color: #e3342f;
+        }
 
-      .btn-red:hover {
-        background-color: #cc1f1a;
+        .btn-red:hover {
+          background-color: #cc1f1a;
+        }
       }
       "
     `)
