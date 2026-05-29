@@ -86,12 +86,30 @@ export function constantFoldDeclarationAst(
         if (
           operator === '*' &&
           ((lhs?.[0] === 0 && lhs?.[1] === null) || // 0 * something
-            (rhs?.[0] === 0 && rhs?.[1] === null) || // something * 0
-            (lhs?.[0] === 0 && lhs?.[1] !== null && rhs?.[1] === null) || // 0<unit> * something-without-unit
-            (rhs?.[0] === 0 && rhs?.[1] !== null && lhs?.[1] === null)) // something-without-unit * 0<unit>
+            (rhs?.[0] === 0 && rhs?.[1] === null)) // something * 0
         ) {
           folded = true
           return WalkAction.ReplaceSkip(ValueParser.word('0'))
+        }
+
+        // Fold `0<unit> * something-without-unit` to just `0<unit>`, inside of a function such as `calc(…)`
+        if (operator === '*' && lhs?.[0] === 0 && lhs?.[1] !== null && rhs?.[1] === null) {
+          folded = true
+          if (ctx.parent?.kind === 'function') {
+            return WalkAction.ReplaceSkip(ValueParser.word(`0${lhs[1]}`))
+          } else {
+            return WalkAction.ReplaceSkip(ValueParser.word('0'))
+          }
+        }
+
+        // Fold `something-without-unit * 0<unit>` to just `0<unit>`, inside of a function such as `calc(…)`
+        if (operator === '*' && rhs?.[0] === 0 && rhs?.[1] !== null && lhs?.[1] === null) {
+          folded = true
+          if (ctx.parent?.kind === 'function') {
+            return WalkAction.ReplaceSkip(ValueParser.word(`0${rhs[1]}`))
+          } else {
+            return WalkAction.ReplaceSkip(ValueParser.word('0'))
+          }
         }
 
         if (operator === '*') {

@@ -96,6 +96,14 @@ it.each([
 })
 
 it.each([
+  // Expressions, keep unit when they are nested
+  //
+  // TODO: We might be able to fold this further to just `1rem`, but we can't do
+  // that for any `0<unit>`. E.g.: `calc(0s + 1rem)` which is invalid, would
+  // become valid if we just use `1rem`.
+  ['calc(calc(0px * -1) + 1rem)', 'calc(0px + 1rem)'],
+
+  // Non-foldable units
   ['0deg', '0deg'],
   ['0rad', '0deg'],
   ['0%', '0%'],
