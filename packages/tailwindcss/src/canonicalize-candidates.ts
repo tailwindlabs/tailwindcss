@@ -1086,6 +1086,7 @@ const SPACING_KEY = Symbol()
 // and keep them low. The largest rem value we have is for the 2xl breakpoint,
 // which is 96rem, which is 1536px.
 const MAX_BARE_VALUE_IN_PX = 1536
+const MAX_BARE_VALUE_IN_REM = MAX_BARE_VALUE_IN_PX / 16
 
 function isReasonableBareValue(value: number, designSystem: DesignSystem, rem: number | null) {
   let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
@@ -1095,10 +1096,11 @@ function isReasonableBareValue(value: number, designSystem: DesignSystem, rem: n
   if (parsed === null) return false
 
   let [spacingValue, spacingUnit] = parsed
-  if (spacingUnit !== 'px') return false
-
   let bareValueInPixels = value * spacingValue
-  return bareValueInPixels <= MAX_BARE_VALUE_IN_PX
+
+  if (spacingUnit === 'px') return bareValueInPixels <= MAX_BARE_VALUE_IN_PX
+  if (spacingUnit === 'rem') return bareValueInPixels <= MAX_BARE_VALUE_IN_REM
+  return false
 }
 
 function createSpacingCache(
