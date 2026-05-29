@@ -39,9 +39,6 @@ export function constantFoldDeclarationAst(
         // We need to be careful with `0` because `0<unit>` can only be
         // converted to `0` if we're dealing with a `<length>` type.
         if (canonical === '0') {
-          let withUnit = canonicalizeDimension(valueNode.value, rem, false)
-          if (withUnit === null) return
-
           // When used inside of a function such as `calc(…)`, then this isn't
           // always safe to convert to `0`.
           //
@@ -49,6 +46,9 @@ export function constantFoldDeclarationAst(
           // - `calc(0px + 1rem)` → `calc(0 + 1rem)` this goes from valid to invalid
           // - `calc(0px * 1rem)` → `calc(0 * 1rem)` this goes from invalid to valid
           if (ctx.parent?.kind === 'function') {
+            let withUnit = canonicalizeDimension(valueNode.value, rem, false)
+            if (withUnit === null) return
+
             folded = true
             return WalkAction.ReplaceSkip(ValueParser.word(withUnit))
           }
