@@ -537,7 +537,151 @@ export function buildPluginApi({
     },
 
     matchComponents(components, options) {
-      this.matchUtilities(components, options)
+      let types = options?.type
+        ? Array.isArray(options?.type)
+          ? options.type
+          : [options.type]
+        : ['any']
+
+      for (let [name, fn] of Object.entries(components)) {
+        if (!IS_VALID_UTILITY_NAME.test(name)) {
+          throw new Error(
+            `\`matchComponents({ '${name}' : … })\` defines an invalid component name. Components should be alphanumeric and start with a lowercase letter, eg. \`scrollbar\`.`,
+          )
+        }
+
+        function compileFn({ negative }: { negative: boolean }) {
+          return (candidate: Extract<Candidate, { kind: 'functional' }>) => {
+            // Throw out any candidate whose value is not a supported type
+            if (
+              candidate.value?.kind === 'arbitrary' &&
+              types.length > 0 &&
+              !types.includes('any')
+            ) {
+              if (candidate.value.dataType && !types.includes(candidate.value.dataType)) {
+                return
+              }
+
+              if (
+                !candidate.value.dataType &&
+                !inferDataType(candidate.value.value, types as any[])
+              ) {
+                return
+              }
+            }
+
+            let isColor = types.includes('color')
+
+            // Resolve the candidate value
+            let value: string | null = null
+            let ignoreModifier = false
+
+            {
+              let values = options?.values ?? {}
+
+              if (isColor) {
+                values = Object.assign(
+                  {
+                    inherit: 'inherit',
+                    transparent: 'transparent',
+                    current: 'currentcolor',
+                  },
+                  values,
+                )
+              }
+
+              if (!candidate.value) {
+                value = values.DEFAULT ?? null
+              } else if (candidate.value.kind === 'arbitrary') {
+                value = candidate.value.value
+              } else if (
+                candidate.value.fraction &&
+                Object.hasOwn(values, candidate.value.fraction)
+              ) {
+                value = values[candidate.value.fraction]
+                ignoreModifier = true
+              } else if (Object.hasOwn(values, candidate.value.value)) {
+                value = values[candidate.value.value]
+              } else if (values.__BARE_VALUE__) {
+                value = values.__BARE_VALUE__(candidate.value) ?? null
+                ignoreModifier =
+                  (candidate.value.fraction !== null && value?.includes('/')) ?? false
+              }
+            }
+
+            if (value === null) return
+
+            // Resolve the modifier value
+            let modifier: string | null
+
+            {
+              let modifiers = options?.modifiers ?? null
+
+              if (!candidate.modifier) {
+                modifier = null
+              } else if (modifiers === 'any' || candidate.modifier.kind === 'arbitrary') {
+                modifier = candidate.modifier.value
+              } else if (modifiers && Object.hasOwn(modifiers, candidate.modifier.value)) {
+                modifier = modifiers[candidate.modifier.value]
+              } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
+                modifier = `${candidate.modifier.value}%`
+              } else {
+                modifier = null
+              }
+            }
+
+            // A modifier was provided but is invalid
+            if (candidate.modifier && modifier === null && !ignoreModifier) {
+              return candidate.value?.kind === 'arbitrary' ? null : undefined
+            }
+
+            if (isColor && modifier !== null) {
+              value = withAlpha(value, modifier)
+            }
+
+            if (negative) {
+              value = `calc(${value} * -1)`
+            }
+
+            let ast = objectToAst(fn(value, { modifier }))
+            replaceNestedClassNameReferences(ast, name, candidate.raw)
+            featuresRef.current |= substituteAtApply(ast, designSystem)
+
+            // Wrap the component AST inside @layer components
+            let rule = atRule('@layer', 'components', ast)
+            walk([rule], (node) => {
+              node.src = src
+            })
+            return [rule]
+          }
+        }
+
+        if (options?.supportsNegativeValues) {
+          designSystem.utilities.functional(`-${name}`, compileFn({ negative: true }), { types })
+        }
+        designSystem.utilities.functional(name, compileFn({ negative: false }), { types })
+
+        designSystem.utilities.suggest(name, () => {
+          let values = options?.values ?? {}
+          let valueKeys = new Set<string | null>(Object.keys(values))
+          valueKeys.delete('__BARE_VALUE__')
+          valueKeys.delete('__CSS_VALUES__')
+          if (valueKeys.has('DEFAULT')) {
+            valueKeys.delete('DEFAULT')
+            valueKeys.add(null)
+          }
+
+          let modifiers = options?.modifiers ?? {}
+          let modifierKeys = modifiers === 'any' ? [] : Object.keys(modifiers)
+
+          return [
+            {
+              values: Array.from(valueKeys),
+              modifiers: modifierKeys,
+            },
+          ]
+        })
+      }
     },
 
     theme: createThemeFn(
