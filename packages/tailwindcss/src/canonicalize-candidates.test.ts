@@ -1480,8 +1480,6 @@ describe('regressions', () => {
       rem: 16,
     }
 
-    expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual([
-      'px-[calc(1rem+0px)]',
-    ])
+    expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual(['px-4'])
   })
 })
