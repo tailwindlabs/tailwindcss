@@ -288,6 +288,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[font-weight:400]', 'font-normal'],
       ['[line-height:0]', 'leading-0'],
       ['[border-style:solid]', 'border-solid'],
+
+      // Do not constant fold `0<unit>` to `0` when the type is unknown (which
+      // is often the case with CSS variables)
+      ['[--foo:0px]', '[--foo:0px]'],
+      ['[--foo:calc(0px*1)]', '[--foo:calc(0px*1)]'],
+      ['[--foo:calc(0*1rem)]', '[--foo:calc(0*1rem)]'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
