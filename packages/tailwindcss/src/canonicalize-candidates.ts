@@ -1074,6 +1074,33 @@ function printUnprefixedCandidate(designSystem: DesignSystem, candidate: Candida
 // ----
 
 const SPACING_KEY = Symbol()
+
+// We prefer bare values over arbitrary values such as `left-[6px]` →
+// `left-1.5`.
+//
+// There are situations where this doesn't always make sense. E.g.:
+// `left-[99999px]` → `left-24999.75`.
+//
+// We could try and analyze the incoming value and bail out if we detect certain
+// patterns. But a first step would be to limit the bare values for large values
+// and keep them low. The largest rem value we have is for the 2xl breakpoint,
+// which is 96rem, which is 1536px.
+const MAX_BARE_VALUE_IN_PX = 1536
+
+function isReasonableBareValue(value: number, designSystem: DesignSystem, rem: number | null) {
+  let spacingMultiplier = designSystem.resolveThemeValue('--spacing')
+  if (spacingMultiplier === undefined) return false
+
+  let parsed = dimensions.get(constantFoldDeclaration(spacingMultiplier, rem))
+  if (parsed === null) return false
+
+  let [spacingValue, spacingUnit] = parsed
+  if (spacingUnit !== 'px') return false
+
+  let bareValueInPixels = value * spacingValue
+  return bareValueInPixels <= MAX_BARE_VALUE_IN_PX
+}
+
 function createSpacingCache(
   designSystem: DesignSystem,
   options?: CanonicalizeOptions,
@@ -1220,7 +1247,10 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
       ) {
         let bareValue = designSystem.storage[SPACING_KEY]?.get(value) ?? null
         if (bareValue !== null) {
-          if (isValidSpacingMultiplier(bareValue)) {
+          if (
+            isValidSpacingMultiplier(bareValue) &&
+            isReasonableBareValue(bareValue, designSystem, options.signatureOptions.rem)
+          ) {
             yield Object.assign({}, candidate, {
               value: { kind: 'named', value: bareValue, fraction: null },
             })
@@ -1261,7 +1291,11 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
         // Try bare value based on the `--spacing` value. E.g.:
         //
         // - `w-[64rem]` → `w-256`
-        if (spacingMultiplier !== null) {
+        if (
+          spacingMultiplier !== null &&
+          isValidSpacingMultiplier(spacingMultiplier) &&
+          isReasonableBareValue(spacingMultiplier, designSystem, options.signatureOptions.rem)
+        ) {
           for (let replacementCandidate of parseCandidate(
             designSystem,
             `${root}-${spacingMultiplier}`,
