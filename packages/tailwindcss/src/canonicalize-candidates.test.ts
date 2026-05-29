@@ -288,6 +288,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[font-weight:400]', 'font-normal'],
       ['[line-height:0]', 'leading-0'],
       ['[border-style:solid]', 'border-solid'],
+
+      // Do not constant fold `0<unit>` to `0` when the type is unknown (which
+      // is often the case with CSS variables)
+      ['[--foo:0px]', '[--foo:0px]'],
+      ['[--foo:calc(0px*1)]', '[--foo:calc(0px*1)]'],
+      ['[--foo:calc(0*1rem)]', '[--foo:calc(0*1rem)]'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
@@ -1467,4 +1473,19 @@ describe('regressions', () => {
       ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
     },
   )
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1579
+  test('does not suggest invalid alternative when canonicalizing calc expressions', async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual(['px-4'])
+  })
 })

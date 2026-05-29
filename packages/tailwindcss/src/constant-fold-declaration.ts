@@ -23,10 +23,10 @@ export function constantFoldDeclarationAst(
   let folded = false
 
   walk(ast, {
-    exit(valueNode) {
+    exit(valueNode, ctx) {
       // Canonicalize dimensions to their simplest form. This includes:
       // - Convert `-0`, `+0`, `0.0`, … to `0`
-      // - Convert `-0px`, `+0em`, `0.0rem`, … to `0`
+      // - Convert `-0px`, `+0em`, `0.0rem`, … to `0<unit>`
       // - Convert units to an equivalent unit
       if (
         valueNode.kind === 'word' &&
@@ -35,6 +35,24 @@ export function constantFoldDeclarationAst(
         let canonical = canonicalizeDimension(valueNode.value, rem, normalizeUnit)
         if (canonical === null) return // Couldn't be canonicalized, nothing to do
         if (canonical === valueNode.value) return // Already in canonical form, nothing to do
+
+        // We need to be careful with `0` because `0<unit>` can only be
+        // converted to `0` if we're dealing with a `<length>` type.
+        if (canonical === '0') {
+          // When used inside of a function such as `calc(…)`, then this isn't
+          // always safe to convert to `0`.
+          //
+          // E.g.:
+          // - `calc(0px + 1rem)` → `calc(0 + 1rem)` this goes from valid to invalid
+          // - `calc(0px * 1rem)` → `calc(0 * 1rem)` this goes from invalid to valid
+          if (ctx.parent?.kind === 'function') {
+            let withUnit = canonicalizeDimension(valueNode.value, rem, false)
+            if (withUnit === null) return
+
+            folded = true
+            return WalkAction.ReplaceSkip(ValueParser.word(withUnit))
+          }
+        }
 
         folded = true
         return WalkAction.ReplaceSkip(ValueParser.word(canonical))
@@ -72,6 +90,26 @@ export function constantFoldDeclarationAst(
         ) {
           folded = true
           return WalkAction.ReplaceSkip(ValueParser.word('0'))
+        }
+
+        // Fold `0<unit> * something-without-unit` to just `0<unit>`, inside of a function such as `calc(…)`
+        if (operator === '*' && lhs?.[0] === 0 && lhs?.[1] !== null && rhs?.[1] === null) {
+          folded = true
+          if (ctx.parent?.kind === 'function') {
+            return WalkAction.ReplaceSkip(ValueParser.word(`0${lhs[1]}`))
+          } else {
+            return WalkAction.ReplaceSkip(ValueParser.word('0'))
+          }
+        }
+
+        // Fold `something-without-unit * 0<unit>` to just `0<unit>`, inside of a function such as `calc(…)`
+        if (operator === '*' && rhs?.[0] === 0 && rhs?.[1] !== null && lhs?.[1] === null) {
+          folded = true
+          if (ctx.parent?.kind === 'function') {
+            return WalkAction.ReplaceSkip(ValueParser.word(`0${rhs[1]}`))
+          } else {
+            return WalkAction.ReplaceSkip(ValueParser.word('0'))
+          }
         }
 
         if (operator === '*') {
@@ -142,8 +180,8 @@ export function constantFoldDeclarationAst(
                 return
               }
 
-              // `+` requires that the units are the same. Adding a unitless
-              // value to a value with a unit is not allowed.
+              // `+` requires that both values being unitless, or both values
+              // have a unit. Mixed units are valid, but we won't fold these.
               //
               // - `2    + 3`     → valid
               // - `4rem + 5`     → invalid
@@ -273,7 +311,10 @@ function canonicalizeDimension(
   if (unit === null) return `${value}` // Already unitless, nothing to do
 
   // Replace `0<length>` units with just `0`
-  if (value === 0 && isLength(input)) return '0'
+  if (value === 0 && isLength(input)) {
+    if (normalizeUnit) return '0'
+    else return `0${unit}` // Keep unit
+  }
 
   // Only normalize into base units when necessary
   if (!normalizeUnit) return `${input}`
