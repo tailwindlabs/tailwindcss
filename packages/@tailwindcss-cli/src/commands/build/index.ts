@@ -479,10 +479,13 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
       await Promise.all(
         events.map(async (event) => {
-          // We currently don't handle deleted files because it doesn't influence
-          // the CSS output. This is because we currently keep all scanned
-          // candidates in a cache for performance reasons.
-          if (event.type === 'delete') return
+          // We don't handle deleted content files (they remain in the candidate
+          // cache), but we do track deleted config/plugin dependencies so that
+          // a full rebuild can surface the missing file error.
+          if (event.type === 'delete') {
+            files.add(event.path)
+            return
+          }
 
           // Ignore directory changes. We only care about file changes
           let stats: Stats | null = null
