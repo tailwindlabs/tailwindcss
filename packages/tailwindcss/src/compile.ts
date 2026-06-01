@@ -140,7 +140,7 @@ export function compileAstNodes(
 
   let selector = `.${escape(candidate.raw)}`
 
-  for (let nodes of asts) {
+  for (let { nodes, options } of asts) {
     let propertySort = getPropertySort(nodes)
 
     // If the candidate itself is important then we want to always mark
@@ -150,7 +150,7 @@ export function compileAstNodes(
       applyImportant(nodes)
     }
 
-    let node: StyleRule = {
+    let node: Rule = {
       kind: 'rule',
       selector,
       nodes,
@@ -165,10 +165,18 @@ export function compileAstNodes(
       if (result === null) return []
     }
 
-    rules.push({
-      node,
-      propertySort,
-    })
+    if (options?.layer) {
+      let wrapped = atRule('@layer', options.layer, [node])
+      rules.push({
+        node: wrapped,
+        propertySort,
+      })
+    } else {
+      rules.push({
+        node,
+        propertySort,
+      })
+    }
   }
 
   return rules
@@ -262,7 +270,10 @@ function isFallbackUtility(utility: Utility) {
   return types.length > 1 && types.includes('any')
 }
 
-function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
+function compileBaseUtility(
+  candidate: Candidate,
+  designSystem: DesignSystem,
+): { nodes: AstNode[]; options?: UtilityOptions }[] {
   if (candidate.kind === 'arbitrary') {
     let value: string | null = candidate.value
 
@@ -274,12 +285,12 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
     if (value === null) return []
 
-    return [[decl(candidate.property, value)]]
+    return [{ nodes: [decl(candidate.property, value)] }]
   }
 
   let utilities = designSystem.utilities.get(candidate.root) ?? []
 
-  let asts: AstNode[][] = []
+  let asts: { nodes: AstNode[]; options?: UtilityOptions }[] = []
 
   let normalUtilities = utilities.filter((u) => !isFallbackUtility(u))
   for (let utility of normalUtilities) {
@@ -300,7 +311,7 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
       continue
     }
-    asts.push(compiledNodes)
+    asts.push({ nodes: compiledNodes, options: utility.options })
   }
 
   if (asts.length > 0) return asts
@@ -324,7 +335,7 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
       continue
     }
-    asts.push(compiledNodes)
+    asts.push({ nodes: compiledNodes, options: utility.options })
   }
 
   return asts

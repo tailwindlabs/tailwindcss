@@ -510,30 +510,92 @@ export function buildPluginApi({
     },
 
     addComponents(components, options) {
-      if (referenceMode) return
-      let componentNodes = objectToAst(components)
+      components = Array.isArray(components) ? components : [components]
 
-      // Prefix all class selectors with the configured theme prefix
-      if (designSystem.theme.prefix) {
-        walk(componentNodes, (node) => {
-          if (node.kind === 'rule') {
-            let selectorAst = SelectorParser.parse(node.selector)
-            walk(selectorAst, (node) => {
-              if (node.kind === 'selector' && node.value[0] === '.') {
-                node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
-              }
+      let entries = components.flatMap((u) => Object.entries(u))
+
+      // Split multi-selector components into individual components
+      entries = entries.flatMap(([name, css]) =>
+        segment(name, ',').map((selector) => [selector.trim(), css] as [string, CssInJs]),
+      )
+
+      // Merge entries for the same class
+      let utils = new DefaultMap<string, AstNode[]>(() => [])
+
+      for (let [name, css] of entries) {
+        if (name.startsWith('@keyframes ')) {
+          if (!referenceMode) {
+            let keyframes = rule(name, objectToAst(css))
+            walk([keyframes], (node) => {
+              node.src = src
             })
-            node.selector = SelectorParser.toCss(selectorAst)
+            ast.push(keyframes)
+          }
+          continue
+        }
+
+        let selectorAst = SelectorParser.parse(name)
+        let foundValidComponent = false
+
+        walk(selectorAst, (node) => {
+          if (
+            node.kind === 'selector' &&
+            node.value[0] === '.' &&
+            IS_VALID_UTILITY_NAME.test(node.value.slice(1))
+          ) {
+            let value = node.value
+            node.value = '&'
+            let selector = SelectorParser.toCss(selectorAst)
+
+            let className = value.slice(1)
+            let contents = selector === '&' ? objectToAst(css) : [rule(selector, objectToAst(css))]
+            utils.get(className).push(...contents)
+            foundValidComponent = true
+
+            node.value = value
+            return
+          }
+
+          if (node.kind === 'function' && node.value === ':not') {
+            return WalkAction.Skip
           }
         })
+
+        if (!foundValidComponent) {
+          throw new Error(
+            `\`addComponents({ '${name}' : … })\` defines an invalid component selector. Components must be a single class name and start with a lowercase letter, eg. \`.btn\`.`,
+          )
+        }
       }
 
-      featuresRef.current |= substituteFunctions(componentNodes, designSystem)
-      let rule = atRule('@layer', 'components', componentNodes)
-      walk([rule], (node) => {
-        node.src = src
-      })
-      ast.push(rule)
+      for (let [className, ast] of utils) {
+        // Prefix all class selector with the configured theme prefix
+        if (designSystem.theme.prefix) {
+          walk(ast, (node) => {
+            if (node.kind === 'rule') {
+              let selectorAst = SelectorParser.parse(node.selector)
+              walk(selectorAst, (node) => {
+                if (node.kind === 'selector' && node.value[0] === '.') {
+                  node.value = `.${designSystem.theme.prefix}\\:${node.value.slice(1)}`
+                }
+              })
+              node.selector = SelectorParser.toCss(selectorAst)
+            }
+          })
+        }
+
+        designSystem.utilities.static(
+          className,
+          (candidate) => {
+            let clonedAst = ast.map(cloneAstNode)
+            replaceNestedClassNameReferences(clonedAst, className, candidate.raw)
+            featuresRef.current |= substituteFunctions(clonedAst, designSystem)
+            featuresRef.current |= substituteAtApply(clonedAst, designSystem)
+            return clonedAst
+          },
+          { layer: 'components' },
+        )
+      }
     },
 
     matchComponents(components, options) {
@@ -647,19 +709,20 @@ export function buildPluginApi({
             replaceNestedClassNameReferences(ast, name, candidate.raw)
             featuresRef.current |= substituteAtApply(ast, designSystem)
 
-            // Wrap the component AST inside @layer components
-            let rule = atRule('@layer', 'components', ast)
-            walk([rule], (node) => {
-              node.src = src
-            })
-            return [rule]
+            return ast
           }
         }
 
         if (options?.supportsNegativeValues) {
-          designSystem.utilities.functional(`-${name}`, compileFn({ negative: true }), { types })
+          designSystem.utilities.functional(`-${name}`, compileFn({ negative: true }), {
+            layer: 'components',
+            types,
+          })
         }
-        designSystem.utilities.functional(name, compileFn({ negative: false }), { types })
+        designSystem.utilities.functional(name, compileFn({ negative: false }), {
+          layer: 'components',
+          types,
+        })
 
         designSystem.utilities.suggest(name, () => {
           let values = options?.values ?? {}
@@ -676,6 +739,7 @@ export function buildPluginApi({
 
           return [
             {
+              supportsNegative: options?.supportsNegativeValues ?? false,
               values: Array.from(valueKeys),
               modifiers: modifierKeys,
             },

@@ -89,7 +89,8 @@ type SuggestionDefinition =
     }
 
 export type UtilityOptions = {
-  types: string[]
+  types?: string[]
+  layer?: string
 }
 
 export type Utility = {
@@ -103,8 +104,8 @@ export class Utilities {
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
-  static(name: string, compileFn: CompileFn<'static'>) {
-    this.utilities.get(name).push({ kind: 'static', compileFn })
+  static(name: string, compileFn: CompileFn<'static'>, options?: UtilityOptions) {
+    this.utilities.get(name).push({ kind: 'static', compileFn, options })
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {

@@ -4216,6 +4216,44 @@ describe('addComponents()', () => {
       "
     `)
   })
+
+  test('component styles are tree-shaken and only emitted when used', async () => {
+    expect(
+      await run(
+        ['btn-blue'],
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+        `,
+        {
+          async loadModule(_id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ addComponents }: PluginAPI) => {
+                addComponents({
+                  '.btn': {
+                    padding: '.5rem 1rem',
+                  },
+                  '.btn-blue': {
+                    backgroundColor: '#3490dc',
+                  },
+                })
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer components {
+        .btn-blue {
+          background-color: #3490dc;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('matchComponents()', () => {
@@ -4247,6 +4285,53 @@ describe('matchComponents()', () => {
       @layer components {
         .prose {
           --container-size: normal;
+        }
+
+        @media (hover: hover) {
+          .hover\\:prose-lg:hover {
+            --container-size: lg;
+          }
+        }
+      }
+      "
+    `)
+  })
+
+  test('outputs inside @layer components alongside @tailwind utilities', async () => {
+    expect(
+      await run(
+        ['prose', 'sm:prose-sm', 'hover:prose-lg'],
+        css`
+          @plugin "my-plugin";
+          @tailwind utilities;
+          @layer components;
+        `,
+        {
+          async loadModule(_id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ matchComponents }: PluginAPI) => {
+                matchComponents(
+                  { prose: (value) => ({ '--container-size': value }) },
+                  { values: { DEFAULT: 'normal', sm: 'sm', lg: 'lg' } },
+                )
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer components {
+        .prose {
+          --container-size: normal;
+        }
+
+        @media (min-width: 640px) {
+          .sm\\:prose-sm {
+            --container-size: sm;
+          }
         }
 
         @media (hover: hover) {
