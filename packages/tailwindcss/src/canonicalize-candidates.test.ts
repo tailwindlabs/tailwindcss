@@ -871,6 +871,15 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[margin:-0]', 'm-0'],
       ['[margin:0px]', 'm-0'],
 
+      // Limit conversions for big values using the `--spacing` multiplier
+      ['left-[99999px]', 'left-[99999px]'], // This would otherwise result in `left-24999.75`
+      ['left-[-99999px]', 'left-[-99999px]'], // This would otherwise result in `-left-24999.75`
+      ['left-[96rem]', 'left-384'], // Within the limit
+      ['left-[-96rem]', '-left-384'], // Within the limit
+      ['left-[calc(96rem+1px)]', 'left-[calc(96rem+1px)]'], // Out of the positive limit
+      ['left-[calc(-96rem-1px)]', 'left-[calc(-96rem-1px)]'], // Out of the negative limit
+      ['z-[9999999]', 'z-9999999'], // `--spacing` multiplier is not used
+
       // Not a length-unit, can't safely constant fold
       ['[margin:0%]', 'm-[0%]'],
 
