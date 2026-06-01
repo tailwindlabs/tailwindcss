@@ -644,7 +644,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -705,7 +705,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -771,7 +771,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -832,7 +832,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -1065,7 +1065,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
