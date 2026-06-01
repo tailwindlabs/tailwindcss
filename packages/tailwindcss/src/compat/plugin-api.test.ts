@@ -4481,4 +4481,65 @@ describe('config()', () => {
       ),
     ).toEqual('')
   })
+
+  test('custom components registered via addComponents and matchComponents support `@apply`', async () => {
+    expect(
+      await run(
+        ['my-btn', 'my-box'],
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+
+          .my-btn {
+            @apply btn;
+          }
+
+          .my-box {
+            @apply box-large;
+          }
+        `,
+        {
+          loadModule: async (_id, base) => {
+            return {
+              path: '',
+              base,
+              module: plugin(function ({ addComponents, matchComponents }) {
+                addComponents({
+                  '.btn': {
+                    padding: '1rem',
+                    'border-radius': '0.25rem',
+                  },
+                })
+                matchComponents(
+                  {
+                    box: (value) => ({
+                      padding: value,
+                      border: '1px solid black',
+                    }),
+                  },
+                  {
+                    values: {
+                      large: '2rem',
+                    },
+                  },
+                )
+              }),
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .my-btn {
+        padding: 1rem;
+        border-radius: 0.25rem;
+      }
+
+      .my-box {
+        padding: 2rem;
+        border: 1px solid black;
+      }
+      "
+    `)
+  })
 })

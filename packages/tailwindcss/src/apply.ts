@@ -320,15 +320,20 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         // was used, we want to insert its children instead of the rule because we
         // don't want the wrapping selector.
         let newNodes: AstNode[] = []
-        for (let candidateNode of candidateAst) {
-          if (candidateNode.kind === 'rule') {
-            for (let child of candidateNode.nodes) {
-              newNodes.push(child)
+        function collectApplyNodes(nodes: AstNode[]) {
+          for (let node of nodes) {
+            if (node.kind === 'rule') {
+              for (let child of node.nodes) {
+                newNodes.push(child)
+              }
+            } else if (node.kind === 'at-rule' && node.name === '@layer') {
+              collectApplyNodes(node.nodes)
+            } else {
+              newNodes.push(node)
             }
-          } else {
-            newNodes.push(candidateNode)
           }
         }
+        collectApplyNodes(candidateAst)
 
         return WalkAction.Replace(newNodes)
       }

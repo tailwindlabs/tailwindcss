@@ -2,7 +2,7 @@ import { atRule, decl, rule, type AstNode, type Rule, type StyleRule } from './a
 import { type Candidate, type Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
-import { asColor, type Utility } from './utilities'
+import { asColor, type Utility, type UtilityOptions } from './utilities'
 import { compare } from './utils/compare'
 import { escape } from './utils/escape'
 import type { Variants } from './variants'
