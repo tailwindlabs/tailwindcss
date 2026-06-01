@@ -644,7 +644,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -705,7 +705,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -771,7 +771,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -832,7 +832,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -1065,7 +1065,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -1292,6 +1292,86 @@ describe.each([
         original: '(none)',
         generated: '}\n\n/*# sou...',
       })
+    },
+  )
+
+  test(
+    'watch mode should trigger a full rebuild when a dependency is removed',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'src/index.html': html`
+          <div class="flex text-primary"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @config '../tailwind.config.js';
+        `,
+        'tailwind.config.js': js`
+          const myColor = require('./my-color')
+
+          module.exports = {
+            theme: {
+              extend: {
+                colors: {
+                  primary: myColor,
+                },
+              },
+            },
+          }
+        `,
+        'my-color.js': js`
+          //
+          module.exports = 'blue'
+        `,
+      },
+    },
+    async ({ spawn, fs, expect }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+        "
+        --- dist/out.css ---
+        .flex {
+          display: flex;
+        }
+        .text-primary {
+          color: blue;
+        }
+        "
+      `)
+
+      // Remove the dependency of the tailwind.config.js file
+      await fs.delete('my-color.js')
+
+      // We expect an error
+      await process.onStderr((m) => m.includes('Error'))
+      await process.onStderr((m) => m.includes('Done in'))
+
+      // Re-create the file to resolve the issue
+      await fs.write('my-color.js', js`module.exports = 'red'`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      // Expect a full rebuild
+      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+        "
+        --- dist/out.css ---
+        .flex {
+          display: flex;
+        }
+        .text-primary {
+          color: red;
+        }
+        "
+      `)
     },
   )
 })

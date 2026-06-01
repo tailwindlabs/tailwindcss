@@ -77,9 +77,13 @@ async function handleError<T>(fn: () => T): Promise<T> {
   try {
     return await fn()
   } catch (err) {
-    if (err instanceof Error) {
-      eprintln(err.toString())
-    }
+    eprintln(
+      [red('Error:'), dim('\u250C')]
+        .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
+        .concat(dim('\u2514'))
+        .join('\n'),
+    )
+
     process.exit(1)
   }
 }
@@ -219,6 +223,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let inputBasePath = inputFilePath ? path.dirname(inputFilePath) : process.cwd()
 
   let fullRebuildPaths: string[] = inputFilePath ? [inputFilePath] : []
+  let backupRebuildPaths = fullRebuildPaths
 
   async function createCompiler(css: string, I: Instrumentation) {
     DEBUG && I.start('Setup compiler')
@@ -308,10 +313,22 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   @import 'tailwindcss';
                 `
             clearRequireCache(resolvedFullRebuildPaths)
+
+            // Track current rebuild paths in case something goes wrong when
+            // performing a full rebuild.
+            backupRebuildPaths = fullRebuildPaths.slice()
+
+            // The `inputFilePath`, if provided, will be the only known full
+            // rebuild path before the compiler is re-created.
             fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
             ;[compiler, scanner] = await createCompiler(input, I)
+
+            // Succesfully created a new compiler, so the `fullRebuildPaths`
+            // will be updated. If other errors occur, we should be able to
+            // restore the paths unconditionally.
+            backupRebuildPaths = fullRebuildPaths.slice()
 
             // Scan the directory for candidates
             DEBUG && I.start('Scan for candidates')
@@ -372,11 +389,51 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let end = process.hrtime.bigint()
           if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         } catch (err) {
+          // It's important that we perform a full rebuild when any of the
+          // dependencies tracked in `fullRebuildPaths` has been changed.
+          //
+          // If we remove one of those files, then a subsequent build will be
+          // triggered, but it will fail because the dependency is gone. The
+          // compiler itself will be in a broken state and won't be able to
+          // register any dependencies therefore we want to restore all the
+          // dependencies from before. If we don't do that, then we won't be
+          // able to recover from a bug in a transitive dependency.
+          //
+          // E.g.:
+          // ```css
+          // /* input.css — known full rebuild path */
+          // @import 'tailwindcss';
+          // @config "./tailwind.config.js";
+          // ```
+          //
+          // ```js
+          // // tailwind.config.js
+          // const theme = require('./my-theme.js');
+          //
+          // module.exports = {
+          //   theme
+          // }
+          // ```
+          // In this case `my-theme.js` is a transitive dependency of
+          // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
+          // result in an error, restoring `my-theme.js` should trigger a
+          // fresh build even though the compiler didn't restore.
+          //
+          // Once the build error is fixed, a fresh full rebuild will happen
+          // which in turn will fixup the full rebuild paths.
+          fullRebuildPaths = backupRebuildPaths
+
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
-          if (err instanceof Error) {
-            eprintln(err.toString())
-          }
+          eprintln(
+            [red('Error:'), dim('\u250C')]
+              .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
+              .concat(dim('\u2514'))
+              .join('\n'),
+          )
+
+          let end = process.hrtime.bigint()
+          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         }
       }),
     )
@@ -479,10 +536,16 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
       await Promise.all(
         events.map(async (event) => {
-          // We currently don't handle deleted files because it doesn't influence
-          // the CSS output. This is because we currently keep all scanned
-          // candidates in a cache for performance reasons.
-          if (event.type === 'delete') return
+          // When a file is deleted, a rebuild should be triggered such that we
+          // can figure out whether this file must trigger a fresh build or not.
+          //
+          // If it must trigger a fresh build, then we will temporarily end up
+          // in a broken state, but an error will be shown to the user. Once the
+          // user resolves the issue, the CLI will recover.
+          if (event.type === 'delete') {
+            files.add(event.path)
+            return
+          }
 
           // Ignore directory changes. We only care about file changes
           let stats: Stats | null = null
@@ -515,4 +578,12 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
 function watchDirectories(scanner: Scanner) {
   return [...new Set(scanner.normalizedSources.flatMap((globEntry) => globEntry.base))]
+}
+
+function dim(str: string) {
+  return `\x1B[2m${str}\x1B[22m`
+}
+
+function red(str: string) {
+  return `\x1B[31m${str}\x1B[39m`
 }

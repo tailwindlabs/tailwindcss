@@ -51,6 +51,7 @@ interface TestContext {
     write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
+    delete(filePath: string): Promise<void>
     glob(pattern: string): Promise<[string, string][]>
     dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
@@ -326,6 +327,10 @@ export function test(
               await fs.mkdir(dir, { recursive: true })
               await fs.writeFile(full, '')
             }
+          },
+
+          async delete(filename: string): Promise<void> {
+            await fs.unlink(path.join(root, filename))
           },
 
           async read(filePath: string) {
