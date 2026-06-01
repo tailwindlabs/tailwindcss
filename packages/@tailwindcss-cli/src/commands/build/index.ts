@@ -77,9 +77,13 @@ async function handleError<T>(fn: () => T): Promise<T> {
   try {
     return await fn()
   } catch (err) {
-    if (err instanceof Error) {
-      eprintln(err.toString())
-    }
+    eprintln(
+      [red('Error:'), dim('\u250C')]
+        .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
+        .concat(dim('\u2514'))
+        .join('\n'),
+    )
+
     process.exit(1)
   }
 }
@@ -374,9 +378,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         } catch (err) {
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
-          if (err instanceof Error) {
-            eprintln(err.toString())
-          }
+          eprintln(
+            [red('Error:'), dim('\u250C')]
+              .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
+              .concat(dim('\u2514'))
+              .join('\n'),
+          )
+
+          let end = process.hrtime.bigint()
+          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         }
       }),
     )
@@ -515,4 +525,12 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
 function watchDirectories(scanner: Scanner) {
   return [...new Set(scanner.normalizedSources.flatMap((globEntry) => globEntry.base))]
+}
+
+function dim(str: string) {
+  return `\x1B[2m${str}\x1B[22m`
+}
+
+function red(str: string) {
+  return `\x1B[31m${str}\x1B[39m`
 }
