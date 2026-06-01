@@ -479,9 +479,10 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
       await Promise.all(
         events.map(async (event) => {
-          // We don't handle deleted content files (they remain in the candidate
-          // cache), but we do track deleted config/plugin dependencies so that
-          // a full rebuild can surface the missing file error.
+          // We track deleted files so that a full rebuild can surface missing
+          // file errors (e.g. a deleted config dependency). Deleted content files
+          // are also tracked here but are harmless — they still hit the candidate
+          // cache so scanFiles returns empty and we bail early.
           if (event.type === 'delete') {
             files.add(event.path)
             return
