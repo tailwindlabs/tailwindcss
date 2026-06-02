@@ -2560,7 +2560,9 @@ test(
         @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
           ::placeholder {
             color: currentcolor;
-            @supports (color: color-mix(in lab, red, red)) {
+          }
+          @supports (color: color-mix(in lab, red, red)) {
+            ::placeholder {
               color: color-mix(in oklab, currentcolor 50%, transparent);
             }
           }
@@ -2603,7 +2605,9 @@ test(
       @layer utilities {
         .bg-red-500\\/50 {
           background-color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-          @supports (color: color-mix(in lab, red, red)) {
+        }
+        @supports (color: color-mix(in lab, red, red)) {
+          .bg-red-500\\/50 {
             background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
           }
         }

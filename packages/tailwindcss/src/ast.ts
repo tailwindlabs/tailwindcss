@@ -1,9 +1,11 @@
 import { Polyfills } from '.'
+import * as SelectorParser from '../src/selector-parser'
 import { parseAtRule } from './css-parser'
 import type { DesignSystem } from './design-system'
 import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { segment } from './utils/segment'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction, type VisitContext } from './walk'
@@ -286,9 +288,9 @@ export function optimizeAst(
       // found in the theme config.
       if (
         polyfills & Polyfills.ColorMix &&
-        node.value.includes('color-mix(') &&
         !context.supportsColorMix &&
-        !context.keyframes
+        !context.keyframes &&
+        node.value.includes('color-mix(')
       ) {
         colorMixDeclarations.get(parent).add(node)
       }
@@ -304,37 +306,7 @@ export function optimizeAst(
         transform(child, nodes, context, depth + 1)
       }
 
-      // Keep the last decl when there are exact duplicates. Keeping the *first* one might
-      // not be correct when given nested rules where a rule sits between declarations.
-      let seen: Record<string, AstNode[]> = {}
-      let toRemove = new Set<AstNode>()
-
-      // Keep track of all nodes that produce a given declaration
-      for (let child of nodes) {
-        if (child.kind !== 'declaration') continue
-
-        let key = `${child.property}:${child.value}:${child.important}`
-        seen[key] ??= []
-        seen[key].push(child)
-      }
-
-      // And remove all but the last of each
-      for (let key in seen) {
-        for (let i = 0; i < seen[key].length - 1; ++i) {
-          toRemove.add(seen[key][i])
-        }
-      }
-
-      if (toRemove.size > 0) {
-        nodes = nodes.filter((node) => !toRemove.has(node))
-      }
-
-      if (nodes.length === 0) return
-
-      // Rules with `&` as the selector should be flattened
-      if (node.selector === '&') {
-        parent.push(...nodes)
-      } else {
+      if (nodes.length > 0) {
         parent.push({ ...node, nodes })
       }
     }
@@ -679,7 +651,463 @@ export function optimizeAst(
     }
   }
 
-  return newAst
+  return handleNesting(newAst)
+}
+
+export function handleNesting(ast: AstNode[]): AstNode[] {
+  // Track `rule` selectors as we go
+  let selectorStack: [
+    selector: string,
+    src: SourceLocation | undefined,
+    dst: SourceLocation | undefined,
+  ][] = []
+
+  // Track `at-rule` information as we go. Tracking this separately from the
+  // selector stack for rules such that we can hoist this above all the rules.
+  let atRuleStack: [
+    name: string,
+    params: string,
+    src: SourceLocation | undefined,
+    dst: SourceLocation | undefined,
+  ][] = []
+
+  // The current "nodes" we can push to
+  let nodes = null as AstNode[] | null
+
+  // Optimization: Track the declaration properties we've seen in the current
+  // nodes.
+  let seenDeclarationProperties = new Set<string>()
+
+  // Track nodes lists where we want to dedupe declarations
+  let dedupeDeclarationsInNodes = new Set<AstNode[]>()
+
+  // The final, new AST
+  let result: AstNode[] = []
+
+  // Track whether we should skip a node in the `exit` phase
+  let skipExit = new Set<AstNode>()
+
+  walk(ast, {
+    enter(node) {
+      switch (node.kind) {
+        case 'rule': {
+          nodes = null // Start a new level
+
+          // First time we see a rule
+          if (selectorStack.length === 0) {
+            // A rule with a selector containing `&` should replace the `&` with
+            // `:scope` if there is no parent rule.
+            //
+            // Note: there could be false positives when the `&` is escaped or
+            // part of a string inside an attribute selector. But the
+            // SelectorParser will take care of that.
+            if (node.selector.includes('&')) {
+              let ast = SelectorParser.parse(node.selector)
+              let changed = false
+
+              walk(ast, (node) => {
+                if (node.kind === 'selector' && node.value === '&') {
+                  changed = true
+                  node.value = ':scope'
+                }
+              })
+
+              if (changed) {
+                selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
+              } else {
+                selectorStack.push([node.selector, node.src, node.dst])
+              }
+            }
+
+            // No nesting markers, track as-is
+            else {
+              selectorStack.push([node.selector, node.src, node.dst])
+            }
+          }
+
+          // Nested rule, ensure `&` is present in each selector. Then track the
+          // selector.
+          else {
+            // A rule with just `&` can be replaced by its children. Let's
+            // ignore this node and keep walking its children.
+            if (node.selector === '&') {
+              skipExit.add(node)
+              return
+            }
+
+            // `&` is using `:is(…)` semantics
+            let parentSelector = `:is(${selectorStack[selectorStack.length - 1][0]})`
+            let selector = segment(node.selector, ',')
+              .map((selector) => {
+                // Slow path: we need to replace the `&` with the parent
+                // selector. A simple `replaceAll(…)` won't work because a `&`
+                // could be escaped, or could be part of an attribute selector.
+                //
+                // Much safer to parse the selector and replace the `&` that way
+                if (selector.includes('&')) {
+                  let ast = SelectorParser.parse(selector)
+                  let changed = false
+                  walk(ast, (node) => {
+                    if (node.kind === 'selector' && node.value === '&') {
+                      changed = true
+                      node.value = parentSelector
+                    }
+                  })
+
+                  // It could be that `&` was not found as an actual selector,
+                  // in that case we still have to prepend the parent selector.
+                  return changed ? SelectorParser.toCss(ast) : `${parentSelector} ${selector}`
+                }
+
+                // Fast path: we know there isn't a `&` so we can prepend the
+                // parent selector immediately.
+                else {
+                  return `${parentSelector} ${selector}`
+                }
+              })
+              .join(', ')
+            selectorStack.push([selector, node.src, node.dst])
+          }
+          break
+        }
+
+        case 'at-rule': {
+          nodes = null // Start a new level
+
+          // `@layer` is hoistable, but when it's empty then we have to make
+          // sure that we still emit it because this might influence the layer
+          // order. We can't just get grid of it.
+          if (node.nodes.length === 0 && !DROPPABLE_IF_EMPTY_AT_RULES.has(node.name)) {
+            emit(node)
+            skipExit.add(node)
+            return WalkAction.Skip
+          }
+
+          // Hoist at-rules
+          else if (HOISTABLE_AT_RULES.has(node.name)) {
+            atRuleStack.push([node.name, node.params, node.src, node.dst])
+          }
+
+          // If we can't hoist them, emit them immediately as-is
+          else {
+            emit(node)
+            skipExit.add(node)
+            return WalkAction.Skip
+          }
+          break
+        }
+
+        case 'declaration':
+        case 'comment': {
+          emit(node)
+          break
+        }
+
+        case 'context':
+        case 'at-root':
+          break
+
+        default:
+          node satisfies never
+          break
+      }
+    },
+    exit(node) {
+      if (skipExit.delete(node)) return
+
+      switch (node.kind) {
+        case 'rule': {
+          nodes = null
+          selectorStack.pop()
+          break
+        }
+
+        case 'at-rule': {
+          nodes = null
+          atRuleStack.pop()
+          break
+        }
+
+        case 'declaration':
+        case 'comment':
+        case 'context':
+        case 'at-root':
+          break
+
+        default:
+          node satisfies never
+          break
+      }
+    },
+  })
+
+  // Dedupe declarations that we've already seen before if they match the
+  // `property`, `value` and `important` information.
+  {
+    for (let nodes of dedupeDeclarationsInNodes) {
+      let seen = new Set()
+      for (let i = nodes.length - 1; i >= 0; --i) {
+        let node = nodes[i]
+        if (node.kind !== 'declaration') continue
+
+        let id = `${node.property}\0${node.value}\0${node.important}`
+
+        if (seen.has(id)) nodes.splice(i, 1)
+        else seen.add(id)
+      }
+    }
+  }
+
+  return result
+
+  function emit(node: AstNode) {
+    // Existing nodes are available, emit into those nodes
+    if (nodes) {
+      // Optimization: track used declarations in the current node.
+      if (node.kind === 'declaration') {
+        if (seenDeclarationProperties.has(node.property)) {
+          dedupeDeclarationsInNodes.add(nodes)
+        } else {
+          seenDeclarationProperties.add(node.property)
+        }
+      }
+
+      nodes.push(node)
+      return
+    }
+
+    // Nothing available, setup a fresh node
+    {
+      // There are no parent rules or at-rules available, which means taht we
+      // can emit the node as-is.
+      if (selectorStack.length === 0 && atRuleStack.length === 0) {
+        let target = result
+        let lastNode = target[target.length - 1]
+
+        // Optimization: when the current and last node are the same, ignore the
+        // new node entirely otherwise we will get unnecessary duplicate
+        // results.
+        //
+        // We only care about at-rules with no body because some of them (such
+        // as `@charset` or `@layer`) need to be emitted. A normal rule that's
+        // empty doesn't need to be emitted.
+        if (
+          lastNode &&
+          lastNode.kind === 'at-rule' &&
+          node.kind === 'at-rule' &&
+          lastNode.name === node.name &&
+          lastNode.params === node.params
+        ) {
+          return
+        }
+
+        result.push(node)
+        return
+      }
+
+      // Track the new "parent" nodes
+      {
+        nodes = [node]
+
+        // Clear out seen declarations from the previous work in progress nodes
+        seenDeclarationProperties.clear()
+
+        // Track new declaration
+        if (node.kind === 'declaration') {
+          seenDeclarationProperties.add(node.property)
+        }
+      }
+
+      // Track the new root node that we build up to store in the final AST
+      let root = null as AstNode | null
+
+      let target = result
+      let atRuleOffset = 0
+
+      // Optimization: merge adjacent at-rules
+      //
+      // Figure out whether we can push our new node into a previous node that
+      // was already emitted.
+      //
+      // We have to make sure that the order stays the same, so therefore we
+      // only ever have to look at the last node that was emitted.
+      {
+        let lastNode = target[target.length - 1]
+        if (lastNode && lastNode.kind === 'at-rule') {
+          for (let i = 0; i < atRuleStack.length; i++) {
+            let atRule = atRuleStack[i]
+            if (lastNode.kind !== 'at-rule') break
+            if (lastNode.name !== atRule[0]) break
+            if (lastNode.params !== atRule[1]) break
+
+            atRuleOffset++
+            target = lastNode.nodes
+            lastNode = lastNode.nodes[lastNode.nodes.length - 1]
+          }
+        }
+      }
+
+      // Build up the rule
+      if (selectorStack.length > 0) {
+        let [lastSelector, src, dst] = selectorStack[selectorStack.length - 1]
+        let selector = optimizeSelector(lastSelector)
+
+        // Optimization: merge adjacent rules with the same selector
+        //
+        // Figure out whether we can push into an existing rule.
+        //
+        // If we have some at-rules that we have to keep into account, then we
+        // definitely can't.
+        if (atRuleStack.length - atRuleOffset <= 0) {
+          let lastNode = target[target.length - 1]
+          if (lastNode && lastNode.kind === 'rule' && lastNode.selector === selector) {
+            lastNode.nodes.push(...nodes)
+
+            // Ensure that our current nodes points to the nodes of the
+            // `lastNode`, otherwise we will lose information.
+            nodes = lastNode.nodes
+
+            // We appended a group that could contain declarations already in the
+            // existing rule, so let the final dedupe pass handle it once.
+            //
+            // Note: we could loop over _all_ previous nodes to figure out if we
+            // really want to dedupe this. But this could result in a bunch of
+            // duplicate work if we have `n` nodes that we want to merge
+            // together.
+            dedupeDeclarationsInNodes.add(nodes)
+
+            // We know that we don't have to handle any more at-rules, so we can
+            // bail early since we just merged the nodes with the same selector.
+            return
+          }
+        }
+
+        // Can't push into existing node, create a new node
+        root = rule(selector, nodes)
+        if (src || dst) Object.assign(root, { src, dst })
+      }
+
+      // Wrap in at-rules, if we can push into an existing node then we can
+      // ignore `offset` amount of nodes since the `root`/`nodes` will already
+      // point to a nested node.
+      for (let i = atRuleStack.length - 1; i >= atRuleOffset; --i) {
+        let [name, params, src, dst] = atRuleStack[i]
+
+        root = atRule(name, params, root ? [root] : nodes)
+        if (src || dst) Object.assign(root, { src, dst })
+      }
+
+      // Track the root node in the AST
+      if (root) {
+        target.push(root)
+      }
+
+      // We didn't build up any new root, so we can move our node directly into
+      // the target. This can happen when we emit a node that is not a
+      // declaration or a comment.
+      else {
+        target.push(...nodes)
+      }
+    }
+  }
+}
+
+// A set of at-rules that can be hoisted to the top without any repercussions.
+// Typically at-rules that rely on the environment, not parent information and
+// contain other rules/declarations.
+export const HOISTABLE_AT_RULES = new Set([
+  '@container',
+  '@layer',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+// As set of at-rules that can be dropped if they don't contain any nodes. We
+// don't have the distinction between an at-rule with no body, or an at-rule
+// with a body that is empty right now.
+export const DROPPABLE_IF_EMPTY_AT_RULES = new Set([
+  '@container',
+  '@media',
+  '@page',
+  '@starting-style',
+  '@supports',
+  '@view-transition',
+])
+
+// An `element` and a `*` can only appear once, and if they do, they have
+// to be first. If multiple exist, an `:is(…)` should be used.
+//
+// - `div*` is invalid, must be `div:is(*)`
+// - `**` is invalid, must be `*:is(*)`
+// - `.classdiv` is invalid, must be `div.class`
+//
+function mustBeFirst(node: SelectorParser.SelectorAstNode | undefined) {
+  return node?.kind === 'selector' && (node.value === '*' || /^[a-zA-Z-]+$/.test(node.value))
+}
+
+let optimizedSelectorCache = new DefaultMap((selector) => {
+  let ast = SelectorParser.parse(selector)
+
+  let changed = false
+  walk(ast, {
+    exit(node, ctx) {
+      if (node.kind === 'compound') {
+        // Swap nodes in a compound selector if one of the nodes has to be first
+        let idx = node.nodes.findIndex((child) => mustBeFirst(child))
+        if (idx >= 0) {
+          // Optimization: Already in the correct spot, nothing to do here
+          if (idx === ctx.index) return
+
+          changed = true
+          node.nodes.unshift(...node.nodes.splice(idx, 1))
+        }
+        return
+      }
+
+      // Unwrap `:is(…)`
+      if (node.kind !== 'function') return
+      if (node.value !== ':is') return
+      if (node.nodes.length !== 1) return
+
+      let current = node.nodes[0]
+      if (current.kind !== 'selector' && current.kind !== 'function') return
+
+      if (ctx.parent?.kind !== 'compound') {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      let existing = ctx.siblings.find((sibling) => sibling !== node && mustBeFirst(sibling))
+      if (!existing) {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      if (!mustBeFirst(current)) {
+        changed = true
+        return WalkAction.Replace(current)
+      }
+
+      if (
+        existing.kind === 'selector' &&
+        existing.value === '*' &&
+        current.kind === 'selector' &&
+        current.value !== '*'
+      ) {
+        changed = true
+        ctx.siblings[ctx.siblings.indexOf(existing)] = SelectorParser.fun(':is', [existing])
+        return WalkAction.Replace(current)
+      }
+    },
+  })
+
+  return changed ? SelectorParser.toCss(ast) : selector
+})
+export function optimizeSelector(selector: string): string {
+  return optimizedSelectorCache.get(selector)
 }
 
 export function toCss(ast: AstNode[], track?: boolean) {

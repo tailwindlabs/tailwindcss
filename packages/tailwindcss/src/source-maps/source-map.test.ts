@@ -462,115 +462,118 @@ test('source maps trace back to @import location', async ({ expect }) => {
                ^^^^^^^^^^^^^^^^^^^ EQ @ 119:6-25                                                         |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EQ @ 294:4-61
                                                                                                          | 295    }
                                                                                                          | 296  }
-    120        @supports (color: color-mix(in lab, red, red)) {                                          | 
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EQ @ 120:6-53                             | 
-    121          color: color-mix(in oklab, currentcolor 50%, transparent);                              | 
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EQ @ 121:8-65                 | 
-    122        }                                                                                         | 
-    123      }                                                                                           | 
-    124    }                                                                                             | 
-    125    textarea {                                                                                    | 302  textarea {
-           ^^^^^^^^^ ER @ 125:2-11                                                                       |      ^^^^^^^^^ ER @ 302:0-9
-    126      resize: vertical;                                                                           | 303    resize: vertical;
-             ^^^^^^^^^^^^^^^^ ES @ 126:4-20                                                              |        ^^^^^^^^^^^^^^^^ ES @ 303:2-18
+    120      }                                                                                           | 
+    121      @supports (color: color-mix(in lab, red, red)) {                                            | 
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EQ @ 121:4-51                               | 
+    122        ::placeholder {                                                                           | 
+               ^^^^^^^^^^^^^^ EP @ 122:6-20                                                              | 
+    123          color: color-mix(in oklab, currentcolor 50%, transparent);                              | 
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EQ @ 123:8-65                 | 
+    124        }                                                                                         | 
+    125      }                                                                                           | 
+    126    }                                                                                             | 
+    127    textarea {                                                                                    | 302  textarea {
+           ^^^^^^^^^ ER @ 127:2-11                                                                       |      ^^^^^^^^^ ER @ 302:0-9
+    128      resize: vertical;                                                                           | 303    resize: vertical;
+             ^^^^^^^^^^^^^^^^ ES @ 128:4-20                                                              |        ^^^^^^^^^^^^^^^^ ES @ 303:2-18
                                                                                                          | 304  }
-    127    }                                                                                             | 
-    128    ::-webkit-search-decoration {                                                                 | 310  ::-webkit-search-decoration {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ET @ 128:2-30                                                    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ET @ 310:0-28
-    129      -webkit-appearance: none;                                                                   | 311    -webkit-appearance: none;
-             ^^^^^^^^^^^^^^^^^^^^^^^^ EU @ 129:4-28                                                      |        ^^^^^^^^^^^^^^^^^^^^^^^^ EU @ 311:2-26
+    129    }                                                                                             | 
+    130    ::-webkit-search-decoration {                                                                 | 310  ::-webkit-search-decoration {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ET @ 130:2-30                                                    |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ET @ 310:0-28
+    131      -webkit-appearance: none;                                                                   | 311    -webkit-appearance: none;
+             ^^^^^^^^^^^^^^^^^^^^^^^^ EU @ 131:4-28                                                      |        ^^^^^^^^^^^^^^^^^^^^^^^^ EU @ 311:2-26
                                                                                                          | 312  }
-    130    }                                                                                             | 
-    131    ::-webkit-date-and-time-value {                                                               | 319  ::-webkit-date-and-time-value {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EV @ 131:2-32                                                  |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EV @ 319:0-30
-    132      min-height: 1lh;                                                                            | 320    min-height: 1lh; /* 1 */
-             ^^^^^^^^^^^^^^^ EW @ 132:4-19                                                               |        ^^^^^^^^^^^^^^^ EW @ 320:2-17
-    133      text-align: inherit;                                                                        | 321    text-align: inherit; /* 2 */
-             ^^^^^^^^^^^^^^^^^^^ EX @ 133:4-23                                                           |        ^^^^^^^^^^^^^^^^^^^ EX @ 321:2-21
+    132    }                                                                                             | 
+    133    ::-webkit-date-and-time-value {                                                               | 319  ::-webkit-date-and-time-value {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EV @ 133:2-32                                                  |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ EV @ 319:0-30
+    134      min-height: 1lh;                                                                            | 320    min-height: 1lh; /* 1 */
+             ^^^^^^^^^^^^^^^ EW @ 134:4-19                                                               |        ^^^^^^^^^^^^^^^ EW @ 320:2-17
+    135      text-align: inherit;                                                                        | 321    text-align: inherit; /* 2 */
+             ^^^^^^^^^^^^^^^^^^^ EX @ 135:4-23                                                           |        ^^^^^^^^^^^^^^^^^^^ EX @ 321:2-21
                                                                                                          | 322  }
-    134    }                                                                                             | 
-    135    ::-webkit-datetime-edit {                                                                     | 328  ::-webkit-datetime-edit {
-           ^^^^^^^^^^^^^^^^^^^^^^^^ EY @ 135:2-26                                                        |      ^^^^^^^^^^^^^^^^^^^^^^^^ EY @ 328:0-24
-    136      display: inline-flex;                                                                       | 329    display: inline-flex;
-             ^^^^^^^^^^^^^^^^^^^^ EZ @ 136:4-24                                                          |        ^^^^^^^^^^^^^^^^^^^^ EZ @ 329:2-22
+    136    }                                                                                             | 
+    137    ::-webkit-datetime-edit {                                                                     | 328  ::-webkit-datetime-edit {
+           ^^^^^^^^^^^^^^^^^^^^^^^^ EY @ 137:2-26                                                        |      ^^^^^^^^^^^^^^^^^^^^^^^^ EY @ 328:0-24
+    138      display: inline-flex;                                                                       | 329    display: inline-flex;
+             ^^^^^^^^^^^^^^^^^^^^ EZ @ 138:4-24                                                          |        ^^^^^^^^^^^^^^^^^^^^ EZ @ 329:2-22
                                                                                                          | 330  }
-    137    }                                                                                             | 
-    138    ::-webkit-datetime-edit-fields-wrapper {                                                      | 336  ::-webkit-datetime-edit-fields-wrapper {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FA @ 138:2-41                                         |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FA @ 336:0-39
-    139      padding: 0;                                                                                 | 337    padding: 0;
-             ^^^^^^^^^^ FB @ 139:4-14                                                                    |        ^^^^^^^^^^ FB @ 337:2-12
+    139    }                                                                                             | 
+    140    ::-webkit-datetime-edit-fields-wrapper {                                                      | 336  ::-webkit-datetime-edit-fields-wrapper {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FA @ 140:2-41                                         |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FA @ 336:0-39
+    141      padding: 0;                                                                                 | 337    padding: 0;
+             ^^^^^^^^^^ FB @ 141:4-14                                                                    |        ^^^^^^^^^^ FB @ 337:2-12
                                                                                                          | 338  }
-    140    }                                                                                             | 
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 340  ::-webkit-datetime-edit,
-           ^ FC @ 141:2                                                                                  |      ^ FC @ 340:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 341  ::-webkit-datetime-edit-year-field,
-           ^ FD @ 141:2                                                                                  |      ^ FD @ 341:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 342  ::-webkit-datetime-edit-month-field,
-           ^ FE @ 141:2                                                                                  |      ^ FE @ 342:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 343  ::-webkit-datetime-edit-day-field,
-           ^ FF @ 141:2                                                                                  |      ^ FF @ 343:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 344  ::-webkit-datetime-edit-hour-field,
-           ^ FG @ 141:2                                                                                  |      ^ FG @ 344:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 345  ::-webkit-datetime-edit-minute-field,
-           ^ FH @ 141:2                                                                                  |      ^ FH @ 345:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 346  ::-webkit-datetime-edit-second-field,
-           ^ FI @ 141:2                                                                                  |      ^ FI @ 346:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 347  ::-webkit-datetime-edit-millisecond-field,
-           ^ FJ @ 141:2                                                                                  |      ^ FJ @ 347:0
-    141    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 348  ::-webkit-datetime-edit-meridiem-field {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^... FK @ 141:2-329 |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FK @ 348:0-39
-    142      padding-block: 0;                                                                           | 349    padding-block: 0;
-             ^^^^^^^^^^^^^^^^ FL @ 142:4-20                                                              |        ^^^^^^^^^^^^^^^^ FL @ 349:2-18
+    142    }                                                                                             | 
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 340  ::-webkit-datetime-edit,
+           ^ FC @ 143:2                                                                                  |      ^ FC @ 340:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 341  ::-webkit-datetime-edit-year-field,
+           ^ FD @ 143:2                                                                                  |      ^ FD @ 341:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 342  ::-webkit-datetime-edit-month-field,
+           ^ FE @ 143:2                                                                                  |      ^ FE @ 342:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 343  ::-webkit-datetime-edit-day-field,
+           ^ FF @ 143:2                                                                                  |      ^ FF @ 343:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 344  ::-webkit-datetime-edit-hour-field,
+           ^ FG @ 143:2                                                                                  |      ^ FG @ 344:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 345  ::-webkit-datetime-edit-minute-field,
+           ^ FH @ 143:2                                                                                  |      ^ FH @ 345:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 346  ::-webkit-datetime-edit-second-field,
+           ^ FI @ 143:2                                                                                  |      ^ FI @ 346:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 347  ::-webkit-datetime-edit-millisecond-field,
+           ^ FJ @ 143:2                                                                                  |      ^ FJ @ 347:0
+    143    ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month... | 348  ::-webkit-datetime-edit-meridiem-field {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^... FK @ 143:2-329 |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FK @ 348:0-39
+    144      padding-block: 0;                                                                           | 349    padding-block: 0;
+             ^^^^^^^^^^^^^^^^ FL @ 144:4-20                                                              |        ^^^^^^^^^^^^^^^^ FL @ 349:2-18
                                                                                                          | 350  }
-    143    }                                                                                             | 
-    144    ::-webkit-calendar-picker-indicator {                                                         | 356  ::-webkit-calendar-picker-indicator {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FM @ 144:2-38                                            |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FM @ 356:0-36
-    145      line-height: 1;                                                                             | 357    line-height: 1;
-             ^^^^^^^^^^^^^^ FN @ 145:4-18                                                                |        ^^^^^^^^^^^^^^ FN @ 357:2-16
+    145    }                                                                                             | 
+    146    ::-webkit-calendar-picker-indicator {                                                         | 356  ::-webkit-calendar-picker-indicator {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FM @ 146:2-38                                            |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FM @ 356:0-36
+    147      line-height: 1;                                                                             | 357    line-height: 1;
+             ^^^^^^^^^^^^^^ FN @ 147:4-18                                                                |        ^^^^^^^^^^^^^^ FN @ 357:2-16
                                                                                                          | 358  }
-    146    }                                                                                             | 
-    147    :-moz-ui-invalid {                                                                            | 364  :-moz-ui-invalid {
-           ^^^^^^^^^^^^^^^^^ FO @ 147:2-19                                                               |      ^^^^^^^^^^^^^^^^^ FO @ 364:0-17
-    148      box-shadow: none;                                                                           | 365    box-shadow: none;
-             ^^^^^^^^^^^^^^^^ FP @ 148:4-20                                                              |        ^^^^^^^^^^^^^^^^ FP @ 365:2-18
+    148    }                                                                                             | 
+    149    :-moz-ui-invalid {                                                                            | 364  :-moz-ui-invalid {
+           ^^^^^^^^^^^^^^^^^ FO @ 149:2-19                                                               |      ^^^^^^^^^^^^^^^^^ FO @ 364:0-17
+    150      box-shadow: none;                                                                           | 365    box-shadow: none;
+             ^^^^^^^^^^^^^^^^ FP @ 150:4-20                                                              |        ^^^^^^^^^^^^^^^^ FP @ 365:2-18
                                                                                                          | 366  }
-    149    }                                                                                             | 
-    150    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 372  button,
-           ^ FQ @ 150:2                                                                                  |      ^ FQ @ 372:0
-    150    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 373  input:where([type='button'], [type='reset'], [type='submit']),
-           ^ FR @ 150:2                                                                                  |      ^ FR @ 373:0
-    150    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 374  ::file-selector-button {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^... FS @ 150:2-96 |      ^^^^^^^^^^^^^^^^^^^^^^^ FS @ 374:0-23
-    151      appearance: button;                                                                         | 375    appearance: button;
-             ^^^^^^^^^^^^^^^^^^ FT @ 151:4-22                                                            |        ^^^^^^^^^^^^^^^^^^ FT @ 375:2-20
+    151    }                                                                                             | 
+    152    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 372  button,
+           ^ FQ @ 152:2                                                                                  |      ^ FQ @ 372:0
+    152    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 373  input:where([type='button'], [type='reset'], [type='submit']),
+           ^ FR @ 152:2                                                                                  |      ^ FR @ 373:0
+    152    button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-but... | 374  ::file-selector-button {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^... FS @ 152:2-96 |      ^^^^^^^^^^^^^^^^^^^^^^^ FS @ 374:0-23
+    153      appearance: button;                                                                         | 375    appearance: button;
+             ^^^^^^^^^^^^^^^^^^ FT @ 153:4-22                                                            |        ^^^^^^^^^^^^^^^^^^ FT @ 375:2-20
                                                                                                          | 376  }
-    152    }                                                                                             | 
-    153    ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {                                    | 382  ::-webkit-inner-spin-button,
-           ^ FU @ 153:2                                                                                  |      ^ FU @ 382:0
-    153    ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {                                    | 383  ::-webkit-outer-spin-button {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FV @ 153:2-59                       |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FV @ 383:0-28
-    154      height: auto;                                                                               | 384    height: auto;
-             ^^^^^^^^^^^^ FW @ 154:4-16                                                                  |        ^^^^^^^^^^^^ FW @ 384:2-14
+    154    }                                                                                             | 
+    155    ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {                                    | 382  ::-webkit-inner-spin-button,
+           ^ FU @ 155:2                                                                                  |      ^ FU @ 382:0
+    155    ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {                                    | 383  ::-webkit-outer-spin-button {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FV @ 155:2-59                       |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FV @ 383:0-28
+    156      height: auto;                                                                               | 384    height: auto;
+             ^^^^^^^^^^^^ FW @ 156:4-16                                                                  |        ^^^^^^^^^^^^ FW @ 384:2-14
                                                                                                          | 385  }
-    155    }                                                                                             | 
-    156    [hidden]:where(:not([hidden='until-found'])) {                                                | 391  [hidden]:where(:not([hidden='until-found'])) {
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FX @ 156:2-47                                   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FX @ 391:0-45
-    157      display: none !important;                                                                   | 392    display: none !important;
-             ^^^^^^^^^^^^^^^^^^^^^^^^ FY @ 157:4-28                                                      |        ^^^^^^^^^^^^^^^^^^^^^^^^ FY @ 392:2-26
+    157    }                                                                                             | 
+    158    [hidden]:where(:not([hidden='until-found'])) {                                                | 391  [hidden]:where(:not([hidden='until-found'])) {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FX @ 158:2-47                                   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FX @ 391:0-45
+    159      display: none !important;                                                                   | 392    display: none !important;
+             ^^^^^^^^^^^^^^^^^^^^^^^^ FY @ 159:4-28                                                      |        ^^^^^^^^^^^^^^^^^^^^^^^^ FY @ 392:2-26
                                                                                                          | 393  }
-    158    }                                                                                             | 
-    159  }                                                                                               | 
+    160    }                                                                                             | 
+    161  }                                                                                               | 
                                                                                                          |      --- index.css ---
-    160  @layer utilities;                                                                               |   5  @import './utilities.css' layer(utilities);
-         ^^^^^^^^^^^^^^^^ FZ @ 160:0-16                                                                  |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FZ @ 5:0-42
+    162  @layer utilities;                                                                               |   5  @import './utilities.css' layer(utilities);
+         ^^^^^^^^^^^^^^^^ FZ @ 162:0-16                                                                  |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ FZ @ 5:0-42
                                                                                                          |      --- input.css ---
-    161  .foo {                                                                                          |   3  .foo {
-         ^^^^^ GA @ 161:0-5                                                                              |      ^^^^^ GA @ 3:0-5
-    162    text-decoration-line: underline;                                                              |   4    @apply underline;
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ GB @ 162:2-33                                                 |               ^^^^^^^^^ GB @ 4:9-18
+    163  .foo {                                                                                          |   3  .foo {
+         ^^^^^ GA @ 163:0-5                                                                              |      ^^^^^ GA @ 3:0-5
+    164    text-decoration-line: underline;                                                              |   4    @apply underline;
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ GB @ 164:2-33                                                 |               ^^^^^^^^^ GB @ 4:9-18
                                                                                                          |   5  }
-    163  }                                                                                               | 
-    164                                                                                                  | 
+    165  }                                                                                               | 
+    166                                                                                                  | 
     "
   `)
 })
@@ -695,23 +698,26 @@ test('@apply generates source maps', async ({ expect }) => {
           ^^^^^^^^^^^ B @ 2:2-13                         |      ^^^^^^^^^^^ B @ 2:2-13
      3    color: #000;                                   | 3    @apply text-[#000] hover:text-[#f00];
           ^^^^^^^^^^^ C @ 3:2-13                         |             ^^^^^^^^^^^ C @ 3:9-20
-     4    &:hover {                                      | 3    @apply text-[#000] hover:text-[#f00];
-          ^^^^^^^^ D @ 4:2-10                            |                         ^^^^^^^^^^^^^^^^^ D @ 3:21-38
-     5      @media (hover: hover) {                      | 
-            ^^^^^^^^^^^^^^^^^^^^^^ D @ 5:4-26            | 
-     6        color: #f00;                               | 
-              ^^^^^^^^^^^ D @ 6:6-17                     | 
-     7      }                                            | 
+     4  }                                                | 
+     5  @media (hover: hover) {                          | 3    @apply text-[#000] hover:text-[#f00];
+        ^^^^^^^^^^^^^^^^^^^^^^ D @ 5:0-22                |                         ^^^^^^^^^^^^^^^^^ D @ 3:21-38
+     6    .foo:hover {                                   | 
+          ^^^^^^^^^^^ D @ 6:2-13                         | 
+     7      color: #f00;                                 | 
+            ^^^^^^^^^^^ D @ 7:4-15                       | 
      8    }                                              | 
-     9    text-decoration-line: underline;               | 4    @apply underline;
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E @ 9:2-33     |             ^^^^^^^^^ E @ 4:9-18
-    10    @apply --my-mixin-1 --my-mixin-2();            | 5    @apply --my-mixin-1 --my-mixin-2();
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 10:2-36 |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 5:2-36
-    11    color: red;                                    | 6    color: red;
-          ^^^^^^^^^^ G @ 11:2-12                         |      ^^^^^^^^^^ G @ 6:2-12
+     9  }                                                | 
+    10  .foo {                                           | 
+        ^^^^^ A @ 10:0-5                                 | 
+    11    text-decoration-line: underline;               | 4    @apply underline;
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E @ 11:2-33    |             ^^^^^^^^^ E @ 4:9-18
+    12    @apply --my-mixin-1 --my-mixin-2();            | 5    @apply --my-mixin-1 --my-mixin-2();
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 12:2-36 |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ F @ 5:2-36
+    13    color: red;                                    | 6    color: red;
+          ^^^^^^^^^^ G @ 13:2-12                         |      ^^^^^^^^^^ G @ 6:2-12
                                                          | 7  }
-    12  }                                                | 
-    13                                                   | 
+    14  }                                                | 
+    15                                                   | 
     "
   `)
 })
@@ -737,49 +743,43 @@ test('@variant generates source maps', async ({ expect }) => {
 
   expect(annotations).toMatchInlineSnapshot(`
     "
-        output.css                         |     input.css
-                                           | 
-     1  .foo {                             |  1  .foo {
-        ^^^^^ A @ 1:0-5                    |     ^^^^^ A @ 1:0-5
-     2    color: red;                      |  2    color: red;
-          ^^^^^^^^^^ B @ 2:2-12            |       ^^^^^^^^^^ B @ 2:2-12
-     3    &[data-a] {                      | 
-                                           |  4    @variant data-a, data-b:data-c {
-     4      color: green;                  |  5      color: green;
-            ^^^^^^^^^^^^ C @ 4:4-16        |         ^^^^^^^^^^^^ C @ 5:4-16
-     5      &[data-d] {                    | 
-                                           |  7      @variant data-d, data-e:data-f {
-     6        color: blue;                 |  8        color: blue;
-              ^^^^^^^^^^^ D @ 6:6-17       |           ^^^^^^^^^^^ D @ 8:6-17
-                                           |  9      }
-                                           | 10    }
-                                           | 11  }
-     7      }                              | 
-     8      &[data-e] {                    | 
-     9        &[data-f] {                  | 
-    10          color: blue;               | 
-                ^^^^^^^^^^^ D @ 10:8-19    | 
-    11        }                            | 
-    12      }                              | 
-    13    }                                | 
-    14    &[data-b] {                      | 
-    15      &[data-c] {                    | 
-    16        color: green;                | 
-              ^^^^^^^^^^^^ C @ 16:6-18     | 
-    17        &[data-d] {                  | 
-    18          color: blue;               | 
-                ^^^^^^^^^^^ D @ 18:8-19    | 
-    19        }                            | 
-    20        &[data-e] {                  | 
-    21          &[data-f] {                | 
-    22            color: blue;             | 
-                  ^^^^^^^^^^^ D @ 22:10-21 | 
-    23          }                          | 
-    24        }                            | 
-    25      }                              | 
-    26    }                                | 
-    27  }                                  | 
-    28                                     | 
+        output.css                 |     input.css
+                                   | 
+     1  .foo {                     |  1  .foo {
+        ^^^^^ A @ 1:0-5            |     ^^^^^ A @ 1:0-5
+     2    color: red;              |  2    color: red;
+          ^^^^^^^^^^ B @ 2:2-12    |       ^^^^^^^^^^ B @ 2:2-12
+     3  }                          | 
+     4  .foo[data-a] {             | 
+                                   |  4    @variant data-a, data-b:data-c {
+     5    color: green;            |  5      color: green;
+          ^^^^^^^^^^^^ C @ 5:2-14  |         ^^^^^^^^^^^^ C @ 5:4-16
+     6  }                          | 
+     7  :is(.foo[data-a])[data-... | 
+                                   |  7      @variant data-d, data-e:data-f {
+     8    color: blue;             |  8        color: blue;
+          ^^^^^^^^^^^ D @ 8:2-13   |           ^^^^^^^^^^^ D @ 8:6-17
+                                   |  9      }
+                                   | 10    }
+                                   | 11  }
+     9  }                          | 
+    10  :is(:is(.foo[data-a])[d... | 
+    11    color: blue;             | 
+          ^^^^^^^^^^^ D @ 11:2-13  | 
+    12  }                          | 
+    13  :is(.foo[data-b])[data-... | 
+    14    color: green;            | 
+          ^^^^^^^^^^^^ C @ 14:2-14 | 
+    15  }                          | 
+    16  :is(:is(.foo[data-b])[d... | 
+    17    color: blue;             | 
+          ^^^^^^^^^^^ D @ 17:2-13  | 
+    18  }                          | 
+    19  :is(:is(:is(.foo[data-b... | 
+    20    color: blue;             | 
+          ^^^^^^^^^^^ D @ 20:2-13  | 
+    21  }                          | 
+    22                             | 
     "
   `)
 })
@@ -865,25 +865,19 @@ test('Source locations for `addBase` point to the `@plugin` that generated them'
 
   expect(annotations).toMatchInlineSnapshot(`
     "
-        output.css                  |    input.css
-                                    | 
-     1  @layer base {               | 1  @plugin "./plugin.js";
-        ^^^^^^^^^^^^ A @ 1:0-12     |    ^^^^^^^^^^^^^^^^^^^^^ A @ 1:0-21
-     2    body {                    | 
-          ^^^^^ A @ 2:2-7           | 
-     3      color: red;             | 
-            ^^^^^^^^^^ A @ 3:4-14   | 
-     4    }                         | 
-     5  }                           | 
-     6  @layer base {               | 2  @config "./config.js";
-        ^^^^^^^^^^^^ B @ 6:0-12     |    ^^^^^^^^^^^^^^^^^^^^^ B @ 2:0-21
-     7    body {                    | 
-          ^^^^^ B @ 7:2-7           | 
-     8      color: green;           | 
-            ^^^^^^^^^^^^ B @ 8:4-16 | 
-     9    }                         | 
-    10  }                           | 
-    11                              | 
+       output.css                  |    input.css
+                                   | 
+    1  @layer base {               | 1  @plugin "./plugin.js";
+       ^^^^^^^^^^^^ A @ 1:0-12     |    ^^^^^^^^^^^^^^^^^^^^^ A @ 1:0-21
+    2    body {                    | 
+         ^^^^^ A @ 2:2-7           | 
+    3      color: red;             | 
+           ^^^^^^^^^^ A @ 3:4-14   | 
+    4      color: green;           | 2  @config "./config.js";
+           ^^^^^^^^^^^^ B @ 4:4-16 |    ^^^^^^^^^^^^^^^^^^^^^ B @ 2:0-21
+    5    }                         | 
+    6  }                           | 
+    7                              | 
     "
   `)
 })

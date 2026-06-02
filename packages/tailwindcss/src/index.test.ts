@@ -1027,7 +1027,7 @@ describe('variant stacking', () => {
     expect(await run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
       "
       @media (hover: hover) {
-        .\\[\\&_p\\]\\:hover\\:flex p:hover {
+        :is(.\\[\\&_p\\]\\:hover\\:flex p):hover {
           display: flex;
         }
       }
@@ -1063,7 +1063,7 @@ describe('variant stacking', () => {
       }
 
       @media (hover: hover) {
-        .before\\:hover\\:flex:before:hover {
+        :is():hover {
           display: flex;
         }
 
@@ -4449,7 +4449,7 @@ describe('@custom-variant', () => {
             --has-before: 1;
           }
 
-          .custom-before\\:underline:before:hover, .custom-before\\:underline:before:focus {
+          :is():hover, :is():focus {
             text-decoration-line: underline;
           }
         }
@@ -4938,7 +4938,7 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a\\:flex .a, .b\\:flex .b .a .a-inside-b, .a\\:b\\:flex .a .b .a .a-inside-b, .b\\:a\\:flex .b .a .a-inside-b .a {
+      .a\\:flex .a, :is(:is(.b\\:flex .b) .a) .a-inside-b, :is(:is(:is(.a\\:b\\:flex .a) .b) .a) .a-inside-b, :is(:is(:is(.b\\:a\\:flex .b) .a) .a-inside-b) .a {
         display: flex;
       }
       "

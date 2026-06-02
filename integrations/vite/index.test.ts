@@ -1137,7 +1137,7 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="hover:flex">Hello, world!</div>
+          <div class="focus:text-[black]">Hello, world!</div>
         </body>
       `,
       'src/index.css': css`
@@ -1149,16 +1149,16 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
-    expect(files).toHaveLength(1)
-    let [filename] = files[0]
-
     // Should not be minified when optimize is disabled
-    let content = await fs.read(filename)
-    expect(content).toContain('.hover\\:flex {')
-    expect(content).toContain('&:hover {')
-    expect(content).toContain('@media (hover: hover) {')
-    expect(content).toContain('display: flex;')
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+        "
+        --- dist/assets/index-<hash>.css ---
+        .focus\\:text-\\[black\\]:focus {
+          color: black;
+        }
+        "
+      `)
   },
 )
 
@@ -1192,7 +1192,7 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="hover:flex">Hello, world!</div>
+          <div class="hover:text-[black]">Hello, world!</div>
         </body>
       `,
       'src/index.css': css`
@@ -1204,15 +1204,17 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
-    expect(files).toHaveLength(1)
-    let [filename] = files[0]
-
-    // Should be optimized but not minified
-    let content = await fs.read(filename)
-    expect(content).toContain('@media (hover: hover) {')
-    expect(content).toContain('.hover\\:flex:hover {')
-    expect(content).toContain('display: flex;')
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+      "
+      --- dist/assets/index-<hash>.css ---
+      @media (hover: hover) {
+        .hover\\:text-\\[black\\]:hover {
+          color: #000;
+        }
+      }
+      "
+    `)
   },
 )
 

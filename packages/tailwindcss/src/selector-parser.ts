@@ -70,7 +70,7 @@ function compound(nodes: SelectorAstNode[]): SelectorCompoundNode {
   }
 }
 
-function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
+export function fun(value: string, nodes: SelectorAstNode[]): SelectorFunctionNode {
   return {
     kind: 'function',
     value,
@@ -85,7 +85,7 @@ function list(nodes: SelectorAstNode[]): SelectorListNode {
   }
 }
 
-function selector(value: string): SelectorNode {
+export function selector(value: string): SelectorNode {
   return {
     kind: 'selector',
     value,
@@ -96,6 +96,37 @@ function value(value: string): SelectorValueNode {
   return {
     kind: 'value',
     value,
+  }
+}
+
+export function cloneAstNode<T extends SelectorAstNode>(node: T): T {
+  switch (node.kind) {
+    case 'combinator':
+    case 'selector':
+    case 'value':
+      return {
+        kind: node.kind,
+        value: node.value,
+      } as T
+
+    case 'complex':
+    case 'compound':
+    case 'list':
+      return {
+        kind: node.kind,
+        nodes: node.nodes.map(cloneAstNode),
+      } as T
+
+    case 'function':
+      return {
+        kind: node.kind,
+        value: node.value,
+        nodes: node.nodes.map(cloneAstNode),
+      } satisfies SelectorFunctionNode as T
+
+    default:
+      node satisfies never
+      throw new Error(`Unknown node kind: ${(node as any).kind}`)
   }
 }
 

@@ -21,7 +21,7 @@ test('Utilities can be wrapped in a selector', async () => {
     }
 
     @media (hover: hover) {
-      #app .hover\\:line-through:hover {
+      :is(#app .hover\\:line-through):hover {
         text-decoration-line: line-through;
       }
     }
@@ -81,7 +81,7 @@ test('Utilities can be wrapped with a selector and marked as important', async (
     }
 
     @media (hover: hover) {
-      #app .hover\\:line-through:hover {
+      :is(#app .hover\\:line-through):hover {
         text-decoration-line: line-through !important;
       }
     }

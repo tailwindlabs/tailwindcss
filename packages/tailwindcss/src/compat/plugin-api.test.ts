@@ -2737,7 +2737,7 @@ describe('matchVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .foo-known\\:flex:is(known), .foo-\\[test\\]\\:flex:is(test) {
+        known.foo-known\\:flex, test.foo-\\[test\\]\\:flex {
           display: flex;
         }
       }
@@ -2775,7 +2775,7 @@ describe('matchVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .foo-string\\:flex:is(some string), .foo-\\[test\\]\\:flex:is(test) {
+        .foo-string\\:flex:is(some string), test.foo-\\[test\\]\\:flex {
           display: flex;
         }
       }
@@ -3204,7 +3204,7 @@ describe('addUtilities()', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .j.j, .j.j, .a .b:hover .c, .a .b:hover .c, .a .b:hover .c, .d > *, .e .bar:not(.f):has(.g), .e .bar:not(.f):has(.g), .h ~ .i, .h ~ .i {
+        .j.j, .a .b:hover .c, .d > *, .e .bar:not(.f):has(.g), .h ~ .i {
           color: red;
         }
       }
