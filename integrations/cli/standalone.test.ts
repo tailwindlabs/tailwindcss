@@ -1,6 +1,7 @@
+import nodeFs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
-import { candidate, css, html, js, json, test, ts } from '../utils'
+import { candidate, css, html, IS_WINDOWS, js, json, test, ts } from '../utils'
 
 const STANDALONE_BINARY = (() => {
   switch (os.platform()) {
@@ -14,6 +15,41 @@ const STANDALONE_BINARY = (() => {
       throw new Error(`Unsupported platform: ${os.platform()} ${os.arch()}`)
   }
 })()
+
+test(
+  'does not scan itself for candidates',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {}
+        }
+      `,
+      'src/index.css': css` @import 'tailwindcss'; `,
+    },
+  },
+  async ({ root, fs, exec }) => {
+    let sourceBinary = path.resolve(
+      __dirname,
+      `../../packages/@tailwindcss-standalone/dist/${STANDALONE_BINARY}`,
+    )
+    let binary = IS_WINDOWS ? 'tailwindcss.exe' : 'tailwindcss'
+    let localBinary = path.join(root, binary)
+    await nodeFs.copyFile(sourceBinary, localBinary)
+
+    if (!IS_WINDOWS) {
+      await nodeFs.chmod(localBinary, 0o755)
+    }
+
+    await exec(`${IS_WINDOWS ? binary : `./${binary}`} --input src/index.css --output dist/out.css`)
+
+    await fs.expectFileNotToContain('dist/out.css', [
+      candidate`flex`,
+      candidate`grid`,
+      candidate`underline`,
+    ])
+  },
+)
 
 test(
   'includes first-party plugins',
