@@ -250,6 +250,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       return [{ ...compiler.root, negated: false }]
     })().concat(compiler.sources)
 
+    // Do not scan the current executable. Otherwise when using the standalone
+    // CLI, if the CLI lives in the current repo we would be scanning that file.
+    //
+    // This is also immune against renames of the executable file.
+    sources.push({
+      base: path.dirname(process.execPath),
+      pattern: path.basename(process.execPath),
+      negated: true,
+    })
+
     let scanner = new Scanner({ sources })
     DEBUG && I.end('Setup compiler')
 
