@@ -41,7 +41,7 @@ test(
       await nodeFs.chmod(localBinary, 0o755)
     }
 
-    await exec(`./${binary} --input src/index.css --output dist/out.css`)
+    await exec(`${IS_WINDOWS ? binary : `./${binary}`} --input src/index.css --output dist/out.css`)
 
     await fs.expectFileNotToContain('dist/out.css', [
       candidate`flex`,
