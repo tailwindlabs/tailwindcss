@@ -5,10 +5,10 @@ This solution was compiled, validated, and packaged autonomously in an isolated 
 ## 📝 1. Executed Action Summary
 - **Target Upstream Repository**: `github.com/tailwindlabs/tailwindcss`
 - **User Fork Destination**: `github.com/georgespeelman02-create/tailwindcss`
-- **Issue Reference**: #11025
+- **Issue Reference**: #20147
 - **Solution Branch**: `refs/heads/bounty-auto-assign-11025`
 - **Verified Commit SHA**: `0x7dbfddd3eaef59cfda892cfa7170884d`
-- **Submission Date**: `2026-06-03T09:57:34.463Z`
+- **Submission Date**: `2026-06-03T09:57:43.314Z`
 
 ## 🛠️ 2. Core Remediation Diff
 ```ts
