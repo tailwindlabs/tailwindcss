@@ -128,7 +128,7 @@ describe('--spacing(…)', () => {
       `)
     })
 
-    test('--spacing(…) optimizes the output when the input is `0` (with an inline themed)', async () => {
+    test('--spacing(…) optimizes the output when the input is `0` (with an inlined theme value)', async () => {
       expect(
         await compileCss(css`
           @theme inline {
@@ -176,7 +176,7 @@ describe('--spacing(…)', () => {
       `)
     })
 
-    test('--spacing(…) optimizes the output when the input is `1` (with an inline themed)', async () => {
+    test('--spacing(…) optimizes the output when the input is `1` (with an inlined theme value)', async () => {
       expect(
         await compileCss(css`
           @theme inline {
