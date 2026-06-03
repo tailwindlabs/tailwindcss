@@ -2170,7 +2170,7 @@ test('mx', async () => {
     }
 
     .mx-1 {
-      margin-inline: calc(var(--spacing) * 1);
+      margin-inline: var(--spacing);
     }
 
     .mx-4 {
@@ -2262,7 +2262,7 @@ test('my', async () => {
     }
 
     .my-1 {
-      margin-block: calc(var(--spacing) * 1);
+      margin-block: var(--spacing);
     }
 
     .my-2\\.5 {
@@ -2350,7 +2350,7 @@ test('mt', async () => {
     }
 
     .mt-1 {
-      margin-top: calc(var(--spacing) * 1);
+      margin-top: var(--spacing);
     }
 
     .mt-2\\.5 {
@@ -2438,7 +2438,7 @@ test('ms', async () => {
     }
 
     .ms-1 {
-      margin-inline-start: calc(var(--spacing) * 1);
+      margin-inline-start: var(--spacing);
     }
 
     .ms-2\\.5 {
@@ -2526,7 +2526,7 @@ test('me', async () => {
     }
 
     .me-1 {
-      margin-inline-end: calc(var(--spacing) * 1);
+      margin-inline-end: var(--spacing);
     }
 
     .me-2\\.5 {
@@ -2614,7 +2614,7 @@ test('mbs', async () => {
     }
 
     .mbs-1 {
-      margin-block-start: calc(var(--spacing) * 1);
+      margin-block-start: var(--spacing);
     }
 
     .mbs-2\\.5 {
@@ -2702,7 +2702,7 @@ test('mbe', async () => {
     }
 
     .mbe-1 {
-      margin-block-end: calc(var(--spacing) * 1);
+      margin-block-end: var(--spacing);
     }
 
     .mbe-2\\.5 {
@@ -2790,7 +2790,7 @@ test('mr', async () => {
     }
 
     .mr-1 {
-      margin-right: calc(var(--spacing) * 1);
+      margin-right: var(--spacing);
     }
 
     .mr-2\\.5 {
@@ -2878,7 +2878,7 @@ test('mb', async () => {
     }
 
     .mb-1 {
-      margin-bottom: calc(var(--spacing) * 1);
+      margin-bottom: var(--spacing);
     }
 
     .mb-2\\.5 {
@@ -2966,7 +2966,7 @@ test('ml', async () => {
     }
 
     .ml-1 {
-      margin-left: calc(var(--spacing) * 1);
+      margin-left: var(--spacing);
     }
 
     .ml-2\\.5 {
@@ -19355,8 +19355,16 @@ test('mask-y-to', async () => {
 })
 
 test('mask-linear', async () => {
-  expect(await run(['mask-linear-0', 'mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45']))
-    .toMatchInlineSnapshot(`
+  expect(
+    await run([
+      'mask-linear-0',
+      'mask-linear-1',
+      '-mask-linear-1',
+      'mask-linear-45',
+      'mask-linear-[3rad]',
+      '-mask-linear-45',
+    ]),
+  ).toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -19371,6 +19379,17 @@ test('mask-linear', async () => {
           --tw-mask-linear-to-color: transparent;
         }
       }
+    }
+
+    .-mask-linear-1 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)));
+      --tw-mask-linear-position: -1deg;
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
     }
 
     .-mask-linear-45 {
@@ -19390,6 +19409,17 @@ test('mask-linear', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)));
       --tw-mask-linear-position: 0deg;
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-linear-1 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)));
+      --tw-mask-linear-position: 1deg;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -20721,8 +20751,16 @@ test('mask-radial-to', async () => {
 })
 
 test('mask-conic', async () => {
-  expect(await run(['mask-conic-0', 'mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45']))
-    .toMatchInlineSnapshot(`
+  expect(
+    await run([
+      'mask-conic-0',
+      'mask-conic-1',
+      '-mask-conic-1',
+      'mask-conic-45',
+      'mask-conic-[3rad]',
+      '-mask-conic-45',
+    ]),
+  ).toMatchInlineSnapshot(`
     "
     @layer properties {
       @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
@@ -20737,6 +20775,17 @@ test('mask-conic', async () => {
           --tw-mask-conic-to-color: transparent;
         }
       }
+    }
+
+    .-mask-conic-1 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
+      --tw-mask-conic-position: -1deg;
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
     }
 
     .-mask-conic-45 {
@@ -20756,6 +20805,17 @@ test('mask-conic', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
       --tw-mask-conic-position: 0deg;
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-conic-1 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
+      --tw-mask-conic-position: 1deg;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -22472,7 +22532,7 @@ test('p', async () => {
     }
 
     .p-1 {
-      padding: calc(var(--spacing) * 1);
+      padding: var(--spacing);
     }
 
     .p-4 {
@@ -22515,7 +22575,7 @@ test('px', async () => {
     }
 
     .px-1 {
-      padding-inline: calc(var(--spacing) * 1);
+      padding-inline: var(--spacing);
     }
 
     .px-2\\.5 {
@@ -22558,7 +22618,7 @@ test('py', async () => {
     }
 
     .py-1 {
-      padding-block: calc(var(--spacing) * 1);
+      padding-block: var(--spacing);
     }
 
     .py-4 {
@@ -22601,7 +22661,7 @@ test('pt', async () => {
     }
 
     .pt-1 {
-      padding-top: calc(var(--spacing) * 1);
+      padding-top: var(--spacing);
     }
 
     .pt-4 {
@@ -22644,7 +22704,7 @@ test('ps', async () => {
     }
 
     .ps-1 {
-      padding-inline-start: calc(var(--spacing) * 1);
+      padding-inline-start: var(--spacing);
     }
 
     .ps-4 {
@@ -22687,7 +22747,7 @@ test('pe', async () => {
     }
 
     .pe-1 {
-      padding-inline-end: calc(var(--spacing) * 1);
+      padding-inline-end: var(--spacing);
     }
 
     .pe-4 {
@@ -22730,7 +22790,7 @@ test('pbs', async () => {
     }
 
     .pbs-1 {
-      padding-block-start: calc(var(--spacing) * 1);
+      padding-block-start: var(--spacing);
     }
 
     .pbs-4 {
@@ -22773,7 +22833,7 @@ test('pbe', async () => {
     }
 
     .pbe-1 {
-      padding-block-end: calc(var(--spacing) * 1);
+      padding-block-end: var(--spacing);
     }
 
     .pbe-4 {
@@ -22816,7 +22876,7 @@ test('pr', async () => {
     }
 
     .pr-1 {
-      padding-right: calc(var(--spacing) * 1);
+      padding-right: var(--spacing);
     }
 
     .pr-4 {
@@ -22859,7 +22919,7 @@ test('pb', async () => {
     }
 
     .pb-1 {
-      padding-bottom: calc(var(--spacing) * 1);
+      padding-bottom: var(--spacing);
     }
 
     .pb-4 {
@@ -22902,7 +22962,7 @@ test('pl', async () => {
     }
 
     .pl-1 {
-      padding-left: calc(var(--spacing) * 1);
+      padding-left: var(--spacing);
     }
 
     .pl-4 {

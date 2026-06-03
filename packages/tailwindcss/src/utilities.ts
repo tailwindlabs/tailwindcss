@@ -3418,12 +3418,16 @@ export function createUtilities(theme: Theme) {
     supportsFractions: false,
     handleBareValue({ value }) {
       if (!isPositiveInteger(value)) return null
-      if (Number(value) === 0) return '0deg'
+      let valueAsNumber = Number(value)
+      if (valueAsNumber === 0) return '0deg'
+      if (valueAsNumber === 1) return '1deg'
       return `calc(1deg * ${value})`
     },
     handleNegativeBareValue({ value }) {
       if (!isPositiveInteger(value)) return null
-      if (Number(value) === 0) return '0deg'
+      let valueAsNumber = Number(value)
+      if (valueAsNumber === 0) return '0deg'
+      if (valueAsNumber === 1) return '-1deg'
       return `calc(1deg * -${value})`
     },
     handle: (value) => [
@@ -3638,12 +3642,16 @@ export function createUtilities(theme: Theme) {
     supportsFractions: false,
     handleBareValue({ value }) {
       if (!isPositiveInteger(value)) return null
-      if (Number(value) === 0) return '0deg'
+      let valueAsNumber = Number(value)
+      if (valueAsNumber === 0) return '0deg'
+      if (valueAsNumber === 1) return '1deg'
       return `calc(1deg * ${value})`
     },
     handleNegativeBareValue({ value }) {
       if (!isPositiveInteger(value)) return null
-      if (Number(value) === 0) return '0deg'
+      let valueAsNumber = Number(value)
+      if (valueAsNumber === 0) return '0deg'
+      if (valueAsNumber === 1) return '-1deg'
       return `calc(1deg * -${value})`
     },
     handle: (value) => [

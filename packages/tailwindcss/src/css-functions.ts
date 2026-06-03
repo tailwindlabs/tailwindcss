@@ -70,9 +70,13 @@ function spacing(
   // - We can assume that the `--spacing` value is not set to a `0`-like value.
   //   Otherwise `p-<anything>` would calculate as `0` which wouldn't make sense.
   //
-  // That means that a value of `0` can be replaced by `0`
+  // - That means that a value of `0` can be replaced by `0`
+  // - That means that a value of `1` can be replaced by `multiplier`
   let valueDimension = dimensions.get(value)
-  if (valueDimension && valueDimension[0] === 0) return '0'
+  if (valueDimension) {
+    if (valueDimension[0] === 0) return '0'
+    if (valueDimension[0] === 1) return multiplier
+  }
 
   // No known optimizations available, use full calculation
   return `calc(${multiplier} * ${value})`
