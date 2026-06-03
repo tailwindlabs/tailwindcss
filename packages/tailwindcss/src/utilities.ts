@@ -15,6 +15,7 @@ import type { DesignSystem } from './design-system'
 import type { Theme, ThemeKey } from './theme'
 import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
+import { dimensions } from './utils/dimensions'
 import { unescape } from './utils/escape'
 import {
   inferDataType,
@@ -2119,31 +2120,59 @@ export function createUtilities(theme: Theme) {
   spacingUtility(
     'space-x',
     ['--space', '--spacing'],
-    (value) => [
-      atRoot([property('--tw-space-x-reverse', '0')]),
+    (value) => {
+      let zero = (() => {
+        if (value === '--spacing(0)') return true
 
-      styleRule(':where(& > :not(:last-child))', [
-        decl('--tw-sort', 'row-gap'),
-        decl('--tw-space-x-reverse', '0'),
-        decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
-        decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
-      ]),
-    ],
+        let parsed = dimensions.get(value)
+        if (parsed && parsed[0] === 0) return true
+
+        return false
+      })()
+
+      return [
+        atRoot([property('--tw-space-x-reverse', '0')]),
+
+        styleRule(':where(& > :not(:last-child))', [
+          decl('--tw-sort', 'row-gap'),
+          decl('--tw-space-x-reverse', '0'),
+          decl('margin-inline-start', zero ? '0' : `calc(${value} * var(--tw-space-x-reverse))`),
+          decl(
+            'margin-inline-end',
+            zero ? '0' : `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`,
+          ),
+        ]),
+      ]
+    },
     { supportsNegative: true },
   )
 
   spacingUtility(
     'space-y',
     ['--space', '--spacing'],
-    (value) => [
-      atRoot([property('--tw-space-y-reverse', '0')]),
-      styleRule(':where(& > :not(:last-child))', [
-        decl('--tw-sort', 'column-gap'),
-        decl('--tw-space-y-reverse', '0'),
-        decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
-        decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
-      ]),
-    ],
+    (value) => {
+      let zero = (() => {
+        if (value === '--spacing(0)') return true
+
+        let parsed = dimensions.get(value)
+        if (parsed && parsed[0] === 0) return true
+
+        return false
+      })()
+
+      return [
+        atRoot([property('--tw-space-y-reverse', '0')]),
+        styleRule(':where(& > :not(:last-child))', [
+          decl('--tw-sort', 'column-gap'),
+          decl('--tw-space-y-reverse', '0'),
+          decl('margin-block-start', zero ? '0' : `calc(${value} * var(--tw-space-y-reverse))`),
+          decl(
+            'margin-block-end',
+            zero ? '0' : `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`,
+          ),
+        ]),
+      ]
+    },
     { supportsNegative: true },
   )
 
