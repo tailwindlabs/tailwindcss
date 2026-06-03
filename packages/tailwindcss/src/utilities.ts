@@ -2123,6 +2123,7 @@ export function createUtilities(theme: Theme) {
     (value) => {
       let zero = (() => {
         if (value === '--spacing(0)') return true
+        if (value === '--spacing(-0)') return true
 
         let parsed = dimensions.get(value)
         if (parsed && parsed[0] === 0) return true
@@ -2153,6 +2154,7 @@ export function createUtilities(theme: Theme) {
     (value) => {
       let zero = (() => {
         if (value === '--spacing(0)') return true
+        if (value === '--spacing(-0)') return true
 
         let parsed = dimensions.get(value)
         if (parsed && parsed[0] === 0) return true
