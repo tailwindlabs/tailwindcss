@@ -105,6 +105,100 @@ describe('--spacing(…)', () => {
     `)
   })
 
+  describe('optimizations', () => {
+    test('--spacing(…) optimizes the output when the input is `0`', async () => {
+      expect(
+        await compileCss(css`
+          @theme {
+            --spacing: 0.25rem;
+          }
+
+          .foo {
+            margin: --spacing(0);
+            padding: --spacing(0px);
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .foo {
+          margin: 0;
+          padding: 0;
+        }
+        "
+      `)
+    })
+
+    test('--spacing(…) optimizes the output when the input is `0` (with an inlined theme value)', async () => {
+      expect(
+        await compileCss(css`
+          @theme inline {
+            --spacing: 0.25rem;
+          }
+
+          .foo {
+            margin: --spacing(0);
+            padding: --spacing(0px);
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .foo {
+          margin: 0;
+          padding: 0;
+        }
+        "
+      `)
+    })
+
+    test('--spacing(…) optimizes the output when the input is `1`', async () => {
+      expect(
+        await compileCss(css`
+          @theme {
+            --spacing: 0.25rem;
+          }
+
+          .foo {
+            margin: --spacing(1);
+            padding: --spacing(1px);
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :root, :host {
+          --spacing: .25rem;
+        }
+
+        .foo {
+          margin: var(--spacing);
+          padding: var(--spacing);
+        }
+        "
+      `)
+    })
+
+    test('--spacing(…) optimizes the output when the input is `1` (with an inlined theme value)', async () => {
+      expect(
+        await compileCss(css`
+          @theme inline {
+            --spacing: 0.25rem;
+          }
+
+          .foo {
+            margin: --spacing(1);
+            padding: --spacing(1px);
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .foo {
+          margin: .25rem;
+          padding: .25rem;
+        }
+        "
+      `)
+    })
+  })
+
   test('--spacing(…) relies on `--spacing` to be defined', async () => {
     await expect(() =>
       compileCss(css`
