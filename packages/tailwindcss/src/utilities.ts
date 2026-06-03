@@ -19,6 +19,7 @@ import { dimensions } from './utils/dimensions'
 import { unescape } from './utils/escape'
 import {
   inferDataType,
+  isLength,
   isPositiveInteger,
   isStrictPositiveInteger,
   isValidOpacityValue,
@@ -2126,7 +2127,9 @@ export function createUtilities(theme: Theme) {
         if (value === '--spacing(-0)') return true
 
         let parsed = dimensions.get(value)
-        if (parsed && parsed[0] === 0) return true
+        if (parsed && parsed[0] === 0 && (parsed[1] === null || isLength(value))) {
+          return true
+        }
 
         return false
       })()
@@ -2157,7 +2160,9 @@ export function createUtilities(theme: Theme) {
         if (value === '--spacing(-0)') return true
 
         let parsed = dimensions.get(value)
-        if (parsed && parsed[0] === 0) return true
+        if (parsed && parsed[0] === 0 && (parsed[1] === null || isLength(value))) {
+          return true
+        }
 
         return false
       })()
