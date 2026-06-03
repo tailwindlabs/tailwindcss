@@ -550,14 +550,14 @@ export function createUtilities(theme: Theme) {
         if (!multiplier) return null
         if (!isValidSpacingMultiplier(value)) return null
 
-        return `calc(${multiplier} * ${value})`
+        return `--spacing(${value})`
       },
       handleNegativeBareValue: ({ value }) => {
         let multiplier = theme.resolve(null, ['--spacing'])
         if (!multiplier) return null
         if (!isValidSpacingMultiplier(value)) return null
 
-        return `calc(${multiplier} * -${value})`
+        return `--spacing(-${value})`
       },
       handle,
       staticValues,
@@ -3241,7 +3241,7 @@ export function createUtilities(theme: Theme) {
             if (!multiplier) return
             if (!isValidSpacingMultiplier(candidate.value.value)) return
 
-            return desc.position(`calc(${multiplier} * ${candidate.value.value})`)
+            return desc.position(`--spacing(${candidate.value.value})`)
           }
 
           case 'percentage': {
@@ -5231,7 +5231,7 @@ export function createUtilities(theme: Theme) {
             if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
               let multiplier = theme.resolve(null, ['--spacing'])
               if (!multiplier) return null
-              modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+              modifier = `--spacing(${candidate.modifier.value})`
             }
 
             // Shorthand for `leading-none`
@@ -5284,7 +5284,7 @@ export function createUtilities(theme: Theme) {
           if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
             let multiplier = theme.resolve(null, ['--spacing'])
             if (!multiplier) return null
-            modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+            modifier = `--spacing(${candidate.modifier.value})`
           }
 
           // Shorthand for `leading-none`

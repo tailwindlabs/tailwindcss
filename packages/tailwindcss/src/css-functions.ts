@@ -2,6 +2,7 @@ import { Features } from '.'
 import { type AstNode } from './ast'
 import type { DesignSystem } from './design-system'
 import { withAlpha } from './utilities'
+import { dimensions } from './utils/dimensions'
 import { segment } from './utils/segment'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
@@ -62,6 +63,18 @@ function spacing(
     )
   }
 
+  // Optimization:
+  //
+  // - We know that at this point the `--spacing` value must be set.
+  // - We know that `--spacing` must be set to a `<length>` unit, such as `0.25rem`
+  // - We can assume that the `--spacing` value is not set to a `0`-like value.
+  //   Otherwise `p-<anything>` would calculate as `0` which wouldn't make sense.
+  //
+  // That means that a value of `0` can be replaced by `0`
+  let valueDimension = dimensions.get(value)
+  if (valueDimension && valueDimension[0] === 0) return '0'
+
+  // No known optimizations available, use full calculation
   return `calc(${multiplier} * ${value})`
 }
 
