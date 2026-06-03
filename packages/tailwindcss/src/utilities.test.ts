@@ -318,6 +318,81 @@ test('inset', async () => {
   ).toEqual('')
 })
 
+test('inset/position utilities with a `0` value emit a constant, not calc()', async () => {
+  let output = await run(
+    [
+      'inset-0',
+      'inset-x-0',
+      'inset-y-0',
+      'inset-s-0',
+      'inset-e-0',
+      'inset-bs-0',
+      'inset-be-0',
+      'top-0',
+      'right-0',
+      'bottom-0',
+      'left-0',
+      // Negative zero must collapse too (no `calc(0 * -1)`).
+      '-inset-0',
+      '-top-0',
+    ],
+    css`
+      @theme {
+        --spacing: 0.25rem;
+      }
+      @tailwind utilities;
+    `,
+  )
+
+  expect(output).toMatchInlineSnapshot(`
+    "
+    .-inset-0, .inset-0 {
+      inset: 0;
+    }
+
+    .inset-x-0 {
+      inset-inline: 0;
+    }
+
+    .inset-y-0 {
+      inset-block: 0;
+    }
+
+    .inset-s-0 {
+      inset-inline-start: 0;
+    }
+
+    .inset-e-0 {
+      inset-inline-end: 0;
+    }
+
+    .inset-bs-0 {
+      inset-block-start: 0;
+    }
+
+    .inset-be-0 {
+      inset-block-end: 0;
+    }
+
+    .-top-0, .top-0 {
+      top: 0;
+    }
+
+    .right-0 {
+      right: 0;
+    }
+
+    .bottom-0 {
+      bottom: 0;
+    }
+
+    .left-0 {
+      left: 0;
+    }
+    "
+  `)
+})
+
 test('inset-x', async () => {
   expect(
     await run(
@@ -9922,9 +9997,10 @@ test('gap-y', async () => {
 test('space-x', async () => {
   expect(
     await run(
-      ['space-x-4', 'space-x-[4px]', '-space-x-4'],
+      ['space-x-0', 'space-x-4', 'space-x-[4px]', '-space-x-4'],
       css`
         @theme {
+          --spacing: 0.25rem;
           --spacing-4: 1rem;
         }
         @tailwind utilities;
@@ -9962,6 +10038,10 @@ test('space-x', async () => {
       margin-inline-end: calc(4px * calc(1 - var(--tw-space-x-reverse)));
     }
 
+    :where(.space-x-0 > :not(:last-child)) {
+      margin-inline: 0;
+    }
+
     @property --tw-space-x-reverse {
       syntax: "*";
       inherits: false;
@@ -9975,9 +10055,10 @@ test('space-x', async () => {
 test('space-y', async () => {
   expect(
     await run(
-      ['space-y-4', 'space-y-[4px]', '-space-y-4'],
+      ['space-y-0', 'space-y-4', 'space-y-[4px]', '-space-y-4'],
       css`
         @theme {
+          --spacing: 0.25rem;
           --spacing-4: 1rem;
         }
         @tailwind utilities;
@@ -10013,6 +10094,10 @@ test('space-y', async () => {
       --tw-space-y-reverse: 0;
       margin-block-start: calc(4px * var(--tw-space-y-reverse));
       margin-block-end: calc(4px * calc(1 - var(--tw-space-y-reverse)));
+    }
+
+    :where(.space-y-0 > :not(:last-child)) {
+      margin-block: 0;
     }
 
     @property --tw-space-y-reverse {
@@ -10076,7 +10161,7 @@ test('space-y-reverse', async () => {
 })
 
 test('divide-x', async () => {
-  expect(await run(['divide-x', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]']))
+  expect(await run(['divide-x', 'divide-x-0', 'divide-x-4', 'divide-x-123', 'divide-x-[4px]']))
     .toMatchInlineSnapshot(`
     "
     @layer properties {
@@ -10114,6 +10199,11 @@ test('divide-x', async () => {
       border-inline-style: var(--tw-border-style);
       border-inline-start-width: calc(4px * var(--tw-divide-x-reverse));
       border-inline-end-width: calc(4px * calc(1 - var(--tw-divide-x-reverse)));
+    }
+
+    :where(.divide-x-0 > :not(:last-child)) {
+      border-inline-style: var(--tw-border-style);
+      border-inline-width: 0;
     }
 
     @property --tw-divide-x-reverse {
@@ -10190,7 +10280,7 @@ test('divide-x with custom default border width', async () => {
 })
 
 test('divide-y', async () => {
-  expect(await run(['divide-y', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]']))
+  expect(await run(['divide-y', 'divide-y-0', 'divide-y-4', 'divide-y-123', 'divide-y-[4px]']))
     .toMatchInlineSnapshot(`
     "
     @layer properties {
@@ -10232,6 +10322,13 @@ test('divide-y', async () => {
       border-top-style: var(--tw-border-style);
       border-top-width: calc(4px * var(--tw-divide-y-reverse));
       border-bottom-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
+    }
+
+    :where(.divide-y-0 > :not(:last-child)) {
+      border-bottom-style: var(--tw-border-style);
+      border-top-style: var(--tw-border-style);
+      border-top-width: 0;
+      border-bottom-width: 0;
     }
 
     @property --tw-divide-y-reverse {
@@ -16014,7 +16111,7 @@ test('mask-t-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-from-position: calc(var(--spacing) * 0);
+      --tw-mask-top-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -16274,7 +16371,7 @@ test('mask-t-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 0);
+      --tw-mask-top-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -16535,7 +16632,7 @@ test('mask-r-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-from-position: calc(var(--spacing) * 0);
+      --tw-mask-right-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -16796,7 +16893,7 @@ test('mask-r-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-to-position: calc(var(--spacing) * 0);
+      --tw-mask-right-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -17057,7 +17154,7 @@ test('mask-b-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-bottom: linear-gradient(to bottom, var(--tw-mask-bottom-from-color) var(--tw-mask-bottom-from-position), var(--tw-mask-bottom-to-color) var(--tw-mask-bottom-to-position));
-      --tw-mask-bottom-from-position: calc(var(--spacing) * 0);
+      --tw-mask-bottom-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -17318,7 +17415,7 @@ test('mask-b-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-bottom: linear-gradient(to bottom, var(--tw-mask-bottom-from-color) var(--tw-mask-bottom-from-position), var(--tw-mask-bottom-to-color) var(--tw-mask-bottom-to-position));
-      --tw-mask-bottom-to-position: calc(var(--spacing) * 0);
+      --tw-mask-bottom-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -17579,7 +17676,7 @@ test('mask-l-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-left: linear-gradient(to left, var(--tw-mask-left-from-color) var(--tw-mask-left-from-position), var(--tw-mask-left-to-color) var(--tw-mask-left-to-position));
-      --tw-mask-left-from-position: calc(var(--spacing) * 0);
+      --tw-mask-left-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -17840,7 +17937,7 @@ test('mask-l-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-left: linear-gradient(to left, var(--tw-mask-left-from-color) var(--tw-mask-left-from-position), var(--tw-mask-left-to-color) var(--tw-mask-left-to-position));
-      --tw-mask-left-to-position: calc(var(--spacing) * 0);
+      --tw-mask-left-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -18109,9 +18206,9 @@ test('mask-x-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-from-position: calc(var(--spacing) * 0);
+      --tw-mask-right-from-position: 0;
       --tw-mask-left: linear-gradient(to left, var(--tw-mask-left-from-color) var(--tw-mask-left-from-position), var(--tw-mask-left-to-color) var(--tw-mask-left-to-position));
-      --tw-mask-left-from-position: calc(var(--spacing) * 0);
+      --tw-mask-left-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -18416,9 +18513,9 @@ test('mask-x-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-right: linear-gradient(to right, var(--tw-mask-right-from-color) var(--tw-mask-right-from-position), var(--tw-mask-right-to-color) var(--tw-mask-right-to-position));
-      --tw-mask-right-to-position: calc(var(--spacing) * 0);
+      --tw-mask-right-to-position: 0;
       --tw-mask-left: linear-gradient(to left, var(--tw-mask-left-from-color) var(--tw-mask-left-from-position), var(--tw-mask-left-to-color) var(--tw-mask-left-to-position));
-      --tw-mask-left-to-position: calc(var(--spacing) * 0);
+      --tw-mask-left-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -18723,9 +18820,9 @@ test('mask-y-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-from-position: calc(var(--spacing) * 0);
+      --tw-mask-top-from-position: 0;
       --tw-mask-bottom: linear-gradient(to bottom, var(--tw-mask-bottom-from-color) var(--tw-mask-bottom-from-position), var(--tw-mask-bottom-to-color) var(--tw-mask-bottom-to-position));
-      --tw-mask-bottom-from-position: calc(var(--spacing) * 0);
+      --tw-mask-bottom-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -19030,9 +19127,9 @@ test('mask-y-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: var(--tw-mask-left), var(--tw-mask-right), var(--tw-mask-bottom), var(--tw-mask-top);
       --tw-mask-top: linear-gradient(to top, var(--tw-mask-top-from-color) var(--tw-mask-top-from-position), var(--tw-mask-top-to-color) var(--tw-mask-top-to-position));
-      --tw-mask-top-to-position: calc(var(--spacing) * 0);
+      --tw-mask-top-to-position: 0;
       --tw-mask-bottom: linear-gradient(to bottom, var(--tw-mask-bottom-from-color) var(--tw-mask-bottom-from-position), var(--tw-mask-bottom-to-color) var(--tw-mask-bottom-to-position));
-      --tw-mask-bottom-to-position: calc(var(--spacing) * 0);
+      --tw-mask-bottom-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -19251,7 +19348,7 @@ test('mask-y-to', async () => {
 })
 
 test('mask-linear', async () => {
-  expect(await run(['mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45']))
+  expect(await run(['mask-linear-0', 'mask-linear-45', 'mask-linear-[3rad]', '-mask-linear-45']))
     .toMatchInlineSnapshot(`
     "
     @layer properties {
@@ -19275,6 +19372,17 @@ test('mask-linear', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)));
       --tw-mask-linear-position: calc(1deg * -45);
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-linear-0 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops, var(--tw-mask-linear-position)));
+      --tw-mask-linear-position: 0deg;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -19446,7 +19554,7 @@ test('mask-linear-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear-stops: var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position);
       --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops));
-      --tw-mask-linear-from-position: calc(var(--spacing) * 0);
+      --tw-mask-linear-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -19686,7 +19794,7 @@ test('mask-linear-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-linear-stops: var(--tw-mask-linear-position), var(--tw-mask-linear-from-color) var(--tw-mask-linear-from-position), var(--tw-mask-linear-to-color) var(--tw-mask-linear-to-position);
       --tw-mask-linear: linear-gradient(var(--tw-mask-linear-stops));
-      --tw-mask-linear-to-position: calc(var(--spacing) * 0);
+      --tw-mask-linear-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -20175,7 +20283,7 @@ test('mask-radial-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-radial-stops: var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position);
       --tw-mask-radial: radial-gradient(var(--tw-mask-radial-stops));
-      --tw-mask-radial-from-position: calc(var(--spacing) * 0);
+      --tw-mask-radial-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -20429,7 +20537,7 @@ test('mask-radial-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-radial-stops: var(--tw-mask-radial-shape) var(--tw-mask-radial-size) at var(--tw-mask-radial-position), var(--tw-mask-radial-from-color) var(--tw-mask-radial-from-position), var(--tw-mask-radial-to-color) var(--tw-mask-radial-to-position);
       --tw-mask-radial: radial-gradient(var(--tw-mask-radial-stops));
-      --tw-mask-radial-to-position: calc(var(--spacing) * 0);
+      --tw-mask-radial-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -20606,7 +20714,7 @@ test('mask-radial-to', async () => {
 })
 
 test('mask-conic', async () => {
-  expect(await run(['mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45']))
+  expect(await run(['mask-conic-0', 'mask-conic-45', 'mask-conic-[3rad]', '-mask-conic-45']))
     .toMatchInlineSnapshot(`
     "
     @layer properties {
@@ -20630,6 +20738,17 @@ test('mask-conic', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
       --tw-mask-conic-position: calc(1deg * -45);
+      -webkit-mask-composite: source-in;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .mask-conic-0 {
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      -webkit-mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
+      --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops, var(--tw-mask-conic-position)));
+      --tw-mask-conic-position: 0deg;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -20801,7 +20920,7 @@ test('mask-conic-from', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-conic-stops: from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position);
       --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops));
-      --tw-mask-conic-from-position: calc(var(--spacing) * 0);
+      --tw-mask-conic-from-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -21041,7 +21160,7 @@ test('mask-conic-to', async () => {
       mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic);
       --tw-mask-conic-stops: from var(--tw-mask-conic-position), var(--tw-mask-conic-from-color) var(--tw-mask-conic-from-position), var(--tw-mask-conic-to-color) var(--tw-mask-conic-to-position);
       --tw-mask-conic: conic-gradient(var(--tw-mask-conic-stops));
-      --tw-mask-conic-to-position: calc(var(--spacing) * 0);
+      --tw-mask-conic-to-position: 0;
       -webkit-mask-composite: source-in;
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
@@ -26308,12 +26427,14 @@ test('text', async () => {
 
         // font-size / line-height / letter-spacing / font-weight
         'text-sm',
+        'text-sm/0',
         'text-sm/6',
         'text-sm/none',
         'text-[10px]/none',
         'text-sm/snug',
         'text-sm/[4px]',
         'text-[12px]',
+        'text-[12px]/0',
         'text-[12px]/6',
         'text-[50%]',
         'text-[50%]/6',
@@ -26357,6 +26478,11 @@ test('text', async () => {
       line-height: 1;
     }
 
+    .text-\\[12px\\]\\/0 {
+      font-size: 12px;
+      line-height: 0;
+    }
+
     .text-\\[12px\\]\\/6 {
       font-size: 12px;
       line-height: calc(var(--spacing) * 6);
@@ -26385,6 +26511,11 @@ test('text', async () => {
     .text-sm {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+
+    .text-sm\\/0 {
+      font-size: var(--text-sm);
+      line-height: 0;
     }
 
     .text-sm\\/6 {

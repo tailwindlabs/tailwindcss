@@ -550,6 +550,7 @@ export function createUtilities(theme: Theme) {
         if (!multiplier) return null
         if (!isValidSpacingMultiplier(value)) return null
 
+        if (Number(value) === 0) return '0'
         return `calc(${multiplier} * ${value})`
       },
       handleNegativeBareValue: ({ value }) => {
@@ -557,6 +558,7 @@ export function createUtilities(theme: Theme) {
         if (!multiplier) return null
         if (!isValidSpacingMultiplier(value)) return null
 
+        if (Number(value) === 0) return '0'
         return `calc(${multiplier} * -${value})`
       },
       handle,
@@ -2119,31 +2121,51 @@ export function createUtilities(theme: Theme) {
   spacingUtility(
     'space-x',
     ['--space', '--spacing'],
-    (value) => [
-      atRoot([property('--tw-space-x-reverse', '0')]),
+    (value) =>
+      // Skip the variable entirely if we would multiply it by zero.
+      value === '0'
+        ? [
+            styleRule(':where(& > :not(:last-child))', [
+              decl('--tw-sort', 'row-gap'),
+              decl('margin-inline-start', '0'),
+              decl('margin-inline-end', '0'),
+            ]),
+          ]
+        : [
+            atRoot([property('--tw-space-x-reverse', '0')]),
 
-      styleRule(':where(& > :not(:last-child))', [
-        decl('--tw-sort', 'row-gap'),
-        decl('--tw-space-x-reverse', '0'),
-        decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
-        decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
-      ]),
-    ],
+            styleRule(':where(& > :not(:last-child))', [
+              decl('--tw-sort', 'row-gap'),
+              decl('--tw-space-x-reverse', '0'),
+              decl('margin-inline-start', `calc(${value} * var(--tw-space-x-reverse))`),
+              decl('margin-inline-end', `calc(${value} * calc(1 - var(--tw-space-x-reverse)))`),
+            ]),
+          ],
     { supportsNegative: true },
   )
 
   spacingUtility(
     'space-y',
     ['--space', '--spacing'],
-    (value) => [
-      atRoot([property('--tw-space-y-reverse', '0')]),
-      styleRule(':where(& > :not(:last-child))', [
-        decl('--tw-sort', 'column-gap'),
-        decl('--tw-space-y-reverse', '0'),
-        decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
-        decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
-      ]),
-    ],
+    (value) =>
+      // Skip the variable entirely if we would multiply it by zero.
+      value === '0'
+        ? [
+            styleRule(':where(& > :not(:last-child))', [
+              decl('--tw-sort', 'column-gap'),
+              decl('margin-block-start', '0'),
+              decl('margin-block-end', '0'),
+            ]),
+          ]
+        : [
+            atRoot([property('--tw-space-y-reverse', '0')]),
+            styleRule(':where(& > :not(:last-child))', [
+              decl('--tw-sort', 'column-gap'),
+              decl('--tw-space-y-reverse', '0'),
+              decl('margin-block-start', `calc(${value} * var(--tw-space-y-reverse))`),
+              decl('margin-block-end', `calc(${value} * calc(1 - var(--tw-space-y-reverse)))`),
+            ]),
+          ],
     { supportsNegative: true },
   )
 
@@ -2549,18 +2571,33 @@ export function createUtilities(theme: Theme) {
         if (!isPositiveInteger(value)) return null
         return `${value}px`
       },
-      handle: (value) => [
-        atRoot([property('--tw-divide-x-reverse', '0')]),
+      handle: (value) =>
+        // Skip the variable entirely if we would multiply it by zero.
+        value === '0' || value === '0px'
+          ? [
+              styleRule(':where(& > :not(:last-child))', [
+                decl('--tw-sort', 'divide-x-width'),
+                borderProperties(),
+                decl('border-inline-style', 'var(--tw-border-style)'),
+                decl('border-inline-start-width', '0'),
+                decl('border-inline-end-width', '0'),
+              ]),
+            ]
+          : [
+              atRoot([property('--tw-divide-x-reverse', '0')]),
 
-        styleRule(':where(& > :not(:last-child))', [
-          decl('--tw-sort', 'divide-x-width'),
-          borderProperties(),
-          decl('--tw-divide-x-reverse', '0'),
-          decl('border-inline-style', 'var(--tw-border-style)'),
-          decl('border-inline-start-width', `calc(${value} * var(--tw-divide-x-reverse))`),
-          decl('border-inline-end-width', `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`),
-        ]),
-      ],
+              styleRule(':where(& > :not(:last-child))', [
+                decl('--tw-sort', 'divide-x-width'),
+                borderProperties(),
+                decl('--tw-divide-x-reverse', '0'),
+                decl('border-inline-style', 'var(--tw-border-style)'),
+                decl('border-inline-start-width', `calc(${value} * var(--tw-divide-x-reverse))`),
+                decl(
+                  'border-inline-end-width',
+                  `calc(${value} * calc(1 - var(--tw-divide-x-reverse)))`,
+                ),
+              ]),
+            ],
     })
 
     functionalUtility('divide-y', {
@@ -2570,19 +2607,36 @@ export function createUtilities(theme: Theme) {
         if (!isPositiveInteger(value)) return null
         return `${value}px`
       },
-      handle: (value) => [
-        atRoot([property('--tw-divide-y-reverse', '0')]),
+      handle: (value) =>
+        // A zero border width resolves to zero regardless of the reverse
+        // direction, so we can skip the reverse variable entirely.
+        value === '0' || value === '0px'
+          ? [
+              styleRule(':where(& > :not(:last-child))', [
+                decl('--tw-sort', 'divide-y-width'),
+                borderProperties(),
+                decl('border-bottom-style', 'var(--tw-border-style)'),
+                decl('border-top-style', 'var(--tw-border-style)'),
+                decl('border-top-width', '0'),
+                decl('border-bottom-width', '0'),
+              ]),
+            ]
+          : [
+              atRoot([property('--tw-divide-y-reverse', '0')]),
 
-        styleRule(':where(& > :not(:last-child))', [
-          decl('--tw-sort', 'divide-y-width'),
-          borderProperties(),
-          decl('--tw-divide-y-reverse', '0'),
-          decl('border-bottom-style', 'var(--tw-border-style)'),
-          decl('border-top-style', 'var(--tw-border-style)'),
-          decl('border-top-width', `calc(${value} * var(--tw-divide-y-reverse))`),
-          decl('border-bottom-width', `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`),
-        ]),
-      ],
+              styleRule(':where(& > :not(:last-child))', [
+                decl('--tw-sort', 'divide-y-width'),
+                borderProperties(),
+                decl('--tw-divide-y-reverse', '0'),
+                decl('border-bottom-style', 'var(--tw-border-style)'),
+                decl('border-top-style', 'var(--tw-border-style)'),
+                decl('border-top-width', `calc(${value} * var(--tw-divide-y-reverse))`),
+                decl(
+                  'border-bottom-width',
+                  `calc(${value} * calc(1 - var(--tw-divide-y-reverse)))`,
+                ),
+              ]),
+            ],
     })
 
     suggest('divide-x', () => [
@@ -3232,21 +3286,23 @@ export function createUtilities(theme: Theme) {
       {
         if (candidate.modifier) return
 
-        let type = inferDataType(candidate.value.value, ['number', 'percentage'])
+        let value = candidate.value.value
+        let type = inferDataType(value, ['number', 'percentage'])
         if (!type) return
 
         switch (type) {
           case 'number': {
             let multiplier = theme.resolve(null, ['--spacing'])
             if (!multiplier) return
-            if (!isValidSpacingMultiplier(candidate.value.value)) return
+            if (!isValidSpacingMultiplier(value)) return
 
-            return desc.position(`calc(${multiplier} * ${candidate.value.value})`)
+            if (Number(value) === 0) return desc.position('0')
+            return desc.position(`calc(${multiplier} * ${value})`)
           }
 
           case 'percentage': {
-            if (!isPositiveInteger(candidate.value.value.slice(0, -1))) return
-            return desc.position(candidate.value.value)
+            if (!isPositiveInteger(value.slice(0, -1))) return
+            return desc.position(value)
           }
 
           default: {
@@ -3416,13 +3472,15 @@ export function createUtilities(theme: Theme) {
     defaultValue: null,
     supportsNegative: true,
     supportsFractions: false,
-    handleBareValue(value) {
-      if (!isPositiveInteger(value.value)) return null
-      return `calc(1deg * ${value.value})`
+    handleBareValue({ value }) {
+      if (!isPositiveInteger(value)) return null
+      if (Number(value) === 0) return '0deg'
+      return `calc(1deg * ${value})`
     },
-    handleNegativeBareValue(value) {
-      if (!isPositiveInteger(value.value)) return null
-      return `calc(1deg * -${value.value})`
+    handleNegativeBareValue({ value }) {
+      if (!isPositiveInteger(value)) return null
+      if (Number(value) === 0) return '0deg'
+      return `calc(1deg * -${value})`
     },
     handle: (value) => [
       maskPropertiesGradient(),
@@ -3634,13 +3692,15 @@ export function createUtilities(theme: Theme) {
     defaultValue: null,
     supportsNegative: true,
     supportsFractions: false,
-    handleBareValue(value) {
-      if (!isPositiveInteger(value.value)) return null
-      return `calc(1deg * ${value.value})`
+    handleBareValue({ value }) {
+      if (!isPositiveInteger(value)) return null
+      if (Number(value) === 0) return '0deg'
+      return `calc(1deg * ${value})`
     },
-    handleNegativeBareValue(value) {
-      if (!isPositiveInteger(value.value)) return null
-      return `calc(1deg * -${value.value})`
+    handleNegativeBareValue({ value }) {
+      if (!isPositiveInteger(value)) return null
+      if (Number(value) === 0) return '0deg'
+      return `calc(1deg * -${value})`
     },
     handle: (value) => [
       maskPropertiesGradient(),
@@ -5227,7 +5287,10 @@ export function createUtilities(theme: Theme) {
             if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
               let multiplier = theme.resolve(null, ['--spacing'])
               if (!multiplier) return null
-              modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+              modifier =
+                Number(candidate.modifier.value) === 0
+                  ? '0'
+                  : `calc(${multiplier} * ${candidate.modifier.value})`
             }
 
             // Shorthand for `leading-none`
@@ -5280,7 +5343,10 @@ export function createUtilities(theme: Theme) {
           if (!modifier && isValidSpacingMultiplier(candidate.modifier.value)) {
             let multiplier = theme.resolve(null, ['--spacing'])
             if (!multiplier) return null
-            modifier = `calc(${multiplier} * ${candidate.modifier.value})`
+            modifier =
+              Number(candidate.modifier.value) === 0
+                ? '0'
+                : `calc(${multiplier} * ${candidate.modifier.value})`
           }
 
           // Shorthand for `leading-none`

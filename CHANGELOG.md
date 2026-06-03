@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `--silent` option to suppress output in `@tailwindcss/cli` ([#20100](https://github.com/tailwindlabs/tailwindcss/pull/20100))
 
+### Changed
+
+- Skip redundant `calc(…)` for utilities whose computed value is zero (e.g. `m-0`, `px-0`, `left-0`, `space-x-0`, `divide-x-0`, `text-sm/0`, `mask-linear-0`)
+
 ### Fixed
 
 - Remove deprecation warnings by using `Module#registerHooks` instead of `Module#register` on Node 26+ ([#20028](https://github.com/tailwindlabs/tailwindcss/pull/20028))
