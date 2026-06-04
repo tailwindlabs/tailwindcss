@@ -1480,35 +1480,37 @@ describe('addBase', () => {
   })
 
   test('@variant is replaced inside rules using addBase', async () => {
-    let input = css`
-      @plugin "my-plugin";
-      @theme {
-        --breakpoint-supertiny: 128px;
-      }
-    `
-
-    let compiler = await compile(input, {
-      loadModule: async () => ({
-        path: '',
-        base: '/root',
-        module: plugin(function ({ addBase }) {
-          addBase({
-            ':root': {
-              '@variant supertiny': {
-                '--PascalCase': '1',
-                '--camelCase': '1',
-                '--UPPERCASE': '1',
-              },
-            },
-          })
-        }),
-      }),
-    })
-
-    expect(compiler.build([])).toMatchInlineSnapshot(`
-      "@layer base {
-        :root {
-          @media (width >= 128px) {
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @theme {
+            --breakpoint-supertiny: 128px;
+          }
+        `,
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: plugin(function ({ addBase }) {
+              addBase({
+                ':root': {
+                  '@variant supertiny': {
+                    '--PascalCase': '1',
+                    '--camelCase': '1',
+                    '--UPPERCASE': '1',
+                  },
+                },
+              })
+            }),
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer base {
+        @media (min-width: 128px) {
+          :root {
             --PascalCase: 1;
             --camelCase: 1;
             --UPPERCASE: 1;
