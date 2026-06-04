@@ -1206,6 +1206,11 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('any-pointer-coarse', ['@media (any-pointer: coarse)'])
   staticVariant('any-pointer-fine', ['@media (any-pointer: fine)'])
 
+  staticVariant('standalone', ['@media (display-mode: standalone)'])
+  staticVariant('minimal-ui', ['@media (display-mode: minimal-ui)'])
+  staticVariant('browser', ['@media (display-mode: browser)'])
+  staticVariant('fullscreen', ['@media (display-mode: fullscreen)'])
+
   staticVariant('noscript', ['@media (scripting: none)'])
 
   return variants

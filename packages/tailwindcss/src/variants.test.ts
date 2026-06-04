@@ -2249,6 +2249,54 @@ test('any-pointer-fine', async () => {
   `)
 })
 
+test('standalone', async () => {
+  expect(await run(['standalone:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (any-pointer: fine) {
+      .standalone\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('minimal-ui', async () => {
+  expect(await run(['minimal-ui:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (any-pointer: fine) {
+      .minimal-ui\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('browser', async () => {
+  expect(await run(['browser:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (any-pointer: fine) {
+      .browser\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('fullscreen', async () => {
+  expect(await run(['fullscreen:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (any-pointer: fine) {
+      .fullscreen\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('scripting-none', async () => {
   expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
     "
