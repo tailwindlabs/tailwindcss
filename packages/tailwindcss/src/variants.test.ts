@@ -2252,7 +2252,7 @@ test('any-pointer-fine', async () => {
 test('standalone', async () => {
   expect(await run(['standalone:flex'])).toMatchInlineSnapshot(`
     "
-    @media (any-pointer: fine) {
+    @media (display-mode: standalone) {
       .standalone\\:flex {
         display: flex;
       }
@@ -2264,7 +2264,7 @@ test('standalone', async () => {
 test('minimal-ui', async () => {
   expect(await run(['minimal-ui:flex'])).toMatchInlineSnapshot(`
     "
-    @media (any-pointer: fine) {
+    @media (display-mode: minimal-ui) {
       .minimal-ui\\:flex {
         display: flex;
       }
@@ -2276,7 +2276,7 @@ test('minimal-ui', async () => {
 test('browser', async () => {
   expect(await run(['browser:flex'])).toMatchInlineSnapshot(`
     "
-    @media (any-pointer: fine) {
+    @media (display-mode: browser) {
       .browser\\:flex {
         display: flex;
       }
@@ -2288,7 +2288,7 @@ test('browser', async () => {
 test('fullscreen', async () => {
   expect(await run(['fullscreen:flex'])).toMatchInlineSnapshot(`
     "
-    @media (any-pointer: fine) {
+    @media (display-mode: fullscreen) {
       .fullscreen\\:flex {
         display: flex;
       }
