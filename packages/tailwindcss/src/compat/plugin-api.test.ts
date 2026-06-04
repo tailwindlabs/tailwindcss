@@ -1500,6 +1500,9 @@ describe('addBase', () => {
                     '--camelCase': '1',
                     '--UPPERCASE': '1',
                   },
+                  '@variant data-enabled:focus, disabled': {
+                    '--x': '1',
+                  },
                 },
               })
             }),
@@ -1515,6 +1518,10 @@ describe('addBase', () => {
             --camelCase: 1;
             --UPPERCASE: 1;
           }
+        }
+
+        :root[data-enabled]:focus, :root:disabled {
+          --x: 1;
         }
       }
       "
