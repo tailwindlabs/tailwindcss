@@ -1478,6 +1478,55 @@ describe('addBase', () => {
       "
     `)
   })
+
+  test('@variant is replaced inside rules using addBase', async () => {
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+          @theme {
+            --breakpoint-supertiny: 128px;
+          }
+        `,
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: plugin(function ({ addBase }) {
+              addBase({
+                ':root': {
+                  '@variant supertiny': {
+                    '--PascalCase': '1',
+                    '--camelCase': '1',
+                    '--UPPERCASE': '1',
+                  },
+                  '@variant data-enabled:focus, disabled': {
+                    '--x': '1',
+                  },
+                },
+              })
+            }),
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer base {
+        @media (min-width: 128px) {
+          :root {
+            --PascalCase: 1;
+            --camelCase: 1;
+            --UPPERCASE: 1;
+          }
+        }
+
+        :root[data-enabled]:focus, :root:disabled {
+          --x: 1;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('addVariant', () => {
