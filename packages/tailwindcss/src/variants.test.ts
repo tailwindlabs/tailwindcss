@@ -2297,6 +2297,30 @@ test('fullscreen', async () => {
   `)
 })
 
+test('picture-in-picture', async () => {
+  expect(await run(['picture-in-picture:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: picture-in-picture) {
+      .picture-in-picture\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('window-controls-overlay', async () => {
+  expect(await run(['window-controls-overlay:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: window-controls-overlay) {
+      .window-controls-overlay\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('scripting-none', async () => {
   expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
     "
