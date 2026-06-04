@@ -138,8 +138,8 @@ importers:
         version: link:npm/win32-x64-msvc
     devDependencies:
       '@napi-rs/cli':
-        specifier: 3.6.2
-        version: 3.6.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@types/node@25.9.1)(node-addon-api@8.7.0)
+        specifier: 3.7.0
+        version: 3.7.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@types/node@25.9.1)(node-addon-api@8.7.0)
       '@napi-rs/wasm-runtime':
         specifier: ^1.1.4
         version: 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
@@ -1059,8 +1059,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@napi-rs/cli@3.6.2':
-    resolution: {integrity: sha512-jy5rABUh9tbE/vPRzw9kGzGuqZiVslyDQUV8LkvjzqVX/oJMN7g0U1uhtr9L3W1H+iRM/urXHXUf+CE4n8FvLA==}
+  '@napi-rs/cli@3.7.0':
+    resolution: {integrity: sha512-3d3+rmxlOIV/G1zPWeX4PCxuYnhcCQM2BvY9rtimC8RO0dFR9gtYP+Grov+WoduZtfWRj5N1XvytWeRxxCk5zw==}
     engines: {node: '>= 16'}
     hasBin: true
     peerDependencies:
@@ -3791,7 +3791,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@napi-rs/cli@3.6.2(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@types/node@25.9.1)(node-addon-api@8.7.0)':
+  '@napi-rs/cli@3.7.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@types/node@25.9.1)(node-addon-api@8.7.0)':
     dependencies:
       '@inquirer/prompts': 8.4.3(@types/node@25.9.1)
       '@napi-rs/cross-toolchain': 1.0.3(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
