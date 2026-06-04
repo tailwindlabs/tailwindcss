@@ -10,6 +10,7 @@ pub mod ruby;
 pub mod rust;
 pub mod slim;
 pub mod svelte;
+pub mod twig;
 pub mod vue;
 
 pub use clojure::*;
@@ -24,4 +25,5 @@ pub use ruby::*;
 pub use rust::*;
 pub use slim::*;
 pub use svelte::*;
+pub use twig::*;
 pub use vue::*;
