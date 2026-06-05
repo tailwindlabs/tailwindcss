@@ -294,11 +294,7 @@ export function test(
           }
         },
         fs: {
-          async write(
-            filename: string,
-            content: string | Uint8Array,
-            encoding: BufferEncoding = 'utf8',
-          ): Promise<void> {
+          async write(filename, content, encoding = 'utf8') {
             let full = path.join(root, filename)
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
@@ -319,7 +315,7 @@ export function test(
             await fs.writeFile(full, content, encoding)
           },
 
-          async create(filenames: string[]): Promise<void> {
+          async create(filenames) {
             for (let filename of filenames) {
               let full = path.join(root, filename)
 
@@ -329,11 +325,11 @@ export function test(
             }
           },
 
-          async delete(filename: string): Promise<void> {
+          async delete(filename) {
             await fs.unlink(path.join(root, filename))
           },
 
-          async read(filePath: string) {
+          async read(filePath) {
             let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
 
             // Ensure that files read on Windows have \r\n line endings removed
@@ -343,7 +339,7 @@ export function test(
 
             return content
           },
-          async glob(pattern: string) {
+          async glob(pattern) {
             let files = await fastGlob(pattern, { cwd: root })
             return Promise.all(
               files.map(async (file) => {
@@ -356,7 +352,7 @@ export function test(
               }),
             )
           },
-          async dumpFiles(pattern: string) {
+          async dumpFiles(pattern) {
             let files = await context.fs.glob(pattern)
             return `\n${files
               .slice()
