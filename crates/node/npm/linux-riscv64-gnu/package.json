@@ -1,0 +1,30 @@
+{
+  "name": "@tailwindcss/oxide-linux-riscv64-gnu",
+  "version": "4.3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/linux-riscv64-gnu"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "riscv64"
+  ],
+  "main": "tailwindcss-oxide.linux-riscv64-gnu.node",
+  "files": [
+    "tailwindcss-oxide.linux-riscv64-gnu.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 20"
+  },
+  "libc": [
+    "glibc"
+  ]
+}

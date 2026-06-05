@@ -64,6 +64,9 @@ jobs:
             strip: aarch64-linux-gnu-strip
             build-flags: --use-napi-cross
           - os: ubuntu-latest
+            target: riscv64gc-unknown-linux-gnu
+            strip: riscv64-linux-gnu-strip
+          - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             strip: arm-linux-gnueabihf-strip
             build-flags: --use-napi-cross
@@ -105,6 +108,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install binutils-aarch64-linux-gnu -y
 
+      - name: Install gcc-riscv64-linux-gnu
+        if: ${{ matrix.target == 'riscv64gc-unknown-linux-gnu' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install gcc-riscv64-linux-gnu g++-riscv64-linux-gnu -y
+
       - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
         if: ${{ contains(matrix.target, 'musl') }}
         with:
@@ -130,6 +139,9 @@ jobs:
         env:
           RUST_TARGET: ${{ matrix.target }}
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
+          CARGO_TARGET_RISCV64GC_UNKNOWN_LINUX_GNU_LINKER: riscv64-linux-gnu-gcc
+          CC_riscv64gc_unknown_linux_gnu: riscv64-linux-gnu-gcc
+          CXX_riscv64gc_unknown_linux_gnu: riscv64-linux-gnu-g++
 
       - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
         if: ${{ matrix.strip || matrix.strip-zig }}
@@ -272,6 +284,7 @@ jobs:
           cp bindings-aarch64-linux-android/* ./npm/android-arm64/
           cp bindings-armv7-linux-androideabi/* ./npm/android-arm-eabi/
           cp bindings-aarch64-unknown-linux-gnu/* ./npm/linux-arm64-gnu/
+          cp bindings-riscv64gc-unknown-linux-gnu/* ./npm/linux-riscv64-gnu/
           cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
