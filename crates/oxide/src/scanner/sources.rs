@@ -1,7 +1,6 @@
-use crate::glob::split_pattern;
 use crate::GlobEntry;
 use bexpand::Expression;
-use std::path::PathBuf;
+use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
@@ -102,72 +101,78 @@ impl PublicSourceEntry {
     /// resolved path.
     pub fn optimize(&mut self) {
         // Resolve base path immediately
-        let Ok(base) = dunce::canonicalize(&self.base) else {
+        let Ok(mut base) = dunce::canonicalize(&self.base) else {
             event!(Level::ERROR, "Failed to resolve base: {:?}", self.base);
             return;
         };
-        self.base = base.to_string_lossy().to_string();
 
-        // No dynamic part, figure out if we are dealing with a file or a directory.
-        if !self.pattern.contains('*') {
-            let combined_path = if self.pattern.starts_with("/") {
-                PathBuf::from(&self.pattern)
-            } else {
-                PathBuf::from(&self.base).join(&self.pattern)
-            };
-
-            match dunce::canonicalize(combined_path) {
-                Ok(resolved_path) if resolved_path.is_dir() => {
-                    self.base = resolved_path.to_string_lossy().to_string();
-                    self.pattern = "**/*".to_owned();
-                }
-                Ok(resolved_path) if resolved_path.is_file() => {
-                    self.base = resolved_path
-                        .parent()
-                        .unwrap()
-                        .to_string_lossy()
-                        .to_string();
-                    // Ensure leading slash, otherwise it will match against all files in all folders/
-                    self.pattern =
-                        format!("/{}", resolved_path.file_name().unwrap().to_string_lossy());
-                }
-                _ => {}
-            }
-            return;
+        let mut new_pattern = PathBuf::new();
+        enum ComponentStage {
+            Base,
+            Pattern,
         }
+        let mut stage = ComponentStage::Base;
 
-        // Contains dynamic part
-        let (static_part, dynamic_part) = split_pattern(&self.pattern);
+        let mut components = Path::new(&self.pattern).components().peekable();
+        while let Some(component) = components.next() {
+            match stage {
+                ComponentStage::Base => {
+                    match component {
+                        // Ignore the current dir, e.g. `.`
+                        Component::CurDir => {}
 
-        let base: PathBuf = self.base.clone().into();
-        let base = match static_part {
-            Some(static_part) => {
-                // TODO: If the base does not exist on disk, try removing the last slash and try
-                // again.
-                match dunce::canonicalize(base.join(static_part)) {
-                    Ok(base) => base,
-                    Err(err) => {
-                        event!(tracing::Level::ERROR, "Failed to resolve glob: {:?}", err);
-                        return;
+                        // Go up a directory, e.g. `..`
+                        Component::ParentDir => {
+                            base.pop();
+                        }
+
+                        // Once we hit a component that contains a wildcard character, then we
+                        // can't change the base anymore and we must move to the pattern part.
+                        Component::Normal(part) if part.to_string_lossy().contains("*") => {
+                            new_pattern.push(component);
+                            stage = ComponentStage::Pattern;
+                        }
+
+                        // File or folder, but not the last component
+                        Component::Normal(part) if components.peek().is_some() => {
+                            base.push(part);
+                        }
+
+                        // Last file or folder. If it's a folder, we move it to the base,
+                        // otherwise we move it to the pattern.
+                        Component::Normal(part) => {
+                            let full_path = base.join(part);
+                            if full_path.is_dir() {
+                                base.push(part);
+
+                                // Ensure we have a pattern since the last component is a
+                                // directory.
+                                new_pattern.push("**/*");
+                            } else {
+                                new_pattern.push("/");
+                                new_pattern.push(part);
+                            }
+                        }
+
+                        Component::Prefix(_) | Component::RootDir => {
+                            new_pattern.push(component);
+                            stage = ComponentStage::Pattern;
+                        }
                     }
                 }
-            }
-            None => base,
-        };
-
-        let pattern = match dynamic_part {
-            Some(dynamic_part) => dynamic_part,
-            None => {
-                if base.is_dir() {
-                    "**/*".to_owned()
-                } else {
-                    "".to_owned()
+                ComponentStage::Pattern => {
+                    new_pattern.push(component);
                 }
             }
-        };
+        }
+
+        // Ensure we have `**/*` when the base is a folder and we don't have a pattern at all
+        if new_pattern.as_os_str().is_empty() && base.is_dir() {
+            new_pattern.push("**/*");
+        }
 
         self.base = base.to_string_lossy().to_string();
-        self.pattern = pattern;
+        self.pattern = new_pattern.to_string_lossy().to_string();
     }
 }
 
