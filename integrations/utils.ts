@@ -49,6 +49,7 @@ interface TestContext {
   parseSourceMap(opts: string | SourceMapOptions): SourceMap
   fs: {
     write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
+    symlink(dst: string, src: string): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     delete(filePath: string): Promise<void>
@@ -315,6 +316,18 @@ export function test(
             await fs.writeFile(full, content, encoding)
           },
 
+          async symlink(target, src) {
+            let targetAbsolute = path.join(root, target)
+            let targetParent = path.dirname(targetAbsolute)
+            await fs.mkdir(targetParent, { recursive: true })
+
+            let srcAbsolute = path.join(root, src)
+            let srcParent = path.dirname(srcAbsolute)
+            await fs.mkdir(srcParent, { recursive: true })
+
+            await fs.symlink(targetAbsolute, srcAbsolute)
+          },
+
           async create(filenames) {
             for (let filename of filenames) {
               let full = path.join(root, filename)
@@ -412,7 +425,17 @@ export function test(
       `
 
       for (let [filename, content] of Object.entries(config.fs)) {
-        await context.fs.write(filename, content)
+        if (content.toString().startsWith('symlink:')) {
+          // The symlink path is relative to the target destination's path
+          let target = path.join(
+            filename,
+            content.toString().slice('symlink:'.length), // Relative path
+          )
+
+          await context.fs.symlink(target, filename)
+        } else {
+          await context.fs.write(filename, content)
+        }
       }
 
       let shouldInstallDependencies = config.installDependencies ?? true

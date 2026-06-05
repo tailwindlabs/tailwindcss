@@ -1938,7 +1938,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec, spawn, root, expect }) => {
+  async ({ fs, exec, root, expect }) => {
     await exec('pnpm tailwindcss --input ./index.css --output dist/out.css', { cwd: root })
 
     let content = await fs.dumpFiles('./dist/*.css')
@@ -1946,6 +1946,201 @@ test(
     expect(content).not.toContain(candidate`content-['project-a/src/index.html']`)
     expect(content).toContain(candidate`content-['project-b/src/index.html']`)
     expect(content).toContain(candidate`content-['project-c/src/index.html']`)
+  },
+)
+
+test(
+  '@source order is important (referencing sibling project)',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        @source '../../project-b';
+        @source not '../../project-b/ignored';
+        @source '../../project-b/ignored/except.html';
+      `,
+
+      'project-b/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'project-b/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'project-b/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+    },
+  },
+  async ({ fs, root, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  '@source works with symlinks (referencing sibling project)',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        /* Same as the previous test, but using symlinks instead */
+        @source '../../project-b';
+        @source not '../../project-b/ignored';
+        @source '../../project-b/ignored/except.html';
+      `,
+
+      'project-b/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'project-c/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'project-c/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+
+      // Symlink the ignored folder to another project
+      'project-b/ignored': 'symlink:../../project-c/ignored/',
+    },
+  },
+  async ({ fs, root, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  '@source works with symlinks (referencing folder in current folder)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        /* Same as the previous test, but using symlinks instead */
+        @source '../lib';
+        @source not '../lib/ignored';
+        @source '../lib/ignored/except.html';
+      `,
+
+      'lib/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'vendor/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'vendor/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+
+      // Symlink the ignored folder to another folder
+      'lib/ignored': 'symlink:../../vendor/ignored/',
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
   },
 )
 
