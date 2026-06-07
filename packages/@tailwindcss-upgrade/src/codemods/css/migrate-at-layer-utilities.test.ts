@@ -194,6 +194,56 @@ it('should leave non-class utilities alone', async () => {
   `)
 })
 
+it('should not convert empty classes into `@utility` since that would make them invalid', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        .good {
+          color: red;
+        }
+
+        .bad-empty {
+        }
+
+        /* Comment above */
+        .bad-with-comment-above {
+        }
+
+        .bad-with-comment-inside {
+          /* Comment inside */
+        }
+
+        .bad-with-comment-below {
+        }
+        /* Comment below */
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "
+    @utility good {
+      color: red;
+    }
+
+    @layer utilities {
+      .bad-empty {
+      }
+
+      /* Comment above */
+      .bad-with-comment-above {
+      }
+
+      .bad-with-comment-inside {
+        /* Comment inside */
+      }
+
+      .bad-with-comment-below {
+      }
+      /* Comment below */
+    }
+    "
+  `)
+})
+
 it('should migrate simple `@layer utilities` with nesting to `@utility`', async () => {
   expect(
     await migrate(css`
