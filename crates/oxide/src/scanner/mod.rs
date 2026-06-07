@@ -657,7 +657,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
             }
             SourceEntry::Pattern { base, pattern } => {
-                let mut pattern = pattern.to_string();
+                let pattern = pattern.to_owned();
 
                 if first_root.is_none() {
                     first_root = Some(base);
@@ -666,11 +666,6 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 if !pattern.contains("**") {
-                    // Ensure that the pattern is pinned to the base path.
-                    if !pattern.starts_with("/") {
-                        pattern = format!("/{pattern}");
-                    }
-
                     // Specific patterns should take precedence even over git-ignored files:
                     emit(base, format!("!{}", pattern));
                 } else {
@@ -683,12 +678,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
             }
             SourceEntry::Ignored { base, pattern } => {
-                let mut pattern = pattern.to_string();
-                // Ensure that the pattern is pinned to the base path.
-                if !pattern.starts_with("/") {
-                    pattern = format!("/{pattern}");
-                }
-                emit(base, pattern);
+                emit(base, pattern.to_owned());
             }
             SourceEntry::External { base } => {
                 if first_root.is_none() {

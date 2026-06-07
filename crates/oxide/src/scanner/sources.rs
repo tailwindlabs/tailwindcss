@@ -144,12 +144,7 @@ impl PublicSourceEntry {
                             let full_path = base.join(part);
                             if full_path.is_dir() {
                                 base.push(part);
-
-                                // Ensure we have a pattern since the last component is a
-                                // directory.
-                                new_pattern.push("**/*");
                             } else {
-                                new_pattern.push("/");
                                 new_pattern.push(part);
                             }
                         }
@@ -166,13 +161,17 @@ impl PublicSourceEntry {
             }
         }
 
-        // Ensure we have `**/*` when the base is a folder and we don't have a pattern at all
-        if new_pattern.as_os_str().is_empty() && base.is_dir() {
-            new_pattern.push("**/*");
-        }
-
         self.base = base.to_string_lossy().to_string();
         self.pattern = new_pattern.to_string_lossy().to_string();
+
+        // Ensure we have `**/*` when the base is a folder and we don't have a pattern at all
+        if self.pattern == "" {
+            self.pattern = "/**/*".to_owned();
+        }
+        // Ensure that the pattern is pinned to the base path.
+        else if !self.pattern.starts_with("/") {
+            self.pattern = format!("/{}", self.pattern);
+        }
     }
 }
 
