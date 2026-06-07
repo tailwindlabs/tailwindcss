@@ -162,7 +162,7 @@ impl PublicSourceEntry {
         }
 
         self.base = base.to_string_lossy().to_string();
-        self.pattern = new_pattern.to_string_lossy().to_string();
+        self.pattern = path_to_posix_string(&new_pattern);
 
         // Ensure we have `**/*` when the base is a folder and we don't have a pattern at all
         if self.pattern == "" {
@@ -172,6 +172,41 @@ impl PublicSourceEntry {
         else if !self.pattern.starts_with("/") {
             self.pattern = format!("/{}", self.pattern);
         }
+    }
+}
+
+fn path_to_posix_string(path: &Path) -> String {
+    let mut parts = Vec::new();
+    let mut is_rooted = false;
+
+    for component in path.components() {
+        match component {
+            Component::Prefix(prefix) => {
+                parts.push(prefix.as_os_str().to_string_lossy().to_string());
+            }
+            Component::RootDir => {
+                is_rooted = true;
+                if parts.is_empty() {
+                    parts.push(String::new());
+                }
+            }
+            Component::CurDir => {
+                parts.push(".".to_string());
+            }
+            Component::ParentDir => {
+                parts.push("..".to_string());
+            }
+            Component::Normal(part) => {
+                parts.push(part.to_string_lossy().to_string());
+            }
+        }
+    }
+
+    let result = parts.join("/");
+    if result.is_empty() && is_rooted {
+        "/".to_string()
+    } else {
+        result
     }
 }
 
