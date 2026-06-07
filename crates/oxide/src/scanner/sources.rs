@@ -149,9 +149,16 @@ impl PublicSourceEntry {
                             }
                         }
 
-                        Component::Prefix(_) | Component::RootDir => {
-                            new_pattern.push(component);
-                            stage = ComponentStage::Pattern;
+                        // When we're dealing with an absolute path, then we have to bypass the
+                        // `base` entirely.
+                        Component::Prefix(_) => {
+                            base.clear();
+                            base.push(component);
+                        }
+                        Component::RootDir => {
+                            #[cfg(not(windows))]
+                            base.clear();
+                            base.push(component);
                         }
                     }
                 }
