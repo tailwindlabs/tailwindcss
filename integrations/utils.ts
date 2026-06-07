@@ -49,6 +49,7 @@ interface TestContext {
   parseSourceMap(opts: string | SourceMapOptions): SourceMap
   fs: {
     write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
+    symlink(dst: string, src: string): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
     delete(filePath: string): Promise<void>
@@ -294,11 +295,7 @@ export function test(
           }
         },
         fs: {
-          async write(
-            filename: string,
-            content: string | Uint8Array,
-            encoding: BufferEncoding = 'utf8',
-          ): Promise<void> {
+          async write(filename, content, encoding = 'utf8') {
             let full = path.join(root, filename)
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
@@ -319,7 +316,19 @@ export function test(
             await fs.writeFile(full, content, encoding)
           },
 
-          async create(filenames: string[]): Promise<void> {
+          async symlink(target, src) {
+            let targetAbsolute = path.join(root, target)
+            let targetParent = path.dirname(targetAbsolute)
+            await fs.mkdir(targetParent, { recursive: true })
+
+            let srcAbsolute = path.join(root, src)
+            let srcParent = path.dirname(srcAbsolute)
+            await fs.mkdir(srcParent, { recursive: true })
+
+            await fs.symlink(targetAbsolute, srcAbsolute)
+          },
+
+          async create(filenames) {
             for (let filename of filenames) {
               let full = path.join(root, filename)
 
@@ -329,11 +338,11 @@ export function test(
             }
           },
 
-          async delete(filename: string): Promise<void> {
+          async delete(filename) {
             await fs.unlink(path.join(root, filename))
           },
 
-          async read(filePath: string) {
+          async read(filePath) {
             let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
 
             // Ensure that files read on Windows have \r\n line endings removed
@@ -343,7 +352,7 @@ export function test(
 
             return content
           },
-          async glob(pattern: string) {
+          async glob(pattern) {
             let files = await fastGlob(pattern, { cwd: root })
             return Promise.all(
               files.map(async (file) => {
@@ -356,7 +365,7 @@ export function test(
               }),
             )
           },
-          async dumpFiles(pattern: string) {
+          async dumpFiles(pattern) {
             let files = await context.fs.glob(pattern)
             return `\n${files
               .slice()
@@ -416,7 +425,17 @@ export function test(
       `
 
       for (let [filename, content] of Object.entries(config.fs)) {
-        await context.fs.write(filename, content)
+        if (content.toString().startsWith('symlink:')) {
+          // The symlink path is relative to the target destination's path
+          let target = path.join(
+            filename,
+            content.toString().slice('symlink:'.length), // Relative path
+          )
+
+          await context.fs.symlink(target, filename)
+        } else {
+          await context.fs.write(filename, content)
+        }
       }
 
       let shouldInstallDependencies = config.installDependencies ?? true

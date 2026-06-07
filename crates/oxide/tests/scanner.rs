@@ -20,6 +20,16 @@ mod scanner {
         result
     }
 
+    fn symlink_file<P: AsRef<Path>, Q: AsRef<Path>>(original: P, link: Q) -> std::io::Result<()> {
+        #[cfg(not(windows))]
+        let result = std::os::unix::fs::symlink(original, link);
+
+        #[cfg(windows)]
+        let result = std::os::windows::fs::symlink_file(original, link);
+
+        result
+    }
+
     fn public_source_entry_from_pattern(dir: PathBuf, pattern: &str) -> PublicSourceEntry {
         let mut parts = pattern.split_whitespace();
         let _ = parts.next().unwrap_or_default();
@@ -544,6 +554,36 @@ mod scanner {
 
         assert_eq!(candidates, vec!["content-['foo.html']"]);
         assert_eq!(normalized_sources, vec!["**/*", "foo/bar/**/*"]);
+    }
+
+    #[test]
+    fn it_should_preserve_source_order_when_referencing_a_sibling_project() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/src/index.css", ""),
+                ("project-b/keep/keep.html", "content-['GOOD-1']"),
+                ("project-b/ignored/ignored.html", "content-['BAD-1']"),
+                ("project-b/ignored/except.html", "content-['GOOD-2']"),
+            ],
+        );
+
+        let base = dir.join("project-a/src");
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(base.clone(), "@source '../../project-b'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../../project-b/ignored'"),
+            public_source_entry_from_pattern(
+                base.clone(),
+                "@source '../../project-b/ignored/except.html'",
+            ),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['GOOD-1']", "content-['GOOD-2']"]);
     }
 
     #[test]
@@ -1759,6 +1799,88 @@ mod scanner {
         let candidates = scanner.scan();
 
         assert_eq!(candidates, vec!["content-['abcd/xyz.html']"]);
+    }
+
+    #[test]
+    fn test_symlinked_sources_within_the_scanned_tree_can_be_ignored() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                ("src/keep.html", "content-['src/keep.html']"),
+                (
+                    "actual-dir/ignore.html",
+                    "content-['actual-dir/ignore.html']",
+                ),
+                ("actual-file.html", "content-['actual-file.html']"),
+            ],
+        );
+
+        let _ = symlink(dir.join("actual-dir"), dir.join("linked-dir"));
+        let _ = symlink_file(dir.join("actual-file.html"), dir.join("linked-file.html"));
+
+        let base = dir.join("src");
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(base.clone(), "@source '../**/*'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../actual-dir'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../linked-dir'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../actual-file.html'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../linked-file.html'"),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['src/keep.html']"]);
+
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(base.clone(), "@source '../**/*'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../actual-dir/**/*.html'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../linked-dir/**/*.html'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../actual-file.html'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../linked-file.html'"),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['src/keep.html']"]);
+    }
+
+    #[test]
+    fn test_symlinked_sources_outside_the_scanned_tree_can_be_ignored() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "actual-dir/ignore.html",
+                    "content-['actual-dir/ignore.html']",
+                ),
+                ("project/keep.html", "content-['project/keep.html']"),
+            ],
+        );
+
+        let _ = symlink(dir.join("actual-dir"), dir.join("project/linked-dir"));
+
+        let base = dir.join("project");
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            base.clone(),
+            "@source '**/*'",
+        )]);
+        let candidates = scanner.scan();
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['actual-dir/ignore.html']",
+                "content-['project/keep.html']",
+            ]
+        );
+
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(base.clone(), "@source '**/*'"),
+            public_source_entry_from_pattern(base.clone(), "@source not 'linked-dir'"),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['project/keep.html']"]);
     }
 
     #[test]

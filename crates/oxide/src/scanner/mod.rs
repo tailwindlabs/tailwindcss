@@ -17,7 +17,6 @@ use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
-use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
@@ -637,7 +636,16 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
 fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
-    let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
+
+    let mut ignores: Vec<(&PathBuf, Vec<String>)> = Default::default();
+    let mut emit = |base, pattern| match ignores.last_mut() {
+        Some((prev_base, patterns)) if *prev_base == base => {
+            patterns.push(pattern);
+        }
+        _ => {
+            ignores.push((base, vec![pattern]));
+        }
+    };
 
     for source in sources.iter() {
         match source {
@@ -649,7 +657,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
             }
             SourceEntry::Pattern { base, pattern } => {
-                let mut pattern = pattern.to_string();
+                let pattern = pattern.to_owned();
 
                 if first_root.is_none() {
                     first_root = Some(base);
@@ -658,35 +666,19 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 if !pattern.contains("**") {
-                    // Ensure that the pattern is pinned to the base path.
-                    if !pattern.starts_with("/") {
-                        pattern = format!("/{pattern}");
-                    }
-
                     // Specific patterns should take precedence even over git-ignored files:
-                    ignores
-                        .entry(base)
-                        .or_default()
-                        .insert(format!("!{}", pattern));
+                    emit(base, format!("!{}", pattern));
                 } else {
                     // Assumption: the pattern we receive will already be brace expanded. So
                     // `*.{html,jsx}` will result in two separate patterns: `*.html` and `*.jsx`.
                     if let Some(extension) = Path::new(&pattern).extension() {
                         // Extend auto source detection to include the extension
-                        ignores
-                            .entry(base)
-                            .or_default()
-                            .insert(format!("!*.{}", extension.to_string_lossy()));
+                        emit(base, format!("!*.{}", extension.to_string_lossy()));
                     }
                 }
             }
             SourceEntry::Ignored { base, pattern } => {
-                let mut pattern = pattern.to_string();
-                // Ensure that the pattern is pinned to the base path.
-                if !pattern.starts_with("/") {
-                    pattern = format!("/{pattern}");
-                }
-                ignores.entry(base).or_default().insert(pattern);
+                emit(base, pattern.to_owned());
             }
             SourceEntry::External { base } => {
                 if first_root.is_none() {
@@ -696,16 +688,10 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 // External sources should take precedence even over git-ignored files:
-                ignores
-                    .entry(base)
-                    .or_default()
-                    .insert(format!("!{}", "/**/*"));
+                emit(base, format!("!{}", "/**/*"));
 
                 // External sources should still disallow binary extensions:
-                ignores
-                    .entry(base)
-                    .or_default()
-                    .insert(BINARY_EXTENSIONS_GLOB.clone());
+                emit(base, BINARY_EXTENSIONS_GLOB.clone());
             }
         }
     }
