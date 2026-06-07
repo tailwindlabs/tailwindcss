@@ -210,6 +210,102 @@ fn path_to_posix_string(path: &Path) -> String {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+    use std::fs;
+    use tempfile::tempdir;
+
+    #[test]
+    fn path_to_posix_string_serializes_relative_paths() {
+        let path = PathBuf::from("src").join("**").join("*.html");
+
+        assert_eq!(path_to_posix_string(&path), "src/**/*.html");
+    }
+
+    #[test]
+    fn path_to_posix_string_serializes_rooted_paths() {
+        let path = PathBuf::from(std::path::MAIN_SEPARATOR.to_string())
+            .join("src")
+            .join("**")
+            .join("*.html");
+
+        assert_eq!(path_to_posix_string(&path), "/src/**/*.html");
+    }
+
+    #[test]
+    fn path_to_posix_string_serializes_empty_paths() {
+        assert_eq!(path_to_posix_string(&PathBuf::new()), "");
+    }
+
+    #[test]
+    fn optimize_hoists_static_directories_and_keeps_files_in_the_pattern() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src").join("examples")).unwrap();
+
+        let mut source = PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/examples/index.html".to_string(),
+            negated: false,
+        };
+
+        source.optimize();
+
+        assert_eq!(
+            source.base,
+            dunce::canonicalize(dir.path().join("src").join("examples"))
+                .unwrap()
+                .to_string_lossy()
+        );
+        assert_eq!(source.pattern, "/index.html");
+    }
+
+    #[test]
+    fn optimize_hoists_folder_patterns() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src").join("examples")).unwrap();
+
+        let mut source = PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/examples".to_string(),
+            negated: false,
+        };
+
+        source.optimize();
+
+        assert_eq!(
+            source.base,
+            dunce::canonicalize(dir.path().join("src").join("examples"))
+                .unwrap()
+                .to_string_lossy()
+        );
+        assert_eq!(source.pattern, "/**/*");
+    }
+
+    #[test]
+    fn optimize_keeps_wildcards_in_the_pattern() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+
+        let mut source = PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/**/*.html".to_string(),
+            negated: false,
+        };
+
+        source.optimize();
+
+        assert_eq!(
+            source.base,
+            dunce::canonicalize(dir.path().join("src"))
+                .unwrap()
+                .to_string_lossy()
+        );
+        assert_eq!(source.pattern, "/**/*.html");
+    }
+}
+
 /// For each public source entry:
 ///
 /// 1. Perform brace expansion
