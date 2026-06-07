@@ -557,6 +557,36 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_preserve_source_order_when_referencing_a_sibling_project() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("project-a/src/index.css", ""),
+                ("project-b/keep/keep.html", "content-['GOOD-1']"),
+                ("project-b/ignored/ignored.html", "content-['BAD-1']"),
+                ("project-b/ignored/except.html", "content-['GOOD-2']"),
+            ],
+        );
+
+        let base = dir.join("project-a/src");
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(base.clone(), "@source '../../project-b'"),
+            public_source_entry_from_pattern(base.clone(), "@source not '../../project-b/ignored'"),
+            public_source_entry_from_pattern(
+                base.clone(),
+                "@source '../../project-b/ignored/except.html'",
+            ),
+        ]);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['GOOD-1']", "content-['GOOD-2']"]);
+    }
+
+    #[test]
     fn it_should_scan_files_without_extensions() {
         // These look like folders, but they are files
         let ScanResult {
