@@ -39,7 +39,7 @@ async function migrate(
     .use(sortBuckets())
     .use(formatNodes())
     .process(stylesheet.root!, { from: expect.getState().testPath })
-    .then((result) => result.css)
+    .then((result) => `\n${result.css.trim()}\n`)
 }
 
 it('should migrate simple `@layer utilities` to `@utility`', async () => {
@@ -52,9 +52,11 @@ it('should migrate simple `@layer utilities` to `@utility`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
-    }"
+    }
+    "
   `)
 })
 
@@ -69,13 +71,15 @@ it('should split multiple selectors in separate utilities', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
     }
 
     @utility bar {
       color: red;
-    }"
+    }
+    "
   `)
 })
 
@@ -99,14 +103,16 @@ it('should merge `@utility` with the same name', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
       font-weight: bold;
     }
 
     .bar {
       color: blue;
-    }"
+    }
+    "
   `)
 })
 
@@ -149,7 +155,8 @@ it('should leave non-class utilities alone', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       /* 2. */
       /* 2.1. */
       color: red;
@@ -182,7 +189,58 @@ it('should leave non-class utilities alone', async () => {
           font-weight: bold;
         }
       }
-    }"
+    }
+    "
+  `)
+})
+
+it('should not convert empty classes into `@utility` since that would make them invalid', async () => {
+  expect(
+    await migrate(css`
+      @layer utilities {
+        .good {
+          color: red;
+        }
+
+        .bad-empty {
+        }
+
+        /* Comment above */
+        .bad-with-comment-above {
+        }
+
+        .bad-with-comment-inside {
+          /* Comment inside */
+        }
+
+        .bad-with-comment-below {
+        }
+        /* Comment below */
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    "
+    @utility good {
+      color: red;
+    }
+
+    @layer utilities {
+      .bad-empty {
+      }
+
+      /* Comment above */
+      .bad-with-comment-above {
+      }
+
+      .bad-with-comment-inside {
+        /* Comment inside */
+      }
+
+      .bad-with-comment-below {
+      }
+      /* Comment below */
+    }
+    "
   `)
 })
 
@@ -204,7 +262,8 @@ it('should migrate simple `@layer utilities` with nesting to `@utility`', async 
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
 
       &:hover {
@@ -214,7 +273,8 @@ it('should migrate simple `@layer utilities` with nesting to `@utility`', async 
       &:focus {
         color: green;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -232,13 +292,15 @@ it('should migrate multiple simple `@layer utilities` to `@utility`', async () =
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
     }
 
     @utility bar {
       color: blue;
-    }"
+    }
+    "
   `)
 })
 
@@ -260,7 +322,8 @@ it('should not migrate Rules inside of Rules to a `@utility`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       color: red;
     }
 
@@ -270,7 +333,8 @@ it('should not migrate Rules inside of Rules to a `@utility`', async () => {
       .baz {
         color: green;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -286,11 +350,13 @@ it('should invert at-rules to make them migrate-able', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       @media (min-width: 640px) {
         color: red;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -314,7 +380,8 @@ it('should migrate at-rules with multiple utilities and invert them', async () =
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       @media (min-width: 640px) {
         color: red;
       }
@@ -324,7 +391,8 @@ it('should migrate at-rules with multiple utilities and invert them', async () =
       @media (min-width: 640px) {
         color: blue;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -356,7 +424,8 @@ it('should migrate deeply nested at-rules with multiple utilities and invert the
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       @media (min-width: 640px) {
         color: red;
       }
@@ -384,7 +453,8 @@ it('should migrate deeply nested at-rules with multiple utilities and invert the
           }
         }
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -398,11 +468,13 @@ it('should migrate classes with pseudo elements', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       &::-webkit-scrollbar {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -416,11 +488,13 @@ it('should migrate classes with attribute selectors', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       &[data-checked=''] {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -434,11 +508,13 @@ it('should migrate classes with element selectors', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       & main {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -452,11 +528,13 @@ it('should migrate classes attached to an element selector', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       &main {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -470,11 +548,13 @@ it('should migrate classes with id selectors', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       &#main {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -488,7 +568,8 @@ it('should migrate classes with another attached class', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility no-scrollbar {
+    "
+    @utility no-scrollbar {
       &.main {
         display: none;
       }
@@ -498,7 +579,8 @@ it('should migrate classes with another attached class', async () => {
       &.no-scrollbar {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -512,7 +594,8 @@ it('should migrate a selector with multiple classes to multiple @utility definit
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       & .bar:hover .baz:focus {
         display: none;
       }
@@ -528,7 +611,8 @@ it('should migrate a selector with multiple classes to multiple @utility definit
       .foo .bar:hover &:focus {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -548,7 +632,8 @@ it('should merge `@utility` definitions with the same name', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility step {
+    "
+    @utility step {
       counter-increment: step;
 
       &:before {
@@ -556,7 +641,8 @@ it('should merge `@utility` definitions with the same name', async () => {
         @apply ml-[-41px];
         content: counter(step);
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -570,7 +656,8 @@ it('should not migrate nested classes inside a `:not(…)`', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       & .bar:not(.qux):has(.baz) {
         display: none;
       }
@@ -586,7 +673,8 @@ it('should not migrate nested classes inside a `:not(…)`', async () => {
       .foo .bar:not(.qux):has(&) {
         display: none;
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -620,7 +708,8 @@ it('should migrate advanced combinations', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@utility foo {
+    "
+    @utility foo {
       @media (width >= 100px) {
         @supports (display: none) {
           & .bar:not(.qux):has(.baz) {
@@ -659,7 +748,8 @@ it('should migrate advanced combinations', async () => {
           }
         }
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -677,12 +767,14 @@ describe('comments', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "/* Start of utilities: */
+      "
+      /* Start of utilities: */
       @utility foo {
         /* Utility #1 */
         /* Declarations: */
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -699,7 +791,8 @@ describe('comments', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "/* Start of utilities: */
+      "
+      /* Start of utilities: */
       @utility foo {
         /* Foo & Bar */
         & .bar {
@@ -713,7 +806,8 @@ describe('comments', () => {
           /* Declarations: */
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -733,7 +827,8 @@ describe('comments', () => {
         }
       `),
     ).toMatchInlineSnapshot(`
-      "/* Start of utilities: */
+      "
+      /* Start of utilities: */
       @utility foo {
         /* Mobile only */
         @media (width <= 640px) {
@@ -741,7 +836,8 @@ describe('comments', () => {
           /* Declarations: */
           color: red;
         }
-      }"
+      }
+      "
     `)
   })
 
@@ -780,7 +876,8 @@ describe('comments', () => {
         /* After */
       `),
     ).toMatchInlineSnapshot(`
-      "/* Tailwind Utilities: */
+      "
+      /* Tailwind Utilities: */
       @utility no-scrollbar {
         /* Chrome, Safari and Opera */
         /* Second comment */
@@ -807,7 +904,8 @@ describe('comments', () => {
       .after {
         /* Inside */
       }
-      /* After */"
+      /* After */
+      "
     `)
   })
 })
@@ -832,7 +930,8 @@ it('should not lose attribute selectors', async () => {
       }
     `),
   ).toMatchInlineSnapshot(`
-    "@layer components {
+    "
+    @layer components {
       #TableOfContents {
         .toc a {
           @apply block max-w-full truncate py-1 pl-2 hover:font-medium hover:no-underline;
@@ -845,7 +944,8 @@ it('should not lose attribute selectors', async () => {
           }
         }
       }
-    }"
+    }
+    "
   `)
 })
 
@@ -863,11 +963,13 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@utility foo {
+      "
+      @utility foo {
         /* Utility #1 */
         /* Declarations: */
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -884,11 +986,13 @@ describe('layered stylesheets', () => {
         layers: ['components'],
       }),
     ).toMatchInlineSnapshot(`
-      "@utility foo {
+      "
+      @utility foo {
         /* Utility #1 */
         /* Declarations: */
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -905,11 +1009,13 @@ describe('layered stylesheets', () => {
         layers: ['foo'],
       }),
     ).toMatchInlineSnapshot(`
-      "/* Utility #1 */
+      "
+      /* Utility #1 */
       .foo {
         /* Declarations: */
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -929,7 +1035,8 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@utility foo {
+      "
+      @utility foo {
         /* Utility #1 */
         /* Declarations: */
         color: red;
@@ -937,7 +1044,8 @@ describe('layered stylesheets', () => {
 
       #main {
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -978,7 +1086,8 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@utility foo {
+      "
+      @utility foo {
         @layer utilities {
           @layer utilities {
             /* Utility #1 */
@@ -1011,7 +1120,8 @@ describe('layered stylesheets', () => {
 
       #secondary {
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -1028,11 +1138,13 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@import 'thing';
+      "
+      @import 'thing';
 
       @utility foo {
         color: red;
-      }"
+      }
+      "
     `)
   })
 
@@ -1049,11 +1161,13 @@ describe('layered stylesheets', () => {
         layers: ['utilities'],
       }),
     ).toMatchInlineSnapshot(`
-      "@charset "utf-8";
+      "
+      @charset "utf-8";
 
       @utility foo {
         color: red;
-      }"
+      }
+      "
     `)
   })
 })
