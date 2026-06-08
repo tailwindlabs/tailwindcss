@@ -1514,6 +1514,30 @@ mod scanner {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/19844
+    #[test]
+    fn test_allow_explicit_sources_ignored_by_allow_list_gitignore() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "*\n!/app\n!/app/design\n!/app/design/**\n"),
+                (
+                    "app/design/frontend/theme/templates/component.phtml",
+                    "content-['app/design/frontend/theme/templates/component.phtml']",
+                ),
+                (
+                    "vendor/acme/theme/module/templates/component.phtml",
+                    "content-['vendor/acme/theme/module/templates/component.phtml']",
+                ),
+            ],
+            vec!["@source 'vendor/acme/theme'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['vendor/acme/theme/module/templates/component.phtml']"]
+        );
+    }
+
     #[test]
     fn test_ignore_node_modules_without_gitignore() {
         let ScanResult {

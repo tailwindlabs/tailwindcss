@@ -2083,6 +2083,76 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/19844
+test(
+  '@source scans directories ignored by allow-list .gitignore files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        *
+        !/app
+        !/app/design
+        !/app/design/**
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+        @source '../vendor/acme/theme';
+      `,
+      // 1. Ignored by the `*` in `.gitignore`
+      // 2. Included by the `!` pattern in `.gitignore`
+      // 3. Ignored by `source(none)`
+      //
+      // → Should be ignored
+      'app/design/frontend/theme/templates/component.phtml': html`
+        <div
+          class="content-['app/design/frontend/theme/templates/component.phtml']"
+        ></div>
+      `,
+      // 1. Ignored by the `*` in `.gitignore`
+      // 2. Included by the `!` pattern in `.gitignore`
+      // 3. Ignored by `source(none)`
+      // 4. Included by the `@source` directive
+      //
+      // → Should be included
+      'vendor/acme/theme/module/templates/component.phtml': html`
+        <div
+          class="content-['vendor/acme/theme/module/templates/component.phtml']"
+        ></div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    // 1. Ignored by the `*` in `.gitignore`
+    // 2. Included by the `!` pattern in `.gitignore`
+    // 3. Ignored by `source(none)`
+    //
+    // → Should be ignored
+    await fs.expectFileNotToContain('dist/out.css', [
+      candidate`content-['app/design/frontend/theme/templates/component.phtml']`,
+    ])
+
+    // 1. Ignored by the `*` in `.gitignore`
+    // 2. Included by the `!` pattern in `.gitignore`
+    // 3. Ignored by `source(none)`
+    // 4. Included by the `@source` directive
+    //
+    // → Should be included
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`content-['vendor/acme/theme/module/templates/component.phtml']`,
+    ])
+  },
+)
+
 test(
   '@source works with symlinks (referencing folder in current folder)',
   {

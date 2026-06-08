@@ -311,6 +311,80 @@ mod tests {
         );
         assert_eq!(source.pattern, "/**/*.html");
     }
+
+    /// Run the public-to-private conversion for an auto-detected source pointing at `base` and
+    /// return the resulting entry.
+    fn auto_source_entry(base: &Path) -> SourceEntry {
+        public_source_entries_to_private_source_entries(vec![PublicSourceEntry {
+            base: base.to_string_lossy().to_string(),
+            pattern: "**/*".to_string(),
+            negated: false,
+        }])
+        .into_iter()
+        .next()
+        .unwrap()
+    }
+
+    #[test]
+    fn auto_detected_folders_become_auto_sources() {
+        let dir = tempdir().unwrap();
+        let base = dir.path().join("src");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_default_become_external_sources() {
+        let dir = tempdir().unwrap();
+        let base = dir.path().join("node_modules").join("my-lib");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_gitignore_become_external_sources() {
+        let dir = tempdir().unwrap();
+        // Pretend this is a git repository so the `.gitignore` search is bounded to it.
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "dist/\n").unwrap();
+
+        let base = dir.path().join("dist");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_a_parent_gitignore_become_external_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        // A `.gitignore` higher up in the tree should still apply to nested directories.
+        fs::write(dir.path().join(".gitignore"), "generated/\n").unwrap();
+
+        let base = dir.path().join("packages").join("app").join("generated");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_not_ignored_by_gitignore_stay_auto_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "dist/\n").unwrap();
+
+        let base = dir.path().join("src");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
 }
 
 /// For each public source entry:
