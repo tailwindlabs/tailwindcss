@@ -5734,7 +5734,7 @@ export function createUtilities(theme: Theme) {
           if (candidate.modifier) return
           return [
             boxShadowProperties(),
-            decl('--tw-inset-shadow', nullShadow),
+            decl('--tw-inset-shadow', `inset ${nullShadow}`),
             decl('box-shadow', cssBoxShadowValue),
           ]
 
