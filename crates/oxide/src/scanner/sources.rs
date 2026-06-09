@@ -445,8 +445,22 @@ pub fn public_source_entries_to_private_source_entries(
 /// Convert a public source entry to a source entry
 impl From<PublicSourceEntry> for SourceEntry {
     fn from(value: PublicSourceEntry) -> Self {
+        if value.negated {
+            return SourceEntry::Ignored {
+                base: value.base.into(),
+                pattern: value.pattern,
+            };
+        }
+
         let auto = value.pattern.ends_with("**/*")
             || PathBuf::from(&value.base).join(&value.pattern).is_dir();
+
+        if !auto {
+            return SourceEntry::Pattern {
+                base: value.base.into(),
+                pattern: value.pattern,
+            };
+        }
 
         let inside_ignored_content_dir = IGNORED_CONTENT_DIRS.iter().any(|dir| {
             value.base.contains(&format!(
@@ -459,20 +473,12 @@ impl From<PublicSourceEntry> for SourceEntry {
                 .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir,))
         });
 
-        match (value.negated, auto, inside_ignored_content_dir) {
-            (false, true, false) => SourceEntry::Auto {
+        match inside_ignored_content_dir {
+            false => SourceEntry::Auto {
                 base: value.base.into(),
             },
-            (false, true, true) => SourceEntry::External {
+            true => SourceEntry::External {
                 base: value.base.into(),
-            },
-            (false, false, _) => SourceEntry::Pattern {
-                base: value.base.into(),
-                pattern: value.pattern,
-            },
-            (true, _, _) => SourceEntry::Ignored {
-                base: value.base.into(),
-                pattern: value.pattern,
             },
         }
     }
