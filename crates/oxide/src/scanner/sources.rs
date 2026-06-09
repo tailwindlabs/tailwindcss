@@ -1,5 +1,7 @@
 use crate::GlobEntry;
 use bexpand::Expression;
+use fxhash::FxHashMap;
+use ignore::gitignore::Gitignore;
 use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
@@ -435,11 +437,51 @@ pub fn public_source_entries_to_private_source_entries(
         })
         .collect::<Vec<_>>();
 
+    // Compiled `.gitignore` matchers are cached per directory so we read and parse each
+    // `.gitignore` file at most once, even though entries commonly share ancestor directories
+    // (e.g. the repository root). A cached `None` means the directory has no `.gitignore` file.
+    let mut gitignores: FxHashMap<PathBuf, Option<Gitignore>> = FxHashMap::default();
+
     // Convert from public SourceEntry to private SourceEntry
     expanded_globs
         .into_iter()
-        .map(Into::into)
-        .collect::<Vec<_>>()
+        .map(|public_source| {
+            let mut source: SourceEntry = public_source.into();
+
+            // Promote auto-sources to external sources if they were gitignored
+            if let SourceEntry::Auto { ref base } = source {
+                // Walk up from the folder, applying each `.gitignore` relative to the directory
+                // that contains it (matching git), and stop at the git repository root so
+                // `.gitignore` files outside of the repo are not considered.
+                for dir in base.ancestors() {
+                    let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+                        let path = dir.join(".gitignore");
+
+                        // `Gitignore::new` roots the matcher at the directory
+                        // containing the file, so patterns match relative to it.
+                        path.is_file().then(|| Gitignore::new(&path).0)
+                    });
+
+                    if let Some(gitignore) = gitignore {
+                        if gitignore
+                            .matched_path_or_any_parents(&base, true)
+                            .is_ignore()
+                        {
+                            source = SourceEntry::External { base: base.into() };
+                            break;
+                        }
+                    }
+
+                    // Stop at the git repository root.
+                    if dir.join(".git").exists() {
+                        break;
+                    }
+                }
+            }
+
+            source
+        })
+        .collect::<Vec<SourceEntry>>()
 }
 
 /// Convert a public source entry to a source entry
