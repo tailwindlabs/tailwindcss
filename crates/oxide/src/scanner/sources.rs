@@ -48,13 +48,14 @@ pub enum SourceEntry {
     /// ```
     Ignored { base: PathBuf, pattern: String },
 
-    /// External sources are sources outside of your git root which should not
-    /// follow gitignore rules.
+    /// External sources are directories that are ignored (by us or .gitignore rules), but should be
+    /// included bypassing the default ignore rules.
     ///
     /// Represented by:
     ///
     /// ```css
     /// @source "../node_modules/my-lib";`
+    /// @source "../node_modules/my-lib/**/*";`
     /// ```
     External { base: PathBuf },
 }
