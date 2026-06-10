@@ -442,6 +442,12 @@ pub fn public_source_entries_to_private_source_entries(
     // (e.g. the repository root). A cached `None` means the directory has no `.gitignore` file.
     let mut gitignores: FxHashMap<PathBuf, Option<Gitignore>> = FxHashMap::default();
 
+    // Boundary for the `.gitignore` walk when a source is not inside a git repository (see
+    // below).
+    let cwd = std::env::current_dir()
+        .map(|cwd| dunce::canonicalize(&cwd).unwrap_or(cwd))
+        .ok();
+
     // Convert from public SourceEntry to private SourceEntry
     expanded_globs
         .into_iter()
@@ -450,6 +456,8 @@ pub fn public_source_entries_to_private_source_entries(
 
             // Promote auto-sources to external sources if they were gitignored
             if let SourceEntry::Auto { ref base } = source {
+                let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
+
                 // Walk up from the folder, applying each `.gitignore` relative to the directory
                 // that contains it (matching git), and stop at the git repository root so
                 // `.gitignore` files outside of the repo are not considered.
@@ -474,6 +482,16 @@ pub fn public_source_entries_to_private_source_entries(
 
                     // Stop at the git repository root.
                     if dir.join(".git").exists() {
+                        break;
+                    }
+
+                    // Without a git repository there is no repository root to stop at. Stop
+                    // once the directory contains the current working directory instead, so
+                    // `.gitignore` files outside of the project (e.g. in the user's home
+                    // directory) can never promote a source to an external source. Note that
+                    // the file walker still applies those `.gitignore` files when deciding
+                    // which files to scan.
+                    if !inside_git_repo && cwd.as_ref().is_some_and(|cwd| cwd.starts_with(dir)) {
                         break;
                     }
                 }
