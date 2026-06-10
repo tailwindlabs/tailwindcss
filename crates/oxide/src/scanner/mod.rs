@@ -688,7 +688,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 // External sources should take precedence even over git-ignored files:
-                emit(base, format!("!{}", "/**/*"));
+                emit(base, "!/**/*".to_owned());
 
                 // External sources should still disallow binary extensions:
                 emit(base, BINARY_EXTENSIONS_GLOB.clone());
@@ -780,14 +780,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let pattern_sources: Vec<(PathBuf, String)> = sources
         .iter()
         .filter_map(|source| match source {
-            SourceEntry::Pattern { base, pattern } => {
-                let normalized = if pattern.starts_with("/") {
-                    pattern.to_string()
-                } else {
-                    format!("/{pattern}")
-                };
-                Some((base.clone(), normalized))
-            }
+            SourceEntry::Pattern { base, pattern } => Some((base.into(), pattern.into())),
             _ => None,
         })
         .collect();

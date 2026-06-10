@@ -1,5 +1,7 @@
 use crate::GlobEntry;
 use bexpand::Expression;
+use fxhash::FxHashMap;
+use ignore::gitignore::Gitignore;
 use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
@@ -48,13 +50,14 @@ pub enum SourceEntry {
     /// ```
     Ignored { base: PathBuf, pattern: String },
 
-    /// External sources are sources outside of your git root which should not
-    /// follow gitignore rules.
+    /// External sources are directories that are ignored (by us or .gitignore rules), but should be
+    /// included bypassing the default ignore rules.
     ///
     /// Represented by:
     ///
     /// ```css
     /// @source "../node_modules/my-lib";`
+    /// @source "../node_modules/my-lib/**/*";`
     /// ```
     External { base: PathBuf },
 }
@@ -311,6 +314,80 @@ mod tests {
         );
         assert_eq!(source.pattern, "/**/*.html");
     }
+
+    /// Run the public-to-private conversion for an auto-detected source pointing at `base` and
+    /// return the resulting entry.
+    fn auto_source_entry(base: &Path) -> SourceEntry {
+        public_source_entries_to_private_source_entries(vec![PublicSourceEntry {
+            base: base.to_string_lossy().to_string(),
+            pattern: "**/*".to_string(),
+            negated: false,
+        }])
+        .into_iter()
+        .next()
+        .unwrap()
+    }
+
+    #[test]
+    fn auto_detected_folders_become_auto_sources() {
+        let dir = tempdir().unwrap();
+        let base = dir.path().join("src");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_default_become_external_sources() {
+        let dir = tempdir().unwrap();
+        let base = dir.path().join("node_modules").join("my-lib");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_gitignore_become_external_sources() {
+        let dir = tempdir().unwrap();
+        // Pretend this is a git repository so the `.gitignore` search is bounded to it.
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "dist/\n").unwrap();
+
+        let base = dir.path().join("dist");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_ignored_by_a_parent_gitignore_become_external_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        // A `.gitignore` higher up in the tree should still apply to nested directories.
+        fs::write(dir.path().join(".gitignore"), "generated/\n").unwrap();
+
+        let base = dir.path().join("packages").join("app").join("generated");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+    }
+
+    #[test]
+    fn folders_not_ignored_by_gitignore_stay_auto_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "dist/\n").unwrap();
+
+        let base = dir.path().join("src");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
 }
 
 /// For each public source entry:
@@ -360,18 +437,90 @@ pub fn public_source_entries_to_private_source_entries(
         })
         .collect::<Vec<_>>();
 
+    // Compiled `.gitignore` matchers are cached per directory so we read and parse each
+    // `.gitignore` file at most once, even though entries commonly share ancestor directories
+    // (e.g. the repository root). A cached `None` means the directory has no `.gitignore` file.
+    let mut gitignores: FxHashMap<PathBuf, Option<Gitignore>> = FxHashMap::default();
+
+    // Boundary for the `.gitignore` walk when a source is not inside a git repository (see
+    // below).
+    let cwd = std::env::current_dir()
+        .map(|cwd| dunce::canonicalize(&cwd).unwrap_or(cwd))
+        .ok();
+
     // Convert from public SourceEntry to private SourceEntry
     expanded_globs
         .into_iter()
-        .map(Into::into)
-        .collect::<Vec<_>>()
+        .map(|public_source| {
+            let mut source: SourceEntry = public_source.into();
+
+            // Promote auto-sources to external sources if they were gitignored
+            if let SourceEntry::Auto { ref base } = source {
+                let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
+
+                // Walk up from the folder, applying each `.gitignore` relative to the directory
+                // that contains it (matching git), and stop at the git repository root so
+                // `.gitignore` files outside of the repo are not considered.
+                for dir in base.ancestors() {
+                    let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+                        let path = dir.join(".gitignore");
+
+                        // `Gitignore::new` roots the matcher at the directory
+                        // containing the file, so patterns match relative to it.
+                        path.is_file().then(|| Gitignore::new(&path).0)
+                    });
+
+                    if let Some(gitignore) = gitignore {
+                        if gitignore
+                            .matched_path_or_any_parents(&base, true)
+                            .is_ignore()
+                        {
+                            source = SourceEntry::External { base: base.into() };
+                            break;
+                        }
+                    }
+
+                    // Stop at the git repository root.
+                    if dir.join(".git").exists() {
+                        break;
+                    }
+
+                    // Without a git repository there is no repository root to stop at. Stop
+                    // once the directory contains the current working directory instead, so
+                    // `.gitignore` files outside of the project (e.g. in the user's home
+                    // directory) can never promote a source to an external source. Note that
+                    // the file walker still applies those `.gitignore` files when deciding
+                    // which files to scan.
+                    if !inside_git_repo && cwd.as_ref().is_some_and(|cwd| cwd.starts_with(dir)) {
+                        break;
+                    }
+                }
+            }
+
+            source
+        })
+        .collect::<Vec<SourceEntry>>()
 }
 
 /// Convert a public source entry to a source entry
 impl From<PublicSourceEntry> for SourceEntry {
     fn from(value: PublicSourceEntry) -> Self {
+        if value.negated {
+            return SourceEntry::Ignored {
+                base: value.base.into(),
+                pattern: value.pattern,
+            };
+        }
+
         let auto = value.pattern.ends_with("**/*")
             || PathBuf::from(&value.base).join(&value.pattern).is_dir();
+
+        if !auto {
+            return SourceEntry::Pattern {
+                base: value.base.into(),
+                pattern: value.pattern,
+            };
+        }
 
         let inside_ignored_content_dir = IGNORED_CONTENT_DIRS.iter().any(|dir| {
             value.base.contains(&format!(
@@ -384,20 +533,12 @@ impl From<PublicSourceEntry> for SourceEntry {
                 .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir,))
         });
 
-        match (value.negated, auto, inside_ignored_content_dir) {
-            (false, true, false) => SourceEntry::Auto {
+        match inside_ignored_content_dir {
+            false => SourceEntry::Auto {
                 base: value.base.into(),
             },
-            (false, true, true) => SourceEntry::External {
+            true => SourceEntry::External {
                 base: value.base.into(),
-            },
-            (false, false, _) => SourceEntry::Pattern {
-                base: value.base.into(),
-                pattern: value.pattern,
-            },
-            (true, _, _) => SourceEntry::Ignored {
-                base: value.base.into(),
-                pattern: value.pattern,
             },
         }
     }

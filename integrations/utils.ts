@@ -59,7 +59,7 @@ interface TestContext {
       filePath: string,
       contents: string | RegExp | (string | RegExp)[],
     ): Promise<void>
-    expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
+    expectFileNotToContain(filePath: string, contents: string[]): Promise<void>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -481,7 +481,7 @@ export function test(
         try {
           await context.exec('git init', { cwd: root })
           await context.exec('git add --all', { cwd: root })
-          await context.exec('git commit -m "before migration"', { cwd: root })
+          await context.exec('git commit -m "before migration" --allow-empty', { cwd: root })
         } catch (error: any) {
           console.error(error)
           console.error(error.stdout?.toString())
@@ -597,6 +597,7 @@ export async function retryAssertion<T>(
     try {
       return await fn()
     } catch (err) {
+      Error.captureStackTrace(err, retryAssertion)
       error = err
       await new Promise((resolve) => setTimeout(resolve, delay))
     }
