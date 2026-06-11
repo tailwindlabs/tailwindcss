@@ -293,7 +293,7 @@ export function constantFoldDeclarationAst(
               // E.g. 100% / 3.5 = 28.571428571428573%, which is correct but not
               //      as user friendly. Especially when going from
               //      `w-[calc(100%/3.5)]` → `w-[28.571428571428573%]`
-              if (Math.floor(computed * 100) / 100 !== computed) {
+              if (Math.round(computed * 100) / 100 !== computed) {
                 break
               }
 

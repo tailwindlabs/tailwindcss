@@ -131,3 +131,7 @@ it('should not constant fold when dividing by `0`', () => {
 it('should not constant fold when a computation has a high-precision result', () => {
   expect(constantFoldDeclaration('calc(100% / 3.5)')).toBe('calc(100% / 3.5)')
 })
+
+it('should constant fold division results with floating-point error after scaling', () => {
+  expect(constantFoldDeclaration('calc(29% / 100)')).toBe('0.29%')
+})
