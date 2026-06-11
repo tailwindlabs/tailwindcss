@@ -512,8 +512,8 @@ impl From<PublicSourceEntry> for SourceEntry {
             };
         }
 
-        let auto = value.pattern.ends_with("**/*")
-            || PathBuf::from(&value.base).join(&value.pattern).is_dir();
+        let auto =
+            value.pattern == "/**/*" || PathBuf::from(&value.base).join(&value.pattern).is_dir();
 
         if !auto {
             return SourceEntry::Pattern {
