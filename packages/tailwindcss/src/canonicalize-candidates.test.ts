@@ -1220,7 +1220,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['w-[calc(100%_-_calc(var(--spacing)*60))]', 'w-[calc(100%-(--spacing(60)))]'],
     ['w-[calc(100%_-_--spacing(60))]', 'w-[calc(100%-(--spacing(60)))]'],
 
-    // No need to to wrap in `(…)` after a `,`
+    // No need to wrap in `(…)` after a `,`
     ['m-[min(100%,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
     ['m-[min(100%_,_--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
     ['m-[min(100%,--spacing(6))]', 'm-[min(100%,--spacing(6))]'],
