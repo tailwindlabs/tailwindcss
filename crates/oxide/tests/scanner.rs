@@ -660,6 +660,36 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_preserve_paths_for_sources_ending_in_a_deep_glob() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            normalized_sources,
+        } = scan_with_globs(
+            &[
+                (
+                    "blog/2024/foo/bar/baz/index.html",
+                    "content-['blog/2024/foo/bar/baz/index.html']",
+                ),
+                (
+                    "blog/2024/foo/bar/qux/index.html",
+                    "content-['blog/2024/foo/bar/qux/index.html']",
+                ),
+            ],
+            vec!["@source './blog/*/foo/bar/baz/**/*'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['blog/2024/foo/bar/baz/index.html']"]
+        );
+        assert_eq!(files, vec!["blog/2024/foo/bar/baz/index.html"]);
+        assert_eq!(globs, vec!["blog/*/foo/bar/baz/**/*"]);
+        assert_eq!(normalized_sources, vec!["blog/*/foo/bar/baz/**/*"]);
+    }
+
+    #[test]
     fn it_should_scan_next_dynamic_folders() {
         let ScanResult {
             candidates,

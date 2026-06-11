@@ -512,8 +512,8 @@ impl From<PublicSourceEntry> for SourceEntry {
             };
         }
 
-        let auto = value.pattern.ends_with("**/*")
-            || PathBuf::from(&value.base).join(&value.pattern).is_dir();
+        let auto =
+            value.pattern == "/**/*" || PathBuf::from(&value.base).join(&value.pattern).is_dir();
 
         if !auto {
             return SourceEntry::Pattern {
@@ -530,7 +530,7 @@ impl From<PublicSourceEntry> for SourceEntry {
                 std::path::MAIN_SEPARATOR
             )) || value
                 .base
-                .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir,))
+                .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir))
         });
 
         match inside_ignored_content_dir {
