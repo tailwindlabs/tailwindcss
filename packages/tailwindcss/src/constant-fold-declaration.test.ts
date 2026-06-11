@@ -127,3 +127,7 @@ it.each([
 it('should not constant fold when dividing by `0`', () => {
   expect(constantFoldDeclaration('calc(123rem / 0)')).toBe('calc(123rem / 0)')
 })
+
+it('should not constant fold when a computation has a high-precision result', () => {
+  expect(constantFoldDeclaration('calc(100% / 3.5)')).toBe('calc(100% / 3.5)')
+})
