@@ -1244,6 +1244,17 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
     await expectCanonicalization(input, candidate, expected)
   })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1591
+  test.each([
+    ['w-[calc(100%/3.5)]', 'w-[calc(100%/3.5)]'], // Not w-[28.571428571428573%]
+  ])(testName, { timeout }, async (candidate, expected) => {
+    let input = css`
+      @import 'tailwindcss';
+    `
+
+    await expectCanonicalization(input, candidate, expected)
+  })
 })
 
 describe('theme to var', () => {
