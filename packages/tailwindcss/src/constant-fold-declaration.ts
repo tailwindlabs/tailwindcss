@@ -286,8 +286,19 @@ export function constantFoldDeclarationAst(
               ((lhs[1] === null && rhs[1] === null) || // Unitless / Unitless, e.g.: `8 / 2`
                 (lhs[1] !== null && rhs[1] === null)) // Unit / Unitless, e.g.: `1rem / 2`
             ) {
+              let computed = lhs[0] / rhs[0]
+
+              // Only fold with .xx precision, anything beyond that might be a bit too much.
+              //
+              // E.g. 100% / 3.5 = 28.571428571428573%, which is correct but not
+              //      as user friendly. Especially when going from
+              //      `w-[calc(100%/3.5)]` → `w-[28.571428571428573%]`
+              if (Math.floor(computed * 100) / 100 !== computed) {
+                break
+              }
+
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] / rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(ValueParser.word(`${computed}${lhs[1] ?? ''}`))
             }
             break
           }
