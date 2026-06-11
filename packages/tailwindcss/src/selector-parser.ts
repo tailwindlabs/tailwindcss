@@ -99,6 +99,49 @@ function value(value: string): SelectorValueNode {
   }
 }
 
+export function isUniversalSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === ASTERISK
+}
+
+export function isNestingSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === AMPERSAND
+}
+
+export function isClassSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === DOT
+}
+
+export function isIdSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === HASH
+}
+
+export function isPseudoSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === COLON
+}
+
+export function isAttributeSelector(node: SelectorAstNode): boolean {
+  return node.kind === 'selector' && node.value.charCodeAt(0) === OPEN_BRACKET
+}
+
+export function isTypeSelector(node: SelectorAstNode): boolean {
+  if (node.kind !== 'selector') return false
+
+  switch (node.value.charCodeAt(0)) {
+    case ASTERISK: // Universal selector
+    case AMPERSAND: // Nesting selector
+    case DOT: // Class selector
+    case HASH: // ID selector
+    case COLON: // Pseudo selector
+    case OPEN_BRACKET: // Attribute selector
+      return false
+
+    // We don't fully verify whether this is actually a proper type selector,
+    // but we assume it is one if it's not any of the other ones.
+    default:
+      return true
+  }
+}
+
 export function cloneAstNode<T extends SelectorAstNode>(node: T): T {
   switch (node.kind) {
     case 'combinator':
@@ -172,10 +215,10 @@ const CLOSE_PAREN = 0x29
 const COLON = 0x3a
 const COMMA = 0x2c
 const DOUBLE_QUOTE = 0x22
-const FULL_STOP = 0x2e
+const DOT = 0x2e
 const GREATER_THAN = 0x3e
 const NEWLINE = 0x0a
-const NUMBER_SIGN = 0x23
+const HASH = 0x23
 const OPEN_BRACKET = 0x5b
 const OPEN_PAREN = 0x28
 const PLUS = 0x2b
@@ -420,9 +463,9 @@ export function parse(input: string) {
       // .foo.bar
       //     ^
       // ```
-      case FULL_STOP:
+      case DOT:
       case COLON:
-      case NUMBER_SIGN: {
+      case HASH: {
         if (currentChar === COLON && buffer === ':') {
           buffer += input[i]
           break

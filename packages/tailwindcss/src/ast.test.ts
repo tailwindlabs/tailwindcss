@@ -1,13 +1,9 @@
 import { describe, expect, it, test } from 'vitest'
-import * as SelectorParser from '../src/selector-parser'
 import {
-  atRule,
-  cloneAstNode,
   context,
   cssContext,
   decl,
-  DROPPABLE_IF_EMPTY_AT_RULES,
-  HOISTABLE_AT_RULES,
+  handleNesting,
   optimizeAst,
   rule,
   styleRule,
@@ -16,11 +12,9 @@ import {
 } from './ast'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
-import { SourceLocation } from './source-maps/source'
 import { pretty } from './test-utils/run'
 import { Theme } from './theme'
-import { segment } from './utils/segment'
-import { walk, WalkAction } from './walk'
+import { walk } from './walk'
 
 const css = String.raw
 const defaultDesignSystem = buildDesignSystem(new Theme())
@@ -83,9 +77,9 @@ it('allows the placement of context nodes', () => {
     }
     .bar {
       color: blue;
-      .baz {
-        color: green;
-      }
+    }
+    .bar .baz {
+      color: green;
     }
     "
   `)
@@ -179,7 +173,6 @@ it('should not emit empty rules once optimized', () => {
     "
     @charset "UTF-8";
     @layer foo, bar, baz;
-    @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
@@ -256,30 +249,22 @@ it('should not emit exact duplicate declarations in the same rule', () => {
     "
     .foo {
       color: red;
-      .bar {
-        color: green;
-        color: blue;
-        color: green;
-      }
-      color: red;
+    }
+    .foo .bar {
+      color: blue;
+      color: green;
     }
     .foo {
+      color: green;
+      color: blue;
       color: red;
-      & {
-        color: green;
-        & {
-          color: red;
-          color: green;
-          color: blue;
-        }
-        color: red;
-      }
       background: blue;
-      .bar {
-        color: green;
-        color: blue;
-        color: green;
-      }
+    }
+    .foo .bar {
+      color: blue;
+      color: green;
+    }
+    .foo {
       caret-color: orange;
     }
     "
@@ -319,11 +304,7 @@ it('should not emit color-mix() fallbacks inside @keyframes', () => {
 
 describe('optimization', () => {
   function optimize(input: string) {
-    let ast = CSS.parse(input)
-
-    let cssOracle = pretty(toCss(handleNestingOracle(ast)))
-
-    return cssOracle
+    return pretty(toCss(handleNesting(CSS.parse(input))))
   }
 
   // See: https://drafts.csswg.org/css-nesting-1/
@@ -357,25 +338,25 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) element {
+        .a element {
           --x: 1;
         }
-        :is(.a) .class {
+        .a .class {
           --x: 2;
         }
-        :is(.a) #id {
+        .a #id {
           --x: 3;
         }
-        :is(.a) :pseudo-class {
+        .a :pseudo-class {
           --x: 4;
         }
-        :is(.a) ::pseudo-element {
+        .a ::pseudo-element {
           --x: 5;
         }
-        :is(.a) [attribute] {
+        .a [attribute] {
           --x: 6;
         }
-        :is(.a) * {
+        .a * {
           --x: 7;
         }
         "
@@ -399,13 +380,13 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) + .b {
+        .a + .b {
           --x: 1;
         }
-        :is(.a) > .c {
+        .a > .c {
           --x: 2;
         }
-        :is(.a) ~ .d {
+        .a ~ .d {
           --x: 3;
         }
         "
@@ -477,18 +458,18 @@ describe('optimization', () => {
             --x: 2;
           }
         }
-        :scope {
+        :is(:scope) {
           --x: 3;
         }
         @supports (--y: 2) {
-          :scope {
+          :is(:scope) {
             --x: 4;
           }
         }
         :scope, .a {
           --x: 5;
         }
-        :scope, .b {
+        :is(:scope), .b {
           --x: 6;
         }
         @supports (--y: 3) {
@@ -497,7 +478,7 @@ describe('optimization', () => {
           }
         }
         @supports (--y: 4) {
-          :scope, .d {
+          :is(:scope), .d {
             --x: 8;
           }
         }
@@ -522,13 +503,13 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) + .b {
+        .a + .b {
           --x: 1;
         }
-        :is(.a) > .c {
+        .a > .c {
           --x: 2;
         }
-        :is(.a) ~ .d {
+        .a ~ .d {
           --x: 3;
         }
         "
@@ -555,16 +536,16 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        .b :is(.a) {
+        .b .a {
           --x: 1;
         }
-        .c + :is(.a) {
+        .c + .a {
           --x: 2;
         }
-        .d > :is(.a) {
+        .d > .a {
           --x: 3;
         }
-        .e ~ :is(.a) {
+        .e ~ .a {
           --x: 4;
         }
         "
@@ -603,8 +584,10 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        .a {
+        :is(.a) {
           --x: 1;
+        }
+        :is(:is(:is(.a))) {
           --x: 2;
         }
         "
@@ -648,7 +631,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) .b-\\& {
+        .a .b-\\& {
           --x: 1;
         }
         "
@@ -666,7 +649,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) [data-b='c&d'] {
+        .a [data-b='c&d'] {
           --x: 1;
         }
         "
@@ -674,158 +657,158 @@ describe('optimization', () => {
     })
 
     it.each([
-      ['element', '&element', 'element:is(element)'],
+      ['element', '&element', ':is(element)element'], // Invalid CSS
       ['element', 'element&', 'element:is(element)'],
       ['element', '&.class', 'element.class'],
-      ['element', '.class&', 'element.class'],
+      ['element', '.class&', '.class:is(element)'], // Optimization: element.class
       ['element', '&#id', 'element#id'],
-      ['element', '#id&', 'element#id'],
-      ['element', '&:pseudo-class', 'element:pseudo-class'],
-      ['element', ':pseudo-class&', 'element:pseudo-class'],
-      ['element', '&::pseudo-element', 'element::pseudo-element'],
-      ['element', '::pseudo-element&', 'element::pseudo-element'],
-      ['element', '&:pseudo-fn()', 'element:pseudo-fn()'],
-      ['element', ':pseudo-fn()&', 'element:pseudo-fn()'],
+      ['element', '#id&', '#id:is(element)'], // Optimization: element#id
+      ['element', '&:hover', 'element:hover'],
+      ['element', ':hover&', ':hover:is(element)'],
+      ['element', '&::before', 'element::before'],
+      ['element', '::before&', '::before:is(element)'], // Invalid CSS
+      ['element', '&:not(.x)', 'element:not(.x)'],
+      ['element', ':not(.x)&', ':not(.x):is(element)'], // Optimization: element:not(.x)
       ['element', '&[attribute]', 'element[attribute]'],
-      ['element', '[attribute]&', 'element[attribute]'],
-      ['element', '&*', 'element:is(*)'],
-      ['element', '*&', 'element:is(*)'],
+      ['element', '[attribute]&', '[attribute]:is(element)'], // Optimization: element[attribute]
+      ['element', '&*', ':is(element)*'], // Invalid CSS
+      ['element', '*&', 'element'],
 
-      ['.class', '&element', 'element.class'],
+      ['.class', '&element', ':is(.class)element'], // Invalid CSS
       ['.class', 'element&', 'element.class'],
       ['.class', '&.class', '.class.class'],
       ['.class', '.class&', '.class.class'],
       ['.class', '&#id', '.class#id'],
       ['.class', '#id&', '#id.class'],
-      ['.class', '&:pseudo-class', '.class:pseudo-class'],
-      ['.class', ':pseudo-class&', ':pseudo-class.class'],
-      ['.class', '&::pseudo-element', '.class::pseudo-element'],
-      ['.class', '::pseudo-element&', '::pseudo-element.class'],
-      ['.class', '&:pseudo-fn()', '.class:pseudo-fn()'],
-      ['.class', ':pseudo-fn()&', ':pseudo-fn().class'],
+      ['.class', '&:hover', '.class:hover'],
+      ['.class', ':hover&', ':hover.class'],
+      ['.class', '&::before', '.class::before'],
+      ['.class', '::before&', '::before.class'], // Invalid CSS
+      ['.class', '&:not(.x)', '.class:not(.x)'],
+      ['.class', ':not(.x)&', ':not(.x).class'],
       ['.class', '&[attribute]', '.class[attribute]'],
       ['.class', '[attribute]&', '[attribute].class'],
-      ['.class', '&*', '*.class'],
-      ['.class', '*&', '*.class'],
+      ['.class', '&*', ':is(.class)*'], // Invalid CSS
+      ['.class', '*&', '.class'],
 
-      ['#id', '&element', 'element#id'],
+      ['#id', '&element', ':is(#id)element'], // Invalid CSS
       ['#id', 'element&', 'element#id'],
       ['#id', '&.class', '#id.class'],
       ['#id', '.class&', '.class#id'],
       ['#id', '&#id', '#id#id'],
       ['#id', '#id&', '#id#id'],
-      ['#id', '&:pseudo-class', '#id:pseudo-class'],
-      ['#id', ':pseudo-class&', ':pseudo-class#id'],
-      ['#id', '&::pseudo-element', '#id::pseudo-element'],
-      ['#id', '::pseudo-element&', '::pseudo-element#id'],
-      ['#id', '&:pseudo-fn()', '#id:pseudo-fn()'],
-      ['#id', ':pseudo-fn()&', ':pseudo-fn()#id'],
+      ['#id', '&:hover', '#id:hover'],
+      ['#id', ':hover&', ':hover#id'],
+      ['#id', '&::before', '#id::before'],
+      ['#id', '::before&', '::before#id'], // Invalid CSS
+      ['#id', '&:not(.x)', '#id:not(.x)'],
+      ['#id', ':not(.x)&', ':not(.x)#id'],
       ['#id', '&[attribute]', '#id[attribute]'],
       ['#id', '[attribute]&', '[attribute]#id'],
-      ['#id', '&*', '*#id'],
-      ['#id', '*&', '*#id'],
+      ['#id', '&*', ':is(#id)*'], // Invalid CSS
+      ['#id', '*&', '#id'],
 
-      [':pseudo-class', '&element', 'element:pseudo-class'],
-      [':pseudo-class', 'element&', 'element:pseudo-class'],
-      [':pseudo-class', '&.class', ':pseudo-class.class'],
-      [':pseudo-class', '.class&', '.class:pseudo-class'],
-      [':pseudo-class', '&#id', ':pseudo-class#id'],
-      [':pseudo-class', '#id&', '#id:pseudo-class'],
-      [':pseudo-class', '&:pseudo-class', ':pseudo-class:pseudo-class'],
-      [':pseudo-class', ':pseudo-class&', ':pseudo-class:pseudo-class'],
-      [':pseudo-class', '&::pseudo-element', ':pseudo-class::pseudo-element'],
-      [':pseudo-class', '::pseudo-element&', '::pseudo-element:pseudo-class'],
-      [':pseudo-class', '&:pseudo-fn()', ':pseudo-class:pseudo-fn()'],
-      [':pseudo-class', ':pseudo-fn()&', ':pseudo-fn():pseudo-class'],
-      [':pseudo-class', '&[attribute]', ':pseudo-class[attribute]'],
-      [':pseudo-class', '[attribute]&', '[attribute]:pseudo-class'],
-      [':pseudo-class', '&*', '*:pseudo-class'],
-      [':pseudo-class', '*&', '*:pseudo-class'],
+      [':hover', '&element', ':is(:hover)element'], // Invalid CSS
+      [':hover', 'element&', 'element:hover'],
+      [':hover', '&.class', ':hover.class'],
+      [':hover', '.class&', '.class:hover'],
+      [':hover', '&#id', ':hover#id'],
+      [':hover', '#id&', '#id:hover'],
+      [':hover', '&:hover', ':hover:hover'],
+      [':hover', ':hover&', ':hover:hover'],
+      [':hover', '&::before', ':hover::before'],
+      [':hover', '::before&', '::before:hover'],
+      [':hover', '&:not(.x)', ':hover:not(.x)'],
+      [':hover', ':not(.x)&', ':not(.x):hover'],
+      [':hover', '&[attribute]', ':hover[attribute]'],
+      [':hover', '[attribute]&', '[attribute]:hover'],
+      [':hover', '&*', ':is(:hover)*'], // Invalid CSS
+      [':hover', '*&', ':hover'],
 
-      ['::pseudo-element', '&element', 'element::pseudo-element'],
-      ['::pseudo-element', 'element&', 'element::pseudo-element'],
-      ['::pseudo-element', '&.class', '::pseudo-element.class'],
-      ['::pseudo-element', '.class&', '.class::pseudo-element'],
-      ['::pseudo-element', '&#id', '::pseudo-element#id'],
-      ['::pseudo-element', '#id&', '#id::pseudo-element'],
-      ['::pseudo-element', '&:pseudo-class', '::pseudo-element:pseudo-class'],
-      ['::pseudo-element', ':pseudo-class&', ':pseudo-class::pseudo-element'],
-      ['::pseudo-element', '&::pseudo-element', '::pseudo-element::pseudo-element'],
-      ['::pseudo-element', '::pseudo-element&', '::pseudo-element::pseudo-element'],
-      ['::pseudo-element', '&:pseudo-fn()', '::pseudo-element:pseudo-fn()'],
-      ['::pseudo-element', ':pseudo-fn()&', ':pseudo-fn()::pseudo-element'],
-      ['::pseudo-element', '&[attribute]', '::pseudo-element[attribute]'],
-      ['::pseudo-element', '[attribute]&', '[attribute]::pseudo-element'],
-      ['::pseudo-element', '&*', '*::pseudo-element'],
-      ['::pseudo-element', '*&', '*::pseudo-element'],
+      ['::before', '&element', ':is(::before)element'], // Invalid CSS
+      ['::before', 'element&', 'element::before'],
+      ['::before', '&.class', '::before.class'],
+      ['::before', '.class&', '.class::before'],
+      ['::before', '&#id', '::before#id'],
+      ['::before', '#id&', '#id::before'],
+      ['::before', '&:hover', '::before:hover'],
+      ['::before', ':hover&', ':hover::before'],
+      ['::before', '&::before', '::before::before'],
+      ['::before', '::before&', '::before::before'],
+      ['::before', '&:not(.x)', '::before:not(.x)'],
+      ['::before', ':not(.x)&', ':not(.x)::before'],
+      ['::before', '&[attribute]', '::before[attribute]'],
+      ['::before', '[attribute]&', '[attribute]::before'],
+      ['::before', '&*', ':is(::before)*'], // Invalid CSS
+      ['::before', '*&', '::before'],
 
-      [':pseudo-fn()', '&element', 'element:pseudo-fn()'],
-      [':pseudo-fn()', 'element&', 'element:pseudo-fn()'],
-      [':pseudo-fn()', '&.class', ':pseudo-fn().class'],
-      [':pseudo-fn()', '.class&', '.class:pseudo-fn()'],
-      [':pseudo-fn()', '&#id', ':pseudo-fn()#id'],
-      [':pseudo-fn()', '#id&', '#id:pseudo-fn()'],
-      [':pseudo-fn()', '&:pseudo-class', ':pseudo-fn():pseudo-class'],
-      [':pseudo-fn()', ':pseudo-class&', ':pseudo-class:pseudo-fn()'],
-      [':pseudo-fn()', '&::pseudo-element', ':pseudo-fn()::pseudo-element'],
-      [':pseudo-fn()', '::pseudo-element&', '::pseudo-element:pseudo-fn()'],
-      [':pseudo-fn()', '&:pseudo-fn()', ':pseudo-fn():pseudo-fn()'],
-      [':pseudo-fn()', ':pseudo-fn()&', ':pseudo-fn():pseudo-fn()'],
-      [':pseudo-fn()', '&[attribute]', ':pseudo-fn()[attribute]'],
-      [':pseudo-fn()', '[attribute]&', '[attribute]:pseudo-fn()'],
-      [':pseudo-fn()', '&*', '*:pseudo-fn()'],
-      [':pseudo-fn()', '*&', '*:pseudo-fn()'],
+      [':not(.x)', '&element', ':is(:not(.x))element'], // Invalid CSS
+      [':not(.x)', 'element&', 'element:not(.x)'],
+      [':not(.x)', '&.class', ':not(.x).class'],
+      [':not(.x)', '.class&', '.class:not(.x)'],
+      [':not(.x)', '&#id', ':not(.x)#id'],
+      [':not(.x)', '#id&', '#id:not(.x)'],
+      [':not(.x)', '&:hover', ':not(.x):hover'],
+      [':not(.x)', ':hover&', ':hover:not(.x)'],
+      [':not(.x)', '&::before', ':not(.x)::before'],
+      [':not(.x)', '::before&', '::before:not(.x)'],
+      [':not(.x)', '&:not(.x)', ':not(.x):not(.x)'],
+      [':not(.x)', ':not(.x)&', ':not(.x):not(.x)'],
+      [':not(.x)', '&[attribute]', ':not(.x)[attribute]'],
+      [':not(.x)', '[attribute]&', '[attribute]:not(.x)'],
+      [':not(.x)', '&*', ':is(:not(.x))*'], // Invalid CSS
+      [':not(.x)', '*&', ':not(.x)'],
 
-      ['[attribute]', '&element', 'element[attribute]'],
+      ['[attribute]', '&element', ':is([attribute])element'], // Invalid CSS
       ['[attribute]', 'element&', 'element[attribute]'],
       ['[attribute]', '&.class', '[attribute].class'],
       ['[attribute]', '.class&', '.class[attribute]'],
       ['[attribute]', '&#id', '[attribute]#id'],
       ['[attribute]', '#id&', '#id[attribute]'],
-      ['[attribute]', '&:pseudo-class', '[attribute]:pseudo-class'],
-      ['[attribute]', ':pseudo-class&', ':pseudo-class[attribute]'],
-      ['[attribute]', '&::pseudo-element', '[attribute]::pseudo-element'],
-      ['[attribute]', '::pseudo-element&', '::pseudo-element[attribute]'],
-      ['[attribute]', '&:pseudo-fn()', '[attribute]:pseudo-fn()'],
-      ['[attribute]', ':pseudo-fn()&', ':pseudo-fn()[attribute]'],
+      ['[attribute]', '&:hover', '[attribute]:hover'],
+      ['[attribute]', ':hover&', ':hover[attribute]'],
+      ['[attribute]', '&::before', '[attribute]::before'],
+      ['[attribute]', '::before&', '::before[attribute]'],
+      ['[attribute]', '&:not(.x)', '[attribute]:not(.x)'],
+      ['[attribute]', ':not(.x)&', ':not(.x)[attribute]'],
       ['[attribute]', '&[attribute]', '[attribute][attribute]'],
       ['[attribute]', '[attribute]&', '[attribute][attribute]'],
-      ['[attribute]', '&*', '*[attribute]'],
-      ['[attribute]', '*&', '*[attribute]'],
+      ['[attribute]', '&*', ':is([attribute])*'], // Invalid CSS
+      ['[attribute]', '*&', '[attribute]'],
 
-      ['*', '&element', 'element:is(*)'],
+      ['*', '&element', ':is(*)element'], // Invalid CSS
       ['*', 'element&', 'element:is(*)'],
-      ['*', '&.class', '*.class'],
-      ['*', '.class&', '*.class'],
-      ['*', '&#id', '*#id'],
-      ['*', '#id&', '*#id'],
-      ['*', '&:pseudo-class', '*:pseudo-class'],
-      ['*', ':pseudo-class&', '*:pseudo-class'],
-      ['*', '&::pseudo-element', '*::pseudo-element'],
-      ['*', '::pseudo-element&', '*::pseudo-element'],
-      ['*', '&:pseudo-fn()', '*:pseudo-fn()'],
-      ['*', ':pseudo-fn()&', '*:pseudo-fn()'],
-      ['*', '&[attribute]', '*[attribute]'],
-      ['*', '[attribute]&', '*[attribute]'],
-      ['*', '&*', '*:is(*)'],
-      ['*', '*&', '*:is(*)'],
+      ['*', '&.class', '.class'],
+      ['*', '.class&', '.class:is(*)'], // Optimization: *.class → .class
+      ['*', '&#id', '#id'],
+      ['*', '#id&', '#id:is(*)'], // Optimization: *#id → #id
+      ['*', '&:hover', ':hover'],
+      ['*', ':hover&', ':hover:is(*)'],
+      ['*', '&::before', '::before'],
+      ['*', '::before&', '::before:is(*)'], // Invalid CSS
+      ['*', '&:not(.x)', ':not(.x)'],
+      ['*', ':not(.x)&', ':not(.x):is(*)'], // Optimization: *:not(.x) → :not(.x)
+      ['*', '&[attribute]', '[attribute]'],
+      ['*', '[attribute]&', '[attribute]:is(*)'], // Optimization: *[attribute] → [attribute]
+      ['*', '&*', ':is(*)*'], // Invalid CSS
+      ['*', '*&', '*'],
 
-      ['&', '&element', 'element:scope'],
+      ['&', '&element', ':is(:scope)element'], // Invalid CSS
       ['&', 'element&', 'element:scope'],
       ['&', '&.class', ':scope.class'],
       ['&', '.class&', '.class:scope'],
       ['&', '&#id', ':scope#id'],
       ['&', '#id&', '#id:scope'],
-      ['&', '&:pseudo-class', ':scope:pseudo-class'],
-      ['&', ':pseudo-class&', ':pseudo-class:scope'],
-      ['&', '&::pseudo-element', ':scope::pseudo-element'],
-      ['&', '::pseudo-element&', '::pseudo-element:scope'],
-      ['&', '&:pseudo-fn()', ':scope:pseudo-fn()'],
-      ['&', ':pseudo-fn()&', ':pseudo-fn():scope'],
+      ['&', '&:hover', ':scope:hover'],
+      ['&', ':hover&', ':hover:scope'],
+      ['&', '&::before', ':scope::before'],
+      ['&', '::before&', '::before:scope'],
+      ['&', '&:not(.x)', ':scope:not(.x)'],
+      ['&', ':not(.x)&', ':not(.x):scope'],
       ['&', '&[attribute]', ':scope[attribute]'],
       ['&', '[attribute]&', '[attribute]:scope'],
-      ['&', '&*', '*:scope'],
-      ['&', '*&', '*:scope'],
+      ['&', '&*', ':is(:scope)*'], // Invalid CSS
+      ['&', '*&', ':scope'],
     ])(`'%s { %s }' → '%s' (%#)`, async (root, nested, expected) => {
       let optimized = optimize(toCss([rule(root, [rule(nested, [decl('--x', '0')])])]))
       let ast = CSS.parse(optimized)
@@ -838,6 +821,24 @@ describe('optimization', () => {
 
       if (ast[0].kind !== 'rule') throw new Error('expected a rule')
       expect(ast[0].selector).toEqual(expected)
+    })
+
+    it('should not remove the `*` namespace from namespaced selectors', () => {
+      expect(
+        optimize(css`
+          .a {
+            & *|div {
+              color: red;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a *|div {
+          color: red;
+        }
+        "
+      `)
     })
 
     test('multiple selectors in the list are relative to the parent', async () => {
@@ -880,7 +881,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a) .b :is(.a) .c :is(.a) .d {
+        .a .b .a .c .a .d {
           --x: 1;
         }
         "
@@ -898,7 +899,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.a):is(.a):is(.a) {
+        .a.a.a {
           --x: 1;
         }
         "
@@ -916,7 +917,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :not(:is(.a)) {
+        :not(.a) {
           --x: 1;
         }
         "
@@ -951,10 +952,10 @@ describe('optimization', () => {
         .c :is(.a, .b) {
           --x: 2;
         }
-        :is(.c :is(.a, .b)):hover, :is(.c :is(.a, .b)):focus {
+        .c :is(.a, .b):hover, .c :is(.a, .b):focus {
           --x: 3;
         }
-        :is(:is(.c :is(.a, .b)):hover, :is(.c :is(.a, .b)):focus) .d {
+        :is(.c :is(.a, .b):hover, .c :is(.a, .b):focus) .d {
           --x: 4;
         }
         "
@@ -977,7 +978,7 @@ describe('optimization', () => {
         .a {
           --before: 1;
         }
-        :is(.a):hover {
+        .a:hover {
           --inside: 1;
         }
         .a {
@@ -985,6 +986,44 @@ describe('optimization', () => {
         }
         "
       `)
+    })
+
+    it.each([
+      ['div', '&', 'div'],
+      ['div', '[before]&', '[before]:is(div)'],
+      ['div', '&[after]', 'div[after]'],
+      ['div', '[before]&[after]', '[before]:is(div)[after]'],
+      ['div', '[before] &', '[before] div'],
+      ['div', '& [after]', 'div [after]'],
+      ['div', '[before] & [after]', '[before] div [after]'],
+
+      ['.parent', '&', '.parent'],
+      ['.parent', '[before]&', '[before].parent'],
+      ['.parent', '&[after]', '.parent[after]'],
+      ['.parent', '[before]&[after]', '[before].parent[after]'],
+      ['.parent', '[before] &', '[before] .parent'],
+      ['.parent', '& [after]', '.parent [after]'],
+      ['.parent', '[before] & [after]', '[before] .parent [after]'],
+
+      ['.a > .b', '&', '.a > .b'],
+      ['.a > .b', '[before]&', '[before]:is(.a > .b)'],
+      ['.a > .b', '&[after]', '.a > .b[after]'],
+      ['.a > .b', '[before]&[after]', '[before]:is(.a > .b)[after]'],
+      ['.a > .b', '[before] &', '[before] :is(.a > .b)'],
+      ['.a > .b', '& [after]', '.a > .b [after]'],
+      ['.a > .b', '[before] & [after]', '[before] :is(.a > .b) [after]'],
+    ])(`should optimize '%s { %s }' → '%s' (%#)`, async (root, nested, expected) => {
+      let optimized = optimize(toCss([rule(root, [rule(nested, [decl('--x', '0')])])]))
+      let ast = CSS.parse(optimized)
+
+      let count = 0
+      walk(ast, () => void count++)
+
+      // 1 rule, 1 declaration
+      expect(count).toBe(2)
+
+      if (ast[0].kind !== 'rule') throw new Error('expected a rule')
+      expect(ast[0].selector).toEqual(expected)
     })
 
     it('should hoist at-rules', async () => {
@@ -1077,7 +1116,7 @@ describe('optimization', () => {
         `),
       ).toMatchInlineSnapshot(`
         "
-        :is(.foo) .bar {
+        .foo .bar {
           @apply text-red-500 hover:text-red-600;
         }
         .baz {
@@ -1095,490 +1134,80 @@ describe('optimization', () => {
         "
       `)
     })
+
+    it('should merge a body-less @layer with an @layer with the same name that has a body', async () => {
+      expect(
+        optimize(css`
+          @layer a;
+
+          @layer a {
+            @layer b {
+              .x {
+                color: red;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer a {
+          @layer b {
+            .x {
+              color: red;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should not dedupe adjacent at-rules with the same prelude but different bodies', async () => {
+      expect(
+        optimize(css`
+          @font-face {
+            font-family: 'A';
+            src: url('/fonts/a.woff2');
+          }
+
+          @font-face {
+            font-family: 'B';
+            src: url('/fonts/b.woff2');
+          }
+
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+
+          @keyframes spin {
+            to {
+              transform: rotate(-360deg);
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @font-face {
+          font-family: 'A';
+          src: url('/fonts/a.woff2');
+        }
+        @font-face {
+          font-family: 'B';
+          src: url('/fonts/b.woff2');
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(-360deg);
+          }
+        }
+        "
+      `)
+    })
   })
 })
-
-// A simple step-by-step but slow implementation of CSS nesting used as an
-// oracle to test faster and more efficient solutions against.
-export function handleNestingOracle(ast: AstNode[]): AstNode[] {
-  // Remove empty nodes
-  //
-  // Inside-out such that a node containing another node that is empty, also gets
-  // cleaned up when walking up the tree.
-  //
-  // For at-rules, we only want to get rid of at-rules like `@supports` and
-  // `@media` that we know are safe to remove when they are empty.
-  //
-  // Known at-rules that are not safe to delete: `@charset`, `@layer`,
-  // `@namespace`, `@custom-media`, `@apply`, …
-  //
-  // ```css
-  // .foo {}
-  // @media (min-width: 123px) {
-  //   .bar {}
-  // }
-  // @layer base;
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // @layer base;
-  // ```
-  {
-    walk(ast, {
-      exit(node) {
-        if (!('nodes' in node)) return
-        if (node.nodes.length > 0) return
-        if (node.kind === 'at-rule' && !DROPPABLE_IF_EMPTY_AT_RULES.has(node.name)) return
-
-        return WalkAction.ReplaceSkip([])
-      },
-    })
-  }
-
-  // A rule with an `&` selector should be converted to a `:scope` if that rule
-  // has no parent rule. Parent at-rules don't count since they don't contain
-  // selectors.
-  //
-  // ```css
-  // & {
-  //   color: red;
-  // }
-  // :is(&) {
-  //   color: blue;
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // :scope {
-  //   color: red;
-  // }
-  // :scope {
-  //   color: blue;
-  // }
-  // ```
-  {
-    walk(ast, (node) => {
-      if (node.kind !== 'rule') return
-
-      let ast = SelectorParser.parse(node.selector)
-
-      walk(ast, (node) => {
-        // Nested in `:is(…)`, unwrap
-        while (node.kind === 'function' && node.value === ':is' && node.nodes.length === 1) {
-          node = node.nodes[0]
-        }
-
-        // Just `&`, replace with `:scope`
-        if (node.kind === 'selector' && node.value === '&') {
-          return WalkAction.ReplaceSkip(SelectorParser.selector(':scope'))
-        }
-      })
-
-      node.selector = SelectorParser.toCss(ast)
-
-      return WalkAction.Skip
-    })
-  }
-
-  // Remove intermediate nodes with an `&` selector, or `&` nested inside
-  // `:is(…)` n-levels deep, and replace them by its `nodes`.
-  //
-  // ```css
-  // .foo {
-  //   & {
-  //     color: red;
-  //   }
-  //   :is(&) {
-  //     color: green;
-  //   }
-  //   :is(:is(&)) {
-  //     color: blue;
-  //     & {
-  //       color: black
-  //     }
-  //   }
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // .foo {
-  //   color: red;
-  //   color: green;
-  //   color: blue;
-  //   color: black;
-  // }
-  // ```
-  {
-    walk(ast, (node) => {
-      if (node.kind !== 'rule') return
-
-      let ast = SelectorParser.parse(node.selector)
-
-      while (
-        ast.length === 1 &&
-        ast[0].kind === 'function' &&
-        ast[0].value === ':is' &&
-        ast[0].nodes.length === 1
-      ) {
-        ast = ast[0].nodes
-      }
-
-      // Just `&`, replace by its `nodes`
-      if (ast.length === 1 && ast[0].kind === 'selector' && ast[0].value === '&') {
-        return WalkAction.Replace(node.nodes)
-      }
-    })
-  }
-
-  // Split into groups, this allows us to reduce the problem space, and only
-  // have to think about linear nesting because there will only ever be a single
-  // rule or at-rule at each level.
-  //
-  // ```css
-  // .foo {
-  //   --x: 1;
-  //   .bar {
-  //     --x: 2;
-  //   }
-  //   --x: 3;
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // .foo {
-  //   --x: 1;
-  // }
-  // .foo {
-  //   .bar {
-  //     --x: 2;
-  //   }
-  // }
-  // .foo {
-  //   --x: 3;
-  // }
-  // ```
-  {
-    walk(ast, {
-      exit(node) {
-        if (!('nodes' in node)) return
-
-        let last: AstNode | null = null
-        let groups: AstNode[][] = []
-        for (let child of node.nodes) {
-          if (last === null || 'nodes' in child) {
-            groups.push([child])
-          } else {
-            if ('nodes' in last) {
-              groups.push([child])
-            } else {
-              groups[groups.length - 1].push(child)
-            }
-          }
-          last = child
-        }
-
-        if (groups.length <= 1) {
-          return
-        }
-
-        node.nodes = []
-        return WalkAction.Replace(
-          groups.map((nodes) => Object.assign(cloneAstNode(node), { nodes })),
-        )
-      },
-    })
-  }
-
-  // Hoist at-rules to the top in the order they were seen in
-  //
-  // ```css
-  // .foo {
-  //   @media (print) {
-  //     @supports (display: grid) {
-  //       color: red;
-  //     }
-  //   }
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // @media (print) {
-  //   @supports (display: grid) {
-  //     .foo {
-  //       color: red;
-  //     }
-  //   }
-  // }
-  // ```
-  {
-    for (let [idx, node] of ast.entries()) {
-      if (!('nodes' in node)) continue
-
-      let nodes: AstNode[] = [node]
-      let atRules: [
-        name: string,
-        params: string,
-        src: SourceLocation | undefined,
-        dst: SourceLocation | undefined,
-      ][] = []
-      walk(nodes, (node) => {
-        if (node.kind !== 'at-rule') return
-        if (node.nodes.length <= 0) return
-        if (!HOISTABLE_AT_RULES.has(node.name)) return
-
-        // Track the at-rule
-        atRules.unshift([node.name, node.params, node.src, node.dst])
-
-        // Replace the at-rule by its nodes
-        return WalkAction.Replace(node.nodes)
-      })
-
-      // No at-rules found
-      if (atRules.length <= 0) continue
-
-      // Wrap `node` in the at-rules
-      {
-        let root: AstNode | null = null
-        for (let [name, params, src, dst] of atRules) {
-          root = atRule(name, params, root ? [root] : nodes)
-          if (src || dst) Object.assign(root, { src, dst })
-        }
-        if (root) ast[idx] = root
-      }
-    }
-  }
-
-  // Insert explicit `&`, when one was not used
-  //
-  // ```css
-  // .foo {
-  //   .a, .b:is(&) {
-  //     --x: 1;
-  //   }
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // .foo {
-  //   & .a, .b:is(&) {
-  //     --x: 1;
-  //   }
-  // }
-  // ```
-  {
-    walk(ast, (node, ctx) => {
-      if (node.kind !== 'rule') return
-      if (!ctx.path().some((node) => node.kind === 'rule')) return // Only inject `&` when it's not the first rule
-
-      node.selector = segment(node.selector, ',')
-        .map((selector) => {
-          selector = selector.trim()
-
-          let hasAmpersand = false
-          walk(SelectorParser.parse(selector.trim()), (node) => {
-            if (node.kind === 'selector' && node.value === '&') {
-              hasAmpersand = true
-              return WalkAction.Stop
-            }
-          })
-
-          return hasAmpersand ? selector : `& ${selector}`
-        })
-        .join(', ')
-    })
-  }
-
-  // Flatten selectors with `:is(…)` semantics
-  //
-  // ```css
-  // .foo, .bar {
-  //   &:hover {
-  //     --x: 1;
-  //   }
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // :is(.foo, .bar):hover {
-  //   --x: 1;
-  // }
-  // ```
-  {
-    walk(ast, {
-      exit(node, ctx) {
-        if (node.kind !== 'rule') return
-        if (ctx.parent?.kind !== 'rule') return
-
-        let parentAst = SelectorParser.parse(`:is(${ctx.parent.selector})`)
-
-        // Wrap parent selector in `:is(…)`
-        let ast = SelectorParser.parse(node.selector)
-        walk(ast, (node) => {
-          if (node.kind === 'selector' && node.value === '&') {
-            return WalkAction.ReplaceSkip(parentAst.map(SelectorParser.cloneAstNode))
-          }
-        })
-        ctx.parent.selector = SelectorParser.toCss(ast)
-
-        // Override the parent's nodes with our nodes now that we merged the
-        // selectors together.
-        ctx.parent.nodes = node.nodes
-      },
-    })
-  }
-
-  // Merge adjacent at-rules
-  //
-  // ```css
-  // @media (print) {
-  //   .a, .b {
-  //     --x: 1;
-  //   }
-  // }
-  //
-  // @media (print) {
-  //   @media (min-width: 123px) {
-  //     :is(.a, .b) .c {
-  //       --x: 2;
-  //     }
-  //   }
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // @media (print) {
-  //   .a, .b {
-  //     --x: 1;
-  //   }
-  //
-  //   @media (min-width: 123px) {
-  //     :is(.a, .b) .c {
-  //       --x: 2;
-  //     }
-  //   }
-  // }
-  // ```
-  {
-    walk(ast, {
-      enter(node, ctx) {
-        if (node.kind !== 'at-rule') return
-
-        let next = ctx.siblings[ctx.index + 1]
-
-        if (!next) return
-        if (next.kind !== 'at-rule') return
-        if (next.name !== node.name) return
-        if (next.params !== node.params) return
-
-        // Move our nodes over
-        next.nodes = node.nodes.concat(next.nodes)
-
-        // We merge everything into the last at-rule, but from a CSS perspective
-        // this should look as-if we merged it into the first one.
-        next.src = node.src
-        next.dst = node.dst
-
-        return WalkAction.Replace([])
-      },
-    })
-  }
-
-  // Merge adjacent rules with the same selector
-  //
-  // ```css
-  // .a {
-  //   --x: 1;
-  // }
-  // .a {
-  //   --y: 1;
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // .a {
-  //   --x: 1;
-  //   --y: 1;
-  // }
-  // ```
-  {
-    walk(ast, {
-      enter(node, ctx) {
-        if (node.kind !== 'rule') return
-
-        let next = ctx.siblings[ctx.index + 1]
-
-        if (!next) return
-        if (next.kind !== 'rule') return
-        if (next.selector !== node.selector) return
-
-        // Move our nodes over
-        next.nodes = node.nodes.concat(next.nodes)
-
-        // We merge everything into the last at-rule, but from a CSS perspective
-        // this should look as-if we merged it into the first one.
-        next.src = node.src
-        next.dst = node.dst
-
-        return WalkAction.Replace([])
-      },
-    })
-  }
-
-  // Remove declarations that occur later with the same property / value /
-  // important information. A potential future improvement could be getting rid
-  // of overrides, but often a fallback value is used this way.
-  //
-  // ```css
-  // .foo {
-  //   --x: 1;
-  //   --x: 2;
-  //   --x: 1;
-  // }
-  // ```
-  //
-  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-  //
-  // ```css
-  // .foo {
-  //   --x: 2;
-  //   --x: 1;
-  // }
-  // ```
-  {
-    walk(ast, (node, ctx) => {
-      if (node.kind !== 'declaration') return
-
-      for (let i = ctx.index + 1; i < ctx.siblings.length; i++) {
-        let next = ctx.siblings[i]
-        if (
-          next.kind === 'declaration' &&
-          next.property === node.property &&
-          next.value === node.value &&
-          next.important === node.important
-        ) {
-          return WalkAction.Replace([])
-        }
-      }
-    })
-  }
-
-  return ast
-}

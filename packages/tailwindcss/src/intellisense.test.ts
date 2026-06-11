@@ -213,11 +213,9 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
       text-decoration-line: underline;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     ",
@@ -244,11 +242,9 @@ test('Utilities, when marked as important, show as important in intellisense', a
       text-decoration-line: underline !important;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     ",

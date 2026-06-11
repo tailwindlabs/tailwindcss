@@ -34,20 +34,18 @@ describe('compiling CSS', () => {
         .flex {
           display: flex;
         }
-        .hover\\:underline {
-          &:hover {
-            @media (hover: hover) {
-              text-decoration-line: underline;
-            }
+        @media (hover: hover) {
+          .hover\\:underline:hover {
+            text-decoration-line: underline;
           }
         }
-        .md\\:grid {
-          @media (width >= 768px) {
+        @media (width >= 768px) {
+          .md\\:grid {
             display: grid;
           }
         }
-        .dark\\:bg-black {
-          @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: dark) {
+          .dark\\:bg-black {
             background-color: var(--color-black);
           }
         }
@@ -260,7 +258,9 @@ describe('arbitrary properties', () => {
       "
       .\\[color\\:var\\(--my-color\\)\\]\\/50 {
         color: var(--my-color);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .\\[color\\:var\\(--my-color\\)\\]\\/50 {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
@@ -413,19 +413,23 @@ describe('@apply', () => {
         animation: var(--animate-spin);
         background-color: var(--color-red-500);
         text-decoration-line: underline;
-        &:hover {
-          @media (hover: hover) {
-            background-color: var(--color-blue-500);
-          }
+      }
+      @media (hover: hover) {
+        .foo:hover {
+          background-color: var(--color-blue-500);
         }
-        @media (width >= 768px) {
+      }
+      @media (width >= 768px) {
+        .foo {
           background-color: var(--color-green-500);
         }
-        &:hover:focus {
-          background-color: var(--color-red-200);
-          @media (width >= 768px) {
-            background-color: var(--color-green-200);
-          }
+      }
+      .foo:hover:focus {
+        background-color: var(--color-red-200);
+      }
+      @media (width >= 768px) {
+        .foo:hover:focus {
+          background-color: var(--color-green-200);
         }
       }
       @property --tw-translate-x {
@@ -509,13 +513,11 @@ describe('@apply', () => {
       @layer properties;
       .foo {
         --tw-content: "a";
-        content: var(--tw-content);
         --tw-content: "b";
         content: var(--tw-content);
       }
       .bar {
         --tw-content: "a";
-        content: var(--tw-content);
         --tw-content: "b";
         content: var(--tw-content);
       }
@@ -651,13 +653,11 @@ describe('@apply', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      .foo {
-        &:before {
-          content: 'bar';
-        }
-        &:after {
-          content: 'baz';
-        }
+      .foo:before {
+        content: 'bar';
+      }
+      .foo:after {
+        content: 'baz';
       }
       "
     `)
@@ -695,15 +695,11 @@ describe('@apply', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a {
-        &:focus {
-          display: flex !important;
-        }
+      .a:focus {
+        display: flex !important;
       }
-      .b {
-        &:focus {
-          display: flex !important;
-        }
+      .b:focus {
+        display: flex !important;
       }
       .c {
         display: flex !important;
@@ -715,10 +711,8 @@ describe('@apply', () => {
         display: flex;
       }
       @layer base {
-        body {
-          &:focus {
-            display: flex !important;
-          }
+        body:focus {
+          display: flex !important;
         }
       }
       "
@@ -752,9 +746,9 @@ describe('@apply', () => {
       }
       .ignore-me {
         text-decoration-line: underline;
-        div {
-          display: flex;
-        }
+      }
+      .ignore-me div {
+        display: flex;
       }
       "
     `)
@@ -802,30 +796,30 @@ describe('@apply', () => {
       }
       .test {
         background-color: var(--color-green-500);
-        &:hover {
-          background-color: var(--color-red-500);
-        }
-        &:disabled {
-          background-color: var(--color-indigo-500);
-        }
+      }
+      .test:hover {
+        background-color: var(--color-red-500);
+      }
+      .test:disabled {
+        background-color: var(--color-indigo-500);
       }
       .test2 {
         background-color: var(--color-green-500);
-        &:hover {
-          background-color: var(--color-red-500);
-        }
-        &:disabled {
-          background-color: var(--color-indigo-500);
-        }
+      }
+      .test2:hover {
+        background-color: var(--color-red-500);
+      }
+      .test2:disabled {
+        background-color: var(--color-indigo-500);
       }
       .foo {
         background-color: var(--color-green-500);
-        &:hover {
-          background-color: var(--color-red-500);
-        }
-        &:disabled {
-          background-color: var(--color-indigo-500);
-        }
+      }
+      .foo:hover {
+        background-color: var(--color-red-500);
+      }
+      .foo:disabled {
+        background-color: var(--color-indigo-500);
       }
       "
     `)
@@ -964,10 +958,8 @@ describe('arbitrary variants', () => {
   it('should generate arbitrary variants', async () => {
     expect(await run(['[&_p]:flex'])).toMatchInlineSnapshot(`
       "
-      .\\[\\&_p\\]\\:flex {
-        & p {
-          display: flex;
-        }
+      .\\[\\&_p\\]\\:flex p {
+        display: flex;
       }
       "
     `)
@@ -976,8 +968,8 @@ describe('arbitrary variants', () => {
   it('should generate arbitrary at-rule variants', async () => {
     expect(await run(['[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "
-      .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
-        @media (width>=123px) {
+      @media (width>=123px) {
+        .\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
           display: flex;
         }
       }
@@ -994,13 +986,9 @@ describe('variant stacking', () => {
   it('should stack simple variants', async () => {
     expect(await run(['focus:hover:flex'])).toMatchInlineSnapshot(`
       "
-      .focus\\:hover\\:flex {
-        &:focus {
-          &:hover {
-            @media (hover: hover) {
-              display: flex;
-            }
-          }
+      @media (hover: hover) {
+        .focus\\:hover\\:flex:focus:hover {
+          display: flex;
         }
       }
       "
@@ -1010,13 +998,9 @@ describe('variant stacking', () => {
   it('should stack arbitrary variants and simple variants', async () => {
     expect(await run(['[&_p]:hover:flex'])).toMatchInlineSnapshot(`
       "
-      .\\[\\&_p\\]\\:hover\\:flex {
-        & p {
-          &:hover {
-            @media (hover: hover) {
-              display: flex;
-            }
-          }
+      @media (hover: hover) {
+        .\\[\\&_p\\]\\:hover\\:flex p:hover {
+          display: flex;
         }
       }
       "
@@ -1026,11 +1010,9 @@ describe('variant stacking', () => {
   it('should stack multiple arbitrary variants', async () => {
     expect(await run(['[&_p]:[@media(width>=123px)]:flex'])).toMatchInlineSnapshot(`
       "
-      .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex {
-        & p {
-          @media (width>=123px) {
-            display: flex;
-          }
+      @media (width>=123px) {
+        .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex p {
+          display: flex;
         }
       }
       "
@@ -1041,24 +1023,16 @@ describe('variant stacking', () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "
       @layer properties;
-      .before\\:hover\\:flex {
-        &::before {
-          content: var(--tw-content);
-          &:hover {
-            @media (hover: hover) {
-              display: flex;
-            }
-          }
-        }
+      .before\\:hover\\:flex::before {
+        content: var(--tw-content);
       }
-      .hover\\:before\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            &::before {
-              content: var(--tw-content);
-              display: flex;
-            }
-          }
+      @media (hover: hover) {
+        .before\\:hover\\:flex::before:hover {
+          display: flex;
+        }
+        .hover\\:before\\:flex:hover::before {
+          content: var(--tw-content);
+          display: flex;
         }
       }
       @property --tw-content {
@@ -1230,12 +1204,10 @@ describe('sorting', () => {
       .gap-4 {
         gap: var(--spacing-4);
       }
-      .space-x-2 {
-        :where(& > :not(:last-child)) {
-          --tw-space-x-reverse: 0;
-          margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
-          margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
-        }
+      :where(.space-x-2 > :not(:last-child)) {
+        --tw-space-x-reverse: 0;
+        margin-inline-start: calc(var(--spacing-2) * var(--tw-space-x-reverse));
+        margin-inline-end: calc(var(--spacing-2) * calc(1 - var(--tw-space-x-reverse)));
       }
       @property --tw-space-x-reverse {
         syntax: "*";
@@ -1348,17 +1320,13 @@ describe('sorting', () => {
       .flex {
         display: flex;
       }
-      .hover\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            display: flex;
-          }
+      @media (hover: hover) {
+        .hover\\:flex:hover {
+          display: flex;
         }
       }
-      .focus\\:pointer-events-none {
-        &:focus {
-          pointer-events: none;
-        }
+      .focus\\:pointer-events-none:focus {
+        pointer-events: none;
       }
       "
     `)
@@ -1391,31 +1359,21 @@ describe('sorting', () => {
       .flex {
         display: flex;
       }
-      .hover\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
-      .focus\\:flex {
-        &:focus {
+      @media (hover: hover) {
+        .hover\\:flex:hover {
           display: flex;
         }
       }
-      .hover\\:focus\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            &:focus {
-              display: flex;
-            }
-          }
-        }
+      .focus\\:flex:focus {
+        display: flex;
       }
-      .disabled\\:flex {
-        &:disabled {
+      @media (hover: hover) {
+        .hover\\:focus\\:flex:hover:focus {
           display: flex;
         }
+      }
+      .disabled\\:flex:disabled {
+        display: flex;
       }
       "
     `)
@@ -1447,107 +1405,53 @@ describe('sorting', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .group-hover\\:flex {
-        &:is(:where(.group):hover *) {
-          @media (hover: hover) {
-            display: flex;
-          }
-        }
-      }
-      .group-focus\\:flex {
-        &:is(:where(.group):focus *) {
+      @media (hover: hover) {
+        .group-hover\\:flex:is(:where(.group):hover *) {
           display: flex;
         }
       }
-      .peer-hover\\:flex {
-        &:is(:where(.peer):hover ~ *) {
-          @media (hover: hover) {
+      .group-focus\\:flex:is(:where(.group):focus *) {
+        display: flex;
+      }
+      @media (hover: hover) {
+        .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+          display: flex;
+        }
+        @media (hover: hover) {
+          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *) {
+            display: flex;
+          }
+          .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
             display: flex;
           }
         }
-      }
-      .group-hover\\:peer-hover\\:flex {
-        &:is(:where(.group):hover *) {
-          @media (hover: hover) {
-            &:is(:where(.peer):hover ~ *) {
-              @media (hover: hover) {
-                display: flex;
-              }
-            }
-          }
+        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *) {
+          display: flex;
         }
-      }
-      .peer-hover\\:group-hover\\:flex {
-        &:is(:where(.peer):hover ~ *) {
-          @media (hover: hover) {
-            &:is(:where(.group):hover *) {
-              @media (hover: hover) {
-                display: flex;
-              }
-            }
-          }
-        }
-      }
-      .group-focus\\:peer-hover\\:flex {
-        &:is(:where(.group):focus *) {
-          &:is(:where(.peer):hover ~ *) {
-            @media (hover: hover) {
-              display: flex;
-            }
-          }
-        }
-      }
-      .peer-hover\\:group-focus\\:flex {
-        &:is(:where(.peer):hover ~ *) {
-          @media (hover: hover) {
-            &:is(:where(.group):focus *) {
-              display: flex;
-            }
-          }
-        }
-      }
-      .peer-focus\\:flex {
-        &:is(:where(.peer):focus ~ *) {
+        .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
           display: flex;
         }
       }
-      .group-hover\\:peer-focus\\:flex {
-        &:is(:where(.group):hover *) {
-          @media (hover: hover) {
-            &:is(:where(.peer):focus ~ *) {
-              display: flex;
-            }
-          }
+      .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
+        display: flex;
+      }
+      @media (hover: hover) {
+        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *) {
+          display: flex;
+        }
+        .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
+          display: flex;
         }
       }
-      .peer-focus\\:group-hover\\:flex {
-        &:is(:where(.peer):focus ~ *) {
-          &:is(:where(.group):hover *) {
-            @media (hover: hover) {
-              display: flex;
-            }
-          }
-        }
+      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *) {
+        display: flex;
       }
-      .group-focus\\:peer-focus\\:flex {
-        &:is(:where(.group):focus *) {
-          &:is(:where(.peer):focus ~ *) {
-            display: flex;
-          }
-        }
+      .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
+        display: flex;
       }
-      .peer-focus\\:group-focus\\:flex {
-        &:is(:where(.peer):focus ~ *) {
-          &:is(:where(.group):focus *) {
-            display: flex;
-          }
-        }
-      }
-      .hover\\:flex {
-        &:hover {
-          @media (hover: hover) {
-            display: flex;
-          }
+      @media (hover: hover) {
+        .hover\\:flex:hover {
+          display: flex;
         }
       }
       "
@@ -3572,15 +3476,11 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex {
-          &:is(:is(:where(.group):hover, :where(.group):focus) *) {
-            display: flex;
-          }
+        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          display: flex;
         }
-        .hocus\\:underline {
-          &:hover, &:focus {
-            text-decoration-line: underline;
-          }
+        .hocus\\:underline:hover, .hocus\\:underline:focus {
+          text-decoration-line: underline;
         }
       }
       "
@@ -3610,21 +3510,17 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex {
-          &:is(:where(.group):hover *) {
-            display: flex;
-          }
-          &:is(:where(.group):focus *) {
-            display: flex;
-          }
+        .group-hocus\\:flex:is(:where(.group):hover *) {
+          display: flex;
         }
-        .hocus\\:underline {
-          &:hover {
-            text-decoration-line: underline;
-          }
-          &:focus {
-            text-decoration-line: underline;
-          }
+        .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+        .hocus\\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
         }
       }
       "
@@ -3657,21 +3553,17 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex {
-          &:is(:where(.group):hover *) {
-            display: flex;
-          }
-          &:is(:where(.group):focus *) {
-            display: flex;
-          }
+        .group-hocus\\:flex:is(:where(.group):hover *) {
+          display: flex;
         }
-        .hocus\\:underline {
-          &:hover {
-            text-decoration-line: underline;
-          }
-          &:focus {
-            text-decoration-line: underline;
-          }
+        .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+        .hocus\\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
         }
       }
       "
@@ -3706,25 +3598,21 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex {
-          @media (hover: hover) {
-            &:is(:where(.group):hover *) {
-              display: flex;
-            }
-          }
-          &:is(:where(.group):focus *) {
+        @media (hover: hover) {
+          .group-hocus\\:flex:is(:where(.group):hover *) {
             display: flex;
           }
         }
-        .hocus\\:underline {
-          @media (hover: hover) {
-            &:hover {
-              text-decoration-line: underline;
-            }
-          }
-          &:focus {
+        .group-hocus\\:flex:is(:where(.group):focus *) {
+          display: flex;
+        }
+        @media (hover: hover) {
+          .hocus\\:underline:hover {
             text-decoration-line: underline;
           }
+        }
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
         }
       }
       "
@@ -3761,15 +3649,13 @@ describe('plugins', () => {
       "
       @layer utilities {
         .hocus\\:underline {
-          & {
-            --custom-property: @slot;
-            &:hover {
-              text-decoration-line: underline;
-            }
-            &:focus {
-              text-decoration-line: underline;
-            }
-          }
+          --custom-property: @slot;
+        }
+        .hocus\\:underline:hover {
+          text-decoration-line: underline;
+        }
+        .hocus\\:underline:focus {
+          text-decoration-line: underline;
         }
       }
       "
@@ -3801,18 +3687,14 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .rtl\\:flex {
-          &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-            display: flex;
-          }
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+          display: flex;
         }
-        .dark\\:flex {
-          &:is([data-theme=dark] *) {
-            display: flex;
-          }
+        .dark\\:flex:is([data-theme=dark] *) {
+          display: flex;
         }
-        .starting\\:flex {
-          @starting-style {
+        @starting-style {
+          .starting\\:flex {
             display: flex;
           }
         }
@@ -4188,15 +4070,11 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:flex {
-            &:is(:is(:where(.group):hover, :where(.group):focus) *) {
-              display: flex;
-            }
+          .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+            display: flex;
           }
-          .hocus\\:underline {
-            &:hover, &:focus {
-              text-decoration-line: underline;
-            }
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4218,12 +4096,10 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .any-hover\\:hover\\:underline {
-            @media (any-hover: hover) {
-              &:hover {
-                @media (hover: hover) {
-                  text-decoration-line: underline;
-                }
+          @media (any-hover: hover) {
+            @media (hover: hover) {
+              .any-hover\\:hover\\:underline:hover {
+                text-decoration-line: underline;
               }
             }
           }
@@ -4247,21 +4123,17 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .cant-hover\\:focus\\:underline {
-            &:not(:hover), &:not(:active) {
-              &:focus {
-                text-decoration-line: underline;
-              }
+          :is(.cant-hover\\:focus\\:underline:not(:hover), .cant-hover\\:focus\\:underline:not(:active)):focus {
+            text-decoration-line: underline;
+          }
+          @media not (any-hover: hover) {
+            .cant-hover\\:focus\\:underline:focus {
+              text-decoration-line: underline;
             }
-            @media not (any-hover: hover) {
-              &:focus {
-                text-decoration-line: underline;
-              }
-            }
-            @media not (pointer: fine) {
-              &:focus {
-                text-decoration-line: underline;
-              }
+          }
+          @media not (pointer: fine) {
+            .cant-hover\\:focus\\:underline:focus {
+              text-decoration-line: underline;
             }
           }
         }
@@ -4290,15 +4162,11 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-selected\\:underline {
-            &:is(:where(.group)[data-selected] *) {
-              text-decoration-line: underline;
-            }
+          .group-selected\\:underline:is(:where(.group)[data-selected] *) {
+            text-decoration-line: underline;
           }
-          .selected\\:underline {
-            &[data-selected] {
-              text-decoration-line: underline;
-            }
+          .selected\\:underline[data-selected] {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4325,15 +4193,11 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline {
-            &:is(:is(:where(.group):hover, :where(.group):focus) *) {
-              text-decoration-line: underline;
-            }
+          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *) {
+            text-decoration-line: underline;
           }
-          .hocus\\:underline {
-            &:hover, &:focus {
-              text-decoration-line: underline;
-            }
+          .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4363,21 +4227,17 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline {
-            &:is(:where(.group):hover *) {
-              text-decoration-line: underline;
-            }
-            &:is(:where(.group):focus *) {
-              text-decoration-line: underline;
-            }
+          .group-hocus\\:underline:is(:where(.group):hover *) {
+            text-decoration-line: underline;
           }
-          .hocus\\:underline {
-            &:hover {
-              text-decoration-line: underline;
-            }
-            &:focus {
-              text-decoration-line: underline;
-            }
+          .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+          .hocus\\:underline:hover {
+            text-decoration-line: underline;
+          }
+          .hocus\\:underline:focus {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4407,12 +4267,10 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           .custom-before\\:underline {
-            & {
-              --has-before: 1;
-              &::before {
-                text-decoration-line: underline;
-              }
-            }
+            --has-before: 1;
+          }
+          .custom-before\\:underline::before {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4445,14 +4303,10 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           .custom-before\\:underline {
-            & {
-              --has-before: 1;
-              &::before {
-                &:hover, &:focus {
-                  text-decoration-line: underline;
-                }
-              }
-            }
+            --has-before: 1;
+          }
+          .custom-before\\:underline::before:hover, .custom-before\\:underline::before:focus {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4484,25 +4338,21 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline {
-            &:is(:where(.group):hover *) {
-              @media (hover: hover) {
-                text-decoration-line: underline;
-              }
-            }
-            &:is(:where(.group):focus *) {
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
               text-decoration-line: underline;
             }
           }
-          .hocus\\:underline {
-            &:hover {
-              @media (hover: hover) {
-                text-decoration-line: underline;
-              }
-            }
-            &:focus {
+          .group-hocus\\:underline:is(:where(.group):focus *) {
+            text-decoration-line: underline;
+          }
+          @media (hover: hover) {
+            .hocus\\:underline:hover {
               text-decoration-line: underline;
             }
+          }
+          .hocus\\:underline:focus {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4530,18 +4380,12 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline {
-            @media (hover: hover) {
-              &:is(:where(.group):hover *) {
-                text-decoration-line: underline;
-              }
+          @media (hover: hover) {
+            .group-hocus\\:underline:is(:where(.group):hover *) {
+              text-decoration-line: underline;
             }
-          }
-          .hocus\\:underline {
-            @media (hover: hover) {
-              &:hover {
-                text-decoration-line: underline;
-              }
+            .hocus\\:underline:hover {
+              text-decoration-line: underline;
             }
           }
         }
@@ -4568,8 +4412,8 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .any-hover\\:underline {
-            @media (any-hover: hover) {
+          @media (any-hover: hover) {
+            .any-hover\\:underline {
               text-decoration-line: underline;
             }
           }
@@ -4601,11 +4445,13 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .desktop\\:underline {
-            @media (any-hover: hover) {
+          @media (any-hover: hover) {
+            .desktop\\:underline {
               text-decoration-line: underline;
             }
-            @media (pointer: fine) {
+          }
+          @media (pointer: fine) {
+            .desktop\\:underline {
               text-decoration-line: underline;
             }
           }
@@ -4639,12 +4485,14 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .custom-variant\\:underline {
-            @media (orientation: landscape) {
-              @media screen {
+          @media (orientation: landscape) {
+            @media screen {
+              .custom-variant\\:underline {
                 text-decoration-line: underline;
               }
-              @media print {
+            }
+            @media print {
+              .custom-variant\\:underline {
                 display: none;
               }
             }
@@ -4676,13 +4524,13 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .custom-dark\\:underline {
-            @media (prefers-color-scheme: dark) {
+          @media (prefers-color-scheme: dark) {
+            .custom-dark\\:underline {
               text-decoration-line: underline;
             }
-            &:is(.dark *) {
-              text-decoration-line: underline;
-            }
+          }
+          .custom-dark\\:underline:is(.dark *) {
+            text-decoration-line: underline;
           }
         }
         "
@@ -4706,18 +4554,14 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .rtl\\:flex {
-          &:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
-            display: flex;
-          }
+        .rtl\\:flex:where(:dir(rtl), [dir="rtl"], [dir="rtl"] *) {
+          display: flex;
         }
-        .dark\\:flex {
-          &:is([data-theme='dark'] *) {
-            display: flex;
-          }
+        .dark\\:flex:is([data-theme='dark'] *) {
+          display: flex;
         }
-        .starting\\:flex {
-          @starting-style {
+        @starting-style {
+          .starting\\:flex {
             display: flex;
           }
         }
@@ -4741,13 +4585,13 @@ describe('@custom-variant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .not-foo\\:flex {
-          @media not foo {
+        @media not foo {
+          .not-foo\\:flex {
             display: flex;
           }
         }
-        .foo\\:flex {
-          @media foo {
+        @media foo {
+          .foo\\:flex {
             display: flex;
           }
         }
@@ -4774,17 +4618,9 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex {
-        & {
-          &:hover {
-            @media (hover: hover) {
-              & {
-                &:focus {
-                  display: flex;
-                }
-              }
-            }
-          }
+      @media (hover: hover) {
+        .hocus\\:flex:hover:focus {
+          display: flex;
         }
       }
       "
@@ -4811,16 +4647,8 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex {
-        & {
-          &:hover {
-            & {
-              &:focus {
-                display: flex;
-              }
-            }
-          }
-        }
+      .hocus\\:flex:hover:focus {
+        display: flex;
       }
       "
     `)
@@ -4846,16 +4674,8 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex {
-        & {
-          &:hover {
-            & {
-              &:focus {
-                display: flex;
-              }
-            }
-          }
-        }
+      .hocus\\:flex:hover:focus {
+        display: flex;
       }
       "
     `)
@@ -4943,19 +4763,13 @@ describe('@custom-variant', () => {
         display: flex;
       }
       .b\\:flex {
-        & {
-          display: flex;
-        }
+        display: flex;
       }
       .a\\:b\\:flex {
-        & {
-          display: flex;
-        }
+        display: flex;
       }
       .b\\:a\\:flex {
-        & {
-          display: flex;
-        }
+        display: flex;
       }
       "
     `)
@@ -4987,47 +4801,17 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .a\\:flex {
-        .a {
-          display: flex;
-        }
+      .a\\:flex .a {
+        display: flex;
       }
-      .b\\:flex {
-        .b {
-          & {
-            .a {
-              .a-inside-b {
-                display: flex;
-              }
-            }
-          }
-        }
+      .b\\:flex .b .a .a-inside-b {
+        display: flex;
       }
-      .a\\:b\\:flex {
-        .a {
-          .b {
-            & {
-              .a {
-                .a-inside-b {
-                  display: flex;
-                }
-              }
-            }
-          }
-        }
+      .a\\:b\\:flex .a .b .a .a-inside-b {
+        display: flex;
       }
-      .b\\:a\\:flex {
-        .b {
-          & {
-            .a {
-              .a-inside-b {
-                .a {
-                  display: flex;
-                }
-              }
-            }
-          }
-        }
+      .b\\:a\\:flex .b .a .a-inside-b .a {
+        display: flex;
       }
       "
     `)
@@ -5062,23 +4846,11 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:flex {
-        & {
-          &:hover {
-            & {
-              &:focus {
-                display: flex;
-              }
-            }
-          }
-          &[data-hover] {
-            & {
-              &:focus {
-                display: flex;
-              }
-            }
-          }
-        }
+      .hocus\\:flex:hover:focus {
+        display: flex;
+      }
+      .hocus\\:flex[data-hover]:focus {
+        display: flex;
       }
       "
     `)
@@ -5121,16 +4893,8 @@ describe('@custom-variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .baz\\:flex {
-        & {
-          &:active {
-            & {
-              [data-broken-circle] & {
-                display: flex;
-              }
-            }
-          }
-        }
+      [data-broken-circle] .baz\\:flex:active {
+        display: flex;
       }
       "
     `)
@@ -5342,27 +5106,19 @@ test('JS APIs support @variant', async () => {
       .underline {
         text-decoration-line: underline;
       }
-      .bar-one {
-        & {
-          @media (prefers-color-scheme: dark) {
-            --bar: 1;
-          }
+      @media (prefers-color-scheme: dark) {
+        .bar-one {
+          --bar: 1;
         }
-      }
-      .foo {
-        & {
-          @media (prefers-color-scheme: dark) {
-            --foo: foo;
-          }
+        .foo {
+          --foo: foo;
         }
       }
     }
     @layer base {
-      body {
-        & {
-          @media (prefers-color-scheme: dark) {
-            color: red;
-          }
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: red;
         }
       }
     }
@@ -5438,11 +5194,9 @@ describe('`@reference "…" imports`', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .bar {
-        @media (width >= 768px) {
-          &:hover, &:focus {
-            color: red;
-          }
+      @media (width >= 768px) {
+        .bar:hover, .bar:focus {
+          color: red;
         }
       }
       "
@@ -5681,11 +5435,9 @@ describe('`@reference "…" imports`', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .bar {
-        @media (width >= 768px) {
-          &:hover, &:focus {
-            color: red;
-          }
+      @media (width >= 768px) {
+        .bar:hover, .bar:focus {
+          color: red;
         }
       }
       "
@@ -5716,11 +5468,9 @@ describe('`@reference "…" imports`', () => {
       `),
     ).toMatchInlineSnapshot(`
       "
-      .bar {
-        @media (width >= 48rem) {
-          &:hover, &:focus {
-            color: red;
-          }
+      @media (width >= 48rem) {
+        .bar:hover, .bar:focus {
+          color: red;
         }
       }
       "
@@ -5740,10 +5490,8 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:underline {
-        &:hover, &:focus {
-          text-decoration-line: underline;
-        }
+      .hocus\\:underline:hover, .hocus\\:underline:focus {
+        text-decoration-line: underline;
       }
       "
     `)
@@ -5768,13 +5516,11 @@ describe('@variant', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .hocus\\:underline {
-        &:hover {
-          text-decoration-line: underline;
-        }
-        &:focus {
-          text-decoration-line: underline;
-        }
+      .hocus\\:underline:hover {
+        text-decoration-line: underline;
+      }
+      .hocus\\:underline:focus {
+        text-decoration-line: underline;
       }
       "
     `)
@@ -5827,52 +5573,36 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        & {
-          @media (prefers-color-scheme: dark) {
-            background: white;
-          }
+      }
+      @media (prefers-color-scheme: dark) {
+        .btn {
+          background: white;
         }
       }
-      & {
-        &:hover {
-          @media (hover: hover) {
-            & {
-              @media (orientation: landscape) {
-                .btn2 {
-                  color: red;
-                }
-              }
-            }
+      @media (hover: hover) {
+        @media (orientation: landscape) {
+          :scope:hover .btn2 {
+            color: red;
           }
         }
-      }
-      & {
-        &:hover {
-          @media (hover: hover) {
-            .foo {
-              color: red;
-            }
-            & {
-              @media (orientation: landscape) {
-                .bar {
-                  color: blue;
-                }
-              }
-            }
-            .baz {
-              & {
-                @media (orientation: portrait) {
-                  color: green;
-                }
-              }
-            }
+        :scope:hover .foo {
+          color: red;
+        }
+        @media (orientation: landscape) {
+          :scope:hover .bar {
+            color: blue;
+          }
+        }
+        @media (orientation: portrait) {
+          :scope:hover .baz {
+            color: green;
           }
         }
       }
       @media something {
-        & {
-          @media (orientation: landscape) {
-            @page {
+        @media (orientation: landscape) {
+          @page {
+            :scope {
               color: red;
             }
           }
@@ -5899,11 +5629,9 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        & {
-          &:hover, &:focus {
-            background: white;
-          }
-        }
+      }
+      .btn:hover, .btn:focus {
+        background: white;
       }
       "
     `)
@@ -5930,22 +5658,12 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        & {
-          &:disabled {
-            & {
-              &:focus {
-                background: white;
-              }
-            }
-          }
-        }
       }
-      .disabled\\:focus\\:underline {
-        &:disabled {
-          &:focus {
-            text-decoration-line: underline;
-          }
-        }
+      .btn:disabled:focus {
+        background: white;
+      }
+      .disabled\\:focus\\:underline:disabled:focus {
+        text-decoration-line: underline;
       }
       "
     `)
@@ -5968,18 +5686,14 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:hover {
-              @media (hover: hover) {
-                background: red;
-              }
-            }
+        }
+        @media (hover: hover) {
+          .btn:hover {
+            background: red;
           }
-          & {
-            &:focus {
-              background: red;
-            }
-          }
+        }
+        .btn:focus {
+          background: red;
         }
         "
       `)
@@ -6026,18 +5740,14 @@ describe('@variant', () => {
           "
           .btn {
             background: black;
-            & {
-              &:hover {
-                @media (hover: hover) {
-                  background: red;
-                }
-              }
+          }
+          @media (hover: hover) {
+            .btn:hover {
+              background: red;
             }
-            & {
-              &:focus {
-                background: red;
-              }
-            }
+          }
+          .btn:focus {
+            background: red;
           }
           "
         `)
@@ -6060,16 +5770,12 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:is(:hover,:focus) {
-              background: red;
-            }
-          }
-          & {
-            &:disabled {
-              background: red;
-            }
-          }
+        }
+        .btn:is(:hover, :focus) {
+          background: red;
+        }
+        .btn:disabled {
+          background: red;
         }
         "
       `)
@@ -6095,38 +5801,26 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:hover {
-              @media (hover: hover) {
-                background: red;
-                & {
-                  &:active {
-                    background: blue;
-                  }
-                }
-                & {
-                  &:disabled {
-                    background: blue;
-                  }
-                }
-              }
-            }
+        }
+        @media (hover: hover) {
+          .btn:hover {
+            background: red;
           }
-          & {
-            &:focus {
-              background: red;
-              & {
-                &:active {
-                  background: blue;
-                }
-              }
-              & {
-                &:disabled {
-                  background: blue;
-                }
-              }
-            }
+          .btn:hover:active {
+            background: blue;
           }
+          .btn:hover:disabled {
+            background: blue;
+          }
+        }
+        .btn:focus {
+          background: red;
+        }
+        .btn:focus:active {
+          background: blue;
+        }
+        .btn:focus:disabled {
+          background: blue;
         }
         "
       `)
@@ -6217,14 +5911,10 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:hover {
-              @media (hover: hover) {
-                &:focus {
-                  background: red;
-                }
-              }
-            }
+        }
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
           }
         }
         "
@@ -6247,20 +5937,14 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:hover {
-              @media (hover: hover) {
-                &:focus {
-                  background: red;
-                }
-              }
-            }
+        }
+        @media (hover: hover) {
+          .btn:hover:focus {
+            background: red;
           }
-          & {
-            &:disabled {
-              background: red;
-            }
-          }
+        }
+        .btn:disabled {
+          background: red;
         }
         "
       `)
@@ -6282,21 +5966,13 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-          & {
-            &:is(:hover,:focus) {
-              &:disabled {
-                background: red;
-              }
-            }
-          }
-          & {
-            &[aria-disabled="true"] {
-              &:hover {
-                @media (hover: hover) {
-                  background: red;
-                }
-              }
-            }
+        }
+        .btn:is(:hover, :focus):disabled {
+          background: red;
+        }
+        @media (hover: hover) {
+          .btn[aria-disabled="true"]:hover {
+            background: red;
           }
         }
         "
@@ -6324,42 +6000,24 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        & {
-          &[data-a] {
-            background: red;
-            & {
-              &[data-d] {
-                background: blue;
-              }
-            }
-            & {
-              &[data-e] {
-                &[data-f] {
-                  background: blue;
-                }
-              }
-            }
-          }
-        }
-        & {
-          &[data-b] {
-            &[data-c] {
-              background: red;
-              & {
-                &[data-d] {
-                  background: blue;
-                }
-              }
-              & {
-                &[data-e] {
-                  &[data-f] {
-                    background: blue;
-                  }
-                }
-              }
-            }
-          }
-        }
+      }
+      .btn[data-a] {
+        background: red;
+      }
+      .btn[data-a][data-d] {
+        background: blue;
+      }
+      .btn[data-a][data-e][data-f] {
+        background: blue;
+      }
+      .btn[data-b][data-c] {
+        background: red;
+      }
+      .btn[data-b][data-c][data-d] {
+        background: blue;
+      }
+      .btn[data-b][data-c][data-e][data-f] {
+        background: blue;
       }
       "
     `)
@@ -6425,14 +6083,10 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-        & {
-          @container (width >= 768px) {
-            & {
-              &.foo {
-                background: white;
-              }
-            }
-          }
+      }
+      @container (width >= 768px) {
+        .btn.foo {
+          background: white;
         }
       }
       "
@@ -6459,7 +6113,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/50 {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/50 {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
       }
@@ -6487,7 +6143,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red\\/50 {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red\\/50 {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
@@ -6515,7 +6173,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .mixed {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, oklch(70.5% 0.213 47.604));
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .mixed {
           color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
         }
       }
@@ -6545,7 +6205,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .stacked {
         color: color-mix( in lch, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 50%, transparent );
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .stacked {
           color: color-mix( in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent );
         }
       }
@@ -6578,7 +6240,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .gradient {
         background: linear-gradient( 90deg, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 0%, color-mix(in srgb, oklch(70.5% 0.213 47.604) 50%, transparent) 0%, 100% );
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .gradient {
           background: linear-gradient( 90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100% );
         }
       }
@@ -6607,7 +6271,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/50 {
         color: color-mix(in srgb,oklch(63.7% 0.237 25.331)50%,transparent);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/50 {
           color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }
@@ -6633,19 +6299,25 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
         color: var(--my-color);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
           color: color-mix(in oklab, var(--my-color) var(--my-opacity), transparent);
         }
       }
       .text-\\(--my-color\\)\\/50 {
         color: var(--my-color);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-\\(--my-color\\)\\/50 {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
       .text-red-500\\/\\(--my-opacity\\) {
         color: oklch(63.7% 0.237 25.331);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/\\(--my-opacity\\) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-opacity), transparent);
         }
       }
@@ -6658,7 +6330,9 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .text-current\\/50 {
         color: currentcolor;
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-current\\/50 {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
       }
@@ -6681,7 +6355,9 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .text-red\\/50 {
         color: var(--color-red);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red\\/50 {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
@@ -6709,7 +6385,9 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .stacked {
         color: var(--my-color);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .stacked {
           color: color-mix( in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent );
         }
       }
@@ -6757,7 +6435,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/\\(--my-half\\) {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-red-500\\/\\(--my-half\\) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);
         }
       }
@@ -6797,9 +6477,13 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .shadow-xl {
         --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in srgb, red 25%, transparent));
-        @supports (color: color-mix(in lab, red, red)) {
+      }
+      @supports (color: color-mix(in lab, red, red)) {
+        .shadow-xl {
           --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
         }
+      }
+      .shadow-xl {
         box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
       }
       @property --tw-shadow {
@@ -6906,8 +6590,8 @@ describe('`color-mix(…)` polyfill', () => {
       ),
     ).toMatchInlineSnapshot(`
       "
-      .mixed {
-        @supports (color: color-mix(in lab, red, red)) {
+      @supports (color: color-mix(in lab, red, red)) {
+        .mixed {
           background: color-mix(in oklab, var(--color-1), var(--color-2) 0%);
         }
       }

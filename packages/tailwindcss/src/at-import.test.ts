@@ -645,10 +645,8 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
     ),
   ).toMatchInlineSnapshot(`
     "
-    .dark\\:flex {
-      &:where([data-theme='dark'] *) {
-        display: flex;
-      }
+    .dark\\:flex:where([data-theme='dark'] *) {
+      display: flex;
     }
     "
   `)
