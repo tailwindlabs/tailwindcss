@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.3.1] - 2026-06-12
+
 ### Added
 
 - Add `--silent` option to suppress output in `@tailwindcss/cli` ([#20100](https://github.com/tailwindlabs/tailwindcss/pull/20100))
@@ -4053,7 +4057,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.0...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...HEAD
+[4.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.4...v4.3.0
 [4.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.3...v4.2.4
 [4.2.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.2...v4.2.3
