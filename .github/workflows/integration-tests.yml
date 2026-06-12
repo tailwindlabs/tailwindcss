@@ -114,6 +114,7 @@ jobs:
           GITHUB_WORKSPACE: ${{ github.workspace }}
 
   notify:
+    timeout-minutes: 15
     if: ${{ always() && github.ref == 'refs/heads/main' && needs.tests.result == 'failure' }}
     needs: tests
     runs-on: ubuntu-latest
