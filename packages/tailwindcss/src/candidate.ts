@@ -1096,7 +1096,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
       node.value = ','
     }
 
-    // Wrap custom functions starting with `--`, in parentheses if preceeded by
+    // Wrap custom functions starting with `--`, in parentheses if preceded by
     // a symbol. E.g.: `calc(100%---spacing(2))` → `calc(100%-(--spacing(2)))`
     else if (node.kind === 'function' && node.value.startsWith('--')) {
       let idx = ctx.index
