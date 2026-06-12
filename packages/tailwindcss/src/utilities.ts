@@ -1985,6 +1985,10 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('auto-cols', {
     themeKeys: ['--grid-auto-columns'],
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return `--spacing(${value})`
+    },
     handle: (value) => [decl('grid-auto-columns', value)],
     staticValues: {
       auto: [decl('grid-auto-columns', 'auto')],
@@ -1996,6 +2000,10 @@ export function createUtilities(theme: Theme) {
 
   functionalUtility('auto-rows', {
     themeKeys: ['--grid-auto-rows'],
+    handleBareValue: ({ value }) => {
+      if (!isPositiveInteger(value)) return null
+      return `--spacing(${value})`
+    },
     handle: (value) => [decl('grid-auto-rows', value)],
     staticValues: {
       auto: [decl('grid-auto-rows', 'auto')],
