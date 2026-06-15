@@ -272,7 +272,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   if (args['--watch']) {
     let cleanupWatchers: (() => Promise<void>)[] = []
     cleanupWatchers.push(
-      await createWatchers(watchDirectories(scanner), async function handle(files) {
+      await createWatchers(await watchDirectories(scanner), async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
@@ -347,7 +347,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             // Setup new watchers
             DEBUG && I.start('Setup new watchers')
-            let newCleanupFunction = await createWatchers(watchDirectories(scanner), handle)
+            let newCleanupFunction = await createWatchers(await watchDirectories(scanner), handle)
             DEBUG && I.end('Setup new watchers')
 
             // Clear old watchers
@@ -586,8 +586,22 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 }
 
-function watchDirectories(scanner: Scanner) {
-  return [...new Set(scanner.normalizedSources.flatMap((globEntry) => globEntry.base))]
+async function watchDirectories(scanner: Scanner) {
+  let directories = (
+    await Promise.all(
+      scanner.normalizedSources.map(async (globEntry) => {
+        let resolvedPath = path.resolve(globEntry.base)
+        let realPath = await fs.realpath(resolvedPath).catch(() => resolvedPath)
+
+        return fs
+          .stat(realPath)
+          .then((stat) => (stat.isDirectory() ? [realPath] : []))
+          .catch(() => [])
+      }),
+    )
+  ).flat(1)
+
+  return Array.from(new Set(directories))
 }
 
 function dim(str: string) {
