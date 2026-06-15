@@ -310,8 +310,8 @@ importers:
         specifier: ^0.5.11
         version: 0.5.11(tailwindcss@packages+tailwindcss)
       '@tailwindcss/typography':
-        specifier: ^0.5.19
-        version: 0.5.19(tailwindcss@packages+tailwindcss)
+        specifier: ^0.5.20
+        version: 0.5.20(tailwindcss@packages+tailwindcss)
       detect-libc:
         specifier: 1.0.3
         version: 1.0.3
@@ -2069,10 +2069,10 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || >= 4.0.0-alpha.20 || >= 4.0.0-beta.1'
 
-  '@tailwindcss/typography@0.5.19':
-    resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
+  '@tailwindcss/typography@0.5.20':
+    resolution: {integrity: sha512-hwbzQuNUfcPvbegQFatVPl/MY/tcM9KLl963hQ5laJKPh81TEZ1+dNG9PirGvcaDBkp+BCshExAyKVPW91dozw==}
     peerDependencies:
-      tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
+      tailwindcss: '>=3.0.0 || >=4.0.0 || insiders'
 
   '@turbo/darwin-64@2.9.14':
     resolution: {integrity: sha512-t7QiPflaEyBE4oayeZtSmu4mEfjgIrcNlNNl1z1dmIVPqEdtA7+CfTf8d7KXsOGPh6aNgWjKxyvQg9uGfDQF+A==}
@@ -4535,7 +4535,7 @@ snapshots:
       mini-svg-data-uri: 1.4.4
       tailwindcss: link:packages/tailwindcss
 
-  '@tailwindcss/typography@0.5.19(tailwindcss@packages+tailwindcss)':
+  '@tailwindcss/typography@0.5.20(tailwindcss@packages+tailwindcss)':
     dependencies:
       postcss-selector-parser: 6.0.10
       tailwindcss: link:packages/tailwindcss
