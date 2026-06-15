@@ -144,8 +144,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)
       emnapi:
-        specifier: 1.10.0
-        version: 1.10.0(node-addon-api@8.7.0)
+        specifier: 1.11.1
+        version: 1.11.1(node-addon-api@8.7.0)
 
   crates/node/npm/android-arm-eabi: {}
 
@@ -2463,8 +2463,8 @@ packages:
   electron-to-chromium@1.5.361:
     resolution: {integrity: sha512-Q6Hts7N9FnJc5LeGRINFvLhCI9xZmNtTDe5ZbcVezQz7cU4a8Aua3GH1b8J2XY8Al9PF+OCwYqhgsOOheMdvkA==}
 
-  emnapi@1.10.0:
-    resolution: {integrity: sha512-swoyZjupDvLoe/KC3HZ4SY1JUN+tviT6eOZ3Px28TZAYdBHtRIiMWWrIUUH+2/9CYY4fNTID1YhYZ+kdFHszHg==}
+  emnapi@1.11.1:
+    resolution: {integrity: sha512-kSRjhIcxjMFsBqk7ORvoc9aA5SBKDmecrtF5RMcmOTao0kD/zamaxsuTxMI8C1//wGUuvE7a+19pCE7AEhGVnA==}
     peerDependencies:
       node-addon-api: '>= 6.1.0'
     peerDependenciesMeta:
@@ -3808,7 +3808,7 @@ snapshots:
       '@octokit/rest': 22.0.1
       clipanion: 4.0.0-rc.4(typanion@3.14.0)
       colorette: 2.0.20
-      emnapi: 1.10.0(node-addon-api@8.7.0)
+      emnapi: 1.11.1(node-addon-api@8.7.0)
       es-toolkit: 1.46.1
       js-yaml: 4.1.1
       obug: 2.1.1
@@ -4907,7 +4907,7 @@ snapshots:
 
   electron-to-chromium@1.5.361: {}
 
-  emnapi@1.10.0(node-addon-api@8.7.0):
+  emnapi@1.11.1(node-addon-api@8.7.0):
     optionalDependencies:
       node-addon-api: 8.7.0
 
