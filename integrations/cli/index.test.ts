@@ -392,7 +392,7 @@ describe.each([
         `,
         'src/index.css': css`
           @import 'tailwindcss';
-          @source "uknown-folder/**/*";
+          @source "unknown-folder/**/*";
         `,
       },
     },
