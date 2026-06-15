@@ -376,6 +376,35 @@ describe.each([
   )
 
   test(
+    "watch mode with unknown @source paths shouldn't crash on Windows",
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss';
+          @source "uknown-folder/**/*";
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+    },
+  )
+
+  test(
     'production build (stdin)',
     {
       fs: {
