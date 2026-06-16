@@ -405,6 +405,44 @@ describe.each([
   )
 
   test(
+    'watch mode rebuilds when the input file is in an ignored folder',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'assets/index.css': css`
+          @import 'tailwindcss';
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input assets/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      await fs.write(
+        'assets/index.css',
+        css`
+          @import 'tailwindcss';
+          @source inline("flex");
+        `,
+      )
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  test(
     'production build (stdin)',
     {
       fs: {
