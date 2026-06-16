@@ -1527,6 +1527,41 @@ describe('addBase', () => {
       "
     `)
   })
+
+  test('@variant inside addBase works with custom variants', async () => {
+    expect(
+      await compileCss(
+        css`
+          @plugin "my-plugin";
+
+          @custom-variant custom (&.custom);
+        `,
+        {
+          loadModule: async () => ({
+            path: '',
+            base: '/root',
+            module: plugin(function ({ addBase }) {
+              addBase({
+                ':root': {
+                  '@variant custom': {
+                    '--x': '1',
+                  },
+                },
+              })
+            }),
+          }),
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer base {
+        :root.custom {
+          --x: 1;
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('addVariant', () => {
