@@ -260,6 +260,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       negated: true,
     })
 
+    if (inputFilePath !== null) {
+      sources.push({
+        base: path.dirname(inputFilePath),
+        pattern: path.basename(inputFilePath),
+        negated: false,
+      })
+    }
+
     let scanner = new Scanner({ sources })
     DEBUG && I.end('Setup compiler')
 
