@@ -9012,15 +9012,28 @@ test('break-after', async () => {
 
 test('auto-cols', async () => {
   expect(
-    await run([
-      'auto-cols-auto',
-      'auto-cols-min',
-      'auto-cols-max',
-      'auto-cols-fr',
-      'auto-cols-[2fr]',
-    ]),
+    await run(
+      [
+        'auto-cols-auto',
+        'auto-cols-min',
+        'auto-cols-max',
+        'auto-cols-fr',
+        'auto-cols-[2fr]',
+        'auto-cols-12',
+      ],
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+    ),
   ).toMatchInlineSnapshot(`
     "
+    .auto-cols-12 {
+      grid-auto-columns: calc(var(--spacing) * 12);
+    }
+
     .auto-cols-\\[2fr\\] {
       grid-auto-columns: 2fr;
     }
@@ -9039,6 +9052,10 @@ test('auto-cols', async () => {
 
     .auto-cols-min {
       grid-auto-columns: min-content;
+    }
+
+    :root, :host {
+      --spacing: .25rem;
     }
     "
   `)
@@ -9129,15 +9146,28 @@ test('grid-flow', async () => {
 
 test('auto-rows', async () => {
   expect(
-    await run([
-      'auto-rows-auto',
-      'auto-rows-min',
-      'auto-rows-max',
-      'auto-rows-fr',
-      'auto-rows-[2fr]',
-    ]),
+    await run(
+      [
+        'auto-rows-auto',
+        'auto-rows-min',
+        'auto-rows-max',
+        'auto-rows-fr',
+        'auto-rows-[2fr]',
+        'auto-rows-12',
+      ],
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+    ),
   ).toMatchInlineSnapshot(`
     "
+    .auto-rows-12 {
+      grid-auto-rows: calc(var(--spacing) * 12);
+    }
+
     .auto-rows-\\[2fr\\] {
       grid-auto-rows: 2fr;
     }
@@ -9156,6 +9186,10 @@ test('auto-rows', async () => {
 
     .auto-rows-min {
       grid-auto-rows: min-content;
+    }
+
+    :root, :host {
+      --spacing: .25rem;
     }
     "
   `)
