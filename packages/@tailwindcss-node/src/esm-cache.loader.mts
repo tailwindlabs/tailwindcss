@@ -17,20 +17,24 @@ export let resolveSync: ResolveHookSync = (specifier, context, nextResolve) => {
 }
 
 function processResolve(context: ResolveHookContext, result: ResolveFnOutput) {
-  if (result.url === import.meta.url) return result
-  if (isBuiltin(result.url)) return result
-  if (!context.parentURL) return result
+  try {
+    if (result.url === import.meta.url) return result
+    if (isBuiltin(result.url)) return result
+    if (!context.parentURL) return result
 
-  let parent = new URL(context.parentURL)
+    let parent = new URL(context.parentURL)
 
-  let id = parent.searchParams.get('id')
-  if (id === null) return result
+    let id = parent.searchParams.get('id')
+    if (id === null) return result
 
-  let url = new URL(result.url)
-  url.searchParams.set('id', id)
+    let url = new URL(result.url)
+    url.searchParams.set('id', id)
 
-  return {
-    ...result,
-    url: `${url}`,
+    return {
+      ...result,
+      url: `${url}`,
+    }
+  } catch {
+    return result
   }
 }
