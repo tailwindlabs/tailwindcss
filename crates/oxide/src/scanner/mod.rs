@@ -373,14 +373,19 @@ impl Scanner {
 
         let mut css_files: Vec<PathBuf> = vec![];
         let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
-        let mut seen_files: FxHashSet<PathBuf> = FxHashSet::default();
+
+        // Fresh state
+        self.files.clear();
+        self.dirs.clear();
+        self.extensions.clear();
+        self.globs = None;
 
         for (path, is_dir, extension) in all_entries {
             if is_dir {
-                self.dirs.insert(path);
+                self.dirs.insert(path.clone());
             } else {
                 // Deduplicate: parallel walk can visit the same file from multiple threads
-                if !seen_files.insert(path.clone()) {
+                if !self.files.insert(path.clone()) {
                     continue;
                 }
 
@@ -419,9 +424,11 @@ impl Scanner {
                 }
 
                 self.extensions.insert(extension);
-                self.files.insert(path);
             }
         }
+
+        // Ensure `mtimes` don't include stale files
+        self.mtimes.retain(|path, _| self.files.contains(path));
 
         // Read + preprocess all discovered files in parallel
         let scanned_blobs: Vec<Vec<u8>> = content_paths
