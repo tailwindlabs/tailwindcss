@@ -84,20 +84,16 @@ export function buildDesignSystem(
       let ast = compileAstNodes(candidate, designSystem, flags)
 
       try {
+        let nodes = ast.map((value) => value.node)
+
         // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
         // properties (`[--my-var:theme(--color-red-500)]`) can contain function
         // calls so we need evaluate any functions we find there that weren't in
         // the source CSS.
-        substituteFunctions(
-          ast.map(({ node }) => node),
-          designSystem,
-        )
+        substituteFunctions(nodes, designSystem)
 
         // JS plugins might contain an `@variant` inside a generated utility
-        substituteAtVariant(
-          ast.map(({ node }) => node),
-          designSystem,
-        )
+        substituteAtVariant(nodes, designSystem)
       } catch (err) {
         // If substitution fails then the candidate likely contains a call to
         // `theme()` that is invalid which may be because of incorrect usage,
