@@ -71,6 +71,41 @@ mod scanner {
         }
     }
 
+    fn scanned_files(scanner: &mut Scanner, base: &Path) -> Vec<String> {
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+
+        let mut files = scanner
+            .get_files()
+            .iter()
+            // Normalize paths to use unix style separators
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+        files.sort();
+        files
+    }
+
+    fn scanned_globs(scanner: &mut Scanner, base: &Path) -> Vec<String> {
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+
+        let mut globs = scanner
+            .get_globs()
+            .iter()
+            .map(|glob| {
+                if glob.pattern.starts_with('/') {
+                    format!("{}{}", glob.base, glob.pattern)
+                } else {
+                    format!("{}/{}", glob.base, glob.pattern)
+                }
+            })
+            // Normalize paths to use unix style separators
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+        globs.sort();
+        globs
+    }
+
     fn scan_with_globs(
         paths_with_content: &[(&str, &str)],
         source_directives: Vec<&str>,
@@ -95,34 +130,14 @@ mod scanner {
         let mut scanner = Scanner::new(sources);
 
         let candidates = scanner.scan();
-
         let base_dir =
             format!("{}{}", dunce::canonicalize(&base).unwrap().display(), "/").replace('\\', "/");
 
         // Get all scanned files as strings relative to the base directory
-        let mut files = scanner
-            .get_files()
-            .iter()
-            // Normalize paths to use unix style separators
-            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
-            .collect::<Vec<_>>();
-        files.sort();
+        let files = scanned_files(&mut scanner, Path::new(&base));
 
         // Get all scanned globs as strings relative to the base directory
-        let mut globs = scanner
-            .get_globs()
-            .iter()
-            .map(|glob| {
-                if glob.pattern.starts_with('/') {
-                    format!("{}{}", glob.base, glob.pattern)
-                } else {
-                    format!("{}/{}", glob.base, glob.pattern)
-                }
-            })
-            // Normalize paths to use unix style separators
-            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
-            .collect::<Vec<_>>();
-        globs.sort();
+        let globs = scanned_globs(&mut scanner, Path::new(&base));
 
         // Get all normalized sources as strings relative to the base directory
         let mut normalized_sources = scanner
@@ -908,6 +923,126 @@ mod scanner {
                 "content-['project-b/sub1/sub2/new.html']"
             ]
         );
+    }
+
+    #[test]
+    fn it_should_remove_deleted_files_from_scanned_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/keep.html", "content-['src/keep.html']"),
+                ("src/remove.html", "content-['src/remove.html']"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        scanner.scan();
+        assert_eq!(
+            scanned_files(&mut scanner, &dir),
+            vec!["src/index.html", "src/keep.html", "src/remove.html"]
+        );
+
+        fs::remove_file(dir.join("src/remove.html")).unwrap();
+
+        scanner.scan();
+        assert_eq!(
+            scanned_files(&mut scanner, &dir),
+            vec!["src/index.html", "src/keep.html"]
+        );
+    }
+
+    #[test]
+    fn it_should_remove_deleted_directories_from_scanned_files() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/keep/index.html", "content-['src/keep/index.html']"),
+                ("src/remove/index.html", "content-['src/remove/index.html']"),
+                (
+                    "src/remove/nested/index.html",
+                    "content-['src/remove/nested/index.html']",
+                ),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        scanner.scan();
+        assert_eq!(
+            scanned_files(&mut scanner, &dir),
+            vec![
+                "src/index.html",
+                "src/keep/index.html",
+                "src/remove/index.html",
+                "src/remove/nested/index.html",
+            ]
+        );
+
+        fs::remove_dir_all(dir.join("src/remove")).unwrap();
+
+        scanner.scan();
+        assert_eq!(
+            scanned_files(&mut scanner, &dir),
+            vec!["src/index.html", "src/keep/index.html"]
+        );
+    }
+
+    #[test]
+    fn it_should_remove_deleted_directories_from_scanned_globs() {
+        // Create a temporary working directory
+        let dir = tempdir().unwrap().into_path();
+
+        // Initialize this directory as a git repository
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        // Create files
+        create_files_in(
+            &dir,
+            &[
+                ("index.html", "content-['index.html']"),
+                ("src/index.html", "content-['src/index.html']"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        scanner.scan();
+
+        let globs = scanned_globs(&mut scanner, &dir);
+        assert!(globs.iter().any(|glob| glob.starts_with("src/**/*")));
+
+        fs::remove_dir_all(dir.join("src")).unwrap();
+
+        scanner.scan();
+
+        let globs = scanned_globs(&mut scanner, &dir);
+        assert!(!globs.iter().any(|glob| glob.starts_with("src/**/*")));
     }
 
     #[test]
