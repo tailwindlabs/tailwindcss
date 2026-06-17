@@ -49,6 +49,82 @@ test(
 )
 
 test(
+  'builds the `@tailwindcss/typography` plugin utilities with `@variant` usages',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/typography": "^0.5.14",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div className="prose prose-custom">
+          <h1>Headline</h1>
+          <p>
+            Until now, trying to style an article, document, or blog post with Tailwind has been a
+            tedious task that required a keen eye for typography and a lot of complex custom CSS.
+          </p>
+        </div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+        @plugin '@tailwindcss/typography';
+        @config '../tailwind.config.js';
+        @custom-variant custom (&.custom);
+      `,
+      'tailwind.config.js': ts`
+        module.exports = {
+          theme: {
+            typography: ({ theme }) => ({
+              custom: {
+                css: {
+                  hr: {
+                    '--x': '1',
+                    '@variant sm:custom': {
+                      '--x': '2',
+                    },
+                  },
+                },
+              },
+            }),
+          },
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    // We don't want to see `@variant` in the output
+    let contents = await fs.read('dist/out.css')
+    expect(contents).not.toContain('@variant')
+
+    expect(await fs.dumpFiles('dist/out.css')).toMatchInlineSnapshot(`
+      "
+      --- dist/out.css ---
+      .prose-custom {
+        :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+          --x: 1;
+          @media (width >= 640px) {
+            &.custom {
+              --x: 2;
+            }
+          }
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
   'builds the `@tailwindcss/forms` plugin utilities',
   {
     fs: {
