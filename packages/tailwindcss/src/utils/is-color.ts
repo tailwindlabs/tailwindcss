@@ -195,7 +195,7 @@ const NAMED_COLORS = new Set([
   'accentcolortext',
 ])
 
-const IS_COLOR_FN = /^(rgba?|hsla?|hwb|color|(ok)?(lab|lch)|light-dark|color-mix)\(/i
+const IS_COLOR_FN = /^(rgba?|hsla?|hwb|color|(ok)?(lab|lch)|light-dark|color-mix|--alpha)\(/i
 
 export function isColor(value: string): boolean {
   return (
