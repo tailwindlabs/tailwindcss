@@ -26518,6 +26518,7 @@ test('text', async () => {
         'text-[color:var(--my-color)]/50',
         'text-[color:var(--my-color)]/[0.5]',
         'text-[color:var(--my-color)]/[50%]',
+        'text-[--alpha(red/20%)]',
 
         // font-size / line-height / letter-spacing / font-weight
         'text-sm',
@@ -26543,6 +26544,7 @@ test('text', async () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
+        'text-[--spacing(2)]',
       ],
       css`
         @theme {
@@ -26632,6 +26634,10 @@ test('text', async () => {
       line-height: var(--leading-snug);
     }
 
+    .text-\\[--spacing\\(2\\)\\] {
+      font-size: calc(var(--spacing) * 2);
+    }
+
     .text-\\[12px\\] {
       font-size: 12px;
     }
@@ -26670,6 +26676,10 @@ test('text', async () => {
 
     .text-\\[\\#0088cc\\]\\/50, .text-\\[\\#0088cc\\]\\/\\[0\\.5\\], .text-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       color: oklab(59.9824% -.067 -.124 / .5);
+    }
+
+    .text-\\[--alpha\\(red\\/20\\%\\)\\] {
+      color: oklab(62.7955% .224 .125 / .2);
     }
 
     .text-\\[color\\:var\\(--my-color\\)\\], .text-\\[color\\:var\\(--my-color\\)\\]\\/50 {
