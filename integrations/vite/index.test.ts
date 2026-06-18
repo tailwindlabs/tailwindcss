@@ -1275,3 +1275,100 @@ test(
     await fs.expectFileToContain(filename, [candidate`content-['index.html']`])
   },
 )
+
+// https://github.com/tailwindlabs/tailwindcss/issues/17532
+test(
+  'deleting a file should not crash Vite',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "6.2.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <body>
+          <div id="app" class="underline"></div>
+          <script type="module" src="./src/main.js"></script>
+        </body>
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+      'src/main.js': js`
+        import iconUrl from './assets/icon.svg?url'
+        import './index.css'
+
+        document.querySelector('#app').innerHTML = iconUrl
+      `,
+      'src/assets/icon.svg': html`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1">
+          <rect class="fill-red-500" width="1" height="1" />
+        </svg>
+       `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let [main, css] = await Promise.all([
+        fetch(`${url}/src/main.js`).then((r) => r.text()),
+        fetch(`${url}/src/index.css`).then((r) => r.text()),
+      ])
+
+      expect(main).toContain('/src/assets/icon.svg?import&url')
+      expect(main).toContain('/src/index.css')
+      expect(css).toContain('.fill-red-500')
+    })
+
+    process.flush()
+
+    let unexpectedError = process.onStderr((m) => {
+      return /error|crash|panic/i.test(m)
+    })
+
+    await fs.write(
+      'src/main.js',
+      js`
+        import './index.css'
+        document.querySelector('#app').innerHTML = 'Hello World'
+      `,
+    )
+
+    await fs.delete('src/assets/icon.svg')
+
+    let result = await Promise.race([
+      unexpectedError.then(() => 'stderr'),
+      new Promise((resolve) => setTimeout(() => resolve('timeout'), 500)),
+    ])
+
+    expect(result).toBe('timeout')
+
+    await retryAssertion(async () => {
+      let response = await fetch(`${url}/src/index.css?t=${Date.now()}`)
+      expect(response.status).toBe(200)
+    })
+  },
+)

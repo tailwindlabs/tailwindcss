@@ -373,24 +373,28 @@ impl Scanner {
 
         let mut css_files: Vec<PathBuf> = vec![];
         let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
-        let mut seen_files: FxHashSet<PathBuf> = FxHashSet::default();
+
+        // Fresh state
+        self.files.clear();
+        self.dirs.clear();
+        self.extensions.clear();
+        self.globs = None;
 
         for (path, is_dir, extension) in all_entries {
             if is_dir {
                 self.dirs.insert(path);
             } else {
                 // Deduplicate: parallel walk can visit the same file from multiple threads
-                if !seen_files.insert(path.clone()) {
+                if !self.files.insert(path.clone()) {
                     continue;
                 }
+                self.extensions.insert(extension.clone());
 
                 // On re-scans, check mtime to skip unchanged files.
                 // On the first scan we skip this entirely to avoid extra
                 // metadata syscalls.
                 let changed = if self.has_scanned_once {
-                    let current_mtime = std::fs::metadata(&path)
-                        .ok()
-                        .and_then(|m| m.modified().ok());
+                    let current_mtime = path.metadata().ok().and_then(|m| m.modified().ok());
 
                     match current_mtime {
                         Some(mtime) => {
@@ -403,25 +407,21 @@ impl Scanner {
                     true
                 };
 
+                if !changed {
+                    continue;
+                }
+
                 match extension.as_str() {
                     // Special handing for CSS files, we don't want to extract candidates from
                     // these files, but we do want to extract used CSS variables.
-                    "css" => {
-                        if changed {
-                            css_files.push(path.clone());
-                        }
-                    }
-                    _ => {
-                        if changed {
-                            content_paths.push((path.clone(), extension.clone()));
-                        }
-                    }
+                    "css" => css_files.push(path),
+                    _ => content_paths.push((path, extension)),
                 }
-
-                self.extensions.insert(extension);
-                self.files.insert(path);
             }
         }
+
+        // Ensure `mtimes` don't include stale files
+        self.mtimes.retain(|path, _| self.files.contains(path));
 
         // Read + preprocess all discovered files in parallel
         let scanned_blobs: Vec<Vec<u8>> = content_paths
