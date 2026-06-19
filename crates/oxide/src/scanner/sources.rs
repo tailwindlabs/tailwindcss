@@ -315,6 +315,173 @@ mod tests {
         assert_eq!(source.pattern, "/**/*.html");
     }
 
+    #[test]
+    fn concrete_patterns_are_expanded_to_restrict_their_base() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+        let base = dunce::canonicalize(dir.path().join("src")).unwrap();
+
+        let sources = public_source_entries_to_private_source_entries(vec![PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/foo.html".to_string(),
+            negated: false,
+        }]);
+
+        assert_eq!(
+            sources,
+            vec![
+                SourceEntry::Ignored {
+                    base: base.clone(),
+                    pattern: "*".to_string(),
+                },
+                SourceEntry::Pattern {
+                    base,
+                    pattern: "/foo.html".to_string(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn restricted_patterns_include_parent_directory_allow_rules() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+        let base = dunce::canonicalize(dir.path().join("src")).unwrap();
+
+        let sources = public_source_entries_to_private_source_entries(vec![PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/ef*/*.html".to_string(),
+            negated: false,
+        }]);
+
+        assert_eq!(
+            sources,
+            vec![
+                SourceEntry::Ignored {
+                    base: base.clone(),
+                    pattern: "*".to_string(),
+                },
+                SourceEntry::Ignored {
+                    base: base.clone(),
+                    pattern: "!/ef*/".to_string(),
+                },
+                SourceEntry::Pattern {
+                    base,
+                    pattern: "/ef*/*.html".to_string(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn unrestricted_sources_do_not_expand_patterns_for_the_same_base() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+        let base = dunce::canonicalize(dir.path().join("src")).unwrap();
+
+        let sources = public_source_entries_to_private_source_entries(vec![
+            PublicSourceEntry {
+                base: dir.path().to_string_lossy().to_string(),
+                pattern: "src".to_string(),
+                negated: false,
+            },
+            PublicSourceEntry {
+                base: dir.path().to_string_lossy().to_string(),
+                pattern: "src/foo.html".to_string(),
+                negated: false,
+            },
+        ]);
+
+        assert_eq!(
+            sources,
+            vec![
+                SourceEntry::Auto { base: base.clone() },
+                SourceEntry::Pattern {
+                    base,
+                    pattern: "/foo.html".to_string(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn restricted_parent_bases_do_not_open_unrelated_siblings() {
+        let dir = tempdir().unwrap();
+        let project = dir.path().join("Users").join("robin").join("docus-test");
+        fs::create_dir_all(&project).unwrap();
+
+        let users = dunce::canonicalize(dir.path().join("Users")).unwrap();
+        let project = dunce::canonicalize(project).unwrap();
+
+        let sources = public_source_entries_to_private_source_entries(vec![
+            PublicSourceEntry {
+                base: project.to_string_lossy().to_string(),
+                pattern: "**/*".to_string(),
+                negated: false,
+            },
+            PublicSourceEntry {
+                base: project.to_string_lossy().to_string(),
+                pattern: "../../app.config.ts".to_string(),
+                negated: false,
+            },
+        ]);
+
+        assert_eq!(
+            sources,
+            vec![
+                SourceEntry::Auto {
+                    base: project.clone(),
+                },
+                SourceEntry::Ignored {
+                    base: users.clone(),
+                    pattern: "/*".to_string(),
+                },
+                SourceEntry::Pattern {
+                    base: users,
+                    pattern: "/app.config.ts".to_string(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn restricted_patterns_preserve_source_order() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+        let base = dunce::canonicalize(dir.path().join("src")).unwrap();
+
+        let sources = public_source_entries_to_private_source_entries(vec![
+            PublicSourceEntry {
+                base: dir.path().to_string_lossy().to_string(),
+                pattern: "src/foo.html".to_string(),
+                negated: false,
+            },
+            PublicSourceEntry {
+                base: dir.path().to_string_lossy().to_string(),
+                pattern: "src/foo.html".to_string(),
+                negated: true,
+            },
+        ]);
+
+        assert_eq!(
+            sources,
+            vec![
+                SourceEntry::Ignored {
+                    base: base.clone(),
+                    pattern: "*".to_string(),
+                },
+                SourceEntry::Pattern {
+                    base: base.clone(),
+                    pattern: "/foo.html".to_string(),
+                },
+                SourceEntry::Ignored {
+                    base,
+                    pattern: "/foo.html".to_string(),
+                },
+            ]
+        );
+    }
+
     /// Run the public-to-private conversion for an auto-detected source pointing at `base` and
     /// return the resulting entry.
     fn auto_source_entry(base: &Path) -> SourceEntry {

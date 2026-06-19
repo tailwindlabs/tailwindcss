@@ -1203,6 +1203,207 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_restrict_explicit_file_sources_to_the_matching_file() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/foo.html", "content-['src/foo.html']"),
+                ("src/bar.html", "content-['src/bar.html']"),
+            ],
+            vec!["@source './src/foo.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/foo.html']"]);
+        assert_eq!(files, vec!["src/foo.html"]);
+    }
+
+    #[test]
+    fn it_should_combine_multiple_restricted_sources_for_the_same_base() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/foo.html", "content-['src/foo.html']"),
+                ("src/bar.html", "content-['src/bar.html']"),
+                ("src/baz.html", "content-['src/baz.html']"),
+            ],
+            vec!["@source './src/foo.html'", "@source './src/bar.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['src/bar.html']", "content-['src/foo.html']"]
+        );
+        assert_eq!(files, vec!["src/bar.html", "src/foo.html"]);
+    }
+
+    #[test]
+    fn it_should_allow_later_ignores_to_override_restricted_sources() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[("src/foo.html", "content-['src/foo.html']")],
+            vec!["@source './src/foo.html'", "@source not './src/foo.html'"],
+        );
+
+        assert!(candidates.is_empty());
+        assert!(files.is_empty());
+    }
+
+    #[test]
+    fn it_should_handle_sources_with_parent_patterns() {
+        {
+            let ScanResult {
+                candidates, files, ..
+            } = scan_with_globs(
+                &[
+                    ("src/foo.html", "content-['src/foo.html']"),
+                    ("src/bar/index.html", "content-['src/bar/index.html']"),
+                    ("src/bar/ignore.html", "content-['src/bar/ignore.html']"),
+                ],
+                vec!["@source './src/ba*/*.html'"],
+            );
+
+            assert_eq!(
+                candidates,
+                vec![
+                    "content-['src/bar/ignore.html']",
+                    "content-['src/bar/index.html']"
+                ]
+            );
+            assert_eq!(files, vec!["src/bar/ignore.html", "src/bar/index.html"]);
+        }
+
+        {
+            let ScanResult {
+                candidates, files, ..
+            } = scan_with_globs(
+                &[
+                    ("src/foo.html", "content-['src/foo.html']"),
+                    ("src/bar/index.html", "content-['src/bar/index.html']"),
+                    ("src/bar/ignore.html", "content-['src/bar/ignore.html']"),
+                ],
+                vec![
+                    "@source './src/ba*/*.html'",
+                    "@source not './src/bar/ignore.html'", // Ignore the ignore.html
+                ],
+            );
+
+            assert_eq!(candidates, vec!["content-['src/bar/index.html']"]);
+            assert_eq!(files, vec!["src/bar/index.html"]);
+        }
+
+        {
+            let ScanResult {
+                candidates, files, ..
+            } = scan_with_globs(
+                &[
+                    ("src/foo.html", "content-['src/foo.html']"),
+                    ("src/bar/index.html", "content-['src/bar/index.html']"),
+                    ("src/bar/ignore.html", "content-['src/bar/ignore.html']"),
+                ],
+                vec!["@source '**/*'", "@source not './src/ba*/*.html'"],
+            );
+
+            assert_eq!(candidates, vec!["content-['src/foo.html']"]);
+            assert_eq!(files, vec!["src/foo.html"]);
+        }
+
+        {
+            let ScanResult {
+                candidates, files, ..
+            } = scan_with_globs(
+                &[
+                    ("src/foo.html", "content-['src/foo.html']"),
+                    ("src/bar/index.html", "content-['src/bar/index.html']"),
+                    ("src/bar/ignore.html", "content-['src/bar/ignore.html']"),
+                ],
+                vec![
+                    "@source '**/*'",
+                    "@source not './src/ba*/*.html'",
+                    "@source './src/bar/index.html'", //
+                ],
+            );
+
+            assert_eq!(
+                candidates,
+                vec!["content-['src/bar/index.html']", "content-['src/foo.html']"]
+            );
+            assert_eq!(files, vec!["src/bar/index.html", "src/foo.html"]);
+        }
+    }
+
+    #[test]
+    fn nested_explicit_source_should_not_suppress_siblings_of_broad_source() {
+        // A broad `**/*` source should keep auto-detecting every file, even when a more
+        // specific `@source` points at a single file inside a subdirectory. The restriction
+        // added for the explicit file must not hide its siblings from the broad source.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/components/button.html", "content-['button']"),
+                ("src/components/card.html", "content-['card']"),
+            ],
+            vec!["@source '**/*'", "@source './src/components/button.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['button']", "content-['card']"]);
+        assert_eq!(
+            files,
+            vec!["src/components/button.html", "src/components/card.html"]
+        );
+    }
+
+    #[test]
+    fn nested_explicit_source_should_not_suppress_siblings_of_auto_source() {
+        // Same as above, but the broad source is an auto-detected directory (`@source "src"`)
+        // and the explicit file lives in a nested subdirectory of it.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/components/button.html", "content-['button']"),
+                ("src/components/card.html", "content-['card']"),
+            ],
+            vec!["@source 'src'", "@source './src/components/button.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['button']", "content-['card']"]);
+        assert_eq!(
+            files,
+            vec!["src/components/button.html", "src/components/card.html"]
+        );
+    }
+
+    #[test]
+    fn root_file_source_should_not_suppress_sibling_source_roots() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                ("index.css", ""),
+                ("src/index.html", "content-['src/index.html']"),
+                ("pages/foo.html", "content-['pages/foo.html']"),
+                ("pages/nested/foo.html", "content-['pages/nested/foo.html']"),
+            ],
+            vec![
+                "@source './src'",
+                "@source './pages/**/*.html'",
+                "@source './index.css'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['pages/foo.html']",
+                "content-['pages/nested/foo.html']",
+                "content-['src/index.html']",
+            ]
+        );
+    }
+
+    #[test]
     fn it_respects_gitignore_in_workspace_root() {
         let ScanResult {
             candidates,
@@ -1281,6 +1482,28 @@ mod scanner {
         assert_eq!(files, vec!["web/ignore-1.html", "web/index.html",]);
         assert_eq!(globs, vec!["web/*"]);
         assert_eq!(normalized_sources, vec!["web/**/*", "web/ignore-1.html"]);
+    }
+
+    #[test]
+    fn explicit_sources_can_include_files_inside_gitignored_parent_directories() {
+        let ScanResult {
+            candidates,
+            files,
+            globs,
+            ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "src/efgh/"),
+                ("src/efgh/index.html", "content-['src/efgh/index.html']"),
+                ("src/efgh/ignore.js", "content-['src/efgh/ignore.js']"),
+                ("src/abcd/index.html", "content-['src/abcd/index.html']"),
+            ],
+            vec!["@source './src/ef*/*.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/efgh/index.html']"]);
+        assert_eq!(files, vec!["src/efgh/index.html"]);
+        assert_eq!(globs, vec!["src/ef*/*.html"]);
     }
 
     #[test]
