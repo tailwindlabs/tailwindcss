@@ -1,6 +1,6 @@
 use crate::GlobEntry;
 use bexpand::Expression;
-use fxhash::FxHashMap;
+use fxhash::{FxHashMap, FxHashSet};
 use ignore::gitignore::Gitignore;
 use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
@@ -75,6 +75,151 @@ impl Sources {
     pub fn iter(&self) -> impl Iterator<Item = &SourceEntry> {
         self.sources.iter()
     }
+}
+
+/// When dealing with a pattern, then it could be that we end up with:
+///
+/// ```json
+/// { base: '/some/folder', pattern: 'foo.ts' }
+/// ```
+///
+/// If we just emit `!foo.ts` for the `/some/folder` path, then _everything_ else in that folder
+/// would still be walked (but the result will be ignored).
+///
+/// Instead, we have to ensure that we ignore everything in that folder _except_ for the `foo.ts`
+/// pattern.
+///
+/// This should be equivalent to:
+/// ```gitignore
+/// *
+/// !foo.ts
+/// ```
+///
+/// However, we have to be careful that we don't start ignoring files/folders that already exist.
+/// ```css
+/// @source "./some/folder/foo.ts";
+/// @source "./some/folder/bar.ts";
+/// ```
+/// Would result in:
+/// ```json
+/// { base: '/some/folder', pattern: 'foo.ts' }
+/// { base: '/some/folder', pattern: 'bar.ts' }
+/// ```
+///
+/// If we were to blindly emit `*` for each pattern, then the `.gitignore` equivalent would look like
+/// this:
+/// ```gitignore
+/// *
+/// !foo.ts
+/// *
+/// !bar.ts
+/// ```
+///
+/// This would result in ignoring the `foo.ts` file as well. Therefore we only want to insert
+/// this `*` pattern when nothing else exists yet.
+///
+/// There is another problem that we need to solve. Let's say you have a pattern that contains a `*`
+/// in the pattern:
+/// ```css
+/// @source './src/ba*/*.html';
+/// ```
+///
+/// This would result in
+/// ```json
+/// { base: '/src', pattern: '/ba*/*.html' }
+/// ```
+///
+/// If we now inject the `*` pattern for the `/src` folder, then we wouldn't scan any `ba*` folders
+/// (e.g. `bar` or `baz`). For this, we have to make sure that we add inverse patterns for these
+/// folders. This would essentially result in:
+/// ```gitignore
+/// *                     ← ignore everything
+/// !/ba*/                ← except for the `ba*/` pattern, so we scan these folders
+/// !/ba*/*.html          ← then ensure we scan the `*.html` files in it as well
+/// ```
+///
+fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
+    let unrestricted_roots = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base.clone()),
+            SourceEntry::Pattern { base, pattern } if pattern.contains("**") => Some(base.clone()),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+
+    let mut restricted_roots: FxHashSet<PathBuf> = FxHashSet::default();
+    let mut expanded = vec![];
+
+    for source in sources {
+        let SourceEntry::Pattern { base, pattern } = &source else {
+            expanded.push(source);
+            continue;
+        };
+
+        // `base` is already included by another `@source` that we know should be walked. This
+        // includes the case where `base` is _nested_ inside such a root, because everything under
+        // an unrestricted root is walked already. Restricting it would incorrectly hide siblings
+        // that the broader source is supposed to pick up.
+        if unrestricted_roots.iter().any(|root| base.starts_with(root)) {
+            expanded.push(source);
+            continue;
+        }
+
+        // Ignore everything in the directory. We will later add the specific patterns we are
+        // interested in. When another source root is nested in this base, only ignore direct
+        // children so the nested source can still be walked from its own root.
+        if restricted_roots.insert(base.clone()) {
+            let pattern = if unrestricted_roots.iter().any(|root| root.starts_with(base)) {
+                "/*"
+            } else {
+                "*"
+            };
+
+            expanded.push(SourceEntry::Ignored {
+                base: base.clone(),
+                pattern: pattern.to_owned(),
+            });
+        }
+
+        // Ensure to _include_ parent paths, otherwise the `*` from above would block walking the
+        // folders that need to be walked.
+        //
+        // ```css
+        // @source './src/ba*/*.html';
+        // ```
+        //
+        // ```gitignore
+        // *                     ← added by the above rule
+        // !/ba*/                ← this is what we're focusing on in this block
+        // !/ba*/*.html          ← this is added later
+        // ```
+        {
+            let mut dir = PathBuf::new();
+            let mut components = Path::new(pattern).components().peekable();
+
+            while let Some(component) = components.next() {
+                if components.peek().is_none() {
+                    break;
+                }
+
+                match component {
+                    Component::Prefix(_) | Component::RootDir | Component::CurDir => continue,
+                    Component::ParentDir | Component::Normal(_) => dir.push(component),
+                }
+
+                expanded.push(SourceEntry::Ignored {
+                    base: base.clone(),
+                    pattern: format!("!/{}/", path_to_posix_string(&dir).trim_start_matches('/')),
+                });
+            }
+        }
+
+        // Track the original source
+        expanded.push(source);
+    }
+
+    expanded
 }
 
 impl PublicSourceEntry {
@@ -616,7 +761,7 @@ pub fn public_source_entries_to_private_source_entries(
         .ok();
 
     // Convert from public SourceEntry to private SourceEntry
-    expanded_globs
+    let sources = expanded_globs
         .into_iter()
         .map(|public_source| {
             let mut source: SourceEntry = public_source.into();
@@ -666,7 +811,9 @@ pub fn public_source_entries_to_private_source_entries(
 
             source
         })
-        .collect::<Vec<SourceEntry>>()
+        .collect::<Vec<SourceEntry>>();
+
+    expand_restricted_patterns(sources)
 }
 
 /// Convert a public source entry to a source entry
