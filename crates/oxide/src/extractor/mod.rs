@@ -908,6 +908,18 @@ mod tests {
         );
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    #[test]
+    fn test_template_toolkit_syntax() {
+        assert_extract_candidates_contains(
+            &pre_process_input(
+                r#"<div class="[% IF $is_open %]bg-white/40[% ELSE %]bg-white/10[% END %]"></div>"#,
+                "tx",
+            ),
+            vec!["bg-white/40", "bg-white/10"],
+        );
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/17050
     #[test]
     fn test_haml_syntax() {
