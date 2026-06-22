@@ -104,6 +104,12 @@ impl Rust {
 
                 b'[' => {
                     bracket_stack.push(cursor.curr());
+
+                    // Handle `p.flex[condition]`. If there is a `-` before it, it will likely be an
+                    // arbitrary value e.g. `text-[red]`
+                    if !matches!(cursor.prev(), b'-') {
+                        result[cursor.pos] = b' ';
+                    }
                 }
 
                 b']' if !bracket_stack.is_empty() => {
