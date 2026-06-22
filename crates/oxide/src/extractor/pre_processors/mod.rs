@@ -10,6 +10,7 @@ pub mod ruby;
 pub mod rust;
 pub mod slim;
 pub mod svelte;
+pub mod template_toolkit;
 pub mod twig;
 pub mod vue;
 
@@ -25,5 +26,6 @@ pub use ruby::*;
 pub use rust::*;
 pub use slim::*;
 pub use svelte::*;
+pub use template_toolkit::*;
 pub use twig::*;
 pub use vue::*;
