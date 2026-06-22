@@ -213,4 +213,20 @@ mod tests {
         let input = r#"html! { \x.px-4.text-black {  } }"#;
         Rust::test(input, r#"html! { \x px-4 text-black {  } }"#);
     }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    #[test]
+    fn test_maud_template_extraction_with_conditional_classes() {
+        let input = r#"
+            use maud::{html, Markup};
+
+            pub fn main() -> Markup {
+                html! {
+                    p.text-black[cuteness > 50] { "Squee!" }
+                }
+            }
+        "#;
+
+        Rust::test_extract_contains(input, vec!["text-black"]);
+    }
 }
