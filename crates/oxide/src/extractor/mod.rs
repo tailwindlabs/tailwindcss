@@ -104,6 +104,33 @@ impl<'a> Extractor<'a> {
             let cursor = &mut self.cursor.clone();
 
             while cursor.pos < len {
+                // Skip past `[% ... %]` template tags (Template Toolkit,
+                // Text::Xslate, ExpressionEngine, etc.) so that candidates on
+                // either side can be extracted. The tag body is template
+                // syntax, not real content, so any keywords inside (e.g.
+                // `if`, `cond`) are intentionally not extracted as candidates.
+                //
+                // The skip is done here in the outer loop (not inside the
+                // candidate machine) because the inner utility machine may
+                // terminate a candidate early and advance the cursor PAST `[`
+                // before the candidate machine's own `[%` check ever sees it.
+                //
+                // Non-greedy: first `%]` ends the tag. Nested `[% ... %]`
+                // inside the body is not a thing in any of the template
+                // languages we target. If no `%]` is found (e.g. a typo), we
+                // fall through to the normal candidate extraction path so the
+                // rest of the input still parses.
+                // https://github.com/tailwindlabs/tailwindcss/issues/20233
+                if cursor.curr() == b'[' && cursor.next() == b'%' {
+                    if let Some(rel) = cursor.input[cursor.pos..]
+                        .windows(2)
+                        .position(|w| w[0] == b'%' && w[1] == b']')
+                    {
+                        cursor.advance_by(rel + 2);
+                        continue;
+                    }
+                }
+
                 if cursor.curr().is_ascii_whitespace() {
                     cursor.advance();
                     continue;
@@ -121,6 +148,26 @@ impl<'a> Extractor<'a> {
                             cursor,
                             &mut in_flight_spans,
                         );
+                    }
+                }
+
+                // Skip past `[% ... %]` template tags after `next()` returns.
+                // The top-of-loop check above only fires when the cursor
+                // *enters* an iteration parked on `[`; this post-match check
+                // handles the common case where `next()` returns `Done` (or
+                // `Idle`) with cursor.pos on the `[` that opens a template
+                // tag (because the inner utility machine terminates a
+                // candidate whose last char immediately precedes `[`). We
+                // `continue` to skip the bottom `cursor.advance()` since the
+                // tag-skip already moved past the `[`.
+                // https://github.com/tailwindlabs/tailwindcss/issues/20233
+                if cursor.curr() == b'[' && cursor.next() == b'%' {
+                    if let Some(rel) = cursor.input[cursor.pos..]
+                        .windows(2)
+                        .position(|w| w[0] == b'%' && w[1] == b']')
+                    {
+                        cursor.advance_by(rel + 2);
+                        continue;
                     }
                 }
 
@@ -192,7 +239,27 @@ fn extract_sub_candidates(
     in_flight_spans: &mut Vec<Span>,
 ) {
     let end = range.end;
-    for i in range {
+    let mut i = range.start;
+    while i < end {
+        // Skip past `[% ... %]` template tags (Template Toolkit, Text::Xslate,
+        // ExpressionEngine, etc.) when scanning for `[` openers below. Without
+        // this, an inner CandidateMachine would be spawned at `%` (pos after
+        // `[`) and extract template keywords (`if`, `cond`, …) as classes.
+        //
+        // Non-greedy: first `%]` ends the tag. If no `%]` is found in the
+        // remaining range (e.g. a typo), fall through and let the inner
+        // machine process whatever follows.
+        // https://github.com/tailwindlabs/tailwindcss/issues/20233
+        if cursor.input[i] == b'[' && i + 1 < end && cursor.input[i + 1] == b'%' {
+            if let Some(rel) = cursor.input[i..end]
+                .windows(2)
+                .position(|w| w[0] == b'%' && w[1] == b']')
+            {
+                i += rel + 2;
+                continue;
+            }
+        }
+
         if cursor.input[i] == b'[' {
             let mut cursor = cursor.clone();
             cursor.move_to(i + 1);
@@ -207,6 +274,8 @@ fn extract_sub_candidates(
                 cursor.advance();
             }
         }
+
+        i += 1;
     }
 }
 
@@ -906,6 +975,72 @@ mod tests {
             r#"<div class="{% if true %}flex{% else %}block{% endif %}">"#,
             vec!["flex", "block"],
         );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    //
+    // `[% ... %]` is the template-tag syntax used by Template Toolkit,
+    // Text::Xslate, ExpressionEngine, etc. The scanner must skip past these
+    // tags so that classes immediately before/after them are extracted, the
+    // same way `{% ... %}` (Twig) and `<% ... %>` (ERB/EJS) already work.
+    #[test]
+    fn test_template_toolkit_syntax() {
+        // The exact reproduction from the issue.
+        assert_extract_candidates_contains(
+            r#"<div class="[% IF $is_open %]bg-white/40[% ELSE %]bg-white/10[% END %]"></div>"#,
+            vec!["bg-white/40", "bg-white/10"],
+        );
+
+        // Lowercase keywords.
+        assert_extract_candidates_contains(
+            r#"<div class="[% if cond %]flex[% end %]"></div>"#,
+            vec!["flex"],
+        );
+
+        // Static class adjacent to a `[% %]` block.
+        assert_extract_candidates_contains(
+            r#"<div class="bg-blue-500 [% if cond %]bg-red-500[% end %]"></div>"#,
+            vec!["bg-blue-500", "bg-red-500"],
+        );
+
+        // `[color:red]` (arbitrary property) must STILL extract as a whole
+        // arbitrary property, not be skipped as a template tag. We use the
+        // non-strict contains-checker because `class` is also legitimately
+        // extracted from the `<div class="...">` attribute name.
+        assert_extract_candidates_contains(
+            r#"<div class="[color:red]"></div>"#,
+            vec!["[color:red]"],
+        );
+
+        // `bg-[red][blue]` (arbitrary value followed by arbitrary value) must
+        // STILL be invalid — `[` alone is not a template-tag opener.
+        assert_extract_sorted_candidates("bg-[red][blue]", vec![]);
+
+        // Candidate immediately before a tag with no trailing class. Locks in
+        // the before-boundary `]` path independently of the after-boundary
+        // `[` path (recommended by review).
+        assert_extract_sorted_candidates("bg-red-500[% if x %]", vec!["bg-red-500"]);
+
+        // Multiple adjacent tags in the same string. Guards the
+        // `cursor.advance_by(rel + 2)` + `continue` loop in the outer
+        // extractor — each tag must be skipped independently without
+        // consuming or merging surrounding candidates (recommended by
+        // review). Uses multi-char utilities (1-letter utilities followed
+        // by `[` are not extractable — pre-existing limitation of the
+        // named utility machine).
+        assert_extract_sorted_candidates(
+            "bg-red-500[% x %]bg-blue-500[% y %]text-white",
+            vec!["bg-red-500", "bg-blue-500", "text-white"],
+        );
+
+        // `[%` at input start, class follows the tag. Exercises the
+        // top-of-loop `[%` skip in `extract()` (covers the case where
+        // the cursor enters the iteration parked on `[`).
+        assert_extract_sorted_candidates("[% if x %] bg-red-500", vec!["bg-red-500"]);
+
+        // `[%` after whitespace (no candidate before). Exercises the
+        // post-whitespace-arrival path in the top-of-loop `[%` skip.
+        assert_extract_sorted_candidates("bg-red-500 [% if x %]", vec!["bg-red-500"]);
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/17050

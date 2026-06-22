@@ -70,6 +70,16 @@ impl Machine for CandidateMachine {
                 continue;
             }
 
+            // Skip past `[% ... %]` template tags (Template Toolkit, Text::Xslate,
+            // ExpressionEngine, etc.) so that candidates on either side can be
+            // extracted. The skip is implemented in the outer extractor loop
+            // (`extract()` in mod.rs) rather than here, because the inner
+            // utility machine may emit a Done result for a candidate whose
+            // last char precedes `[`, advancing the cursor PAST `[` before
+            // this machine sees it. See mod.rs for the full implementation.
+            // https://github.com/tailwindlabs/tailwindcss/issues/20233
+            // (`extract_sub_candidates` skips the same construct when it
+            // spawns an inner machine for `[class.foo]`-style attributes.)
             let mut variant_cursor = cursor.clone();
             let variant_machine_state = self.variant_machine.next(&mut variant_cursor);
 

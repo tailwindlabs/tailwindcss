@@ -4,7 +4,16 @@ use crate::extractor::Span;
 
 #[inline(always)]
 pub fn is_valid_before_boundary(c: &u8) -> bool {
-    matches!(c.into(), Class::Common | Class::Before)
+    // `]` is also a valid before-boundary so that candidates immediately
+    // following `[% ... %]` template tags (Template Toolkit, Text::Xslate,
+    // ExpressionEngine, etc.) are extracted. Symmetric with `]` already being
+    // a valid after-boundary for `[class.foo]`-style attributes.
+    //
+    // The classification macro generates one class per byte; `]` lives in
+    // `After` (for `[class.foo]`), so we special-case it here rather than
+    // losing the After-class semantics by listing it in `Before` as well.
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    matches!(c.into(), Class::Common | Class::Before) || *c == b']'
 }
 
 #[inline(always)]
@@ -30,8 +39,27 @@ pub fn has_valid_boundaries(span: &Span, input: &[u8]) -> bool {
         }
     };
 
-    // Ensure the span has valid boundary characters before and after
-    is_valid_before_boundary(&before) && is_valid_after_boundary(&after)
+    if !is_valid_before_boundary(&before) {
+        return false;
+    }
+
+    // A `[` immediately after a candidate is valid only when the candidate
+    // itself does not already contain an arbitrary value `[...]`. This
+    // preserves the "one arbitrary value per utility" semantics that
+    // `bg-[red][blue]` should not extract.
+    //
+    // Without this carve-out, `bg-white/40[% end %]` would fail the after-
+    // boundary check (`[` not in Common/Before/After) and the user's classes
+    // wouldn't be extracted. With it, plain utilities terminate cleanly at
+    // `[` (e.g. `bg-white[` after a template tag), but a utility that already
+    // contains `[...]` rejects a directly-following `[` (which would start
+    // a second arbitrary value).
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    if after == b'[' && span.slice(input).contains(&b'[') {
+        return false;
+    }
+
+    is_valid_after_boundary(&after)
 }
 
 #[derive(Debug, Clone, Copy, ClassifyBytes)]
@@ -89,6 +117,14 @@ enum Class {
     //           ^
     // ```
     #[bytes(b']')]
+    // Open bracket that starts an arbitrary property `[name:value]` or that
+    // follows a candidate directly (e.g. after a `[% end %]` template tag).
+    // Listed here so `is_valid_after_boundary(b'[')` returns true in the
+    // common case. The carve-out in `has_valid_boundaries` rejects `[` as
+    // an after-boundary when the span itself already contains `[` (so
+    // `bg-[red][blue]` still extracts nothing).
+    // https://github.com/tailwindlabs/tailwindcss/issues/20233
+    #[bytes(b'[')]
     // Twig like templating languages, e.g.:
     //
     // ```

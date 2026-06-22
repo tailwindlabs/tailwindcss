@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/vite` doesn't crash during HMR when scanned files or directories are deleted ([#20259](https://github.com/tailwindlabs/tailwindcss/pull/20259))
 - Ensure `text-[--spacing(…)]` generates `font-size` instead of `color` ([#20260](https://github.com/tailwindlabs/tailwindcss/pull/20260))
 - Prevent `@source` patterns from scanning unrelated sibling files and folders ([#20263](https://github.com/tailwindlabs/tailwindcss/pull/20263))
+- Ensure classes adjacent to `[% … %]` template tags (Template Toolkit, Text::Xslate, ExpressionEngine, etc.) are extracted by skipping past the tag in the scanner ([#20233](https://github.com/tailwindlabs/tailwindcss/issues/20233))
 
 ## [4.3.1] - 2026-06-12
 
