@@ -33,6 +33,9 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@emnapi/core": "^1.11.1",
+    "@emnapi/runtime": "^1.11.1",
+    "@emnapi/wasi-threads": "^1.2.2",
     "@napi-rs/cli": "3.7.0",
     "@napi-rs/wasm-runtime": "^1.1.5",
     "emnapi": "1.11.1"

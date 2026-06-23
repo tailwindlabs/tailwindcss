@@ -99,6 +99,15 @@ importers:
 
   crates/node:
     devDependencies:
+      '@emnapi/core':
+        specifier: ^1.11.1
+        version: 1.11.1
+      '@emnapi/runtime':
+        specifier: ^1.11.1
+        version: 1.11.1
+      '@emnapi/wasi-threads':
+        specifier: ^1.2.2
+        version: 1.2.2
       '@napi-rs/cli':
         specifier: 3.7.0
         version: 3.7.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@types/node@26.0.0)(node-addon-api@8.8.0)
