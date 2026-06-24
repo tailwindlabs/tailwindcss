@@ -40,7 +40,7 @@ test(
     await exec('git commit -m "before migration"')
 
     // Fully upgrade to v4
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     // Undo all changes to the current repo. This will bring the repo back to a
     // v3 state, but the `node_modules` will now have v4 installed.
@@ -48,7 +48,7 @@ test(
 
     // Re-running the upgrade should result in an error
     return expect(() => {
-      return exec('npx @tailwindcss/upgrade', {}, { ignoreStdErr: true }).catch((e) => {
+      return exec('pnpm exec upgrade', {}, { ignoreStdErr: true }).catch((e) => {
         // Replacing the current version with a hardcoded `v4` to make it stable
         // when we release new minor/patch versions.
         return Promise.reject(
@@ -56,7 +56,7 @@ test(
         )
       })
     }).rejects.toThrowErrorMatchingInlineSnapshot(`
-      "Command failed: npx @tailwindcss/upgrade
+      "Command failed: pnpm exec upgrade
       ≈ tailwindcss v4.0.0
 
       │ ↳ Upgrading from Tailwind CSS \`v4.0.0\` 

@@ -28,7 +28,7 @@ test(
     },
   },
   async ({ fs, exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade')
+    let output = await exec('pnpm exec upgrade')
     expect(output).toContain('Cannot find any CSS files that reference Tailwind CSS.')
 
     // Files should not be modified
@@ -100,7 +100,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -158,7 +158,7 @@ test(
     })
 
     // Ensure the v4 project compiles correctly
-    await exec('npx tailwindcss --input src/input.css --output dist/out.css')
+    await exec('pnpm exec tailwindcss --input src/input.css --output dist/out.css')
 
     await fs.expectFileToContain('dist/out.css', [
       candidate`flex!`,
@@ -205,7 +205,7 @@ test(
     retry: 0,
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./**/*.{html,php,txt}')).toMatchInlineSnapshot(`
       "
@@ -263,7 +263,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -335,7 +335,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -407,7 +407,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -484,7 +484,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -587,7 +587,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -695,7 +695,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     await fs.expectFileToContain(
       'postcss.config.js',
@@ -766,7 +766,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
@@ -813,7 +813,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     let packageJsonContent = await fs.read('package.json')
     let packageJson = JSON.parse(packageJsonContent)
@@ -865,7 +865,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
     await fs.expectFileToContain(
@@ -941,7 +941,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     await fs.expectFileToContain('src/index.css', css`@import 'tailwindcss';`)
     await fs.expectFileToContain(
@@ -1008,7 +1008,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
       "
@@ -1055,7 +1055,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.html')).toMatchInlineSnapshot(`
       "
@@ -1099,7 +1099,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -1172,7 +1172,7 @@ test(
     retry: 0,
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -1284,7 +1284,7 @@ test(
     retry: 0,
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -1417,7 +1417,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade --force')
+    let output = await exec('pnpm exec upgrade --force')
 
     expect(output).toMatch(
       /You have one or more stylesheets that are imported into a utility layer and non-utility layer./,
@@ -1541,7 +1541,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
@@ -1766,7 +1766,7 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('npx @tailwindcss/upgrade --force', {}, { ignoreStdErr: true }).catch(
+    let output = await exec('pnpm exec upgrade --force', {}, { ignoreStdErr: true }).catch(
       (e) => e.toString(),
     )
 
@@ -1838,7 +1838,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
@@ -1974,7 +1974,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
@@ -2094,7 +2094,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.{html,css}')).toMatchInlineSnapshot(`
       "
@@ -2174,7 +2174,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -2259,7 +2259,7 @@ test(
     retry: 0,
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     expect(await fs.dumpFiles('./src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -2313,7 +2313,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     let pkg = JSON.parse(await fs.read('package.json'))
 
@@ -2392,7 +2392,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     // Files should not be modified
     expect(await fs.dumpFiles('./*.{js,css,html}')).toMatchInlineSnapshot(`
@@ -2490,7 +2490,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade --force')
+    await exec('pnpm exec upgrade --force')
 
     // Files should not be modified
     expect(await fs.dumpFiles('./*.{js,css,html,tsx}')).toMatchInlineSnapshot(`
@@ -2597,7 +2597,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade ./src/index.css')
+    await exec('pnpm exec upgrade ./src/index.css')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -2723,7 +2723,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -2809,7 +2809,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -2877,7 +2877,7 @@ test(
     },
   },
   async ({ exec, root, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     let before = await fs.dumpFiles('./src/**/*.{css,html}')
     expect(before).toMatchInlineSnapshot(`
@@ -2919,7 +2919,7 @@ test(
     }
 
     // Run the upgrade again
-    let output = await exec('npx @tailwindcss/upgrade')
+    let output = await exec('pnpm exec upgrade')
     expect(output).toContain('No changes were made to your repository')
 
     let after = await fs.dumpFiles('./src/**/*.{css,html}')
@@ -2998,7 +2998,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,html}')).toMatchInlineSnapshot(`
       "
@@ -3047,7 +3047,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/{*,.env,.env.*}')).toMatchInlineSnapshot(`
       "
@@ -3118,7 +3118,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./{src,templates}/**/*')).toMatchInlineSnapshot(`
       "
@@ -3194,6 +3194,10 @@ test(
     let originalKeepFile = await fs.read('src/keep.php')
     let originalTemplate = await fs.read('src/templates/template-0.php')
 
+    // NOTE: This test intentionally keeps `npx` instead of `pnpm exec`. It uses
+    // a `NODE_OPTIONS` hook that overrides `fs.writeFile` to simulate a bad
+    // write, and `pnpm exec` may write a bin shim on startup which would trip
+    // that hook before template migration begins.
     let process = await spawn('npx @tailwindcss/upgrade --force', {
       env: {
         NODE_OPTIONS: '--require=./hook.cjs',
@@ -3261,7 +3265,7 @@ test(
     },
   },
   async ({ root, exec, fs, expect }) => {
-    let stdout = await exec('npx @tailwindcss/upgrade', {
+    let stdout = await exec('pnpm exec upgrade', {
       cwd: path.join(root, 'project-a'),
     })
 
@@ -3335,7 +3339,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    let stdout = await exec('npx @tailwindcss/upgrade')
+    let stdout = await exec('pnpm exec upgrade')
 
     expect(stdout).not.toContain(
       'Running this command will add the dependency to the workspace root',
@@ -3411,7 +3415,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('./src/**/*.{css,vue}')).toMatchInlineSnapshot(`
       "
