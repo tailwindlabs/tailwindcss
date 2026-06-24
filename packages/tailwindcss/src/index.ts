@@ -158,6 +158,7 @@ async function parseCss(
   let customVariants = new Map<string, (designSystem: DesignSystem) => void>()
   let customVariantDependencies = new Map<string, Set<string>>()
   let customUtilities: ((designSystem: DesignSystem) => void)[] = []
+  let importedUtilityRootsByPrefix = new Map<string, Set<string>>()
   let firstThemeRule = null as StyleRule | null
   let utilitiesNode = null as AtRule | null
   let variantNodes: AtRule[] = []
@@ -233,6 +234,19 @@ async function parseCss(
       }
 
       let utility = createCssUtility(node)
+      let importPrefix = ctx.context.importPrefix as string | undefined
+      if (importPrefix) {
+        let prefixedParams = `${importPrefix}-${node.params}`
+        utility = createCssUtility({ ...node, params: prefixedParams })
+
+        if (utility !== null) {
+          let roots = importedUtilityRootsByPrefix.get(importPrefix)
+          if (!roots) importedUtilityRootsByPrefix.set(importPrefix, (roots = new Set()))
+
+          let root = unescape(prefixedParams)
+          roots.add(root.endsWith('-*') ? root.slice(0, -2) : root)
+        }
+      }
       if (utility === null) {
         if (!node.params.endsWith('-*')) {
           if (node.params.endsWith('*')) {
@@ -505,13 +519,31 @@ async function parseCss(
         else if (param.startsWith('prefix(')) {
           let prefix = param.slice(7, -1)
 
+          if (!IS_VALID_PREFIX.test(prefix)) {
+            throw new Error(
+              `The prefix "${prefix}" is invalid. Prefixes must be lowercase ASCII letters (a-z) only.`,
+            )
+          }
+
+          let containsTailwindUtilities = false
+
           walk(node.nodes, (child) => {
             if (child.kind !== 'at-rule') return
+            if (child.name === '@tailwind' && child.params.startsWith('utilities')) {
+              containsTailwindUtilities = true
+            }
+
             if (child.name === '@theme') {
               child.params += ` prefix(${prefix})`
               return WalkAction.Skip
             }
           })
+
+          if (containsTailwindUtilities) {
+            theme.prefix = prefix
+          }
+
+          node.nodes = [contextNode({ importPrefix: prefix }, node.nodes)]
         }
 
         // Handle important
@@ -597,6 +629,35 @@ async function parseCss(
   })
 
   let designSystem = buildDesignSystem(theme, utilitiesNode?.src)
+
+  if (importedUtilityRootsByPrefix.size > 0) {
+    let parseCandidate = designSystem.parseCandidate
+
+    designSystem.parseCandidate = (candidate) => {
+      let [prefix, ...parts] = segment(candidate, ':')
+      let roots = importedUtilityRootsByPrefix.get(prefix)
+      if (!roots) return parseCandidate(candidate)
+
+      let base = parts.pop()
+      if (!base) return []
+
+      // Imported utilities use `prefix:name` publicly, but are registered as
+      // `prefix-name` internally because `@utility` names cannot contain `:`.
+      let internalCandidate = [...parts, `${prefix}-${base}`].join(':')
+      if (designSystem.theme.prefix) {
+        internalCandidate = `${designSystem.theme.prefix}:${internalCandidate}`
+      }
+
+      return parseCandidate(internalCandidate)
+        .filter((parsedCandidate) => {
+          return parsedCandidate.kind !== 'arbitrary' && roots.has(parsedCandidate.root)
+        })
+        .map((parsedCandidate) => ({
+          ...parsedCandidate,
+          raw: candidate,
+        }))
+    }
+  }
 
   if (important) {
     designSystem.important = important
