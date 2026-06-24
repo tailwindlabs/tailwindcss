@@ -434,6 +434,42 @@ test('a prefixed custom import does not prefix Tailwind utilities', async () => 
   `)
 })
 
+test('custom utilities from prefixed imports support variants', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(ui);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['hover:ui:card'], input, { loadStylesheet })).toEqual('')
+
+  expect(await run(['ui:hover:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    @media (hover: hover) {
+      .ui\\:hover\\:card:hover {
+        color: red;
+      }
+    }
+    "
+  `)
+})
+
 test('a prefixed custom import with a theme does not prefix Tailwind utilities', async () => {
   let input = css`
     @import 'tailwindcss';
