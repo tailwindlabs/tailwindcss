@@ -202,6 +202,7 @@ test(
       `,
       'notes/unrelated.txt': `order-[0] bg-[--my-red]`,
     },
+    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade')
@@ -1168,6 +1169,7 @@ test(
         }
       `,
     },
+    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
@@ -1279,6 +1281,7 @@ test(
         }
       `,
     },
+    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')
@@ -2253,6 +2256,7 @@ test(
         }
       `,
     },
+    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('npx @tailwindcss/upgrade --force')

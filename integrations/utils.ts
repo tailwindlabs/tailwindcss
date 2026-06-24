@@ -44,6 +44,7 @@ interface TestConfig {
 
   timeout?: number
   installDependencies?: boolean
+  retry?: number
 }
 interface TestContext {
   root: string
@@ -98,7 +99,7 @@ export function test(
     name,
     {
       timeout: config.timeout ?? TEST_TIMEOUT,
-      retry: process.env.CI ? 2 : 0,
+      retry: config.retry ?? (process.env.CI ? 2 : 0),
       only: only || (!process.env.CI && debug),
       skip,
       concurrent,
