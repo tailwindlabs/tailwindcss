@@ -648,7 +648,7 @@ async function parseCss(
         internalCandidate = `${designSystem.theme.prefix}:${internalCandidate}`
       }
 
-      return parseCandidate(internalCandidate)
+      let results = parseCandidate(internalCandidate)
         .filter((parsedCandidate) => {
           return parsedCandidate.kind !== 'arbitrary' && roots.has(parsedCandidate.root)
         })
@@ -656,6 +656,8 @@ async function parseCss(
           ...parsedCandidate,
           raw: candidate,
         }))
+
+      return results.length > 0 ? results : parseCandidate(candidate)
     }
   }
 

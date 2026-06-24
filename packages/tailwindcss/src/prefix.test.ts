@@ -432,6 +432,48 @@ test('a prefixed custom import does not prefix Tailwind utilities', async () => 
   `)
 })
 
+test('custom import prefixes do not shadow variants with the same name', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(sm);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @theme {
+                --breakpoint-sm: 40rem;
+              }
+
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['sm:card', 'sm:flex'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    .sm\\:card {
+      color: red;
+    }
+
+    @media (min-width: 40rem) {
+      .sm\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('a prefix must be letters only', async () => {
   let input = css`
     @theme reference prefix(__);
