@@ -8,10 +8,14 @@ import path from 'node:path'
 import { promisify, stripVTControlCharacters } from 'node:util'
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
+import * as Yaml from 'yaml'
 import { createLineTable } from '../packages/tailwindcss/src/source-maps/line-table'
 import { escape } from '../packages/tailwindcss/src/utils/escape'
 
 const REPO_ROOT = path.join(__dirname, '..')
+const ROOT_PNPM_WORKSPACE = Yaml.parse(
+  await fs.readFile(path.join(REPO_ROOT, 'pnpm-workspace.yaml'), 'utf8'),
+)
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
   name.replace('tailwindcss-', '@tailwindcss/').replace('.tgz', ''),
 )
@@ -306,6 +310,8 @@ export function test(
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
+            } else if (filename.endsWith('pnpm-workspace.yaml')) {
+              content = overwriteVersionsInPnpmWorkspace(content)
             }
 
             // Ensure that files written on Windows use \r\n line ending
@@ -424,6 +430,12 @@ export function test(
         node_modules/
       `
 
+      // Ensure there is always a root `pnpm-workspace.yaml` so that transitive
+      // dependency overrides (and the build allow list) are injected into it.
+      // As of pnpm v10, these can no longer live in the `pnpm.overrides` field
+      // of `package.json`.
+      config.fs['pnpm-workspace.yaml'] ??= ''
+
       for (let [filename, content] of Object.entries(config.fs)) {
         if (content.toString().startsWith('symlink:')) {
           // The symlink path is relative to the target destination's path
@@ -441,14 +453,12 @@ export function test(
       let shouldInstallDependencies = config.installDependencies ?? true
 
       try {
-        // In debug mode, the directory is going to be inside the pnpm workspace
-        // of the tailwindcss package. This means that `pnpm install` will run
-        // pnpm install on the workspace instead (expect if the root dir defines
-        // a separate workspace). We work around this by using the
-        // `--ignore-workspace` flag.
+        // Every test project gets its own root `pnpm-workspace.yaml` (see
+        // above). This makes the test directory its own workspace root, so even
+        // in debug mode — where the directory lives inside this repository's
+        // pnpm workspace — `pnpm install` won't attach to the parent workspace.
         if (shouldInstallDependencies) {
-          let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-          await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+          await context.exec(`pnpm install`)
         }
       } catch (error: any) {
         console.error(error)
@@ -526,28 +536,42 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
     }
   }
 
+  return JSON.stringify(json, null, 2)
+}
+
+function overwriteVersionsInPnpmWorkspace(content: string): string {
+  let workspace = content.trim() === '' ? {} : Yaml.parse(content)
+
+  // Inherit information from the root workspace
+  workspace.allowBuilds = {
+    ...ROOT_PNPM_WORKSPACE.allowBuilds,
+    ...workspace.allowBuilds,
+  }
+
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
   // @tailwindcss/oxide and we instead want to resolve it to the locally built
   // version.
-  json.pnpm ||= {}
-  json.pnpm.overrides ||= {}
+  //
+  // As of pnpm v10, the `pnpm.overrides` field in `package.json` is no longer
+  // read. Overrides have to be defined in `pnpm-workspace.yaml` instead.
+  workspace.overrides ||= {}
   for (let pkg of PUBLIC_PACKAGES) {
     if (pkg === 'tailwindcss') {
       // We want to be explicit about the `tailwindcss` package so our tests can
       // also import v3 without conflicting v4 tarballs.
-      json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {
-      json.pnpm.overrides[pkg] = resolveVersion(pkg)
+      workspace.overrides[pkg] = resolveVersion(pkg)
     }
   }
 
-  return JSON.stringify(json, null, 2)
+  return Yaml.stringify(workspace)
 }
 
 function resolveVersion(dependency: string) {
