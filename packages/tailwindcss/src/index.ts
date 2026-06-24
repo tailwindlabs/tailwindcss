@@ -526,6 +526,7 @@ async function parseCss(
           }
 
           let containsTailwindUtilities = false
+          let themeNodes: AtRule[] = []
 
           walk(node.nodes, (child) => {
             if (child.kind !== 'at-rule') return
@@ -534,13 +535,17 @@ async function parseCss(
             }
 
             if (child.name === '@theme') {
-              child.params += ` prefix(${prefix})`
+              themeNodes.push(child)
               return WalkAction.Skip
             }
           })
 
           if (containsTailwindUtilities) {
             theme.prefix = prefix
+
+            for (let themeNode of themeNodes) {
+              themeNode.params += ` prefix(${prefix})`
+            }
           }
 
           node.nodes = [contextNode({ importPrefix: prefix }, node.nodes)]
