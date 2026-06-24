@@ -377,7 +377,9 @@ test('custom utilities from prefixed imports use their import prefix', async () 
   }
 
   expect(
-    await run(['underline', 'card', 'tw:card', 'ui:underline'], input, { loadStylesheet }),
+    await run(['underline', 'card', 'tw:card', 'ui:underline', 'tw:ui-card'], input, {
+      loadStylesheet,
+    }),
   ).toEqual('')
 
   expect(await run(['tw:underline', 'ui:card', 'tw:ui-underline'], input, { loadStylesheet }))
@@ -417,7 +419,7 @@ test('a prefixed custom import does not prefix Tailwind utilities', async () => 
     }
   }
 
-  expect(await run(['card', 'ui:underline'], input, { loadStylesheet })).toEqual('')
+  expect(await run(['card', 'ui-card', 'ui:underline'], input, { loadStylesheet })).toEqual('')
 
   expect(await run(['underline', 'ui:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
     "

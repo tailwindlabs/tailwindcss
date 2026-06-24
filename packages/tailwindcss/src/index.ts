@@ -632,11 +632,23 @@ async function parseCss(
 
   if (importedUtilityRootsByPrefix.size > 0) {
     let parseCandidate = designSystem.parseCandidate
+    let importedUtilityRoots = new Set<string>()
+    for (let roots of importedUtilityRootsByPrefix.values()) {
+      for (let root of roots) importedUtilityRoots.add(root)
+    }
+
+    function parseCandidateWithoutImportedRoots(candidate: string) {
+      return parseCandidate(candidate).filter((parsedCandidate) => {
+        return (
+          parsedCandidate.kind === 'arbitrary' || !importedUtilityRoots.has(parsedCandidate.root)
+        )
+      })
+    }
 
     designSystem.parseCandidate = (candidate) => {
       let [prefix, ...parts] = segment(candidate, ':')
       let roots = importedUtilityRootsByPrefix.get(prefix)
-      if (!roots) return parseCandidate(candidate)
+      if (!roots) return parseCandidateWithoutImportedRoots(candidate)
 
       let base = parts.pop()
       if (!base) return []
@@ -657,7 +669,7 @@ async function parseCss(
           raw: candidate,
         }))
 
-      return results.length > 0 ? results : parseCandidate(candidate)
+      return results.length > 0 ? results : parseCandidateWithoutImportedRoots(candidate)
     }
   }
 
