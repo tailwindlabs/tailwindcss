@@ -126,6 +126,39 @@ export function test(
           execOptions: ExecOptions = {},
         ) {
           let cwd = childProcessOptions.cwd ?? root
+          let originalCommand = command
+
+          // Avoid `pnpm exec upgrade` on Windows because the upgrader runs
+          // `pnpm add`, which rewrites Windows `.cmd` shims while the current
+          // shim is still executing.
+          //
+          // Pretty sure this is a pnpm v11 bug on Windows.
+          if (IS_WINDOWS && command.includes('pnpm exec upgrade')) {
+            for (let base = cwd; ; base = path.dirname(base)) {
+              let upgradeBin = path.join(
+                base,
+                'node_modules',
+                '@tailwindcss',
+                'upgrade',
+                'dist',
+                'index.mjs',
+              )
+
+              try {
+                await fs.access(upgradeBin)
+                command = command.replace('pnpm exec upgrade', `node "${upgradeBin}"`)
+                break
+              } catch (error: any) {
+                if (error?.code !== 'ENOENT') throw error
+              }
+
+              let parent = path.dirname(base)
+              if (parent === base) {
+                throw new Error(`Unable to resolve @tailwindcss/upgrade from ${cwd}`)
+              }
+            }
+          }
+
           if (debug && cwd !== root) {
             let relative = path.relative(root, cwd)
             if (relative[0] !== '.') relative = `./${relative}`
@@ -145,6 +178,11 @@ export function test(
               },
               (error, stdout, stderr) => {
                 if (error) {
+                  if (command !== originalCommand) {
+                    error.message = error.message.replace(command, originalCommand)
+                    let mappedError = error as any
+                    mappedError.cmd = originalCommand
+                  }
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   if (only || debug) {
                     console.error(stdout)
