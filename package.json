@@ -66,5 +66,8 @@
       "@parcel/watcher@2.5.1": "patches/@parcel__watcher@2.5.1.patch",
       "lightningcss@1.32.0": "patches/lightningcss@1.32.0.patch"
     }
+  },
+  "dependencies": {
+    "vite": "8.0.16"
   }
 }
