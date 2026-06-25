@@ -431,6 +431,15 @@ export function test(
         node_modules/
       `
 
+      // Disable Git's automatic line ending conversion in these throwaway test
+      // repositories. Tools like pnpm write files (e.g. `pnpm-lock.yaml`) with
+      // LF endings, which on Windows (where `core.autocrlf=true` is common)
+      // makes Git emit noisy "LF will be replaced by CRLF" warnings when it
+      // touches those files.
+      config.fs['.gitattributes'] ??= txt`
+        * -text
+      `
+
       // Ensure there is always a root `pnpm-workspace.yaml` so that transitive
       // dependency overrides (and the build allow list) are injected into it.
       // As of pnpm v10, these can no longer live in the `pnpm.overrides` field
