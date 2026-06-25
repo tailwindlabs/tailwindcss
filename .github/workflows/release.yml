@@ -218,7 +218,7 @@ jobs:
           package-manager-cache: false
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@67ef31d5b988238dd797d409d6f9574278e20537 # stable
 
       - name: Setup rust target
         run: rustup target add aarch64-unknown-linux-ohos
@@ -236,7 +236,7 @@ jobs:
           chmod +x /tmp/aarch64-linux-ohos-clang
 
       - name: Install dependencies
-        run: pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/*
+        run: pnpm install --frozen-lockfile --filter=!./playgrounds/*
 
       - name: Build release
         run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=aarch64-unknown-linux-ohos
