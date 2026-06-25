@@ -127,6 +127,9 @@ importers:
       '@tailwindcss/oxide-linux-x64-musl':
         specifier: workspace:*
         version: link:npm/linux-x64-musl
+      '@tailwindcss/oxide-openharmony-arm64':
+        specifier: workspace:*
+        version: link:npm/openharmony-arm64
       '@tailwindcss/oxide-wasm32-wasi':
         specifier: workspace:*
         version: link:npm/wasm32-wasi
@@ -166,6 +169,8 @@ importers:
   crates/node/npm/linux-x64-gnu: {}
 
   crates/node/npm/linux-x64-musl: {}
+
+  crates/node/npm/openharmony-arm64: {}
 
   crates/node/npm/wasm32-wasi:
     dependencies:
