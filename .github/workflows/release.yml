@@ -199,6 +199,61 @@ jobs:
           name: bindings-x86_64-unknown-freebsd
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
+  build-ohos:
+    name: Build aarch64-unknown-linux-ohos (oxide)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup rust target
+        run: rustup target add aarch64-unknown-linux-ohos
+
+      - name: Setup OpenHarmony SDK
+        uses: Boshen/setup-ohos-sdk@edb865a89a712f1f15dbad932dfa9cfce849d95c # v1.0.0
+
+      - name: Configure OHOS linker
+        run: |
+          echo "${OHOS_SDK_NATIVE}/llvm/bin" >> $GITHUB_PATH
+          cat > /tmp/aarch64-linux-ohos-clang <<'WRAPPER'
+          #!/bin/sh
+          exec ${OHOS_SDK_NATIVE}/llvm/bin/clang --target=aarch64-linux-ohos "$@"
+          WRAPPER
+          chmod +x /tmp/aarch64-linux-ohos-clang
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/*
+
+      - name: Build release
+        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=aarch64-unknown-linux-ohos
+        env:
+          RUST_TARGET: aarch64-unknown-linux-ohos
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_OHOS_LINKER: /tmp/aarch64-linux-ohos-clang
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_OHOS_RUSTFLAGS: -C link-arg=-fuse-ld=lld -C link-arg=-lm
+
+      - name: Strip debug symbols
+        run: ${OHOS_SDK_NATIVE}/llvm/bin/llvm-strip ${{ env.OXIDE_LOCATION }}/*.node
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: bindings-aarch64-unknown-linux-ohos
+          path: ${{ env.OXIDE_LOCATION }}/*.node
+
   release:
     runs-on: macos-14
     timeout-minutes: 15
@@ -212,6 +267,7 @@ jobs:
     needs:
       - build
       - build-freebsd
+      - build-ohos
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -277,6 +333,7 @@ jobs:
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
           cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
+          cp bindings-aarch64-unknown-linux-ohos/* ./npm/openharmony-arm64/
 
       - name: 'Version based on commit: ${{ env.INSIDERS_VERSION }}'
         if: env.RELEASE_KIND == 'insiders'
