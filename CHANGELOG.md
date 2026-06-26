@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.3.2] - 2026-06-26
+
 ### Added
 
 - Support bare spacing values for `auto-rows-*` and `auto-cols-*` utilities (e.g. `auto-rows-12` and `auto-cols-16`) ([#20229](https://github.com/tailwindlabs/tailwindcss/pull/20229))
@@ -4074,7 +4078,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.2...HEAD
+[4.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.0...v4.3.1
 [4.3.0]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.4...v4.3.0
 [4.2.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.2.3...v4.2.4
