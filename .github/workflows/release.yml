@@ -321,3 +321,38 @@ jobs:
               ref: 'main',
               workflow_id: 'upgrade-tailwindcss.yml'
             })
+
+  notify:
+    if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure') }}
+    needs:
+      - build
+      - build-freebsd
+      - release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+
+      - name: Resolve release label
+        id: release
+        env:
+          INPUT_CHANNEL: ${{ github.event.inputs.channel || '' }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || '' }}
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            tag_name="${RELEASE_TAG:-${GITHUB_REF_NAME}}"
+            echo "label=release ${tag_name}" >> $GITHUB_OUTPUT
+          elif [[ "$INPUT_CHANNEL" == "release" ]]; then
+            version=$(node -p "require('./packages/tailwindcss/package.json').version")
+            echo "label=release v${version}" >> $GITHUB_OUTPUT
+          else
+            sha_short=$(git rev-parse --short HEAD)
+            echo "label=insiders release 0.0.0-insiders.${sha_short}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify Discord
+        uses: discord-actions/message@5c7149c81a83146e5d01f142be1bf87a61831c4d # v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) for `${{ steps.release.outputs.label }}` has failed.'
