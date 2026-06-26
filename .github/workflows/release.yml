@@ -308,7 +308,7 @@ jobs:
         run: |
           pnpm --recursive --filter="!@tailwindcss/oxide-wasm32-wasi" publish --tag ${RELEASE_CHANNEL} --no-git-checks
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
-          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks; popd;
+          pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks --config.node-linker=hoisted; popd;
 
       - name: Trigger Tailwind Play update
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
