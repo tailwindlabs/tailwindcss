@@ -40,7 +40,7 @@ catalogs:
       specifier: 1.32.0
       version: 1.32.0
     postcss:
-      specifier: 8.5.15
+      specifier: ^8.5.15
       version: 8.5.15
     prettier:
       specifier: 3.8.3
