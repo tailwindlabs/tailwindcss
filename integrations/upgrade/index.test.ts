@@ -1766,8 +1766,8 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('pnpm exec upgrade --force', {}, { ignoreStdErr: true }).catch(
-      (e) => e.toString(),
+    let output = await exec('pnpm exec upgrade --force', {}, { ignoreStdErr: true }).catch((e) =>
+      e.toString(),
     )
 
     expect(output).toMatch('Could not determine configuration file for:')
@@ -2736,8 +2736,8 @@ test(
           text-red-500/10
           text-red-500/semitransparent
           text-red-500/transparent
-          text-red-500/50
-          text-red-500/50.5
+          text-red-500/semitransparent
+          text-red-500/50.50
           text-red-500/50.50
           text-red-500/50%
           text-red-500/100%"
