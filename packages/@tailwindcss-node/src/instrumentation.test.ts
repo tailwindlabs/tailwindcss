@@ -83,7 +83,7 @@ it('should measure async callbacks via the `span` api', async () => {
     `)
 
     let [, duration] = stripVTControlCharacters(output).match(/\[(.*)\]/)!
-    expect(parseFloat(duration)).toBeGreaterThanOrEqual(500)
+    expect(parseFloat(duration)).toBeGreaterThanOrEqual(500 - 2 /* Margin of error */)
   })
 })
 

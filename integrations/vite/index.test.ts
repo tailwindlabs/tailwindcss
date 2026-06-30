@@ -1090,6 +1090,14 @@ test(
         </head>
       `,
       'src/index.js': js`import Plotly from 'plotly.js/lib/core'`,
+
+      // `plotly.js` pulls in `es5-ext`, which has a build script. As of pnpm
+      // v10, build scripts only run when explicitly allowed.
+      'pnpm-workspace.yaml': yaml`
+        #
+        allowBuilds:
+          es5-ext: true
+      `,
     },
   },
   async ({ exec, expect, fs }) => {

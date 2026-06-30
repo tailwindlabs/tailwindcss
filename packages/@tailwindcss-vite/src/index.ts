@@ -45,7 +45,7 @@ function createCustomResolver(
     // It does matter that this is a file, otherwise we would go up a directory,
     // which means that we would be resolving files from a parent folder first,
     // instead of the current folder we are in.
-    let importer = path.resolve(base, '__placeholder__.css')
+    let importer = path.resolve(base, '__placeholder__.ts')
 
     for (let resolver of resolvers) {
       let resolved = await resolver(id, importer)

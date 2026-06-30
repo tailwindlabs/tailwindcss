@@ -5,6 +5,7 @@
   "devDependencies": {
     "dedent": "catalog:",
     "fast-glob": "^3.3.3",
-    "source-map-js": "^1.2.1"
+    "source-map-js": "^1.2.1",
+    "yaml": "^2.9.0"
   }
 }

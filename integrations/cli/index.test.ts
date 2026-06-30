@@ -639,6 +639,15 @@ describe.each([
     'git ignore files outside of a repo are not considered',
     {
       fs: {
+        // Make the test root a pnpm workspace that includes `home/project` so
+        // the install below resolves the transitive dependency overrides that
+        // the test harness injects into this `pnpm-workspace.yaml`.
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - home/project
+        `,
+
         // Ignore everything in the "home" directory
         'home/.gitignore': '*',
 
@@ -676,7 +685,7 @@ describe.each([
       installDependencies: false,
     },
     async ({ fs, root, exec }) => {
-      await exec(`pnpm install --ignore-workspace`, {
+      await exec(`pnpm install`, {
         cwd: path.join(root, 'home/project'),
       })
 
