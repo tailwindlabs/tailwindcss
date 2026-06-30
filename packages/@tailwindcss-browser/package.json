@@ -12,6 +12,7 @@
   },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
+  "funding": "https://tailwindcss.com/sponsor",
   "scripts": {
     "lint": "tsc --noEmit",
     "build": "tsup-node",

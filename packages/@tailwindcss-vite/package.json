@@ -10,6 +10,7 @@
   },
   "bugs": "https://github.com/tailwindlabs/tailwindcss/issues",
   "homepage": "https://tailwindcss.com",
+  "funding": "https://tailwindcss.com/sponsor",
   "scripts": {
     "build": "tsup-node",
     "dev": "pnpm run build -- --watch"
