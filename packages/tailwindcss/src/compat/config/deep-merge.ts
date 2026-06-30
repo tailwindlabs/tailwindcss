@@ -17,7 +17,7 @@ export function deepMerge<T extends object>(
   type Value = T[Key]
 
   for (let source of sources) {
-    if (source === null || source === undefined) {
+    if (source === null || source === undefined || typeof source !== 'object') {
       continue
     }
 
