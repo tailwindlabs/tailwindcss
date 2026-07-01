@@ -1508,4 +1508,30 @@ describe('regressions', () => {
 
     expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual(['px-4'])
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20295
+  test('canonicalizations work when casing of arbitrary values is different', async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+      @theme {
+        --color-brand-purple: #3f3cbb;
+      }
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3cbb]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3Cbb]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3CBB]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
+  })
 })
