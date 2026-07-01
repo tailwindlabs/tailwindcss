@@ -11,7 +11,7 @@ const sharedOptions = {
 } satisfies Arg
 
 function buildUsage(command = 'tailwindcss') {
-  return `${command} [--input input.css] [--output output.css] [--watch] [options…]`
+  return `${command} [--input input.css] [--output output.css] [--watch] [--poll=ms] [options…]`
 }
 
 function rootHelp({ invalid }: { invalid?: string } = {}) {
