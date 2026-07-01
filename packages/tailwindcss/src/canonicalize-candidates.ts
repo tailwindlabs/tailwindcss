@@ -2425,6 +2425,12 @@ function createUtilitySignatureCache(
   })
 }
 
+// #RGB
+// #RGBA
+// #RRGGBB
+// #RRGGBBAA
+const HEX_REGEX = /#(?:[a-f0-9]{8}|[a-f0-9]{6}|[a-f0-9]{4}|[a-f0-9]{3})/gi
+
 // Optimize the CSS AST to make it suitable for signature comparison. We want to
 // expand declarations, ignore comments, sort declarations etc...
 function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: SignatureOptions) {
@@ -2535,6 +2541,18 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
           if (b.kind !== 'declaration') return 0
           return a.property.localeCompare(b.property)
         })
+      }
+
+      //
+      else if (node.kind === 'declaration' && node.value) {
+        // Leave CSS variables alone
+        if (node.property[0] === '-' && node.property[1] === '-') return
+
+        // Ensure hex colors are always lowercased
+        {
+          HEX_REGEX.lastIndex = 0
+          node.value = node.value.replace(HEX_REGEX, (color) => color.toLowerCase())
+        }
       }
     },
   })
