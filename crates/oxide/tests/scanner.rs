@@ -106,6 +106,18 @@ mod scanner {
         globs
     }
 
+    fn normalize_files(files: Vec<String>, base: &Path) -> Vec<String> {
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+
+        let mut files = files
+            .iter()
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+        files.sort();
+        files
+    }
+
     fn scan_with_globs(
         paths_with_content: &[(&str, &str)],
         source_directives: Vec<&str>,
@@ -1043,6 +1055,53 @@ mod scanner {
 
         let globs = scanned_globs(&mut scanner, &dir);
         assert!(!globs.iter().any(|glob| glob.starts_with("src/**/*")));
+    }
+
+    #[test]
+    fn it_should_track_files_scanned_by_the_last_scan() {
+        let dir = tempdir().unwrap().into_path();
+
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        create_files_in(
+            &dir,
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/keep.html", "content-['src/keep.html']"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        assert_eq!(
+            scanner.scan(),
+            vec!["content-['src/index.html']", "content-['src/keep.html']"]
+        );
+
+        assert_eq!(
+            scanner.scan(),
+            vec!["content-['src/index.html']", "content-['src/keep.html']"]
+        );
+        assert_eq!(scanner.get_scanned_files(), Vec::<String>::new());
+
+        sleep(Duration::from_millis(10));
+        fs::write(dir.join("src/index.html"), "content-['src/changed.html']").unwrap();
+
+        assert_eq!(
+            scanner.scan(),
+            vec![
+                "content-['src/changed.html']",
+                "content-['src/index.html']",
+                "content-['src/keep.html']",
+            ]
+        );
+        assert_eq!(
+            normalize_files(scanner.get_scanned_files(), &dir),
+            vec!["src/index.html"]
+        );
     }
 
     #[test]

@@ -376,6 +376,40 @@ describe.each([
   )
 
   test(
+    'watch mode with polling',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'src/index.css': css`@import 'tailwindcss/utilities';`,
+        'src/index.html': html`
+          <div class="underline"></div>
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --watch --poll=50`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      await fs.write('src/index.html', html`
+          <div class="underline flex"></div>
+        `)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  test(
     "watch mode with unknown @source paths shouldn't crash on Windows",
     {
       fs: {
