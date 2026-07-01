@@ -26,6 +26,8 @@ const syncedWorkspaces = new Map([
       'crates/node/npm/linux-arm-gnueabihf',
       'crates/node/npm/linux-arm64-gnu',
       'crates/node/npm/linux-arm64-musl',
+      'crates/node/npm/linux-loong64-gnu',
+      'crates/node/npm/linux-loong64-musl',
       'crates/node/npm/linux-x64-gnu',
       'crates/node/npm/linux-x64-musl',
       'crates/node/npm/wasm32-wasi',
