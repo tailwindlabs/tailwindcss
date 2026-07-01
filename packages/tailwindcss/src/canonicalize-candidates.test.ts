@@ -316,6 +316,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[color:var(--color-red-500)]', 'text-red-500'],
       ['[background-color:var(--color-red-500)]', 'bg-red-500'],
 
+      // Arbitrary property to named utility (case insensitive)
+      ['[color:#fff]', 'text-white'],
+      ['[color:#FFF]', 'text-white'],
+
       // Arbitrary property with modifier to named functional utility with modifier
       ['[color:var(--color-red-500)]/25', 'text-red-500/25'],
 
@@ -354,6 +358,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
           --*: initial;
           --spacing: 0.25rem;
           --color-red-500: red;
+          --color-white: #fff;
 
           /* Equivalent of blue-500/50 */
           --color-primary: color-mix(in oklab, oklch(62.3% 0.214 259.815) 50%, transparent);
@@ -393,6 +398,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Arbitrary value
       ['bg-[theme(colors.red.500/75%)]', 'bg-red-500/75'],
       ['bg-[theme(colors.red.500/12.34%)]', 'bg-red-500/[12.34%]'],
+
+      // Arbitrary value with different casing
+      ['bg-[#fff]', 'bg-white'],
+      ['bg-[#FFF]', 'bg-white'],
 
       // Values that don't contain only `theme(…)` calls should not be converted to
       // use a modifier since the color is not the whole value.
@@ -478,6 +487,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
         @import 'tailwindcss';
+        @theme {
+          --color-white: #fff;
+        }
       `
 
       await expectCanonicalization(input, candidate, expected)
@@ -1507,5 +1519,31 @@ describe('regressions', () => {
     }
 
     expect(designSystem.canonicalizeCandidates(['px-[calc(1rem+0px)]'], options)).toEqual(['px-4'])
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20295
+  test('canonicalizations work when casing of arbitrary values is different', async () => {
+    let designSystem = await designSystems.get(__dirname).get(css`
+      @import 'tailwindcss';
+      @theme {
+        --color-brand-purple: #3f3cbb;
+      }
+    `)
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3cbb]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3Cbb]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
+    expect(designSystem.canonicalizeCandidates(['bg-[#3F3CBB]'], options)).toEqual([
+      'bg-brand-purple',
+    ])
   })
 })
