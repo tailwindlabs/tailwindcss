@@ -338,8 +338,8 @@ test('source maps trace back to @import location', async ({ expect }) => {
              ^^^^^^^^^^^^^^^^^^^^^^^^^ CS @ 73:4-29                                                      |        ^^^^^^^^^^^^^^^^^^^^^^^^^ CS @ 166:2-27
                                                                                                          | 167  }
      74    }                                                                                             | 
-     75    :-moz-focusring {                                                                             | 173  :-moz-focusring {
-           ^^^^^^^^^^^^^^^^ CT @ 75:2-18                                                                 |      ^^^^^^^^^^^^^^^^ CT @ 173:0-16
+     75    :-moz-focusring:where(:not(iframe)) {                                                         | 173  :-moz-focusring:where(:not(iframe)) {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ CT @ 75:2-38                                             |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ CT @ 173:0-36
      76      outline: auto;                                                                              | 174    outline: auto;
              ^^^^^^^^^^^^^ CU @ 76:4-17                                                                  |        ^^^^^^^^^^^^^ CU @ 174:2-15
                                                                                                          | 175  }

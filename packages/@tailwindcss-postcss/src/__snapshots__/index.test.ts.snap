@@ -110,7 +110,7 @@ exports[`\`@import 'tailwindcss'\` is replaced with the generated CSS 1`] = `
     border-collapse: collapse;
   }
 
-  :-moz-focusring {
+  :-moz-focusring:where(:not(iframe)) {
     outline: auto;
   }
 
