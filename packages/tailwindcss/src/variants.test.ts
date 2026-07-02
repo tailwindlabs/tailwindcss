@@ -1924,6 +1924,41 @@ test('not', async () => {
   ).toEqual('')
 })
 
+test('not-not-* restores the original condition for variants that mix a style rule with an at-rule', async () => {
+  // `hover` compiles to a style rule wrapping an at-rule (`&:hover { @media
+  // (hover: hover) { … } }`), which is an AND of two conditions. Negating it
+  // once produces an OR of the two negated halves as sibling rules (De
+  // Morgan's law). Negating that result again must AND the halves back
+  // together instead of negating each independently, otherwise `not-not-*`
+  // silently produces nothing (the sibling `&` wrapper looks like an
+  // unsupported nested style rule) or, if naively "fixed", a condition
+  // broader than the original (an OR instead of an AND).
+  expect(
+    await run(
+      ['not-not-hover:flex', 'not-not-device-hocus:flex'],
+      css`
+        @custom-variant device-hocus {
+          @media (hover: hover) {
+            &:hover,
+            &:focus {
+              @slot;
+            }
+          }
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @media (hover: hover) {
+      .not-not-hover\\:flex:not(:not(:hover)), .not-not-device-hocus\\:flex:not(:not(:hover, :focus)) {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('in', async () => {
   expect(
     await run([

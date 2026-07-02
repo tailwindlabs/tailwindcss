@@ -496,9 +496,75 @@ export function createVariants(theme: Theme): Variants {
     if (variant.modifier) return null
 
     let didApply = false
+    let failed = false
+
+    // Collect the negated rules from every leaf (or leaf-group, see below)
+    // across the whole tree before mutating `ruleNode`, then assign once at
+    // the end. Assigning to `ruleNode` after each individual leaf would
+    // discard the leaves visited before it.
+    let rules: Rule[] = []
 
     walk([ruleNode], (node, ctx) => {
       if (node.kind !== 'rule' && node.kind !== 'at-rule') return WalkAction.Continue
+
+      // A previous `not-*` application negates a single style-rule+at-rule
+      // chain (an AND, e.g. `hover` = "&:hover" AND "@media (hover: hover)")
+      // into a synthetic `&` wrapper holding both negated halves as siblings
+      // (an OR, per De Morgan's law). Negating that OR again must AND the
+      // two halves back together into a single nested rule — treating them
+      // as independent leaves would produce an OR of negations instead,
+      // which is a different (broader) condition than the intended result.
+      if (
+        node.kind === 'rule' &&
+        node.selector === '&' &&
+        node.nodes.length > 1 &&
+        node.nodes.every(
+          (child) =>
+            (child.kind === 'rule' || child.kind === 'at-rule') && child.nodes.length === 0,
+        )
+      ) {
+        let atRules: AtRule[] = []
+        let styleRules: StyleRule[] = []
+
+        for (let child of node.nodes as (StyleRule | AtRule)[]) {
+          if (child.kind === 'at-rule') atRules.push(child)
+          else styleRules.push(child)
+        }
+
+        if (atRules.length > 1 || styleRules.length > 1) {
+          failed = true
+          return WalkAction.Stop
+        }
+
+        let negatedSelector: string | null = null
+        for (let styleRuleNode of styleRules) {
+          negatedSelector = negateSelector(styleRuleNode.selector)
+          if (!negatedSelector) {
+            failed = true
+            return WalkAction.Stop
+          }
+        }
+
+        let negatedAtRule: AtRule | null = null
+        for (let atRuleNode of atRules) {
+          negatedAtRule = negateAtRule(atRuleNode)
+          if (!negatedAtRule) {
+            failed = true
+            return WalkAction.Stop
+          }
+        }
+
+        rules.push(
+          negatedSelector
+            ? styleRule(negatedSelector, negatedAtRule ? [negatedAtRule] : [])
+            : (negatedAtRule as AtRule),
+        )
+
+        didApply = true
+
+        return WalkAction.Skip
+      }
+
       if (node.nodes.length > 0) return WalkAction.Continue
 
       // Throw out any candidates with variants using nested style rules
@@ -511,20 +577,24 @@ export function createVariants(theme: Theme): Variants {
       for (let node of path) {
         if (node.kind === 'at-rule') {
           atRules.push(node)
-        } else if (node.kind === 'rule') {
+        } else if (node.kind === 'rule' && node.selector !== '&') {
+          // A bare `&` selector carries no meaning of its own — it's the
+          // synthetic wrapper `not` itself introduces to hold sibling
+          // branches, not a real nested style rule, so it shouldn't count
+          // towards the "no nested style rules" check below.
           styleRules.push(node)
         }
       }
 
-      if (atRules.length > 1) return WalkAction.Stop
-      if (styleRules.length > 1) return WalkAction.Stop
-
-      let rules: Rule[] = []
+      if (atRules.length > 1 || styleRules.length > 1) {
+        failed = true
+        return WalkAction.Stop
+      }
 
       for (let node of styleRules) {
         let selector = negateSelector(node.selector)
         if (!selector) {
-          didApply = false
+          failed = true
           return WalkAction.Stop
         }
 
@@ -534,14 +604,12 @@ export function createVariants(theme: Theme): Variants {
       for (let node of atRules) {
         let negatedAtRule = negateAtRule(node)
         if (!negatedAtRule) {
-          didApply = false
+          failed = true
           return WalkAction.Stop
         }
 
         rules.push(negatedAtRule)
       }
-
-      Object.assign(ruleNode, styleRule('&', rules))
 
       // Track that the variant was actually applied
       didApply = true
@@ -549,14 +617,14 @@ export function createVariants(theme: Theme): Variants {
       return WalkAction.Skip
     })
 
+    if (failed || !didApply) return null
+
+    Object.assign(ruleNode, styleRule('&', rules))
+
     // TODO: Tweak group, peer, has to ignore intermediate `&` selectors (maybe?)
     if (ruleNode.kind === 'rule' && ruleNode.selector === '&' && ruleNode.nodes.length === 1) {
       Object.assign(ruleNode, ruleNode.nodes[0])
     }
-
-    // If the node wasn't modified, this variant is not compatible with
-    // `not-*` so discard the candidate.
-    if (!didApply) return null
   })
 
   variants.suggest('not', () => {
