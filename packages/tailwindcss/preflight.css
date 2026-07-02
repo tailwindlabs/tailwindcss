@@ -170,7 +170,7 @@ table {
   Use the modern Firefox focus style for all focusable elements.
 */
 
-:-moz-focusring {
+:-moz-focusring:where(:not(iframe)) {
   outline: auto;
 }
 
