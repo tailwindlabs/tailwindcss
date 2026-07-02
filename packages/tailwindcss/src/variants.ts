@@ -514,6 +514,13 @@ export function createVariants(theme: Theme): Variants {
       // two halves back together into a single nested rule — treating them
       // as independent leaves would produce an OR of negations instead,
       // which is a different (broader) condition than the intended result.
+      //
+      // This branch can only ever see a wrapper `not` itself produced: a
+      // genuinely parallel/authored variant (e.g. two top-level `&:hover {}`
+      // / `&:focus {}` blocks from a custom variant) is already rejected in
+      // `applyVariant` (compile.ts) before `not`'s `applyFn` is invoked at
+      // all, since applying it in isolation yields more than one top-level
+      // node there.
       if (
         node.kind === 'rule' &&
         node.selector === '&' &&
