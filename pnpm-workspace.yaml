@@ -10,9 +10,9 @@ patchedDependencies:
   lightningcss@1.32.0: patches/lightningcss@1.32.0.patch
 
 catalog:
-  '@types/node': 22.19.19
+  '@types/node': 22.19.21
   dedent: 1.7.2
-  enhanced-resolve: 5.21.6
+  enhanced-resolve: ^5.24.1
   lightningcss-darwin-arm64: 1.32.0
   lightningcss-darwin-x64: 1.32.0
   lightningcss-linux-arm64-gnu: 1.32.0
@@ -21,10 +21,10 @@ catalog:
   lightningcss-linux-x64-musl: 1.32.0
   lightningcss-win32-x64-msvc: 1.32.0
   lightningcss: 1.32.0
-  postcss: ^8.5.15
-  prettier: 3.8.3
-  vite: 8.0.14
-  webpack: 5.107.0
+  postcss: ^8.5.16
+  prettier: 3.9.4
+  vite: ^8.1.2
+  webpack: ^5.108.3
 
 onlyBuiltDependencies:
   - '@parcel/watcher'

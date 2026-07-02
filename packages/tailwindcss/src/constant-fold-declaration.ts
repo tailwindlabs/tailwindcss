@@ -190,7 +190,7 @@ export function constantFoldDeclarationAst(
               if (
                 operator === '+' &&
                 !(
-                  (constant[1] === known[1]) // Only same unit is allowed
+                  constant[1] === known[1] // Only same unit is allowed
                 )
               ) {
                 return
