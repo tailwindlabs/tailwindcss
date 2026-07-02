@@ -2249,6 +2249,78 @@ test('any-pointer-fine', async () => {
   `)
 })
 
+test('standalone', async () => {
+  expect(await run(['standalone:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: standalone) {
+      .standalone\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('minimal-ui', async () => {
+  expect(await run(['minimal-ui:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: minimal-ui) {
+      .minimal-ui\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('browser', async () => {
+  expect(await run(['browser:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: browser) {
+      .browser\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('fullscreen', async () => {
+  expect(await run(['fullscreen:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: fullscreen) {
+      .fullscreen\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('picture-in-picture', async () => {
+  expect(await run(['picture-in-picture:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: picture-in-picture) {
+      .picture-in-picture\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
+test('window-controls-overlay', async () => {
+  expect(await run(['window-controls-overlay:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (display-mode: window-controls-overlay) {
+      .window-controls-overlay\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('scripting-none', async () => {
   expect(await run(['noscript:flex'])).toMatchInlineSnapshot(`
     "
