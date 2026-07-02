@@ -4618,7 +4618,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isPositiveInteger(candidate.modifier.value)) {
+          if (isValidOpacityValue(candidate.modifier.value)) {
             alpha = `${candidate.modifier.value}%`
           }
         }
@@ -5427,7 +5427,7 @@ export function createUtilities(theme: Theme) {
       if (candidate.modifier.kind === 'arbitrary') {
         alpha = candidate.modifier.value
       } else {
-        if (isPositiveInteger(candidate.modifier.value)) {
+        if (isValidOpacityValue(candidate.modifier.value)) {
           alpha = `${candidate.modifier.value}%`
         }
       }
@@ -5573,7 +5573,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isPositiveInteger(candidate.modifier.value)) {
+          if (isValidOpacityValue(candidate.modifier.value)) {
             alpha = `${candidate.modifier.value}%`
           }
         }
@@ -5699,7 +5699,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isPositiveInteger(candidate.modifier.value)) {
+          if (isValidOpacityValue(candidate.modifier.value)) {
             alpha = `${candidate.modifier.value}%`
           }
         }

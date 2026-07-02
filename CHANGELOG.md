@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: match arbitrary hex colors against theme colors case-insensitively (e.g. `bg-[#fff]` and `bg-[#FFF]` → `bg-white`) ([#20298](https://github.com/tailwindlabs/tailwindcss/pull/20298))
 - Prevent Preflight from overriding Firefox's native `iframe:focus-visible` outline styles ([#20292](https://github.com/tailwindlabs/tailwindcss/pull/20292))
 - Prevent `theme('colors.foo')` in JS plugins from returning an internal disambiguation object when a CSS theme key shares a prefix with a sibling key like `--color-foo-bar` ([#20299](https://github.com/tailwindlabs/tailwindcss/pull/20299))
+- Support fractional opacity modifiers (e.g. `shadow-sm/12.5`) for `shadow-*`, `text-shadow-*`, `drop-shadow-*`, and `inset-shadow-*` named sizes
 
 ## [4.3.2] - 2026-06-26
 
