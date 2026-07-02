@@ -127,6 +127,12 @@ importers:
       '@tailwindcss/oxide-linux-arm64-musl':
         specifier: workspace:*
         version: link:npm/linux-arm64-musl
+      '@tailwindcss/oxide-linux-loong64-gnu':
+        specifier: workspace:*
+        version: link:npm/linux-loong64-gnu
+      '@tailwindcss/oxide-linux-loong64-musl':
+        specifier: workspace:*
+        version: link:npm/linux-loong64-musl
       '@tailwindcss/oxide-linux-x64-gnu':
         specifier: workspace:*
         version: link:npm/linux-x64-gnu
@@ -158,6 +164,10 @@ importers:
   crates/node/npm/linux-arm64-gnu: {}
 
   crates/node/npm/linux-arm64-musl: {}
+
+  crates/node/npm/linux-loong64-gnu: {}
+
+  crates/node/npm/linux-loong64-musl: {}
 
   crates/node/npm/linux-x64-gnu: {}
 

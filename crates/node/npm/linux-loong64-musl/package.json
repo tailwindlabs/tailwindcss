@@ -1,0 +1,30 @@
+{
+  "name": "@tailwindcss/oxide-linux-loong64-musl",
+  "version": "4.3.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/linux-loong64-musl"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "loong64"
+  ],
+  "main": "tailwindcss-oxide.linux-loong64-musl.node",
+  "files": [
+    "tailwindcss-oxide.linux-loong64-musl.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 20"
+  },
+  "libc": [
+    "musl"
+  ]
+}
