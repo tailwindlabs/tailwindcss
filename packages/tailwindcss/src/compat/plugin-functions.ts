@@ -100,14 +100,14 @@ export function createThemeFn(
         return [base, extra]
       }
 
-      // At this point `cssValue` is an object purely because a CSS theme key
-      // (e.g. `--color-foo`) shares a prefix with sibling keys (e.g.
-      // `--color-foo-bar`), and there was no JS config value to merge it with
-      // (otherwise we would have returned from the branch above). This is the
-      // same ambiguity handled for the CSS `theme()` function in
-      // `apply-compat-hooks.ts`, so resolve it the same way: prefer the
-      // `DEFAULT` key instead of leaking the synthetic object (and its internal
-      // `__CSS_VALUES__` bookkeeping) into plugin code.
+      // If `--color-foo` and `--color-foo-bar` are both defined, `colors.foo`
+      // produces a synthetic object:
+      //
+      // ```ts
+      // { DEFAULT: 'red', bar: 'blue', __CSS_VALUES__: { DEFAULT: 0, bar: 0 } }
+      // ```
+      //
+      // Prefer `DEFAULT` instead of exposing the object to plugin code.
       if (
         cssValue !== null &&
         typeof cssValue === 'object' &&
