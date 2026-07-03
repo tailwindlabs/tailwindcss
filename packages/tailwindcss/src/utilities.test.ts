@@ -24053,6 +24053,7 @@ test('filter', async () => {
         'invert-[var(--value)]',
         'drop-shadow',
         'drop-shadow/25',
+        'drop-shadow/12.5',
         'drop-shadow-xl',
         'drop-shadow-multi',
         'drop-shadow-[0_0_red]',
@@ -24147,6 +24148,13 @@ test('filter', async () => {
 
     .contrast-\\[1\\.23\\] {
       --tw-contrast: contrast(1.23);
+      filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+    }
+
+    .drop-shadow\\/12\\.5 {
+      --tw-drop-shadow-alpha: 12.5%;
+      --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, oklab(0% 0 0 / .125)));
+      --tw-drop-shadow: drop-shadow(var(--drop-shadow));
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
@@ -26901,6 +26909,7 @@ test('text-shadow', async () => {
         'text-shadow-[shadow:var(--value)]',
 
         'text-shadow-sm/25',
+        'text-shadow-sm/12.5',
         'text-shadow-[12px_12px_#0088cc]/25',
         'text-shadow-[12px_12px_var(--value)]/25',
         'text-shadow-[10px_10px]/25',
@@ -26977,6 +26986,11 @@ test('text-shadow', async () => {
     .text-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
       text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(59.9824% -.067 -.124 / .25));
+    }
+
+    .text-shadow-sm\\/12\\.5 {
+      --tw-text-shadow-alpha: 12.5%;
+      text-shadow: 0px 1px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .125)), 0px 2px 2px var(--tw-text-shadow-color, oklab(0% 0 0 / .125));
     }
 
     .text-shadow-sm\\/25 {
@@ -27266,6 +27280,7 @@ test('shadow', async () => {
         'shadow-[shadow:var(--value)]',
 
         'shadow-sm/25',
+        'shadow-sm/12.5',
         'shadow-[12px_12px_#0088cc]/25',
         'shadow-[12px_12px_var(--value)]/25',
         'shadow-[10px_10px]/25',
@@ -27365,6 +27380,12 @@ test('shadow', async () => {
     .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-shadow-alpha: 25%;
       --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(59.9824% -.067 -.124 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .shadow-sm\\/12\\.5 {
+      --tw-shadow-alpha: 12.5%;
+      --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, oklab(0% 0 0 / .125)), 0 1px 2px -1px var(--tw-shadow-color, oklab(0% 0 0 / .125));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
@@ -27742,6 +27763,7 @@ test('inset-shadow', async () => {
         'inset-shadow-[12px_12px_#0088cc,12px_12px_var(--value,#0088cc)]',
 
         'inset-shadow-sm/25',
+        'inset-shadow-sm/12.5',
         'inset-shadow-[12px_12px_#0088cc]/25',
         'inset-shadow-[12px_12px_var(--value)]/25',
         'inset-shadow-[10px_10px]/25',
@@ -27854,6 +27876,12 @@ test('inset-shadow', async () => {
     .inset-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(59.9824% -.067 -.124 / .25));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .inset-shadow-sm\\/12\\.5 {
+      --tw-inset-shadow-alpha: 12.5%;
+      --tw-inset-shadow: inset 0 1px 1px var(--tw-inset-shadow-color, oklab(0% 0 0 / .125));
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
