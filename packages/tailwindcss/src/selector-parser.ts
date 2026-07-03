@@ -418,8 +418,8 @@ export function parse(input: string) {
         // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
+          buffer = ''
         }
-        buffer = ''
 
         let start = i
         let nesting = 0
@@ -440,8 +440,7 @@ export function parse(input: string) {
           }
         }
 
-        // Adjust `buffer` to include the string.
-        buffer += input.slice(start, i + 1)
+        append(selector(input.slice(start, i + 1)))
         break
       }
 
