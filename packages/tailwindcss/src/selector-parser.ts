@@ -196,20 +196,14 @@ export function parse(input: string) {
     let currentChar = input.charCodeAt(i)
 
     switch (currentChar) {
-      // E.g.:
+      // Handle selector lists
       //
       // ```css
-      // .foo .bar
+      // .foo, .bar {}
       //     ^
-      //
-      // .foo > .bar
-      //     ^^^
       // ```
       case COMMA: {
-        // Flush remaining buffer, mark it as a selector
-        //
-        // Combinators are handled separately, and functions end with `)` which
-        // means that the `buffer` will be empty at that point.
+        // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
           buffer = ''
@@ -244,19 +238,30 @@ export function parse(input: string) {
         break
       }
 
+      // Handle combinators
+      //
+      // E.g.:
+      //
+      // ```css
+      // .foo .bar
+      //     ^
+      //
+      // .foo > .bar
+      //     ^^^
+      // ```
       case GREATER_THAN:
       case NEWLINE:
       case SPACE:
       case PLUS:
       case TAB:
       case TILDE: {
-        // 1. Handle everything before the combinator as a selector
+        // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
           buffer = ''
         }
 
-        // 2. Look ahead and find the end of the combinator
+        // Look ahead and find the end of the combinator
         let start = i
         let end = i + 1
         for (; end < input.length; end++) {
@@ -288,7 +293,7 @@ export function parse(input: string) {
         break
       }
 
-      // Start of a function call.
+      // Start of a function call
       //
       // E.g.:
       //
@@ -312,7 +317,7 @@ export function parse(input: string) {
           let start = i + 1
           let nesting = 0
 
-          // Find the closing bracket.
+          // Find the closing bracket
           for (let j = i + 1; j < input.length; j++) {
             peekChar = input.charCodeAt(j)
             if (peekChar === OPEN_PAREN) {
@@ -347,7 +352,7 @@ export function parse(input: string) {
         break
       }
 
-      // End of a function call.
+      // End of a function call
       //
       // E.g.:
       //
@@ -356,7 +361,7 @@ export function parse(input: string) {
       //             ^
       // ```
       case CLOSE_PAREN: {
-        // Handle everything before the closing paren a selector
+        // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
           buffer = ''
@@ -376,7 +381,7 @@ export function parse(input: string) {
         break
       }
 
-      // Split compound selectors.
+      // Split compound selectors
       //
       // E.g.:
       //
@@ -392,8 +397,8 @@ export function parse(input: string) {
           break
         }
 
-        // Handle everything before the combinator as a selector and
-        // start a new selector
+        // Handle everything before the combinator as a selector and start a new
+        // selector
         if (buffer.length > 0) {
           append(selector(buffer))
         }
@@ -401,7 +406,7 @@ export function parse(input: string) {
         break
       }
 
-      // Start of an attribute selector.
+      // Start of an attribute selector
       //
       // NOTE: Right now we don't care about the individual parts of the
       // attribute selector, we just want to find the matching closing bracket.
@@ -410,7 +415,7 @@ export function parse(input: string) {
       // future, then we can use the `AttributeSelectorParser` here (and even
       // inline it if needed)
       case OPEN_BRACKET: {
-        // Handle everything before the combinator as a selector
+        // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
         }
@@ -419,7 +424,7 @@ export function parse(input: string) {
         let start = i
         let nesting = 0
 
-        // Find the closing bracket.
+        // Find the closing bracket
         for (let j = i + 1; j < input.length; j++) {
           peekChar = input.charCodeAt(j)
           if (peekChar === OPEN_BRACKET) {
@@ -440,7 +445,7 @@ export function parse(input: string) {
         break
       }
 
-      // Start of a string.
+      // Start of a string
       case SINGLE_QUOTE:
       case DOUBLE_QUOTE: {
         let start = i
@@ -452,43 +457,43 @@ export function parse(input: string) {
         //
         // ```css
         // "This is a string with a 'quote' in it"
-        //                          ^     ^         -> These are not the end of the string.
+        //                          ^     ^         -> These are not the end of the string
         // ```
         for (let j = i + 1; j < input.length; j++) {
           peekChar = input.charCodeAt(j)
-          // Current character is a `\` therefore the next character is escaped.
+          // Current character is a `\` therefore the next character is escaped
           if (peekChar === BACKSLASH) {
             j += 1
           }
 
-          // End of the string.
+          // End of the string
           else if (peekChar === currentChar) {
             i = j
             break
           }
         }
 
-        // Adjust `buffer` to include the string.
+        // Adjust `buffer` to include the string
         buffer += input.slice(start, i + 1)
         break
       }
 
-      // Nesting `&` is always a new selector.
-      // Universal `*` is always a new selector.
+      // Nesting `&` is always a new selector
+      // Universal `*` is always a new selector
       case AMPERSAND:
       case ASTERISK: {
-        // 1. Handle everything before the combinator as a selector
+        // Flush remaining buffer as a selector
         if (buffer.length > 0) {
           append(selector(buffer))
           buffer = ''
         }
 
-        // 2. Handle the `&` or `*` as a selector on its own
+        // Handle the `&` or `*` as a selector on its own
         append(selector(input[i]))
         break
       }
 
-      // Escaped characters.
+      // Escaped characters
       case BACKSLASH: {
         buffer += input[i] + input[i + 1]
         i += 1
@@ -502,7 +507,7 @@ export function parse(input: string) {
     }
   }
 
-  // Collect the remainder as a word
+  // Collect the remainder as a selector
   if (buffer.length > 0) {
     append(selector(buffer))
   }
