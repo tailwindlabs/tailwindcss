@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent Preflight from overriding Firefox's native `iframe:focus-visible` outline styles ([#20292](https://github.com/tailwindlabs/tailwindcss/pull/20292))
 - Prevent `theme('colors.foo')` in JS plugins from returning an internal disambiguation object when a CSS theme key shares a prefix with a sibling key like `--color-foo-bar` ([#20299](https://github.com/tailwindlabs/tailwindcss/pull/20299))
 - Ensure fractional opacity modifiers work with named shadow sizes like `shadow-sm/12.5`, `text-shadow-sm/12.5`, `drop-shadow-sm/12.5`, and `inset-shadow-sm/12.5` ([#20302](https://github.com/tailwindlabs/tailwindcss/pull/20302))
+- Fix parsing selectors like `[data-foo]div` as one selector instead of two ([#20303](https://github.com/tailwindlabs/tailwindcss/pull/20303))
 
 ## [4.3.2] - 2026-06-26
 
