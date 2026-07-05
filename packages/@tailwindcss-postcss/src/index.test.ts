@@ -20,6 +20,16 @@ function inputCssFilePath() {
 
 const css = dedent
 
+async function runOnce(plugin: any, from: string, input: string): Promise<string> {
+  let ast = postcss.parse(input)
+  for (let runner of (plugin as any).plugins) {
+    if (runner.Once) {
+      await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
+    }
+  }
+  return ast.toString()
+}
+
 test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
@@ -422,17 +432,7 @@ describe('concurrent builds', () => {
 
     let plugin = tailwindcss({ optimize: { minify: false } })
 
-    async function run(input: string): Promise<string> {
-      let ast = postcss.parse(input)
-      for (let runner of (plugin as any).plugins) {
-        if (runner.Once) {
-          await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
-        }
-      }
-      return ast.toString()
-    }
-
-    let result = await run(input)
+    let result = await runOnce(plugin, from, input)
 
     expect(result).toContain('.underline')
 
@@ -448,8 +448,8 @@ describe('concurrent builds', () => {
       `,
     )
 
-    let promise1 = run(input)
-    let promise2 = run(input)
+    let promise1 = runOnce(plugin, from, input)
+    let promise2 = runOnce(plugin, from, input)
 
     expect(await promise1).toContain('.red')
     expect(await promise2).toContain('.red')
@@ -466,28 +466,26 @@ test('rebuilds when the input CSS changes even if the `from` file on disk did no
   let from = path.join(dir, 'index.css')
   let plugin = tailwindcss({ base: dir, optimize: { minify: false } })
 
-  async function run(input: string): Promise<string> {
-    let ast = postcss.parse(input)
-    for (let runner of (plugin as any).plugins) {
-      if (runner.Once) {
-        await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
+  let first = await runOnce(
+    plugin,
+    from,
+    css`
+      @tailwind utilities;
+      .first {
+        @apply underline;
       }
-    }
-    return ast.toString()
-  }
-
-  let first = await run(css`
-    @tailwind utilities;
-    .first {
-      @apply underline;
-    }
-  `)
-  let second = await run(css`
-    @tailwind utilities;
-    .second {
-      @apply line-through;
-    }
-  `)
+    `,
+  )
+  let second = await runOnce(
+    plugin,
+    from,
+    css`
+      @tailwind utilities;
+      .second {
+        @apply line-through;
+      }
+    `,
+  )
 
   expect(first).toContain('.first')
   expect(second).toContain('.second')
