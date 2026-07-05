@@ -145,7 +145,18 @@ export function buildPluginApi({
         designSystem.variants.static(
           name,
           (r) => {
-            r.nodes = parseVariantValue(variant, r.nodes)
+            let body = parseVariantValue(variant, r.nodes)
+
+            const isBlock =
+              typeof variant === 'string'
+                ? variant.trim().endsWith('}')
+                : variant.some((v) => v.trim().endsWith('}'))
+
+            if (isBlock && body.length === 1 && body[0].kind === 'at-rule') {
+              return body[0]
+            }
+
+            r.nodes = body
           },
           {
             compounds: compoundsForSelectors(typeof variant === 'string' ? [variant] : variant),
