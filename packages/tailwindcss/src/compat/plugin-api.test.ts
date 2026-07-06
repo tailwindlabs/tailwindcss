@@ -278,9 +278,7 @@ describe('theme', async () => {
       }
       .variable {
         color: #ef4444;
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .variable {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, #ef4444 var(--opacity), transparent);
         }
       }
@@ -347,9 +345,7 @@ describe('theme', async () => {
       }
       .css-variable {
         color: rgba(255 0 0 / <alpha-value>);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .css-variable {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgba(255 0 0 / <alpha-value>) var(--opacity), transparent);
         }
       }
@@ -361,9 +357,7 @@ describe('theme', async () => {
       }
       .js-variable {
         color: rgb(255 0 0 / 1);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .js-variable {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, rgb(255 0 0 / 1) var(--opacity), transparent);
         }
       }
@@ -3199,9 +3193,7 @@ describe('addUtilities()', () => {
       @layer utilities {
         .foo {
           display: flex;
-        }
-        @media (prefers-color-scheme: dark) {
-          .foo {
+          @media (prefers-color-scheme: dark) {
             text-decoration-line: underline;
           }
         }
@@ -3330,9 +3322,9 @@ describe('addUtilities()', () => {
       "
       .form-input {
         background-color: red;
-      }
-      .form-input::placeholder {
-        background-color: red;
+        &::placeholder {
+          background-color: red;
+        }
       }
       @media (width >= 1024px) {
         .lg\\:form-textarea:hover:focus {
@@ -3999,9 +3991,7 @@ describe('matchUtilities()', () => {
       }
       .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
         scrollbar-color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
@@ -4010,9 +4000,7 @@ describe('matchUtilities()', () => {
       }
       .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
         scrollbar-color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-\\[var\\(--my-color\\)\\]\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           scrollbar-color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
@@ -4091,9 +4079,7 @@ describe('matchUtilities()', () => {
       "
       .scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
         scrollbar-color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-\\[var\\(--my-color\\)\\]\\/\\[25\\%\\] {
+        @supports (color: color-mix(in lab, red, red)) {
           scrollbar-color: color-mix(in oklab, var(--my-color) 25%, transparent);
         }
       }
@@ -4111,9 +4097,7 @@ describe('matchUtilities()', () => {
       }
       .scrollbar-current\\/45 {
         scrollbar-color: currentcolor;
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .scrollbar-current\\/45 {
+        @supports (color: color-mix(in lab, red, red)) {
           scrollbar-color: color-mix(in oklab, currentcolor 45%, transparent);
         }
       }
@@ -4360,16 +4344,16 @@ describe('addComponents()', () => {
       .btn-blue {
         background-color: #3490dc;
         color: #fff;
-      }
-      .btn-blue:hover {
-        background-color: #2779bd;
+        &:hover {
+          background-color: #2779bd;
+        }
       }
       .btn-red {
         background-color: #e3342f;
         color: #fff;
-      }
-      .btn-red:hover {
-        background-color: #cc1f1a;
+        &:hover {
+          background-color: #cc1f1a;
+        }
       }
       "
     `)

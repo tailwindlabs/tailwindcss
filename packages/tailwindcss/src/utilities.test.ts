@@ -4104,29 +4104,19 @@ describe('container', () => {
       }
       .container {
         width: 100%;
-      }
-      @media (width >= 40rem) {
-        .container {
+        @media (width >= 40rem) {
           max-width: 40rem;
         }
-      }
-      @media (width >= 48rem) {
-        .container {
+        @media (width >= 48rem) {
           max-width: 48rem;
         }
-      }
-      @media (width >= 64rem) {
-        .container {
+        @media (width >= 64rem) {
           max-width: 64rem;
         }
-      }
-      @media (width >= 80rem) {
-        .container {
+        @media (width >= 80rem) {
           max-width: 80rem;
         }
-      }
-      @media (width >= 96rem) {
-        .container {
+        @media (width >= 96rem) {
           max-width: 96rem;
         }
       }
@@ -4161,39 +4151,25 @@ describe('container', () => {
       "
       .container {
         width: 100%;
-      }
-      @media (width >= 40em) {
-        .container {
+        @media (width >= 40em) {
           max-width: 40em;
         }
-      }
-      @media (width >= 48em) {
-        .container {
+        @media (width >= 48em) {
           max-width: 48em;
         }
-      }
-      @media (width >= 30px) {
-        .container {
+        @media (width >= 30px) {
           max-width: 30px;
         }
-      }
-      @media (width >= 1600px) {
-        .container {
+        @media (width >= 1600px) {
           max-width: 1600px;
         }
-      }
-      @media (width >= 64rem) {
-        .container {
+        @media (width >= 64rem) {
           max-width: 64rem;
         }
-      }
-      @media (width >= 80rem) {
-        .container {
+        @media (width >= 80rem) {
           max-width: 80rem;
         }
-      }
-      @media (width >= 96rem) {
-        .container {
+        @media (width >= 96rem) {
           max-width: 96rem;
         }
       }
@@ -4232,38 +4208,24 @@ describe('container', () => {
       }
       .container {
         width: 100%;
-      }
-      @media (width >= 40rem) {
-        .container {
+        @media (width >= 40rem) {
           max-width: 40rem;
         }
-      }
-      @media (width >= 48rem) {
-        .container {
+        @media (width >= 48rem) {
           max-width: 48rem;
         }
-      }
-      @media (width >= 64rem) {
-        .container {
+        @media (width >= 64rem) {
           max-width: 64rem;
         }
-      }
-      @media (width >= 80rem) {
-        .container {
+        @media (width >= 80rem) {
           max-width: 80rem;
         }
-      }
-      @media (width >= 96rem) {
-        .container {
+        @media (width >= 96rem) {
           max-width: 96rem;
         }
-      }
-      .container {
         margin-inline: auto;
         padding-inline: 1rem;
-      }
-      @media (width >= 40rem) {
-        .container {
+        @media (width >= 40rem) {
           padding-inline: 2rem;
         }
       }
@@ -9638,25 +9600,19 @@ test('accent', async () => {
     }
     .accent-current\\/50 {
       accent-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .accent-current\\/\\[0\\.5\\] {
       accent-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .accent-current\\/\\[50\\%\\] {
       accent-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -9668,49 +9624,37 @@ test('accent', async () => {
     }
     .accent-red-500\\/2\\.5 {
       accent-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .accent-red-500\\/2\\.25 {
       accent-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .accent-red-500\\/2\\.75 {
       accent-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .accent-red-500\\/50 {
       accent-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .accent-red-500\\/\\[0\\.5\\] {
       accent-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .accent-red-500\\/\\[50\\%\\] {
       accent-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .accent-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         accent-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -9813,25 +9757,19 @@ test('caret', async () => {
     }
     .caret-current\\/50 {
       caret-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .caret-current\\/\\[0\\.5\\] {
       caret-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .caret-current\\/\\[50\\%\\] {
       caret-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -9843,49 +9781,37 @@ test('caret', async () => {
     }
     .caret-red-500\\/2\\.5 {
       caret-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .caret-red-500\\/2\\.25 {
       caret-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .caret-red-500\\/2\\.75 {
       caret-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .caret-red-500\\/50 {
       caret-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .caret-red-500\\/\\[0\\.5\\] {
       caret-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .caret-red-500\\/\\[50\\%\\] {
       caret-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .caret-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         caret-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -9986,25 +9912,19 @@ test('divide-color', async () => {
     }
     :where(.divide-current\\/50 > :not(:last-child)) {
       border-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-current\\/50 > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)) {
       border-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-current\\/\\[0\\.5\\] > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-current\\/\\[50\\%\\] > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -10016,49 +9936,37 @@ test('divide-color', async () => {
     }
     :where(.divide-red-500\\/2\\.5 > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/2\\.5 > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     :where(.divide-red-500\\/2\\.25 > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/2\\.25 > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     :where(.divide-red-500\\/2\\.75 > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/2\\.75 > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     :where(.divide-red-500\\/50 > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/50 > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/\\[0\\.5\\] > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
       border-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      :where(.divide-red-500\\/\\[50\\%\\] > :not(:last-child)) {
+      @supports (color: color-mix(in lab, red, red)) {
         border-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -10612,24 +10520,16 @@ test('scrollbar-thumb', async () => {
     }
     .scrollbar-thumb-red-500\\/50 {
       --tw-scrollbar-thumb: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .scrollbar-thumb-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-scrollbar-thumb: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .scrollbar-thumb-red-500\\/50 {
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
     .scrollbar-thumb-red-500\\/\\[0\\.5\\] {
       --tw-scrollbar-thumb: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .scrollbar-thumb-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-scrollbar-thumb: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .scrollbar-thumb-red-500\\/\\[0\\.5\\] {
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
     .scrollbar-thumb-transparent {
@@ -10715,24 +10615,16 @@ test('scrollbar-track', async () => {
     }
     .scrollbar-track-red-500\\/50 {
       --tw-scrollbar-track: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .scrollbar-track-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-scrollbar-track: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .scrollbar-track-red-500\\/50 {
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
     .scrollbar-track-red-500\\/\\[0\\.5\\] {
       --tw-scrollbar-track: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .scrollbar-track-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-scrollbar-track: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .scrollbar-track-red-500\\/\\[0\\.5\\] {
       scrollbar-color: var(--tw-scrollbar-thumb) var(--tw-scrollbar-track);
     }
     .scrollbar-track-transparent {
@@ -12233,25 +12125,19 @@ test('bg', async () => {
     }
     .bg-\\[color\\:var\\(--some-var\\)\\]\\/50 {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[color\\:var\\(--some-var\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
     .bg-\\[color\\:var\\(--some-var\\)\\]\\/\\[0\\.5\\] {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[color\\:var\\(--some-var\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
     .bg-\\[color\\:var\\(--some-var\\)\\]\\/\\[50\\%\\] {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[color\\:var\\(--some-var\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
@@ -12260,25 +12146,19 @@ test('bg', async () => {
     }
     .bg-\\[var\\(--some-var\\)\\]\\/50 {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[var\\(--some-var\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
     .bg-\\[var\\(--some-var\\)\\]\\/\\[0\\.5\\] {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[var\\(--some-var\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
     .bg-\\[var\\(--some-var\\)\\]\\/\\[50\\%\\] {
       background-color: var(--some-var);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-\\[var\\(--some-var\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--some-var) 50%, transparent);
       }
     }
@@ -12290,33 +12170,25 @@ test('bg', async () => {
     }
     .bg-current\\/50 {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .bg-current\\/\\[0\\.5\\] {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .bg-current\\/\\[50\\%\\] {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/\\[var\\(--bg-opacity\\)\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor var(--bg-opacity), transparent);
       }
     }
@@ -12328,33 +12200,25 @@ test('bg', async () => {
     }
     .bg-red-500\\/2\\.5 {
       background-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .bg-red-500\\/2\\.25 {
       background-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .bg-red-500\\/2\\.75 {
       background-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .bg-red-500\\/50 {
       background-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -12363,17 +12227,13 @@ test('bg', async () => {
     }
     .bg-red-500\\/\\[0\\.5\\] {
       background-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .bg-red-500\\/\\[50\\%\\] {
       background-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -12385,266 +12245,170 @@ test('bg', async () => {
     }
     .-bg-linear-45 {
       --tw-gradient-position: calc(45deg * -1);
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .-bg-linear-45 {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: calc(45deg * -1) in oklab;
       }
-    }
-    .-bg-linear-45 {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .-bg-linear-45\\/oklab {
       --tw-gradient-position: calc(45deg * -1);
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .-bg-linear-45\\/oklab {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: calc(45deg * -1) in oklab;
       }
-    }
-    .-bg-linear-45\\/oklab {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-45 {
       --tw-gradient-position: 45deg;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-45 {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: 45deg in oklab;
       }
-    }
-    .bg-linear-45 {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
       --tw-gradient-position: 45deg;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: 45deg in hsl longer hue;
       }
-    }
-    .bg-linear-45\\/\\[in_hsl_longer_hue\\] {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-45\\/oklab {
       --tw-gradient-position: 45deg;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-45\\/oklab {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: 45deg in oklab;
       }
-    }
-    .bg-linear-45\\/oklab {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-45\\/shorter {
       --tw-gradient-position: 45deg;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-45\\/shorter {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: 45deg in oklch shorter hue;
       }
-    }
-    .bg-linear-45\\/shorter {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-b {
       --tw-gradient-position: to bottom;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-b {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to bottom in oklab;
       }
-    }
-    .bg-linear-to-b {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-bl {
       --tw-gradient-position: to bottom left;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-bl {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to bottom left in oklab;
       }
-    }
-    .bg-linear-to-bl {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-br {
       --tw-gradient-position: to bottom right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-br {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to bottom right in oklab;
       }
-    }
-    .bg-linear-to-br {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-l {
       --tw-gradient-position: to left;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-l {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to left in oklab;
       }
-    }
-    .bg-linear-to-l {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklab;
       }
-    }
-    .bg-linear-to-r {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in hsl longer hue;
       }
-    }
-    .bg-linear-to-r\\/\\[in_hsl_longer_hue\\] {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/\\[longer\\] {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/\\[longer\\] {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right longer;
       }
-    }
-    .bg-linear-to-r\\/\\[longer\\] {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/decreasing {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/decreasing {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklch decreasing hue;
       }
-    }
-    .bg-linear-to-r\\/decreasing {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/hsl {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/hsl {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in hsl;
       }
-    }
-    .bg-linear-to-r\\/hsl {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/increasing {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/increasing {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklch increasing hue;
       }
-    }
-    .bg-linear-to-r\\/increasing {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/longer {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/longer {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklch longer hue;
       }
-    }
-    .bg-linear-to-r\\/longer {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/oklab {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/oklab {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklab;
       }
-    }
-    .bg-linear-to-r\\/oklab {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/oklch {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/oklch {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklch;
       }
-    }
-    .bg-linear-to-r\\/oklch {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/shorter {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/shorter {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in oklch shorter hue;
       }
-    }
-    .bg-linear-to-r\\/shorter {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-r\\/srgb {
       --tw-gradient-position: to right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-r\\/srgb {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to right in srgb;
       }
-    }
-    .bg-linear-to-r\\/srgb {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-t {
       --tw-gradient-position: to top;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-t {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to top in oklab;
       }
-    }
-    .bg-linear-to-t {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-tl {
       --tw-gradient-position: to top left;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-tl {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to top left in oklab;
       }
-    }
-    .bg-linear-to-tl {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .bg-linear-to-tr {
       --tw-gradient-position: to top right;
-    }
-    @supports (background-image: linear-gradient(in lab, red, red)) {
-      .bg-linear-to-tr {
+      @supports (background-image: linear-gradient(in lab, red, red)) {
         --tw-gradient-position: to top right in oklab;
       }
-    }
-    .bg-linear-to-tr {
       background-image: linear-gradient(var(--tw-gradient-stops));
     }
     .-bg-conic-45\\/oklab {
@@ -12985,25 +12749,19 @@ test('bg', async () => {
     "
     .bg-current\\/custom {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/custom {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor var(--opacity-custom, var(--custom-opacity)), transparent);
       }
     }
     .bg-current\\/half {
       background-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .bg-current\\/half {
+      @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, currentcolor var(--opacity-half, 0.5), transparent);
       }
     }
     .\\[color\\:red\\]\\/half {
       color: color-mix(in srgb, red 0.5, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .\\[color\\:red\\]\\/half {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, red var(--opacity-half, 0.5), transparent);
       }
     }
@@ -13161,35 +12919,23 @@ test('from', async () => {
     }
     .from-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-\\[var\\(--my-color\\)\\] {
@@ -13198,35 +12944,23 @@ test('from', async () => {
     }
     .from-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-from: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .from-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-current {
@@ -13235,35 +12969,23 @@ test('from', async () => {
     }
     .from-current\\/50 {
       --tw-gradient-from: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .from-current\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-current\\/\\[0\\.5\\] {
       --tw-gradient-from: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .from-current\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-current\\/\\[50\\%\\] {
       --tw-gradient-from: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .from-current\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-inherit {
@@ -13276,35 +12998,23 @@ test('from', async () => {
     }
     .from-red-500\\/50 {
       --tw-gradient-from: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .from-red-500\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-red-500\\/\\[0\\.5\\] {
       --tw-gradient-from: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .from-red-500\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-red-500\\/\\[50\\%\\] {
       --tw-gradient-from: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .from-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-from: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .from-red-500\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .from-transparent {
@@ -13503,37 +13213,25 @@ test('via', async () => {
     }
     .via-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -13544,37 +13242,25 @@ test('via', async () => {
     }
     .via-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .via-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -13585,37 +13271,25 @@ test('via', async () => {
     }
     .via-current\\/50 {
       --tw-gradient-via: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .via-current\\/50 {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-current\\/\\[0\\.5\\] {
       --tw-gradient-via: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .via-current\\/\\[0\\.5\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-current\\/\\[50\\%\\] {
       --tw-gradient-via: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .via-current\\/\\[50\\%\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -13631,37 +13305,25 @@ test('via', async () => {
     }
     .via-red-500\\/50 {
       --tw-gradient-via: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .via-red-500\\/50 {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-red-500\\/\\[0\\.5\\] {
       --tw-gradient-via: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .via-red-500\\/\\[0\\.5\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
     .via-red-500\\/\\[50\\%\\] {
       --tw-gradient-via: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .via-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-via: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .via-red-500\\/\\[50\\%\\] {
       --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
       --tw-gradient-stops: var(--tw-gradient-via-stops);
     }
@@ -13855,35 +13517,23 @@ test('to', async () => {
     }
     .to-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-\\[var\\(--my-color\\)\\] {
@@ -13892,35 +13542,23 @@ test('to', async () => {
     }
     .to-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-to: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
-    }
-    .to-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-current {
@@ -13929,35 +13567,23 @@ test('to', async () => {
     }
     .to-current\\/50 {
       --tw-gradient-to: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .to-current\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-current\\/\\[0\\.5\\] {
       --tw-gradient-to: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .to-current\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-current\\/\\[50\\%\\] {
       --tw-gradient-to: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, currentcolor 50%, transparent);
       }
-    }
-    .to-current\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-inherit {
@@ -13970,35 +13596,23 @@ test('to', async () => {
     }
     .to-red-500\\/50 {
       --tw-gradient-to: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .to-red-500\\/50 {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-red-500\\/\\[0\\.5\\] {
       --tw-gradient-to: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .to-red-500\\/\\[0\\.5\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-red-500\\/\\[50\\%\\] {
       --tw-gradient-to: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .to-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-gradient-to: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
-    }
-    .to-red-500\\/\\[50\\%\\] {
       --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
     }
     .to-transparent {
@@ -14414,9 +14028,7 @@ test('mask', async () => {
     "
     .\\[color\\:red\\]\\/half {
       color: color-mix(in srgb, red 0.5, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .\\[color\\:red\\]\\/half {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, red var(--opacity-half, 0.5), transparent);
       }
     }
@@ -19359,25 +18971,19 @@ test('fill', async () => {
     }
     .fill-current\\/50 {
       fill: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .fill-current\\/\\[0\\.5\\] {
       fill: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .fill-current\\/\\[50\\%\\] {
       fill: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -19389,49 +18995,37 @@ test('fill', async () => {
     }
     .fill-red-500\\/2\\.5 {
       fill: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .fill-red-500\\/2\\.25 {
       fill: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .fill-red-500\\/2\\.75 {
       fill: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .fill-red-500\\/50 {
       fill: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .fill-red-500\\/\\[0\\.5\\] {
       fill: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .fill-red-500\\/\\[50\\%\\] {
       fill: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .fill-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         fill: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -19537,25 +19131,19 @@ test('stroke', async () => {
     }
     .stroke-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .stroke-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .stroke-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -19564,25 +19152,19 @@ test('stroke', async () => {
     }
     .stroke-\\[var\\(--my-color\\)\\]\\/50 {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .stroke-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .stroke-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       stroke: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -19594,25 +19176,19 @@ test('stroke', async () => {
     }
     .stroke-current\\/50 {
       stroke: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .stroke-current\\/\\[0\\.5\\] {
       stroke: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .stroke-current\\/\\[50\\%\\] {
       stroke: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -19627,49 +19203,37 @@ test('stroke', async () => {
     }
     .stroke-red-500\\/2\\.5 {
       stroke: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .stroke-red-500\\/2\\.25 {
       stroke: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .stroke-red-500\\/2\\.75 {
       stroke: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .stroke-red-500\\/50 {
       stroke: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .stroke-red-500\\/\\[0\\.5\\] {
       stroke: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .stroke-red-500\\/\\[50\\%\\] {
       stroke: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .stroke-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         stroke: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -20728,25 +20292,19 @@ test('placeholder', async () => {
     }
     .placeholder-current\\/50::placeholder {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-current\\/50::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .placeholder-current\\/\\[0\\.5\\]::placeholder {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-current\\/\\[0\\.5\\]::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .placeholder-current\\/\\[50\\%\\]::placeholder {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-current\\/\\[50\\%\\]::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -20758,49 +20316,37 @@ test('placeholder', async () => {
     }
     .placeholder-red-500\\/2\\.5::placeholder {
       color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/2\\.5::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .placeholder-red-500\\/2\\.25::placeholder {
       color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/2\\.25::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .placeholder-red-500\\/2\\.75::placeholder {
       color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/2\\.75::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .placeholder-red-500\\/50::placeholder {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/50::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/\\[0\\.5\\]::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .placeholder-red-500\\/\\[50\\%\\]::placeholder {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .placeholder-red-500\\/\\[50\\%\\]::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -20910,25 +20456,19 @@ test('decoration', async () => {
     }
     .decoration-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -20937,25 +20477,19 @@ test('decoration', async () => {
     }
     .decoration-\\[var\\(--my-color\\)\\]\\/50 {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .decoration-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .decoration-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       text-decoration-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -20967,25 +20501,19 @@ test('decoration', async () => {
     }
     .decoration-current\\/50 {
       text-decoration-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .decoration-current\\/\\[0\\.5\\] {
       text-decoration-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .decoration-current\\/\\[50\\%\\] {
       text-decoration-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -20997,25 +20525,19 @@ test('decoration', async () => {
     }
     .decoration-red-500\\/50 {
       text-decoration-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .decoration-red-500\\/\\[0\\.5\\] {
       text-decoration-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .decoration-red-500\\/\\[50\\%\\] {
       text-decoration-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .decoration-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         text-decoration-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -21334,24 +20856,16 @@ test('filter', async () => {
     }
     .drop-shadow-red-500 {
       --tw-drop-shadow-color: #ef4444;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .drop-shadow-red-500 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-drop-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-drop-shadow-alpha), transparent);
       }
-    }
-    .drop-shadow-red-500 {
       --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
     .drop-shadow-red-500\\/50 {
       --tw-drop-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .drop-shadow-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-drop-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-drop-shadow-alpha), transparent);
       }
-    }
-    .drop-shadow-red-500\\/50 {
       --tw-drop-shadow: var(--tw-drop-shadow-size);
     }
     .grayscale {
@@ -22982,9 +22496,7 @@ test('outline', async () => {
     .outline-hidden {
       --tw-outline-style: none;
       outline-style: none;
-    }
-    @media (forced-colors: active) {
-      .outline-hidden {
+      @media (forced-colors: active) {
         outline: 2px solid transparent;
         outline-offset: 2px;
       }
@@ -23050,25 +22562,19 @@ test('outline', async () => {
     }
     .outline-\\[color\\:var\\(--value\\)\\]\\/50 {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[color\\:var\\(--value\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
     .outline-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
     .outline-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
@@ -23077,25 +22583,19 @@ test('outline', async () => {
     }
     .outline-\\[var\\(--value\\)\\]\\/50 {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[var\\(--value\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
     .outline-\\[var\\(--value\\)\\]\\/\\[0\\.5\\] {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
     .outline-\\[var\\(--value\\)\\]\\/\\[50\\%\\] {
       outline-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-\\[var\\(--value\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--value) 50%, transparent);
       }
     }
@@ -23107,25 +22607,19 @@ test('outline', async () => {
     }
     .outline-current\\/50 {
       outline-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .outline-current\\/\\[0\\.5\\] {
       outline-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .outline-current\\/\\[50\\%\\] {
       outline-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -23137,25 +22631,19 @@ test('outline', async () => {
     }
     .outline-red-500\\/50 {
       outline-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .outline-red-500\\/\\[0\\.5\\] {
       outline-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .outline-red-500\\/\\[50\\%\\] {
       outline-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .outline-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         outline-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -23615,25 +23103,19 @@ test('text', async () => {
     }
     .text-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .text-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .text-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -23642,25 +23124,19 @@ test('text', async () => {
     }
     .text-\\[var\\(--my-color\\)\\]\\/50 {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .text-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .text-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -23672,25 +23148,19 @@ test('text', async () => {
     }
     .text-current\\/50 {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .text-current\\/\\[0\\.5\\] {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .text-current\\/\\[50\\%\\] {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -23702,49 +23172,37 @@ test('text', async () => {
     }
     .text-red-500\\/2\\.5 {
       color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .text-red-500\\/2\\.25 {
       color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .text-red-500\\/2\\.75 {
       color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .text-red-500\\/50 {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .text-red-500\\/\\[0\\.5\\] {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .text-red-500\\/\\[50\\%\\] {
       color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -23851,18 +23309,14 @@ test('text-shadow', async () => {
     .text-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
       text-shadow: 12px 12px var(--tw-text-shadow-color, var(--value));
-    }
-    @supports (color: lab(from red l a b)) {
-      .text-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      @supports (color: lab(from red l a b)) {
         text-shadow: 12px 12px var(--tw-text-shadow-color, oklab(from var(--value) l a b / 25%));
       }
     }
     .text-shadow-\\[10px_10px\\]\\/25 {
       --tw-text-shadow-alpha: 25%;
       text-shadow: 10px 10px var(--tw-text-shadow-color, currentcolor);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[10px_10px\\]\\/25 {
+      @supports (color: color-mix(in lab, red, red)) {
         text-shadow: 10px 10px var(--tw-text-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
       }
     }
@@ -23883,33 +23337,25 @@ test('text-shadow', async () => {
     }
     .text-shadow-\\[\\#0088cc\\] {
       --tw-text-shadow-color: #0088cc;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[\\#0088cc\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, #0088cc var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[\\#0088cc\\]\\/50 {
       --tw-text-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[\\#0088cc\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
       --tw-text-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-text-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
@@ -23924,33 +23370,25 @@ test('text-shadow', async () => {
     }
     .text-shadow-\\[color\\:var\\(--value\\)\\] {
       --tw-text-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[color\\:var\\(--value\\)\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, var(--value) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
       --tw-text-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
       --tw-text-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
       --tw-text-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
@@ -23962,33 +23400,25 @@ test('text-shadow', async () => {
     }
     .text-shadow-current {
       --tw-text-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-current {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, currentcolor var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-current\\/50 {
       --tw-text-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-current\\/\\[0\\.5\\] {
       --tw-text-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-current\\/\\[50\\%\\] {
       --tw-text-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
@@ -24000,57 +23430,43 @@ test('text-shadow', async () => {
     }
     .text-shadow-red-500 {
       --tw-text-shadow-color: #ef4444;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/2\\.5 {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.5%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/2\\.25 {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.25%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/2\\.75 {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.75%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/50 {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/\\[0\\.5\\] {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
     .text-shadow-red-500\\/\\[50\\%\\] {
       --tw-text-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-text-shadow-alpha), transparent);
       }
     }
@@ -24059,9 +23475,7 @@ test('text-shadow', async () => {
     }
     .text-shadow-transparent {
       --tw-text-shadow-color: transparent;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .text-shadow-transparent {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-text-shadow-color: color-mix(in oklab, transparent var(--tw-text-shadow-alpha), transparent);
       }
     }
@@ -24171,25 +23585,17 @@ test('shadow', async () => {
     .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       --tw-shadow-alpha: 25%;
       --tw-shadow: 12px 12px var(--tw-shadow-color, var(--value));
-    }
-    @supports (color: lab(from red l a b)) {
-      .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      @supports (color: lab(from red l a b)) {
         --tw-shadow: 12px 12px var(--tw-shadow-color, oklab(from var(--value) l a b / 25%));
       }
-    }
-    .shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .shadow-\\[10px_10px\\]\\/25 {
       --tw-shadow-alpha: 25%;
       --tw-shadow: 10px 10px var(--tw-shadow-color, currentcolor);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[10px_10px\\]\\/25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow: 10px 10px var(--tw-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
       }
-    }
-    .shadow-\\[10px_10px\\]\\/25 {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
@@ -24241,105 +23647,79 @@ test('shadow', async () => {
     }
     .shadow-\\[\\#0088cc\\] {
       --tw-shadow-color: #0088cc;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[\\#0088cc\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, #0088cc var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[\\#0088cc\\]\\/50 {
       --tw-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[\\#0088cc\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
       --tw-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[color\\:var\\(--value\\)\\] {
       --tw-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[color\\:var\\(--value\\)\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, var(--value) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
       --tw-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
       --tw-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
       --tw-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-blue-500 {
       --tw-shadow-color: #3b82f6;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-blue-500 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, var(--box-shadow-color-blue-500) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-current {
       --tw-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-current {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, currentcolor var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-current\\/50 {
       --tw-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-current\\/\\[0\\.5\\] {
       --tw-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-current\\/\\[50\\%\\] {
       --tw-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
@@ -24348,65 +23728,49 @@ test('shadow', async () => {
     }
     .shadow-red-500 {
       --tw-shadow-color: #ef4444;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/2\\.5 {
       --tw-shadow-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.5%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/2\\.25 {
       --tw-shadow-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.25%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/2\\.75 {
       --tw-shadow-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.75%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/50 {
       --tw-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/\\[0\\.5\\] {
       --tw-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-red-500\\/\\[50\\%\\] {
       --tw-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-shadow-alpha), transparent);
       }
     }
     .shadow-transparent {
       --tw-shadow-color: transparent;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .shadow-transparent {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, transparent var(--tw-shadow-alpha), transparent);
       }
     }
@@ -24583,37 +23947,25 @@ test('inset-shadow', async () => {
     .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, #0088cc), inset 12px 12px var(--tw-inset-shadow-color, var(--value,#0088cc));
-    }
-    @supports (color: lab(from red l a b)) {
-      .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\]\\/25 {
+      @supports (color: lab(from red l a b)) {
         --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(from #0088cc l a b / 25%)), inset 12px 12px var(--tw-inset-shadow-color, oklab(from var(--value,#0088cc) l a b / 25%));
       }
-    }
-    .inset-shadow-\\[12px_12px_\\#0088cc\\,12px_12px_var\\(--value\\,\\#0088cc\\)\\]\\/25 {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, var(--value));
-    }
-    @supports (color: lab(from red l a b)) {
-      .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
+      @supports (color: lab(from red l a b)) {
         --tw-inset-shadow: inset 12px 12px var(--tw-inset-shadow-color, oklab(from var(--value) l a b / 25%));
       }
-    }
-    .inset-shadow-\\[12px_12px_var\\(--value\\)\\]\\/25 {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .inset-shadow-\\[10px_10px\\]\\/25 {
       --tw-inset-shadow-alpha: 25%;
       --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, currentcolor);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[10px_10px\\]\\/25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow: inset 10px 10px var(--tw-inset-shadow-color, color-mix(in oklab, currentcolor 25%, transparent));
       }
-    }
-    .inset-shadow-\\[10px_10px\\]\\/25 {
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
     .inset-shadow-\\[12px_12px_\\#0088cc\\]\\/25 {
@@ -24669,97 +24021,73 @@ test('inset-shadow', async () => {
     }
     .inset-shadow-\\[\\#0088cc\\] {
       --tw-inset-shadow-color: #0088cc;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[\\#0088cc\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, #0088cc var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[\\#0088cc\\]\\/50 {
       --tw-inset-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[\\#0088cc\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
       --tw-inset-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[\\#0088cc\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, #0088cc 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[\\#0088cc\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, #0088cc 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[color\\:var\\(--value\\)\\] {
       --tw-inset-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[color\\:var\\(--value\\)\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, var(--value) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
       --tw-inset-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
       --tw-inset-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
       --tw-inset-shadow-color: var(--value);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-\\[color\\:var\\(--value\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--value) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-current {
       --tw-inset-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-current {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, currentcolor var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-current\\/50 {
       --tw-inset-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-current\\/\\[0\\.5\\] {
       --tw-inset-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-current\\/\\[50\\%\\] {
       --tw-inset-shadow-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, currentcolor 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
@@ -24768,65 +24096,49 @@ test('inset-shadow', async () => {
     }
     .inset-shadow-red-500 {
       --tw-inset-shadow-color: #ef4444;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, var(--color-red-500) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/2\\.5 {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.5%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/2\\.25 {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.25%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/2\\.75 {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 2.75%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/50 {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/\\[0\\.5\\] {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-red-500\\/\\[50\\%\\] {
       --tw-inset-shadow-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-red-500) 50%, transparent) var(--tw-inset-shadow-alpha), transparent);
       }
     }
     .inset-shadow-transparent {
       --tw-inset-shadow-color: transparent;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-shadow-transparent {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-shadow-color: color-mix(in oklab, transparent var(--tw-inset-shadow-alpha), transparent);
       }
     }
@@ -25042,25 +24354,19 @@ test('ring', async () => {
     }
     .ring-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25069,25 +24375,19 @@ test('ring', async () => {
     }
     .ring-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25099,25 +24399,19 @@ test('ring', async () => {
     }
     .ring-current\\/50 {
       --tw-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .ring-current\\/\\[0\\.5\\] {
       --tw-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .ring-current\\/\\[50\\%\\] {
       --tw-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -25129,49 +24423,37 @@ test('ring', async () => {
     }
     .ring-red-500\\/2\\.5 {
       --tw-ring-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .ring-red-500\\/2\\.25 {
       --tw-ring-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .ring-red-500\\/2\\.75 {
       --tw-ring-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .ring-red-500\\/50 {
       --tw-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .ring-red-500\\/\\[0\\.5\\] {
       --tw-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .ring-red-500\\/\\[50\\%\\] {
       --tw-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -25508,25 +24790,19 @@ test('inset-ring', async () => {
     }
     .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25535,25 +24811,19 @@ test('inset-ring', async () => {
     }
     .inset-ring-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .inset-ring-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .inset-ring-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-inset-ring-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25562,25 +24832,19 @@ test('inset-ring', async () => {
     }
     .inset-ring-current\\/50 {
       --tw-inset-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .inset-ring-current\\/\\[0\\.5\\] {
       --tw-inset-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .inset-ring-current\\/\\[50\\%\\] {
       --tw-inset-ring-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -25592,49 +24856,37 @@ test('inset-ring', async () => {
     }
     .inset-ring-red-500\\/2\\.5 {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 2.5%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/2\\.5 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 2.5%, transparent);
       }
     }
     .inset-ring-red-500\\/2\\.25 {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 2.25%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/2\\.25 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 2.25%, transparent);
       }
     }
     .inset-ring-red-500\\/2\\.75 {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 2.75%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/2\\.75 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 2.75%, transparent);
       }
     }
     .inset-ring-red-500\\/50 {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .inset-ring-red-500\\/\\[0\\.5\\] {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .inset-ring-red-500\\/\\[50\\%\\] {
       --tw-inset-ring-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .inset-ring-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-inset-ring-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -25859,25 +25111,19 @@ test('ring-offset', async () => {
     }
     .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/50 {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[color\\:var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25886,25 +25132,19 @@ test('ring-offset', async () => {
     }
     .ring-offset-\\[var\\(--my-color\\)\\]\\/50 {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[var\\(--my-color\\)\\]\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
     .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
       --tw-ring-offset-color: var(--my-color);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-\\[var\\(--my-color\\)\\]\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--my-color) 50%, transparent);
       }
     }
@@ -25916,25 +25156,19 @@ test('ring-offset', async () => {
     }
     .ring-offset-current\\/50 {
       --tw-ring-offset-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-current\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .ring-offset-current\\/\\[0\\.5\\] {
       --tw-ring-offset-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-current\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
     .ring-offset-current\\/\\[50\\%\\] {
       --tw-ring-offset-color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-current\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }
@@ -25946,25 +25180,19 @@ test('ring-offset', async () => {
     }
     .ring-offset-red-500\\/50 {
       --tw-ring-offset-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-red-500\\/50 {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .ring-offset-red-500\\/\\[0\\.5\\] {
       --tw-ring-offset-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-red-500\\/\\[0\\.5\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
     .ring-offset-red-500\\/\\[50\\%\\] {
       --tw-ring-offset-color: color-mix(in srgb, #ef4444 50%, transparent);
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      .ring-offset-red-500\\/\\[50\\%\\] {
+      @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-offset-color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
       }
     }
@@ -26544,9 +25772,9 @@ describe('custom utilities', () => {
       "
       .bar {
         z-index: 10;
-      }
-      .bar .baz {
-        z-index: 20;
+        .baz {
+          z-index: 20;
+        }
       }
       .foo {
         display: flex;
@@ -26584,9 +25812,7 @@ describe('custom utilities', () => {
       "
       .bar {
         flex-wrap: wrap;
-      }
-      @media (prefers-color-scheme: dark) {
-        .bar {
+        @media (prefers-color-scheme: dark) {
           display: flex;
           flex-direction: column;
           text-decoration-line: underline;

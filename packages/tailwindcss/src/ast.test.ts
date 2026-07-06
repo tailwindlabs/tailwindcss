@@ -77,9 +77,9 @@ it('allows the placement of context nodes', () => {
     }
     .bar {
       color: blue;
-    }
-    .bar .baz {
-      color: green;
+      .baz {
+        color: green;
+      }
     }
     "
   `)
@@ -248,23 +248,27 @@ it('should not emit exact duplicate declarations in the same rule', () => {
   expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
     "
     .foo {
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
       color: red;
-    }
-    .foo .bar {
-      color: blue;
-      color: green;
-    }
-    .foo {
-      color: green;
-      color: blue;
-      color: red;
+      & {
+        color: green;
+        & {
+          color: red;
+          color: green;
+          color: blue;
+        }
+        color: red;
+      }
       background: blue;
-    }
-    .foo .bar {
-      color: blue;
-      color: green;
-    }
-    .foo {
+      .bar {
+        color: green;
+        color: blue;
+        color: green;
+      }
       caret-color: orange;
     }
     "
@@ -612,9 +616,9 @@ describe('optimization', () => {
         "
         :is(.a, .b) .c, .d :is(.a, .b) {
           --x: 1;
-        }
-        :is(:is(.a, .b) .c, .d :is(.a, .b)):hover {
-          --x: 2;
+          &:hover {
+            --x: 2;
+          }
         }
         "
       `)
@@ -859,12 +863,12 @@ describe('optimization', () => {
         "
         .a, .b {
           --x: 1;
-        }
-        :is(.a, .b) + .c {
-          --x: 2;
-        }
-        :is(.a, .b).d {
-          --x: 3;
+          + .c {
+            --x: 2;
+          }
+          &.d {
+            --x: 3;
+          }
         }
         "
       `)
@@ -948,15 +952,15 @@ describe('optimization', () => {
         "
         .a, .b {
           --x: 1;
-        }
-        .c :is(.a, .b) {
-          --x: 2;
-        }
-        .c :is(.a, .b):hover, .c :is(.a, .b):focus {
-          --x: 3;
-        }
-        :is(.c :is(.a, .b):hover, .c :is(.a, .b):focus) .d {
-          --x: 4;
+          .c & {
+            --x: 2;
+            &:hover, &:focus {
+              --x: 3;
+              .d {
+                --x: 4;
+              }
+            }
+          }
         }
         "
       `)
@@ -977,11 +981,9 @@ describe('optimization', () => {
         "
         .a {
           --before: 1;
-        }
-        .a:hover {
-          --inside: 1;
-        }
-        .a {
+          &:hover {
+            --inside: 1;
+          }
           --after: 1;
         }
         "

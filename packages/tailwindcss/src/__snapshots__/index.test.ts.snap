@@ -231,9 +231,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
     ::placeholder {
       color: currentcolor;
-    }
-    @supports (color: color-mix(in lab, red, red)) {
-      ::placeholder {
+      @supports (color: color-mix(in lab, red, red)) {
         color: color-mix(in oklab, currentcolor 50%, transparent);
       }
     }

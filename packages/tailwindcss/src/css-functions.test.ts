@@ -297,9 +297,7 @@ describe('--theme(…)', () => {
       }
       .red {
         color: color-mix(in srgb, #f00 50%, transparent);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .red {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
       }
@@ -736,9 +734,7 @@ describe('theme(…)', () => {
           "
           .red {
             color: #f00;
-          }
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
+            @supports (color: color-mix(in lab, red, red)) {
               color: color-mix(in oklab, #f00 var(--opacity), transparent);
             }
           }
@@ -761,9 +757,7 @@ describe('theme(…)', () => {
           "
           .red {
             color: #f00;
-          }
-          @supports (color: color-mix(in lab, red, red)) {
-            .red {
+            @supports (color: color-mix(in lab, red, red)) {
               color: color-mix(in oklab, #f00 var(--opacity,50%), transparent);
             }
           }

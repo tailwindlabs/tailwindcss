@@ -258,9 +258,7 @@ describe('arbitrary properties', () => {
       "
       .\\[color\\:var\\(--my-color\\)\\]\\/50 {
         color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .\\[color\\:var\\(--my-color\\)\\]\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
@@ -413,23 +411,19 @@ describe('@apply', () => {
         animation: var(--animate-spin);
         background-color: var(--color-red-500);
         text-decoration-line: underline;
-      }
-      @media (hover: hover) {
-        .foo:hover {
-          background-color: var(--color-blue-500);
+        &:hover {
+          @media (hover: hover) {
+            background-color: var(--color-blue-500);
+          }
         }
-      }
-      @media (width >= 768px) {
-        .foo {
+        @media (width >= 768px) {
           background-color: var(--color-green-500);
         }
-      }
-      .foo:hover:focus {
-        background-color: var(--color-red-200);
-      }
-      @media (width >= 768px) {
-        .foo:hover:focus {
-          background-color: var(--color-green-200);
+        &:hover:focus {
+          background-color: var(--color-red-200);
+          @media (width >= 768px) {
+            background-color: var(--color-green-200);
+          }
         }
       }
       @property --tw-translate-x {
@@ -746,9 +740,9 @@ describe('@apply', () => {
       }
       .ignore-me {
         text-decoration-line: underline;
-      }
-      .ignore-me div {
-        display: flex;
+        div {
+          display: flex;
+        }
       }
       "
     `)
@@ -796,30 +790,30 @@ describe('@apply', () => {
       }
       .test {
         background-color: var(--color-green-500);
-      }
-      .test:hover {
-        background-color: var(--color-red-500);
-      }
-      .test:disabled {
-        background-color: var(--color-indigo-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
       .test2 {
         background-color: var(--color-green-500);
-      }
-      .test2:hover {
-        background-color: var(--color-red-500);
-      }
-      .test2:disabled {
-        background-color: var(--color-indigo-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
       .foo {
         background-color: var(--color-green-500);
-      }
-      .foo:hover {
-        background-color: var(--color-red-500);
-      }
-      .foo:disabled {
-        background-color: var(--color-indigo-500);
+        &:hover {
+          background-color: var(--color-red-500);
+        }
+        &:disabled {
+          background-color: var(--color-indigo-500);
+        }
       }
       "
     `)
@@ -1025,11 +1019,13 @@ describe('variant stacking', () => {
       @layer properties;
       .before\\:hover\\:flex::before {
         content: var(--tw-content);
+        &:hover {
+          @media (hover: hover) {
+            display: flex;
+          }
+        }
       }
       @media (hover: hover) {
-        .before\\:hover\\:flex::before:hover {
-          display: flex;
-        }
         .hover\\:before\\:flex:hover::before {
           content: var(--tw-content);
           display: flex;
@@ -5573,9 +5569,7 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-      }
-      @media (prefers-color-scheme: dark) {
-        .btn {
+        @media (prefers-color-scheme: dark) {
           background: white;
         }
       }
@@ -5627,9 +5621,9 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-      }
-      .btn:hover, .btn:focus {
-        background: white;
+        &:hover, &:focus {
+          background: white;
+        }
       }
       "
     `)
@@ -5656,9 +5650,11 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-      }
-      .btn:disabled:focus {
-        background: white;
+        &:disabled {
+          &:focus {
+            background: white;
+          }
+        }
       }
       .disabled\\:focus\\:underline:disabled:focus {
         text-decoration-line: underline;
@@ -5684,14 +5680,14 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        @media (hover: hover) {
-          .btn:hover {
+          &:hover {
+            @media (hover: hover) {
+              background: red;
+            }
+          }
+          &:focus {
             background: red;
           }
-        }
-        .btn:focus {
-          background: red;
         }
         "
       `)
@@ -5738,14 +5734,14 @@ describe('@variant', () => {
           "
           .btn {
             background: black;
-          }
-          @media (hover: hover) {
-            .btn:hover {
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+              }
+            }
+            &:focus {
               background: red;
             }
-          }
-          .btn:focus {
-            background: red;
           }
           "
         `)
@@ -5768,12 +5764,12 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        .btn:is(:hover, :focus) {
-          background: red;
-        }
-        .btn:disabled {
-          background: red;
+          &:is(:hover,:focus) {
+            background: red;
+          }
+          &:disabled {
+            background: red;
+          }
         }
         "
       `)
@@ -5799,26 +5795,26 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        @media (hover: hover) {
-          .btn:hover {
+          &:hover {
+            @media (hover: hover) {
+              background: red;
+              &:active {
+                background: blue;
+              }
+              &:disabled {
+                background: blue;
+              }
+            }
+          }
+          &:focus {
             background: red;
+            &:active {
+              background: blue;
+            }
+            &:disabled {
+              background: blue;
+            }
           }
-          .btn:hover:active {
-            background: blue;
-          }
-          .btn:hover:disabled {
-            background: blue;
-          }
-        }
-        .btn:focus {
-          background: red;
-        }
-        .btn:focus:active {
-          background: blue;
-        }
-        .btn:focus:disabled {
-          background: blue;
         }
         "
       `)
@@ -5909,10 +5905,12 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        @media (hover: hover) {
-          .btn:hover:focus {
-            background: red;
+          &:hover {
+            @media (hover: hover) {
+              &:focus {
+                background: red;
+              }
+            }
           }
         }
         "
@@ -5935,14 +5933,16 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        @media (hover: hover) {
-          .btn:hover:focus {
+          &:hover {
+            @media (hover: hover) {
+              &:focus {
+                background: red;
+              }
+            }
+          }
+          &:disabled {
             background: red;
           }
-        }
-        .btn:disabled {
-          background: red;
         }
         "
       `)
@@ -5964,13 +5964,17 @@ describe('@variant', () => {
         "
         .btn {
           background: black;
-        }
-        .btn:is(:hover, :focus):disabled {
-          background: red;
-        }
-        @media (hover: hover) {
-          .btn[aria-disabled="true"]:hover {
-            background: red;
+          &:is(:hover,:focus) {
+            &:disabled {
+              background: red;
+            }
+          }
+          &[aria-disabled="true"] {
+            &:hover {
+              @media (hover: hover) {
+                background: red;
+              }
+            }
           }
         }
         "
@@ -5998,24 +6002,30 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-      }
-      .btn[data-a] {
-        background: red;
-      }
-      .btn[data-a][data-d] {
-        background: blue;
-      }
-      .btn[data-a][data-e][data-f] {
-        background: blue;
-      }
-      .btn[data-b][data-c] {
-        background: red;
-      }
-      .btn[data-b][data-c][data-d] {
-        background: blue;
-      }
-      .btn[data-b][data-c][data-e][data-f] {
-        background: blue;
+        &[data-a] {
+          background: red;
+          &[data-d] {
+            background: blue;
+          }
+          &[data-e] {
+            &[data-f] {
+              background: blue;
+            }
+          }
+        }
+        &[data-b] {
+          &[data-c] {
+            background: red;
+            &[data-d] {
+              background: blue;
+            }
+            &[data-e] {
+              &[data-f] {
+                background: blue;
+              }
+            }
+          }
+        }
       }
       "
     `)
@@ -6081,10 +6091,10 @@ describe('@variant', () => {
       "
       .btn {
         background: black;
-      }
-      @container (width >= 768px) {
-        .btn.foo {
-          background: white;
+        @container (width >= 768px) {
+          &.foo {
+            background: white;
+          }
         }
       }
       "
@@ -6111,9 +6121,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/50 {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) 50%, transparent);
         }
       }
@@ -6141,9 +6149,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red\\/50 {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
@@ -6171,9 +6177,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .mixed {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, oklch(70.5% 0.213 47.604));
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .mixed {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in lch, var(--color-red-500) 50%, var(--color-orange-500));
         }
       }
@@ -6203,9 +6207,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .stacked {
         color: color-mix( in lch, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 50%, transparent );
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .stacked {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix( in lch, color-mix(in lch, var(--color-red-500) 50%, transparent) 50%, transparent );
         }
       }
@@ -6238,9 +6240,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .gradient {
         background: linear-gradient( 90deg, color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent) 0%, color-mix(in srgb, oklch(70.5% 0.213 47.604) 50%, transparent) 0%, 100% );
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .gradient {
+        @supports (color: color-mix(in lab, red, red)) {
           background: linear-gradient( 90deg, color-mix(in oklab, var(--color-red-500) 50%, transparent) 0%, color-mix(in oklab, var(--color-orange-500) 50%, transparent) 0%, 100% );
         }
       }
@@ -6269,9 +6269,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/50 {
         color: color-mix(in srgb,oklch(63.7% 0.237 25.331)50%,transparent);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab,var(--color-red-500)50%,transparent);
         }
       }
@@ -6297,25 +6295,19 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
         color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-\\(--my-color\\)\\/\\(--my-opacity\\) {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) var(--my-opacity), transparent);
         }
       }
       .text-\\(--my-color\\)\\/50 {
         color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-\\(--my-color\\)\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--my-color) 50%, transparent);
         }
       }
       .text-red-500\\/\\(--my-opacity\\) {
         color: oklch(63.7% 0.237 25.331);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/\\(--my-opacity\\) {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-opacity), transparent);
         }
       }
@@ -6328,9 +6320,7 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .text-current\\/50 {
         color: currentcolor;
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-current\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
       }
@@ -6353,9 +6343,7 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .text-red\\/50 {
         color: var(--color-red);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red\\/50 {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red) 50%, transparent);
         }
       }
@@ -6383,9 +6371,7 @@ describe('`color-mix(…)` polyfill', () => {
       "
       .stacked {
         color: var(--my-color);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .stacked {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix( in oklab, color-mix(in oklab, var(--my-color) var(--my-inner-opacity), transparent) var(--my-outer-opacity), transparent );
         }
       }
@@ -6433,9 +6419,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .text-red-500\\/\\(--my-half\\) {
         color: color-mix(in srgb, oklch(63.7% 0.237 25.331) 50%, transparent);
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .text-red-500\\/\\(--my-half\\) {
+        @supports (color: color-mix(in lab, red, red)) {
           color: color-mix(in oklab, var(--color-red-500) var(--my-half), transparent);
         }
       }
@@ -6475,13 +6459,9 @@ describe('`color-mix(…)` polyfill', () => {
       }
       .shadow-xl {
         --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in srgb, red 25%, transparent));
-      }
-      @supports (color: color-mix(in lab, red, red)) {
-        .shadow-xl {
+        @supports (color: color-mix(in lab, red, red)) {
           --tw-shadow: 0 6px 18px 4px var(--tw-shadow-color, color-mix(in oklab, var(--color-red-500) 25%, transparent));
         }
-      }
-      .shadow-xl {
         box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
       }
       @property --tw-shadow {

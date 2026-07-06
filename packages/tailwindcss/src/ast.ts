@@ -1016,7 +1016,44 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
               })
               .join(', ')
             selectorStack.push([selector, node.src, node.dst])
-            break
+          }
+
+          // Once we hit a rule that has at least one declaration, then we can
+          // stop handling the nested selectors.
+          //
+          // This ensures that browser devtools can at least show _something_
+          // for a given rule. This also means that we can leverage CSS nesting
+          // which is better for gzip results due to increased repetition.
+          //
+          // E.g.:
+          //
+          // ```css
+          // .a {
+          //   &[b] {
+          //     color: red;
+          //     &:hover {
+          //       color: blue;
+          //     }
+          //   }
+          // }
+          // ```
+          //
+          // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+          //
+          // ```css
+          // .a[b] {          /* ← flattened */
+          //   color: red;    /* ← saw a declaration, therefore */
+          //   &:hover {      /* ← we keep this nested syntax */
+          //     color: blue;
+          //   }
+          // }
+          // ```
+          if (node.nodes.some((child) => child.kind === 'declaration')) {
+            // Emitting each child instead of the node itself because we do want
+            // to flatten the current node and its selector that is already
+            // pushed to the stack.
+            for (let child of node.nodes) emit(child)
+            return WalkAction.Skip
           }
           break
         }
