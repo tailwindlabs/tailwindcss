@@ -20,9 +20,9 @@ function inputCssFilePath() {
 
 const css = dedent
 
-async function runOnce(plugin: any, from: string, input: string): Promise<string> {
+async function run(plugin: any, from: string, input: string): Promise<string> {
   let ast = postcss.parse(input)
-  for (let runner of (plugin as any).plugins) {
+  for (let runner of plugin.plugins) {
     if (runner.Once) {
       await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
     }
@@ -432,7 +432,7 @@ describe('concurrent builds', () => {
 
     let plugin = tailwindcss({ optimize: { minify: false } })
 
-    let result = await runOnce(plugin, from, input)
+    let result = await run(plugin, from, input)
 
     expect(result).toContain('.underline')
 
@@ -448,8 +448,8 @@ describe('concurrent builds', () => {
       `,
     )
 
-    let promise1 = runOnce(plugin, from, input)
-    let promise2 = runOnce(plugin, from, input)
+    let promise1 = run(plugin, from, input)
+    let promise2 = run(plugin, from, input)
 
     expect(await promise1).toContain('.red')
     expect(await promise2).toContain('.red')
@@ -466,7 +466,7 @@ test('rebuilds when the input CSS changes even if the `from` file on disk did no
   let from = path.join(dir, 'index.css')
   let plugin = tailwindcss({ base: dir, optimize: { minify: false } })
 
-  let first = await runOnce(
+  let first = await run(
     plugin,
     from,
     css`
@@ -476,7 +476,7 @@ test('rebuilds when the input CSS changes even if the `from` file on disk did no
       }
     `,
   )
-  let second = await runOnce(
+  let second = await run(
     plugin,
     from,
     css`
