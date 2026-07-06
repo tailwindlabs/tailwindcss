@@ -3386,6 +3386,41 @@ describe('addUtilities()', () => {
     `)
   })
 
+  test('does not register class names inside `:nth-child(… of …)` as utilities', async () => {
+    expect(
+      await run(
+        ['foo', 'mark'],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          async loadModule(_id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ addUtilities }: PluginAPI) => {
+                addUtilities({
+                  '.foo:nth-child(2 of .mark)': { color: 'red' },
+                })
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
+        .foo:nth-child(2 of .mark) {
+          color: red;
+        }
+      }
+      "
+    `)
+  })
+
   test('prefixes nested class names with the configured theme prefix', async () => {
     expect(
       await run(

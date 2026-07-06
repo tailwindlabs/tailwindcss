@@ -408,7 +408,39 @@ export function parse(input: string) {
           }
           let end = i
 
-          node.nodes.push(value(input.slice(start, end)))
+          let contents = input.slice(start, end)
+
+          // `:nth-child(…)` and `:nth-last-child(…)` can contain an
+          // `of <complex-selector-list>` clause. The selector list must be
+          // parsed (e.g. to be able to substitute `&`), but the `An+B` part
+          // is not a selector so it stays an opaque value node. E.g.:
+          //
+          // ```css
+          // :nth-child(2n + 1 of .foo, .bar)
+          //            ^^^^^^^^^^ value
+          //                       ^^^^^^^^^^ selector list
+          // ```
+          if (node.value === ':nth-child' || node.value === ':nth-last-child') {
+            let idx = contents.indexOf('of ')
+            if (idx !== -1) {
+              node.nodes.push(
+                value(
+                  contents.slice(0, idx + 3), // value `2n + 1 of `
+                ),
+                ...parse(
+                  contents.slice(idx + 3), // `.foo, .bar`
+                ),
+              )
+              buffer = ''
+              i = end
+
+              append(node)
+
+              break
+            }
+          }
+
+          node.nodes.push(value(contents))
           buffer = ''
           i = end
 
