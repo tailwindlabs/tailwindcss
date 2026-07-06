@@ -20,7 +20,7 @@ const DEBUG = env.DEBUG
 
 interface CacheEntry {
   mtimes: Map<string, number>
-  cachedInputCss: string
+  inputCss: string
   compiler: null | ReturnType<typeof compileAst>
   scanner: null | Scanner
   tailwindCssAst: AstNode[]
@@ -35,7 +35,7 @@ function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOp
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
-    cachedInputCss: '',
+    inputCss: '',
     compiler: null,
     scanner: null,
 
@@ -202,9 +202,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               // it can change without any tracked file's mtime changing, so also
               // rebuild when the input CSS itself differs from the last build.
               let inputCss = root.source?.input.css ?? root.toString()
-              if (context.cachedInputCss !== inputCss) {
+              if (context.inputCss !== inputCss) {
                 rebuildStrategy = 'full'
-                context.cachedInputCss = inputCss
+                context.inputCss = inputCss
               }
             }
             DEBUG && I.end('Register full rebuild paths')
