@@ -109,13 +109,11 @@ test(
     expect(await fs.dumpFiles('dist/out.css')).toMatchInlineSnapshot(`
       "
       --- dist/out.css ---
-      .prose-custom {
-        :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-          --x: 1;
-          @media (width >= 640px) {
-            &.custom {
-              --x: 2;
-            }
+      .prose-custom :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+        --x: 1;
+        @media (width >= 640px) {
+          &.custom {
+            --x: 2;
           }
         }
       }
