@@ -367,7 +367,7 @@ describe('optimization', () => {
       `)
     })
 
-    it('shoud be possible to change the combinator', async () => {
+    it('should be possible to change the combinator', async () => {
       expect(
         optimize(css`
           .a {

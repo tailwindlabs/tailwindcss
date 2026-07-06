@@ -783,7 +783,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                       if (ctx.parent.kind === 'complex') {
                         // `& [after]`
                         //
-                        // `:is(…)` semantics are note required, because these
+                        // `:is(…)` semantics are not required, because these
                         // are equivalent:
                         //
                         // - `:is(div) [after]`       → `div [after]`
@@ -890,7 +890,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                         }
 
                         // `&*` and `&div` are invalid CSS so these should stay
-                        // invalid. They should be written as `*&` and `&div` instead.
+                        // invalid. They should be written as `*&` and `div&` instead.
                         if (
                           ctx.siblings
                             .slice(ctx.index + 1)
@@ -905,7 +905,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
                         // `&[after]`
                         //
-                        // `:is(…)` semantics are note required, because these
+                        // `:is(…)` semantics are not required, because these
                         // are equivalent:
                         //
                         // - `:is(div)[after]`       → `div[after]`
@@ -1063,7 +1063,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
           // `@layer` is hoistable, but when it's empty then we have to make
           // sure that we still emit it because this might influence the layer
-          // order. We can't just get grid of it.
+          // order. We can't just get rid of it.
           if (node.nodes.length === 0 && !DROPPABLE_IF_EMPTY_AT_RULES.has(node.name)) {
             emit(node)
             skipExit.add(node)
@@ -1165,7 +1165,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
     // Nothing available, setup a fresh node
     {
-      // There are no parent rules or at-rules available, which means taht we
+      // There are no parent rules or at-rules available, which means that we
       // can emit the node as-is.
       if (selectorStack.length === 0 && atRuleStack.length === 0) {
         let target = result
@@ -1316,7 +1316,7 @@ const HOISTABLE_AT_RULES = new Set([
   '@view-transition',
 ])
 
-// As set of at-rules that can be dropped if they don't contain any nodes. We
+// A set of at-rules that can be dropped if they don't contain any nodes. We
 // don't have the distinction between an at-rule with no body, or an at-rule
 // with a body that is empty right now.
 const DROPPABLE_IF_EMPTY_AT_RULES = new Set([

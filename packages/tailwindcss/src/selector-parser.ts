@@ -379,7 +379,7 @@ export function parse(input: string) {
         let node = fun(buffer, [])
         buffer = ''
 
-        // If the function is not one of the following, we combine all it's
+        // If the function is not one of the following, we combine all its
         // contents into a single value node
         if (
           node.value !== ':not' &&
