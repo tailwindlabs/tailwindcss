@@ -572,7 +572,7 @@ test(
     await exec('pnpm vite build')
 
     expect(
-      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
+      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
     ).toMatchInlineSnapshot(`
       "
       --- ./dist/assets/index-<hash>.css ---
@@ -643,7 +643,7 @@ test(
     await exec('pnpm vite build')
 
     expect(
-      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
+      (await fs.dumpFiles('./dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'),
     ).toMatchInlineSnapshot(`
         "
         --- ./dist/assets/index-<hash>.css ---

@@ -1158,7 +1158,7 @@ test(
     await exec('pnpm vite build')
 
     // Should not be minified when optimize is disabled
-    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
       .toMatchInlineSnapshot(`
         "
         --- dist/assets/index-<hash>.css ---
@@ -1212,7 +1212,7 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
       .toMatchInlineSnapshot(`
       "
       --- dist/assets/index-<hash>.css ---
