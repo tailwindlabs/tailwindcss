@@ -847,12 +847,10 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                       //           ^^^^^^^^^^^^^^^^^   complex selector
                       //
                       else if (ctx.parent.kind === 'compound') {
-                        let path = ctx.path()
-                        let grandParent = path[path.length - 2]
+                        if (parentAst[0].kind === 'complex') {
+                          let path = ctx.path()
+                          let grandParent = path[path.length - 2]
 
-                        if (
-                          grandParent &&
-                          grandParent.kind === 'complex' &&
                           // When our compound parent is part of a complex
                           // selector, and it's not the very first node, then we
                           // can't safely get rid of the `:is(…)` if the last
@@ -882,11 +880,13 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                           //   --x: 2;
                           // }
                           // ```
-                          //
-                          grandParent.nodes[0] !== ctx.parent &&
-                          parentAst[0].kind === 'complex'
-                        ) {
-                          return // Keep `:is(…)` semantics
+                          if (
+                            grandParent &&
+                            grandParent.kind === 'complex' &&
+                            grandParent.nodes[0] !== ctx.parent
+                          ) {
+                            return // Keep `:is(…)` semantics
+                          }
                         }
 
                         // `&*` and `&div` are invalid CSS so these should stay
