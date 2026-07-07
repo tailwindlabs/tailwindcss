@@ -1161,6 +1161,32 @@ describe('optimization', () => {
       `)
     })
 
+    it('should not get rid of `:is(…)` when the compound selector is part of a complex selector', async () => {
+      expect(
+        optimize(css`
+          .foo .bar {
+            .system &:focus {
+              --x: 1;
+            }
+          }
+          .foo:hover {
+            .system &:focus {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .system :is(.foo .bar):focus {
+          --x: 1;
+        }
+        .system .foo:hover:focus {
+          --x: 2;
+        }
+        "
+      `)
+    })
+
     it('should not dedupe adjacent at-rules with the same prelude but different bodies', async () => {
       expect(
         optimize(css`

@@ -831,8 +831,60 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
                       // 3. We know that `&` is attached to some other
                       //    selector when it's inside of a compound selector.
+                      //
                       //    E.g. `[before]&[after]`
+                      //
+                      //    We have to be careful that our parent, when it's
+                      //    part of a complex selector, that the same rules apply
+                      //
+                      //    E.g.: `[before] &[after]`
+                      //                    ^          current node
+                      //                    ^^^^^^^^   compound selector
+                      //           ^^^^^^^^^^^^^^^^^   complex selector
+                      //
                       else if (ctx.parent.kind === 'compound') {
+                        let path = ctx.path()
+                        let grandParent = path[path.length - 2]
+
+                        if (
+                          grandParent &&
+                          grandParent.kind === 'complex' &&
+                          // When our compound parent is part of a complex
+                          // selector, and it's not the very first node, then we
+                          // can't safely get rid of the `:is(…)` if the last
+                          // selector is a complex selector as well, unless the
+                          // `&` maps to a single selector or compound selector.
+                          //
+                          // ```css
+                          // .foo .bar {            /* Complex selector */
+                          //   .system &:focus {    /* Complex selector + compound selecto*/
+                          //     --x: 1;
+                          //   }
+                          // }
+                          // .foo:hover {           /* Compound selector */
+                          //   .system &:focus {    /* Complex selector + compound selector */
+                          //     --x: 2;
+                          //   }
+                          // }
+                          // ```
+                          //
+                          // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+                          //
+                          // ```css
+                          // .system :is(.foo .bar):focus { /* Cannot drop the `:is(…)`, otherwise `.system` and `.foo` can be swapped in the DOM */
+                          //   --x: 1;
+                          // }
+                          // .system .foo:hover:focus {
+                          //   --x: 2;
+                          // }
+                          // ```
+                          //
+                          grandParent.nodes[0] !== ctx.parent &&
+                          parentAst[0].kind === 'complex'
+                        ) {
+                          return // Keep `:is(…)` semantics
+                        }
+
                         // `&*` and `&div` are invalid CSS so these should stay
                         // invalid. They should be written as `*&` and `&div` instead.
                         if (
