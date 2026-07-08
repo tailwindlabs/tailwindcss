@@ -1373,7 +1373,8 @@ function allVariablesAreUsed(
   walk(ValueParser.parse(value), (node) => {
     if (node.kind === 'function' && node.value === 'var') {
       let variable = node.nodes[0].value
-      let r = new RegExp(`var\\(${variable}[,)]\\s*`, 'g')
+      const escapedVariable = variable.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      let r = new RegExp(`var\\(${escapedVariable}[,)]\\s*`, 'g')
       if (
         // We need to check if the variable is used in the replacement
         !r.test(replacementAsCss) ||
