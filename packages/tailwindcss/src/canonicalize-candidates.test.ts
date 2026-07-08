@@ -316,6 +316,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[color:var(--color-red-500)]', 'text-red-500'],
       ['[background-color:var(--color-red-500)]', 'bg-red-500'],
 
+      // Arbitrary property to functional utility when CSS variable contains regex special chars
+      ['[color:var(--my-[color])]', 'text-(--my-[color])'],
+
+
+
       // Arbitrary property to named utility (case insensitive)
       ['[color:#fff]', 'text-white'],
       ['[color:#FFF]', 'text-white'],
