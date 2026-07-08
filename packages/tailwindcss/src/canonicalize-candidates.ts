@@ -766,7 +766,8 @@ function spacingCalcToSpacingFunction(input: string, designSystem: DesignSystem)
 
     return WalkAction.Replace(
       ValueParser.parse(
-        `--spacing(${ValueParser.toCss([node.nodes[4]]) // Value node
+        `--spacing(${
+          ValueParser.toCss([node.nodes[4]]) // Value node
         })`,
       ),
     )
@@ -2135,9 +2136,9 @@ function modernizeArbitraryValuesVariant(
               attributeSelector.value === null
                 ? { kind: 'named', value: name }
                 : {
-                  kind: 'arbitrary',
-                  value: `${name}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
-                },
+                    kind: 'arbitrary',
+                    value: `${name}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
+                  },
           } satisfies Variant)
         }
 
@@ -2152,13 +2153,13 @@ function modernizeArbitraryValuesVariant(
               attributeSelector.value === null
                 ? { kind: 'arbitrary', value: name } // aria-[foo]
                 : attributeSelector.operator === '=' &&
-                  attributeSelector.value === 'true' &&
-                  attributeSelector.sensitivity === null
+                    attributeSelector.value === 'true' &&
+                    attributeSelector.sensitivity === null
                   ? { kind: 'named', value: name } // aria-[foo="true"] or aria-[foo='true'] or aria-[foo=true]
                   : {
-                    kind: 'arbitrary',
-                    value: `${attributeSelector.attribute}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
-                  }, // aria-[foo~="true"], aria-[foo|="true"], …
+                      kind: 'arbitrary',
+                      value: `${attributeSelector.attribute}${attributeSelector.operator}${attributeSelector.quote ?? ''}${attributeSelector.value}${attributeSelector.quote ?? ''}${attributeSelector.sensitivity ? ` ${attributeSelector.sensitivity}` : ''}`,
+                    }, // aria-[foo~="true"], aria-[foo|="true"], …
           } satisfies Variant)
         }
 
