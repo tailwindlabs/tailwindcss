@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix parsing selectors like `[data-foo]div` as one selector instead of two ([#20303](https://github.com/tailwindlabs/tailwindcss/pull/20303))
 - Fix stale `@tailwindcss/postcss` output when changed input CSS is passed from a preprocessor like Sass without updating the input file on disk ([#20310](https://github.com/tailwindlabs/tailwindcss/pull/20310))
 - Ensure CSS nesting is handled even when Lightning CSS isn't run, like in `@tailwindcss/browser` and Tailwind Play ([#20124](https://github.com/tailwindlabs/tailwindcss/pull/20124))
+- Prevent achromatic theme colors from shifting hue in `color-mix(…)` with polar color spaces like `oklch` ([#19830](https://github.com/tailwindlabs/tailwindcss/issues/19830))
 
 ## [4.3.2] - 2026-06-26
 
