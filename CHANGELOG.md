@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent achromatic theme colors from shifting hue in `color-mix(…)` with polar color spaces like `oklch` ([#20314](https://github.com/tailwindlabs/tailwindcss/issues/20314))
 - Ensure `--spacing(0)` is optimized to `0px` instead of `0` so it remains a `<length>` when used in `calc(…)` ([#20319](https://github.com/tailwindlabs/tailwindcss/pull/20319))
 - Lazily load `@parcel/watcher` when using the `--watch` flag in `@tailwindcss/cli`, so one-off builds and `--watch --poll` work when `@parcel/watcher` can't be loaded ([#20325](https://github.com/tailwindlabs/tailwindcss/issues/20325))
+- Use explicit platform fonts instead of `system-ui` and `ui-sans-serif` so CJK text respects the page's `lang` attribute on Windows ([#19767](https://github.com/tailwindlabs/tailwindcss/issues/19767), [#19768](https://github.com/tailwindlabs/tailwindcss/issues/19768))
 
 ## [4.3.2] - 2026-06-26
 
