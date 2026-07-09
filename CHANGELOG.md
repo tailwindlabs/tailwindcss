@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix stale `@tailwindcss/postcss` output when changed input CSS is passed from a preprocessor like Sass without updating the input file on disk ([#20310](https://github.com/tailwindlabs/tailwindcss/pull/20310))
 - Ensure CSS nesting is handled even when Lightning CSS isn't run, like in `@tailwindcss/browser` and Tailwind Play ([#20124](https://github.com/tailwindlabs/tailwindcss/pull/20124))
 - Prevent achromatic theme colors from shifting hue in `color-mix(…)` with polar color spaces like `oklch` ([#19830](https://github.com/tailwindlabs/tailwindcss/issues/19830))
+- Ensure `--spacing(0)` is optimized to `0px` instead of `0` so it remains a `<length>` when used in `calc(…)` ([#20319](https://github.com/tailwindlabs/tailwindcss/pull/20319))
 
 ## [4.3.2] - 2026-06-26
 
