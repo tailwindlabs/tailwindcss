@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
+import { compile } from '.'
 import plugin from './plugin'
-import { compileCss, run } from './test-utils/run'
+import { compileCss, pretty, run } from './test-utils/run'
 
 const css = String.raw
 
@@ -106,6 +107,14 @@ describe('--spacing(…)', () => {
   })
 
   describe('optimizations', () => {
+    // Use custom `compileCss` such that we can use a version without Lightning
+    // CSS. This way we test _our_ optimizations instead of Lightning's
+    // optimizations.
+    async function compileCss(css: string, options: Parameters<typeof compile>[1] = {}) {
+      let { build } = await compile(css, options)
+      return pretty(build([]))
+    }
+
     test('--spacing(…) optimizes the output when the input is `0`', async () => {
       expect(
         await compileCss(css`
@@ -121,8 +130,8 @@ describe('--spacing(…)', () => {
       ).toMatchInlineSnapshot(`
         "
         .foo {
-          margin: 0;
-          padding: 0;
+          margin: 0px;
+          padding: 0px;
         }
         "
       `)
@@ -143,8 +152,8 @@ describe('--spacing(…)', () => {
       ).toMatchInlineSnapshot(`
         "
         .foo {
-          margin: 0;
-          padding: 0;
+          margin: 0px;
+          padding: 0px;
         }
         "
       `)
@@ -165,9 +174,8 @@ describe('--spacing(…)', () => {
       ).toMatchInlineSnapshot(`
         "
         :root, :host {
-          --spacing: .25rem;
+          --spacing: 0.25rem;
         }
-
         .foo {
           margin: var(--spacing);
           padding: var(--spacing);
@@ -191,8 +199,8 @@ describe('--spacing(…)', () => {
       ).toMatchInlineSnapshot(`
         "
         .foo {
-          margin: .25rem;
-          padding: .25rem;
+          margin: 0.25rem;
+          padding: 0.25rem;
         }
         "
       `)
