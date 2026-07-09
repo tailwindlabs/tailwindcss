@@ -42,7 +42,7 @@ function alpha(
 
 function spacing(
   designSystem: DesignSystem,
-  _source: AstNode,
+  source: AstNode,
   value: string,
   ...rest: string[]
 ): string {
@@ -74,7 +74,9 @@ function spacing(
   // - That means that a value of `1` can be replaced by `multiplier`
   let valueDimension = dimensions.get(value)
   if (valueDimension) {
-    if (valueDimension[0] === 0) return '0'
+    if (valueDimension[0] === 0) {
+      return source.kind === 'declaration' && source.property.startsWith('--') ? '0px' : '0'
+    }
     if (valueDimension[0] === 1) return multiplier
   }
 

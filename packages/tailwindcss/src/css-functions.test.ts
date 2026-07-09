@@ -128,6 +128,28 @@ describe('--spacing(…)', () => {
       `)
     })
 
+    test('--spacing(…) preserves a length when zero is assigned to a custom property', async () => {
+      expect(
+        await compileCss(css`
+          @theme {
+            --spacing: 0.25rem;
+          }
+
+          .foo {
+            --offset: --spacing(0);
+            width: calc(100% + var(--offset));
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .foo {
+          --offset: 0px;
+          width: calc(100% + var(--offset));
+        }
+        "
+      `)
+    })
+
     test('--spacing(…) optimizes the output when the input is `0` (with an inlined theme value)', async () => {
       expect(
         await compileCss(css`
