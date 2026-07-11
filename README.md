@@ -25,6 +25,8 @@
 
 For full documentation, visit [tailwindcss.com](https://tailwindcss.com).
 
+For theming guide, visit [Customizing Colors](https://tailwindcss.com/docs/customizing-colors) and [Customizing Spacing](https://tailwindcss.com/docs/customizing-spacing).
+
 ## Community
 
 For help, discussion about best practices, or feature ideas:
