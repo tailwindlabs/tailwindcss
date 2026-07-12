@@ -25,6 +25,7 @@ const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
+const JS_MODULE_RE = /\.[cm]?[jt]sx?$/
 
 export type PluginOptions = {
   /**
@@ -276,6 +277,14 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             modules.length > 0 &&
             modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
+
+          // JS and TS source files are handled by Vite itself whenever they
+          // are loaded. If one only shows up as an external file here, it
+          // means it is scanned by Tailwind but not currently loaded as a
+          // module (e.g. a lazy route or an unvisited chunk). New candidates
+          // in the file are picked up through the regular CSS update, so a
+          // full reload is not needed and would only throw away client state.
+          if (JS_MODULE_RE.test(file)) return
 
           // Skip if the module exists in other environments. SSR framework has
           // its own server side hmr/reload mechanism when handling server

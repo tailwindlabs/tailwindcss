@@ -585,6 +585,128 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 
   test(
+    'scanned module files that are not loaded do not trigger a full reload',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+              "vite": "^8"
+            }
+          }
+        `,
+        'project-a/vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+            build: { cssMinify: false },
+            plugins: [
+              tailwindcss(),
+              {
+                // Log every payload sent over the HMR channels so the test
+                // can observe (the absence of) full reloads
+                name: 'hot-send-logger',
+                configureServer(server) {
+                  for (let environment of Object.values(server.environments)) {
+                    let send = environment.hot.send.bind(environment.hot)
+                    environment.hot.send = (...args) => {
+                      console.log('HOT_SEND ' + JSON.stringify(args[0]))
+                      return send(...args)
+                    }
+                  }
+                },
+              },
+            ],
+          })
+        `,
+        'project-a/index.html': html`
+          <html>
+            <head>
+              <link rel="stylesheet" href="./src/index.css" />
+            </head>
+            <body>
+              <div id="app"></div>
+              <script type="module" src="./src/main.ts"></script>
+            </body>
+          </html>
+        `,
+        'project-a/src/main.ts': ts`import { classes } from './app'`,
+        'project-a/src/app.ts': ts`export let classes = "content-['src/app.ts']"`,
+
+        // This file is scanned by Tailwind but never imported, so it is not
+        // part of the loaded module graph (e.g. a lazy route or an unvisited
+        // chunk)
+        'project-a/src/unloaded.ts': ts`export let classes = "content-['src/unloaded.ts']"`,
+        'project-a/src/index.css': css`@import 'tailwindcss';`,
+      },
+    },
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev', {
+        cwd: path.join(root, 'project-a'),
+      })
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`content-['src/unloaded.ts']`)
+      })
+
+      // Flush all messages so that we can be sure the next messages are from
+      // the file change we're about to make
+      process.flush()
+
+      // Changing a scanned but not loaded module file should regenerate the
+      // CSS through a regular CSS update instead of a full reload
+      {
+        await fs.write(
+          'project-a/src/unloaded.ts',
+          ts`export let classes = "content-['updated:src/unloaded.ts']"`,
+        )
+
+        let payload = ''
+        await process.onStdout((m) => {
+          if (!m.includes('HOT_SEND')) return false
+          if (m.includes('full-reload')) {
+            payload = 'full-reload'
+            return true
+          }
+          if (m.includes('"type":"update"')) {
+            payload = 'update'
+            return true
+          }
+          return false
+        })
+        expect(payload).toBe('update')
+
+        // Ensure the styles were regenerated with the new content
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`content-['updated:src/unloaded.ts']`)
+      }
+    },
+  )
+
+  test(
     `source(none) disables looking at the module graph`,
     {
       fs: {
