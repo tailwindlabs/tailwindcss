@@ -20,6 +20,7 @@ import {
   highlight,
   println,
   relative,
+  wordWrap,
 } from '../../utils/renderer'
 import { drainStdin, outputFile } from './utils'
 
@@ -79,17 +80,41 @@ export function options() {
   } satisfies Arg
 }
 
+function formatError(error: unknown): string {
+  function render(err: unknown, depth: number): string[] {
+    let indent = '  '.repeat(depth)
+    let width = (process.stderr.columns ?? Infinity) - 2 * (depth + 1)
+
+    let output = [
+      `${indent}${red(depth === 0 ? 'Error:' : 'Caused by:')}`,
+      `${indent}${dim('\u250C')}`,
+    ]
+
+    for (let line of `${err}`.split('\n')) {
+      let wrapped = wordWrap(line, width)
+      if (wrapped.length === 0) wrapped = ['']
+      for (let chunk of wrapped) {
+        output.push(`${indent}${dim('\u2502')} ${chunk}`)
+      }
+    }
+
+    output.push(`${indent}${dim('\u2514')}`)
+
+    if (typeof err === 'object' && err !== null && 'cause' in err && err.cause != null) {
+      output.push(...render(err.cause, depth + 1))
+    }
+
+    return output
+  }
+
+  return render(error, 0).join('\n')
+}
+
 async function handleError<T>(fn: () => T): Promise<T> {
   try {
     return await fn()
   } catch (err) {
-    eprintln(
-      [red('Error:'), dim('\u250C')]
-        .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
-        .concat(dim('\u2514'))
-        .join('\n'),
-    )
-
+    eprintln(formatError(err))
     process.exit(1)
   }
 }
@@ -448,12 +473,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
-          eprintln(
-            [red('Error:'), dim('\u250C')]
-              .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
-              .concat(dim('\u2514'))
-              .join('\n'),
-          )
+          eprintln(formatError(err))
 
           let end = process.hrtime.bigint()
           if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
@@ -602,12 +622,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           } catch (err) {
             fullRebuildPaths = backupRebuildPaths
 
-            let message = [red('Error:'), dim('\u250C')]
-              .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
-              .concat(dim('\u2514'))
-              .join('\n')
-
-            logPollingMessage(message)
+            logPollingMessage(formatError(err))
           }
 
           if (!args['--silent']) {
@@ -669,7 +684,8 @@ async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
     return (await import('@parcel/watcher')).default
   } catch (err) {
     throw new Error(
-      `Failed to load the file watcher. Your platform may not be supported by \`@parcel/watcher\`. As a workaround, you can use polling instead by passing the \`--watch --poll\` flags.\n\n${err}`,
+      `Failed to load the file watcher. Your platform may not be supported by \`@parcel/watcher\`. As a workaround, you can use polling instead by passing the \`--watch --poll\` flags.`,
+      { cause: err },
     )
   }
 }
