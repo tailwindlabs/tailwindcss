@@ -81,6 +81,7 @@ export function options() {
 }
 
 function formatError(error: unknown): string {
+  let seen = new Set() // Track seen errors to prevent circular errors
   function render(err: unknown, depth: number): string[] {
     let indent = '  '.repeat(depth)
     let width = (process.stderr.columns ?? Infinity) - 2 * (depth + 1)
@@ -101,7 +102,9 @@ function formatError(error: unknown): string {
     output.push(`${indent}${dim('\u2514')}`)
 
     if (typeof err === 'object' && err !== null && 'cause' in err && err.cause != null) {
-      output.push(...render(err.cause, depth + 1))
+      if (!seen.add(err).has(err.cause)) {
+        output.push(...render(err.cause, depth + 1))
+      }
     }
 
     return output
