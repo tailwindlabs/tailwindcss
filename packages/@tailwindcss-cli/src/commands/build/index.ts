@@ -1,4 +1,3 @@
-import watcher from '@parcel/watcher'
 import {
   compile,
   env,
@@ -302,6 +301,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Watch for changes
   if (args['--watch'] && pollInterval === false) {
+    // Ensure the file watcher can be loaded before setting up any watchers,
+    // such that we can present a helpful error message if needed.
+    await handleError(() => loadWatcher())
+
     cleanupWatchers.push(
       await createWatchers(await watchDirectories(scanner), async function handle(files) {
         try {
@@ -658,7 +661,22 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 }
 
+// Load `@parcel/watcher` lazily so a missing or broken native binding only
+// affects `--watch` (without `--poll`), instead of crashing one-off builds and
+// polling mode as well.
+async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
+  try {
+    return (await import('@parcel/watcher')).default
+  } catch (err) {
+    throw new Error(
+      `Failed to load the file watcher. Your platform may not be supported by \`@parcel/watcher\`. As a workaround, you can use polling instead by passing the \`--watch --poll\` flags.\n\n${err}`,
+    )
+  }
+}
+
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  let watcher = await loadWatcher()
+
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
