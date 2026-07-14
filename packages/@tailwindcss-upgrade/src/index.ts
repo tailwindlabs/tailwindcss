@@ -19,7 +19,7 @@ import { prepareConfig } from './codemods/template/prepare-config'
 import { help } from './commands/help'
 import { Stylesheet } from './stylesheet'
 import { args, type Arg } from './utils/args'
-import { isRepoDirty } from './utils/git'
+import { gitRoot, isRepoDirty } from './utils/git'
 import { pkg } from './utils/packages'
 import { eprintln, error, header, highlight, info, relative, success } from './utils/renderer'
 import * as version from './utils/version'
@@ -43,7 +43,9 @@ if (flags['--help']) {
 
 async function run() {
   let base = process.cwd()
-  let isIgnored = await isGitIgnored({ cwd: base })
+  // Use the project's git root, instead of the `base` to ensure all
+  // `.gitignore` rules are being used.
+  let isIgnored = await isGitIgnored({ cwd: gitRoot(base) ?? base })
 
   eprintln(header())
   eprintln()
@@ -125,7 +127,7 @@ async function run() {
 
     // Analyze the stylesheets
     try {
-      await analyzeStylesheets(stylesheets)
+      await analyzeStylesheets(stylesheets, { base })
     } catch (e: any) {
       error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }

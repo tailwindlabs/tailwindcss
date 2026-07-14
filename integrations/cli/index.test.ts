@@ -2831,8 +2831,8 @@ test(
       @layer theme, base, components, utilities;
       @layer theme {
         :root, :host {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
+          --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+          sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
           --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
           monospace;
           --color-red-500: oklch(63.7% 0.237 25.331);
@@ -2851,7 +2851,7 @@ test(
           line-height: 1.5;
           -webkit-text-size-adjust: 100%;
           tab-size: 4;
-          font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+          font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
           font-feature-settings: var(--default-font-feature-settings, normal);
           font-variation-settings: var(--default-font-variation-settings, normal);
           -webkit-tap-highlight-color: transparent;
