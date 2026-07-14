@@ -1,5 +1,1 @@
-@reference "./globals.css";
-
-.heading {
-  @apply text-red-500;
-}
+/* Intentionally empty — the upgraded playground uses pure Tailwind utilities. */

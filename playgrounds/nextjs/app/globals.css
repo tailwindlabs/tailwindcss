@@ -1,1 +1,11 @@
 @import 'tailwindcss';
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-cyan-400) 40%, transparent);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cyan-400);
+  outline-offset: 2px;
+}
