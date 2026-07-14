@@ -3407,6 +3407,13 @@ test(
         @import 'tailwindcss/utilities.css' layer(utilities) source(none);
       `,
       'packages/css/src/index.html': html`<div class="flex text-red-500">Hi</div>`,
+      // The root-level `.gitignore` that anchors the fix. The test harness
+      // injects a default `.gitignore` with `node_modules/` when none is
+      // provided, but declaring it explicitly here makes the mechanism the
+      // fix relies on part of the test's visible surface.
+      '.gitignore': txt`
+        node_modules/
+      `,
     },
   },
   async ({ root, exec, fs, expect }) => {
