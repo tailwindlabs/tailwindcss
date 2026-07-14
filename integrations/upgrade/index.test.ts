@@ -3371,6 +3371,61 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/20328
+test(
+  'ignored files should not be touched when upgrading from a nested directory',
+  {
+    fs: {
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - packages/*
+      `,
+      'package.json': json`
+        {
+          "name": "root",
+          "private": true
+        }
+      `,
+      'packages/css/package.json': json`
+        {
+          "name": "css-pkg",
+          "private": true,
+          "devDependencies": {
+            "tailwindcss": "^4",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'packages/css/src/input.css': css`
+        @import 'tailwindcss/utilities.css' layer(utilities) source(none);
+      `,
+      'packages/css/src/index.html': html`<div class="flex text-red-500">Hi</div>`,
+
+      // Ensure files/folders ignored by a `.gitignore` in the root take effect
+      // when executing the upgrade tool from a sub-package.
+      '.gitignore': txt`
+        node_modules/
+      `,
+    },
+  },
+  async ({ root, exec, fs, expect }) => {
+    await exec('git init', { cwd: root })
+
+    await exec('pnpm exec upgrade --force', {
+      cwd: path.join(root, 'packages/css'),
+    })
+
+    expect(await fs.dumpFiles('packages/css/node_modules/tailwindcss/utilities.css'))
+      .toMatchInlineSnapshot(`
+        "
+        --- packages/css/node_modules/tailwindcss/utilities.css ---
+        @tailwind utilities;
+        "
+    `)
+  },
+)
+
 test(
   'upgrade <style> blocks carefully',
   {

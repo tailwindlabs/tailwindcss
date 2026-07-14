@@ -353,8 +353,13 @@ export default {
   },
   fontFamily: {
     sans: [
-      'ui-sans-serif',
-      'system-ui',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      '"Noto Sans"',
+      'Arial',
       'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
