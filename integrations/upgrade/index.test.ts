@@ -3371,14 +3371,9 @@ test(
   },
 )
 
-// Regression test for tailwindlabs/tailwindcss#20328: when the upgrade tool is
-// run from a subpackage of a workspace, `globby`'s `isGitIgnored` was reading
-// only the local `.gitignore` (relative to `cwd`) and missing the ancestor
-// `.gitignore` that lists `node_modules`. That let the tool walk into
-// `../../node_modules/tailwindcss/…` and rewrite its own `utilities.css` in
-// place, producing a self-referential import loop.
+// https://github.com/tailwindlabs/tailwindcss/issues/20328
 test(
-  'does not rewrite files inside node_modules when run from a workspace subpackage',
+  'ignored files should not be touched when upgrading from a nested directory',
   {
     fs: {
       'pnpm-workspace.yaml': yaml`
@@ -3402,36 +3397,32 @@ test(
           }
         }
       `,
-      // v4-style explicit-path import, resolves into node_modules
       'packages/css/src/input.css': css`
         @import 'tailwindcss/utilities.css' layer(utilities) source(none);
       `,
       'packages/css/src/index.html': html`<div class="flex text-red-500">Hi</div>`,
-      // The root-level `.gitignore` that anchors the fix. The test harness
-      // injects a default `.gitignore` with `node_modules/` when none is
-      // provided, but declaring it explicitly here makes the mechanism the
-      // fix relies on part of the test's visible surface.
+
+      // Ensure files/folders ignored by a `.gitignore` in the root take effect
+      // when executing the upgrade tool from a sub-package.
       '.gitignore': txt`
         node_modules/
       `,
     },
   },
   async ({ root, exec, fs, expect }) => {
-    // Make it a git repo so the tool's ancestor-`.gitignore` lookup has a
-    // repo root to anchor on (mirrors what a real user's project looks like).
     await exec('git init', { cwd: root })
 
     await exec('pnpm exec upgrade --force', {
       cwd: path.join(root, 'packages/css'),
     })
 
-    // The installed `tailwindcss/utilities.css` should still hold the pristine
-    // `@tailwind utilities;` directive — never rewritten to
-    // `@import 'tailwindcss/utilities' layer(utilities);`. Read via the
-    // subpackage's stable symlink to avoid coupling the test to pnpm's
-    // internal store layout.
-    let installed = await fs.read('packages/css/node_modules/tailwindcss/utilities.css')
-    expect(installed.trim()).toBe('@tailwind utilities;')
+    expect(await fs.dumpFiles('packages/css/node_modules/tailwindcss/utilities.css'))
+      .toMatchInlineSnapshot(`
+        "
+        --- packages/css/node_modules/tailwindcss/utilities.css ---
+        @tailwind utilities;
+        "
+    `)
   },
 )
 
