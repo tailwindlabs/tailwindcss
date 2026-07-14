@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en" class="h-full scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="TailwindUniverse — a beautiful multi-framework playground merging React, Next.js, Vue, Nuxt, Svelte, Vite, Astro, Bootstrap, Express, Django, Flask, and Tailwind CSS."
+    />
+    <meta name="theme-color" content="#09090b" />
+    <title>TailwindUniverse · Multi-framework playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+      ::selection { background: rgba(34, 211, 238, 0.35); color: #fff; }
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+        background-size: 64px 64px;
+      }
+      .code-line::before {
+        content: attr(data-n);
+        display: inline-block;
+        width: 2rem;
+        margin-right: 1rem;
+        text-align: right;
+        color: #52525b;
+        user-select: none;
+      }
+    </style>
+  </head>
+  <body class="min-h-full bg-zinc-950 text-zinc-100 antialiased">
+    <!-- Ambient -->
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(34,211,238,0.18),transparent)]"></div>
+      <div class="absolute top-1/3 left-1/4 h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-violet-600/10 blur-[120px]"></div>
+      <div class="absolute top-1/2 right-0 h-[30rem] w-[30rem] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+      <div class="absolute inset-0 grid-bg opacity-40"></div>
+    </div>
+
+    <!-- Nav -->
+    <header id="nav" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+      <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <a href="#home" class="flex items-center gap-2.5">
+          <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-sky-600 text-sm font-bold text-zinc-950 shadow-lg shadow-cyan-500/25">T</span>
+          <span class="text-sm font-semibold tracking-tight">Tailwind<span class="text-cyan-400">Universe</span></span>
+        </a>
+        <nav class="hidden items-center gap-1 md:flex">
+          <a href="#home" class="nav-link rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-white">Home</a>
+          <a href="#ecosystem" class="nav-link rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-white">Ecosystem</a>
+          <a href="#features" class="nav-link rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-white">Features</a>
+          <a href="#code" class="nav-link rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-white">Code</a>
+          <a href="#start" class="nav-link rounded-lg px-3 py-1.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-white">Start</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <a href="https://tailwindcss.com/docs" target="_blank" rel="noreferrer" class="hidden rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-white/10 transition hover:bg-cyan-300 sm:inline-flex">Docs</a>
+          <button id="menu-btn" type="button" aria-label="Toggle menu" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 md:hidden">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobile-menu" class="hidden border-t border-white/10 bg-zinc-950/95 px-4 py-3 backdrop-blur-xl md:hidden">
+        <a href="#home" class="block rounded-lg px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5">Home</a>
+        <a href="#ecosystem" class="block rounded-lg px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5">Ecosystem</a>
+        <a href="#features" class="block rounded-lg px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5">Features</a>
+        <a href="#code" class="block rounded-lg px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5">Code</a>
+        <a href="#start" class="block rounded-lg px-3 py-2.5 text-sm text-zinc-300 hover:bg-white/5">Start</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section id="home" class="relative px-4 pt-28 pb-20 sm:px-6 sm:pt-36 sm:pb-28">
+        <div class="mx-auto max-w-6xl">
+          <div class="mx-auto max-w-3xl text-center">
+            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
+              <span class="relative flex h-1.5 w-1.5">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400"></span>
+              </span>
+              Merged ecosystem · Tailwind CSS v4
+            </div>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+              One utility system.
+              <span class="bg-gradient-to-r from-cyan-300 via-sky-400 to-violet-400 bg-clip-text text-transparent">Every framework.</span>
+            </h1>
+            <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+              A beautiful playground that unifies React, Next.js, Vue, Nuxt, Svelte, Vite, Astro,
+              Bootstrap, Express, Django, Flask — and Tailwind CSS — into one cohesive design language.
+            </p>
+            <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+              <a href="#ecosystem" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 px-6 py-3 text-sm font-semibold text-zinc-950 shadow-xl shadow-cyan-500/25 transition hover:brightness-110">
+                Explore frameworks
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </a>
+              <a href="#code" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10">
+                View code samples
+              </a>
+            </div>
+          </div>
+
+          <div class="mx-auto mt-16 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 text-center backdrop-blur">
+              <div class="text-3xl font-bold text-white">12</div>
+              <div class="mt-1 text-xs text-zinc-500">Frameworks unified</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 text-center backdrop-blur">
+              <div class="text-3xl font-bold text-white">v4</div>
+              <div class="mt-1 text-xs text-zinc-500">Tailwind generation</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 text-center backdrop-blur">
+              <div class="text-3xl font-bold text-white">0</div>
+              <div class="mt-1 text-xs text-zinc-500">Runtime CSS cost</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-5 text-center backdrop-blur">
+              <div class="text-3xl font-bold text-white">∞</div>
+              <div class="mt-1 text-xs text-zinc-500">Design possibilities</div>
+            </div>
+          </div>
+
+          <!-- Preview card -->
+          <div class="relative mx-auto mt-16 max-w-4xl">
+            <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-cyan-500/40 via-violet-500/30 to-fuchsia-500/40 opacity-60 blur-xl"></div>
+            <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/80 shadow-2xl shadow-black/50 backdrop-blur">
+              <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+                <span class="h-2.5 w-2.5 rounded-full bg-red-400/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-amber-400/80"></span>
+                <span class="h-2.5 w-2.5 rounded-full bg-emerald-400/80"></span>
+                <span class="ml-3 font-mono text-xs text-zinc-500">playground · merged-repos</span>
+              </div>
+              <div class="grid gap-4 p-5 sm:grid-cols-3">
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-cyan-500/20 to-transparent p-5">
+                  <div class="mb-3 flex h-24 flex-col justify-end gap-1.5 rounded-xl border border-white/5 bg-zinc-950/50 p-3">
+                    <div class="h-2 w-2/3 rounded-full bg-white/15"></div>
+                    <div class="h-2 w-1/2 rounded-full bg-white/10"></div>
+                    <div class="mt-1 h-6 w-20 rounded-lg bg-cyan-400/30"></div>
+                  </div>
+                  <h3 class="font-semibold text-white">Components</h3>
+                  <p class="mt-1 text-sm text-zinc-500">Buttons, cards, navs</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-violet-500/20 to-transparent p-5">
+                  <div class="mb-3 flex h-24 flex-col justify-end gap-1.5 rounded-xl border border-white/5 bg-zinc-950/50 p-3">
+                    <div class="h-2 w-3/4 rounded-full bg-white/15"></div>
+                    <div class="grid grid-cols-3 gap-1.5">
+                      <div class="h-8 rounded-md bg-white/10"></div>
+                      <div class="h-8 rounded-md bg-white/10"></div>
+                      <div class="h-8 rounded-md bg-white/10"></div>
+                    </div>
+                  </div>
+                  <h3 class="font-semibold text-white">Layouts</h3>
+                  <p class="mt-1 text-sm text-zinc-500">Heroes, grids, footers</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-fuchsia-500/20 to-transparent p-5">
+                  <div class="mb-3 flex h-24 items-center justify-center gap-2 rounded-xl border border-white/5 bg-zinc-950/50 p-3">
+                    <div class="h-8 w-8 rounded-full bg-zinc-100"></div>
+                    <div class="h-8 w-8 rounded-full bg-zinc-800 ring-2 ring-cyan-400/40"></div>
+                    <div class="h-8 w-8 rounded-full bg-violet-500"></div>
+                  </div>
+                  <h3 class="font-semibold text-white">Themes</h3>
+                  <p class="mt-1 text-sm text-zinc-500">Light, dark, brand</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ecosystem -->
+      <section id="ecosystem" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+        <div class="mx-auto max-w-6xl">
+          <div class="max-w-2xl">
+            <p class="text-sm font-semibold tracking-wide text-cyan-400 uppercase">Ecosystem</p>
+            <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">All your frameworks. One design language.</h2>
+            <p class="mt-4 text-zinc-400">
+              Pulled together from the kariitsme forks of the modern web stack — each card links back to its repo.
+              Style every surface with the same Tailwind primitives.
+            </p>
+          </div>
+          <div id="fw-grid" class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+        <div class="mx-auto max-w-6xl">
+          <div class="text-center">
+            <p class="text-sm font-semibold tracking-wide text-violet-400 uppercase">Features</p>
+            <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Designed for beauty. Built for speed.</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-zinc-400">
+              Everything you need to craft interfaces that feel intentional — across every framework in the stack.
+            </p>
+          </div>
+          <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">⚡</div>
+              <h3 class="text-lg font-semibold text-white">Utility-first</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">Build complex designs from a constrained set of primitive utilities — no more fighting CSS specificity.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">📱</div>
+              <h3 class="text-lg font-semibold text-white">Responsive by default</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">Mobile-first breakpoints with sm:, md:, lg:, and xl: variants. Design once, ship everywhere.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">🌙</div>
+              <h3 class="text-lg font-semibold text-white">Dark mode ready</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">First-class dark: variants and CSS variables so theming feels effortless across every surface.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">🚀</div>
+              <h3 class="text-lg font-semibold text-white">Lightning fast</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">Oxide engine + Lightning CSS. Incremental builds and tiny production bundles out of the box.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">🧩</div>
+              <h3 class="text-lg font-semibold text-white">Framework agnostic</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">Works with React, Vue, Svelte, Next, Nuxt, Astro, Django templates, Flask, Express — anywhere HTML lives.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition hover:border-violet-400/30">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-2xl">🎨</div>
+              <h3 class="text-lg font-semibold text-white">Design tokens</h3>
+              <p class="mt-2 text-sm leading-relaxed text-zinc-500">Colors, spacing, typography, and shadows as a coherent system. Customize with @theme in one place.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Code -->
+      <section id="code" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+        <div class="mx-auto max-w-6xl">
+          <div class="grid items-start gap-10 lg:grid-cols-2">
+            <div>
+              <p class="text-sm font-semibold tracking-wide text-fuchsia-400 uppercase">Multi-framework</p>
+              <h2 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Same utilities. Every stack.</h2>
+              <p class="mt-4 text-zinc-400">
+                Drop the same class names into React, Next, Vue, Nuxt, or Svelte. Tailwind doesn&apos;t care what
+                renders your HTML — only that it looks incredible.
+              </p>
+              <div id="snippet-tabs" class="mt-8 flex flex-wrap gap-2"></div>
+              <ul class="mt-8 space-y-3 text-sm text-zinc-400">
+                <li class="flex items-start gap-2.5">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/15 text-cyan-300">✓</span>
+                  Zero runtime CSS-in-JS overhead
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/15 text-cyan-300">✓</span>
+                  Works with SSR, SSG, and SPA alike
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/15 text-cyan-300">✓</span>
+                  Oxide scanner finds classes in any template
+                </li>
+              </ul>
+            </div>
+            <div class="relative">
+              <div class="absolute -inset-1 rounded-3xl bg-gradient-to-br from-fuchsia-500/30 via-violet-500/20 to-cyan-500/30 opacity-50 blur-xl"></div>
+              <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl">
+                <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <span class="h-2.5 w-2.5 rounded-full bg-red-400/80"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-amber-400/80"></span>
+                    <span class="h-2.5 w-2.5 rounded-full bg-emerald-400/80"></span>
+                  </div>
+                  <span id="snippet-filename" class="font-mono text-xs text-zinc-500">react.vite.tsx</span>
+                </div>
+                <pre class="overflow-x-auto p-5 text-[13px] leading-relaxed"><code id="snippet-code" class="font-mono text-zinc-300"></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Palette -->
+      <section class="px-4 py-10 sm:px-6">
+        <div class="mx-auto max-w-6xl overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 via-zinc-950 to-zinc-900 p-6 sm:p-10">
+          <h3 class="text-xl font-bold sm:text-2xl">Live component palette</h3>
+          <p class="mt-1 text-sm text-zinc-500">Built entirely with utility classes — no custom CSS files.</p>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <button type="button" class="rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-lg shadow-cyan-500/30 transition hover:bg-cyan-400 active:scale-95">Primary</button>
+            <button type="button" class="rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">Secondary</button>
+            <button type="button" class="rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/30 transition hover:brightness-110">Gradient</button>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Online
+            </span>
+            <span class="rounded-lg bg-amber-400/15 px-2.5 py-1 text-xs font-medium text-amber-300">Beta</span>
+          </div>
+          <div class="mt-6 grid gap-4 sm:grid-cols-3">
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 text-sm font-bold text-zinc-950">AC</div>
+              <div>
+                <div class="text-sm font-semibold text-white">Ava Chen</div>
+                <div class="text-xs text-zinc-500">Design systems</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-violet-400 to-purple-500 text-sm font-bold text-zinc-950">ML</div>
+              <div>
+                <div class="text-sm font-semibold text-white">Marcus Lee</div>
+                <div class="text-xs text-zinc-500">Full-stack</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-rose-400 to-orange-400 text-sm font-bold text-zinc-950">SR</div>
+              <div>
+                <div class="text-sm font-semibold text-white">Sofia Ruiz</div>
+                <div class="text-xs text-zinc-500">Frontend craft</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 h-2 overflow-hidden rounded-full bg-zinc-800">
+            <div class="h-full w-2/3 rounded-full bg-gradient-to-r from-cyan-400 via-sky-500 to-violet-500"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section id="start" class="scroll-mt-20 px-4 py-20 sm:px-6 sm:py-28">
+        <div class="mx-auto max-w-4xl">
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 px-6 py-16 text-center sm:px-12">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-violet-600/15 to-fuchsia-500/20"></div>
+            <div class="relative">
+              <h2 class="text-3xl font-bold tracking-tight sm:text-5xl">Ready to build something beautiful?</h2>
+              <p class="mx-auto mt-4 max-w-xl text-zinc-400">
+                Install Tailwind CSS v4, pick any framework from the ecosystem, and start shipping interfaces that feel finished.
+              </p>
+              <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <a href="https://tailwindcss.com/docs/installation" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-zinc-950 shadow-xl transition hover:bg-cyan-300">
+                  Install Tailwind
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+                <a href="https://github.com/kariitsme/tailwindcss" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/20 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10">
+                  Star on GitHub
+                </a>
+              </div>
+              <p class="mt-8 font-mono text-xs text-zinc-500">npm install tailwindcss @tailwindcss/vite</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/10 px-4 py-12 sm:px-6">
+      <div class="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-sky-600 text-xs font-bold text-zinc-950">T</span>
+            <span class="text-sm font-semibold">Tailwind<span class="text-cyan-400">Universe</span></span>
+          </div>
+          <p class="mt-3 max-w-xs text-sm text-zinc-500">
+            A playground merging the modern web stack under one utility-first design system.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-3">
+          <div>
+            <h4 class="text-xs font-semibold tracking-wide text-zinc-400 uppercase">Frontend</h4>
+            <ul class="mt-3 space-y-2 text-sm text-zinc-500">
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/react" target="_blank" rel="noreferrer">React</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/vue" target="_blank" rel="noreferrer">Vue</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/svelte" target="_blank" rel="noreferrer">Svelte</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/next.js" target="_blank" rel="noreferrer">Next.js</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/nuxt" target="_blank" rel="noreferrer">Nuxt</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/astro" target="_blank" rel="noreferrer">Astro</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-semibold tracking-wide text-zinc-400 uppercase">Backend</h4>
+            <ul class="mt-3 space-y-2 text-sm text-zinc-500">
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/express" target="_blank" rel="noreferrer">Express</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/django" target="_blank" rel="noreferrer">Django</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/flask" target="_blank" rel="noreferrer">Flask</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-xs font-semibold tracking-wide text-zinc-400 uppercase">Tooling</h4>
+            <ul class="mt-3 space-y-2 text-sm text-zinc-500">
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/vite" target="_blank" rel="noreferrer">Vite</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/bootstrap" target="_blank" rel="noreferrer">Bootstrap</a></li>
+              <li><a class="hover:text-cyan-300" href="https://github.com/kariitsme/tailwindcss" target="_blank" rel="noreferrer">Tailwind CSS</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mx-auto mt-10 max-w-6xl border-t border-white/5 pt-6 text-center text-xs text-zinc-600">
+        Built with Tailwind CSS · Playground inside the tailwindcss monorepo · MIT
+      </div>
+    </footer>
+
+    <script>
+      const frameworks = [
+        { name: 'React', tag: 'UI Library', tone: 'from-sky-400 to-cyan-300', href: 'https://github.com/kariitsme/react', blurb: 'The library for web and native user interfaces.' },
+        { name: 'Next.js', tag: 'React Framework', tone: 'from-zinc-100 to-zinc-400', href: 'https://github.com/kariitsme/next.js', blurb: 'The React Framework for the Web — production-ready.' },
+        { name: 'Vue', tag: 'Progressive Framework', tone: 'from-emerald-400 to-teal-300', href: 'https://github.com/kariitsme/vue', blurb: 'The progressive JavaScript framework for building UIs.' },
+        { name: 'Nuxt', tag: 'Vue Framework', tone: 'from-green-400 to-lime-300', href: 'https://github.com/kariitsme/nuxt', blurb: 'The full-stack Vue framework — intuitive & performant.' },
+        { name: 'Svelte', tag: 'Compiled UI', tone: 'from-orange-400 to-red-400', href: 'https://github.com/kariitsme/svelte', blurb: 'Cybernetically enhanced web apps — no virtual DOM.' },
+        { name: 'Vite', tag: 'Build Tool', tone: 'from-violet-400 to-fuchsia-400', href: 'https://github.com/kariitsme/vite', blurb: 'Next generation frontend tooling. Instant, blazing fast.' },
+        { name: 'Astro', tag: 'Content Sites', tone: 'from-pink-400 to-rose-400', href: 'https://github.com/kariitsme/astro', blurb: 'The web framework for content-driven websites.' },
+        { name: 'Bootstrap', tag: 'CSS Framework', tone: 'from-purple-400 to-indigo-400', href: 'https://github.com/kariitsme/bootstrap', blurb: 'The most popular HTML, CSS, and JS framework — mobile first.' },
+        { name: 'Express', tag: 'Node Backend', tone: 'from-stone-300 to-stone-500', href: 'https://github.com/kariitsme/express', blurb: 'Fast, unopinionated, minimalist web framework for Node.' },
+        { name: 'Django', tag: 'Python Web', tone: 'from-green-500 to-emerald-300', href: 'https://github.com/kariitsme/django', blurb: 'The web framework for perfectionists with deadlines.' },
+        { name: 'Flask', tag: 'Python Micro', tone: 'from-zinc-200 to-zinc-500', href: 'https://github.com/kariitsme/flask', blurb: 'The Python micro framework for building web applications.' },
+        { name: 'Tailwind', tag: 'Utility CSS', tone: 'from-cyan-400 to-sky-500', href: 'https://github.com/kariitsme/tailwindcss', blurb: 'A utility-first CSS framework for rapid UI development.' },
+      ]
+
+      const snippets = [
+        {
+          label: 'React + Vite',
+          file: 'button.tsx',
+          code: `export function Button() {
+  return (
+    <button className="rounded-xl bg-cyan-500
+      px-5 py-2.5 font-semibold text-white
+      shadow-lg shadow-cyan-500/30
+      transition hover:bg-cyan-400
+      active:scale-95">
+      Get started
+    </button>
+  )
+}`,
+        },
+        {
+          label: 'Next.js',
+          file: 'hero.tsx',
+          code: `export default function Hero() {
+  return (
+    <section className="relative overflow-hidden
+      bg-zinc-950 px-6 py-24">
+      <h1 className="text-5xl font-bold
+        tracking-tight text-white">
+        Ship faster with Tailwind
+      </h1>
+    </section>
+  )
+}`,
+        },
+        {
+          label: 'Vue / Nuxt',
+          file: 'cards.vue',
+          code: `<template>
+  <div class="grid gap-4 sm:grid-cols-2
+              lg:grid-cols-3">
+    <article
+      v-for="card in cards"
+      :key="card.id"
+      class="rounded-2xl border border-white/10
+             bg-white/5 p-6 backdrop-blur">
+      <h3 class="text-lg font-semibold
+                 text-white">{{ card.title }}</h3>
+    </article>
+  </div>
+</template>`,
+        },
+        {
+          label: 'Svelte',
+          file: 'menu.svelte',
+          code: `<script>
+  let open = $state(false)
+</script>
+
+<button
+  class="inline-flex items-center gap-2
+         rounded-full bg-gradient-to-r
+         from-orange-400 to-rose-500
+         px-4 py-2 text-sm font-medium
+         text-white shadow-lg"
+  onclick={() => open = !open}>
+  {open ? 'Close' : 'Open'} menu
+</button>`,
+        },
+      ]
+
+      // Framework cards
+      const grid = document.getElementById('fw-grid')
+      grid.innerHTML = frameworks
+        .map(
+          (fw) => `
+        <a href="${fw.href}" target="_blank" rel="noreferrer"
+           class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.05]">
+          <div class="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-gradient-to-br ${fw.tone} opacity-0 blur-2xl transition group-hover:opacity-20"></div>
+          <div class="relative flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${fw.tone} text-sm font-bold text-zinc-950 shadow-lg">
+              ${fw.name.slice(0, 1)}
+            </div>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-semibold text-white">${fw.name}</h3>
+                <span class="rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-medium tracking-wide text-zinc-400 uppercase">${fw.tag}</span>
+              </div>
+              <p class="mt-1.5 text-sm leading-relaxed text-zinc-500">${fw.blurb}</p>
+            </div>
+          </div>
+          <div class="relative mt-4 text-xs font-medium text-zinc-500 transition group-hover:text-cyan-300">View repository →</div>
+        </a>`,
+        )
+        .join('')
+
+      // Snippets
+      let activeSnippet = 0
+      const tabs = document.getElementById('snippet-tabs')
+      const codeEl = document.getElementById('snippet-code')
+      const fileEl = document.getElementById('snippet-filename')
+
+      function renderSnippet(i) {
+        activeSnippet = i
+        const s = snippets[i]
+        fileEl.textContent = s.file
+        codeEl.innerHTML = s.code
+          .split('\n')
+          .map((line, n) => `<div class="code-line" data-n="${n + 1}">${escapeHtml(line) || ' '}</div>`)
+          .join('')
+        ;[...tabs.children].forEach((btn, idx) => {
+          btn.className =
+            idx === i
+              ? 'rounded-full px-4 py-2 text-sm font-medium bg-white text-zinc-950 shadow-lg shadow-white/10'
+              : 'rounded-full px-4 py-2 text-sm font-medium border border-white/10 bg-white/5 text-zinc-400 hover:text-white'
+        })
+      }
+
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+      }
+
+      snippets.forEach((s, i) => {
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.textContent = s.label
+        btn.addEventListener('click', () => renderSnippet(i))
+        tabs.appendChild(btn)
+      })
+      renderSnippet(0)
+
+      // Nav scroll style
+      const nav = document.getElementById('nav')
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (window.scrollY > 12) {
+            nav.classList.add('border-b', 'border-white/10', 'bg-zinc-950/80', 'shadow-lg', 'shadow-black/20', 'backdrop-blur-xl')
+          } else {
+            nav.classList.remove('border-b', 'border-white/10', 'bg-zinc-950/80', 'shadow-lg', 'shadow-black/20', 'backdrop-blur-xl')
+          }
+        },
+        { passive: true },
+      )
+
+      // Mobile menu
+      const menuBtn = document.getElementById('menu-btn')
+      const mobileMenu = document.getElementById('mobile-menu')
+      menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'))
+      mobileMenu.querySelectorAll('a').forEach((a) =>
+        a.addEventListener('click', () => mobileMenu.classList.add('hidden')),
+      )
+    </script>
+  </body>
+</html>
