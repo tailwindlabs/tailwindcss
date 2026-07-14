@@ -125,7 +125,7 @@ async function run() {
 
     // Analyze the stylesheets
     try {
-      await analyzeStylesheets(stylesheets)
+      await analyzeStylesheets(stylesheets, { base })
     } catch (e: any) {
       error(`${e?.message ?? e}`, { prefix: '↳ ' })
     }

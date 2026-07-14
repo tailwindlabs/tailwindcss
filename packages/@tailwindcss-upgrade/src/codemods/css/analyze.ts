@@ -4,11 +4,19 @@ import postcss, { type Result } from 'postcss'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { Stylesheet, type StylesheetConnection } from '../../stylesheet'
+import { gitRoot } from '../../utils/git'
 import { error, highlight, relative } from '../../utils/renderer'
 import { resolveCssId } from '../../utils/resolve'
 
-export async function analyze(stylesheets: Stylesheet[]) {
-  let isIgnored = await isGitIgnored()
+export async function analyze(stylesheets: Stylesheet[], { base }: { base: string }) {
+  // Consult `.gitignore` from the git repository root rather than from `base`.
+  // `globby`'s `isGitIgnored` only reads `.gitignore` files at or below its
+  // `cwd`, so when the upgrade tool is invoked from a subpackage of a
+  // workspace, the workspace root's `.gitignore` (which almost always lists
+  // `node_modules`) is not consulted. That was letting the tool walk into
+  // `../../node_modules/tailwindcss/…` and rewrite its own `utilities.css`
+  // in place. See tailwindlabs/tailwindcss#19726 and #20328.
+  let isIgnored = await isGitIgnored({ cwd: gitRoot(base) ?? base })
   let processingQueue: (() => Promise<Result>)[] = []
   let stylesheetsByFile = new DefaultMap<string, Stylesheet | null>((file) => {
     // We don't want to process ignored files (like node_modules)

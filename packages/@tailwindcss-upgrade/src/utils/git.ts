@@ -1,5 +1,21 @@
 import { execSync } from 'node:child_process'
 
+/**
+ * Return the absolute path of the git repository root that contains `cwd`, or
+ * `null` if `cwd` is not inside a git repository (or `git` is unavailable).
+ */
+export function gitRoot(cwd?: string): string | null {
+  try {
+    return execSync('git rev-parse --show-toplevel', {
+      encoding: 'utf-8',
+      cwd,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+  } catch {
+    return null
+  }
+}
+
 export function isRepoDirty(cwd?: string) {
   try {
     let stdout = execSync('git status --porcelain', { encoding: 'utf-8', cwd })
