@@ -148,6 +148,16 @@ fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
         })
         .collect::<Vec<_>>();
 
+    // Bases of restricted patterns. Each of these becomes its own walk root with its own
+    // `*` + `!<pattern>` rules, so an ancestor base must not ignore them recursively.
+    let pattern_roots = sources
+        .iter()
+        .filter_map(|source| match source {
+            SourceEntry::Pattern { base, .. } => Some(base.clone()),
+            _ => None,
+        })
+        .collect::<Vec<_>>();
+
     let mut restricted_roots: FxHashSet<PathBuf> = FxHashSet::default();
     let mut expanded = vec![];
 
@@ -167,14 +177,17 @@ fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
         }
 
         // Ignore everything in the directory. We will later add the specific patterns we are
-        // interested in. When another source root is nested in this base, only ignore direct
-        // children so the nested source can still be walked from its own root.
+        // interested in.
         if restricted_roots.insert(base.clone()) {
-            let pattern = if unrestricted_roots.iter().any(|root| root.starts_with(base)) {
-                "/*"
-            } else {
-                "*"
-            };
+            // When another source root is nested inside this base — an unrestricted root, or the
+            // base of another restricted pattern (which is walked from its own root with its own
+            // rules) — only ignore direct children so the nested root can still be walked.
+            let has_nested_root = unrestricted_roots.iter().any(|root| root.starts_with(base))
+                || pattern_roots
+                    .iter()
+                    .any(|root| root != base && root.starts_with(base));
+
+            let pattern = if has_nested_root { "/*" } else { "*" };
 
             expanded.push(SourceEntry::Ignored {
                 base: base.clone(),
