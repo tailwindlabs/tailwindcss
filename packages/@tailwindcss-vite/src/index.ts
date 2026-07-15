@@ -25,6 +25,7 @@ const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
+const JS_EXTENSIONS_RE = /^\.[cm]?[jt]sx?$/
 
 export type PluginOptions = {
   /**
@@ -75,6 +76,13 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let servers: ViteDevServer[] = []
   let config: ResolvedConfig | null = null
   let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
+
+  // File extensions that Vite (or one of its plugins) has been seen to process
+  // as a module. Plugins don't get added or removed while the dev server is
+  // running (changing the Vite config restarts the server), so once we've seen
+  // evidence for a file type we don't need to scan the module graphs for it
+  // again.
+  let viteProcessedExtensions = new Set<string>()
 
   let isSSR = false
   let shouldOptimize = true
@@ -271,25 +279,83 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           // 'asset'. But it will also have a `HARD_INVALIDATED` state and will
           // do a full page reload already.
           //
-          // Empty modules can be skipped since it means it's not `addWatchFile`d and thus irrelevant to Tailwind.
+          // Empty modules can be skipped since it means it's not
+          // `addWatchFile`d and thus irrelevant to Tailwind.
           let isExternalFile =
             modules.length > 0 &&
             modules.every((mod) => mod.type === 'asset' || mod.id === undefined)
           if (!isExternalFile) return
 
-          // Skip if the module exists in other environments. SSR framework has
-          // its own server side hmr/reload mechanism when handling server
-          // only modules. See https://v6.vite.dev/guide/migration.html
+          // Skip files that Vite (or one of its plugins) processes as a
+          // module — in this environment (e.g. a lazily-loaded route that
+          // hasn't been visited yet) or in another one (e.g. an SSR-only
+          // module). Such a file can only affect the page through Vite's own
+          // pipeline, so a full reload would only destroy client state. Any
+          // changes to the generated CSS still go through the regular
+          // `css-update` flow because the file is registered via
+          // `addWatchFile`.
+          //
+          // If the file exists as a real module in another environment, then
+          // that environment is responsible for it. E.g. an SSR framework
+          // has its own server side hmr/reload mechanism when handling
+          // server only modules. See https://v6.vite.dev/guide/migration.html
           // > Updates to an SSR-only module no longer triggers a full page reload in the client. ...
           for (let environment of Object.values(server.environments)) {
             if (environment.name === this.environment.name) continue
 
             let modules = environment.moduleGraph.getModulesByFile(file)
             if (modules) {
-              for (let module of modules) {
-                if (module.type !== 'asset') {
+              for (let mod of modules) {
+                if (mod.type !== 'asset') {
                   return
                 }
+              }
+            }
+          }
+
+          // Otherwise the file is not loaded as a module anywhere, so
+          // determine whether its file _type_ would be processed by Vite
+          // when requested by the browser (in which case the file just isn't
+          // loaded yet, e.g. a lazily-loaded route that hasn't been visited).
+          // Vite has no API to answer this without actually running the
+          // plugin pipeline, so instead:
+          //
+          // Files Vite handles natively (the JS/TS and CSS families) are always
+          // processed by Vite. This includes stylesheets that never show up as
+          // their own module because a framework plugin compiles them into a
+          // component (e.g. Angular), in which case that plugin owns their HMR.
+          let extension = path.extname(file)
+          if (JS_EXTENSIONS_RE.test(extension) || vite.isCSSRequest(file)) return
+
+          // For any other file type (e.g. `.vue`, `.svelte`, or `.md` with an
+          // SSG plugin), if a file with the same extension exists as a real
+          // module in any environment's module graph, then a plugin evidently
+          // handles this file type and the changed file just isn't loaded
+          // (yet).
+          if (extension !== '') {
+            if (viteProcessedExtensions.has(extension)) return
+
+            for (let environment of Object.values(server.environments)) {
+              for (let mod of environment.moduleGraph.idToModuleMap.values()) {
+                if (!mod.file?.endsWith(extension)) continue
+                if (mod.type === 'asset') continue
+
+                // Only count modules that the plugin pipeline actually
+                // transformed. Vite also creates untransformed placeholder
+                // nodes (e.g. for the file underlying a `?raw` import) that
+                // are not evidence that a plugin handles this file type.
+                if (mod.transformResult == null) continue
+
+                // Similarly, ignore query imports (e.g. `./template.html?raw`,
+                // or the `?html-proxy` modules Vite creates for inline
+                // scripts): they pull a file's _contents_ into the graph
+                // without a plugin processing the file type. A scanned
+                // `.html` template must still trigger a full reload even if
+                // some other `.html` file is imported with `?raw`.
+                if (!mod.id || mod.id.includes('?')) continue
+
+                viteProcessedExtensions.add(extension)
+                return
               }
             }
           }
