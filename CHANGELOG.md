@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lazily load `@parcel/watcher` when using the `--watch` flag in `@tailwindcss/cli`, so one-off builds and `--watch --poll` work when `@parcel/watcher` can't be loaded ([#20325](https://github.com/tailwindlabs/tailwindcss/issues/20325))
 - Use explicit platform fonts instead of `system-ui` and `ui-sans-serif` so CJK text respects the page's `lang` attribute on Windows ([#19767](https://github.com/tailwindlabs/tailwindcss/issues/19767), [#19768](https://github.com/tailwindlabs/tailwindcss/issues/19768))
 - Prevent `@tailwindcss/upgrade` from rewriting ignored files when run from a subdirectory ([#20328](https://github.com/tailwindlabs/tailwindcss/issues/20328))
+- Ensure earlier `@source` rules pointing to nested files are scanned when later `@source` rules point to files in parent folders ([#20335](https://github.com/tailwindlabs/tailwindcss/pull/20335))
 
 ## [4.3.2] - 2026-06-26
 
