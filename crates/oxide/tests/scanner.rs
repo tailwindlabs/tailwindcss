@@ -1297,6 +1297,67 @@ mod scanner {
         assert_eq!(files, vec!["src/bar.html", "src/foo.html"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/20333
+    #[test]
+    fn it_should_combine_nested_and_root_restricted_sources() {
+        // The restriction (`*`) added for the root-level file must not prevent walking into the
+        // `nested` folder that another explicit source points into. At the same time, relaxing
+        // that restriction to `/*` must not accidentally open up sibling folders (`ignore-me`)
+        // or files that no explicit source points at.
+        let paths_with_content = &[
+            ("nested/component.html", "content-['nested/component.html']"),
+            ("nested/ignore-me.html", "content-['nested/ignore-me.html']"),
+            ("ignore-me/component.html", "content-['ignore-me']"),
+            ("component-sources.classes.txt", "content-['classes.txt']"),
+            ("ignore-me.txt", "content-['ignore-me.txt']"),
+        ];
+
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            paths_with_content,
+            vec![
+                "@source './nested/component.html'",
+                "@source './component-sources.classes.txt'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['classes.txt']",
+                "content-['nested/component.html']"
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["component-sources.classes.txt", "nested/component.html"]
+        );
+
+        // Same setup, but with the root-level source declared first
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            paths_with_content,
+            vec![
+                "@source './component-sources.classes.txt'",
+                "@source './nested/component.html'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['classes.txt']",
+                "content-['nested/component.html']"
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["component-sources.classes.txt", "nested/component.html"]
+        );
+    }
+
     #[test]
     fn it_should_allow_later_ignores_to_override_restricted_sources() {
         let ScanResult {
