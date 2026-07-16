@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent `@tailwindcss/upgrade` from rewriting ignored files when run from a subdirectory ([#20328](https://github.com/tailwindlabs/tailwindcss/issues/20328))
 - Ensure earlier `@source` rules pointing to nested files are scanned when later `@source` rules point to files in parent folders ([#20335](https://github.com/tailwindlabs/tailwindcss/pull/20335))
 - Prevent `@tailwindcss/vite` from triggering full page reloads when scanned files are processed by Vite but haven't been loaded as modules yet ([#20336](https://github.com/tailwindlabs/tailwindcss/pull/20336))
+- Ensure `drop-shadow-*` utilities generate valid CSS when a theme value contains multiple shadows by treating it as inline ([#17677](https://github.com/tailwindlabs/tailwindcss/issues/17677))
 
 ## [4.3.2] - 2026-06-26
 

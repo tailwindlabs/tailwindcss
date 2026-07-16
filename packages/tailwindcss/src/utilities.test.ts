@@ -24056,6 +24056,7 @@ test('filter', async () => {
         'drop-shadow/12.5',
         'drop-shadow-xl',
         'drop-shadow-multi',
+        'drop-shadow-double',
         'drop-shadow-[0_0_red]',
         'drop-shadow-red-500',
         'drop-shadow-red-500/50',
@@ -24078,6 +24079,7 @@ test('filter', async () => {
           --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
           --drop-shadow-xl: 0 9px 7px rgb(0 0 0 / 0.1);
           --drop-shadow-calc: 0 0 calc(1 * var(--spacing)) black;
+          --drop-shadow-double: 0 1px 1px rgb(0 0 0 / 0.05), 0 9px 7px rgb(0 0 0 / 0.1);
         }
         @theme inline {
           --drop-shadow-multi: 0 1px 1px rgb(0 0 0 / 0.05), 0 9px 7px rgb(0 0 0 / 0.1);
@@ -24183,7 +24185,7 @@ test('filter', async () => {
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
-    .drop-shadow-multi {
+    .drop-shadow-double, .drop-shadow-multi {
       --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, #0000000d)) drop-shadow(0 9px 7px var(--tw-drop-shadow-color, #0000001a));
       --tw-drop-shadow: drop-shadow(0 1px 1px #0000000d) drop-shadow(0 9px 7px #0000001a);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );

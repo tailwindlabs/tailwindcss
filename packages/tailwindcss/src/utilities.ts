@@ -4629,6 +4629,12 @@ export function createUtilities(theme: Theme) {
         let resolved = theme.resolve(null, ['--drop-shadow'])
         if (value === null || resolved === null) return
 
+        // Multiple shadows can not be represented with a single `var(…)`
+        // reference because every shadow needs to be wrapped in its own
+        // `drop-shadow(…)` function, so behave as if the theme value was
+        // declared using `@theme inline`.
+        if (segment(value, ',').length > 1) resolved = value
+
         return [
           filterProperties(),
           decl('--tw-drop-shadow-alpha', alpha),
@@ -4687,6 +4693,12 @@ export function createUtilities(theme: Theme) {
         let resolved = theme.resolve(candidate.value.value, ['--drop-shadow'])
         if (value && resolved) {
           if (candidate.modifier && !alpha) return
+
+          // Multiple shadows can not be represented with a single `var(…)`
+          // reference because every shadow needs to be wrapped in its own
+          // `drop-shadow(…)` function, so behave as if the theme value was
+          // declared using `@theme inline`.
+          if (segment(value, ',').length > 1) resolved = value
 
           if (alpha) {
             return [
