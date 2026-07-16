@@ -22,6 +22,7 @@ import {
   relative,
   wordWrap,
 } from '../../utils/renderer'
+import { pathsEqual } from '../../utils/paths-equal'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
@@ -338,7 +339,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
-          if (files.length === 1 && files[0] === args['--output']) return
+          if (files.length === 1 && args['--output'] && pathsEqual(files[0], args['--output'])) return
 
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/cli] (watcher)')
@@ -807,7 +808,7 @@ function getRebuildStrategy(
     // If one of the changed files is related to the input CSS or JS
     // config/plugin files, then we need to do a full rebuild because
     // the theme might have changed.
-    if (fullRebuildPaths.includes(file)) {
+    if (fullRebuildPaths.some((p) => pathsEqual(p, file))) {
       return { kind: 'full' }
     }
 
