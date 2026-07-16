@@ -4683,6 +4683,64 @@ describe('@custom-variant', () => {
         "
       `)
     })
+
+    test('@scope with @slot', async () => {
+      expect(
+        await run(
+          ['in-checkout:underline'],
+          css`
+            @custom-variant in-checkout {
+              @scope (.checkout) {
+                @slot;
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.checkout) {
+            .in-checkout\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('@scope with a limit with @slot', async () => {
+      expect(
+        await run(
+          ['in-checkout:underline'],
+          css`
+            @custom-variant in-checkout {
+              @scope (.checkout) to (.payment) {
+                @slot;
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.checkout) to (.payment) {
+            .in-checkout\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
   })
 
   test('built-in variants can be overridden while keeping their order', async () => {

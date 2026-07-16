@@ -1093,6 +1093,30 @@ describe('optimization', () => {
       `)
     })
 
+    it('should hoist `@scope` at-rules', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .a {
+              @scope (.b) to (.c) {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.b) to (.c) {
+            .a {
+              --x: 1;
+            }
+          }
+        }
+        "
+      `)
+    })
+
     it('should leave `@property` and `@apply` alone', async () => {
       expect(
         optimize(css`
