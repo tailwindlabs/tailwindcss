@@ -504,11 +504,15 @@ class Root {
   // assume the file has always changed.
   private buildDependencies = new Map<string, number | null>()
 
-  // Cache of resolved symlinks for scanned paths. Scanned paths preserve
-  // symlinks as written in `@source` directives (e.g. a path through a pnpm
-  // workspace symlink in `node_modules`), but Vite tracks modules and file
-  // change events by their real path.
-  private realpaths = new Map<string, string>()
+  // Resolved symlinks for scanned paths. Scanned paths preserve symlinks as
+  // written in `@source` directives, but Vite tracks files by their real path.
+  private realpaths = new DefaultMap<string, string>((file) => {
+    try {
+      return realpathSync(file)
+    } catch {
+      return file
+    }
+  })
 
   constructor(
     private id: string,
@@ -523,26 +527,13 @@ class Root {
     return this.scanner?.files ?? []
   }
 
-  private realpath(file: string): string {
-    let real = this.realpaths.get(file)
-    if (real === undefined) {
-      try {
-        real = realpathSync(file)
-      } catch {
-        real = file
-      }
-      this.realpaths.set(file, real)
-    }
-    return real
-  }
-
-  // Whether a changed file is one of the scanned files, accounting for scanned
-  // paths that reach the file through a symlink.
+  // Whether a changed file is one of the scanned files, accounting for
+  // symlinks on either side.
   isScannedFile(file: string, realpath: string | null): boolean {
+    let resolved = realpath ?? file
     for (let scanned of this.scannedFiles) {
-      if (scanned === file) return true
-      if (realpath !== null && scanned === realpath) return true
-      if (this.realpath(scanned) === file) return true
+      if (scanned === file || scanned === resolved) return true
+      if (this.realpaths.get(scanned) === resolved) return true
     }
     return false
   }
@@ -585,6 +576,9 @@ class Root {
     if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
+
+      // Symlinks may have been retargeted since the last full rebuild
+      this.realpaths.clear()
 
       this.addBuildDependency(idToPath(inputPath))
 
@@ -656,25 +650,21 @@ class Root {
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
-      // Watch individual files found via custom `@source` paths. Also watch
-      // the resolved path when it differs, otherwise changes to a file behind
-      // a symlink are never noticed (Vite's watcher ignores `node_modules`,
-      // and change events carry the real path).
+      // Watch individual files found via custom `@source` paths, and their
+      // resolved paths when a symlink is involved
       for (let file of this.scanner.files) {
         addWatchFile(file)
 
-        let real = this.realpath(file)
-        if (real !== file) {
-          addWatchFile(real)
-        }
+        let real = this.realpaths.get(file)
+        if (real !== file) addWatchFile(real)
       }
 
-      // Watch globs found via custom `@source` paths, on the resolved base as
-      // well so files created behind a symlink are noticed too.
+      // Watch globs found via custom `@source` paths, also on the resolved
+      // base when it goes through a symlink
       for (let glob of this.scanner.globs) {
         if (glob.pattern[0] === '!') continue
 
-        for (let base of new Set([glob.base, this.realpath(glob.base)])) {
+        for (let base of new Set([glob.base, this.realpaths.get(glob.base)])) {
           let relative = path.relative(this.base, base)
           if (relative[0] !== '.') {
             relative = './' + relative

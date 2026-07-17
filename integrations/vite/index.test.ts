@@ -1687,8 +1687,7 @@ test(
     })
 
     await retryAssertion(async () => {
-      // Write to the real file, not through the `node_modules` symlink that
-      // the `@source` directive goes through.
+      // Write to the real file, not through the symlink the `@source` goes through
       await fs.write(
         'project-b/index.js',
         js`
