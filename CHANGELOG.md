@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure `@tailwindcss/vite` rebuilds when a `@source` file behind a symlink changes, such as a file in a linked package in a pnpm workspace ([#20347](https://github.com/tailwindlabs/tailwindcss/pull/20347))
 
 ## [4.3.3] - 2026-07-16
 

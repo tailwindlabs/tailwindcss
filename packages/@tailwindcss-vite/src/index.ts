@@ -504,6 +504,12 @@ class Root {
   // assume the file has always changed.
   private buildDependencies = new Map<string, number | null>()
 
+  // Cache of resolved symlinks for scanned paths. Scanned paths preserve
+  // symlinks as written in `@source` directives (e.g. a path through a pnpm
+  // workspace symlink in `node_modules`), but Vite tracks modules and file
+  // change events by their real path.
+  private realpaths = new Map<string, string>()
+
   constructor(
     private id: string,
     private base: string,
@@ -515,6 +521,30 @@ class Root {
 
   get scannedFiles() {
     return this.scanner?.files ?? []
+  }
+
+  private realpath(file: string): string {
+    let real = this.realpaths.get(file)
+    if (real === undefined) {
+      try {
+        real = realpathSync(file)
+      } catch {
+        real = file
+      }
+      this.realpaths.set(file, real)
+    }
+    return real
+  }
+
+  // Whether a changed file is one of the scanned files, accounting for scanned
+  // paths that reach the file through a symlink.
+  isScannedFile(file: string, realpath: string | null): boolean {
+    for (let scanned of this.scannedFiles) {
+      if (scanned === file) return true
+      if (realpath !== null && scanned === realpath) return true
+      if (this.realpath(scanned) === file) return true
+    }
+    return false
   }
 
   // Generate the CSS for the root file. This can return false if the file is
@@ -626,24 +656,35 @@ class Root {
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
-      // Watch individual files found via custom `@source` paths
+      // Watch individual files found via custom `@source` paths. Also watch
+      // the resolved path when it differs, otherwise changes to a file behind
+      // a symlink are never noticed (Vite's watcher ignores `node_modules`,
+      // and change events carry the real path).
       for (let file of this.scanner.files) {
         addWatchFile(file)
+
+        let real = this.realpath(file)
+        if (real !== file) {
+          addWatchFile(real)
+        }
       }
 
-      // Watch globs found via custom `@source` paths
+      // Watch globs found via custom `@source` paths, on the resolved base as
+      // well so files created behind a symlink are noticed too.
       for (let glob of this.scanner.globs) {
         if (glob.pattern[0] === '!') continue
 
-        let relative = path.relative(this.base, glob.base)
-        if (relative[0] !== '.') {
-          relative = './' + relative
-        }
-        // Ensure relative is a posix style path since we will merge it with the
-        // glob.
-        relative = normalizePath(relative)
+        for (let base of new Set([glob.base, this.realpath(glob.base)])) {
+          let relative = path.relative(this.base, base)
+          if (relative[0] !== '.') {
+            relative = './' + relative
+          }
+          // Ensure relative is a posix style path since we will merge it with
+          // the glob.
+          relative = normalizePath(relative)
 
-        addWatchFile(path.posix.join(relative, glob.pattern))
+          addWatchFile(path.posix.join(relative, glob.pattern))
+        }
 
         let root = this.compiler.root
 
@@ -736,10 +777,7 @@ function isScannedFile(
         // for sure that it's being watched by any of the Tailwind CSS roots. It
         // doesn't matter which root it is since it's only used to know whether
         // we should trigger a full reload or not.
-        if (
-          root.scannedFiles.includes(checks.file) ||
-          (checks.realpath && root.scannedFiles.includes(checks.realpath))
-        ) {
+        if (root.isScannedFile(checks.file, checks.realpath)) {
           return true
         }
       }

@@ -1609,3 +1609,96 @@ test(
     })
   },
 )
+
+test(
+  '`@source` files behind a workspace symlink trigger rebuilds when the real file changes',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+          - project-b
+      `,
+      'project-a/package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "project-b": "workspace:*",
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'project-a/vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'project-a/index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div>Hello, world!</div>
+        </body>
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss' source(none);
+        @source '../node_modules/project-b/index.js';
+      `,
+      'project-b/package.json': json`
+        {
+          "name": "project-b",
+          "version": "1.0.0",
+          "exports": "./index.js"
+        }
+      `,
+      'project-b/index.js': js`
+        const className = "content-['project-b/index.js']"
+        export default { className }
+      `,
+    },
+  },
+  async ({ root, spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite dev', {
+      cwd: path.join(root, 'project-a'),
+    })
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`content-['project-b/index.js']`)
+    })
+
+    await retryAssertion(async () => {
+      // Write to the real file, not through the `node_modules` symlink that
+      // the `@source` directive goes through.
+      await fs.write(
+        'project-b/index.js',
+        js`
+          const className = "[.changed_&]:content-['project-b/index.js']"
+          export default { className }
+        `,
+      )
+
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`[.changed_&]:content-['project-b/index.js']`)
+    })
+  },
+)
