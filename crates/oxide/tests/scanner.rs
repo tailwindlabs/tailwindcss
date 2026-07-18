@@ -1277,6 +1277,36 @@ mod scanner {
         assert_eq!(files, vec!["src/foo.html"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/18870
+    #[test]
+    fn it_should_scan_explicit_deep_globs_inside_gitignored_folders() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (
+                    "storage/app/private/cms_content/.gitignore",
+                    "*\n!.gitignore\n",
+                ),
+                (
+                    "storage/app/private/cms_content/some-slug/0.html",
+                    "content-['cms/some-slug/0.html']",
+                ),
+                (
+                    "storage/app/private/cms_content/some-slug/ignored.jsx",
+                    "content-['SHOULD-NOT-EXIST-IN-OUTPUT']",
+                ),
+            ],
+            vec!["@source './storage/app/private/cms_content/**/*.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['cms/some-slug/0.html']"]);
+        assert_eq!(
+            files,
+            vec!["storage/app/private/cms_content/some-slug/0.html"]
+        );
+    }
+
     #[test]
     fn it_should_combine_multiple_restricted_sources_for_the_same_base() {
         let ScanResult {
