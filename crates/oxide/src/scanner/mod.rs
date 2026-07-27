@@ -405,76 +405,85 @@ impl Scanner {
         // folders are symlinked.
         let mut cached_canonical_dirs: FxHashMap<PathBuf, PathBuf> = FxHashMap::default();
 
-        for (path, is_dir, extension, mtime, is_symlink) in all_entries {
-            if is_dir {
-                self.dirs.insert(path);
-            } else {
-                // Deduplicate: parallel walk can visit the same file from multiple threads
-                if !self.files.insert(path.clone()) {
-                    continue;
+        for entry in all_entries {
+            match entry {
+                WalkEntry::Dir(path) => {
+                    self.dirs.insert(path);
                 }
+                WalkEntry::File {
+                    path,
+                    extension,
+                    mtime,
+                    is_symlink,
+                } => {
+                    // Deduplicate: parallel walk can visit the same file from multiple threads
+                    if !self.files.insert(path.clone()) {
+                        continue;
+                    }
 
-                // Track canonicalized paths in addition to potentially symlinked file paths
-                let canonical = if is_symlink {
-                    dunce::canonicalize(&path).ok()
-                } else {
-                    path.parent().and_then(|parent| {
-                        // Perf: cache the canonicalized parent path such that sibling files don't
-                        // have to canonicalize over and over again.
-                        let canonical_parent = cached_canonical_dirs
-                            .entry(parent.to_path_buf())
-                            .or_insert_with(|| {
-                                dunce::canonicalize(parent).unwrap_or_else(|_| parent.to_path_buf())
-                            });
+                    // Track canonicalized paths in addition to potentially symlinked file paths
+                    let canonical = if is_symlink {
+                        dunce::canonicalize(&path).ok()
+                    } else {
+                        path.parent().and_then(|parent| {
+                            // Perf: cache the canonicalized parent path such that sibling files don't
+                            // have to canonicalize over and over again.
+                            let canonical_parent = cached_canonical_dirs
+                                .entry(parent.to_path_buf())
+                                .or_insert_with(|| {
+                                    dunce::canonicalize(parent)
+                                        .unwrap_or_else(|_| parent.to_path_buf())
+                                });
 
-                        if canonical_parent.as_path() != parent {
-                            path.file_name()
-                                .map(|file_name| canonical_parent.join(file_name))
-                        } else {
-                            None
+                            if canonical_parent.as_path() != parent {
+                                path.file_name()
+                                    .map(|file_name| canonical_parent.join(file_name))
+                            } else {
+                                None
+                            }
+                        })
+                    };
+
+                    if let Some(canonical) = canonical {
+                        if canonical != path {
+                            self.files.insert(canonical);
                         }
-                    })
-                };
-
-                if let Some(canonical) = canonical {
-                    if canonical != path {
-                        self.files.insert(canonical);
                     }
-                }
 
-                self.extensions.insert(extension.clone());
+                    self.extensions.insert(extension.clone());
 
-                // On incremental scans, check mtime to skip unchanged files.
-                // On the first scan, track mtimes while still scanning every file.
-                let changed = if self.has_scanned_once {
-                    match mtime {
-                        Some(mtime) => {
-                            let prev = self.mtimes.insert(path.clone(), mtime);
-                            prev.is_none_or(|prev| prev != mtime)
+                    // On incremental scans, check mtime to skip unchanged files.
+                    // On the first scan, track mtimes while still scanning every file.
+                    let changed = if self.has_scanned_once {
+                        match mtime {
+                            Some(mtime) => {
+                                let prev = self.mtimes.insert(path.clone(), mtime);
+                                prev.is_none_or(|prev| prev != mtime)
+                            }
+                            None => true,
                         }
-                        None => true,
+                    } else {
+                        if let Some(mtime) = mtime {
+                            self.mtimes.insert(path.clone(), mtime);
+                        }
+
+                        true
+                    };
+
+                    if !changed {
+                        continue;
                     }
-                } else {
-                    if let Some(mtime) = mtime {
-                        self.mtimes.insert(path.clone(), mtime);
+
+                    if let Ok(file) = path.clone().into_os_string().into_string() {
+                        changed_files.push(file);
                     }
 
-                    true
-                };
-
-                if !changed {
-                    continue;
-                }
-
-                if let Ok(file) = path.clone().into_os_string().into_string() {
-                    changed_files.push(file);
-                }
-
-                match extension.as_str() {
-                    // Special handing for CSS files, we don't want to extract candidates from
-                    // these files, but we do want to extract used CSS variables.
-                    "css" => css_files.push(path),
-                    _ => content_paths.push((path, extension)),
+                    match extension.as_str() {
+                        // Special handing for CSS files, we don't want to extract candidates from
+                        // these files, but we do want to extract used CSS variables.
+                        "css" => css_files.push(path),
+                        _ => content_paths.push((path, extension)),
+                    }
                 }
             }
         }
@@ -608,33 +617,53 @@ where
         .collect()
 }
 
-type WalkEntry = (PathBuf, bool, String, Option<SystemTime>, bool);
+#[derive(Debug)]
+enum WalkEntry {
+    Dir(PathBuf),
+    File {
+        path: PathBuf,
+        extension: String,
+        mtime: Option<SystemTime>,
 
-/// Walk the file system synchronously. Used for the initial build where the overhead of spawning
-/// parallel walker threads is not worth it.
-#[tracing::instrument(skip_all)]
-fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
-    let mut entries = vec![];
+        /// Whether the path itself is a symlink
+        is_symlink: bool,
+    },
+}
 
-    for entry in walker.build().filter_map(Result::ok) {
+impl From<ignore::DirEntry> for WalkEntry {
+    fn from(entry: ignore::DirEntry) -> Self {
         let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
         let is_symlink = entry.path_is_symlink();
         let path = entry.into_path();
 
         if is_dir {
-            entries.push((path, true, String::new(), None, is_symlink));
+            WalkEntry::Dir(path)
         } else {
-            let ext = path
+            let extension = path
                 .extension()
                 .and_then(|x| x.to_str())
                 .unwrap_or_default()
                 .to_owned();
             let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
-            entries.push((path, false, ext, mtime, is_symlink));
+            WalkEntry::File {
+                path,
+                extension,
+                mtime,
+                is_symlink,
+            }
         }
     }
+}
 
-    entries
+/// Walk the file system synchronously. Used for the initial build where the overhead of spawning
+/// parallel walker threads is not worth it.
+#[tracing::instrument(skip_all)]
+fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
+    walker
+        .build()
+        .filter_map(Result::ok)
+        .map(WalkEntry::from)
+        .collect()
 }
 
 /// Walk the file system in parallel. Used in watch mode where the parallel walker overhead is
@@ -667,22 +696,7 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
                 return ignore::WalkState::Continue;
             };
 
-            let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
-            let is_symlink = entry.path_is_symlink();
-            let path = entry.into_path();
-
-            if is_dir {
-                buf.local
-                    .push((path, true, String::new(), None, is_symlink));
-            } else {
-                let ext = path
-                    .extension()
-                    .and_then(|x| x.to_str())
-                    .unwrap_or_default()
-                    .to_owned();
-                let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
-                buf.local.push((path, false, ext, mtime, is_symlink));
-            }
+            buf.local.push(WalkEntry::from(entry));
 
             if buf.local.len() >= 256 {
                 buf.shared.lock().unwrap().append(&mut buf.local);
