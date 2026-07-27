@@ -1297,22 +1297,22 @@ test('utilities must be prefixed', async () => {
   // Prefixed utilities are generated
   expect(await run(['tw:underline', 'tw:hover:line-through', 'tw:custom'], input, options))
     .toMatchInlineSnapshot(`
-    "
-    .tw\\:custom {
-      color: red;
-    }
-
-    .tw\\:underline {
-      text-decoration-line: underline;
-    }
-
-    @media (hover: hover) {
-      .tw\\:hover\\:line-through:hover {
-        text-decoration-line: line-through;
+      "
+      .tw\\:custom {
+        color: red;
       }
-    }
-    "
-  `)
+
+      .tw\\:underline {
+        text-decoration-line: underline;
+      }
+
+      @media (hover: hover) {
+        .tw\\:hover\\:line-through:hover {
+          text-decoration-line: line-through;
+        }
+      }
+      "
+    `)
 
   // Non-prefixed utilities are ignored
   expect(await run(['underline', 'hover:line-through', 'custom'], input, options)).toEqual('')
@@ -1534,18 +1534,18 @@ test('blocklisted candidates are not generated', async () => {
   // underline will as will md:bg-white
   expect(await run(['underline', 'bg-white', 'md:bg-white'], input, options))
     .toMatchInlineSnapshot(`
-    "
-    .underline {
-      text-decoration-line: underline;
-    }
-
-    @media (min-width: 48rem) {
-      .md\\:bg-white {
-        background-color: var(--color-white, #fff);
+      "
+      .underline {
+        text-decoration-line: underline;
       }
-    }
-    "
-  `)
+
+      @media (min-width: 48rem) {
+        .md\\:bg-white {
+          background-color: var(--color-white, #fff);
+        }
+      }
+      "
+    `)
 })
 
 test('blocklisted candidates cannot be used with `@apply`', async () => {

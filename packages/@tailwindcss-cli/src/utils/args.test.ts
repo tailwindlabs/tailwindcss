@@ -153,3 +153,34 @@ it('should be possible to provide multiple types, and convert the value to that 
     }
   `)
 })
+
+it('should be possible to provide boolean or number arguments', () => {
+  let options = {
+    '--poll': {
+      type: 'boolean | number',
+      description: 'Use polling instead of filesystem events when watching',
+      default: false,
+    },
+  } satisfies Arg
+
+  expect(args(options, ['--poll'])).toMatchInlineSnapshot(`
+    {
+      "--poll": true,
+      "_": [],
+    }
+  `)
+
+  expect(args(options, ['--poll=50'])).toMatchInlineSnapshot(`
+    {
+      "--poll": 50,
+      "_": [],
+    }
+  `)
+
+  expect(args(options, ['--poll=foo'])).toMatchInlineSnapshot(`
+    {
+      "--poll": undefined,
+      "_": [],
+    }
+  `)
+})

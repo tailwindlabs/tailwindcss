@@ -11,6 +11,7 @@ import {
   type Rule,
   type StyleRule,
 } from './ast'
+import * as AttributeSelectorParser from './attribute-selector-parser'
 import { type Variant } from './candidate'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
@@ -845,11 +846,15 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [
-        styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
-      ]
+      let selector = `[aria-${quoteAttributeValue(variant.value.value)}]`
+      let parsed = AttributeSelectorParser.parse(selector)
+      if (parsed === null) return null
+      ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
     } else {
-      ruleNode.nodes = [styleRule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
+      let selector = `[aria-${variant.value.value}="true"]`
+      let parsed = AttributeSelectorParser.parse(selector)
+      if (parsed === null) return null
+      ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
     }
   })
 
@@ -868,9 +873,11 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [
-      styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
-    ]
+    let selector = `[data-${quoteAttributeValue(variant.value.value)}]`
+    let parsed = AttributeSelectorParser.parse(selector)
+    if (parsed === null) return null
+
+    ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -1295,7 +1302,11 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
         }
       }
 
-      nodes.push(node)
+      if (node.selector === '&') {
+        nodes.push(...node.nodes)
+      } else {
+        nodes.push(node)
+      }
     }
 
     // Update the variant at-rule node, to be the `&` rule node

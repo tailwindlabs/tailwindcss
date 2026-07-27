@@ -2098,6 +2098,15 @@ test('data', async () => {
       'data-[potato=salad]/foo:flex',
     ]),
   ).toEqual('')
+
+  // Non-ASCII code points are valid in attribute names
+  expect(await run(['data-[état]:flex', 'aria-[état]:flex'])).toMatchInlineSnapshot(`
+    "
+    .aria-\\[état\\]\\:flex[aria-état], .data-\\[état\\]\\:flex[data-état] {
+      display: flex;
+    }
+    "
+  `)
 })
 
 test('portrait', async () => {

@@ -1,5 +1,5 @@
 import { stripVTControlCharacters } from 'node:util'
-import { candidate, css, html, json, test, ts } from '../utils'
+import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
 
 test(
   'production build',
@@ -246,5 +246,135 @@ test(
         `"[@tailwindcss/vite:generate:build] Cannot apply unknown utility class \`text-red-500\`. Are you using CSS modules or similar and missing \`@reference\`? https://tailwindcss.com/docs/functions-and-directives#reference-directive"`,
       )
     }
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/20320
+test(
+  'editing a scanned `.vue` file that is not loaded as a module does not trigger a full reload',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "vue": "^3.4.37",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "@vitejs/plugin-vue": "^6",
+            "@tailwindcss/vite": "workspace:^",
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import fs from 'node:fs'
+        import path from 'node:path'
+        import { defineConfig } from 'vite'
+        import vue from '@vitejs/plugin-vue'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [
+            vue(),
+            tailwindcss(),
+            {
+              // Log update and full-reload HMR payloads to a file so the
+              // test can assert on them. Custom events are not logged
+              // because \`@vitejs/plugin-vue\` sends a \`file-changed\` event
+              // for every file change, including changes to the log file
+              // itself, which would cause an infinite feedback loop.
+              name: 'hmr-wiretap',
+              configureServer(server) {
+                let logFile = path.resolve('hmr.log')
+                fs.writeFileSync(logFile, '')
+                for (let environment of Object.values(server.environments)) {
+                  let send = environment.hot.send.bind(environment.hot)
+                  environment.hot.send = (payload) => {
+                    if (payload.type === 'update' || payload.type === 'full-reload') {
+                      fs.appendFileSync(logFile, JSON.stringify(payload) + '\\n')
+                    }
+                    return send(payload)
+                  }
+                }
+              },
+            },
+          ],
+        })
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <div id="app"></div>
+            <script type="module" src="./src/main.ts"></script>
+          </body>
+        </html>
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+      'src/main.ts': ts`
+        import { createApp } from 'vue'
+        import App from './App.vue'
+
+        createApp(App).mount('#app')
+      `,
+      'src/App.vue': html`
+        <template>
+          <div class="content-['src/App.vue']">Hello Vue!</div>
+        </template>
+      `,
+
+      // This file is scanned by Tailwind but never imported, so it is not
+      // part of the loaded module graph (e.g. a lazy route that hasn't been
+      // visited yet)
+      'src/LazyRoute.vue': html`
+        <template>
+          <div class="content-['src/LazyRoute.vue']">Lazy</div>
+        </template>
+      `,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`content-['src/App.vue']`)
+      expect(styles).toContain(candidate`content-['src/LazyRoute.vue']`)
+    })
+
+    // Load `main.ts` and `App.vue` as real modules, like a browser visiting
+    // the page would
+    await fetch(`${url}/src/main.ts`)
+    await fetch(`${url}/src/App.vue`)
+
+    // Changing the scanned but unloaded `.vue` file should not trigger a
+    // full reload, but new classes should still apply
+    await fs.write(
+      'src/LazyRoute.vue',
+      html`
+        <template>
+          <div class="content-['updated:src/LazyRoute.vue']">Lazy</div>
+        </template>
+      `,
+    )
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`content-['updated:src/LazyRoute.vue']`)
+    })
+    expect(await fs.read('hmr.log')).not.toContain('full-reload')
   },
 )

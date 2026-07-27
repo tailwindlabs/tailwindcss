@@ -213,11 +213,9 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
       text-decoration-line: underline;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     ",
@@ -244,11 +242,9 @@ test('Utilities, when marked as important, show as important in intellisense', a
       text-decoration-line: underline !important;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     ",
@@ -361,48 +357,48 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 
   expect(design.candidatesToCss(['custom-1-red', 'custom-1-green', 'custom-1-unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-1-red {
-      color: #ff0000;
-    }
-    ",
-      ".custom-1-green {
-      color: #ff0000;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-1-red {
+        color: #ff0000;
+      }
+      ",
+        ".custom-1-green {
+        color: #ff0000;
+      }
+      ",
+        null,
+      ]
+    `)
 
   expect(design.candidatesToCss(['custom-2-red', 'custom-2-green', 'custom-2-unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-2-red {
-      color: #ff0000 / 0%;
-    }
-    ",
-      ".custom-2-green {
-      color: #ff0000 / 0%;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-2-red {
+        color: #ff0000 / 0%;
+      }
+      ",
+        ".custom-2-green {
+        color: #ff0000 / 0%;
+      }
+      ",
+        null,
+      ]
+    `)
 
   expect(design.candidatesToCss(['custom-2-red/50', 'custom-2-red/75', 'custom-2-red/unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-2-red\\/50 {
-      color: #ff0000 / 50%;
-    }
-    ",
-      ".custom-2-red\\/75 {
-      color: #ff0000 / 75%;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-2-red\\/50 {
+        color: #ff0000 / 50%;
+      }
+      ",
+        ".custom-2-red\\/75 {
+        color: #ff0000 / 75%;
+      }
+      ",
+        null,
+      ]
+    `)
 
   let classMap = new Map(design.getClassList())
   let classNames = Array.from(classMap.keys())

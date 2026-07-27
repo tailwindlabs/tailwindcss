@@ -635,6 +635,46 @@ describe('theme', async () => {
     })
   })
 
+  test('theme() resolves the DEFAULT value when a bare CSS theme key shares a prefix with a sibling key', async () => {
+    expect(
+      await run(
+        ['example-foo', 'example-foo-bar'],
+        css`
+          @tailwind utilities;
+          @theme {
+            --color-foo: red;
+            --color-foo-bar: blue;
+          }
+          @plugin "my-plugin";
+        `,
+        {
+          loadModule: async (_id, base) => {
+            return {
+              path: '',
+              base,
+              module: plugin(function ({ addUtilities, theme }) {
+                addUtilities({
+                  '.example-foo': { color: theme('colors.foo') },
+                  '.example-foo-bar': { color: theme('colors.foo-bar') },
+                })
+              }),
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .example-foo {
+        color: red;
+      }
+
+      .example-foo-bar {
+        color: #00f;
+      }
+      "
+    `)
+  })
+
   test('all necessary theme keys support bare values', async () => {
     expect(
       await run(
@@ -3288,7 +3328,42 @@ describe('addUtilities()', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .j.j, .j.j, .a .b:hover .c, .a .b:hover .c, .a .b:hover .c, .d > *, .e .bar:not(.f):has(.g), .e .bar:not(.f):has(.g), .h ~ .i, .h ~ .i {
+        .j.j, .a .b:hover .c, .d > *, .e .bar:not(.f):has(.g), .h ~ .i {
+          color: red;
+        }
+      }
+      "
+    `)
+  })
+
+  test('does not register class names inside `:nth-child(… of …)` as utilities', async () => {
+    expect(
+      await run(
+        ['foo', 'mark'],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          async loadModule(_id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ addUtilities }: PluginAPI) => {
+                addUtilities({
+                  '.foo:nth-child(2 of .mark)': { color: 'red' },
+                })
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
+        .foo:nth-child(2 of .mark) {
           color: red;
         }
       }

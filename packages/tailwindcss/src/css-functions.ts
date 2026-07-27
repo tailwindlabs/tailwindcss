@@ -70,11 +70,13 @@ function spacing(
   // - We can assume that the `--spacing` value is not set to a `0`-like value.
   //   Otherwise `p-<anything>` would calculate as `0` which wouldn't make sense.
   //
-  // - That means that a value of `0` can be replaced by `0`
+  // - That means that a value of `0` can be replaced by `0px`. It's important
+  //   to keep the unit so the value stays a `<length>`, e.g. when assigned to
+  //   a custom property and later used inside `calc(…)`.
   // - That means that a value of `1` can be replaced by `multiplier`
   let valueDimension = dimensions.get(value)
   if (valueDimension) {
-    if (valueDimension[0] === 0) return '0'
+    if (valueDimension[0] === 0) return '0px'
     if (valueDimension[0] === 1) return multiplier
   }
 

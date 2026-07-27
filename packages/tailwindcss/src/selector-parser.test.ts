@@ -326,14 +326,39 @@ describe('parse', () => {
   })
 
   it('parses :nth-child()', () => {
+    // The `An+B` part is not a selector, it stays an opaque value
     expect(parse(':nth-child(n+1)')).toEqual([
       {
         kind: 'function',
         value: ':nth-child',
+        nodes: [{ kind: 'value', value: 'n+1' }],
+      },
+    ])
+
+    // The selector list after `of` is parsed as a selector
+    expect(parse(':nth-child(2 of &)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
         nodes: [
+          { kind: 'value', value: '2 of ' },
+          { kind: 'selector', value: '&' },
+        ],
+      },
+    ])
+
+    expect(parse(':nth-child(2n + 1 of .foo, .bar)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          { kind: 'value', value: '2n + 1 of ' },
           {
-            kind: 'value',
-            value: 'n+1',
+            kind: 'list',
+            nodes: [
+              { kind: 'selector', value: '.foo' },
+              { kind: 'selector', value: '.bar' },
+            ],
           },
         ],
       },
@@ -445,13 +470,49 @@ describe('parse', () => {
     ])
   })
 
-  it('parses universal selector after an attribute selector', () => {
+  it('parses the universal selector after an attribute selector', () => {
     expect(parse('[data-foo]*')).toEqual([
       {
         kind: 'compound',
         nodes: [
           { kind: 'selector', value: '[data-foo]' },
           { kind: 'selector', value: '*' },
+        ],
+      },
+    ])
+  })
+
+  it('parses another attribute selector after an attribute selector', () => {
+    expect(parse('[data-foo][data-bar]')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '[data-foo]' },
+          { kind: 'selector', value: '[data-bar]' },
+        ],
+      },
+    ])
+  })
+
+  it('parses a type selector before an attribute selector', () => {
+    expect(parse('div[data-foo]')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: 'div' },
+          { kind: 'selector', value: '[data-foo]' },
+        ],
+      },
+    ])
+  })
+
+  it('parses a type selector after an attribute selector', () => {
+    expect(parse('[data-foo]div')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '[data-foo]' },
+          { kind: 'selector', value: 'div' },
         ],
       },
     ])
@@ -529,7 +590,11 @@ describe('toCss', () => {
   })
 
   it('should print :nth-child()', () => {
+    // The `An+B` part is printed verbatim, whitespace in the selector list
+    // after `of` is normalized
     expect(toCss(parse(':nth-child(n+1)'))).toBe(':nth-child(n+1)')
+    expect(toCss(parse(':nth-child(+2)'))).toBe(':nth-child(+2)')
+    expect(toCss(parse(':nth-child(2n + 1 of .foo,.bar)'))).toBe(':nth-child(2n + 1 of .foo, .bar)')
   })
 
   it('should pretty print a complex selector', () => {

@@ -376,6 +376,40 @@ describe.each([
   )
 
   test(
+    'watch mode with polling',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'src/index.css': css`@import 'tailwindcss/utilities';`,
+        'src/index.html': html`
+          <div class="underline"></div>
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --watch --poll=50`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      await fs.write('src/index.html', html`
+          <div class="underline flex"></div>
+        `)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  test(
     "watch mode with unknown @source paths shouldn't crash on Windows",
     {
       fs: {
@@ -639,6 +673,15 @@ describe.each([
     'git ignore files outside of a repo are not considered',
     {
       fs: {
+        // Make the test root a pnpm workspace that includes `home/project` so
+        // the install below resolves the transitive dependency overrides that
+        // the test harness injects into this `pnpm-workspace.yaml`.
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - home/project
+        `,
+
         // Ignore everything in the "home" directory
         'home/.gitignore': '*',
 
@@ -676,7 +719,7 @@ describe.each([
       installDependencies: false,
     },
     async ({ fs, root, exec }) => {
-      await exec(`pnpm install --ignore-workspace`, {
+      await exec(`pnpm install`, {
         cwd: path.join(root, 'home/project'),
       })
 
@@ -2788,8 +2831,8 @@ test(
       @layer theme, base, components, utilities;
       @layer theme {
         :root, :host {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
+          --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+          sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
           --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
           monospace;
           --color-red-500: oklch(63.7% 0.237 25.331);
@@ -2808,7 +2851,7 @@ test(
           line-height: 1.5;
           -webkit-text-size-adjust: 100%;
           tab-size: 4;
-          font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+          font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
           font-feature-settings: var(--default-font-feature-settings, normal);
           font-variation-settings: var(--default-font-variation-settings, normal);
           -webkit-tap-highlight-color: transparent;
@@ -2860,7 +2903,7 @@ test(
           border-color: inherit;
           border-collapse: collapse;
         }
-        :-moz-focusring {
+        :-moz-focusring:where(:not(iframe)) {
           outline: auto;
         }
         progress {

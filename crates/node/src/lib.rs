@@ -166,6 +166,11 @@ impl Scanner {
   }
 
   #[napi(getter)]
+  pub fn scanned_files(&self) -> Vec<String> {
+    self.scanner.get_scanned_files()
+  }
+
+  #[napi(getter)]
   pub fn globs(&mut self) -> Vec<GlobEntry> {
     self
       .scanner

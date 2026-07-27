@@ -78,10 +78,11 @@ pub struct Scanner {
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
 
-    /// Track mtimes for files so re-scans can skip unchanged files.
-    /// Only populated after the first scan completes (to avoid unnecessary
-    /// metadata calls on initial build).
+    /// Track mtimes for files so incremental scans can skip unchanged files.
     mtimes: FxHashMap<PathBuf, SystemTime>,
+
+    /// Files that were scanned during the last `scan()` call.
+    scanned_files: Vec<String>,
 
     /// Whether we've completed at least one full scan. When false, we skip
     /// mtime tracking entirely so the initial build stays fast.
@@ -122,9 +123,10 @@ impl Scanner {
     pub fn scan(&mut self) -> Vec<String> {
         self.sources_scanned = false;
 
-        let (scanned_blobs, css_files) = self.discover_sources();
+        let (scanned_blobs, css_files, files) = self.discover_sources();
 
         self.extract_candidates(scanned_blobs, css_files);
+        self.scanned_files = files;
 
         // Return all candidates sorted
         let mut result = self.candidates.iter().cloned().collect::<Vec<_>>();
@@ -257,6 +259,11 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
+    pub fn get_scanned_files(&self) -> Vec<String> {
+        self.scanned_files.clone()
+    }
+
+    #[tracing::instrument(skip_all)]
     pub fn get_globs(&mut self) -> Vec<GlobEntry> {
         if let Some(globs) = &self.globs {
             return globs.clone();
@@ -353,14 +360,14 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>) {
+    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>, Vec<String>) {
         if self.sources_scanned {
-            return (vec![], vec![]);
+            return (vec![], vec![], vec![]);
         }
         self.sources_scanned = true;
 
         let Some(walker) = &mut self.walker else {
-            return (vec![], vec![]);
+            return (vec![], vec![], vec![]);
         };
 
         // Use synchronous walk for the initial build (lower overhead) and parallel
@@ -372,7 +379,8 @@ impl Scanner {
         };
 
         let mut css_files: Vec<PathBuf> = vec![];
-        let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
+        let mut content_paths: Vec<(PathBuf, String)> = vec![];
+        let mut changed_files = vec![];
 
         // Fresh state
         self.files.clear();
@@ -380,7 +388,7 @@ impl Scanner {
         self.extensions.clear();
         self.globs = None;
 
-        for (path, is_dir, extension) in all_entries {
+        for (path, is_dir, extension, mtime) in all_entries {
             if is_dir {
                 self.dirs.insert(path);
             } else {
@@ -390,13 +398,10 @@ impl Scanner {
                 }
                 self.extensions.insert(extension.clone());
 
-                // On re-scans, check mtime to skip unchanged files.
-                // On the first scan we skip this entirely to avoid extra
-                // metadata syscalls.
+                // On incremental scans, check mtime to skip unchanged files.
+                // On the first scan, track mtimes while still scanning every file.
                 let changed = if self.has_scanned_once {
-                    let current_mtime = path.metadata().ok().and_then(|m| m.modified().ok());
-
-                    match current_mtime {
+                    match mtime {
                         Some(mtime) => {
                             let prev = self.mtimes.insert(path.clone(), mtime);
                             prev.is_none_or(|prev| prev != mtime)
@@ -404,11 +409,19 @@ impl Scanner {
                         None => true,
                     }
                 } else {
+                    if let Some(mtime) = mtime {
+                        self.mtimes.insert(path.clone(), mtime);
+                    }
+
                     true
                 };
 
                 if !changed {
                     continue;
+                }
+
+                if let Ok(file) = path.clone().into_os_string().into_string() {
+                    changed_files.push(file);
                 }
 
                 match extension.as_str() {
@@ -442,7 +455,9 @@ impl Scanner {
             self.has_scanned_once = true;
         }
 
-        (scanned_blobs, css_files)
+        changed_files.par_sort_unstable();
+
+        (scanned_blobs, css_files, changed_files)
     }
 }
 
@@ -547,27 +562,28 @@ where
         .collect()
 }
 
-type WalkEntry = (PathBuf, bool, String);
+type WalkEntry = (PathBuf, bool, String, Option<SystemTime>);
 
 /// Walk the file system synchronously. Used for the initial build where the overhead of spawning
 /// parallel walker threads is not worth it.
 #[tracing::instrument(skip_all)]
 fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
-    let mut entries = Vec::new();
+    let mut entries = vec![];
 
     for entry in walker.build().filter_map(Result::ok) {
         let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
         let path = entry.into_path();
 
         if is_dir {
-            entries.push((path, true, String::new()));
+            entries.push((path, true, String::new(), None));
         } else {
             let ext = path
                 .extension()
                 .and_then(|x| x.to_str())
                 .unwrap_or_default()
                 .to_owned();
-            entries.push((path, false, ext));
+            let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
+            entries.push((path, false, ext, mtime));
         }
     }
 
@@ -591,7 +607,7 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
         }
     }
 
-    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
+    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(vec![]));
 
     walker.build_parallel().run(|| {
         let mut buf = FlushOnDrop {
@@ -608,14 +624,15 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
             let path = entry.into_path();
 
             if is_dir {
-                buf.local.push((path, true, String::new()));
+                buf.local.push((path, true, String::new(), None));
             } else {
                 let ext = path
                     .extension()
                     .and_then(|x| x.to_str())
                     .unwrap_or_default()
                     .to_owned();
-                buf.local.push((path, false, ext));
+                let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
+                buf.local.push((path, false, ext, mtime));
             }
 
             if buf.local.len() >= 256 {

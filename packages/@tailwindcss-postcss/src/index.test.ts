@@ -20,6 +20,16 @@ function inputCssFilePath() {
 
 const css = dedent
 
+async function run(plugin: any, from: string, input: string): Promise<string> {
+  let ast = postcss.parse(input)
+  for (let runner of plugin.plugins) {
+    if (runner.Once) {
+      await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
+    }
+  }
+  return ast.toString()
+}
+
 test("`@import 'tailwindcss'` is replaced with the generated CSS", async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
@@ -422,17 +432,7 @@ describe('concurrent builds', () => {
 
     let plugin = tailwindcss({ optimize: { minify: false } })
 
-    async function run(input: string): Promise<string> {
-      let ast = postcss.parse(input)
-      for (let runner of (plugin as any).plugins) {
-        if (runner.Once) {
-          await runner.Once(ast, { postcss, result: { opts: { from }, messages: [] } })
-        }
-      }
-      return ast.toString()
-    }
-
-    let result = await run(input)
+    let result = await run(plugin, from, input)
 
     expect(result).toContain('.underline')
 
@@ -448,12 +448,49 @@ describe('concurrent builds', () => {
       `,
     )
 
-    let promise1 = run(input)
-    let promise2 = run(input)
+    let promise1 = run(plugin, from, input)
+    let promise2 = run(plugin, from, input)
 
     expect(await promise1).toContain('.red')
     expect(await promise2).toContain('.red')
   })
+})
+
+test('rebuilds when the input CSS changes even if the `from` file on disk did not', async () => {
+  let dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
+  // The `from` file exists on disk with a stable mtime. The input CSS is handed
+  // to the plugin directly (as a preprocessor like Sass would produce it), so it
+  // can change without `from`'s mtime ever changing.
+  await writeFile(path.join(dir, 'index.css'), '')
+
+  let from = path.join(dir, 'index.css')
+  let plugin = tailwindcss({ base: dir, optimize: { minify: false } })
+
+  let first = await run(
+    plugin,
+    from,
+    css`
+      @tailwind utilities;
+      .first {
+        @apply underline;
+      }
+    `,
+  )
+  let second = await run(
+    plugin,
+    from,
+    css`
+      @tailwind utilities;
+      .second {
+        @apply line-through;
+      }
+    `,
+  )
+
+  expect(first).toContain('.first')
+  expect(second).toContain('.second')
+
+  await rm(dir, { recursive: true, force: true })
 })
 
 test('does not register the input file as a dependency, even if it is passed in as relative path', async () => {

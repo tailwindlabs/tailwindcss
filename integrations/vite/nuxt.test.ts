@@ -8,6 +8,7 @@ import {
   retryAssertion,
   test,
   ts,
+  yaml,
 } from '../utils'
 
 const SETUP = {
@@ -21,13 +22,13 @@ const SETUP = {
           "nitropack": "2.11.0",
           "tailwindcss": "workspace:^",
           "vue": "latest"
-        },
-        "pnpm": {
-          "overrides": {
-            "nuxi": "3.28.0"
-          }
         }
       }
+    `,
+    'pnpm-workspace.yaml': yaml`
+      #
+      overrides:
+        nuxi: 3.28.0
     `,
     'nuxt.config.ts': ts`
       import tailwindcss from '@tailwindcss/vite'

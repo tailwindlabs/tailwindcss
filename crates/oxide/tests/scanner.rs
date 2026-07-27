@@ -106,6 +106,18 @@ mod scanner {
         globs
     }
 
+    fn normalize_files(files: Vec<String>, base: &Path) -> Vec<String> {
+        let base_dir =
+            format!("{}{}", dunce::canonicalize(base).unwrap().display(), "/").replace('\\', "/");
+
+        let mut files = files
+            .iter()
+            .map(|file| file.replace('\\', "/").replace(&base_dir, ""))
+            .collect::<Vec<_>>();
+        files.sort();
+        files
+    }
+
     fn scan_with_globs(
         paths_with_content: &[(&str, &str)],
         source_directives: Vec<&str>,
@@ -1046,6 +1058,53 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_track_files_scanned_by_the_last_scan() {
+        let dir = tempdir().unwrap().into_path();
+
+        let _ = Command::new("git").arg("init").current_dir(&dir).output();
+
+        create_files_in(
+            &dir,
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/keep.html", "content-['src/keep.html']"),
+            ],
+        );
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source '**/*'",
+        )]);
+
+        assert_eq!(
+            scanner.scan(),
+            vec!["content-['src/index.html']", "content-['src/keep.html']"]
+        );
+
+        assert_eq!(
+            scanner.scan(),
+            vec!["content-['src/index.html']", "content-['src/keep.html']"]
+        );
+        assert_eq!(scanner.get_scanned_files(), Vec::<String>::new());
+
+        sleep(Duration::from_millis(10));
+        fs::write(dir.join("src/index.html"), "content-['src/changed.html']").unwrap();
+
+        assert_eq!(
+            scanner.scan(),
+            vec![
+                "content-['src/changed.html']",
+                "content-['src/index.html']",
+                "content-['src/keep.html']",
+            ]
+        );
+        assert_eq!(
+            normalize_files(scanner.get_scanned_files(), &dir),
+            vec!["src/index.html"]
+        );
+    }
+
+    #[test]
     fn it_should_ignore_negated_custom_sources() {
         let ScanResult {
             candidates,
@@ -1236,6 +1295,67 @@ mod scanner {
             vec!["content-['src/bar.html']", "content-['src/foo.html']"]
         );
         assert_eq!(files, vec!["src/bar.html", "src/foo.html"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20333
+    #[test]
+    fn it_should_combine_nested_and_root_restricted_sources() {
+        // The restriction (`*`) added for the root-level file must not prevent walking into the
+        // `nested` folder that another explicit source points into. At the same time, relaxing
+        // that restriction to `/*` must not accidentally open up sibling folders (`ignore-me`)
+        // or files that no explicit source points at.
+        let paths_with_content = &[
+            ("nested/component.html", "content-['nested/component.html']"),
+            ("nested/ignore-me.html", "content-['nested/ignore-me.html']"),
+            ("ignore-me/component.html", "content-['ignore-me']"),
+            ("component-sources.classes.txt", "content-['classes.txt']"),
+            ("ignore-me.txt", "content-['ignore-me.txt']"),
+        ];
+
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            paths_with_content,
+            vec![
+                "@source './nested/component.html'",
+                "@source './component-sources.classes.txt'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['classes.txt']",
+                "content-['nested/component.html']"
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["component-sources.classes.txt", "nested/component.html"]
+        );
+
+        // Same setup, but with the root-level source declared first
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            paths_with_content,
+            vec![
+                "@source './component-sources.classes.txt'",
+                "@source './nested/component.html'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['classes.txt']",
+                "content-['nested/component.html']"
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["component-sources.classes.txt", "nested/component.html"]
+        );
     }
 
     #[test]

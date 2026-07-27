@@ -100,6 +100,23 @@ export function createThemeFn(
         return [base, extra]
       }
 
+      // If `--color-foo` and `--color-foo-bar` are both defined, `colors.foo`
+      // produces a synthetic object:
+      //
+      // ```ts
+      // { DEFAULT: 'red', bar: 'blue', __CSS_VALUES__: { DEFAULT: 0, bar: 0 } }
+      // ```
+      //
+      // Prefer `DEFAULT` instead of exposing the object to plugin code.
+      if (
+        cssValue !== null &&
+        typeof cssValue === 'object' &&
+        !Array.isArray(cssValue) &&
+        'DEFAULT' in cssValue
+      ) {
+        return cssValue.DEFAULT
+      }
+
       // Values from CSS take precedence over values from the config
       return cssValue ?? configValue
     })()

@@ -310,7 +310,14 @@ export function buildPluginApi({
             return
           }
 
-          if (node.kind === 'function' && node.value === ':not') {
+          if (
+            node.kind === 'function' &&
+            (node.value === ':not' ||
+              // A class inside `:nth-child(… of <selector>)` is part of the
+              // condition, not a utility being defined.
+              node.value === ':nth-child' ||
+              node.value === ':nth-last-child')
+          ) {
             return WalkAction.Skip
           }
         })

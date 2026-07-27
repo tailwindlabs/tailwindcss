@@ -1,4 +1,3 @@
-import watcher from '@parcel/watcher'
 import {
   compile,
   env,
@@ -21,11 +20,13 @@ import {
   highlight,
   println,
   relative,
+  wordWrap,
 } from '../../utils/renderer'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
 const DEBUG = env.DEBUG
+const DEFAULT_POLL_INTERVAL_MS = 250
 
 export function options() {
   return {
@@ -46,6 +47,12 @@ export function options() {
         'Watch for changes and rebuild as needed, and use `always` to keep watching when stdin is closed',
       alias: '-w',
       values: ['always'],
+    },
+    '--poll': {
+      type: 'boolean | number',
+      description: 'Use polling instead of filesystem events when watching',
+      default: false,
+      values: ['ms'],
     },
     '--minify': {
       type: 'boolean',
@@ -73,17 +80,44 @@ export function options() {
   } satisfies Arg
 }
 
+function formatError(error: unknown): string {
+  let seen = new Set() // Track seen errors to prevent circular errors
+  function render(err: unknown, depth: number): string[] {
+    let indent = '  '.repeat(depth)
+    let width = (process.stderr.columns ?? Infinity) - 2 * (depth + 1)
+
+    let output = [
+      `${indent}${red(depth === 0 ? 'Error:' : 'Caused by:')}`,
+      `${indent}${dim('\u250C')}`,
+    ]
+
+    for (let line of `${err}`.split('\n')) {
+      let wrapped = wordWrap(line, width)
+      if (wrapped.length === 0) wrapped = ['']
+      for (let chunk of wrapped) {
+        output.push(`${indent}${dim('\u2502')} ${chunk}`)
+      }
+    }
+
+    output.push(`${indent}${dim('\u2514')}`)
+
+    if (typeof err === 'object' && err !== null && 'cause' in err && err.cause != null) {
+      if (!seen.add(err).has(err.cause)) {
+        output.push(...render(err.cause, depth + 1))
+      }
+    }
+
+    return output
+  }
+
+  return render(error, 0).join('\n')
+}
+
 async function handleError<T>(fn: () => T): Promise<T> {
   try {
     return await fn()
   } catch (err) {
-    eprintln(
-      [red('Error:'), dim('\u250C')]
-        .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
-        .concat(dim('\u2514'))
-        .join('\n'),
-    )
-
+    eprintln(formatError(err))
     process.exit(1)
   }
 }
@@ -129,7 +163,17 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // If the user passes `{bin} build --map -` then this likely means they want to output the map inline
   // this is the default behavior of `{bin build} --map` to inform the user of that
   if (args['--map'] === '-') {
-    eprintln(`Use --map without a value to inline the source map`)
+    eprintln(`Use --map without a value to inline the source map.`)
+    process.exit(1)
+  }
+
+  if (args['--poll'] === undefined) {
+    eprintln(`Use --poll with a non-zero value in milliseconds.`)
+    process.exit(1)
+  }
+  let pollInterval = args['--poll'] === true ? DEFAULT_POLL_INTERVAL_MS : args['--poll']
+  if (pollInterval !== false && pollInterval <= 0) {
+    eprintln(`Specified polling interval must be a positive number.`)
     process.exit(1)
   }
 
@@ -152,6 +196,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let previous = {
     css: '',
     optimizedCss: '',
+    output: null as string | null,
   }
 
   async function write(
@@ -208,13 +253,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       }
     }
 
+    let didChange = output !== previous.output
+
     DEBUG && I.start('Write output')
     if (args['--output'] && args['--output'] !== '-') {
       await outputFile(args['--output'], output)
-    } else {
+    } else if (didChange) {
       println(output)
     }
     DEBUG && I.end('Write output')
+
+    previous.output = output
+    return didChange
   }
 
   let inputFilePath =
@@ -275,10 +325,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
+  let cleanupWatchers: (() => Promise<void>)[] = []
 
   // Watch for changes
-  if (args['--watch']) {
-    let cleanupWatchers: (() => Promise<void>)[] = []
+  if (args['--watch'] && pollInterval === false) {
+    // Ensure the file watcher can be loaded before setting up any watchers,
+    // such that we can present a helpful error message if needed.
+    await handleError(() => loadWatcher())
+
     cleanupWatchers.push(
       await createWatchers(await watchDirectories(scanner), async function handle(files) {
         try {
@@ -292,36 +346,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           // Re-compile the input
           let start = process.hrtime.bigint()
 
-          let changedFiles: ChangedContent[] = []
-          let rebuildStrategy: 'incremental' | 'full' = 'incremental'
-
           let resolvedFullRebuildPaths = fullRebuildPaths
-
-          for (let file of files) {
-            // If one of the changed files is related to the input CSS or JS
-            // config/plugin files, then we need to do a full rebuild because
-            // the theme might have changed.
-            if (resolvedFullRebuildPaths.includes(file)) {
-              rebuildStrategy = 'full'
-
-              // No need to check the rest of the events, because we already know we
-              // need to do a full rebuild.
-              break
-            }
-
-            // Track new and updated files for incremental rebuilds.
-            changedFiles.push({
-              file,
-              extension: path.extname(file).slice(1),
-            } satisfies ChangedContent)
-          }
+          let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
 
           // Track the compiled CSS
           let compiledCss = ''
           let compiledMap: SourceMap | null = null
 
           // Scan the entire `base` directory for full rebuilds.
-          if (rebuildStrategy === 'full') {
+          if (rebuildStrategy.kind === 'full') {
             // Read the new `input`.
             let input = args['--input']
               ? args['--input'] === '-'
@@ -378,9 +411,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           }
 
           // Scan changed files only for incremental rebuilds.
-          else if (rebuildStrategy === 'incremental') {
+          else if (rebuildStrategy.kind === 'incremental') {
             DEBUG && I.start('Scan for candidates')
-            let newCandidates = scanner.scanFiles(changedFiles)
+            let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
             DEBUG && I.end('Scan for candidates')
 
             // No new candidates found which means we don't need to write to
@@ -443,12 +476,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
-          eprintln(
-            [red('Error:'), dim('\u250C')]
-              .concat(`${err}`.split('\n').map((line) => `${dim('\u2502')} ${line}`))
-              .concat(dim('\u2514'))
-              .join('\n'),
-          )
+          eprintln(formatError(err))
 
           let end = process.hrtime.bigint()
           if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
@@ -490,9 +518,184 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let end = process.hrtime.bigint()
   if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+
+  // Watch for changes, using polling
+  if (args['--watch'] && pollInterval !== false) {
+    let cleanupPollingIndicator = () => {}
+
+    function logPollingMessage(message: string) {
+      if (!args['--silent']) {
+        process.stderr.write('\r\x1B[2K')
+      }
+
+      eprintln(message)
+
+      if (!args['--silent']) {
+        process.stderr.write(`\r\x1B[2K${dim(`Polling for changes…`)}`)
+      }
+    }
+
+    async function fullRebuild(I: Instrumentation) {
+      clearRequireCache(fullRebuildPaths)
+      backupRebuildPaths = fullRebuildPaths.slice()
+      fullRebuildPaths = inputFilePath ? [inputFilePath] : []
+
+      let input = args['--input']
+        ? args['--input'] === '-'
+          ? await drainStdin()
+          : await fs.readFile(args['--input'], 'utf-8')
+        : css`
+            @import 'tailwindcss';
+          `
+
+      ;[compiler, scanner] = await createCompiler(input, I)
+      backupRebuildPaths = fullRebuildPaths.slice()
+
+      DEBUG && I.start('Scan for candidates')
+      let candidates = scanner.scan()
+      DEBUG && I.end('Scan for candidates')
+
+      DEBUG && I.start('Build CSS')
+      let output = compiler.build(candidates)
+      DEBUG && I.end('Build CSS')
+
+      let map: SourceMap | null = null
+
+      if (args['--map']) {
+        DEBUG && I.start('Build Source Map')
+        map = toSourceMap(compiler.buildSourceMap())
+        DEBUG && I.end('Build Source Map')
+      }
+
+      await write(output, map, args, I)
+    }
+
+    if (!args['--silent']) {
+      let restored = false
+
+      function restoreCursor() {
+        if (restored) return
+        restored = true
+        process.stderr.write('\r\x1B[2K\x1B[?25h')
+        process.off('exit', restoreCursor)
+        process.off('SIGINT', onSigint)
+        process.off('SIGTERM', onSigterm)
+      }
+
+      function onSigint() {
+        restoreCursor()
+        process.exit(130)
+      }
+
+      function onSigterm() {
+        restoreCursor()
+        process.exit(143)
+      }
+
+      process.stderr.write('\x1B[?25l')
+      process.on('exit', restoreCursor)
+      process.on('SIGINT', onSigint)
+      process.on('SIGTERM', onSigterm)
+
+      cleanupPollingIndicator = restoreCursor
+      cleanupWatchers.push(async () => cleanupPollingIndicator())
+    }
+
+    cleanupWatchers.push(
+      createPollingWatcher(async () => {
+        using I = new Instrumentation()
+
+        DEBUG && I.start('Scan for candidates')
+        let candidates = scanner.scan()
+        DEBUG && I.end('Scan for candidates')
+
+        let files = scanner.scannedFiles.filter(
+          (file) => file !== args['--output'] && file !== args['--map'],
+        )
+
+        if (files.length <= 0) return
+
+        let start = process.hrtime.bigint()
+
+        let strategy = getRebuildStrategy(files, fullRebuildPaths)
+
+        if (strategy.kind === 'full') {
+          try {
+            await fullRebuild(I)
+          } catch (err) {
+            fullRebuildPaths = backupRebuildPaths
+
+            logPollingMessage(formatError(err))
+          }
+
+          if (!args['--silent']) {
+            logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+          }
+          return
+        }
+
+        // No candidates found which means we don't need to write to disk, and
+        // can return early.
+        if (candidates.length <= 0) {
+          if (!args['--silent']) {
+            logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+          }
+          return
+        }
+
+        DEBUG && I.start('Build CSS')
+        let output = compiler.build(candidates)
+        DEBUG && I.end('Build CSS')
+
+        let map: SourceMap | null = null
+
+        if (args['--map']) {
+          DEBUG && I.start('Build Source Map')
+          map = toSourceMap(compiler.buildSourceMap())
+          DEBUG && I.end('Build Source Map')
+        }
+
+        await write(output, map, args, I)
+
+        if (!args['--silent']) {
+          logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+        }
+      }, pollInterval),
+    )
+
+    if (args['--watch'] !== 'always') {
+      process.stdin.on('end', () => {
+        Promise.all(cleanupWatchers.map((fn) => fn())).then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
+      })
+    }
+
+    process.stdin.resume()
+    if (!args['--silent']) {
+      process.stderr.write(`\r\x1B[2K${dim(`Polling for changes…`)}`)
+    }
+  }
+}
+
+// Load `@parcel/watcher` lazily so a missing or broken native binding only
+// affects `--watch` (without `--poll`), instead of crashing one-off builds and
+// polling mode as well.
+async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
+  try {
+    return (await import('@parcel/watcher')).default
+  } catch (err) {
+    throw new Error(
+      `Failed to load the file watcher. Your platform may not be supported by \`@parcel/watcher\`. As a workaround, you can use polling instead by passing the \`--watch --poll\` flags.`,
+      { cause: err },
+    )
+  }
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  let watcher = await loadWatcher()
+
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
@@ -591,6 +794,56 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   return async () => {
     await watchers.dispose()
     await debounceQueue.dispose()
+  }
+}
+
+function getRebuildStrategy(
+  files: string[],
+  fullRebuildPaths: string[],
+): { kind: 'incremental'; changedFiles: ChangedContent[] } | { kind: 'full' } {
+  let changedFiles: ChangedContent[] = []
+
+  for (let file of files) {
+    // If one of the changed files is related to the input CSS or JS
+    // config/plugin files, then we need to do a full rebuild because
+    // the theme might have changed.
+    if (fullRebuildPaths.includes(file)) {
+      return { kind: 'full' }
+    }
+
+    // Track new and updated files for incremental rebuilds.
+    changedFiles.push({
+      file,
+      extension: path.extname(file).slice(1),
+    } satisfies ChangedContent)
+  }
+
+  return { kind: 'incremental', changedFiles }
+}
+
+function createPollingWatcher(cb: () => Promise<void>, pollInterval: number) {
+  let disposed = false
+  let timer: ReturnType<typeof setTimeout> | null = null
+
+  async function poll() {
+    if (disposed) return
+
+    try {
+      await cb()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      if (!disposed) {
+        timer = setTimeout(poll, pollInterval)
+      }
+    }
+  }
+
+  timer = setTimeout(poll, pollInterval)
+
+  return async () => {
+    disposed = true
+    if (timer) clearTimeout(timer)
   }
 }
 

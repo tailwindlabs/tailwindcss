@@ -68,6 +68,13 @@ export function optimize(
       return false
     }
 
+    // Ignore warnings about unknown at-rules.
+    //
+    // TODO: drop `@position-try` once https://github.com/parcel-bundler/lightningcss/pull/1238 lands
+    if (/Unknown at rule: @position-try/.test(warning.message)) {
+      return false
+    }
+
     return true
   })
 
