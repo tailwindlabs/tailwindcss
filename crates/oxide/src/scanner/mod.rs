@@ -412,7 +412,6 @@ impl Scanner {
                 }
                 WalkEntry::File {
                     path,
-                    extension,
                     mtime,
                     is_symlink,
                 } => {
@@ -449,8 +448,13 @@ impl Scanner {
                             self.files.insert(canonical);
                         }
                     }
+                    let extension = path
+                        .extension()
+                        .and_then(|x| x.to_str())
+                        .unwrap_or_default()
+                        .to_owned();
 
-                    self.extensions.insert(extension.clone());
+                    self.extensions.insert(extension.to_owned());
 
                     // On incremental scans, check mtime to skip unchanged files.
                     // On the first scan, track mtimes while still scanning every file.
@@ -622,7 +626,6 @@ enum WalkEntry {
     Dir(PathBuf),
     File {
         path: PathBuf,
-        extension: String,
         mtime: Option<SystemTime>,
 
         /// Whether the path itself is a symlink
@@ -639,15 +642,9 @@ impl From<ignore::DirEntry> for WalkEntry {
         if is_dir {
             WalkEntry::Dir(path)
         } else {
-            let extension = path
-                .extension()
-                .and_then(|x| x.to_str())
-                .unwrap_or_default()
-                .to_owned();
             let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
             WalkEntry::File {
                 path,
-                extension,
                 mtime,
                 is_symlink,
             }
