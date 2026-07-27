@@ -2416,6 +2416,131 @@ mod scanner {
     }
 
     #[test]
+    fn test_files_behind_symlinks_are_tracked_with_their_canonical_paths() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(
+            &dir,
+            &[
+                (
+                    "packages/repro/source.html",
+                    "content-['packages/repro/source.html']",
+                ),
+                (
+                    "packages/repro/nested/deep.html",
+                    "content-['packages/repro/nested/deep.html']",
+                ),
+                (
+                    "packages/other/index.html",
+                    "content-['packages/other/index.html']",
+                ),
+            ],
+        );
+
+        // Mimic a pnpm workspace where `node_modules` contains a symlink to the actual package
+        fs::create_dir_all(dir.join("node_modules")).unwrap();
+        let _ = symlink(dir.join("packages/repro"), dir.join("node_modules/repro"));
+
+        // A directly symlinked file
+        let _ = symlink_file(
+            dir.join("packages/other/index.html"),
+            dir.join("linked.html"),
+        );
+
+        let mut scanner = Scanner::new(vec![
+            public_source_entry_from_pattern(
+                dir.clone(),
+                "@source 'node_modules/repro/source.html'",
+            ),
+            // The symlink sits multiple levels up from the file
+            public_source_entry_from_pattern(
+                dir.clone(),
+                "@source 'node_modules/repro/nested/deep.html'",
+            ),
+            public_source_entry_from_pattern(dir.clone(), "@source 'linked.html'"),
+        ]);
+
+        let candidates = scanner.scan();
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['packages/other/index.html']",
+                "content-['packages/repro/nested/deep.html']",
+                "content-['packages/repro/source.html']",
+            ]
+        );
+
+        // Both the symlinked paths and the canonical paths should be tracked, such that file
+        // watchers watching the returned files also watch the real files on disk.
+        let files = scanned_files(&mut scanner, &dir);
+        assert_eq!(
+            files,
+            vec![
+                "linked.html",
+                "node_modules/repro/nested/deep.html",
+                "node_modules/repro/source.html",
+                "packages/other/index.html",
+                "packages/repro/nested/deep.html",
+                "packages/repro/source.html",
+            ]
+        );
+    }
+
+    #[test]
+    fn test_changes_to_the_canonical_path_of_a_symlinked_file_are_detected() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(&dir, &[("packages/repro/source.html", "content-['v1']")]);
+
+        // Mimic a pnpm workspace where `node_modules` contains a symlink to the actual package
+        fs::create_dir_all(dir.join("node_modules")).unwrap();
+        let _ = symlink(dir.join("packages/repro"), dir.join("node_modules/repro"));
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'node_modules/repro/source.html'",
+        )]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['v1']"]);
+
+        // Update the real file on disk. This is the path file watchers will report changes for.
+        create_files_in(&dir, &[("packages/repro/source.html", "content-['v2']")]);
+
+        let candidates = scanner.scan_content(vec![ChangedContent::File(
+            dir.join("packages/repro/source.html"),
+            "html".into(),
+        )]);
+        assert_eq!(candidates, vec!["content-['v2']"]);
+    }
+
+    #[test]
+    fn test_new_files_behind_symlinks_are_detected_at_their_canonical_path() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(&dir, &[("packages/repro/a.html", "content-['a']")]);
+
+        // Mimic a pnpm workspace where `node_modules` contains a symlink to the actual package
+        fs::create_dir_all(dir.join("node_modules")).unwrap();
+        let _ = symlink(dir.join("packages/repro"), dir.join("node_modules/repro"));
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.clone(),
+            "@source 'node_modules/repro/*.html'",
+        )]);
+
+        let candidates = scanner.scan();
+        assert_eq!(candidates, vec!["content-['a']"]);
+
+        // Create a new file in the real directory. File watchers watching the real directory
+        // will report the new file with its canonical path.
+        create_files_in(&dir, &[("packages/repro/b.html", "content-['b']")]);
+
+        let candidates = scanner.scan_content(vec![ChangedContent::File(
+            dir.join("packages/repro/b.html"),
+            "html".into(),
+        )]);
+        assert_eq!(candidates, vec!["content-['b']"]);
+    }
+
+    #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
         create_files_in(

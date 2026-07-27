@@ -181,6 +181,11 @@ impl Scanner {
                         continue;
                     }
 
+                    // The walked path can contain symlinks, while the changed files have already
+                    // been canonicalized. Lazily canonicalize the walked path so we can compare
+                    // the real paths as well.
+                    let mut canonical_path: Option<PathBuf> = None;
+
                     let mut drop_file_indexes = vec![];
                     for (idx, changed_file) in new_unknown_files.iter().enumerate().rev() {
                         let ChangedContent::File(file, _) = changed_file else {
@@ -189,7 +194,15 @@ impl Scanner {
 
                         // When the file is found on disk it means that all the rules pass. We can
                         // extract the current file and remove it from the list of passed in files.
-                        if file == path {
+                        let matches = file == path
+                            || (file.file_name() == path.file_name() && {
+                                if canonical_path.is_none() {
+                                    canonical_path = dunce::canonicalize(path).ok();
+                                }
+                                canonical_path.as_deref() == Some(file.as_path())
+                            });
+
+                        if matches {
                             self.files.insert(path.to_path_buf()); // Track for future use
                             content_to_scan.push(changed_file.clone()); // Track for parsing
                             drop_file_indexes.push(idx);
@@ -388,7 +401,11 @@ impl Scanner {
         self.extensions.clear();
         self.globs = None;
 
-        for (path, is_dir, extension, mtime) in all_entries {
+        // Cache canonicalized folders in case a file itself is not symlinked, but any of the parent
+        // folders are symlinked.
+        let mut cached_canonical_dirs: FxHashMap<PathBuf, PathBuf> = FxHashMap::default();
+
+        for (path, is_dir, extension, mtime, is_symlink) in all_entries {
             if is_dir {
                 self.dirs.insert(path);
             } else {
@@ -396,6 +413,35 @@ impl Scanner {
                 if !self.files.insert(path.clone()) {
                     continue;
                 }
+
+                // Track canonicalized paths in addition to potentially symlinked file paths
+                let canonical = if is_symlink {
+                    dunce::canonicalize(&path).ok()
+                } else {
+                    path.parent().and_then(|parent| {
+                        // Perf: cache the canonicalized parent path such that sibling files don't
+                        // have to canonicalize over and over again.
+                        let canonical_parent = cached_canonical_dirs
+                            .entry(parent.to_path_buf())
+                            .or_insert_with(|| {
+                                dunce::canonicalize(parent).unwrap_or_else(|_| parent.to_path_buf())
+                            });
+
+                        if canonical_parent.as_path() != parent {
+                            path.file_name()
+                                .map(|file_name| canonical_parent.join(file_name))
+                        } else {
+                            None
+                        }
+                    })
+                };
+
+                if let Some(canonical) = canonical {
+                    if canonical != path {
+                        self.files.insert(canonical);
+                    }
+                }
+
                 self.extensions.insert(extension.clone());
 
                 // On incremental scans, check mtime to skip unchanged files.
@@ -562,7 +608,7 @@ where
         .collect()
 }
 
-type WalkEntry = (PathBuf, bool, String, Option<SystemTime>);
+type WalkEntry = (PathBuf, bool, String, Option<SystemTime>, bool);
 
 /// Walk the file system synchronously. Used for the initial build where the overhead of spawning
 /// parallel walker threads is not worth it.
@@ -572,10 +618,11 @@ fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
 
     for entry in walker.build().filter_map(Result::ok) {
         let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+        let is_symlink = entry.path_is_symlink();
         let path = entry.into_path();
 
         if is_dir {
-            entries.push((path, true, String::new(), None));
+            entries.push((path, true, String::new(), None, is_symlink));
         } else {
             let ext = path
                 .extension()
@@ -583,7 +630,7 @@ fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
                 .unwrap_or_default()
                 .to_owned();
             let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
-            entries.push((path, false, ext, mtime));
+            entries.push((path, false, ext, mtime, is_symlink));
         }
     }
 
@@ -621,10 +668,12 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
             };
 
             let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+            let is_symlink = entry.path_is_symlink();
             let path = entry.into_path();
 
             if is_dir {
-                buf.local.push((path, true, String::new(), None));
+                buf.local
+                    .push((path, true, String::new(), None, is_symlink));
             } else {
                 let ext = path
                     .extension()
@@ -632,7 +681,7 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
                     .unwrap_or_default()
                     .to_owned();
                 let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
-                buf.local.push((path, false, ext, mtime));
+                buf.local.push((path, false, ext, mtime, is_symlink));
             }
 
             if buf.local.len() >= 256 {
