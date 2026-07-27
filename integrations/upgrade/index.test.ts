@@ -2557,7 +2557,7 @@ test(
         @import './utilities.css';
         @import './generated/ignore-me.css';
       `,
-      'src/generated/.gitignore': `
+      'src/generated/.gitignore': txt`
         *
         !.gitignore
       `,
