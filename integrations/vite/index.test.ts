@@ -294,6 +294,113 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20346
+  test(
+    'dev mode + symlinked `@source` files pick up changes to the real file',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+            - packages/*
+        `,
+        'project-a/package.json': txt`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "repro-package": "workspace:*",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+              "vite": "^7"
+            }
+          }
+        `,
+        'project-a/vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+          })
+        `,
+        'project-a/index.html': html`
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <div class="underline">Hello, world!</div>
+          </body>
+        `,
+
+        // The `@source` points through the `node_modules` symlink that pnpm
+        // creates for the workspace package. Vite's file watcher ignores
+        // `node_modules` by default, so the symlinked path can not be watched.
+        // The real file (in `packages/repro-package`) has to be watched
+        // instead.
+        'project-a/src/index.css': css`
+          @reference 'tailwindcss/theme';
+          @import 'tailwindcss/utilities';
+          @source '../node_modules/repro-package/source.html';
+        `,
+        'packages/repro-package/package.json': json`
+          {
+            "name": "repro-package",
+            "private": true,
+            "version": "1.0.0"
+          }
+        `,
+        'packages/repro-package/source.html': html`
+          <div class="content-['v1']">
+            Hello, world!
+          </div>
+        `,
+      },
+    },
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev', {
+        cwd: path.join(root, 'project-a'),
+      })
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`content-['v1']`)
+      })
+
+      await retryAssertion(async () => {
+        // Changes to the real file (behind the symlink) should be picked up
+        await fs.write(
+          'packages/repro-package/source.html',
+          html`
+            <div class="content-['v1'] content-['v2']">
+              Hello, world!
+            </div>
+          `,
+        )
+
+        let styles = await fetchStyles(url)
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`content-['v1']`)
+        expect(styles).toContain(candidate`content-['v2']`)
+      })
+    },
+  )
+
   test(
     'watch mode',
     {
