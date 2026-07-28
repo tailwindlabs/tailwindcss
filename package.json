@@ -60,5 +60,8 @@
     "typescript": "^5.9.3",
     "vitest": "^4.1.9"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.9.0",
+  "dependencies": {
+    "next": "16.2.11"
+  }
 }
