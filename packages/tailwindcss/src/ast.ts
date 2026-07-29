@@ -401,6 +401,21 @@ export function optimizeAst(
       // Remove reference imports from printing
       if (node.context.reference) {
         return
+      }
+
+      // Preserve context nodes that track the source of their subtree (variant
+      // bodies and the user content slotted into them), so `handleNesting`
+      // knows whether to compose `@scope` rules with the variant semantics or
+      // their native CSS nesting semantics
+      else if (node.context.source) {
+        let copy = { ...node, nodes: [] as AstNode[] }
+        for (let child of node.nodes) {
+          transform(child, copy.nodes, { ...context, ...node.context }, depth)
+        }
+
+        if (copy.nodes.length > 0) {
+          parent.push(copy)
+        }
       } else {
         for (let child of node.nodes) {
           transform(child, parent, { ...context, ...node.context }, depth)
@@ -658,6 +673,27 @@ export function optimizeAst(
 export function handleNesting(ast: AstNode[]): AstNode[] {
   let parseSelectorCache = new DefaultMap(SelectorParser.parse)
 
+  // Nodes with an `@scope` rule somewhere in their subtree. These cannot use
+  // the "emit as-is" fast path for rules containing declarations, because
+  // `@scope` rules change meaning when they stay nested inside a style rule and
+  // must go through the hoisting machinery instead.
+  let containsAtScope = new Set<AstNode>()
+  {
+    function scan(nodes: AstNode[]): boolean {
+      let found = false
+      for (let node of nodes) {
+        if (node.kind === 'declaration' || node.kind === 'comment') continue
+
+        if (scan(node.nodes) || (node.kind === 'at-rule' && node.name === '@scope')) {
+          containsAtScope.add(node)
+          found = true
+        }
+      }
+      return found
+    }
+    scan(ast)
+  }
+
   // Track `rule` selectors as we go
   let selectorStack: [
     selector: string,
@@ -690,6 +726,45 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
   // Track whether we should skip a node in the `exit` phase
   let skipExit = new Set<AstNode>()
 
+  // Track the source of the subtree we are currently in. Variant bodies are
+  // wrapped in a `context` node with `source: 'variant'`, and the user content
+  // slotted into them is wrapped in `source: 'user'`. `@scope` rules whose
+  // nearest source is a variant are hoisted with the variant semantics, all
+  // other `@scope` rules use their native CSS nesting semantics.
+  let sourceStack: (string | boolean)[] = []
+
+  // Selector stacks that are masked while inside an `@scope` rule whose
+  // `<scope-start>` selector consumed the parent selector via `&`.
+  //
+  // Once the parent selector is part of the `<scope-start>` selector, the rules
+  // inside the `@scope` are relative to the scoping root, not to the parent
+  // rule. Selectors in scoped style rules only match elements in scope, and the
+  // parent matches ancestors of the scoping root, so prefixing the rules with
+  // the parent selector would make them match nothing at all.
+  //
+  // E.g.:
+  //
+  // ```css
+  // .parent {
+  //   @scope (& > .scope) {
+  //     .content {
+  //       color: red;
+  //     }
+  //   }
+  // }
+  // ```
+  //
+  // becomes:
+  //
+  // ```css
+  // @scope (.parent > .scope) {
+  //   .content { /* ← not `.parent .content` */
+  //     color: red;
+  //   }
+  // }
+  // ```
+  let maskedSelectorStacks = new Map<AstNode, typeof selectorStack>()
+
   walk(ast, {
     enter(node) {
       switch (node.kind) {
@@ -705,13 +780,40 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             // part of a string inside an attribute selector. But the
             // SelectorParser will take care of that.
             if (node.selector.includes('&')) {
+              // Inside an `@scope` rule, the nesting selector behaves like
+              // `:where(:scope)` and matches the scoping root with zero
+              // specificity. E.g.:
+              //
+              // ```css
+              // @scope (.checkout) {
+              //   & > p {
+              //     color: red;
+              //   }
+              // }
+              // ```
+              //
+              // becomes:
+              //
+              // ```css
+              // @scope (.checkout) {
+              //   :where(:scope) > p {
+              //     color: red;
+              //   }
+              // }
+              // ```
+              //
+              // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+              let replacement = atRuleStack.some(([name]) => name === '@scope')
+                ? ':where(:scope)'
+                : ':scope'
+
               let ast = SelectorParser.parse(node.selector)
               let changed = false
 
               walk(ast, (node) => {
                 if (node.kind === 'selector' && node.value === '&') {
                   changed = true
-                  node.value = ':scope'
+                  node.value = replacement
                 }
               })
 
@@ -775,7 +877,14 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
           //   }
           // }
           // ```
-          if (node.nodes.some((child) => child.kind === 'declaration')) {
+          //
+          // The exception is when the rule contains an `@scope` rule somewhere,
+          // because it must go through the normal hoisting machinery instead.
+          // See `containsAtScope` for more details.
+          if (
+            node.nodes.some((child) => child.kind === 'declaration') &&
+            !containsAtScope.has(node)
+          ) {
             // Emitting each child instead of the node itself because we do want
             // to flatten the current node and its selector that is already
             // pushed to the stack.
@@ -799,7 +908,196 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
           // Hoist at-rules
           else if (HOISTABLE_AT_RULES.has(node.name)) {
-            atRuleStack.push([node.name, node.params, node.src, node.dst])
+            let params = node.params
+
+            // `@scope` is the only hoistable at-rule with selectors in its
+            // prelude, and the only one that changes meaning when it stays
+            // nested inside a style rule. Resolve the prelude and its contents
+            // before hoisting, using one of two composition modes:
+            //
+            // 1. Variant-generated `@scope` rules attach the parent selector
+            //    (the utility) to the rules _inside_ the scope:
+            //
+            //    ```css
+            //    .scoped\:underline {
+            //      @scope (.from) to (.to) {
+            //        text-decoration-line: underline;
+            //      }
+            //    }
+            //    ```
+            //
+            //    becomes:
+            //
+            //    ```css
+            //    @scope (.from) to (.to) {
+            //      .scoped\:underline {
+            //        text-decoration-line: underline;
+            //      }
+            //    }
+            //    ```
+            //    This way the utility is properly sandwiched between the
+            //    `.from` and `.to` boundaries.
+            //
+            // 2. User-authored `@scope` rules keep their native CSS nesting
+            //    semantics: the `<scope-start>` selector is relative to the parent
+            //    rule, and the rules inside are relative to the scoping root:
+            //
+            //    ```css
+            //    .parent {
+            //      @scope (.from) {
+            //        color: red;
+            //      }
+            //    }
+            //    ```
+            //
+            //    becomes:
+            //
+            //    ```css
+            //    @scope (.parent .from) {
+            //      :where(:scope) {
+            //        color: red;
+            //      }
+            //    }
+            //    ```
+            //
+            //    In a perfect world we leave this alone, but Lightning CSS
+            //    seems to incorrectly transform this into a version where the
+            //    `.parent` class is gone entirely:
+            //
+            //    ```css
+            //    @scope (.from) {
+            //      color: red;
+            //    }
+            //    ```
+            //
+            // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+            if (node.name === '@scope') {
+              let isVariant = sourceStack[sourceStack.length - 1] === 'variant'
+              let hasParent = selectorStack.length > 0
+
+              // Lightning CSS bug: This snippet will error
+              //
+              // ```css
+              // @scope {
+              //   --x: 1;
+              // }
+              // ```
+              //
+              // We will wrap these bare-declarations in a `&` rule to fix the crash:
+              // ```css
+              // @scope {
+              //   & {
+              //     --x: 1;
+              //   }
+              // }
+              // ```
+              {
+                let queue: (AtRule | Context)[] = [node]
+
+                for (let parent of queue) {
+                  let newNodes: AstNode[] = []
+                  let group: AstNode[] | null = null
+
+                  for (let child of parent.nodes) {
+                    if (child.kind === 'context') queue.push(child)
+
+                    if (child.kind === 'declaration' || child.kind === 'comment') {
+                      if (group === null) {
+                        group = []
+                        newNodes.push(styleRule('&', group))
+                      }
+                      group.push(child)
+                    } else {
+                      group = null
+                      newNodes.push(child)
+                    }
+                  }
+
+                  parent.nodes = newNodes
+                }
+              }
+
+              if (params.includes('&') || (!isVariant && hasParent)) {
+                // The selector to substitute for `&` in the `<scope-start>`
+                // selector: the elements matched by the nearest ancestor style
+                // rule, or `:scope` when there is none.
+                let parentSelector = hasParent ? selectorStack[selectorStack.length - 1][0] : null
+
+                let paramsAst = ValueParser.parse(params)
+
+                // Whether the current `(…)` group is a `<scope-end>` selector.
+                //
+                // ```css
+                // @scope (.from) to (.to)
+                //        ^^^^^^^           scope-start (optional)
+                //                   ^^^^^  scope-end
+                //
+                // @scope to (.to)
+                //           ^^^^^          scope-end
+                // ```
+                let isScopeEnd = false
+
+                // Whether the `<scope-start>` selector consumed the parent
+                // selector
+                let consumedParent = false
+
+                for (let paramNode of paramsAst) {
+                  if (paramNode.kind === 'word' && paramNode.value === 'to') {
+                    isScopeEnd = true
+                    continue
+                  }
+
+                  // A `(…)` group parses as a function call without a name
+                  if (paramNode.kind !== 'function' || paramNode.value !== '') continue
+
+                  let selector = ValueParser.toCss(paramNode.nodes)
+
+                  // A user-authored `<scope-start>` selector is relative to the
+                  // parent rule, and resolves exactly like nested style rule
+                  // selectors do: `&` refers to the elements matched by the
+                  // parent rule, and selectors without `&` are prefixed with
+                  // it.
+                  if (!isScopeEnd && !isVariant && parentSelector !== null) {
+                    paramNode.nodes = [
+                      ValueParser.word(
+                        segment(selector, ',')
+                          .map((part) => substituteNestingSelector(part.trim(), parentSelector))
+                          .join(', '),
+                      ),
+                    ]
+                    consumedParent = true
+                  }
+
+                  // Otherwise, only an explicit `&` is resolved. In the
+                  // `<scope-start>` selector, `&` refers to the elements
+                  // matched by the nearest ancestor style rule (or `:scope`
+                  // when there is none). In the `<scope-end>` selector, `&`
+                  // refers to the scoping root and behaves like
+                  // `:where(:scope)`.
+                  else if (selector.includes('&')) {
+                    let replacement = isScopeEnd ? ':where(:scope)' : (parentSelector ?? ':scope')
+
+                    paramNode.nodes = [
+                      ValueParser.word(substituteNestingSelector(selector, replacement)),
+                    ]
+                    if (!isScopeEnd && hasParent) consumedParent = true
+                  }
+                }
+
+                params = ValueParser.toCss(paramsAst)
+
+                // Mask the selector stack for the `@scope` rule's subtree, so
+                // its rules resolve like top-level rules within the scope (and
+                // `&` resolves to `:where(:scope)`). The stack is restored in
+                // the exit phase. See `maskedSelectorStacks` for more details.
+                if (consumedParent) {
+                  maskedSelectorStacks.set(node, selectorStack)
+                  selectorStack = []
+                }
+              }
+            }
+
+            atRuleStack.push([node.name, params, node.src, node.dst])
           }
 
           // If we can't hoist them, emit them immediately as-is
@@ -818,6 +1116,9 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
         }
 
         case 'context':
+          if (node.context.source) sourceStack.push(node.context.source)
+          break
+
         case 'at-root':
           break
 
@@ -839,12 +1140,22 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
         case 'at-rule': {
           nodes = null
           atRuleStack.pop()
+
+          // Restore the selector stack that was masked by this `@scope` rule
+          let maskedSelectorStack = maskedSelectorStacks.get(node)
+          if (maskedSelectorStack) {
+            selectorStack = maskedSelectorStack
+            maskedSelectorStacks.delete(node)
+          }
           break
         }
 
+        case 'context':
+          if (node.context.source) sourceStack.pop()
+          break
+
         case 'declaration':
         case 'comment':
-        case 'context':
         case 'at-root':
           break
 
