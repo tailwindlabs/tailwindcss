@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ensure watch mode detects changes to symlinked `@source` files whose real paths aren't otherwise scanned ([#20356](https://github.com/tailwindlabs/tailwindcss/pull/20356))
 - Ensure custom variants using `@scope` wrap the generated utilities instead of nesting inside them ([#20344](https://github.com/tailwindlabs/tailwindcss/pull/20344))
+- Fix flattening of `@scope` at-rules ([#20344](https://github.com/tailwindlabs/tailwindcss/pull/20344))
+- Fix standalone declarations in `@scope`, wrap them in `:where(:scope)` ([#20344](https://github.com/tailwindlabs/tailwindcss/pull/20344))
 
 ## [4.3.3] - 2026-07-16
 
