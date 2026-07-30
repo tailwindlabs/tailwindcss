@@ -612,6 +612,7 @@ function overwriteVersionsInPnpmWorkspace(content: string): string {
       workspace.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
       workspace.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
       workspace.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/turbopack>tailwindcss'] = resolveVersion(pkg)
       workspace.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
       workspace.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {

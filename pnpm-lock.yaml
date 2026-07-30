@@ -431,6 +431,28 @@ importers:
         specifier: ^7.7.1
         version: 7.7.1
 
+  packages/@tailwindcss-turbopack:
+    dependencies:
+      '@alloc/quick-lru':
+        specifier: ^5.2.0
+        version: 5.2.0
+      '@tailwindcss/node':
+        specifier: workspace:*
+        version: link:../@tailwindcss-node
+      '@tailwindcss/oxide':
+        specifier: workspace:*
+        version: link:../../crates/node
+      tailwindcss:
+        specifier: workspace:*
+        version: link:../tailwindcss
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.19.21
+      webpack:
+        specifier: 'catalog:'
+        version: 5.108.3(esbuild@0.27.7)(postcss@8.5.16)
+
   packages/@tailwindcss-vite:
     dependencies:
       '@tailwindcss/node':
