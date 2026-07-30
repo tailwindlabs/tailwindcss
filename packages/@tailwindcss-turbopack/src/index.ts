@@ -72,7 +72,7 @@ export default async function tailwindLoader(
 
   using I = new Instrumentation()
 
-  DEBUG && I.start(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+  DEBUG && I.start(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
 
   // Bail out early if this is guaranteed to be a non-Tailwind CSS file.
   {
@@ -80,7 +80,7 @@ export default async function tailwindLoader(
     let canBail = !/@(import|reference|theme|variant|config|plugin|apply|tailwind)\b/.test(source)
     if (canBail) {
       DEBUG && I.end('Quick bail check')
-      DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+      DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
       callback(null, source)
       return
     }
@@ -124,7 +124,7 @@ export default async function tailwindLoader(
 
     // Early exit if no Tailwind features are used
     if (context.compiler.features === Features.None) {
-      DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+      DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
       callback(null, source)
       return
     }
@@ -178,7 +178,7 @@ export default async function tailwindLoader(
         (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
       )
     ) {
-      DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+      DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
       callback(null, source)
       return
     }
@@ -274,14 +274,14 @@ export default async function tailwindLoader(
       DEBUG && I.end('Optimization')
     }
 
-    DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+    DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
     callback(null, result)
   } catch (error) {
     // Clear the cache entry on error to force a full rebuild next time
     let key = getCacheKey(resourceId, options)
     cache.delete(key)
 
-    DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)
+    DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
     callback(error as Error)
   }
 }
