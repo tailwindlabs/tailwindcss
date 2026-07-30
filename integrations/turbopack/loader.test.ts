@@ -48,7 +48,7 @@ test(
     },
   },
   async ({ fs, spawn, expect }) => {
-    let process = await spawn('pnpm next dev --turbopack')
+    let process = await spawn('pnpm next dev')
 
     let url = ''
     await process.onStdout((message) => {
