@@ -414,9 +414,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // This should still migrate the `theme(…)` syntax to the modern syntax.
       ['bg-[theme(colors.red.500/50%)]/50', 'bg-[--theme(--color-red-500/50%)]/50'],
 
-      // Variants, we can't use `var(…)` especially inside of `@media(…)`. We can
-      // still upgrade the `theme(…)` to the modern syntax.
-      ['max-[theme(screens.lg)]:flex', 'max-[--theme(--breakpoint-lg)]:flex'],
+      // Variants, we can't use `var(…)` especially inside of `@media(…)`. But
+      // since the value matches the `lg` breakpoint exactly, we can migrate to
+      // the `max-lg` variant.
+      ['max-[theme(screens.lg)]:flex', 'max-lg:flex'],
+      ['min-[theme(screens.lg)]:flex', 'lg:flex'], // We could also map to `min-lg:flex`
       // There are no variables for `--spacing` multiples, so we can't convert this
       ['max-[theme(spacing.4)]:flex', 'max-[theme(spacing.4)]:flex'],
 
@@ -719,6 +721,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       @import 'tailwindcss';
       @theme {
         --*: initial;
+        --breakpoint-lg: 64rem;
       }
     `
 
@@ -734,6 +737,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[@media(scripting:none)]:flex', 'noscript:flex'],
       ['[@media(scripting:_none)]:flex', 'noscript:flex'],
       ['[@media_(scripting:_none)]:flex', 'noscript:flex'],
+
+      // Arbitrary variants with media queries cannot use `var(…)`, but if an
+      // equivalent variant exists we can use that one instead.
+      ['[@media(width>=theme(screens.lg))]:flex', 'lg:flex'], // `min-lg:flex` would also be valid
+      ['[@media(width<theme(screens.lg))]:flex', 'max-lg:flex'],
 
       // With compound variants
       ['has-[&:focus]:flex', 'has-focus:flex'],
@@ -948,6 +956,67 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
         @import 'tailwindcss';
       `
       await expectCanonicalization(input, candidate, expected)
+    })
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20365
+  describe('media query and container query variants', () => {
+    test.each([
+      // Breakpoints (`--breakpoint-lg: 64rem`, `--breakpoint-md: 48rem`)
+      ['min-[64rem]:flex', 'lg:flex'],
+      ['max-[64rem]:flex', 'max-lg:flex'],
+      ['min-[48rem]:flex', 'md:flex'],
+      ['max-[48rem]:flex', 'max-md:flex'],
+
+      // With the `rem` option set, equivalent `px` values should also be
+      // canonicalized to the breakpoint variants.
+      ['min-[1024px]:flex', 'lg:flex'],
+      ['max-[1024px]:flex', 'max-lg:flex'],
+
+      // Container queries (`--container-md: 28rem`)
+      ['@min-[28rem]:flex', '@md:flex'],
+      ['@max-[28rem]:flex', '@max-md:flex'],
+      ['@min-[448px]:flex', '@md:flex'],
+      ['@max-[448px]:flex', '@max-md:flex'],
+
+      // Values that don't map to a known breakpoint or container size should
+      // stay as-is.
+      ['min-[123px]:flex', 'min-[123px]:flex'],
+      ['max-[123px]:flex', 'max-[123px]:flex'],
+      ['@min-[123px]:flex', '@min-[123px]:flex'],
+      ['@max-[123px]:flex', '@max-[123px]:flex'],
+
+      // Named variants that produce the same CSS should be kept as-is
+      ['min-lg:flex', 'min-lg:flex'],
+      ['@min-md:flex', '@min-md:flex'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected)
+    })
+
+    test.each([
+      // Without the `rem` option, `px` values cannot be safely converted to
+      // `rem` based breakpoints.
+      ['min-[1024px]:flex', 'min-[1024px]:flex'],
+      ['@min-[448px]:flex', '@min-[448px]:flex'],
+
+      // Same unit still works without the `rem` option
+      ['min-[64rem]:flex', 'lg:flex'],
+      ['max-[64rem]:flex', 'max-lg:flex'],
+      ['@min-[28rem]:flex', '@md:flex'],
+      ['@max-[28rem]:flex', '@max-md:flex'],
+    ])(`${testName} (no rem option)`, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+
+      await expectCanonicalization(input, candidate, expected, {
+        collapse: true,
+        logicalToPhysical: true,
+      })
     })
   })
 
@@ -1544,6 +1613,29 @@ describe('regressions', () => {
     ])
     expect(designSystem.canonicalizeCandidates(['bg-[#3F3CBB]'], options)).toEqual([
       'bg-brand-purple',
+    ])
+  })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20365
+  test('canonicalizes min/max media query and container query variants', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --breakpoint-lg: 64rem;
+          --container-lg: 32rem;
+          --spacing: 0.25rem;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['min-[64rem]:flex'])).toEqual(['lg:flex'])
+    expect(designSystem.canonicalizeCandidates(['max-[64rem]:flex'])).toEqual(['max-lg:flex'])
+    expect(designSystem.canonicalizeCandidates(['@min-[32rem]:flex'])).toEqual(['@lg:flex'])
+    expect(designSystem.canonicalizeCandidates(['@max-[32rem]:flex'])).toEqual(['@max-lg:flex'])
+    expect(designSystem.canonicalizeCandidates(['min-[1024px]:flex'], { rem: 16 })).toEqual([
+      'lg:flex',
     ])
   })
 })
