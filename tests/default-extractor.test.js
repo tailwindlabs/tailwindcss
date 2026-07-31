@@ -576,3 +576,13 @@ it.each([
     expect(extractions).toContain(value)
   }
 })
+
+test('arbitrary not selector with preceding variants (issue #18387)', () => {
+  let extractions = defaultExtractor(`
+    <div class="focus-visible:[&:not([aria-selected='true'])]:bg-red-500"></div>
+    <div class='hover:[&:not([aria-selected="true"])]:bg-red-500'></div>
+  `)
+
+  expect(extractions).toContain("focus-visible:[&:not([aria-selected='true'])]:bg-red-500")
+  expect(extractions).toContain('hover:[&:not([aria-selected="true"])]:bg-red-500')
+})
