@@ -1,6 +1,6 @@
 import type { Features } from '..'
 import { substituteAtApply } from '../apply'
-import { atRule, cloneAstNode, decl, rule, type AstNode } from '../ast'
+import { atRule, cloneAstNode, context, decl, rule, type AstNode } from '../ast'
 import type { Candidate, CandidateModifier, NamedUtilityValue } from '../candidate'
 import { substituteFunctions } from '../css-functions'
 import * as CSS from '../css-parser'
@@ -608,14 +608,28 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
 
 function parseVariantValue(resolved: string | string[], nodes: AstNode[]): AstNode[] {
   let resolvedArray = typeof resolved === 'string' ? [resolved] : resolved
-  return resolvedArray.flatMap((r) => {
+  return resolvedArray.flatMap((r): AstNode | AstNode[] => {
     if (r.trim().endsWith('}')) {
+      let usesAtScope = r.includes('@scope')
       let updatedCSS = r.replace('}', '{@slot}}')
       let ast = CSS.parse(updatedCSS)
+
+      if (usesAtScope) {
+        substituteAtSlot(ast, [context({ source: 'user' }, nodes)])
+        return context({ source: 'variant' }, ast)
+      }
+
       substituteAtSlot(ast, nodes)
       return ast
     } else {
-      return rule(r, nodes)
+      let node = rule(r, nodes)
+
+      if (node.kind === 'at-rule' && node.name === '@scope') {
+        node.nodes = [context({ source: 'user' }, nodes)]
+        return context({ source: 'variant' }, [node])
+      }
+
+      return node
     }
   })
 }

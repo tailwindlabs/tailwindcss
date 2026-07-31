@@ -4685,6 +4685,319 @@ describe('@custom-variant', () => {
     })
   })
 
+  describe('@scope', () => {
+    test('arbitrary variant', async () => {
+      expect(await run(['[@scope_(.from)_to_(.to)]:underline'])).toMatchInlineSnapshot(`
+        "
+        @scope (.from) to (.to) {
+          .\\[\\@scope_\\(\\.from\\)_to_\\(\\.to\\)\\]\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+        "
+      `)
+    })
+
+    test('shorthand syntax', async () => {
+      expect(
+        await run(
+          ['scoped:underline'],
+          css`
+            @custom-variant scoped (@scope (.from) to (.to));
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .scoped\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('with @slot syntax', async () => {
+      expect(
+        await run(
+          ['scoped:underline'],
+          css`
+            @custom-variant scoped {
+              @scope (.from) to (.to) {
+                @slot;
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .scoped\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('@scope in a custom variant combined with user-authored `@scope` rules', async () => {
+      expect(
+        await run(
+          ['blue:bg-blue-500'],
+          css`
+            @layer utilities {
+              @tailwind utilities;
+            }
+
+            @theme inline {
+              --color-blue-500: blue;
+            }
+
+            /* In a variant */
+            @custom-variant blue {
+              @scope ([data-theme='blue']) to ([data-theme]) {
+                @slot;
+              }
+            }
+
+            /* User CSS */
+            .parent {
+              /* @scope with bare declarations */
+              @scope (.from) to (.to) {
+                --x: 1;
+              }
+
+              .child {
+                .a {
+                  /* Variant with @scope used by @apply */
+                  @apply blue:[--x:2];
+                }
+                .b {
+                  /* Variant with @scope used by @apply combined with another variant */
+                  @apply blue:hover:[--x:3];
+                }
+                .c {
+                  /* Variant with @scoped used by @variant */
+                  @variant blue {
+                    --x: 4;
+                  }
+                }
+              }
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope ([data-theme="blue"]) to ([data-theme]) {
+            .blue\\:bg-blue-500 {
+              background-color: #00f;
+            }
+          }
+        }
+
+        @scope (.parent .from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+
+        @scope ([data-theme="blue"]) to ([data-theme]) {
+          .parent .child .a {
+            --x: 2;
+          }
+
+          @media (hover: hover) {
+            .parent .child .b:hover {
+              --x: 3;
+            }
+          }
+
+          .parent .child .c {
+            --x: 4;
+          }
+        }
+        "
+      `)
+    })
+
+    test('`&` in the `@scope` prelude of a custom variant controls the composition', async () => {
+      expect(
+        await run(
+          ['in-blue:flex', 'blue-self:flex', 'scoped-panel:flex', 'in-blue:hover:flex'],
+          css`
+            /* Default: the utility applies to elements inside the scope */
+            @custom-variant in-blue {
+              @scope ([data-theme='blue']) to ([data-theme]) {
+                @slot;
+              }
+            }
+
+            /* Trailing &: the utility itself becomes the scoping root */
+            @custom-variant blue-self {
+              @scope ([data-theme='blue'] &) to ([data-theme]) {
+                @slot;
+              }
+            }
+
+            /* Leading &: the scoping roots are found inside the utility */
+            @custom-variant scoped-panel {
+              @scope (& .panel) {
+                @slot;
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope ([data-theme="blue"]) to ([data-theme]) {
+            .in-blue\\:flex {
+              display: flex;
+            }
+
+            @media (hover: hover) {
+              .in-blue\\:hover\\:flex:hover {
+                display: flex;
+              }
+            }
+          }
+
+          @scope ([data-theme="blue"] .blue-self\\:flex) to ([data-theme]) {
+            :where(:scope) {
+              display: flex;
+            }
+          }
+
+          @scope (.scoped-panel\\:flex .panel) {
+            :where(:scope) {
+              display: flex;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('user-authored `@scope` inside `@variant` keeps its native semantics', async () => {
+      // The `hocus` variant does not use `@scope` itself, so the inner `@scope`
+      // is user CSS and compiles with the native CSS nesting semantics: the
+      // parent selector moves into the prelude, and bare declarations apply to
+      // the scoping root.
+      expect(
+        await compileCss(css`
+          @custom-variant hocus (&:hover, &:focus);
+
+          .btn {
+            @variant hocus {
+              @scope (.from) to (.to) {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.btn:hover, .btn:focus) .from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    test('user-authored `@scope` inside a `@variant` that uses `@scope` keeps its native semantics', async () => {
+      // The `blue` variant uses `@scope` itself, so its own `@scope` takes the
+      // variant composition. But the user CSS slotted into its body is marked
+      // as `user` content, so the inner `@scope` keeps its native CSS nesting
+      // semantics: the parent selector moves into the prelude, and bare
+      // declarations apply to the scoping root.
+      expect(
+        await compileCss(css`
+          @custom-variant blue {
+            @scope ([data-theme='blue']) to ([data-theme]) {
+              @slot;
+            }
+          }
+
+          .btn {
+            @variant blue {
+              @scope (.from) to (.to) {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope ([data-theme="blue"]) to ([data-theme]) {
+          @scope (.btn .from) to (.to) {
+            :where(:scope) {
+              --x: 1;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('@scope nested in a rule, nested in another @scope, with @slot', async () => {
+      // Both `@scope` rules take the variant composition: neither prelude is
+      // made relative to a parent, the outer/inner nesting order is preserved,
+      // and the rule between them composes into the body with the utility's
+      // selector.
+      expect(
+        await run(
+          ['foo:underline'],
+          css`
+            @custom-variant foo {
+              @scope (.outer) to (.outer-limit) {
+                .middle {
+                  @scope (.inner) to (.inner-limit) {
+                    @slot;
+                  }
+                }
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.outer) to (.outer-limit) {
+            @scope (.inner) to (.inner-limit) {
+              .foo\\:underline .middle {
+                text-decoration-line: underline;
+              }
+            }
+          }
+        }
+        "
+      `)
+    })
+  })
+
   test('built-in variants can be overridden while keeping their order', async () => {
     expect(
       await run(

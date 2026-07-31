@@ -401,6 +401,21 @@ export function optimizeAst(
       // Remove reference imports from printing
       if (node.context.reference) {
         return
+      }
+
+      // Preserve context nodes that track the source of their subtree (variant
+      // bodies and the user content slotted into them), so `handleNesting`
+      // knows whether to compose `@scope` rules with the variant semantics or
+      // their native CSS nesting semantics
+      else if (node.context.source) {
+        let copy = { ...node, nodes: [] as AstNode[] }
+        for (let child of node.nodes) {
+          transform(child, copy.nodes, { ...context, ...node.context }, depth)
+        }
+
+        if (copy.nodes.length > 0) {
+          parent.push(copy)
+        }
       } else {
         for (let child of node.nodes) {
           transform(child, parent, { ...context, ...node.context }, depth)
@@ -658,6 +673,27 @@ export function optimizeAst(
 export function handleNesting(ast: AstNode[]): AstNode[] {
   let parseSelectorCache = new DefaultMap(SelectorParser.parse)
 
+  // Nodes with an `@scope` rule somewhere in their subtree. These cannot use
+  // the "emit as-is" fast path for rules containing declarations, because
+  // `@scope` rules change meaning when they stay nested inside a style rule and
+  // must go through the hoisting machinery instead.
+  let containsAtScope = new Set<AstNode>()
+  {
+    function scan(nodes: AstNode[]): boolean {
+      let found = false
+      for (let node of nodes) {
+        if (node.kind === 'declaration' || node.kind === 'comment') continue
+
+        if (scan(node.nodes) || (node.kind === 'at-rule' && node.name === '@scope')) {
+          containsAtScope.add(node)
+          found = true
+        }
+      }
+      return found
+    }
+    scan(ast)
+  }
+
   // Track `rule` selectors as we go
   let selectorStack: [
     selector: string,
@@ -690,6 +726,45 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
   // Track whether we should skip a node in the `exit` phase
   let skipExit = new Set<AstNode>()
 
+  // Track the source of the subtree we are currently in. Variant bodies are
+  // wrapped in a `context` node with `source: 'variant'`, and the user content
+  // slotted into them is wrapped in `source: 'user'`. `@scope` rules whose
+  // nearest source is a variant are hoisted with the variant semantics, all
+  // other `@scope` rules use their native CSS nesting semantics.
+  let sourceStack: (string | boolean)[] = []
+
+  // Selector stacks that are masked while inside an `@scope` rule whose
+  // `<scope-start>` selector consumed the parent selector via `&`.
+  //
+  // Once the parent selector is part of the `<scope-start>` selector, the rules
+  // inside the `@scope` are relative to the scoping root, not to the parent
+  // rule. Selectors in scoped style rules only match elements in scope, and the
+  // parent matches ancestors of the scoping root, so prefixing the rules with
+  // the parent selector would make them match nothing at all.
+  //
+  // E.g.:
+  //
+  // ```css
+  // .parent {
+  //   @scope (& > .scope) {
+  //     .content {
+  //       color: red;
+  //     }
+  //   }
+  // }
+  // ```
+  //
+  // becomes:
+  //
+  // ```css
+  // @scope (.parent > .scope) {
+  //   .content { /* ← not `.parent .content` */
+  //     color: red;
+  //   }
+  // }
+  // ```
+  let maskedSelectorStacks = new Map<AstNode, typeof selectorStack>()
+
   walk(ast, {
     enter(node) {
       switch (node.kind) {
@@ -705,13 +780,40 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             // part of a string inside an attribute selector. But the
             // SelectorParser will take care of that.
             if (node.selector.includes('&')) {
+              // Inside an `@scope` rule, the nesting selector behaves like
+              // `:where(:scope)` and matches the scoping root with zero
+              // specificity. E.g.:
+              //
+              // ```css
+              // @scope (.checkout) {
+              //   & > p {
+              //     color: red;
+              //   }
+              // }
+              // ```
+              //
+              // becomes:
+              //
+              // ```css
+              // @scope (.checkout) {
+              //   :where(:scope) > p {
+              //     color: red;
+              //   }
+              // }
+              // ```
+              //
+              // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+              let replacement = atRuleStack.some(([name]) => name === '@scope')
+                ? ':where(:scope)'
+                : ':scope'
+
               let ast = SelectorParser.parse(node.selector)
               let changed = false
 
               walk(ast, (node) => {
                 if (node.kind === 'selector' && node.value === '&') {
                   changed = true
-                  node.value = ':scope'
+                  node.value = replacement
                 }
               })
 
@@ -740,280 +842,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
             let lastSelector = selectorStack[selectorStack.length - 1][0]
             let selector = segment(node.selector, ',')
-              .map((selector) => {
-                // Fast path: we know there isn't an `&` so we can prepend the
-                // parent selector immediately.
-                if (!selector.includes('&')) {
-                  let lastAst = parseSelectorCache.get(lastSelector)
-                  return `${lastAst.length === 1 && lastAst[0].kind === 'list' ? `:is(${lastSelector})` : lastSelector} ${selector}`
-                }
-
-                // Slow path: we need to replace the `&` with the parent
-                // selector. A simple `replaceAll(…)` won't work because a `&`
-                // could be escaped, or could be part of an attribute selector.
-                //
-                // Much safer to parse the selector and replace the `&` that way
-                {
-                  let ast = SelectorParser.parse(selector)
-                  let changed = false
-                  walk(ast, {
-                    enter(node, ctx) {
-                      if (node.kind !== 'selector' || node.value !== '&') return
-
-                      changed = true
-
-                      // Safest option: use `is(…)` semantics when
-                      // substituting `&` for the parent selector.
-                      node.value = `:is(${lastSelector})`
-
-                      // We should always have a parent, so this shouldn't happen
-                      if (ctx.parent === null) return
-
-                      // Optimizations:
-                      let parentAst = parseSelectorCache.get(lastSelector)
-
-                      // 1. If we're dealing with multiple selectors, then we
-                      //    know that the `:is(…)` needs to stay. Nothing to optimize.
-                      if (parentAst.length === 1 && parentAst[0].kind === 'list') {
-                        return // Keep `:is(…)` semantics
-                      }
-
-                      // 2. We know that `&` is standalone when it's inside of
-                      //    a complex selector. E.g. `[before] & [after]`
-                      if (ctx.parent.kind === 'complex') {
-                        // `& [after]`
-                        //
-                        // `:is(…)` semantics are not required, because these
-                        // are equivalent:
-                        //
-                        // - `:is(div) [after]`       → `div [after]`
-                        // - `:is(.x) [after]`        → `.x [after]`
-                        // - `:is([before]) [after]`  → `[before] [after]`
-                        // - `:is(.a > .b) [after]`   → `.a > .b [after]`
-                        if (ctx.index === 0) {
-                          node.value = lastSelector
-                          return
-                        }
-
-                        // `[before] &`
-                        //
-                        // `:is(…)` semantics are required if we're dealing
-                        // with a complex parent selector. Otherwise the
-                        // meaning of the selector could change:
-                        //
-                        // - `[before] :is(div)`      → `[before] div`
-                        // - `[before] :is(.x)`       → `[before] .x`
-                        // - `[before] :is([after])`  → `[before] [after]`
-                        // - `[before] :is(.a > .b)`  → `[before] :is(.a > .b)` (!)
-                        else if (ctx.index === ctx.siblings.length - 1) {
-                          if (parentAst[0].kind === 'complex') {
-                            return // Keep `:is(…)` semantics
-                          }
-
-                          node.value = lastSelector
-                          return
-                        }
-
-                        // `[before] & [after]`
-                        //
-                        // `:is(…)` semantics are required if we're dealing
-                        // with a complex parent selector. Otherwise the
-                        // meaning of the selector could change:
-                        //
-                        // - `[before] :is(div) [after]`      → `[before] div [after]`
-                        // - `[before] :is(.x) [after]`       → `[before] .x [after]`
-                        // - `[before] :is(.a > .b) [after]`  → `[before] :is(.a > .b) [after]` (!)
-                        else {
-                          if (parentAst[0].kind === 'complex') {
-                            return // Keep `:is(…)` semantics
-                          }
-
-                          node.value = lastSelector
-                          return
-                        }
-                      }
-
-                      // 3. We know that `&` is attached to some other
-                      //    selector when it's inside of a compound selector.
-                      //
-                      //    E.g. `[before]&[after]`
-                      //
-                      //    We have to be careful that our parent, when it's
-                      //    part of a complex selector, that the same rules apply
-                      //
-                      //    E.g.: `[before] &[after]`
-                      //                    ^          current node
-                      //                    ^^^^^^^^   compound selector
-                      //           ^^^^^^^^^^^^^^^^^   complex selector
-                      //
-                      else if (ctx.parent.kind === 'compound') {
-                        if (parentAst[0].kind === 'complex') {
-                          let path = ctx.path()
-                          let grandParent = path[path.length - 2]
-
-                          // When our compound parent is part of a complex
-                          // selector, and it's not the very first node, then we
-                          // can't safely get rid of the `:is(…)` if the last
-                          // selector is a complex selector as well, unless the
-                          // `&` maps to a single selector or compound selector.
-                          //
-                          // ```css
-                          // .foo .bar {            /* Complex selector */
-                          //   .system &:focus {    /* Complex selector + compound selecto*/
-                          //     --x: 1;
-                          //   }
-                          // }
-                          // .foo:hover {           /* Compound selector */
-                          //   .system &:focus {    /* Complex selector + compound selector */
-                          //     --x: 2;
-                          //   }
-                          // }
-                          // ```
-                          //
-                          // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-                          //
-                          // ```css
-                          // .system :is(.foo .bar):focus { /* Cannot drop the `:is(…)`, otherwise `.system` and `.foo` can be swapped in the DOM */
-                          //   --x: 1;
-                          // }
-                          // .system .foo:hover:focus {
-                          //   --x: 2;
-                          // }
-                          // ```
-                          if (
-                            grandParent &&
-                            grandParent.kind === 'complex' &&
-                            grandParent.nodes[0] !== ctx.parent
-                          ) {
-                            return // Keep `:is(…)` semantics
-                          }
-                        }
-
-                        // `&*` and `&div` are invalid CSS so these should stay
-                        // invalid. They should be written as `*&` and `div&` instead.
-                        if (
-                          ctx.siblings
-                            .slice(ctx.index + 1)
-                            .some(
-                              (sibling) =>
-                                SelectorParser.isUniversalSelector(sibling) ||
-                                SelectorParser.isTypeSelector(sibling),
-                            )
-                        ) {
-                          return // Keep `:is(…)` semantics
-                        }
-
-                        // `&[after]`
-                        //
-                        // `:is(…)` semantics are not required, because these
-                        // are equivalent:
-                        //
-                        // - `:is(div)[after]`       → `div[after]`
-                        // - `:is(.x)[after]`        → `.x[after]`
-                        // - `:is([before])[after]`  → `[before][after]`
-                        // - `:is(.a > .b)[after]`   → `.a > .b[after]`
-                        if (ctx.index === 0) {
-                          node.value = lastSelector
-                          return
-                        }
-
-                        // `[before]&`
-                        //
-                        // `:is(…)` semantics are required if we're dealing with a
-                        //
-                        // - complex parent selector, to prevent changing the meaning of the selector
-                        // - a universal selector, because `*` needs to be first
-                        // - a type selector, because `div` needs to be first
-                        //
-                        // - `[before]:is(div)`      → `[before]:is(div)` (!)
-                        // - `[before]:is(*)`        → `[before]:is(*)` (!)
-                        // - `[before]:is(.a > .b)`  → `[before]:is(.a > .b)` (!)
-                        // - `[before]:is(.x)`       → `[before].x`
-                        else if (ctx.index === ctx.siblings.length - 1) {
-                          if (
-                            parentAst[0].kind === 'complex' ||
-                            SelectorParser.isUniversalSelector(parentAst[0]) ||
-                            SelectorParser.isTypeSelector(parentAst[0])
-                          ) {
-                            return // Keep `:is(…)` semantics
-                          }
-
-                          node.value = lastSelector
-                          return
-                        }
-
-                        // `[before]&[after]`
-                        //
-                        // `:is(…)` semantics are required if we're dealing with a
-                        //
-                        // - complex parent selector, to prevent changing the meaning of the selector
-                        // - a universal selector, because `*` needs to be first
-                        // - a type selector, because `div` needs to be first
-                        //
-                        // - `[before]:is(div)[after]`      → `[before]:is(div)[after]` (!)
-                        // - `[before]:is(*)[after]`        → `[before]:is(*)[after]` (!)
-                        // - `[before]:is(.a > .b)[after]`  → `[before]:is(.a > .b)[after]` (!)
-                        // - `[before]:is(.x)[after]`       → `[before].x[after]`
-                        else {
-                          if (
-                            parentAst[0].kind === 'complex' ||
-                            SelectorParser.isUniversalSelector(parentAst[0]) ||
-                            SelectorParser.isTypeSelector(parentAst[0])
-                          ) {
-                            return // Keep `:is(…)` semantics
-                          }
-
-                          node.value = lastSelector
-                          return
-                        }
-                      }
-
-                      // 4. When the current node is a function argument (e.g.
-                      //    `:not(&))`, then we can drop the `:is(…)` entirely.
-                      //
-                      //    The only exception is when the parent has multiple
-                      //    selectors because then we would introduce multiple
-                      //    arguments. Multiple selectors are already handled.
-                      else if (ctx.parent.kind === 'function') {
-                        node.value = lastSelector
-                        return
-                      }
-                    },
-                    exit(node, ctx) {
-                      // Optimization: We can remove the universal selector `*` if
-                      // they are part of a compound selector. E.g.:
-                      //
-                      // - `*:hover` → `:hover`
-                      // - `*[attribute]` → `[attribute]`
-                      //
-                      // Except when the `*` is a namespace, e.g.: `*|div`,
-                      // because `*|div` (any namespace) and `|div` (no
-                      // namespace) have different meanings.
-                      if (
-                        ctx.index === 0 &&
-                        ctx.siblings.length > 1 &&
-                        ctx.parent?.kind === 'compound' &&
-                        SelectorParser.isUniversalSelector(node)
-                      ) {
-                        let next = ctx.siblings[1]
-                        if (next.kind === 'selector' && next.value.charCodeAt(0) === PIPE) {
-                          return
-                        }
-                        return WalkAction.ReplaceSkip([])
-                      }
-                    },
-                  })
-
-                  if (changed) {
-                    return SelectorParser.toCss(ast)
-                  }
-
-                  // It could be that `&` was not found as an actual selector,
-                  // in that case we still have to prepend the parent selector.
-                  let lastAst = parseSelectorCache.get(lastSelector)
-                  return `${lastAst.length === 1 && lastAst[0].kind === 'list' ? `:is(${lastSelector})` : lastSelector} ${selector}`
-                }
-              })
+              .map((selector) => substituteNestingSelector(selector, lastSelector))
               .join(', ')
             selectorStack.push([selector, node.src, node.dst])
           }
@@ -1048,7 +877,14 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
           //   }
           // }
           // ```
-          if (node.nodes.some((child) => child.kind === 'declaration')) {
+          //
+          // The exception is when the rule contains an `@scope` rule somewhere,
+          // because it must go through the normal hoisting machinery instead.
+          // See `containsAtScope` for more details.
+          if (
+            node.nodes.some((child) => child.kind === 'declaration') &&
+            !containsAtScope.has(node)
+          ) {
             // Emitting each child instead of the node itself because we do want
             // to flatten the current node and its selector that is already
             // pushed to the stack.
@@ -1072,7 +908,196 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
           // Hoist at-rules
           else if (HOISTABLE_AT_RULES.has(node.name)) {
-            atRuleStack.push([node.name, node.params, node.src, node.dst])
+            let params = node.params
+
+            // `@scope` is the only hoistable at-rule with selectors in its
+            // prelude, and the only one that changes meaning when it stays
+            // nested inside a style rule. Resolve the prelude and its contents
+            // before hoisting, using one of two composition modes:
+            //
+            // 1. Variant-generated `@scope` rules attach the parent selector
+            //    (the utility) to the rules _inside_ the scope:
+            //
+            //    ```css
+            //    .scoped\:underline {
+            //      @scope (.from) to (.to) {
+            //        text-decoration-line: underline;
+            //      }
+            //    }
+            //    ```
+            //
+            //    becomes:
+            //
+            //    ```css
+            //    @scope (.from) to (.to) {
+            //      .scoped\:underline {
+            //        text-decoration-line: underline;
+            //      }
+            //    }
+            //    ```
+            //    This way the utility is properly sandwiched between the
+            //    `.from` and `.to` boundaries.
+            //
+            // 2. User-authored `@scope` rules keep their native CSS nesting
+            //    semantics: the `<scope-start>` selector is relative to the parent
+            //    rule, and the rules inside are relative to the scoping root:
+            //
+            //    ```css
+            //    .parent {
+            //      @scope (.from) {
+            //        color: red;
+            //      }
+            //    }
+            //    ```
+            //
+            //    becomes:
+            //
+            //    ```css
+            //    @scope (.parent .from) {
+            //      :where(:scope) {
+            //        color: red;
+            //      }
+            //    }
+            //    ```
+            //
+            //    In a perfect world we leave this alone, but Lightning CSS
+            //    seems to incorrectly transform this into a version where the
+            //    `.parent` class is gone entirely:
+            //
+            //    ```css
+            //    @scope (.from) {
+            //      color: red;
+            //    }
+            //    ```
+            //
+            // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+            if (node.name === '@scope') {
+              let isVariant = sourceStack[sourceStack.length - 1] === 'variant'
+              let hasParent = selectorStack.length > 0
+
+              // Lightning CSS bug: This snippet will error
+              //
+              // ```css
+              // @scope {
+              //   --x: 1;
+              // }
+              // ```
+              //
+              // We will wrap these bare-declarations in a `&` rule to fix the crash:
+              // ```css
+              // @scope {
+              //   & {
+              //     --x: 1;
+              //   }
+              // }
+              // ```
+              {
+                let queue: (AtRule | Context)[] = [node]
+
+                for (let parent of queue) {
+                  let newNodes: AstNode[] = []
+                  let group: AstNode[] | null = null
+
+                  for (let child of parent.nodes) {
+                    if (child.kind === 'context') queue.push(child)
+
+                    if (child.kind === 'declaration' || child.kind === 'comment') {
+                      if (group === null) {
+                        group = []
+                        newNodes.push(styleRule('&', group))
+                      }
+                      group.push(child)
+                    } else {
+                      group = null
+                      newNodes.push(child)
+                    }
+                  }
+
+                  parent.nodes = newNodes
+                }
+              }
+
+              if (params.includes('&') || (!isVariant && hasParent)) {
+                // The selector to substitute for `&` in the `<scope-start>`
+                // selector: the elements matched by the nearest ancestor style
+                // rule, or `:scope` when there is none.
+                let parentSelector = hasParent ? selectorStack[selectorStack.length - 1][0] : null
+
+                let paramsAst = ValueParser.parse(params)
+
+                // Whether the current `(…)` group is a `<scope-end>` selector.
+                //
+                // ```css
+                // @scope (.from) to (.to)
+                //        ^^^^^^^           scope-start (optional)
+                //                   ^^^^^  scope-end
+                //
+                // @scope to (.to)
+                //           ^^^^^          scope-end
+                // ```
+                let isScopeEnd = false
+
+                // Whether the `<scope-start>` selector consumed the parent
+                // selector
+                let consumedParent = false
+
+                for (let paramNode of paramsAst) {
+                  if (paramNode.kind === 'word' && paramNode.value === 'to') {
+                    isScopeEnd = true
+                    continue
+                  }
+
+                  // A `(…)` group parses as a function call without a name
+                  if (paramNode.kind !== 'function' || paramNode.value !== '') continue
+
+                  let selector = ValueParser.toCss(paramNode.nodes)
+
+                  // A user-authored `<scope-start>` selector is relative to the
+                  // parent rule, and resolves exactly like nested style rule
+                  // selectors do: `&` refers to the elements matched by the
+                  // parent rule, and selectors without `&` are prefixed with
+                  // it.
+                  if (!isScopeEnd && !isVariant && parentSelector !== null) {
+                    paramNode.nodes = [
+                      ValueParser.word(
+                        segment(selector, ',')
+                          .map((part) => substituteNestingSelector(part.trim(), parentSelector))
+                          .join(', '),
+                      ),
+                    ]
+                    consumedParent = true
+                  }
+
+                  // Otherwise, only an explicit `&` is resolved. In the
+                  // `<scope-start>` selector, `&` refers to the elements
+                  // matched by the nearest ancestor style rule (or `:scope`
+                  // when there is none). In the `<scope-end>` selector, `&`
+                  // refers to the scoping root and behaves like
+                  // `:where(:scope)`.
+                  else if (selector.includes('&')) {
+                    let replacement = isScopeEnd ? ':where(:scope)' : (parentSelector ?? ':scope')
+
+                    paramNode.nodes = [
+                      ValueParser.word(substituteNestingSelector(selector, replacement)),
+                    ]
+                    if (!isScopeEnd && hasParent) consumedParent = true
+                  }
+                }
+
+                params = ValueParser.toCss(paramsAst)
+
+                // Mask the selector stack for the `@scope` rule's subtree, so
+                // its rules resolve like top-level rules within the scope (and
+                // `&` resolves to `:where(:scope)`). The stack is restored in
+                // the exit phase. See `maskedSelectorStacks` for more details.
+                if (consumedParent) {
+                  maskedSelectorStacks.set(node, selectorStack)
+                  selectorStack = []
+                }
+              }
+            }
+
+            atRuleStack.push([node.name, params, node.src, node.dst])
           }
 
           // If we can't hoist them, emit them immediately as-is
@@ -1091,6 +1116,9 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
         }
 
         case 'context':
+          if (node.context.source) sourceStack.push(node.context.source)
+          break
+
         case 'at-root':
           break
 
@@ -1112,12 +1140,22 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
         case 'at-rule': {
           nodes = null
           atRuleStack.pop()
+
+          // Restore the selector stack that was masked by this `@scope` rule
+          let maskedSelectorStack = maskedSelectorStacks.get(node)
+          if (maskedSelectorStack) {
+            selectorStack = maskedSelectorStack
+            maskedSelectorStacks.delete(node)
+          }
           break
         }
 
+        case 'context':
+          if (node.context.source) sourceStack.pop()
+          break
+
         case 'declaration':
         case 'comment':
-        case 'context':
         case 'at-root':
           break
 
@@ -1301,6 +1339,274 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
       }
     }
   }
+
+  // Substitutes the `&` selector with the parent selector with `:is(…)` semantics.
+  //
+  // If the `&` is not found, we will prepend it using a descendant combinator.
+  // E.g.: `& ${selector}` → `${parentSelector} ${selector}`
+  //
+  // In some situations we can get rid of the `:is(…)` wrapper, but only if it's safe to do so.
+  function substituteNestingSelector(selector: string, parentSelector: string): string {
+    // Slow path: we need to replace the `&` with the parent selector. A simple
+    // `replaceAll(…)` won't work because a `&` could be escaped, or could be
+    // part of an attribute selector.
+    //
+    // Much safer to parse the selector and replace the `&` that way
+    if (selector.includes('&')) {
+      let ast = SelectorParser.parse(selector)
+      let changed = false
+      walk(ast, {
+        enter(node, ctx) {
+          if (node.kind !== 'selector' || node.value !== '&') return
+
+          changed = true
+
+          // Safest option: use `is(…)` semantics when substituting `&` for the
+          // parent selector.
+          node.value = `:is(${parentSelector})`
+
+          // We should always have a parent, so this shouldn't happen
+          if (ctx.parent === null) return
+
+          // Optimizations:
+          let parentAst = parseSelectorCache.get(parentSelector)
+
+          // 1. If we're dealing with multiple selectors, then we know that the
+          //    `:is(…)` needs to stay. Nothing to optimize.
+          if (parentAst.length === 1 && parentAst[0].kind === 'list') {
+            return // Keep `:is(…)` semantics
+          }
+
+          // 2. We know that `&` is standalone when it's inside of a complex
+          //    selector. E.g. `[before] & [after]`
+          if (ctx.parent.kind === 'complex') {
+            // `& [after]`
+            //
+            // `:is(…)` semantics are not required, because these are equivalent:
+            //
+            // - `:is(div) [after]`       → `div [after]`
+            // - `:is(.x) [after]`        → `.x [after]`
+            // - `:is([before]) [after]`  → `[before] [after]`
+            // - `:is(.a > .b) [after]`   → `.a > .b [after]`
+            if (ctx.index === 0) {
+              node.value = parentSelector
+              return
+            }
+
+            // `[before] &`
+            //
+            // `:is(…)` semantics are required if we're dealing with a complex
+            // parent selector. Otherwise the meaning of the selector could
+            // change:
+            //
+            // - `[before] :is(div)`      → `[before] div`
+            // - `[before] :is(.x)`       → `[before] .x`
+            // - `[before] :is([after])`  → `[before] [after]`
+            // - `[before] :is(.a > .b)`  → `[before] :is(.a > .b)` (!)
+            else if (ctx.index === ctx.siblings.length - 1) {
+              if (parentAst[0].kind === 'complex') {
+                return // Keep `:is(…)` semantics
+              }
+
+              node.value = parentSelector
+              return
+            }
+
+            // `[before] & [after]`
+            //
+            // `:is(…)` semantics are required if we're dealing with a complex
+            // parent selector. Otherwise the meaning of the selector could
+            // change:
+            //
+            // - `[before] :is(div) [after]`      → `[before] div [after]`
+            // - `[before] :is(.x) [after]`       → `[before] .x [after]`
+            // - `[before] :is(.a > .b) [after]`  → `[before] :is(.a > .b) [after]` (!)
+            else {
+              if (parentAst[0].kind === 'complex') {
+                return // Keep `:is(…)` semantics
+              }
+
+              node.value = parentSelector
+              return
+            }
+          }
+
+          // 3. We know that `&` is attached to some other selector when it's
+          //    inside of a compound selector.
+          //
+          //    E.g. `[before]&[after]`
+          //
+          //    We have to be careful that our parent, when it's part of a complex
+          //    selector, that the same rules apply
+          //
+          //    E.g.: `[before] &[after]`
+          //                    ^          current node
+          //                    ^^^^^^^^   compound selector
+          //           ^^^^^^^^^^^^^^^^^   complex selector
+          //
+          else if (ctx.parent.kind === 'compound') {
+            if (parentAst[0].kind === 'complex') {
+              let path = ctx.path()
+              let grandParent = path[path.length - 2]
+
+              // When our compound parent is part of a complex selector, and it's
+              // not the very first node, then we can't safely get rid of the
+              // `:is(…)` if the last selector is a complex selector as well,
+              // unless the `&` maps to a single selector or compound selector.
+              //
+              // ```css
+              // .foo .bar {            /* Complex selector */
+              //   .system &:focus {    /* Complex selector + compound selecto*/
+              //     --x: 1;
+              //   }
+              // }
+              // .foo:hover {           /* Compound selector */
+              //   .system &:focus {    /* Complex selector + compound selector */
+              //     --x: 2;
+              //   }
+              // }
+              // ```
+              //
+              // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+              //
+              // ```css
+              // .system :is(.foo .bar):focus { /* Cannot drop the `:is(…)`, otherwise `.system` and `.foo` can be swapped in the DOM */
+              //   --x: 1;
+              // }
+              // .system .foo:hover:focus {
+              //   --x: 2;
+              // }
+              // ```
+              if (
+                grandParent &&
+                grandParent.kind === 'complex' &&
+                grandParent.nodes[0] !== ctx.parent
+              ) {
+                return // Keep `:is(…)` semantics
+              }
+            }
+
+            // `&*` and `&div` are invalid CSS so these should stay invalid. They
+            // should be written as `*&` and `div&` instead.
+            if (
+              ctx.siblings
+                .slice(ctx.index + 1)
+                .some(
+                  (sibling) =>
+                    SelectorParser.isUniversalSelector(sibling) ||
+                    SelectorParser.isTypeSelector(sibling),
+                )
+            ) {
+              return // Keep `:is(…)` semantics
+            }
+
+            // `&[after]`
+            //
+            // `:is(…)` semantics are not required, because these are equivalent:
+            //
+            // - `:is(div)[after]`       → `div[after]`
+            // - `:is(.x)[after]`        → `.x[after]`
+            // - `:is([before])[after]`  → `[before][after]`
+            // - `:is(.a > .b)[after]`   → `.a > .b[after]`
+            if (ctx.index === 0) {
+              node.value = parentSelector
+              return
+            }
+
+            // `[before]&`
+            //
+            // `:is(…)` semantics are required if we're dealing with a
+            //
+            // - complex parent selector, to prevent changing the meaning of the selector
+            // - a universal selector, because `*` needs to be first
+            // - a type selector, because `div` needs to be first
+            //
+            // - `[before]:is(div)`      → `[before]:is(div)` (!)
+            // - `[before]:is(*)`        → `[before]:is(*)` (!)
+            // - `[before]:is(.a > .b)`  → `[before]:is(.a > .b)` (!)
+            // - `[before]:is(.x)`       → `[before].x`
+            else if (ctx.index === ctx.siblings.length - 1) {
+              if (
+                parentAst[0].kind === 'complex' ||
+                SelectorParser.isUniversalSelector(parentAst[0]) ||
+                SelectorParser.isTypeSelector(parentAst[0])
+              ) {
+                return // Keep `:is(…)` semantics
+              }
+
+              node.value = parentSelector
+              return
+            }
+
+            // `[before]&[after]`
+            //
+            // `:is(…)` semantics are required if we're dealing with a
+            //
+            // - complex parent selector, to prevent changing the meaning of the selector
+            // - a universal selector, because `*` needs to be first
+            // - a type selector, because `div` needs to be first
+            //
+            // - `[before]:is(div)[after]`      → `[before]:is(div)[after]` (!)
+            // - `[before]:is(*)[after]`        → `[before]:is(*)[after]` (!)
+            // - `[before]:is(.a > .b)[after]`  → `[before]:is(.a > .b)[after]` (!)
+            // - `[before]:is(.x)[after]`       → `[before].x[after]`
+            else {
+              if (
+                parentAst[0].kind === 'complex' ||
+                SelectorParser.isUniversalSelector(parentAst[0]) ||
+                SelectorParser.isTypeSelector(parentAst[0])
+              ) {
+                return // Keep `:is(…)` semantics
+              }
+
+              node.value = parentSelector
+              return
+            }
+          }
+
+          // 4. When the current node is a function argument (e.g. `:not(&))`,
+          //    then we can drop the `:is(…)` entirely.
+          //
+          //    The only exception is when the parent has multiple selectors
+          //    because then we would introduce multiple arguments. Multiple
+          //    selectors are already handled.
+          else if (ctx.parent.kind === 'function') {
+            node.value = parentSelector
+            return
+          }
+        },
+        exit(node, ctx) {
+          // Optimization: We can remove the universal selector `*` if they are
+          // part of a compound selector. E.g.:
+          //
+          // - `*:hover` → `:hover`
+          // - `*[attribute]` → `[attribute]`
+          //
+          // Except when the `*` is a namespace, e.g.: `*|div`, because `*|div`
+          // (any namespace) and `|div` (no namespace) have different meanings.
+          if (
+            ctx.index === 0 &&
+            ctx.siblings.length > 1 &&
+            ctx.parent?.kind === 'compound' &&
+            SelectorParser.isUniversalSelector(node)
+          ) {
+            let next = ctx.siblings[1]
+            if (next.kind === 'selector' && next.value.charCodeAt(0) === PIPE) {
+              return
+            }
+            return WalkAction.ReplaceSkip([])
+          }
+        },
+      })
+
+      if (changed) return SelectorParser.toCss(ast)
+    }
+
+    // Fast path: we know there isn't an `&` so we can prepend the parent
+    // selector immediately.
+    let parentAst = parseSelectorCache.get(parentSelector)
+    return `${parentAst.length === 1 && parentAst[0].kind === 'list' ? `:is(${parentSelector})` : parentSelector} ${selector}`
+  }
 }
 
 // A set of at-rules that can be hoisted to the top without any repercussions.
@@ -1311,6 +1617,7 @@ const HOISTABLE_AT_RULES = new Set([
   '@layer',
   '@media',
   '@page',
+  '@scope',
   '@starting-style',
   '@supports',
   '@view-transition',
@@ -1323,6 +1630,7 @@ const DROPPABLE_IF_EMPTY_AT_RULES = new Set([
   '@container',
   '@media',
   '@page',
+  '@scope',
   '@starting-style',
   '@supports',
   '@view-transition',

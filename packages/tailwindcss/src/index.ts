@@ -392,21 +392,25 @@ async function parseCss(
           }
         }
 
+        let usesAtScope = atRuleParams.some((param) => param.startsWith('@scope'))
+
         customVariants.set(name, (designSystem) => {
           designSystem.variants.static(
             name,
             (r) => {
+              let slot = usesAtScope ? [contextNode({ source: 'user' }, r.nodes)] : r.nodes
+
               let nodes: AstNode[] = []
 
               if (styleRuleSelectors.length > 0) {
-                nodes.push(styleRule(styleRuleSelectors.join(', '), r.nodes))
+                nodes.push(styleRule(styleRuleSelectors.join(', '), slot))
               }
 
               for (let selector of atRuleParams) {
-                nodes.push(rule(selector, r.nodes))
+                nodes.push(rule(selector, slot))
               }
 
-              r.nodes = nodes
+              r.nodes = usesAtScope ? [contextNode({ source: 'variant' }, nodes)] : nodes
             },
             {
               compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleParams]),
