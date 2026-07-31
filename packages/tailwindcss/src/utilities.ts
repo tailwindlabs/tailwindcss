@@ -1561,11 +1561,11 @@ export function createUtilities(theme: Theme) {
 
   {
     let transformValue = [
-      'var(--tw-rotate-x,)',
-      'var(--tw-rotate-y,)',
-      'var(--tw-rotate-z,)',
-      'var(--tw-skew-x,)',
-      'var(--tw-skew-y,)',
+      'var(--tw-rotate-x, )',
+      'var(--tw-rotate-y, )',
+      'var(--tw-rotate-z, )',
+      'var(--tw-skew-x, )',
+      'var(--tw-skew-y, )',
     ].join(' ')
 
     let transformProperties = () =>
@@ -1807,7 +1807,7 @@ export function createUtilities(theme: Theme) {
     staticUtility(`touch-pan-${value}`, [
       touchProperties,
       ['--tw-pan-x', `pan-${value}`],
-      ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+      ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
     ])
   }
 
@@ -1815,14 +1815,14 @@ export function createUtilities(theme: Theme) {
     staticUtility(`touch-pan-${value}`, [
       touchProperties,
       ['--tw-pan-y', `pan-${value}`],
-      ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+      ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
     ])
   }
 
   staticUtility('touch-pinch-zoom', [
     touchProperties,
     ['--tw-pinch-zoom', `pinch-zoom`],
-    ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+    ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
   ])
 
   /**
@@ -4178,27 +4178,27 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssFilterValue = [
-      'var(--tw-blur,)',
-      'var(--tw-brightness,)',
-      'var(--tw-contrast,)',
-      'var(--tw-grayscale,)',
-      'var(--tw-hue-rotate,)',
-      'var(--tw-invert,)',
-      'var(--tw-saturate,)',
-      'var(--tw-sepia,)',
-      'var(--tw-drop-shadow,)',
+      'var(--tw-blur, )',
+      'var(--tw-brightness, )',
+      'var(--tw-contrast, )',
+      'var(--tw-grayscale, )',
+      'var(--tw-hue-rotate, )',
+      'var(--tw-invert, )',
+      'var(--tw-saturate, )',
+      'var(--tw-sepia, )',
+      'var(--tw-drop-shadow, )',
     ].join(' ')
 
     let cssBackdropFilterValue = [
-      'var(--tw-backdrop-blur,)',
-      'var(--tw-backdrop-brightness,)',
-      'var(--tw-backdrop-contrast,)',
-      'var(--tw-backdrop-grayscale,)',
-      'var(--tw-backdrop-hue-rotate,)',
-      'var(--tw-backdrop-invert,)',
-      'var(--tw-backdrop-opacity,)',
-      'var(--tw-backdrop-saturate,)',
-      'var(--tw-backdrop-sepia,)',
+      'var(--tw-backdrop-blur, )',
+      'var(--tw-backdrop-brightness, )',
+      'var(--tw-backdrop-contrast, )',
+      'var(--tw-backdrop-grayscale, )',
+      'var(--tw-backdrop-hue-rotate, )',
+      'var(--tw-backdrop-invert, )',
+      'var(--tw-backdrop-opacity, )',
+      'var(--tw-backdrop-saturate, )',
+      'var(--tw-backdrop-sepia, )',
     ].join(' ')
 
     let filterProperties = () => {
@@ -4941,7 +4941,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssContainValue =
-      'var(--tw-contain-size,) var(--tw-contain-layout,) var(--tw-contain-paint,) var(--tw-contain-style,)'
+      'var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, )'
     let cssContainProperties = () => {
       return atRoot([
         property('--tw-contain-size'),
@@ -5035,7 +5035,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssFontVariantNumericValue =
-      'var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,)'
+      'var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, )'
     let fontVariantNumericProperties = () => {
       return atRoot([
         property('--tw-ordinal'),
@@ -5819,7 +5819,7 @@ export function createUtilities(theme: Theme) {
 
     let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentcolor'
     function ringShadowValue(value: string) {
-      return `var(--tw-ring-inset,) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
+      return `var(--tw-ring-inset, ) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
     }
     utilities.functional('ring', (candidate) => {
       if (!candidate.value) {
@@ -5968,7 +5968,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     let ringOffsetShadowValue =
-      'var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
+      'var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
     utilities.functional('ring-offset', (candidate) => {
       if (!candidate.value) return
 
