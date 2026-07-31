@@ -2817,7 +2817,7 @@ test(
       ﻿<div class="ring-3"></div>
 
       --- ./src/input.css ---
-      @import 'tailwindcss';
+      ﻿@import 'tailwindcss';
 
       /*
         The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
