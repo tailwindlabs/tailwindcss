@@ -577,7 +577,8 @@ it.each([
   }
 })
 
-test('arbitrary not selector with preceding variants (issue #18387)', () => {
+// https://github.com/tailwindlabs/tailwindcss/issues/18387
+test('arbitrary not selector with preceding variants', () => {
   let extractions = defaultExtractor(`
     <div class="focus-visible:[&:not([aria-selected='true'])]:bg-red-500"></div>
     <div class='hover:[&:not([aria-selected="true"])]:bg-red-500'></div>
