@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Ensure classes are extracted when a variant precedes an arbitrary variant containing a quoted attribute selector (e.g. `focus-visible:[&:not([aria-selected="true"])]:bg-red-500`) ([#20374](https://github.com/tailwindlabs/tailwindcss/pull/20374))
 
 ## [3.4.19] - 2025-12-10
 
