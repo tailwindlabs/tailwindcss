@@ -7,7 +7,7 @@ import tailwindcss from './index'
 test('hotUpdate does not crash when Vite omits the server (bundledDev)', () => {
   let plugin = tailwindcss().find((plugin) => plugin.name === '@tailwindcss/vite:generate:serve')!
 
-  let hotUpdate = plugin.hotUpdate as (options: {
+  let hotUpdate = plugin.hotUpdate as unknown as (options: {
     file: string
     modules: unknown[]
     timestamp: number
