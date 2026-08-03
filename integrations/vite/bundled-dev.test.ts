@@ -84,6 +84,10 @@ test(
     // generated CSS is embedded in the bundled JS and injected at runtime, so
     // extract the bundle from the served HTML. While the bundle is being built,
     // Vite serves a temporary fallback page instead.
+    //
+    // The bundle can be split into multiple chunks (e.g. the HMR client runtime
+    // and the app itself), and the chunk containing the CSS is not always the
+    // first one, so fetch every referenced script and stylesheet.
     async function fetchBundledStyles(): Promise<string> {
       let index = await fetch(`${url}/`)
       let html = await index.text()
@@ -91,11 +95,19 @@ test(
         throw new Error('Bundling still in progress')
       }
 
-      let match = /<script[^>]*\ssrc="([^"]+)"/.exec(html)
-      if (!match) throw new Error(`No script tag found in:\n\n${html}`)
+      let sources = [
+        ...html.matchAll(/<script[^>]*\ssrc="([^"]+)"/g),
+        ...html.matchAll(/<link[^>]*\srel="stylesheet"[^>]*\shref="([^"]+)"/g),
+      ].map((match) => match[1])
+      if (sources.length === 0) throw new Error(`No scripts or stylesheets found in:\n\n${html}`)
 
-      let bundle = await fetch(new URL(match[1], `${url}/`))
-      return await bundle.text()
+      let contents = await Promise.all(
+        sources.map(async (src) => {
+          let response = await fetch(new URL(src, `${url}/`))
+          return await response.text()
+        }),
+      )
+      return contents.join('\n')
     }
 
     await retryAssertion(async () => {
@@ -103,6 +115,13 @@ test(
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`flex`)
     })
+
+    // A file change is only picked up once rolldown's watcher is fully set up,
+    // which races with the first write on slow machines. Retried writes must
+    // also produce _different_ content each time, because rolldown compares
+    // module contents and treats a write of identical content as a no-op — so a
+    // lost first change could never be recovered by re-writing the same file.
+    let iteration = 0
 
     await retryAssertion(async () => {
       // Updates are additive and cause new candidates to be added.
@@ -113,7 +132,7 @@ test(
             <link rel="stylesheet" href="./src/index.css" />
           </head>
           <body>
-            <div class="underline m-2">Hello, world!</div>
+            <div class="underline m-2">Hello, world! (${++iteration})</div>
           </body>
         `,
       )
@@ -129,7 +148,7 @@ test(
       await fs.write(
         'project-b/src/index.html',
         html`
-          <div class="flex font-bold" />
+          <div class="flex font-bold" data-iteration="${++iteration}" />
         `,
       )
 
