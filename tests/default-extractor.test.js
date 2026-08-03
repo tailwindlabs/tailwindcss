@@ -576,3 +576,14 @@ it.each([
     expect(extractions).toContain(value)
   }
 })
+
+// https://github.com/tailwindlabs/tailwindcss/issues/18387
+test('arbitrary not selector with preceding variants', () => {
+  let extractions = defaultExtractor(`
+    <div class="focus-visible:[&:not([aria-selected='true'])]:bg-red-500"></div>
+    <div class='hover:[&:not([aria-selected="true"])]:bg-red-500'></div>
+  `)
+
+  expect(extractions).toContain("focus-visible:[&:not([aria-selected='true'])]:bg-red-500")
+  expect(extractions).toContain('hover:[&:not([aria-selected="true"])]:bg-red-500')
+})
