@@ -258,6 +258,13 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       },
 
       hotUpdate({ file, modules, timestamp, server }) {
+        // Vite's experimental `bundledDev` mode invokes `hotUpdate` without a
+        // `server`, so there are no sibling environments to inspect and no
+        // server-level `hot`/`ws` channel to reload through. Bail out early
+        // rather than dereferencing `undefined`.
+        // https://github.com/tailwindlabs/tailwindcss/issues/20378
+        if (!server) return
+
         // Ensure full-reloads are triggered for files that are being watched by
         // Tailwind but aren't part of the module graph (like PHP or HTML
         // files). If we don't do this, then changes to those files won't
