@@ -133,7 +133,7 @@ function* buildRegExps(context) {
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]\/[\w_-]+/, separator]),
 
       regex.pattern([/([^\s"'`\[\\]+-)?\[[^\s`]+\]/, separator]),
-      regex.pattern([/[^\s`\[\\]+/, separator]),
+      regex.pattern([/[^\s"'`\[\\]+/, separator]),
     ]),
   ]
 
