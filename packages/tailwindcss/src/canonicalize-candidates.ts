@@ -72,12 +72,11 @@ interface InternalCanonicalizeOptions {
   signatureOptions: SignatureOptions
 }
 
+type RemValue = number | null
+
 interface DesignSystem extends BaseDesignSystem {
   storage: {
-    [SIGNATURE_OPTIONS_KEY]: DefaultMap<
-      number | null, // Rem value
-      DefaultMap<SignatureFeatures, SignatureOptions>
-    >
+    [SIGNATURE_OPTIONS_KEY]: DefaultMap<RemValue, DefaultMap<SignatureFeatures, SignatureOptions>>
     [COMPARE_CANDIDATES_KEY]: DefaultMap<
       SignatureOptions,
       (a: Candidate | string, b: Candidate | string) => boolean
@@ -107,8 +106,8 @@ interface DesignSystem extends BaseDesignSystem {
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
-    [VARIANT_SIGNATURE_KEY]: DefaultMap<string, string | symbol>
-    [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<string, string[]>
+    [VARIANT_SIGNATURE_KEY]: DefaultMap<RemValue, DefaultMap<string, string | symbol>>
+    [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<RemValue, DefaultMap<string, string[]>>
   }
 }
 
@@ -1537,8 +1536,8 @@ function arbitraryVariants(
   options: InternalCanonicalizeOptions,
 ): Variant | Variant[] {
   let designSystem = options.designSystem
-  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
-  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY]
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY].get(options.signatureOptions.rem)
+  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY].get(options.signatureOptions.rem)
 
   let iterator = walkVariants(variant)
   for (let [variant] of iterator) {
@@ -1549,7 +1548,11 @@ function arbitraryVariants(
     if (typeof targetSignature !== 'string') continue
 
     let foundVariants = variants.get(targetSignature)
-    if (foundVariants.length !== 1) continue
+    if (foundVariants.length === 0) continue
+
+    // The variant is already in a canonical form, e.g.: `min-lg` and `lg`
+    // produce the same CSS, but both are valid so we keep them as-is.
+    if (foundVariants.includes(targetString)) continue
 
     let foundVariant = foundVariants[0]
     let parsedVariant = designSystem.parseVariant(foundVariant)
@@ -1769,7 +1772,7 @@ function modernizeArbitraryValuesVariant(
 ): Variant | Variant[] {
   let result = [variant]
   let designSystem = options.designSystem
-  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY].get(options.signatureOptions.rem)
 
   let iterator = walkVariants(variant)
   for (let [variant, parent] of iterator) {
@@ -2785,100 +2788,110 @@ export const VARIANT_SIGNATURE_KEY = Symbol()
 function createVariantSignatureCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof VARIANT_SIGNATURE_KEY] {
-  return new DefaultMap<string, string | symbol>((variant) => {
-    try {
-      // Ensure the prefix is added to the utility if it is not already present.
-      variant =
-        designSystem.theme.prefix && !variant.startsWith(designSystem.theme.prefix)
-          ? `${designSystem.theme.prefix}:${variant}`
-          : variant
+  return new DefaultMap((rem: number | null) => {
+    return new DefaultMap<string, string | symbol>((variant) => {
+      try {
+        // Ensure the prefix is added to the utility if it is not already present.
+        variant =
+          designSystem.theme.prefix && !variant.startsWith(designSystem.theme.prefix)
+            ? `${designSystem.theme.prefix}:${variant}`
+            : variant
 
-      // Use `@apply` to normalize the selector to `.x`
-      let ast: AstNode[] = [styleRule('.x', [atRule('@apply', `${variant}:flex`)])]
-      substituteAtApply(ast, designSystem)
+        // Use `@apply` to normalize the selector to `.x`
+        let ast: AstNode[] = [styleRule('.x', [atRule('@apply', `${variant}:flex`)])]
+        substituteAtApply(ast, designSystem)
 
-      // Canonicalize selectors to their minimal form
-      walk(ast, (node) => {
-        // At-rules
-        if (node.kind === 'at-rule' && node.params.includes(' ')) {
-          node.params = node.params.replaceAll(' ', '')
-        }
+        // Canonicalize selectors to their minimal form
+        walk(ast, (node) => {
+          // At-rules
+          if (node.kind === 'at-rule') {
+            // Normalize dimensions such that equivalent values in different
+            // units are considered the same. E.g.: with a root font size of
+            // `16px`, `@media (width >= 64rem)` and `@media (width >= 1024px)`
+            // are equivalent.
+            node.params = constantFoldDeclaration(node.params, rem)
 
-        // Style rules
-        else if (node.kind === 'rule') {
-          let selectorAst = SelectorParser.parse(node.selector)
-          let changed = false
-          walk(selectorAst, (node) => {
-            // Assumption: when we have a list of selectors: `.foo, .bar` we
-            // want to mark this as changed because this will be re-printed as
-            // `.foo,.bar`.
-            //
-            // Similarly, when we receive a combinator like `.foo + .bar`, this
-            // will be printed as `.foo+.bar`.
-            //
-            // It could be that this was already optimal, but then this would be
-            // a no-op situation.
-            if (node.kind === 'list' || node.kind === 'combinator') {
-              changed = true
+            if (node.params.includes(' ')) {
+              node.params = node.params.replaceAll(' ', '')
             }
+          }
 
-            // Remove unnecessary `:is(…)` selectors
-            else if (node.kind === 'function' && node.value === ':is') {
-              // A single selector inside of `:is(…)` can be replaced with the
-              // selector itself.
+          // Style rules
+          else if (node.kind === 'rule') {
+            let selectorAst = SelectorParser.parse(node.selector)
+            let changed = false
+            walk(selectorAst, (node) => {
+              // Assumption: when we have a list of selectors: `.foo, .bar` we
+              // want to mark this as changed because this will be re-printed as
+              // `.foo,.bar`.
               //
-              // E.g.: `:is(.foo)` → `.foo`
-              if (node.nodes.length === 1) {
+              // Similarly, when we receive a combinator like `.foo + .bar`, this
+              // will be printed as `.foo+.bar`.
+              //
+              // It could be that this was already optimal, but then this would be
+              // a no-op situation.
+              if (node.kind === 'list' || node.kind === 'combinator') {
                 changed = true
-                return WalkAction.Replace(node.nodes)
               }
 
-              // A selector with the universal selector `*` followed by a pseudo
-              // class, can be replaced with the pseudo class itself.
+              // Remove unnecessary `:is(…)` selectors
+              else if (node.kind === 'function' && node.value === ':is') {
+                // A single selector inside of `:is(…)` can be replaced with the
+                // selector itself.
+                //
+                // E.g.: `:is(.foo)` → `.foo`
+                if (node.nodes.length === 1) {
+                  changed = true
+                  return WalkAction.Replace(node.nodes)
+                }
+
+                // A selector with the universal selector `*` followed by a pseudo
+                // class, can be replaced with the pseudo class itself.
+                else if (
+                  node.nodes.length === 2 &&
+                  node.nodes[0].kind === 'selector' &&
+                  node.nodes[0].value === '*' &&
+                  node.nodes[1].kind === 'selector' &&
+                  node.nodes[1].value[0] === ':'
+                ) {
+                  changed = true
+                  return WalkAction.Replace(node.nodes[1])
+                }
+              }
+
+              // Ensure `*` exists before pseudo selectors inside of `:not(…)`,
+              // `:where(…)`, …
+              //
+              // E.g.:
+              //
+              // `:not(:first-child)` → `:not(*:first-child)`
+              //
               else if (
-                node.nodes.length === 2 &&
-                node.nodes[0].kind === 'selector' &&
-                node.nodes[0].value === '*' &&
-                node.nodes[1].kind === 'selector' &&
-                node.nodes[1].value[0] === ':'
+                node.kind === 'function' &&
+                node.value[0] === ':' &&
+                node.nodes[0]?.kind === 'selector' &&
+                node.nodes[0]?.value[0] === ':'
               ) {
                 changed = true
-                return WalkAction.Replace(node.nodes[1])
+                node.nodes.unshift({ kind: 'selector', value: '*' })
               }
-            }
+            })
 
-            // Ensure `*` exists before pseudo selectors inside of `:not(…)`,
-            // `:where(…)`, …
-            //
-            // E.g.:
-            //
-            // `:not(:first-child)` → `:not(*:first-child)`
-            //
-            else if (
-              node.kind === 'function' &&
-              node.value[0] === ':' &&
-              node.nodes[0]?.kind === 'selector' &&
-              node.nodes[0]?.value[0] === ':'
-            ) {
-              changed = true
-              node.nodes.unshift({ kind: 'selector', value: '*' })
+            if (changed) {
+              node.selector = SelectorParser.toCss(selectorAst, true)
             }
-          })
-
-          if (changed) {
-            node.selector = SelectorParser.toCss(selectorAst, true)
           }
-        }
-      })
+        })
 
-      // Compute the final signature, by generating the CSS for the variant
-      let signature = toCss(ast)
-      return signature
-    } catch {
-      // A unique symbol is returned to ensure that 2 signatures resulting in
-      // `null` are not considered equal.
-      return Symbol()
-    }
+        // Compute the final signature, by generating the CSS for the variant
+        let signature = toCss(ast)
+        return signature
+      } catch {
+        // A unique symbol is returned to ensure that 2 signatures resulting in
+        // `null` are not considered equal.
+        return Symbol()
+      }
+    })
   })
 }
 
@@ -2886,19 +2899,31 @@ export const PRE_COMPUTED_VARIANTS_KEY = Symbol()
 function createPreComputedVariantsCache(
   designSystem: DesignSystem,
 ): DesignSystem['storage'][typeof PRE_COMPUTED_VARIANTS_KEY] {
-  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
-  let lookup = new DefaultMap<string, string[]>(() => [])
+  return new DefaultMap((rem: number | null) => {
+    let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY].get(rem)
+    let lookup = new DefaultMap<string, string[]>(() => [])
 
-  // Actual static variants
-  for (let [root, variant] of designSystem.variants.entries()) {
-    if (variant.kind === 'static') {
-      let signature = signatures.get(root)
-      if (typeof signature !== 'string') continue
-      lookup.get(signature).push(root)
+    for (let [root, variant] of designSystem.variants.entries()) {
+      // Actual static variants
+      if (variant.kind === 'static') {
+        let signature = signatures.get(root)
+        if (typeof signature !== 'string') continue
+        lookup.get(signature).push(root)
+      }
+
+      // Functional variants with known values, e.g.: `max-lg`, `@min-md`, …
+      else if (variant.kind === 'functional') {
+        for (let value of designSystem.variants.getCompletions(root)) {
+          let name = root === '@' ? `@${value}` : `${root}-${value}`
+          let signature = signatures.get(name)
+          if (typeof signature !== 'string') continue
+          lookup.get(signature).push(name)
+        }
+      }
     }
-  }
 
-  return lookup
+    return lookup
+  })
 }
 
 function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => T): T {
