@@ -3,7 +3,10 @@ import tailwindcss from './index'
 
 // Vite's experimental `bundledDev` mode calls `hotUpdate` without a `server`,
 // so the handler must not dereference it.
-// https://github.com/tailwindlabs/tailwindcss/issues/20378
+//
+// - https://github.com/vitejs/vite/discussions/22746
+// - https://github.com/tailwindlabs/tailwindcss/issues/20378
+// - https://vite.dev/blog/announcing-vite8-1#experimental-bundled-dev-mode
 test('hotUpdate does not crash when Vite omits the server (bundledDev)', () => {
   let plugin = tailwindcss().find((plugin) => plugin.name === '@tailwindcss/vite:generate:serve')!
 

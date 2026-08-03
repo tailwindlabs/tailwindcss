@@ -262,6 +262,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         // `server`, so there are no sibling environments to inspect and no
         // server-level `hot`/`ws` channel to reload through. Bail out early
         // rather than dereferencing `undefined`.
+        //
         // https://github.com/tailwindlabs/tailwindcss/issues/20378
         if (!server) return
 
