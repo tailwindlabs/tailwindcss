@@ -33,9 +33,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "3.7.0",
-    "@napi-rs/wasm-runtime": "^1.1.5",
-    "emnapi": "1.11.1"
+    "@napi-rs/cli": "3.8.2",
+    "@napi-rs/wasm-runtime": "^1.2.2",
+    "emnapi": "1.11.3"
   },
   "engines": {
     "node": ">= 20"
