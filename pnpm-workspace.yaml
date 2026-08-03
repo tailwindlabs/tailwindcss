@@ -7,24 +7,24 @@ packages:
 
 patchedDependencies:
   '@parcel/watcher@2.5.1': patches/@parcel__watcher@2.5.1.patch
-  lightningcss@1.32.0: patches/lightningcss@1.32.0.patch
+  lightningcss@1.33.0: patches/lightningcss@1.33.0.patch
 
 catalog:
-  '@types/node': 22.19.21
+  '@types/node': 22.20.1
   dedent: 1.7.2
-  enhanced-resolve: ^5.24.1
-  lightningcss-darwin-arm64: 1.32.0
-  lightningcss-darwin-x64: 1.32.0
-  lightningcss-linux-arm64-gnu: 1.32.0
-  lightningcss-linux-arm64-musl: 1.32.0
-  lightningcss-linux-x64-gnu: 1.32.0
-  lightningcss-linux-x64-musl: 1.32.0
-  lightningcss-win32-x64-msvc: 1.32.0
-  lightningcss: 1.32.0
-  postcss: ^8.5.16
-  prettier: 3.9.4
-  vite: ^8.1.2
-  webpack: ^5.108.3
+  enhanced-resolve: ^5.24.5
+  lightningcss-darwin-arm64: 1.33.0
+  lightningcss-darwin-x64: 1.33.0
+  lightningcss-linux-arm64-gnu: 1.33.0
+  lightningcss-linux-arm64-musl: 1.33.0
+  lightningcss-linux-x64-gnu: 1.33.0
+  lightningcss-linux-x64-musl: 1.33.0
+  lightningcss-win32-x64-msvc: 1.33.0
+  lightningcss: 1.33.0
+  postcss: ^8.5.25
+  prettier: 3.9.6
+  vite: ^8.2.0
+  webpack: ^5.109.2
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
