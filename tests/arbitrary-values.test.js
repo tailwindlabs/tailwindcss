@@ -354,6 +354,25 @@ it('should be possible to read theme values in arbitrary values (without quotes)
   })
 })
 
+it('should be possible to negate theme values in arbitrary values with negative modifier', () => {
+  let config = {
+    content: [{ raw: html`<div class="-mt-[theme(spacing.1)]"></div>` }],
+    theme: {
+      spacing: {
+        1: '0.25rem',
+      },
+    },
+  }
+
+  return run('@tailwind utilities', config).then((result) => {
+    return expect(result.css).toMatchFormattedCss(css`
+      .-mt-\[theme\(spacing\.1\)\] {
+        margin-top: -0.25rem;
+      }
+    `)
+  })
+})
+
 it('should be possible to read theme values in arbitrary values (with quotes)', () => {
   let config = {
     content: [{ raw: html`<div class="w-[theme('spacing.1')] w-[theme('spacing[0.5]')]"></div>` }],
