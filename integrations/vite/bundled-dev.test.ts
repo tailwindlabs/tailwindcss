@@ -9,6 +9,9 @@ import { candidate, css, html, json, retryAssertion, test, ts, txt, yaml } from 
 test(
   'dev mode (experimental `bundledDev`)',
   {
+    // The worst-case retry budget below adds up to ~50s, which does not fit in
+    // the default 60s timeout together with the setup work.
+    timeout: 120_000,
     fs: {
       'package.json': json`{}`,
       'pnpm-workspace.yaml': yaml`
@@ -119,55 +122,73 @@ test(
       { timeout: 10_000, delay: 100 },
     )
 
-    // A file change is only picked up once rolldown's watcher is fully set up,
-    // which races with the first write on slow machines. Retried writes must
-    // also produce _different_ content each time, because rolldown compares
-    // module contents and treats a write of identical content as a no-op — so a
-    // lost first change could never be recovered by re-writing the same file.
+    // Without a connected HMR websocket client (this test only uses HTTP
+    // fetches), a file change does not trigger an eager rebuild — it only marks
+    // the bundle as stale. The next request then kicks off a rebuild and is
+    // served the fallback page until it finishes.
+    //
+    // So after writing a file, poll with fetches _without touching the file
+    // again_: the fetch itself triggers the rebuild, and rewriting on every
+    // poll would re-mark the bundle stale right before each fetch, so a
+    // completed rebuild could never be observed (which is exactly what made
+    // this test flaky).
+    //
+    // The write is only repeated when polling comes up empty for a while, which
+    // covers a change being lost because rolldown's watcher wasn't fully set up
+    // yet. Retried writes must produce _different_ content each time (hence
+    // `iteration`), because rolldown compares module contents and treats a
+    // write of identical content as a no-op.
     let iteration = 0
 
-    // Each iteration writes the file and then immediately fetches, so the fetch
-    // can only observe the rebuild of a _previous_ write. The delay between
-    // iterations is what gives that rebuild time to finish. The default 5ms
-    // would queue a new rebuild on every poll and keep the served bundle
-    // permanently one edit behind, so retry once per second instead.
-    let retryOptions = { timeout: 15_000, delay: 1_000 }
+    async function writeAndAwaitRebuild(
+      file: string,
+      content: () => string,
+      assert: (styles: string) => void,
+    ) {
+      await retryAssertion(
+        async () => {
+          await fs.write(file, content())
 
-    await retryAssertion(async () => {
-      // Updates are additive and cause new candidates to be added.
-      await fs.write(
-        'project-a/index.html',
-        html`
-          <head>
-            <link rel="stylesheet" href="./src/index.css" />
-          </head>
-          <body>
-            <div class="underline m-2">Hello, world! (${++iteration})</div>
-          </body>
-        `,
+          await retryAssertion(async () => assert(await fetchBundledStyles()), {
+            timeout: 5_000,
+            delay: 100,
+          })
+        },
+        { timeout: 20_000 },
       )
+    }
 
-      let styles = await fetchBundledStyles()
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).toContain(candidate`flex`)
-      expect(styles).toContain(candidate`m-2`)
-    }, retryOptions)
+    // Updates are additive and cause new candidates to be added.
+    await writeAndAwaitRebuild(
+      'project-a/index.html',
+      () => html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline m-2">Hello, world! (${++iteration})</div>
+        </body>
+      `,
+      (styles) => {
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`flex`)
+        expect(styles).toContain(candidate`m-2`)
+      },
+    )
 
-    await retryAssertion(async () => {
-      // Manually added `@source`s are watched and trigger a rebuild
-      await fs.write(
-        'project-b/src/index.html',
-        html`
-          <div class="flex font-bold" data-iteration="${++iteration}" />
-        `,
-      )
-
-      let styles = await fetchBundledStyles()
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).toContain(candidate`flex`)
-      expect(styles).toContain(candidate`m-2`)
-      expect(styles).toContain(candidate`font-bold`)
-    }, retryOptions)
+    // Manually added `@source`s are watched and trigger a rebuild
+    await writeAndAwaitRebuild(
+      'project-b/src/index.html',
+      () => html`
+        <div class="flex font-bold" data-iteration="${++iteration}" />
+      `,
+      (styles) => {
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`flex`)
+        expect(styles).toContain(candidate`m-2`)
+        expect(styles).toContain(candidate`font-bold`)
+      },
+    )
 
     expect(pluginErrors).toEqual([])
   },
