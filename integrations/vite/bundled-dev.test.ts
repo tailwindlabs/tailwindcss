@@ -9,8 +9,8 @@ import { candidate, css, html, json, retryAssertion, test, ts, txt, yaml } from 
 test(
   'dev mode (experimental `bundledDev`)',
   {
-    // The worst-case retry budget below adds up to ~50s, which does not fit in
-    // the default 60s timeout together with the setup work.
+    // The worst-case retry budget below adds up to ~100s, which does not fit in
+    // the default 60s timeout.
     timeout: 120_000,
     fs: {
       'package.json': json`{}`,
@@ -138,6 +138,12 @@ test(
     // yet. Retried writes must produce _different_ content each time (hence
     // `iteration`), because rolldown compares module contents and treats a
     // write of identical content as a no-op.
+    //
+    // The polling window doubles as the maximum time a rebuild may take:
+    // rewriting any sooner marks the bundle stale again and restarts the
+    // rebuild, so a machine whose rebuilds outlast the window would never
+    // converge. Rebuilds take ~200ms on an idle machine — the window is sized
+    // with generous headroom for an overloaded CI runner.
     let iteration = 0
 
     async function writeAndAwaitRebuild(
@@ -150,11 +156,11 @@ test(
           await fs.write(file, content())
 
           await retryAssertion(async () => assert(await fetchBundledStyles()), {
-            timeout: 5_000,
+            timeout: 15_000,
             delay: 100,
           })
         },
-        { timeout: 20_000 },
+        { timeout: 45_000 },
       )
     }
 
