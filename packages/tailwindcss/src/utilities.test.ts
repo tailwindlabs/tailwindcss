@@ -12120,7 +12120,7 @@ test('rounded', async () => {
     }
 
     .rounded-full {
-      border-radius: 3.40282e38px;
+      border-radius: 2147483647px;
     }
 
     .rounded-none {

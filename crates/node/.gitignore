@@ -202,5 +202,6 @@ index.js
 browser.js
 tailwindcss-oxide.wasi-browser.js
 tailwindcss-oxide.wasi.cjs
+tailwindcss-oxide.wasi.d.cts
 wasi-worker-browser.mjs
 wasi-worker.mjs

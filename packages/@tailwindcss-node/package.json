@@ -57,7 +57,7 @@
     "enhanced-resolve": "catalog:",
     "jiti": "^2.7.0",
     "lightningcss": "catalog:",
-    "magic-string": "^0.30.21",
+    "magic-string": "^1.1.0",
     "source-map-js": "^1.2.1",
     "tailwindcss": "workspace:*"
   }
