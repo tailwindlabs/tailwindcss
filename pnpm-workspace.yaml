@@ -6,7 +6,7 @@ packages:
   - 'integrations'
 
 patchedDependencies:
-  '@parcel/watcher@2.5.1': patches/@parcel__watcher@2.5.1.patch
+  '@parcel/watcher@2.6.0': patches/@parcel__watcher@2.6.0.patch
   lightningcss@1.33.0: patches/lightningcss@1.33.0.patch
 
 catalog:
@@ -21,6 +21,14 @@ catalog:
   lightningcss-linux-x64-musl: 1.33.0
   lightningcss-win32-x64-msvc: 1.33.0
   lightningcss: 1.33.0
+  '@parcel/watcher-darwin-arm64': ^2.6.0
+  '@parcel/watcher-darwin-x64': ^2.6.0
+  '@parcel/watcher-linux-arm64-glibc': ^2.6.0
+  '@parcel/watcher-linux-arm64-musl': ^2.6.0
+  '@parcel/watcher-linux-x64-glibc': ^2.6.0
+  '@parcel/watcher-linux-x64-musl': ^2.6.0
+  '@parcel/watcher-win32-x64': ^2.6.0
+  '@parcel/watcher': ^2.6.0
   postcss: ^8.5.25
   prettier: 3.9.6
   vite: ^8.2.0

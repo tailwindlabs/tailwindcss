@@ -1,13 +1,14 @@
 diff --git a/index.js b/index.js
-index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..f28fd092644ccfb8aff2618b966cb5219a181a02 100644
+index 78ee744d74900c39a839cafa46b295258fc86307..f28fd092644ccfb8aff2618b966cb5219a181a02 100644
 --- a/index.js
 +++ b/index.js
-@@ -1,40 +1,32 @@
+@@ -1,43 +1,32 @@
  const {createWrapper} = require('./wrapper');
  
 -let name = `@parcel/watcher-${process.platform}-${process.arch}`;
 -if (process.platform === 'linux') {
--  const { MUSL, family } = require('detect-libc');
+-  const {MUSL, familySync} = require('detect-libc');
+-  const family = familySync();
 -  if (family === MUSL) {
 -    name += '-musl';
 -  } else {
@@ -39,7 +40,9 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..f28fd092644ccfb8aff2618b966cb521
 -      binding = require('./build/Debug/watcher.node');
 -    } catch (err) {
 -      handleError(err);
--      throw new Error(`No prebuild or local build of @parcel/watcher found. Tried ${name}. Please ensure it is installed (don't use --no-optional when installing with npm). Otherwise it is possible we don't support your platform yet. If this is the case, please report an issue to https://github.com/parcel-bundler/watcher.`);
+-      throw new Error(
+-        `No prebuild or local build of @parcel/watcher found. Tried ${name}. Please ensure it is installed (don't use --no-optional when installing with npm). Otherwise it is possible we don't support your platform yet. If this is the case, please report an issue to https://github.com/parcel-bundler/watcher.`,
+-      );
 -    }
 -  }
 -}
