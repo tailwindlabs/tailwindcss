@@ -165,12 +165,24 @@ test(
         { timeout: 15_000, delay: 100 },
       )
     } catch (error) {
-      // Rolldown's watcher never delivered a single event, so the updates can
-      // never be observed no matter how long we wait — an upstream rolldown bug
-      // on this machine, not a plugin regression. The crash regression this
-      // test guards is still covered: `hotUpdate` is driven by Vite's own
-      // (working) chokidar watcher and asserted via `pluginErrors` below.
+      // If rolldown's watcher delivered any file event, the updates were
+      // genuinely dropped somewhere along the way — a real failure.
       if (watcherAlive) throw error
+
+      // Otherwise the watcher never delivered a single event, so the updates
+      // can never be observed no matter how long we wait — an upstream
+      // rolldown bug on some CI machines, not a plugin regression. The crash
+      // regression this test guards is still covered: `hotUpdate` is driven
+      // by Vite's own (working) chokidar watcher and asserted via
+      // `pluginErrors` below.
+      //
+      // Skipping is only sound while the server still healthily serves the
+      // original bundle. If it stopped serving (crashed, or wedged on the
+      // fallback page), that's real breakage a silent watcher must not mask.
+      console.log(error)
+      let styles = await fetchBundledStyles()
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain(candidate`flex`)
       console.warn(
         'Skipping update assertions: rolldown’s file watcher delivered no events on this machine.',
       )
