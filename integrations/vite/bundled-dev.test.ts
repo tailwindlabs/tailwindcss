@@ -110,11 +110,14 @@ test(
       return contents.join('\n')
     }
 
-    await retryAssertion(async () => {
-      let styles = await fetchBundledStyles()
-      expect(styles).toContain(candidate`underline`)
-      expect(styles).toContain(candidate`flex`)
-    })
+    await retryAssertion(
+      async () => {
+        let styles = await fetchBundledStyles()
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`flex`)
+      },
+      { timeout: 10_000, delay: 100 },
+    )
 
     // A file change is only picked up once rolldown's watcher is fully set up,
     // which races with the first write on slow machines. Retried writes must
@@ -122,6 +125,13 @@ test(
     // module contents and treats a write of identical content as a no-op — so a
     // lost first change could never be recovered by re-writing the same file.
     let iteration = 0
+
+    // Each iteration writes the file and then immediately fetches, so the fetch
+    // can only observe the rebuild of a _previous_ write. The delay between
+    // iterations is what gives that rebuild time to finish. The default 5ms
+    // would queue a new rebuild on every poll and keep the served bundle
+    // permanently one edit behind, so retry once per second instead.
+    let retryOptions = { timeout: 15_000, delay: 1_000 }
 
     await retryAssertion(async () => {
       // Updates are additive and cause new candidates to be added.
@@ -141,7 +151,7 @@ test(
       expect(styles).toContain(candidate`underline`)
       expect(styles).toContain(candidate`flex`)
       expect(styles).toContain(candidate`m-2`)
-    })
+    }, retryOptions)
 
     await retryAssertion(async () => {
       // Manually added `@source`s are watched and trigger a rebuild
@@ -157,7 +167,7 @@ test(
       expect(styles).toContain(candidate`flex`)
       expect(styles).toContain(candidate`m-2`)
       expect(styles).toContain(candidate`font-bold`)
-    })
+    }, retryOptions)
 
     expect(pluginErrors).toEqual([])
   },
