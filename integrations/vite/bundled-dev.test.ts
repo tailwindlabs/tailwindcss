@@ -63,6 +63,13 @@ test(
   async ({ root, spawn, fs, expect }) => {
     let process = await spawn('pnpm vite dev', {
       cwd: path.join(root, 'project-a'),
+      env: {
+        // On CI-only failures the debug output shows whether rolldown's watcher
+        // saw a file change at all ("ignored file change") and whether a fetch
+        // triggered a rebuild ("TRIGGER: access to stale bundle"). The harness
+        // only prints this output when the test fails.
+        DEBUG: 'vite:full-bundle-mode',
+      },
     })
 
     // `hotUpdate` errors don't kill the dev server, they are only printed to
@@ -70,6 +77,7 @@ test(
     // rebuild happens to succeed anyway.
     let pluginErrors: string[] = []
     process.onStderr((message) => {
+      if (message.includes('vite:full-bundle-mode')) return false
       if (message.includes('@tailwindcss/vite')) pluginErrors.push(message)
       return false
     })
@@ -151,17 +159,25 @@ test(
       content: () => string,
       assert: (styles: string) => void,
     ) {
-      await retryAssertion(
-        async () => {
-          await fs.write(file, content())
+      try {
+        await retryAssertion(
+          async () => {
+            await fs.write(file, content())
 
-          await retryAssertion(async () => assert(await fetchBundledStyles()), {
-            timeout: 15_000,
-            delay: 100,
-          })
-        },
-        { timeout: 45_000 },
-      )
+            await retryAssertion(async () => assert(await fetchBundledStyles()), {
+              timeout: 15_000,
+              delay: 100,
+            })
+          },
+          { timeout: 45_000 },
+        )
+      } catch (error) {
+        // The served HTML contains the written iteration marker, so on a
+        // CI-only failure it shows whether the edit reached the bundle at all.
+        console.log(`Served HTML after failing to see ${file} update:`)
+        console.log(await fetch(`${url}/`).then((response) => response.text()))
+        throw error
+      }
     }
 
     // Updates are additive and cause new candidates to be added.
