@@ -7,28 +7,28 @@ settings:
 catalogs:
   default:
     '@parcel/watcher':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-darwin-arm64':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-darwin-x64':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-linux-arm64-glibc':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-linux-arm64-musl':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-linux-x64-glibc':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-linux-x64-musl':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@parcel/watcher-win32-x64':
-      specifier: ^2.6.0
+      specifier: 2.6.0
       version: 2.6.0
     '@types/node':
       specifier: 22.20.1
