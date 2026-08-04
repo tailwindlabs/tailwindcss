@@ -14,7 +14,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=14.0.0"
+    "node": "^20.19.0 || ^22.13.0 || >=23.5.0"
   },
   "publishConfig": {
     "provenance": true,
