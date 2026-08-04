@@ -77,6 +77,7 @@ catalogs:
       version: 5.109.2
 
 patchedDependencies:
+  '@napi-rs/cli@3.7.4': 9912bf0a9c2cef8329d11c41fbce4d33ce2bdcf660a630b258c962c0a3c44bed
   '@parcel/watcher@2.6.0': 705ce75ccea54337110c4d7fe0a8b421658ea0c23e1a77c1fa890a86041179da
   lightningcss@1.33.0: 1d4a8800d60d13d42887b88b3a86576df4b451670308145fb432ec8abbf40930
 
@@ -128,7 +129,7 @@ importers:
         version: 1.11.3
       '@napi-rs/cli':
         specifier: 3.7.4
-        version: 3.7.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(node-addon-api@8.7.0)
+        version: 3.7.4(patch_hash=9912bf0a9c2cef8329d11c41fbce4d33ce2bdcf660a630b258c962c0a3c44bed)(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(node-addon-api@8.7.0)
       '@napi-rs/wasm-runtime':
         specifier: ^1.2.2
         version: 1.2.2(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
@@ -3895,7 +3896,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@napi-rs/cli@3.7.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(node-addon-api@8.7.0)':
+  '@napi-rs/cli@3.7.4(patch_hash=9912bf0a9c2cef8329d11c41fbce4d33ce2bdcf660a630b258c962c0a3c44bed)(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@25.9.1)(node-addon-api@8.7.0)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@25.9.1)
       '@napi-rs/cross-toolchain': 1.0.3(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
