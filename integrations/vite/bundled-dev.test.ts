@@ -9,9 +9,6 @@ import { candidate, css, html, json, retryAssertion, test, ts, txt, yaml } from 
 test(
   'dev mode (experimental `bundledDev`)',
   {
-    // The worst-case retry budget below adds up to ~100s, which does not fit in
-    // the default 60s timeout.
-    timeout: 120_000,
     fs: {
       'package.json': json`{}`,
       'pnpm-workspace.yaml': yaml`
@@ -64,19 +61,15 @@ test(
     let process = await spawn('pnpm vite dev', {
       cwd: path.join(root, 'project-a'),
       env: {
-        // On CI-only failures the debug output shows whether rolldown's watcher
-        // saw a file change at all ("ignored file change") and whether a fetch
-        // triggered a rebuild ("TRIGGER: access to stale bundle"). The harness
-        // only prints this output when the test fails.
+        // Some CI machines have an upstream rolldown bug where its file watcher
+        // never delivers a single event. The debug output is the only way to
+        // tell that apart from a real regression (see below).
         DEBUG: 'vite:full-bundle-mode',
       },
     })
 
     // Any debug output beyond the "INITIAL:" startup lines proves rolldown's
-    // watcher delivered at least one file event. On some CI runners the
-    // watcher intermittently delivers no events at all for the entire server
-    // lifetime (while Vite's own chokidar watcher works fine) — an upstream
-    // rolldown bug this test cannot work around.
+    // watcher delivered at least one file event.
     let watcherAlive = false
 
     // `hotUpdate` errors don't kill the dev server, they are only printed to
@@ -86,13 +79,11 @@ test(
     process.onStderr((message) => {
       if (message.includes('vite:full-bundle-mode')) {
         if (!message.includes('INITIAL:')) watcherAlive = true
-        return false
+      } else if (message.includes('@tailwindcss/vite')) {
+        pluginErrors.push(message)
       }
-      if (message.includes('@tailwindcss/vite')) pluginErrors.push(message)
       return false
     })
-
-    await process.onStdout((m) => m.includes('ready in'))
 
     let url = ''
     await process.onStdout((m) => {
@@ -140,111 +131,50 @@ test(
       { timeout: 10_000, delay: 100 },
     )
 
-    // Without a connected HMR websocket client (this test only uses HTTP
-    // fetches), a file change does not trigger an eager rebuild — it only marks
-    // the bundle as stale. The next request then kicks off a rebuild and is
-    // served the fallback page until it finishes.
-    //
-    // So after writing a file, poll with fetches _without touching the file
-    // again_: the fetch itself triggers the rebuild, and rewriting on every
-    // poll would re-mark the bundle stale right before each fetch, so a
-    // completed rebuild could never be observed (which is exactly what made
-    // this test flaky).
-    //
-    // The write is only repeated when polling comes up empty for a while, which
-    // covers a change being lost because rolldown's watcher wasn't fully set up
-    // yet. Retried writes must produce _different_ content each time (hence
-    // `iteration`), because rolldown compares module contents and treats a
-    // write of identical content as a no-op.
-    //
-    // The polling window doubles as the maximum time a rebuild may take:
-    // rewriting any sooner marks the bundle stale again and restarts the
-    // rebuild, so a machine whose rebuilds outlast the window would never
-    // converge. Rebuilds take ~200ms on an idle machine — the window is sized
-    // with generous headroom for an overloaded CI runner.
-    let iteration = 0
-    let watcherDead = false
-
-    async function writeAndAwaitRebuild(
-      file: string,
-      content: () => string,
-      assert: (styles: string) => void,
-    ) {
-      // Once the watcher is known to be dead, later updates cannot be observed
-      // either. Still write the file: Vite's chokidar watcher does work and
-      // invokes `hotUpdate`, so the write keeps exercising the crash
-      // regression that this test primarily guards.
-      if (watcherDead) {
-        await fs.write(file, content())
-        return
-      }
-
-      try {
-        await retryAssertion(
-          async () => {
-            await fs.write(file, content())
-
-            await retryAssertion(async () => assert(await fetchBundledStyles()), {
-              timeout: 15_000,
-              delay: 100,
-            })
-          },
-          { timeout: 45_000 },
-        )
-      } catch (error) {
-        // Rolldown's watcher provably never delivered a single event, so no
-        // update could ever be observed no matter how long we wait. This is an
-        // upstream rolldown/vite bug on this machine, not a plugin regression:
-        // the plugin only reacts to (chokidar-driven) `hotUpdate` calls and
-        // `transform` calls from rebuilds that rolldown chooses to run. Skip
-        // the update assertions instead of failing.
-        if (!watcherAlive) {
-          watcherDead = true
-          console.warn(
-            `Skipping update assertions: rolldown's file watcher delivered no events, so the change to \`${file}\` can never be picked up on this machine.`,
-          )
-          return
-        }
-
-        // The served HTML contains the written iteration marker, so on a
-        // CI-only failure it shows whether the edit reached the bundle at all.
-        console.log(`Served HTML after failing to see ${file} update:`)
-        console.log(await fetch(`${url}/`).then((response) => response.text()))
-        throw error
-      }
-    }
-
-    // Updates are additive and cause new candidates to be added.
-    await writeAndAwaitRebuild(
+    // Edit a module file and a manually `@source`d file. Without a connected
+    // HMR websocket client (this test only uses HTTP fetches), a file change
+    // does not trigger an eager rebuild — it only marks the bundle as stale,
+    // and the next fetch kicks off the rebuild. So poll with fetches without
+    // touching the files again: rewriting would re-mark the bundle stale right
+    // before each fetch and the rebuild could never be observed.
+    await fs.write(
       'project-a/index.html',
-      () => html`
+      html`
         <head>
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="underline m-2">Hello, world! (${++iteration})</div>
+          <div class="underline m-2">Hello, world!</div>
         </body>
       `,
-      (styles) => {
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`m-2`)
-      },
     )
 
-    // Manually added `@source`s are watched and trigger a rebuild
-    await writeAndAwaitRebuild(
-      'project-b/src/index.html',
-      () => html`
-        <div class="flex font-bold" data-iteration="${++iteration}" />
-      `,
-      (styles) => {
-        expect(styles).toContain(candidate`underline`)
-        expect(styles).toContain(candidate`flex`)
-        expect(styles).toContain(candidate`m-2`)
-        expect(styles).toContain(candidate`font-bold`)
-      },
-    )
+    await fs.write('project-b/src/index.html', html`
+      <div class="flex font-bold" />
+    `)
+
+    try {
+      await retryAssertion(
+        async () => {
+          let styles = await fetchBundledStyles()
+          expect(styles).toContain(candidate`underline`)
+          expect(styles).toContain(candidate`flex`)
+          expect(styles).toContain(candidate`m-2`)
+          expect(styles).toContain(candidate`font-bold`)
+        },
+        { timeout: 15_000, delay: 100 },
+      )
+    } catch (error) {
+      // Rolldown's watcher never delivered a single event, so the updates can
+      // never be observed no matter how long we wait — an upstream rolldown bug
+      // on this machine, not a plugin regression. The crash regression this
+      // test guards is still covered: `hotUpdate` is driven by Vite's own
+      // (working) chokidar watcher and asserted via `pluginErrors` below.
+      if (watcherAlive) throw error
+      console.warn(
+        'Skipping update assertions: rolldown’s file watcher delivered no events on this machine.',
+      )
+    }
 
     expect(pluginErrors).toEqual([])
   },
