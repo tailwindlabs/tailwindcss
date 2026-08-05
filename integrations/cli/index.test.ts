@@ -375,6 +375,41 @@ describe.each([
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/17246
+  test(
+    'watch mode does not rebuild for changes inside node_modules or .git',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'index.html': html`<div class="underline"></div>`,
+        'src/index.css': css` @import 'tailwindcss/utilities'; `,
+        'node_modules/some-dep/index.js': js` module.exports = {} `,
+        '.git/HEAD': txt`ref: refs/heads/main`,
+      },
+    },
+    async ({ fs, spawn, expect }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+      process.flush()
+
+      await fs.write('node_modules/some-dep/index.js', js`module.exports = { touched: true }`)
+      await fs.write('.git/HEAD', txt`ref: refs/heads/other`)
+
+      // A watcher rebuild cycle (real or a no-op early return) always logs
+      // "Done in", so if the watcher incorrectly reacted to either change
+      // above, this would resolve. It must not.
+      let sawRebuild = await Promise.race([
+        process.onStderr((m) => m.includes('Done in')).then(() => true),
+        new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 1000)),
+      ])
+      expect(sawRebuild).toBe(false)
+
+      // Sanity check: the watcher is still alive and reacts to real changes.
+      await fs.write('index.html', html`<div class="underline flex"></div>`)
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
   test(
     'watch mode with polling',
     {
