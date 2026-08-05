@@ -158,6 +158,15 @@ impl PreProcessor for Ruby {
                 continue;
             }
 
+            // A `%` that follows a value is a modulo operation, not a percent literal. E.g.: the
+            // `50%w` in `hit rate 50%w.`
+            if cursor.prev().is_ascii_alphanumeric()
+                || matches!(cursor.prev(), b'_' | b')' | b']' | b'}')
+            {
+                cursor.advance();
+                continue;
+            }
+
             cursor.advance_twice();
 
             // Boundary character
@@ -188,8 +197,8 @@ impl PreProcessor for Ruby {
 
             while cursor.pos < len {
                 match cursor.curr() {
-                    // Skip escaped characters
-                    b'\\' => {
+                    // Skip escaped characters, unless the backslash is the delimiter itself
+                    b'\\' if boundary != b'\\' => {
                         // Use backslash to embed spaces in the strings.
                         if cursor.next() == b' ' {
                             result[cursor.pos] = b' ';
@@ -283,6 +292,12 @@ mod tests {
             ("%w|flex px-2.5|", "%w flex px-2.5 "),
             ("%w:flex px-2.5:", "%w flex px-2.5 "),
             ("%w!flex px-2.5!", "%w flex px-2.5 "),
+            (r#"%w\flex px-2.5\"#, r#"%w flex px-2.5 "#),
+            // A `%` that follows a value is a modulo operation, not a percent literal
+            (
+                "hit rate 50%w.\n%w[flex px-2.5]",
+                "hit rate 50%w.\n%w flex px-2.5 ",
+            ),
 
             // %w …\n
             ("%w flex px-2.5\n", "%w flex px-2.5\n"),
