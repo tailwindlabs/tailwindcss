@@ -28,6 +28,13 @@ const css = String.raw
 const DEBUG = env.DEBUG
 const DEFAULT_POLL_INTERVAL_MS = 250
 
+// Directories that should never be watched, regardless of which project
+// directories are being watched. Watching these can cause excessive CPU
+// usage or hangs on file watcher backends (e.g. Watchman) when they contain
+// large or frequently-changing trees, and Tailwind never needs to react to
+// changes inside them.
+const DEFAULT_WATCH_IGNORE = ['**/node_modules/**', '**/.git/**', '**/.hg/**', '**/.svn/**']
+
 export function options() {
   return {
     '--input': {
@@ -747,44 +754,48 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
   // Setup a watcher for every directory.
   for (let dir of dirs) {
-    let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
-      // Whenever an error occurs we want to let the user know about it but we
-      // want to keep watching for changes.
-      if (err) {
-        console.error(err)
-        return
-      }
+    let { unsubscribe } = await watcher.subscribe(
+      dir,
+      async (err, events) => {
+        // Whenever an error occurs we want to let the user know about it but we
+        // want to keep watching for changes.
+        if (err) {
+          console.error(err)
+          return
+        }
 
-      await Promise.all(
-        events.map(async (event) => {
-          // When a file is deleted, a rebuild should be triggered such that we
-          // can figure out whether this file must trigger a fresh build or not.
-          //
-          // If it must trigger a fresh build, then we will temporarily end up
-          // in a broken state, but an error will be shown to the user. Once the
-          // user resolves the issue, the CLI will recover.
-          if (event.type === 'delete') {
+        await Promise.all(
+          events.map(async (event) => {
+            // When a file is deleted, a rebuild should be triggered such that we
+            // can figure out whether this file must trigger a fresh build or not.
+            //
+            // If it must trigger a fresh build, then we will temporarily end up
+            // in a broken state, but an error will be shown to the user. Once the
+            // user resolves the issue, the CLI will recover.
+            if (event.type === 'delete') {
+              files.add(event.path)
+              return
+            }
+
+            // Ignore directory changes. We only care about file changes
+            let stats: Stats | null = null
+            try {
+              stats = await fs.lstat(event.path)
+            } catch {}
+            if (!stats?.isFile() && !stats?.isSymbolicLink()) {
+              return
+            }
+
+            // Track the changed file.
             files.add(event.path)
-            return
-          }
+          }),
+        )
 
-          // Ignore directory changes. We only care about file changes
-          let stats: Stats | null = null
-          try {
-            stats = await fs.lstat(event.path)
-          } catch {}
-          if (!stats?.isFile() && !stats?.isSymbolicLink()) {
-            return
-          }
-
-          // Track the changed file.
-          files.add(event.path)
-        }),
-      )
-
-      // Handle the tracked files at some point in the future.
-      await enqueueCallback()
-    })
+        // Handle the tracked files at some point in the future.
+        await enqueueCallback()
+      },
+      { ignore: DEFAULT_WATCH_IGNORE },
+    )
 
     // Ensure we cleanup the watcher when we're done.
     watchers.add(unsubscribe)
