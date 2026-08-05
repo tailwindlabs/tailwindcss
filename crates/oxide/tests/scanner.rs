@@ -687,6 +687,102 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_drop_invalid_utf8_candidates() {
+        let dir = tempdir().unwrap();
+        fs::write(dir.path().join("index.html"), b"flex bg-[\x80] block").unwrap();
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.path().to_path_buf(),
+            "@source '*.html'",
+        )]);
+
+        let candidates = scanner
+            .scan()
+            .into_iter()
+            .map(String::into_bytes)
+            .collect::<Vec<_>>();
+
+        assert_eq!(candidates, vec![b"block".to_vec(), b"flex".to_vec()]);
+    }
+
+    #[test]
+    fn it_should_not_store_invalid_utf8_candidates_during_incremental_scans() {
+        let dir = tempdir().unwrap();
+        let file = dir.path().join("index.html");
+        fs::write(&file, b"flex bg-[\x80]").unwrap();
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.path().to_path_buf(),
+            "@source '*.html'",
+        )]);
+
+        let candidates = scanner
+            .scan_content(vec![ChangedContent::File(file, "html".into())])
+            .into_iter()
+            .map(String::into_bytes)
+            .collect::<Vec<_>>();
+        assert_eq!(candidates, vec![b"flex".to_vec()]);
+
+        let candidates =
+            scanner.scan_content(vec![ChangedContent::Content("block".into(), "html".into())]);
+        assert_eq!(candidates, vec!["block"]);
+
+        let candidates = scanner
+            .scan()
+            .into_iter()
+            .map(String::into_bytes)
+            .collect::<Vec<_>>();
+        assert_eq!(candidates, vec![b"block".to_vec(), b"flex".to_vec()]);
+    }
+
+    #[test]
+    fn it_should_drop_invalid_utf8_candidates_with_positions() {
+        let dir = tempdir().unwrap();
+        let file = dir.path().join("index.html");
+        fs::write(
+            &file,
+            b"flex bg-[\x80] group-[]:block group-[]:bg-[\x80] grid",
+        )
+        .unwrap();
+
+        let mut scanner = Scanner::new(vec![]);
+        let candidates = scanner
+            .get_candidates_with_positions(ChangedContent::File(file, "html".into()))
+            .into_iter()
+            .map(|(candidate, position)| (candidate.into_bytes(), position))
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            candidates,
+            vec![
+                (b"flex".to_vec(), 0),
+                (b"group-[]:block".to_vec(), 12),
+                (b"grid".to_vec(), 43),
+            ]
+        );
+    }
+
+    #[test]
+    fn it_should_preserve_valid_utf8_candidates() {
+        let dir = tempdir().unwrap();
+        fs::write(
+            dir.path().join("index.html"),
+            "before:content-['💩'] bg-[é] font-[中文]".as_bytes(),
+        )
+        .unwrap();
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.path().to_path_buf(),
+            "@source '*.html'",
+        )]);
+
+        assert_eq!(
+            scanner.scan(),
+            vec!["before:content-['💩']", "bg-[é]", "font-[中文]"]
+        );
+    }
+
+    #[test]
     fn it_should_preserve_paths_for_sources_ending_in_a_deep_glob() {
         let ScanResult {
             candidates,
@@ -2565,6 +2661,11 @@ mod scanner {
                 ("src/defined-at-start.css", "--color-defined-at-start: red;"),
             ],
         );
+        fs::write(
+            dir.join("src/invalid.css"),
+            b".button { color: var(--color-\x80); }",
+        )
+        .unwrap();
 
         let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
