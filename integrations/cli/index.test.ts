@@ -410,6 +410,44 @@ describe.each([
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/17246
+  test(
+    'watch mode still rebuilds for an explicit @source nested inside node_modules, even when its watch root is collapsed into a broader ancestor',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @source '../**/*.html';
+          @source '../node_modules/my-lib/src/*.html';
+        `,
+        'index.html': html`<div class="underline"></div>`,
+        // This lives inside node_modules, but is explicitly opted back in via
+        // @source above. The broader `../**/*.html` source also covers the
+        // project root, so this directory gets collapsed into it by
+        // createWatchers' dedup step -- the ignore filter must not apply to
+        // node_modules for that collapsed root.
+        'node_modules/my-lib/src/index.html': html`
+          <div
+            class="content-['initial']"
+          ></div>
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`content-['initial']`])
+
+      await fs.write(
+        'node_modules/my-lib/src/index.html',
+        html`<div class="content-['changed']"></div>`,
+      )
+      await fs.expectFileToContain('dist/out.css', [candidate`content-['changed']`])
+    },
+  )
+
   test(
     'watch mode with polling',
     {

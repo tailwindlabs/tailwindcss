@@ -28,12 +28,13 @@ const css = String.raw
 const DEBUG = env.DEBUG
 const DEFAULT_POLL_INTERVAL_MS = 250
 
-// Directories that should never be watched, regardless of which project
-// directories are being watched. Watching these can cause excessive CPU
-// usage or hangs on file watcher backends (e.g. Watchman) when they contain
-// large or frequently-changing trees, and Tailwind never needs to react to
-// changes inside them.
-const DEFAULT_WATCH_IGNORE = ['**/node_modules/**', '**/.git/**', '**/.hg/**', '**/.svn/**']
+// Directory segments that should not be watched by default, regardless of
+// which project directories are being watched. Watching these can cause
+// excessive CPU usage or hangs on file watcher backends (e.g. Watchman) when
+// they contain large or frequently-changing trees, and Tailwind normally
+// never needs to react to changes inside them. See `watchIgnoreFor` for the
+// one exception: an explicit `@source` pointing inside one of these.
+const DEFAULT_WATCH_IGNORE_SEGMENTS = ['node_modules', '.git', '.hg', '.svn']
 
 export function options() {
   return {
@@ -703,6 +704,13 @@ async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   let watcher = await loadWatcher()
 
+  // Keep every originally-requested directory before the dedup step below
+  // collapses child directories into an already-watched parent. We need
+  // this to detect when an explicit source directory (e.g. an `@source`
+  // pointing inside `node_modules`) ends up nested under a broader watched
+  // root, so we know not to ignore that noise directory for that root.
+  let allRequestedDirs = dirs.slice()
+
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
@@ -794,7 +802,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
         // Handle the tracked files at some point in the future.
         await enqueueCallback()
       },
-      { ignore: DEFAULT_WATCH_IGNORE },
+      { ignore: watchIgnoreFor(dir, allRequestedDirs) },
     )
 
     // Ensure we cleanup the watcher when we're done.
@@ -856,6 +864,25 @@ function createPollingWatcher(cb: () => Promise<void>, pollInterval: number) {
     disposed = true
     if (timer) clearTimeout(timer)
   }
+}
+
+// Compute the default watch-ignore glob list for `dir`, one of the
+// (already deduped) directories being watched. Skips any noise segment
+// (`node_modules`, `.git`, etc.) that contains another originally-requested
+// directory nested inside it — e.g. an explicit `@source` pointing inside
+// `node_modules` whose own watch root got collapsed into this broader `dir`
+// by the dedup step in `createWatchers`. Ignoring that segment for `dir`
+// would otherwise silently stop the watcher from picking up changes to that
+// explicitly-configured source, since `@parcel/watcher` matches `ignore`
+// globs relative to the watched root — the segment only needs to be
+// preserved for the root that actually ended up watching that subtree.
+function watchIgnoreFor(dir: string, allRequestedDirs: string[]): string[] {
+  return DEFAULT_WATCH_IGNORE_SEGMENTS.filter((segment) => {
+    let marker = `/${segment}/`
+    return !allRequestedDirs.some(
+      (other) => other !== dir && other.startsWith(`${dir}/`) && `${other}/`.includes(marker),
+    )
+  }).map((segment) => `**/${segment}/**`)
 }
 
 async function watchDirectories(scanner: Scanner) {
