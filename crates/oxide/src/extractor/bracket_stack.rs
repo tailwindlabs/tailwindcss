@@ -25,6 +25,7 @@ impl BracketStack {
                 b'(' => b')',
                 b'[' => b']',
                 b'{' => b'}',
+                b'<' => b'>',
                 _ => std::hint::unreachable_unchecked(),
             };
         }

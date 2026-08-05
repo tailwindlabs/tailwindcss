@@ -167,11 +167,15 @@ impl PreProcessor for Ruby {
                 b'{' => b'}',
                 b'<' => b'>',
                 b' ' => b'\n',
-                c if c.is_ascii_alphanumeric() || c.is_ascii_whitespace() => {
+
+                // Any other ASCII punctuation can be used as a custom delimiter
+                c if c.is_ascii_punctuation() => c,
+
+                // Everything else is not a valid delimiter
+                _ => {
                     cursor.advance();
                     continue;
                 }
-                c => c,
             };
 
             bracket_stack.reset();
@@ -199,8 +203,21 @@ impl PreProcessor for Ruby {
                         bracket_stack.push(cursor.curr());
                     }
 
+                    // Start of a nested `<…>`, which Ruby allows inside a `%w<…>` literal
+                    b'<' if boundary == b'>' => {
+                        bracket_stack.push(cursor.curr());
+                    }
+
                     // End of a nested bracket
                     b']' | b')' | b'}' if !bracket_stack.is_empty() => {
+                        if !bracket_stack.pop(cursor.curr()) {
+                            // Unbalanced
+                            cursor.advance();
+                        }
+                    }
+
+                    // End of a nested `<…>`
+                    b'>' if boundary == b'>' && !bracket_stack.is_empty() => {
                         if !bracket_stack.pop(cursor.curr()) {
                             // Unbalanced
                             cursor.advance();
@@ -254,6 +271,18 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
             ),
+            // %w<…>
+            ("%w<flex px-2.5>", "%w flex px-2.5 "),
+            (
+                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
+                "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
+            ),
+            // Nested `<…>` does not end the literal
+            ("%w<flex <nested> px-2.5>", "%w flex <nested> px-2.5 "),
+            // %w|…|, %w:…:, %w!…!
+            ("%w|flex px-2.5|", "%w flex px-2.5 "),
+            ("%w:flex px-2.5:", "%w flex px-2.5 "),
+            ("%w!flex px-2.5!", "%w flex px-2.5 "),
 
             // %w …\n
             ("%w flex px-2.5\n", "%w flex px-2.5\n"),
@@ -299,14 +328,6 @@ mod tests {
               "%w#this text is kept# # this text is not",
               "%w this text is kept                    ",
             ),
-
-            // %w<…>
-            ("%w<flex px-2.5>", "%w flex px-2.5 "),
-
-            // %w|…|, %w:…:, and other custom delimiters
-            ("%w|flex px-2.5|", "%w flex px-2.5 "),
-            ("%w:flex px-2.5:", "%w flex px-2.5 "),
-            ("%w!flex px-2.5!", "%w flex px-2.5 "),
         ] {
             Ruby::test(input, expected);
         }
@@ -339,6 +360,20 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
             ),
+            // %w<…>
+            ("%w<flex px-2.5>", vec!["flex", "px-2.5"]),
+            ("%w<px-2.5 flex>", vec!["flex", "px-2.5"]),
+            ("%w<2xl:flex>", vec!["2xl:flex"]),
+            (
+                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
+                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
+            ),
+            // Nested `<…>` does not end the literal
+            ("%w<flex <nested> px-2.5>", vec!["flex", "px-2.5"]),
+            // %w|…|, %w:…:, %w!…!
+            ("%w|flex px-2.5|", vec!["flex", "px-2.5"]),
+            ("%w:flex px-2.5:", vec!["flex", "px-2.5"]),
+            ("%w!flex px-2.5!", vec!["flex", "px-2.5"]),
 
             (
               "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",
@@ -349,19 +384,6 @@ mod tests {
             (r#"'foo # bar'"#, vec!["foo", "bar"]),
 
             (r#"%w[foo ' bar]"#, vec!["foo", "bar"]),
-
-            // %w<…>
-            ("%w<flex px-2.5>", vec!["flex", "px-2.5"]),
-            ("%w<2xl:flex>", vec!["2xl:flex"]),
-            (
-                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
-                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
-            ),
-
-            // %w|…|, %w:…:, and other custom delimiters
-            ("%w|flex px-2.5|", vec!["flex", "px-2.5"]),
-            ("%w:flex px-2.5:", vec!["flex", "px-2.5"]),
-            ("%w!flex px-2.5!", vec!["flex", "px-2.5"]),
         ] {
             Ruby::test_extract_contains(input, expected);
         }
