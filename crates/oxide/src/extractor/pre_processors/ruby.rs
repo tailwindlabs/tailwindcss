@@ -165,12 +165,13 @@ impl PreProcessor for Ruby {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
-                b'#' => b'#',
+                b'<' => b'>',
                 b' ' => b'\n',
-                _ => {
+                c if c.is_ascii_alphanumeric() || c.is_ascii_whitespace() => {
                     cursor.advance();
                     continue;
                 }
+                c => c,
             };
 
             bracket_stack.reset();
@@ -298,6 +299,14 @@ mod tests {
               "%w#this text is kept# # this text is not",
               "%w this text is kept                    ",
             ),
+
+            // %w<…>
+            ("%w<flex px-2.5>", "%w flex px-2.5 "),
+
+            // %w|…|, %w:…:, and other custom delimiters
+            ("%w|flex px-2.5|", "%w flex px-2.5 "),
+            ("%w:flex px-2.5:", "%w flex px-2.5 "),
+            ("%w!flex px-2.5!", "%w flex px-2.5 "),
         ] {
             Ruby::test(input, expected);
         }
@@ -340,6 +349,19 @@ mod tests {
             (r#"'foo # bar'"#, vec!["foo", "bar"]),
 
             (r#"%w[foo ' bar]"#, vec!["foo", "bar"]),
+
+            // %w<…>
+            ("%w<flex px-2.5>", vec!["flex", "px-2.5"]),
+            ("%w<2xl:flex>", vec!["2xl:flex"]),
+            (
+                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
+                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
+            ),
+
+            // %w|…|, %w:…:, and other custom delimiters
+            ("%w|flex px-2.5|", vec!["flex", "px-2.5"]),
+            ("%w:flex px-2.5:", vec!["flex", "px-2.5"]),
+            ("%w!flex px-2.5!", vec!["flex", "px-2.5"]),
         ] {
             Ruby::test_extract_contains(input, expected);
         }
