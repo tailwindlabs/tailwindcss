@@ -356,15 +356,14 @@ impl Scanner {
                     let i = s.as_ptr() as usize - offset;
                     let original = &original_content[i..i + s.len()];
                     if original.contains_str("-[]") {
-                        return Some(unsafe {
-                            (String::from_utf8_unchecked(original.to_vec()), i)
-                        });
+                        return String::from_utf8(original.to_vec())
+                            .ok()
+                            .map(|candidate| (candidate, i));
                     }
 
-                    // SAFETY: When we parsed the candidates, we already guaranteed that the byte
-                    // slices are valid, therefore we don't have to re-check here when we want to
-                    // convert it back to a string.
-                    Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
+                    String::from_utf8(s.to_vec())
+                        .ok()
+                        .map(|candidate| (candidate, i))
                 }
 
                 _ => None,
@@ -617,7 +616,7 @@ where
             a
         })
         .into_iter()
-        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+        .filter_map(|s| String::from_utf8(s.to_vec()).ok())
         .collect()
 }
 
