@@ -25727,6 +25727,86 @@ test('leading', async () => {
     }
     "
   `)
+
+  // Custom named --spacing-* values should not shadow the none keyword but remain resolvable by name
+  expect(
+    await run(
+      ['leading-none', 'leading-big'],
+      css`
+        @theme {
+          --spacing-none: 0;
+          --spacing-big: 3rem;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --spacing-big: 3rem;
+    }
+
+    .leading-big {
+      --tw-leading: var(--spacing-big);
+      line-height: var(--spacing-big);
+    }
+
+    .leading-none {
+      --tw-leading: 1;
+      line-height: 1;
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
+
+  expect(
+    await run(
+      ['leading-none'],
+      css`
+        @theme {
+          --leading-none: 1.5;
+          --spacing-none: 0;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --leading-none: 1.5;
+    }
+
+    .leading-none {
+      --tw-leading: var(--leading-none);
+      line-height: var(--leading-none);
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
 })
 
 test('tracking', async () => {

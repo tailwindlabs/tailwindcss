@@ -381,6 +381,7 @@ export function createUtilities(theme: Theme) {
     supportsNegative?: boolean
     supportsFractions?: boolean
     themeKeys?: ThemeKey[]
+    fallbackThemeKeys?: ThemeKey[]
     defaultValue?: string | null
     staticValues?: Record<string, AstNode[]>
     handleBareValue?: (value: NamedUtilityValue) => string | null
@@ -420,6 +421,19 @@ export function createUtilities(theme: Theme) {
             candidate.value.fraction ?? candidate.value.value,
             desc.themeKeys ?? [],
           )
+
+          if (value === null && desc.fallbackThemeKeys) {
+            // Static keywords like leading-none win over fallback namespaces like --spacing
+            if (!negative && desc.staticValues && !candidate.modifier) {
+              let fallback = desc.staticValues[candidate.value.value]
+              if (fallback) return fallback.map(cloneAstNode)
+            }
+
+            value = theme.resolve(
+              candidate.value.fraction ?? candidate.value.value,
+              desc.fallbackThemeKeys,
+            )
+          }
 
           // Automatically handle things like `w-1/2` without requiring `1/2` to
           // exist as a theme value.
@@ -467,7 +481,7 @@ export function createUtilities(theme: Theme) {
     suggest(classRoot, () => [
       {
         supportsNegative: desc.supportsNegative,
-        valueThemeKeys: desc.themeKeys ?? [],
+        valueThemeKeys: [...(desc.themeKeys ?? []), ...(desc.fallbackThemeKeys ?? [])],
         hasDefaultValue: desc.defaultValue !== undefined && desc.defaultValue !== null,
         supportsFractions: desc.supportsFractions,
       },
@@ -543,8 +557,17 @@ export function createUtilities(theme: Theme) {
       utilities.static(`-${name}-px`, () => handle('-1px'))
     }
     utilities.static(`${name}-px`, () => handle('1px'))
+
+    // The generic `--spacing` namespace (and everything after it) is resolved
+    // only after `staticValues`, so custom values like `--spacing-none` don't
+    // shadow canonical keywords like `leading-none`.
+    let fallbackIndex = themeKeys.indexOf('--spacing')
+    let ownThemeKeys = fallbackIndex === -1 ? themeKeys : themeKeys.slice(0, fallbackIndex)
+    let fallbackThemeKeys = fallbackIndex === -1 ? undefined : themeKeys.slice(fallbackIndex)
+
     functionalUtility(name, {
-      themeKeys,
+      themeKeys: ownThemeKeys,
+      fallbackThemeKeys,
       supportsFractions,
       supportsNegative,
       defaultValue: null,
