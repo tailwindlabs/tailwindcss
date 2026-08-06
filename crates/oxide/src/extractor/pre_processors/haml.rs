@@ -232,6 +232,8 @@ impl PreProcessor for Haml {
                         }
                     };
 
+                    let start = cursor.pos;
+
                     result[cursor.pos] = b' '; // Replace `%`
                     cursor.advance();
                     result[cursor.pos] = b' '; // Replace `w`
@@ -275,6 +277,15 @@ impl PreProcessor for Haml {
                         }
 
                         cursor.advance();
+                    }
+
+                    // Without a closing delimiter this is not a percent literal, so undo the
+                    // replacements and rescan the input right after the `%`. Otherwise the cursor
+                    // sits at the end of the input and the rest of the file is never processed.
+                    if depth != 0 {
+                        let end = cursor.pos.min(len);
+                        result[start..end].copy_from_slice(&content[start..end]);
+                        cursor.move_to(start);
                     }
                 }
 
@@ -572,6 +583,26 @@ mod tests {
                 "grid",
             ],
         );
+    }
+
+    #[test]
+    fn test_embedded_ruby_percent_w_unterminated() {
+        for (input, expected) in [
+            (
+                "%div{class: %w|flex}\n.p-4.text-center",
+                "%div class: %w|flex \n p-4 text-center",
+            ),
+            (
+                "%div{class: %W!flex}\n.mt-2.underline",
+                "%div class: %W!flex \n mt-2 underline",
+            ),
+        ] {
+            Haml::test(input, expected);
+        }
+
+        let input = "%div{class: %w|flex}\n.p-4.text-center";
+
+        Haml::test_extract_contains(input, vec!["p-4", "text-center"]);
     }
 
     // https://github.com/tailwindlabs/tailwindcss/pull/17051#issuecomment-2711181352

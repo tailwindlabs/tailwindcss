@@ -89,6 +89,8 @@ impl PreProcessor for Slim {
                         }
                     };
 
+                    let start = cursor.pos;
+
                     result[cursor.pos] = b' '; // Replace `%`
                     cursor.advance();
                     result[cursor.pos] = b' '; // Replace `w`
@@ -132,6 +134,15 @@ impl PreProcessor for Slim {
                         }
 
                         cursor.advance();
+                    }
+
+                    // Without a closing delimiter this is not a percent literal, so undo the
+                    // replacements and rescan the input right after the `%`. Otherwise the cursor
+                    // sits at the end of the input and the rest of the file is never processed.
+                    if depth != 0 {
+                        let end = cursor.pos.min(len);
+                        result[start..end].copy_from_slice(&content[start..end]);
+                        cursor.move_to(start);
                     }
                 }
 
@@ -445,5 +456,25 @@ mod tests {
                 "flex",
             ],
         );
+    }
+
+    #[test]
+    fn test_embedded_ruby_percent_w_unterminated() {
+        for (input, expected) in [
+            (
+                "- classes = %w|flex\n.p-4.text-center",
+                "- classes = %w|flex\n p-4 text-center",
+            ),
+            (
+                "- classes = %W!flex\n.mt-2.underline",
+                "- classes = %W!flex\n mt-2 underline",
+            ),
+        ] {
+            Slim::test(input, expected);
+        }
+
+        let input = "- classes = %w|flex\n.p-4.text-center";
+
+        Slim::test_extract_contains(input, vec!["p-4", "text-center"]);
     }
 }
