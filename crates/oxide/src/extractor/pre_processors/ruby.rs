@@ -158,6 +158,15 @@ impl PreProcessor for Ruby {
                 continue;
             }
 
+            // A `%` that follows a value is a modulo operation, not a percent literal. E.g.: the
+            // `50%w` in `hit rate 50%w.`
+            if cursor.prev().is_ascii_alphanumeric()
+                || matches!(cursor.prev(), b'_' | b')' | b']' | b'}')
+            {
+                cursor.advance();
+                continue;
+            }
+
             cursor.advance_twice();
 
             // Boundary character
@@ -165,8 +174,13 @@ impl PreProcessor for Ruby {
                 b'[' => b']',
                 b'(' => b')',
                 b'{' => b'}',
-                b'#' => b'#',
+                b'<' => b'>',
                 b' ' => b'\n',
+
+                // Any other ASCII punctuation can be used as a custom delimiter
+                c if c.is_ascii_punctuation() => c,
+
+                // Everything else is not a valid delimiter
                 _ => {
                     cursor.advance();
                     continue;
@@ -183,8 +197,8 @@ impl PreProcessor for Ruby {
 
             while cursor.pos < len {
                 match cursor.curr() {
-                    // Skip escaped characters
-                    b'\\' => {
+                    // Skip escaped characters, unless the backslash is the delimiter itself
+                    b'\\' if boundary != b'\\' => {
                         // Use backslash to embed spaces in the strings.
                         if cursor.next() == b' ' {
                             result[cursor.pos] = b' ';
@@ -198,8 +212,21 @@ impl PreProcessor for Ruby {
                         bracket_stack.push(cursor.curr());
                     }
 
+                    // Start of a nested `<…>`, which Ruby allows inside a `%w<…>` literal
+                    b'<' if boundary == b'>' => {
+                        bracket_stack.push(cursor.curr());
+                    }
+
                     // End of a nested bracket
                     b']' | b')' | b'}' if !bracket_stack.is_empty() => {
+                        if !bracket_stack.pop(cursor.curr()) {
+                            // Unbalanced
+                            cursor.advance();
+                        }
+                    }
+
+                    // End of a nested `<…>`
+                    b'>' if boundary == b'>' && !bracket_stack.is_empty() => {
                         if !bracket_stack.pop(cursor.curr()) {
                             // Unbalanced
                             cursor.advance();
@@ -252,6 +279,24 @@ mod tests {
             (
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
+            ),
+            // %w<…>
+            ("%w<flex px-2.5>", "%w flex px-2.5 "),
+            (
+                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
+                "%w flex data-[state=pending]:bg-(--my-color) flex-col ",
+            ),
+            // Nested `<…>` does not end the literal
+            ("%w<flex <nested> px-2.5>", "%w flex <nested> px-2.5 "),
+            // %w|…|, %w:…:, %w!…!
+            ("%w|flex px-2.5|", "%w flex px-2.5 "),
+            ("%w:flex px-2.5:", "%w flex px-2.5 "),
+            ("%w!flex px-2.5!", "%w flex px-2.5 "),
+            (r#"%w\flex px-2.5\"#, r#"%w flex px-2.5 "#),
+            // A `%` that follows a value is a modulo operation, not a percent literal
+            (
+                "hit rate 50%w.\n%w[flex px-2.5]",
+                "hit rate 50%w.\n%w flex px-2.5 ",
             ),
 
             // %w …\n
@@ -330,6 +375,20 @@ mod tests {
                 "%w(flex data-[state=pending]:bg-(--my-color) flex-col)",
                 vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
             ),
+            // %w<…>
+            ("%w<flex px-2.5>", vec!["flex", "px-2.5"]),
+            ("%w<px-2.5 flex>", vec!["flex", "px-2.5"]),
+            ("%w<2xl:flex>", vec!["2xl:flex"]),
+            (
+                "%w<flex data-[state=pending]:bg-(--my-color) flex-col>",
+                vec!["flex", "data-[state=pending]:bg-(--my-color)", "flex-col"],
+            ),
+            // Nested `<…>` does not end the literal
+            ("%w<flex <nested> px-2.5>", vec!["flex", "px-2.5"]),
+            // %w|…|, %w:…:, %w!…!
+            ("%w|flex px-2.5|", vec!["flex", "px-2.5"]),
+            ("%w:flex px-2.5:", vec!["flex", "px-2.5"]),
+            ("%w!flex px-2.5!", vec!["flex", "px-2.5"]),
 
             (
               "# test\n# test\n# {ActiveRecord::Base#save!}[rdoc-ref:Persistence#save!]\n%w[flex px-2.5]",

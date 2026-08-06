@@ -65,17 +65,74 @@ impl PreProcessor for Slim {
                 //   class=%w[bg-blue-500 w-10 h-10]
                 // ]
                 // ```
+                //
+                // A `%` that follows a value is not a percent literal. E.g.: the `50%w` in
+                // `hit rate 50%w.`
                 b'%' if matches!(cursor.next(), b'w' | b'W')
-                    && matches!(cursor.input.get(cursor.pos + 2), Some(b'[' | b'(' | b'{')) =>
+                    && !cursor.prev().is_ascii_alphanumeric()
+                    && !matches!(cursor.prev(), b'_' | b')' | b']' | b'}') =>
                 {
+                    // Boundary characters
+                    let (open, close) = match cursor.input.get(cursor.pos + 2) {
+                        Some(b'[') => (b'[', b']'),
+                        Some(b'(') => (b'(', b')'),
+                        Some(b'{') => (b'{', b'}'),
+                        Some(b'<') => (b'<', b'>'),
+
+                        // Any other ASCII punctuation can be used as a custom delimiter
+                        Some(&c) if c.is_ascii_punctuation() => (c, c),
+
+                        // Everything else is not a valid delimiter
+                        _ => {
+                            cursor.advance();
+                            continue;
+                        }
+                    };
+
                     result[cursor.pos] = b' '; // Replace `%`
                     cursor.advance();
                     result[cursor.pos] = b' '; // Replace `w`
                     cursor.advance();
-                    result[cursor.pos] = b' '; // Replace `[` or `(` or `{`
-                    bracket_stack.push(cursor.curr());
-                    cursor.advance(); // Move past the bracket
-                    continue;
+                    result[cursor.pos] = b' '; // Replace the opening delimiter
+                    cursor.advance();
+
+                    // Paired delimiters can be nested as long as they are balanced. E.g.:
+                    // `%w[foo[bar]baz]` produces a flat array.
+                    let mut depth = 1_usize;
+
+                    while cursor.pos < len {
+                        match cursor.curr() {
+                            // Skip escaped characters, unless the backslash is the delimiter
+                            // itself
+                            b'\\' if close != b'\\' => {
+                                // Use backslash to embed spaces in the strings.
+                                if cursor.next() == b' ' {
+                                    result[cursor.pos] = b' ';
+                                }
+
+                                cursor.advance();
+                            }
+
+                            // Start of a nested delimiter pair
+                            c if c == open && open != close => depth += 1,
+
+                            // Closing delimiter
+                            c if c == close => {
+                                depth -= 1;
+
+                                // End of the literal, replace the closing delimiter with a space
+                                if depth == 0 {
+                                    result[cursor.pos] = b' ';
+                                    break;
+                                }
+                            }
+
+                            // Everything else is valid content
+                            _ => {}
+                        }
+
+                        cursor.advance();
+                    }
                 }
 
                 // Any `[` preceded by an alphanumeric value will not be part of a candidate.
@@ -316,16 +373,77 @@ mod tests {
             ]
         "#;
 
-        let expected = r#"
-            div 
-              class=   bg-blue-500 w-10 h-10]
-            ]
-            div 
-              class=   w-10 bg-green-500 h-10]
-            ]
-        "#;
+        let expected = "
+            div \n              class=   bg-blue-500 w-10 h-10 \n            ]
+            div \n              class=   w-10 bg-green-500 h-10 \n            ]
+        ";
 
         Slim::test(input, expected);
         Slim::test_extract_contains(input, vec!["bg-blue-500", "bg-green-500", "w-10", "h-10"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20386
+    #[test]
+    fn test_embedded_ruby_percent_w_delimiters() {
+        for (input, expected) in [
+            // %w<…>, Slim only counts `[({` nesting in attribute values, so the code must be
+            // wrapped in parentheses to contain spaces
+            (
+                "div class=(%w<bg-blue-500 w-10 h-10>)",
+                "div class=    bg-blue-500 w-10 h-10 )",
+            ),
+            // Nested `<…>` does not end the literal
+            (
+                "div class=(%w<flex <nested> px-2.5>)",
+                "div class=    flex <nested> px-2.5 )",
+            ),
+            // Custom delimiters
+            ("div class=(%w|flex px-2.5|)", "div class=    flex px-2.5 )"),
+            ("div class=(%W!flex px-2.5!)", "div class=    flex px-2.5 )"),
+            (
+                "div class=(%w#text-sm leading-6#)",
+                "div class=    text-sm leading-6 )",
+            ),
+            (
+                "div class=(%w=italic tracking-wide=)",
+                "div class=    italic tracking-wide )",
+            ),
+            // Nested paired delimiters stay balanced inside the literal
+            (
+                "div class=(%w[content-['[hello]'] p-4])",
+                "div class=    content-['[hello]'] p-4 )",
+            ),
+            // Escaped spaces embed a space in a single array element
+            (
+                r#"div class=(%w[foo\ bar baz-1])"#,
+                r#"div class=    foo  bar baz-1 )"#,
+            ),
+            // Ruby control line, which is plain Ruby code
+            ("- classes = %w<mt-4 flex>", "- classes =    mt-4 flex "),
+            // A `%` that follows a value is not a percent literal
+            ("| hit rate 50%w.", "| hit rate 50%w "),
+        ] {
+            Slim::test(input, expected);
+        }
+
+        let input = r#"
+            div[
+              class=(%w<bg-blue-500 w-10 h-10>)
+            ]
+            - classes = %w|w-10 bg-green-500 h-10|
+            = tag.div class: %W!px-2.5 flex!
+        "#;
+
+        Slim::test_extract_contains(
+            input,
+            vec![
+                "bg-blue-500",
+                "bg-green-500",
+                "w-10",
+                "h-10",
+                "px-2.5",
+                "flex",
+            ],
+        );
     }
 }
