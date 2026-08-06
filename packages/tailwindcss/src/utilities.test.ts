@@ -31000,6 +31000,34 @@ describe('custom utilities', () => {
       expect(await run(['example-123/foo'], input)).toEqual('')
     })
 
+    test('the value of `--default(…)` is emitted as-is', async () => {
+      let input = css`
+        @theme reference {
+          --text-box-trim-trim-both: trim-both;
+          --text-box-edge-cap: cap alphabetic;
+        }
+
+        @utility trim-* {
+          text-box: --value(--text-box-trim-*)
+            --modifier(--text-box-edge-*, --default(box alphabetic));
+        }
+
+        @tailwind utilities;
+      `
+
+      expect(await run(['trim-trim-both', 'trim-trim-both/cap'], input)).toMatchInlineSnapshot(`
+        "
+        .trim-trim-both {
+          text-box: var(--text-box-trim-trim-both, trim-both) box alphabetic;
+        }
+
+        .trim-trim-both\\/cap {
+          text-box: var(--text-box-trim-trim-both, trim-both) var(--text-box-edge-cap, cap alphabetic);
+        }
+        "
+      `)
+    })
+
     test('modifiers', async () => {
       let input = css`
         @theme reference {
