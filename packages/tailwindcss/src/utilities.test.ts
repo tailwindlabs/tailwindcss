@@ -25770,6 +25770,43 @@ test('leading', async () => {
     }
     "
   `)
+
+  expect(
+    await run(
+      ['leading-none'],
+      css`
+        @theme {
+          --leading-none: 1.5;
+          --spacing-none: 0;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --leading-none: 1.5;
+    }
+
+    .leading-none {
+      --tw-leading: var(--leading-none);
+      line-height: var(--leading-none);
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
 })
 
 test('tracking', async () => {
