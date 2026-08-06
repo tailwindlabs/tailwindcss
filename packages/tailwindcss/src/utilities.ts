@@ -6193,6 +6193,15 @@ export function createCssUtility(node: AtRule) {
 
           let args = segment(ValueParser.toCss(fn.nodes), ',')
           for (let [idx, arg] of args.entries()) {
+            arg = arg.trim()
+
+            // The value of `--default(…)` is emitted as-is, so it should not be
+            // normalized.
+            if (arg.startsWith('--default(')) {
+              args[idx] = arg
+              continue
+            }
+
             // Transform escaped `\\*` -> `*`
             arg = arg.replace(/\\\*/g, '*')
 
