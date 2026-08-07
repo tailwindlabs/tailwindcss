@@ -37,20 +37,45 @@ pub fn init_tracing() {
         return;
     }
 
-    let file_path = format!("tailwindcss-{}.log", std::process::id());
-    let file = OpenOptions::new()
+    let root = Path::new(".tailwindcss");
+    let logs_dir = root.join("logs");
+    if let Err(err) = std::fs::create_dir_all(&logs_dir) {
+        eprintln!(
+            "{} Failed to create {}, skipping debug logs ({err})",
+            dim("[DEBUG]"),
+            highlight(&logs_dir.display().to_string())
+        );
+        return;
+    }
+
+    // Ensure everything inside `.tailwindcss/` is ignored by git. The file is only created if it
+    // doesn't exist yet, an existing `.gitignore` is left untouched.
+    if let Ok(mut file) = std::fs::File::create_new(root.join(".gitignore")) {
+        _ = file.write_all(b"*\n");
+    }
+
+    let file_path = logs_dir.join(format!("tailwindcss-{}.log", std::process::id()));
+    let file = match OpenOptions::new()
         .create(true)
         .append(true)
         .open(&file_path)
-        .unwrap_or_else(|_| panic!("Failed to open {file_path}"));
+    {
+        Ok(file) => file,
+        Err(err) => {
+            eprintln!(
+                "{} Failed to create {}, skipping debug logs ({err})",
+                dim("[DEBUG]"),
+                highlight(&file_path.display().to_string())
+            );
+            return;
+        }
+    };
 
-    let file_path = Path::new(&file_path);
-    let absolute_file_path = dunce::canonicalize(file_path)
-        .unwrap_or_else(|_| panic!("Failed to canonicalize {file_path:?}"));
+    let absolute_file_path = dunce::canonicalize(&file_path).unwrap_or_else(|_| file_path.clone());
     eprintln!(
         "{} Writing debug info to: {}\n",
         dim("[DEBUG]"),
-        highlight(absolute_file_path.as_path().to_str().unwrap())
+        highlight(&absolute_file_path.display().to_string())
     );
 
     let file = Arc::new(Mutex::new(file));
