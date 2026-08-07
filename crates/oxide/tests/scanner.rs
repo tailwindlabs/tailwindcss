@@ -1605,6 +1605,107 @@ mod scanner {
     }
 
     #[test]
+    fn it_respects_gitignore_files_with_whitelist_patterns() {
+        // https://github.com/tailwindlabs/tailwindcss/discussions/20382
+        //
+        // A `.gitignore` that ignores everything (`/*`) and then whitelists specific
+        // directories and files using negated patterns.
+        let ScanResult {
+            files, candidates, ..
+        } = scan(&[
+            (
+                ".gitignore",
+                "/*\n!/app\n!/public\n!/package.json\n!/.gitignore\n",
+            ),
+            ("app/index.html", "content-['app/index.html']"),
+            ("public/index.html", "content-['public/index.html']"),
+            ("package.json", ""),
+            // These are all ignored by the `/*` rule because they are not whitelisted
+            ("build/generated.html", "content-['build/generated.html']"),
+            ("logs/dev.log", "content-['logs/dev.log']"),
+            (
+                "node_modules/my-ui-lib/index.html",
+                "content-['node_modules/my-ui-lib/index.html']",
+            ),
+        ]);
+
+        assert_eq!(
+            files,
+            vec!["app/index.html", "package.json", "public/index.html"]
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['app/index.html']",
+                "content-['public/index.html']"
+            ]
+        );
+    }
+
+    #[test]
+    fn it_respects_gitignore_files_with_nested_whitelist_patterns() {
+        // Example from the official `.gitignore` documentation:
+        //
+        // ```gitignore
+        // # exclude everything except directory foo/bar
+        // /*
+        // !/foo
+        // /foo/*
+        // !/foo/bar
+        // ```
+        let ScanResult {
+            files, candidates, ..
+        } = scan(&[
+            (
+                ".gitignore",
+                "# exclude everything except directory foo/bar\n/*\n!/foo\n/foo/*\n!/foo/bar\n",
+            ),
+            ("foo/bar/index.html", "content-['foo/bar/index.html']"),
+            (
+                "foo/bar/nested/index.html",
+                "content-['foo/bar/nested/index.html']",
+            ),
+            // These are all ignored because they are not inside `foo/bar`
+            ("index.html", "content-['index.html']"),
+            ("foo/index.html", "content-['foo/index.html']"),
+            ("foo/baz/index.html", "content-['foo/baz/index.html']"),
+        ]);
+
+        assert_eq!(
+            files,
+            vec!["foo/bar/index.html", "foo/bar/nested/index.html"]
+        );
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['foo/bar/index.html']",
+                "content-['foo/bar/nested/index.html']"
+            ]
+        );
+    }
+
+    #[test]
+    fn explicit_source_directories_respect_their_own_gitignore() {
+        // A directory referenced via `@source` behaves like an auto source detection
+        // root. The `.gitignore` file _inside_ that directory still applies to its
+        // contents. Only when the directory itself is ignored (by an ancestor
+        // `.gitignore`, see the tests above) do we bypass the ignore rules.
+        let ScanResult {
+            files, candidates, ..
+        } = scan_with_globs(
+            &[
+                ("vendor/.gitignore", "ignored.html"),
+                ("vendor/index.html", "content-['vendor/index.html']"),
+                ("vendor/ignored.html", "content-['vendor/ignored.html']"),
+            ],
+            vec!["@source 'vendor'"],
+        );
+
+        assert_eq!(files, vec!["vendor/index.html"]);
+        assert_eq!(candidates, vec!["content-['vendor/index.html']"]);
+    }
+
+    #[test]
     fn explicit_sources_can_include_files_inside_gitignored_parent_directories() {
         let ScanResult {
             candidates,
