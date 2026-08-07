@@ -763,12 +763,11 @@ pub fn public_source_entries_to_private_source_entries(
         .collect::<Vec<_>>();
 
     // Compiled `.gitignore` matchers are cached per directory so we read and parse each
-    // `.gitignore` file at most once, even though entries commonly share ancestor directories
-    // (e.g. the repository root). A cached `None` means the directory has no `.gitignore` file.
+    // `.gitignore` file at most once, even though entries commonly share ancestor directories (e.g.
+    // the repository root). A cached `None` means the directory has no `.gitignore` file.
     let mut gitignores: FxHashMap<PathBuf, Option<Gitignore>> = FxHashMap::default();
 
-    // Boundary for the `.gitignore` walk when a source is not inside a git repository (see
-    // below).
+    // Boundary for the `.gitignore` walk when a source is not inside a git repository (see below).
     let cwd = std::env::current_dir()
         .map(|cwd| dunce::canonicalize(&cwd).unwrap_or(cwd))
         .ok();
@@ -790,8 +789,8 @@ pub fn public_source_entries_to_private_source_entries(
                     let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
                         let path = dir.join(".gitignore");
 
-                        // `Gitignore::new` roots the matcher at the directory
-                        // containing the file, so patterns match relative to it.
+                        // `Gitignore::new` roots the matcher at the directory containing the file,
+                        // so patterns match relative to it.
                         path.is_file().then(|| Gitignore::new(&path).0)
                     });
 
@@ -831,12 +830,11 @@ pub fn public_source_entries_to_private_source_entries(
                         break;
                     }
 
-                    // Without a git repository there is no repository root to stop at. Stop
-                    // once the directory contains the current working directory instead, so
-                    // `.gitignore` files outside of the project (e.g. in the user's home
-                    // directory) can never promote a source to an external source. Note that
-                    // the file walker still applies those `.gitignore` files when deciding
-                    // which files to scan.
+                    // Without a git repository there is no repository root to stop at. Stop once
+                    // the directory contains the current working directory instead, so `.gitignore`
+                    // files outside of the project (e.g. in the user's home directory) can never
+                    // promote a source to an external source. Note that the file walker still
+                    // applies those `.gitignore` files when deciding which files to scan.
                     if !inside_git_repo && cwd.as_ref().is_some_and(|cwd| cwd.starts_with(dir)) {
                         break;
                     }
