@@ -795,13 +795,34 @@ pub fn public_source_entries_to_private_source_entries(
                         path.is_file().then(|| Gitignore::new(&path).0)
                     });
 
-                    if let Some(gitignore) = gitignore {
-                        if gitignore
-                            .matched_path_or_any_parents(&base, true)
-                            .is_ignore()
-                        {
-                            source = SourceEntry::External { base: base.into() };
-                            break;
+                    // Only `.gitignore` files in ancestors of `base` can ignore `base` itself.
+                    // Patterns in `base`'s own `.gitignore` only match paths _inside_ `base`, never
+                    // `base` itself (the file walker still applies them to `base`'s contents).
+                    //
+                    // Skipping `base`'s own `.gitignore` also prevents a false positive for
+                    // whitelist style `.gitignore` files, because relativizing `base` against
+                    // itself yields the empty path, which incorrectly matches `/*`.
+                    //
+                    // E.g.:
+                    //
+                    // ```gitignore
+                    // /*
+                    // !/.gitignore
+                    // !/app
+                    // !/public
+                    // ```
+                    //
+                    // Everything inside `base` except `.gitignore`, `app` and `public` is ignored,
+                    // but `base` itself is not.
+                    if dir != base {
+                        if let Some(gitignore) = gitignore {
+                            if gitignore
+                                .matched_path_or_any_parents(&base, true)
+                                .is_ignore()
+                            {
+                                source = SourceEntry::External { base: base.into() };
+                                break;
+                            }
                         }
                     }
 
