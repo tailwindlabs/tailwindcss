@@ -54,7 +54,14 @@ pub fn init_tracing() {
         _ = file.write_all(b"*\n");
     }
 
-    let file_path = logs_dir.join(format!("tailwindcss-{}.log", std::process::id()));
+    let file_path = logs_dir.join(format!(
+        "scanner-{}-{}.log",
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.as_millis())
+            .unwrap_or(0),
+        std::process::id()
+    ));
     let file = match OpenOptions::new()
         .create(true)
         .append(true)
