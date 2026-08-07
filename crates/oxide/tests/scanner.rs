@@ -1685,6 +1685,27 @@ mod scanner {
     }
 
     #[test]
+    fn explicit_source_directories_respect_their_own_gitignore() {
+        // A directory referenced via `@source` behaves like an auto source detection
+        // root. The `.gitignore` file _inside_ that directory still applies to its
+        // contents. Only when the directory itself is ignored (by an ancestor
+        // `.gitignore`, see the tests above) do we bypass the ignore rules.
+        let ScanResult {
+            files, candidates, ..
+        } = scan_with_globs(
+            &[
+                ("vendor/.gitignore", "ignored.html"),
+                ("vendor/index.html", "content-['vendor/index.html']"),
+                ("vendor/ignored.html", "content-['vendor/ignored.html']"),
+            ],
+            vec!["@source 'vendor'"],
+        );
+
+        assert_eq!(files, vec!["vendor/index.html"]);
+        assert_eq!(candidates, vec!["content-['vendor/index.html']"]);
+    }
+
+    #[test]
     fn explicit_sources_can_include_files_inside_gitignored_parent_directories() {
         let ScanResult {
             candidates,
