@@ -1,32 +1,51 @@
 import { describe, expect, test } from 'vitest'
 import { buildDesignSystem } from '../../design-system'
 import { Theme } from '../../theme'
-import { createCompatConfig, spreadTheme } from './create-compat-config'
+import { createCompatConfig } from './create-compat-config'
 import { resolveConfig } from './resolve-config'
 
-describe('spreadTheme', () => {
-  test('spreading a plain string produces garbage', () => {
-    // When theme() returns a plain string `'1rem'`, a naive spread such as
-    // `({ theme }) => ({ ...theme('text', {}) })` spreads the characters of
-    // the string rather than producing `{ DEFAULT: '1rem' }`.
-    let result = { ...('1rem' as any) }
-    expect(result).not.toEqual({ DEFAULT: '1rem' })
-    expect(result).toEqual({ '0': '1', '1': 'r', '2': 'e', '3': 'm' })
+function buildCompatConfig(cssValues: Record<string, string>) {
+  let theme = new Theme()
+  for (let [key, value] of Object.entries(cssValues)) {
+    theme.add(key, value)
+  }
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig } = resolveConfig(design, [
+    { config: createCompatConfig(design.theme), base: '/root', reference: true, src: undefined },
+  ])
+
+  return resolvedConfig
+}
+
+describe('theme namespace lookups', () => {
+  test('a namespace that only defines a bare value resolves to `{ DEFAULT: … }`, not a string', () => {
+    // When the CSS theme only defines `--text` (a single bare value),
+    // `theme('text', {})` used to return the string `'1rem'`.
+    //
+    // Spreading that string, like the compat config does, produced char-indexed
+    // garbage (`{ '0': '1', '1': 'r', … }`) instead of `{ DEFAULT: '1rem' }`.
+    let config = buildCompatConfig({ '--text': '1rem' })
+
+    expect(config.theme?.fontSize?.DEFAULT).toBe('1rem')
+    expect(config.theme?.fontSize).not.toHaveProperty('0')
   })
 
-  test('a naive extend entry without spreadTheme corrupts the config', () => {
-    // Simulate what happens if someone adds an extend entry like:
-    //
-    //   fontSize: ({ theme }) => ({ ...theme('text', {}) })
-    //
-    // When the CSS theme only defines `--text` (a single DEFAULT value),
-    // theme('text', {}) returns `'1rem'`, and `{ ...'1rem' }` becomes
-    // `{ '0': '1', '1': 'r', '2': 'e', '3': 'm' }`.
+  test('a bare value is kept alongside suffixed values in the same namespace', () => {
+    let config = buildCompatConfig({
+      '--text': '1rem',
+      '--text-sm': '0.875rem',
+    })
+
+    expect(config.theme?.fontSize?.DEFAULT).toBe('1rem')
+    expect(config.theme?.fontSize?.sm).toBe('0.875rem')
+  })
+
+  test('a naive spread of a theme namespace in a user config is safe', () => {
     let theme = new Theme()
     theme.add('--text', '1rem')
     let design = buildDesignSystem(theme)
 
-    // A config with a *naive* extend entry that doesn't use spreadTheme
     let { resolvedConfig } = resolveConfig(design, [
       {
         config: {
@@ -42,22 +61,31 @@ describe('spreadTheme', () => {
       },
     ])
 
-    // The result is corrupted — string characters spread as indices
-    expect(resolvedConfig.theme?.fontSize).not.toHaveProperty('DEFAULT')
-    expect(resolvedConfig.theme?.fontSize).toEqual({ '0': '1', '1': 'r', '2': 'e', '3': 'm' })
+    expect(resolvedConfig.theme?.fontSize?.DEFAULT).toBe('1rem')
+    expect(resolvedConfig.theme?.fontSize).not.toHaveProperty('0')
   })
 
-  test('spreadTheme prevents the corruption', () => {
+  test('namespace root lookups resolve to an object, key lookups resolve to the value', () => {
     let theme = new Theme()
     theme.add('--text', '1rem')
+    theme.add('--animate-spin', 'spin 1s linear infinite')
     let design = buildDesignSystem(theme)
 
-    let { resolvedConfig } = resolveConfig(design, [
+    let root: unknown
+    let rootWithDefault: unknown
+    let leaf: unknown
+
+    resolveConfig(design, [
       {
         config: {
           theme: {
             extend: {
-              fontSize: ({ theme }: any) => spreadTheme(theme, 'text'),
+              fontSize: ({ theme }: any) => {
+                root = theme('text')
+                rootWithDefault = theme('text', {})
+                leaf = theme('animate.spin')
+                return {}
+              },
             },
           },
         },
@@ -67,66 +95,40 @@ describe('spreadTheme', () => {
       },
     ])
 
-    expect(resolvedConfig.theme?.fontSize).toEqual({ DEFAULT: '1rem' })
+    // A namespace root lookup always resolves to an object, like in v3, even
+    // when the namespace only contains a bare value
+    expect(root).toMatchObject({ DEFAULT: '1rem' })
+    expect(rootWithDefault).toMatchObject({ DEFAULT: '1rem' })
+
+    // Lookups of a specific key resolve to the value itself
+    expect(leaf).toBe('spin 1s linear infinite')
   })
 
-  test('wraps a string value in { DEFAULT: ... }', () => {
-    let theme = (path: string, opts: any) => '3rem'
-    expect(spreadTheme(theme, 'text')).toEqual({ DEFAULT: '3rem' })
-  })
-
-  test('spreads an object value', () => {
-    let theme = (path: string, opts: any) => ({
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-    })
-    expect(spreadTheme(theme, 'text')).toEqual({
-      xs: '0.75rem',
-      sm: '0.875rem',
-      base: '1rem',
-    })
-  })
-
-  test('returns an empty object when theme returns a non-object like null', () => {
-    let theme = (path: string, opts: any) => null
-    expect(spreadTheme(theme, 'missing')).toEqual({})
-  })
-
-  test('returns an empty object when theme returns a non-object like undefined', () => {
-    let theme = (path: string, opts: any) => undefined
-    expect(spreadTheme(theme, 'missing')).toEqual({})
-  })
-
-  test('returns an empty object when theme returns an array', () => {
-    let theme = (path: string, opts: any) => ['a', 'b']
-    expect(spreadTheme(theme, 'list')).toEqual({})
-  })
-
-  test('returns a copy, not the original reference', () => {
-    let original = { sm: '1rem' }
-    let theme = (path: string, opts: any) => original
-    let result = spreadTheme(theme, 'test')
-    expect(result).toEqual(original)
-    expect(result).not.toBe(original)
-  })
-})
-
-describe('createCompatConfig — namespace mappings via spreadTheme', () => {
-  function buildCompatConfig(cssValues: Record<string, string>) {
+  test('lookups of a specific key still resolve to the value itself', () => {
     let theme = new Theme()
-    for (let [key, value] of Object.entries(cssValues)) {
-      theme.add(key, value)
-    }
+    theme.add('--animate-spin', 'spin 1s linear infinite')
     let design = buildDesignSystem(theme)
 
     let { resolvedConfig } = resolveConfig(design, [
-      { config: createCompatConfig(design.theme), base: '/root', reference: true, src: undefined },
+      {
+        config: {
+          theme: {
+            extend: {
+              animation: ({ theme }: any) => ({ spin: theme('animate.spin') }),
+            },
+          },
+        },
+        base: '/root',
+        reference: true,
+        src: undefined,
+      },
     ])
 
-    return resolvedConfig
-  }
+    expect(resolvedConfig.theme?.animation?.spin).toBe('spin 1s linear infinite')
+  })
+})
 
+describe('createCompatConfig namespace mappings', () => {
   test('fontSize maps from CSS text namespace', () => {
     let config = buildCompatConfig({ '--text-base': '1rem' })
     expect(config.theme?.fontSize?.base).toBe('1rem')
@@ -167,17 +169,6 @@ describe('createCompatConfig — namespace mappings via spreadTheme', () => {
     expect(config.theme?.lineHeight?.relaxed).toBe('1.75')
   })
 
-  test('fontSize DEFAULT is preserved when text is a single string', () => {
-    let theme = new Theme()
-    theme.add('--text', '1rem')
-    let design = buildDesignSystem(theme)
-
-    let { resolvedConfig } = resolveConfig(design, [
-      { config: createCompatConfig(design.theme), base: '/root', reference: true, src: undefined },
-    ])
-    expect(resolvedConfig.theme?.fontSize?.DEFAULT).toBe('1rem')
-  })
-
   test('maxWidth maps from the container namespace in the default theme', () => {
     let config = buildCompatConfig({})
     // The default theme has container.sm = '24rem'
@@ -185,26 +176,14 @@ describe('createCompatConfig — namespace mappings via spreadTheme', () => {
   })
 
   test('transitionDuration gets DEFAULT from --default-transition-duration', () => {
-    let theme = new Theme()
-    theme.add('--default-transition-duration', '150ms')
-    let design = buildDesignSystem(theme)
-
-    let { resolvedConfig } = resolveConfig(design, [
-      { config: createCompatConfig(design.theme), base: '/root', reference: true, src: undefined },
-    ])
-    expect(resolvedConfig.theme?.transitionDuration?.DEFAULT).toBe('150ms')
+    let config = buildCompatConfig({ '--default-transition-duration': '150ms' })
+    expect(config.theme?.transitionDuration?.DEFAULT).toBe('150ms')
   })
 
   test('transitionTimingFunction gets DEFAULT from --default-transition-timing-function', () => {
-    let theme = new Theme()
-    theme.add('--default-transition-timing-function', 'cubic-bezier(0.4, 0, 0.2, 1)')
-    let design = buildDesignSystem(theme)
-
-    let { resolvedConfig } = resolveConfig(design, [
-      { config: createCompatConfig(design.theme), base: '/root', reference: true, src: undefined },
-    ])
-    expect(resolvedConfig.theme?.transitionTimingFunction?.DEFAULT).toBe(
-      'cubic-bezier(0.4, 0, 0.2, 1)',
-    )
+    let config = buildCompatConfig({
+      '--default-transition-timing-function': 'cubic-bezier(0.4, 0, 0.2, 1)',
+    })
+    expect(config.theme?.transitionTimingFunction?.DEFAULT).toBe('cubic-bezier(0.4, 0, 0.2, 1)')
   })
 })

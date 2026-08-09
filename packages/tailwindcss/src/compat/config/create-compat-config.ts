@@ -1,28 +1,6 @@
 import type { Theme } from '../../theme'
 import defaultTheme from '../default-theme'
-import type { PluginUtils } from './resolve-config'
 import type { UserConfig } from './types'
-
-/**
- * Returns a theme value that is safe to spread into an object.
- *
- * Depending on how `theme()` resolves a namespace, a `DEFAULT` entry may be
- * returned as a primitive string instead of an object. This helper wraps such
- * values in `{ DEFAULT: ... }` so callers can safely spread the result.
- */
-export function spreadTheme(theme: PluginUtils['theme'], path: string): Record<string, string> {
-  let value = theme(path, {})
-
-  if (typeof value === 'string') {
-    return { DEFAULT: value }
-  }
-
-  if (value && typeof value === 'object' && !Array.isArray(value)) {
-    return { ...value } as Record<string, string>
-  }
-
-  return {}
-}
 
 export function createCompatConfig(cssTheme: Theme): UserConfig {
   return {
@@ -36,21 +14,37 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
       colors: ({ theme }) => theme('color', {}),
 
       extend: {
-        fontSize: ({ theme }) => spreadTheme(theme, 'text'),
+        fontSize: ({ theme }) => ({
+          ...theme('text', {}),
+        }),
 
-        boxShadow: ({ theme }) => spreadTheme(theme, 'shadow'),
+        boxShadow: ({ theme }) => ({
+          ...theme('shadow', {}),
+        }),
 
-        animation: ({ theme }) => spreadTheme(theme, 'animate'),
+        animation: ({ theme }) => ({
+          ...theme('animate', {}),
+        }),
 
-        aspectRatio: ({ theme }) => spreadTheme(theme, 'aspect'),
+        aspectRatio: ({ theme }) => ({
+          ...theme('aspect', {}),
+        }),
 
-        borderRadius: ({ theme }) => spreadTheme(theme, 'radius'),
+        borderRadius: ({ theme }) => ({
+          ...theme('radius', {}),
+        }),
 
-        screens: ({ theme }) => spreadTheme(theme, 'breakpoint'),
+        screens: ({ theme }) => ({
+          ...theme('breakpoint', {}),
+        }),
 
-        letterSpacing: ({ theme }) => spreadTheme(theme, 'tracking'),
+        letterSpacing: ({ theme }) => ({
+          ...theme('tracking', {}),
+        }),
 
-        lineHeight: ({ theme }) => spreadTheme(theme, 'leading'),
+        lineHeight: ({ theme }) => ({
+          ...theme('leading', {}),
+        }),
 
         transitionDuration: {
           DEFAULT: cssTheme.get(['--default-transition-duration']) ?? null,
@@ -60,7 +54,9 @@ export function createCompatConfig(cssTheme: Theme): UserConfig {
           DEFAULT: cssTheme.get(['--default-transition-timing-function']) ?? null,
         },
 
-        maxWidth: ({ theme }) => spreadTheme(theme, 'container'),
+        maxWidth: ({ theme }) => ({
+          ...theme('container', {}),
+        }),
       },
     },
   }
