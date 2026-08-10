@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/vite` rebuilds when a plugin that runs before it changes the input CSS without changing the input file on disk ([#20700](https://github.com/tailwindlabs/tailwindcss/pull/20700))
 - Allow `@apply` with a CSS mixin that has spaces in its arguments (e.g. `@apply --card(red, 2rem)`) instead of throwing an error about mixins and utilities ([#20725](https://github.com/tailwindlabs/tailwindcss/pull/20725))
 - Prevent a crash on Windows when a worker thread that used `@tailwindcss/oxide` exits ([#20471](https://github.com/tailwindlabs/tailwindcss/pull/20471))
+- Don't scan every sibling of a concrete `@source` file when it sits behind an ignored directory inside the project root (e.g. `@source "./node_modules/.generated/ui/button.ts"` no longer scans the whole `ui` folder) ([#TBD](https://github.com/tailwindlabs/tailwindcss/pull/TBD))
 
 ### Changed
 
