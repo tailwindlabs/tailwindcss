@@ -2148,6 +2148,45 @@ mod scanner {
     }
 
     #[test]
+    fn test_concrete_file_source_in_node_modules_does_not_include_siblings() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "node_modules\n"),
+                ("src/index.html", "content-['src/index.html']"),
+                ("node_modules/.generated/ui/button.ts", "content-['button']"),
+                ("node_modules/.generated/ui/table.ts", "content-['table']"),
+            ],
+            vec![
+                "@source './'",
+                "@source './node_modules/.generated/ui/button.ts'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['button']", "content-['src/index.html']"]
+        );
+    }
+
+    #[test]
+    fn test_concrete_file_source_in_gitignored_dir_does_not_include_siblings() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "generated\n"),
+                ("index.html", "content-['index.html']"),
+                ("generated/ui/button.ts", "content-['button']"),
+                ("generated/ui/table.ts", "content-['table']"),
+            ],
+            vec!["@source './'", "@source './generated/ui/button.ts'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['button']", "content-['index.html']"]
+        );
+    }
+
+    #[test]
     fn test_ignore_node_modules_without_gitignore() {
         let ScanResult {
             candidates,
