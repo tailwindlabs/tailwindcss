@@ -1605,6 +1605,131 @@ mod scanner {
     }
 
     #[test]
+    fn it_scans_gitignored_files_matched_by_explicit_glob_sources() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/web/ignored.html"),
+                ("web/index.html", "content-['web/index.html']"),
+                ("web/ignored.html", "content-['web/ignored.html']"),
+            ],
+            vec!["@source './web/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['web/ignored.html']", "content-['web/index.html']",]
+        );
+        assert_eq!(files, vec!["web/ignored.html", "web/index.html"]);
+    }
+
+    #[test]
+    fn it_scans_explicit_glob_sources_through_gitignored_directories() {
+        // https://github.com/tailwindlabs/tailwindcss/issues/18870
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/web/pages"),
+                ("web/index.html", "content-['web/index.html']"),
+                (
+                    "web/pages/nested/page.html",
+                    "content-['web/pages/nested/page.html']",
+                ),
+            ],
+            vec!["@source './web/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['web/index.html']",
+                "content-['web/pages/nested/page.html']",
+            ]
+        );
+        assert_eq!(files, vec!["web/index.html", "web/pages/nested/page.html"]);
+    }
+
+    #[test]
+    fn it_scans_explicit_glob_sources_through_self_ignoring_directories() {
+        // Directories that ignore themselves with `*` + `!.gitignore`, like
+        // Laravel's `storage/` directories.
+        //
+        // https://github.com/tailwindlabs/tailwindcss/issues/18870
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                ("storage/cms/.gitignore", "*\n!.gitignore\n"),
+                (
+                    "storage/cms/collection/en/page.html",
+                    "content-['storage/cms/collection/en/page.html']",
+                ),
+            ],
+            vec!["@source './src'", "@source './storage/cms/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['src/index.html']",
+                "content-['storage/cms/collection/en/page.html']",
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["src/index.html", "storage/cms/collection/en/page.html"]
+        );
+    }
+
+    #[test]
+    fn it_keeps_auto_ignored_directories_pruned_inside_explicit_glob_sources() {
+        // Re-opening gitignored directories for an explicit glob source must not
+        // re-open directories that are always ignored, like `node_modules`.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("web/.gitignore", "*\n!.gitignore\n"),
+                ("web/pages/index.html", "content-['web/pages/index.html']"),
+                (
+                    "web/node_modules/dep/ui.html",
+                    "content-['web/node_modules/dep/ui.html']",
+                ),
+            ],
+            vec!["@source './web/**/*.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['web/pages/index.html']"]);
+        assert_eq!(files, vec!["web/pages/index.html"]);
+    }
+
+    #[test]
+    fn it_respects_source_not_inside_glob_sources_through_gitignored_directories() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("web/.gitignore", "*\n!.gitignore\n"),
+                ("web/pages/index.html", "content-['web/pages/index.html']"),
+                (
+                    "web/pages/secret/hidden.html",
+                    "content-['web/pages/secret/hidden.html']",
+                ),
+            ],
+            vec![
+                "@source './web/**/*.html'",
+                "@source not './web/pages/secret'",
+            ],
+        );
+
+        assert_eq!(candidates, vec!["content-['web/pages/index.html']"]);
+        assert_eq!(files, vec!["web/pages/index.html"]);
+    }
+
+    #[test]
     fn it_respects_gitignore_files_with_whitelist_patterns() {
         // https://github.com/tailwindlabs/tailwindcss/discussions/20382
         //

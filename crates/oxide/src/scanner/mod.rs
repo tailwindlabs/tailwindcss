@@ -725,6 +725,12 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
         }
     };
 
+    // Bases of glob sources whose directories must stay walkable even when a
+    // `.gitignore` ignores them, otherwise the pattern rules emitted below can
+    // never reach the files they whitelist (e.g. a directory that ignores
+    // itself with `*`, like Laravel's `storage/` directories).
+    let mut reopened_bases: Vec<&PathBuf> = Vec::new();
+
     for source in sources.iter() {
         match source {
             SourceEntry::Auto { base } => {
@@ -752,6 +758,14 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                     if let Some(extension) = Path::new(&pattern).extension() {
                         // Extend auto source detection to include the extension
                         emit(base, format!("!*.{}", extension.to_string_lossy()));
+
+                        // The extension rule above whitelists matching files even
+                        // when they are git-ignored, but it cannot stop the walker
+                        // from pruning git-ignored directories on the way to those
+                        // files. Keep directories under this base walkable as well.
+                        if !reopened_bases.contains(&base) {
+                            reopened_bases.push(base);
+                        }
                     }
                 }
             }
@@ -829,6 +843,17 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
 
     for root in other_roots {
         builder.add(root);
+    }
+
+    // Re-open directories under glob sources. These rules are registered before
+    // the auto source detection rules and the `@source` rules so both still take
+    // precedence, e.g. `node_modules` inside a glob source stays pruned unless
+    // targeted explicitly.
+    for base in reopened_bases {
+        let mut ignore_builder = GitignoreBuilder::new(base);
+        ignore_builder.add_line(None, "!*/").unwrap();
+        let ignore = ignore_builder.build().unwrap();
+        builder.add_gitignore(ignore);
     }
 
     // Setup auto source detection rules
