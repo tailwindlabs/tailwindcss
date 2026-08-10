@@ -2169,6 +2169,31 @@ mod scanner {
     }
 
     #[test]
+    fn test_concrete_file_source_in_reincluded_dir_keeps_siblings() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "generated\n"),
+                ("sub/.gitignore", "!generated\n"),
+                ("index.html", "content-['index.html']"),
+                ("sub/generated/ui/button.ts", "content-['button']"),
+                ("sub/generated/ui/table.ts", "content-['table']"),
+            ],
+            vec!["@source './'", "@source './sub/generated/ui/button.ts'"],
+        );
+
+        // `sub/.gitignore` re-includes `generated`, so the auto walk reaches it and its files:
+        // the concrete source must not restrict the directory to just `button.ts`.
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['button']",
+                "content-['index.html']",
+                "content-['table']"
+            ]
+        );
+    }
+
+    #[test]
     fn test_concrete_file_source_in_gitignored_dir_does_not_include_siblings() {
         let ScanResult { candidates, .. } = scan_with_globs(
             &[

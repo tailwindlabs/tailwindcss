@@ -323,11 +323,14 @@ fn is_ignored_by_gitignore(
         // itself is not.
         if dir != base {
             if let Some(gitignore) = gitignore {
-                if gitignore
-                    .matched_path_or_any_parents(base, true)
-                    .is_ignore()
-                {
-                    return true;
+                // The nearest `.gitignore` with a definitive answer wins, matching git: patterns
+                // in a deeper `.gitignore` override the directories above it, so a re-included
+                // (`!dir`) directory is not ignored even when an ancestor `.gitignore` ignores
+                // it.
+                match gitignore.matched_path_or_any_parents(base, true) {
+                    ignore::Match::Ignore(_) => return true,
+                    ignore::Match::Whitelist(_) => return false,
+                    ignore::Match::None => {}
                 }
             }
         }
