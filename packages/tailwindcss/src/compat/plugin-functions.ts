@@ -108,7 +108,12 @@ export function createThemeFn(
       // ```
       //
       // Prefer `DEFAULT` instead of exposing the object to plugin code.
+      //
+      // This only applies to lookups of a specific key (e.g. `colors.foo`). A
+      // namespace root lookup (e.g. `theme('shadow')`) resolves to the whole
+      // namespace as an object, like in v3.
       if (
+        keypath.length > 1 &&
         cssValue !== null &&
         typeof cssValue === 'object' &&
         !Array.isArray(cssValue) &&
@@ -225,7 +230,12 @@ function readFromCss(
   // The request looked like `theme('animation.spin')` and was turned into a
   // lookup for `--animation-spin-*` which had only one entry which means it
   // should be returned directly.
-  if ('DEFAULT' in obj && Object.keys(obj).length === 1) {
+  //
+  // This only applies to lookups of a specific key (`path.length > 1`). A
+  // namespace root lookup like `theme('shadow')` resolves to the whole
+  // namespace as an object, like in v3, so it must keep the object shape (`{
+  // DEFAULT: … }`).
+  if (path.length > 1 && 'DEFAULT' in obj && Object.keys(obj).length === 1) {
     return [obj.DEFAULT as any, optionsObj.DEFAULT ?? ThemeOptions.NONE] as const
   }
 
