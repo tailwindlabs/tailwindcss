@@ -3947,6 +3947,340 @@ mod scanner {
         ]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/18870
+    #[test]
+    fn glob_sources_can_descend_into_directories_ignored_from_within() {
+        // Laravel's `storage/` directories ship a `.gitignore` that ignores everything inside
+        // (`*` + `!.gitignore`). An explicit glob through such a directory should still find
+        // matching files, but nothing else.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("storage/.gitignore", "*\n!.gitignore"),
+                (
+                    "storage/cms/section.html",
+                    "content-['storage/cms/section.html']",
+                ),
+                (
+                    "storage/cms/nested/deep.html",
+                    "content-['storage/cms/nested/deep.html']",
+                ),
+                ("storage/cms/data.json", "content-['storage/cms/data.json']"),
+                ("storage/other/other.html", "content-['storage/other.html']"),
+            ],
+            vec!["@source './storage/cms/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['storage/cms/nested/deep.html']",
+                "content-['storage/cms/section.html']",
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["storage/cms/nested/deep.html", "storage/cms/section.html"]
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/18870
+    #[test]
+    fn glob_sources_can_descend_into_directories_ignored_by_an_ancestor() {
+        // Same as above, but the ignore comes from an ancestor `.gitignore` rather than one
+        // inside the ignored directory itself.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/storage"),
+                (
+                    "storage/cms/section.html",
+                    "content-['storage/cms/section.html']",
+                ),
+                (
+                    "storage/cms/nested/deep.html",
+                    "content-['storage/cms/nested/deep.html']",
+                ),
+                ("storage/cms/script.js", "content-['storage/cms/script.js']"),
+            ],
+            vec!["@source './storage/cms/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['storage/cms/nested/deep.html']",
+                "content-['storage/cms/section.html']",
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["storage/cms/nested/deep.html", "storage/cms/section.html"]
+        );
+    }
+
+    #[test]
+    fn glob_sources_inside_ignored_directories_do_not_include_other_extensions() {
+        // `@source "./foo/*.html"` where `foo` is git ignored: only the `.html` files were asked
+        // for. Other files in `foo` must not be scanned, even when a broader auto source exists.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/foo"),
+                ("foo/index.html", "content-['foo/index.html']"),
+                ("foo/script.js", "content-['foo/script.js']"),
+                (
+                    "foo/nested/nested.html",
+                    "content-['foo/nested/nested.html']",
+                ),
+                ("index.html", "content-['index.html']"),
+            ],
+            vec!["@source '**/*'", "@source './foo/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['foo/index.html']", "content-['index.html']"]
+        );
+        assert_eq!(files, vec!["foo/index.html", "index.html"]);
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/pull/20406
+    #[test]
+    fn concrete_file_sources_behind_node_modules_do_not_include_siblings() {
+        // A concrete file `@source` pointing into a default-ignored directory (`node_modules`)
+        // must only include that file, not its siblings, even when the project root is an auto
+        // source.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (
+                    "node_modules/.generated/ui/button.ts",
+                    "content-['button.ts']",
+                ),
+                ("node_modules/.generated/ui/card.ts", "content-['card.ts']"),
+                ("index.html", "content-['index.html']"),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source './node_modules/.generated/ui/button.ts'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['button.ts']", "content-['index.html']"]
+        );
+        assert_eq!(
+            files,
+            vec!["index.html", "node_modules/.generated/ui/button.ts"]
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/pull/20406
+    #[test]
+    fn concrete_file_sources_behind_gitignored_directories_do_not_include_siblings() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/generated"),
+                ("generated/button.ts", "content-['button.ts']"),
+                ("generated/card.ts", "content-['card.ts']"),
+                ("index.html", "content-['index.html']"),
+            ],
+            vec!["@source '**/*'", "@source './generated/button.ts'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['button.ts']", "content-['index.html']"]
+        );
+        assert_eq!(files, vec!["generated/button.ts", "index.html"]);
+    }
+
+    #[test]
+    fn glob_sources_do_not_reopen_node_modules() {
+        // A glob source respects the default auto source detection rules: `node_modules` inside
+        // the globbed tree stays pruned unless it is targeted explicitly.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                (
+                    "src/node_modules/lib/index.html",
+                    "content-['src/node_modules/lib/index.html']",
+                ),
+            ],
+            vec!["@source './src/**/*.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+        assert_eq!(files, vec!["src/index.html"]);
+    }
+
+    #[test]
+    fn wildcards_in_glob_sources_do_not_descend_into_gitignored_directories() {
+        // The static part of a glob source is the "explicit" part: it bypasses ignore rules.
+        // The wildcard part does not: `@source "./**/*.html"` does not descend into a git
+        // ignored directory — you weren't explicit about it. To opt in, name the directory:
+        // `@source "./dist/**/*.html"`.
+        //
+        // Files are different: a git ignored *file* that matches the glob is still included
+        // (you asked for all `.html` files).
+        let paths_with_content = &[
+            (".gitignore", "dist/\nignored.html"),
+            ("src/index.html", "content-['src/index.html']"),
+            ("dist/index.html", "content-['dist/index.html']"),
+            ("ignored.html", "content-['ignored.html']"),
+        ];
+
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(paths_with_content, vec!["@source './**/*.html'"]);
+
+        assert_eq!(
+            candidates,
+            vec!["content-['ignored.html']", "content-['src/index.html']"]
+        );
+        assert_eq!(files, vec!["ignored.html", "src/index.html"]);
+
+        // Being explicit about the ignored directory bypasses the ignore rule.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            paths_with_content,
+            vec!["@source './**/*.html'", "@source './dist/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['dist/index.html']",
+                "content-['ignored.html']",
+                "content-['src/index.html']"
+            ]
+        );
+        assert_eq!(
+            files,
+            vec!["dist/index.html", "ignored.html", "src/index.html"]
+        );
+    }
+
+    #[test]
+    fn glob_sources_only_rescue_matching_files_from_ignored_directories() {
+        // When a glob source forces the walker into a git ignored directory, files that do not
+        // match the glob must stay excluded, even though they are only ignored "via" their
+        // parent directory.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "gen/"),
+                ("gen/a.html", "content-['gen/a.html']"),
+                ("gen/b.js", "content-['gen/b.js']"),
+                ("index.html", "content-['index.html']"),
+            ],
+            vec!["@source '**/*'", "@source './gen/**/*.html'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['gen/a.html']", "content-['index.html']"]
+        );
+        assert_eq!(files, vec!["gen/a.html", "index.html"]);
+    }
+
+    #[test]
+    fn unpinned_extension_globs_apply_default_extension_rules() {
+        // A glob that doesn't pin an extension (`**/*`-style tail after a wildcard directory)
+        // still applies the default extension rules, so binary files are not included.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("blog/2024/post/index.html", "content-['index.html']"),
+                ("blog/2024/post/image.png", "content-['image.png']"),
+                ("blog/2024/post/styles.scss", "content-['styles.scss']"),
+            ],
+            vec!["@source './blog/*/post/**/*'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['index.html']"]);
+        assert_eq!(files, vec!["blog/2024/post/index.html"]);
+    }
+
+    #[test]
+    fn external_sources_ignore_nested_default_ignored_directories() {
+        // An explicitly listed, git ignored directory (external source) still applies the
+        // default auto source detection rules inside of it: nested `node_modules` are not
+        // scanned.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "node_modules"),
+                (
+                    "node_modules/my-lib/dist/index.html",
+                    "content-['node_modules/my-lib/dist/index.html']",
+                ),
+                (
+                    "node_modules/my-lib/node_modules/dep/index.html",
+                    "content-['node_modules/my-lib/node_modules/dep/index.html']",
+                ),
+                (
+                    "node_modules/my-lib/logo.png",
+                    "content-['node_modules/my-lib/logo.png']",
+                ),
+            ],
+            vec!["@source './node_modules/my-lib'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/my-lib/dist/index.html']"]
+        );
+        assert_eq!(files, vec!["node_modules/my-lib/dist/index.html"]);
+    }
+
+    #[test]
+    fn later_pattern_sources_override_earlier_not_sources() {
+        // Order matters: a later positive `@source` wins from an earlier `@source not`, and
+        // vice versa.
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                ("src/keep.html", "content-['src/keep.html']"),
+                ("src/other.html", "content-['src/other.html']"),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source not './src'",
+                "@source './src/keep.html'",
+            ],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/keep.html']"]);
+
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                ("src/keep.html", "content-['src/keep.html']"),
+                ("src/other.html", "content-['src/other.html']"),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source './src/keep.html'",
+                "@source not './src'",
+            ],
+        );
+
+        assert!(candidates.is_empty());
+    }
+
     #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();

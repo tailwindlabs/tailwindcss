@@ -22,16 +22,58 @@ use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
 use tracing::event;
 
-// @source "some/folder";               // This is auto source detection
-// @source "some/folder/**/*";          // This is auto source detection
-// @source "some/folder/*.html";        // This is just a glob, but new files matching this should be included
-// @source "node_modules/my-ui-lib";    // Auto source detection but since node_modules is explicit we allow it
-//                                      // Maybe could be considered `external(…)` automatically if:
-//                                      // 1. It's git ignored but listed explicitly
-//                                      // 2. It exists outside of the current working directory (do we know that?)
+// # `@source` semantics
 //
-// @source "do-include-me.bin";         // `.bin` is typically ignored, but now it's explicit so should be included
-// @source "git-ignored.html";          // A git ignored file that is listed explicitly, should be scanned
+// Every `@source` directive is classified as one of:
+//
+// - `Auto`: `@source "some/folder"` or `@source "some/folder/**/*"` — auto source detection.
+//   The folder is scanned recursively while respecting `.gitignore` files and the default rules
+//   (skip `node_modules`/`.git`/…, skip binary and irrelevant extensions, skip lock files, …).
+//
+// - `External`: an `Auto` source whose folder is itself ignored (by a `.gitignore` or because
+//   it's a default-ignored directory like `node_modules`), e.g.
+//   `@source "node_modules/my-ui-lib"`. Since the folder was listed explicitly, its ignoredness
+//   is bypassed: everything inside is scanned as if it were an `Auto` source, except that
+//   `.gitignore` files no longer apply inside (git ignores the whole tree anyway). The default
+//   rules still apply inside: nested `node_modules`, binary extensions, etc. stay ignored.
+//
+// - `Pattern`: `@source "some/folder/*.html"` — an explicit glob. Only files matching the glob
+//   are scanned. The *static* prefix of the glob (`some/folder`) is the explicit part: it is
+//   reached even when it is git ignored or hidden behind a default-ignored directory
+//   (`@source "node_modules/lib/dist/*.html"` works). The *wildcard* part is not explicit:
+//   while expanding it we still respect `.gitignore` files inside the walked subtree and the
+//   default-ignored directories (`@source "./**/*.html"` does not descend into `node_modules`
+//   or a git ignored `dist/`; `@source "./dist/**/*.html"` does descend into `dist/`).
+//   Individual *files* matching the glob are always included, even when git ignored — you were
+//   explicit about wanting files of that shape (`@source "git-ignored.html"` and
+//   `@source "*.styl"` work). Extensions that are ignored by default are only included when the
+//   glob pins an extension (`@source "logo.{jpg,png}"`, `@source "do-include-me.bin"`), an
+//   extension-less glob like `@source "some/folder/**/*"`… is `Auto`, and e.g.
+//   `@source "blog/*/post/**/*"` still applies the default extension rules.
+//
+// - `Ignored`: `@source not "…"` — excludes matching files/folders, even when a `.gitignore`
+//   or another `@source` allows them.
+//
+// Later directives win over earlier ones on conflict: `@source not "./x"` followed by
+// `@source "./x/keep.html"` scans `keep.html`, and vice versa excludes it.
+//
+// # Implementation
+//
+// Scanning uses the vendored `ignore` crate for gitignore-aware, pruned directory walking (we
+// never descend into directories that cannot contribute files). Sources are split over multiple
+// walkers:
+//
+// - One walker for all `Auto` and `External` roots. Default rules and `@source not` rules are
+//   registered as explicit in-memory gitignores (they rank above `.gitignore` files found on
+//   disk, later directives above earlier ones). `External` roots additionally get a `!/**/*`
+//   whitelist (bypassing gitignore rules) plus a re-statement of the default rules.
+//
+// - One walker per `Pattern` base. It never looks at `.gitignore` files *above* its base
+//   (the static prefix is explicit), while `.gitignore` files inside the subtree still prune
+//   directories. Matching files are whitelisted (a glob match beats file-level ignores), and a
+//   filter closure makes the final per-file decision: the file must match a glob, honoring the
+//   relative order of `@source not` directives, and non-extension-pinning globs re-apply the
+//   default file rules.
 
 #[derive(Debug, Clone)]
 pub enum ChangedContent {
@@ -60,8 +102,9 @@ pub struct Scanner {
     /// Content sources
     sources: Sources,
 
-    /// The walker to detect all files that we have to scan
-    walker: Option<WalkBuilder>,
+    /// The walkers to detect all files that we have to scan: one for all auto/external source
+    /// roots, and one per pattern source base
+    walkers: Vec<WalkBuilder>,
 
     /// All found extensions
     extensions: FxHashSet<String>,
@@ -111,11 +154,11 @@ impl Scanner {
             }
         }
 
-        let walker = create_walker(&sources);
+        let walkers = create_walkers(&sources);
 
         Self {
             sources,
-            walker,
+            walkers,
             ..Default::default()
         }
     }
@@ -174,7 +217,7 @@ impl Scanner {
 
         // Figure out if the new unknown files are allowed to be scanned
         if !new_unknown_files.is_empty() {
-            if let Some(walk_builder) = &mut self.walker {
+            'outer: for walk_builder in self.walkers.iter_mut() {
                 for entry in walk_builder.build().filter_map(Result::ok) {
                     let path = entry.path();
                     if !path.is_file() {
@@ -219,7 +262,7 @@ impl Scanner {
                     // We can stop walking the file system if all files we are interested in have
                     // been found.
                     if new_unknown_files.is_empty() {
-                        break;
+                        break 'outer;
                     }
                 }
             }
@@ -379,17 +422,20 @@ impl Scanner {
         }
         self.sources_scanned = true;
 
-        let Some(walker) = &mut self.walker else {
+        if self.walkers.is_empty() {
             return (vec![], vec![], vec![]);
-        };
+        }
 
-        // Use synchronous walk for the initial build (lower overhead) and parallel
-        // walk for subsequent calls (watch mode) where the overhead is amortised.
-        let all_entries = if self.has_scanned_once {
-            walk_parallel(walker)
-        } else {
-            walk_synchronous(walker)
-        };
+        // Use synchronous walks for the initial build (lower overhead) and parallel
+        // walks for subsequent calls (watch mode) where the overhead is amortised.
+        let mut all_entries = vec![];
+        for walker in self.walkers.iter_mut() {
+            if self.has_scanned_once {
+                all_entries.extend(walk_parallel(walker));
+            } else {
+                all_entries.extend(walk_synchronous(walker));
+            }
+        }
 
         let mut css_files: Vec<PathBuf> = vec![];
         let mut content_paths: Vec<(PathBuf, String)> = vec![];
@@ -707,74 +753,42 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
     Arc::try_unwrap(collected).unwrap().into_inner().unwrap()
 }
 
-/// Sets up a WalkBuilder with all source roots, gitignore rules, and source pattern matching.
+/// Sets up all walkers for the given sources: one gitignore-aware walker for all `Auto` and
+/// `External` roots, and one walker per `Pattern` base.
+fn create_walkers(sources: &Sources) -> Vec<WalkBuilder> {
+    let mut walkers = vec![];
+    walkers.extend(create_auto_walker(sources));
+    walkers.extend(create_pattern_walkers(sources));
+    walkers
+}
+
+/// A single walker for all `Auto` and `External` roots.
 ///
-/// This is the common setup shared between the full walker (with mtime tracking for re-scans)
-/// and the parallel walker (without mtime tracking for the initial scan).
-fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
-    let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
-    let mut first_root: Option<&PathBuf> = None;
+/// The walker respects `.gitignore` files (also from parent directories, up to the git
+/// repository root) plus a stack of explicit in-memory gitignores. Explicit gitignores rank
+/// above the ignore files found on disk, and later-registered ones above earlier ones (see the
+/// `CHANGED:` annotations in the vendored `ignore` crate). From low to high precedence:
+///
+/// 1. The default auto source detection rules
+/// 2. Per `@source` directive, in order:
+///    - `External`: a `!/**/*` whitelist at its base (bypassing all gitignore rules), plus a
+///      re-statement of the default rules so that e.g. nested `node_modules` stay ignored
+///    - `Ignored` (`@source not`): its pattern at its base
+fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
+    let mut roots = sources.iter().filter_map(|source| match source {
+        SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base),
+        _ => None,
+    });
 
-    let mut ignores: Vec<(&PathBuf, Vec<String>)> = Default::default();
-    let mut emit = |base, pattern| match ignores.last_mut() {
-        Some((prev_base, patterns)) if *prev_base == base => {
-            patterns.push(pattern);
-        }
-        _ => {
-            ignores.push((base, vec![pattern]));
-        }
-    };
+    let first_root = roots.next()?;
 
-    for source in sources.iter() {
-        match source {
-            SourceEntry::Auto { base } => {
-                if first_root.is_none() {
-                    first_root = Some(base);
-                } else {
-                    other_roots.insert(base);
-                }
-            }
-            SourceEntry::Pattern { base, pattern } => {
-                let pattern = pattern.to_owned();
-
-                if first_root.is_none() {
-                    first_root = Some(base);
-                } else {
-                    other_roots.insert(base);
-                }
-
-                if !pattern.contains("**") {
-                    // Specific patterns should take precedence even over git-ignored files:
-                    emit(base, format!("!{}", pattern));
-                } else {
-                    // Assumption: the pattern we receive will already be brace expanded. So
-                    // `*.{html,jsx}` will result in two separate patterns: `*.html` and `*.jsx`.
-                    if let Some(extension) = Path::new(&pattern).extension() {
-                        // Extend auto source detection to include the extension
-                        emit(base, format!("!*.{}", extension.to_string_lossy()));
-                    }
-                }
-            }
-            SourceEntry::Ignored { base, pattern } => {
-                emit(base, pattern.to_owned());
-            }
-            SourceEntry::External { base } => {
-                if first_root.is_none() {
-                    first_root = Some(base);
-                } else {
-                    other_roots.insert(base);
-                }
-
-                // External sources should take precedence even over git-ignored files:
-                emit(base, "!/**/*".to_owned());
-
-                // External sources should still disallow binary extensions:
-                emit(base, BINARY_EXTENSIONS_GLOB.clone());
-            }
+    let mut builder = WalkBuilder::new(first_root);
+    let mut seen_roots = FxHashSet::from_iter([first_root]);
+    for root in roots {
+        if seen_roots.insert(root) {
+            builder.add(root);
         }
     }
-
-    let mut builder = WalkBuilder::new(first_root?);
 
     // We have to follow symlinks
     builder.follow_links(true);
@@ -820,15 +834,11 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     // - my-project/apps/.gitignore
     //
     // Setting the require_git(true) flag conditionally allows us to do this.
-    for parent in first_root?.ancestors() {
+    for parent in first_root.ancestors() {
         if parent.join(".git").exists() {
             builder.require_git(true);
             break;
         }
-    }
-
-    for root in other_roots {
-        builder.add(root);
     }
 
     // Setup auto source detection rules
@@ -836,74 +846,288 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
         builder.add_gitignore(ignore.clone());
     }
 
-    // Setup ignores based on `@source` definitions
-    for (base, patterns) in ignores {
-        let mut ignore_builder = GitignoreBuilder::new(base);
-        for pattern in patterns {
-            ignore_builder.add_line(None, &pattern).unwrap();
+    // Setup ignores based on `@source` definitions, in directive order so later directives win
+    for source in sources.iter() {
+        match source {
+            SourceEntry::External { base } => {
+                // External sources bypass all gitignore rules (the directory was explicitly
+                // listed even though it is ignored)…
+                let mut ignore_builder = GitignoreBuilder::new(base);
+                ignore_builder.add_line(None, "!/**/*").unwrap();
+
+                // …but the default auto source detection rules still apply inside of them, so
+                // nested `node_modules`, ignored extensions, and lock files stay ignored.
+                ignore_builder
+                    .add_line(None, &auto_source_detection::IGNORED_CONTENT_DIRS_GLOB)
+                    .unwrap();
+                ignore_builder
+                    .add_line(None, &auto_source_detection::IGNORED_EXTENSIONS_GLOB)
+                    .unwrap();
+                ignore_builder
+                    .add_line(None, &auto_source_detection::IGNORED_FILES_GLOB)
+                    .unwrap();
+                builder.add_gitignore(ignore_builder.build().unwrap());
+
+                // Binary extensions are ignored as well, but only for files, so that a folder
+                // named e.g. `some.pages` is still scanned.
+                let mut ignore_builder = GitignoreBuilder::new(base);
+                ignore_builder
+                    .only_on_files(true)
+                    .add_line(None, &BINARY_EXTENSIONS_GLOB)
+                    .unwrap();
+                builder.add_gitignore(ignore_builder.build().unwrap());
+            }
+            SourceEntry::Ignored { base, pattern } => {
+                let mut ignore_builder = GitignoreBuilder::new(base);
+                ignore_builder.add_line(None, pattern).unwrap();
+                builder.add_gitignore(ignore_builder.build().unwrap());
+            }
+            _ => {}
         }
-        let ignore = ignore_builder.build().unwrap();
-        builder.add_gitignore(ignore);
     }
 
-    // Pre-compute source matching data to avoid allocations in the hot filter_entry path
-    let auto_bases: Vec<PathBuf> = sources
-        .iter()
-        .filter_map(|source| match source {
-            SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base.clone()),
-            _ => None,
-        })
-        .collect();
-
-    let pattern_sources: Vec<(PathBuf, String)> = sources
-        .iter()
-        .filter_map(|source| match source {
-            SourceEntry::Pattern { base, pattern } => Some((base.into(), pattern.into())),
-            _ => None,
-        })
-        .collect();
-
-    // Source pattern matching filter (lock-free, safe for parallel walking)
-    builder.filter_entry(move |entry| {
-        let path = entry.path();
-
-        // Ensure the entries are matching any of the provided source patterns (this is
-        // necessary for manual-patterns that can filter the file extension)
-        if path.is_file() {
-            let mut matches = false;
-
-            for base in &auto_bases {
-                if path.starts_with(base) {
-                    matches = true;
-                    break;
-                }
-            }
-
-            if !matches {
-                for (base, pattern) in &pattern_sources {
-                    let remainder = path.strip_prefix(base);
-                    if remainder.is_ok_and(|remainder| {
-                        let mut path_str = remainder.to_string_lossy().to_string();
-                        if !path_str.starts_with("/") {
-                            path_str = format!("/{path_str}");
-                        }
-                        glob_match(pattern, path_str.as_bytes())
-                    }) {
-                        matches = true;
-                        break;
-                    }
-                }
-            }
-
-            if !matches {
-                return false;
-            }
-        }
-
-        true
-    });
-
     Some(builder)
+}
+
+/// A glob pattern of a `Pattern` source, together with the position of its `@source` directive.
+#[derive(Debug, Clone)]
+struct PatternRule {
+    /// Position of the `@source` directive, used to resolve conflicts with `@source not`
+    /// directives: the later directive wins.
+    idx: usize,
+
+    /// The glob pattern, relative to the walker's base, e.g. `/ba*/*.html`
+    pattern: String,
+
+    /// Whether the pattern pins a specific extension (e.g. `*.html` or `logo.png`). Patterns
+    /// that don't (e.g. `blog/*/**/*`) re-apply the default extension rules.
+    pins_extension: bool,
+}
+
+/// An `@source not` directive, together with its position.
+#[derive(Debug, Clone)]
+struct NotRule {
+    /// Position of the `@source not` directive
+    idx: usize,
+
+    base: PathBuf,
+
+    /// The glob pattern, relative to `base`, e.g. `/ignored/**/*`
+    pattern: String,
+}
+
+impl NotRule {
+    /// Whether this directive excludes the given file.
+    fn matches_file(&self, path: &Path) -> bool {
+        let Ok(remainder) = path.strip_prefix(&self.base) else {
+            return false;
+        };
+        glob_match(&self.pattern, rooted_posix(remainder).as_bytes())
+    }
+
+    /// Whether this directive excludes the entire directory (and everything inside).
+    fn covers_dir(&self, path: &Path) -> bool {
+        // Directory-shaped `@source not "./some/dir"` directives are normalized to a `/**/*`
+        // pattern with the directory as its base.
+        self.pattern == "/**/*" && path.starts_with(&self.base)
+    }
+}
+
+/// Serialize a path relative to some base as a `/`-rooted posix style string, e.g.
+/// `/ba*/index.html`, matching how source patterns are stored.
+fn rooted_posix(path: &Path) -> String {
+    let posix = crate::scanner::sources::path_to_posix_string(path);
+    if posix.starts_with('/') {
+        posix
+    } else {
+        format!("/{posix}")
+    }
+}
+
+/// Whether a directory (relative to the pattern's base) can contain files matching the pattern.
+/// Used to prune directories that can never contribute, e.g. for `/ba*/*.html` only `ba*`
+/// directories are entered.
+fn dir_could_contain_matches(pattern: &str, dir: &Path) -> bool {
+    let pattern_components: Vec<&str> = pattern
+        .trim_start_matches('/')
+        .split('/')
+        .filter(|c| !c.is_empty())
+        .collect();
+
+    for (i, component) in dir.components().enumerate() {
+        let component = component.as_os_str().to_string_lossy();
+
+        // Once we see a `**` everything nested can contain matches
+        match pattern_components.get(i) {
+            Some(&"**") => return true,
+            // The last pattern component matches files, not directories. A directory nested
+            // deeper than the pattern's directory part can never contain matches.
+            Some(_) if i + 1 >= pattern_components.len() => return false,
+            Some(pattern_component) => {
+                if !glob_match(pattern_component, component.as_bytes()) {
+                    return false;
+                }
+            }
+            None => return false,
+        }
+    }
+
+    true
+}
+
+/// One walker per `Pattern` base.
+///
+/// The static base of a glob is the explicit part: it is used as the walk root, so `.gitignore`
+/// files *above* it never apply (`parents(false)`), even when the base is hidden inside an
+/// ignored directory. The wildcard part is not explicit:
+///
+/// - `.gitignore` files inside the subtree still prune directories
+/// - the default rules still prune directories (`node_modules` etc., unless the base itself
+///   points inside of one)
+///
+/// Files matching a glob are whitelisted explicitly (a glob match beats file-level gitignore
+/// and default rules). The filter closure then makes the exact per-file decision.
+fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
+    // Collect all `@source not` directives with their positions
+    let nots: Vec<NotRule> = sources
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, source)| match source {
+            SourceEntry::Ignored { base, pattern } => Some(NotRule {
+                idx,
+                base: base.clone(),
+                pattern: pattern.clone(),
+            }),
+            _ => None,
+        })
+        .collect();
+
+    // Group patterns by base, preserving directive order
+    let mut bases: Vec<PathBuf> = vec![];
+    let mut patterns_by_base: FxHashMap<PathBuf, Vec<PatternRule>> = FxHashMap::default();
+    for (idx, source) in sources.iter().enumerate() {
+        let SourceEntry::Pattern { base, pattern } = source else {
+            continue;
+        };
+
+        patterns_by_base
+            .entry(base.clone())
+            .or_insert_with(|| {
+                bases.push(base.clone());
+                vec![]
+            })
+            .push(PatternRule {
+                idx,
+                pattern: pattern.clone(),
+                pins_extension: pattern_pins_extension(pattern),
+            });
+    }
+
+    bases
+        .into_iter()
+        .map(|base| {
+            let patterns = patterns_by_base.remove(&base).unwrap();
+
+            let mut builder = WalkBuilder::new(&base);
+
+            // We have to follow symlinks
+            builder.follow_links(true);
+
+            // Scan hidden files / directories
+            builder.hidden(false);
+
+            // Don't respect global gitignore files
+            builder.git_global(false);
+
+            // The static base is explicit: `.gitignore` files above it do not apply
+            builder.parents(false);
+
+            // Apply `.gitignore` files inside the subtree regardless of whether a `.git`
+            // directory is present
+            builder.require_git(false);
+
+            // The default rules prune directories (`node_modules`, …). Their file-level rules
+            // are rescued by the whitelists below when the glob matches.
+            for ignore in auto_source_detection::RULES.iter() {
+                builder.add_gitignore(ignore.clone());
+            }
+
+            // Whitelist the patterns themselves so that matching files win from file-level
+            // gitignore rules and the default rules. Restricted to files: the wildcard part of
+            // a pattern must not re-include ignored directories.
+            let mut ignore_builder = GitignoreBuilder::new(&base);
+            ignore_builder.only_on_files(true);
+            for pattern in &patterns {
+                ignore_builder
+                    .add_line(None, &format!("!{}", pattern.pattern))
+                    .unwrap();
+            }
+            builder.add_gitignore(ignore_builder.build().unwrap());
+
+            // The exact per-file decision (lock-free, safe for parallel walking)
+            let filter_base = base.clone();
+            let filter_nots = nots.clone();
+            builder.filter_entry(move |entry| {
+                // Always keep the walk root itself
+                if entry.depth() == 0 {
+                    return true;
+                }
+
+                let path = entry.path();
+                let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+
+                let Ok(remainder) = path.strip_prefix(&filter_base) else {
+                    return false;
+                };
+
+                if is_dir {
+                    // Only descend when some pattern can match files inside this directory…
+                    let relevant = patterns
+                        .iter()
+                        .filter(|p| dir_could_contain_matches(&p.pattern, remainder))
+                        .collect::<Vec<_>>();
+                    if relevant.is_empty() {
+                        return false;
+                    }
+
+                    // …and no later `@source not` directive excludes the directory for all of
+                    // those patterns. When a pattern comes after the `not`, keep walking; the
+                    // file-level check below resolves the conflict exactly.
+                    return !filter_nots.iter().any(|not| {
+                        not.covers_dir(path) && relevant.iter().all(|p| p.idx < not.idx)
+                    });
+                }
+
+                let rel = rooted_posix(remainder);
+                patterns.iter().any(|p| {
+                    glob_match(&p.pattern, rel.as_bytes())
+                        && !filter_nots
+                            .iter()
+                            .any(|not| not.idx > p.idx && not.matches_file(path))
+                        && (p.pins_extension || !is_ignored_by_default_file_rules(path))
+                })
+            });
+
+            builder
+        })
+        .collect()
+}
+
+/// Whether a pattern pins a specific extension, e.g. `/*.html` or `/logo.png`. Patterns that
+/// don't (e.g. `/blog/*/**/*`) keep the default extension rules applied.
+fn pattern_pins_extension(pattern: &str) -> bool {
+    match Path::new(pattern).extension().and_then(|ext| ext.to_str()) {
+        Some(ext) => !ext.contains(['*', '?', '[']),
+        None => false,
+    }
+}
+
+/// Whether a file is ignored by the default file-level rules (binary extensions, ignored
+/// extensions, lock files, …).
+fn is_ignored_by_default_file_rules(path: &Path) -> bool {
+    auto_source_detection::RULES
+        .iter()
+        .any(|ignore| ignore.matched(path, false).is_ignore())
 }
 
 #[cfg(test)]

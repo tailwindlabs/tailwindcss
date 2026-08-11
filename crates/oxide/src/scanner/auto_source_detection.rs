@@ -34,10 +34,10 @@ pub static IGNORED_CONTENT_DIRS: sync::LazyLock<Vec<&'static str>> = sync::LazyL
         .collect()
 });
 
-static IGNORED_CONTENT_DIRS_GLOB: sync::LazyLock<String> =
+pub static IGNORED_CONTENT_DIRS_GLOB: sync::LazyLock<String> =
     sync::LazyLock::new(|| format!("{{{}}}/", IGNORED_CONTENT_DIRS.join(",")));
 
-static IGNORED_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
+pub static IGNORED_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
     format!(
         "*.{{{}}}",
         include_str!("fixtures/ignored-extensions.txt")
@@ -59,7 +59,7 @@ pub static BINARY_EXTENSIONS_GLOB: sync::LazyLock<String> = sync::LazyLock::new(
     )
 });
 
-static IGNORED_FILES_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
+pub static IGNORED_FILES_GLOB: sync::LazyLock<String> = sync::LazyLock::new(|| {
     format!(
         "{{{}}}",
         include_str!("fixtures/ignored-files.txt")
