@@ -1,4 +1,3 @@
-use crate::GlobEntry;
 use bexpand::Expression;
 use fxhash::FxHashMap;
 use ignore::gitignore::Gitignore;
@@ -29,7 +28,20 @@ pub enum SourceEntry {
     /// @source "src";`
     /// @source "src/**/*";`
     /// ```
-    Auto { base: PathBuf },
+    ///
+    /// `external` is set when the directory itself is ignored (by the default rules, e.g.
+    /// `node_modules`, or by a `.gitignore`) but was explicitly listed anyway:
+    ///
+    /// ```css
+    /// @source "../node_modules/my-lib";`
+    /// @source "../node_modules/my-lib/**/*";`
+    /// ```
+    ///
+    /// Being explicit bypasses the ignoredness of the directory: everything inside is scanned
+    /// as if it were a regular auto source, except that `.gitignore` files no longer apply
+    /// inside (git ignores the whole tree anyway). The default rules still apply inside, so
+    /// e.g. nested `node_modules` stay ignored.
+    Auto { base: PathBuf, external: bool },
 
     /// Explicit source pattern regardless of any auto source detection rules
     ///
@@ -48,18 +60,11 @@ pub enum SourceEntry {
     /// @source not "src";`
     /// @source not "src/**/*.html";`
     /// ```
+    ///
+    /// Note that directory-shaped directives (`@source not "src"`) are normalized to
+    /// `base: "src", pattern: "/**/*"`, which is semantically identical: everything under the
+    /// directory is ignored.
     Ignored { base: PathBuf, pattern: String },
-
-    /// External sources are directories that are ignored (by us or .gitignore rules), but should be
-    /// included bypassing the default ignore rules.
-    ///
-    /// Represented by:
-    ///
-    /// ```css
-    /// @source "../node_modules/my-lib";`
-    /// @source "../node_modules/my-lib/**/*";`
-    /// ```
-    External { base: PathBuf },
 }
 
 #[derive(Debug, Clone, Default)]
@@ -342,7 +347,10 @@ mod tests {
         assert_eq!(
             sources,
             vec![
-                SourceEntry::Auto { base: base.clone() },
+                SourceEntry::Auto {
+                    base: base.clone(),
+                    external: false,
+                },
                 SourceEntry::Pattern {
                     base: base.clone(),
                     pattern: "/foo.html".to_string(),
@@ -375,7 +383,13 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: false,
+            }
+        );
     }
 
     #[test]
@@ -385,7 +399,13 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: true,
+            }
+        );
     }
 
     #[test]
@@ -399,7 +419,13 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: true,
+            }
+        );
     }
 
     #[test]
@@ -413,7 +439,13 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::External { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: true,
+            }
+        );
     }
 
     #[test]
@@ -449,7 +481,13 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: false,
+            }
+        );
     }
 }
 
@@ -516,8 +554,12 @@ pub fn public_source_entries_to_private_source_entries(
         .map(|public_source| {
             let mut source: SourceEntry = public_source.into();
 
-            // Promote auto-sources to external sources if they were gitignored
-            if let SourceEntry::Auto { ref base } = source {
+            // Mark auto sources as external if their directory is gitignored
+            if let SourceEntry::Auto {
+                ref base,
+                external: false,
+            } = source
+            {
                 let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
 
                 // Walk up from the folder, applying each `.gitignore` relative to the directory
@@ -559,7 +601,10 @@ pub fn public_source_entries_to_private_source_entries(
                             // `.gitignore` ignores it.
                             match gitignore.matched_path_or_any_parents(&base, true) {
                                 ignore::Match::Ignore(_) => {
-                                    source = SourceEntry::External { base: base.into() };
+                                    source = SourceEntry::Auto {
+                                        base: base.into(),
+                                        external: true,
+                                    };
                                     break;
                                 }
                                 ignore::Match::Whitelist(_) => break,
@@ -601,8 +646,15 @@ impl From<PublicSourceEntry> for SourceEntry {
             };
         }
 
-        let auto =
-            value.pattern == "/**/*" || PathBuf::from(&value.base).join(&value.pattern).is_dir();
+        // After a successful `optimize()` any trailing concrete directory has already been
+        // hoisted into the base, so a folder source always has the `/**/*` pattern. The
+        // `is_dir` check only matters when `optimize()` could not canonicalize the base and
+        // left the entry untouched. Note that the pinned leading `/` has to be stripped, since
+        // joining an absolute-looking path onto the base would discard the base entirely.
+        let auto = value.pattern == "/**/*"
+            || PathBuf::from(&value.base)
+                .join(value.pattern.trim_start_matches('/'))
+                .is_dir();
 
         if !auto {
             return SourceEntry::Pattern {
@@ -611,6 +663,8 @@ impl From<PublicSourceEntry> for SourceEntry {
             };
         }
 
+        // A directory inside e.g. `node_modules` is ignored by default, so listing it
+        // explicitly makes it an external source.
         let inside_ignored_content_dir = IGNORED_CONTENT_DIRS.iter().any(|dir| {
             value.base.contains(&format!(
                 "{}{}{}",
@@ -622,60 +676,9 @@ impl From<PublicSourceEntry> for SourceEntry {
                 .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir))
         });
 
-        match inside_ignored_content_dir {
-            false => SourceEntry::Auto {
-                base: value.base.into(),
-            },
-            true => SourceEntry::External {
-                base: value.base.into(),
-            },
-        }
-    }
-}
-
-impl From<GlobEntry> for SourceEntry {
-    fn from(value: GlobEntry) -> Self {
-        SourceEntry::Pattern {
-            base: PathBuf::from(value.base),
-            pattern: value.pattern,
-        }
-    }
-}
-
-impl From<SourceEntry> for GlobEntry {
-    fn from(value: SourceEntry) -> Self {
-        match value {
-            SourceEntry::Auto { base } | SourceEntry::External { base } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: "**/*".into(),
-            },
-            SourceEntry::Pattern { base, pattern } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: pattern.clone(),
-            },
-            SourceEntry::Ignored { base, pattern } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: pattern.clone(),
-            },
-        }
-    }
-}
-
-impl From<&SourceEntry> for GlobEntry {
-    fn from(value: &SourceEntry) -> Self {
-        match value {
-            SourceEntry::Auto { base } | SourceEntry::External { base } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: "**/*".into(),
-            },
-            SourceEntry::Pattern { base, pattern } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: pattern.clone(),
-            },
-            SourceEntry::Ignored { base, pattern } => GlobEntry {
-                base: base.to_string_lossy().into(),
-                pattern: pattern.clone(),
-            },
+        SourceEntry::Auto {
+            base: value.base.into(),
+            external: inside_ignored_content_dir,
         }
     }
 }
