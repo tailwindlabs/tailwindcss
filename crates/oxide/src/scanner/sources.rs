@@ -702,6 +702,29 @@ mod tests {
     }
 
     #[test]
+    fn folders_reincluded_by_a_deeper_gitignore_stay_auto_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "generated/\n").unwrap();
+        // The nearest `.gitignore` with a definitive answer wins: `packages/app/.gitignore`
+        // re-includes `generated`, overruling the ignore rule in the root `.gitignore`, so the
+        // directory keeps its regular auto source detection behavior (which respects the
+        // `.gitignore` rules inside of it) instead of bypassing them as an external source.
+        fs::create_dir_all(dir.path().join("packages").join("app")).unwrap();
+        fs::write(
+            dir.path().join("packages").join("app").join(".gitignore"),
+            "!generated/\n",
+        )
+        .unwrap();
+
+        let base = dir.path().join("packages").join("app").join("generated");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
+
+    #[test]
     fn folders_not_ignored_by_gitignore_stay_auto_sources() {
         let dir = tempdir().unwrap();
         fs::create_dir_all(dir.path().join(".git")).unwrap();
@@ -815,12 +838,17 @@ pub fn public_source_entries_to_private_source_entries(
                     // but `base` itself is not.
                     if dir != base {
                         if let Some(gitignore) = gitignore {
-                            if gitignore
-                                .matched_path_or_any_parents(&base, true)
-                                .is_ignore()
-                            {
-                                source = SourceEntry::External { base: base.into() };
-                                break;
+                            // Match git's precedence: the nearest `.gitignore` with a definitive
+                            // answer wins. A directory that is re-included by a deeper
+                            // `!the-directory` pattern is not ignored, even when an ancestor
+                            // `.gitignore` ignores it.
+                            match gitignore.matched_path_or_any_parents(&base, true) {
+                                ignore::Match::Ignore(_) => {
+                                    source = SourceEntry::External { base: base.into() };
+                                    break;
+                                }
+                                ignore::Match::Whitelist(_) => break,
+                                ignore::Match::None => {}
                             }
                         }
                     }
