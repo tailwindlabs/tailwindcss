@@ -2641,6 +2641,31 @@ mod scanner {
         assert_eq!(candidates, vec!["content-['b']"]);
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/pull/20408
+    #[test]
+    fn test_resolving_globs_does_not_traverse_gitignored_directories() {
+        let ScanResult { files, globs, .. } = scan_with_globs(
+            &[
+                (".gitignore", "/vendor\n"),
+                ("vendor/pkg/canary/index.html", ""),
+                ("src/index.html", ""),
+            ],
+            vec!["@source '**/*'", "@source './vendor/pkg/canary'"],
+        );
+
+        assert_eq!(
+            files,
+            vec!["src/index.html", "vendor/pkg/canary/index.html"]
+        );
+        assert_eq!(globs, vec![
+            "*",
+            "src/**/*.{aspx,astro,cjs,cts,eex,erb,gjs,gts,haml,handlebars,hbs,heex,html,jade,js,jsx,liquid,md,mdx,mjs,mts,mustache,njk,nunjucks,php,pug,py,razor,rb,rhtml,rs,slim,svelte,tpl,ts,tsx,twig,vue}",
+
+            // This should not include `**` or `**.*.{aspx,...}` otherwise this might be scanned recursively.
+            "vendor/pkg/canary/*",
+        ]);
+    }
+
     #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
