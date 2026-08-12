@@ -55,7 +55,9 @@ use tracing::event;
 //   or another `@source` allows them.
 //
 // Later directives win over earlier ones on conflict: `@source not "./x"` followed by
-// `@source "./x/keep.html"` scans `keep.html`, and vice versa excludes it.
+// `@source "./x/keep.html"` scans `keep.html`, and vice versa excludes it. The same holds for
+// directory sources: `@source not "./x"` followed by `@source "./x"` re-includes `./x` (with
+// the normal auto source detection rules applied inside).
 //
 // # Implementation
 //
@@ -63,10 +65,11 @@ use tracing::event;
 // never descend into directories that cannot contribute files). Sources are split over multiple
 // walkers:
 //
-// - One walker for all `Auto` and `External` roots. Default rules and `@source not` rules are
-//   registered as explicit in-memory gitignores (they rank above `.gitignore` files found on
-//   disk, later directives above earlier ones). `External` roots additionally get a `!/**/*`
-//   whitelist (bypassing gitignore rules) plus a re-statement of the default rules.
+// - One walker for all `Auto` and `External` roots. Default rules are registered as explicit
+//   in-memory gitignores (they rank above `.gitignore` files found on disk). `External` roots
+//   additionally get a `!/**/*` whitelist (bypassing gitignore rules) plus a re-statement of
+//   the default rules. `@source not` rules are handled by a filter closure that honors the
+//   directive order: the last directive covering a path wins.
 //
 // - One walker per `Pattern` base. It never looks at `.gitignore` files *above* its base
 //   (the static prefix is explicit), while `.gitignore` files inside the subtree still prune
@@ -880,14 +883,56 @@ fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
                     .unwrap();
                 builder.add_gitignore(ignore_builder.build().unwrap());
             }
-            SourceEntry::Ignored { base, pattern } => {
-                let mut ignore_builder = GitignoreBuilder::new(base);
-                ignore_builder.add_line(None, pattern).unwrap();
-                builder.add_gitignore(ignore_builder.build().unwrap());
-            }
             _ => {}
         }
     }
+
+    // `@source not` directives are handled in a filter closure instead of a gitignore layer,
+    // because their effect depends on the directive order: the last directive that covers a
+    // path wins. When that is a `@source not`, the entry is excluded; when it is an
+    // auto/external source, the entry falls through to the normal gitignore + default rules
+    // handling. E.g.:
+    //
+    // ```css
+    // @source not "./src";
+    // @source "./src";      /* re-includes ./src, .gitignore files still apply inside */
+    // ```
+    //
+    // Directories excluded here can be pruned safely: every auto/external base is its own walk
+    // root, so a source root nested inside an excluded directory is still walked.
+    let includes: Vec<(usize, PathBuf)> = sources
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, source)| match source {
+            SourceEntry::Auto { base, .. } => Some((idx, base.clone())),
+            _ => None,
+        })
+        .collect();
+    let nots = collect_not_rules(sources);
+
+    builder.filter_entry(move |entry| {
+        // Always keep the walk roots themselves
+        if entry.depth() == 0 {
+            return true;
+        }
+
+        let path = entry.path();
+
+        // The last `@source not` directive covering the path…
+        let Some(not_idx) = nots
+            .iter()
+            .filter(|not| not.matches(path))
+            .map(|not| not.idx)
+            .max()
+        else {
+            return true;
+        };
+
+        // …loses when a later auto/external source covers it as well
+        includes
+            .iter()
+            .any(|(idx, base)| *idx > not_idx && path.starts_with(base))
+    });
 
     Some(builder)
 }
@@ -936,11 +981,33 @@ impl NotRule {
             return false;
         };
 
+        // A directory-shaped directive (normalized to a `/**/*` pattern) also excludes the
+        // base directory itself, not just its contents, so the directory can be pruned.
+        if remainder.as_os_str().is_empty() {
+            return self.pattern == "/**/*";
+        }
+
         remainder.ancestors().any(|prefix| {
             !prefix.as_os_str().is_empty()
                 && glob_match(&self.pattern, rooted_posix(prefix).as_bytes())
         })
     }
+}
+
+/// Collect all `@source not` directives with their positions.
+fn collect_not_rules(sources: &Sources) -> Vec<NotRule> {
+    sources
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, source)| match source {
+            SourceEntry::Ignored { base, pattern } => Some(NotRule {
+                idx,
+                base: base.clone(),
+                pattern: pattern.clone(),
+            }),
+            _ => None,
+        })
+        .collect()
 }
 
 /// Serialize a path relative to some base as a `/`-rooted posix style string, e.g.
@@ -998,19 +1065,7 @@ fn dir_could_contain_matches(pattern: &str, dir: &Path) -> bool {
 /// Files matching a glob are whitelisted explicitly (a glob match beats file-level gitignore
 /// and default rules). The filter closure then makes the exact per-file decision.
 fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
-    // Collect all `@source not` directives with their positions
-    let nots: Vec<NotRule> = sources
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, source)| match source {
-            SourceEntry::Ignored { base, pattern } => Some(NotRule {
-                idx,
-                base: base.clone(),
-                pattern: pattern.clone(),
-            }),
-            _ => None,
-        })
-        .collect();
+    let nots = collect_not_rules(sources);
 
     // Group patterns by base, preserving directive order
     let mut bases: Vec<PathBuf> = vec![];
