@@ -124,6 +124,11 @@ mod scanner {
                             .to_string_lossy()
                             .replace('\\', "/");
                         display_name = format!("{name} → {target}");
+
+                        // The symlink points to a target that doesn't exist
+                        if path.metadata().is_err() {
+                            display_name = format!("{display_name} (broken)");
+                        }
                     }
                 }
 
@@ -3521,10 +3526,10 @@ mod scanner {
 
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
-        ├── ✗ a → c
+        ├── ✗ a → c (broken)
         ├── ✓ b
         │   └── ✓ index.html
-        ├── ✗ c → b/c
+        ├── ✗ c → b/c (broken)
         └── ✓ z
             └── ✓ index.html
         ");
