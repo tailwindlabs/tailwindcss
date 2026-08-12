@@ -4306,6 +4306,23 @@ mod scanner {
     }
 
     #[test]
+    fn later_directory_sources_override_earlier_not_sources() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[("src/index.html", "content-['src/index.html']")],
+            vec![
+                "@source '**/*'",
+                "@source not './src'",
+                "@source './src'",
+            ],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+        assert_eq!(files, vec!["src/index.html"]);
+    }
+
+    #[test]
     fn wildcard_not_sources_exclude_matching_directories() {
         let ScanResult {
             candidates, files, ..
