@@ -118,11 +118,15 @@ mod scanner {
                 }
                 if file_type.is_symlink() {
                     if let Ok(target) = fs::read_link(&path) {
-                        let target = target
+                        let mut target = target
                             .strip_prefix(root)
                             .unwrap_or(&target)
                             .to_string_lossy()
                             .replace('\\', "/");
+                        if target.is_empty() {
+                            // The symlink points to the root itself
+                            target = ".".into();
+                        }
                         display_name = format!("{name} → {target}");
 
                         // The symlink points to a target that doesn't exist
@@ -3512,11 +3516,14 @@ mod scanner {
             ],
         );
 
-        // Create recursive symlinks
-        let _ = symlink(dir.join("a"), dir.join("b"));
-        let _ = symlink(dir.join("b/c"), dir.join("c"));
-        let _ = symlink(dir.join("b/root"), &dir);
-        let _ = symlink(dir.join("c"), dir.join("a"));
+        // Create recursive symlinks:
+        //
+        // - `a → b`, `b/c → c`, `c → a` form a cycle
+        // - `b/root → .` points back at the root directory
+        let _ = symlink(dir.join("b"), dir.join("a"));
+        let _ = symlink(dir.join("c"), dir.join("b/c"));
+        let _ = symlink(&dir, dir.join("b/root"));
+        let _ = symlink(dir.join("a"), dir.join("c"));
 
         let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
             dir.clone(),
@@ -3526,10 +3533,18 @@ mod scanner {
 
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
-        ├── ✗ a → c (broken)
+        ├── ✓ a → b
+        │   ├── ✗ c → c
+        │   ├── ✓ index.html
+        │   └── ✗ root → .
         ├── ✓ b
-        │   └── ✓ index.html
-        ├── ✗ c → b/c (broken)
+        │   ├── ✗ c → c
+        │   ├── ✓ index.html
+        │   └── ✗ root → .
+        ├── ✓ c → a
+        │   ├── ✗ c → c
+        │   ├── ✓ index.html
+        │   └── ✗ root → .
         └── ✓ z
             └── ✓ index.html
         ");
