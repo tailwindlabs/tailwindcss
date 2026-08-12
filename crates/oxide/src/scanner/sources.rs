@@ -192,6 +192,12 @@ impl PublicSourceEntry {
         else if !self.pattern.starts_with("/") {
             self.pattern = format!("/{}", self.pattern);
         }
+
+        // `src/**` means everything underneath `src`, just like `src/**/*` and `src` do.
+        // Normalize it so all three are classified as auto source detection.
+        if self.pattern == "/**" {
+            self.pattern = "/**/*".to_owned();
+        }
     }
 }
 
@@ -323,6 +329,31 @@ mod tests {
                 .to_string_lossy()
         );
         assert_eq!(source.pattern, "/**/*.html");
+    }
+
+    #[test]
+    fn optimize_normalizes_double_star_to_auto_source_detection() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join("src")).unwrap();
+
+        let mut source = PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/**".to_string(),
+            negated: false,
+        };
+
+        source.optimize();
+
+        assert_eq!(source.pattern, "/**/*");
+
+        // …and therefore `src/**` is classified as an auto source, like `src/**/*` and `src`
+        let base = dunce::canonicalize(dir.path().join("src")).unwrap();
+        let sources = public_source_entries_to_private_source_entries(vec![PublicSourceEntry {
+            base: dir.path().to_string_lossy().to_string(),
+            pattern: "src/**".to_string(),
+            negated: false,
+        }]);
+        assert_eq!(sources, vec![SourceEntry::Auto { base }]);
     }
 
     #[test]

@@ -4323,6 +4323,154 @@ mod scanner {
     }
 
     #[test]
+    fn double_star_sources_are_auto_sources() {
+        // `@source "./src/**"` means "everything underneath src", just like `./src/**/*` and
+        // `./src`: auto source detection applies, so `.gitignore` files and the default rules
+        // are respected instead of the glob rescuing every git ignored file.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "src/secret.html"),
+                ("src/index.html", "content-['src/index.html']"),
+                ("src/secret.html", "content-['src/secret.html']"),
+                ("src/logo.png", "content-['src/logo.png']"),
+            ],
+            vec!["@source './src/**'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/index.html']"]);
+        assert_eq!(files, vec!["src/index.html"]);
+    }
+
+    #[test]
+    fn gitignore_whitelists_do_not_reinclude_default_ignored_content() {
+        // A `.gitignore` whitelist re-includes files for git, but the default auto source
+        // detection rules are independent of git: `node_modules`, binary files, etc. stay
+        // ignored even when a `.gitignore` explicitly whitelists them.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "!node_modules/\n!*.png"),
+                ("index.html", "content-['index.html']"),
+                ("logo.png", "content-['logo.png']"),
+                (
+                    "node_modules/lib/index.html",
+                    "content-['node_modules/lib/index.html']",
+                ),
+            ],
+            vec!["@source '**/*'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['index.html']"]);
+        assert_eq!(files, vec!["index.html"]);
+    }
+
+    #[test]
+    fn dot_ignore_files_are_respected() {
+        // `.ignore` files (the gitignore-style files used by ripgrep and friends) work like
+        // `.gitignore` files and rank above them within the same directory.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "by-git.html\nby-both.html"),
+                (".ignore", "by-ignore.html\n!by-both.html"),
+                ("keep.html", "content-['keep.html']"),
+                ("by-git.html", "content-['by-git.html']"),
+                ("by-ignore.html", "content-['by-ignore.html']"),
+                // Ignored by the `.gitignore` file, re-included by the `.ignore` file
+                ("by-both.html", "content-['by-both.html']"),
+            ],
+            vec!["@source '**/*'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['by-both.html']", "content-['keep.html']"]
+        );
+        assert_eq!(files, vec!["by-both.html", "keep.html"]);
+    }
+
+    #[test]
+    fn git_info_exclude_is_respected() {
+        // `.git/info/exclude` works like the repository root's `.gitignore` file, ranking
+        // below it.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".git/info/exclude", "excluded.html\nreincluded.html"),
+                (".gitignore", "!reincluded.html"),
+                ("keep.html", "content-['keep.html']"),
+                ("excluded.html", "content-['excluded.html']"),
+                // Excluded by `.git/info/exclude`, re-included by the `.gitignore` file
+                ("reincluded.html", "content-['reincluded.html']"),
+            ],
+            vec!["@source '**/*'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['keep.html']", "content-['reincluded.html']"]
+        );
+        assert_eq!(files, vec!["keep.html", "reincluded.html"]);
+    }
+
+    #[test]
+    fn not_sources_apply_inside_external_sources() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "node_modules"),
+                (
+                    "node_modules/lib/src/index.html",
+                    "content-['node_modules/lib/src/index.html']",
+                ),
+                (
+                    "node_modules/lib/dist/index.html",
+                    "content-['node_modules/lib/dist/index.html']",
+                ),
+            ],
+            vec![
+                "@source './node_modules/lib'",
+                "@source not './node_modules/lib/dist'",
+            ],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['node_modules/lib/src/index.html']"]
+        );
+        assert_eq!(files, vec!["node_modules/lib/src/index.html"]);
+    }
+
+    #[test]
+    fn wildcards_in_glob_sources_respect_gitignores_deeper_in_the_subtree() {
+        // Like `wildcards_in_glob_sources_do_not_descend_into_gitignored_directories`, but the
+        // `.gitignore` sits in a directory between the glob's base and the ignored directory,
+        // not at the base itself.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("blog/2024/.gitignore", "drafts/"),
+                ("blog/2024/keep.html", "content-['blog/2024/keep.html']"),
+                (
+                    "blog/2024/drafts/secret.html",
+                    "content-['blog/2024/drafts/secret.html']",
+                ),
+            ],
+            vec!["@source './blog/**/*.html'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['blog/2024/keep.html']"]);
+        assert_eq!(files, vec!["blog/2024/keep.html"]);
+    }
+
+    #[test]
     fn later_pattern_sources_override_earlier_not_sources() {
         // Order matters: a later positive `@source` wins from an earlier `@source not`, and
         // vice versa.
