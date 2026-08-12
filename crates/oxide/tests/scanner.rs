@@ -4306,6 +4306,22 @@ mod scanner {
     }
 
     #[test]
+    fn wildcard_not_sources_exclude_matching_directories() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("src/bar/index.html", "content-['src/bar/index.html']"),
+                ("src/foo/index.html", "content-['src/foo/index.html']"),
+            ],
+            vec!["@source './src/**/*.html'", "@source not './src/ba*'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['src/foo/index.html']"]);
+        assert_eq!(files, vec!["src/foo/index.html"]);
+    }
+
+    #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
         create_files_in(
