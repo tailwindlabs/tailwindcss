@@ -920,19 +920,24 @@ struct NotRule {
 }
 
 impl NotRule {
-    /// Whether this directive excludes the given file.
-    fn matches_file(&self, path: &Path) -> bool {
+    /// Whether this directive excludes the given path: a file, or a directory and thereby
+    /// everything inside of it.
+    ///
+    /// Like a gitignore rule, the pattern excludes a whole subtree when it matches a
+    /// directory, so besides the path itself every ancestor directory (up to the directive's
+    /// base) is tested as well. E.g. `@source not "./src/ba*"` excludes `src/bar/index.html`
+    /// because `/ba*` matches the `src/bar` directory. Note that directory-shaped directives
+    /// (`@source not "./some/dir"`) are normalized to a `/**/*` pattern with the directory as
+    /// its base, which matches everything inside the directory directly.
+    fn matches(&self, path: &Path) -> bool {
         let Ok(remainder) = path.strip_prefix(&self.base) else {
             return false;
         };
-        glob_match(&self.pattern, rooted_posix(remainder).as_bytes())
-    }
 
-    /// Whether this directive excludes the entire directory (and everything inside).
-    fn covers_dir(&self, path: &Path) -> bool {
-        // Directory-shaped `@source not "./some/dir"` directives are normalized to a `/**/*`
-        // pattern with the directory as its base.
-        self.pattern == "/**/*" && path.starts_with(&self.base)
+        remainder.ancestors().any(|prefix| {
+            !prefix.as_os_str().is_empty()
+                && glob_match(&self.pattern, rooted_posix(prefix).as_bytes())
+        })
     }
 }
 
@@ -1096,9 +1101,9 @@ fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
                     // …and no later `@source not` directive excludes the directory for all of
                     // those patterns. When a pattern comes after the `not`, keep walking; the
                     // file-level check below resolves the conflict exactly.
-                    return !filter_nots.iter().any(|not| {
-                        not.covers_dir(path) && relevant.iter().all(|p| p.idx < not.idx)
-                    });
+                    return !filter_nots
+                        .iter()
+                        .any(|not| not.matches(path) && relevant.iter().all(|p| p.idx < not.idx));
                 }
 
                 let rel = rooted_posix(remainder);
@@ -1106,7 +1111,7 @@ fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
                     glob_match(&p.pattern, rel.as_bytes())
                         && !filter_nots
                             .iter()
-                            .any(|not| not.idx > p.idx && not.matches_file(path))
+                            .any(|not| not.idx > p.idx && not.matches(path))
                         && (p.pins_extension || !is_ignored_by_default_file_rules(path))
                 })
             });
