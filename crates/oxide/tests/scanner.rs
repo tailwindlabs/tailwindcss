@@ -4216,6 +4216,30 @@ mod scanner {
     }
 
     #[test]
+    fn unpinned_globs_do_not_reinclude_gitignored_directories() {
+        // The whitelist of an unpinned glob like `./blog/*/**/*` could also match *directory*
+        // paths (unlike e.g. `./**/*.html`, which only ever matches files). It must not: the
+        // wildcard part of a glob is not explicit, so git ignored directories inside the
+        // walked subtree stay pruned, even when the whitelisted glob happens to match them.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                ("blog/.gitignore", "drafts/"),
+                ("blog/2024/keep.html", "content-['blog/2024/keep.html']"),
+                (
+                    "blog/2024/drafts/secret.html",
+                    "content-['blog/2024/drafts/secret.html']",
+                ),
+            ],
+            vec!["@source './blog/*/**/*'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['blog/2024/keep.html']"]);
+        assert_eq!(files, vec!["blog/2024/keep.html"]);
+    }
+
+    #[test]
     fn external_sources_ignore_nested_default_ignored_directories() {
         // An explicitly listed, git ignored directory (external source) still applies the
         // default auto source detection rules inside of it: nested `node_modules` are not
