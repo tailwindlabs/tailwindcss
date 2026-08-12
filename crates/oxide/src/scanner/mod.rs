@@ -333,7 +333,7 @@ impl Scanner {
         let mut globs = vec![];
         for source in self.sources.iter() {
             match source {
-                SourceEntry::Auto { base, .. } => {
+                SourceEntry::Auto { base } | SourceEntry::External { base } => {
                     globs.extend(resolve_globs(
                         base.to_path_buf(),
                         &self.dirs,
@@ -364,7 +364,7 @@ impl Scanner {
         self.sources
             .iter()
             .filter_map(|source| match source {
-                SourceEntry::Auto { base, .. } => Some(GlobEntry {
+                SourceEntry::Auto { base } | SourceEntry::External { base } => Some(GlobEntry {
                     base: base.to_string_lossy().to_string(),
                     pattern: "**/*".to_string(),
                 }),
@@ -779,7 +779,7 @@ fn create_walkers(sources: &Sources) -> Vec<WalkBuilder> {
 ///    - `Ignored` (`@source not`): its pattern at its base
 fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut roots = sources.iter().filter_map(|source| match source {
-        SourceEntry::Auto { base, .. } => Some(base),
+        SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base),
         _ => None,
     });
 
@@ -852,10 +852,7 @@ fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
     // Setup ignores based on `@source` definitions, in directive order so later directives win
     for source in sources.iter() {
         match source {
-            SourceEntry::Auto {
-                base,
-                external: true,
-            } => {
+            SourceEntry::External { base } => {
                 // External sources bypass all gitignore rules (the directory was explicitly
                 // listed even though it is ignored)…
                 let mut ignore_builder = GitignoreBuilder::new(base);
@@ -904,7 +901,9 @@ fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
         .iter()
         .enumerate()
         .filter_map(|(idx, source)| match source {
-            SourceEntry::Auto { base, .. } => Some((idx, base.clone())),
+            SourceEntry::Auto { base } | SourceEntry::External { base } => {
+                Some((idx, base.clone()))
+            }
             _ => None,
         })
         .collect();

@@ -28,9 +28,12 @@ pub enum SourceEntry {
     /// @source "src";`
     /// @source "src/**/*";`
     /// ```
+    Auto { base: PathBuf },
+
+    /// An `Auto` source whose directory is itself ignored (by the default rules, e.g.
+    /// `node_modules`, or by a `.gitignore`) but was explicitly listed anyway.
     ///
-    /// `external` is set when the directory itself is ignored (by the default rules, e.g.
-    /// `node_modules`, or by a `.gitignore`) but was explicitly listed anyway:
+    /// Represented by:
     ///
     /// ```css
     /// @source "../node_modules/my-lib";`
@@ -41,7 +44,7 @@ pub enum SourceEntry {
     /// as if it were a regular auto source, except that `.gitignore` files no longer apply
     /// inside (git ignores the whole tree anyway). The default rules still apply inside, so
     /// e.g. nested `node_modules` stay ignored.
-    Auto { base: PathBuf, external: bool },
+    External { base: PathBuf },
 
     /// Explicit source pattern regardless of any auto source detection rules
     ///
@@ -347,10 +350,7 @@ mod tests {
         assert_eq!(
             sources,
             vec![
-                SourceEntry::Auto {
-                    base: base.clone(),
-                    external: false,
-                },
+                SourceEntry::Auto { base: base.clone() },
                 SourceEntry::Pattern {
                     base: base.clone(),
                     pattern: "/foo.html".to_string(),
@@ -385,10 +385,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: false,
-            }
+            SourceEntry::Auto { base }
         );
     }
 
@@ -401,10 +398,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: true,
-            }
+            SourceEntry::External { base }
         );
     }
 
@@ -421,10 +415,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: true,
-            }
+            SourceEntry::External { base }
         );
     }
 
@@ -441,10 +432,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: true,
-            }
+            SourceEntry::External { base }
         );
     }
 
@@ -468,10 +456,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: false,
-            }
+            SourceEntry::Auto { base }
         );
     }
 
@@ -491,10 +476,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: true,
-            }
+            SourceEntry::External { base }
         );
     }
 
@@ -510,10 +492,7 @@ mod tests {
 
         assert_eq!(
             auto_source_entry(&base),
-            SourceEntry::Auto {
-                base,
-                external: false,
-            }
+            SourceEntry::Auto { base }
         );
     }
 }
@@ -582,11 +561,7 @@ pub fn public_source_entries_to_private_source_entries(
             let mut source: SourceEntry = public_source.into();
 
             // Mark auto sources as external if their directory is gitignored
-            if let SourceEntry::Auto {
-                ref base,
-                external: false,
-            } = source
-            {
+            if let SourceEntry::Auto { ref base } = source {
                 let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
 
                 // The chain of directories whose `.gitignore` files can apply: `base` itself and
@@ -642,10 +617,7 @@ pub fn public_source_entries_to_private_source_entries(
 
                         match gitignore.matched(prefix, true) {
                             ignore::Match::Ignore(_) => {
-                                source = SourceEntry::Auto {
-                                    base: base.into(),
-                                    external: true,
-                                };
+                                source = SourceEntry::External { base: base.into() };
                                 break 'prefixes;
                             }
                             // Re-included; this directory is reachable, move on to the next one.
@@ -703,9 +675,13 @@ impl From<PublicSourceEntry> for SourceEntry {
                 .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir))
         });
 
-        SourceEntry::Auto {
-            base: value.base.into(),
-            external: inside_ignored_content_dir,
+        match inside_ignored_content_dir {
+            false => SourceEntry::Auto {
+                base: value.base.into(),
+            },
+            true => SourceEntry::External {
+                base: value.base.into(),
+            },
         }
     }
 }
