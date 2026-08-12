@@ -4335,6 +4335,27 @@ mod scanner {
     }
 
     #[test]
+    fn unreachable_whitelists_do_not_reinclude_explicit_source_directories() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "parent/"),
+                ("parent/.gitignore", "!child/"),
+                ("parent/child/.gitignore", "index.html"),
+                (
+                    "parent/child/index.html",
+                    "content-['parent/child/index.html']",
+                ),
+            ],
+            vec!["@source './parent/child'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['parent/child/index.html']"]);
+        assert_eq!(files, vec!["parent/child/index.html"]);
+    }
+
+    #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
         create_files_in(
