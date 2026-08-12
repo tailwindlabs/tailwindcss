@@ -203,7 +203,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ])
     })
 
-    it('should parse declarations with with strings and escaped string endings', () => {
+    it('should parse declarations with strings and escaped string endings', () => {
       expect(
         parse(css`
           content: 'These are not the end "\' of the string';
