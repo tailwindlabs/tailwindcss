@@ -4322,6 +4322,19 @@ mod scanner {
     }
 
     #[test]
+    fn explicit_file_sources_include_default_ignored_files_without_extensions() {
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[(".env", "content-['.env']"), ("index.html", "content-['index.html']")],
+            vec!["@source '.env'"],
+        );
+
+        assert_eq!(candidates, vec!["content-['.env']"]);
+        assert_eq!(files, vec![".env"]);
+    }
+
+    #[test]
     fn test_extract_used_css_variables_from_css() {
         let dir = tempdir().unwrap().into_path();
         create_files_in(
