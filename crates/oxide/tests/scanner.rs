@@ -65,13 +65,42 @@ mod scanner {
     /// - `✓` — scanned
     /// - `✗` — ignored / skipped
     ///
-    /// Symlinks are rendered as `link → target`, and the contents of every
+    /// Symlinks are rendered as `link → target`, where the target is shown
+    /// relative to the folder containing the symlink. The contents of every
     /// `.gitignore` file are printed right below the file itself.
     ///
     /// Folders that are a git repository root (they contain a `.git` folder)
     /// are marked with `(git)`, because ignore rules behave differently
     /// inside and outside of a repository.
     fn fs_tree(root: &Path, scanned: &[String]) -> String {
+        /// Computes the relative path from `parent` to `target`, where both
+        /// are relative to the same root, e.g.: `b/c` seen from `b` is `c`,
+        /// and the root itself seen from `b` is `..`.
+        fn relative_to(target: &Path, parent: &Path) -> String {
+            let target = target.components().collect::<Vec<_>>();
+            let parent = parent.components().collect::<Vec<_>>();
+
+            let common = target
+                .iter()
+                .zip(&parent)
+                .take_while(|(a, b)| **a == **b)
+                .count();
+
+            let mut parts = vec![".."; parent.len() - common];
+            parts.extend(
+                target[common..]
+                    .iter()
+                    .map(|component| component.as_os_str().to_str().unwrap()),
+            );
+
+            if parts.is_empty() {
+                // The symlink points to its own parent folder
+                ".".into()
+            } else {
+                parts.join("/")
+            }
+        }
+
         fn walk(
             dir: &Path,
             root: &Path,
@@ -118,15 +147,13 @@ mod scanner {
                 }
                 if file_type.is_symlink() {
                     if let Ok(target) = fs::read_link(&path) {
-                        let mut target = target
-                            .strip_prefix(root)
-                            .unwrap_or(&target)
-                            .to_string_lossy()
-                            .replace('\\', "/");
-                        if target.is_empty() {
-                            // The symlink points to the root itself
-                            target = ".".into();
-                        }
+                        // Show the target relative to the folder containing
+                        // the symlink, or as-is when it points outside of the
+                        // tree.
+                        let target = match (target.strip_prefix(root), dir.strip_prefix(root)) {
+                            (Ok(target), Ok(parent)) => relative_to(target, parent),
+                            _ => target.to_string_lossy().replace('\\', "/"),
+                        };
                         display_name = format!("{name} → {target}");
 
                         // The symlink points to a target that doesn't exist
@@ -3438,7 +3465,7 @@ mod scanner {
             │           └── ✓ index.ts
             └── ✓ @org
                 ├── ✓ .gitkeep
-                └── ✓ my-ui-library → node_modules/.pnpm/@org+my-ui-library
+                └── ✓ my-ui-library → ../.pnpm/@org+my-ui-library
                     └── ✓ dist
                         └── ✓ index.ts
         ");
@@ -3466,7 +3493,7 @@ mod scanner {
             │           └── ✓ index.ts
             └── ✓ @org
                 ├── ✗ .gitkeep
-                └── ✓ my-ui-library → node_modules/.pnpm/@org+my-ui-library
+                └── ✓ my-ui-library → ../.pnpm/@org+my-ui-library
                     └── ✓ dist
                         └── ✓ index.ts
         ");
@@ -3494,7 +3521,7 @@ mod scanner {
             │           └── ✓ index.ts
             └── ✓ @org
                 ├── ✓ .gitkeep
-                └── ✓ my-ui-library → node_modules/.pnpm/@org+my-ui-library
+                └── ✓ my-ui-library → ../.pnpm/@org+my-ui-library
                     └── ✓ dist
                         └── ✓ index.ts
         ");
@@ -3534,17 +3561,17 @@ mod scanner {
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
         ├── ✓ a → b
-        │   ├── ✗ c → c
+        │   ├── ✗ c → ../c
         │   ├── ✓ index.html
-        │   └── ✗ root → .
+        │   └── ✗ root → ..
         ├── ✓ b
-        │   ├── ✗ c → c
+        │   ├── ✗ c → ../c
         │   ├── ✓ index.html
-        │   └── ✗ root → .
+        │   └── ✗ root → ..
         ├── ✓ c → a
-        │   ├── ✗ c → c
+        │   ├── ✗ c → .
         │   ├── ✓ index.html
-        │   └── ✗ root → .
+        │   └── ✗ root → ..
         └── ✓ z
             └── ✓ index.html
         ");
@@ -3676,7 +3703,7 @@ mod scanner {
         │   └── ✓ ignore.html
         └── ✓ project
             ├── ✓ keep.html
-            └── ✓ linked-dir → actual-dir
+            └── ✓ linked-dir → ../actual-dir
                 └── ✓ ignore.html
         ");
 
@@ -3700,7 +3727,7 @@ mod scanner {
         │   └── ✗ ignore.html
         └── ✓ project
             ├── ✓ keep.html
-            └── ✗ linked-dir → actual-dir
+            └── ✗ linked-dir → ../actual-dir
                 └── ✗ ignore.html
         ");
 
@@ -3765,7 +3792,7 @@ mod scanner {
         .
         ├── ✓ linked.html → packages/other/index.html
         ├── ✓ node_modules
-        │   └── ✓ repro → packages/repro
+        │   └── ✓ repro → ../packages/repro
         │       ├── ✓ nested
         │       │   └── ✓ deep.html
         │       └── ✓ source.html
@@ -3814,7 +3841,7 @@ mod scanner {
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
         ├── ✓ node_modules
-        │   └── ✓ repro → packages/repro
+        │   └── ✓ repro → ../packages/repro
         │       └── ✓ source.html
         └── ✓ packages
             └── ✓ repro
@@ -3851,7 +3878,7 @@ mod scanner {
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
         ├── ✓ node_modules
-        │   └── ✓ repro → packages/repro
+        │   └── ✓ repro → ../packages/repro
         │       └── ✓ a.html
         └── ✓ packages
             └── ✓ repro
@@ -3871,7 +3898,7 @@ mod scanner {
         assert_snapshot!(fs_tree(&dir, &scanned_files(&mut scanner, &dir)), @"
         .
         ├── ✓ node_modules
-        │   └── ✓ repro → packages/repro
+        │   └── ✓ repro → ../packages/repro
         │       ├── ✓ a.html
         │       └── ✓ b.html
         └── ✓ packages
