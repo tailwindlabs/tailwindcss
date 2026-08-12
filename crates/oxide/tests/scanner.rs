@@ -4273,6 +4273,56 @@ mod scanner {
     }
 
     #[test]
+    fn external_sources_respect_gitignore_files_inside_of_them() {
+        // Listing an ignored directory explicitly bypasses the rules that made it ignored:
+        // `.gitignore` files above the base, and the base's own `.gitignore` — inside ignored
+        // trees that is typically the self-ignoring `*` file that generators drop into the
+        // directory. `.gitignore` files *deeper inside* the external tree were put there
+        // deliberately by whatever generates those files, so they still apply, just like they
+        // do for auto and pattern sources.
+        let ScanResult {
+            candidates, files, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "node_modules"),
+                // The self-ignoring device at the base: bypassed
+                ("node_modules/.generated/.gitignore", "*"),
+                // A deliberate ignore deeper inside: applies
+                ("node_modules/.generated/ui/.gitignore", "ignored.tsx\ncache/"),
+                (
+                    "node_modules/.generated/ui/button.tsx",
+                    "content-['button.tsx']",
+                ),
+                (
+                    "node_modules/.generated/ui/input.tsx",
+                    "content-['input.tsx']",
+                ),
+                (
+                    "node_modules/.generated/ui/ignored.tsx",
+                    "content-['ignored.tsx']",
+                ),
+                (
+                    "node_modules/.generated/ui/cache/stale.tsx",
+                    "content-['cache/stale.tsx']",
+                ),
+            ],
+            vec!["@source './node_modules/.generated'"],
+        );
+
+        assert_eq!(
+            candidates,
+            vec!["content-['button.tsx']", "content-['input.tsx']"]
+        );
+        assert_eq!(
+            files,
+            vec![
+                "node_modules/.generated/ui/button.tsx",
+                "node_modules/.generated/ui/input.tsx"
+            ]
+        );
+    }
+
+    #[test]
     fn later_pattern_sources_override_earlier_not_sources() {
         // Order matters: a later positive `@source` wins from an earlier `@source not`, and
         // vice versa.

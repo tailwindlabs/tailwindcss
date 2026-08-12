@@ -36,8 +36,10 @@ use tracing::event;
 //   it's a default-ignored directory like `node_modules`), e.g.
 //   `@source "node_modules/my-ui-lib"`. Since the folder was listed explicitly, its ignoredness
 //   is bypassed: everything inside is scanned as if it were an `Auto` source, except that
-//   `.gitignore` files no longer apply inside (git ignores the whole tree anyway). The default
-//   rules still apply inside: nested `node_modules`, binary extensions, etc. stay ignored.
+//   `.gitignore` files from at or above the folder no longer apply — they (including the
+//   self-ignoring `*` file that generators typically place inside such folders) are what made
+//   it ignored in the first place. `.gitignore` files *deeper inside* the folder still apply,
+//   and so do the default rules: nested `node_modules`, binary extensions, etc. stay ignored.
 //
 // - `Pattern`: `@source "some/folder/*.html"` — an explicit glob. Only files matching the glob
 //   are scanned. The *static* prefix of the glob (`some/folder`) is the explicit part: it is
@@ -817,10 +819,10 @@ fn create_walker(resolver: Arc<Resolver>) -> Option<WalkBuilder> {
 /// - a file is kept when at least one source includes it, honoring the directive order of
 ///   `@source not` (the later directive wins)
 ///
-/// The per-source verdicts require gitignore decisions relative to different anchors (an auto
-/// source respects the full `.gitignore` chain, a pattern source only the `.gitignore` files
-/// at or below its base, an external source none at all), so the resolver maintains its own
-/// lazily-loaded cache of ignore files instead of using the walker's built-in handling.
+/// The per-source verdicts require gitignore decisions relative to different anchors (see
+/// [`Boundary`]: each source kind respects a different part of the `.gitignore` chain), so the
+/// resolver maintains its own lazily-loaded cache of ignore files instead of using the
+/// walker's built-in handling.
 #[derive(Debug)]
 struct Resolver {
     /// `Auto` sources: directive position and base
@@ -843,7 +845,7 @@ struct Resolver {
     auto_reachable: Mutex<FxHashMap<PathBuf, bool>>,
 
     /// Memoized "is this directory reachable for an external source": like `auto_reachable`,
-    /// but without the gitignore chain (git ignores the whole tree anyway)
+    /// but only `.gitignore` files strictly below the external base apply
     external_reachable: Mutex<FxHashMap<PathBuf, bool>>,
 }
 
@@ -1035,17 +1037,25 @@ impl Resolver {
             file.starts_with(base)
                 && self.auto_reachable(parent)
                 && !is_ignored_by_default_rules(file, false)
-                && !self.ignore_files.is_ignored(file, false, parent, None)
+                && !self
+                    .ignore_files
+                    .is_ignored(file, false, parent, Boundary::None)
                 && !not_after(*idx)
         }) {
             return true;
         }
 
-        // External sources: like auto sources, but the gitignore chain doesn't apply
+        // External sources: like auto sources, but only `.gitignore` files strictly below the
+        // base apply. Rules from at or above the base are bypassed — they are what made the
+        // directory ignored, and it was listed explicitly anyway — while `.gitignore` files
+        // deeper inside the external tree still apply.
         if self.externals.iter().any(|(idx, base)| {
             file.starts_with(base)
                 && self.external_reachable(parent)
                 && !is_ignored_by_default_rules(file, false)
+                && !self
+                    .ignore_files
+                    .is_ignored(file, false, parent, Boundary::Inside(base))
                 && !not_after(*idx)
         }) {
             return true;
@@ -1076,22 +1086,40 @@ impl Resolver {
             |dir| self.autos.iter().any(|(_, base)| base == dir),
             |dir| {
                 !is_ignored_by_default_rules(dir, true)
-                    && dir
-                        .parent()
-                        .is_some_and(|parent| !self.ignore_files.is_ignored(dir, true, parent, None))
+                    && dir.parent().is_some_and(|parent| {
+                        !self.ignore_files.is_ignored(dir, true, parent, Boundary::None)
+                    })
             },
         )
     }
 
-    /// Like [`Resolver::auto_reachable`], but for external sources: the gitignore chain
-    /// doesn't apply inside of them (git ignores the whole tree anyway), only the default
-    /// rules do.
+    /// Like [`Resolver::auto_reachable`], but for external sources: only `.gitignore` files
+    /// strictly below the external base apply (see [`Boundary`]). Rules from at or above the
+    /// base are bypassed — they are what made the directory ignored, and it was listed
+    /// explicitly anyway.
+    ///
+    /// When external bases are nested, the deepest base containing the directory bounds the
+    /// chain: reachability from an outer base implies reachability from a nested base (the
+    /// outer chain checks a superset of the ignore files), so this computes the union of the
+    /// per-base verdicts.
     fn external_reachable(&self, dir: &Path) -> bool {
         reachable(
             &self.external_reachable,
             dir,
             |dir| self.externals.iter().any(|(_, base)| base == dir),
-            |dir| !is_ignored_by_default_rules(dir, true),
+            |dir| {
+                !is_ignored_by_default_rules(dir, true)
+                    && dir.parent().is_some_and(|parent| {
+                        let boundary = self
+                            .externals
+                            .iter()
+                            .map(|(_, base)| base)
+                            .filter(|base| dir.starts_with(base))
+                            .max_by_key(|base| base.components().count())
+                            .map_or(Boundary::None, |base| Boundary::Inside(base));
+                        !self.ignore_files.is_ignored(dir, true, parent, boundary)
+                    })
+            },
         )
     }
 
@@ -1108,7 +1136,7 @@ impl Resolver {
                     && dir.parent().is_some_and(|parent| {
                         !self
                             .ignore_files
-                            .is_ignored(dir, true, parent, Some(&group.base))
+                            .is_ignored(dir, true, parent, Boundary::At(&group.base))
                     })
             },
         )
@@ -1163,16 +1191,42 @@ struct IgnoreFiles {
     chains: Mutex<FxHashMap<PathBuf, Arc<Vec<Arc<Gitignore>>>>>,
 }
 
+/// Which part of the ignore file chain applies to a source, anchored at its base:
+///
+/// - `Auto` sources respect the full chain, up to the git repository root
+/// - `Pattern` sources respect ignore files at or below their base (the static base is
+///   explicit, everything above it is bypassed)
+/// - `External` sources respect ignore files strictly below their base: the base's own
+///   ignore file is part of its bypassed ignoredness — inside ignored trees it is typically
+///   the self-ignoring `*` file that generators drop into the directory — while deeper ignore
+///   files are deliberate signals about specific contents and still apply
+#[derive(Debug, Clone, Copy)]
+enum Boundary<'a> {
+    None,
+    At(&'a Path),
+    Inside(&'a Path),
+}
+
+impl Boundary<'_> {
+    /// Whether an ignore file rooted at the given directory applies
+    fn applies_to(&self, dir: &Path) -> bool {
+        match self {
+            Boundary::None => true,
+            Boundary::At(base) => dir.starts_with(base),
+            Boundary::Inside(base) => dir != *base && dir.starts_with(base),
+        }
+    }
+}
+
 impl IgnoreFiles {
     /// Whether the ignore files definitively ignore the given path. `dir` is the directory
-    /// containing the path, and `below` optionally restricts the chain to ignore files at or
-    /// below the given directory.
+    /// containing the path, and `boundary` restricts which ignore files of the chain apply.
     ///
     /// The deepest ignore file with a definitive answer wins, matching git's precedence, so a
     /// path that a deeper ignore file re-includes via a `!` pattern is not ignored.
-    fn is_ignored(&self, path: &Path, is_dir: bool, dir: &Path, below: Option<&Path>) -> bool {
+    fn is_ignored(&self, path: &Path, is_dir: bool, dir: &Path, boundary: Boundary) -> bool {
         for matcher in self.chain(dir).iter() {
-            if below.is_some_and(|below| !matcher.path().starts_with(below)) {
+            if !boundary.applies_to(matcher.path()) {
                 // Chains are ordered deepest first, so nothing below the boundary can follow
                 break;
             }

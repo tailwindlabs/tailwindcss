@@ -41,9 +41,11 @@ pub enum SourceEntry {
     /// ```
     ///
     /// Being explicit bypasses the ignoredness of the directory: everything inside is scanned
-    /// as if it were a regular auto source, except that `.gitignore` files no longer apply
-    /// inside (git ignores the whole tree anyway). The default rules still apply inside, so
-    /// e.g. nested `node_modules` stay ignored.
+    /// as if it were a regular auto source, except that `.gitignore` files from at or above
+    /// the directory no longer apply — they (including the self-ignoring `*` file that
+    /// generators typically place inside such directories) are what made it ignored in the
+    /// first place. `.gitignore` files *deeper inside* the directory still apply, and so do
+    /// the default rules, so e.g. nested `node_modules` stay ignored.
     External { base: PathBuf },
 
     /// Explicit source pattern regardless of any auto source detection rules
