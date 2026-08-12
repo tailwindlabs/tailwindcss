@@ -829,8 +829,8 @@ struct Resolver {
     /// `External` sources: directive position and base
     externals: Vec<(usize, PathBuf)>,
 
-    /// `Pattern` sources: base and the pattern with its directive position
-    patterns: Vec<(PathBuf, PatternRule)>,
+    /// `Pattern` sources, grouped by base
+    patterns: Vec<PatternGroup>,
 
     /// `@source not` directives
     nots: Vec<NotRule>,
@@ -845,34 +845,51 @@ struct Resolver {
     /// Memoized "is this directory reachable for an external source": like `auto_reachable`,
     /// but without the gitignore chain (git ignores the whole tree anyway)
     external_reachable: Mutex<FxHashMap<PathBuf, bool>>,
+}
 
-    /// Memoized "is this directory reachable for a pattern source with this base": like
-    /// `auto_reachable`, but only `.gitignore` files at or below the base apply (the static
-    /// base is explicit, everything above it is bypassed)
-    pattern_reachable: Mutex<FxHashMap<(PathBuf, PathBuf), bool>>,
+/// All `Pattern` sources sharing a base, e.g. `@source "src/*.{html,jsx}"` produces the
+/// patterns `/*.html` and `/*.jsx` for the base `src`. Patterns carry the position of their
+/// `@source` directive to resolve conflicts with `@source not` directives: the later
+/// directive wins.
+#[derive(Debug)]
+struct PatternGroup {
+    base: PathBuf,
+
+    /// The glob patterns, relative to `base`, with their directive positions
+    patterns: Vec<(usize, String)>,
+
+    /// Memoized "is this directory reachable for this group": like
+    /// `Resolver::auto_reachable`, but only `.gitignore` files at or below the base apply —
+    /// the static base is explicit, so everything above it is bypassed
+    reachable: Mutex<FxHashMap<PathBuf, bool>>,
 }
 
 impl Resolver {
     fn new(sources: &Sources) -> Self {
         let mut autos = vec![];
         let mut externals = vec![];
-        let mut patterns = vec![];
+        let mut patterns: Vec<PatternGroup> = vec![];
+        let mut nots = vec![];
 
         for (idx, source) in sources.iter().enumerate() {
             match source {
                 SourceEntry::Auto { base } => autos.push((idx, base.clone())),
                 SourceEntry::External { base } => externals.push((idx, base.clone())),
-                SourceEntry::Pattern { base, pattern } => patterns.push((
-                    base.clone(),
-                    PatternRule {
-                        idx,
-                        pattern: pattern.clone(),
-                        bypasses_default_file_rules: pattern_bypasses_default_file_rules(
-                            pattern,
-                        ),
-                    },
-                )),
-                SourceEntry::Ignored { .. } => {}
+                SourceEntry::Pattern { base, pattern } => {
+                    match patterns.iter_mut().find(|group| &group.base == base) {
+                        Some(group) => group.patterns.push((idx, pattern.clone())),
+                        None => patterns.push(PatternGroup {
+                            base: base.clone(),
+                            patterns: vec![(idx, pattern.clone())],
+                            reachable: Default::default(),
+                        }),
+                    }
+                }
+                SourceEntry::Ignored { base, pattern } => nots.push(NotRule {
+                    idx,
+                    base: base.clone(),
+                    pattern: pattern.clone(),
+                }),
             }
         }
 
@@ -880,11 +897,10 @@ impl Resolver {
             autos,
             externals,
             patterns,
-            nots: collect_not_rules(sources),
+            nots,
             ignore_files: IgnoreFiles::default(),
             auto_reachable: Default::default(),
             external_reachable: Default::default(),
-            pattern_reachable: Default::default(),
         }
     }
 
@@ -894,7 +910,7 @@ impl Resolver {
             .iter()
             .map(|(_, base)| base)
             .chain(self.externals.iter().map(|(_, base)| base))
-            .chain(self.patterns.iter().map(|(base, _)| base))
+            .chain(self.patterns.iter().map(|group| &group.base))
     }
 
     /// The walk roots: all bases that are not contained in another base. Nested bases are
@@ -951,10 +967,12 @@ impl Resolver {
                 .externals
                 .iter()
                 .any(|(idx, base)| leads_to_base(*idx, base))
-            || self
-                .patterns
-                .iter()
-                .any(|(base, pattern)| leads_to_base(pattern.idx, base))
+            || self.patterns.iter().any(|group| {
+                group
+                    .patterns
+                    .iter()
+                    .any(|(idx, _)| leads_to_base(*idx, &group.base))
+            })
         {
             return true;
         }
@@ -991,11 +1009,11 @@ impl Resolver {
             return true;
         }
 
-        self.patterns.iter().any(|(base, pattern)| {
-            dir.strip_prefix(base).is_ok_and(|remainder| {
-                dir_could_contain_matches(&pattern.pattern, remainder)
-                    && self.pattern_reachable(base, dir)
-                    && !not_after(pattern.idx)
+        self.patterns.iter().any(|group| {
+            dir.strip_prefix(&group.base).is_ok_and(|remainder| {
+                group.patterns.iter().any(|(idx, pattern)| {
+                    dir_could_contain_matches(pattern, remainder) && !not_after(*idx)
+                }) && self.pattern_reachable(group, dir)
             })
         })
     }
@@ -1016,8 +1034,8 @@ impl Resolver {
         if self.autos.iter().any(|(idx, base)| {
             file.starts_with(base)
                 && self.auto_reachable(parent)
-                && !is_ignored_by_default_file_rules(file)
-                && self.ignore_files.matched(file, false, parent, None) != Some(Match::Ignore)
+                && !is_ignored_by_default_rules(file, false)
+                && !self.ignore_files.is_ignored(file, false, parent, None)
                 && !not_after(*idx)
         }) {
             return true;
@@ -1027,127 +1045,117 @@ impl Resolver {
         if self.externals.iter().any(|(idx, base)| {
             file.starts_with(base)
                 && self.external_reachable(parent)
-                && !is_ignored_by_default_file_rules(file)
+                && !is_ignored_by_default_rules(file, false)
                 && !not_after(*idx)
         }) {
             return true;
         }
 
-        // Pattern sources: the file must match the glob. A match beats file-level gitignore
+        // Pattern sources: the file must match a glob. A match beats file-level gitignore
         // rules — you were explicit about wanting files of that shape — and the default file
         // rules only apply when the pattern isn't explicit about the file's shape.
-        self.patterns.iter().any(|(base, pattern)| {
-            file.strip_prefix(base).is_ok_and(|remainder| {
-                glob_match(&pattern.pattern, rooted_posix(remainder).as_bytes())
-                    && self.pattern_reachable(base, parent)
-                    && (pattern.bypasses_default_file_rules
-                        || !is_ignored_by_default_file_rules(file))
-                    && !not_after(pattern.idx)
+        self.patterns.iter().any(|group| {
+            file.strip_prefix(&group.base).is_ok_and(|remainder| {
+                let remainder = rooted_posix(remainder);
+                group.patterns.iter().any(|(idx, pattern)| {
+                    glob_match(pattern, remainder.as_bytes())
+                        && (pattern_bypasses_default_file_rules(pattern)
+                            || !is_ignored_by_default_rules(file, false))
+                        && !not_after(*idx)
+                }) && self.pattern_reachable(group, parent)
             })
         })
     }
 
     /// Whether the given directory is reachable for an auto source: every directory on the
     /// path from the auto base down to it passes the default rules and the gitignore chain.
-    /// Auto bases themselves are always reachable — a base that is itself ignored would have
-    /// been promoted to an external source.
     fn auto_reachable(&self, dir: &Path) -> bool {
-        if let Some(reachable) = self.auto_reachable.lock().unwrap().get(dir) {
-            return *reachable;
-        }
-
-        let reachable = if self.autos.iter().any(|(_, base)| base == dir) {
-            true
-        } else if !self.autos.iter().any(|(_, base)| dir.starts_with(base)) {
-            false
-        } else {
-            dir.parent().is_some_and(|parent| {
-                self.auto_reachable(parent)
-                    && !is_ignored_by_default_dir_rules(dir)
-                    && self.ignore_files.matched(dir, true, parent, None) != Some(Match::Ignore)
-            })
-        };
-
-        self.auto_reachable
-            .lock()
-            .unwrap()
-            .insert(dir.to_path_buf(), reachable);
-        reachable
+        reachable(
+            &self.auto_reachable,
+            dir,
+            |dir| self.autos.iter().any(|(_, base)| base == dir),
+            |dir| {
+                !is_ignored_by_default_rules(dir, true)
+                    && dir
+                        .parent()
+                        .is_some_and(|parent| !self.ignore_files.is_ignored(dir, true, parent, None))
+            },
+        )
     }
 
     /// Like [`Resolver::auto_reachable`], but for external sources: the gitignore chain
     /// doesn't apply inside of them (git ignores the whole tree anyway), only the default
     /// rules do.
     fn external_reachable(&self, dir: &Path) -> bool {
-        if let Some(reachable) = self.external_reachable.lock().unwrap().get(dir) {
-            return *reachable;
-        }
-
-        let reachable = if self.externals.iter().any(|(_, base)| base == dir) {
-            true
-        } else if !self.externals.iter().any(|(_, base)| dir.starts_with(base)) {
-            false
-        } else {
-            dir.parent().is_some_and(|parent| {
-                self.external_reachable(parent) && !is_ignored_by_default_dir_rules(dir)
-            })
-        };
-
-        self.external_reachable
-            .lock()
-            .unwrap()
-            .insert(dir.to_path_buf(), reachable);
-        reachable
+        reachable(
+            &self.external_reachable,
+            dir,
+            |dir| self.externals.iter().any(|(_, base)| base == dir),
+            |dir| !is_ignored_by_default_rules(dir, true),
+        )
     }
 
-    /// Like [`Resolver::auto_reachable`], but for a pattern source with the given base: only
-    /// `.gitignore` files at or below the base apply — the static base is explicit, so
-    /// everything above it is bypassed.
-    fn pattern_reachable(&self, base: &Path, dir: &Path) -> bool {
-        if let Some(reachable) = self
-            .pattern_reachable
-            .lock()
-            .unwrap()
-            .get(&(base.to_path_buf(), dir.to_path_buf()))
-        {
-            return *reachable;
-        }
-
-        let reachable = if base == dir {
-            true
-        } else if !dir.starts_with(base) {
-            false
-        } else {
-            dir.parent().is_some_and(|parent| {
-                self.pattern_reachable(base, parent)
-                    && !is_ignored_by_default_dir_rules(dir)
-                    && self.ignore_files.matched(dir, true, parent, Some(base))
-                        != Some(Match::Ignore)
-            })
-        };
-
-        self.pattern_reachable
-            .lock()
-            .unwrap()
-            .insert((base.to_path_buf(), dir.to_path_buf()), reachable);
-        reachable
+    /// Like [`Resolver::auto_reachable`], but for a pattern group: only `.gitignore` files at
+    /// or below the base apply — the static base is explicit, so everything above it is
+    /// bypassed.
+    fn pattern_reachable(&self, group: &PatternGroup, dir: &Path) -> bool {
+        reachable(
+            &group.reachable,
+            dir,
+            |dir| dir == group.base,
+            |dir| {
+                !is_ignored_by_default_rules(dir, true)
+                    && dir.parent().is_some_and(|parent| {
+                        !self
+                            .ignore_files
+                            .is_ignored(dir, true, parent, Some(&group.base))
+                    })
+            },
+        )
     }
 }
 
-/// The verdict of the on-disk ignore files for a path
-#[derive(Debug, Clone, Copy, PartialEq)]
-enum Match {
-    Ignore,
-    Whitelist,
+/// Whether every directory on the path from a source base down to `dir` passes the source's
+/// `enter` rule. Bases themselves are always reachable: they are explicitly listed (and an
+/// auto base that is itself ignored would have been promoted to an external source). Verdicts
+/// are memoized per directory.
+fn reachable(
+    memo: &Mutex<FxHashMap<PathBuf, bool>>,
+    dir: &Path,
+    is_base: impl Fn(&Path) -> bool,
+    enter: impl Fn(&Path) -> bool,
+) -> bool {
+    // Walk up to the nearest base or directory with a memoized verdict…
+    let mut pending = vec![];
+    let mut current = dir;
+    let mut reachable = loop {
+        if is_base(current) {
+            break true;
+        }
+        if let Some(reachable) = memo.lock().unwrap().get(current) {
+            break *reachable;
+        }
+        pending.push(current.to_path_buf());
+        match current.parent() {
+            Some(parent) => current = parent,
+            // Reached the file system root without finding a base
+            None => break false,
+        }
+    };
+
+    // …then fill in the verdicts back down towards `dir`
+    for dir in pending.into_iter().rev() {
+        reachable = reachable && enter(&dir);
+        memo.lock().unwrap().insert(dir, reachable);
+    }
+
+    reachable
 }
 
 /// A lazily-loaded cache of the on-disk ignore files (`.gitignore`, `.ignore` and the
 /// repository's `.git/info/exclude`).
 #[derive(Debug, Default)]
 struct IgnoreFiles {
-    /// Compiled ignore rules per directory (`None` when the directory has no ignore files)
-    matchers: Mutex<FxHashMap<PathBuf, Option<Arc<Gitignore>>>>,
-
     /// The matcher chains per directory: all matchers that apply to paths inside the
     /// directory, deepest first, from the directory itself up to the repository root (or the
     /// file system root outside of a git repository, matching `git init`-less projects where
@@ -1156,12 +1164,13 @@ struct IgnoreFiles {
 }
 
 impl IgnoreFiles {
-    /// The verdict of the ignore files for the given path. `dir` is the directory containing
-    /// the path (matchers are looked up for that directory), and `below` optionally restricts
-    /// the chain to ignore files at or below the given directory.
+    /// Whether the ignore files definitively ignore the given path. `dir` is the directory
+    /// containing the path, and `below` optionally restricts the chain to ignore files at or
+    /// below the given directory.
     ///
-    /// The deepest ignore file with a definitive answer wins, matching git's precedence.
-    fn matched(&self, path: &Path, is_dir: bool, dir: &Path, below: Option<&Path>) -> Option<Match> {
+    /// The deepest ignore file with a definitive answer wins, matching git's precedence, so a
+    /// path that a deeper ignore file re-includes via a `!` pattern is not ignored.
+    fn is_ignored(&self, path: &Path, is_dir: bool, dir: &Path, below: Option<&Path>) -> bool {
         for matcher in self.chain(dir).iter() {
             if below.is_some_and(|below| !matcher.path().starts_with(below)) {
                 // Chains are ordered deepest first, so nothing below the boundary can follow
@@ -1169,13 +1178,13 @@ impl IgnoreFiles {
             }
 
             match matcher.matched(path, is_dir) {
-                ignore::Match::Ignore(_) => return Some(Match::Ignore),
-                ignore::Match::Whitelist(_) => return Some(Match::Whitelist),
+                ignore::Match::Ignore(_) => return true,
+                ignore::Match::Whitelist(_) => return false,
                 ignore::Match::None => {}
             }
         }
 
-        None
+        false
     }
 
     /// The matcher chain for paths inside the given directory: the directory's own matcher
@@ -1188,7 +1197,7 @@ impl IgnoreFiles {
         let is_repo_root = dir.join(".git").exists();
 
         let mut chain = vec![];
-        if let Some(matcher) = self.matcher(dir, is_repo_root) {
+        if let Some(matcher) = load_ignore_files(dir, is_repo_root) {
             chain.push(matcher);
         }
 
@@ -1207,71 +1216,44 @@ impl IgnoreFiles {
             .insert(dir.to_path_buf(), chain.clone());
         chain
     }
+}
 
-    /// The compiled ignore rules of the given directory, combining (from low to high
-    /// precedence) the repository's `.git/info/exclude`, the `.gitignore` file, and the
-    /// `.ignore` file.
-    fn matcher(&self, dir: &Path, is_repo_root: bool) -> Option<Arc<Gitignore>> {
-        if let Some(matcher) = self.matchers.lock().unwrap().get(dir) {
-            return matcher.clone();
+/// Compile the ignore rules of the given directory, combining (from low to high precedence)
+/// the repository's `.git/info/exclude`, the `.gitignore` file, and the `.ignore` file.
+fn load_ignore_files(dir: &Path, is_repo_root: bool) -> Option<Arc<Gitignore>> {
+    let mut builder = GitignoreBuilder::new(dir);
+    let mut any = false;
+
+    let mut add = |file: PathBuf| {
+        if file.is_file() {
+            // I/O errors and partially invalid ignore files are ignored, matching the
+            // walker's behavior.
+            let _ = builder.add(file);
+            any = true;
         }
+    };
 
-        let mut builder = GitignoreBuilder::new(dir);
-        let mut any = false;
+    if is_repo_root {
+        add(dir.join(".git").join("info").join("exclude"));
+    }
+    add(dir.join(".gitignore"));
+    add(dir.join(".ignore"));
 
-        let mut add = |file: PathBuf| {
-            if file.is_file() {
-                // I/O errors and partially invalid ignore files are ignored, matching the
-                // walker's behavior.
-                let _ = builder.add(file);
-                any = true;
-            }
-        };
-
-        if is_repo_root {
-            add(dir.join(".git").join("info").join("exclude"));
-        }
-        add(dir.join(".gitignore"));
-        add(dir.join(".ignore"));
-
-        let matcher = if any {
-            builder.build().ok().map(Arc::new)
-        } else {
-            None
-        };
-
-        self.matchers
-            .lock()
-            .unwrap()
-            .insert(dir.to_path_buf(), matcher.clone());
-        matcher
+    if any {
+        builder.build().ok().map(Arc::new)
+    } else {
+        None
     }
 }
 
-/// Whether a directory is ignored by the default rules (e.g. `node_modules`). Only the
+/// Whether a path is ignored by the default auto source detection rules: directories like
+/// `node_modules`, binary and irrelevant extensions, lock files, … For directories only the
 /// directory's own name is checked; the path towards it is checked by the reachability
 /// helpers one directory at a time.
-fn is_ignored_by_default_dir_rules(dir: &Path) -> bool {
+fn is_ignored_by_default_rules(path: &Path, is_dir: bool) -> bool {
     auto_source_detection::RULES
         .iter()
-        .any(|ignore| ignore.matched(dir, true).is_ignore())
-}
-
-/// A glob pattern of a `Pattern` source, together with the position of its `@source` directive.
-#[derive(Debug, Clone)]
-struct PatternRule {
-    /// Position of the `@source` directive, used to resolve conflicts with `@source not`
-    /// directives: the later directive wins.
-    idx: usize,
-
-    /// The glob pattern, relative to the walker's base, e.g. `/ba*/*.html`
-    pattern: String,
-
-    /// Whether the pattern is explicit enough to bypass the default file rules: it names a
-    /// concrete file (e.g. `.env` or `do-include-me.bin`) or pins a specific extension (e.g.
-    /// `*.html` or `logo.png`). Patterns that don't (e.g. `blog/*/**/*`) re-apply the default
-    /// file rules.
-    bypasses_default_file_rules: bool,
+        .any(|ignore| ignore.matched(path, is_dir).is_ignore())
 }
 
 /// An `@source not` directive, together with its position.
@@ -1312,22 +1294,6 @@ impl NotRule {
                 && glob_match(&self.pattern, rooted_posix(prefix).as_bytes())
         })
     }
-}
-
-/// Collect all `@source not` directives with their positions.
-fn collect_not_rules(sources: &Sources) -> Vec<NotRule> {
-    sources
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, source)| match source {
-            SourceEntry::Ignored { base, pattern } => Some(NotRule {
-                idx,
-                base: base.clone(),
-                pattern: pattern.clone(),
-            }),
-            _ => None,
-        })
-        .collect()
 }
 
 /// Serialize a path relative to some base as a `/`-rooted posix style string, e.g.
@@ -1389,14 +1355,6 @@ fn pattern_bypasses_default_file_rules(pattern: &str) -> bool {
         Some(ext) => !ext.contains(['*', '?', '[']),
         None => false,
     }
-}
-
-/// Whether a file is ignored by the default file-level rules (binary extensions, ignored
-/// extensions, lock files, …).
-fn is_ignored_by_default_file_rules(path: &Path) -> bool {
-    auto_source_detection::RULES
-        .iter()
-        .any(|ignore| ignore.matched(path, false).is_ignore())
 }
 
 #[cfg(test)]
