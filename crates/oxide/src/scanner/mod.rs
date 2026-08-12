@@ -46,10 +46,10 @@ use tracing::event;
 //   or a git ignored `dist/`; `@source "./dist/**/*.html"` does descend into `dist/`).
 //   Individual *files* matching the glob are always included, even when git ignored — you were
 //   explicit about wanting files of that shape (`@source "git-ignored.html"` and
-//   `@source "*.styl"` work). Extensions that are ignored by default are only included when the
-//   glob pins an extension (`@source "logo.{jpg,png}"`, `@source "do-include-me.bin"`), an
-//   extension-less glob like `@source "some/folder/**/*"`… is `Auto`, and e.g.
-//   `@source "blog/*/post/**/*"` still applies the default extension rules.
+//   `@source "*.styl"` work). Files that are ignored by default are only included when the
+//   pattern is explicit about them: it names a concrete file (`@source "do-include-me.bin"`,
+//   `@source ".env"`) or pins an extension (`@source "logo.{jpg,png}"`). A glob that does
+//   neither (e.g. `@source "blog/*/post/**/*"`) still applies the default file rules.
 //
 // - `Ignored`: `@source not "…"` — excludes matching files/folders, even when a `.gitignore`
 //   or another `@source` allows them.
@@ -902,9 +902,11 @@ struct PatternRule {
     /// The glob pattern, relative to the walker's base, e.g. `/ba*/*.html`
     pattern: String,
 
-    /// Whether the pattern pins a specific extension (e.g. `*.html` or `logo.png`). Patterns
-    /// that don't (e.g. `blog/*/**/*`) re-apply the default extension rules.
-    pins_extension: bool,
+    /// Whether the pattern is explicit enough to bypass the default file rules: it names a
+    /// concrete file (e.g. `.env` or `do-include-me.bin`) or pins a specific extension (e.g.
+    /// `*.html` or `logo.png`). Patterns that don't (e.g. `blog/*/**/*`) re-apply the default
+    /// file rules.
+    bypasses_default_file_rules: bool,
 }
 
 /// An `@source not` directive, together with its position.
@@ -1027,7 +1029,7 @@ fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
             .push(PatternRule {
                 idx,
                 pattern: pattern.clone(),
-                pins_extension: pattern_pins_extension(pattern),
+                bypasses_default_file_rules: pattern_bypasses_default_file_rules(pattern),
             });
     }
 
@@ -1112,7 +1114,7 @@ fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
                         && !filter_nots
                             .iter()
                             .any(|not| not.idx > p.idx && not.matches(path))
-                        && (p.pins_extension || !is_ignored_by_default_file_rules(path))
+                        && (p.bypasses_default_file_rules || !is_ignored_by_default_file_rules(path))
                 })
             });
 
@@ -1121,9 +1123,19 @@ fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
         .collect()
 }
 
-/// Whether a pattern pins a specific extension, e.g. `/*.html` or `/logo.png`. Patterns that
-/// don't (e.g. `/blog/*/**/*`) keep the default extension rules applied.
-fn pattern_pins_extension(pattern: &str) -> bool {
+/// Whether a pattern is explicit enough to bypass the default file rules.
+///
+/// A pattern without any wildcards names a concrete file, e.g. `/.env` or
+/// `/do-include-me.bin` — you asked for exactly this file, so the default rules never apply.
+/// A pattern that pins a specific extension, e.g. `/*.html` or `/**/*.bin`, bypasses them as
+/// well. Patterns that do neither (e.g. `/blog/*/**/*`) keep the default file rules applied.
+fn pattern_bypasses_default_file_rules(pattern: &str) -> bool {
+    // Concrete file, no wildcards (braces have already been expanded away)
+    if !pattern.contains(['*', '?', '[']) {
+        return true;
+    }
+
+    // Pinned extension
     match Path::new(pattern).extension().and_then(|ext| ext.to_str()) {
         Some(ext) => !ext.contains(['*', '?', '[']),
         None => false,
