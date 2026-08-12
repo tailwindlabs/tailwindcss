@@ -10,11 +10,13 @@ use crate::scanner::sources::{
     public_source_entries_to_private_source_entries, PublicSourceEntry, SourceEntry, Sources,
 };
 use crate::GlobEntry;
-use auto_source_detection::BINARY_EXTENSIONS_GLOB;
 use bstr::ByteSlice;
 use fast_glob::glob_match;
 use fxhash::{FxHashMap, FxHashSet};
-use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
+use ignore::{
+    gitignore::{Gitignore, GitignoreBuilder},
+    WalkBuilder,
+};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
 use std::path::{Path, PathBuf};
@@ -61,22 +63,30 @@ use tracing::event;
 //
 // # Implementation
 //
-// Scanning uses the vendored `ignore` crate for gitignore-aware, pruned directory walking (we
-// never descend into directories that cannot contribute files). Sources are split over multiple
-// walkers:
+// All sources are scanned in a single file system walk. The vendored `ignore` crate only
+// provides the traversal itself (parallel walking, symlink loop handling); its built-in
+// gitignore handling is disabled, because it computes one global verdict per path while the
+// `@source` semantics are per source: the same directory can be pruned for an auto source but
+// walkable for a pattern source, and a file can be gitignored for an auto source but rescued
+// by a glob.
 //
-// - One walker for all `Auto` and `External` roots. Default rules are registered as explicit
-//   in-memory gitignores (they rank above `.gitignore` files found on disk). `External` roots
-//   additionally get a `!/**/*` whitelist (bypassing gitignore rules) plus a re-statement of
-//   the default rules. `@source not` rules are handled by a filter closure that honors the
-//   directive order: the last directive covering a path wins.
+// Instead, the [`Resolver`] implements the semantics in the walker's `filter_entry` callback,
+// backed by its own lazily-loaded cache of the on-disk ignore files (`.gitignore`, `.ignore`,
+// and the repository's `.git/info/exclude`, applied up to the git repository root):
 //
-// - One walker per `Pattern` base. It never looks at `.gitignore` files *above* its base
-//   (the static prefix is explicit), while `.gitignore` files inside the subtree still prune
-//   directories. Matching files are whitelisted (a glob match beats file-level ignores), and a
-//   filter closure makes the final per-file decision: the file must match a glob, honoring the
-//   relative order of `@source not` directives, and non-extension-pinning globs re-apply the
-//   default file rules.
+// - The walk roots are the "maximal" source bases; nested bases are reached by walking, and
+//   the resolver keeps the static path towards an explicitly listed base open even through
+//   ignored directories.
+//
+// - A directory is entered when at least one source can contribute files inside of it, where
+//   each source kind applies its own rules: auto sources check the default rules and the full
+//   gitignore chain, external sources only the default rules, and pattern sources check the
+//   default rules, the `.gitignore` files at or below their base, and whether the glob can
+//   match anything inside the directory. Directories that cannot contribute anything are
+//   never descended into.
+//
+// - A file is kept when at least one source includes it, honoring the directive order of
+//   `@source not` (the later directive wins).
 
 #[derive(Debug, Clone)]
 pub enum ChangedContent {
@@ -105,9 +115,11 @@ pub struct Scanner {
     /// Content sources
     sources: Sources,
 
-    /// The walkers to detect all files that we have to scan: one for all auto/external source
-    /// roots, and one per pattern source base
-    walkers: Vec<WalkBuilder>,
+    /// The walker to detect all files that we have to scan
+    walker: Option<WalkBuilder>,
+
+    /// The resolver implementing the `@source` semantics for the walker
+    resolver: Option<Arc<Resolver>>,
 
     /// All found extensions
     extensions: FxHashSet<String>,
@@ -157,11 +169,13 @@ impl Scanner {
             }
         }
 
-        let walkers = create_walkers(&sources);
+        let resolver = Arc::new(Resolver::new(&sources));
+        let walker = create_walker(resolver.clone());
 
         Self {
             sources,
-            walkers,
+            walker,
+            resolver: Some(resolver),
             ..Default::default()
         }
     }
@@ -220,7 +234,7 @@ impl Scanner {
 
         // Figure out if the new unknown files are allowed to be scanned
         if !new_unknown_files.is_empty() {
-            'outer: for walk_builder in self.walkers.iter_mut() {
+            if let Some(walk_builder) = &mut self.walker {
                 for entry in walk_builder.build().filter_map(Result::ok) {
                     let path = entry.path();
                     if !path.is_file() {
@@ -265,7 +279,7 @@ impl Scanner {
                     // We can stop walking the file system if all files we are interested in have
                     // been found.
                     if new_unknown_files.is_empty() {
-                        break 'outer;
+                        break;
                     }
                 }
             }
@@ -425,20 +439,17 @@ impl Scanner {
         }
         self.sources_scanned = true;
 
-        if self.walkers.is_empty() {
+        let Some(walker) = &mut self.walker else {
             return (vec![], vec![], vec![]);
-        }
+        };
 
-        // Use synchronous walks for the initial build (lower overhead) and parallel
-        // walks for subsequent calls (watch mode) where the overhead is amortised.
-        let mut all_entries = vec![];
-        for walker in self.walkers.iter_mut() {
-            if self.has_scanned_once {
-                all_entries.extend(walk_parallel(walker));
-            } else {
-                all_entries.extend(walk_synchronous(walker));
-            }
-        }
+        // Use synchronous walk for the initial build (lower overhead) and parallel
+        // walk for subsequent calls (watch mode) where the overhead is amortised.
+        let all_entries = if self.has_scanned_once {
+            walk_parallel(walker)
+        } else {
+            walk_synchronous(walker)
+        };
 
         let mut css_files: Vec<PathBuf> = vec![];
         let mut content_paths: Vec<(PathBuf, String)> = vec![];
@@ -457,7 +468,16 @@ impl Scanner {
         for entry in all_entries {
             match entry {
                 WalkEntry::Dir(path) => {
-                    self.dirs.insert(path);
+                    // Directories that are only walked to reach an explicitly listed base are
+                    // not part of any source's content: they must not widen the generated
+                    // file watcher globs.
+                    let contributes = self
+                        .resolver
+                        .as_ref()
+                        .is_some_and(|resolver| resolver.contributes_dir(&path));
+                    if contributes {
+                        self.dirs.insert(path);
+                    }
                 }
                 WalkEntry::File {
                     path,
@@ -756,184 +776,485 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
     Arc::try_unwrap(collected).unwrap().into_inner().unwrap()
 }
 
-/// Sets up all walkers for the given sources: one gitignore-aware walker for all `Auto` and
-/// `External` roots, and one walker per `Pattern` base.
-fn create_walkers(sources: &Sources) -> Vec<WalkBuilder> {
-    let mut walkers = vec![];
-    walkers.extend(create_auto_walker(sources));
-    walkers.extend(create_pattern_walkers(sources));
-    walkers
-}
-
-/// A single walker for all `Auto` and `External` roots.
+/// Sets up the single walker for all sources.
 ///
-/// The walker respects `.gitignore` files (also from parent directories, up to the git
-/// repository root) plus a stack of explicit in-memory gitignores. Explicit gitignores rank
-/// above the ignore files found on disk, and later-registered ones above earlier ones (see the
-/// `CHANGED:` annotations in the vendored `ignore` crate). From low to high precedence:
+/// The walker is only used for the (parallel, symlink aware) traversal itself: all ignore
+/// semantics are implemented by the [`Resolver`] in the `filter_entry` callback. The crate's
+/// built-in gitignore handling can't be used because it computes one global verdict per path,
+/// while the `@source` semantics are per source (see the spec at the top of this file): the
+/// same directory can be pruned for an auto source but walkable for a pattern source, and a
+/// file can be gitignored for an auto source but rescued by a glob.
 ///
-/// 1. The default auto source detection rules
-/// 2. Per `@source` directive, in order:
-///    - `External`: a `!/**/*` whitelist at its base (bypassing all gitignore rules), plus a
-///      re-statement of the default rules so that e.g. nested `node_modules` stay ignored
-///    - `Ignored` (`@source not`): its pattern at its base
-fn create_auto_walker(sources: &Sources) -> Option<WalkBuilder> {
-    let mut roots = sources.iter().filter_map(|source| match source {
-        SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base),
-        _ => None,
-    });
-
+/// The walk roots are the "maximal" source bases: a base contained in another base is reached
+/// by walking, which the resolver allows even through ignored directories (the static path to
+/// an explicit base bypasses ignore rules).
+fn create_walker(resolver: Arc<Resolver>) -> Option<WalkBuilder> {
+    let mut roots = resolver.walk_roots().into_iter();
     let first_root = roots.next()?;
 
     let mut builder = WalkBuilder::new(first_root);
-    let mut seen_roots = FxHashSet::from_iter([first_root]);
     for root in roots {
-        if seen_roots.insert(root) {
-            builder.add(root);
-        }
+        builder.add(root);
     }
 
     // We have to follow symlinks
     builder.follow_links(true);
 
-    // Scan hidden files / directories
-    builder.hidden(false);
+    // Disable all of the built-in filtering (hidden files, .gitignore files, parent
+    // directories, global gitignore files, …): the resolver implements the ignore semantics.
+    builder.standard_filters(false);
 
-    // Don't respect global gitignore files
-    builder.git_global(false);
+    builder.filter_entry(move |entry| resolver.keep(entry));
 
-    // By default, allow .gitignore files to be used regardless of whether or not
-    // a .git directory is present. This is an optimization for when projects
-    // are first created and may not be in a git repo yet.
-    builder.require_git(false);
+    Some(builder)
+}
 
-    // If we are in a git repo then require it to ensure that only rules within
-    // the repo are used. For example, we don't want to consider a .gitignore file
-    // in the user's home folder if we're in a git repo.
-    //
-    // The alternative is using a call like `.parents(false)` but that will
-    // prevent looking at parent directories for .gitignore files from within
-    // the repo and that's not what we want.
-    //
-    // For example, in a project with this structure:
-    //
-    // home
-    // .gitignore
-    //  my-project
-    //   .gitignore
-    //   apps
-    //     .gitignore
-    //     web
-    //       {root}
-    //
-    // We do want to consider all .gitignore files listed:
-    // - home/.gitignore
-    // - my-project/.gitignore
-    // - my-project/apps/.gitignore
-    //
-    // However, if a repo is initialized inside my-project then only the following
-    // make sense for consideration:
-    // - my-project/.gitignore
-    // - my-project/apps/.gitignore
-    //
-    // Setting the require_git(true) flag conditionally allows us to do this.
-    for parent in first_root.ancestors() {
-        if parent.join(".git").exists() {
-            builder.require_git(true);
-            break;
+/// Implements the `@source` semantics for a single file system walk.
+///
+/// For every walked entry, the resolver computes the union of the per-source verdicts:
+///
+/// - a directory is entered when at least one source can contribute files inside of it
+/// - a file is kept when at least one source includes it, honoring the directive order of
+///   `@source not` (the later directive wins)
+///
+/// The per-source verdicts require gitignore decisions relative to different anchors (an auto
+/// source respects the full `.gitignore` chain, a pattern source only the `.gitignore` files
+/// at or below its base, an external source none at all), so the resolver maintains its own
+/// lazily-loaded cache of ignore files instead of using the walker's built-in handling.
+#[derive(Debug)]
+struct Resolver {
+    /// `Auto` sources: directive position and base
+    autos: Vec<(usize, PathBuf)>,
+
+    /// `External` sources: directive position and base
+    externals: Vec<(usize, PathBuf)>,
+
+    /// `Pattern` sources: base and the pattern with its directive position
+    patterns: Vec<(PathBuf, PatternRule)>,
+
+    /// `@source not` directives
+    nots: Vec<NotRule>,
+
+    /// Lazily loaded ignore files (`.gitignore`, `.ignore`, `.git/info/exclude`) per directory
+    ignore_files: IgnoreFiles,
+
+    /// Memoized "is this directory reachable for an auto source": every directory on the path
+    /// from an auto base down to it passes the gitignore chain and the default rules
+    auto_reachable: Mutex<FxHashMap<PathBuf, bool>>,
+
+    /// Memoized "is this directory reachable for an external source": like `auto_reachable`,
+    /// but without the gitignore chain (git ignores the whole tree anyway)
+    external_reachable: Mutex<FxHashMap<PathBuf, bool>>,
+
+    /// Memoized "is this directory reachable for a pattern source with this base": like
+    /// `auto_reachable`, but only `.gitignore` files at or below the base apply (the static
+    /// base is explicit, everything above it is bypassed)
+    pattern_reachable: Mutex<FxHashMap<(PathBuf, PathBuf), bool>>,
+}
+
+impl Resolver {
+    fn new(sources: &Sources) -> Self {
+        let mut autos = vec![];
+        let mut externals = vec![];
+        let mut patterns = vec![];
+
+        for (idx, source) in sources.iter().enumerate() {
+            match source {
+                SourceEntry::Auto { base } => autos.push((idx, base.clone())),
+                SourceEntry::External { base } => externals.push((idx, base.clone())),
+                SourceEntry::Pattern { base, pattern } => patterns.push((
+                    base.clone(),
+                    PatternRule {
+                        idx,
+                        pattern: pattern.clone(),
+                        bypasses_default_file_rules: pattern_bypasses_default_file_rules(
+                            pattern,
+                        ),
+                    },
+                )),
+                SourceEntry::Ignored { .. } => {}
+            }
+        }
+
+        Self {
+            autos,
+            externals,
+            patterns,
+            nots: collect_not_rules(sources),
+            ignore_files: IgnoreFiles::default(),
+            auto_reachable: Default::default(),
+            external_reachable: Default::default(),
+            pattern_reachable: Default::default(),
         }
     }
 
-    // Setup auto source detection rules
-    for ignore in auto_source_detection::RULES.iter() {
-        builder.add_gitignore(ignore.clone());
+    /// All source bases
+    fn bases(&self) -> impl Iterator<Item = &PathBuf> {
+        self.autos
+            .iter()
+            .map(|(_, base)| base)
+            .chain(self.externals.iter().map(|(_, base)| base))
+            .chain(self.patterns.iter().map(|(base, _)| base))
     }
 
-    // Setup ignores based on `@source` definitions, in directive order so later directives win
-    for source in sources.iter() {
-        match source {
-            SourceEntry::External { base } => {
-                // External sources bypass all gitignore rules (the directory was explicitly
-                // listed even though it is ignored)…
-                let mut ignore_builder = GitignoreBuilder::new(base);
-                ignore_builder.add_line(None, "!/**/*").unwrap();
-
-                // …but the default auto source detection rules still apply inside of them, so
-                // nested `node_modules`, ignored extensions, and lock files stay ignored.
-                ignore_builder
-                    .add_line(None, &auto_source_detection::IGNORED_CONTENT_DIRS_GLOB)
-                    .unwrap();
-                ignore_builder
-                    .add_line(None, &auto_source_detection::IGNORED_EXTENSIONS_GLOB)
-                    .unwrap();
-                ignore_builder
-                    .add_line(None, &auto_source_detection::IGNORED_FILES_GLOB)
-                    .unwrap();
-                builder.add_gitignore(ignore_builder.build().unwrap());
-
-                // Binary extensions are ignored as well, but only for files, so that a folder
-                // named e.g. `some.pages` is still scanned.
-                let mut ignore_builder = GitignoreBuilder::new(base);
-                ignore_builder
-                    .only_on_files(true)
-                    .add_line(None, &BINARY_EXTENSIONS_GLOB)
-                    .unwrap();
-                builder.add_gitignore(ignore_builder.build().unwrap());
+    /// The walk roots: all bases that are not contained in another base. Nested bases are
+    /// reached by walking (the resolver keeps the path to an explicit base open).
+    fn walk_roots(&self) -> Vec<PathBuf> {
+        let mut roots: Vec<PathBuf> = vec![];
+        for base in self.bases() {
+            if self
+                .bases()
+                .any(|other| other != base && base.starts_with(other))
+            {
+                continue;
             }
-            _ => {}
+            if !roots.contains(base) {
+                roots.push(base.clone());
+            }
         }
+        roots
     }
 
-    // `@source not` directives are handled in a filter closure instead of a gitignore layer,
-    // because their effect depends on the directive order: the last directive that covers a
-    // path wins. When that is a `@source not`, the entry is excluded; when it is an
-    // auto/external source, the entry falls through to the normal gitignore + default rules
-    // handling. E.g.:
-    //
-    // ```css
-    // @source not "./src";
-    // @source "./src";      /* re-includes ./src, .gitignore files still apply inside */
-    // ```
-    //
-    // Directories excluded here can be pruned safely: every auto/external base is its own walk
-    // root, so a source root nested inside an excluded directory is still walked.
-    let includes: Vec<(usize, PathBuf)> = sources
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, source)| match source {
-            SourceEntry::Auto { base } | SourceEntry::External { base } => {
-                Some((idx, base.clone()))
-            }
-            _ => None,
-        })
-        .collect();
-    let nots = collect_not_rules(sources);
-
-    builder.filter_entry(move |entry| {
-        // Always keep the walk roots themselves
+    /// Whether to keep the given walk entry
+    fn keep(&self, entry: &ignore::DirEntry) -> bool {
+        // Always keep the walk roots themselves; they are explicitly listed bases
         if entry.depth() == 0 {
             return true;
         }
 
         let path = entry.path();
+        let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
 
-        // The last `@source not` directive covering the path…
-        let Some(not_idx) = nots
-            .iter()
-            .filter(|not| not.matches(path))
-            .map(|not| not.idx)
-            .max()
-        else {
+        if is_dir {
+            self.keep_dir(path)
+        } else {
+            self.keep_file(path)
+        }
+    }
+
+    /// Whether to keep walking the given directory: either a source can contribute files
+    /// inside of it, or it is on the static path towards an explicitly listed base.
+    fn keep_dir(&self, dir: &Path) -> bool {
+        // A directory on the static path to an explicit base can always be entered (the base
+        // is explicit, so its ignoredness is bypassed), unless everything below it is excluded
+        // again by a later `@source not` directive.
+        let leads_to_base = |idx: usize, base: &PathBuf| {
+            base != dir
+                && base.starts_with(dir)
+                && !self
+                    .nots
+                    .iter()
+                    .any(|not| not.idx > idx && not.matches(base))
+        };
+        if self.autos.iter().any(|(idx, base)| leads_to_base(*idx, base))
+            || self
+                .externals
+                .iter()
+                .any(|(idx, base)| leads_to_base(*idx, base))
+            || self
+                .patterns
+                .iter()
+                .any(|(base, pattern)| leads_to_base(pattern.idx, base))
+        {
             return true;
+        }
+
+        self.contributes_dir(dir)
+    }
+
+    /// Whether at least one source can contribute files inside the given directory. Unlike
+    /// [`Resolver::keep_dir`], directories that are only walked to reach an explicitly listed
+    /// base don't count: they are not part of any source's content, e.g. for the purpose of
+    /// generating file watcher globs.
+    fn contributes_dir(&self, dir: &Path) -> bool {
+        // Some source must be able to contribute files inside the directory, and not be
+        // overridden by a later `@source not` directive.
+        let not_after = |idx: usize| {
+            self.nots
+                .iter()
+                .any(|not| not.idx > idx && not.matches(dir))
         };
 
-        // …loses when a later auto/external source covers it as well
-        includes
+        if self
+            .autos
             .iter()
-            .any(|(idx, base)| *idx > not_idx && path.starts_with(base))
-    });
+            .any(|(idx, _)| self.auto_reachable(dir) && !not_after(*idx))
+        {
+            return true;
+        }
 
-    Some(builder)
+        if self
+            .externals
+            .iter()
+            .any(|(idx, _)| self.external_reachable(dir) && !not_after(*idx))
+        {
+            return true;
+        }
+
+        self.patterns.iter().any(|(base, pattern)| {
+            dir.strip_prefix(base).is_ok_and(|remainder| {
+                dir_could_contain_matches(&pattern.pattern, remainder)
+                    && self.pattern_reachable(base, dir)
+                    && !not_after(pattern.idx)
+            })
+        })
+    }
+
+    /// Whether at least one source includes the given file
+    fn keep_file(&self, file: &Path) -> bool {
+        let Some(parent) = file.parent() else {
+            return false;
+        };
+
+        let not_after = |idx: usize| {
+            self.nots
+                .iter()
+                .any(|not| not.idx > idx && not.matches(file))
+        };
+
+        // Auto sources: the file must pass the default rules and the gitignore chain
+        if self.autos.iter().any(|(idx, base)| {
+            file.starts_with(base)
+                && self.auto_reachable(parent)
+                && !is_ignored_by_default_file_rules(file)
+                && self.ignore_files.matched(file, false, parent, None) != Some(Match::Ignore)
+                && !not_after(*idx)
+        }) {
+            return true;
+        }
+
+        // External sources: like auto sources, but the gitignore chain doesn't apply
+        if self.externals.iter().any(|(idx, base)| {
+            file.starts_with(base)
+                && self.external_reachable(parent)
+                && !is_ignored_by_default_file_rules(file)
+                && !not_after(*idx)
+        }) {
+            return true;
+        }
+
+        // Pattern sources: the file must match the glob. A match beats file-level gitignore
+        // rules — you were explicit about wanting files of that shape — and the default file
+        // rules only apply when the pattern isn't explicit about the file's shape.
+        self.patterns.iter().any(|(base, pattern)| {
+            file.strip_prefix(base).is_ok_and(|remainder| {
+                glob_match(&pattern.pattern, rooted_posix(remainder).as_bytes())
+                    && self.pattern_reachable(base, parent)
+                    && (pattern.bypasses_default_file_rules
+                        || !is_ignored_by_default_file_rules(file))
+                    && !not_after(pattern.idx)
+            })
+        })
+    }
+
+    /// Whether the given directory is reachable for an auto source: every directory on the
+    /// path from the auto base down to it passes the default rules and the gitignore chain.
+    /// Auto bases themselves are always reachable — a base that is itself ignored would have
+    /// been promoted to an external source.
+    fn auto_reachable(&self, dir: &Path) -> bool {
+        if let Some(reachable) = self.auto_reachable.lock().unwrap().get(dir) {
+            return *reachable;
+        }
+
+        let reachable = if self.autos.iter().any(|(_, base)| base == dir) {
+            true
+        } else if !self.autos.iter().any(|(_, base)| dir.starts_with(base)) {
+            false
+        } else {
+            dir.parent().is_some_and(|parent| {
+                self.auto_reachable(parent)
+                    && !is_ignored_by_default_dir_rules(dir)
+                    && self.ignore_files.matched(dir, true, parent, None) != Some(Match::Ignore)
+            })
+        };
+
+        self.auto_reachable
+            .lock()
+            .unwrap()
+            .insert(dir.to_path_buf(), reachable);
+        reachable
+    }
+
+    /// Like [`Resolver::auto_reachable`], but for external sources: the gitignore chain
+    /// doesn't apply inside of them (git ignores the whole tree anyway), only the default
+    /// rules do.
+    fn external_reachable(&self, dir: &Path) -> bool {
+        if let Some(reachable) = self.external_reachable.lock().unwrap().get(dir) {
+            return *reachable;
+        }
+
+        let reachable = if self.externals.iter().any(|(_, base)| base == dir) {
+            true
+        } else if !self.externals.iter().any(|(_, base)| dir.starts_with(base)) {
+            false
+        } else {
+            dir.parent().is_some_and(|parent| {
+                self.external_reachable(parent) && !is_ignored_by_default_dir_rules(dir)
+            })
+        };
+
+        self.external_reachable
+            .lock()
+            .unwrap()
+            .insert(dir.to_path_buf(), reachable);
+        reachable
+    }
+
+    /// Like [`Resolver::auto_reachable`], but for a pattern source with the given base: only
+    /// `.gitignore` files at or below the base apply — the static base is explicit, so
+    /// everything above it is bypassed.
+    fn pattern_reachable(&self, base: &Path, dir: &Path) -> bool {
+        if let Some(reachable) = self
+            .pattern_reachable
+            .lock()
+            .unwrap()
+            .get(&(base.to_path_buf(), dir.to_path_buf()))
+        {
+            return *reachable;
+        }
+
+        let reachable = if base == dir {
+            true
+        } else if !dir.starts_with(base) {
+            false
+        } else {
+            dir.parent().is_some_and(|parent| {
+                self.pattern_reachable(base, parent)
+                    && !is_ignored_by_default_dir_rules(dir)
+                    && self.ignore_files.matched(dir, true, parent, Some(base))
+                        != Some(Match::Ignore)
+            })
+        };
+
+        self.pattern_reachable
+            .lock()
+            .unwrap()
+            .insert((base.to_path_buf(), dir.to_path_buf()), reachable);
+        reachable
+    }
+}
+
+/// The verdict of the on-disk ignore files for a path
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Match {
+    Ignore,
+    Whitelist,
+}
+
+/// A lazily-loaded cache of the on-disk ignore files (`.gitignore`, `.ignore` and the
+/// repository's `.git/info/exclude`).
+#[derive(Debug, Default)]
+struct IgnoreFiles {
+    /// Compiled ignore rules per directory (`None` when the directory has no ignore files)
+    matchers: Mutex<FxHashMap<PathBuf, Option<Arc<Gitignore>>>>,
+
+    /// The matcher chains per directory: all matchers that apply to paths inside the
+    /// directory, deepest first, from the directory itself up to the repository root (or the
+    /// file system root outside of a git repository, matching `git init`-less projects where
+    /// all ancestor `.gitignore` files apply)
+    chains: Mutex<FxHashMap<PathBuf, Arc<Vec<Arc<Gitignore>>>>>,
+}
+
+impl IgnoreFiles {
+    /// The verdict of the ignore files for the given path. `dir` is the directory containing
+    /// the path (matchers are looked up for that directory), and `below` optionally restricts
+    /// the chain to ignore files at or below the given directory.
+    ///
+    /// The deepest ignore file with a definitive answer wins, matching git's precedence.
+    fn matched(&self, path: &Path, is_dir: bool, dir: &Path, below: Option<&Path>) -> Option<Match> {
+        for matcher in self.chain(dir).iter() {
+            if below.is_some_and(|below| !matcher.path().starts_with(below)) {
+                // Chains are ordered deepest first, so nothing below the boundary can follow
+                break;
+            }
+
+            match matcher.matched(path, is_dir) {
+                ignore::Match::Ignore(_) => return Some(Match::Ignore),
+                ignore::Match::Whitelist(_) => return Some(Match::Whitelist),
+                ignore::Match::None => {}
+            }
+        }
+
+        None
+    }
+
+    /// The matcher chain for paths inside the given directory: the directory's own matcher
+    /// first, then its parents' matchers, up to and including the git repository root.
+    fn chain(&self, dir: &Path) -> Arc<Vec<Arc<Gitignore>>> {
+        if let Some(chain) = self.chains.lock().unwrap().get(dir) {
+            return chain.clone();
+        }
+
+        let is_repo_root = dir.join(".git").exists();
+
+        let mut chain = vec![];
+        if let Some(matcher) = self.matcher(dir, is_repo_root) {
+            chain.push(matcher);
+        }
+
+        // Stop at the git repository root so that ignore files outside of the repository are
+        // not considered. Without a repository, all ancestor ignore files apply.
+        if !is_repo_root {
+            if let Some(parent) = dir.parent() {
+                chain.extend(self.chain(parent).iter().cloned());
+            }
+        }
+
+        let chain = Arc::new(chain);
+        self.chains
+            .lock()
+            .unwrap()
+            .insert(dir.to_path_buf(), chain.clone());
+        chain
+    }
+
+    /// The compiled ignore rules of the given directory, combining (from low to high
+    /// precedence) the repository's `.git/info/exclude`, the `.gitignore` file, and the
+    /// `.ignore` file.
+    fn matcher(&self, dir: &Path, is_repo_root: bool) -> Option<Arc<Gitignore>> {
+        if let Some(matcher) = self.matchers.lock().unwrap().get(dir) {
+            return matcher.clone();
+        }
+
+        let mut builder = GitignoreBuilder::new(dir);
+        let mut any = false;
+
+        let mut add = |file: PathBuf| {
+            if file.is_file() {
+                // I/O errors and partially invalid ignore files are ignored, matching the
+                // walker's behavior.
+                let _ = builder.add(file);
+                any = true;
+            }
+        };
+
+        if is_repo_root {
+            add(dir.join(".git").join("info").join("exclude"));
+        }
+        add(dir.join(".gitignore"));
+        add(dir.join(".ignore"));
+
+        let matcher = if any {
+            builder.build().ok().map(Arc::new)
+        } else {
+            None
+        };
+
+        self.matchers
+            .lock()
+            .unwrap()
+            .insert(dir.to_path_buf(), matcher.clone());
+        matcher
+    }
+}
+
+/// Whether a directory is ignored by the default rules (e.g. `node_modules`). Only the
+/// directory's own name is checked; the path towards it is checked by the reachability
+/// helpers one directory at a time.
+fn is_ignored_by_default_dir_rules(dir: &Path) -> bool {
+    auto_source_detection::RULES
+        .iter()
+        .any(|ignore| ignore.matched(dir, true).is_ignore())
 }
 
 /// A glob pattern of a `Pattern` source, together with the position of its `@source` directive.
@@ -1049,132 +1370,6 @@ fn dir_could_contain_matches(pattern: &str, dir: &Path) -> bool {
     }
 
     true
-}
-
-/// One walker per `Pattern` base.
-///
-/// The static base of a glob is the explicit part: it is used as the walk root, so `.gitignore`
-/// files *above* it never apply (`parents(false)`), even when the base is hidden inside an
-/// ignored directory. The wildcard part is not explicit:
-///
-/// - `.gitignore` files inside the subtree still prune directories
-/// - the default rules still prune directories (`node_modules` etc., unless the base itself
-///   points inside of one)
-///
-/// Files matching a glob are whitelisted explicitly (a glob match beats file-level gitignore
-/// and default rules). The filter closure then makes the exact per-file decision.
-fn create_pattern_walkers(sources: &Sources) -> Vec<WalkBuilder> {
-    let nots = collect_not_rules(sources);
-
-    // Group patterns by base, preserving directive order
-    let mut bases: Vec<PathBuf> = vec![];
-    let mut patterns_by_base: FxHashMap<PathBuf, Vec<PatternRule>> = FxHashMap::default();
-    for (idx, source) in sources.iter().enumerate() {
-        let SourceEntry::Pattern { base, pattern } = source else {
-            continue;
-        };
-
-        patterns_by_base
-            .entry(base.clone())
-            .or_insert_with(|| {
-                bases.push(base.clone());
-                vec![]
-            })
-            .push(PatternRule {
-                idx,
-                pattern: pattern.clone(),
-                bypasses_default_file_rules: pattern_bypasses_default_file_rules(pattern),
-            });
-    }
-
-    bases
-        .into_iter()
-        .map(|base| {
-            let patterns = patterns_by_base.remove(&base).unwrap();
-
-            let mut builder = WalkBuilder::new(&base);
-
-            // We have to follow symlinks
-            builder.follow_links(true);
-
-            // Scan hidden files / directories
-            builder.hidden(false);
-
-            // Don't respect global gitignore files
-            builder.git_global(false);
-
-            // The static base is explicit: `.gitignore` files above it do not apply
-            builder.parents(false);
-
-            // Apply `.gitignore` files inside the subtree regardless of whether a `.git`
-            // directory is present
-            builder.require_git(false);
-
-            // The default rules prune directories (`node_modules`, …). Their file-level rules
-            // are rescued by the whitelists below when the glob matches.
-            for ignore in auto_source_detection::RULES.iter() {
-                builder.add_gitignore(ignore.clone());
-            }
-
-            // Whitelist the patterns themselves so that matching files win from file-level
-            // gitignore rules and the default rules. Restricted to files: the wildcard part of
-            // a pattern must not re-include ignored directories.
-            let mut ignore_builder = GitignoreBuilder::new(&base);
-            ignore_builder.only_on_files(true);
-            for pattern in &patterns {
-                ignore_builder
-                    .add_line(None, &format!("!{}", pattern.pattern))
-                    .unwrap();
-            }
-            builder.add_gitignore(ignore_builder.build().unwrap());
-
-            // The exact per-file decision (lock-free, safe for parallel walking)
-            let filter_base = base.clone();
-            let filter_nots = nots.clone();
-            builder.filter_entry(move |entry| {
-                // Always keep the walk root itself
-                if entry.depth() == 0 {
-                    return true;
-                }
-
-                let path = entry.path();
-                let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
-
-                let Ok(remainder) = path.strip_prefix(&filter_base) else {
-                    return false;
-                };
-
-                if is_dir {
-                    // Only descend when some pattern can match files inside this directory…
-                    let relevant = patterns
-                        .iter()
-                        .filter(|p| dir_could_contain_matches(&p.pattern, remainder))
-                        .collect::<Vec<_>>();
-                    if relevant.is_empty() {
-                        return false;
-                    }
-
-                    // …and no later `@source not` directive excludes the directory for all of
-                    // those patterns. When a pattern comes after the `not`, keep walking; the
-                    // file-level check below resolves the conflict exactly.
-                    return !filter_nots
-                        .iter()
-                        .any(|not| not.matches(path) && relevant.iter().all(|p| p.idx < not.idx));
-                }
-
-                let rel = rooted_posix(remainder);
-                patterns.iter().any(|p| {
-                    glob_match(&p.pattern, rel.as_bytes())
-                        && !filter_nots
-                            .iter()
-                            .any(|not| not.idx > p.idx && not.matches(path))
-                        && (p.bypasses_default_file_rules || !is_ignored_by_default_file_rules(path))
-                })
-            });
-
-            builder
-        })
-        .collect()
 }
 
 /// Whether a pattern is explicit enough to bypass the default file rules.
