@@ -453,10 +453,8 @@ mod tests {
         let dir = tempdir().unwrap();
         fs::create_dir_all(dir.path().join(".git")).unwrap();
         fs::write(dir.path().join(".gitignore"), "generated/\n").unwrap();
-        // The nearest `.gitignore` with a definitive answer wins: `packages/app/.gitignore`
-        // re-includes `generated`, overruling the ignore rule in the root `.gitignore`, so the
-        // directory keeps its regular auto source detection behavior (which respects the
-        // `.gitignore` rules inside of it) instead of bypassing them as an external source.
+        // The deepest `.gitignore` with a definitive answer wins: the re-include is reachable
+        // (no parent directory of `generated` is excluded), so `generated` is not ignored.
         fs::create_dir_all(dir.path().join("packages").join("app")).unwrap();
         fs::write(
             dir.path().join("packages").join("app").join(".gitignore"),
@@ -468,7 +466,36 @@ mod tests {
         fs::create_dir_all(&base).unwrap();
         let base = dunce::canonicalize(&base).unwrap();
 
-        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: false,
+            }
+        );
+    }
+
+    #[test]
+    fn folders_inside_excluded_directories_become_external_sources() {
+        let dir = tempdir().unwrap();
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "parent/\n").unwrap();
+        // This whitelist is unreachable: `parent` itself is excluded, so git never descends
+        // into it and the re-include of `child` has no effect.
+        fs::create_dir_all(dir.path().join("parent")).unwrap();
+        fs::write(dir.path().join("parent").join(".gitignore"), "!child/\n").unwrap();
+
+        let base = dir.path().join("parent").join("child");
+        fs::create_dir_all(&base).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(
+            auto_source_entry(&base),
+            SourceEntry::Auto {
+                base,
+                external: true,
+            }
+        );
     }
 
     #[test]
@@ -562,69 +589,69 @@ pub fn public_source_entries_to_private_source_entries(
             {
                 let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
 
-                // Walk up from the folder, applying each `.gitignore` relative to the directory
-                // that contains it (matching git), and stop at the git repository root so
-                // `.gitignore` files outside of the repo are not considered.
+                // The chain of directories whose `.gitignore` files can apply: `base` itself and
+                // its ancestors, up to and including the git repository root so `.gitignore`
+                // files outside of the repo are not considered.
+                //
+                // Without a git repository there is no repository root to stop at. Stop once the
+                // directory contains the current working directory instead, so `.gitignore`
+                // files outside of the project (e.g. in the user's home directory) can never
+                // promote a source to an external source. Note that the file walker still
+                // applies those `.gitignore` files when deciding which files to scan.
+                let mut chain: Vec<&Path> = vec![];
                 for dir in base.ancestors() {
-                    let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
-                        let path = dir.join(".gitignore");
+                    chain.push(dir);
 
-                        // `Gitignore::new` roots the matcher at the directory containing the file,
-                        // so patterns match relative to it.
-                        path.is_file().then(|| Gitignore::new(&path).0)
-                    });
-
-                    // Only `.gitignore` files in ancestors of `base` can ignore `base` itself.
-                    // Patterns in `base`'s own `.gitignore` only match paths _inside_ `base`, never
-                    // `base` itself (the file walker still applies them to `base`'s contents).
-                    //
-                    // Skipping `base`'s own `.gitignore` also prevents a false positive for
-                    // whitelist style `.gitignore` files, because relativizing `base` against
-                    // itself yields the empty path, which incorrectly matches `/*`.
-                    //
-                    // E.g.:
-                    //
-                    // ```gitignore
-                    // /*
-                    // !/.gitignore
-                    // !/app
-                    // !/public
-                    // ```
-                    //
-                    // Everything inside `base` except `.gitignore`, `app` and `public` is ignored,
-                    // but `base` itself is not.
-                    if dir != base {
-                        if let Some(gitignore) = gitignore {
-                            // Match git's precedence: the nearest `.gitignore` with a definitive
-                            // answer wins. A directory that is re-included by a deeper
-                            // `!the-directory` pattern is not ignored, even when an ancestor
-                            // `.gitignore` ignores it.
-                            match gitignore.matched_path_or_any_parents(&base, true) {
-                                ignore::Match::Ignore(_) => {
-                                    source = SourceEntry::Auto {
-                                        base: base.into(),
-                                        external: true,
-                                    };
-                                    break;
-                                }
-                                ignore::Match::Whitelist(_) => break,
-                                ignore::Match::None => {}
-                            }
-                        }
-                    }
-
-                    // Stop at the git repository root.
                     if dir.join(".git").exists() {
                         break;
                     }
 
-                    // Without a git repository there is no repository root to stop at. Stop once
-                    // the directory contains the current working directory instead, so `.gitignore`
-                    // files outside of the project (e.g. in the user's home directory) can never
-                    // promote a source to an external source. Note that the file walker still
-                    // applies those `.gitignore` files when deciding which files to scan.
                     if !inside_git_repo && cwd.as_ref().is_some_and(|cwd| cwd.starts_with(dir)) {
                         break;
+                    }
+                }
+
+                // Match git's semantics: a directory is ignored when the directory itself or any
+                // of its parent directories is excluded, and it is not possible to re-include a
+                // directory once a parent directory is excluded — git never descends into an
+                // excluded directory, so whitelist rules inside of it are unreachable.
+                //
+                // So walk the path from the top down (`chain` is ordered bottom-up: `base` at
+                // index 0, the boundary last) and decide for every directory along the way
+                // whether it is excluded. The first excluded directory settles it. For a single
+                // directory, only `.gitignore` files in its parent directories can match it (its
+                // own `.gitignore` only matches paths _inside_ of it), and the deepest
+                // `.gitignore` with a definitive answer wins, so a directory that is re-included
+                // by a deeper `!the-directory` pattern is not ignored, even when an ancestor
+                // `.gitignore` ignores it.
+                'prefixes: for i in (0..chain.len().saturating_sub(1)).rev() {
+                    let prefix = chain[i];
+
+                    for dir in &chain[i + 1..] {
+                        let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+                            let path = dir.join(".gitignore");
+
+                            // `Gitignore::new` roots the matcher at the directory containing the
+                            // file, so patterns match relative to it.
+                            path.is_file().then(|| Gitignore::new(&path).0)
+                        });
+
+                        let Some(gitignore) = gitignore else {
+                            continue;
+                        };
+
+                        match gitignore.matched(prefix, true) {
+                            ignore::Match::Ignore(_) => {
+                                source = SourceEntry::Auto {
+                                    base: base.into(),
+                                    external: true,
+                                };
+                                break 'prefixes;
+                            }
+                            // Re-included; this directory is reachable, move on to the next one.
+                            ignore::Match::Whitelist(_) => continue 'prefixes,
+                            ignore::Match::None => {}
+                        }
                     }
                 }
             }
