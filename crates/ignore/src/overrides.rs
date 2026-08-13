@@ -94,7 +94,11 @@ impl Override {
     /// given) is stripped. If there is no common suffix/prefix overlap, then
     /// `path` is assumed to reside in the same directory as the root path for
     /// this set of overrides.
-    pub fn matched<'a, P: AsRef<Path>>(&'a self, path: P, is_dir: bool) -> Match<Glob<'a>> {
+    pub fn matched<'a, P: AsRef<Path>>(
+        &'a self,
+        path: P,
+        is_dir: bool,
+    ) -> Match<Glob<'a>> {
         if self.is_empty() {
             return Match::None;
         }
@@ -146,7 +150,10 @@ impl OverrideBuilder {
     /// affected.
     ///
     /// This is disabled by default.
-    pub fn case_insensitive(&mut self, yes: bool) -> Result<&mut OverrideBuilder, Error> {
+    pub fn case_insensitive(
+        &mut self,
+        yes: bool,
+    ) -> Result<&mut OverrideBuilder, Error> {
         // TODO: This should not return a `Result`. Fix this in the next semver
         // release.
         self.builder.case_insensitive(yes)?;
@@ -276,11 +283,8 @@ mod tests {
 
     #[test]
     fn default_case_sensitive() {
-        let ov = OverrideBuilder::new(ROOT)
-            .add("*.html")
-            .unwrap()
-            .build()
-            .unwrap();
+        let ov =
+            OverrideBuilder::new(ROOT).add("*.html").unwrap().build().unwrap();
         assert!(ov.matched("foo.html", false).is_whitelist());
         assert!(ov.matched("foo.HTML", false).is_ignore());
         assert!(ov.matched("foo.htm", false).is_ignore());

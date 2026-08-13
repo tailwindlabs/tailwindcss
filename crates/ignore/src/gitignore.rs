@@ -102,7 +102,9 @@ impl Gitignore {
     ///
     /// Note that I/O errors are ignored. For more granular control over
     /// errors, use `GitignoreBuilder`.
-    pub fn new<P: AsRef<Path>>(gitignore_path: P) -> (Gitignore, Option<Error>) {
+    pub fn new<P: AsRef<Path>>(
+        gitignore_path: P,
+    ) -> (Gitignore, Option<Error>) {
         let path = gitignore_path.as_ref();
         let parent = path.parent().unwrap_or(Path::new("/"));
         let mut builder = GitignoreBuilder::new(parent);
@@ -122,6 +124,17 @@ impl Gitignore {
     ///
     /// The global config file path is specified by git's `core.excludesFile`
     /// config option.
+    ///
+    /// # Behavior
+    ///
+    /// This routine does its best to discover any global git exclude files.
+    /// This will try to parse out the `excludesFile` config option in your
+    /// global git configuration, if necessary.
+    ///
+    /// The specific things this routine tries (which are subject to change
+    /// based on how git behaves) are:
+    ///
+    ///
     ///
     /// Git's config file location is `$HOME/.gitconfig`. If `$HOME/.gitconfig`
     /// does not exist or does not specify `core.excludesFile`, then
@@ -145,7 +158,8 @@ impl Gitignore {
             num_ignores: 0,
             num_whitelists: 0,
             matches: None,
-            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            // CHANGED: Add a flag to have Gitignore rules that apply only to
+            // files.
             only_on_files: false,
         }
     }
@@ -190,7 +204,11 @@ impl Gitignore {
     /// determined by a common suffix of the directory containing this
     /// gitignore) is stripped. If there is no common suffix/prefix overlap,
     /// then `path` is assumed to be relative to this matcher.
-    pub fn matched<P: AsRef<Path>>(&self, path: P, is_dir: bool) -> Match<&Glob> {
+    pub fn matched<P: AsRef<Path>>(
+        &self,
+        path: P,
+        is_dir: bool,
+    ) -> Match<&Glob> {
         if self.is_empty() {
             return Match::None;
         }
@@ -243,11 +261,16 @@ impl Gitignore {
     }
 
     /// Like matched, but takes a path that has already been stripped.
-    fn matched_stripped<P: AsRef<Path>>(&self, path: P, is_dir: bool) -> Match<&Glob> {
+    fn matched_stripped<P: AsRef<Path>>(
+        &self,
+        path: P,
+        is_dir: bool,
+    ) -> Match<&Glob> {
         if self.is_empty() {
             return Match::None;
         }
-        // CHANGED: Rules marked as only_on_files can not match against directories.
+        // CHANGED: Rules marked as only_on_files can not match against
+        // directories.
         if self.only_on_files && is_dir {
             return Match::None;
         }
@@ -270,7 +293,10 @@ impl Gitignore {
 
     /// Strips the given path such that it's suitable for matching with this
     /// gitignore matcher.
-    fn strip<'a, P: 'a + AsRef<Path> + ?Sized>(&'a self, path: &'a P) -> &'a Path {
+    fn strip<'a, P: 'a + AsRef<Path> + ?Sized>(
+        &'a self,
+        path: &'a P,
+    ) -> &'a Path {
         let mut path = path.as_ref();
         // A leading ./ is completely superfluous. We also strip it from
         // our gitignore root path, so we need to strip it from our candidate
@@ -326,7 +352,8 @@ impl GitignoreBuilder {
             globs: vec![],
             case_insensitive: false,
             allow_unclosed_class: true,
-            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            // CHANGED: Add a flag to have Gitignore rules that apply only to
+            // files.
             only_on_files: false,
         }
     }
@@ -337,18 +364,21 @@ impl GitignoreBuilder {
     pub fn build(&self) -> Result<Gitignore, Error> {
         let nignore = self.globs.iter().filter(|g| !g.is_whitelist()).count();
         let nwhite = self.globs.iter().filter(|g| g.is_whitelist()).count();
-        let set = self.builder.build().map_err(|err| Error::Glob {
-            glob: None,
-            err: err.to_string(),
-        })?;
+        let set = self
+            .builder
+            .build()
+            .map_err(|err| Error::Glob { glob: None, err: err.to_string() })?;
         Ok(Gitignore {
             set,
             root: self.root.clone(),
             globs: self.globs.clone(),
             num_ignores: nignore as u64,
             num_whitelists: nwhite as u64,
-            matches: Some(Arc::new(Pool::new(|| vec![]))),
-            // CHANGED: Add a flag to have Gitignore rules that apply only to files.
+            matches: Some(Arc::new(
+                Pool::with_available_parallelism_capacity(|| vec![]),
+            )),
+            // CHANGED: Add a flag to have Gitignore rules that apply only to
+            // files.
             only_on_files: self.only_on_files,
         })
     }
@@ -411,11 +441,8 @@ impl GitignoreBuilder {
 
             // Match Git's handling of .gitignore files that begin with the Unicode BOM
             const UTF8_BOM: &str = "\u{feff}";
-            let line = if i == 0 {
-                line.trim_start_matches(UTF8_BOM)
-            } else {
-                &line
-            };
+            let line =
+                if i == 0 { line.trim_start_matches(UTF8_BOM) } else { &line };
 
             if let Err(err) = self.add_line(Some(path.to_path_buf()), &line) {
                 errs.push(err.tagged(path, lineno));
@@ -537,7 +564,10 @@ impl GitignoreBuilder {
     /// affected.
     ///
     /// This is disabled by default.
-    pub fn case_insensitive(&mut self, yes: bool) -> Result<&mut GitignoreBuilder, Error> {
+    pub fn case_insensitive(
+        &mut self,
+        yes: bool,
+    ) -> Result<&mut GitignoreBuilder, Error> {
         // TODO: This should not return a `Result`. Fix this in the next semver
         // release.
         self.case_insensitive = yes;
@@ -556,7 +586,10 @@ impl GitignoreBuilder {
     /// modes since the glob parser becomes more permissive. You might want to
     /// enable this when compatibility (e.g., with POSIX glob implementations)
     /// is more important than good error messages.
-    pub fn allow_unclosed_class(&mut self, yes: bool) -> &mut GitignoreBuilder {
+    pub fn allow_unclosed_class(
+        &mut self,
+        yes: bool,
+    ) -> &mut GitignoreBuilder {
         self.allow_unclosed_class = yes;
         self
     }
@@ -576,32 +609,56 @@ impl GitignoreBuilder {
 ///
 /// Note that the file path returned may not exist.
 pub fn gitconfig_excludes_path() -> Option<PathBuf> {
-    // git supports $HOME/.gitconfig and $XDG_CONFIG_HOME/git/config. Notably,
-    // both can be active at the same time, where $HOME/.gitconfig takes
-    // precedent. So if $HOME/.gitconfig defines a `core.excludesFile`, then
-    // we're done.
-    match gitconfig_home_contents().and_then(|x| parse_excludes_file(&x)) {
-        Some(path) => return Some(path),
-        None => {}
+    // When GIT_CONFIG_GLOBAL is set, it replaces both $HOME/.gitconfig and
+    // $XDG_CONFIG_HOME/git/config (per git 2.32+). Otherwise, git supports
+    // $HOME/.gitconfig and $XDG_CONFIG_HOME/git/config simultaneously, where
+    // $HOME/.gitconfig takes precedent.
+    gitconfig_global_env_contents()
+        .and_then(|x| parse_excludes_file(&x))
+        .or_else(|| {
+            gitconfig_home_contents().and_then(|x| parse_excludes_file(&x))
+        })
+        .or_else(|| {
+            gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x))
+        })
+        // System-level config has the lowest priority for core.excludesFile.
+        // GIT_CONFIG_SYSTEM overrides the default /etc/gitconfig path.
+        .or_else(|| {
+            gitconfig_system_contents().and_then(|x| parse_excludes_file(&x))
+        })
+        .or_else(excludes_file_default)
+}
+
+/// Returns the file contents of git's global config file from the path
+/// specified by the `GIT_CONFIG_GLOBAL` environment variable.
+fn gitconfig_global_env_contents() -> Option<Vec<u8>> {
+    let path = std::env::var_os("GIT_CONFIG_GLOBAL").map(PathBuf::from)?;
+    if path.as_os_str().is_empty() {
+        return None;
     }
-    match gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x)) {
-        Some(path) => return Some(path),
-        None => {}
-    }
-    excludes_file_default()
+    let mut file = BufReader::new(File::open(path).ok()?);
+    let mut contents = vec![];
+    file.read_to_end(&mut contents).ok().map(|_| contents)
+}
+
+/// Returns the file contents of git's system-level config file.
+///
+/// Checks `GIT_CONFIG_SYSTEM` first, then falls back to `/etc/gitconfig`.
+fn gitconfig_system_contents() -> Option<Vec<u8>> {
+    let path = std::env::var_os("GIT_CONFIG_SYSTEM")
+        .map(PathBuf::from)
+        .filter(|x| !x.as_os_str().is_empty())
+        .unwrap_or_else(|| PathBuf::from("/etc/gitconfig"));
+    let mut file = BufReader::new(File::open(path).ok()?);
+    let mut contents = vec![];
+    file.read_to_end(&mut contents).ok().map(|_| contents)
 }
 
 /// Returns the file contents of git's global config file, if one exists, in
 /// the user's home directory.
 fn gitconfig_home_contents() -> Option<Vec<u8>> {
-    let home = match home_dir() {
-        None => return None,
-        Some(home) => home,
-    };
-    let mut file = match File::open(home.join(".gitconfig")) {
-        Err(_) => return None,
-        Ok(file) => BufReader::new(file),
-    };
+    let home = home_dir()?;
+    let mut file = BufReader::new(File::open(home.join(".gitconfig")).ok()?);
     let mut contents = vec![];
     file.read_to_end(&mut contents).ok().map(|_| contents)
 }
@@ -610,19 +667,11 @@ fn gitconfig_home_contents() -> Option<Vec<u8>> {
 /// the user's XDG_CONFIG_HOME directory.
 fn gitconfig_xdg_contents() -> Option<Vec<u8>> {
     let path = std::env::var_os("XDG_CONFIG_HOME")
-        .and_then(|x| {
-            if x.is_empty() {
-                None
-            } else {
-                Some(PathBuf::from(x))
-            }
-        })
+        .map(PathBuf::from)
+        .filter(|x| !x.as_os_str().is_empty())
         .or_else(|| home_dir().map(|p| p.join(".config")))
-        .map(|x| x.join("git/config"));
-    let mut file = match path.and_then(|p| File::open(p).ok()) {
-        None => return None,
-        Some(file) => BufReader::new(file),
-    };
+        .map(|x| x.join("git/config"))?;
+    let mut file = BufReader::new(File::open(path).ok()?);
     let mut contents = vec![];
     file.read_to_end(&mut contents).ok().map(|_| contents)
 }
@@ -632,13 +681,8 @@ fn gitconfig_xdg_contents() -> Option<Vec<u8>> {
 /// Specifically, this respects XDG_CONFIG_HOME.
 fn excludes_file_default() -> Option<PathBuf> {
     std::env::var_os("XDG_CONFIG_HOME")
-        .and_then(|x| {
-            if x.is_empty() {
-                None
-            } else {
-                Some(PathBuf::from(x))
-            }
-        })
+        .map(PathBuf::from)
+        .filter(|x| !x.as_os_str().is_empty())
         .or_else(|| home_dir().map(|p| p.join(".config")))
         .map(|x| x.join("git/ignore"))
 }
@@ -667,9 +711,7 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
     re.captures(data, &mut caps);
     let span = caps.get_group(1)?;
     let candidate = &data[span];
-    std::str::from_utf8(candidate)
-        .ok()
-        .map(|s| PathBuf::from(expand_tilde(s)))
+    std::str::from_utf8(candidate).ok().map(|s| PathBuf::from(expand_tilde(s)))
 }
 
 /// Expands ~ in file paths to the value of $HOME.
@@ -831,7 +873,10 @@ mod tests {
     fn parse_excludes_file4() {
         let data = bytes("[core]\nexcludesFile = \"~/foo/bar\"");
         let got = super::parse_excludes_file(&data);
-        assert_eq!(path_string(got.unwrap()), super::expand_tilde("~/foo/bar"));
+        assert_eq!(
+            path_string(got.unwrap()),
+            super::expand_tilde("~/foo/bar")
+        );
     }
 
     #[test]
