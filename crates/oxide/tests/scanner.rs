@@ -3954,7 +3954,10 @@ mod scanner {
         // (`*` + `!.gitignore`). An explicit glob through such a directory should still find
         // matching files, but nothing else.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("storage/.gitignore", "*\n!.gitignore"),
@@ -3971,6 +3974,21 @@ mod scanner {
             ],
             vec!["@source './storage/cms/**/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ storage
+            ├── ✗ .gitignore
+            │       *
+            │       !.gitignore
+            ├── ✓ cms
+            │   ├── ✗ data.json
+            │   ├── ✓ nested
+            │   │   └── ✓ deep.html
+            │   └── ✓ section.html
+            └── ✗ other
+                └── ✗ other.html
+        ");
 
         assert_eq!(
             candidates,
@@ -3991,7 +4009,10 @@ mod scanner {
         // Same as above, but the ignore comes from an ancestor `.gitignore` rather than one
         // inside the ignored directory itself.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "/storage"),
@@ -4007,6 +4028,18 @@ mod scanner {
             ],
             vec!["@source './storage/cms/**/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       /storage
+        └── ✓ storage
+            └── ✓ cms
+                ├── ✓ nested
+                │   └── ✓ deep.html
+                ├── ✗ script.js
+                └── ✓ section.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4026,7 +4059,10 @@ mod scanner {
         // `@source "./foo/*.html"` where `foo` is git ignored: only the `.html` files were asked
         // for. Other files in `foo` must not be scanned, even when a broader auto source exists.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "/foo"),
@@ -4040,6 +4076,18 @@ mod scanner {
             ],
             vec!["@source '**/*'", "@source './foo/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       /foo
+        ├── ✓ foo
+        │   ├── ✓ index.html
+        │   ├── ✗ nested
+        │   │   └── ✗ nested.html
+        │   └── ✗ script.js
+        └── ✓ index.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4055,7 +4103,10 @@ mod scanner {
         // must only include that file, not its siblings, even when the project root is an auto
         // source.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (
@@ -4071,6 +4122,16 @@ mod scanner {
             ],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✓ index.html
+        └── ✓ node_modules
+            └── ✓ .generated
+                └── ✓ ui
+                    ├── ✓ button.ts
+                    └── ✗ card.ts
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['button.ts']", "content-['index.html']"]
@@ -4085,7 +4146,10 @@ mod scanner {
     #[test]
     fn concrete_file_sources_behind_gitignored_directories_do_not_include_siblings() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "/generated"),
@@ -4095,6 +4159,16 @@ mod scanner {
             ],
             vec!["@source '**/*'", "@source './generated/button.ts'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       /generated
+        ├── ✓ generated
+        │   ├── ✓ button.ts
+        │   └── ✗ card.ts
+        └── ✓ index.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4108,7 +4182,10 @@ mod scanner {
         // A glob source respects the default auto source detection rules: `node_modules` inside
         // the globbed tree stays pruned unless it is targeted explicitly.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("src/index.html", "content-['src/index.html']"),
@@ -4119,6 +4196,15 @@ mod scanner {
             ],
             vec!["@source './src/**/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ src
+            ├── ✓ index.html
+            └── ✗ node_modules
+                └── ✗ lib
+                    └── ✗ index.html
+        ");
 
         assert_eq!(candidates, vec!["content-['src/index.html']"]);
         assert_eq!(files, vec!["src/index.html"]);
@@ -4141,8 +4227,23 @@ mod scanner {
         ];
 
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(paths_with_content, vec!["@source './**/*.html'"]);
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       dist/
+        │       ignored.html
+        ├── ✗ dist
+        │   └── ✗ index.html
+        ├── ✓ ignored.html
+        └── ✓ src
+            └── ✓ index.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4152,11 +4253,26 @@ mod scanner {
 
         // Being explicit about the ignored directory bypasses the ignore rule.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             paths_with_content,
             vec!["@source './**/*.html'", "@source './dist/**/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       dist/
+        │       ignored.html
+        ├── ✓ dist
+        │   └── ✓ index.html
+        ├── ✓ ignored.html
+        └── ✓ src
+            └── ✓ index.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4178,7 +4294,10 @@ mod scanner {
         // match the glob must stay excluded, even though they are only ignored "via" their
         // parent directory.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "gen/"),
@@ -4188,6 +4307,16 @@ mod scanner {
             ],
             vec!["@source '**/*'", "@source './gen/**/*.html'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       gen/
+        ├── ✓ gen
+        │   ├── ✓ a.html
+        │   └── ✗ b.js
+        └── ✓ index.html
+        ");
 
         assert_eq!(
             candidates,
@@ -4201,7 +4330,10 @@ mod scanner {
         // A glob that doesn't pin an extension (`**/*`-style tail after a wildcard directory)
         // still applies the default extension rules, so binary files are not included.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("blog/2024/post/index.html", "content-['index.html']"),
@@ -4210,6 +4342,16 @@ mod scanner {
             ],
             vec!["@source './blog/*/post/**/*'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ blog
+            └── ✓ 2024
+                └── ✓ post
+                    ├── ✗ image.png
+                    ├── ✓ index.html
+                    └── ✗ styles.scss
+        ");
 
         assert_eq!(candidates, vec!["content-['index.html']"]);
         assert_eq!(files, vec!["blog/2024/post/index.html"]);
@@ -4222,7 +4364,10 @@ mod scanner {
         // wildcard part of a glob is not explicit, so git ignored directories inside the
         // walked subtree stay pruned, even when the whitelisted glob happens to match them.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("blog/.gitignore", "drafts/"),
@@ -4235,6 +4380,17 @@ mod scanner {
             vec!["@source './blog/*/**/*'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ blog
+            ├── ✗ .gitignore
+            │       drafts/
+            └── ✓ 2024
+                ├── ✗ drafts
+                │   └── ✗ secret.html
+                └── ✓ keep.html
+        ");
+
         assert_eq!(candidates, vec!["content-['blog/2024/keep.html']"]);
         assert_eq!(files, vec!["blog/2024/keep.html"]);
     }
@@ -4245,7 +4401,10 @@ mod scanner {
         // default auto source detection rules inside of it: nested `node_modules` are not
         // scanned.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "node_modules"),
@@ -4265,6 +4424,20 @@ mod scanner {
             vec!["@source './node_modules/my-lib'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       node_modules
+        └── ✓ node_modules
+            └── ✓ my-lib
+                ├── ✓ dist
+                │   └── ✓ index.html
+                ├── ✗ logo.png
+                └── ✗ node_modules
+                    └── ✗ dep
+                        └── ✗ index.html
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['node_modules/my-lib/dist/index.html']"]
@@ -4281,14 +4454,20 @@ mod scanner {
         // deliberately by whatever generates those files, so they still apply, just like they
         // do for auto and pattern sources.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "node_modules"),
                 // The self-ignoring device at the base: bypassed
                 ("node_modules/.generated/.gitignore", "*"),
                 // A deliberate ignore deeper inside: applies
-                ("node_modules/.generated/ui/.gitignore", "ignored.tsx\ncache/"),
+                (
+                    "node_modules/.generated/ui/.gitignore",
+                    "ignored.tsx\ncache/",
+                ),
                 (
                     "node_modules/.generated/ui/button.tsx",
                     "content-['button.tsx']",
@@ -4309,6 +4488,25 @@ mod scanner {
             vec!["@source './node_modules/.generated'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       node_modules
+        └── ✓ node_modules
+            └── ✓ .generated
+                ├── ✗ .gitignore
+                │       *
+                └── ✓ ui
+                    ├── ✗ .gitignore
+                    │       ignored.tsx
+                    │       cache/
+                    ├── ✓ button.tsx
+                    ├── ✗ cache
+                    │   └── ✗ stale.tsx
+                    ├── ✗ ignored.tsx
+                    └── ✓ input.tsx
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['button.tsx']", "content-['input.tsx']"]
@@ -4328,7 +4526,10 @@ mod scanner {
         // `./src`: auto source detection applies, so `.gitignore` files and the default rules
         // are respected instead of the glob rescuing every git ignored file.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "src/secret.html"),
@@ -4338,6 +4539,16 @@ mod scanner {
             ],
             vec!["@source './src/**'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       src/secret.html
+        └── ✓ src
+            ├── ✓ index.html
+            ├── ✗ logo.png
+            └── ✗ secret.html
+        ");
 
         assert_eq!(candidates, vec!["content-['src/index.html']"]);
         assert_eq!(files, vec!["src/index.html"]);
@@ -4349,7 +4560,10 @@ mod scanner {
         // detection rules are independent of git: `node_modules`, binary files, etc. stay
         // ignored even when a `.gitignore` explicitly whitelists them.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "!node_modules/\n!*.png"),
@@ -4363,6 +4577,18 @@ mod scanner {
             vec!["@source '**/*'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       !node_modules/
+        │       !*.png
+        ├── ✓ index.html
+        ├── ✗ logo.png
+        └── ✗ node_modules
+            └── ✗ lib
+                └── ✗ index.html
+        ");
+
         assert_eq!(candidates, vec!["content-['index.html']"]);
         assert_eq!(files, vec!["index.html"]);
     }
@@ -4372,7 +4598,10 @@ mod scanner {
         // `.ignore` files (the gitignore-style files used by ripgrep and friends) work like
         // `.gitignore` files and rank above them within the same directory.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "by-git.html\nby-both.html"),
@@ -4386,6 +4615,18 @@ mod scanner {
             vec!["@source '**/*'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       by-git.html
+        │       by-both.html
+        ├── ✗ .ignore
+        ├── ✓ by-both.html
+        ├── ✗ by-git.html
+        ├── ✗ by-ignore.html
+        └── ✓ keep.html
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['by-both.html']", "content-['keep.html']"]
@@ -4398,7 +4639,10 @@ mod scanner {
         // `.git/info/exclude` works like the repository root's `.gitignore` file, ranking
         // below it.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".git/info/exclude", "excluded.html\nreincluded.html"),
@@ -4411,6 +4655,15 @@ mod scanner {
             vec!["@source '**/*'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       !reincluded.html
+        ├── ✗ excluded.html
+        ├── ✓ keep.html
+        └── ✓ reincluded.html
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['keep.html']", "content-['reincluded.html']"]
@@ -4421,7 +4674,10 @@ mod scanner {
     #[test]
     fn not_sources_apply_inside_external_sources() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "node_modules"),
@@ -4440,6 +4696,18 @@ mod scanner {
             ],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       node_modules
+        └── ✓ node_modules
+            └── ✓ lib
+                ├── ✗ dist
+                │   └── ✗ index.html
+                └── ✓ src
+                    └── ✓ index.html
+        ");
+
         assert_eq!(
             candidates,
             vec!["content-['node_modules/lib/src/index.html']"]
@@ -4453,7 +4721,10 @@ mod scanner {
         // `.gitignore` sits in a directory between the glob's base and the ignored directory,
         // not at the base itself.
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("blog/2024/.gitignore", "drafts/"),
@@ -4466,6 +4737,17 @@ mod scanner {
             vec!["@source './blog/**/*.html'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ blog
+            └── ✓ 2024
+                ├── ✗ .gitignore
+                │       drafts/
+                ├── ✗ drafts
+                │   └── ✗ secret.html
+                └── ✓ keep.html
+        ");
+
         assert_eq!(candidates, vec!["content-['blog/2024/keep.html']"]);
         assert_eq!(files, vec!["blog/2024/keep.html"]);
     }
@@ -4474,7 +4756,9 @@ mod scanner {
     fn later_pattern_sources_override_earlier_not_sources() {
         // Order matters: a later positive `@source` wins from an earlier `@source not`, and
         // vice versa.
-        let ScanResult { candidates, .. } = scan_with_globs(
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
             &[
                 ("src/keep.html", "content-['src/keep.html']"),
                 ("src/other.html", "content-['src/other.html']"),
@@ -4485,10 +4769,19 @@ mod scanner {
                 "@source './src/keep.html'",
             ],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ src
+            ├── ✓ keep.html
+            └── ✗ other.html
+        ");
 
         assert_eq!(candidates, vec!["content-['src/keep.html']"]);
 
-        let ScanResult { candidates, .. } = scan_with_globs(
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
             &[
                 ("src/keep.html", "content-['src/keep.html']"),
                 ("src/other.html", "content-['src/other.html']"),
@@ -4499,6 +4792,13 @@ mod scanner {
                 "@source not './src'",
             ],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✗ src
+            ├── ✗ keep.html
+            └── ✗ other.html
+        ");
 
         assert!(candidates.is_empty());
     }
@@ -4506,15 +4806,20 @@ mod scanner {
     #[test]
     fn later_directory_sources_override_earlier_not_sources() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[("src/index.html", "content-['src/index.html']")],
-            vec![
-                "@source '**/*'",
-                "@source not './src'",
-                "@source './src'",
-            ],
+            vec!["@source '**/*'", "@source not './src'", "@source './src'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ src
+            └── ✓ index.html
+        ");
 
         assert_eq!(candidates, vec!["content-['src/index.html']"]);
         assert_eq!(files, vec!["src/index.html"]);
@@ -4523,7 +4828,10 @@ mod scanner {
     #[test]
     fn wildcard_not_sources_exclude_matching_directories() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 ("src/bar/index.html", "content-['src/bar/index.html']"),
@@ -4532,6 +4840,15 @@ mod scanner {
             vec!["@source './src/**/*.html'", "@source not './src/ba*'"],
         );
 
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ src
+            ├── ✗ bar
+            │   └── ✗ index.html
+            └── ✓ foo
+                └── ✓ index.html
+        ");
+
         assert_eq!(candidates, vec!["content-['src/foo/index.html']"]);
         assert_eq!(files, vec!["src/foo/index.html"]);
     }
@@ -4539,11 +4856,23 @@ mod scanner {
     #[test]
     fn explicit_file_sources_include_default_ignored_files_without_extensions() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
-            &[(".env", "content-['.env']"), ("index.html", "content-['index.html']")],
+            &[
+                (".env", "content-['.env']"),
+                ("index.html", "content-['index.html']"),
+            ],
             vec!["@source '.env'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✓ .env
+        └── ✗ index.html
+        ");
 
         assert_eq!(candidates, vec!["content-['.env']"]);
         assert_eq!(files, vec![".env"]);
@@ -4552,7 +4881,10 @@ mod scanner {
     #[test]
     fn unreachable_whitelists_do_not_reinclude_explicit_source_directories() {
         let ScanResult {
-            candidates, files, ..
+            candidates,
+            files,
+            tree,
+            ..
         } = scan_with_globs(
             &[
                 (".gitignore", "parent/"),
@@ -4565,6 +4897,19 @@ mod scanner {
             ],
             vec!["@source './parent/child'"],
         );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       parent/
+        └── ✓ parent
+            ├── ✗ .gitignore
+            │       !child/
+            └── ✓ child
+                ├── ✗ .gitignore
+                │       index.html
+                └── ✓ index.html
+        ");
 
         assert_eq!(candidates, vec!["content-['parent/child/index.html']"]);
         assert_eq!(files, vec!["parent/child/index.html"]);
