@@ -59,23 +59,21 @@ mod scanner {
         tree: String,
     }
 
-    /// Renders the directory as a tree, annotating every file and folder with
-    /// an indicator that shows whether the scanner picked it up:
+    /// Renders the directory as a tree, annotating every file and folder with an indicator that
+    /// shows whether the scanner picked it up:
     ///
     /// - `✓` — scanned
     /// - `✗` — ignored / skipped
     ///
-    /// Symlinks are rendered as `link → target`, where the target is shown
-    /// relative to the folder containing the symlink. The contents of every
-    /// `.gitignore` file are printed right below the file itself.
+    /// Symlinks are rendered as `link → target`, where the target is shown relative to the folder
+    /// containing the symlink. The contents of every `.gitignore` file are printed right below the
+    /// file itself.
     ///
-    /// Folders that are a git repository root (they contain a `.git` folder)
-    /// are marked with `(git)`, because ignore rules behave differently
-    /// inside and outside of a repository.
+    /// Folders that are a git repository root (they contain a `.git` folder) are marked with
+    /// `(git)`, because ignore rules behave differently inside and outside of a repository.
     fn fs_tree(root: &Path, scanned: &[String]) -> String {
-        /// Computes the relative path from `parent` to `target`, where both
-        /// are relative to the same root, e.g.: `b/c` seen from `b` is `c`,
-        /// and the root itself seen from `b` is `..`.
+        /// Computes the relative path from `parent` to `target`, where both are relative to the
+        /// same root, e.g.: `b/c` seen from `b` is `c`, and the root itself seen from `b` is `..`.
         fn relative_to(target: &Path, parent: &Path) -> String {
             let target = target.components().collect::<Vec<_>>();
             let parent = parent.components().collect::<Vec<_>>();
@@ -131,10 +129,9 @@ mod scanner {
 
                 let file_type = entry.file_type().unwrap();
 
-                // A file is scanned when it shows up in the scanned files
-                // list. A folder is considered scanned when any scanned file
-                // lives inside of it. Paths that go through a symlink count
-                // towards the symlink, not towards the target directory.
+                // a file is scanned when it shows up in the scanned files list. a folder is
+                // considered scanned when any scanned file lives inside of it. paths that go
+                // through a symlink count towards the symlink, not towards the target directory.
                 let dir_prefix = format!("{rel}/");
                 let is_scanned = scanned
                     .iter()
@@ -147,9 +144,8 @@ mod scanner {
                 }
                 if file_type.is_symlink() {
                     if let Ok(target) = fs::read_link(&path) {
-                        // Show the target relative to the folder containing
-                        // the symlink, or as-is when it points outside of the
-                        // tree.
+                        // Show the target relative to the folder containing the symlink, or as-is
+                        // when it points outside of the tree.
                         let target = match (target.strip_prefix(root), dir.strip_prefix(root)) {
                             (Ok(target), Ok(parent)) => relative_to(target, parent),
                             _ => target.to_string_lossy().replace('\\', "/"),
@@ -165,8 +161,8 @@ mod scanner {
 
                 out.push_str(&format!("{prefix}{connector}{indicator} {display_name}\n"));
 
-                // Print the contents of `.gitignore` files below the file
-                // itself, so the ignore rules are visible in the same output.
+                // Print the contents of `.gitignore` files below the file itself, so the ignore
+                // rules are visible in the same output.
                 if name == ".gitignore" {
                     if let Ok(contents) = fs::read_to_string(&path) {
                         for line in contents.lines() {
@@ -177,10 +173,9 @@ mod scanner {
                     }
                 }
 
-                // Descend into directories, including symlinked ones. The
-                // paths inside a symlinked directory are computed through the
-                // symlink, so the indicators show what the scanner saw via
-                // that route. A visited stack prevents symlink cycles from
+                // Descend into directories, including symlinked ones. The paths inside a symlinked
+                // directory are computed through the symlink, so the indicators show what the
+                // scanner saw via that route. A visited stack prevents symlink cycles from
                 // recursing forever.
                 if path.metadata().map(|meta| meta.is_dir()).unwrap_or(false) {
                     let Ok(canonical) = dunce::canonicalize(&path) else {
