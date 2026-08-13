@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't scan gitignored directories (e.g. `node_modules` and `.git`) when the project uses a safelist-style `.gitignore` (e.g. `/*` followed by `!/…` negations) ([#20397](https://github.com/tailwindlabs/tailwindcss/discussions/20397))
 - Ensure root `theme('…')` namespace lookups in JavaScript plugins and config files return the full namespace object instead of the value of its `DEFAULT` key ([#20399](https://github.com/tailwindlabs/tailwindcss/pull/20399))
 - Skip ignored directories entirely when computing watch globs (`scanner.globs`), instead of walking their full contents on every rebuild ([#20408](https://github.com/tailwindlabs/tailwindcss/pull/20408))
+- Oxide: drop invalid UTF-8 candidates ([#20389](https://github.com/tailwindlabs/tailwindcss/pull/20389))
 
 ## [4.3.3] - 2026-07-16
 
