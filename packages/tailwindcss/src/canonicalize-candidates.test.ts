@@ -1638,4 +1638,26 @@ describe('regressions', () => {
       'lg:flex',
     ])
   })
+
+  // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1610
+  test('does not merge utilities whose theme variables resolve to CSS-wide keywords', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --foreground: unset;
+          --default: unset;
+        }
+        @theme inline {
+          --color-foreground: var(--foreground);
+          --color-default-soft-hover: color-mix(in oklab, var(--default) 60%, transparent);
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
+    ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
+  })
 })
