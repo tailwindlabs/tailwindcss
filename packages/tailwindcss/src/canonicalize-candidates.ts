@@ -2563,6 +2563,25 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
   return ast
 }
 
+// Variables whose theme value is a CSS-wide keyword (e.g.: `unset`) are never
+// inlined. These are typically registered as a placeholder to be re-assigned at
+// runtime, so two variables that share such a value are not interchangeable.
+//
+// E.g.:
+//
+// ```css
+// @theme {
+//   --foreground: unset;
+//   --background: unset;
+// }
+// ```
+//
+// Inlining would make `text-(--foreground)` and `text-(--background)` produce
+// the same signature `color: unset`, even though they are different at runtime.
+//
+// https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/Data_types#css-wide_keywords
+const CSS_WIDE_KEYWORDS = ['initial', 'inherit', 'revert', 'revert-layer', 'revert-rule', 'unset']
+
 // Resolve theme values to their inlined value.
 //
 // E.g.:
@@ -2578,8 +2597,8 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
 // }
 // ```
 //
-// Which conveniently will be equivalent to: `text-red-500` when we inline
-// the value.
+// Which conveniently will be equivalent to: `text-red-500` when we inline the
+// value.
 //
 // Without inlining:
 // ```css
@@ -2595,13 +2614,13 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
 // }
 // ```
 //
-// Recently we made sure that utilities like `text-red-500` also generate
-// the fallback value for usage in `@reference` mode.
+// Recently we made sure that utilities like `text-red-500` also generate the
+// fallback value for usage in `@reference` mode.
 //
-// The second assumption is that if you use `var(--key, fallback)` that
-// happens to match a known variable _and_ its inlined value. Then we can
-// replace it with the inlined variable. This allows us to handle custom
-// `@theme` and `@theme inline` definitions.
+// The second assumption is that if you use `var(--key, fallback)` that happens
+// to match a known variable _and_ its inlined value. Then we can replace it
+// with the inlined variable. This allows us to handle custom `@theme` and
+// `@theme inline` definitions.
 function resolveVariablesInValue(value: string, designSystem: DesignSystem): string {
   let changed = false
   let valueAst = ValueParser.parse(value)
@@ -2629,6 +2648,9 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
     if (seen.has(variable)) return
     seen.add(variable)
     if (variableValue === undefined) return // Couldn't resolve the variable
+
+    // CSS-wide keywords are never inlined
+    if (CSS_WIDE_KEYWORDS.includes(variableValue.toLowerCase())) return
 
     // Inject variable fallbacks when no fallback is present yet.
     //
