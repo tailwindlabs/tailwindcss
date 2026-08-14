@@ -421,8 +421,11 @@ export function createUtilities(theme: Theme) {
             desc.themeKeys ?? [],
           )
 
-          // Modifiers are not supported on theme values, except when the
-          // modifier is part of the resolved fraction (e.g. `w-1/2`).
+          // If the theme value resolved without consuming the modifier, then
+          // the modifier would be silently ignored and `w-4` and `w-4/foo`
+          // would generate the same CSS.
+          //
+          // The modifier would be consumed if it's a fraction, e.g.: `w-1/2`
           if (value !== null && candidate.modifier && !candidate.value.fraction) return
 
           // Automatically handle things like `w-1/2` without requiring `1/2` to
