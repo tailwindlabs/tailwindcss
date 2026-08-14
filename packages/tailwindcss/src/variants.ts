@@ -940,15 +940,18 @@ export function createVariants(theme: Theme): Variants {
         // `(condition1) or (condition2)` is supported.
         let changed = false
         let ast = ValueParser.parse(value)
-        for (let node of ast) {
-          if (
-            node.kind === 'function' &&
-            (node.value === 'and' || node.value === 'or' || node.value === 'not')
-          ) {
+        walk(ast, (node) => {
+          if (node.kind !== 'function') return
+
+          // Leave selectors as-is, they could contain `selector(a:not(b))`, and
+          // in this case we don't want the space around the `not`.
+          if (node.value === 'selector') return WalkAction.Skip
+
+          if (node.value === 'and' || node.value === 'or' || node.value === 'not') {
             changed = true
             node.value = ` ${node.value} `
           }
-        }
+        })
 
         let query = changed ? ValueParser.toCss(ast) : value
 
