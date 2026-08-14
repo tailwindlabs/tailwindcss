@@ -12167,6 +12167,17 @@ test('rounded', async () => {
       'rounded-[4px]/foo',
     ]),
   ).toEqual('')
+  expect(
+    await run(
+      ['rounded-sm/foo', 'rounded-sm/[5]', 'rounded-sm/(--foo)'],
+      css`
+        @theme {
+          --radius-sm: 0.125rem;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toEqual('')
 })
 
 test('rounded-s', async () => {
@@ -24475,6 +24486,17 @@ test('filter', async () => {
       'sepia-[var(--value)]/foo',
     ]),
   ).toEqual('')
+  expect(
+    await run(
+      ['drop-shadow/foo'],
+      css`
+        @theme {
+          --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toEqual('')
 
   expect(
     await run(
@@ -27263,6 +27285,18 @@ test('text-shadow', async () => {
       '-shadow-[var(--value)]',
     ]),
   ).toEqual('')
+  expect(
+    await run(
+      ['text-shadow/foo', 'text-shadow-sm/foo', 'text-shadow-[0_35px_35px_red]/foo'],
+      css`
+        @theme {
+          --text-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+          --text-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toEqual('')
 })
 
 test('shadow', async () => {
@@ -27744,6 +27778,18 @@ test('shadow', async () => {
       '-shadow-[#0088cc]/[50%]',
       '-shadow-[var(--value)]',
     ]),
+  ).toEqual('')
+  expect(
+    await run(
+      ['shadow/foo', 'shadow-sm/foo', 'shadow-[10px_10px]/foo'],
+      css`
+        @theme {
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
@@ -28235,6 +28281,18 @@ test('inset-shadow', async () => {
       '-inset-shadow-[#0088cc]/[50%]',
       '-inset-shadow-[var(--value)]',
     ]),
+  ).toEqual('')
+  expect(
+    await run(
+      ['inset-shadow/foo', 'inset-shadow-sm/foo', 'inset-shadow-[10px_10px]/foo'],
+      css`
+        @theme {
+          --inset-shadow: inset 0 1px 3px 0 rgb(0 0 0 / 0.1);
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
