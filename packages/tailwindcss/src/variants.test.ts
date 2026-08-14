@@ -1445,11 +1445,18 @@ test('supports', async () => {
       'supports-[foo-not(display:grid)]:flex',
       'supports-[selector([data-foo="("])or(display:grid)]:flex',
       'supports-[selector(.foo\\(bar)or(display:grid)]:flex',
+      'supports-[((display:grid)or(display:flex))]:grid',
     ]),
   ).toMatchInlineSnapshot(`
     "
     @supports (gap: var(--tw)) {
       .supports-gap\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports (display: grid) or (display: flex) {
+      .supports-\\[\\(\\(display\\:grid\\)or\\(display\\:flex\\)\\)\\]\\:grid {
         display: grid;
       }
     }
