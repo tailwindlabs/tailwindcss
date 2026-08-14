@@ -1424,6 +1424,43 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
   `)
 })
 
+test('supports: `and`, `or`, and `not` inside function calls are not spaced out', async () => {
+  expect(
+    await run([
+      'supports-[selector(a:not(.foo))]:flex',
+      'supports-[selector(a:is(.and,.or))]:flex',
+      'supports-[(display:grid)or(display:flex)]:grid',
+      'supports-[not(display:grid)]:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "
+    @supports (display: grid) or (display: flex) {
+      .supports-\\[\\(display\\:grid\\)or\\(display\\:flex\\)\\]\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports not (display: grid) {
+      .supports-\\[not\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector(a:is(.and,.or)) {
+      .supports-\\[selector\\(a\\:is\\(\\.and\\,\\.or\\)\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector(a:not(.foo)) {
+      .supports-\\[selector\\(a\\:not\\(\\.foo\\)\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('supports', async () => {
   expect(
     await run([

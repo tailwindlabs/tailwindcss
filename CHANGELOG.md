@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Oxide: drop invalid UTF-8 candidates ([#20389](https://github.com/tailwindlabs/tailwindcss/pull/20389))
 - `@tailwindcss/vite` no longer forces a full page reload for external files (e.g.: `.php` files) ([#20414](https://github.com/tailwindlabs/tailwindcss/issues/20414))
 - Canonicalization: don't merge utilities that reference different theme variables set to CSS-wide keywords like `unset` ([#20417](https://github.com/tailwindlabs/tailwindcss/pull/20417))
+- Don't space out `and`, `or`, and `not` inside function calls like `selector(a:not(.foo))` in `supports-[…]` variants ([#20420](https://github.com/tailwindlabs/tailwindcss/pull/20420))
 
 ## [4.3.3] - 2026-07-16
 
