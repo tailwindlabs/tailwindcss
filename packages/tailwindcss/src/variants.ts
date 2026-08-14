@@ -943,7 +943,7 @@ export function createVariants(theme: Theme): Variants {
         let parens: boolean[] = []
         let inFunction = 0
         let query = value.replace(
-          /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[()]|[\w-]+/g,
+          /\\.|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[()]|[\w-]+/g,
           (match, offset: number) => {
             if (match === '(') {
               let head = value.slice(0, offset)
