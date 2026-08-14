@@ -3892,6 +3892,10 @@ export function createUtilities(theme: Theme) {
     }
 
     {
+      // A modifier is only valid as the opacity of a stroke color. The value
+      // did not resolve to a color, so a modifier would be silently ignored.
+      if (candidate.modifier) return
+
       let value = theme.resolve(candidate.value.value, ['--stroke-width'])
       if (value) {
         return [decl('stroke-width', value)]
