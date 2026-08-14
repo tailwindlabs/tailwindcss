@@ -1424,64 +1424,6 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
   `)
 })
 
-test('supports: `and`, `or`, and `not` inside function calls are not spaced out', async () => {
-  expect(
-    await run([
-      'supports-[selector(a:not(.foo))]:flex',
-      'supports-[selector(a:is(.and,.or))]:flex',
-      'supports-[(display:grid)or(display:flex)]:grid',
-      'supports-[not(display:grid)]:flex',
-      'supports-[foo-not(display:grid)]:flex',
-      'supports-[selector([data-foo="("])or(display:grid)]:flex',
-      'supports-[selector(.foo\\(bar)or(display:grid)]:flex',
-    ]),
-  ).toMatchInlineSnapshot(`
-    "
-    @supports (display: grid) or (display: flex) {
-      .supports-\\[\\(display\\:grid\\)or\\(display\\:flex\\)\\]\\:grid {
-        display: grid;
-      }
-    }
-
-    @supports foo-not(display:grid) {
-      .supports-\\[foo-not\\(display\\:grid\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-
-    @supports not (display: grid) {
-      .supports-\\[not\\(display\\:grid\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-
-    @supports selector(.foo\\(bar) or (display: grid) {
-      .supports-\\[selector\\(\\.foo\\\\\\(bar\\)or\\(display\\:grid\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-
-    @supports selector([data-foo="("]) or (display: grid) {
-      .supports-\\[selector\\(\\[data-foo\\=\\"\\(\\"\\]\\)or\\(display\\:grid\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-
-    @supports selector(a:is(.and,.or)) {
-      .supports-\\[selector\\(a\\:is\\(\\.and\\,\\.or\\)\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-
-    @supports selector(a:not(.foo)) {
-      .supports-\\[selector\\(a\\:not\\(\\.foo\\)\\)\\]\\:flex {
-        display: flex;
-      }
-    }
-    "
-  `)
-})
-
 test('supports', async () => {
   expect(
     await run([
@@ -1493,6 +1435,16 @@ test('supports', async () => {
       'supports-[font-tech(color-COLRv1)]:flex',
       'supports-[var(--test)]:flex',
       'supports-[--test]:flex',
+
+      // Only top-level and/or/not should have spaces around them. We should
+      // ignore and/or/not inside of `selector(…)`
+      'supports-[selector(a:not(.foo))]:flex',
+      'supports-[selector(a:is(.and,.or))]:flex',
+      'supports-[(display:grid)or(display:flex)]:grid',
+      'supports-[not(display:grid)]:flex',
+      'supports-[foo-not(display:grid)]:flex',
+      'supports-[selector([data-foo="("])or(display:grid)]:flex',
+      'supports-[selector(.foo\\(bar)or(display:grid)]:flex',
     ]),
   ).toMatchInlineSnapshot(`
     "
@@ -1504,6 +1456,12 @@ test('supports', async () => {
 
     @supports (display: grid) and font-format(opentype) {
       .supports-\\[\\(display\\:grid\\)_and_font-format\\(opentype\\)\\]\\:grid {
+        display: grid;
+      }
+    }
+
+    @supports (display: grid) or (display: flex) {
+      .supports-\\[\\(display\\:grid\\)or\\(display\\:flex\\)\\]\\:grid {
         display: grid;
       }
     }
@@ -1532,8 +1490,44 @@ test('supports', async () => {
       }
     }
 
+    @supports foo-not(display:grid) {
+      .supports-\\[foo-not\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports not (display: grid) {
+      .supports-\\[not\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector(.foo\\(bar) or (display: grid) {
+      .supports-\\[selector\\(\\.foo\\\\\\(bar\\)or\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
     @supports selector(A > B) {
       .supports-\\[selector\\(A_\\>_B\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector([data-foo="("]) or (display: grid) {
+      .supports-\\[selector\\(\\[data-foo\\=\\"\\(\\"\\]\\)or\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector(a:is(.and,.or)) {
+      .supports-\\[selector\\(a\\:is\\(\\.and\\,\\.or\\)\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector(a:not(.foo)) {
+      .supports-\\[selector\\(a\\:not\\(\\.foo\\)\\)\\]\\:flex {
         display: flex;
       }
     }
