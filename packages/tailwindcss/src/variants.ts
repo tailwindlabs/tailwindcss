@@ -937,30 +937,20 @@ export function createVariants(theme: Theme): Variants {
       // other functions, we can use the value as-is.
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
-        // `(condition1) or (condition2)` is supported. Only space out keywords
-        // in the condition itself, not inside function calls like
-        // `selector(a:not(.foo))` where `not` is part of a selector.
-        let parens: boolean[] = []
-        let inFunction = 0
-        let query = value.replace(
-          /\\.|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[()]|[\w-]+/g,
-          (match, offset: number) => {
-            if (match === '(') {
-              let head = value.slice(0, offset)
-              let isFunction = /[\w-]$/.test(head) && !/(?:^|[^\w-])(?:and|or|not)$/.test(head)
-              parens.push(isFunction)
-              if (isFunction) inFunction++
-            } else if (match === ')') {
-              if (parens.pop()) inFunction--
-            } else if (
-              inFunction === 0 &&
-              (match === 'and' || match === 'or' || match === 'not')
-            ) {
-              return ` ${match} `
-            }
-            return match
-          },
-        )
+        // `(condition1) or (condition2)` is supported.
+        let changed = false
+        let ast = ValueParser.parse(value)
+        for (let node of ast) {
+          if (
+            node.kind === 'function' &&
+            (node.value === 'and' || node.value === 'or' || node.value === 'not')
+          ) {
+            changed = true
+            node.value = ` ${node.value} `
+          }
+        }
+
+        let query = changed ? ValueParser.toCss(ast) : value
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return
