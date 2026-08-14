@@ -2650,7 +2650,7 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
     if (variableValue === undefined) return // Couldn't resolve the variable
 
     // CSS-wide keywords are never inlined
-    if (CSS_WIDE_KEYWORDS.includes(variableValue)) return
+    if (CSS_WIDE_KEYWORDS.includes(variableValue.toLowerCase())) return
 
     // Inject variable fallbacks when no fallback is present yet.
     //
