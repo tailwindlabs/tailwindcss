@@ -22383,6 +22383,11 @@ test('stroke', async () => {
       // Width
       '-stroke-0',
       'stroke--1',
+      'stroke-0/foo',
+      'stroke-1/50',
+      'stroke-2/[0.5]',
+      'stroke-2/(--my-opacity)',
+      'stroke-[12px]/foo',
     ]),
   ).toEqual('')
 })
