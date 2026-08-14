@@ -942,19 +942,25 @@ export function createVariants(theme: Theme): Variants {
         // `selector(a:not(.foo))` where `not` is part of a selector.
         let parens: boolean[] = []
         let inFunction = 0
-        let query = value.replace(/[()]|\b(?:and|or|not)\b/g, (match, offset: number) => {
-          if (match === '(') {
-            let head = value.slice(0, offset)
-            let isFunction = /[\w-]$/.test(head) && !/(?:^|[^\w-])(?:and|or|not)$/.test(head)
-            parens.push(isFunction)
-            if (isFunction) inFunction++
-          } else if (match === ')') {
-            if (parens.pop()) inFunction--
-          } else if (inFunction === 0) {
-            return ` ${match} `
-          }
-          return match
-        })
+        let query = value.replace(
+          /"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[()]|[\w-]+/g,
+          (match, offset: number) => {
+            if (match === '(') {
+              let head = value.slice(0, offset)
+              let isFunction = /[\w-]$/.test(head) && !/(?:^|[^\w-])(?:and|or|not)$/.test(head)
+              parens.push(isFunction)
+              if (isFunction) inFunction++
+            } else if (match === ')') {
+              if (parens.pop()) inFunction--
+            } else if (
+              inFunction === 0 &&
+              (match === 'and' || match === 'or' || match === 'not')
+            ) {
+              return ` ${match} `
+            }
+            return match
+          },
+        )
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return

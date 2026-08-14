@@ -1431,6 +1431,8 @@ test('supports: `and`, `or`, and `not` inside function calls are not spaced out'
       'supports-[selector(a:is(.and,.or))]:flex',
       'supports-[(display:grid)or(display:flex)]:grid',
       'supports-[not(display:grid)]:flex',
+      'supports-[foo-not(display:grid)]:flex',
+      'supports-[selector([data-foo="("])or(display:grid)]:flex',
     ]),
   ).toMatchInlineSnapshot(`
     "
@@ -1440,8 +1442,20 @@ test('supports: `and`, `or`, and `not` inside function calls are not spaced out'
       }
     }
 
+    @supports foo-not(display:grid) {
+      .supports-\\[foo-not\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
     @supports not (display: grid) {
       .supports-\\[not\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports selector([data-foo="("]) or (display: grid) {
+      .supports-\\[selector\\(\\[data-foo\\=\\"\\(\\"\\]\\)or\\(display\\:grid\\)\\]\\:flex {
         display: flex;
       }
     }
