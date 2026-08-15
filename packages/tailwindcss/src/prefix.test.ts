@@ -311,6 +311,253 @@ test('a prefix can be configured via @import prefix(…)', async () => {
   expect(await run(['underline', 'hover:line-through', 'custom'], input, options)).toEqual('')
 })
 
+test('custom utilities from imports use the Tailwind import prefix', async () => {
+  let input = css`
+    @import 'tailwindcss' prefix(tw);
+    @import './components.css';
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['underline', 'card'], input, { loadStylesheet })).toEqual('')
+
+  expect(await run(['tw:underline', 'tw:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    .tw\\:card {
+      color: red;
+    }
+
+    .tw\\:underline {
+      text-decoration-line: underline;
+    }
+    "
+  `)
+})
+
+test('custom utilities from prefixed imports use their import prefix', async () => {
+  let input = css`
+    @import 'tailwindcss' prefix(tw);
+    @import './components.css' prefix(ui);
+
+    @utility ui-underline {
+      color: red;
+    }
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(
+    await run(['underline', 'card', 'tw:card', 'ui:underline', 'tw:ui-card'], input, {
+      loadStylesheet,
+    }),
+  ).toEqual('')
+
+  expect(await run(['tw:underline', 'ui:card', 'tw:ui-underline'], input, { loadStylesheet }))
+    .toMatchInlineSnapshot(`
+    "
+    .tw\\:ui-underline, .ui\\:card {
+      color: red;
+    }
+
+    .tw\\:underline {
+      text-decoration-line: underline;
+    }
+    "
+  `)
+})
+
+test('a prefixed custom import does not prefix Tailwind utilities', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(ui);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['card', 'ui-card', 'ui:underline'], input, { loadStylesheet })).toEqual('')
+
+  expect(await run(['underline', 'ui:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    .ui\\:card {
+      color: red;
+    }
+
+    .underline {
+      text-decoration-line: underline;
+    }
+    "
+  `)
+})
+
+test('custom utilities from prefixed imports support variants', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(ui);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['hover:ui:card'], input, { loadStylesheet })).toEqual('')
+
+  expect(await run(['ui:hover:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    @media (hover: hover) {
+      .ui\\:hover\\:card:hover {
+        color: red;
+      }
+    }
+    "
+  `)
+})
+
+test('a prefixed custom import with a theme does not prefix Tailwind utilities', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(ui);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @tailwind utilities;
+            `
+          : css`
+              @theme {
+                --color-red: red;
+              }
+
+              @utility card {
+                color: var(--color-red);
+              }
+            `,
+    }
+  }
+
+  expect(await run(['ui:underline'], input, { loadStylesheet })).toEqual('')
+
+  expect(await run(['underline', 'ui:card'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    .ui\\:card {
+      color: var(--color-red);
+    }
+
+    .underline {
+      text-decoration-line: underline;
+    }
+
+    :root, :host {
+      --color-red: red;
+    }
+    "
+  `)
+})
+
+test('custom import prefixes do not shadow variants with the same name', async () => {
+  let input = css`
+    @import 'tailwindcss';
+    @import './components.css' prefix(sm);
+  `
+
+  async function loadStylesheet(id: string, base: string) {
+    return {
+      path: '',
+      base,
+      content:
+        id === 'tailwindcss'
+          ? css`
+              @theme {
+                --breakpoint-sm: 40rem;
+              }
+
+              @tailwind utilities;
+            `
+          : css`
+              @utility card {
+                color: red;
+              }
+            `,
+    }
+  }
+
+  expect(await run(['sm:card', 'sm:flex'], input, { loadStylesheet })).toMatchInlineSnapshot(`
+    "
+    .sm\\:card {
+      color: red;
+    }
+
+    @media (min-width: 40rem) {
+      .sm\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('a prefix must be letters only', async () => {
   let input = css`
     @theme reference prefix(__);
