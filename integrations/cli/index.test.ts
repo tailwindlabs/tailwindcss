@@ -375,6 +375,131 @@ describe.each([
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/17246
+  test(
+    'watch mode does not rebuild for changes inside node_modules or .git',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'index.html': html`<div class="underline"></div>`,
+        'src/index.css': css` @import 'tailwindcss/utilities'; `,
+        'node_modules/some-dep/index.js': js` module.exports = {} `,
+        '.git/HEAD': txt`ref: refs/heads/main`,
+      },
+    },
+    async ({ fs, spawn, expect }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+      process.flush()
+
+      await fs.write('node_modules/some-dep/index.js', js`module.exports = { touched: true }`)
+      await fs.write('.git/HEAD', txt`ref: refs/heads/other`)
+
+      // A watcher rebuild cycle (real or a no-op early return) always logs
+      // "Done in", so if the watcher incorrectly reacted to either change
+      // above, this would resolve. It must not.
+      let sawRebuild = await Promise.race([
+        process.onStderr((m) => m.includes('Done in')).then(() => true),
+        new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 1000)),
+      ])
+      expect(sawRebuild).toBe(false)
+
+      // Sanity check: the watcher is still alive and reacts to real changes.
+      await fs.write('index.html', html`<div class="underline flex"></div>`)
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/17246
+  test(
+    'watch mode still rebuilds for an explicit @source nested inside node_modules, even when its watch root is collapsed into a broader ancestor',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @source '../**/*.html';
+          @source '../node_modules/my-lib/src/*.html';
+        `,
+        'index.html': html`<div class="underline"></div>`,
+        // This lives inside node_modules, but is explicitly opted back in via
+        // @source above. The broader `../**/*.html` source also covers the
+        // project root, so this directory gets collapsed into it by
+        // createWatchers' dedup step -- the ignore filter must not apply to
+        // node_modules for that collapsed root.
+        'node_modules/my-lib/src/index.html': html`
+          <div
+            class="content-['initial']"
+          ></div>
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`content-['initial']`])
+
+      await fs.write(
+        'node_modules/my-lib/src/index.html',
+        html`<div class="content-['changed']"></div>`,
+      )
+      await fs.expectFileToContain('dist/out.css', [candidate`content-['changed']`])
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/pull/20388#discussion (Greptile)
+  test(
+    'watch mode still rebuilds when a tracked @import dependency inside node_modules changes',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @import '../node_modules/my-base-styles/base.css';
+        `,
+        'index.html': html`<div class="underline"></div>`,
+        // Not covered by any @source -- this is a plain @import dependency,
+        // tracked via `onDependency`/`fullRebuildPaths` rather than
+        // `scanner.normalizedSources`. It must still be exempted from the
+        // node_modules ignore filter for the collapsed project root.
+        'node_modules/my-base-styles/base.css': css`
+          .imported-marker {
+            color: red;
+          }
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [
+        css`
+          .imported-marker {
+            color: red;
+          }
+        `,
+      ])
+
+      await fs.write(
+        'node_modules/my-base-styles/base.css',
+        css`
+          .imported-marker {
+            color: blue;
+          }
+        `,
+      )
+      await fs.expectFileToContain('dist/out.css', [
+        css`
+          .imported-marker {
+            color: blue;
+          }
+        `,
+      ])
+    },
+  )
+
   test(
     'watch mode with polling',
     {
