@@ -1,6 +1,6 @@
 [package]
 name = "ignore"
-version = "0.4.24"  #:version
+version = "0.4.33"  #:version
 authors = ["Andrew Gallant <jamslam@gmail.com>"]
 description = """
 A fast library for efficiently matching ignore files such as `.gitignore`
@@ -12,7 +12,10 @@ repository = "https://github.com/BurntSushi/ripgrep/tree/master/crates/ignore"
 readme = "README.md"
 keywords = ["glob", "ignore", "gitignore", "pattern", "file"]
 license = "Unlicense OR MIT"
+# CHANGED: Use an explicit edition instead of `edition.workspace = true` since this crate is
+# vendored into the Tailwind CSS workspace.
 edition = "2024"
+rust-version = "1.88"
 
 [lib]
 name = "ignore"
@@ -20,15 +23,17 @@ bench = false
 
 [dependencies]
 crossbeam-deque = "0.8.3"
-globset = "0.4.17"
+# CHANGED: Use the published globset crate instead of a path dependency.
+globset = "0.4.20"
 log = "0.4.20"
 memchr = "2.6.3"
 same-file = "1.0.6"
 walkdir = "2.4.0"
+# CHANGED: Added `dunce` to canonicalize paths without UNC prefixes on Windows.
 dunce = "1.0.5"
 
 [dependencies.regex-automata]
-version = "0.4.0"
+version = "0.4.18"
 default-features = false
 features = ["std", "perf", "syntax", "meta", "nfa", "hybrid", "dfa-onepass"]
 

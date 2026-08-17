@@ -309,6 +309,19 @@ function upgradeToFullPluginSupport({
 
     let resolvedValue = sharedPluginApi.theme(path, undefined)
 
+    // If we're dealing with an object that has the `DEFAULT` key, unwrap it to
+    // the default value first. This happens for namespace root lookups where
+    // the CSS theme defines a bare value, e.g. `--shadow` resolved via
+    // `theme('shadow')`.
+    if (
+      typeof resolvedValue === 'object' &&
+      resolvedValue !== null &&
+      !Array.isArray(resolvedValue) &&
+      'DEFAULT' in resolvedValue
+    ) {
+      resolvedValue = resolvedValue.DEFAULT
+    }
+
     // When a tuple is returned, return the first element
     if (Array.isArray(resolvedValue) && resolvedValue.length === 2) {
       return resolvedValue[0]
@@ -317,16 +330,6 @@ function upgradeToFullPluginSupport({
     // Arrays get serialized into a comma-separated lists
     else if (Array.isArray(resolvedValue)) {
       return resolvedValue.join(', ')
-    }
-
-    // If we're dealing with an object that has the `DEFAULT` key, return the
-    // default value
-    else if (
-      typeof resolvedValue === 'object' &&
-      resolvedValue !== null &&
-      'DEFAULT' in resolvedValue
-    ) {
-      return resolvedValue.DEFAULT
     }
 
     // Otherwise only allow string values here, objects (and namespace maps)

@@ -48,13 +48,16 @@ See the documentation for `WalkBuilder` for many other options.
 
 use std::path::{Path, PathBuf};
 
+pub use crate::incremental::{IncrementalIgnore, IncrementalMatch};
 pub use crate::walk::{
-    DirEntry, ParallelVisitor, ParallelVisitorBuilder, Walk, WalkBuilder, WalkParallel, WalkState,
+    DirEntry, ParallelVisitor, ParallelVisitorBuilder, Walk, WalkBuilder,
+    WalkParallel, WalkState,
 };
 
 mod default_types;
 mod dir;
 pub mod gitignore;
+mod incremental;
 pub mod overrides;
 mod pathutil;
 pub mod types;
@@ -120,34 +123,31 @@ impl Clone for Error {
     fn clone(&self) -> Error {
         match *self {
             Error::Partial(ref errs) => Error::Partial(errs.clone()),
-            Error::WithLineNumber { line, ref err } => Error::WithLineNumber {
-                line,
-                err: err.clone(),
-            },
-            Error::WithPath { ref path, ref err } => Error::WithPath {
-                path: path.clone(),
-                err: err.clone(),
-            },
-            Error::WithDepth { depth, ref err } => Error::WithDepth {
-                depth,
-                err: err.clone(),
-            },
-            Error::Loop {
-                ref ancestor,
-                ref child,
-            } => Error::Loop {
+            Error::WithLineNumber { line, ref err } => {
+                Error::WithLineNumber { line, err: err.clone() }
+            }
+            Error::WithPath { ref path, ref err } => {
+                Error::WithPath { path: path.clone(), err: err.clone() }
+            }
+            Error::WithDepth { depth, ref err } => {
+                Error::WithDepth { depth, err: err.clone() }
+            }
+            Error::Loop { ref ancestor, ref child } => Error::Loop {
                 ancestor: ancestor.clone(),
                 child: child.clone(),
             },
             Error::Io(ref err) => match err.raw_os_error() {
                 Some(e) => Error::Io(std::io::Error::from_raw_os_error(e)),
-                None => Error::Io(std::io::Error::new(err.kind(), err.to_string())),
+                None => {
+                    Error::Io(std::io::Error::new(err.kind(), err.to_string()))
+                }
             },
-            Error::Glob { ref glob, ref err } => Error::Glob {
-                glob: glob.clone(),
-                err: err.clone(),
-            },
-            Error::UnrecognizedFileType(ref err) => Error::UnrecognizedFileType(err.clone()),
+            Error::Glob { ref glob, ref err } => {
+                Error::Glob { glob: glob.clone(), err: err.clone() }
+            }
+            Error::UnrecognizedFileType(ref err) => {
+                Error::UnrecognizedFileType(err.clone())
+            }
             Error::InvalidDefinition => Error::InvalidDefinition,
         }
     }
@@ -269,19 +269,14 @@ impl Error {
 
     /// Turn an error into a tagged error with the given depth.
     fn with_depth(self, depth: usize) -> Error {
-        Error::WithDepth {
-            depth,
-            err: Box::new(self),
-        }
+        Error::WithDepth { depth, err: Box::new(self) }
     }
 
     /// Turn an error into a tagged error with the given file path and line
     /// number. If path is empty, then it is omitted from the error.
     fn tagged<P: AsRef<Path>>(self, path: P, lineno: u64) -> Error {
-        let errline = Error::WithLineNumber {
-            line: lineno,
-            err: Box::new(self),
-        };
+        let errline =
+            Error::WithLineNumber { line: lineno, err: Box::new(self) };
         if path.as_ref().as_os_str().is_empty() {
             return errline;
         }
@@ -301,12 +296,12 @@ impl Error {
             };
         }
         let path = err.path().map(|p| p.to_path_buf());
-        let mut ig_err = Error::Io(std::io::Error::from(err));
+        let mut ig_err = Error::WithDepth {
+            depth,
+            err: Box::new(Error::Io(std::io::Error::from(err))),
+        };
         if let Some(path) = path {
-            ig_err = Error::WithPath {
-                path,
-                err: Box::new(ig_err),
-            };
+            ig_err = Error::WithPath { path, err: Box::new(ig_err) };
         }
         ig_err
     }
@@ -333,7 +328,8 @@ impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             Error::Partial(ref errs) => {
-                let msgs: Vec<String> = errs.iter().map(|err| err.to_string()).collect();
+                let msgs: Vec<String> =
+                    errs.iter().map(|err| err.to_string()).collect();
                 write!(f, "{}", msgs.join("\n"))
             }
             Error::WithLineNumber { line, ref err } => {
@@ -343,10 +339,7 @@ impl std::fmt::Display for Error {
                 write!(f, "{}: {}", path.display(), err)
             }
             Error::WithDepth { ref err, .. } => err.fmt(f),
-            Error::Loop {
-                ref ancestor,
-                ref child,
-            } => write!(
+            Error::Loop { ref ancestor, ref child } => write!(
                 f,
                 "File system loop found: \
                            {} points to an ancestor {}",
@@ -354,14 +347,8 @@ impl std::fmt::Display for Error {
                 ancestor.display()
             ),
             Error::Io(ref err) => err.fmt(f),
-            Error::Glob {
-                glob: None,
-                ref err,
-            } => write!(f, "{}", err),
-            Error::Glob {
-                glob: Some(ref glob),
-                ref err,
-            } => {
+            Error::Glob { glob: None, ref err } => write!(f, "{}", err),
+            Error::Glob { glob: Some(ref glob), ref err } => {
                 write!(f, "error parsing glob '{}': {}", glob, err)
             }
             Error::UnrecognizedFileType(ref ty) => {
@@ -507,7 +494,8 @@ mod tests {
     };
 
     /// A convenient result type alias.
-    pub(crate) type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
+    pub(crate) type Result<T> =
+        std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
     macro_rules! err {
         ($($tt:tt)*) => {
@@ -545,8 +533,9 @@ mod tests {
                 if path.is_dir() {
                     continue;
                 }
-                fs::create_dir_all(&path)
-                    .map_err(|e| err!("failed to create {}: {}", path.display(), e))?;
+                fs::create_dir_all(&path).map_err(|e| {
+                    err!("failed to create {}: {}", path.display(), e)
+                })?;
                 return Ok(TempDir(path));
             }
             Err(err!("failed to create temp dir after {} tries", TRIES))

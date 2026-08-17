@@ -938,7 +938,22 @@ export function createVariants(theme: Theme): Variants {
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
-        let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
+        let changed = false
+        let ast = ValueParser.parse(value)
+        walk(ast, (node) => {
+          if (node.kind !== 'function') return
+
+          // Leave selectors as-is, they could contain `selector(a:not(b))`, and
+          // in this case we don't want the space around the `not`.
+          if (node.value === 'selector') return WalkAction.Skip
+
+          if (node.value === 'and' || node.value === 'or' || node.value === 'not') {
+            changed = true
+            node.value = ` ${node.value} `
+          }
+        })
+
+        let query = changed ? ValueParser.toCss(ast) : value
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return
