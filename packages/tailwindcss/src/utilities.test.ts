@@ -8787,6 +8787,27 @@ test('columns', async () => {
     }
     "
   `)
+
+  // A custom `--container-auto` value must not shadow the `columns-auto`
+  // static value: https://github.com/tailwindlabs/tailwindcss/issues/19722
+  expect(
+    await run(
+      ['columns-auto'],
+      css`
+        @theme {
+          --container-auto: 500px;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .columns-auto {
+      columns: auto;
+    }
+    "
+  `)
+
   expect(
     await run([
       'columns',
@@ -25074,6 +25095,89 @@ test('backdrop-filter', async () => {
     }
     "
   `)
+
+  // A custom `--blur-none` value must not shadow the `backdrop-blur-none`
+  // static value: https://github.com/tailwindlabs/tailwindcss/issues/19722
+  expect(
+    await run(
+      ['backdrop-blur-none'],
+      css`
+        @theme {
+          --blur-none: 0;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-backdrop-blur: initial;
+          --tw-backdrop-brightness: initial;
+          --tw-backdrop-contrast: initial;
+          --tw-backdrop-grayscale: initial;
+          --tw-backdrop-hue-rotate: initial;
+          --tw-backdrop-invert: initial;
+          --tw-backdrop-opacity: initial;
+          --tw-backdrop-saturate: initial;
+          --tw-backdrop-sepia: initial;
+        }
+      }
+    }
+
+    .backdrop-blur-none {
+      --tw-backdrop-blur:  ;
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    @property --tw-backdrop-blur {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-brightness {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-contrast {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-grayscale {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-hue-rotate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-invert {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-opacity {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-saturate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-sepia {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
 })
 
 test('transition', async () => {
@@ -25742,6 +25846,40 @@ test('leading', async () => {
     .leading-none {
       --tw-leading: var(--leading-none);
       line-height: var(--leading-none);
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
+
+  // A custom `--spacing-none` value must not shadow the `leading-none`
+  // static value: https://github.com/tailwindlabs/tailwindcss/issues/19722
+  expect(
+    await run(
+      ['leading-none'],
+      css`
+        @theme {
+          --spacing-none: 0;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    .leading-none {
+      --tw-leading: 1;
+      line-height: 1;
     }
 
     @property --tw-leading {

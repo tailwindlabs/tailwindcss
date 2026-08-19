@@ -416,6 +416,16 @@ export function createUtilities(theme: Theme) {
           value = candidate.value.value
           dataType = candidate.value.dataType
         } else {
+          // Resolved against the utility's own dedicated theme namespace only
+          // (i.e. `desc.themeKeys[0]`), ignoring any secondary/fallback theme
+          // keys (like `--spacing` or `--container`) that are shared across
+          // many unrelated utilities. Used below to make sure `staticValues`
+          // (like `none` or `auto`) aren't shadowed just because some other
+          // utility's custom theme value happens to share the same suffix.
+          let ownValue = desc.themeKeys?.[0]
+            ? theme.resolve(candidate.value.fraction ?? candidate.value.value, [desc.themeKeys[0]])
+            : null
+
           value = theme.resolve(
             candidate.value.fraction ?? candidate.value.value,
             desc.themeKeys ?? [],
@@ -449,7 +459,12 @@ export function createUtilities(theme: Theme) {
             if (!value?.includes('/') && candidate.modifier) return
           }
 
-          if (value === null && !negative && desc.staticValues && !candidate.modifier) {
+          // A `staticValues` entry (e.g. `none`, `auto`) should win unless the
+          // utility's own theme namespace explicitly defines a value for this
+          // name. A fallback namespace shared with other utilities (like
+          // `--spacing` or `--container`) resolving a same-named value isn't
+          // enough to shadow it.
+          if (!negative && !candidate.modifier && desc.staticValues && ownValue === null) {
             let fallback = desc.staticValues[candidate.value.value]
             if (fallback) return fallback.map(cloneAstNode)
           }
