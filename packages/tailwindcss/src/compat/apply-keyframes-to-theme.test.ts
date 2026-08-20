@@ -76,6 +76,32 @@ test('setting `theme.keyframes` to `null` does not throw and clears keyframes', 
   expect(toCss(design.theme.getKeyframes())).toEqual('')
 })
 
+test('setting `theme.extend.keyframes` to `null` does not throw', () => {
+  // Unlike a top-level `theme.keyframes: null`, this is a no-op: `deepMerge`
+  // skips `null`/`undefined` sources entirely, so the resolved value here is
+  // `{}`, not `null`. This test guards against that assumption changing.
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          extend: {
+            keyframes: null,
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  expect(() => applyKeyframesToTheme(design, resolvedConfig)).not.toThrow()
+  expect(toCss(design.theme.getKeyframes())).toEqual('')
+})
+
 test('will append to the default keyframes with new keyframes', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
