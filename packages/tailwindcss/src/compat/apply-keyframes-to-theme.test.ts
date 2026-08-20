@@ -55,6 +55,27 @@ test('keyframes can be merged into the theme', () => {
   `)
 })
 
+test('setting `theme.keyframes` to `null` does not throw and clears keyframes', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          keyframes: null,
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  expect(() => applyKeyframesToTheme(design, resolvedConfig)).not.toThrow()
+  expect(toCss(design.theme.getKeyframes())).toEqual('')
+})
+
 test('will append to the default keyframes with new keyframes', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
