@@ -14,7 +14,7 @@ export function applyKeyframesToTheme(
 
 export function keyframesToRules(resolvedConfig: Pick<ResolvedConfig, 'theme'>): AtRule[] {
   let rules: AtRule[] = []
-  if ('keyframes' in resolvedConfig.theme) {
+  if (resolvedConfig.theme.keyframes) {
     for (let [name, keyframe] of Object.entries(resolvedConfig.theme.keyframes)) {
       rules.push(atRule('@keyframes', name, objectToAst(keyframe as any)))
     }
