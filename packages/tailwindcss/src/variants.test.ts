@@ -2000,6 +2000,10 @@ test('in', async () => {
     "
   `)
   expect(await run(['in-p:flex', 'in-foo-bar:flex'])).toEqual('')
+
+  // `in-*` is built using `:where(…) &`, which — unlike `:has(…)` — does not
+  // accept relative selectors, so these must not generate any output.
+  expect(await run(['in-[>img]:flex', 'in-[+img]:flex', 'in-[~img]:flex'])).toEqual('')
 })
 
 test('has', async () => {

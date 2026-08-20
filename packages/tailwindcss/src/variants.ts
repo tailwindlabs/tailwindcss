@@ -782,6 +782,8 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('inert', ['&:is([inert], [inert] *)'])
 
   variants.compound('in', Compounds.StyleRules, (ruleNode, variant) => {
+    if (variant.variant.kind === 'arbitrary' && variant.variant.relative) return null
+
     if (variant.modifier) return null
 
     let didApply = false
