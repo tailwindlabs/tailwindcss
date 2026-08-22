@@ -802,3 +802,88 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 })
+
+test(
+  'resolves CSS @import with custom resolve.conditions',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^",
+            "custom-lib": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'node_modules/custom-lib/package.json': json`
+        {
+          "name": "custom-lib",
+          "exports": {
+            "./style.css": {
+              "custom-condition": "./src/style.css",
+              "default": "./dist/style.css"
+            }
+          }
+        }
+      `,
+      'node_modules/custom-lib/src/style.css': css`
+        .from-custom-condition {
+          color: red;
+        }
+      `,
+      'node_modules/custom-lib/dist/style.css': css`
+        .from-default {
+          color: blue;
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+          resolve: {
+            conditions: ['custom-condition'],
+          },
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @import 'custom-lib/style.css';
+      `,
+    },
+  },
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain('.from-custom-condition')
+      expect(styles).not.toContain('.from-default')
+    })
+  },
+)
+
