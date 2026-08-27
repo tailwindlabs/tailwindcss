@@ -18,9 +18,10 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /wire:[^\s]*?$/,
 
   // shadcn/ui variants, including a ternary or nullish branch between the prop
-  // and the literal. Braces and commas are excluded so the match cannot reach
-  // out of its own value into a neighbouring prop such as `className`.
-  /variant\s*[:=]\s*\{?(?:[^{},]*?(?:\?\?|\?|:)\s*)?['"`]$/,
+  // and the literal. A parenthesised group is consumed whole so a call in the
+  // condition keeps its own commas, while a bare comma or brace still ends the
+  // match so it cannot reach out into a neighbouring prop such as `className`.
+  /variant\s*[:=]\s*\{?(?:(?:[^{},()]|\([^()]*\))*?(?:\?\?|\?|:)\s*)?\(*\s*['"`]$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
