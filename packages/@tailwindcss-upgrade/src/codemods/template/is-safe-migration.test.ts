@@ -119,6 +119,10 @@ describe('is-safe-migration', async () => {
     [`function Button({ variant='outline' }) {}`, 'outline'],
     [`Button({ variant: "outline" })`, 'outline'],
     [`Button({ variant: 'outline' })`, 'outline'],
+    [`Button({ variant: isActive ? "outline" : "ghost" })`, 'outline'],
+    [`<Button variant={first ? "default" : "outline"} />`, 'outline'],
+    [`<Button variant={variant ?? "outline"} />`, 'outline'],
+    [`<Button variant={required ? 'secondary' : 'outline'} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -142,6 +146,15 @@ describe('is-safe-migration', async () => {
 
     // Preact-style
     [`<div enterClass="shadow"></div>`, 'shadow', 'shadow-sm'],
+
+    // A conditional class is still a class, even next to a `variant` prop
+    [`<div className={active ? "shadow" : "none"}></div>`, 'shadow', 'shadow-sm'],
+    [`<Button variant="ghost" className={active ? "shadow" : "none"} />`, 'shadow', 'shadow-sm'],
+    [
+      `Button({ variant: a ? "ghost" : "x", className: b ? "shadow" : "y" })`,
+      'shadow',
+      'shadow-sm',
+    ],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
