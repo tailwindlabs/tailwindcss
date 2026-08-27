@@ -17,8 +17,10 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Alpine
   /wire:[^\s]*?$/,
 
-  // shadcn/ui variants
-  /variant\s*[:=]\s*\{?['"`]$/,
+  // shadcn/ui variants, including a ternary or nullish branch between the prop
+  // and the literal. Braces and commas are excluded so the match cannot reach
+  // out of its own value into a neighbouring prop such as `className`.
+  /variant\s*[:=]\s*\{?(?:[^{},]*?(?:\?\?|\?|:)\s*)?['"`]$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
