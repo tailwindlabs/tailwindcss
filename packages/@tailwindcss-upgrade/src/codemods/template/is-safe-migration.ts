@@ -4,6 +4,20 @@ import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import * as version from '../../utils/version'
 
 const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=', '<', '<=']
+
+// A parenthesised group with one level of nesting, so a call in a condition keeps
+// its own commas instead of ending the match early.
+const PAREN_GROUP = String.raw`\((?:[^()]|\([^()]*\))*\)`
+// What may sit between a `variant` prop and its string literal. Inside a brace a
+// quoted branch is ordinary, so quotes can be crossed but braces cannot. Outside
+// one a quote closes the attribute value, so crossing it would let the guard
+// reach a neighbouring attribute such as Vue's `:class`.
+const VARIANT_CONDITION = [
+  String.raw`\{(?:[^{}]|${PAREN_GROUP})*?(?:\?\?|\?|:)\s*`,
+  String.raw`(?:[^{},()'"\`]|${PAREN_GROUP})*?(?:\?\?|\?|:)\s*`,
+  String.raw`\{`,
+].join('|')
+
 const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Skip any generic attributes like `xxx="shadow"`,
   // including Vue conditions like `v-if="something && shadow"`
@@ -18,10 +32,8 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   /wire:[^\s]*?$/,
 
   // shadcn/ui variants, including a ternary or nullish branch between the prop
-  // and the literal. A parenthesised group is consumed whole so a call in the
-  // condition keeps its own commas, while a bare comma or brace still ends the
-  // match so it cannot reach out into a neighbouring prop such as `className`.
-  /variant\s*[:=]\s*\{?(?:(?:[^{},()]|\([^()]*\))*?(?:\?\?|\?|:)\s*)?\(*\s*['"`]$/,
+  // and the literal
+  new RegExp(String.raw`variant\s*[:=]\s*(?:${VARIANT_CONDITION})?\(*\s*['"\`]$`),
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
