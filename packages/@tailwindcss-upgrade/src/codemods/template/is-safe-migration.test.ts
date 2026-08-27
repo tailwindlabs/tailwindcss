@@ -123,6 +123,9 @@ describe('is-safe-migration', async () => {
     [`<Button variant={first ? "default" : "outline"} />`, 'outline'],
     [`<Button variant={variant ?? "outline"} />`, 'outline'],
     [`<Button variant={required ? 'secondary' : 'outline'} />`, 'outline'],
+    [`<Button variant={isActive(foo, bar) ? "outline" : "ghost"} />`, 'outline'],
+    [`<Button variant={cond ? ("outline") : "ghost"} />`, 'outline'],
+    [`<Button variant={cond ? "ghost" : ("outline")} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
