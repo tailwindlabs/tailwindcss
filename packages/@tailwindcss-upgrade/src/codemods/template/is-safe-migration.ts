@@ -8,6 +8,9 @@ const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=',
 // A parenthesised group with one level of nesting, so a call in a condition keeps
 // its own commas instead of ending the match early.
 const PAREN_GROUP = String.raw`\((?:[^()]|\([^()]*\))*\)`
+// An object literal with one level of nesting, so a condition may contain one
+// without the surrounding value looking like it ended there.
+const OBJECT_GROUP = String.raw`\{(?:[^{}]|\{[^{}]*\})*\}`
 // A ternary or nullish operator, then whatever sits before the string literal.
 const CONDITION_TAIL = String.raw`(?:\?\?|\?|:)\s*\(*\s*['"\`]$`
 
@@ -34,15 +37,19 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
 
   // `variant={cond ? "outline" : "ghost"}` — a brace ends the value, and a
   // quoted branch inside it is ordinary
-  new RegExp(String.raw`variant\s*[:=]\s*\{(?:[^{}]|${PAREN_GROUP})*?${CONDITION_TAIL}`),
+  new RegExp(
+    String.raw`variant\s*[:=]\s*\{(?:[^{}]|${PAREN_GROUP}|${OBJECT_GROUP})*?${CONDITION_TAIL}`,
+  ),
 
   // `:variant="active ? 'outline' : 'ghost'"` — the opening quote ends the value,
   // so the match cannot run on into a neighbouring attribute such as `:class`
-  new RegExp(String.raw`variant\s*=\s*(["'])(?:(?!\1)[^{}])*?${CONDITION_TAIL}`),
+  new RegExp(String.raw`variant\s*=\s*(["'])(?:(?!\1)[^{}]|${OBJECT_GROUP})*?${CONDITION_TAIL}`),
 
   // `{ variant: theme === "dark" ? "outline" : "ghost" }` — a comma or brace ends
   // the value, quotes do not
-  new RegExp(String.raw`variant\s*:\s*(?:[^{},]|${PAREN_GROUP})*?${CONDITION_TAIL}`),
+  new RegExp(
+    String.raw`variant\s*:\s*(?:[^{},]|${PAREN_GROUP}|${OBJECT_GROUP})*?${CONDITION_TAIL}`,
+  ),
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
