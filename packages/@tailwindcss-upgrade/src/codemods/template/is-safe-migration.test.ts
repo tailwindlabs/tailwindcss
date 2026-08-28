@@ -128,6 +128,8 @@ describe('is-safe-migration', async () => {
     [`<div :variant="active ? 'ghost' : 'outline'"></div>`, 'outline'],
     [`Button({ variant: (value ?? "outline") })`, 'outline'],
     [`Button({ variant: theme === "dark" ? "outline" : "ghost" })`, 'outline'],
+    [`<div :variant="isActive({ x: 1 }) ? 'ghost' : 'outline'"></div>`, 'outline'],
+    [`<Button variant={{ tone: "dark" }.tone === "dark" ? "outline" : "ghost"} />`, 'outline'],
     [`<Button variant={cond ? ("outline") : "ghost"} />`, 'outline'],
     [`<Button variant={cond ? "ghost" : ("outline")} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
