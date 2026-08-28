@@ -125,6 +125,9 @@ describe('is-safe-migration', async () => {
     [`<Button variant={required ? 'secondary' : 'outline'} />`, 'outline'],
     [`<Button variant={isActive(foo, bar) ? "outline" : "ghost"} />`, 'outline'],
     [`<Button variant={isActive(getState(foo, bar), x) ? "outline" : "ghost"} />`, 'outline'],
+    [`<div :variant="active ? 'ghost' : 'outline'"></div>`, 'outline'],
+    [`Button({ variant: (value ?? "outline") })`, 'outline'],
+    [`Button({ variant: theme === "dark" ? "outline" : "ghost" })`, 'outline'],
     [`<Button variant={cond ? ("outline") : "ghost"} />`, 'outline'],
     [`<Button variant={cond ? "ghost" : ("outline")} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
