@@ -8,15 +8,8 @@ const LOGICAL_OPERATORS = ['&&', '||', '?', '===', '==', '!=', '!==', '>', '>=',
 // A parenthesised group with one level of nesting, so a call in a condition keeps
 // its own commas instead of ending the match early.
 const PAREN_GROUP = String.raw`\((?:[^()]|\([^()]*\))*\)`
-// What may sit between a `variant` prop and its string literal. Inside a brace a
-// quoted branch is ordinary, so quotes can be crossed but braces cannot. Outside
-// one a quote closes the attribute value, so crossing it would let the guard
-// reach a neighbouring attribute such as Vue's `:class`.
-const VARIANT_CONDITION = [
-  String.raw`\{(?:[^{}]|${PAREN_GROUP})*?(?:\?\?|\?|:)\s*`,
-  String.raw`(?:[^{},()'"\`]|${PAREN_GROUP})*?(?:\?\?|\?|:)\s*`,
-  String.raw`\{`,
-].join('|')
+// A ternary or nullish operator, then whatever sits before the string literal.
+const CONDITION_TAIL = String.raw`(?:\?\?|\?|:)\s*\(*\s*['"\`]$`
 
 const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Skip any generic attributes like `xxx="shadow"`,
@@ -31,9 +24,25 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // Alpine
   /wire:[^\s]*?$/,
 
-  // shadcn/ui variants, including a ternary or nullish branch between the prop
-  // and the literal
-  new RegExp(String.raw`variant\s*[:=]\s*(?:${VARIANT_CONDITION})?\(*\s*['"\`]$`),
+  // shadcn/ui variants. A conditional can sit between the prop and the literal,
+  // so each form below stops at whatever actually ends its own value. Getting
+  // that boundary wrong in either direction is costly: too narrow and a prop is
+  // rewritten as a class, too wide and a real class stops being migrated.
+
+  // `variant="outline"`, `variant={"outline"}`, `variant: "outline"`
+  /variant\s*[:=]\s*\{?['"`]$/,
+
+  // `variant={cond ? "outline" : "ghost"}` — a brace ends the value, and a
+  // quoted branch inside it is ordinary
+  new RegExp(String.raw`variant\s*[:=]\s*\{(?:[^{}]|${PAREN_GROUP})*?${CONDITION_TAIL}`),
+
+  // `:variant="active ? 'outline' : 'ghost'"` — the opening quote ends the value,
+  // so the match cannot run on into a neighbouring attribute such as `:class`
+  new RegExp(String.raw`variant\s*=\s*(["'])(?:(?!\1)[^{}])*?${CONDITION_TAIL}`),
+
+  // `{ variant: theme === "dark" ? "outline" : "ghost" }` — a comma or brace ends
+  // the value, quotes do not
+  new RegExp(String.raw`variant\s*:\s*(?:[^{},]|${PAREN_GROUP})*?${CONDITION_TAIL}`),
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
