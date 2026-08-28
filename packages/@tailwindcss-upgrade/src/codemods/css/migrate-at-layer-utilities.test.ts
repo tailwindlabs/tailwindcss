@@ -1054,7 +1054,7 @@ describe('layered stylesheets', () => {
     `)
   })
 
-  it('should handle non-classes in utility-layered stylesheets', async () => {
+  it('should handle nested `@layer utilities` rules alongside non-class selectors', async () => {
     expect(
       await migrate({
         root: postcss.parse(css`
