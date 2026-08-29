@@ -530,6 +530,19 @@ test('hover', async () => {
   expect(await run(['hover/foo:flex'])).toEqual('')
 })
 
+test('self-hover', async () => {
+  expect(await run(['self-hover:flex'])).toMatchInlineSnapshot(`
+    "
+    @media (hover: hover) {
+      :where(:hover) > .self-hover\\:flex:hover {
+        display: flex;
+      }
+    }
+    "
+  `)
+  expect(await run(['self-hover/foo:flex'])).toEqual('')
+})
+
 test('focus', async () => {
   expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
     "

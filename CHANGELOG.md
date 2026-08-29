@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `@tailwindcss/turbopack` package to run Tailwind CSS with Next.js ([20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))
+- Add `self-hover` variant for direct pointer hover only, ignoring `:hover` propagated from `<label for>` associations
 
 ### Fixed
 
