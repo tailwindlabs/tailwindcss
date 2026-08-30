@@ -132,6 +132,10 @@ describe('is-safe-migration', async () => {
     [`<Button variant={{ tone: "dark" }.tone === "dark" ? "outline" : "ghost"} />`, 'outline'],
     [`<Button variant={cond ? ("outline") : "ghost"} />`, 'outline'],
     [`<Button variant={cond ? "ghost" : ("outline")} />`, 'outline'],
+    [`<Button variant={{ tone: "}" }.tone === "}" ? "outline" : "ghost"} />`, 'outline'],
+    [`<Button variant={{ a: { b: { c: 1 } } }.a ? "outline" : "ghost"} />`, 'outline'],
+    [`Button({ variant: { a: { b: 1 } }.a ? "outline" : "ghost" })`, 'outline'],
+    [`<Button variant={obj["state"] ? "outline" : "ghost"} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -165,6 +169,13 @@ describe('is-safe-migration', async () => {
       'shadow-sm',
     ],
     [`<div variant="ghost" :class="active ? 'shadow' : 'none'"></div>`, 'shadow', 'shadow-sm'],
+    [`<Button variant={{ a: 1 }} className={b ? "shadow" : "none"} />`, 'shadow', 'shadow-sm'],
+    [`<Button variant={cn("ghost", active ? "shadow" : "none")} />`, 'shadow', 'shadow-sm'],
+    [
+      `<div title="variant: outline" className={b ? "shadow" : "none"}></div>`,
+      'shadow',
+      'shadow-sm',
+    ],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
