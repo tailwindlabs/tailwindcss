@@ -111,7 +111,7 @@ test('`color-mix(…)` fallbacks can be disabled', async () => {
   let withPolyfill = await postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
   ]).process(input, { from: inputCssFilePath() })
-  expect(withPolyfill.css).toContain('color-mix(in lab, red, red)')
+  expect(withPolyfill.css).toContain('@supports (color: color-mix(in lab, red, red))')
 
   // Disabled: the declaration ships once, and nothing else changes.
   let withoutPolyfill = await postcss([
