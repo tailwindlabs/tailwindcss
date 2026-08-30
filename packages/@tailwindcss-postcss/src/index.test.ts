@@ -98,6 +98,33 @@ test('output is optimized by Lightning CSS', async () => {
   `)
 })
 
+test('`color-mix(…)` fallbacks can be disabled', async () => {
+  let input = css`
+    @reference 'tailwindcss/theme.css';
+    .foo {
+      @apply text-red-500/50;
+    }
+  `
+
+  // On by default: a `color-mix(…)` declaration is emitted twice — a plain
+  // fallback, plus the original behind an `@supports` gate.
+  let withPolyfill = await postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ]).process(input, { from: inputCssFilePath() })
+  expect(withPolyfill.css).toContain('color-mix(in lab, red, red)')
+
+  // Disabled: the declaration ships once, and nothing else changes.
+  let withoutPolyfill = await postcss([
+    tailwindcss({
+      base: `${__dirname}/fixtures/example-project`,
+      colorMixPolyfill: false,
+      optimize: { minify: false },
+    }),
+  ]).process(input, { from: inputCssFilePath() })
+  expect(withoutPolyfill.css).toContain('color-mix(')
+  expect(withoutPolyfill.css).not.toContain('@supports')
+})
+
 test('@apply can be used without emitting the theme in the CSS file', async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
