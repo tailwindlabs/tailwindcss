@@ -327,6 +327,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
   let cleanupWatchers: (() => Promise<void>)[] = []
+  // A rebuild swaps the watcher generation. Shutdown must not close the queue
+  // while that swap is in flight, or the files the old generation flushes are
+  // pushed into a closed queue and silently dropped.
+  let watcherSwap: Promise<unknown> = Promise.resolve()
   let finishInitialBuild!: () => void
   let initialBuildFinished = new Promise<void>((resolve) => (finishInitialBuild = resolve))
   let eventBatches: SerialBatches<string> | null = null
@@ -409,12 +413,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             )
             DEBUG && I.end('Setup new watchers')
 
-            // Clear old watchers
+            // Clear old watchers. Register the new generation *before* awaiting
+            // the old one, so shutdown never observes an empty cleanup list.
             DEBUG && I.start('Cleanup old watchers')
-            await Promise.all(cleanupWatchers.splice(0).map((cleanup) => cleanup()))
-            DEBUG && I.end('Cleanup old watchers')
-
+            let previousCleanups = cleanupWatchers.splice(0)
             cleanupWatchers.push(newWatchers.cleanup)
+            watcherSwap = Promise.all(previousCleanups.map((cleanup) => cleanup()))
+            await watcherSwap
+            DEBUG && I.end('Cleanup old watchers')
 
             // Re-compile the CSS
             DEBUG && I.start('Build CSS')
@@ -509,12 +515,10 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        Promise.all(cleanupWatchers.map((fn) => fn()))
-          .then(() => eventBatches?.close())
-          .then(
-            () => process.exit(0),
-            () => process.exit(1),
-          )
+        shutdownWatchMode(watcherSwap, cleanupWatchers, eventBatches).then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
       })
     }
 
@@ -706,6 +710,23 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 // Load `@parcel/watcher` lazily so a missing or broken native binding only
 // affects `--watch` (without `--poll`), instead of crashing one-off builds and
 // polling mode as well.
+/// Shut watch mode down in an order that cannot drop collected files.
+///
+/// A rebuild swaps the watcher generation, and the old generation flushes what it
+/// collected as it is torn down. Closing the queue before that flush lands means the
+/// files are pushed into a closed queue and ignored, so the process exits successfully
+/// with stale CSS. Wait for an in-flight swap first, then the current generation, and
+/// only then close.
+export async function shutdownWatchMode(
+  watcherSwap: Promise<unknown>,
+  cleanups: (() => Promise<void>)[],
+  batches: { close(): Promise<void> } | null,
+) {
+  await watcherSwap
+  await Promise.all(cleanups.map((cleanup) => cleanup()))
+  await batches?.close()
+}
+
 async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
   try {
     return (await import('@parcel/watcher')).default

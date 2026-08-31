@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 import { serializeBatches } from '../../utils/serial-batches'
-import { createWatchers, filterChangedFiles } from './index'
+import { createWatchers, filterChangedFiles, shutdownWatchMode } from './index'
 
 type WatchEvent = { type: 'create' | 'update' | 'delete'; path: string }
 type WatchCallback = (error: Error | null, events: WatchEvent[]) => Promise<void>
@@ -120,4 +120,30 @@ it('writes the newest change last when an earlier rebuild is slower', async () =
   await queue.close()
 
   expect(written).toEqual(['older-change', 'newer-change'])
+})
+
+it('does not close the queue while a watcher swap is still flushing', async () => {
+  // A rebuild swaps the watcher generation, and the old generation flushes what
+  // it collected as it is torn down. If shutdown closes the queue first, those
+  // files land in a closed queue and the process exits with stale CSS.
+  let closed = false
+  let flushed: string[] = []
+  let finishSwap!: () => void
+  let swap = new Promise<void>((resolve) => (finishSwap = resolve)).then(() => {
+    flushed.push('collected-during-swap')
+  })
+
+  let shutdown = shutdownWatchMode(swap, [], {
+    async close() {
+      closed = true
+    },
+  })
+  await nextTask()
+  expect(closed).toBe(false)
+
+  finishSwap()
+  await shutdown
+
+  expect(flushed).toEqual(['collected-during-swap'])
+  expect(closed).toBe(true)
 })
