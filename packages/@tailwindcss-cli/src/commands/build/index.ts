@@ -22,6 +22,7 @@ import {
   relative,
   wordWrap,
 } from '../../utils/renderer'
+import { serializeBatches, type SerialBatches } from '../../utils/serial-batches'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
@@ -326,6 +327,13 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
   let cleanupWatchers: (() => Promise<void>)[] = []
+  let finishInitialBuild!: () => void
+  let initialBuildFinished = new Promise<void>((resolve) => (finishInitialBuild = resolve))
+  let eventBatches: SerialBatches<string> | null = null
+  let setEventHandler!: (handler: (files: string[]) => Promise<void>) => void
+  let eventHandler = new Promise<(files: string[]) => Promise<void>>(
+    (resolve) => (setEventHandler = resolve),
+  )
 
   // Watch for changes
   if (args['--watch'] && pollInterval === false) {
@@ -333,12 +341,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // such that we can present a helpful error message if needed.
     await handleError(() => loadWatcher())
 
-    cleanupWatchers.push(
-      await createWatchers(await watchDirectories(scanner), async function handle(files) {
+    eventBatches = serializeBatches(
+      async (files) => (await eventHandler)(files),
+      initialBuildFinished,
+      (error) => eprintln(formatError(error)),
+    )
+    let initialWatchers = await createWatchers(
+      await watchDirectories(scanner),
+      async function handle(files) {
         try {
-          // If the only change happened to the output file, then we don't want to
-          // trigger a rebuild because that will result in an infinite loop.
-          if (files.length === 1 && files[0] === args['--output']) return
+          // Ignore our own writes so they don't trigger another rebuild.
+          files = filterChangedFiles(files, args['--output'], args['--map'])
+          if (files.length === 0) return
 
           using I = new Instrumentation()
           DEBUG && I.start('[@tailwindcss/cli] (watcher)')
@@ -388,7 +402,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             // Setup new watchers
             DEBUG && I.start('Setup new watchers')
-            let newCleanupFunction = await createWatchers(await watchDirectories(scanner), handle)
+            let newWatchers = await createWatchers(
+              await watchDirectories(scanner),
+              handle,
+              eventBatches!,
+            )
             DEBUG && I.end('Setup new watchers')
 
             // Clear old watchers
@@ -396,7 +414,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             await Promise.all(cleanupWatchers.splice(0).map((cleanup) => cleanup()))
             DEBUG && I.end('Cleanup old watchers')
 
-            cleanupWatchers.push(newCleanupFunction)
+            cleanupWatchers.push(newWatchers.cleanup)
 
             // Re-compile the CSS
             DEBUG && I.start('Build CSS')
@@ -481,17 +499,22 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           let end = process.hrtime.bigint()
           if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         }
-      }),
+      },
+      eventBatches,
     )
+    setEventHandler(initialWatchers.callback)
+    cleanupWatchers.push(initialWatchers.cleanup)
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        Promise.all(cleanupWatchers.map((fn) => fn())).then(
-          () => process.exit(0),
-          () => process.exit(1),
-        )
+        Promise.all(cleanupWatchers.map((fn) => fn()))
+          .then(() => eventBatches?.close())
+          .then(
+            () => process.exit(0),
+            () => process.exit(1),
+          )
       })
     }
 
@@ -515,6 +538,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   await write(output, map, args, I)
+  finishInitialBuild()
 
   let end = process.hrtime.bigint()
   if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
@@ -693,9 +717,29 @@ async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
   }
 }
 
-async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
-  let watcher = await loadWatcher()
+type WatchEvent = { type: 'create' | 'update' | 'delete'; path: string }
+type WatcherBackend = {
+  subscribe(
+    directory: string,
+    callback: (error: Error | null, events: WatchEvent[]) => Promise<void>,
+  ): Promise<{ unsubscribe(): void | Promise<void> }>
+}
 
+export async function createWatchers(
+  dirs: string[],
+  cb: (files: string[]) => Promise<void>,
+  batches: SerialBatches<string>,
+  watcher?: WatcherBackend,
+  lstat: (path: string) => Promise<Pick<Stats, 'isFile' | 'isSymbolicLink'>> = fs.lstat,
+) {
+  if (!watcher) {
+    let nativeWatcher = await loadWatcher()
+    watcher = {
+      subscribe(directory, callback) {
+        return nativeWatcher.subscribe(directory, callback)
+      },
+    }
+  }
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
@@ -730,6 +774,7 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
   // Keep track of the debounce queue to avoid multiple rebuilds.
   let debounceQueue = new Disposables()
+  let activeCallbacks = new Set<Promise<void>>()
 
   // A changed file can be watched by multiple watchers, but we only want to
   // handle the file once. We debounce the handle function with the collected
@@ -740,50 +785,60 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
     // Setup a new macrotask to handle the files in batch.
     debounceQueue.queueMacrotask(() => {
-      cb(Array.from(files))
+      let batch = Array.from(files)
       files.clear()
+      void batches.push(batch)
     })
   }
 
   // Setup a watcher for every directory.
   for (let dir of dirs) {
-    let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
-      // Whenever an error occurs we want to let the user know about it but we
-      // want to keep watching for changes.
-      if (err) {
-        console.error(err)
-        return
-      }
+    let { unsubscribe } = await watcher.subscribe(dir, (err, events) => {
+      let callback = (async () => {
+        // Whenever an error occurs we want to let the user know about it but we
+        // want to keep watching for changes.
+        if (err) {
+          console.error(err)
+          return
+        }
 
-      await Promise.all(
-        events.map(async (event) => {
-          // When a file is deleted, a rebuild should be triggered such that we
-          // can figure out whether this file must trigger a fresh build or not.
-          //
-          // If it must trigger a fresh build, then we will temporarily end up
-          // in a broken state, but an error will be shown to the user. Once the
-          // user resolves the issue, the CLI will recover.
-          if (event.type === 'delete') {
+        await Promise.all(
+          events.map(async (event) => {
+            // When a file is deleted, a rebuild should be triggered such that we
+            // can figure out whether this file must trigger a fresh build or not.
+            //
+            // If it must trigger a fresh build, then we will temporarily end up
+            // in a broken state, but an error will be shown to the user. Once the
+            // user resolves the issue, the CLI will recover.
+            if (event.type === 'delete') {
+              files.add(event.path)
+              return
+            }
+
+            // Ignore directory changes. We only care about file changes
+            let stats: Stats | null = null
+            try {
+              stats = (await lstat(event.path)) as Stats
+            } catch {}
+            if (!stats?.isFile() && !stats?.isSymbolicLink()) {
+              return
+            }
+
+            // Track the changed file.
             files.add(event.path)
-            return
-          }
+          }),
+        )
 
-          // Ignore directory changes. We only care about file changes
-          let stats: Stats | null = null
-          try {
-            stats = await fs.lstat(event.path)
-          } catch {}
-          if (!stats?.isFile() && !stats?.isSymbolicLink()) {
-            return
-          }
+        // Handle the tracked files at some point in the future.
+        await enqueueCallback()
+      })()
 
-          // Track the changed file.
-          files.add(event.path)
-        }),
+      activeCallbacks.add(callback)
+      void callback.then(
+        () => activeCallbacks.delete(callback),
+        () => activeCallbacks.delete(callback),
       )
-
-      // Handle the tracked files at some point in the future.
-      await enqueueCallback()
+      return callback
     })
 
     // Ensure we cleanup the watcher when we're done.
@@ -791,10 +846,27 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 
   // Cleanup
-  return async () => {
-    await watchers.dispose()
-    await debounceQueue.dispose()
+  return {
+    callback: cb,
+    cleanup: async () => {
+      await watchers.dispose()
+      await Promise.all(activeCallbacks)
+      await debounceQueue.dispose()
+      if (files.size > 0) {
+        let batch = Array.from(files)
+        files.clear()
+        void batches.push(batch)
+      }
+    },
   }
+}
+
+export function filterChangedFiles(
+  files: string[],
+  output: string | null,
+  map: boolean | string,
+): string[] {
+  return files.filter((file) => file !== output && file !== map)
 }
 
 function getRebuildStrategy(
