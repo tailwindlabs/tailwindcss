@@ -515,7 +515,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        shutdownWatchMode(watcherSwap, cleanupWatchers, eventBatches).then(
+        shutdownWatchMode(() => watcherSwap, cleanupWatchers, eventBatches).then(
           () => process.exit(0),
           () => process.exit(1),
         )
@@ -718,11 +718,19 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 /// with stale CSS. Wait for an in-flight swap first, then the current generation, and
 /// only then close.
 export async function shutdownWatchMode(
-  watcherSwap: Promise<unknown>,
+  pendingSwap: () => Promise<unknown>,
   cleanups: (() => Promise<void>)[],
   batches: { close(): Promise<void> } | null,
 ) {
-  await watcherSwap
+  // A rebuild already in flight can start its own swap while we are shutting
+  // down, so read the current one each time round rather than capturing it
+  // once. Capturing it once waits for the swap that happened to be current when
+  // stdin closed and closes the queue while a later one is still flushing.
+  let awaited: Promise<unknown> | undefined
+  while (awaited !== pendingSwap()) {
+    awaited = pendingSwap()
+    await awaited
+  }
   await Promise.all(cleanups.map((cleanup) => cleanup()))
   await batches?.close()
 }

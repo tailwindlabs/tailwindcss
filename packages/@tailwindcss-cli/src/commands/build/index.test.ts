@@ -133,7 +133,7 @@ it('does not close the queue while a watcher swap is still flushing', async () =
     flushed.push('collected-during-swap')
   })
 
-  let shutdown = shutdownWatchMode(swap, [], {
+  let shutdown = shutdownWatchMode(() => swap, [], {
     async close() {
       closed = true
     },
@@ -145,5 +145,40 @@ it('does not close the queue while a watcher swap is still flushing', async () =
   await shutdown
 
   expect(flushed).toEqual(['collected-during-swap'])
+  expect(closed).toBe(true)
+})
+
+it('waits for a watcher swap that starts after shutdown begins', async () => {
+  // A rebuild already in flight can swap watchers while we are shutting down.
+  // Reading the swap once captures whichever was current when stdin closed, and
+  // closes the queue while the later one is still flushing.
+  let closed = false
+  let flushed: string[] = []
+  let finishFirstSwap!: () => void
+  let firstSwap = new Promise<void>((resolve) => (finishFirstSwap = resolve)).then(() => {
+    flushed.push('first-swap')
+  })
+  let finishSecondSwap!: () => void
+  let secondSwap = new Promise<void>((resolve) => (finishSecondSwap = resolve)).then(() => {
+    flushed.push('second-swap')
+  })
+
+  let currentSwap: Promise<unknown> = firstSwap
+  let shutdown = shutdownWatchMode(() => currentSwap, [], {
+    async close() {
+      closed = true
+    },
+  })
+
+  // The in-flight rebuild starts its own swap while shutdown is already waiting.
+  currentSwap = secondSwap
+  finishFirstSwap()
+  await nextTask()
+  expect(closed).toBe(false)
+
+  finishSecondSwap()
+  await shutdown
+
+  expect(flushed).toEqual(['first-swap', 'second-swap'])
   expect(closed).toBe(true)
 })
