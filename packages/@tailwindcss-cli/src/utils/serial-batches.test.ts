@@ -153,3 +153,36 @@ it('reports a rejected initial barrier once and settles', async () => {
   expect(calls).toEqual([])
   expect(errors).toEqual([new Error('initial build failed')])
 })
+
+it('drains in-flight work but stays open for more', async () => {
+  let release!: () => void
+  let canFinish = new Promise<void>((resolve) => (release = resolve))
+  let calls: string[][] = []
+  let queue = serializeBatches<string>(async (batch) => {
+    calls.push(batch)
+    if (calls.length === 1) await canFinish
+  })
+
+  void queue.push(['first'])
+  await Promise.resolve()
+
+  let drained = queue.drain()
+  release()
+  await drained
+  expect(calls).toEqual([['first']])
+
+  // Draining must not close the queue — a shutdown drains before the watchers
+  // have flushed what they collected, and that work still has to be accepted.
+  await queue.push(['after-drain'])
+  expect(calls).toEqual([['first'], ['after-drain']])
+})
+
+it('drain returns immediately when nothing is in flight', async () => {
+  let calls: string[][] = []
+  let queue = serializeBatches<string>(async (batch) => {
+    calls.push(batch)
+  })
+
+  await queue.drain()
+  expect(calls).toEqual([])
+})
