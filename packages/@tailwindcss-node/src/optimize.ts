@@ -61,11 +61,9 @@ export function optimize(
   map = result.map?.toString()
 
   result.warnings = result.warnings.filter((warning) => {
-    // Ignore warnings about unknown pseudo-classes and pseudo-elements as they
-    // are likely caused by the use of `:deep()`, `:slotted()`, and `:global()`
-    // in frameworks like Vue, or `::ng-deep` and `:host-context()` in Angular.
-    // None of these are standard CSS, and each is resolved by the framework's
-    // own compiler before the CSS reaches a browser.
+    // Ignore warnings about unknown pseudo-classes that are used in frameworks
+    // such as Vue or Angular and are handled by their own compilers, before
+    // reaching the browser.
     if (
       /'(deep|slotted|global|ng-deep|host-context)' is not recognized as a valid pseudo-/.test(
         warning.message,
