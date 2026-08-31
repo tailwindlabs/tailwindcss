@@ -76,3 +76,41 @@ it('waits for an entered watcher callback before shutdown flushes changes', asyn
   await queue.close()
   expect(calls).toEqual([['delayed-change']])
 })
+
+it('writes the newest change last when an earlier rebuild is slower', async () => {
+  // The reported bug: a rebuild for an older change finished *after* the rebuild
+  // for a newer one and overwrote it, leaving stale CSS on disk. The serial
+  // batches tests pin the scheduling on its own; this pins the outcome through
+  // the watcher wiring, which is the shape the bug was reported in.
+  let written: string[] = []
+  let releaseSlowRebuild!: () => void
+  let slowRebuildCanFinish = new Promise<void>((resolve) => (releaseSlowRebuild = resolve))
+
+  let queue = serializeBatches<string>(async (files) => {
+    // Make the *first* rebuild the slow one. Without serialization the second
+    // rebuild finishes first and this stale result lands on top of it.
+    if (written.length === 0) await slowRebuildCanFinish
+    written.push(files.at(-1)!)
+  })
+  let fake = fakeWatcher()
+  await createWatchers(
+    ['/watch'],
+    async () => {},
+    queue,
+    fake.watcher,
+    async () => ({
+      isFile: () => true,
+      isSymbolicLink: () => false,
+    }),
+  )
+
+  await fake.callbacks[0](null, [{ type: 'update', path: 'older-change' }])
+  await nextTask()
+  await fake.callbacks[0](null, [{ type: 'update', path: 'newer-change' }])
+  await nextTask()
+
+  releaseSlowRebuild()
+  await queue.close()
+
+  expect(written).toEqual(['older-change', 'newer-change'])
+})
