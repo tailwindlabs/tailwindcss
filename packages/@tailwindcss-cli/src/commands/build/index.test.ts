@@ -122,63 +122,55 @@ it('writes the newest change last when an earlier rebuild is slower', async () =
   expect(written).toEqual(['older-change', 'newer-change'])
 })
 
-it('does not close the queue while a watcher swap is still flushing', async () => {
-  // A rebuild swaps the watcher generation, and the old generation flushes what
-  // it collected as it is torn down. If shutdown closes the queue first, those
-  // files land in a closed queue and the process exits with stale CSS.
-  let closed = false
-  let flushed: string[] = []
-  let finishSwap!: () => void
-  let swap = new Promise<void>((resolve) => (finishSwap = resolve)).then(() => {
-    flushed.push('collected-during-swap')
+it('waits for an in-flight rebuild before tearing down the watchers', async () => {
+  // A full rebuild runs inside the queue and swaps the watcher generation while
+  // it does. Tearing the watchers down first races that swap.
+  let order: string[] = []
+  let finishRebuild!: () => void
+  let rebuildDone = new Promise<void>((resolve) => (finishRebuild = resolve))
+  let queue = serializeBatches<string>(async () => {
+    order.push('rebuild:start')
+    await rebuildDone
+    order.push('rebuild:end')
   })
 
-  let shutdown = shutdownWatchMode(() => swap, [], {
-    async close() {
-      closed = true
-    },
-  })
+  void queue.push(['change'])
   await nextTask()
-  expect(closed).toBe(false)
 
-  finishSwap()
+  let shutdown = shutdownWatchMode(
+    [
+      async () => {
+        order.push('cleanup')
+      },
+    ],
+    queue,
+  )
+  await nextTask()
+  expect(order).toEqual(['rebuild:start'])
+
+  finishRebuild()
   await shutdown
 
-  expect(flushed).toEqual(['collected-during-swap'])
-  expect(closed).toBe(true)
+  expect(order).toEqual(['rebuild:start', 'rebuild:end', 'cleanup'])
 })
 
-it('waits for a watcher swap that starts after shutdown begins', async () => {
-  // A rebuild already in flight can swap watchers while we are shutting down.
-  // Reading the swap once captures whichever was current when stdin closed, and
-  // closes the queue while the later one is still flushing.
-  let closed = false
-  let flushed: string[] = []
-  let finishFirstSwap!: () => void
-  let firstSwap = new Promise<void>((resolve) => (finishFirstSwap = resolve)).then(() => {
-    flushed.push('first-swap')
-  })
-  let finishSecondSwap!: () => void
-  let secondSwap = new Promise<void>((resolve) => (finishSecondSwap = resolve)).then(() => {
-    flushed.push('second-swap')
+it('processes what the watchers flush on the way out', async () => {
+  // The watchers flush what they collected as they are torn down. That has to
+  // land in a queue that is still open, or it is dropped and we exit as if all
+  // was well.
+  let processed: string[][] = []
+  let queue = serializeBatches<string>(async (files) => {
+    processed.push(files)
   })
 
-  let currentSwap: Promise<unknown> = firstSwap
-  let shutdown = shutdownWatchMode(() => currentSwap, [], {
-    async close() {
-      closed = true
-    },
-  })
+  await shutdownWatchMode(
+    [
+      async () => {
+        void queue.push(['flushed-on-shutdown'])
+      },
+    ],
+    queue,
+  )
 
-  // The in-flight rebuild starts its own swap while shutdown is already waiting.
-  currentSwap = secondSwap
-  finishFirstSwap()
-  await nextTask()
-  expect(closed).toBe(false)
-
-  finishSecondSwap()
-  await shutdown
-
-  expect(flushed).toEqual(['first-swap', 'second-swap'])
-  expect(closed).toBe(true)
+  expect(processed).toEqual([['flushed-on-shutdown']])
 })

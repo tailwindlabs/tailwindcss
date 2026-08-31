@@ -327,10 +327,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
   let cleanupWatchers: (() => Promise<void>)[] = []
-  // A rebuild swaps the watcher generation. Shutdown must not close the queue
-  // while that swap is in flight, or the files the old generation flushes are
-  // pushed into a closed queue and silently dropped.
-  let watcherSwap: Promise<unknown> = Promise.resolve()
   let finishInitialBuild!: () => void
   let initialBuildFinished = new Promise<void>((resolve) => (finishInitialBuild = resolve))
   let eventBatches: SerialBatches<string> | null = null
@@ -418,8 +414,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             DEBUG && I.start('Cleanup old watchers')
             let previousCleanups = cleanupWatchers.splice(0)
             cleanupWatchers.push(newWatchers.cleanup)
-            watcherSwap = Promise.all(previousCleanups.map((cleanup) => cleanup()))
-            await watcherSwap
+            await Promise.all(previousCleanups.map((cleanup) => cleanup()))
             DEBUG && I.end('Cleanup old watchers')
 
             // Re-compile the CSS
@@ -515,7 +510,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // disable this behavior with `--watch=always`.
     if (args['--watch'] !== 'always') {
       process.stdin.on('end', () => {
-        shutdownWatchMode(() => watcherSwap, cleanupWatchers, eventBatches).then(
+        shutdownWatchMode(cleanupWatchers, eventBatches).then(
           () => process.exit(0),
           () => process.exit(1),
         )
@@ -712,25 +707,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 // polling mode as well.
 /// Shut watch mode down in an order that cannot drop collected files.
 ///
-/// A rebuild swaps the watcher generation, and the old generation flushes what it
-/// collected as it is torn down. Closing the queue before that flush lands means the
-/// files are pushed into a closed queue and ignored, so the process exits successfully
-/// with stale CSS. Wait for an in-flight swap first, then the current generation, and
-/// only then close.
+/// A full rebuild runs inside the queue and swaps the watcher generation while it
+/// does, so draining the queue is what waits for a rebuild to finish — including
+/// one that has not yet replaced its watchers. Only then is it safe to tear the
+/// watchers down, because the files they flush on the way out have to land in a
+/// queue that is still open. Closing first drops them and exits with stale CSS.
 export async function shutdownWatchMode(
-  pendingSwap: () => Promise<unknown>,
   cleanups: (() => Promise<void>)[],
-  batches: { close(): Promise<void> } | null,
+  batches: { drain(): Promise<void>; close(): Promise<void> } | null,
 ) {
-  // A rebuild already in flight can start its own swap while we are shutting
-  // down, so read the current one each time round rather than capturing it
-  // once. Capturing it once waits for the swap that happened to be current when
-  // stdin closed and closes the queue while a later one is still flushing.
-  let awaited: Promise<unknown> | undefined
-  while (awaited !== pendingSwap()) {
-    awaited = pendingSwap()
-    await awaited
-  }
+  await batches?.drain()
   await Promise.all(cleanups.map((cleanup) => cleanup()))
   await batches?.close()
 }

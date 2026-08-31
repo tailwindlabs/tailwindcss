@@ -1,5 +1,9 @@
 export interface SerialBatches<T> {
   push(batch: T[]): Promise<void>
+  /// Wait for in-flight work to finish, without closing. Callers that need the
+  /// queue to still accept work afterwards — a shutdown that has yet to flush
+  /// what the watchers collected — drain first and close last.
+  drain(): Promise<void>
   close(): Promise<void>
 }
 
@@ -57,6 +61,13 @@ export function serializeBatches<T>(
 
   return {
     push,
+    async drain() {
+      // `inFlight` is re-chained by finalization when work arrived mid-drain, so
+      // loop until it settles rather than awaiting whichever promise is current.
+      while (inFlight) {
+        await inFlight
+      }
+    },
     async close() {
       closed = true
       await inFlight
