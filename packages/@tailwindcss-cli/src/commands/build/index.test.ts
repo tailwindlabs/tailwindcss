@@ -83,13 +83,20 @@ it('writes the newest change last when an earlier rebuild is slower', async () =
   // batches tests pin the scheduling on its own; this pins the outcome through
   // the watcher wiring, which is the shape the bug was reported in.
   let written: string[] = []
+  let rebuildCount = 0
+  let startFirstRebuild!: () => void
+  let firstRebuildStarted = new Promise<void>((resolve) => (startFirstRebuild = resolve))
   let releaseSlowRebuild!: () => void
   let slowRebuildCanFinish = new Promise<void>((resolve) => (releaseSlowRebuild = resolve))
 
   let queue = serializeBatches<string>(async (files) => {
-    // Make the *first* rebuild the slow one. Without serialization the second
-    // rebuild finishes first and this stale result lands on top of it.
-    if (written.length === 0) await slowRebuildCanFinish
+    // Only the *first* rebuild is slow. Counting rebuilds rather than writes
+    // matters: the first rebuild is suspended below, so a write-count check
+    // would also suspend the second one and the test would pass unserialized.
+    if (rebuildCount++ === 0) {
+      startFirstRebuild()
+      await slowRebuildCanFinish
+    }
     written.push(files.at(-1)!)
   })
   let fake = fakeWatcher()
@@ -105,7 +112,7 @@ it('writes the newest change last when an earlier rebuild is slower', async () =
   )
 
   await fake.callbacks[0](null, [{ type: 'update', path: 'older-change' }])
-  await nextTask()
+  await firstRebuildStarted
   await fake.callbacks[0](null, [{ type: 'update', path: 'newer-change' }])
   await nextTask()
 
