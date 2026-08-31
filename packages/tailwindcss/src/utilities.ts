@@ -4641,6 +4641,21 @@ export function createUtilities(theme: Theme) {
         if (value === null || resolved === null) return
         if (candidate.modifier && !alpha) return
 
+        if (alpha) {
+          return [
+            filterProperties(),
+            decl('--tw-drop-shadow-alpha', alpha),
+            ...alphaReplacedDropShadowProperties(
+              '--tw-drop-shadow-size',
+              value,
+              alpha,
+              (color) => `var(--tw-drop-shadow-color, ${color})`,
+            ),
+            decl('--tw-drop-shadow', `var(--tw-drop-shadow-size)`),
+            decl('filter', cssFilterValue),
+          ]
+        }
+
         return [
           filterProperties(),
           decl('--tw-drop-shadow-alpha', alpha),

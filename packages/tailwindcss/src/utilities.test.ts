@@ -24169,14 +24169,14 @@ test('filter', async () => {
     .drop-shadow\\/12\\.5 {
       --tw-drop-shadow-alpha: 12.5%;
       --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, oklab(0% 0 0 / .125)));
-      --tw-drop-shadow: drop-shadow(var(--drop-shadow));
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
     .drop-shadow\\/25 {
       --tw-drop-shadow-alpha: 25%;
       --tw-drop-shadow-size: drop-shadow(0 1px 1px var(--tw-drop-shadow-color, oklab(0% 0 0 / .25)));
-      --tw-drop-shadow: drop-shadow(var(--drop-shadow));
+      --tw-drop-shadow: var(--tw-drop-shadow-size);
       filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
     }
 
