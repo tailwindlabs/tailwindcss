@@ -516,6 +516,8 @@ it('should not parse functional utilities with multiple modifiers', () => {
   utilities.functional('bg', () => [])
 
   expect(run('bg-red-1/2/3', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/50/', { utilities })).toMatchInlineSnapshot(`[]`)
+  expect(run('bg-red-500/50//foo', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an arbitrary value', () => {
@@ -1414,6 +1416,19 @@ it('should parse a functional variant with a modifier', () => {
       },
     ]
   `)
+})
+
+it('should not parse variants with multiple modifiers', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+  variants.compound('group', Compounds.StyleRules, () => {})
+
+  expect(run('group-hover/foo:flex', { utilities, variants })).toHaveLength(1)
+  expect(run('group-hover/foo/:flex', { utilities, variants })).toEqual([])
+  expect(run('group-hover/foo//bar:flex', { utilities, variants })).toEqual([])
 })
 
 it('should parse a functional variant starting with @', () => {

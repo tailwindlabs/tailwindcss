@@ -381,14 +381,15 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^^^^^^^^^    -> Base without modifier
   //            ^^ -> Modifier segment
   // ```
-  let [baseWithoutModifier, modifierSegment = null, additionalModifier] = segment(base, '/')
+  let parts = segment(base, '/')
+  let [baseWithoutModifier, modifierSegment = null] = parts
 
   // If there's more than one modifier, the utility is invalid.
   //
   // E.g.:
   //
   // - `bg-red-500/50/50`
-  if (additionalModifier) return
+  if (parts.length > 2) return
 
   let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
 
@@ -710,14 +711,15 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // group-hover/group-name
     // ^^^^^^^^^^^            -> Variant without modifier
     //             ^^^^^^^^^^ -> Modifier
-    let [variantWithoutModifier, modifier = null, additionalModifier] = segment(variant, '/')
+    let parts = segment(variant, '/')
+    let [variantWithoutModifier, modifier = null] = parts
 
     // If there's more than one modifier, the variant is invalid.
     //
     // E.g.:
     //
     // - `group-hover/foo/bar`
-    if (additionalModifier) return null
+    if (parts.length > 2) return null
 
     let roots = findRoots(variantWithoutModifier, (root) => {
       return designSystem.variants.has(root)
