@@ -5,6 +5,38 @@ extern crate napi_derive;
 
 mod utf16;
 
+#[cfg(windows)]
+#[napi(module_exports)]
+fn retain_native_library() -> napi::Result<()> {
+  use std::ffi::c_void;
+
+  #[link(name = "kernel32")]
+  extern "system" {
+    fn GetModuleHandleExW(flags: u32, address: *const u16, module: *mut *mut c_void) -> i32;
+  }
+
+  const FROM_ADDRESS: u32 = 0x00000004;
+  const PIN: u32 = 0x00000001;
+  let mut module = std::ptr::null_mut();
+  // Rayon threads may outlive a Node worker. Keep their code mapped until process exit.
+  // SAFETY: FROM_ADDRESS treats this function's address as a module location, not a string.
+  // The module is executing this registration hook and `module` is a valid output pointer.
+  let retained = unsafe {
+    GetModuleHandleExW(
+      FROM_ADDRESS | PIN,
+      retain_native_library as *const () as *const u16,
+      &mut module,
+    )
+  };
+  if retained == 0 {
+    return Err(napi::Error::from_reason(format!(
+      "Failed to retain the Oxide native library: {}",
+      std::io::Error::last_os_error()
+    )));
+  }
+  Ok(())
+}
+
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ChangedContent {
