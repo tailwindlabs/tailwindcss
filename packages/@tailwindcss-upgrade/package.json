@@ -31,7 +31,7 @@
     "@tailwindcss/oxide": "workspace:*",
     "dedent": "catalog:",
     "enhanced-resolve": "catalog:",
-    "globby": "^16.2.0",
+    "globby": "^16.2.2",
     "jiti": "^2.7.0",
     "mri": "^1.2.0",
     "picocolors": "^1.1.1",
@@ -39,14 +39,14 @@
     "postcss-import": "^16.1.1",
     "postcss-selector-parser": "^7.1.4",
     "prettier": "catalog:",
-    "semver": "^7.8.4",
+    "semver": "^7.8.5",
     "tailwindcss": "workspace:*",
-    "tree-sitter": "^0.22.4",
+    "tree-sitter": "^0.25.1",
     "tree-sitter-typescript": "^0.23.2"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@types/postcss-import": "^14.0.3",
-    "@types/semver": "^7.7.1"
+    "@types/semver": "^7.8.0"
   }
 }

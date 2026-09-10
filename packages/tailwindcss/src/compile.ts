@@ -1,4 +1,4 @@
-import { atRule, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
+import { atRule, context, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
@@ -187,7 +187,18 @@ export function applyVariant(
     // E.g. `[>img]:flex` is not valid, but `has-[>img]:flex` is
     if (variant.relative && depth === 0) return null
 
-    node.nodes = [rule(variant.selector, node.nodes)]
+    let child: AstNode = rule(variant.selector, node.nodes)
+
+    // Wrap variant-generated `@scope` rules in a `context` marker, so they are
+    // hoisted with the variant semantics instead of their native CSS nesting
+    // semantics. The slotted content is marked as `user` content, so `@scope`
+    // rules defined there keep their native CSS nesting semantics.
+    if (child.kind === 'at-rule' && child.name === '@scope') {
+      child.nodes = [context({ source: 'user' }, node.nodes)]
+      child = context({ source: 'variant' }, [child])
+    }
+
+    node.nodes = [child]
     return
   }
 

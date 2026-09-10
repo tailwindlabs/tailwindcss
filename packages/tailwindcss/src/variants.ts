@@ -3,6 +3,7 @@ import {
   atRoot,
   atRule,
   cloneAstNode,
+  context,
   decl,
   rule,
   styleRule,
@@ -89,12 +90,14 @@ export class Variants {
     let selectors: string[] = []
 
     let usesAtVariant = false
+    let usesAtScope = false
     walk(ast, (node) => {
       if (node.kind === 'rule') {
         selectors.push(node.selector)
       } else if (node.kind === 'at-rule' && node.name === '@variant') {
         usesAtVariant = true
       } else if (node.kind === 'at-rule' && node.name !== '@slot') {
+        if (node.name === '@scope') usesAtScope = true
         selectors.push(`${node.name} ${node.params}`)
       }
     })
@@ -104,8 +107,14 @@ export class Variants {
       (r) => {
         let body = ast.map(cloneAstNode)
         if (usesAtVariant) substituteAtVariant(body, designSystem)
-        substituteAtSlot(body, r.nodes)
-        r.nodes = body
+
+        if (usesAtScope) {
+          substituteAtSlot(body, [context({ source: 'user' }, r.nodes)])
+          r.nodes = [context({ source: 'variant' }, body)]
+        } else {
+          substituteAtSlot(body, r.nodes)
+          r.nodes = body
+        }
       },
       { compounds: compoundsForSelectors(selectors) },
     )
@@ -929,7 +938,22 @@ export function createVariants(theme: Theme): Variants {
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
-        let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
+        let changed = false
+        let ast = ValueParser.parse(value)
+        walk(ast, (node) => {
+          if (node.kind !== 'function') return
+
+          // Leave selectors as-is, they could contain `selector(a:not(b))`, and
+          // in this case we don't want the space around the `not`.
+          if (node.value === 'selector') return WalkAction.Skip
+
+          if (node.value === 'and' || node.value === 'or' || node.value === 'not') {
+            changed = true
+            node.value = ` ${node.value} `
+          }
+        })
+
+        let query = changed ? ValueParser.toCss(ast) : value
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return

@@ -421,6 +421,13 @@ export function createUtilities(theme: Theme) {
             desc.themeKeys ?? [],
           )
 
+          // If the theme value resolved without consuming the modifier, then
+          // the modifier would be silently ignored and `w-4` and `w-4/foo`
+          // would generate the same CSS.
+          //
+          // The modifier would be consumed if it's a fraction, e.g.: `w-1/2`
+          if (value !== null && candidate.modifier && !candidate.value.fraction) return
+
           // Automatically handle things like `w-1/2` without requiring `1/2` to
           // exist as a theme value.
           if (value === null && desc.supportsFractions && candidate.value.fraction) {
@@ -1561,11 +1568,11 @@ export function createUtilities(theme: Theme) {
 
   {
     let transformValue = [
-      'var(--tw-rotate-x,)',
-      'var(--tw-rotate-y,)',
-      'var(--tw-rotate-z,)',
-      'var(--tw-skew-x,)',
-      'var(--tw-skew-y,)',
+      'var(--tw-rotate-x, )',
+      'var(--tw-rotate-y, )',
+      'var(--tw-rotate-z, )',
+      'var(--tw-skew-x, )',
+      'var(--tw-skew-y, )',
     ].join(' ')
 
     let transformProperties = () =>
@@ -1807,7 +1814,7 @@ export function createUtilities(theme: Theme) {
     staticUtility(`touch-pan-${value}`, [
       touchProperties,
       ['--tw-pan-x', `pan-${value}`],
-      ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+      ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
     ])
   }
 
@@ -1815,14 +1822,14 @@ export function createUtilities(theme: Theme) {
     staticUtility(`touch-pan-${value}`, [
       touchProperties,
       ['--tw-pan-y', `pan-${value}`],
-      ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+      ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
     ])
   }
 
   staticUtility('touch-pinch-zoom', [
     touchProperties,
     ['--tw-pinch-zoom', `pinch-zoom`],
-    ['touch-action', 'var(--tw-pan-x,) var(--tw-pan-y,) var(--tw-pinch-zoom,)'],
+    ['touch-action', 'var(--tw-pan-x, ) var(--tw-pan-y, ) var(--tw-pinch-zoom, )'],
   ])
 
   /**
@@ -3888,6 +3895,10 @@ export function createUtilities(theme: Theme) {
     }
 
     {
+      // A modifier is only valid as the opacity of a stroke color. The value
+      // did not resolve to a color, so a modifier would be silently ignored.
+      if (candidate.modifier) return
+
       let value = theme.resolve(candidate.value.value, ['--stroke-width'])
       if (value) {
         return [decl('stroke-width', value)]
@@ -4178,27 +4189,27 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssFilterValue = [
-      'var(--tw-blur,)',
-      'var(--tw-brightness,)',
-      'var(--tw-contrast,)',
-      'var(--tw-grayscale,)',
-      'var(--tw-hue-rotate,)',
-      'var(--tw-invert,)',
-      'var(--tw-saturate,)',
-      'var(--tw-sepia,)',
-      'var(--tw-drop-shadow,)',
+      'var(--tw-blur, )',
+      'var(--tw-brightness, )',
+      'var(--tw-contrast, )',
+      'var(--tw-grayscale, )',
+      'var(--tw-hue-rotate, )',
+      'var(--tw-invert, )',
+      'var(--tw-saturate, )',
+      'var(--tw-sepia, )',
+      'var(--tw-drop-shadow, )',
     ].join(' ')
 
     let cssBackdropFilterValue = [
-      'var(--tw-backdrop-blur,)',
-      'var(--tw-backdrop-brightness,)',
-      'var(--tw-backdrop-contrast,)',
-      'var(--tw-backdrop-grayscale,)',
-      'var(--tw-backdrop-hue-rotate,)',
-      'var(--tw-backdrop-invert,)',
-      'var(--tw-backdrop-opacity,)',
-      'var(--tw-backdrop-saturate,)',
-      'var(--tw-backdrop-sepia,)',
+      'var(--tw-backdrop-blur, )',
+      'var(--tw-backdrop-brightness, )',
+      'var(--tw-backdrop-contrast, )',
+      'var(--tw-backdrop-grayscale, )',
+      'var(--tw-backdrop-hue-rotate, )',
+      'var(--tw-backdrop-invert, )',
+      'var(--tw-backdrop-opacity, )',
+      'var(--tw-backdrop-saturate, )',
+      'var(--tw-backdrop-sepia, )',
     ].join(' ')
 
     let filterProperties = () => {
@@ -4628,6 +4639,7 @@ export function createUtilities(theme: Theme) {
         let value = theme.get(['--drop-shadow'])
         let resolved = theme.resolve(null, ['--drop-shadow'])
         if (value === null || resolved === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           filterProperties(),
@@ -4941,7 +4953,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssContainValue =
-      'var(--tw-contain-size,) var(--tw-contain-layout,) var(--tw-contain-paint,) var(--tw-contain-style,)'
+      'var(--tw-contain-size, ) var(--tw-contain-layout, ) var(--tw-contain-paint, ) var(--tw-contain-style, )'
     let cssContainProperties = () => {
       return atRoot([
         property('--tw-contain-size'),
@@ -5035,7 +5047,7 @@ export function createUtilities(theme: Theme) {
 
   {
     let cssFontVariantNumericValue =
-      'var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,)'
+      'var(--tw-ordinal, ) var(--tw-slashed-zero, ) var(--tw-numeric-figure, ) var(--tw-numeric-spacing, ) var(--tw-numeric-fraction, )'
     let fontVariantNumericProperties = () => {
       return atRoot([
         property('--tw-ordinal'),
@@ -5436,6 +5448,7 @@ export function createUtilities(theme: Theme) {
     if (!candidate.value) {
       let value = theme.get(['--text-shadow'])
       if (value === null) return
+      if (candidate.modifier && !alpha) return
 
       return [
         textShadowProperties(),
@@ -5463,6 +5476,8 @@ export function createUtilities(theme: Theme) {
           ]
         }
         default: {
+          if (candidate.modifier && !alpha) return
+
           return [
             textShadowProperties(),
             decl('--tw-text-shadow-alpha', alpha),
@@ -5491,6 +5506,8 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.get([`--text-shadow-${candidate.value.value}`])
       if (value) {
+        if (candidate.modifier && !alpha) return
+
         return [
           textShadowProperties(),
           decl('--tw-text-shadow-alpha', alpha),
@@ -5582,6 +5599,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let value = theme.get(['--shadow'])
         if (value === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           boxShadowProperties(),
@@ -5611,6 +5629,8 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
+            if (candidate.modifier && !alpha) return
+
             return [
               boxShadowProperties(),
               decl('--tw-shadow-alpha', alpha),
@@ -5644,6 +5664,8 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
+          if (candidate.modifier && !alpha) return
+
           return [
             boxShadowProperties(),
             decl('--tw-shadow-alpha', alpha),
@@ -5708,6 +5730,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let value = theme.get(['--inset-shadow'])
         if (value === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           boxShadowProperties(),
@@ -5737,6 +5760,8 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
+            if (candidate.modifier && !alpha) return
+
             return [
               boxShadowProperties(),
               decl('--tw-inset-shadow-alpha', alpha),
@@ -5772,6 +5797,8 @@ export function createUtilities(theme: Theme) {
         let value = theme.get([`--inset-shadow-${candidate.value.value}`])
 
         if (value) {
+          if (candidate.modifier && !alpha) return
+
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow-alpha', alpha),
@@ -5819,7 +5846,7 @@ export function createUtilities(theme: Theme) {
 
     let defaultRingColor = theme.get(['--default-ring-color']) ?? 'currentcolor'
     function ringShadowValue(value: string) {
-      return `var(--tw-ring-inset,) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
+      return `var(--tw-ring-inset, ) 0 0 0 calc(${value} + var(--tw-ring-offset-width)) var(--tw-ring-color, ${defaultRingColor})`
     }
     utilities.functional('ring', (candidate) => {
       if (!candidate.value) {
@@ -5968,7 +5995,7 @@ export function createUtilities(theme: Theme) {
     ])
 
     let ringOffsetShadowValue =
-      'var(--tw-ring-inset,) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
+      'var(--tw-ring-inset, ) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color)'
     utilities.functional('ring-offset', (candidate) => {
       if (!candidate.value) return
 
@@ -6193,6 +6220,15 @@ export function createCssUtility(node: AtRule) {
 
           let args = segment(ValueParser.toCss(fn.nodes), ',')
           for (let [idx, arg] of args.entries()) {
+            arg = arg.trim()
+
+            // The value of `--default(…)` is emitted as-is, so it should not be
+            // normalized.
+            if (arg.startsWith('--default(')) {
+              args[idx] = arg
+              continue
+            }
+
             // Transform escaped `\\*` -> `*`
             arg = arg.replace(/\\\*/g, '*')
 

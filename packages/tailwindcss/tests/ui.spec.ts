@@ -2177,6 +2177,216 @@ test('shadow DOM has access to variables', async ({ page }) => {
   expect(gap).toBe('8px')
 })
 
+// @scope related tests
+{
+  test('custom variant using `@scope`', async ({ page }) => {
+    let { getPropertyValue } = await render(
+      page,
+      html`
+        <div class="checkout">
+          <div id="in" class="in-checkout:underline">In scope</div>
+          <div class="payment">
+            <div id="beyond" class="in-checkout:underline">Beyond the limit</div>
+          </div>
+        </div>
+        <div id="out" class="in-checkout:underline">Not in scope</div>
+      `,
+      css`
+        @custom-variant in-checkout {
+          @scope (.checkout) to (.payment) {
+            @slot;
+          }
+        }
+      `,
+    )
+
+    test.skip(!(await supportsAtScope(page)), '`@scope` is not supported in this browser')
+
+    expect(await getPropertyValue('#in', 'text-decoration-line')).toEqual('underline')
+    expect(await getPropertyValue('#beyond', 'text-decoration-line')).toEqual('none')
+    expect(await getPropertyValue('#out', 'text-decoration-line')).toEqual('none')
+  })
+
+  test('custom variant using `@scope` behaves like the equivalent authored CSS', async ({
+    page,
+  }) => {
+    // Render the same structure twice:
+    // - Once styled by authored CSS using `@scope`, like the "normal CSS"
+    //   reference in https://github.com/tailwindlabs/tailwindcss/issues/18961
+    // - Once styled by utilities using an equivalent custom variant
+    function structure(prefix: string, probe: string) {
+      return html`
+        <div class="checkout">
+          <div id="${prefix}-in" class="${probe}">In scope</div>
+          <div class="payment">
+            <div id="${prefix}-beyond" class="${probe}">Beyond the limit</div>
+          </div>
+        </div>
+        <div id="${prefix}-out" class="${probe}">Not in scope</div>
+      `
+    }
+
+    let { getPropertyValue } = await render(
+      page,
+      structure('a', 'a-probe') + structure('c', 'in-checkout:underline'),
+      css`
+        @custom-variant in-checkout {
+          @scope (.checkout) to (.payment) {
+            @slot;
+          }
+        }
+      `,
+    )
+
+    // The `a-*` structure is styled by the authored CSS as-is
+    await page.addStyleTag({
+      content: css`
+        @scope (.checkout) to (.payment) {
+          .a-probe {
+            text-decoration-line: underline;
+          }
+        }
+      `,
+    })
+
+    test.skip(!(await supportsAtScope(page)), '`@scope` is not supported in this browser')
+
+    for (let prefix of ['a', 'c']) {
+      expect(await getPropertyValue(`#${prefix}-in`, 'text-decoration-line')).toEqual('underline')
+      expect(await getPropertyValue(`#${prefix}-beyond`, 'text-decoration-line')).toEqual('none')
+      expect(await getPropertyValue(`#${prefix}-out`, 'text-decoration-line')).toEqual('none')
+    }
+  })
+
+  test('user-authored nested `@scope` behaves like the authored CSS', async ({ page }) => {
+    // User-authored `@scope` rules are compiled to their native CSS nesting
+    // semantics. Rendering the same structure twice:
+    // - Once styled by the authored (nested) CSS as-is
+    // - Once styled by the compiled output
+    function structure(prefix: string) {
+      return html`
+        <div class="${prefix}-parent">
+          <div class="${prefix}-scope">
+            <span class="${prefix}-content" id="${prefix}-in">in scope</span>
+            <div class="${prefix}-limit">
+              <span class="${prefix}-content" id="${prefix}-beyond">beyond the limit</span>
+            </div>
+          </div>
+        </div>
+        <div class="${prefix}-scope">
+          <span class="${prefix}-content" id="${prefix}-out">scope not inside parent</span>
+        </div>
+      `
+    }
+
+    function scopeCss(prefix: string) {
+      return css`
+        .${prefix}-parent {
+          @scope (& > .${prefix}-scope) to (& .${prefix}-limit) {
+            .${prefix}-content {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      `
+    }
+
+    // The `c-*` structure is styled by the compiled CSS
+    let { getPropertyValue } = await render(page, structure('a') + structure('c'), scopeCss('c'))
+
+    // The `a-*` structure is styled by the authored CSS as-is
+    await page.addStyleTag({ content: scopeCss('a') })
+
+    test.skip(!(await supportsAtScope(page)), '`@scope` is not supported in this browser')
+
+    // The compiled output only applies within the scope
+    expect(await getPropertyValue('#c-in', 'text-decoration-line')).toEqual('underline')
+    expect(await getPropertyValue('#c-beyond', 'text-decoration-line')).toEqual('none')
+    expect(await getPropertyValue('#c-out', 'text-decoration-line')).toEqual('none')
+
+    // The authored CSS behaves the same
+    expect(await getPropertyValue('#a-in', 'text-decoration-line')).toEqual('underline')
+    expect(await getPropertyValue('#a-out', 'text-decoration-line')).toEqual('none')
+
+    // WebKit currently drops the `<scope-end>` limit entirely when it contains
+    // `&`. Since we resolve the `&` at build time, the compiled output works
+    // even though the authored CSS doesn't.
+    if (test.info().project.name !== 'webkit') {
+      expect(await getPropertyValue('#a-beyond', 'text-decoration-line')).toEqual('none')
+    }
+  })
+
+  test('user-authored `@scope` nested inside another `@scope`', async ({ page }) => {
+    function structure(prefix: string) {
+      return html`
+        <!-- Control: outer > middle > inner -->
+        <div class="${prefix}-outer">
+          <div class="${prefix}-middle">
+            <div class="${prefix}-inner" id="${prefix}-ctrl">ctrl</div>
+          </div>
+        </div>
+
+        <!-- Middle is an ancestor of the outer scope root -->
+        <div class="${prefix}-middle">
+          <div class="${prefix}-outer">
+            <div class="${prefix}-inner" id="${prefix}-ancestor">ancestor</div>
+          </div>
+        </div>
+
+        <!-- Middle is beyond the outer limit -->
+        <div class="${prefix}-outer">
+          <div class="${prefix}-outer-limit">
+            <div class="${prefix}-middle">
+              <div class="${prefix}-inner" id="${prefix}-beyond">beyond</div>
+            </div>
+          </div>
+        </div>
+      `
+    }
+
+    function scopeCss(prefix: string) {
+      return css`
+        @scope (.${prefix}-outer) to (.${prefix}-outer-limit) {
+          .${prefix}-middle {
+            @scope (.${prefix}-inner) to (.${prefix}-inner-limit) {
+              text-decoration-line: underline;
+            }
+          }
+        }
+      `
+    }
+
+    // The `c-*` structure is styled by the compiled CSS
+    let { getPropertyValue } = await render(page, structure('a') + structure('c'), scopeCss('c'))
+
+    // The `a-*` structure is styled by the authored CSS as-is
+    await page.addStyleTag({ content: scopeCss('a') })
+
+    test.skip(!(await supportsAtScope(page)), '`@scope` is not supported in this browser')
+
+    // The compiled output behaves the same in every browser
+    expect(await getPropertyValue('#c-ctrl', 'text-decoration-line')).toEqual('underline')
+    expect(await getPropertyValue('#c-ancestor', 'text-decoration-line')).toEqual('none')
+    expect(await getPropertyValue('#c-beyond', 'text-decoration-line')).toEqual('none')
+
+    // The authored CSS behaves the same …
+    expect(await getPropertyValue('#a-ctrl', 'text-decoration-line')).toEqual('underline')
+    expect(await getPropertyValue('#a-beyond', 'text-decoration-line')).toEqual('none')
+
+    // … except in Chromium, which resolves the nesting context of a
+    // rule-nested `@scope` without the enclosing scope's constraint (Safari
+    // and Firefox both constrain it). The compiled output normalizes this
+    // browser difference.
+    if (test.info().project.name !== 'chromium') {
+      expect(await getPropertyValue('#a-ancestor', 'text-decoration-line')).toEqual('none')
+    }
+  })
+
+  function supportsAtScope(page: Page) {
+    return page.evaluate(() => typeof CSSScopeRule !== 'undefined')
+  }
+}
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')

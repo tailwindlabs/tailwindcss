@@ -203,6 +203,81 @@ impl PreProcessor for Haml {
                     }
                 }
 
+                // Handle Ruby syntax with `%w[]` arrays embedded in Haml attribute hashes. E.g.:
+                //
+                // ```haml
+                // %div{class: %w[bg-blue-500 w-10 h-10]}
+                // ```
+                //
+                // A `%` that follows a value is not a percent literal. E.g.: the `50%w` in
+                // `hit rate 50%w.`
+                b'%' if matches!(cursor.next(), b'w' | b'W')
+                    && !cursor.prev().is_ascii_alphanumeric()
+                    && !matches!(cursor.prev(), b'_' | b')' | b']' | b'}') =>
+                {
+                    // Boundary characters
+                    let (open, close) = match cursor.input.get(cursor.pos + 2) {
+                        Some(b'[') => (b'[', b']'),
+                        Some(b'(') => (b'(', b')'),
+                        Some(b'{') => (b'{', b'}'),
+                        Some(b'<') => (b'<', b'>'),
+
+                        // Any other ASCII punctuation can be used as a custom delimiter
+                        Some(&c) if c.is_ascii_punctuation() => (c, c),
+
+                        // Everything else is not a valid delimiter
+                        _ => {
+                            cursor.advance();
+                            continue;
+                        }
+                    };
+
+                    result[cursor.pos] = b' '; // Replace `%`
+                    cursor.advance();
+                    result[cursor.pos] = b' '; // Replace `w`
+                    cursor.advance();
+                    result[cursor.pos] = b' '; // Replace the opening delimiter
+                    cursor.advance();
+
+                    // Paired delimiters can be nested as long as they are balanced. E.g.:
+                    // `%w[foo[bar]baz]` produces a flat array.
+                    let mut depth = 1_usize;
+
+                    while cursor.pos < len {
+                        match cursor.curr() {
+                            // Skip escaped characters, unless the backslash is the delimiter
+                            // itself
+                            b'\\' if close != b'\\' => {
+                                // Use backslash to embed spaces in the strings.
+                                if cursor.next() == b' ' {
+                                    result[cursor.pos] = b' ';
+                                }
+
+                                cursor.advance();
+                            }
+
+                            // Start of a nested delimiter pair
+                            c if c == open && open != close => depth += 1,
+
+                            // Closing delimiter
+                            c if c == close => {
+                                depth -= 1;
+
+                                // End of the literal, replace the closing delimiter with a space
+                                if depth == 0 {
+                                    result[cursor.pos] = b' ';
+                                    break;
+                                }
+                            }
+
+                            // Everything else is valid content
+                            _ => {}
+                        }
+
+                        cursor.advance();
+                    }
+                }
+
                 // Replace following characters with spaces if they are not inside of brackets
                 b'#' | b'=' if bracket_stack.is_empty() => {
                     result[cursor.pos] = b' ';
@@ -420,6 +495,81 @@ mod tests {
                 "text-4xl",
                 "font-bold",
                 "italic",
+            ],
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20386
+    #[test]
+    fn test_embedded_ruby_percent_w_delimiters() {
+        for (input, expected) in [
+            // %w[…] in an attribute hash
+            (
+                "%div{class: %w[flex px-2.5]}",
+                "%div class:    flex px-2.5  ",
+            ),
+            // %w<…>
+            (
+                "%div{class: %w<flex px-2.5>}",
+                "%div class:    flex px-2.5  ",
+            ),
+            // Nested `<…>` does not end the literal
+            (
+                "%div{class: %w<flex <nested> px-2.5>}",
+                "%div class:    flex <nested> px-2.5  ",
+            ),
+            // Custom delimiters
+            (
+                "%div{class: %w|flex px-2.5|}",
+                "%div class:    flex px-2.5  ",
+            ),
+            (
+                "%div{class: %W!flex px-2.5!}",
+                "%div class:    flex px-2.5  ",
+            ),
+            (
+                "%div{class: %w#text-sm leading-6#}",
+                "%div class:    text-sm leading-6  ",
+            ),
+            (
+                "%div{class: %w=italic tracking-wide=}",
+                "%div class:    italic tracking-wide  ",
+            ),
+            // Nested paired delimiters stay balanced inside the literal
+            (
+                "%div{class: %w[content-['[hello]'] p-4]}",
+                "%div class:    content-['[hello]'] p-4  ",
+            ),
+            // Escaped spaces embed a space in a single array element
+            (
+                r#"%div{class: %w[foo\ bar baz-1]}"#,
+                r#"%div class:    foo  bar baz-1  "#,
+            ),
+            // A `%` that follows a value is not a percent literal
+            ("%p hit rate 50%w.", "%p hit rate 50%w "),
+        ] {
+            Haml::test(input, expected);
+        }
+
+        let input = r#"
+            %div{class: %w[bg-blue-500 w-10 h-10]}
+            %div{class: %w<flex px-2.5>}
+            %div{class: %w|underline font-bold|}
+            - classes = %w<mt-4 grid>
+        "#;
+
+        Haml::test_extract_contains(
+            input,
+            vec![
+                "bg-blue-500",
+                "w-10",
+                "h-10",
+                "flex",
+                "px-2.5",
+                "underline",
+                "font-bold",
+                "mt-4",
+                "grid",
             ],
         );
     }

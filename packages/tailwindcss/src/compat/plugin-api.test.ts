@@ -1642,6 +1642,83 @@ describe('addVariant', () => {
     `)
   })
 
+  test('addVariant with `@scope`', async () => {
+    expect(
+      await run(
+        ['blue:underline', 'green:underline'],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          loadModule: async (_id, base) => {
+            return {
+              path: '',
+              base,
+              module: ({ addVariant }: PluginAPI) => {
+                addVariant('blue', '@scope ([data-theme=blue]) to ([data-theme])')
+                addVariant('green', '@scope ([data-theme=green]) to ([data-theme]) { & }')
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
+        @scope ([data-theme="blue"]) to ([data-theme]) {
+          .blue\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+
+        @scope ([data-theme="green"]) to ([data-theme]) {
+          .green\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+      }
+      "
+    `)
+  })
+
+  test('matchVariant with `@scope`', async () => {
+    expect(
+      await run(
+        ['theme-[blue]:underline'],
+        css`
+          @plugin "my-plugin";
+          @layer utilities {
+            @tailwind utilities;
+          }
+        `,
+        {
+          loadModule: async (_id, base) => {
+            return {
+              path: '',
+              base,
+              module: ({ matchVariant }: PluginAPI) => {
+                matchVariant('theme', (value) => `@scope ([data-theme=${value}]) to ([data-theme])`)
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer utilities {
+        @scope ([data-theme="blue"]) to ([data-theme]) {
+          .theme-\\[blue\\]\\:underline {
+            text-decoration-line: underline;
+          }
+        }
+      }
+      "
+    `)
+  })
+
   test('addVariant with array of selectors', async () => {
     expect(
       await run(

@@ -14,7 +14,7 @@ import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
 import { pretty } from './test-utils/run'
 import { Theme } from './theme'
-import { walk } from './walk'
+import { walk, WalkAction } from './walk'
 
 const css = String.raw
 const defaultDesignSystem = buildDesignSystem(new Theme())
@@ -308,7 +308,25 @@ it('should not emit color-mix() fallbacks inside @keyframes', () => {
 
 describe('optimization', () => {
   function optimize(input: string) {
-    return pretty(toCss(handleNesting(CSS.parse(input))))
+    let ast = CSS.parse(input)
+    walk(ast, {
+      exit(node) {
+        // Depending on where we use `@scope`, it's handled slightly differently:
+        //
+        // 1. In user authored CSS, we perform the normal CSS nesting and
+        //    hoisting of `@scope` rules
+        // 2. In a `@custom-variant` definition, we need to swap the `@scope`
+        //    with the parent definition. Otherwise you'll never get the
+        //    expected "sandwich" effect.
+        //
+        // This little `@in-variant` hack is just a different way of
+        // differentiating between both cases for these tests.
+        if (node.kind === 'at-rule' && node.name === '@in-variant') {
+          return WalkAction.Replace(context({ source: 'variant' }, node.nodes))
+        }
+      },
+    })
+    return pretty(toCss(handleNesting(ast)))
   }
 
   // See: https://drafts.csswg.org/css-nesting-1/
@@ -1087,6 +1105,411 @@ describe('optimization', () => {
             .e {
               --x: 4;
             }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should hoist `@scope` at-rules', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .parent {
+              @in-variant {
+                @scope (.from) to (.to) {
+                  --x: 1;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .parent {
+              --x: 1;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    // We have an optimization where the moment we see a declaration that we
+    // stop handling the nesting and emit everything as-is. This won't work when
+    // we're dealing with `@scope` and we still want to hoist that out.
+    it('should hoist `@scope` at-rules, even when sibling declarations are present', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .parent {
+              --x: 1;
+              @in-variant {
+                @scope (.from) {
+                  .inside {
+                    --y: 2;
+                  }
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          .parent {
+            --x: 1;
+          }
+          @scope (.from) {
+            .parent .inside {
+              --y: 2;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should resolve `&` in the `@scope` prelude when hoisting', async () => {
+      // `&` in the `<scope-start>` selector refers to the elements matched by
+      // the nearest ancestor style rule, while `&` in the `<scope-end>`
+      // selector refers to the scoping root.
+      //
+      // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+      expect(
+        optimize(css`
+          .parent {
+            @scope (& > .scope) to (& .limit) {
+              .content {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent > .scope) to (:where(:scope) .limit) {
+          .content {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Selector lists need `:is(…)` to keep their meaning
+      expect(
+        optimize(css`
+          .parent-a,
+          .parent-b {
+            @scope (& > .from) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent-a, .parent-b) > .from) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // The `<scope-start>` selector is optional, so the first group in the
+      // prelude is not necessarily the `<scope-start>` selector.
+      expect(
+        optimize(css`
+          .parent {
+            @scope to (& .to) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope to (:where(:scope) .to) {
+          .parent .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // The parent selector is substituted with the same logic as the nesting
+      // selector in regular style rules: `:is(…)` is used when substituting the
+      // parent as-is would change the meaning (e.g. a type selector cannot
+      // appear after a class selector in a compound selector), …
+      expect(
+        optimize(css`
+          main {
+            @scope (.card&) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.card:is(main)) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // … and dropped when the substitution is provably equivalent, even for
+      // complex parent selectors
+      expect(
+        optimize(css`
+          .a .b {
+            @scope (& > .from) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.a .b > .from) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should wrap bare declarations inside `@scope` in a `&` rule', async () => {
+      // A bug in Lightning CSS causes an error when there are declarations
+      // directly in the `@scope`. To fix this we will ensure a rule with
+      // `:where(:scope)` is available.
+      expect(
+        optimize(css`
+          @scope (.from) to (.to) {
+            --x: 1;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // When generated by a variant, the declarations resolve against the
+      // parent rule: the `@scope` rule scopes _where the utility applies_
+      // (like nesting `@media` does, and like variants do).
+      //
+      // Note: this deviates from native CSS nesting, where the `<scope-start>`
+      // selector would be relative to `.parent` and the declarations would
+      // apply to the scoping root. User-authored `@scope` rules (without the
+      // `@in-variant` marker) keep those native semantics.
+      expect(
+        optimize(css`
+          .parent {
+            @in-variant {
+              @scope (.from) {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          .parent {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should replace `&` with `:where(:scope)` for rules directly inside `@scope`', async () => {
+      // Inside an `@scope` rule, the nesting selector behaves like
+      // `:where(:scope)` and matches the scoping root with zero specificity.
+      expect(
+        optimize(css`
+          @scope (.from) {
+            & > p {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          :where(:scope) > p {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should handle `&` deeply nested in `@scope` as normal references to a parent', async () => {
+      expect(
+        optimize(css`
+          @scope (.from) {
+            &,
+            .inside {
+              --x: 1;
+
+              &:hover {
+                --x: 2;
+              }
+
+              &:focus {
+                --x: 3;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          :where(:scope), .inside {
+            --x: 1;
+            &:hover {
+              --x: 2;
+            }
+            &:focus {
+              --x: 3;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should compile user-authored `@scope` rules with their native CSS nesting semantics', async () => {
+      // The `<scope-start>` selector is relative to the parent rule (like
+      // nested style rule selectors are), the rules inside are relative to
+      // the scoping root, and `&` refers to the scoping root
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from) to (.to) {
+              .inside {
+                --x: 1;
+              }
+
+              & > .child {
+                --x: 2;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .from) to (.to) {
+          .inside {
+            --x: 1;
+          }
+          :where(:scope) > .child {
+            --x: 2;
+          }
+        }
+        "
+      `)
+
+      // A trailing `&` makes the parent rule the scoping root: the scoping
+      // roots are `.parent` elements inside `.from` elements
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from &) to (.to) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from .parent) to (.to) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Bare declarations apply to the scoping root. They are wrapped in a
+      // `:where(:scope)` rule, which is the spec's exact equivalent, because
+      // Lightning CSS drops bare declarations inside `@scope` entirely.
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from) {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .from) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Also at the top level
+      expect(
+        optimize(css`
+          @scope (.from) to (.to) {
+            --x: 1;
+
+            .inside {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+          .inside {
+            --x: 2;
+          }
+        }
+        "
+      `)
+
+      // Every selector in a `<scope-start>` selector list is relative to the
+      // parent rule, whether it uses `&` or not
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.a, & > .b) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .a, .parent > .b) {
+          .inside {
+            --x: 1;
           }
         }
         "

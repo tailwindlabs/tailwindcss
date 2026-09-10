@@ -27,8 +27,10 @@ jobs:
           - name: Linux
             os: namespace-profile-default
 
+          # Playwright 1.62+ dropped WebKit support for macOS 14, and hangs
+          # instead of failing when launching WebKit on a macos-14 runner.
           - name: macOS
-            os: macos-14
+            os: macos-15
 
         # Exclude windows and macos from being built on feature branches
         run-all:

@@ -48,7 +48,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.1",
     "@types/node": "catalog:",
     "postcss": "catalog:",
     "postcss-import": "^16.1.1",
@@ -56,9 +56,9 @@
     "prettier-plugin-embed": "^0.5.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "tsup": "^8.5.1",
-    "turbo": "^2.9.18",
+    "turbo": "^2.10.8",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@11.9.0"
 }

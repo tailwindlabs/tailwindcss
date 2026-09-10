@@ -2276,6 +2276,70 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/discussions/20382
+test(
+  'auto source detection respects allow-list .gitignore files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        /*
+        !/.gitignore
+        !/app
+        !/public
+        !/package.json
+      `,
+      'app/root.css': css` @import 'tailwindcss/utilities'; `,
+      // Included by the `!/app` pattern in `.gitignore`
+      //
+      // → Should be included
+      'app/index.html': html`
+        <div class="content-['app/index.html']"></div>
+      `,
+      // Included by the `!/public` pattern in `.gitignore`
+      //
+      // → Should be included
+      'public/index.html': html`
+        <div class="content-['public/index.html']"></div>
+      `,
+      // Ignored by the `/*` in `.gitignore`
+      //
+      // → Should be ignored
+      'build/index.html': html`
+        <div class="content-['build/index.html']"></div>
+      `,
+      // Ignored by the `/*` in `.gitignore` and the default `node_modules` rules
+      //
+      // → Should be ignored
+      'node_modules/my-ui-lib/index.html': html`
+        <div
+          class="content-['node_modules/my-ui-lib/index.html']"
+        ></div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input app/root.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`content-['app/index.html']`,
+      candidate`content-['public/index.html']`,
+    ])
+
+    await fs.expectFileNotToContain('dist/out.css', [
+      candidate`content-['build/index.html']`,
+      candidate`content-['node_modules/my-ui-lib/index.html']`,
+    ])
+  },
+)
+
 test(
   '@source works with symlinks (referencing folder in current folder)',
   {

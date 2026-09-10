@@ -769,6 +769,7 @@ describe('comments', () => {
     ).toMatchInlineSnapshot(`
       "
       /* Start of utilities: */
+
       @utility foo {
         /* Utility #1 */
         /* Declarations: */
@@ -793,6 +794,7 @@ describe('comments', () => {
     ).toMatchInlineSnapshot(`
       "
       /* Start of utilities: */
+
       @utility foo {
         /* Foo & Bar */
         & .bar {
@@ -800,6 +802,7 @@ describe('comments', () => {
           color: red;
         }
       }
+
       @utility bar {
         /* Foo & Bar */
         .foo & {
@@ -829,6 +832,7 @@ describe('comments', () => {
     ).toMatchInlineSnapshot(`
       "
       /* Start of utilities: */
+
       @utility foo {
         /* Mobile only */
         @media (width <= 640px) {
@@ -878,6 +882,7 @@ describe('comments', () => {
     ).toMatchInlineSnapshot(`
       "
       /* Tailwind Utilities: */
+
       @utility no-scrollbar {
         /* Chrome, Safari and Opera */
         /* Second comment */

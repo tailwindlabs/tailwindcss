@@ -56,6 +56,7 @@ describe('fixRelativePathsPlugin', () => {
       @plugin './plugin-in-sibling.ts';
       @plugin '../plugin-in-sibling.ts';
       @plugin 'plugin-in-sibling';
+
       @plugin './plugin-in-root.ts';
       @plugin '../plugin-in-root.ts';
       @plugin 'plugin-in-root';

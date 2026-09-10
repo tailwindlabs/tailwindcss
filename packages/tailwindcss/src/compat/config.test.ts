@@ -1784,7 +1784,7 @@ test('The theme() function does not try indexing into strings', async () => {
   ).toMatchInlineSnapshot(`
     "
     :root, :host {
-      --color-what: light-dark(red, red);
+      --color-what: red;
     }
 
     .text-what {
