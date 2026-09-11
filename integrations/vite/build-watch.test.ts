@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { candidate, css, js, json, test } from '../utils'
+import { candidate, css, html, js, json, test } from '../utils'
 
 test(
   'build watch ignores a custom output directory',
@@ -47,8 +47,12 @@ test(
 
         document.body.innerHTML = '<div class="underline">Hello</div>'
       `,
-      'resources/css/app.css': css` @import 'tailwindcss'; `,
+      'resources/css/app.css': css`
+        @import 'tailwindcss';
+        @source '../../assets/source.html';
+      `,
       'assets/app.js': js` console.log('previous build') `,
+      'assets/source.html': html` <div class="font-black"></div> `,
       'assets/styles.css': css`
         .previous-build {
           display: block;
@@ -64,7 +68,7 @@ test(
     await process.onStdout((message) => message.includes('built in'))
 
     let output = path.join(root, 'assets/styles.css')
-    await fs.expectFileToContain(output, candidate`underline`)
+    await fs.expectFileToContain(output, [candidate`font-black`, candidate`underline`])
 
     process.flush()
     let result = await Promise.race([
