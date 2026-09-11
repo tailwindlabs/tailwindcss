@@ -385,7 +385,9 @@ export function parse(input: string) {
           node.value !== ':not' &&
           node.value !== ':where' &&
           node.value !== ':has' &&
-          node.value !== ':is'
+          node.value !== ':is' &&
+          node.value !== ':-moz-any' &&
+          node.value !== ':-webkit-any'
         ) {
           // Find the end of the function call
           let start = i + 1
