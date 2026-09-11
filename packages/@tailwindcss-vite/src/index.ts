@@ -166,6 +166,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
     return new Root(
       id,
       config!.root,
+      config!.command === 'build' ? path.resolve(config!.root, config!.build.outDir) : null,
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
       config?.css.devSourcemap ?? false,
@@ -350,6 +351,7 @@ class Root {
   constructor(
     private id: string,
     private base: string,
+    private buildOutputDirectory: string | null,
 
     private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -430,6 +432,16 @@ class Root {
         // Use the specified root
         return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
+
+      if (this.buildOutputDirectory !== null) {
+        // Watching files emitted by Vite would trigger another build every time
+        // the output is written.
+        sources.push({
+          base: this.buildOutputDirectory,
+          pattern: '**/*',
+          negated: true,
+        })
+      }
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
