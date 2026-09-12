@@ -59,6 +59,83 @@ testFn(
 )
 
 testFn(
+  '@tailwindcss/oxide-wasm32-wasi discovers changes across incremental scans',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/oxide-wasm32-wasi": "workspace:^"
+          }
+        }
+      `,
+      'src/index.js': js`const className = 'flex'`,
+      'index.mjs': js`
+        import { Scanner } from '@tailwindcss/oxide-wasm32-wasi'
+        import { readFileSync, statSync, utimesSync, writeFileSync } from 'node:fs'
+        import { join, relative } from 'node:path'
+
+        let source = join(process.cwd(), 'src/index.js')
+        let scanner = new Scanner({
+          sources: [
+            {
+              base: join(process.cwd(), 'src'),
+              pattern: '**/*',
+              negated: false,
+            },
+          ],
+        })
+
+        function scan() {
+          let candidates = scanner.scan()
+
+          return {
+            candidates: candidates.filter(
+              (candidate) => candidate === 'flex' || candidate === 'grid',
+            ),
+            files: scanner.files.map((file) => relative(process.cwd(), file)),
+            scannedFiles: scanner.scannedFiles.map((file) => relative(process.cwd(), file)),
+          }
+        }
+
+        let initial = scan()
+        let unchanged = scan()
+
+        writeFileSync(source, readFileSync(source, 'utf8').replace('flex', 'grid'))
+        let mtime = statSync(source).mtime
+        utimesSync(source, mtime, new Date(mtime.getTime() + 2000))
+
+        let changed = scan()
+
+        console.log(JSON.stringify({ initial, unchanged, changed }))
+        process.exit()
+      `,
+    },
+  },
+  async ({ expect, exec }) => {
+    let output = await exec(`node index.mjs`)
+
+    expect(JSON.parse(output)).toEqual({
+      initial: {
+        candidates: ['flex'],
+        files: ['src/index.js'],
+        scannedFiles: ['src/index.js'],
+      },
+      unchanged: {
+        candidates: ['flex'],
+        files: ['src/index.js'],
+        scannedFiles: [],
+      },
+      changed: {
+        candidates: ['flex', 'grid'],
+        files: ['src/index.js'],
+        scannedFiles: ['src/index.js'],
+      },
+    })
+  },
+)
+
+testFn(
   '`@tailwindcss/oxide` falls back to the wasm build when no native binding is available',
   {
     fs: {
