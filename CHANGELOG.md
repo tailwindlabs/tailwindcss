@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only normalize top-level `and`, `or`, and `not` keywords in `supports-[…]` variants (e.g. `selector(a: not (.foo))` → `selector(a:not(.foo))`) ([#20420](https://github.com/tailwindlabs/tailwindcss/pull/20420))
 - Don't warn about Angular's `::ng-deep` and `:host-context()` when optimizing CSS ([#20434](https://github.com/tailwindlabs/tailwindcss/pull/20434))
 - Don't generate CSS for candidates containing an empty additional modifier (e.g. `bg-red-500/50/` and `group-hover/foo//bar:flex`) ([#20466](https://github.com/tailwindlabs/tailwindcss/pull/20466))
+- `@tailwindcss/vite` no longer keeps a finished build's plugin context alive, which could retain multiple GB of memory in long-lived build processes (e.g. Astro static builds) ([#20503](https://github.com/tailwindlabs/tailwindcss/pull/20503))
 
 ## [4.3.3] - 2026-07-16
 
