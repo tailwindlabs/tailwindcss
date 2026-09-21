@@ -284,6 +284,13 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       },
 
       closeBundle() {
+        // In `--watch` mode, `closeBundle` fires after every rebuild, not
+        // just once at the end — clearing the roots here would throw away
+        // the mtime-based rebuild cache `Root` relies on and force a full
+        // recompile on every change. Only clear once the build itself is
+        // done for good.
+        if (config?.build.watch) return
+
         // Roots hold on to the compiler (and, through it, the `PluginContext`
         // of whichever transform call created it) for the lifetime of the
         // plugin instance. Drop them once the bundle is done so a long-lived
