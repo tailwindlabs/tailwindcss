@@ -33,6 +33,7 @@ test(
         const NAME = '@tailwindcss/vite:generate:build'
 
         let ctxRef = null
+        let probeRan = false
 
         function instrument(plugins) {
           return plugins.map((plugin) => {
@@ -44,6 +45,7 @@ test(
                 ...plugin.transform,
                 handler(...args) {
                   ctxRef ??= new WeakRef(this)
+                  probeRan = true
                   return original.apply(this, args)
                 },
               },
@@ -67,12 +69,14 @@ test(
           await new Promise((resolve) => setImmediate(resolve))
         }
 
+        console.log('probeRan=' + probeRan)
         console.log('pluginContextAlive=' + (ctxRef?.deref() !== undefined))
       `,
     },
   },
   async ({ exec, expect }) => {
     let output = await exec('node --expose-gc probe.mjs')
+    expect(output).toContain('probeRan=true')
     expect(output).toContain('pluginContextAlive=false')
   },
 )
