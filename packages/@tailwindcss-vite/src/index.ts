@@ -282,6 +282,15 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           return result
         },
       },
+
+      closeBundle() {
+        // Roots hold on to the compiler (and, through it, the `PluginContext`
+        // of whichever transform call created it) for the lifetime of the
+        // plugin instance. Drop them once the bundle is done so a long-lived
+        // process (e.g. Astro's SSR build followed by static route
+        // generation) doesn't keep the finished build's context alive.
+        rootsByEnv.get(this.environment?.name ?? 'default').clear()
+      },
     },
   ] satisfies Plugin[]
 }
