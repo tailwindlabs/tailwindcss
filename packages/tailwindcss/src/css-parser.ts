@@ -134,13 +134,9 @@ export function parse(input: string, opts?: ParseOptions) {
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
-        // Current character is a `\` therefore the next character is escaped.
-        if (peekChar === BACKSLASH) {
-          j += 1
-        }
-
-        // End of the comment
-        else if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
+        // End of the comment. Escapes are not processed inside of comments,
+        // so a `\` right before the closing `*/` does not escape it.
+        if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
           i = j + 1
           break
         }
@@ -224,13 +220,9 @@ export function parse(input: string, opts?: ParseOptions) {
         else if (peekChar === SLASH && input.charCodeAt(j + 1) === ASTERISK) {
           for (let k = j + 2; k < input.length; k++) {
             peekChar = input.charCodeAt(k)
-            // Current character is a `\` therefore the next character is escaped.
-            if (peekChar === BACKSLASH) {
-              k += 1
-            }
 
-            // End of the comment
-            else if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
+            // End of the comment. Escapes are not processed inside of comments.
+            if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
               j = k + 1
               break
             }
