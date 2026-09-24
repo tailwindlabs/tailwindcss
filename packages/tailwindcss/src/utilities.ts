@@ -599,6 +599,13 @@ export function createUtilities(theme: Theme) {
     ['clip-path', 'inset(50%)'],
     ['white-space', 'nowrap'],
     ['border-width', '0'],
+    // Firefox applies `clip-path` to the inner table box instead of the table
+    // wrapper box, so a table's `<caption>` is not clipped along with it.
+    // Same root cause as https://bugzilla.mozilla.org/show_bug.cgi?id=1998269 (for `opacity`).
+    () =>
+      styleRule('& > caption', [
+        decl('clip-path', 'inset(50%)'),
+      ]),
   ])
   staticUtility('not-sr-only', [
     ['position', 'static'],
@@ -609,6 +616,10 @@ export function createUtilities(theme: Theme) {
     ['overflow', 'visible'],
     ['clip-path', 'none'],
     ['white-space', 'normal'],
+    () =>
+      styleRule('& > caption', [
+        decl('clip-path', 'none'),
+      ]),
   ])
 
   /**
