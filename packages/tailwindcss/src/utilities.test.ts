@@ -26917,6 +26917,29 @@ test('text', async () => {
   ).toEqual('')
 })
 
+test('text with viewport and font-relative length units', async () => {
+  expect(await run(['text-[1cap]', 'text-[1rex]', 'text-[1svi]', 'text-[1dvmin]']))
+    .toMatchInlineSnapshot(`
+      "
+      .text-\\[1cap\\] {
+        font-size: 1cap;
+      }
+
+      .text-\\[1dvmin\\] {
+        font-size: 1dvmin;
+      }
+
+      .text-\\[1rex\\] {
+        font-size: 1rex;
+      }
+
+      .text-\\[1svi\\] {
+        font-size: 1svi;
+      }
+      "
+    `)
+})
+
 test('text-shadow', async () => {
   expect(
     await run(
