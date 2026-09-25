@@ -128,14 +128,23 @@ export function parse(input: string, opts?: ParseOptions) {
     //         ^^^^^^^^^^^^^
     // }
     // ```
+    //
+    // The escape character `\` in comments are ignored, this means that a
+    // the end of a comment preceded by `\` does _not_ mean that the end of the
+    // comment is escaped and therefore we have to keep parsing.
+    //
+    // This is a valid comment:
+    // ```
+    // /*C:\*/
+    // ```
+    // See: https://www.w3.org/TR/css-syntax-3/#consume-comment
     else if (currentChar === SLASH && input.charCodeAt(i + 1) === ASTERISK) {
       let start = i
 
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
-        // End of the comment. Escapes are not processed inside of comments,
-        // so a `\` right before the closing `*/` does not escape it.
+        // End of the comment.
         if (peekChar === ASTERISK && input.charCodeAt(j + 1) === SLASH) {
           i = j + 1
           break
@@ -221,7 +230,7 @@ export function parse(input: string, opts?: ParseOptions) {
           for (let k = j + 2; k < input.length; k++) {
             peekChar = input.charCodeAt(k)
 
-            // End of the comment. Escapes are not processed inside of comments.
+            // End of the comment.
             if (peekChar === ASTERISK && input.charCodeAt(k + 1) === SLASH) {
               j = k + 1
               break
