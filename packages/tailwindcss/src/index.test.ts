@@ -1444,42 +1444,42 @@ describe('sorting', () => {
     ).toMatchInlineSnapshot(`
       "
       @media (hover: hover) {
-        .group-hover\\:flex:is(:where(.group):hover *) {
+        :is(:where(.group):hover .group-hover\\:flex) {
           display: flex;
         }
       }
 
-      .group-focus\\:flex:is(:where(.group):focus *) {
+      :is(:where(.group):focus .group-focus\\:flex) {
         display: flex;
       }
 
       @media (hover: hover) {
-        .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+        :is(:where(.peer):hover ~ .peer-hover\\:flex) {
           display: flex;
         }
 
         @media (hover: hover) {
-          .group-hover\\:peer-hover\\:flex:is(:where(.group):hover *):is(:where(.peer):hover ~ *), .peer-hover\\:group-hover\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):hover *) {
+          :is(:where(.peer):hover ~ :is(:where(.group):hover .group-hover\\:peer-hover\\:flex)), :is(:where(.group):hover :is(:where(.peer):hover ~ .peer-hover\\:group-hover\\:flex)) {
             display: flex;
           }
         }
 
-        .group-focus\\:peer-hover\\:flex:is(:where(.group):focus *):is(:where(.peer):hover ~ *), .peer-hover\\:group-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.group):focus *) {
+        :is(:where(.peer):hover ~ :is(:where(.group):focus .group-focus\\:peer-hover\\:flex)), :is(:where(.group):focus :is(:where(.peer):hover ~ .peer-hover\\:group-focus\\:flex)) {
           display: flex;
         }
       }
 
-      .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
+      :is(:where(.peer):focus ~ .peer-focus\\:flex) {
         display: flex;
       }
 
       @media (hover: hover) {
-        .group-hover\\:peer-focus\\:flex:is(:where(.group):hover *):is(:where(.peer):focus ~ *), .peer-focus\\:group-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):hover *) {
+        :is(:where(.peer):focus ~ :is(:where(.group):hover .group-hover\\:peer-focus\\:flex)), :is(:where(.group):hover :is(:where(.peer):focus ~ .peer-focus\\:group-hover\\:flex)) {
           display: flex;
         }
       }
 
-      .group-focus\\:peer-focus\\:flex:is(:where(.group):focus *):is(:where(.peer):focus ~ *), .peer-focus\\:group-focus\\:flex:is(:where(.peer):focus ~ *):is(:where(.group):focus *) {
+      :is(:where(.peer):focus ~ :is(:where(.group):focus .group-focus\\:peer-focus\\:flex)), :is(:where(.group):focus :is(:where(.peer):focus ~ .peer-focus\\:group-focus\\:flex)) {
         display: flex;
       }
 
@@ -3601,7 +3601,7 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+        :is(:is(:where(.group):hover, :where(.group):focus) .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -3636,7 +3636,7 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):hover .group-hocus\\:flex), :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -3674,7 +3674,7 @@ describe('plugins', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):hover .group-hocus\\:flex), :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -3715,12 +3715,12 @@ describe('plugins', () => {
       "
       @layer utilities {
         @media (hover: hover) {
-          .group-hocus\\:flex:is(:where(.group):hover *) {
+          :is(:where(.group):hover .group-hocus\\:flex) {
             display: flex;
           }
         }
 
-        .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -4199,7 +4199,7 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+          :is(:is(:where(.group):hover, :where(.group):focus) .group-hocus\\:flex) {
             display: flex;
           }
 
@@ -4294,7 +4294,7 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-selected\\:underline:is(:where(.group)[data-selected] *), .selected\\:underline[data-selected] {
+          :is(:where(.group)[data-selected] .group-selected\\:underline), .selected\\:underline[data-selected] {
             text-decoration-line: underline;
           }
         }
@@ -4322,7 +4322,7 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline:is(:is(:where(.group):hover, :where(.group):focus) *), .hocus\\:underline:hover, .hocus\\:underline:focus {
+          :is(:is(:where(.group):hover, :where(.group):focus) .group-hocus\\:underline), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }
@@ -4353,7 +4353,7 @@ describe('@custom-variant', () => {
       ).toMatchInlineSnapshot(`
         "
         @layer utilities {
-          .group-hocus\\:underline:is(:where(.group):hover *), .group-hocus\\:underline:is(:where(.group):focus *), .hocus\\:underline:hover, .hocus\\:underline:focus {
+          :is(:where(.group):hover .group-hocus\\:underline), :is(:where(.group):focus .group-hocus\\:underline), .hocus\\:underline:hover, .hocus\\:underline:focus {
             text-decoration-line: underline;
           }
         }
@@ -4458,12 +4458,12 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *) {
+            :is(:where(.group):hover .group-hocus\\:underline) {
               text-decoration-line: underline;
             }
           }
 
-          .group-hocus\\:underline:is(:where(.group):focus *) {
+          :is(:where(.group):focus .group-hocus\\:underline) {
             text-decoration-line: underline;
           }
 
@@ -4503,7 +4503,7 @@ describe('@custom-variant', () => {
         "
         @layer utilities {
           @media (hover: hover) {
-            .group-hocus\\:underline:is(:where(.group):hover *), .hocus\\:underline:hover {
+            :is(:where(.group):hover .group-hocus\\:underline), .hocus\\:underline:hover {
               text-decoration-line: underline;
             }
           }

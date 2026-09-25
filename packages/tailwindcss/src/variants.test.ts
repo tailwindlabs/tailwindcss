@@ -186,7 +186,7 @@ test('after', async () => {
 test('first', async () => {
   expect(await run(['first:flex', 'group-first:flex', 'peer-first:flex'])).toMatchInlineSnapshot(`
     "
-    .group-first\\:flex:is(:where(.group):first-child *), .peer-first\\:flex:is(:where(.peer):first-child ~ *), .first\\:flex:first-child {
+    :is(:where(.group):first-child .group-first\\:flex), :is(:where(.peer):first-child ~ .peer-first\\:flex), .first\\:flex:first-child {
       display: flex;
     }
     "
@@ -197,7 +197,7 @@ test('first', async () => {
 test('last', async () => {
   expect(await run(['last:flex', 'group-last:flex', 'peer-last:flex'])).toMatchInlineSnapshot(`
     "
-    .group-last\\:flex:is(:where(.group):last-child *), .peer-last\\:flex:is(:where(.peer):last-child ~ *), .last\\:flex:last-child {
+    :is(:where(.group):last-child .group-last\\:flex), :is(:where(.peer):last-child ~ .peer-last\\:flex), .last\\:flex:last-child {
       display: flex;
     }
     "
@@ -208,7 +208,7 @@ test('last', async () => {
 test('only', async () => {
   expect(await run(['only:flex', 'group-only:flex', 'peer-only:flex'])).toMatchInlineSnapshot(`
     "
-    .group-only\\:flex:is(:where(.group):only-child *), .peer-only\\:flex:is(:where(.peer):only-child ~ *), .only\\:flex:only-child {
+    :is(:where(.group):only-child .group-only\\:flex), :is(:where(.peer):only-child ~ .peer-only\\:flex), .only\\:flex:only-child {
       display: flex;
     }
     "
@@ -219,7 +219,7 @@ test('only', async () => {
 test('odd', async () => {
   expect(await run(['odd:flex', 'group-odd:flex', 'peer-odd:flex'])).toMatchInlineSnapshot(`
     "
-    .group-odd\\:flex:is(:where(.group):nth-child(odd) *), .peer-odd\\:flex:is(:where(.peer):nth-child(odd) ~ *), .odd\\:flex:nth-child(odd) {
+    :is(:where(.group):nth-child(odd) .group-odd\\:flex), :is(:where(.peer):nth-child(odd) ~ .peer-odd\\:flex), .odd\\:flex:nth-child(odd) {
       display: flex;
     }
     "
@@ -230,7 +230,7 @@ test('odd', async () => {
 test('even', async () => {
   expect(await run(['even:flex', 'group-even:flex', 'peer-even:flex'])).toMatchInlineSnapshot(`
     "
-    .group-even\\:flex:is(:where(.group):nth-child(2n) *), .peer-even\\:flex:is(:where(.peer):nth-child(2n) ~ *), .even\\:flex:nth-child(2n) {
+    :is(:where(.group):nth-child(2n) .group-even\\:flex), :is(:where(.peer):nth-child(2n) ~ .peer-even\\:flex), .even\\:flex:nth-child(2n) {
       display: flex;
     }
     "
@@ -242,7 +242,7 @@ test('first-of-type', async () => {
   expect(await run(['first-of-type:flex', 'group-first-of-type:flex', 'peer-first-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-first-of-type\\:flex:is(:where(.group):first-of-type *), .peer-first-of-type\\:flex:is(:where(.peer):first-of-type ~ *), .first-of-type\\:flex:first-of-type {
+      :is(:where(.group):first-of-type .group-first-of-type\\:flex), :is(:where(.peer):first-of-type ~ .peer-first-of-type\\:flex), .first-of-type\\:flex:first-of-type {
         display: flex;
       }
       "
@@ -254,7 +254,7 @@ test('last-of-type', async () => {
   expect(await run(['last-of-type:flex', 'group-last-of-type:flex', 'peer-last-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-last-of-type\\:flex:is(:where(.group):last-of-type *), .peer-last-of-type\\:flex:is(:where(.peer):last-of-type ~ *), .last-of-type\\:flex:last-of-type {
+      :is(:where(.group):last-of-type .group-last-of-type\\:flex), :is(:where(.peer):last-of-type ~ .peer-last-of-type\\:flex), .last-of-type\\:flex:last-of-type {
         display: flex;
       }
       "
@@ -266,7 +266,7 @@ test('only-of-type', async () => {
   expect(await run(['only-of-type:flex', 'group-only-of-type:flex', 'peer-only-of-type:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-only-of-type\\:flex:is(:where(.group):only-of-type *), .peer-only-of-type\\:flex:is(:where(.peer):only-of-type ~ *), .only-of-type\\:flex:only-of-type {
+      :is(:where(.group):only-of-type .group-only-of-type\\:flex), :is(:where(.peer):only-of-type ~ .peer-only-of-type\\:flex), .only-of-type\\:flex:only-of-type {
         display: flex;
       }
       "
@@ -278,7 +278,7 @@ test('visited', async () => {
   expect(await run(['visited:flex', 'group-visited:flex', 'peer-visited:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-visited\\:flex:is(:where(.group):visited *), .peer-visited\\:flex:is(:where(.peer):visited ~ *), .visited\\:flex:visited {
+      :is(:where(.group):visited .group-visited\\:flex), :is(:where(.peer):visited ~ .peer-visited\\:flex), .visited\\:flex:visited {
         display: flex;
       }
       "
@@ -290,7 +290,7 @@ test('target', async () => {
   expect(await run(['target:flex', 'group-target:flex', 'peer-target:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-target\\:flex:is(:where(.group):target *), .peer-target\\:flex:is(:where(.peer):target ~ *), .target\\:flex:target {
+      :is(:where(.group):target .group-target\\:flex), :is(:where(.peer):target ~ .peer-target\\:flex), .target\\:flex:target {
         display: flex;
       }
       "
@@ -302,7 +302,7 @@ test('open', async () => {
   expect(await run(['open:flex', 'group-open:flex', 'peer-open:flex', 'not-open:flex']))
     .toMatchInlineSnapshot(`
       "
-      .not-open\\:flex:not(:is([open], :popover-open, :open)), .group-open\\:flex:is(:where(.group):is([open], :popover-open, :open) *), .peer-open\\:flex:is(:where(.peer):is([open], :popover-open, :open) ~ *), .open\\:flex:is([open], :popover-open, :open) {
+      .not-open\\:flex:not(:is([open], :popover-open, :open)), :is(:where(.group):is([open], :popover-open, :open) .group-open\\:flex), :is(:where(.peer):is([open], :popover-open, :open) ~ .peer-open\\:flex), .open\\:flex:is([open], :popover-open, :open) {
         display: flex;
       }
       "
@@ -314,7 +314,7 @@ test('default', async () => {
   expect(await run(['default:flex', 'group-default:flex', 'peer-default:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-default\\:flex:is(:where(.group):default *), .peer-default\\:flex:is(:where(.peer):default ~ *), .default\\:flex:default {
+      :is(:where(.group):default .group-default\\:flex), :is(:where(.peer):default ~ .peer-default\\:flex), .default\\:flex:default {
         display: flex;
       }
       "
@@ -326,7 +326,7 @@ test('checked', async () => {
   expect(await run(['checked:flex', 'group-checked:flex', 'peer-checked:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-checked\\:flex:is(:where(.group):checked *), .peer-checked\\:flex:is(:where(.peer):checked ~ *), .checked\\:flex:checked {
+      :is(:where(.group):checked .group-checked\\:flex), :is(:where(.peer):checked ~ .peer-checked\\:flex), .checked\\:flex:checked {
         display: flex;
       }
       "
@@ -338,7 +338,7 @@ test('indeterminate', async () => {
   expect(await run(['indeterminate:flex', 'group-indeterminate:flex', 'peer-indeterminate:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-indeterminate\\:flex:is(:where(.group):indeterminate *), .peer-indeterminate\\:flex:is(:where(.peer):indeterminate ~ *), .indeterminate\\:flex:indeterminate {
+      :is(:where(.group):indeterminate .group-indeterminate\\:flex), :is(:where(.peer):indeterminate ~ .peer-indeterminate\\:flex), .indeterminate\\:flex:indeterminate {
         display: flex;
       }
       "
@@ -355,7 +355,7 @@ test('placeholder-shown', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-placeholder-shown\\:flex:is(:where(.group):placeholder-shown *), .peer-placeholder-shown\\:flex:is(:where(.peer):placeholder-shown ~ *), .placeholder-shown\\:flex:placeholder-shown {
+    :is(:where(.group):placeholder-shown .group-placeholder-shown\\:flex), :is(:where(.peer):placeholder-shown ~ .peer-placeholder-shown\\:flex), .placeholder-shown\\:flex:placeholder-shown {
       display: flex;
     }
     "
@@ -367,7 +367,7 @@ test('autofill', async () => {
   expect(await run(['autofill:flex', 'group-autofill:flex', 'peer-autofill:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-autofill\\:flex:is(:where(.group):autofill *), .peer-autofill\\:flex:is(:where(.peer):autofill ~ *) {
+      :is(:where(.group):autofill .group-autofill\\:flex), :is(:where(.peer):autofill ~ .peer-autofill\\:flex) {
         display: flex;
       }
 
@@ -383,7 +383,7 @@ test('optional', async () => {
   expect(await run(['optional:flex', 'group-optional:flex', 'peer-optional:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-optional\\:flex:is(:where(.group):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
+      :is(:where(.group):optional .group-optional\\:flex), :is(:where(.peer):optional ~ .peer-optional\\:flex), .optional\\:flex:optional {
         display: flex;
       }
       "
@@ -395,7 +395,7 @@ test('required', async () => {
   expect(await run(['required:flex', 'group-required:flex', 'peer-required:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-required\\:flex:is(:where(.group):required *), .peer-required\\:flex:is(:where(.peer):required ~ *), .required\\:flex:required {
+      :is(:where(.group):required .group-required\\:flex), :is(:where(.peer):required ~ .peer-required\\:flex), .required\\:flex:required {
         display: flex;
       }
       "
@@ -406,7 +406,7 @@ test('required', async () => {
 test('valid', async () => {
   expect(await run(['valid:flex', 'group-valid:flex', 'peer-valid:flex'])).toMatchInlineSnapshot(`
     "
-    .group-valid\\:flex:is(:where(.group):valid *), .peer-valid\\:flex:is(:where(.peer):valid ~ *), .valid\\:flex:valid {
+    :is(:where(.group):valid .group-valid\\:flex), :is(:where(.peer):valid ~ .peer-valid\\:flex), .valid\\:flex:valid {
       display: flex;
     }
     "
@@ -418,7 +418,7 @@ test('invalid', async () => {
   expect(await run(['invalid:flex', 'group-invalid:flex', 'peer-invalid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-invalid\\:flex:is(:where(.group):invalid *), .peer-invalid\\:flex:is(:where(.peer):invalid ~ *), .invalid\\:flex:invalid {
+      :is(:where(.group):invalid .group-invalid\\:flex), :is(:where(.peer):invalid ~ .peer-invalid\\:flex), .invalid\\:flex:invalid {
         display: flex;
       }
       "
@@ -430,7 +430,7 @@ test('user-valid', async () => {
   expect(await run(['user-valid:flex', 'group-user-valid:flex', 'peer-user-valid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-user-valid\\:flex:is(:where(.group):user-valid *), .peer-user-valid\\:flex:is(:where(.peer):user-valid ~ *) {
+      :is(:where(.group):user-valid .group-user-valid\\:flex), :is(:where(.peer):user-valid ~ .peer-user-valid\\:flex) {
         display: flex;
       }
 
@@ -446,7 +446,7 @@ test('user-invalid', async () => {
   expect(await run(['user-invalid:flex', 'group-user-invalid:flex', 'peer-user-invalid:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-user-invalid\\:flex:is(:where(.group):user-invalid *), .peer-user-invalid\\:flex:is(:where(.peer):user-invalid ~ *) {
+      :is(:where(.group):user-invalid .group-user-invalid\\:flex), :is(:where(.peer):user-invalid ~ .peer-user-invalid\\:flex) {
         display: flex;
       }
 
@@ -462,7 +462,7 @@ test('in-range', async () => {
   expect(await run(['in-range:flex', 'group-in-range:flex', 'peer-in-range:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-in-range\\:flex:is(:where(.group):in-range *), .peer-in-range\\:flex:is(:where(.peer):in-range ~ *), .in-range\\:flex:in-range {
+      :is(:where(.group):in-range .group-in-range\\:flex), :is(:where(.peer):in-range ~ .peer-in-range\\:flex), .in-range\\:flex:in-range {
         display: flex;
       }
       "
@@ -474,7 +474,7 @@ test('out-of-range', async () => {
   expect(await run(['out-of-range:flex', 'group-out-of-range:flex', 'peer-out-of-range:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-out-of-range\\:flex:is(:where(.group):out-of-range *), .peer-out-of-range\\:flex:is(:where(.peer):out-of-range ~ *), .out-of-range\\:flex:out-of-range {
+      :is(:where(.group):out-of-range .group-out-of-range\\:flex), :is(:where(.peer):out-of-range ~ .peer-out-of-range\\:flex), .out-of-range\\:flex:out-of-range {
         display: flex;
       }
       "
@@ -486,7 +486,7 @@ test('read-only', async () => {
   expect(await run(['read-only:flex', 'group-read-only:flex', 'peer-read-only:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-read-only\\:flex:is(:where(.group):read-only *), .peer-read-only\\:flex:is(:where(.peer):read-only ~ *), .read-only\\:flex:read-only {
+      :is(:where(.group):read-only .group-read-only\\:flex), :is(:where(.peer):read-only ~ .peer-read-only\\:flex), .read-only\\:flex:read-only {
         display: flex;
       }
       "
@@ -497,7 +497,7 @@ test('read-only', async () => {
 test('empty', async () => {
   expect(await run(['empty:flex', 'group-empty:flex', 'peer-empty:flex'])).toMatchInlineSnapshot(`
     "
-    .group-empty\\:flex:is(:where(.group):empty *), .peer-empty\\:flex:is(:where(.peer):empty ~ *), .empty\\:flex:empty {
+    :is(:where(.group):empty .group-empty\\:flex), :is(:where(.peer):empty ~ .peer-empty\\:flex), .empty\\:flex:empty {
       display: flex;
     }
     "
@@ -509,7 +509,7 @@ test('focus-within', async () => {
   expect(await run(['focus-within:flex', 'group-focus-within:flex', 'peer-focus-within:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-focus-within\\:flex:is(:where(.group):focus-within *), .peer-focus-within\\:flex:is(:where(.peer):focus-within ~ *), .focus-within\\:flex:focus-within {
+      :is(:where(.group):focus-within .group-focus-within\\:flex), :is(:where(.peer):focus-within ~ .peer-focus-within\\:flex), .focus-within\\:flex:focus-within {
         display: flex;
       }
       "
@@ -521,7 +521,7 @@ test('hover', async () => {
   expect(await run(['hover:flex', 'group-hover:flex', 'peer-hover:flex'])).toMatchInlineSnapshot(`
     "
     @media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *), .hover\\:flex:hover {
+      :is(:where(.group):hover .group-hover\\:flex), :is(:where(.peer):hover ~ .peer-hover\\:flex), .hover\\:flex:hover {
         display: flex;
       }
     }
@@ -533,7 +533,7 @@ test('hover', async () => {
 test('focus', async () => {
   expect(await run(['focus:flex', 'group-focus:flex', 'peer-focus:flex'])).toMatchInlineSnapshot(`
     "
-    .group-focus\\:flex:is(:where(.group):focus *), .peer-focus\\:flex:is(:where(.peer):focus ~ *), .focus\\:flex:focus {
+    :is(:where(.group):focus .group-focus\\:flex), :is(:where(.peer):focus ~ .peer-focus\\:flex), .focus\\:flex:focus {
       display: flex;
     }
     "
@@ -545,12 +545,12 @@ test('group-hover group-focus sorting', async () => {
   expect(await run(['group-hover:flex', 'group-focus:flex'])).toMatchInlineSnapshot(`
     "
     @media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *) {
+      :is(:where(.group):hover .group-hover\\:flex) {
         display: flex;
       }
     }
 
-    .group-focus\\:flex:is(:where(.group):focus *) {
+    :is(:where(.group):focus .group-focus\\:flex) {
       display: flex;
     }
     "
@@ -558,23 +558,36 @@ test('group-hover group-focus sorting', async () => {
   expect(await run(['group-focus:flex', 'group-hover:flex'])).toMatchInlineSnapshot(`
     "
     @media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *) {
+      :is(:where(.group):hover .group-hover\\:flex) {
         display: flex;
       }
     }
 
-    .group-focus\\:flex:is(:where(.group):focus *) {
+    :is(:where(.group):focus .group-focus\\:flex) {
       display: flex;
     }
     "
   `)
 })
 
+test('stacking group and peer variants does not duplicate the target selector', async () => {
+  let candidate = Array.from(
+    { length: 12 },
+    (_, i) => `${i % 2 === 0 ? 'group' : 'peer'}-data-active/name${i}`,
+  ).join(':')
+
+  let output = await run([`${candidate}:flex`])
+  expect(output).toContain('display: flex')
+  // Repeating `&` in each variant makes the generated selector grow
+  // exponentially. This many variants should still produce a small rule.
+  expect(output.length).toBeLessThan(2_000)
+})
+
 test('focus-visible', async () => {
   expect(await run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-focus-visible\\:flex:is(:where(.group):focus-visible *), .peer-focus-visible\\:flex:is(:where(.peer):focus-visible ~ *), .focus-visible\\:flex:focus-visible {
+      :is(:where(.group):focus-visible .group-focus-visible\\:flex), :is(:where(.peer):focus-visible ~ .peer-focus-visible\\:flex), .focus-visible\\:flex:focus-visible {
         display: flex;
       }
       "
@@ -586,7 +599,7 @@ test('active', async () => {
   expect(await run(['active:flex', 'group-active:flex', 'peer-active:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-active\\:flex:is(:where(.group):active *), .peer-active\\:flex:is(:where(.peer):active ~ *), .active\\:flex:active {
+      :is(:where(.group):active .group-active\\:flex), :is(:where(.peer):active ~ .peer-active\\:flex), .active\\:flex:active {
         display: flex;
       }
       "
@@ -598,7 +611,7 @@ test('enabled', async () => {
   expect(await run(['enabled:flex', 'group-enabled:flex', 'peer-enabled:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-enabled\\:flex:is(:where(.group):enabled *), .peer-enabled\\:flex:is(:where(.peer):enabled ~ *), .enabled\\:flex:enabled {
+      :is(:where(.group):enabled .group-enabled\\:flex), :is(:where(.peer):enabled ~ .peer-enabled\\:flex), .enabled\\:flex:enabled {
         display: flex;
       }
       "
@@ -610,7 +623,7 @@ test('disabled', async () => {
   expect(await run(['disabled:flex', 'group-disabled:flex', 'peer-disabled:flex']))
     .toMatchInlineSnapshot(`
       "
-      .group-disabled\\:flex:is(:where(.group):disabled *), .peer-disabled\\:flex:is(:where(.peer):disabled ~ *), .disabled\\:flex:disabled {
+      :is(:where(.group):disabled .group-disabled\\:flex), :is(:where(.peer):disabled ~ .peer-disabled\\:flex), .disabled\\:flex:disabled {
         display: flex;
       }
       "
@@ -621,7 +634,7 @@ test('disabled', async () => {
 test('inert', async () => {
   expect(await run(['inert:flex', 'group-inert:flex', 'peer-inert:flex'])).toMatchInlineSnapshot(`
     "
-    .group-inert\\:flex:is(:where(.group):is([inert], [inert] *) *), .peer-inert\\:flex:is(:where(.peer):is([inert], [inert] *) ~ *), .inert\\:flex:is([inert], [inert] *) {
+    :is(:where(.group):is([inert], [inert] *) .group-inert\\:flex), :is(:where(.peer):is([inert], [inert] *) ~ .peer-inert\\:flex), .inert\\:flex:is([inert], [inert] *) {
       display: flex;
     }
     "
@@ -640,17 +653,17 @@ test('group-[...]', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-\\[\\&_p\\]\\:flex:is(:where(.group) p *), .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex:is(:where(.group):hover *):is(:where(.group) p *) {
+    :is(:where(.group) p .group-\\[\\&_p\\]\\:flex), :is(:where(.group) p :is(:where(.group):hover .group-\\[\\&\\:hover\\]\\:group-\\[\\&_p\\]\\:flex)) {
       display: flex;
     }
 
     @media (hover: hover) {
-      .group-\\[\\&_p\\]\\:hover\\:flex:is(:where(.group) p *):hover, .hover\\:group-\\[\\&_p\\]\\:flex:hover:is(:where(.group) p *) {
+      :is(:where(.group) p .group-\\[\\&_p\\]\\:hover\\:flex):hover, :is(:where(.group) p .hover\\:group-\\[\\&_p\\]\\:flex:hover) {
         display: flex;
       }
 
       @media (hover: hover) {
-        .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover:is(:where(.group) p *):hover {
+        :is(:where(.group) p .hover\\:group-\\[\\&_p\\]\\:hover\\:flex:hover):hover {
           display: flex;
         }
       }
@@ -692,22 +705,22 @@ test('group-*', async () => {
   ).toMatchInlineSnapshot(`
     "
     @media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *) {
+      :is(:where(.group):hover .group-hover\\:flex) {
         display: flex;
       }
     }
 
-    .group-focus\\:flex:is(:where(.group):focus *) {
+    :is(:where(.group):focus .group-focus\\:flex) {
       display: flex;
     }
 
     @media (hover: hover) {
-      .group-focus\\:group-hover\\:flex:is(:where(.group):focus *):is(:where(.group):hover *), .group-hover\\:group-focus\\:flex:is(:where(.group):hover *):is(:where(.group):focus *) {
+      :is(:where(.group):hover :is(:where(.group):focus .group-focus\\:group-hover\\:flex)), :is(:where(.group):focus :is(:where(.group):hover .group-hover\\:group-focus\\:flex)) {
         display: flex;
       }
     }
 
-    .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+    :is(:is(:where(.group):hover, :where(.group):focus) .group-hocus\\:flex) {
       display: flex;
     }
     "
@@ -742,12 +755,12 @@ test('peer-[...]', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .peer-\\[\\&_p\\]\\:flex:is(:where(.peer) p ~ *), .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer) p ~ *) {
+    :is(:where(.peer) p ~ .peer-\\[\\&_p\\]\\:flex), :is(:where(.peer) p ~ :is(:where(.peer):hover ~ .peer-\\[\\&\\:hover\\]\\:peer-\\[\\&_p\\]\\:flex)) {
       display: flex;
     }
 
     @media (hover: hover) {
-      .hover\\:peer-\\[\\&_p\\]\\:flex:hover:is(:where(.peer) p ~ *), .peer-\\[\\&_p\\]\\:hover\\:flex:is(:where(.peer) p ~ *):hover, .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover:is(:where(.peer) p ~ *):focus {
+      :is(:where(.peer) p ~ .hover\\:peer-\\[\\&_p\\]\\:flex:hover), :is(:where(.peer) p ~ .peer-\\[\\&_p\\]\\:hover\\:flex):hover, :is(:where(.peer) p ~ .hover\\:peer-\\[\\&_p\\]\\:focus\\:flex:hover):focus {
         display: flex;
       }
     }
@@ -782,22 +795,22 @@ test('peer-*', async () => {
   ).toMatchInlineSnapshot(`
     "
     @media (hover: hover) {
-      .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+      :is(:where(.peer):hover ~ .peer-hover\\:flex) {
         display: flex;
       }
     }
 
-    .peer-focus\\:flex:is(:where(.peer):focus ~ *) {
+    :is(:where(.peer):focus ~ .peer-focus\\:flex) {
       display: flex;
     }
 
     @media (hover: hover) {
-      .peer-focus\\:peer-hover\\:flex:is(:where(.peer):focus ~ *):is(:where(.peer):hover ~ *), .peer-hover\\:peer-focus\\:flex:is(:where(.peer):hover ~ *):is(:where(.peer):focus ~ *) {
+      :is(:where(.peer):hover ~ :is(:where(.peer):focus ~ .peer-focus\\:peer-hover\\:flex)), :is(:where(.peer):focus ~ :is(:where(.peer):hover ~ .peer-hover\\:peer-focus\\:flex)) {
         display: flex;
       }
     }
 
-    .peer-hocus\\:flex:is(:is(:where(.peer):hover, :where(.peer):focus) ~ *) {
+    :is(:is(:where(.peer):hover, :where(.peer):focus) ~ .peer-hocus\\:flex) {
       display: flex;
     }
     "
@@ -1897,7 +1910,7 @@ test('not', async () => {
       }
     }
 
-    .group-not-checked\\:flex:is(:where(.group):not(:checked) *), .group-not-hocus\\:flex:is(:where(.group):not(:hover, :focus) *), .group-not-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:hover, :focus) *), .group-not-\\[\\:checked\\]\\:flex:is(:where(.group):not(:checked) *), .group-not-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):not(:checked) *), .peer-not-checked\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-hocus\\:flex:is(:where(.peer):not(:hover, :focus) ~ *), .peer-not-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ *), .peer-not-\\[\\:checked\\]\\:flex:is(:where(.peer):not(:checked) ~ *), .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):not(:checked) ~ *) {
+    :is(:where(.group):not(:checked) .group-not-checked\\:flex), :is(:where(.group):not(:hover, :focus) .group-not-hocus\\:flex), :is(:where(.group\\/parent-name):not(:hover, :focus) .group-not-hocus\\/parent-name\\:flex), :is(:where(.group):not(:checked) .group-not-\\[\\:checked\\]\\:flex), :is(:where(.group\\/parent-name):not(:checked) .group-not-\\[\\:checked\\]\\/parent-name\\:flex), :is(:where(.peer):not(:checked) ~ .peer-not-checked\\:flex), :is(:where(.peer):not(:hover, :focus) ~ .peer-not-hocus\\:flex), :is(:where(.peer\\/sibling-name):not(:hover, :focus) ~ .peer-not-hocus\\/sibling-name\\:flex), :is(:where(.peer):not(:checked) ~ .peer-not-\\[\\:checked\\]\\:flex), :is(:where(.peer\\/sibling-name):not(:checked) ~ .peer-not-\\[\\:checked\\]\\/sibling-name\\:flex) {
       display: flex;
     }
     "
@@ -2126,7 +2139,7 @@ test('has', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
-    .group-has-checked\\:flex:is(:where(.group):has(:checked) *), .group-has-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-hocus\\:flex:is(:where(.group):has(:hover, :focus) *), .group-has-hocus\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:hover, :focus) *), .group-has-\\[\\:checked\\]\\:flex:is(:where(.group):has(:checked) *), .group-has-\\[\\:checked\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(:checked) *), .group-has-\\[\\&\\>img\\]\\:flex:is(:where(.group):has(* > img) *), .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has(* > img) *), .group-has-\\[\\+img\\]\\:flex:is(:where(.group):has( + img) *), .group-has-\\[\\>img\\]\\:flex:is(:where(.group):has( > img) *), .group-has-\\[\\>img\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name):has( > img) *), .group-has-\\[\\~img\\]\\:flex:is(:where(.group):has( ~ img) *), .peer-has-checked\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-hocus\\:flex:is(:where(.peer):has(:hover, :focus) ~ *), .peer-has-hocus\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ *), .peer-has-\\[\\:checked\\]\\:flex:is(:where(.peer):has(:checked) ~ *), .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(:checked) ~ *), .peer-has-\\[\\&\\>img\\]\\:flex:is(:where(.peer):has(* > img) ~ *), .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has(* > img) ~ *), .peer-has-\\[\\+img\\]\\:flex:is(:where(.peer):has( + img) ~ *), .peer-has-\\[\\>img\\]\\:flex:is(:where(.peer):has( > img) ~ *), .peer-has-\\[\\>img\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name):has( > img) ~ *), .peer-has-\\[\\~img\\]\\:flex:is(:where(.peer):has( ~ img) ~ *), .has-checked\\:flex:has(:checked), .has-hocus\\:flex:has(:hover, :focus), .has-\\[\\:checked\\]\\:flex:has(:checked), .has-\\[\\&\\>img\\]\\:flex:has(* > img), .has-\\[\\+img\\]\\:flex:has( + img), .has-\\[\\>img\\]\\:flex:has( > img), .has-\\[\\~img\\]\\:flex:has( ~ img) {
+    :is(:where(.group):has(:checked) .group-has-checked\\:flex), :is(:where(.group\\/parent-name):has(:checked) .group-has-checked\\/parent-name\\:flex), :is(:where(.group):has(:hover, :focus) .group-has-hocus\\:flex), :is(:where(.group\\/parent-name):has(:hover, :focus) .group-has-hocus\\/parent-name\\:flex), :is(:where(.group):has(:checked) .group-has-\\[\\:checked\\]\\:flex), :is(:where(.group\\/parent-name):has(:checked) .group-has-\\[\\:checked\\]\\/parent-name\\:flex), :is(:where(.group):has(* > img) .group-has-\\[\\&\\>img\\]\\:flex), :is(:where(.group\\/parent-name):has(* > img) .group-has-\\[\\&\\>img\\]\\/parent-name\\:flex), :is(:where(.group):has( + img) .group-has-\\[\\+img\\]\\:flex), :is(:where(.group):has( > img) .group-has-\\[\\>img\\]\\:flex), :is(:where(.group\\/parent-name):has( > img) .group-has-\\[\\>img\\]\\/parent-name\\:flex), :is(:where(.group):has( ~ img) .group-has-\\[\\~img\\]\\:flex), :is(:where(.peer):has(:checked) ~ .peer-has-checked\\:flex), :is(:where(.peer\\/sibling-name):has(:checked) ~ .peer-has-checked\\/sibling-name\\:flex), :is(:where(.peer):has(:hover, :focus) ~ .peer-has-hocus\\:flex), :is(:where(.peer\\/sibling-name):has(:hover, :focus) ~ .peer-has-hocus\\/sibling-name\\:flex), :is(:where(.peer):has(:checked) ~ .peer-has-\\[\\:checked\\]\\:flex), :is(:where(.peer\\/sibling-name):has(:checked) ~ .peer-has-\\[\\:checked\\]\\/sibling-name\\:flex), :is(:where(.peer):has(* > img) ~ .peer-has-\\[\\&\\>img\\]\\:flex), :is(:where(.peer\\/sibling-name):has(* > img) ~ .peer-has-\\[\\&\\>img\\]\\/sibling-name\\:flex), :is(:where(.peer):has( + img) ~ .peer-has-\\[\\+img\\]\\:flex), :is(:where(.peer):has( > img) ~ .peer-has-\\[\\>img\\]\\:flex), :is(:where(.peer\\/sibling-name):has( > img) ~ .peer-has-\\[\\>img\\]\\/sibling-name\\:flex), :is(:where(.peer):has( ~ img) ~ .peer-has-\\[\\~img\\]\\:flex), .has-checked\\:flex:has(:checked), .has-hocus\\:flex:has(:hover, :focus), .has-\\[\\:checked\\]\\:flex:has(:checked), .has-\\[\\&\\>img\\]\\:flex:has(* > img), .has-\\[\\+img\\]\\:flex:has( + img), .has-\\[\\>img\\]\\:flex:has( > img), .has-\\[\\~img\\]\\:flex:has( ~ img) {
       display: flex;
     }
     "
@@ -2179,7 +2192,7 @@ test('aria', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-aria-checked\\:flex:is(:where(.group)[aria-checked="true"] *), .group-aria-checked\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-checked="true"] *), .group-aria-\\[modal\\]\\:flex:is(:where(.group)[aria-modal] *), .group-aria-\\[modal\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-modal] *), .group-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.group)[aria-valuenow="1"] *), .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[aria-valuenow="1"] *), .peer-aria-checked\\:flex:is(:where(.peer)[aria-checked="true"] ~ *), .peer-aria-checked\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ *), .peer-aria-\\[modal\\]\\:flex:is(:where(.peer)[aria-modal] ~ *), .peer-aria-\\[modal\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-modal] ~ *), .peer-aria-\\[valuenow\\=1\\]\\:flex:is(:where(.peer)[aria-valuenow="1"] ~ *), .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ *), .aria-checked\\:flex[aria-checked="true"], .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"], .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"], .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
+    :is(:where(.group)[aria-checked="true"] .group-aria-checked\\:flex), :is(:where(.group\\/parent-name)[aria-checked="true"] .group-aria-checked\\/parent-name\\:flex), :is(:where(.group)[aria-modal] .group-aria-\\[modal\\]\\:flex), :is(:where(.group\\/parent-name)[aria-modal] .group-aria-\\[modal\\]\\/parent-name\\:flex), :is(:where(.group)[aria-valuenow="1"] .group-aria-\\[valuenow\\=1\\]\\:flex), :is(:where(.group\\/parent-name)[aria-valuenow="1"] .group-aria-\\[valuenow\\=1\\]\\/parent-name\\:flex), :is(:where(.peer)[aria-checked="true"] ~ .peer-aria-checked\\:flex), :is(:where(.peer\\/sibling-name)[aria-checked="true"] ~ .peer-aria-checked\\/sibling-name\\:flex), :is(:where(.peer)[aria-modal] ~ .peer-aria-\\[modal\\]\\:flex), :is(:where(.peer\\/sibling-name)[aria-modal] ~ .peer-aria-\\[modal\\]\\/sibling-name\\:flex), :is(:where(.peer)[aria-valuenow="1"] ~ .peer-aria-\\[valuenow\\=1\\]\\:flex), :is(:where(.peer\\/sibling-name)[aria-valuenow="1"] ~ .peer-aria-\\[valuenow\\=1\\]\\/sibling-name\\:flex), .aria-checked\\:flex[aria-checked="true"], .aria-\\[invalid\\=spelling\\]\\:flex[aria-invalid="spelling"], .aria-\\[valuenow_\\=_\\"1\\"\\]\\:flex[aria-valuenow="1"], .aria-\\[valuenow\\=1\\]\\:flex[aria-valuenow="1"] {
       display: flex;
     }
     "
@@ -2218,7 +2231,7 @@ test('data', async () => {
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .group-data-\\[disabled\\]\\:flex:is(:where(.group)[data-disabled] *), .group-data-\\[disabled\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-disabled] *), .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar" i] *), .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo$="bar baz" i] *), .group-data-\\[foo\\=1\\]\\:flex:is(:where(.group)[data-foo="1"] *), .group-data-\\[foo\\=1\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="1"] *), .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex:is(:where(.group\\/parent-name)[data-foo="bar baz"] *), .peer-data-\\[disabled\\]\\:flex:is(:where(.peer)[data-disabled] ~ *), .peer-data-\\[disabled\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-disabled] ~ *), .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar" i] ~ *), .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ *), .peer-data-\\[foo\\=1\\]\\:flex:is(:where(.peer)[data-foo="1"] ~ *), .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="1"] ~ *), .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex:is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ *), .data-disabled\\:flex[data-disabled], .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i], .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i], .data-\\[foo\\=1\\]\\:flex[data-foo="1"], .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"], .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato="salad"], .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"], .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="], .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
+    :is(:where(.group)[data-disabled] .group-data-\\[disabled\\]\\:flex), :is(:where(.group\\/parent-name)[data-disabled] .group-data-\\[disabled\\]\\/parent-name\\:flex), :is(:where(.group\\/parent-name)[data-foo$="bar" i] .group-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/parent-name\\:flex), :is(:where(.group\\/parent-name)[data-foo$="bar baz" i] .group-data-\\[foo\\$\\=bar_baz_i\\]\\/parent-name\\:flex), :is(:where(.group)[data-foo="1"] .group-data-\\[foo\\=1\\]\\:flex), :is(:where(.group\\/parent-name)[data-foo="1"] .group-data-\\[foo\\=1\\]\\/parent-name\\:flex), :is(:where(.group\\/parent-name)[data-foo="bar baz"] .group-data-\\[foo\\=bar\\ baz\\]\\/parent-name\\:flex), :is(:where(.peer)[data-disabled] ~ .peer-data-\\[disabled\\]\\:flex), :is(:where(.peer\\/sibling-name)[data-disabled] ~ .peer-data-\\[disabled\\]\\/sibling-name\\:flex), :is(:where(.peer\\/sibling-name)[data-foo$="bar" i] ~ .peer-data-\\[foo\\$\\=\\'bar\\'_i\\]\\/sibling-name\\:flex), :is(:where(.peer\\/sibling-name)[data-foo$="bar baz" i] ~ .peer-data-\\[foo\\$\\=bar_baz_i\\]\\/sibling-name\\:flex), :is(:where(.peer)[data-foo="1"] ~ .peer-data-\\[foo\\=1\\]\\:flex), :is(:where(.peer\\/sibling-name)[data-foo="1"] ~ .peer-data-\\[foo\\=1\\]\\/sibling-name\\:flex), :is(:where(.peer\\/sibling-name)[data-foo="bar baz"] ~ .peer-data-\\[foo\\=bar\\ baz\\]\\/sibling-name\\:flex), .data-disabled\\:flex[data-disabled], .data-\\[foo\\$\\=\\'bar\\'_i\\]\\:flex[data-foo$="bar" i], .data-\\[foo\\$\\=bar_baz_i\\]\\:flex[data-foo$="bar baz" i], .data-\\[foo\\=1\\]\\:flex[data-foo="1"], .data-\\[foo\\=bar_baz\\]\\:flex[data-foo="bar baz"], .data-\\[potato_\\=_\\"salad\\"\\]\\:flex[data-potato="salad"], .data-\\[potato_\\^\\=_\\"salad\\"\\]\\:flex[data-potato^="salad"], .data-\\[potato\\=\\"\\^_\\=\\"\\]\\:flex[data-potato="^ ="], .data-\\[potato\\=salad\\]\\:flex[data-potato="salad"] {
       display: flex;
     }
     "
@@ -2717,7 +2730,7 @@ test('variant order', async () => {
     }
 
     @media (hover: hover) {
-      .group-hover\\:flex:is(:where(.group):hover *), .peer-hover\\:flex:is(:where(.peer):hover ~ *) {
+      :is(:where(.group):hover .group-hover\\:flex), :is(:where(.peer):hover ~ .peer-hover\\:flex) {
         display: flex;
       }
     }
@@ -2990,7 +3003,7 @@ test('move modifier of compound variant to sub-variant if its also a compound va
     ]),
   ).toMatchInlineSnapshot(`
     "
-    .not-group-focus\\/name\\:flex:not(:is(:where(.group\\/name):focus *)), .group-peer-focus\\/name\\:flex:is(:where(.group\\/name):is(:where(.peer):focus ~ *) *), :where(:is(:where(.group\\/name):focus *)) .in-group-focus\\/name\\:flex, .has-group-focus\\/name\\:flex:has(:is(:where(.group\\/name):focus *)) {
+    .not-group-focus\\/name\\:flex:not(:is(:where(.group\\/name):focus *)), :is(:is(:where(.peer):focus ~ :where(.group\\/name)) .group-peer-focus\\/name\\:flex), :where(:is(:where(.group\\/name):focus *)) .in-group-focus\\/name\\:flex, .has-group-focus\\/name\\:flex:has(:is(:where(.group\\/name):focus *)) {
       display: flex;
     }
     "
