@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sort `min-*`, `max-*`, and container query variants with decimal values numerically (e.g. `min-[40.25rem]` before `min-[40.5rem]`) ([#20512](https://github.com/tailwindlabs/tailwindcss/pull/20512))
 - Ensure CSS comments ending with `\*/` are closed correctly instead of swallowing the CSS that follows (e.g. `/* C:\temp\*/`) ([#20508](https://github.com/tailwindlabs/tailwindcss/pull/20508))
 - Improve style invalidation performance of `group-*` and `peer-*` variants ([#20513](https://github.com/tailwindlabs/tailwindcss/pull/20513))
+- Treat viewport units like `dvmin` and `svi` and font-relative units like `cap` and `rex` as lengths in arbitrary values (e.g. `text-[10dvmin]` generates `font-size` instead of `color`) ([#XXXXX](https://github.com/tailwindlabs/tailwindcss/pull/XXXXX))
 
 ## [4.3.3] - 2026-07-16
 
