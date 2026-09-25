@@ -1424,6 +1424,43 @@ test('sorting `min` and `max` should sort by unit, then by value, then alphabeti
   `)
 })
 
+test('sorting `min` and `max` should compare decimal values numerically', async () => {
+  expect(
+    await run([
+      'min-[40.5rem]:flex',
+      'min-[40.25rem]:flex',
+      'max-[40.25rem]:flex',
+      'max-[40.5rem]:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "
+    @media not all and (min-width: 40.5rem) {
+      .max-\\[40\\.5rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not all and (min-width: 40.25rem) {
+      .max-\\[40\\.25rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 40.25rem) {
+      .min-\\[40\\.25rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media (min-width: 40.5rem) {
+      .min-\\[40\\.5rem\\]\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('supports', async () => {
   expect(
     await run([
