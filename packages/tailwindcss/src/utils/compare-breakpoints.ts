@@ -25,7 +25,7 @@ export function compareBreakpoints(a: string, z: string, direction: 'asc' | 'des
     // Compare by bucket name
     (aBucket === zBucket ? 0 : aBucket < zBucket ? -1 : 1) ||
     // If bucket names are the same, compare by value
-    (direction === 'asc' ? parseInt(a) - parseInt(z) : parseInt(z) - parseInt(a))
+    (direction === 'asc' ? parseFloat(a) - parseFloat(z) : parseFloat(z) - parseFloat(a))
 
   // If the groups are the same, and the contents are not numbers, the
   // `order` will result in `NaN`. In this case, we want to make sorting
