@@ -28,6 +28,14 @@ const css = String.raw
 const DEBUG = env.DEBUG
 const DEFAULT_POLL_INTERVAL_MS = 250
 
+// Directory segments that should not be watched by default, regardless of
+// which project directories are being watched. Watching these can cause
+// excessive CPU usage or hangs on file watcher backends (e.g. Watchman) when
+// they contain large or frequently-changing trees, and Tailwind normally
+// never needs to react to changes inside them. See `watchIgnoreFor` for the
+// one exception: an explicit `@source` pointing inside one of these.
+const DEFAULT_WATCH_IGNORE_SEGMENTS = ['node_modules', '.git', '.hg', '.svn']
+
 export function options() {
   return {
     '--input': {
@@ -334,154 +342,162 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     await handleError(() => loadWatcher())
 
     cleanupWatchers.push(
-      await createWatchers(await watchDirectories(scanner), async function handle(files) {
-        try {
-          // If the only change happened to the output file, then we don't want to
-          // trigger a rebuild because that will result in an infinite loop.
-          if (files.length === 1 && files[0] === args['--output']) return
+      await createWatchers(
+        await watchDirectories(scanner),
+        async function handle(files) {
+          try {
+            // If the only change happened to the output file, then we don't want to
+            // trigger a rebuild because that will result in an infinite loop.
+            if (files.length === 1 && files[0] === args['--output']) return
 
-          using I = new Instrumentation()
-          DEBUG && I.start('[@tailwindcss/cli] (watcher)')
+            using I = new Instrumentation()
+            DEBUG && I.start('[@tailwindcss/cli] (watcher)')
 
-          // Re-compile the input
-          let start = process.hrtime.bigint()
+            // Re-compile the input
+            let start = process.hrtime.bigint()
 
-          let resolvedFullRebuildPaths = fullRebuildPaths
-          let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
+            let resolvedFullRebuildPaths = fullRebuildPaths
+            let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
 
-          // Track the compiled CSS
-          let compiledCss = ''
-          let compiledMap: SourceMap | null = null
+            // Track the compiled CSS
+            let compiledCss = ''
+            let compiledMap: SourceMap | null = null
 
-          // Scan the entire `base` directory for full rebuilds.
-          if (rebuildStrategy.kind === 'full') {
-            // Read the new `input`.
-            let input = args['--input']
-              ? args['--input'] === '-'
-                ? await drainStdin()
-                : await fs.readFile(args['--input'], 'utf-8')
-              : css`
-                  @import 'tailwindcss';
-                `
-            clearRequireCache(resolvedFullRebuildPaths)
+            // Scan the entire `base` directory for full rebuilds.
+            if (rebuildStrategy.kind === 'full') {
+              // Read the new `input`.
+              let input = args['--input']
+                ? args['--input'] === '-'
+                  ? await drainStdin()
+                  : await fs.readFile(args['--input'], 'utf-8')
+                : css`
+                    @import 'tailwindcss';
+                  `
+              clearRequireCache(resolvedFullRebuildPaths)
 
-            // Track current rebuild paths in case something goes wrong when
-            // performing a full rebuild.
-            backupRebuildPaths = fullRebuildPaths.slice()
+              // Track current rebuild paths in case something goes wrong when
+              // performing a full rebuild.
+              backupRebuildPaths = fullRebuildPaths.slice()
 
-            // The `inputFilePath`, if provided, will be the only known full
-            // rebuild path before the compiler is re-created.
-            fullRebuildPaths = inputFilePath ? [inputFilePath] : []
+              // The `inputFilePath`, if provided, will be the only known full
+              // rebuild path before the compiler is re-created.
+              fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
-            // Create a new compiler, given the new `input`
-            ;[compiler, scanner] = await createCompiler(input, I)
+              // Create a new compiler, given the new `input`
+              ;[compiler, scanner] = await createCompiler(input, I)
 
-            // Succesfully created a new compiler, so the `fullRebuildPaths`
-            // will be updated. If other errors occur, we should be able to
-            // restore the paths unconditionally.
-            backupRebuildPaths = fullRebuildPaths.slice()
+              // Succesfully created a new compiler, so the `fullRebuildPaths`
+              // will be updated. If other errors occur, we should be able to
+              // restore the paths unconditionally.
+              backupRebuildPaths = fullRebuildPaths.slice()
 
-            // Scan the directory for candidates
-            DEBUG && I.start('Scan for candidates')
-            let candidates = scanner.scan()
-            DEBUG && I.end('Scan for candidates')
+              // Scan the directory for candidates
+              DEBUG && I.start('Scan for candidates')
+              let candidates = scanner.scan()
+              DEBUG && I.end('Scan for candidates')
 
-            // Setup new watchers
-            DEBUG && I.start('Setup new watchers')
-            let newCleanupFunction = await createWatchers(await watchDirectories(scanner), handle)
-            DEBUG && I.end('Setup new watchers')
+              // Setup new watchers
+              DEBUG && I.start('Setup new watchers')
+              let newCleanupFunction = await createWatchers(
+                await watchDirectories(scanner),
+                handle,
+                fullRebuildPaths,
+              )
+              DEBUG && I.end('Setup new watchers')
 
-            // Clear old watchers
-            DEBUG && I.start('Cleanup old watchers')
-            await Promise.all(cleanupWatchers.splice(0).map((cleanup) => cleanup()))
-            DEBUG && I.end('Cleanup old watchers')
+              // Clear old watchers
+              DEBUG && I.start('Cleanup old watchers')
+              await Promise.all(cleanupWatchers.splice(0).map((cleanup) => cleanup()))
+              DEBUG && I.end('Cleanup old watchers')
 
-            cleanupWatchers.push(newCleanupFunction)
+              cleanupWatchers.push(newCleanupFunction)
 
-            // Re-compile the CSS
-            DEBUG && I.start('Build CSS')
-            compiledCss = compiler.build(candidates)
-            DEBUG && I.end('Build CSS')
+              // Re-compile the CSS
+              DEBUG && I.start('Build CSS')
+              compiledCss = compiler.build(candidates)
+              DEBUG && I.end('Build CSS')
 
-            if (args['--map']) {
-              DEBUG && I.start('Build Source Map')
-              compiledMap = toSourceMap(compiler.buildSourceMap())
-              DEBUG && I.end('Build Source Map')
+              if (args['--map']) {
+                DEBUG && I.start('Build Source Map')
+                compiledMap = toSourceMap(compiler.buildSourceMap())
+                DEBUG && I.end('Build Source Map')
+              }
             }
+
+            // Scan changed files only for incremental rebuilds.
+            else if (rebuildStrategy.kind === 'incremental') {
+              DEBUG && I.start('Scan for candidates')
+              let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
+              DEBUG && I.end('Scan for candidates')
+
+              // No new candidates found which means we don't need to write to
+              // disk, and can return early.
+              if (newCandidates.length <= 0) {
+                let end = process.hrtime.bigint()
+                if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+                return
+              }
+
+              DEBUG && I.start('Build CSS')
+              compiledCss = compiler.build(newCandidates)
+              DEBUG && I.end('Build CSS')
+
+              if (args['--map']) {
+                DEBUG && I.start('Build Source Map')
+                compiledMap = toSourceMap(compiler.buildSourceMap())
+                DEBUG && I.end('Build Source Map')
+              }
+            }
+
+            await write(compiledCss, compiledMap, args, I)
+
+            let end = process.hrtime.bigint()
+            if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+          } catch (err) {
+            // It's important that we perform a full rebuild when any of the
+            // dependencies tracked in `fullRebuildPaths` has been changed.
+            //
+            // If we remove one of those files, then a subsequent build will be
+            // triggered, but it will fail because the dependency is gone. The
+            // compiler itself will be in a broken state and won't be able to
+            // register any dependencies therefore we want to restore all the
+            // dependencies from before. If we don't do that, then we won't be
+            // able to recover from a bug in a transitive dependency.
+            //
+            // E.g.:
+            // ```css
+            // /* input.css — known full rebuild path */
+            // @import 'tailwindcss';
+            // @config "./tailwind.config.js";
+            // ```
+            //
+            // ```js
+            // // tailwind.config.js
+            // const theme = require('./my-theme.js');
+            //
+            // module.exports = {
+            //   theme
+            // }
+            // ```
+            // In this case `my-theme.js` is a transitive dependency of
+            // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
+            // result in an error, restoring `my-theme.js` should trigger a
+            // fresh build even though the compiler didn't restore.
+            //
+            // Once the build error is fixed, a fresh full rebuild will happen
+            // which in turn will fixup the full rebuild paths.
+            fullRebuildPaths = backupRebuildPaths
+
+            // Catch any errors and print them to stderr, but don't exit the process
+            // and keep watching.
+            eprintln(formatError(err))
+
+            let end = process.hrtime.bigint()
+            if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
           }
-
-          // Scan changed files only for incremental rebuilds.
-          else if (rebuildStrategy.kind === 'incremental') {
-            DEBUG && I.start('Scan for candidates')
-            let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
-            DEBUG && I.end('Scan for candidates')
-
-            // No new candidates found which means we don't need to write to
-            // disk, and can return early.
-            if (newCandidates.length <= 0) {
-              let end = process.hrtime.bigint()
-              if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
-              return
-            }
-
-            DEBUG && I.start('Build CSS')
-            compiledCss = compiler.build(newCandidates)
-            DEBUG && I.end('Build CSS')
-
-            if (args['--map']) {
-              DEBUG && I.start('Build Source Map')
-              compiledMap = toSourceMap(compiler.buildSourceMap())
-              DEBUG && I.end('Build Source Map')
-            }
-          }
-
-          await write(compiledCss, compiledMap, args, I)
-
-          let end = process.hrtime.bigint()
-          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
-        } catch (err) {
-          // It's important that we perform a full rebuild when any of the
-          // dependencies tracked in `fullRebuildPaths` has been changed.
-          //
-          // If we remove one of those files, then a subsequent build will be
-          // triggered, but it will fail because the dependency is gone. The
-          // compiler itself will be in a broken state and won't be able to
-          // register any dependencies therefore we want to restore all the
-          // dependencies from before. If we don't do that, then we won't be
-          // able to recover from a bug in a transitive dependency.
-          //
-          // E.g.:
-          // ```css
-          // /* input.css — known full rebuild path */
-          // @import 'tailwindcss';
-          // @config "./tailwind.config.js";
-          // ```
-          //
-          // ```js
-          // // tailwind.config.js
-          // const theme = require('./my-theme.js');
-          //
-          // module.exports = {
-          //   theme
-          // }
-          // ```
-          // In this case `my-theme.js` is a transitive dependency of
-          // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
-          // result in an error, restoring `my-theme.js` should trigger a
-          // fresh build even though the compiler didn't restore.
-          //
-          // Once the build error is fixed, a fresh full rebuild will happen
-          // which in turn will fixup the full rebuild paths.
-          fullRebuildPaths = backupRebuildPaths
-
-          // Catch any errors and print them to stderr, but don't exit the process
-          // and keep watching.
-          eprintln(formatError(err))
-
-          let end = process.hrtime.bigint()
-          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
-        }
-      }),
+        },
+        fullRebuildPaths,
+      ),
     )
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
@@ -693,8 +709,21 @@ async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
   }
 }
 
-async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+async function createWatchers(
+  dirs: string[],
+  cb: (files: string[]) => void,
+  extraWatchPaths: string[] = [],
+) {
   let watcher = await loadWatcher()
+
+  // Keep every originally-requested directory, plus any tracked compiler
+  // dependency path (e.g. an `@import`-resolved file inside `node_modules`,
+  // such as `tailwindcss` itself), before the dedup step below collapses
+  // child directories into an already-watched parent. We need this to
+  // detect when an explicit source or dependency file ends up nested under
+  // a broader watched root, so we know not to ignore that noise directory
+  // for that root -- otherwise we'd never observe changes to it again.
+  let allRequestedDirs = dirs.concat(extraWatchPaths)
 
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
@@ -747,44 +776,48 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
   // Setup a watcher for every directory.
   for (let dir of dirs) {
-    let { unsubscribe } = await watcher.subscribe(dir, async (err, events) => {
-      // Whenever an error occurs we want to let the user know about it but we
-      // want to keep watching for changes.
-      if (err) {
-        console.error(err)
-        return
-      }
+    let { unsubscribe } = await watcher.subscribe(
+      dir,
+      async (err, events) => {
+        // Whenever an error occurs we want to let the user know about it but we
+        // want to keep watching for changes.
+        if (err) {
+          console.error(err)
+          return
+        }
 
-      await Promise.all(
-        events.map(async (event) => {
-          // When a file is deleted, a rebuild should be triggered such that we
-          // can figure out whether this file must trigger a fresh build or not.
-          //
-          // If it must trigger a fresh build, then we will temporarily end up
-          // in a broken state, but an error will be shown to the user. Once the
-          // user resolves the issue, the CLI will recover.
-          if (event.type === 'delete') {
+        await Promise.all(
+          events.map(async (event) => {
+            // When a file is deleted, a rebuild should be triggered such that we
+            // can figure out whether this file must trigger a fresh build or not.
+            //
+            // If it must trigger a fresh build, then we will temporarily end up
+            // in a broken state, but an error will be shown to the user. Once the
+            // user resolves the issue, the CLI will recover.
+            if (event.type === 'delete') {
+              files.add(event.path)
+              return
+            }
+
+            // Ignore directory changes. We only care about file changes
+            let stats: Stats | null = null
+            try {
+              stats = await fs.lstat(event.path)
+            } catch {}
+            if (!stats?.isFile() && !stats?.isSymbolicLink()) {
+              return
+            }
+
+            // Track the changed file.
             files.add(event.path)
-            return
-          }
+          }),
+        )
 
-          // Ignore directory changes. We only care about file changes
-          let stats: Stats | null = null
-          try {
-            stats = await fs.lstat(event.path)
-          } catch {}
-          if (!stats?.isFile() && !stats?.isSymbolicLink()) {
-            return
-          }
-
-          // Track the changed file.
-          files.add(event.path)
-        }),
-      )
-
-      // Handle the tracked files at some point in the future.
-      await enqueueCallback()
-    })
+        // Handle the tracked files at some point in the future.
+        await enqueueCallback()
+      },
+      { ignore: watchIgnoreFor(dir, allRequestedDirs) },
+    )
 
     // Ensure we cleanup the watcher when we're done.
     watchers.add(unsubscribe)
@@ -845,6 +878,25 @@ function createPollingWatcher(cb: () => Promise<void>, pollInterval: number) {
     disposed = true
     if (timer) clearTimeout(timer)
   }
+}
+
+// Compute the default watch-ignore glob list for `dir`, one of the
+// (already deduped) directories being watched. Skips any noise segment
+// (`node_modules`, `.git`, etc.) that contains another originally-requested
+// directory nested inside it — e.g. an explicit `@source` pointing inside
+// `node_modules` whose own watch root got collapsed into this broader `dir`
+// by the dedup step in `createWatchers`. Ignoring that segment for `dir`
+// would otherwise silently stop the watcher from picking up changes to that
+// explicitly-configured source, since `@parcel/watcher` matches `ignore`
+// globs relative to the watched root — the segment only needs to be
+// preserved for the root that actually ended up watching that subtree.
+function watchIgnoreFor(dir: string, allRequestedDirs: string[]): string[] {
+  return DEFAULT_WATCH_IGNORE_SEGMENTS.filter((segment) => {
+    let marker = `/${segment}/`
+    return !allRequestedDirs.some(
+      (other) => other !== dir && other.startsWith(`${dir}/`) && `${other}/`.includes(marker),
+    )
+  }).map((segment) => `**/${segment}/**`)
 }
 
 async function watchDirectories(scanner: Scanner) {
