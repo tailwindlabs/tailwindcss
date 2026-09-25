@@ -1461,6 +1461,43 @@ test('sorting `min` and `max` should compare decimal values numerically', async 
   `)
 })
 
+test('sorting `@min` and `@max` should compare decimal values numerically', async () => {
+  expect(
+    await run([
+      '@min-[40.5rem]:flex',
+      '@min-[40.25rem]:flex',
+      '@max-[40.25rem]:flex',
+      '@max-[40.5rem]:flex',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "
+    @container not (min-width: 40.5rem) {
+      .\\@max-\\[40\\.5rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container not (min-width: 40.25rem) {
+      .\\@max-\\[40\\.25rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (min-width: 40.25rem) {
+      .\\@min-\\[40\\.25rem\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @container (min-width: 40.5rem) {
+      .\\@min-\\[40\\.5rem\\]\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('supports', async () => {
   expect(
     await run([
