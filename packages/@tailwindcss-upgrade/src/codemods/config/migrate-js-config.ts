@@ -19,6 +19,7 @@ import { buildCustomContainerUtilityRules } from '../../../../tailwindcss/src/co
 import { darkModePlugin } from '../../../../tailwindcss/src/compat/dark-mode'
 import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
+import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { escape } from '../../../../tailwindcss/src/utils/escape'
 import {
   isValidOpacityValue,
@@ -26,7 +27,7 @@ import {
 } from '../../../../tailwindcss/src/utils/infer-data-type'
 import * as ValueParser from '../../../../tailwindcss/src/value-parser'
 import { findStaticPlugins, type StaticPluginOptions } from '../../utils/extract-static-plugins'
-import { highlight, info, relative } from '../../utils/renderer'
+import { highlight, info, relative, warn } from '../../utils/renderer'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -49,11 +50,51 @@ export async function migrateJsConfig(
     fs.readFile(fullConfigPath, 'utf-8'),
   ])
 
-  if (!canMigrateConfig(unresolvedConfig, source)) {
+  let canMigrateConfigResult = canMigrateConfig(unresolvedConfig, source)
+  if (!canMigrateConfigResult.valid) {
     info(
       `The configuration file at ${highlight(relative(fullConfigPath, base))} could not be automatically migrated to the new CSS configuration format, so your CSS has been updated to load your existing configuration file.`,
       { prefix: '↳ ' },
     )
+    for (let [category, messages] of canMigrateConfigResult.errors.entries()) {
+      switch (category) {
+        case 'general': {
+          for (let msg of messages) warn(msg, { prefix: '  ↳ ' })
+          break
+        }
+        case 'top-level': {
+          warn(
+            `Cannot migrate unknown top-level keys:\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join(
+                '\n',
+              )}\n\nThese are non-standard Tailwind CSS options, so we don't know how to migrate them to CSS.`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+        case 'unknown-theme-keys': {
+          warn(
+            `Cannot migrate unknown theme keys:\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join(
+                '\n',
+              )}\n\nThese are non-standard Tailwind CSS theme keys, so we don't know how to migrate them to CSS.`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+        case 'complex-screens': {
+          warn(
+            `Cannot migrate complex screen configuration (min/max/raw):\n${Array.from(messages)
+              .map((key) => `  - \`${key}\``)
+              .join('\n')}`,
+            { prefix: '  ↳ ' },
+          )
+          break
+        }
+      }
+    }
     return null
   }
 
@@ -389,22 +430,36 @@ async function migrateContent(
   return sources
 }
 
-// Applies heuristics to determine if we can attempt to migrate the config
-function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
-  // The file may not contain non-serializable values
-  function isSimpleValue(value: unknown): boolean {
-    if (typeof value === 'function') return false
-    if (Array.isArray(value)) return value.every(isSimpleValue)
-    if (typeof value === 'object' && value !== null) {
-      return Object.values(value).every(isSimpleValue)
+const JS_IDENTIFIER_REGEX = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+function stringifyPath(path: (string | number)[]): string {
+  let result = ''
+
+  for (let segment of path) {
+    if (typeof segment === 'number') {
+      result += `[${segment}]`
+    } else if (!JS_IDENTIFIER_REGEX.test(segment)) {
+      result += `[\`${segment}\`]`
+    } else {
+      result += result.length > 0 ? `.${segment}` : segment
     }
-    return ['string', 'number', 'boolean', 'undefined'].includes(typeof value)
   }
 
-  // `theme` and `plugins` are handled separately and allowed to be more complex
-  let { plugins, theme, ...remainder } = unresolvedConfig
-  if (!isSimpleValue(remainder)) {
-    return false
+  return result
+}
+
+// Keep track of issues given a category and a set of messages
+const MIGRATION_ISSUES = new DefaultMap(() => new Set<string>())
+
+// Applies heuristics to determine if we can attempt to migrate the config
+function canMigrateConfig(
+  unresolvedConfig: Config,
+  source: string,
+): { valid: true } | { valid: false; errors: typeof MIGRATION_ISSUES } {
+  let theme = unresolvedConfig.theme
+
+  // Migrating presets are not supported
+  if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
+    MIGRATION_ISSUES.get('general').add('Cannot migrate config files that use presets')
   }
 
   // The file may only contain known-migratable top-level properties
@@ -420,16 +475,10 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
     'experimental',
   ]
 
-  if (Object.keys(unresolvedConfig).some((key) => !knownProperties.includes(key))) {
-    return false
-  }
-
-  if (findStaticPlugins(source) === null) {
-    return false
-  }
-
-  if (unresolvedConfig.presets && unresolvedConfig.presets.length > 0) {
-    return false
+  for (let key of Object.keys(unresolvedConfig)) {
+    if (!knownProperties.includes(key)) {
+      MIGRATION_ISSUES.get('top-level').add(key)
+    }
   }
 
   // If there are unknown "future" flags we should bail
@@ -458,12 +507,16 @@ function canMigrateConfig(unresolvedConfig: Config, source: string): boolean {
   // Only migrate the config file if all top-level theme keys are allowed to be
   // migrated
   if (theme && typeof theme === 'object') {
-    if (theme.extend && !onlyAllowedThemeValues(theme.extend)) return false
-    let { extend: _extend, ...themeCopy } = theme
-    if (!onlyAllowedThemeValues(themeCopy)) return false
+    let { extend, ...themeCopy } = theme
+    onlyAllowedThemeValues(themeCopy, ['theme'])
+    if (extend) onlyAllowedThemeValues(extend, ['theme', 'extend'])
   }
 
-  return true
+  // TODO: findStaticPlugins already logs errors for unsupported plugins, maybe
+  // it should return them instead?
+  findStaticPlugins(source)
+
+  return MIGRATION_ISSUES.size <= 0 ? { valid: true } : { valid: false, errors: MIGRATION_ISSUES }
 }
 
 const ALLOWED_THEME_KEYS = [
@@ -471,21 +524,20 @@ const ALLOWED_THEME_KEYS = [
   // Used by @tailwindcss/container-queries
   'containers',
 ]
-function onlyAllowedThemeValues(theme: ThemeConfig): boolean {
+function onlyAllowedThemeValues(theme: ThemeConfig, path: (string | number)[]) {
   for (let key of Object.keys(theme)) {
     if (!ALLOWED_THEME_KEYS.includes(key)) {
-      return false
+      MIGRATION_ISSUES.get('unknown-theme-keys').add(stringifyPath([...path, key]))
     }
   }
 
   if ('screens' in theme && typeof theme.screens === 'object' && theme.screens !== null) {
-    for (let screen of Object.values(theme.screens)) {
+    for (let [name, screen] of Object.entries(theme.screens)) {
       if (typeof screen === 'object' && screen !== null && ('max' in screen || 'raw' in screen)) {
-        return false
+        MIGRATION_ISSUES.get('complex-screens').add(stringifyPath([...path, 'screens', name]))
       }
     }
   }
-  return true
 }
 
 function keyframesToCss(keyframes: Record<string, unknown>): string {
