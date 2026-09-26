@@ -557,3 +557,5 @@ class Root {
     return false
   }
 }
+
+export { tailwindcss }

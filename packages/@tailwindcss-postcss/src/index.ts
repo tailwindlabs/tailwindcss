@@ -410,3 +410,4 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
+export { tailwindcss }
