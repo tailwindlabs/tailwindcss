@@ -26918,26 +26918,31 @@ test('text', async () => {
 })
 
 test('text with viewport and font-relative length units', async () => {
-  expect(await run(['text-[1cap]', 'text-[1rex]', 'text-[1svi]', 'text-[1dvmin]']))
-    .toMatchInlineSnapshot(`
-      "
-      .text-\\[1cap\\] {
-        font-size: 1cap;
-      }
+  let units = [
+    'cap',
+    'ic',
+    'rex',
+    'rch',
+    'rcap',
+    'ric',
+    'svi',
+    'svb',
+    'svmin',
+    'svmax',
+    'lvi',
+    'lvb',
+    'lvmin',
+    'lvmax',
+    'dvi',
+    'dvb',
+    'dvmin',
+    'dvmax',
+  ]
+  let css = await run(units.map((unit) => `text-[1${unit}]`))
 
-      .text-\\[1dvmin\\] {
-        font-size: 1dvmin;
-      }
-
-      .text-\\[1rex\\] {
-        font-size: 1rex;
-      }
-
-      .text-\\[1svi\\] {
-        font-size: 1svi;
-      }
-      "
-    `)
+  for (let unit of units) {
+    expect(css).toContain(`font-size: 1${unit};`)
+  }
 })
 
 test('text-shadow', async () => {
