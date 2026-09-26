@@ -31,7 +31,7 @@ interface CacheEntry {
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}:${opts.colorMixPolyfill ?? true}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
@@ -68,12 +68,23 @@ export type PluginOptions = {
    * Defaults to `true`.
    */
   transformAssetUrls?: boolean
+
+  /**
+   * Emit `color-mix(…)` fallbacks for browsers without `color-mix()` support
+   * (Safari < 16.2): a plain fallback declaration, plus a copy of the original
+   * declaration gated behind `@supports (color: color-mix(in lab, red, red))`.
+   *
+   * Defaults to `true`. Set this to `false` when every browser you support has
+   * `color-mix()`, which removes the duplicated declarations from the output.
+   */
+  colorMixPolyfill?: boolean
 }
 
 function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
   let base = opts.base ?? process.cwd()
   let optimize = opts.optimize ?? process.env.NODE_ENV === 'production'
   let shouldRewriteUrls = opts.transformAssetUrls ?? true
+  let colorMixPolyfill = opts.colorMixPolyfill ?? true
 
   return {
     postcssPlugin: '@tailwindcss/postcss',
@@ -144,7 +155,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               // In CSS Module files, we have to disable the `@property` polyfill since these will
               // emit global `*` rules which are considered to be non-pure and will cause builds
               // to fail.
-              polyfills: isCSSModuleFile ? Polyfills.All ^ Polyfills.AtProperty : Polyfills.All,
+              polyfills:
+                (isCSSModuleFile ? Polyfills.All ^ Polyfills.AtProperty : Polyfills.All) &
+                (colorMixPolyfill ? Polyfills.All : ~Polyfills.ColorMix),
             })
             DEBUG && I.end('Create compiler')
 

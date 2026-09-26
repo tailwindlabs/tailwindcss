@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `@tailwindcss/turbopack` package to run Tailwind CSS with Next.js ([20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))
+- Add a `colorMixPolyfill` option to `@tailwindcss/postcss` so projects whose browser targets all support `color-mix()` can drop the duplicated `@supports` fallback declarations
 
 ### Fixed
 
