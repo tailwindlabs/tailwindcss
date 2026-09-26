@@ -46,6 +46,10 @@ test('not-sr-only', async () => {
   expect(await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'])).toEqual('')
 })
 
+test('not-sr-only resets caption clipping', async () => {
+  expect(await run(['not-sr-only'])).toContain('clip-path: none;')
+})
+
 test('pointer-events', async () => {
   expect(await run(['pointer-events-none', 'pointer-events-auto'])).toMatchInlineSnapshot(`
     "
