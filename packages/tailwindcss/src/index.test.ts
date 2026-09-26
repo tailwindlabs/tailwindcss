@@ -144,6 +144,11 @@ describe('compiling CSS', () => {
     ).toMatchSnapshot()
   })
 
+  test('preflight ensures table captions inherit clip-path for Firefox (#20510)', () => {
+    let preflight = fs.readFileSync(path.resolve(__dirname, '../preflight.css'), 'utf-8')
+    expect(preflight).toContain('caption {\n  clip-path: inherit;\n}')
+  })
+
   test('unescapes underscores to spaces inside arbitrary values except for `url()` and first argument of `var()` and `theme()`', async () => {
     expect(
       await run(
