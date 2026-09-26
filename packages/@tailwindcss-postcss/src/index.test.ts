@@ -516,3 +516,83 @@ test('does not register the input file as a dependency, even if it is passed in 
     plugin: expect.any(String),
   })
 })
+
+describe('error recovery', () => {
+  let dir: string
+  beforeEach(async () => {
+    dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
+    await writeFile(path.join(dir, 'index.html'), `<div class="underline"></div>`)
+    await writeFile(path.join(dir, 'index.css'), css` @import './dependency.css'; `)
+    await writeFile(path.join(dir, 'dependency.css'), css` @tailwind utilities; `)
+  })
+  afterEach(() => rm(dir, { recursive: true, force: true }))
+
+  test('dependency messages are still emitted when a build fails outside of `optimize` mode, so watchers do not lose track of the CSS import graph', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: false })])
+
+    let dependencyFile = path.join(dir, 'dependency.css')
+
+    // 1. A successful build establishes `dependency.css` as a known dependency.
+    let ok = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(ok.css).toContain('.underline')
+    expect(ok.messages).toContainEqual({
+      type: 'dependency',
+      plugin: expect.any(String),
+      file: expect.stringMatching(/dependency\.css$/),
+      parent: expect.stringMatching(/index\.css$/),
+    })
+
+    // Ensure the mtime below is actually observed as a change.
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    // 2. Introduce a compile error (an unknown utility class) into that same file.
+    await writeFile(
+      dependencyFile,
+      css`
+        @tailwind utilities;
+        .broken {
+          @apply this-class-does-not-exist;
+        }
+      `,
+    )
+
+    // The build must not reject here. Tools like `postcss-loader` (used by webpack)
+    // only read `result.messages` -- and therefore only register file dependencies --
+    // from a *resolved* result. If this rejects instead, every dependency collected
+    // above is invisible to the consumer, and the entire CSS import graph stops being
+    // watched until some other, still-watched file happens to change.
+    let failed = await processor.process(await readFile(from, 'utf8'), { from })
+
+    expect(failed.warnings().length).toBeGreaterThan(0)
+    expect(failed.messages).toContainEqual({
+      type: 'dependency',
+      plugin: expect.any(String),
+      file: expect.stringMatching(/dependency\.css$/),
+      parent: expect.stringMatching(/index\.css$/),
+    })
+  })
+
+  test('still fails the build when `optimize` is enabled, so broken CSS is never shipped', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: true })])
+
+    await processor.process(await readFile(from, 'utf8'), { from })
+
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+        .broken {
+          @apply this-class-does-not-exist;
+        }
+      `,
+    )
+
+    await expect(processor.process(await readFile(from, 'utf8'), { from })).rejects.toThrow(
+      /this-class-does-not-exist/,
+    )
+  })
+})
