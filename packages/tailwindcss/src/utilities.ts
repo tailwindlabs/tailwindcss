@@ -990,6 +990,12 @@ export function createUtilities(theme: Theme) {
   staticUtility('field-sizing-fixed', [['field-sizing', 'fixed']])
 
   /**
+   * @css `interpolate-size`
+   */
+  staticUtility('interpolate-size-allow', [['interpolate-size', 'allow-keywords']])
+  staticUtility('interpolate-size-numeric', [['interpolate-size', 'numeric-only']])
+
+  /**
    * @css `aspect-ratio`
    */
   functionalUtility('aspect', {
