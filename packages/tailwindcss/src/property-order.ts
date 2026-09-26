@@ -52,6 +52,7 @@ export default [
   'display',
 
   'field-sizing',
+  'interpolate-size',
   'aspect-ratio',
   'height',
   'max-height',
