@@ -53,19 +53,54 @@ export type PluginOptions = {
   /**
    * The base directory to scan for class candidates.
    *
-   * Defaults to the current working directory.
+   * @default process.cwd()
+   *
+   * @example
+   * ```js
+   * export default {
+   *   plugins: {
+   *     '@tailwindcss/postcss': {
+   *       base: './src',
+   *     },
+   *   },
+   * }
+   * ```
    */
   base?: string
 
   /**
    * Optimize and minify the output CSS.
+   *
+   * @default true in production, false in development
+   *
+   * @example
+   * ```js
+   * export default {
+   *   plugins: {
+   *     '@tailwindcss/postcss': {
+   *       optimize: { minify: true },
+   *     },
+   *   },
+   * }
+   * ```
    */
   optimize?: boolean | { minify?: boolean }
 
   /**
    * Enable or disable asset URL rewriting.
    *
-   * Defaults to `true`.
+   * @default true
+   *
+   * @example
+   * ```js
+   * export default {
+   *   plugins: {
+   *     '@tailwindcss/postcss': {
+   *       transformAssetUrls: false,
+   *     },
+   *   },
+   * }
+   * ```
    */
   transformAssetUrls?: boolean
 }
@@ -375,3 +410,4 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
 }
 
 export default Object.assign(tailwindcss, { postcss: true }) as PluginCreator<PluginOptions>
+export { tailwindcss }

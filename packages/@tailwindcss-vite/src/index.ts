@@ -22,6 +22,22 @@ const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
 export type PluginOptions = {
   /**
    * Optimize and minify the output CSS.
+   *
+   * @default true in production build, false in development
+   *
+   * @example
+   * ```ts
+   * import tailwindcss from '@tailwindcss/vite'
+   * import { defineConfig } from 'vite'
+   *
+   * export default defineConfig({
+   *   plugins: [
+   *     tailwindcss({
+   *       optimize: { minify: true },
+   *     }),
+   *   ],
+   * })
+   * ```
    */
   optimize?: boolean | { minify?: boolean }
 }
@@ -541,3 +557,5 @@ class Root {
     return false
   }
 }
+
+export { tailwindcss }
