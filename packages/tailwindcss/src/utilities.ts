@@ -625,6 +625,13 @@ export function createUtilities(theme: Theme) {
   staticUtility('collapse', [['visibility', 'collapse']])
 
   /**
+   * @css `content-visibility`
+   */
+  staticUtility('content-visibility-auto', [['content-visibility', 'auto']])
+  staticUtility('content-visibility-hidden', [['content-visibility', 'hidden']])
+  staticUtility('content-visibility-visible', [['content-visibility', 'visible']])
+
+  /**
    * @css `position`
    */
   staticUtility('static', [['position', 'static']])
