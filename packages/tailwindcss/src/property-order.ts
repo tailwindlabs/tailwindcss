@@ -50,6 +50,7 @@ export default [
 
   'box-sizing',
   'display',
+  'content-visibility',
 
   'field-sizing',
   'aspect-ratio',
