@@ -3266,6 +3266,23 @@ test('field-sizing', async () => {
   ).toEqual('')
 })
 
+test('interpolate-size', async () => {
+  expect(await run(['interpolate-size-allow', 'interpolate-size-numeric'])).toMatchInlineSnapshot(`
+    "
+    .interpolate-size-allow {
+      interpolate-size: allow-keywords;
+    }
+
+    .interpolate-size-numeric {
+      interpolate-size: numeric-only;
+    }
+    "
+  `)
+  expect(
+    await run(['interpolate-size-[other]', '-interpolate-size-allow', '-interpolate-size-numeric']),
+  ).toEqual('')
+})
+
 test('aspect-ratio', async () => {
   expect(
     await run(
