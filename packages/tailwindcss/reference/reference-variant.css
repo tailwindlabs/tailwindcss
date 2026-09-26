@@ -1,0 +1,19 @@
+/* Referenced stylesheet providing additional variants and theme tokens */
+
+@theme reference {
+  --reference-accent: #f97316;
+}
+
+@variant data-open {
+  &[data-open='true'] {
+    @slot;
+  }
+}
+
+@variant data-open {
+  @variant hover {
+    .data-open-hover {
+      color: var(--reference-accent, currentColor);
+    }
+  }
+}
