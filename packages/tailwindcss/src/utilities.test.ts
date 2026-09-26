@@ -26917,6 +26917,34 @@ test('text', async () => {
   ).toEqual('')
 })
 
+test('text with viewport and font-relative length units', async () => {
+  let units = [
+    'cap',
+    'ic',
+    'rex',
+    'rch',
+    'rcap',
+    'ric',
+    'svi',
+    'svb',
+    'svmin',
+    'svmax',
+    'lvi',
+    'lvb',
+    'lvmin',
+    'lvmax',
+    'dvi',
+    'dvb',
+    'dvmin',
+    'dvmax',
+  ]
+  for (let unit of units) {
+    expect(await run([`text-[1${unit}]`])).toEqual(
+      `\n.text-\\[1${unit}\\] {\n  font-size: 1${unit};\n}\n`,
+    )
+  }
+})
+
 test('text-shadow', async () => {
   expect(
     await run(
