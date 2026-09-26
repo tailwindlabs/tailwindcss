@@ -74,3 +74,21 @@ export default defineConfig({
   ],
 })
 ```
+
+### TypeScript Usage
+
+When configuring Vite in TypeScript, `@tailwindcss/vite` provides both default and named exports, along with the `PluginOptions` type definition:
+
+```ts
+import tailwindcss, { type PluginOptions } from '@tailwindcss/vite'
+import { defineConfig } from 'vite'
+
+const options: PluginOptions = {
+  optimize: { minify: true },
+}
+
+export default defineConfig({
+  plugins: [tailwindcss(options)],
+})
+```
+
