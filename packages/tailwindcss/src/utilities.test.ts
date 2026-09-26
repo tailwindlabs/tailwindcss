@@ -26938,10 +26938,10 @@ test('text with viewport and font-relative length units', async () => {
     'dvmin',
     'dvmax',
   ]
-  let css = await run(units.map((unit) => `text-[1${unit}]`))
-
   for (let unit of units) {
-    expect(css).toContain(`font-size: 1${unit};`)
+    expect(await run([`text-[1${unit}]`])).toEqual(
+      `\n.text-\\[1${unit}\\] {\n  font-size: 1${unit};\n}\n`,
+    )
   }
 })
 
