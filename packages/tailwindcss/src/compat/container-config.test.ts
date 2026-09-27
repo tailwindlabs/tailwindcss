@@ -102,6 +102,7 @@ test('allows padding to be defined at custom breakpoints', async () => {
                   '2xl': '3rem',
                   DEFAULT: '1rem',
                   lg: '2rem',
+                  xs: '0.5rem', // Not a breakpoint, so it is ignored
                 },
               },
             },
@@ -278,8 +279,10 @@ test('padding applies to custom `container` screens', async () => {
                 padding: {
                   sm: '2rem',
                   md: '3rem',
+                  xs: '1rem',
                 },
                 screens: {
+                  xs: '30rem', // Not a default --breakpoint
                   md: '48rem',
                 },
               },
@@ -329,6 +332,13 @@ test('padding applies to custom `container` screens', async () => {
     @media (min-width: 40rem) {
       .container {
         max-width: none;
+      }
+    }
+
+    @media (min-width: 30rem) {
+      .container {
+        max-width: 30rem;
+        padding-inline: 1rem;
       }
     }
 
