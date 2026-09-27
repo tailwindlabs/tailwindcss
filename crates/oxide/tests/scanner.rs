@@ -2924,6 +2924,55 @@ mod scanner {
     }
 
     #[test]
+    fn respects_git_core_excludes_file() {
+        let dir = tempdir().unwrap().into_path();
+
+        let global_ignore = dir.join("global_ignore");
+        fs::write(&global_ignore, "ignored-by-global.html\n").unwrap();
+
+        let global_gitconfig = dir.join(".gitconfig");
+        fs::write(
+            &global_gitconfig,
+            format!("[core]\n    excludesFile = {}\n", global_ignore.display()),
+        )
+        .unwrap();
+
+        let repo_dir = dir.join("repo");
+        fs::create_dir_all(&repo_dir).unwrap();
+        _ = Command::new("git").arg("init").current_dir(&repo_dir).output();
+
+        create_files_in(
+            &repo_dir,
+            &[
+                ("src/index.html", "content-['index.html']"),
+                (
+                    "src/ignored-by-global.html",
+                    "content-['ignored-by-global.html']",
+                ),
+            ],
+        );
+
+        let sources = vec![public_source_entry_from_pattern(
+            repo_dir.clone(),
+            "@source '**/*'",
+        )];
+
+        let old_git_config_global = std::env::var_os("GIT_CONFIG_GLOBAL");
+        std::env::set_var("GIT_CONFIG_GLOBAL", &global_gitconfig);
+
+        let mut scanner = Scanner::new(sources);
+        let candidates = scanner.scan();
+
+        if let Some(old) = old_git_config_global {
+            std::env::set_var("GIT_CONFIG_GLOBAL", old);
+        } else {
+            std::env::remove_var("GIT_CONFIG_GLOBAL");
+        }
+
+        assert_eq!(candidates, vec!["content-['index.html']"]);
+    }
+
+    #[test]
     fn test_explicitly_ignore_explicitly_allowed_files() {
         // Create a temporary working directory
         let dir = tempdir().unwrap().into_path();
