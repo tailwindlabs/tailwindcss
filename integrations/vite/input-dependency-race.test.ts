@@ -28,8 +28,17 @@ test(
             new Error().stack?.includes('addBuildDependency')
           ) {
             delayed = true
-            await fs.writeFile('input-stat-delayed', 'yes')
-            await new Promise((resolve) => setTimeout(resolve, 1500))
+            let result = await stat(...args)
+            await fs.writeFile('input-stat-pending', 'yes')
+            while (
+              !(await fs.access('release-input-stat').then(
+                () => true,
+                () => false,
+              ))
+            ) {
+              await new Promise((resolve) => setTimeout(resolve, 10))
+            }
+            return result
           }
           return stat(...args)
         }
@@ -59,10 +68,18 @@ test(
       return Boolean(url)
     })
 
+    let initialStyles = fetchStyles(url)
     await retryAssertion(async () => {
-      expect(await fetchStyles(url)).toContain('--color-brand: red')
+      expect(await fs.read('input-stat-pending')).toBe('yes')
     })
-    expect(await fs.read('input-stat-delayed')).toBe('yes')
+
+    let returnedBeforeStat = await Promise.race([
+      initialStyles.then(() => true),
+      new Promise<false>((resolve) => setTimeout(() => resolve(false), 5000)),
+    ])
+    await fs.write('release-input-stat', 'yes')
+    expect(returnedBeforeStat).toBe(false)
+    expect(await initialStyles).toContain('--color-brand: red')
 
     await fs.write(
       'src/index.css',
