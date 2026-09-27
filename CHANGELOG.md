@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Match math function names case-insensitively when inferring the type of an arbitrary value and adding spaces around math operators (e.g. `text-[Calc(1rem+min(1rem,2rem))]`) ([#20727](https://github.com/tailwindlabs/tailwindcss/pull/20727))
 - Add whitespace around math operators in `abs(…)` and `sign(…)`, and infer them as a length (e.g. `text-[abs(var(--size))]` generates `font-size` instead of `color`) ([#20716](https://github.com/tailwindlabs/tailwindcss/pull/20716))
 - Canonicalization: improve performance of collapsing utilities (e.g. `mt-2 mb-2` → `my-2`) when the same utilities appear in many class lists or variants ([#20698](https://github.com/tailwindlabs/tailwindcss/pull/20698))
-- Don't crash when the legacy `container` config has `padding` for a screen that isn't a breakpoint (e.g. a custom `container.screens` entry) ([#XXXXX](https://github.com/tailwindlabs/tailwindcss/pull/XXXXX))
+- Don't crash when the legacy `container` config has `padding` for a screen that isn't a breakpoint (e.g. a custom `container.screens` entry) ([#20523](https://github.com/tailwindlabs/tailwindcss/pull/20523))
 
 ## [4.3.5] - 2026-11-06
 
