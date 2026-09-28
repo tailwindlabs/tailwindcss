@@ -1513,6 +1513,29 @@ test.skip("::file-selector-button can receive a border with just the 'border' ut
   )
 })
 
+test('sr-only also hides the caption of a table', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <table id="table" class="sr-only">
+        <caption id="caption">
+          Caption
+        </caption>
+        <tbody>
+          <tr>
+            <td>Cell</td>
+          </tr>
+        </tbody>
+      </table>
+    `,
+  )
+
+  // Firefox applies the `clip-path` of the `<table>` to its inner grid box, and
+  // a `<caption>` is rendered in the outer table wrapper box, so the caption is
+  // not clipped by the table itself and must be clipped explicitly.
+  expect(await getPropertyValue('#caption', 'clip-path')).toEqual('inset(50%)')
+})
+
 test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) => {
   let { getPropertyList } = await render(
     page,

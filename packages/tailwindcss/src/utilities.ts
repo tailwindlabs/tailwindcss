@@ -599,6 +599,10 @@ export function createUtilities(theme: Theme) {
     ['clip-path', 'inset(50%)'],
     ['white-space', 'nowrap'],
     ['border-width', '0'],
+    // Firefox applies the `clip-path` of a `<table>` to its inner grid box, so
+    // a `<caption>` (which lives in the outer table wrapper box) is not clipped
+    // and stays visible. Clip the caption itself to cover that case.
+    () => styleRule('& > caption', [decl('clip-path', 'inset(50%)')]),
   ])
   staticUtility('not-sr-only', [
     ['position', 'static'],
