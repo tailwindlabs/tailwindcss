@@ -613,6 +613,8 @@ export function createUtilities(theme: Theme) {
     ['overflow', 'visible'],
     ['clip-path', 'none'],
     ['white-space', 'normal'],
+    // `sr-only` also clips the caption of a table, so undo that here
+    () => styleRule('& > caption', [decl('clip-path', 'none')]),
   ])
 
   /**

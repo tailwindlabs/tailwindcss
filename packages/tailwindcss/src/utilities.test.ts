@@ -41,6 +41,10 @@ test('not-sr-only', async () => {
       position: static;
       overflow: visible;
     }
+
+    .not-sr-only > caption {
+      clip-path: none;
+    }
     "
   `)
   expect(await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'])).toEqual('')
