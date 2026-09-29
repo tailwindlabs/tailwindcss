@@ -6,7 +6,8 @@ mod scanner {
     use std::process::Command;
     use std::thread::sleep;
     use std::time::Duration;
-    use std::{fs, path};
+    use std::sync::{Mutex, OnceLock};
+    use std::{env, fs, path};
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
@@ -2925,15 +2926,21 @@ mod scanner {
 
     #[test]
     fn respects_git_core_excludes_file() {
+        static ENV_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+        let _lock = ENV_LOCK.get_or_init(|| Mutex::new(())).lock().unwrap();
+
         let dir = tempdir().unwrap().into_path();
 
-        let global_ignore = dir.join("global_ignore");
+        let global_ignore = dir.join("global ignore");
         fs::write(&global_ignore, "ignored-by-global.html\n").unwrap();
 
         let global_gitconfig = dir.join(".gitconfig");
         fs::write(
             &global_gitconfig,
-            format!("[core]\n    excludesFile = {}\n", global_ignore.display()),
+            format!(
+                "[core]\n    excludesFile = \"{}\"\n",
+                global_ignore.display()
+            ),
         )
         .unwrap();
 
@@ -2957,17 +2964,23 @@ mod scanner {
             "@source '**/*'",
         )];
 
-        let old_git_config_global = std::env::var_os("GIT_CONFIG_GLOBAL");
-        std::env::set_var("GIT_CONFIG_GLOBAL", &global_gitconfig);
+        struct GitConfigGlobalGuard(Option<std::ffi::OsString>);
+
+        impl Drop for GitConfigGlobalGuard {
+            fn drop(&mut self) {
+                if let Some(old) = self.0.take() {
+                    env::set_var("GIT_CONFIG_GLOBAL", old);
+                } else {
+                    env::remove_var("GIT_CONFIG_GLOBAL");
+                }
+            }
+        }
+
+        let _git_config_global = GitConfigGlobalGuard(env::var_os("GIT_CONFIG_GLOBAL"));
+        env::set_var("GIT_CONFIG_GLOBAL", &global_gitconfig);
 
         let mut scanner = Scanner::new(sources);
         let candidates = scanner.scan();
-
-        if let Some(old) = old_git_config_global {
-            std::env::set_var("GIT_CONFIG_GLOBAL", old);
-        } else {
-            std::env::remove_var("GIT_CONFIG_GLOBAL");
-        }
 
         assert_eq!(candidates, vec!["content-['index.html']"]);
     }
