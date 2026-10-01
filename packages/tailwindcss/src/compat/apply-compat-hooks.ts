@@ -18,6 +18,25 @@ import { registerThemeVariantOverrides } from './theme-variants'
 
 const IS_VALID_PREFIX = /^[a-z]+$/
 
+type LoadModule = (
+  path: string,
+  base: string,
+  resourceHint: 'plugin' | 'config',
+) => Promise<{
+  path: string
+  base: string
+  module: any
+}>
+
+type ModulePath = {
+  id: string
+  base: string
+  reference: boolean
+  src: SourceLocation | undefined
+}
+
+type PluginPath = [ModulePath, CssPluginOptions | null]
+
 export async function applyCompatibilityHooks({
   designSystem,
   base,
@@ -28,28 +47,12 @@ export async function applyCompatibilityHooks({
   designSystem: DesignSystem
   base: string
   ast: AstNode[]
-  loadModule: (
-    path: string,
-    base: string,
-    resourceHint: 'plugin' | 'config',
-  ) => Promise<{
-    path: string
-    base: string
-    module: any
-  }>
+  loadModule: LoadModule
   sources: { base: string; pattern: string; negated: boolean }[]
 }) {
   let features = Features.None
-  let pluginPaths: [
-    { id: string; base: string; reference: boolean; src: SourceLocation | undefined },
-    CssPluginOptions | null,
-  ][] = []
-  let configPaths: {
-    id: string
-    base: string
-    reference: boolean
-    src: SourceLocation | undefined
-  }[] = []
+  let pluginPaths: PluginPath[] = []
+  let configPaths: ModulePath[] = []
 
   walk(ast, (node, _ctx) => {
     if (node.kind !== 'at-rule') return
@@ -174,7 +177,27 @@ export async function applyCompatibilityHooks({
   // any additional backwards compatibility hooks.
   if (!pluginPaths.length && !configPaths.length) return Features.None
 
-  let [configs, pluginDetails] = await Promise.all([
+  // Keep loader callbacks out of the scope retained by the theme resolver.
+  let [configs, pluginDetails] = await loadConfigsAndPlugins(loadModule, configPaths, pluginPaths)
+
+  features |= upgradeToFullPluginSupport({
+    designSystem,
+    base,
+    ast,
+    sources,
+    configs,
+    pluginDetails,
+  })
+
+  return features
+}
+
+function loadConfigsAndPlugins(
+  loadModule: LoadModule,
+  configPaths: ModulePath[],
+  pluginPaths: PluginPath[],
+) {
+  return Promise.all([
     Promise.all(
       configPaths.map(async ({ id, base, reference, src }) => {
         let loaded = await loadModule(id, base, 'config')
@@ -201,17 +224,6 @@ export async function applyCompatibilityHooks({
       }),
     ),
   ])
-
-  features |= upgradeToFullPluginSupport({
-    designSystem,
-    base,
-    ast,
-    sources,
-    configs,
-    pluginDetails,
-  })
-
-  return features
 }
 
 function upgradeToFullPluginSupport({
