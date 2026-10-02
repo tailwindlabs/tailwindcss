@@ -6,7 +6,7 @@ mod scanner {
     use std::process::Command;
     use std::thread::sleep;
     use std::time::Duration;
-    use std::{fs, path};
+    use std::{env, fs, path};
 
     use tailwindcss_oxide::*;
     use tempfile::tempdir;
@@ -2921,6 +2921,61 @@ mod scanner {
                 "content-['index.html']",
             ]
         );
+    }
+
+    #[test]
+    fn respects_git_core_excludes_file() {
+        if env::var_os("TAILWIND_OXIDE_CORE_EXCLUDES_CHILD").is_none() {
+            let status = Command::new(env::current_exe().unwrap())
+                .args(["--exact", "scanner::respects_git_core_excludes_file"])
+                .env("TAILWIND_OXIDE_CORE_EXCLUDES_CHILD", "1")
+                .status()
+                .unwrap();
+            assert!(status.success());
+            return;
+        }
+
+        let dir = tempdir().unwrap().into_path();
+
+        let global_ignore = dir.join("global ignore");
+        fs::write(&global_ignore, "ignored-by-global.html\n").unwrap();
+
+        let global_gitconfig = dir.join(".gitconfig");
+        fs::write(
+            &global_gitconfig,
+            format!(
+                "[core]\n    excludesFile = \"{}\"\n",
+                global_ignore.display()
+            ),
+        )
+        .unwrap();
+
+        let repo_dir = dir.join("repo");
+        fs::create_dir_all(&repo_dir).unwrap();
+        _ = Command::new("git").arg("init").current_dir(&repo_dir).output();
+
+        create_files_in(
+            &repo_dir,
+            &[
+                ("src/index.html", "content-['index.html']"),
+                (
+                    "src/ignored-by-global.html",
+                    "content-['ignored-by-global.html']",
+                ),
+            ],
+        );
+
+        let sources = vec![public_source_entry_from_pattern(
+            repo_dir.clone(),
+            "@source '**/*'",
+        )];
+
+        env::set_var("GIT_CONFIG_GLOBAL", &global_gitconfig);
+
+        let mut scanner = Scanner::new(sources);
+        let candidates = scanner.scan();
+
+        assert_eq!(candidates, vec!["content-['index.html']"]);
     }
 
     #[test]
