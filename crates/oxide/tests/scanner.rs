@@ -6,7 +6,6 @@ mod scanner {
     use std::process::Command;
     use std::thread::sleep;
     use std::time::Duration;
-    use std::sync::{Mutex, OnceLock};
     use std::{env, fs, path};
 
     use tailwindcss_oxide::*;
@@ -2926,8 +2925,15 @@ mod scanner {
 
     #[test]
     fn respects_git_core_excludes_file() {
-        static ENV_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
-        let _lock = ENV_LOCK.get_or_init(|| Mutex::new(())).lock().unwrap();
+        if env::var_os("TAILWIND_OXIDE_CORE_EXCLUDES_CHILD").is_none() {
+            let status = Command::new(env::current_exe().unwrap())
+                .args(["--exact", "scanner::respects_git_core_excludes_file"])
+                .env("TAILWIND_OXIDE_CORE_EXCLUDES_CHILD", "1")
+                .status()
+                .unwrap();
+            assert!(status.success());
+            return;
+        }
 
         let dir = tempdir().unwrap().into_path();
 
@@ -2964,19 +2970,6 @@ mod scanner {
             "@source '**/*'",
         )];
 
-        struct GitConfigGlobalGuard(Option<std::ffi::OsString>);
-
-        impl Drop for GitConfigGlobalGuard {
-            fn drop(&mut self) {
-                if let Some(old) = self.0.take() {
-                    env::set_var("GIT_CONFIG_GLOBAL", old);
-                } else {
-                    env::remove_var("GIT_CONFIG_GLOBAL");
-                }
-            }
-        }
-
-        let _git_config_global = GitConfigGlobalGuard(env::var_os("GIT_CONFIG_GLOBAL"));
         env::set_var("GIT_CONFIG_GLOBAL", &global_gitconfig);
 
         let mut scanner = Scanner::new(sources);
