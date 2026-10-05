@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Replace `fast-glob`, `micromatch` and `chokidar` v3 with `tinyglobby`, `picomatch` and `chokidar` v4 to drop the vulnerable `braces` dependency ([#20541](https://github.com/tailwindlabs/tailwindcss/pull/20541))
+- Replace `fast-glob`, `micromatch` and `chokidar` v3 with `tinyglobby`, `picomatch` and `chokidar` v4 to drop the vulnerable `braces` dependency; the minimum supported Node.js version is now 14.18 ([#20541](https://github.com/tailwindlabs/tailwindcss/pull/20541))
 
 ### Fixed
 
