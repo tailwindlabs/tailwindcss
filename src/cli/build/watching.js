@@ -143,7 +143,10 @@ export function createWatcher(args, { state, rebuild }) {
 
       let relative = path.relative(contentPath.base, dir)
       if (relative === '') return true
-      if (relative.startsWith('..') || path.isAbsolute(relative)) continue
+      // Outside the base directory (`..` as a whole segment, not e.g. `..templates`)
+      if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+        continue
+      }
 
       // Brace expansions that span directories (e.g. `{a,b/c}/*.html`) can't be
       // matched segment by segment, so we watch everything below the base
