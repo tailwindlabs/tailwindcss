@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Replace `fast-glob`, `micromatch` and `chokidar` v3 with `tinyglobby`, `picomatch` and `chokidar` v4 to drop the vulnerable `braces` dependency; the minimum supported Node.js version is now 14.18 ([#20541](https://github.com/tailwindlabs/tailwindcss/pull/20541))
+
 ### Fixed
 
 - Ensure classes are extracted when a variant precedes an arbitrary variant containing a quoted attribute selector (e.g. `focus-visible:[&:not([aria-selected="true"])]:bg-red-500`) ([#20374](https://github.com/tailwindlabs/tailwindcss/pull/20374))
