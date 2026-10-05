@@ -46,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Write plugin logs to stderr in `tailwindcss canonicalize` so they don't end up in the results on stdout ([#20561](https://github.com/tailwindlabs/tailwindcss/pull/20561))
 - Ensure unbalanced brackets in Pug text, comments, and quoted attribute values don't prevent class shorthands on later lines from being extracted ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547))
 - Underline the correct occurrence of an unsupported data type in `--value(…)` warnings ([#20554](https://github.com/tailwindlabs/tailwindcss/pull/20554))
+- Keep the winning utility when collapsing candidates instead of a theme value that only matches by default ([#20540](https://github.com/tailwindlabs/tailwindcss/pull/20540))
 
 ## [4.3.3] - 2026-07-16
 
