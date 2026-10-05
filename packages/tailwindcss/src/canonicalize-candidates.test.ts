@@ -1412,6 +1412,33 @@ describe('options', () => {
 })
 
 describe('regressions', () => {
+  // https://github.com/tailwindlabs/tailwindcss/issues/20539
+  test(
+    'collapsing keeps the winning candidate instead of a theme value that only matches by default',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @theme {
+          --color-foreground: black;
+          --color-primary: red;
+          --color-card-checked-border: red;
+        }
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(
+        designSystem.canonicalizeCandidates(['text-foreground', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+    },
+  )
+
   // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
   {
     test('a subset of classes should be canonicalizable', { timeout }, async () => {
