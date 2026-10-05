@@ -461,7 +461,13 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             .join(' '),
         )
 
-        for (let replacement of potentialReplacements) {
+        // Try the candidates in the combo first. Another utility can have the
+        // same signature only because its theme value matches by default,
+        // e.g. when one of the variables is overridden in `.dark`.
+        let replacements = new Set(combo.map((idx) => candidates[idx]))
+        for (let replacement of potentialReplacements) replacements.add(replacement)
+
+        for (let replacement of replacements) {
           let signature =
             designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
