@@ -14,7 +14,7 @@ import { env } from '../../lib/sharedState'
 import resolveConfig from '../../../resolveConfig.js'
 import { createBroadPatternCheck, parseCandidateFiles } from '../../lib/content.js'
 import { createWatcher } from './watching.js'
-import fastGlob from 'fast-glob'
+import { globSync } from 'tinyglobby'
 import { findAtConfigPath } from '../../lib/findAtConfigPath.js'
 import log from '../../util/log'
 import { loadConfig } from '../../lib/load-config'
@@ -185,7 +185,7 @@ let state = {
 
     // Resolve globs from the content config
     // TODO: When we make the postcss plugin async-capable this can become async
-    let files = fastGlob.sync(this.contentPatterns.all)
+    let files = globSync(this.contentPatterns.all, { absolute: true, expandDirectories: false })
 
     let checkBroadPattern = createBroadPatternCheck(this.contentPatterns.all)
 

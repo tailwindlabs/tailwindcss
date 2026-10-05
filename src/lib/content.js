@@ -3,12 +3,12 @@
 import fs from 'fs'
 import path from 'path'
 import isGlob from 'is-glob'
-import fastGlob from 'fast-glob'
+import { globSync, escapePath } from 'tinyglobby'
 import normalizePath from 'normalize-path'
 import { parseGlob } from '../util/parseGlob'
 import { env } from './sharedState'
 import log from '../util/log'
-import micromatch from 'micromatch'
+import picomatch from 'picomatch'
 
 /** @typedef {import('../../types/config.js').RawFile} RawFile */
 /** @typedef {import('../../types/config.js').FilePath} FilePath */
@@ -41,17 +41,18 @@ export function parseCandidateFiles(context, tailwindConfig) {
   files = files.map(normalizePath)
 
   // Split into included and excluded globs
-  let tasks = fastGlob.generateTasks(files)
-
   /** @type {ContentPath[]} */
   let included = []
 
   /** @type {ContentPath[]} */
   let excluded = []
 
-  for (const task of tasks) {
-    included.push(...task.positive.map((filePath) => parseFilePath(filePath, false)))
-    excluded.push(...task.negative.map((filePath) => parseFilePath(filePath, true)))
+  for (let filePath of files) {
+    if (isNegativePattern(filePath)) {
+      excluded.push(parseFilePath(filePath.slice(1), true))
+    } else {
+      included.push(parseFilePath(filePath, false))
+    }
   }
 
   let paths = [...included, ...excluded]
@@ -66,6 +67,17 @@ export function parseCandidateFiles(context, tailwindConfig) {
   paths = paths.map(resolveGlobPattern)
 
   return paths
+}
+
+/**
+ * Whether the pattern is a negated glob (e.g. `!./src/ignored/**`). A leading
+ * `!(` is an extglob group and not a negation.
+ *
+ * @param {string} pattern
+ * @returns {boolean}
+ */
+function isNegativePattern(pattern) {
+  return pattern.startsWith('!') && pattern[1] !== '('
 }
 
 /**
@@ -102,9 +114,9 @@ function resolveGlobPattern(contentPath) {
   // a package which can't handle mixed directory separators
   let base = normalizePath(contentPath.base)
 
-  // If the user's file path contains any special characters (like parens) for instance fast-glob
+  // If the user's file path contains any special characters (like parens) for instance tinyglobby
   // is like "OOOH SHINY" and treats them as such. So we have to escape the base path to fix this
-  base = fastGlob.escapePath(base)
+  base = escapePath(base)
 
   contentPath.pattern = contentPath.glob ? `${base}/${contentPath.glob}` : base
   contentPath.pattern = contentPath.ignore ? `!${contentPath.pattern}` : contentPath.pattern
@@ -219,7 +231,7 @@ export function createBroadPatternCheck(paths) {
 
   // Create matchers for all paths
   for (let path of paths) {
-    let matcher = micromatch.matcher(path)
+    let matcher = picomatch(path, {})
     if (LARGE_DIRECTORIES_REGEX.test(path)) {
       explicitMatchers.push(matcher)
     }
@@ -278,7 +290,7 @@ function resolveChangedFiles(candidateFiles, fileModifiedMap) {
 
   let changedFiles = new Set()
   env.DEBUG && console.time('Finding changed files')
-  let files = fastGlob.sync(paths, { absolute: true })
+  let files = globSync(paths, { absolute: true, expandDirectories: false })
   for (let file of files) {
     checkBroadPattern(file)
 

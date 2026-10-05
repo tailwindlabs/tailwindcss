@@ -2,9 +2,9 @@
 
 import chokidar from 'chokidar'
 import fs from 'fs'
-import micromatch from 'micromatch'
 import normalizePath from 'normalize-path'
 import path from 'path'
+import picomatch from 'picomatch'
 
 import { readFileWithRetries } from './utils.js'
 
@@ -33,6 +33,140 @@ export function createWatcher(args, { state, rebuild }) {
   // Used only when polling or coalescing add/change events on Windows
   let pollInterval = 10
 
+  /**
+   * chokidar v4 no longer supports glob patterns. Instead of handing it the
+   * content globs we watch the base directory of every content path and do the
+   * glob matching ourselves. The helpers below mirror what chokidar v3 did
+   * internally for globs: dotfiles match, negated globs act as ignore patterns
+   * and directories that can't contain a matching file are not watched at all.
+   */
+
+  /**
+   * Paths that were explicitly added to the watcher (the input CSS file, config
+   * files, PostCSS dependencies, …) as opposed to files that are only watched
+   * because they match one of the content globs.
+   *
+   * @type {Set<string>}
+   */
+  let explicitPaths = new Set()
+
+  /** @type {{ key: string | null, isIncluded: (file: string) => boolean, isExcluded: (file: string) => boolean }} */
+  let contentMatchers = { key: null, isIncluded: () => false, isExcluded: () => false }
+
+  /** @type {Map<string, (part: string) => boolean>} */
+  let segmentMatchers = new Map()
+
+  /**
+   * Whether any of the glob `patterns` match `file`
+   *
+   * @param {string} file
+   * @param {string[]} patterns
+   */
+  function matchesAny(file, patterns) {
+    return patterns.some((pattern) => picomatch(pattern, {})(file))
+  }
+
+  /**
+   * @param {string} file
+   */
+  function isExplicitlyWatched(file) {
+    return explicitPaths.has(normalizePath(path.resolve(file)))
+  }
+
+  /**
+   * Matchers for the positive and the negated content globs, rebuilt whenever
+   * the content configuration changes
+   */
+  function getContentMatchers() {
+    let patterns = state.contentPatterns.all
+    let key = patterns.join('\n')
+
+    if (contentMatchers.key !== key) {
+      let positive = patterns.filter((pattern) => !pattern.startsWith('!'))
+      let negative = patterns
+        .filter((pattern) => pattern.startsWith('!'))
+        .map((pattern) => pattern.slice(1))
+
+      contentMatchers = {
+        key,
+        isIncluded: positive.length > 0 ? picomatch(positive, { dot: true }) : () => false,
+        isExcluded: negative.length > 0 ? picomatch(negative, { dot: true }) : () => false,
+      }
+    }
+
+    return contentMatchers
+  }
+
+  /**
+   * Whether `file` matches the content globs (and is not excluded by a negated one)
+   *
+   * @param {string} file
+   */
+  function matchesContentPatterns(file) {
+    let { isIncluded, isExcluded } = getContentMatchers()
+    return isIncluded(file) && !isExcluded(file)
+  }
+
+  /**
+   * @param {string} file
+   */
+  function isWatchedFile(file) {
+    return isExplicitlyWatched(file) || matchesContentPatterns(file)
+  }
+
+  /**
+   * @param {string} globPart
+   * @param {string} pathPart
+   */
+  function matchesSegment(globPart, pathPart) {
+    let matcher = segmentMatchers.get(globPart)
+
+    if (matcher === undefined) {
+      matcher = picomatch(globPart, { dot: true })
+      segmentMatchers.set(globPart, matcher)
+    }
+
+    return matcher(pathPart)
+  }
+
+  /**
+   * Whether `dir` could contain files that match one of the content globs
+   *
+   * @param {string} dir
+   */
+  function mayContainContentFiles(dir) {
+    // Directories matched by a negated glob (e.g. `!./src/ignored/**`) are never watched
+    if (getContentMatchers().isExcluded(dir)) return false
+
+    for (let contentPath of state.contentPaths) {
+      if (contentPath.ignore || contentPath.glob === null) continue
+
+      let relative = path.relative(contentPath.base, dir)
+      if (relative === '') return true
+      if (relative.startsWith('..') || path.isAbsolute(relative)) continue
+
+      // Brace expansions that span directories (e.g. `{a,b/c}/*.html`) can't be
+      // matched segment by segment, so we watch everything below the base
+      if (/\{[^{}]*\/[^{}]*\}/.test(contentPath.glob)) return true
+
+      // Only the directory parts of the glob are relevant here
+      let globParts = contentPath.glob.split('/')
+      if (globParts.length > 1) globParts.pop()
+
+      let pathParts = relative.split(path.sep)
+      let globstar = false
+
+      let matches = globParts.every((globPart, idx) => {
+        if (globPart === '**') globstar = true
+        return globstar || pathParts[idx] === undefined || matchesSegment(globPart, pathParts[idx])
+      })
+
+      if (matches) return true
+    }
+
+    return false
+  }
+
   let watcher = chokidar.watch([], {
     // Force checking for atomic writes in all situations
     // This causes chokidar to wait up to 100ms for a file to re-added after it's been unlinked
@@ -48,6 +182,14 @@ export function createWatcher(args, { state, rebuild }) {
           pollInterval: pollInterval,
         }
       : false,
+
+    // Skip files and directories that don't match the content globs (see above)
+    ignored: (filePath, stats) => {
+      if (stats === undefined) return false
+      if (stats.isDirectory()) return !mayContainContentFiles(filePath)
+      if (stats.isFile()) return !isWatchedFile(filePath)
+      return false
+    },
   })
 
   // A queue of rebuilds, file reads, etc… to run
@@ -144,8 +286,8 @@ export function createWatcher(args, { state, rebuild }) {
     return chain
   }
 
-  watcher.on('change', (file) => recordChangedFile(file))
-  watcher.on('add', (file) => recordChangedFile(file))
+  watcher.on('change', (file) => isWatchedFile(file) && recordChangedFile(file))
+  watcher.on('add', (file) => isWatchedFile(file) && recordChangedFile(file))
 
   // Restore watching any files that are "removed"
   // This can happen when a file is pseudo-atomically replaced (a copy is created, overwritten, the old one is unlinked, and the new one is renamed)
@@ -154,7 +296,7 @@ export function createWatcher(args, { state, rebuild }) {
     file = normalizePath(file)
 
     // Only re-add the file if it's not covered by a dynamic pattern
-    if (!micromatch.some([file], state.contentPatterns.dynamic)) {
+    if (!matchesAny(file, state.contentPatterns.dynamic)) {
       watcher.add(file)
     }
   })
@@ -175,7 +317,7 @@ export function createWatcher(args, { state, rebuild }) {
     filePath = watchedPath.endsWith(filePath) ? watchedPath : path.join(watchedPath, filePath)
 
     // Skip this event since the files it is for does not match any of the registered content globs
-    if (!micromatch.some([filePath], state.contentPatterns.all)) {
+    if (!matchesAny(filePath, state.contentPatterns.all)) {
       return
     }
 
@@ -221,9 +363,23 @@ export function createWatcher(args, { state, rebuild }) {
     fswatcher: watcher,
 
     refreshWatchedFiles() {
-      watcher.add(Array.from(state.contextDependencies))
-      watcher.add(Array.from(state.configBag.dependencies))
-      watcher.add(state.contentPatterns.all)
+      // chokidar v4 doesn't support globs, so we watch the base directory of
+      // every content path and filter the events ourselves (see above)
+      let contentBases = state.contentPaths
+        .filter((contentPath) => !contentPath.ignore)
+        .map((contentPath) => contentPath.base)
+
+      let paths = [
+        ...state.contextDependencies,
+        ...state.configBag.dependencies,
+        ...new Set(contentBases),
+      ]
+
+      for (let p of paths) {
+        explicitPaths.add(normalizePath(path.resolve(p)))
+      }
+
+      watcher.add(paths)
     },
   }
 }
