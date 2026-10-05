@@ -250,7 +250,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // as bare modifiers). Convert the complex numbers to arbitrary values instead.
       ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
       ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
-      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
+      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/[12.345%]'],
+      ['[color:theme(colors.red.500/.29)]', 'text-red-500/29'],
       ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
 
       // Arbitrary property that already contains a modifier

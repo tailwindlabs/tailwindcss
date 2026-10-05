@@ -870,13 +870,14 @@ function createConverterCache(
           }
 
           // .12 -> /12
-          // .12345 -> /[12.345]
+          // .12345 -> /[12.345%]
           else if (/^0?\.\d+$/.test(modifierPart)) {
-            let value = Number(modifierPart) * 100
-            modifier = {
-              kind: Number.isInteger(value) ? 'named' : 'arbitrary',
-              value: value.toString(),
-            }
+            // Round to get rid of floating point noise, e.g.: `.29 * 100` is
+            // `28.999999999999996`.
+            let value = Number((Number(modifierPart) * 100).toFixed(10))
+            modifier = Number.isInteger(value)
+              ? { kind: 'named', value: value.toString() }
+              : { kind: 'arbitrary', value: `${value}%` }
           }
 
           // Anything else becomes arbitrary
