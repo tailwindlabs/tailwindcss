@@ -289,14 +289,14 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         // the mtime-based rebuild cache `Root` relies on and force a full
         // recompile on every change. Only clear once the build itself is
         // done for good.
-        if (config?.build.watch) return
+        if (this.meta.watchMode) return
 
         // Roots hold on to the compiler (and, through it, the `PluginContext`
         // of whichever transform call created it) for the lifetime of the
         // plugin instance. Drop them once the bundle is done so a long-lived
         // process (e.g. Astro's SSR build followed by static route
         // generation) doesn't keep the finished build's context alive.
-        rootsByEnv.get(this.environment?.name ?? 'default').clear()
+        rootsByEnv.delete(this.environment?.name ?? 'default')
       },
     },
   ] satisfies Plugin[]

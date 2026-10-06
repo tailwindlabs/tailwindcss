@@ -53,6 +53,10 @@ test(
           })
         }
 
+        // Keep the plugins reachable so only the plugin's own cache can be
+        // what keeps the context alive.
+        let plugins = instrument(tailwindcss())
+
         await build({
           root: import.meta.dirname,
           logLevel: 'error',
@@ -61,14 +65,15 @@ test(
             write: false,
             lib: { entry: 'src/main.js', formats: ['es'], fileName: 'out' },
           },
-          plugins: [instrument(tailwindcss())],
+          plugins: [plugins],
         })
 
         for (let i = 0; i < 5; i++) {
-          global.gc()
           await new Promise((resolve) => setImmediate(resolve))
+          global.gc()
         }
 
+        console.log('plugins=' + plugins.length)
         console.log('probeRan=' + probeRan)
         console.log('pluginContextAlive=' + (ctxRef?.deref() !== undefined))
       `,
