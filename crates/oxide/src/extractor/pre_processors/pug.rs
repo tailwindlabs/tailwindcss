@@ -22,7 +22,28 @@ impl PreProcessor for Pug {
         // ```
         let mut in_attributes = false;
 
+        // Whether we are still in the leading whitespace of a line.
+        let mut at_line_start = true;
+
+        // Whether we are in the tag part of a line, i.e. the tag name, class and id shorthands
+        // and mixin calls before any whitespace or text content. An attribute list can only
+        // start here. E.g.:
+        //
+        // ```pug
+        // a.flex(href="#") call(
+        // ^^^^^^ Tag      ^^^^^^ Text
+        // ```
+        let mut in_tag = false;
+
         while cursor.pos < len {
+            if at_line_start && !matches!(cursor.curr(), b' ' | b'\t' | b'\r' | b'\n') {
+                at_line_start = false;
+
+                // Lines starting with `|`, `//`, `-`, `=`, `<`, etc. are text, comments or code.
+                in_tag = cursor.curr().is_ascii_alphabetic()
+                    || matches!(cursor.curr(), b'.' | b'#' | b'+');
+            }
+
             match cursor.curr() {
                 // Pug attribute lists can span multiple lines, but brackets in text or comments
                 // can't, so an unbalanced bracket there should not leak into the next line. E.g.:
@@ -35,6 +56,14 @@ impl PreProcessor for Pug {
                 // ```
                 b'\n' if !in_attributes => {
                     bracket_stack.reset();
+                    at_line_start = true;
+                    in_tag = false;
+                }
+
+                // Whitespace ends the tag part of the line, unless it follows a `:` for block
+                // expansion. E.g.: `li: a(href="#")`
+                b' ' | b'\t' if bracket_stack.is_empty() && cursor.prev() != b':' => {
+                    in_tag = false;
                 }
 
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
@@ -93,8 +122,8 @@ impl PreProcessor for Pug {
                     result[cursor.pos] = b' ';
                     bracket_stack.push(cursor.curr());
 
-                    // A `(` right after a tag, class, id or mixin name opens an attribute list.
-                    in_attributes = cursor.prev().is_ascii_alphanumeric() || cursor.prev() == b'_';
+                    // A `(` in the tag part of the line opens an attribute list.
+                    in_attributes = in_tag;
                 }
 
                 b'(' | b'[' | b'{' => {
@@ -232,6 +261,28 @@ mod tests {
     }
 
     #[test]
+    fn test_unbalanced_paren_after_a_word_in_text_does_not_leak_to_next_line() {
+        let input = r#"
+            p
+              | call(
+              span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            p call(foo
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            //- TODO(
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+    }
+
+    #[test]
     fn test_multiline_attribute_lists() {
         let input = r#"
             a.flex.items-center(
@@ -251,5 +302,16 @@ mod tests {
                 "font-bold",
             ],
         );
+
+        let input = r#"
+            +card(
+              "title"
+            )
+            li: a.w-[10px](
+              href="/home"
+            ) Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["w-[10px]", "underline", "font-bold"]);
     }
 }
