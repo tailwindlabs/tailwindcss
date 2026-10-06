@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve style invalidation performance of `group-*` and `peer-*` variants ([#20513](https://github.com/tailwindlabs/tailwindcss/pull/20513))
 - Ensure cached compilers don't keep `loadModule` and `loadStylesheet` callbacks alive after compilation ([#20531](https://github.com/tailwindlabs/tailwindcss/pull/20531))
 - Canonicalization: keep the `&` when moving a pseudo-element into `*` or `**` (e.g. `[&_::before]:flex` → `**:[&::before]:flex`) ([#20550](https://github.com/tailwindlabs/tailwindcss/pull/20550))
+- Fix `Set.prototype.intersection` polyfill in `canonicalizeCandidates(…)` on Node.js < 22, which returned the first set instead of the intersection ([#20514](https://github.com/tailwindlabs/tailwindcss/pull/20514))
 
 ## [4.3.3] - 2026-07-16
 

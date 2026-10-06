@@ -3,6 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
+import { intersection } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import plugin from './plugin'
@@ -1664,5 +1665,47 @@ describe('regressions', () => {
     expect(
       designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
     ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
+  })
+})
+
+describe('intersection', () => {
+  // Shadow `Set.prototype.intersection` so that the polyfill is used, even on
+  // Node.js versions that have a native implementation.
+  function withoutNative<T>(set: Set<T>): Set<T> {
+    return Object.assign(set, { intersection: undefined })
+  }
+
+  test('polyfill keeps only the items that are in both sets', () => {
+    let a = withoutNative(new Set([1, 2, 3, 4]))
+    let b = new Set([3, 4, 5, 6])
+
+    expect(intersection(a, b)).toEqual(new Set([3, 4]))
+    expect(intersection(withoutNative(new Set(b)), a)).toEqual(new Set([3, 4]))
+  })
+
+  test('polyfill returns an empty set when the sets are disjoint', () => {
+    expect(intersection(withoutNative(new Set([1, 2])), new Set([3, 4]))).toEqual(new Set())
+  })
+
+  test('polyfill returns an empty set when one of the sets is empty', () => {
+    expect(intersection(withoutNative(new Set<number>()), new Set([1]))).toEqual(new Set())
+    expect(intersection(withoutNative(new Set([1])), new Set<number>())).toEqual(new Set())
+  })
+
+  test('polyfill does not mutate the input sets', () => {
+    let a = withoutNative(new Set([1, 2, 3]))
+    let b = new Set([2, 3, 4])
+
+    intersection(a, b)
+
+    expect(a).toEqual(new Set([1, 2, 3]))
+    expect(b).toEqual(new Set([2, 3, 4]))
+  })
+
+  test('native and polyfill implementations agree', () => {
+    let a = new Set(['a', 'b', 'c', 'd'])
+    let b = new Set(['b', 'd', 'e'])
+
+    expect(intersection(withoutNative(new Set(a)), b)).toEqual(intersection(a, b))
   })
 })
