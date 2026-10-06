@@ -298,6 +298,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         // generation) doesn't keep the finished build's context alive.
         rootsByEnv.delete(this.environment?.name ?? 'default')
       },
+
+      closeWatcher() {
+        rootsByEnv.delete(this.environment?.name ?? 'default')
+      },
     },
   ] satisfies Plugin[]
 }

@@ -85,3 +85,92 @@ test(
     expect(output).toContain('pluginContextAlive=false')
   },
 )
+
+test(
+  'does not keep the transform PluginContext alive after a watcher closes',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'src/app.css': css`@import 'tailwindcss';`,
+      'src/main.js': js`import './app.css'`,
+      'probe.mjs': js`
+        import { build } from 'vite'
+        import tailwindcss from '@tailwindcss/vite'
+
+        const NAME = '@tailwindcss/vite:generate:build'
+
+        let ctxRef = null
+        let probeRan = false
+
+        function instrument(plugins) {
+          return plugins.map((plugin) => {
+            if (plugin.name !== NAME) return plugin
+            let original = plugin.transform.handler
+            return {
+              ...plugin,
+              transform: {
+                ...plugin.transform,
+                handler(...args) {
+                  ctxRef ??= new WeakRef(this)
+                  probeRan = true
+                  return original.apply(this, args)
+                },
+              },
+            }
+          })
+        }
+
+        // Keep the plugins reachable so only the plugin's own cache can be
+        // what keeps the context alive.
+        let plugins = instrument(tailwindcss())
+
+        let watcher = await build({
+          root: import.meta.dirname,
+          logLevel: 'error',
+          configFile: false,
+          build: {
+            write: false,
+            watch: {},
+            lib: { entry: 'src/main.js', formats: ['es'], fileName: 'out' },
+          },
+          plugins: [plugins],
+        })
+
+        await new Promise((resolve) => {
+          watcher.on('event', (event) => {
+            if (event.code === 'BUNDLE_END') {
+              event.result.close()
+              resolve()
+            }
+          })
+        })
+        await watcher.close()
+
+        for (let i = 0; i < 5; i++) {
+          await new Promise((resolve) => setImmediate(resolve))
+          global.gc()
+        }
+
+        console.log('plugins=' + plugins.length)
+        console.log('probeRan=' + probeRan)
+        console.log('pluginContextAlive=' + (ctxRef?.deref() !== undefined))
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    let output = await exec('node --expose-gc probe.mjs')
+    expect(output).toContain('probeRan=true')
+    expect(output).toContain('pluginContextAlive=false')
+  },
+)
