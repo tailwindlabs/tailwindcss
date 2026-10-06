@@ -3360,6 +3360,48 @@ mod scanner {
     }
 
     #[test]
+    fn test_concrete_file_source_behind_ignored_parent_of_reincluded_dir_does_not_include_siblings()
+    {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "sub\n"),
+                ("sub/.gitignore", "!generated\n"),
+                ("index.html", "content-['index.html']"),
+                ("sub/generated/ui/button.ts", "content-['button']"),
+                ("sub/generated/ui/table.ts", "content-['table']"),
+            ],
+            vec!["@source './'", "@source './sub/generated/ui/button.ts'"],
+        );
+
+        // `sub` is ignored, so the auto walk never descends into it and the re-include in
+        // `sub/.gitignore` can't apply.
+        assert_eq!(
+            candidates,
+            vec!["content-['button']", "content-['index.html']"]
+        );
+    }
+
+    #[test]
+    fn test_concrete_file_source_in_ignored_dir_inside_reincluded_dir_does_not_include_siblings() {
+        let ScanResult { candidates, .. } = scan_with_globs(
+            &[
+                (".gitignore", "ui\n"),
+                ("sub/.gitignore", "!generated\n"),
+                ("index.html", "content-['index.html']"),
+                ("sub/generated/ui/button.ts", "content-['button']"),
+                ("sub/generated/ui/table.ts", "content-['table']"),
+            ],
+            vec!["@source './'", "@source './sub/generated/ui/button.ts'"],
+        );
+
+        // `sub/.gitignore` re-includes `generated`, but `ui` inside it is still ignored.
+        assert_eq!(
+            candidates,
+            vec!["content-['button']", "content-['index.html']"]
+        );
+    }
+
+    #[test]
     fn test_ignore_node_modules_without_gitignore() {
         let ScanResult {
             candidates,
