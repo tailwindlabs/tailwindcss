@@ -14,8 +14,29 @@ impl PreProcessor for Pug {
         let mut cursor = cursor::Cursor::new(content);
         let mut bracket_stack = BracketStack::default();
 
+        // Whether the outermost open bracket is the `(` of a Pug attribute list. E.g.:
+        //
+        // ```pug
+        // a(href="#")
+        //  ^
+        // ```
+        let mut in_attributes = false;
+
         while cursor.pos < len {
             match cursor.curr() {
+                // Pug attribute lists can span multiple lines, but brackets in text or comments
+                // can't, so an unbalanced bracket there should not leak into the next line. E.g.:
+                //
+                // ```pug
+                // p
+                //   | (
+                //   span.underline.font-bold(title="x") km
+                //   | )
+                // ```
+                b'\n' if !in_attributes => {
+                    bracket_stack.reset();
+                }
+
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
                 //
                 // ```diff
@@ -71,6 +92,9 @@ impl PreProcessor for Pug {
                 b'(' if bracket_stack.is_empty() && !matches!(cursor.prev(), b'-' | b'/') => {
                     result[cursor.pos] = b' ';
                     bracket_stack.push(cursor.curr());
+
+                    // A `(` right after a tag, class, id or mixin name opens an attribute list.
+                    in_attributes = cursor.prev().is_ascii_alphanumeric() || cursor.prev() == b'_';
                 }
 
                 b'(' | b'[' | b'{' => {
@@ -79,6 +103,10 @@ impl PreProcessor for Pug {
 
                 b')' | b']' | b'}' if !bracket_stack.is_empty() => {
                     bracket_stack.pop(cursor.curr());
+
+                    if bracket_stack.is_empty() {
+                        in_attributes = false;
+                    }
                 }
 
                 // Consume everything else
@@ -175,6 +203,52 @@ mod tests {
                 "bg-(--my-color)",
                 "bg-(--my-color)/(--my-opacity)",
                 "bg-[url(https://example.com)]",
+            ],
+        );
+    }
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20545
+    #[test]
+    fn test_unbalanced_brackets_in_text_do_not_leak_to_next_line() {
+        let input = r#"
+            p
+              | (
+              span.underline.font-bold(title="x") km
+              | )
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            //- a bare "(" here
+            span.underline.font-bold(title="x") km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            p.mt-2 Some text (with an unbalanced paren
+            span.underline.font-bold(title="x") km
+        "#;
+        Pug::test_extract_contains(input, vec!["mt-2", "underline", "font-bold"]);
+    }
+
+    #[test]
+    fn test_multiline_attribute_lists() {
+        let input = r#"
+            a.flex.items-center(
+              href="https://example.com"
+              class="bg-[url(https://example.com/a.png)] px-2.5"
+            ) Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(
+            input,
+            vec![
+                "flex",
+                "items-center",
+                "bg-[url(https://example.com/a.png)]",
+                "px-2.5",
+                "underline",
+                "font-bold",
             ],
         );
     }
