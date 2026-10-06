@@ -12154,18 +12154,28 @@ test('rounded', async () => {
     "
   `)
   expect(
-    await run([
-      '-rounded',
-      '-rounded-full',
-      '-rounded-none',
-      '-rounded-sm',
-      '-rounded-[4px]',
-      'rounded/foo',
-      'rounded-full/foo',
-      'rounded-none/foo',
-      'rounded-sm/foo',
-      'rounded-[4px]/foo',
-    ]),
+    await run(
+      [
+        '-rounded',
+        '-rounded-full',
+        '-rounded-none',
+        '-rounded-sm',
+        '-rounded-[4px]',
+        'rounded/foo',
+        'rounded-full/foo',
+        'rounded-none/foo',
+        'rounded-sm/foo',
+        'rounded-[4px]/foo',
+        'rounded-sm/[5]',
+        'rounded-sm/(--foo)',
+      ],
+      css`
+        @theme {
+          --radius-sm: 0.125rem;
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
@@ -22373,6 +22383,11 @@ test('stroke', async () => {
       // Width
       '-stroke-0',
       'stroke--1',
+      'stroke-0/foo',
+      'stroke-1/50',
+      'stroke-2/[0.5]',
+      'stroke-2/(--my-opacity)',
+      'stroke-[12px]/foo',
     ]),
   ).toEqual('')
 })
@@ -24398,82 +24413,90 @@ test('filter', async () => {
     "
   `)
   expect(
-    await run([
-      '-filter',
-      '-filter-none',
-      '-filter-[var(--value)]',
-      '-blur-xl',
-      '-blur-[4px]',
-      'brightness--50',
-      '-brightness-50',
-      '-brightness-[1.23]',
-      'brightness-unknown',
-      'contrast--50',
-      '-contrast-50',
-      '-contrast-[1.23]',
-      'contrast-unknown',
-      '-grayscale',
-      '-grayscale-0',
-      'grayscale--1',
-      '-grayscale-[var(--value)]',
-      'grayscale-unknown',
-      'hue-rotate--5',
-      'hue-rotate-unknown',
-      '-invert',
-      'invert--5',
-      '-invert-0',
-      '-invert-[var(--value)]',
-      'invert-unknown',
-      '-drop-shadow-xl',
-      '-drop-shadow-[0_0_red]',
+    await run(
+      [
+        '-filter',
+        '-filter-none',
+        '-filter-[var(--value)]',
+        '-blur-xl',
+        '-blur-[4px]',
+        'brightness--50',
+        '-brightness-50',
+        '-brightness-[1.23]',
+        'brightness-unknown',
+        'contrast--50',
+        '-contrast-50',
+        '-contrast-[1.23]',
+        'contrast-unknown',
+        '-grayscale',
+        '-grayscale-0',
+        'grayscale--1',
+        '-grayscale-[var(--value)]',
+        'grayscale-unknown',
+        'hue-rotate--5',
+        'hue-rotate-unknown',
+        '-invert',
+        'invert--5',
+        '-invert-0',
+        '-invert-[var(--value)]',
+        'invert-unknown',
+        '-drop-shadow-xl',
+        '-drop-shadow-[0_0_red]',
 
-      'drop-shadow/foo',
-      '-drop-shadow/foo',
-      '-drop-shadow/25',
-      '-drop-shadow-red-500',
-      'drop-shadow-red-500/foo',
-      '-drop-shadow-red-500/foo',
-      '-drop-shadow-red-500/50',
+        'drop-shadow/foo',
+        '-drop-shadow/foo',
+        '-drop-shadow/25',
+        '-drop-shadow-red-500',
+        'drop-shadow-red-500/foo',
+        '-drop-shadow-red-500/foo',
+        '-drop-shadow-red-500/50',
 
-      '-saturate-0',
-      'saturate--5',
-      '-saturate-[1.75]',
-      '-saturate-[var(--value)]',
-      'saturate-saturate',
-      '-sepia',
-      'sepia--50',
-      '-sepia-0',
-      '-sepia-[50%]',
-      '-sepia-[var(--value)]',
-      'sepia-unknown',
-      'filter/foo',
-      'filter-none/foo',
-      'filter-[var(--value)]/foo',
-      'blur-xl/foo',
-      'blur-none/foo',
-      'blur-[4px]/foo',
-      'brightness-50/foo',
-      'brightness-[1.23]/foo',
-      'contrast-50/foo',
-      'contrast-[1.23]/foo',
-      'grayscale/foo',
-      'grayscale-0/foo',
-      'grayscale-[var(--value)]/foo',
-      'hue-rotate-15/foo',
-      'hue-rotate-[45deg]/foo',
-      'invert/foo',
-      'invert-0/foo',
-      'invert-[var(--value)]/foo',
-      'drop-shadow-xl/foo',
-      'drop-shadow-[0_0_red]/foo',
-      'saturate-0/foo',
-      'saturate-[1.75]/foo',
-      'saturate-[var(--value)]/foo',
-      'sepia/foo',
-      'sepia-0/foo',
-      'sepia-[50%]/foo',
-      'sepia-[var(--value)]/foo',
-    ]),
+        '-saturate-0',
+        'saturate--5',
+        '-saturate-[1.75]',
+        '-saturate-[var(--value)]',
+        'saturate-saturate',
+        '-sepia',
+        'sepia--50',
+        '-sepia-0',
+        '-sepia-[50%]',
+        '-sepia-[var(--value)]',
+        'sepia-unknown',
+        'filter/foo',
+        'filter-none/foo',
+        'filter-[var(--value)]/foo',
+        'blur-xl/foo',
+        'blur-none/foo',
+        'blur-[4px]/foo',
+        'brightness-50/foo',
+        'brightness-[1.23]/foo',
+        'contrast-50/foo',
+        'contrast-[1.23]/foo',
+        'grayscale/foo',
+        'grayscale-0/foo',
+        'grayscale-[var(--value)]/foo',
+        'hue-rotate-15/foo',
+        'hue-rotate-[45deg]/foo',
+        'invert/foo',
+        'invert-0/foo',
+        'invert-[var(--value)]/foo',
+        'drop-shadow-xl/foo',
+        'drop-shadow-[0_0_red]/foo',
+        'saturate-0/foo',
+        'saturate-[1.75]/foo',
+        'saturate-[var(--value)]/foo',
+        'sepia/foo',
+        'sepia-0/foo',
+        'sepia-[50%]/foo',
+        'sepia-[var(--value)]/foo',
+      ],
+      css`
+        @theme {
+          --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 
   expect(
@@ -27243,25 +27266,36 @@ test('text-shadow', async () => {
     "
   `)
   expect(
-    await run([
-      '-shadow-xl',
-      '-shadow-none',
-      '-shadow-red-500',
-      '-shadow-red-500/50',
-      '-shadow-red-500/[0.5]',
-      '-shadow-red-500/[50%]',
-      '-shadow-current',
-      '-shadow-current/50',
-      '-shadow-current/[0.5]',
-      '-shadow-current/[50%]',
-      '-shadow-inherit',
-      '-shadow-transparent',
-      '-shadow-[#0088cc]',
-      '-shadow-[#0088cc]/50',
-      '-shadow-[#0088cc]/[0.5]',
-      '-shadow-[#0088cc]/[50%]',
-      '-shadow-[var(--value)]',
-    ]),
+    await run(
+      [
+        '-text-shadow-sm',
+        '-text-shadow-none',
+        '-text-shadow-red-500',
+        '-text-shadow-red-500/50',
+        '-text-shadow-red-500/[0.5]',
+        '-text-shadow-red-500/[50%]',
+        '-text-shadow-current',
+        '-text-shadow-current/50',
+        '-text-shadow-current/[0.5]',
+        '-text-shadow-current/[50%]',
+        '-text-shadow-inherit',
+        '-text-shadow-transparent',
+        '-text-shadow-[#0088cc]',
+        '-text-shadow-[#0088cc]/50',
+        '-text-shadow-[#0088cc]/[0.5]',
+        '-text-shadow-[#0088cc]/[50%]',
+        '-text-shadow-[var(--value)]',
+        'text-shadow/foo',
+        'text-shadow-sm/foo',
+      ],
+      css`
+        @theme {
+          --text-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
+          --text-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
@@ -27725,25 +27759,38 @@ test('shadow', async () => {
     "
   `)
   expect(
-    await run([
-      '-shadow-xl',
-      '-shadow-none',
-      '-shadow-red-500',
-      '-shadow-red-500/50',
-      '-shadow-red-500/[0.5]',
-      '-shadow-red-500/[50%]',
-      '-shadow-current',
-      '-shadow-current/50',
-      '-shadow-current/[0.5]',
-      '-shadow-current/[50%]',
-      '-shadow-inherit',
-      '-shadow-transparent',
-      '-shadow-[#0088cc]',
-      '-shadow-[#0088cc]/50',
-      '-shadow-[#0088cc]/[0.5]',
-      '-shadow-[#0088cc]/[50%]',
-      '-shadow-[var(--value)]',
-    ]),
+    await run(
+      [
+        '-shadow-sm',
+        '-shadow-none',
+        '-shadow-red-500',
+        '-shadow-red-500/50',
+        '-shadow-red-500/[0.5]',
+        '-shadow-red-500/[50%]',
+        '-shadow-current',
+        '-shadow-current/50',
+        '-shadow-current/[0.5]',
+        '-shadow-current/[50%]',
+        '-shadow-inherit',
+        '-shadow-transparent',
+        '-shadow-[#0088cc]',
+        '-shadow-[#0088cc]/50',
+        '-shadow-[#0088cc]/[0.5]',
+        '-shadow-[#0088cc]/[50%]',
+        '-shadow-[var(--value)]',
+        'shadow/foo',
+        'shadow-sm/foo',
+        'shadow-[10px_10px]/foo',
+        'shadow-[#0088cc]/foo',
+      ],
+      css`
+        @theme {
+          --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+          --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
@@ -28216,25 +28263,37 @@ test('inset-shadow', async () => {
     "
   `)
   expect(
-    await run([
-      '-inset-shadow-sm',
-      '-inset-shadow-none',
-      '-inset-shadow-red-500',
-      '-inset-shadow-red-500/50',
-      '-inset-shadow-red-500/[0.5]',
-      '-inset-shadow-red-500/[50%]',
-      '-inset-shadow-current',
-      '-inset-shadow-current/50',
-      '-inset-shadow-current/[0.5]',
-      '-inset-shadow-current/[50%]',
-      '-inset-shadow-inherit',
-      '-inset-shadow-transparent',
-      '-inset-shadow-[#0088cc]',
-      '-inset-shadow-[#0088cc]/50',
-      '-inset-shadow-[#0088cc]/[0.5]',
-      '-inset-shadow-[#0088cc]/[50%]',
-      '-inset-shadow-[var(--value)]',
-    ]),
+    await run(
+      [
+        '-inset-shadow-sm',
+        '-inset-shadow-none',
+        '-inset-shadow-red-500',
+        '-inset-shadow-red-500/50',
+        '-inset-shadow-red-500/[0.5]',
+        '-inset-shadow-red-500/[50%]',
+        '-inset-shadow-current',
+        '-inset-shadow-current/50',
+        '-inset-shadow-current/[0.5]',
+        '-inset-shadow-current/[50%]',
+        '-inset-shadow-inherit',
+        '-inset-shadow-transparent',
+        '-inset-shadow-[#0088cc]',
+        '-inset-shadow-[#0088cc]/50',
+        '-inset-shadow-[#0088cc]/[0.5]',
+        '-inset-shadow-[#0088cc]/[50%]',
+        '-inset-shadow-[var(--value)]',
+        'inset-shadow/foo',
+        'inset-shadow-sm/foo',
+        'inset-shadow-[10px_10px]/foo',
+      ],
+      css`
+        @theme {
+          --inset-shadow: inset 0 1px 3px 0 rgb(0 0 0 / 0.1);
+          --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 

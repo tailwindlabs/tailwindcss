@@ -1630,7 +1630,7 @@ describe('addVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:is(:where(.group):hover, :where(.group):focus) *) {
+        :is(:is(:where(.group):hover, :where(.group):focus) .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -1744,7 +1744,7 @@ describe('addVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):hover .group-hocus\\:flex), :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -1784,7 +1784,7 @@ describe('addVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-hocus\\:flex:is(:where(.group):hover *), .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):hover .group-hocus\\:flex), :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -1827,12 +1827,12 @@ describe('addVariant', () => {
       "
       @layer utilities {
         @media (hover: hover) {
-          .group-hocus\\:flex:is(:where(.group):hover *) {
+          :is(:where(.group):hover .group-hocus\\:flex) {
             display: flex;
           }
         }
 
-        .group-hocus\\:flex:is(:where(.group):focus *) {
+        :is(:where(.group):focus .group-hocus\\:flex) {
           display: flex;
         }
 
@@ -1964,7 +1964,7 @@ describe('addVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-optional\\:flex:is(:where(.group):optional *), .group-optional\\/foo\\:flex:is(:where(.group\\/foo):optional *), .peer-optional\\:flex:is(:where(.peer):optional ~ *), .optional\\:flex:optional {
+        :is(:where(.group):optional .group-optional\\:flex), :is(:where(.group\\/foo):optional .group-optional\\/foo\\:flex), :is(:where(.peer):optional ~ .peer-optional\\:flex), .optional\\:flex:optional {
           display: flex;
         }
       }
@@ -2903,7 +2903,7 @@ describe('matchVariant', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer utilities {
-        .group-optional-\\[test\\]\\:flex:is(:where(.group):optional:has(test) :where(.group) *), .group-optional-\\[test\\]\\/foo\\:flex:is(:where(.group\\/foo):optional:has(test) :where(.group\\/foo) *), .peer-optional-\\[test\\]\\:flex:is(:where(.peer):optional:has(test) :where(.peer) ~ *), .optional-\\[test\\]\\:flex:optional:has(test) .optional-\\[test\\]\\:flex {
+        :is(:where(.group):optional:has(test) :where(.group) .group-optional-\\[test\\]\\:flex), :is(:where(.group\\/foo):optional:has(test) :where(.group\\/foo) .group-optional-\\[test\\]\\/foo\\:flex), :is(:where(.peer):optional:has(test) :where(.peer) ~ .peer-optional-\\[test\\]\\:flex), .optional-\\[test\\]\\:flex:optional:has(test) .optional-\\[test\\]\\:flex {
           display: flex;
         }
       }

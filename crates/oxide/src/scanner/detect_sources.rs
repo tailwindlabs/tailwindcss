@@ -112,6 +112,7 @@ pub fn resolve_globs(
         }
 
         if !dirs.contains(path) {
+            it.skip_current_dir();
             continue;
         }
 

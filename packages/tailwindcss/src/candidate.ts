@@ -372,6 +372,14 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     }
   }
 
+  // If there's more than one modifier, the utility is invalid.
+  //
+  // E.g.:
+  //
+  // - `bg-red-500/50/50`
+  let parts = segment(base, '/')
+  if (parts.length > 2) return
+
   // Figure out the new base and the modifier segment if present.
   //
   // E.g.:
@@ -381,14 +389,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^^^^^^^^^    -> Base without modifier
   //            ^^ -> Modifier segment
   // ```
-  let [baseWithoutModifier, modifierSegment = null, additionalModifier] = segment(base, '/')
-
-  // If there's more than one modifier, the utility is invalid.
-  //
-  // E.g.:
-  //
-  // - `bg-red-500/50/50`
-  if (additionalModifier) return
+  let [baseWithoutModifier, modifierSegment = null] = parts
 
   let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
 
@@ -707,17 +708,18 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
   // Static, functional and compound variants
   {
-    // group-hover/group-name
-    // ^^^^^^^^^^^            -> Variant without modifier
-    //             ^^^^^^^^^^ -> Modifier
-    let [variantWithoutModifier, modifier = null, additionalModifier] = segment(variant, '/')
-
     // If there's more than one modifier, the variant is invalid.
     //
     // E.g.:
     //
     // - `group-hover/foo/bar`
-    if (additionalModifier) return null
+    let parts = segment(variant, '/')
+    if (parts.length > 2) return null
+
+    // group-hover/group-name
+    // ^^^^^^^^^^^            -> Variant without modifier
+    //             ^^^^^^^^^^ -> Modifier
+    let [variantWithoutModifier, modifier = null] = parts
 
     let roots = findRoots(variantWithoutModifier, (root) => {
       return designSystem.variants.has(root)
@@ -1096,7 +1098,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
       node.value = ','
     }
 
-    // Wrap custom functions starting with `--`, in parentheses if preceeded by
+    // Wrap custom functions starting with `--`, in parentheses if preceded by
     // a symbol. E.g.: `calc(100%---spacing(2))` → `calc(100%-(--spacing(2)))`
     else if (node.kind === 'function' && node.value.startsWith('--')) {
       let idx = ctx.index

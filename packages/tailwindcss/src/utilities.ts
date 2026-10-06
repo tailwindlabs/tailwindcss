@@ -421,6 +421,13 @@ export function createUtilities(theme: Theme) {
             desc.themeKeys ?? [],
           )
 
+          // If the theme value resolved without consuming the modifier, then
+          // the modifier would be silently ignored and `w-4` and `w-4/foo`
+          // would generate the same CSS.
+          //
+          // The modifier would be consumed if it's a fraction, e.g.: `w-1/2`
+          if (value !== null && candidate.modifier && !candidate.value.fraction) return
+
           // Automatically handle things like `w-1/2` without requiring `1/2` to
           // exist as a theme value.
           if (value === null && desc.supportsFractions && candidate.value.fraction) {
@@ -3888,6 +3895,10 @@ export function createUtilities(theme: Theme) {
     }
 
     {
+      // A modifier is only valid as the opacity of a stroke color. The value
+      // did not resolve to a color, so a modifier would be silently ignored.
+      if (candidate.modifier) return
+
       let value = theme.resolve(candidate.value.value, ['--stroke-width'])
       if (value) {
         return [decl('stroke-width', value)]
@@ -4628,6 +4639,7 @@ export function createUtilities(theme: Theme) {
         let value = theme.get(['--drop-shadow'])
         let resolved = theme.resolve(null, ['--drop-shadow'])
         if (value === null || resolved === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           filterProperties(),
@@ -5436,6 +5448,7 @@ export function createUtilities(theme: Theme) {
     if (!candidate.value) {
       let value = theme.get(['--text-shadow'])
       if (value === null) return
+      if (candidate.modifier && !alpha) return
 
       return [
         textShadowProperties(),
@@ -5463,6 +5476,8 @@ export function createUtilities(theme: Theme) {
           ]
         }
         default: {
+          if (candidate.modifier && !alpha) return
+
           return [
             textShadowProperties(),
             decl('--tw-text-shadow-alpha', alpha),
@@ -5491,6 +5506,8 @@ export function createUtilities(theme: Theme) {
     {
       let value = theme.get([`--text-shadow-${candidate.value.value}`])
       if (value) {
+        if (candidate.modifier && !alpha) return
+
         return [
           textShadowProperties(),
           decl('--tw-text-shadow-alpha', alpha),
@@ -5582,6 +5599,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let value = theme.get(['--shadow'])
         if (value === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           boxShadowProperties(),
@@ -5611,6 +5629,8 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
+            if (candidate.modifier && !alpha) return
+
             return [
               boxShadowProperties(),
               decl('--tw-shadow-alpha', alpha),
@@ -5644,6 +5664,8 @@ export function createUtilities(theme: Theme) {
       {
         let value = theme.get([`--shadow-${candidate.value.value}`])
         if (value) {
+          if (candidate.modifier && !alpha) return
+
           return [
             boxShadowProperties(),
             decl('--tw-shadow-alpha', alpha),
@@ -5708,6 +5730,7 @@ export function createUtilities(theme: Theme) {
       if (!candidate.value) {
         let value = theme.get(['--inset-shadow'])
         if (value === null) return
+        if (candidate.modifier && !alpha) return
 
         return [
           boxShadowProperties(),
@@ -5737,6 +5760,8 @@ export function createUtilities(theme: Theme) {
             ]
           }
           default: {
+            if (candidate.modifier && !alpha) return
+
             return [
               boxShadowProperties(),
               decl('--tw-inset-shadow-alpha', alpha),
@@ -5772,6 +5797,8 @@ export function createUtilities(theme: Theme) {
         let value = theme.get([`--inset-shadow-${candidate.value.value}`])
 
         if (value) {
+          if (candidate.modifier && !alpha) return
+
           return [
             boxShadowProperties(),
             decl('--tw-inset-shadow-alpha', alpha),

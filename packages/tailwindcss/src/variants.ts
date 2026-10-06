@@ -610,7 +610,13 @@ export function createVariants(theme: Theme): Variants {
         selector = `:is(${selector})`
       }
 
-      node.selector = `&:is(${selector} *)`
+      // Put the target inside `:is` so browsers can limit style invalidation to
+      // it when the group changes. Keep `&` instead of the candidate's class so
+      // this also works with `@apply` and variants that change the target.
+      //
+      // The `:is` wrapper also keeps `has-group-*` from anchoring the group
+      // itself to the element carrying the utility.
+      node.selector = `:is(${selector} &)`
 
       // Track that the variant was actually applied
       didApply = true
@@ -651,7 +657,7 @@ export function createVariants(theme: Theme): Variants {
 
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
-      // just the `.group` class the way we'd need to for these variants, so we
+      // just the `.peer` class the way we'd need to for these variants, so we
       // need to replace it in the selector ourselves.
       let selector = node.selector.replaceAll('&', variantSelector)
 
@@ -662,7 +668,8 @@ export function createVariants(theme: Theme): Variants {
         selector = `:is(${selector})`
       }
 
-      node.selector = `&:is(${selector} ~ *)`
+      // As with `group`, constrain the target without repeating its selector.
+      node.selector = `:is(${selector} ~ &)`
 
       // Track that the variant was actually applied
       didApply = true
@@ -938,7 +945,22 @@ export function createVariants(theme: Theme): Variants {
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
-        let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
+        let changed = false
+        let ast = ValueParser.parse(value)
+        walk(ast, (node) => {
+          if (node.kind !== 'function') return
+
+          // Leave selectors as-is, they could contain `selector(a:not(b))`, and
+          // in this case we don't want the space around the `not`.
+          if (node.value === 'selector') return WalkAction.Skip
+
+          if (node.value === 'and' || node.value === 'or' || node.value === 'not') {
+            changed = true
+            node.value = ` ${node.value} `
+          }
+        })
+
+        let query = changed ? ValueParser.toCss(ast) : value
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return
