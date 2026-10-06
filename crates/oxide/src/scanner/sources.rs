@@ -293,47 +293,37 @@ fn is_ignored_by_gitignore(
 ) -> bool {
     let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
 
-    for dir in base.ancestors() {
-        let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+    // Ancestors of `base` whose `.gitignore` can apply, nearest first.
+    //
+    // Only `.gitignore` files in ancestors of `base` can ignore `base` itself. Patterns in
+    // `base`'s own `.gitignore` only match paths _inside_ `base`, never `base` itself (the file
+    // walker still applies them to `base`'s contents).
+    //
+    // Skipping `base`'s own `.gitignore` also prevents a false positive for whitelist style
+    // `.gitignore` files, because relativizing `base` against itself yields the empty path,
+    // which incorrectly matches `/*`.
+    //
+    // E.g.:
+    //
+    // ```gitignore
+    // /*
+    // !/.gitignore
+    // !/app
+    // !/public
+    // ```
+    //
+    // Everything inside `base` except `.gitignore`, `app` and `public` is ignored, but `base`
+    // itself is not.
+    let mut dirs = vec![];
+    for dir in base.ancestors().skip(1) {
+        gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
             let path = dir.join(".gitignore");
 
             // `Gitignore::new` roots the matcher at the directory containing the file, so
             // patterns match relative to it.
             path.is_file().then(|| Gitignore::new(&path).0)
         });
-
-        // Only `.gitignore` files in ancestors of `base` can ignore `base` itself. Patterns in
-        // `base`'s own `.gitignore` only match paths _inside_ `base`, never `base` itself (the
-        // file walker still applies them to `base`'s contents).
-        //
-        // Skipping `base`'s own `.gitignore` also prevents a false positive for whitelist style
-        // `.gitignore` files, because relativizing `base` against itself yields the empty path,
-        // which incorrectly matches `/*`.
-        //
-        // E.g.:
-        //
-        // ```gitignore
-        // /*
-        // !/.gitignore
-        // !/app
-        // !/public
-        // ```
-        //
-        // Everything inside `base` except `.gitignore`, `app` and `public` is ignored, but `base`
-        // itself is not.
-        if dir != base {
-            if let Some(gitignore) = gitignore {
-                // The nearest `.gitignore` with a definitive answer wins, matching git: patterns
-                // in a deeper `.gitignore` override the directories above it, so a re-included
-                // (`!dir`) directory is not ignored even when an ancestor `.gitignore` ignores
-                // it.
-                match gitignore.matched_path_or_any_parents(base, true) {
-                    ignore::Match::Ignore(_) => return true,
-                    ignore::Match::Whitelist(_) => return false,
-                    ignore::Match::None => {}
-                }
-            }
-        }
+        dirs.push(dir);
 
         // Stop at the git repository root.
         if dir.join(".git").exists() {
@@ -346,6 +336,35 @@ fn is_ignored_by_gitignore(
         // walker still applies those `.gitignore` files when deciding which files to scan.
         if !inside_git_repo && cwd.is_some_and(|cwd| cwd.starts_with(dir)) {
             break;
+        }
+    }
+
+    // Check every directory on the way down to `base`, outermost first. Once one is ignored
+    // the walk never descends into it, so a deeper re-include can't apply. For each directory
+    // the nearest `.gitignore` with a definitive answer wins, matching git: a re-included
+    // (`!dir`) directory is not ignored even when a `.gitignore` above it ignores it.
+    let Some(top) = dirs.last() else {
+        return false;
+    };
+    let mut paths = base
+        .ancestors()
+        .take_while(|path| path != top)
+        .collect::<Vec<_>>();
+    paths.reverse();
+
+    for path in paths {
+        for dir in dirs
+            .iter()
+            .filter(|dir| path != **dir && path.starts_with(dir))
+        {
+            let Some(Some(gitignore)) = gitignores.get(*dir) else {
+                continue;
+            };
+            match gitignore.matched(path, true) {
+                ignore::Match::Ignore(_) => return true,
+                ignore::Match::Whitelist(_) => break,
+                ignore::Match::None => {}
+            }
         }
     }
 
