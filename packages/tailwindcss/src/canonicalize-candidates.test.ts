@@ -1047,6 +1047,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&_>_:--custom]:flex', '*:[:--custom]:flex'],
       ['[&_::before]:flex', '**:[&::before]:flex'],
       ['[&_>_::before]:flex', '*:[&::before]:flex'],
+      ['[&_:before]:flex', '**:[&:before]:flex'],
+      ['[&_>_:before]:flex', '*:[&:before]:flex'],
 
       // in-* variants
       ['[p_&]:flex', 'in-[p]:flex'],
