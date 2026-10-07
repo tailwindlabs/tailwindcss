@@ -61,9 +61,17 @@ impl PreProcessor for Pug {
                 }
 
                 // Whitespace ends the tag part of the line, unless it follows a `:` for block
-                // expansion. E.g.: `li: a(href="#")`
-                b' ' | b'\t' if bracket_stack.is_empty() && cursor.prev() != b':' => {
-                    in_tag = false;
+                // expansion (including repeated spaces/tabs). E.g.: `li:  a(href="#")`
+                b' ' | b'\t' if bracket_stack.is_empty() => {
+                    // Skip back over the current run of whitespace so `li:  a(` (two spaces)
+                    // still counts as block-expansion whitespace and keeps `in_tag`.
+                    let mut i = cursor.pos;
+                    while i > 0 && matches!(content[i - 1], b' ' | b'\t') {
+                        i -= 1;
+                    }
+                    if i == 0 || content[i - 1] != b':' {
+                        in_tag = false;
+                    }
                 }
 
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
@@ -314,4 +322,28 @@ mod tests {
         "#;
         Pug::test_extract_contains(input, vec!["w-[10px]", "underline", "font-bold"]);
     }
+
+    #[test]
+    fn test_block_expansion_with_multiple_spaces_keeps_attribute_context() {
+        // Two spaces/tabs after the colon must not clear `in_tag`, or the `(` is not treated as a
+        // multiline attribute list and dots in attribute values get turned into spaces.
+        Pug::test(
+            "li:  a(\n  href=\"x.flex\"\n)",
+            "li:  a \n  href=\"x.flex\"\n)",
+        );
+        Pug::test(
+            "li:\t\ta(\n  href=\"x.flex\"\n)",
+            "li:\t\ta \n  href=\"x.flex\"\n)",
+        );
+
+        let input = r#"
+            li:  a(
+              href="x.flex"
+              class="underline font-bold"
+            ) Link
+            span.mt-2 km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold", "mt-2"]);
+    }
+
 }
