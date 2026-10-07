@@ -35,6 +35,9 @@ impl PreProcessor for Pug {
         // ```
         let mut in_tag = false;
 
+        // After a block-expansion `:`, spaces/tabs before the nested tag must not clear `in_tag`.
+        let mut in_block_expansion_whitespace = false;
+
         while cursor.pos < len {
             if at_line_start && !matches!(cursor.curr(), b' ' | b'\t' | b'\r' | b'\n') {
                 at_line_start = false;
@@ -58,20 +61,17 @@ impl PreProcessor for Pug {
                     bracket_stack.reset();
                     at_line_start = true;
                     in_tag = false;
+                    in_block_expansion_whitespace = false;
                 }
 
                 // Whitespace ends the tag part of the line, unless it follows a `:` for block
                 // expansion (including repeated spaces/tabs). E.g.: `li:  a(href="#")`
-                b' ' | b'\t' if bracket_stack.is_empty() => {
-                    // Skip back over the current run of whitespace so `li:  a(` (two spaces)
-                    // still counts as block-expansion whitespace and keeps `in_tag`.
-                    let mut i = cursor.pos;
-                    while i > 0 && matches!(content[i - 1], b' ' | b'\t') {
-                        i -= 1;
-                    }
-                    if i == 0 || content[i - 1] != b':' {
-                        in_tag = false;
-                    }
+                b' ' | b'\t' if bracket_stack.is_empty() && !in_block_expansion_whitespace => {
+                    in_tag = false;
+                }
+
+                b':' if bracket_stack.is_empty() => {
+                    in_block_expansion_whitespace = true;
                 }
 
                 // Only replace `.` with a space if it's not surrounded by numbers. E.g.:
@@ -149,6 +149,10 @@ impl PreProcessor for Pug {
                 // Consume everything else
                 _ => {}
             };
+
+            if !matches!(cursor.curr(), b' ' | b'\t' | b':') {
+                in_block_expansion_whitespace = false;
+            }
 
             cursor.advance();
         }
@@ -336,6 +340,12 @@ mod tests {
             "li:\t\ta \n  href=\"x.flex\"\n)",
         );
 
+        let long_gap = " ".repeat(256);
+        Pug::test(
+            &format!("li:{long_gap}a(\n  href=\"x.flex\"\n)"),
+            &format!("li:{long_gap}a \n  href=\"x.flex\"\n)"),
+        );
+
         let input = r#"
             li:  a(
               href="x.flex"
@@ -345,5 +355,4 @@ mod tests {
         "#;
         Pug::test_extract_contains(input, vec!["underline", "font-bold", "mt-2"]);
     }
-
 }
