@@ -24,6 +24,9 @@ jobs:
           - name: Windows
             os: windows-latest
 
+          - name: Windows ARM64
+            os: windows-11-arm
+
           - name: Linux
             os: namespace-profile-default
 
@@ -45,6 +48,11 @@ jobs:
           - run-all: false
             runner:
               name: Windows
+
+          - run-all: false
+            runner:
+              name: Windows ARM64
+
           - run-all: false
             runner:
               name: macOS
