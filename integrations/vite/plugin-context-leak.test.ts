@@ -147,11 +147,14 @@ test(
           plugins: [plugins],
         })
 
-        await new Promise((resolve) => {
+        await new Promise((resolve, reject) => {
           watcher.on('event', (event) => {
             if (event.code === 'BUNDLE_END') {
               event.result.close()
               resolve()
+            } else if (event.code === 'ERROR') {
+              event.result?.close()
+              watcher.close().then(() => reject(event.error))
             }
           })
         })
