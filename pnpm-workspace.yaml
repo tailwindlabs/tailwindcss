@@ -20,6 +20,7 @@ catalog:
   lightningcss-linux-arm64-musl: 1.33.0
   lightningcss-linux-x64-gnu: 1.33.0
   lightningcss-linux-x64-musl: 1.33.0
+  lightningcss-win32-arm64-msvc: 1.33.0
   lightningcss-win32-x64-msvc: 1.33.0
   lightningcss: 1.33.0
   '@parcel/watcher-darwin-arm64': 2.6.0
@@ -28,6 +29,7 @@ catalog:
   '@parcel/watcher-linux-arm64-musl': 2.6.0
   '@parcel/watcher-linux-x64-glibc': 2.6.0
   '@parcel/watcher-linux-x64-musl': 2.6.0
+  '@parcel/watcher-win32-arm64': 2.6.0
   '@parcel/watcher-win32-x64': 2.6.0
   '@parcel/watcher': 2.6.0
   postcss: ^8.5.25

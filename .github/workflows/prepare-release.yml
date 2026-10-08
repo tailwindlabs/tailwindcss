@@ -304,4 +304,5 @@ jobs:
               packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl \
               packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64 \
               packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64 \
-              packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+              packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe \
+              packages/@tailwindcss-standalone/dist/tailwindcss-windows-arm64.exe
