@@ -1,24 +1,31 @@
 import dedent from 'dedent'
-import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { describe } from 'vitest'
-import { candidate, css, html, js, json, retryAssertion, test, ts, txt, yaml } from '../utils'
+import { describe, expect, it } from 'vitest'
+import {
+  candidate,
+  css,
+  html,
+  js,
+  json,
+  retryAssertion,
+  standaloneBinaryName,
+  test,
+  ts,
+  txt,
+  yaml,
+} from '../utils'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const STANDALONE_BINARY = (() => {
-  switch (os.platform()) {
-    case 'win32':
-      return 'tailwindcss-windows-x64.exe'
-    case 'darwin':
-      return os.arch() === 'x64' ? 'tailwindcss-macos-x64' : 'tailwindcss-macos-arm64'
-    case 'linux':
-      return os.arch() === 'x64' ? 'tailwindcss-linux-x64' : 'tailwindcss-linux-arm64'
-    default:
-      throw new Error(`Unsupported platform: ${os.platform()} ${os.arch()}`)
-  }
-})()
+const STANDALONE_BINARY = standaloneBinaryName()
+
+describe('standalone binary selection', () => {
+  it('uses the Windows ARM64 binary', () => {
+    expect(standaloneBinaryName('win32', 'arm64')).toBe('tailwindcss-windows-arm64.exe')
+    expect(standaloneBinaryName('win32', 'x64')).toBe('tailwindcss-windows-x64.exe')
+  })
+})
 
 describe.each([
   ['CLI', 'pnpm tailwindcss'],

@@ -21,19 +21,18 @@ if (process.env.NESTED_BUILD !== '1' && process.env.USERPROFILE && process.env.U
 
 // We use baseline builds for all x64 platforms to ensure compatibility with
 // older hardware.
-let builds: { target: Bun.Build.Target; name: string }[] = [
+let builds: { target: Bun.Build.CompileTarget; name: string }[] = [
   { name: 'tailwindcss-linux-arm64', target: 'bun-linux-arm64' },
   { name: 'tailwindcss-linux-arm64-musl', target: 'bun-linux-arm64-musl' },
-  // @ts-expect-error: Either the types are wrong or the runtime needs to be updated
-  // to accept a `-glibc` at the end like the types suggest.
   { name: 'tailwindcss-linux-x64', target: 'bun-linux-x64-baseline' },
   { name: 'tailwindcss-linux-x64-musl', target: 'bun-linux-x64-baseline-musl' },
   { name: 'tailwindcss-macos-arm64', target: 'bun-darwin-arm64' },
   { name: 'tailwindcss-macos-x64', target: 'bun-darwin-x64-baseline' },
   { name: 'tailwindcss-windows-x64.exe', target: 'bun-windows-x64-baseline' },
+  { name: 'tailwindcss-windows-arm64.exe', target: 'bun-windows-arm64' },
 ]
 
-let summary: { target: Bun.Build.Target; name: string; sum: string }[] = []
+let summary: { target: Bun.Build.CompileTarget; name: string; sum: string }[] = []
 
 // Build platform binaries and checksum them.
 let start = process.hrtime.bigint()

@@ -3,7 +3,7 @@ import fastGlob from 'fast-glob'
 import { exec, execFile, spawn, type ChildProcess } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { createServer } from 'node:net'
-import { platform, tmpdir } from 'node:os'
+import { arch, platform, tmpdir } from 'node:os'
 import path from 'node:path'
 import { promisify, stripVTControlCharacters } from 'node:util'
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
@@ -78,6 +78,21 @@ interface TestFlags {
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
 export const IS_WINDOWS = platform() === 'win32'
+
+export function standaloneBinaryName(platformName = platform(), architecture = arch()) {
+  switch (platformName) {
+    case 'win32':
+      return architecture === 'arm64'
+        ? 'tailwindcss-windows-arm64.exe'
+        : 'tailwindcss-windows-x64.exe'
+    case 'darwin':
+      return architecture === 'x64' ? 'tailwindcss-macos-x64' : 'tailwindcss-macos-arm64'
+    case 'linux':
+      return architecture === 'x64' ? 'tailwindcss-linux-x64' : 'tailwindcss-linux-arm64'
+    default:
+      throw new Error(`Unsupported platform: ${platformName} ${architecture}`)
+  }
+}
 
 const execFileAsync = promisify(execFile)
 

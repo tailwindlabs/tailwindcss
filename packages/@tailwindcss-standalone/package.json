@@ -41,6 +41,7 @@
     "@parcel/watcher-linux-arm64-musl": "catalog:",
     "@parcel/watcher-linux-x64-glibc": "catalog:",
     "@parcel/watcher-linux-x64-musl": "catalog:",
+    "@parcel/watcher-win32-arm64": "catalog:",
     "@parcel/watcher-win32-x64": "catalog:",
     "@types/bun": "^1.3.14",
     "bun": "^1.3.14",
@@ -50,6 +51,7 @@
     "lightningcss-linux-arm64-musl": "catalog:",
     "lightningcss-linux-x64-gnu": "catalog:",
     "lightningcss-linux-x64-musl": "catalog:",
+    "lightningcss-win32-arm64-msvc": "catalog:",
     "lightningcss-win32-x64-msvc": "catalog:"
   }
 }

@@ -27,6 +27,9 @@ catalogs:
     '@parcel/watcher-linux-x64-musl':
       specifier: 2.6.0
       version: 2.6.0
+    '@parcel/watcher-win32-arm64':
+      specifier: 2.6.0
+      version: 2.6.0
     '@parcel/watcher-win32-x64':
       specifier: 2.6.0
       version: 2.6.0
@@ -58,6 +61,9 @@ catalogs:
       specifier: 1.33.0
       version: 1.33.0
     lightningcss-linux-x64-musl:
+      specifier: 1.33.0
+      version: 1.33.0
+    lightningcss-win32-arm64-msvc:
       specifier: 1.33.0
       version: 1.33.0
     lightningcss-win32-x64-msvc:
@@ -370,6 +376,9 @@ importers:
       '@parcel/watcher-linux-x64-musl':
         specifier: 'catalog:'
         version: 2.6.0
+      '@parcel/watcher-win32-arm64':
+        specifier: 'catalog:'
+        version: 2.6.0
       '@parcel/watcher-win32-x64':
         specifier: 'catalog:'
         version: 2.6.0
@@ -395,6 +404,9 @@ importers:
         specifier: 'catalog:'
         version: 1.33.0
       lightningcss-linux-x64-musl:
+        specifier: 'catalog:'
+        version: 1.33.0
+      lightningcss-win32-arm64-msvc:
         specifier: 'catalog:'
         version: 1.33.0
       lightningcss-win32-x64-msvc:
@@ -4356,8 +4368,7 @@ snapshots:
       is-glob: 4.0.3
       picomatch: 4.0.5
 
-  '@parcel/watcher-win32-arm64@2.6.0':
-    optional: true
+  '@parcel/watcher-win32-arm64@2.6.0': {}
 
   '@parcel/watcher-win32-x64@2.6.0': {}
 
@@ -5182,8 +5193,7 @@ snapshots:
 
   lightningcss-linux-x64-musl@1.33.0: {}
 
-  lightningcss-win32-arm64-msvc@1.33.0:
-    optional: true
+  lightningcss-win32-arm64-msvc@1.33.0: {}
 
   lightningcss-win32-x64-msvc@1.33.0: {}
 
