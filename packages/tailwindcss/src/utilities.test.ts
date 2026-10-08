@@ -30417,6 +30417,23 @@ describe('custom utilities', () => {
       `)
     })
 
+    test('repeated unsupported data type underlines each occurrence', async () => {
+      using spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      let input = css`
+        @utility paint-* {
+          paint: --value(color, [color], color);
+        }
+
+        @tailwind utilities;
+      `
+
+      await run(['paint-red'], input)
+      expect(spy.mock.calls.map((c) => c[0]).filter((m) => m.startsWith('```'))).toEqual([
+        '```css\n--value(color,[color],color)\n        ^^^^^\n```',
+        '```css\n--value(color,[color],color)\n                      ^^^^^\n```',
+      ])
+    })
+
     test('resolve literal values', async () => {
       let input = css`
         @utility example-* {
