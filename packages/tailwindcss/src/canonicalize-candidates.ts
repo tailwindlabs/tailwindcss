@@ -2101,7 +2101,13 @@ function modernizeArbitraryValuesVariant(
           if (prefixedVariant) {
             replaceObject(variant, {
               kind: 'arbitrary',
-              selector: target.value,
+              selector:
+                target.value.startsWith('::') ||
+                [':before', ':after', ':first-line', ':first-letter'].includes(
+                  target.value.toLowerCase(),
+                )
+                  ? `&${target.value}`
+                  : target.value,
               relative: false,
             } satisfies Variant)
 
