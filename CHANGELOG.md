@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add a native Windows ARM64 standalone executable
+- Add a native Windows ARM64 standalone executable ([20552](https://github.com/tailwindlabs/tailwindcss/pull/20552))
 - Add `@tailwindcss/turbopack` package to run Tailwind CSS with Next.js ([20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))
 
 ### Fixed
