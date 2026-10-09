@@ -31,6 +31,23 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([])
     })
 
+    it('should end a comment at `*/` even when it is preceded by a `\\`', () => {
+      expect(
+        parse(css`
+          /* C:\temp\*/
+          .foo {
+            color: red;
+          }
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+      ])
+    })
+
     it('should parse a comment inside of a selector and ignore it', () => {
       expect(
         parse(css`
@@ -443,6 +460,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             kind: 'declaration',
             property: '--foo',
             value: '/* This is not the end \\; this is also not the end ; */ but this is',
+            important: false,
+          },
+        ])
+      })
+
+      it('should end a comment in a custom property at `*/` even when it is preceded by a `\\`', () => {
+        expect(
+          parse(css`
+            --foo: /* C:\temp\*/ bar;
+            --bar: /* baz */ qux;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '/* C:\\temp\\*/ bar',
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            value: '/* baz */ qux',
             important: false,
           },
         ])
