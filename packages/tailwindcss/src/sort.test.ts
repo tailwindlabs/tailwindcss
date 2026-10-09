@@ -24,10 +24,7 @@ const table = [
   // Logical sizing utilities
   ['opacity-50 inline-full mx-1', 'mx-1 inline-full opacity-50'],
   ['hover:max-inline-4 hover:px-4 hover:mx-auto', 'hover:mx-auto hover:max-inline-4 hover:px-4'],
-  [
-    'min-inline-1 max-inline-1 inline-1 min-block-1 max-block-1 block-1',
-    'block-1 max-block-1 min-block-1 inline-1 max-inline-1 min-inline-1',
-  ],
+  ['inline-1 h-1 w-1 block-1', 'block-1 inline-1 h-1 w-1'],
 
   // Utilities with important
   ['px-3 py-4! p-1', 'p-1 px-3 py-4!'],
