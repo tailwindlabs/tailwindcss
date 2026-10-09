@@ -747,6 +747,9 @@ export async function compileAst(
     }
   }
 
+  // Avoid retaining loader callbacks, which may keep build tool state alive.
+  let { from, polyfills } = opts
+
   return {
     sources,
     root,
@@ -757,7 +760,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -783,7 +786,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -791,7 +794,7 @@ export async function compileAst(
         onInvalidCandidate,
       }).astNodes
 
-      if (opts.from) {
+      if (from) {
         walk(newNodes, (node) => {
           // We do this conditionally to preserve source locations from both
           // `@utility` and `@custom-variant`. Even though generated nodes are
@@ -805,7 +808,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (!didAddExternalVariable && previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -813,7 +816,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast, designSystem, opts.polyfills)
+      compiled = optimizeAst(ast, designSystem, polyfills)
       return compiled
     },
   }
@@ -835,6 +838,7 @@ export async function compile(
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
+  let from = opts.from
 
   return {
     ...api,
@@ -845,7 +849,7 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst, !!opts.from)
+      compiledCss = toCss(newAst, !!from)
       compiledAst = newAst
 
       return compiledCss
