@@ -24,6 +24,9 @@ jobs:
           - name: Windows
             os: windows-latest
 
+          - name: Windows ARM64
+            os: windows-11-arm
+
           - name: Linux
             os: namespace-profile-default
 
@@ -38,13 +41,18 @@ jobs:
           - oxide
           - webpack
 
-        # Exclude windows and macos from being built on feature branches
+        # Feature branches opt into Windows/macOS (including ARM64) tests with [ci-all]
         run-all:
           - ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.body, '[ci-all]') }}
         exclude:
           - run-all: false
             runner:
               name: Windows
+
+          - run-all: false
+            runner:
+              name: Windows ARM64
+
           - run-all: false
             runner:
               name: macOS
