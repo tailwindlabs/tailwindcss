@@ -10,6 +10,7 @@ import {
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
+import Module from 'node:module'
 import path from 'node:path'
 import type { Environment, InternalResolveOptions, Plugin, ResolvedConfig } from 'vite'
 import * as vite from 'vite'
@@ -308,6 +309,28 @@ function idToPath(id: string) {
   return path.resolve(id.replace(/\?.*$/, ''))
 }
 
+type PnpApi = {
+  resolveVirtual?: (path: string) => string | null
+}
+
+function devirtualizeScannerSourceBase(base: string) {
+  let findPnpApi = (
+    Module as typeof Module & {
+      findPnpApi?: (lookupSource: string) => PnpApi | null
+    }
+  ).findPnpApi
+
+  let resolved = findPnpApi?.(base)?.resolveVirtual?.(base)
+
+  // Yarn's JavaScript filesystem layer can access virtual package paths, but
+  // the native scanner cannot. Keep the original path everywhere else and
+  // only devirtualize the base handed to the filesystem scanner. Paths inside
+  // ZIP archives are still virtual filesystems, so leave those untouched.
+  return resolved && !resolved.split(/[\\/]/).some((segment) => segment.endsWith('.zip'))
+    ? resolved
+    : base
+}
+
 /**
  * A Map that can generate default values for keys that don't exist.
  * Generated default values are added to the map to avoid recomputation.
@@ -431,7 +454,12 @@ class Root {
         return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
 
-      this.scanner = new Scanner({ sources })
+      let scannerSources = sources.map((source) => {
+        let base = devirtualizeScannerSourceBase(source.base)
+        return { ...source, base }
+      })
+
+      this.scanner = new Scanner({ sources: scannerSources })
       DEBUG && I.end('Setup scanner')
     } else {
       for (let buildDependency of this.buildDependencies.keys()) {
