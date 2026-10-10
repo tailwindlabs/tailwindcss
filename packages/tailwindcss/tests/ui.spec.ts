@@ -1513,6 +1513,58 @@ test.skip("::file-selector-button can receive a border with just the 'border' ut
   )
 })
 
+test('sr-only also hides the caption of a table', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <table id="table" class="sr-only">
+        <caption id="caption">
+          Caption
+        </caption>
+        <tbody>
+          <tr>
+            <td>Cell</td>
+          </tr>
+        </tbody>
+      </table>
+    `,
+  )
+
+  // Firefox applies the `clip-path` of the `<table>` to its inner grid box, and
+  // a `<caption>` is rendered in the outer table wrapper box, so the caption is
+  // not clipped by the table itself and must be clipped explicitly. Asserting
+  // the rule that does it is all that can run here: the bug only reproduces in
+  // Firefox, which is not available in this environment.
+  expect(await getPropertyValue('#caption', 'clip-path')).toEqual('inset(50%)')
+})
+
+test('not-sr-only also unclips the caption of a table', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <table id="table" class="sr-only md:not-sr-only">
+        <caption id="caption">
+          Caption
+        </caption>
+        <tbody>
+          <tr>
+            <td>Cell</td>
+          </tr>
+        </tbody>
+      </table>
+    `,
+  )
+
+  // the caption must become visible again together with the table it reveals,
+  // so the responsive reset has to win over the base `sr-only` rule
+  await page.setViewportSize({ width: 640, height: 768 })
+  expect(await getPropertyValue('#caption', 'clip-path')).toEqual('inset(50%)')
+
+  await page.setViewportSize({ width: 1024, height: 768 })
+  expect(await getPropertyValue('#table', 'clip-path')).toEqual('none')
+  expect(await getPropertyValue('#caption', 'clip-path')).toEqual('none')
+})
+
 test('composing shadow, inset shadow, ring, and inset ring', async ({ page }) => {
   let { getPropertyList } = await render(
     page,

@@ -19,6 +19,10 @@ test('sr-only', async () => {
       position: absolute;
       overflow: hidden;
     }
+
+    .sr-only > caption {
+      clip-path: inset(50%);
+    }
     "
   `)
   expect(await run(['-sr-only', 'sr-only-[var(--value)]', 'sr-only/foo'])).toEqual('')
@@ -36,6 +40,10 @@ test('not-sr-only', async () => {
       padding: 0;
       position: static;
       overflow: visible;
+    }
+
+    .not-sr-only > caption {
+      clip-path: none;
     }
     "
   `)
