@@ -47,6 +47,8 @@ async function run() {
   }
 
   if (command === 'canonicalize') {
+    console.log = console.info = console.debug = console.error
+
     let result = await canonicalize.runCommandLine({ argv: argv.slice(1) })
 
     if (result.stdout.length > 0) {
