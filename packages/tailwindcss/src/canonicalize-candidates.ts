@@ -1770,7 +1770,9 @@ function isAttributeSelector(node: SelectorParser.SelectorNode): boolean {
 // colon. See: https://www.w3.org/TR/selectors-4/#pseudo-element-syntax
 const LEGACY_PSEUDO_ELEMENTS = new Set([':before', ':after', ':first-line', ':first-letter'])
 
-function isPseudoElement(node: SelectorParser.SelectorNode): boolean {
+function isPseudoElement(
+  node: SelectorParser.SelectorNode | SelectorParser.SelectorFunctionNode,
+): boolean {
   return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value.toLowerCase())
 }
 
