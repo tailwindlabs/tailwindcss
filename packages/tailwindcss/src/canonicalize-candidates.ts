@@ -3055,17 +3055,17 @@ function* combinations<T>(arr: T[]): Generator<T[]> {
   }
 }
 
-function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+export function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
   // @ts-expect-error Set.prototype.intersection is only available in Node.js v22+
   if (typeof a.intersection === 'function') return a.intersection(b)
 
   // Polyfill for environments that do not support Set.prototype.intersection yet
   if (a.size === 0 || b.size === 0) return new Set<T>()
 
-  let result = new Set<T>(a)
-  for (let item of b) {
-    if (!result.has(item)) {
-      result.delete(item)
+  let result = new Set<T>()
+  for (let item of a) {
+    if (b.has(item)) {
+      result.add(item)
     }
   }
 
