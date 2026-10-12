@@ -250,7 +250,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // as bare modifiers). Convert the complex numbers to arbitrary values instead.
       ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
       ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
-      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
+      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/[12.345%]'],
+      ['[color:theme(colors.red.500/.29)]', 'text-red-500/29'],
       ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
 
       // Arbitrary property that already contains a modifier
@@ -622,6 +623,43 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
               --*: initial;
               --breakpoint-md: 48rem;
               --container-3xl: 48rem;
+            }
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+
+      // A named modifier reads from the `--opacity` namespace first, so only use
+      // it when it results in the same opacity as the inline `theme(…)` alpha.
+      test.each([
+        // `--opacity-*` with a different opacity
+        ['[color:theme(colors.red.500/50%)]', 'text-red-500/[50%]'],
+        ['[color:theme(colors.red.500/.12)]', 'text-red-500/[12%]'],
+        ['[color:theme(colors.red.500/.29)]', 'text-red-500/[29%]'],
+        ['[color:theme(colors.red.500/40%)]', 'text-red-500/[40%]'],
+
+        // `--opacity-*` with the same opacity
+        ['[color:theme(colors.red.500/75%)]', 'text-red-500/75'],
+        ['[color:theme(colors.red.500/.25)]', 'text-red-500/25'],
+
+        // No `--opacity-*`
+        ['[color:theme(colors.red.500/.3)]', 'text-red-500/30'],
+      ])(
+        `migrate an inline \`theme(…)\` alpha to a modifier ${testName}`,
+        { timeout },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+            ${theme} {
+              --*: initial;
+              --color-red-500: oklch(63.7% 0.237 25.331);
+              --opacity-12: 0.5;
+              --opacity-25: 25%;
+              --opacity-29: 0.5;
+              --opacity-40: var(--my-opacity);
+              --opacity-50: 10%;
+              --opacity-75: 0.75;
             }
           `
 

@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure cached compilers don't keep `loadModule` and `loadStylesheet` callbacks alive after compilation ([#20531](https://github.com/tailwindlabs/tailwindcss/pull/20531))
 - Canonicalization: keep the `&` when moving a pseudo-element into `*` or `**` (e.g. `[&_::before]:flex` → `**:[&::before]:flex`) ([#20550](https://github.com/tailwindlabs/tailwindcss/pull/20550))
 - Fix `Set.prototype.intersection` polyfill in `canonicalizeCandidates(…)` on Node.js < 22, which returned the first set instead of the intersection ([#20562](https://github.com/tailwindlabs/tailwindcss/pull/20562))
+- Canonicalization: fix inline `theme(…)` alphas with more than 2 decimals being migrated to a modifier that changes the opacity by a factor of 100 (e.g. `theme(colors.red.500/.12345)` → `text-red-500/[12.345%]`, not `text-red-500/[12.345]`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
+- Canonicalization: keep inline `theme(…)` alphas as an arbitrary percentage when a custom `--opacity-*` theme value would change the opacity (e.g. `theme(colors.red.500/50%)` → `text-red-500/[50%]` with `--opacity-50: 10%`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
 
 ## [4.3.3] - 2026-07-16
 

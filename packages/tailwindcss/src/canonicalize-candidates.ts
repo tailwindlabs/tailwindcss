@@ -866,17 +866,13 @@ function createConverterCache(
 
           // 50% -> /50
           if (/^\d+%$/.test(modifierPart)) {
-            modifier = { kind: 'named', value: modifierPart.slice(0, -1) }
+            modifier = toOpacityModifier(Number(modifierPart.slice(0, -1)))
           }
 
           // .12 -> /12
-          // .12345 -> /[12.345]
+          // .12345 -> /[12.345%]
           else if (/^0?\.\d+$/.test(modifierPart)) {
-            let value = Number(modifierPart) * 100
-            modifier = {
-              kind: Number.isInteger(value) ? 'named' : 'arbitrary',
-              value: value.toString(),
-            }
+            modifier = toOpacityModifier(toPercentage(Number(modifierPart)))
           }
 
           // Anything else becomes arbitrary
@@ -892,6 +888,33 @@ function createConverterCache(
       })
 
       return [result, modifier]
+    }
+
+    function toOpacityModifier(percentage: number): CandidateModifier {
+      // A named modifier reads from the `--opacity-*` theme values first, e.g.:
+      // `--opacity-50: 10%` makes `/50` a 10% opacity. Only use it when it
+      // results in the same opacity.
+      if (Number.isInteger(percentage)) {
+        let opacity = designSystem.theme.resolveValue(`${percentage}`, ['--opacity'])
+        if (opacity === null) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+
+        let themePercentage = opacity.endsWith('%')
+          ? Number(opacity.slice(0, -1))
+          : toPercentage(Number(opacity))
+        if (themePercentage === percentage) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+      }
+
+      return { kind: 'arbitrary', value: `${percentage}%` }
+    }
+
+    function toPercentage(value: number) {
+      // Round to get rid of floating point noise, e.g.: `.29 * 100` is
+      // `28.999999999999996`.
+      return Number((value * 100).toFixed(10))
     }
 
     function pathToVariableName(path: string, shouldPrefix = true) {
