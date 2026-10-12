@@ -407,6 +407,50 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       return result ?? new Set<string>()
     })
 
+    // A replacement can only ever have the same signature as a combination of
+    // candidates if every property it sets is also set by one of the
+    // candidates in that combination. Each candidate in such a combination
+    // also lists that replacement in its `otherUtilities`, so a replacement
+    // whose properties are not covered by all the candidates that list it can
+    // never be used.
+    //
+    // Dropping those replacements up front is important for performance: some
+    // utilities set a lot of properties (e.g.: `sr-only`, or a project
+    // `@utility` used as a component class). Without this step they link
+    // almost every candidate to every other candidate, and since we try every
+    // combination of linked candidates, the work doubles with every candidate
+    // in such a group.
+    //
+    // E.g.: `relative` and `mt-1` are both covered by `sr-only` (it sets
+    // `position` and `margin-top`), but `sr-only` also sets properties like
+    // `clip-path` that none of the candidates set, so it can never be a valid
+    // replacement and should not link them.
+    let coveredProperties = new DefaultMap((_replacement: string) => new Set<string>())
+    for (let [idx, replacements] of otherUtilities.entries()) {
+      for (let replacement of replacements) {
+        let covered = coveredProperties.get(replacement)
+        for (let property of candidatePropertiesValues[idx].keys()) {
+          covered.add(property)
+        }
+      }
+    }
+
+    let isPossibleReplacement = new DefaultMap((replacement: string) => {
+      let covered = coveredProperties.get(replacement)
+      for (let property of computeUtilitiesPropertiesLookup.get(replacement).keys()) {
+        if (!covered.has(property)) return false
+      }
+      return true
+    })
+
+    otherUtilities = otherUtilities.map((replacements) => {
+      let result = new Set<string>()
+      for (let replacement of replacements) {
+        if (isPossibleReplacement.get(replacement)) result.add(replacement)
+      }
+      return result
+    })
+
     // Link each candidate that could be linked via another utility
     // (intersection). This way we can reduce the amount of required combinations.
     //
@@ -474,6 +518,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         if (combo.some((idx) => drop.has(candidates[idx]))) continue // Skip already dropped items
 
         let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
+
+        // Computing the signature of the combination is expensive, so skip it
+        // when there is nothing to compare it against.
+        if (potentialReplacements.size === 0) continue
 
         let collapsed = combo
           .map((idx) => candidates[idx])

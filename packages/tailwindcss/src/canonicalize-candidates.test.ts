@@ -1588,6 +1588,76 @@ describe('regressions', () => {
     })
   }
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20557
+  test(
+    'collapse does not try every combination of candidates linked by a utility that sets many properties',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @utility pill {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          height: 2rem;
+          padding: 0.25rem 0.75rem;
+          margin: 0;
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+          font-weight: 500;
+          color: white;
+          background-color: black;
+          white-space: nowrap;
+          overflow: hidden;
+          cursor: pointer;
+        }
+      `)
+
+      // Every candidate sets a property that `sr-only`, `not-sr-only` or
+      // `pill` also sets, so they used to end up in one group of linked
+      // candidates. Trying every combination of 2^n candidates of that group
+      // took tens of seconds.
+      let candidates = [
+        'relative',
+        'mt-1',
+        'mr-2',
+        'mb-3',
+        'ml-4',
+        'pt-1',
+        'pr-2',
+        'pb-3',
+        'pl-4',
+        'w-64',
+        'h-10',
+        'overflow-x-auto',
+        'overflow-y-hidden',
+        'whitespace-nowrap',
+        'flex',
+        'items-center',
+        'gap-2.5',
+        'rounded-full',
+        'bg-white',
+        'cursor-pointer',
+        'font-semibold',
+        'text-sm',
+        'leading-5',
+      ]
+
+      let start = performance.now()
+      let result = designSystem.canonicalizeCandidates(candidates, DEFAULT_CANONICALIZATION_OPTIONS)
+      let duration = performance.now() - start
+
+      expect(result).toEqual([
+        ...candidates.filter((candidate) => candidate !== 'text-sm' && candidate !== 'leading-5'),
+        'text-sm/5',
+      ])
+      expect(duration).toBeLessThan(5_000)
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss/pull/19727
   test(
     'collapse does not crash when utilities with no standard properties are present',
