@@ -1,12 +1,15 @@
 import path from 'node:path'
 import { PassThrough, Readable } from 'node:stream'
 import { fileURLToPath } from 'node:url'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { runCommandLine, streamStdin } from '.'
 import { normalizeWindowsSeparators } from '../../utils/test-helpers'
 
 let css = normalizeWindowsSeparators(
   path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/input.css'),
+)
+let cssWithPluginLogs = normalizeWindowsSeparators(
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'fixtures/input-with-plugin-logs.css'),
 )
 
 describe('runCommandLine', { timeout: 30_000 }, () => {
@@ -164,6 +167,30 @@ describe('runCommandLine', { timeout: 30_000 }, () => {
       '{"input":"py-3 p-1 px-3","output":"p-3","changed":true}\n' +
         '{"input":"mt-2 mr-2 mb-2 ml-2","output":"m-2","changed":true}\n',
     )
+  })
+
+  test('writes plugin logs to stderr', async () => {
+    let console = globalThis.console
+    using stdout = vi.spyOn(process.stdout, 'write').mockImplementation(() => true)
+    using stderr = vi.spyOn(process.stderr, 'write').mockImplementation(() => true)
+
+    let result = await runCommandLine({
+      argv: ['--css', cssWithPluginLogs, 'p-4 px-2 py-2 plugin-color-red'],
+      stdinIsTTY: true,
+      stdoutIsTTY: false,
+    })
+
+    expect(result).toEqual({
+      exitCode: 0,
+      stdout: 'p-2 plugin-color-red',
+      stderr: '',
+    })
+    expect(stdout).not.toHaveBeenCalled()
+
+    let logs = stderr.mock.calls.map(([chunk]) => chunk)
+    expect(logs).toContain('hello from a plugin\n')
+    expect(logs).toContain('compiling plugin-color-red\n')
+    expect(globalThis.console).toBe(console)
   })
 })
 

@@ -3209,8 +3209,14 @@ test(
     },
   },
   async ({ exec, expect }) => {
-    let output = await exec('pnpm tailwindcss canonicalize --css index.css "p-4 px-2 py-2"')
+    let { stdout, stderr, exitCode } = await exec(
+      'pnpm tailwindcss canonicalize --css index.css "p-4 px-2 py-2"',
+      {},
+      { streams: true },
+    )
 
-    expect(output).toBe('p-2\n\n\nhello from a plugin\n')
+    expect(exitCode).toBe(0)
+    expect(stdout.trim()).toMatchInlineSnapshot(`"p-2"`)
+    expect(stderr.trim()).toMatchInlineSnapshot(`"hello from a plugin"`)
   },
 )
