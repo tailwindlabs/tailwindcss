@@ -26576,6 +26576,24 @@ test('text', async () => {
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
         'text-[--spacing(2)]',
+        'text-[1cap]',
+        'text-[1ic]',
+        'text-[1rex]',
+        'text-[1rch]',
+        'text-[1rcap]',
+        'text-[1ric]',
+        'text-[1svi]',
+        'text-[1svb]',
+        'text-[1svmin]',
+        'text-[1svmax]',
+        'text-[1lvi]',
+        'text-[1lvb]',
+        'text-[1lvmin]',
+        'text-[1lvmax]',
+        'text-[1dvi]',
+        'text-[1dvb]',
+        'text-[1dvmin]',
+        'text-[1dvmax]',
       ],
       css`
         @theme {
@@ -26667,6 +26685,78 @@ test('text', async () => {
 
     .text-\\[--spacing\\(2\\)\\] {
       font-size: calc(var(--spacing) * 2);
+    }
+
+    .text-\\[1cap\\] {
+      font-size: 1cap;
+    }
+
+    .text-\\[1dvb\\] {
+      font-size: 1dvb;
+    }
+
+    .text-\\[1dvi\\] {
+      font-size: 1dvi;
+    }
+
+    .text-\\[1dvmax\\] {
+      font-size: 1dvmax;
+    }
+
+    .text-\\[1dvmin\\] {
+      font-size: 1dvmin;
+    }
+
+    .text-\\[1ic\\] {
+      font-size: 1ic;
+    }
+
+    .text-\\[1lvb\\] {
+      font-size: 1lvb;
+    }
+
+    .text-\\[1lvi\\] {
+      font-size: 1lvi;
+    }
+
+    .text-\\[1lvmax\\] {
+      font-size: 1lvmax;
+    }
+
+    .text-\\[1lvmin\\] {
+      font-size: 1lvmin;
+    }
+
+    .text-\\[1rcap\\] {
+      font-size: 1rcap;
+    }
+
+    .text-\\[1rch\\] {
+      font-size: 1rch;
+    }
+
+    .text-\\[1rex\\] {
+      font-size: 1rex;
+    }
+
+    .text-\\[1ric\\] {
+      font-size: 1ric;
+    }
+
+    .text-\\[1svb\\] {
+      font-size: 1svb;
+    }
+
+    .text-\\[1svi\\] {
+      font-size: 1svi;
+    }
+
+    .text-\\[1svmax\\] {
+      font-size: 1svmax;
+    }
+
+    .text-\\[1svmin\\] {
+      font-size: 1svmin;
     }
 
     .text-\\[12px\\] {
