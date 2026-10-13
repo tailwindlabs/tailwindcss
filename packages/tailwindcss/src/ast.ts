@@ -655,6 +655,10 @@ export function optimizeAst(
           '@supports',
           // We can't write a supports query for `@property` directly so we have to test for
           // features that are added around the same time in Mozilla and Safari.
+          //
+          // Safari shipped `margin-trim` together with `@property` (Safari 16.4). We test `block`
+          // because the `inline` values were removed from the spec and newer Safari versions
+          // reject them: https://github.com/w3c/csswg-drafts/issues/13731
           '((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b))))',
           fallbackAst,
         ),
