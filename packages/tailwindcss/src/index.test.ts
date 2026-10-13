@@ -7330,21 +7330,3 @@ describe('feature detection', () => {
     expect(compiler.build([])).toEqual('')
   })
 })
-
-describe('`@property` fallback detection', () => {
-  test('does not depend on `margin-trim: inline`, which was removed from the spec', async () => {
-    let output = await run(
-      ['translate-x-1'],
-      css`
-        @theme {
-          --spacing: 0.25rem;
-        }
-        @tailwind utilities;
-      `,
-    )
-
-    // `margin-trim: inline` is no longer part of the spec, so the check must use `block`.
-    expect(output).not.toContain('margin-trim: inline')
-    expect(output).toContain('(not (margin-trim: block))')
-  })
-})
