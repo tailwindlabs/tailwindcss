@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: keep inline `theme(…)` alphas as an arbitrary percentage when a custom `--opacity-*` theme value would change the opacity (e.g. `theme(colors.red.500/50%)` → `text-red-500/[50%]` with `--opacity-50: 10%`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
 - Ensure the `@property` fallback isn't applied in Safari versions that no longer support `margin-trim: inline` ([#20569](https://github.com/tailwindlabs/tailwindcss/pull/20569))
 - Treat viewport units like `dvmin` and `svi` and font-relative units like `cap` and `rex` as lengths in arbitrary values (e.g. `text-[10dvmin]` generates `font-size` instead of `color`) ([#20516](https://github.com/tailwindlabs/tailwindcss/pull/20516))
+- Write plugin logs to stderr in `tailwindcss canonicalize` so they don't end up in the results on stdout ([#20561](https://github.com/tailwindlabs/tailwindcss/pull/20561))
 
 ## [4.3.3] - 2026-07-16
 

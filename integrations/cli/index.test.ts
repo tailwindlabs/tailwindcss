@@ -3184,3 +3184,39 @@ test(
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
+
+test(
+  'canonicalize writes plugin logs to stderr',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'plugin.js': js`
+        module.exports = function () {
+          console.log('hello from a plugin')
+        }
+      `,
+      'index.css': css`
+        @import 'tailwindcss';
+        @plugin './plugin.js';
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    let { stdout, stderr, exitCode } = await exec(
+      'pnpm tailwindcss canonicalize --css index.css "p-4 px-2 py-2"',
+      {},
+      { streams: true },
+    )
+
+    expect(exitCode).toBe(0)
+    expect(stdout.trim()).toMatchInlineSnapshot(`"p-2"`)
+    expect(stderr.trim()).toMatchInlineSnapshot(`"hello from a plugin"`)
+  },
+)
