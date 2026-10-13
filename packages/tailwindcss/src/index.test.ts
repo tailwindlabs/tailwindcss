@@ -412,7 +412,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-translate-x: 0;
             --tw-translate-y: 0;
@@ -533,7 +533,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -570,7 +570,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-leading: initial;
           }
@@ -1026,7 +1026,7 @@ describe('variant stacking', () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -1208,7 +1208,7 @@ describe('sorting', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-space-x-reverse: 0;
           }
@@ -1884,7 +1884,7 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-font-weight: initial;
           }
@@ -1933,7 +1933,7 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -6910,7 +6910,7 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -7094,7 +7094,7 @@ describe('`@property` polyfill', async () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           :root, :host {
             --inherit-no-value: initial;
             --inherit-value: red;
@@ -7328,5 +7328,23 @@ describe('feature detection', () => {
 
     // And this produces no output because no other CSS is present
     expect(compiler.build([])).toEqual('')
+  })
+})
+
+describe('`@property` fallback detection', () => {
+  test('does not depend on `margin-trim: inline`, which was removed from the spec', async () => {
+    let output = await run(
+      ['translate-x-1'],
+      css`
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @tailwind utilities;
+      `,
+    )
+
+    // `margin-trim: inline` is no longer part of the spec, so the check must use `block`.
+    expect(output).not.toContain('margin-trim: inline')
+    expect(output).toContain('(not (margin-trim: block))')
   })
 })
