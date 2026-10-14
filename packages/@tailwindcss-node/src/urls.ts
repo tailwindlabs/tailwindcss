@@ -5,7 +5,7 @@
 // Minor modifications have been made to work with the Tailwind CSS codebase
 
 import * as path from 'node:path'
-import { toCss } from '../../tailwindcss/src/ast'
+import { toCss, type AstNode, type Declaration } from '../../tailwindcss/src/ast'
 import { parse } from '../../tailwindcss/src/css-parser'
 import { walk } from '../../tailwindcss/src/walk'
 import { normalizePath } from './normalize-path'
@@ -49,23 +49,26 @@ export async function rewriteUrls({
 
   let ast = parse(css)
 
+  await rewriteUrlsInAst({ ast, base: () => base, root })
+
+  return toCss(ast)
+}
+
+/**
+ * Rewrites the URLs of each declaration in the AST from being relative to the
+ * folder `base` returns for it to being relative to `root`. Declarations for
+ * which `base` returns `null` are left as-is.
+ */
+export async function rewriteUrlsInAst({
+  ast,
+  base,
+  root,
+}: {
+  ast: AstNode[]
+  base: (node: Declaration) => string | null
+  root: string
+}) {
   let promises: Promise<void>[] = []
-
-  function replacerForDeclaration(url: string) {
-    if (url[0] === '/') return url
-
-    let absoluteUrl = path.posix.join(normalizePath(base), url)
-    let relativeUrl = path.posix.relative(normalizePath(root), absoluteUrl)
-
-    // If the path points to a file in the same directory, `path.relative` will
-    // remove the leading `./` and we need to add it back in order to still
-    // consider the path relative
-    if (!relativeUrl.startsWith('.')) {
-      relativeUrl = './' + relativeUrl
-    }
-
-    return relativeUrl
-  }
 
   walk(ast, (node) => {
     if (node.kind !== 'declaration') return
@@ -75,10 +78,13 @@ export async function rewriteUrls({
     let isCssImageSet = cssImageSetRE.test(node.value)
 
     if (isCssUrl || isCssImageSet) {
+      let declarationBase = base(node)
+      if (declarationBase === null) return
+
       let rewriterToUse = isCssImageSet ? rewriteCssImageSet : rewriteCssUrls
 
       promises.push(
-        rewriterToUse(node.value, replacerForDeclaration).then((url) => {
+        rewriterToUse(node.value, (url) => rebaseUrl(url, declarationBase, root)).then((url) => {
           node.value = url
         }),
       )
@@ -88,8 +94,22 @@ export async function rewriteUrls({
   if (promises.length) {
     await Promise.all(promises)
   }
+}
 
-  return toCss(ast)
+function rebaseUrl(url: string, base: string, root: string) {
+  if (url[0] === '/') return url
+
+  let absoluteUrl = path.posix.join(normalizePath(base), url)
+  let relativeUrl = path.posix.relative(normalizePath(root), absoluteUrl)
+
+  // If the path points to a file in the same directory, `path.relative` will
+  // remove the leading `./` and we need to add it back in order to still
+  // consider the path relative
+  if (!relativeUrl.startsWith('.')) {
+    relativeUrl = './' + relativeUrl
+  }
+
+  return relativeUrl
 }
 
 function rewriteCssUrls(css: string, replacer: CssUrlReplacer): Promise<string> {
