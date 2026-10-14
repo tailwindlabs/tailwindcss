@@ -1456,6 +1456,44 @@ describe('options', () => {
 })
 
 describe('regressions', () => {
+  // https://github.com/tailwindlabs/tailwindcss/issues/20539
+  test(
+    'collapsing keeps the winning candidate instead of a theme value that only matches by default',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @theme {
+          --color-foreground: black;
+          --color-primary: red;
+          --color-card-checked-border: red;
+        }
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(
+        designSystem.canonicalizeCandidates(['text-foreground', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+
+      // The candidate that wins in the CSS stays, not the first one in the input
+      expect(
+        designSystem.canonicalizeCandidates(['text-card-checked-border', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+
+      // An existing candidate that wins in the CSS stays, also when it is a
+      // theme value
+      expect(
+        designSystem.canonicalizeCandidates(['text-[red]', 'text-card-checked-border'], options),
+      ).toEqual(['text-card-checked-border'])
+    },
+  )
+
   // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
   {
     test('a subset of classes should be canonicalizable', { timeout }, async () => {
@@ -1616,6 +1654,111 @@ describe('regressions', () => {
           rem: 16,
         }),
       ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
+    },
+  )
+
+  test(
+    'does not crash when a plugin utility throws for one of the candidates during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'my-px'])
+    },
+  )
+
+  test(
+    'does not crash when only another meaning of a linked candidate throws during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ addUtilities, matchUtilities }) => {
+                // The static `boom-bad` compiles, so it is linked to `safe`
+                addUtilities({
+                  '.boom-bad': { color: 'red' },
+                  '.safe': { color: 'red' },
+                })
+
+                // The functional `boom-bad` throws
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'safe', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'safe', 'my-px'])
     },
   )
 

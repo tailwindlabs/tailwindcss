@@ -442,6 +442,25 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       uniqueCombinations.get(sorted.join(','))
     }
 
+    // The position of each candidate in the CSS, the last one wins. Skip the
+    // candidates that throw, e.g. when a plugin utility with the same name
+    // throws for this value. Positions are only comparable within one call, so
+    // compute them once for all the other candidates.
+    let orderable: string[] = []
+    for (let idx of linked.keys()) {
+      try {
+        designSystem.getClassOrder([candidates[idx]])
+        orderable.push(candidates[idx])
+      } catch {}
+    }
+    let classOrder = new Map(designSystem.getClassOrder(orderable))
+    function compareOrder(a: bigint | null, z: bigint | null) {
+      if (a === z) return 0
+      if (a === null) return 1
+      if (z === null) return -1
+      return a < z ? -1 : 1
+    }
+
     // Let's try to actually collapse them now.
     let result = new Set<string>(candidates)
     let drop = new Set<string>()
@@ -461,7 +480,18 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             .join(' '),
         )
 
-        for (let replacement of potentialReplacements) {
+        // Try the candidates in the combo first, the one that wins in the CSS
+        // first. Another utility can have the same signature only because its
+        // theme value matches by default, e.g. when one of the variables is
+        // overridden in `.dark`.
+        let replacements = new Set(
+          combo
+            .map((idx) => candidates[idx])
+            .sort((a, z) => compareOrder(classOrder.get(z) ?? null, classOrder.get(a) ?? null)),
+        )
+        for (let replacement of potentialReplacements) replacements.add(replacement)
+
+        for (let replacement of replacements) {
           let signature =
             designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
