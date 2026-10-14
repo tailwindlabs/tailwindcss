@@ -2456,32 +2456,8 @@ function createUtilitySignatureCache(
   return new DefaultMap((options: SignatureOptions) => {
     return new DefaultMap<string, string | symbol>((utility) => {
       try {
-        // Ensure the prefix is added to the utility if it is not already present.
-        utility =
-          designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
-            ? `${designSystem.theme.prefix}:${utility}`
-            : utility
-
-        // Use `@apply` to normalize the selector to `.x`
-        let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
-
-        temporarilyDisableThemeInline(designSystem, () => {
-          // There's separate utility caches for respect important vs not
-          // so we want to compile them both with `@theme inline` disabled
-          for (let candidate of designSystem.parseCandidate(utility)) {
-            designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
-          }
-
-          substituteAtApply(ast, designSystem)
-        })
-
-        // Optimize the AST. This is needed such that any internal intermediate
-        // nodes are gone. This will also cleanup declaration nodes with undefined
-        // values or `--tw-sort` declarations.
-        canonicalizeAst(designSystem, ast, options)
-
         // Compute the final signature, by generating the CSS for the utility
-        let signature = toCss(ast)
+        let signature = toCss(compileUtilitySignatureAst(designSystem, utility, options))
         return signature
       } catch {
         // A unique symbol is returned to ensure that 2 signatures resulting in
@@ -2490,6 +2466,39 @@ function createUtilitySignatureCache(
       }
     })
   })
+}
+
+// Compile a utility via `@apply` and optimize the AST for signature comparison.
+function compileUtilitySignatureAst(
+  designSystem: DesignSystem,
+  utility: string,
+  options: SignatureOptions,
+) {
+  // Ensure the prefix is added to the utility if it is not already present.
+  utility =
+    designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
+      ? `${designSystem.theme.prefix}:${utility}`
+      : utility
+
+  // Use `@apply` to normalize the selector to `.x`
+  let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
+
+  temporarilyDisableThemeInline(designSystem, () => {
+    // There's separate utility caches for respect important vs not
+    // so we want to compile them both with `@theme inline` disabled
+    for (let candidate of designSystem.parseCandidate(utility)) {
+      designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
+    }
+
+    substituteAtApply(ast, designSystem)
+  })
+
+  // Optimize the AST. This is needed such that any internal intermediate
+  // nodes are gone. This will also cleanup declaration nodes with undefined
+  // values or `--tw-sort` declarations.
+  canonicalizeAst(designSystem, ast, options)
+
+  return ast
 }
 
 // #RGB
