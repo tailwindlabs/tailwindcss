@@ -573,6 +573,51 @@ it('should parse a utility with an arbitrary value with parens', () => {
   `)
 })
 
+it.each(['w-[calc(1px]', 'w-[(]', 'w-[calc(1px+(2px]', 'w-[1px)]', 'w-[a(b]c)]'])(
+  'should not parse a utility with unbalanced parens in the arbitrary value: %s',
+  (candidate) => {
+    let utilities = new Utilities()
+    utilities.functional('w', () => [])
+
+    expect(run(candidate, { utilities })).toMatchInlineSnapshot(`[]`)
+  },
+)
+
+it('should not parse an arbitrary property with unbalanced parens in the value', () => {
+  expect(run('[width:calc(1px]')).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse a utility with unbalanced parens in an arbitrary modifier', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run('bg-red-500/[calc(1]', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse an arbitrary variant with unbalanced parens in the selector', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  expect(run('[&:is(.a]:flex', { utilities })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should not parse a functional variant with unbalanced parens in the arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  let variants = new Variants()
+  variants.functional('data', () => {})
+
+  expect(run('data-[foo(]:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
+})
+
+it('should still parse balanced values containing parens and brackets', () => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
+
+  expect(run('w-[calc(1px+(2px*3))]', { utilities })).not.toEqual([])
+  expect(run("w-[calc(1px+var(--a,'('))]", { utilities })).not.toEqual([])
+})
+
 it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
@@ -1050,13 +1095,13 @@ it('should properly decode escaped underscores but not convert underscores to sp
 
   // Due to limitations in the CSS value parser, the `var(…)` inside the `calc(…)` is not correctly
   // scanned here.
-  expect(run('flex-[calc(0.2*var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+  expect(run('flex-[calc(0.2*var(--\\_foo))]', { utilities, variants })).toMatchInlineSnapshot(`
     [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "raw": "flex-[calc(0.2*var(--\\_foo)]",
+        "raw": "flex-[calc(0.2*var(--\\_foo))]",
         "root": "flex",
         "value": {
           "dataType": null,
@@ -1067,13 +1112,13 @@ it('should properly decode escaped underscores but not convert underscores to sp
       },
     ]
   `)
-  expect(run('flex-[calc(0.2*var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`
+  expect(run('flex-[calc(0.2*var(--_foo))]', { utilities, variants })).toMatchInlineSnapshot(`
     [
       {
         "important": false,
         "kind": "functional",
         "modifier": null,
-        "raw": "flex-[calc(0.2*var(--_foo)]",
+        "raw": "flex-[calc(0.2*var(--_foo))]",
         "root": "flex",
         "value": {
           "dataType": null,

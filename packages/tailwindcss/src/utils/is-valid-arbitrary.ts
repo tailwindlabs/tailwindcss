@@ -81,7 +81,8 @@ export function isValidArbitrary(input: string) {
           // the buffer can be dirty for the next use and still be correct since
           // reading/writing always starts at position `0`.
           stackPos--
-        }
+        } else if (char !== CLOSE_CURLY) return false
+
         break
       case SEMICOLON:
         if (stackPos === 0) return false
@@ -89,5 +90,5 @@ export function isValidArbitrary(input: string) {
     }
   }
 
-  return true
+  return stackPos === 0
 }

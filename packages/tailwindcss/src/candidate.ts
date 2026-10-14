@@ -427,10 +427,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     if (idx === -1 || idx === 0 || idx === baseWithoutModifier.length - 1) return
 
     let property = baseWithoutModifier.slice(0, idx)
-    let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
+    let value = decodeValidArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(value)) return
+    if (value === null) return
 
     yield {
       kind: 'arbitrary',
@@ -551,10 +551,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
         // Arbitrary values must end with a `]`.
         if (value[value.length - 1] !== ']') return
 
-        let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
+        let arbitraryValue = decodeValidArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
         // Values can't contain `;` or `}` characters at the top-level.
-        if (!isValidArbitrary(arbitraryValue)) continue
+        if (arbitraryValue === null) continue
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
         let typehint: string | null = null
@@ -615,10 +615,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
 function parseModifier(modifier: string): CandidateModifier | null {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
-    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+    let arbitraryValue = decodeValidArbitraryValue(modifier.slice(1, -1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(arbitraryValue)) return null
+    if (arbitraryValue === null) return null
 
     // Empty arbitrary values are invalid. E.g.: `data-[]:`
     //                                                 ^^
@@ -678,10 +678,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
      */
     if (variant[1] === '@' && variant.includes('&')) return null
 
-    let selector = decodeArbitraryValue(variant.slice(1, -1))
+    let selector = decodeValidArbitraryValue(variant.slice(1, -1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(selector)) return null
+    if (selector === null) return null
 
     // Empty arbitrary values are invalid. E.g.: `[]:`
     //                                            ^^
@@ -759,10 +759,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             // Discard values like `foo-[#bar]`
             if (value[0] !== '[') continue
 
-            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+            let arbitraryValue = decodeValidArbitraryValue(value.slice(1, -1))
 
             // Values can't contain `;` or `}` characters at the top-level.
-            if (!isValidArbitrary(arbitraryValue)) return null
+            if (arbitraryValue === null) return null
 
             // Empty arbitrary values are invalid. E.g.: `data-[]:`
             //                                                 ^^
@@ -783,10 +783,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             // Discard values like `foo-(--bar)`
             if (value[0] !== '(') continue
 
-            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+            let arbitraryValue = decodeValidArbitraryValue(value.slice(1, -1))
 
             // Values can't contain `;` or `}` characters at the top-level.
-            if (!isValidArbitrary(arbitraryValue)) return null
+            if (arbitraryValue === null) return null
 
             // Empty arbitrary values are invalid. E.g.: `data-():`
             //                                                 ^^
@@ -1236,4 +1236,11 @@ function escapeUnderscore(value: string): string {
   return value
     .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
     .replaceAll(' ', '_') // Replace spaces with underscores
+}
+
+// validates the raw value first and only then decodes it
+// the order matters: decoding breaks unbalanced parens (`calc(1px` becomes
+// `calc()1px`) so validating the decoded value would hide them
+function decodeValidArbitraryValue(raw: string): string | null {
+  return isValidArbitrary(raw) ? decodeArbitraryValue(raw) : null
 }
