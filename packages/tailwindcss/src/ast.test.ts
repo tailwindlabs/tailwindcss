@@ -329,6 +329,167 @@ describe('optimization', () => {
     return pretty(toCss(handleNesting(ast)))
   }
 
+  describe('combinators after a pseudo-element', () => {
+    it('drops a nested rule that puts a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            --x: 1;
+          }
+          .a::selection {
+            & > * {
+              --x: 2;
+            }
+            & .b {
+              --x: 3;
+            }
+            & + .c {
+              --x: 4;
+            }
+            & ~ .d {
+              --x: 5;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::selection {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('drops it for legacy single-colon and functional pseudo-elements', async () => {
+      expect(
+        optimize(css`
+          .a:before {
+            & > * {
+              --x: 1;
+            }
+          }
+          .a:first-line {
+            & > * {
+              --x: 2;
+            }
+          }
+          .a::part(foo) {
+            & > * {
+              --x: 3;
+            }
+          }
+          .a ::selection {
+            & > * {
+              --x: 4;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('keeps pseudo-classes after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::before {
+            & {
+              --x: 0;
+            }
+          }
+          .a::part(foo) {
+            &:hover {
+              --x: 1;
+            }
+          }
+          .a::selection {
+            &:where(.b) {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::before {
+          --x: 0;
+        }
+        .a::part(foo):hover {
+          --x: 1;
+        }
+        .a::selection:where(.b) {
+          --x: 2;
+        }
+        "
+      `)
+    })
+
+    it('keeps combinators after pseudo-classes and before pseudo-elements', async () => {
+      expect(
+        optimize(css`
+          .a:hover {
+            & > * {
+              --x: 1;
+            }
+          }
+          .a:first-child {
+            & > * {
+              --x: 2;
+            }
+          }
+          .a {
+            & > *::before {
+              --x: 3;
+            }
+            ::selection {
+              --x: 4;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a:hover > * {
+          --x: 1;
+        }
+        .a:first-child > * {
+          --x: 2;
+        }
+        .a > ::before {
+          --x: 3;
+        }
+        .a ::selection {
+          --x: 4;
+        }
+        "
+      `)
+    })
+
+    it('only drops the selectors in a list that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::before {
+            & > *,
+            &:hover {
+              --x: 1;
+            }
+          }
+          .a {
+            & ::selection > *,
+            & > .b {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::before:hover {
+          --x: 1;
+        }
+        .a > .b {
+          --x: 2;
+        }
+        "
+      `)
+    })
+  })
+
   // See: https://drafts.csswg.org/css-nesting-1/
   describe('CSS Nesting Module Level 1', () => {
     it('uses the descendant combinator by default', async () => {

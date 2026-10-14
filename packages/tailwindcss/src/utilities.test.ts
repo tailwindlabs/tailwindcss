@@ -30274,6 +30274,61 @@ describe('custom utilities', () => {
       expect(await run(['example', 'example-foo'], input)).toEqual('')
     })
 
+    test('nested child rules are dropped under pseudo-element variants', async () => {
+      let input = css`
+        @theme reference {
+          --color-red-500: #ef4444;
+        }
+
+        @utility bg-* {
+          & > * {
+            --nearest-bg: --value(--color-*);
+          }
+        }
+
+        @tailwind utilities;
+      `
+
+      let { build } = await compile(input)
+
+      expect(build(['selection:bg-red-500', 'marker:bg-red-500', 'hover:bg-red-500', 'bg-red-500']))
+        .toMatchInlineSnapshot(`
+        ".bg-red-500 {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .bg-red-500 > * {
+          --nearest-bg: var(--color-red-500, #ef4444);
+        }
+        .marker\\:bg-red-500 ::marker {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .marker\\:bg-red-500::marker {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .marker\\:bg-red-500 ::-webkit-details-marker {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .marker\\:bg-red-500::-webkit-details-marker {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .selection\\:bg-red-500 ::selection {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        .selection\\:bg-red-500::selection {
+          background-color: var(--color-red-500, #ef4444);
+        }
+        @media (hover: hover) {
+          .hover\\:bg-red-500:hover {
+            background-color: var(--color-red-500, #ef4444);
+          }
+          .hover\\:bg-red-500:hover > * {
+            --nearest-bg: var(--color-red-500, #ef4444);
+          }
+        }
+        "
+      `)
+    })
+
     test('functional utilities must resolve at least one `--value(…)`', async () => {
       let input = css`
         @utility example-* {

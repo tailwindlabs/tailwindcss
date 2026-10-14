@@ -845,10 +845,19 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             }
 
             let lastSelector = selectorStack[selectorStack.length - 1][0]
-            let selector = segment(node.selector, ',')
+            let selectors = segment(node.selector, ',')
               .map((selector) => substituteNestingSelector(selector, lastSelector))
-              .join(', ')
-            selectorStack.push([selector, node.src, node.dst])
+              .filter((selector) => !hasCombinatorAfterPseudoElement(selector))
+
+            // Every selector puts a combinator after a pseudo-element, e.g.
+            // `selection:*` on a utility with a nested `& > *` rule. The
+            // result matches nothing and is invalid CSS, so drop the rule.
+            if (selectors.length === 0) {
+              skipExit.add(node)
+              return WalkAction.Skip
+            }
+
+            selectorStack.push([selectors.join(', '), node.src, node.dst])
           }
 
           // Once we hit a rule that has at least one declaration, then we can
@@ -1342,6 +1351,27 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
         target.push(...nodes)
       }
     }
+  }
+
+  // A pseudo-element can only be followed by pseudo-classes, so a selector
+  // like `.a::before > *` or `.a ::selection .b` can never match anything.
+  function hasCombinatorAfterPseudoElement(selector: string): boolean {
+    let ast = parseSelectorCache.get(selector)
+    let complexes = ast.length === 1 && ast[0].kind === 'list' ? ast[0].nodes : ast
+
+    for (let complex of complexes) {
+      if (complex.kind !== 'complex') continue
+
+      for (let i = 0; i < complex.nodes.length - 1; i++) {
+        if (complex.nodes[i + 1].kind !== 'combinator') continue
+
+        let current = complex.nodes[i]
+        let parts = current.kind === 'compound' ? current.nodes : [current]
+        if (parts.some(isPseudoElement)) return true
+      }
+    }
+
+    return false
   }
 
   // Substitutes the `&` selector with the parent selector with `:is(…)` semantics.
@@ -1891,4 +1921,11 @@ function isVariableUsed(
 
 function extractKeyframeNames(value: string): string[] {
   return value.split(/[\s,]+/)
+}
+
+const LEGACY_PSEUDO_ELEMENTS = new Set([':before', ':after', ':first-line', ':first-letter'])
+
+function isPseudoElement(node: SelectorParser.SelectorAstNode): boolean {
+  if (node.kind !== 'selector' && node.kind !== 'function') return false
+  return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value.toLowerCase())
 }
