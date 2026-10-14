@@ -88,6 +88,25 @@ export default {
 }
 ```
 
+### Enabling or disabling the `color-mix(…)` polyfill
+
+For browsers without `color-mix()` support (Safari < 16.2), the plugin emits every `color-mix(…)` declaration twice: a plain fallback declaration, plus the original gated behind `@supports (color: color-mix(in lab, red, red))`. This is enabled by default.
+
+If every browser you support has `color-mix()`, you can set `colorMixPolyfill` to `false` to drop the duplicated declarations from the output:
+
+```js
+import tailwindcss from '@tailwindcss/postcss'
+
+export default {
+  plugins: [
+    tailwindcss({
+      // Disable the `color-mix(…)` fallbacks
+      colorMixPolyfill: false,
+    }),
+  ],
+}
+```
+
 ### Enabling or disabling `url(…)` rewriting
 
 Our PostCSS plugin can rewrite `url(…)`s for you since it also handles `@import` (no `postcss-import` is needed). This feature is enabled by default.
