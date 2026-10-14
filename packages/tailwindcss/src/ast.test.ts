@@ -1647,6 +1647,16 @@ describe('optimization', () => {
               --x: 6;
             }
           }
+          .a::-webkit-details-marker {
+            & > * {
+              --x: 7;
+            }
+          }
+          .a::view-transition-old(root) {
+            & > * {
+              --x: 8;
+            }
+          }
         `),
       ).toMatchInlineSnapshot(`""`)
     })
@@ -1722,6 +1732,129 @@ describe('optimization', () => {
         }
         .d::selection > * {
           --x: 4;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules inside a dropped rule that can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            :where(& > *) {
+              --x: 1;
+              :is(&, .b) {
+                --x: 2;
+              }
+              &:hover {
+                --x: 3;
+              }
+              @media (width >= 40rem) {
+                --x: 4;
+                :is(&, .c) {
+                  --x: 5;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(:is(:where(.a::selection > *)), .b) {
+          --x: 2;
+        }
+        @media (width >= 40rem) {
+          :is(:is(:where(.a::selection > *)), .c) {
+            --x: 5;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should drop at-rules inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @layer foo;
+              @font-face {
+                font-family: 'A';
+              }
+              @property --x {
+                syntax: '*';
+                inherits: false;
+              }
+              @scope (.from) {
+                color: red;
+              }
+              @media (width >= 40rem) {
+                :is(&, .b) {
+                  --x: 1;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @media (width >= 40rem) {
+          :is(:is(.a::selection > *), .b) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    // Only standard pseudo-elements are known to be invalid before a combinator.
+    // E.g.: framework specific deep combinators look like pseudo-elements, but
+    // they are rewritten by another compiler later on.
+    it('should keep nested rules that put a combinator after an unknown pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a {
+            ::ng-deep .b {
+              --x: 1;
+            }
+          }
+          :host {
+            & ::ng-deep > .c {
+              --x: 2;
+            }
+          }
+          .d {
+            & ::v-deep .e {
+              --x: 3;
+            }
+          }
+          .f {
+            ::deep .g {
+              --x: 4;
+            }
+          }
+          .h::unknown {
+            & > * {
+              --x: 5;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a ::ng-deep .b {
+          --x: 1;
+        }
+        :host ::ng-deep > .c {
+          --x: 2;
+        }
+        .d ::v-deep .e {
+          --x: 3;
+        }
+        .f ::deep .g {
+          --x: 4;
+        }
+        .h::unknown > * {
+          --x: 5;
         }
         "
       `)
