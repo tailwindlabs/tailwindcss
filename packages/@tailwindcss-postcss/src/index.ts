@@ -32,7 +32,7 @@ interface CacheEntry {
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}:${opts.transformAssetUrls ?? true}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
