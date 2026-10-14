@@ -47,6 +47,13 @@ impl PreProcessor for Pug {
         // ```
         let mut quote: Option<u8> = None;
 
+        // The position of the opening quote of the string we are in.
+        let mut quote_start = 0;
+
+        // Whether quotes are text until the end of the line, because a string on this line didn't
+        // end. E.g.: the `"` in a regex like `/"/`.
+        let mut quotes_are_text = false;
+
         while cursor.pos < len {
             if let Some(q) = quote {
                 match cursor.curr() {
@@ -54,11 +61,14 @@ impl PreProcessor for Pug {
                     b'\\' => cursor.advance(),
                     c if c == q => quote = None,
 
-                    // Only template literals can span multiple lines. Ending other strings at the
-                    // end of the line ensures that an unpaired quote can't hide the rest of the
-                    // file. E.g.: `// don't cache` in a `script.` block.
+                    // Only template literals can span multiple lines, so this quote didn't start
+                    // a string. E.g.: `// don't cache` in a `script.` block, or a regex like
+                    // `/"/`. Scan the rest of the line again, with quotes as text, so that an
+                    // unpaired quote can't hide brackets like the `)` of the attribute list.
                     b'\n' if q != b'`' => {
                         quote = None;
+                        quotes_are_text = true;
+                        cursor.move_to(quote_start + 1);
                         continue;
                     }
 
@@ -94,8 +104,9 @@ impl PreProcessor for Pug {
                     in_block_expansion_whitespace = false;
                 }
 
-                b'"' | b'\'' | b'`' if in_attributes => {
+                b'"' | b'\'' | b'`' if in_attributes && !quotes_are_text => {
                     quote = Some(cursor.curr());
+                    quote_start = cursor.pos;
                 }
 
                 // Whitespace ends the tag part of the line, unless it follows a `:` for block
@@ -186,6 +197,10 @@ impl PreProcessor for Pug {
 
             if !matches!(cursor.curr(), b' ' | b'\t' | b':') {
                 in_block_expansion_whitespace = false;
+            }
+
+            if cursor.curr() == b'\n' {
+                quotes_are_text = false;
             }
 
             cursor.advance();
@@ -406,6 +421,19 @@ mod tests {
 
         let input = r#"
             a(title="a \" (b") Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        // A quote in a regex is not a string, so it does not hide the `)` of the attribute list
+        let input = r#"
+            input(pattern=/"/.source)
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            input(pattern=/"/.source title="x")
             span.underline.font-bold km
         "#;
         Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
