@@ -38,7 +38,37 @@ impl PreProcessor for Pug {
         // After a block-expansion `:`, spaces/tabs before the nested tag must not clear `in_tag`.
         let mut in_block_expansion_whitespace = false;
 
+        // The quote of the string we are in, inside of an attribute list. Brackets in a string
+        // are text, so they should not be tracked. E.g.:
+        //
+        // ```pug
+        // a(title="a (b")
+        //          ^^^^^ Not an open `(`
+        // ```
+        let mut quote: Option<u8> = None;
+
         while cursor.pos < len {
+            if let Some(q) = quote {
+                match cursor.curr() {
+                    // Skip the escaped character. E.g.: `"a \" ("`
+                    b'\\' => cursor.advance(),
+                    c if c == q => quote = None,
+
+                    // Only template literals can span multiple lines. Ending other strings at the
+                    // end of the line ensures that an unpaired quote can't hide the rest of the
+                    // file. E.g.: `// don't cache` in a `script.` block.
+                    b'\n' if q != b'`' => {
+                        quote = None;
+                        continue;
+                    }
+
+                    _ => {}
+                }
+
+                cursor.advance();
+                continue;
+            }
+
             if at_line_start && !matches!(cursor.curr(), b' ' | b'\t' | b'\r' | b'\n') {
                 at_line_start = false;
 
@@ -62,6 +92,10 @@ impl PreProcessor for Pug {
                     at_line_start = true;
                     in_tag = false;
                     in_block_expansion_whitespace = false;
+                }
+
+                b'"' | b'\'' | b'`' if in_attributes => {
+                    quote = Some(cursor.curr());
                 }
 
                 // Whitespace ends the tag part of the line, unless it follows a `:` for block
@@ -354,5 +388,43 @@ mod tests {
             span.mt-2 km
         "#;
         Pug::test_extract_contains(input, vec!["underline", "font-bold", "mt-2"]);
+    }
+
+    #[test]
+    fn test_unbalanced_brackets_in_quoted_attribute_values() {
+        let input = r#"
+            a(title="a (b") Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            a(title='a [b' data-x=`{c`) Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        let input = r#"
+            a(title="a \" (b") Link
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        // A `'` or `"` string can't span lines, so an unpaired quote does not hide the next lines
+        let input = r#"
+            script.
+              fetch(url, {
+                // don't cache
+              })
+            span.underline.font-bold km
+        "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        // A `)` in a string does not close the attribute list, so dots in later attribute values
+        // are kept.
+        Pug::test(
+            "a(\n  title=\"a )\"\n  href=\"x.flex\"\n)",
+            "a \n  title=\"a )\"\n  href=\"x.flex\"\n)",
+        );
     }
 }
