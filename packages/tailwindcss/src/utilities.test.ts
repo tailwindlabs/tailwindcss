@@ -30507,6 +30507,35 @@ describe('custom utilities', () => {
       `)
     })
 
+    test('repeated unsupported data type underlines each occurrence', async () => {
+      using spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      let input = css`
+        @utility paint-* {
+          paint: --value(color, [color], color);
+        }
+
+        @tailwind utilities;
+      `
+
+      await run(['paint-red'], input)
+      expect(
+        spy.mock.calls
+          .map(([message]) => message)
+          .filter((message) => message.startsWith('```'))
+          .join('\n\n'),
+      ).toMatchInlineSnapshot(`
+        "\`\`\`css
+        --value(color,[color],color)
+                ^^^^^
+        \`\`\`
+
+        \`\`\`css
+        --value(color,[color],color)
+                              ^^^^^
+        \`\`\`"
+      `)
+    })
+
     test('resolve literal values', async () => {
       let input = css`
         @utility example-* {
