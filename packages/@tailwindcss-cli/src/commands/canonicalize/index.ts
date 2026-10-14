@@ -1,4 +1,5 @@
 import { __unstable__loadDesignSystem } from '@tailwindcss/node'
+import { Console } from 'node:console'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { createInterface } from 'node:readline'
@@ -100,13 +101,15 @@ export async function runCommandLine({
     }
 
     if (flags['--stream']) {
-      await streamStdin({
-        css: flags['--css'],
-        cwd,
-        format,
-        input: process.stdin,
-        output: process.stdout,
-      })
+      await redirectConsoleToStderr(() =>
+        streamStdin({
+          css: flags['--css'],
+          cwd,
+          format,
+          input: process.stdin,
+          output: process.stdout,
+        }),
+      )
       return { exitCode: 0, stdout: '', stderr: '' }
     }
 
@@ -116,11 +119,13 @@ export async function runCommandLine({
       return usageError('No candidate groups provided')
     }
 
-    let results = await processCandidateGroups({
-      css: flags['--css'],
-      cwd,
-      inputs,
-    })
+    let results = await redirectConsoleToStderr(() =>
+      processCandidateGroups({
+        css: flags['--css'],
+        cwd,
+        inputs,
+      }),
+    )
 
     return {
       exitCode: 0,
@@ -272,6 +277,20 @@ async function loadDesignSystem(cssFile: string | null, cwd: string) {
   return __unstable__loadDesignSystem(content, {
     base: path.dirname(resolvedCssFile),
   })
+}
+
+// Plugins can log while they load (e.g. the daisyUI banner), and while their
+// utilities are compiled during canonicalization. The results are written to
+// stdout, so send the console output to stderr instead.
+async function redirectConsoleToStderr<T>(fn: () => Promise<T>): Promise<T> {
+  let console = globalThis.console
+  globalThis.console = new Console({ stdout: process.stderr, stderr: process.stderr })
+
+  try {
+    return await fn()
+  } finally {
+    globalThis.console = console
+  }
 }
 
 function splitCandidateGroups(input: string) {

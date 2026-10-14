@@ -866,17 +866,13 @@ function createConverterCache(
 
           // 50% -> /50
           if (/^\d+%$/.test(modifierPart)) {
-            modifier = { kind: 'named', value: modifierPart.slice(0, -1) }
+            modifier = toOpacityModifier(Number(modifierPart.slice(0, -1)))
           }
 
           // .12 -> /12
-          // .12345 -> /[12.345]
+          // .12345 -> /[12.345%]
           else if (/^0?\.\d+$/.test(modifierPart)) {
-            let value = Number(modifierPart) * 100
-            modifier = {
-              kind: Number.isInteger(value) ? 'named' : 'arbitrary',
-              value: value.toString(),
-            }
+            modifier = toOpacityModifier(toPercentage(Number(modifierPart)))
           }
 
           // Anything else becomes arbitrary
@@ -892,6 +888,33 @@ function createConverterCache(
       })
 
       return [result, modifier]
+    }
+
+    function toOpacityModifier(percentage: number): CandidateModifier {
+      // A named modifier reads from the `--opacity-*` theme values first, e.g.:
+      // `--opacity-50: 10%` makes `/50` a 10% opacity. Only use it when it
+      // results in the same opacity.
+      if (Number.isInteger(percentage)) {
+        let opacity = designSystem.theme.resolveValue(`${percentage}`, ['--opacity'])
+        if (opacity === null) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+
+        let themePercentage = opacity.endsWith('%')
+          ? Number(opacity.slice(0, -1))
+          : toPercentage(Number(opacity))
+        if (themePercentage === percentage) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+      }
+
+      return { kind: 'arbitrary', value: `${percentage}%` }
+    }
+
+    function toPercentage(value: number) {
+      // Round to get rid of floating point noise, e.g.: `.29 * 100` is
+      // `28.999999999999996`.
+      return Number((value * 100).toFixed(10))
     }
 
     function pathToVariableName(path: string, shouldPrefix = true) {
@@ -1766,6 +1789,16 @@ function isAttributeSelector(node: SelectorParser.SelectorNode): boolean {
   return node.value[0] === '[' && node.value[node.value.length - 1] === ']'
 }
 
+// Pseudo-elements from CSS 1 and 2 that browsers still accept with a single
+// colon. See: https://www.w3.org/TR/selectors-4/#pseudo-element-syntax
+const LEGACY_PSEUDO_ELEMENTS = new Set([':before', ':after', ':first-line', ':first-letter'])
+
+function isPseudoElement(
+  node: SelectorParser.SelectorNode | SelectorParser.SelectorFunctionNode,
+): boolean {
+  return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value.toLowerCase())
+}
+
 function modernizeArbitraryValuesVariant(
   variant: Variant,
   options: InternalCanonicalizeOptions,
@@ -2101,7 +2134,8 @@ function modernizeArbitraryValuesVariant(
           if (prefixedVariant) {
             replaceObject(variant, {
               kind: 'arbitrary',
-              selector: target.value,
+              // Pseudo-elements can't be used inside `&:is(…)`, so keep the `&`
+              selector: isPseudoElement(target) ? `&${target.value}` : target.value,
               relative: false,
             } satisfies Variant)
 
@@ -3044,17 +3078,17 @@ function* combinations<T>(arr: T[]): Generator<T[]> {
   }
 }
 
-function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+export function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
   // @ts-expect-error Set.prototype.intersection is only available in Node.js v22+
   if (typeof a.intersection === 'function') return a.intersection(b)
 
   // Polyfill for environments that do not support Set.prototype.intersection yet
   if (a.size === 0 || b.size === 0) return new Set<T>()
 
-  let result = new Set<T>(a)
-  for (let item of b) {
-    if (!result.has(item)) {
-      result.delete(item)
+  let result = new Set<T>()
+  for (let item of a) {
+    if (b.has(item)) {
+      result.add(item)
     }
   }
 

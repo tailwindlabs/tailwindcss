@@ -38,7 +38,7 @@ test('utilities must be prefixed', async () => {
     }
 
     @media (hover: hover) {
-      .tw\\:group-hover\\:flex:is(:where(.tw\\:group):hover *), .tw\\:peer-hover\\:flex:is(:where(.tw\\:peer):hover ~ *) {
+      :is(:where(.tw\\:group):hover .tw\\:group-hover\\:flex), :is(:where(.tw\\:peer):hover ~ .tw\\:peer-hover\\:flex) {
         display: flex;
       }
 
