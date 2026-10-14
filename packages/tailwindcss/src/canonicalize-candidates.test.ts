@@ -1494,6 +1494,55 @@ describe('regressions', () => {
     },
   )
 
+  test(
+    'collapsing does not replace a theme variable with another one that only matches by default',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @theme {
+          --spacing-card: 1rem;
+          --spacing-other: 1rem;
+        }
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // The same theme variable is kept, instead of `--spacing`
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-card'], options)).toEqual([
+        'my-card',
+      ])
+      expect(designSystem.canonicalizeCandidates(['w-card', 'h-card'], options)).toEqual([
+        'size-card',
+      ])
+
+      // Different theme variables are not collapsed
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-other'], options)).toEqual([
+        'mt-card',
+        'mb-other',
+      ])
+      expect(designSystem.canonicalizeCandidates(['w-card', 'h-other'], options)).toEqual([
+        'w-card',
+        'h-other',
+      ])
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-4'], options)).toEqual([
+        'mt-card',
+        'mb-4',
+      ])
+
+      // `px-other` wins for the inline sides, so `p-card` alone is not the same
+      expect(designSystem.canonicalizeCandidates(['p-card', 'px-other'], options)).toEqual([
+        'p-card',
+        'px-other',
+      ])
+    },
+  )
+
   // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
   {
     test('a subset of classes should be canonicalizable', { timeout }, async () => {
