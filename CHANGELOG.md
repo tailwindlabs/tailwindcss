@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep the winning utility when collapsing candidates instead of a theme value that only matches by default ([#20540](https://github.com/tailwindlabs/tailwindcss/pull/20540))
 - Canonicalization: don't collapse utilities into a utility that uses another theme variable with the same default value (e.g. `mt-card mb-card` → `my-card`, not `my-4`) ([#20574](https://github.com/tailwindlabs/tailwindcss/pull/20574))
 - Ensure `@tailwindcss/postcss` rewrites relative `url(…)`s of stylesheets that are inlined before it runs (e.g. `@import`s in Vite) in optimized builds ([#20576](https://github.com/tailwindlabs/tailwindcss/pull/20576))
-- Drop nested rules that put a combinator after a pseudo-element when using pseudo-element variants (e.g. `selection:*` on a utility with a nested `& > *` rule) ([#PR_NUMBER](https://github.com/tailwindlabs/tailwindcss/pull/PR_NUMBER))
+- Drop nested rules that put a combinator after a pseudo-element when using pseudo-element variants (e.g. `selection:*` on a utility with a nested `& > *` rule) ([#20575](https://github.com/tailwindlabs/tailwindcss/pull/20575))
 
 ## [4.3.3] - 2026-07-16
 
