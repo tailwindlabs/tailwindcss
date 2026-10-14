@@ -30518,10 +30518,22 @@ describe('custom utilities', () => {
       `
 
       await run(['paint-red'], input)
-      expect(spy.mock.calls.map((c) => c[0]).filter((m) => m.startsWith('```'))).toEqual([
-        '```css\n--value(color,[color],color)\n        ^^^^^\n```',
-        '```css\n--value(color,[color],color)\n                      ^^^^^\n```',
-      ])
+      expect(
+        spy.mock.calls
+          .map(([message]) => message)
+          .filter((message) => message.startsWith('```'))
+          .join('\n\n'),
+      ).toMatchInlineSnapshot(`
+        "\`\`\`css
+        --value(color,[color],color)
+                ^^^^^
+        \`\`\`
+
+        \`\`\`css
+        --value(color,[color],color)
+                              ^^^^^
+        \`\`\`"
+      `)
     })
 
     test('resolve literal values', async () => {
