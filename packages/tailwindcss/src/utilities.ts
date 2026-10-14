@@ -6250,7 +6250,7 @@ export function createCssUtility(node: AtRule) {
           }
           fn.nodes = ValueParser.parse(args.join(','))
 
-          for (let node of fn.nodes) {
+          for (let [idx, node] of fn.nodes.entries()) {
             // Track literal values
             if (
               node.kind === 'word' &&
@@ -6278,20 +6278,12 @@ export function createCssUtility(node: AtRule) {
               )
               // TODO: Once we properly track the location of the node, we can
               //       clean this up in a better way.
-              let dataType = node.value
-              let copy = structuredClone(fn)
-              let sentinelValue = '¶'
-              walk(copy.nodes, (node) => {
-                if (node.kind === 'word' && node.value === dataType) {
-                  return WalkAction.ReplaceSkip({ kind: 'word', value: sentinelValue } as const)
-                }
-              })
-              let underline = '^'.repeat(ValueParser.toCss([node]).length)
-              let offset = ValueParser.toCss([copy]).indexOf(sentinelValue)
+              let offset = fn.value.length + 1 + ValueParser.toCss(fn.nodes.slice(0, idx)).length
+
               let output = [
                 '```css',
                 ValueParser.toCss([fn]),
-                ' '.repeat(offset) + underline,
+                ' '.repeat(offset) + '^'.repeat(node.value.length),
                 '```',
               ].join('\n')
               console.warn(output)
