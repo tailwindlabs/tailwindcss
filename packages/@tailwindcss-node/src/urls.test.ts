@@ -161,3 +161,14 @@ test('URLs can be rewritten', async () => {
     "
   `)
 })
+
+test('empty URLs are left alone', async () => {
+  let result = await rewriteUrls({
+    root: '/root',
+    base: '/root/foo/bar',
+    css: '.foo { background: url( ); background: url(./image.jpg) }',
+  })
+
+  expect(result).toContain('url( )')
+  expect(result).toContain('url(./foo/bar/image.jpg)')
+})

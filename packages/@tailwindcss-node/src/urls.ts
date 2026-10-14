@@ -174,6 +174,7 @@ function skipUrlReplacer(rawUrl: string, aliases?: string[]) {
   return (
     isExternalUrl(rawUrl) ||
     isDataUrl(rawUrl) ||
+    !rawUrl[0] ||
     !rawUrl[0].match(/[.a-zA-Z0-9_]/) ||
     functionCallRE.test(rawUrl)
   )
