@@ -64,8 +64,9 @@ impl PreProcessor for Pug {
                     // Only template literals can span multiple lines, so this quote didn't start
                     // a string. E.g.: `// don't cache` in a `script.` block, or a regex like
                     // `/"/`. Scan the rest of the line again, with quotes as text, so that an
-                    // unpaired quote can't hide brackets like the `)` of the attribute list.
-                    b'\n' if q != b'`' => {
+                    // unpaired quote can't hide brackets like the `)` of the attribute list. The
+                    // end of the input also ends the line.
+                    c if q != b'`' && (c == b'\n' || cursor.pos + 1 == len) => {
                         quote = None;
                         quotes_are_text = true;
                         cursor.move_to(quote_start + 1);
@@ -436,6 +437,10 @@ mod tests {
             input(pattern=/"/.source title="x")
             span.underline.font-bold km
         "#;
+        Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
+
+        // Also on the last line, without a trailing newline
+        let input = r#"div(data-pattern=/"/.source): span.underline.font-bold"#;
         Pug::test_extract_contains(input, vec!["underline", "font-bold"]);
 
         // A `'` or `"` string can't span lines, so an unpaired quote does not hide the next lines
