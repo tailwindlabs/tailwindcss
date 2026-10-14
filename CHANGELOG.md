@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure the `@property` fallback isn't applied in Safari versions that no longer support `margin-trim: inline` ([#20569](https://github.com/tailwindlabs/tailwindcss/pull/20569))
 - Treat viewport units like `dvmin` and `svi` and font-relative units like `cap` and `rex` as lengths in arbitrary values (e.g. `text-[10dvmin]` generates `font-size` instead of `color`) ([#20516](https://github.com/tailwindlabs/tailwindcss/pull/20516))
 - Write plugin logs to stderr in `tailwindcss canonicalize` so they don't end up in the results on stdout ([#20561](https://github.com/tailwindlabs/tailwindcss/pull/20561))
-- Ensure unbalanced brackets in Pug text and comments don't prevent class shorthands on later lines from being extracted ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547))
+- Ensure unbalanced brackets in Pug text, comments, and quoted attribute values don't prevent class shorthands on later lines from being extracted ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547))
 
 ## [4.3.3] - 2026-07-16
 
