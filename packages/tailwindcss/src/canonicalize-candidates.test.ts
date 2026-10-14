@@ -1706,6 +1706,62 @@ describe('regressions', () => {
     },
   )
 
+  test(
+    'does not crash when only another meaning of a linked candidate throws during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ addUtilities, matchUtilities }) => {
+                // The static `boom-bad` compiles, so it is linked to `safe`
+                addUtilities({
+                  '.boom-bad': { color: 'red' },
+                  '.safe': { color: 'red' },
+                })
+
+                // The functional `boom-bad` throws
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'safe', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'safe', 'my-px'])
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1579
   test('does not suggest invalid alternative when canonicalizing calc expressions', async () => {
     let designSystem = await designSystems.get(__dirname).get(css`

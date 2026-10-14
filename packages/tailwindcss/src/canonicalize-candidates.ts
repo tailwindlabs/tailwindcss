@@ -442,11 +442,18 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       uniqueCombinations.get(sorted.join(','))
     }
 
-    // The position of each candidate in the CSS, the last one wins. Only use
-    // the linked candidates, because they compiled without errors.
-    let classOrder = new Map(
-      designSystem.getClassOrder(Array.from(linked.keys(), (idx) => candidates[idx])),
-    )
+    // The position of each candidate in the CSS, the last one wins. Skip the
+    // candidates that throw, e.g. when a plugin utility with the same name
+    // throws for this value. Positions are only comparable within one call, so
+    // compute them once for all the other candidates.
+    let orderable: string[] = []
+    for (let idx of linked.keys()) {
+      try {
+        designSystem.getClassOrder([candidates[idx]])
+        orderable.push(candidates[idx])
+      } catch {}
+    }
+    let classOrder = new Map(designSystem.getClassOrder(orderable))
     function compareOrder(a: bigint | null, z: bigint | null) {
       if (a === z) return 0
       if (a === null) return 1
