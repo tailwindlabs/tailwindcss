@@ -1480,6 +1480,17 @@ describe('regressions', () => {
       expect(
         designSystem.canonicalizeCandidates(['text-foreground', 'text-primary'], options),
       ).toEqual(['text-primary'])
+
+      // The candidate that wins in the CSS stays, not the first one in the input
+      expect(
+        designSystem.canonicalizeCandidates(['text-card-checked-border', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+
+      // An existing candidate that wins in the CSS stays, also when it is a
+      // theme value
+      expect(
+        designSystem.canonicalizeCandidates(['text-[red]', 'text-card-checked-border'], options),
+      ).toEqual(['text-card-checked-border'])
     },
   )
 
@@ -1643,6 +1654,55 @@ describe('regressions', () => {
           rem: 16,
         }),
       ).toEqual(expect.arrayContaining(['border-[1.5px]', 'flex']))
+    },
+  )
+
+  test(
+    'does not crash when a plugin utility throws for one of the candidates during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'my-px'])
     },
   )
 

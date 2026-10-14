@@ -442,6 +442,18 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       uniqueCombinations.get(sorted.join(','))
     }
 
+    // The position of each candidate in the CSS, the last one wins. Only use
+    // the linked candidates, because they compiled without errors.
+    let classOrder = new Map(
+      designSystem.getClassOrder(Array.from(linked.keys(), (idx) => candidates[idx])),
+    )
+    function compareOrder(a: bigint | null, z: bigint | null) {
+      if (a === z) return 0
+      if (a === null) return 1
+      if (z === null) return -1
+      return a < z ? -1 : 1
+    }
+
     // Let's try to actually collapse them now.
     let result = new Set<string>(candidates)
     let drop = new Set<string>()
@@ -461,10 +473,15 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             .join(' '),
         )
 
-        // Try the candidates in the combo first. Another utility can have the
-        // same signature only because its theme value matches by default,
-        // e.g. when one of the variables is overridden in `.dark`.
-        let replacements = new Set(combo.map((idx) => candidates[idx]))
+        // Try the candidates in the combo first, the one that wins in the CSS
+        // first. Another utility can have the same signature only because its
+        // theme value matches by default, e.g. when one of the variables is
+        // overridden in `.dark`.
+        let replacements = new Set(
+          combo
+            .map((idx) => candidates[idx])
+            .sort((a, z) => compareOrder(classOrder.get(z) ?? null, classOrder.get(a) ?? null)),
+        )
         for (let replacement of potentialReplacements) replacements.add(replacement)
 
         for (let replacement of replacements) {
