@@ -1807,6 +1807,64 @@ describe('optimization', () => {
       `)
     })
 
+    it('should drop an `@scope` inside a dropped rule when its scope can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (.x) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @scope (.x) {
+                :is(&, .fallback) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should keep an `@scope` inside a dropped rule when its scope can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (:is(&, .fallback)) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @in-variant {
+                @scope (.x) {
+                  :is(&, .fallback) {
+                    --x: 2;
+                  }
+                  --x: 3;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(:is(.a::selection > *), .fallback)) {
+          .y {
+            --x: 1;
+          }
+        }
+        @scope (.x) {
+          :is(:is(.a::selection > *), .fallback) {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
     // Only standard pseudo-elements are known to be invalid before a combinator.
     // E.g.: framework specific deep combinators look like pseudo-elements, but
     // they are rewritten by another compiler later on.

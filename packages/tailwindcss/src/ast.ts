@@ -924,18 +924,15 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
           nodes = null // Start a new level
 
           // The current rule can never match anything. At-rules that would be
-          // emitted inside of it can't match anything either, and an `@scope`
-          // would use it in its `<scope-start>` selector. Only hoistable
-          // at-rules such as `@media` can contain nested rules that still
-          // match, so keep walking those.
+          // emitted inside of it can't match anything either. Only hoistable
+          // at-rules such as `@media` or `@scope` can contain nested rules
+          // that still match, so keep walking those.
           {
             let entry = selectorStack[selectorStack.length - 1]
             if (
               entry &&
               deadSelectorStackEntries.has(entry) &&
-              (node.name === '@scope' ||
-                node.nodes.length === 0 ||
-                !HOISTABLE_AT_RULES.has(node.name))
+              (node.nodes.length === 0 || !HOISTABLE_AT_RULES.has(node.name))
             ) {
               skipExit.add(node)
               return WalkAction.Skip
@@ -1086,6 +1083,9 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                 // selector
                 let consumedParent = false
 
+                // The resolved `<scope-start>` selector
+                let scopeStart: string | null = null
+
                 for (let paramNode of paramsAst) {
                   if (paramNode.kind === 'word' && paramNode.value === 'to') {
                     isScopeEnd = true
@@ -1127,9 +1127,28 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                     ]
                     if (!isScopeEnd && hasParent) consumedParent = true
                   }
+
+                  if (!isScopeEnd) scopeStart = ValueParser.toCss(paramNode.nodes)
                 }
 
                 params = ValueParser.toCss(paramsAst)
+
+                // The `<scope-start>` selector consumed the parent selector, and
+                // the parent can never match anything. Then nothing can be in
+                // scope, so drop the `@scope` rule. The scope can still be live
+                // when the parent is only part of the selector, e.g.:
+                // `:is(&, .fallback)`.
+                if (consumedParent && scopeStart !== null) {
+                  let entry = selectorStack[selectorStack.length - 1]
+                  if (
+                    entry &&
+                    deadSelectorStackEntries.has(entry) &&
+                    canNeverMatch(parseSelectorCache.get(scopeStart))
+                  ) {
+                    skipExit.add(node)
+                    return WalkAction.Skip
+                  }
+                }
 
                 // Mask the selector stack for the `@scope` rule's subtree, so
                 // its rules resolve like top-level rules within the scope (and
