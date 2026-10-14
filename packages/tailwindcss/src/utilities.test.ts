@@ -30274,6 +30274,46 @@ describe('custom utilities', () => {
       expect(await run(['example', 'example-foo'], input)).toEqual('')
     })
 
+    test('nested rules are dropped when a pseudo-element variant puts a combinator after a pseudo-element', async () => {
+      let input = css`
+        @theme reference {
+          --color-red-500: #ef4444;
+        }
+
+        @utility bg-* {
+          & > * {
+            --nearest-bg: --value(--color-*);
+          }
+        }
+
+        @tailwind utilities;
+      `
+
+      let { build } = await compile(input)
+
+      expect(build(['selection:bg-red-500', 'backdrop:bg-red-500', 'hover:bg-red-500']))
+        .toMatchInlineSnapshot(`
+          ".selection\\:bg-red-500 ::selection {
+            background-color: var(--color-red-500, #ef4444);
+          }
+          .selection\\:bg-red-500::selection {
+            background-color: var(--color-red-500, #ef4444);
+          }
+          .backdrop\\:bg-red-500::backdrop {
+            background-color: var(--color-red-500, #ef4444);
+          }
+          @media (hover: hover) {
+            .hover\\:bg-red-500:hover {
+              background-color: var(--color-red-500, #ef4444);
+            }
+            .hover\\:bg-red-500:hover > * {
+              --nearest-bg: var(--color-red-500, #ef4444);
+            }
+          }
+          "
+        `)
+    })
+
     test('functional utilities must resolve at least one `--value(…)`', async () => {
       let input = css`
         @utility example-* {

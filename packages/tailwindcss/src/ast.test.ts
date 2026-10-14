@@ -1612,6 +1612,121 @@ describe('optimization', () => {
       `)
     })
 
+    // A pseudo-element can only be followed by pseudo-classes, so these
+    // selectors can never match anything.
+    it('should drop nested rules that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              --x: 1;
+            }
+            & .b,
+            & + .c,
+            & ~ .d {
+              --x: 2;
+            }
+          }
+          .a ::marker {
+            & > * {
+              --x: 3;
+            }
+          }
+          .a:before {
+            & > * {
+              --x: 4;
+            }
+          }
+          .a::part(foo) {
+            & > * {
+              --x: 5;
+            }
+          }
+          .a::backdrop {
+            :where(& > :not(:last-child)) {
+              --x: 6;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should only drop the selectors in a list that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::before,
+          .b {
+            & > * {
+              --x: 1;
+            }
+          }
+          .c::after {
+            & > *,
+            &:hover {
+              --x: 2;
+            }
+          }
+          .d::backdrop {
+            :where(& > *, .e) {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a::before, .b) > * {
+          --x: 1;
+        }
+        .c::after:hover {
+          --x: 2;
+        }
+        :where(.d::backdrop > *, .e) {
+          --x: 3;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules that put a combinator before a pseudo-element or after a pseudo-class', async () => {
+      expect(
+        optimize(css`
+          .a::before {
+            &:hover {
+              --x: 1;
+            }
+          }
+          .b:first-child {
+            & > * {
+              --x: 2;
+            }
+          }
+          .c {
+            & > ::before {
+              --x: 3;
+            }
+          }
+          .d::selection > * {
+            --x: 4;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::before:hover {
+          --x: 1;
+        }
+        .b:first-child > * {
+          --x: 2;
+        }
+        .c > ::before {
+          --x: 3;
+        }
+        .d::selection > * {
+          --x: 4;
+        }
+        "
+      `)
+    })
+
     it('should not dedupe adjacent at-rules with the same prelude but different bodies', async () => {
       expect(
         optimize(css`

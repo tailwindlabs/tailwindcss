@@ -845,10 +845,19 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             }
 
             let lastSelector = selectorStack[selectorStack.length - 1][0]
-            let selector = segment(node.selector, ',')
+            let selectors = segment(node.selector, ',')
               .map((selector) => substituteNestingSelector(selector, lastSelector))
-              .join(', ')
-            selectorStack.push([selector, node.src, node.dst])
+              .filter((selector) => !canNeverMatch(parseSelectorCache.get(selector)))
+
+            // None of the selectors can match anything, e.g.: a utility with a
+            // nested `& > *` rule, used with the `selection:` variant results in
+            // `.selection\:utility::selection > *`. Drop the rule entirely.
+            if (selectors.length === 0) {
+              skipExit.add(node)
+              return WalkAction.Skip
+            }
+
+            selectorStack.push([selectors.join(', '), node.src, node.dst])
           }
 
           // Once we hit a rule that has at least one declaration, then we can
@@ -1891,4 +1900,51 @@ function isVariableUsed(
 
 function extractKeyframeNames(value: string): string[] {
   return value.split(/[\s,]+/)
+}
+
+// A pseudo-element can only be followed by pseudo-classes, so a selector that
+// puts a combinator after a pseudo-element can never match anything.
+//
+// E.g.: `.a::before > *`, `.a ::selection .b` or `:where(.a::before > *)`
+function canNeverMatch(ast: SelectorParser.SelectorAstNode[]): boolean {
+  return ast.length > 0 && ast.every(isDeadSelector)
+}
+
+function isDeadSelector(node: SelectorParser.SelectorAstNode): boolean {
+  switch (node.kind) {
+    // Every selector in the list has to be dead
+    case 'list':
+      return node.nodes.every(isDeadSelector)
+
+    case 'complex':
+      for (let i = 0; i < node.nodes.length; i++) {
+        let child = node.nodes[i]
+        if (child.kind === 'combinator') {
+          let previous = node.nodes[i - 1]
+          if (!previous) continue
+
+          if (
+            SelectorParser.isPseudoElement(previous) ||
+            (previous.kind === 'compound' && previous.nodes.some(SelectorParser.isPseudoElement))
+          ) {
+            return true
+          }
+        } else if (isDeadSelector(child)) {
+          return true
+        }
+      }
+      return false
+
+    case 'compound':
+      return node.nodes.some(isDeadSelector)
+
+    // `:is(…)` and `:where(…)` take a forgiving selector list, so they only
+    // match nothing when all of their selectors are dead.
+    case 'function':
+      if (node.value !== ':is' && node.value !== ':where') return false
+      return canNeverMatch(node.nodes)
+
+    default:
+      return false
+  }
 }
