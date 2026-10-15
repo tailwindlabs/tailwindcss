@@ -573,15 +573,20 @@ it('should parse a utility with an arbitrary value with parens', () => {
   `)
 })
 
-it.each(['w-[calc(1px]', 'w-[(]', 'w-[calc(1px+(2px]', 'w-[1px)]', 'w-[a(b]c)]'])(
-  'should not parse a utility with unbalanced parens in the arbitrary value: %s',
-  (candidate) => {
-    let utilities = new Utilities()
-    utilities.functional('w', () => [])
+it.each([
+  'w-[calc(1px]',
+  'w-[(]',
+  'w-[calc(1px+(2px]',
+  'w-[1px)]',
+  'w-[a(b]c)]',
+  'w-[var(--a,[1px)]',
+  'w-[var(--a,[1px]'
+])('should not parse a utility with unbalanced parens in the arbitrary value: %s', (candidate) => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
 
-    expect(run(candidate, { utilities })).toMatchInlineSnapshot(`[]`)
-  },
-)
+  expect(run(candidate, { utilities })).toMatchInlineSnapshot(`[]`)
+})
 
 it('should not parse an arbitrary property with unbalanced parens in the value', () => {
   expect(run('[width:calc(1px]')).toMatchInlineSnapshot(`[]`)
@@ -616,6 +621,21 @@ it('should still parse balanced values containing parens and brackets', () => {
 
   expect(run('w-[calc(1px+(2px*3))]', { utilities })).not.toEqual([])
   expect(run("w-[calc(1px+var(--a,'('))]", { utilities })).not.toEqual([])
+  expect(run('w-[var(--a,[1px])]', { utilities })).not.toEqual([])
+})
+
+it('should tolerate a `}` that does not match the open paren or bracket', () => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
+
+  //`{` is intentionally not pushed on the validation stack, so a `}` inside
+  // parens can never match the top of the stack it must not be rejected as a
+  // mismatch
+  expect(run('w-[var(--a,{})]', { utilities })).not.toEqual([])
+
+  //a `}` at the top-level is still invalid, this is also why `{` is not
+  // tracked: otherwise `[&{color:red}]:flex` would become valid
+  expect(run('w-[{}]', { utilities })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
@@ -1129,6 +1149,19 @@ it('should properly decode escaped underscores but not convert underscores to sp
       },
     ]
   `)
+})
+
+it('should not parse the unbalanced `calc(0.2*var(…)` inputs that used to be accepted', () => {
+  let utilities = new Utilities()
+  utilities.functional('flex', () => [])
+  let variants = new Variants()
+  variants.functional('supports', () => {})
+
+  // these used to parse only because the value parser mangled the missing `)`
+  // the balanced versions in the test above cover the `var(…)` inside `calc(…)`
+  // limitation of the value parser
+  expect(run('flex-[calc(0.2*var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`[]`)
+  expect(run('flex-[calc(0.2*var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
