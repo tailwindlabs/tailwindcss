@@ -425,9 +425,23 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // `position` and `margin-top`), but `sr-only` also sets properties like
     // `clip-path` that none of the candidates set, so it can never be a valid
     // replacement and should not link them.
+    //
+    // A replacement that is listed by a single candidate can't link candidates
+    // or replace a combination either, so we can drop those without computing
+    // their coverage. This keeps the common case of unrelated candidates fast.
+    let seen = new Set<string>()
+    let shared = new Set<string>()
+    for (let replacements of otherUtilities) {
+      for (let replacement of replacements) {
+        if (seen.has(replacement)) shared.add(replacement)
+        else seen.add(replacement)
+      }
+    }
+
     let coveredProperties = new DefaultMap((_replacement: string) => new Set<string>())
     for (let [idx, replacements] of otherUtilities.entries()) {
       for (let replacement of replacements) {
+        if (!shared.has(replacement)) continue
         let covered = coveredProperties.get(replacement)
         for (let property of candidatePropertiesValues[idx].keys()) {
           covered.add(property)
@@ -446,7 +460,9 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     otherUtilities = otherUtilities.map((replacements) => {
       let result = new Set<string>()
       for (let replacement of replacements) {
-        if (isPossibleReplacement.get(replacement)) result.add(replacement)
+        if (shared.has(replacement) && isPossibleReplacement.get(replacement)) {
+          result.add(replacement)
+        }
       }
       return result
     })
