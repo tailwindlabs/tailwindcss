@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/oxide` falls back to WASM on platforms without native bindings ([#20383](https://github.com/tailwindlabs/tailwindcss/pull/20383))
 - Detect classes in Ruby percent literals using angle brackets or custom delimiters (e.g. `%w<flex>`, `%w|flex|`), including in Slim and Haml templates ([#20387](https://github.com/tailwindlabs/tailwindcss/pull/20387))
 - Preserve whitespace in `--default(…)` values in custom functional utilities (e.g. `--default(box alphabetic)` no longer becomes `boxalphabetic`) ([#20392](https://github.com/tailwindlabs/tailwindcss/pull/20392))
-- Canonicalization: prevent `collapse: true` from taking exponentially longer when classes are linked through a utility that sets many properties (e.g. `sr-only`) ([#20558](https://github.com/tailwindlabs/tailwindcss/pull/20558))
 - Don't scan gitignored directories (e.g. `node_modules` and `.git`) when the project uses a safelist-style `.gitignore` (e.g. `/*` followed by `!/…` negations) ([#20397](https://github.com/tailwindlabs/tailwindcss/pull/20397))
 - Ensure root `theme('…')` namespace lookups in JavaScript plugins and config files return the full namespace object instead of the value of its `DEFAULT` key ([#20399](https://github.com/tailwindlabs/tailwindcss/pull/20399))
 - Skip ignored directories entirely when computing watch globs (`scanner.globs`), instead of walking their full contents on every rebuild ([#20408](https://github.com/tailwindlabs/tailwindcss/pull/20408))
@@ -52,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/postcss` rewrites relative `url(…)`s of stylesheets that are inlined before it runs (e.g. `@import`s in Vite) in optimized builds ([#20576](https://github.com/tailwindlabs/tailwindcss/pull/20576))
 - Drop nested rules that put a combinator after a pseudo-element when using pseudo-element variants (e.g. `selection:*` on a utility with a nested `& > *` rule) ([#20575](https://github.com/tailwindlabs/tailwindcss/pull/20575))
 - Don't generate CSS for arbitrary values with unbalanced parentheses or brackets (e.g. `w-[calc(1px]` or `[--x:a[b]`) ([#20577](https://github.com/tailwindlabs/tailwindcss/pull/20577))
+- Canonicalization: prevent `collapse: true` from taking exponentially longer when classes are linked through a utility that sets many properties (e.g. `sr-only`) ([#20558](https://github.com/tailwindlabs/tailwindcss/pull/20558))
 
 ## [4.3.3] - 2026-07-16
 
