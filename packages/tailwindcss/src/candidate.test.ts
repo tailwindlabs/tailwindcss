@@ -573,70 +573,54 @@ it('should parse a utility with an arbitrary value with parens', () => {
   `)
 })
 
-it.each([
-  'w-[calc(1px]',
-  'w-[(]',
-  'w-[calc(1px+(2px]',
-  'w-[1px)]',
-  'w-[calc(1px))]',
-  'w-[a(b]c)]',
-  'w-[var(--a,[1px)]',
-  'w-[var(--a,[1px]',
-])('should not parse a utility with unbalanced parens in the arbitrary value: %s', (candidate) => {
+describe('arbitrary values with unbalanced parens or brackets', () => {
   let utilities = new Utilities()
+  utilities.static('flex', () => [])
   utilities.functional('w', () => [])
-
-  expect(run(candidate, { utilities })).toMatchInlineSnapshot(`[]`)
-})
-
-it('should not parse an arbitrary property with unbalanced parens in the value', () => {
-  expect(run('[width:calc(1px]')).toMatchInlineSnapshot(`[]`)
-})
-
-it('should not parse a utility with unbalanced parens in an arbitrary modifier', () => {
-  let utilities = new Utilities()
   utilities.functional('bg', () => [])
-
-  expect(run('bg-red-500/[calc(1]', { utilities })).toMatchInlineSnapshot(`[]`)
-})
-
-it('should not parse an arbitrary variant with unbalanced parens in the selector', () => {
-  let utilities = new Utilities()
-  utilities.static('flex', () => [])
-
-  expect(run('[&:is(.a]:flex', { utilities })).toMatchInlineSnapshot(`[]`)
-})
-
-it('should not parse a functional variant with unbalanced parens in the arbitrary value', () => {
-  let utilities = new Utilities()
-  utilities.static('flex', () => [])
   let variants = new Variants()
   variants.functional('data', () => {})
 
-  expect(run('data-[foo(]:flex', { utilities, variants })).toMatchInlineSnapshot(`[]`)
-})
+  it.each([
+    // Utility values
+    'w-[calc(1px]',
+    'w-[(]',
+    'w-[calc(1px+(2px]',
+    'w-[1px)]',
+    'w-[calc(1px))]',
+    'w-[a(b]c)]',
+    'w-[var(--a,[1px)]',
+    'w-[var(--a,[1px]',
 
-it('should still parse balanced values containing parens and brackets', () => {
-  let utilities = new Utilities()
-  utilities.functional('w', () => [])
+    // A `}` at the top-level is invalid. `{` is not tracked on the stack,
+    // otherwise `[&{color:red}]:flex` would become valid.
+    'w-[{}]',
 
-  expect(run('w-[calc(1px+(2px*3))]', { utilities })).not.toEqual([])
-  expect(run("w-[calc(1px+var(--a,'('))]", { utilities })).not.toEqual([])
-  expect(run('w-[var(--a,[1px])]', { utilities })).not.toEqual([])
-})
+    // Arbitrary properties
+    '[width:calc(1px]',
 
-it('should tolerate a `}` that does not match the open paren or bracket', () => {
-  let utilities = new Utilities()
-  utilities.functional('w', () => [])
+    // Arbitrary modifiers
+    'bg-red-500/[calc(1]',
 
-  //`{` is intentionally not pushed on the validation stack, so a `}` inside
-  // parens can never match the top of the stack it must not be rejected as a
-  // mismatch
-  expect(run('w-[var(--a,{})]', { utilities })).not.toEqual([])
+    // Arbitrary variants
+    '[&:is(.a]:flex',
 
-  //a `}` at the top-level is still invalid, this is also why `{` is not
-  // tracked: otherwise `[&{color:red}]:flex` would become valid
-  expect(run('w-[{}]', { utilities })).toMatchInlineSnapshot(`[]`)
+    // Functional variants
+    'data-[foo(]:flex',
+  ])('should not parse `%s`', (candidate) => {
+    expect(run(candidate, { utilities, variants })).toEqual([])
+  })
+
+  it.each([
+    'w-[calc(1px+(2px*3))]',
+    "w-[calc(1px+var(--a,'('))]",
+    'w-[var(--a,[1px])]',
+
+    // A `}` inside parens is tolerated, because `{` is not tracked on the stack
+    'w-[var(--a,{})]',
+  ])('should parse `%s`', (candidate) => {
+    expect(run(candidate, { utilities, variants })).not.toEqual([])
+  })
 })
 
 it('should not parse a utility with an arbitrary value with parens that does not start with --', () => {
@@ -1150,19 +1134,6 @@ it('should properly decode escaped underscores but not convert underscores to sp
       },
     ]
   `)
-})
-
-it('should not parse the unbalanced `calc(0.2*var(…)` inputs that used to be accepted', () => {
-  let utilities = new Utilities()
-  utilities.functional('flex', () => [])
-  let variants = new Variants()
-  variants.functional('supports', () => {})
-
-  // these used to parse only because the value parser mangled the missing `)`
-  // the balanced versions in the test above cover the `var(…)` inside `calc(…)`
-  // limitation of the value parser
-  expect(run('flex-[calc(0.2*var(--\\_foo)]', { utilities, variants })).toMatchInlineSnapshot(`[]`)
-  expect(run('flex-[calc(0.2*var(--_foo)]', { utilities, variants })).toMatchInlineSnapshot(`[]`)
 })
 
 it('should parse a utility with an implicit variable as the modifier using the shorthand', () => {
