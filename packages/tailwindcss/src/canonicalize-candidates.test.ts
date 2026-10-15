@@ -7,6 +7,8 @@ import { intersection } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import plugin from './plugin'
+import { DefaultMap } from './utils/default-map'
+import { LRUDefaultMap } from './utils/lru-default-map'
 
 const css = String.raw
 const timeout = 25_000
@@ -18,16 +20,11 @@ const defaultTheme = fs.readFileSync(path.resolve(__dirname, '../theme.css'), 'u
 // Every strategy below cycles through the same ~30 inputs, so a smaller cache
 // evicts each design system right before it is used again.
 const MAX_CACHED_DESIGN_SYSTEMS = 32
-const designSystems = new Map<string, ReturnType<typeof __unstable__loadDesignSystem>>()
 
-function loadDesignSystem(input: string) {
-  let designSystem = designSystems.get(input)
-  if (designSystem) {
-    // Move it to the end, so that it is evicted last
-    designSystems.delete(input)
-  } else {
-    designSystem = __unstable__loadDesignSystem(input, {
-      base: __dirname,
+const designSystems = new DefaultMap((base: string) => {
+  return new LRUDefaultMap(MAX_CACHED_DESIGN_SYSTEMS, (input: string) => {
+    return __unstable__loadDesignSystem(input, {
+      base,
       async loadStylesheet() {
         return {
           path: '',
@@ -59,15 +56,8 @@ function loadDesignSystem(input: string) {
         }
       },
     })
-  }
-
-  designSystems.set(input, designSystem)
-  if (designSystems.size > MAX_CACHED_DESIGN_SYSTEMS) {
-    designSystems.delete(designSystems.keys().next().value!)
-  }
-
-  return designSystem
-}
+  })
+})
 
 const DEFAULT_CANONICALIZATION_OPTIONS: CanonicalizeOptions = {
   rem: 16,
@@ -125,7 +115,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       input = input.replace("@import 'tailwindcss';", "@import 'tailwindcss' prefix(tw);")
     }
 
-    let designSystem = await loadDesignSystem(input)
+    let designSystem = await designSystems.get(__dirname).get(input)
     let actual = designSystem.canonicalizeCandidates(preparedCandidates, options)
 
     try {
@@ -1479,7 +1469,7 @@ describe('regressions', () => {
     'collapsing keeps the winning candidate instead of a theme value that only matches by default',
     { timeout },
     async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
 
         @theme {
@@ -1516,7 +1506,7 @@ describe('regressions', () => {
     'collapsing does not replace a theme variable with another one that only matches by default',
     { timeout },
     async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
 
         @theme {
@@ -1564,7 +1554,7 @@ describe('regressions', () => {
   // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
   {
     test('a subset of classes should be canonicalizable', { timeout }, async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
       `)
 
@@ -1580,7 +1570,7 @@ describe('regressions', () => {
     })
 
     test('collapse canonicalization is not affected by previous calls', { timeout }, async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
       `)
 
@@ -1611,7 +1601,7 @@ describe('regressions', () => {
     'collapse does not try every combination of candidates linked by a utility that sets many properties',
     { timeout },
     async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
 
         @utility pill {
@@ -1681,7 +1671,7 @@ describe('regressions', () => {
     'collapse does not crash when utilities with no standard properties are present',
     { timeout },
     async () => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
       `)
 
@@ -1733,7 +1723,7 @@ describe('regressions', () => {
     'collapse canonicalization works for arbitrary values',
     { timeout },
     async (candidates, expected) => {
-      let designSystem = await loadDesignSystem(css`
+      let designSystem = await designSystems.get(__dirname).get(css`
         @import 'tailwindcss';
       `)
 
@@ -1901,7 +1891,7 @@ describe('regressions', () => {
 
   // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1579
   test('does not suggest invalid alternative when canonicalizing calc expressions', async () => {
-    let designSystem = await loadDesignSystem(css`
+    let designSystem = await designSystems.get(__dirname).get(css`
       @import 'tailwindcss';
     `)
 
@@ -1916,7 +1906,7 @@ describe('regressions', () => {
 
   // https://github.com/tailwindlabs/tailwindcss/issues/20295
   test('canonicalizations work when casing of arbitrary values is different', async () => {
-    let designSystem = await loadDesignSystem(css`
+    let designSystem = await designSystems.get(__dirname).get(css`
       @import 'tailwindcss';
       @theme {
         --color-brand-purple: #3f3cbb;
