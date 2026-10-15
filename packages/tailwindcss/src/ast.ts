@@ -769,6 +769,10 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
   // ```
   let maskedSelectorStacks = new Map<AstNode, typeof selectorStack>()
 
+  // Selector stack entries of nested rules that can never match anything,
+  // because they put a combinator after a pseudo-element.
+  let deadSelectorStackEntries = new WeakSet<(typeof selectorStack)[number]>()
+
   walk(ast, {
     enter(node) {
       switch (node.kind) {
@@ -845,10 +849,28 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
             }
 
             let lastSelector = selectorStack[selectorStack.length - 1][0]
-            let selector = segment(node.selector, ',')
-              .map((selector) => substituteNestingSelector(selector, lastSelector))
-              .join(', ')
-            selectorStack.push([selector, node.src, node.dst])
+            let selectors = segment(node.selector, ',').map((selector) =>
+              substituteNestingSelector(selector, lastSelector),
+            )
+            let liveSelectors = selectors.filter(
+              (selector) => !canNeverMatch(parseSelectorCache.get(selector)),
+            )
+
+            // None of the selectors can match anything, e.g.: a utility with a
+            // nested `& > *` rule, used with the `selection:` variant results in
+            // `.selection\:utility::selection > *`.
+            //
+            // The declarations of this rule are dropped, but nested rules can
+            // still match something, e.g.: `:is(&, .fallback)`. Therefore we
+            // keep the selector around and keep walking.
+            if (liveSelectors.length === 0) {
+              let entry: (typeof selectorStack)[number] = [selectors.join(', '), node.src, node.dst]
+              deadSelectorStackEntries.add(entry)
+              selectorStack.push(entry)
+              break
+            }
+
+            selectorStack.push([liveSelectors.join(', '), node.src, node.dst])
           }
 
           // Once we hit a rule that has at least one declaration, then we can
@@ -900,6 +922,33 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
         case 'at-rule': {
           nodes = null // Start a new level
+
+          // The current rule can never match anything. At-rules that would be
+          // emitted inside of it can't match anything either. Only hoistable
+          // at-rules such as `@media` or `@scope` can contain nested rules
+          // that still match, so keep walking those.
+          {
+            let entry = selectorStack[selectorStack.length - 1]
+            if (entry && deadSelectorStackEntries.has(entry)) {
+              // An empty `@layer` can establish the layer order, so we have to
+              // keep it. Emit it without the selector of the rule, because
+              // that selector can never match anything.
+              if (node.name === '@layer' && node.nodes.length === 0) {
+                let dead = selectorStack
+                selectorStack = []
+                emit(node)
+                selectorStack = dead
+
+                skipExit.add(node)
+                return WalkAction.Skip
+              }
+
+              if (node.nodes.length === 0 || !HOISTABLE_AT_RULES.has(node.name)) {
+                skipExit.add(node)
+                return WalkAction.Skip
+              }
+            }
+          }
 
           // `@layer` is hoistable, but when it's empty then we have to make
           // sure that we still emit it because this might influence the layer
@@ -1045,6 +1094,9 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                 // selector
                 let consumedParent = false
 
+                // The resolved `<scope-start>` selector
+                let scopeStart: string | null = null
+
                 for (let paramNode of paramsAst) {
                   if (paramNode.kind === 'word' && paramNode.value === 'to') {
                     isScopeEnd = true
@@ -1086,9 +1138,28 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                     ]
                     if (!isScopeEnd && hasParent) consumedParent = true
                   }
+
+                  if (!isScopeEnd) scopeStart = ValueParser.toCss(paramNode.nodes)
                 }
 
                 params = ValueParser.toCss(paramsAst)
+
+                // The `<scope-start>` selector consumed the parent selector, and
+                // the parent can never match anything. Then nothing can be in
+                // scope, so drop the `@scope` rule. The scope can still be live
+                // when the parent is only part of the selector, e.g.:
+                // `:is(&, .fallback)`.
+                if (consumedParent && scopeStart !== null) {
+                  let entry = selectorStack[selectorStack.length - 1]
+                  if (
+                    entry &&
+                    deadSelectorStackEntries.has(entry) &&
+                    canNeverMatch(parseSelectorCache.get(scopeStart))
+                  ) {
+                    skipExit.add(node)
+                    return WalkAction.Skip
+                  }
+                }
 
                 // Mask the selector stack for the `@scope` rule's subtree, so
                 // its rules resolve like top-level rules within the scope (and
@@ -1115,6 +1186,10 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 
         case 'declaration':
         case 'comment': {
+          // The current rule can never match anything, so drop its contents.
+          let entry = selectorStack[selectorStack.length - 1]
+          if (entry && deadSelectorStackEntries.has(entry)) break
+
           emit(node)
           break
         }
@@ -1891,4 +1966,118 @@ function isVariableUsed(
 
 function extractKeyframeNames(value: string): string[] {
   return value.split(/[\s,]+/)
+}
+
+// A pseudo-element can only be followed by pseudo-classes, so a selector that
+// puts a combinator after a pseudo-element can never match anything.
+//
+// E.g.: `.a::before > *`, `.a ::selection .b` or `:where(.a::before > *)`
+function canNeverMatch(ast: SelectorParser.SelectorAstNode[]): boolean {
+  return ast.length > 0 && ast.every(isDeadSelector)
+}
+
+// Standard pseudo-elements. Unknown pseudo-elements are kept as-is, because
+// some of them are not real pseudo-elements, e.g.: framework specific deep
+// combinators such as `::ng-deep` (Angular) or `::v-deep` (Vue 2) are rewritten
+// by another compiler later on.
+//
+// Note: functional pseudo-elements such as `::part(…)` are listed without
+// their arguments.
+//
+// See:
+// - https://drafts.csswg.org/css-pseudo-4/
+// - https://drafts.csswg.org/css-forms-1/
+// - https://drafts.csswg.org/css-overflow-5/
+// - https://drafts.csswg.org/css-shadow-parts-1/
+// - https://drafts.csswg.org/css-scoping-1/
+// - https://drafts.csswg.org/css-view-transitions-2/
+// - https://fullscreen.spec.whatwg.org/#::backdrop-pseudo-element
+// - https://w3c.github.io/webvtt/#css-extensions
+const STANDARD_PSEUDO_ELEMENTS = new Set([
+  '::after',
+  '::backdrop',
+  '::before',
+  '::checkmark',
+  '::column',
+  '::cue',
+  '::cue-region',
+  '::details-content',
+  '::file-selector-button',
+  '::first-letter',
+  '::first-line',
+  '::grammar-error',
+  '::highlight',
+  '::marker',
+  '::part',
+  '::picker',
+  '::picker-icon',
+  '::placeholder',
+  '::scroll-button',
+  '::scroll-marker',
+  '::scroll-marker-group',
+  '::search-text',
+  '::selection',
+  '::slotted',
+  '::spelling-error',
+  '::target-text',
+  '::view-transition',
+  '::view-transition-group',
+  '::view-transition-group-children',
+  '::view-transition-image-pair',
+  '::view-transition-new',
+  '::view-transition-old',
+])
+
+function isStandardPseudoElement(node: SelectorParser.SelectorAstNode): boolean {
+  if (node.kind !== 'selector' && node.kind !== 'function') return false
+  if (!SelectorParser.isPseudoElement(node)) return false
+
+  let value = node.value.toLowerCase()
+
+  // Legacy pseudo-elements with a single colon, e.g.: `:before`
+  if (!value.startsWith('::')) return true
+
+  // Vendor-prefixed pseudo-elements, e.g.: `::-webkit-details-marker`
+  if (value.startsWith('::-')) return true
+
+  return STANDARD_PSEUDO_ELEMENTS.has(value)
+}
+
+function isDeadSelector(node: SelectorParser.SelectorAstNode): boolean {
+  switch (node.kind) {
+    // Every selector in the list has to be dead
+    case 'list':
+      return node.nodes.every(isDeadSelector)
+
+    case 'complex':
+      for (let i = 0; i < node.nodes.length; i++) {
+        let child = node.nodes[i]
+        if (child.kind === 'combinator') {
+          let previous = node.nodes[i - 1]
+          if (!previous) continue
+
+          if (
+            isStandardPseudoElement(previous) ||
+            (previous.kind === 'compound' && previous.nodes.some(isStandardPseudoElement))
+          ) {
+            return true
+          }
+        } else if (isDeadSelector(child)) {
+          return true
+        }
+      }
+      return false
+
+    case 'compound':
+      return node.nodes.some(isDeadSelector)
+
+    // `:is(…)` and `:where(…)` take a forgiving selector list, so they only
+    // match nothing when all of their selectors are dead.
+    case 'function':
+      if (node.value !== ':is' && node.value !== ':where') return false
+      return canNeverMatch(node.nodes)
+
+    default:
+      return false
+  }
 }
