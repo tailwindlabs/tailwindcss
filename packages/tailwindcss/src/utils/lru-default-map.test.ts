@@ -58,3 +58,13 @@ it('should never hold more than the limit', () => {
 
   expect(map.size).toBeLessThanOrEqual(3)
 })
+
+it('should evict the least recently used key when keys are added with `set`', () => {
+  let map = new LRUDefaultMap(2, (key: string) => key)
+
+  map.set('a', 'a')
+  map.set('b', 'b')
+  map.set('c', 'c')
+
+  expect([...map.keys()]).toEqual(['b', 'c'])
+})

@@ -14,14 +14,21 @@ export class LRUDefaultMap<T = string, V = any> extends DefaultMap<T, V> {
   get(key: T): V {
     let value = super.get(key)
 
+    // Mark it as the most recently used
+    this.set(key, value)
+
+    return value
+  }
+
+  set(key: T, value: V): this {
     // Move it to the end, so that it is evicted last
     this.delete(key)
-    this.set(key, value)
+    super.set(key, value)
 
     if (this.size > this.limit) {
       this.delete(this.keys().next().value!)
     }
 
-    return value
+    return this
   }
 }
