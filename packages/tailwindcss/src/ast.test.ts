@@ -1777,7 +1777,6 @@ describe('optimization', () => {
         optimize(css`
           .a::selection {
             & > * {
-              @layer foo;
               @font-face {
                 font-family: 'A';
               }
@@ -1801,6 +1800,35 @@ describe('optimization', () => {
         @media (width >= 40rem) {
           :is(:is(.a::selection > *), .b) {
             --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    // An empty `@layer` can establish the layer order, so dropping it can change
+    // the cascade of other rules.
+    it('should keep `@layer` inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @layer base, utilities;
+              @layer components {
+                --x: 1;
+                :is(&, .b) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer base, utilities;
+        @layer components {
+          :is(:is(.a::selection > *), .b) {
+            --x: 2;
           }
         }
         "

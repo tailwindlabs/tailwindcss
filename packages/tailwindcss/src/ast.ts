@@ -929,13 +929,24 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
           // that still match, so keep walking those.
           {
             let entry = selectorStack[selectorStack.length - 1]
-            if (
-              entry &&
-              deadSelectorStackEntries.has(entry) &&
-              (node.nodes.length === 0 || !HOISTABLE_AT_RULES.has(node.name))
-            ) {
-              skipExit.add(node)
-              return WalkAction.Skip
+            if (entry && deadSelectorStackEntries.has(entry)) {
+              // An empty `@layer` can establish the layer order, so we have to
+              // keep it. Emit it without the selector of the rule, because
+              // that selector can never match anything.
+              if (node.name === '@layer' && node.nodes.length === 0) {
+                let dead = selectorStack
+                selectorStack = []
+                emit(node)
+                selectorStack = dead
+
+                skipExit.add(node)
+                return WalkAction.Skip
+              }
+
+              if (node.nodes.length === 0 || !HOISTABLE_AT_RULES.has(node.name)) {
+                skipExit.add(node)
+                return WalkAction.Skip
+              }
             }
           }
 
