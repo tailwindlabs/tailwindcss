@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: prevent `collapse: true` from taking exponentially longer when classes are linked through a utility that sets many properties (e.g. `sr-only`) ([#20558](https://github.com/tailwindlabs/tailwindcss/pull/20558))
 - Ensure `&` is substituted inside `:-moz-any(…)` and `:-webkit-any(…)` in custom variants (e.g. `@custom-variant firefox (:-moz-any(&));`) ([#20486](https://github.com/tailwindlabs/tailwindcss/pull/20486))
 - Ensure the standalone macOS binaries have a valid code signature, so macOS 27 no longer kills them at launch ([#20578](https://github.com/tailwindlabs/tailwindcss/pull/20578))
+- Canonicalization: round constant folded `calc(…)` results to get rid of floating point noise (e.g. `w-[calc(0.1px+0.2px)]` → `w-[0.3px]`, not `w-[0.30000000000000004px]`) ([#20580](https://github.com/tailwindlabs/tailwindcss/pull/20580))
 
 ## [4.3.3] - 2026-07-16
 
