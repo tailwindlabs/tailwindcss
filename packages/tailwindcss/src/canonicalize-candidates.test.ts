@@ -1641,7 +1641,7 @@ describe('regressions', () => {
         'rounded-full',
         'bg-white',
         'cursor-pointer',
-        'font-semibold',
+        'font-normal',
         'text-sm',
         'leading-5',
       ]
