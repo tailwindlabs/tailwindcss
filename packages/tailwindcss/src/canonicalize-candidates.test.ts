@@ -8,13 +8,21 @@ import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import plugin from './plugin'
 import { DefaultMap } from './utils/default-map'
+import { LRUDefaultMap } from './utils/lru-default-map'
 
 const css = String.raw
 const timeout = 25_000
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '../theme.css'), 'utf8')
 
+// Each design system uses ~30MB of memory, so we only keep the most recently
+// used ones. Keeping all of them runs out of memory on CI.
+//
+// Every strategy below cycles through the same ~30 inputs, so a smaller cache
+// evicts each design system right before it is used again.
+const MAX_CACHED_DESIGN_SYSTEMS = 32
+
 const designSystems = new DefaultMap((base: string) => {
-  return new DefaultMap((input: string) => {
+  return new LRUDefaultMap(MAX_CACHED_DESIGN_SYSTEMS, (input: string) => {
     return __unstable__loadDesignSystem(input, {
       base,
       async loadStylesheet() {
