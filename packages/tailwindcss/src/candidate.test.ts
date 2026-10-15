@@ -578,6 +578,7 @@ it.each([
   'w-[(]',
   'w-[calc(1px+(2px]',
   'w-[1px)]',
+  'w-[calc(1px))]',
   'w-[a(b]c)]',
   'w-[var(--a,[1px)]',
   'w-[var(--a,[1px]',
