@@ -4211,6 +4211,29 @@ describe('@custom-variant', () => {
       `)
     })
 
+    test('vendor-prefixed selector function variant', async () => {
+      expect(
+        await run(
+          ['firefox:underline'],
+          css`
+            @custom-variant firefox (:-moz-any(&));
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          :-moz-any(.firefox\\:underline) {
+            text-decoration-line: underline;
+          }
+        }
+        "
+      `)
+    })
+
     test('at-rule variant', async () => {
       expect(
         await run(
