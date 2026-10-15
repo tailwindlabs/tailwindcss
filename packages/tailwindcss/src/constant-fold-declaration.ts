@@ -205,11 +205,11 @@ export function constantFoldDeclarationAst(
               let combined: string
               switch (operator) {
                 case '*': {
-                  combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
+                  combined = `${round(constant[0] * known[0])}${constant[1] ?? known[1] ?? ''}`
                   break
                 }
                 case '+': {
-                  combined = `${constant[0] + known[0]}${constant[1] ?? known[1] ?? ''}`
+                  combined = `${round(constant[0] + known[0])}${constant[1] ?? known[1] ?? ''}`
                   break
                 }
 
@@ -254,7 +254,7 @@ export function constantFoldDeclarationAst(
             ) {
               folded = true
               return WalkAction.ReplaceSkip(
-                ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? rhs[1] ?? ''}`),
+                ValueParser.word(`${round(lhs[0] * rhs[0])}${lhs[1] ?? rhs[1] ?? ''}`),
               )
             }
             break
@@ -265,7 +265,9 @@ export function constantFoldDeclarationAst(
               lhs[1] === rhs[1] // Same unit or unitless, e.g.: `1rem + 2rem`, `8 + 6`
             ) {
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] + rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(
+                ValueParser.word(`${round(lhs[0] + rhs[0])}${lhs[1] ?? ''}`),
+              )
             }
             break
           }
@@ -275,7 +277,9 @@ export function constantFoldDeclarationAst(
               lhs[1] === rhs[1] // Same unit or unitless, e.g.: `2rem - 1rem`, `8 - 6`
             ) {
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] - rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(
+                ValueParser.word(`${round(lhs[0] - rhs[0])}${lhs[1] ?? ''}`),
+              )
             }
             break
           }
@@ -354,4 +358,11 @@ function canonicalizeDimension(
 
     default: return `${value}${unit}` // No canonicalization possible, return as-is
   }
+}
+
+// round the number to get rid of floating point noise
+// such as 0.1 + 0.2 equal to 0.30000000000000004
+function round(value: number) {
+  if (Number.isInteger(value)) return value
+  return Number(value.toPrecision(15))
 }

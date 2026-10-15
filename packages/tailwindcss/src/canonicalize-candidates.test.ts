@@ -1381,6 +1381,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
   // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1591
   test.each([
     ['w-[calc(100%/3.5)]', 'w-[calc(100%/3.5)]'], // Not w-[28.571428571428573%]
+    ['w-[calc(0.1px+0.2px)]', 'w-[0.3px]'], // Not w-[0.30000000000000004px]
+    ['m-[calc(0.3px-0.1px)]', 'm-[0.2px]'], // Not m-[0.19999999999999998px]
+    ['w-[calc(0.1*3px)]', 'w-[0.3px]'], // Not w-[0.30000000000000004px]
   ])(testName, { timeout }, async (candidate, expected) => {
     let input = css`
       @import 'tailwindcss';
