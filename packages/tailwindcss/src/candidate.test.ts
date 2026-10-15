@@ -580,7 +580,7 @@ it.each([
   'w-[1px)]',
   'w-[a(b]c)]',
   'w-[var(--a,[1px)]',
-  'w-[var(--a,[1px]'
+  'w-[var(--a,[1px]',
 ])('should not parse a utility with unbalanced parens in the arbitrary value: %s', (candidate) => {
   let utilities = new Utilities()
   utilities.functional('w', () => [])
