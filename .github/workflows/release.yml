@@ -64,6 +64,10 @@ jobs:
             strip: aarch64-linux-gnu-strip
             build-flags: --use-napi-cross
           - os: ubuntu-latest
+            target: s390x-unknown-linux-gnu
+            strip: s390x-linux-gnu-strip
+            build-flags: --use-napi-cross
+          - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             strip: arm-linux-gnueabihf-strip
             build-flags: --use-napi-cross
@@ -104,6 +108,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install binutils-aarch64-linux-gnu -y
+
+      - name: Install binutils-s390x-linux-gnu
+        if: ${{ matrix.target == 's390x-unknown-linux-gnu' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install binutils-s390x-linux-gnu -y
 
       - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
         if: ${{ contains(matrix.target, 'musl') }}
@@ -275,6 +285,7 @@ jobs:
           cp bindings-aarch64-unknown-linux-musl/* ./npm/linux-arm64-musl/
           cp bindings-armv7-unknown-linux-gnueabihf/* ./npm/linux-arm-gnueabihf/
           cp bindings-x86_64-unknown-linux-gnu/* ./npm/linux-x64-gnu/
+          cp bindings-s390x-unknown-linux-gnu/* ./npm/linux-s390x-gnu/
           cp bindings-x86_64-unknown-linux-musl/* ./npm/linux-x64-musl/
           cp bindings-x86_64-unknown-freebsd/* ./npm/freebsd-x64/
 
