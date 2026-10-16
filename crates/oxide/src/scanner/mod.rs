@@ -781,8 +781,8 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     // Scan hidden files / directories
     builder.hidden(false);
 
-    // Don't respect global gitignore files
-    builder.git_global(false);
+    // Respect global gitignore files configured in git (e.g. `core.excludesFile`)
+    builder.git_global(true);
 
     // By default, allow .gitignore files to be used regardless of whether or not
     // a .git directory is present. This is an optimization for when projects
