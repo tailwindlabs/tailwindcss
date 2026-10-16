@@ -20,8 +20,9 @@ import { expandDeclaration } from './expand-declaration'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import type { Writable } from './types'
+import { div } from './utils/decimal'
 import { DefaultMap } from './utils/default-map'
-import { dimensions } from './utils/dimensions'
+import { dimensions, numberPart } from './utils/dimensions'
 import { isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
@@ -1255,6 +1256,7 @@ function createSpacingCache(
   if (!parsed) return null
 
   let [value, unit] = parsed
+  let spacingNumber = numberPart(spacingMultiplier, unit)
 
   return new DefaultMap<string, number | null>((input) => {
     // If we already know that the spacing multiplier is 0, all spacing
@@ -1262,13 +1264,19 @@ function createSpacingCache(
     // the input value.
     if (value === 0) return null
 
-    let parsed = dimensions.get(constantFoldDeclaration(input, options?.rem ?? null))
+    let folded = constantFoldDeclaration(input, options?.rem ?? null)
+    let parsed = dimensions.get(folded)
     if (!parsed) return null
 
     let [myValue, myUnit] = parsed
     if (myUnit !== unit) return null
 
-    return myValue / value
+    //prefer the exact multiplier so that e.g. 0.6rem / 0.2rem is 3 instead
+    // of 2.9999999999999996. bare values are multiples of 0.25, so 2
+    // decimals are enough and other multipliers (e.g. 28.5px / 4px = 7.125)
+    // are still used for arbitrary values, so fall back to the float result
+    let multiplier = div(numberPart(folded, myUnit), spacingNumber, 2)
+    return multiplier === null ? myValue / value : Number(multiplier)
   })
 }
 
