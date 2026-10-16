@@ -39,6 +39,7 @@ export function optimize(
       inputSourceMap: map,
       drafts: {
         customMedia: true,
+        scrollNavigationControls: true,
       },
       nonStandard: {
         deepSelectorCombinator: true,
