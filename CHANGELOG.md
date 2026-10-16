@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: prevent `collapse: true` from taking exponentially longer when classes are linked through a utility that sets many properties (e.g. `sr-only`) ([#20558](https://github.com/tailwindlabs/tailwindcss/pull/20558))
 - Ensure `&` is substituted inside `:-moz-any(…)` and `:-webkit-any(…)` in custom variants (e.g. `@custom-variant firefox (:-moz-any(&));`) ([#20486](https://github.com/tailwindlabs/tailwindcss/pull/20486))
 - Ensure the standalone macOS binaries have a valid code signature, so macOS 27 no longer kills them at launch ([#20578](https://github.com/tailwindlabs/tailwindcss/pull/20578))
+- Ensure `@tailwindcss/turbopack` and `@tailwindcss/webpack` rebuild when the input CSS changes (e.g. `next dev` with Turbopack no longer serves the CSS of the previous edit) ([#20582](https://github.com/tailwindlabs/tailwindcss/pull/20582))
 
 ## [4.3.3] - 2026-07-16
 
