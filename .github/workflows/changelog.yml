@@ -1,0 +1,68 @@
+name: Changelog preview
+
+# Push the preview of `CHANGELOG.md`, with the entries of `.changelog/` in the `[Unreleased]`
+# section, to the `changelog` branch.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.changelog/**'
+      - 'CHANGELOG.md'
+      - 'scripts/changelog.mjs'
+      - '.github/workflows/changelog.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 24
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    name: Push preview
+
+    permissions:
+      contents: write # Required for pushing the `changelog` branch
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          # The script finds the pull request of each fragment in the history. It only needs the
+          # commits and the trees, not the file contents.
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          package-manager-cache: false
+
+      - name: Build preview
+        run: node ./scripts/changelog.mjs > "$RUNNER_TEMP/CHANGELOG.md"
+
+      # The branch has one commit with only `CHANGELOG.md`, so it keeps no history. A push with the
+      # `GITHUB_TOKEN` starts no other workflows.
+      - name: Push preview to the `changelog` branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          blob=$(git hash-object -w "$RUNNER_TEMP/CHANGELOG.md")
+          tree=$(printf '100644 blob %s\tCHANGELOG.md\n' "$blob" | git mktree)
+          commit=$(git commit-tree "$tree" -m "Preview \`CHANGELOG.md\` of ${GITHUB_SHA}")
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${commit}:refs/heads/changelog"
