@@ -92,6 +92,40 @@ test('visibility', async () => {
   ).toEqual('')
 })
 
+test('content-visibility', async () => {
+  expect(
+    await run([
+      'content-visibility-auto',
+      'content-visibility-hidden',
+      'content-visibility-visible',
+    ]),
+  ).toMatchInlineSnapshot(`
+    "
+    .content-visibility-auto {
+      content-visibility: auto;
+    }
+
+    .content-visibility-hidden {
+      content-visibility: hidden;
+    }
+
+    .content-visibility-visible {
+      content-visibility: visible;
+    }
+    "
+  `)
+  expect(
+    await run([
+      '-content-visibility-auto',
+      '-content-visibility-hidden',
+      '-content-visibility-visible',
+      'content-visibility-auto/foo',
+      'content-visibility-hidden/foo',
+      'content-visibility-visible/foo',
+    ]),
+  ).toEqual('')
+})
+
 test('position', async () => {
   expect(await run(['static', 'fixed', 'absolute', 'relative', 'sticky'])).toMatchInlineSnapshot(`
     "
