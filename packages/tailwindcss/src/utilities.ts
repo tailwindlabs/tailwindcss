@@ -2359,6 +2359,7 @@ export function createUtilities(theme: Theme) {
   staticUtility('text-nowrap', [['text-wrap', 'nowrap']])
   staticUtility('text-balance', [['text-wrap', 'balance']])
   staticUtility('text-pretty', [['text-wrap', 'pretty']])
+  staticUtility('text-stable', [['text-wrap', 'stable']])
   staticUtility('break-normal', [
     ['overflow-wrap', 'normal'],
     ['word-break', 'normal'],
