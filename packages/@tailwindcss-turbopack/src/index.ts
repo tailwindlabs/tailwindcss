@@ -32,6 +32,7 @@ export interface LoaderOptions {
 
 interface CacheEntry {
   mtimes: Map<string, number>
+  inputCss: string
   compiler: null | Awaited<ReturnType<typeof compile>>
   scanner: null | Scanner
   candidates: Set<string>
@@ -49,6 +50,7 @@ function getContextFromCache(resourceId: string, opts: LoaderOptions): CacheEntr
   if (cache.has(key)) return cache.get(key)!
   let entry: CacheEntry = {
     mtimes: new Map<string, number>(),
+    inputCss: '',
     compiler: null,
     scanner: null,
     candidates: new Set<string>(),
@@ -161,6 +163,11 @@ export default async function tailwindLoader(
 
         rebuildStrategy = 'full'
         context.mtimes.set(file, changedTime)
+      }
+
+      if (context.inputCss !== source) {
+        rebuildStrategy = 'full'
+        context.inputCss = source
       }
     }
     DEBUG && I.end('Register full rebuild paths')
