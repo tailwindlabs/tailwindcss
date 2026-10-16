@@ -1,4 +1,5 @@
-import { dimensions } from './utils/dimensions'
+import { add, div, mul, mulDiv, normalize, round, sub } from './utils/decimal'
+import { dimensions, numberPart } from './utils/dimensions'
 import { isLength } from './utils/infer-data-type'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
@@ -196,26 +197,21 @@ export function constantFoldDeclarationAst(
                 return
               }
 
-              // Re-associate nested expressions so we can still fold the known
-              // part of `x op (y op z)` when `z` is unknown.
-              //
-              // Examples:
-              // - `calc(2 * calc(3 * var(--foo)))` -> `calc(6 * var(--foo))`
-              // - `calc(1rem + calc(2rem + var(--foo)))` -> `calc(3rem + var(--foo))`
-              let combined: string
-              switch (operator) {
-                case '*': {
-                  combined = `${constant[0] * known[0]}${constant[1] ?? known[1] ?? ''}`
-                  break
-                }
-                case '+': {
-                  combined = `${constant[0] + known[0]}${constant[1] ?? known[1] ?? ''}`
-                  break
-                }
+              // re associate nested expressions so we can still fold the known
+              // part of x op (y op z) when z is unknown
+              // - calc(2 * calc(3 * var(--foo))) -> calc(6 * var(--foo))
+              // - calc(1rem + calc(2rem + var(--foo))) -> calc(3rem + var(--foo))
+              let constantNode = (lhs !== null ? lhsNode : rhsNode) as ValueParser.ValueWordNode
+              let knownNode = (
+                nestedLhs !== null ? nestedLhsNode : nestedRhsNode
+              ) as ValueParser.ValueWordNode
 
-                default:
-                  return
-              }
+              let a = numberPart(constantNode.value, constant[1])
+              let b = numberPart(knownNode.value, known[1])
+              let result = operator === '*' ? mul(a, b) : add(a, b)
+              if (result === null) return
+
+              let combined = `${result}${constant[1] ?? known[1] ?? ''}`
 
               folded = true
 
@@ -245,6 +241,10 @@ export function constantFoldDeclarationAst(
           return
         }
 
+        //both sides are dimensions, so both nodes are words
+        let lhsNumber = numberPart((lhsNode as ValueParser.ValueWordNode).value, lhs[1])
+        let rhsNumber = numberPart((rhsNode as ValueParser.ValueWordNode).value, rhs[1])
+
         switch (operator) {
           case '*': {
             if (
@@ -252,10 +252,11 @@ export function constantFoldDeclarationAst(
               (lhs[1] === null && rhs[1] !== null) || // Unitless * Unit, e.g.: `2 * 1rem`
               (lhs[1] !== null && rhs[1] === null) // Unit * Unitless, e.g.: `1rem * 2`
             ) {
+              let result = mul(lhsNumber, rhsNumber)
+              if (result === null) break
+
               folded = true
-              return WalkAction.ReplaceSkip(
-                ValueParser.word(`${lhs[0] * rhs[0]}${lhs[1] ?? rhs[1] ?? ''}`),
-              )
+              return WalkAction.ReplaceSkip(ValueParser.word(`${result}${lhs[1] ?? rhs[1] ?? ''}`))
             }
             break
           }
@@ -264,8 +265,11 @@ export function constantFoldDeclarationAst(
             if (
               lhs[1] === rhs[1] // Same unit or unitless, e.g.: `1rem + 2rem`, `8 + 6`
             ) {
+              let result = add(lhsNumber, rhsNumber)
+              if (result === null) break
+
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] + rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(ValueParser.word(`${result}${lhs[1] ?? ''}`))
             }
             break
           }
@@ -274,8 +278,11 @@ export function constantFoldDeclarationAst(
             if (
               lhs[1] === rhs[1] // Same unit or unitless, e.g.: `2rem - 1rem`, `8 - 6`
             ) {
+              let result = sub(lhsNumber, rhsNumber)
+              if (result === null) break
+
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${lhs[0] - rhs[0]}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(ValueParser.word(`${result}${lhs[1] ?? ''}`))
             }
             break
           }
@@ -286,19 +293,16 @@ export function constantFoldDeclarationAst(
               ((lhs[1] === null && rhs[1] === null) || // Unitless / Unitless, e.g.: `8 / 2`
                 (lhs[1] !== null && rhs[1] === null)) // Unit / Unitless, e.g.: `1rem / 2`
             ) {
-              let computed = lhs[0] / rhs[0]
-
               // Only fold with .xx precision, anything beyond that might be a bit too much.
               //
               // E.g. 100% / 3.5 = 28.571428571428573%, which is correct but not
               //      as user friendly. Especially when going from
               //      `w-[calc(100%/3.5)]` → `w-[28.571428571428573%]`
-              if (Math.round(computed * 100) / 100 !== computed) {
-                break
-              }
+              let result = div(lhsNumber, rhsNumber, 2)
+              if (result === null) break
 
               folded = true
-              return WalkAction.ReplaceSkip(ValueParser.word(`${computed}${lhs[1] ?? ''}`))
+              return WalkAction.ReplaceSkip(ValueParser.word(`${result}${lhs[1] ?? ''}`))
             }
             break
           }
@@ -319,7 +323,7 @@ function canonicalizeDimension(
   if (dimension === null) return null // This shouldn't happen
 
   let [value, unit] = dimension
-  if (unit === null) return `${value}` // Already unitless, nothing to do
+  if (unit === null) return normalize(input) // already unitless, only normalize the number
 
   // Replace `0<length>` units with just `0`
   if (value === 0 && isLength(input)) {
@@ -330,28 +334,34 @@ function canonicalizeDimension(
   // Only normalize into base units when necessary
   if (!normalizeUnit) return `${input}`
 
+  let v = numberPart(input, unit)
+
   // prettier-ignore
   switch (unit.toLowerCase()) {
     // <length> to px, https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Values_and_units#lengths
-    case 'in':  return `${value * 96}px`                  // 1in  = 96.000px
-    case 'cm':  return `${value * 96 / 2.54}px`           // 1cm  = 37.795px
-    case 'mm':  return `${value * 96 / 2.54 / 10}px`      // 1mm  =  3.779px
-    case 'q':   return `${value * 96 / 2.54 / 10 / 4}px`  //  1q  =  0.945px
-    case 'pc':  return `${value * 96 / 6}px`              // 1pc  = 16.000px
-    case 'pt':  return `${value * 96 / 72}px`             // 1pt  =  1.333px
-    case 'rem': return rem !== null ? `${value * rem}px` : null    // 1rem = 16.000px (Assuming root font-size is 16px)
+    case 'in':  return withUnit(mul(v, '96'), 'px')                      // 1in  = 96px
+    case 'cm':  return withUnit(mulDiv(v, '4800', 127), 'px') // 1cm  = 96px / 2.54  = 4800px / 127
+    case 'mm':  return withUnit(mulDiv(v, '480', 127), 'px')  // 1mm  = 96px / 25.4  =  480px / 127
+    case 'q':   return withUnit(mulDiv(v, '120', 127), 'px')  // 1q   = 96px / 101.6 =  120px / 127
+    case 'pc':  return withUnit(mul(v, '16'), 'px')                      // 1pc  = 16px
+    case 'pt':  return withUnit(mulDiv(v, '4', 3), 'px')      // 1pt  = 4px / 3
+    case 'rem': return rem !== null ? withUnit(mul(v, `${rem}`), 'px') : null // 1rem = 16px (Assuming root font-size is 16px)
 
     // <angle> to deg, https://developer.mozilla.org/en-US/docs/Web/CSS/angle
-    case 'grad': return `${value * 0.9}deg`               // 1grad =   0.900deg
-    case 'rad':  return `${value * 180 / Math.PI}deg`     //  1rad =  57.296deg
-    case 'turn': return `${value * 360}deg`               // 1turn = 360.000deg
+    case 'grad': return withUnit(mul(v, '0.9'), 'deg')                   // 1grad = 0.9deg
+    case 'rad':  return withUnit(round(Number(v) * 180 / Math.PI), 'deg') // 1rad = 57.2957795131deg
+    case 'turn': return withUnit(mul(v, '360'), 'deg')                   // 1turn = 360deg
 
     // <time> to s, https://developer.mozilla.org/en-US/docs/Web/CSS/time
-    case 'ms':   return `${value / 1000}s`                // 1ms = 0.001s
+    case 'ms':   return withUnit(mul(v, '0.001'), 's')                   // 1ms = 0.001s
 
     // <frequency> to hz, https://developer.mozilla.org/en-US/docs/Web/CSS/frequency
-    case 'khz':  return `${value * 1000}hz`               // 1kHz = 1000Hz
+    case 'khz':  return withUnit(mul(v, '1000'), 'hz')                   // 1kHz = 1000Hz
 
-    default: return `${value}${unit}` // No canonicalization possible, return as-is
+    default: return withUnit(normalize(v), unit) // No canonicalization possible, only normalize the number
   }
+}
+
+function withUnit(value: string | null, unit: string): string | null {
+  return value === null ? null : `${value}${unit}`
 }
