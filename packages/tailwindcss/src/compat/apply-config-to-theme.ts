@@ -167,7 +167,7 @@ const OLD_TO_NEW_NAMESPACE: Record<string, string> = {
   fontSize: 'text',
   letterSpacing: 'tracking',
   lineHeight: 'leading',
-  maxWidth: 'container',
+  maxWidth: 'max-width',
   screens: 'breakpoint',
   transitionTimingFunction: 'ease',
 }
