@@ -86,6 +86,10 @@ Please ensure that all tests are passing when submitting a pull request. If you'
 
 After a successful build, you can also use the npm package tarballs created inside the `dist/` folder to install your build in other local projects.
 
+## Changelog
+
+If your change fixes a bug, adds a feature, or changes something that users can see, add a changelog entry. Add it in a new file in `.changelog/`, not in `CHANGELOG.md`. See [.changelog/README.md](https://github.com/tailwindlabs/tailwindcss/blob/main/.changelog/README.md) for the format.
+
 ## Pull request process
 
 When submitting a pull request:
