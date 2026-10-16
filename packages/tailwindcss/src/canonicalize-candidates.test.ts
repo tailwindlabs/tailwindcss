@@ -965,9 +965,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Not a length-unit, can't safely constant fold
       ['[margin:0%]', 'm-[0%]'],
 
-      // angles are compared after rounding to 10 decimals
+      // angles are compared after rounding to 12 significant digits
       ['rotate-[0.785398163397rad]', 'rotate-45'], // π/4 truncated to 12 digits
       ['rotate-[1rad]', 'rotate-[1rad]'], // 57.2957795131deg isn't a bare value
+
+      // small converted values must not be rounded before the multiplication
+      ['w-[calc(0.00000000001pt*1000000000000)]', 'w-[calc(0.00000000001pt*1000000000000)]'], // 13.33…px, not `w-0`
+      ['w-[calc(0.0000000001pt*1000000000000)]', 'w-[calc(0.0000000001pt*1000000000000)]'], // 133.33…px, not `w-25`
 
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage

@@ -229,19 +229,34 @@ it.each([
   ['1rad', '57.2957795131deg'],
   ['3.141592653589793rad', '180deg'],
 
-  // rounding to 10 decimals treats values that differ by less than that as
-  // equal, like π/4 truncated to 12 digits is 44.999999999974314deg
+  // rounding to 12 significant digits treats values that differ by less than
+  // that as equal, like π/4 truncated to 12 digits is 44.999999999974314deg
   ['0.785398163397rad', '45deg'],
-])('should convert angle `%s` into `%s` rounded to 10 decimals', (input, expected) => {
+])('should convert angle `%s` into `%s` rounded to 12 significant digits', (input, expected) => {
   expect(constantFoldDeclaration(input)).toBe(expected)
 })
 
 it.each([
-  // would need more than 16 digits after rounding to 10 decimals
-  ['1000000pt'],
-  ['100000cm'],
-])('should not convert `%s` when the result is too large to be exact', (input) => {
-  expect(constantFoldDeclaration(input)).toBe(input)
+  // significant digits don't depend on the magnitude, so large values convert too
+  ['1000000pt', '1333333.33333px'],
+  ['100000cm', '3779527.55906px'],
+])('should convert large value `%s` into `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // rounding a tiny converted value before the multiplication would erase it,
+  // e.g. `0.00000000001pt` is `0.0000000000133…px`, which would become `0px`
+  ['calc(0.00000000001pt * 1000000000000)', '10pt'],
+
+  // or change it, e.g. `0.0000000001pt` would become `0.0000000001px`, so the
+  // result would be `100px` instead of `133.33…px`
+  ['calc(0.0000000001pt * 1000000000000)', '100pt'],
+  ['calc(0.00000000004pt * 1000000000000)', '40pt'],
+  ['calc(0.00000000001cm * 1000000000000)', '10cm'],
+  ['calc(0.00000000001rad * 1000000000000)', '10rad'],
+])('should not round tiny converted values before folding `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
 })
 
 it.each([

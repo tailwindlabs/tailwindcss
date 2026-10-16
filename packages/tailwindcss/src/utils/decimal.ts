@@ -14,9 +14,12 @@ type Decimal = {
 
 const DECIMAL_REGEX = /^[-+]?(?:\d*\.)?\d+$/
 
-//cnversions that cant be exact, like 1cm = 37.795275590551181…px are
-// rounded, so that equivalent values 1cm, 10mm, 40q end up identical
-const CONVERSION_DECIMALS = 10
+//conversions that can't be exact, like 1cm = 37.795275590551181…px, are
+// rounded to 12 significant digits, so that equivalent values 1cm, 10mm, 40q
+// end up identical. significant digits (not decimal places) keep the relative
+// error the same at any magnitude, so a tiny value multiplied later in a
+// calc() stays correct, like calc(0.00000000001pt * 1000000000000)
+const CONVERSION_PRECISION = 12
 
 function parse(input: string): Decimal | null {
   if (!DECIMAL_REGEX.test(input)) return null
@@ -96,12 +99,13 @@ export function div(a: string, b: string, maxDecimals: number): string | null {
   })
 }
 
-//round a float number to a fixed amount of decimals, only for unit
-//conversion that can't be exact, like 1cm -> 37.7952755906px
+//round a float number to 12 significant digits, only for unit conversion
+//that can't be exact, like 1cm -> 37.7952755906px. values that cant be
+//written that way without exponent notation, too small or too large, return null
 export function round(value: number): string | null {
   if (!Number.isFinite(value)) return null
 
-  return normalize(value.toFixed(CONVERSION_DECIMALS))
+  return normalize(value.toPrecision(CONVERSION_PRECISION))
 }
 
 //normalize a number as written, like
@@ -111,7 +115,7 @@ export function normalize(value: string): string | null {
   return decimal === null ? null : format(decimal)
 }
 
-//value * numerator / denominator, rounded to a fixed amount of decimals
+//value * numerator / denominator, rounded to 12 significant digits
 //the multiplication is exact and the division is a single (correctly rounded)
 //float operation, like 1cm -> 1 * 4800 / 127 -> 37.7952755906px
 export function mulDiv(value: string, numerator: string, denominator: number): string | null {

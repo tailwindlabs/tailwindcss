@@ -142,6 +142,8 @@ describe('round', () => {
     [180 / Math.PI, '57.2957795131'],
     [(3.141592653589793 * 180) / Math.PI, '180'],
     [0.1 + 0.2, '0.3'],
+    [1000000, '1000000'],
+    [(1000000 * 4) / 3, '1333333.33333'],
   ])('should round `%s` into `%s`', (input, expected) => {
     expect(round(input)).toBe(expected)
   })
@@ -151,8 +153,9 @@ describe('round', () => {
     [-Infinity],
     [NaN],
 
-    // would need more than 16 digits after rounding to 10 decimals
-    [1000000],
+    // cant be written with 12 significant digits without exponent notation
+    [(0.00000000001 * 4) / 3],
+    [1e21],
   ])('should not round `%s`', (input) => {
     expect(round(input)).toBe(null)
   })
@@ -165,6 +168,7 @@ describe('mulDiv', () => {
     ['40', '120', 127, '37.7952755906'],
     ['25.4', '480', 127, '96'],
     ['0.3', '4', 3, '0.4'],
+    ['1000000', '4', 3, '1333333.33333'],
   ])('should compute `%s * %s / %s` as `%s`', (value, numerator, denominator, expected) => {
     expect(mulDiv(value, numerator, denominator)).toBe(expected)
   })
@@ -176,8 +180,8 @@ describe('mulDiv', () => {
     // multiplication is not a safe integer
     ['9007199254740991', '2', 1],
 
-    // result is too large to round to 10 decimals
-    ['1000000', '4', 3],
+    // result is too small to round to 12 significant digits
+    ['0.00000000001', '4', 3],
   ])('should not compute `%s * %s / %s`', (value, numerator, denominator) => {
     expect(mulDiv(value, numerator, denominator)).toBe(null)
   })
