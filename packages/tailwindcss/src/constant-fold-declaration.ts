@@ -1,5 +1,6 @@
 import { dimensions } from './utils/dimensions'
 import { isLength } from './utils/infer-data-type'
+import { roundFloatNoise } from './utils/round-float-noise'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
@@ -205,11 +206,11 @@ export function constantFoldDeclarationAst(
               let combined: string
               switch (operator) {
                 case '*': {
-                  combined = `${round(constant[0] * known[0])}${constant[1] ?? known[1] ?? ''}`
+                  combined = `${roundFloatNoise(constant[0] * known[0])}${constant[1] ?? known[1] ?? ''}`
                   break
                 }
                 case '+': {
-                  combined = `${round(constant[0] + known[0])}${constant[1] ?? known[1] ?? ''}`
+                  combined = `${roundFloatNoise(constant[0] + known[0])}${constant[1] ?? known[1] ?? ''}`
                   break
                 }
 
@@ -254,7 +255,7 @@ export function constantFoldDeclarationAst(
             ) {
               folded = true
               return WalkAction.ReplaceSkip(
-                ValueParser.word(`${round(lhs[0] * rhs[0])}${lhs[1] ?? rhs[1] ?? ''}`),
+                ValueParser.word(`${roundFloatNoise(lhs[0] * rhs[0])}${lhs[1] ?? rhs[1] ?? ''}`),
               )
             }
             break
@@ -266,7 +267,7 @@ export function constantFoldDeclarationAst(
             ) {
               folded = true
               return WalkAction.ReplaceSkip(
-                ValueParser.word(`${round(lhs[0] + rhs[0])}${lhs[1] ?? ''}`),
+                ValueParser.word(`${roundFloatNoise(lhs[0] + rhs[0])}${lhs[1] ?? ''}`),
               )
             }
             break
@@ -278,7 +279,7 @@ export function constantFoldDeclarationAst(
             ) {
               folded = true
               return WalkAction.ReplaceSkip(
-                ValueParser.word(`${round(lhs[0] - rhs[0])}${lhs[1] ?? ''}`),
+                ValueParser.word(`${roundFloatNoise(lhs[0] - rhs[0])}${lhs[1] ?? ''}`),
               )
             }
             break
@@ -290,7 +291,7 @@ export function constantFoldDeclarationAst(
               ((lhs[1] === null && rhs[1] === null) || // Unitless / Unitless, e.g.: `8 / 2`
                 (lhs[1] !== null && rhs[1] === null)) // Unit / Unitless, e.g.: `1rem / 2`
             ) {
-              let computed = lhs[0] / rhs[0]
+              let computed = roundFloatNoise(lhs[0] / rhs[0])
 
               // Only fold with .xx precision, anything beyond that might be a bit too much.
               //
@@ -358,11 +359,4 @@ function canonicalizeDimension(
 
     default: return `${value}${unit}` // No canonicalization possible, return as-is
   }
-}
-
-// round the number to get rid of floating point noise
-// such as 0.1 + 0.2 equal to 0.30000000000000004
-function round(value: number) {
-  if (Number.isInteger(value)) return value
-  return Number(value.toPrecision(15))
 }

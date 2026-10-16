@@ -137,12 +137,19 @@ it('should constant fold division results with floating-point error after scalin
 })
 
 it.each([
+  ['calc(0.3px / 3)', '0.1px'],
+  ['calc(0.3 / 3)', '0.1'],
+])('should constant fold division `%s` with floating-point error into `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
   ['calc(0.1px + 0.2px)', '0.3px'],
   ['calc(0.3px - 0.1px)', '0.2px'],
   ['calc(0.1 * 3px)', '0.3px'],
   ['calc(0.1rem * 3)', '0.3rem'],
   ['calc(0.1 + 0.2)', '0.3'],
-  ['calc(2px * calc(0.1 * var(--foo)))', 'calc(0.2px * var(--foo))'],
+  ['calc(3px * calc(0.1 * var(--foo)))', 'calc(0.3px * var(--foo))'],
   ['calc(0.1px + calc(0.2px + var(--foo)))', 'calc(0.3px + var(--foo))'],
   ['calc(calc(0.1px + 0.2px) / 2)', '0.15px'],
 ])('should constant fold `%s` without floating-point error into `%s`', (input, expected) => {
@@ -153,10 +160,7 @@ it.each([
 // the number is serialized using exponent notation, but it must keep its value
 it.each([
   ['calc(calc(0.00000000001 * 1) * 100000000000)', 'calc(1e-11 * 100000000000)'],
-  [
-    'calc(100000000000000px * calc(0.000001 * 0.000001))',
-    'calc(100000000000000px * 1e-12)',
-  ],
+  ['calc(100000000000000px * calc(0.000001 * 0.000001))', 'calc(100000000000000px * 1e-12)'],
 ])('should not round small values to `0` in `%s`', (input, expected) => {
   expect(constantFoldDeclaration(input)).toBe(expected)
 })

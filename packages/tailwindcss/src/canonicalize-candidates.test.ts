@@ -1384,6 +1384,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     ['w-[calc(0.1px+0.2px)]', 'w-[0.3px]'], // Not w-[0.30000000000000004px]
     ['m-[calc(0.3px-0.1px)]', 'm-[0.2px]'], // Not m-[0.19999999999999998px]
     ['w-[calc(0.1*3px)]', 'w-[0.3px]'], // Not w-[0.30000000000000004px]
+    ['w-[calc(0.3px/3)]', 'w-[0.1px]'], // Not w-[calc(0.3px/3)]
+    ['w-[calc(0.1px+calc(0.2px+var(--foo)))]', 'w-[calc(0.3px+var(--foo))]'], // Not w-[calc(0.30000000000000004px+var(--foo))]
   ])(testName, { timeout }, async (candidate, expected) => {
     let input = css`
       @import 'tailwindcss';
