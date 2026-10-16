@@ -395,7 +395,7 @@ class Root {
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
 
-      this.addBuildDependency(idToPath(inputPath))
+      await this.addBuildDependency(idToPath(inputPath))
 
       DEBUG && I.start('Setup compiler')
       let addBuildDependenciesPromises: Promise<void>[] = []
