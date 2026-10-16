@@ -172,6 +172,15 @@ table {
 }
 
 /*
+  Ensure table captions inside visually hidden tables (including variants like `md:sr-only`)
+  are properly clipped in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/20510)
+*/
+
+caption {
+  clip-path: inherit;
+}
+
+/*
   Use the modern Firefox focus style for all focusable elements.
 */
 
