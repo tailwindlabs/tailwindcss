@@ -119,6 +119,22 @@ describe('is-safe-migration', async () => {
     [`function Button({ variant='outline' }) {}`, 'outline'],
     [`Button({ variant: "outline" })`, 'outline'],
     [`Button({ variant: 'outline' })`, 'outline'],
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20435
+    // `variant` prop values holding conditional expressions: the strings
+    // inside are variant names, not class names
+    [`Button({ variant: isActive ? "outline" : "ghost" })`, 'outline'],
+    [`<Button variant={first ? "default" : "outline"} />`, 'outline'],
+    [`<Button variant={variant ?? "outline"} />`, 'outline'],
+    [`<Button variant={required ? 'secondary' : 'outline'} />`, 'outline'],
+    [`<div data-variant={variant ?? "outline"} />`, 'outline'],
+    [`<Button variant={variant === "outline" ? "ghost" : "default"} />`, 'outline'],
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20435
+    // Candidates inside comments are not class names
+    ['// this comment mentions `outline: none` as CSS prose', 'outline'],
+    ['/* this comment mentions `outline: none` as CSS prose */', 'outline'],
+    ['<div>{/* this comment mentions `outline: none` as CSS prose */}</div>', 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -142,6 +158,12 @@ describe('is-safe-migration', async () => {
 
     // Preact-style
     [`<div enterClass="shadow"></div>`, 'shadow', 'shadow-sm'],
+
+    // A `className` next to a `variant` prop still migrates: the variant
+    // value ended before the candidate
+    // https://github.com/tailwindlabs/tailwindcss/issues/20435
+    [`<Button variant="primary" className="outline" />`, 'outline', 'outline-solid'],
+    [`Button({ variant: "primary", className: "outline" })`, 'outline', 'outline-solid'],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {

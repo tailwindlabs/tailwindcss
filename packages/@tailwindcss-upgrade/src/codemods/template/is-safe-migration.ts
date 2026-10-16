@@ -16,12 +16,87 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
 
   // Alpine
   /wire:[^\s]*?$/,
-
-  // shadcn/ui variants
-  /variant\s*[:=]\s*\{?['"`]$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
+
+// shadcn/ui style `variant` props can hold arbitrary expressions, e.g.
+// `variant={isActive ? "outline" : "ghost"}` or
+// `Button({ variant: isActive ? "outline" : "ghost" })`.
+// The strings inside are variant names, not class names, so candidates
+// found there must not be migrated.
+function isInsideVariantValue(line: string): boolean {
+  // Find the last `variant` prop assignment on the line
+  let pattern = /variant\s*[:=]\s*\{?/g
+  let match: RegExpExecArray | null = null
+  let current: RegExpExecArray | null
+  while ((current = pattern.exec(line)) !== null) {
+    match = current
+  }
+  if (match === null) return false
+
+  // Scan the value expression up to the candidate. String literals, parens,
+  // and expression characters may appear, but a top-level comma, closing
+  // brace, semicolon, or a new assignment means the variant value ended
+  // before the candidate.
+  let tail = line.slice(match.index + match[0].length)
+  let depth = 0
+  let i = 0
+  while (i < tail.length) {
+    let char = tail[i]
+
+    // Skip string literals (the candidate's own opening quote is the last char)
+    if (char === '"' || char === "'" || char === '`') {
+      i++
+      while (i < tail.length && tail[i] !== char) {
+        if (tail[i] === '\\') i++
+        i++
+      }
+      i++
+      continue
+    }
+
+    if (char === '(' || char === '[' || char === '{') {
+      depth++
+      i++
+      continue
+    }
+
+    if (char === ')' || char === ']' || char === '}') {
+      if (depth === 0) return false
+      depth--
+      i++
+      continue
+    }
+
+    if (char === ',' || char === ';') {
+      if (depth === 0) return false
+      i++
+      continue
+    }
+
+    // A bare `=` starts a new assignment (e.g. the next prop). `==`, `===`,
+    // `=>`, `!=`, `<=` and `>=` are comparisons, not assignments.
+    if (char === '=' && depth === 0) {
+      let prev = tail[i - 1] ?? ''
+      let next = tail[i + 1] ?? ''
+      if (
+        next !== '=' &&
+        next !== '>' &&
+        prev !== '=' &&
+        prev !== '!' &&
+        prev !== '<' &&
+        prev !== '>'
+      ) {
+        return false
+      }
+    }
+
+    i++
+  }
+
+  return true
+}
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -189,6 +264,29 @@ export function isSafeMigration(
     }
   }
 
+  // Heuristic: Disallow candidates inside a `variant` prop value, e.g.
+  // `variant={isActive ? "outline" : "ghost"}`. The strings there are variant
+  // names, not class names, no matter what expression they sit inside.
+  if (isInsideVariantValue(currentLineBeforeCandidate)) {
+    return false
+  }
+
+  // Heuristic: Disallow candidates inside comments (`//` and `/* */`).
+  // Comment prose is not a class name, e.g.:
+  // `// this comment mentions `outline: none` as CSS prose`
+  {
+    let ranges = commentRanges.get(location.contents)
+
+    for (let i = 0; i < ranges.length; i += 2) {
+      let start = ranges[i]
+      let end = ranges[i + 1]
+
+      if (location.start >= start && location.end <= end) {
+        return false
+      }
+    }
+  }
+
   // Heuristic: Disallow Next.js Image `placeholder` prop
   if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
     return false
@@ -201,6 +299,51 @@ export function isSafeMigration(
 
   return true
 }
+
+// Ranges of `//` line comments and `/* */` block comments in a source file,
+// computed once per file. String literals are skipped so comment markers
+// inside strings (e.g. URLs) are not treated as comments.
+const commentRanges = new DefaultMap((source: string) => {
+  let ranges: number[] = []
+  let i = 0
+
+  while (i < source.length) {
+    let char = source[i]
+
+    // Skip string literals
+    if (char === '"' || char === "'" || char === '`') {
+      i++
+      while (i < source.length && source[i] !== char) {
+        if (source[i] === '\\') i++
+        i++
+      }
+      i++
+      continue
+    }
+
+    // Line comment: runs until the end of the line
+    if (char === '/' && source[i + 1] === '/') {
+      let start = i
+      while (i < source.length && source[i] !== '\n') i++
+      ranges.push(start, i)
+      continue
+    }
+
+    // Block comment: runs until the closing `*/`
+    if (char === '/' && source[i + 1] === '*') {
+      let start = i
+      i += 2
+      while (i < source.length && !(source[i] === '*' && source[i + 1] === '/')) i++
+      i += 2
+      ranges.push(start, Math.min(i, source.length))
+      continue
+    }
+
+    i++
+  }
+
+  return ranges
+})
 
 // Assumptions:
 // - All `<style` tags appear before the next `</style>` tag
