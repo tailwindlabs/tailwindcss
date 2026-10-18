@@ -3,17 +3,26 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
+import { intersection } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import plugin from './plugin'
 import { DefaultMap } from './utils/default-map'
+import { LRUDefaultMap } from './utils/lru-default-map'
 
 const css = String.raw
 const timeout = 25_000
 const defaultTheme = fs.readFileSync(path.resolve(__dirname, '../theme.css'), 'utf8')
 
+// Each design system uses ~30MB of memory, so we only keep the most recently
+// used ones. Keeping all of them runs out of memory on CI.
+//
+// Every strategy below cycles through the same ~30 inputs, so a smaller cache
+// evicts each design system right before it is used again.
+const MAX_CACHED_DESIGN_SYSTEMS = 32
+
 const designSystems = new DefaultMap((base: string) => {
-  return new DefaultMap((input: string) => {
+  return new LRUDefaultMap(MAX_CACHED_DESIGN_SYSTEMS, (input: string) => {
     return __unstable__loadDesignSystem(input, {
       base,
       async loadStylesheet() {
@@ -249,7 +258,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // as bare modifiers). Convert the complex numbers to arbitrary values instead.
       ['[color:theme(colors.red.500/12.34%)]', 'text-red-500/[12.34%]'],
       ['[color:theme(colors.red.500/var(--opacity))]', 'text-red-500/(--opacity)'],
-      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/1234.5'],
+      ['[color:theme(colors.red.500/.12345)]', 'text-red-500/[12.345%]'],
+      ['[color:theme(colors.red.500/.29)]', 'text-red-500/29'],
       ['[color:theme(colors.red.500/50.25%)]', 'text-red-500/50.25'],
 
       // Arbitrary property that already contains a modifier
@@ -621,6 +631,43 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
               --*: initial;
               --breakpoint-md: 48rem;
               --container-3xl: 48rem;
+            }
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+
+      // A named modifier reads from the `--opacity` namespace first, so only use
+      // it when it results in the same opacity as the inline `theme(…)` alpha.
+      test.each([
+        // `--opacity-*` with a different opacity
+        ['[color:theme(colors.red.500/50%)]', 'text-red-500/[50%]'],
+        ['[color:theme(colors.red.500/.12)]', 'text-red-500/[12%]'],
+        ['[color:theme(colors.red.500/.29)]', 'text-red-500/[29%]'],
+        ['[color:theme(colors.red.500/40%)]', 'text-red-500/[40%]'],
+
+        // `--opacity-*` with the same opacity
+        ['[color:theme(colors.red.500/75%)]', 'text-red-500/75'],
+        ['[color:theme(colors.red.500/.25)]', 'text-red-500/25'],
+
+        // No `--opacity-*`
+        ['[color:theme(colors.red.500/.3)]', 'text-red-500/30'],
+      ])(
+        `migrate an inline \`theme(…)\` alpha to a modifier ${testName}`,
+        { timeout },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+            ${theme} {
+              --*: initial;
+              --color-red-500: oklch(63.7% 0.237 25.331);
+              --opacity-12: 0.5;
+              --opacity-25: 25%;
+              --opacity-29: 0.5;
+              --opacity-40: var(--my-opacity);
+              --opacity-50: 10%;
+              --opacity-75: 0.75;
             }
           `
 
@@ -1045,6 +1092,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&_>_:first-child]:flex', '*:first:flex'],
       ['[&_:--custom]:flex', '**:[:--custom]:flex'],
       ['[&_>_:--custom]:flex', '*:[:--custom]:flex'],
+      ['[&_::before]:flex', '**:[&::before]:flex'],
+      ['[&_>_::before]:flex', '*:[&::before]:flex'],
+      ['[&_:before]:flex', '**:[&:before]:flex'],
+      ['[&_>_:before]:flex', '*:[&:before]:flex'],
+      ['[&_:BEFORE]:flex', '**:[&:BEFORE]:flex'],
 
       // in-* variants
       ['[p_&]:flex', 'in-[p]:flex'],
@@ -1412,6 +1464,93 @@ describe('options', () => {
 })
 
 describe('regressions', () => {
+  // https://github.com/tailwindlabs/tailwindcss/issues/20539
+  test(
+    'collapsing keeps the winning candidate instead of a theme value that only matches by default',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @theme {
+          --color-foreground: black;
+          --color-primary: red;
+          --color-card-checked-border: red;
+        }
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(
+        designSystem.canonicalizeCandidates(['text-foreground', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+
+      // The candidate that wins in the CSS stays, not the first one in the input
+      expect(
+        designSystem.canonicalizeCandidates(['text-card-checked-border', 'text-primary'], options),
+      ).toEqual(['text-primary'])
+
+      // An existing candidate that wins in the CSS stays, also when it is a
+      // theme value
+      expect(
+        designSystem.canonicalizeCandidates(['text-[red]', 'text-card-checked-border'], options),
+      ).toEqual(['text-card-checked-border'])
+    },
+  )
+
+  test(
+    'collapsing does not replace a theme variable with another one that only matches by default',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @theme {
+          --spacing-card: 1rem;
+          --spacing-other: 1rem;
+        }
+      `)
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // The same theme variable is kept, instead of `--spacing`
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-card'], options)).toEqual([
+        'my-card',
+      ])
+      expect(designSystem.canonicalizeCandidates(['w-card', 'h-card'], options)).toEqual([
+        'size-card',
+      ])
+
+      // Different theme variables are not collapsed
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-other'], options)).toEqual([
+        'mt-card',
+        'mb-other',
+      ])
+      expect(designSystem.canonicalizeCandidates(['w-card', 'h-other'], options)).toEqual([
+        'w-card',
+        'h-other',
+      ])
+      expect(designSystem.canonicalizeCandidates(['mt-card', 'mb-4'], options)).toEqual([
+        'mt-card',
+        'mb-4',
+      ])
+
+      // `px-other` wins for the inline sides, so `p-card` alone is not the same
+      expect(designSystem.canonicalizeCandidates(['p-card', 'px-other'], options)).toEqual([
+        'p-card',
+        'px-other',
+      ])
+    },
+  )
+
   // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/321
   {
     test('a subset of classes should be canonicalizable', { timeout }, async () => {
@@ -1456,6 +1595,76 @@ describe('regressions', () => {
       ])
     })
   }
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20557
+  test(
+    'collapse does not try every combination of candidates linked by a utility that sets many properties',
+    { timeout },
+    async () => {
+      let designSystem = await designSystems.get(__dirname).get(css`
+        @import 'tailwindcss';
+
+        @utility pill {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          height: 2rem;
+          padding: 0.25rem 0.75rem;
+          margin: 0;
+          border-radius: 9999px;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+          font-weight: 500;
+          color: white;
+          background-color: black;
+          white-space: nowrap;
+          overflow: hidden;
+          cursor: pointer;
+        }
+      `)
+
+      // Every candidate sets a property that `sr-only`, `not-sr-only` or
+      // `pill` also sets, so they used to end up in one group of linked
+      // candidates. Trying every combination of 2^n candidates of that group
+      // took tens of seconds.
+      let candidates = [
+        'relative',
+        'mt-1',
+        'mr-2',
+        'mb-3',
+        'ml-4',
+        'pt-1',
+        'pr-2',
+        'pb-3',
+        'pl-4',
+        'w-64',
+        'h-10',
+        'overflow-x-auto',
+        'overflow-y-hidden',
+        'whitespace-nowrap',
+        'flex',
+        'items-center',
+        'gap-2.5',
+        'rounded-full',
+        'bg-white',
+        'cursor-pointer',
+        'font-normal',
+        'text-sm',
+        'leading-5',
+      ]
+
+      let start = performance.now()
+      let result = designSystem.canonicalizeCandidates(candidates, DEFAULT_CANONICALIZATION_OPTIONS)
+      let duration = performance.now() - start
+
+      expect(result).toEqual([
+        ...candidates.filter((candidate) => candidate !== 'text-sm' && candidate !== 'leading-5'),
+        'text-sm/5',
+      ])
+      expect(duration).toBeLessThan(5_000)
+    },
+  )
 
   // https://github.com/tailwindlabs/tailwindcss/pull/19727
   test(
@@ -1575,6 +1784,111 @@ describe('regressions', () => {
     },
   )
 
+  test(
+    'does not crash when a plugin utility throws for one of the candidates during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ matchUtilities }) => {
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'my-px'])
+    },
+  )
+
+  test(
+    'does not crash when only another meaning of a linked candidate throws during collapse',
+    { timeout },
+    async () => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @import 'tailwindcss';
+          @plugin "./plugin.js";
+        `,
+        {
+          async loadStylesheet(_, base) {
+            return {
+              base,
+              path: '',
+              content: '@tailwind utilities;',
+            }
+          },
+          async loadModule() {
+            return {
+              base: '',
+              path: '',
+              module: plugin(({ addUtilities, matchUtilities }) => {
+                // The static `boom-bad` compiles, so it is linked to `safe`
+                addUtilities({
+                  '.boom-bad': { color: 'red' },
+                  '.safe': { color: 'red' },
+                })
+
+                // The functional `boom-bad` throws
+                matchUtilities(
+                  {
+                    boom: (value) => {
+                      if (value === 'bad') {
+                        throw new Error('Mimic as-if a custom plugin failed for some reason')
+                      }
+                      return { color: value }
+                    },
+                  },
+                  { values: { bad: 'bad', good: 'red' } },
+                )
+              }),
+            }
+          },
+        },
+      )
+
+      expect(
+        designSystem.canonicalizeCandidates(['boom-bad', 'safe', 'mt-[1px]', 'mb-[1px]'], {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }),
+      ).toEqual(['boom-bad', 'safe', 'my-px'])
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1579
   test('does not suggest invalid alternative when canonicalizing calc expressions', async () => {
     let designSystem = await designSystems.get(__dirname).get(css`
@@ -1659,5 +1973,47 @@ describe('regressions', () => {
     expect(
       designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
     ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
+  })
+})
+
+describe('intersection', () => {
+  // Shadow `Set.prototype.intersection` so that the polyfill is used, even on
+  // Node.js versions that have a native implementation.
+  function withoutNative<T>(set: Set<T>): Set<T> {
+    return Object.assign(set, { intersection: undefined })
+  }
+
+  test('polyfill keeps only the items that are in both sets', () => {
+    let a = withoutNative(new Set([1, 2, 3, 4]))
+    let b = new Set([3, 4, 5, 6])
+
+    expect(intersection(a, b)).toEqual(new Set([3, 4]))
+    expect(intersection(withoutNative(new Set(b)), a)).toEqual(new Set([3, 4]))
+  })
+
+  test('polyfill returns an empty set when the sets are disjoint', () => {
+    expect(intersection(withoutNative(new Set([1, 2])), new Set([3, 4]))).toEqual(new Set())
+  })
+
+  test('polyfill returns an empty set when one of the sets is empty', () => {
+    expect(intersection(withoutNative(new Set<number>()), new Set([1]))).toEqual(new Set())
+    expect(intersection(withoutNative(new Set([1])), new Set<number>())).toEqual(new Set())
+  })
+
+  test('polyfill does not mutate the input sets', () => {
+    let a = withoutNative(new Set([1, 2, 3]))
+    let b = new Set([2, 3, 4])
+
+    intersection(a, b)
+
+    expect(a).toEqual(new Set([1, 2, 3]))
+    expect(b).toEqual(new Set([2, 3, 4]))
+  })
+
+  test('native and polyfill implementations agree', () => {
+    let a = new Set(['a', 'b', 'c', 'd'])
+    let b = new Set(['b', 'd', 'e'])
+
+    expect(intersection(withoutNative(new Set(a)), b)).toEqual(intersection(a, b))
   })
 })

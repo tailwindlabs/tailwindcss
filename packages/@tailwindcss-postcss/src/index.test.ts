@@ -1,11 +1,12 @@
 import dedent from 'dedent'
-import { mkdir, mkdtemp, readFile, rm, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, realpath, rm, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'path'
 import postcss from 'postcss'
+import atImport from 'postcss-import'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import { pretty } from '../../tailwindcss/src/test-utils/run'
-import tailwindcss from './index'
+import tailwindcss, { type PluginOptions } from './index'
 
 // We give this file path to PostCSS for processing.
 // This file doesn't exist, but the path is used to resolve imports.
@@ -514,5 +515,116 @@ test('does not register the input file as a dependency, even if it is passed in 
     file: expect.stringMatching(/input.css$/g),
     parent: expect.any(String),
     plugin: expect.any(String),
+  })
+})
+
+// Tools like Vite run `postcss-import` before our plugin, so `@import`-ed files
+// are already inlined when we see them. Their `url(…)`s are still relative to
+// their own file, which those tools read from the `source` of each node.
+describe('stylesheets inlined before our plugin runs', () => {
+  let dir: string
+  beforeEach(async () => {
+    // Resolved files are real paths, so the temporary folder must be one too
+    dir = await realpath(await mkdtemp(path.join(tmpdir(), 'tw-postcss')))
+    await mkdir(path.join(dir, 'src/fonts'), { recursive: true })
+    await mkdir(path.join(dir, 'node_modules/example-font'), { recursive: true })
+    await writeFile(
+      path.join(dir, 'src/index.css'),
+      css`
+        @import './fonts/local.css';
+        @import 'example-font/fonts.css';
+        @tailwind utilities;
+        .hero {
+          background-image: url('./hero.png');
+        }
+      `,
+    )
+    await writeFile(
+      path.join(dir, 'src/fonts/local.css'),
+      css`
+        @font-face {
+          font-family: 'Local Sans';
+          src: url('./local.woff2') format('woff2');
+        }
+      `,
+    )
+    await writeFile(
+      path.join(dir, 'node_modules/example-font/fonts.css'),
+      css`
+        @font-face {
+          font-family: 'Example Sans';
+          src: url('./fonts/ExampleSans.woff2') format('woff2');
+        }
+      `,
+    )
+  })
+  afterEach(() => rm(dir, { recursive: true, force: true }))
+
+  // `postcss-import` inlines `example-font/fonts.css`, and our plugin inlines
+  // `./fonts/local.css` itself.
+  async function build(options: PluginOptions) {
+    let from = path.join(dir, 'src/index.css')
+    let processor = postcss([
+      atImport({ filter: (id: string) => id !== './fonts/local.css' }),
+      tailwindcss({ base: dir, ...options }),
+    ])
+    return processor.process(await readFile(from, 'utf8'), { from })
+  }
+
+  test('rewrites their `url(…)`s to be relative to the input file when optimizing', async () => {
+    let result = await build({ optimize: { minify: false } })
+
+    expect(pretty(result.css)).toMatchInlineSnapshot(`
+      "
+      @font-face {
+        font-family: Local Sans;
+        src: url("./fonts/local.woff2") format("woff2");
+      }
+
+      @font-face {
+        font-family: Example Sans;
+        src: url("../node_modules/example-font/fonts/ExampleSans.woff2") format("woff2");
+      }
+
+      .hero {
+        background-image: url("./hero.png");
+      }
+      "
+    `)
+  })
+
+  test('keeps their `url(…)`s and sources when not optimizing', async () => {
+    let result = await build({ optimize: false })
+
+    let decls: string[] = []
+    result.root.walkDecls('src', (decl) => {
+      decls.push(`${path.relative(dir, decl.source!.input.file!)}: ${decl.value}`)
+    })
+
+    expect(decls).toContain(
+      `${path.join('node_modules', 'example-font', 'fonts.css')}: url('./fonts/ExampleSans.woff2') format('woff2')`,
+    )
+  })
+
+  test('keeps their `url(…)`s when `transformAssetUrls` is disabled', async () => {
+    let result = await build({ optimize: { minify: false }, transformAssetUrls: false })
+
+    expect(pretty(result.css)).toMatchInlineSnapshot(`
+      "
+      @font-face {
+        font-family: Local Sans;
+        src: url("./local.woff2") format("woff2");
+      }
+
+      @font-face {
+        font-family: Example Sans;
+        src: url("./fonts/ExampleSans.woff2") format("woff2");
+      }
+
+      .hero {
+        background-image: url("./hero.png");
+      }
+      "
+    `)
   })
 })

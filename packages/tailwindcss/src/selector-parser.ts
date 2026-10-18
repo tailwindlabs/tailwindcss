@@ -119,6 +119,15 @@ export function isPseudoSelector(node: SelectorAstNode): boolean {
   return node.kind === 'selector' && node.value.charCodeAt(0) === COLON
 }
 
+// Pseudo-elements from CSS 1 and 2 that browsers still accept with a single
+// colon. See: https://www.w3.org/TR/selectors-4/#pseudo-element-syntax
+const LEGACY_PSEUDO_ELEMENTS = new Set([':before', ':after', ':first-line', ':first-letter'])
+
+export function isPseudoElement(node: SelectorAstNode): boolean {
+  if (node.kind !== 'selector' && node.kind !== 'function') return false
+  return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value.toLowerCase())
+}
+
 export function isAttributeSelector(node: SelectorAstNode): boolean {
   return node.kind === 'selector' && node.value.charCodeAt(0) === OPEN_BRACKET
 }
@@ -385,7 +394,9 @@ export function parse(input: string) {
           node.value !== ':not' &&
           node.value !== ':where' &&
           node.value !== ':has' &&
-          node.value !== ':is'
+          node.value !== ':is' &&
+          node.value !== ':-moz-any' &&
+          node.value !== ':-webkit-any'
         ) {
           // Find the end of the function call
           let start = i + 1

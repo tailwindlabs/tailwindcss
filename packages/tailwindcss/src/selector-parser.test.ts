@@ -284,6 +284,27 @@ describe('parse', () => {
     ])
   })
 
+  it.each([':-moz-any', ':-webkit-any'])(
+    'should parse selector lists in vendor-prefixed functions (%s)',
+    (fn) => {
+      expect(parse(`${fn}(&, .foo)`)).toEqual([
+        {
+          kind: 'function',
+          value: fn,
+          nodes: [
+            {
+              kind: 'list',
+              nodes: [
+                { kind: 'selector', value: '&' },
+                { kind: 'selector', value: '.foo' },
+              ],
+            },
+          ],
+        },
+      ])
+    },
+  )
+
   it('should handle next-children combinator', () => {
     expect(parse('.foo + p')).toEqual([
       {

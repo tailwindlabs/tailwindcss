@@ -6,6 +6,7 @@ import {
   Instrumentation,
   optimize as optimizeCss,
   Polyfills,
+  rewriteUrlsInAst,
 } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
 import { Scanner } from '@tailwindcss/oxide'
@@ -31,7 +32,7 @@ interface CacheEntry {
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
 function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}:${opts.transformAssetUrls ?? true}`
   if (cache.has(key)) return cache.get(key)!
   let entry = {
     mtimes: new Map<string, number>(),
@@ -134,6 +135,30 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('PostCSS AST -> Tailwind CSS AST')
             let ast = postCssAstToCssAst(root)
             DEBUG && I.end('PostCSS AST -> Tailwind CSS AST')
+
+            // Plugins like `postcss-import` (which Vite adds) can inline other
+            // stylesheets before we run. Their URLs are still relative to
+            // their own file, which tools like Vite read from the `source` of
+            // each node. The optimized output loses that, so we make these URLs
+            // relative to the input file instead, like we do for stylesheets we
+            // inline ourselves.
+            let rootFile = root.source?.input.file
+            if (optimize && shouldRewriteUrls && rootFile) {
+              DEBUG && I.start('Rewrite URLs of inlined stylesheets')
+              await rewriteUrlsInAst({
+                ast,
+                base(node) {
+                  let file = node.src?.[0].file
+
+                  // PostCSS uses ids like `<input css 1>` for CSS without a file
+                  if (!file || file === rootFile || !path.isAbsolute(file)) return null
+
+                  return path.dirname(file)
+                },
+                root: inputBasePath,
+              })
+              DEBUG && I.end('Rewrite URLs of inlined stylesheets')
+            }
 
             DEBUG && I.start('Create compiler')
             let compiler = await compileAst(ast, {

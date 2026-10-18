@@ -150,7 +150,7 @@ describe('compiling CSS', () => {
         [
           'bg-[no-repeat_url(./my_file.jpg)]',
           'ml-[var(--spacing-1_5,_var(--spacing-2_5,_1rem))]',
-          'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem)))]',
+          'ml-[theme(--spacing-1_5,theme(--spacing-2_5,_1rem))]',
         ],
         css`
           @theme {
@@ -167,7 +167,7 @@ describe('compiling CSS', () => {
         --spacing-2_5: 2.5rem;
       }
 
-      .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\)\\] {
+      .ml-\\[theme\\(--spacing-1_5\\,theme\\(--spacing-2_5\\,_1rem\\)\\)\\] {
         margin-left: 1.5rem;
       }
 
@@ -412,7 +412,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-translate-x: 0;
             --tw-translate-y: 0;
@@ -533,7 +533,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -570,7 +570,7 @@ describe('@apply', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-leading: initial;
           }
@@ -1026,7 +1026,7 @@ describe('variant stacking', () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-content: "";
           }
@@ -1208,7 +1208,7 @@ describe('sorting', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-space-x-reverse: 0;
           }
@@ -1884,7 +1884,7 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-font-weight: initial;
           }
@@ -1933,7 +1933,7 @@ describe('Parsing theme values from CSS', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -4204,6 +4204,29 @@ describe('@custom-variant', () => {
           }
 
           .hocus\\:underline:hover, .hocus\\:underline:focus {
+            text-decoration-line: underline;
+          }
+        }
+        "
+      `)
+    })
+
+    test('vendor-prefixed selector function variant', async () => {
+      expect(
+        await run(
+          ['firefox:underline'],
+          css`
+            @custom-variant firefox (:-moz-any(&));
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          :-moz-any(.firefox\\:underline) {
             text-decoration-line: underline;
           }
         }
@@ -6910,7 +6933,7 @@ describe('`color-mix(…)` polyfill', () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           *, :before, :after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -7094,7 +7117,7 @@ describe('`@property` polyfill', async () => {
     ).toMatchInlineSnapshot(`
       "
       @layer properties {
-        @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
           :root, :host {
             --inherit-no-value: initial;
             --inherit-value: red;
