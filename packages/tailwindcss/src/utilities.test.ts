@@ -11994,7 +11994,7 @@ test('tab', async () => {
 })
 
 test('text-wrap', async () => {
-  expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty']))
+  expect(await run(['text-wrap', 'text-nowrap', 'text-balance', 'text-pretty', 'text-stable']))
     .toMatchInlineSnapshot(`
       "
       .text-balance {
@@ -12009,6 +12009,10 @@ test('text-wrap', async () => {
         text-wrap: pretty;
       }
 
+      .text-stable {
+        text-wrap: stable;
+      }
+
       .text-wrap {
         text-wrap: wrap;
       }
@@ -12020,10 +12024,12 @@ test('text-wrap', async () => {
       '-text-nowrap',
       '-text-balance',
       '-text-pretty',
+      '-text-stable',
       'text-wrap/foo',
       'text-nowrap/foo',
       'text-balance/foo',
       'text-pretty/foo',
+      'text-stable/foo',
     ]),
   ).toEqual('')
 })
