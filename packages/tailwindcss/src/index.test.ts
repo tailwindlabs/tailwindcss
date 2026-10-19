@@ -1645,6 +1645,17 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  test('normalizes single-digit hexadecimal escapes in theme variable names', async () => {
+    let compiler = await compile(css`
+      @theme {
+        --color-\0: red;
+      }
+      @tailwind utilities;
+    `)
+
+    expect(compiler.build([String.raw`bg-(--color-\0)`])).toContain('--color-\uFFFD: red;')
+  })
+
   // https://github.com/tailwindlabs/tailwindcss/issues/19786
   test('out-of-range escaped CSS variable candidates do not crash the build', async () => {
     // Shouldn't crash
