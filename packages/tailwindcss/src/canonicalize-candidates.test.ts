@@ -1974,6 +1974,34 @@ describe('regressions', () => {
       designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
     ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
   })
+
+  test('keeps `--tw-*` declarations that are not related to a sibling with the same value', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+        @utility link {
+          margin-top: 16px;
+          --tw-translate-x: 16px;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    let options: CanonicalizeOptions = { rem: 16, collapse: true }
+
+    // `--tw-translate-x` is not related to `margin-top`, so `link` and `mt-4`
+    // are not the same, even though both values are `16px`.
+    expect(designSystem.canonicalizeCandidates(['link', 'mt-4'], options)).toEqual(['link', 'mt-4'])
+    expect(
+      designSystem.canonicalizeCandidates(
+        ['link', 'mt-[16px]', '[--tw-translate-x:16px]'],
+        options,
+      ),
+    ).toEqual(['link', 'mt-4'])
+  })
 })
 
 describe('intersection', () => {

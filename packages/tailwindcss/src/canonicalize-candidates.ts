@@ -2621,6 +2621,16 @@ function compileUtilitySignatureAst(
 // #RRGGBBAA
 const HEX_REGEX = /#(?:[a-f0-9]{8}|[a-f0-9]{6}|[a-f0-9]{4}|[a-f0-9]{3})/gi
 
+// The `--tw-{name}` variables that core utilities set next to a property with a
+// different name. All other `--tw-{name}` variables map to the `{name}`
+// property.
+const TW_VARIABLE_PROPERTIES: Record<string, string> = {
+  '--tw-duration': 'transition-duration',
+  '--tw-ease': 'transition-timing-function',
+  '--tw-leading': 'line-height',
+  '--tw-tracking': 'letter-spacing',
+}
+
 // Optimize the CSS AST to make it suitable for signature comparison. We want to
 // expand declarations, ignore comments, sort declarations etc...
 //
@@ -2644,13 +2654,14 @@ function canonicalizeAst(
 
         // Ignore `--tw-{property}` if `{property}` exists with the same value
         if (node.property.startsWith('--tw-')) {
+          let property = TW_VARIABLE_PROPERTIES[node.property] ?? node.property.slice(5)
           if (
             ctx.siblings.some(
               (sibling) =>
                 sibling.kind === 'declaration' &&
+                sibling.property === property &&
                 node.value === sibling.value &&
-                node.important === sibling.important &&
-                !sibling.property.startsWith('--tw-'),
+                node.important === sibling.important,
             )
           ) {
             return WalkAction.Replace([])
