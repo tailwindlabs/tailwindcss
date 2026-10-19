@@ -56,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure the standalone macOS binaries have a valid code signature, so macOS 27 no longer kills them at launch ([#20578](https://github.com/tailwindlabs/tailwindcss/pull/20578))
 - Ensure `@tailwindcss/turbopack` and `@tailwindcss/webpack` rebuild when the input CSS changes (e.g. `next dev` with Turbopack no longer serves the CSS of the previous edit) ([#20582](https://github.com/tailwindlabs/tailwindcss/pull/20582))
 - Canonicalization: don't ignore a `--tw-*` variable in a utility's signature when only an unrelated property has the same value (e.g. `--tw-translate-x: 16px` next to `margin-top: 16px`) ([#20593](https://github.com/tailwindlabs/tailwindcss/pull/20593))
+- Decode single-digit hexadecimal escapes in theme variable and `@utility` names as the CSS spec does (e.g. `@theme { --color-\0: red; }` no longer registers `--color-0`) ([#20591](https://github.com/tailwindlabs/tailwindcss/pull/20591))
 
 ## [4.3.3] - 2026-07-16
 
