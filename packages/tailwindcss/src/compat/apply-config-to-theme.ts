@@ -7,7 +7,7 @@ function resolveThemeValue(value: unknown, subValue: string | null = null): stri
     Array.isArray(value) &&
     value.length === 2 &&
     typeof value[1] === 'object' &&
-    typeof value[1] !== null
+    value[1] !== null
   ) {
     return subValue ? (value[1][subValue] ?? null) : value[0]
   } else if (Array.isArray(value) && subValue === null) {

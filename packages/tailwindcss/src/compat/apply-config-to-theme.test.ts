@@ -4,6 +4,30 @@ import { Theme, ThemeOptions } from '../theme'
 import { applyConfigToTheme, keyPathToCssProperty } from './apply-config-to-theme'
 import { resolveConfig } from './config/resolve-config'
 
+test.each(['sans', 'mono'])('null font options do not crash default %s font resolution', (name) => {
+  let theme = new Theme()
+  theme.add(`--font-${name}`, 'monospace', ThemeOptions.DEFAULT)
+  let design = buildDesignSystem(theme)
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          extend: {
+            fontFamily: {
+              [name]: ['Inter', null],
+            },
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  expect(() => applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)).not.toThrow()
+})
+
 test('config values can be merged into the theme', () => {
   let theme = new Theme()
   let design = buildDesignSystem(theme)
