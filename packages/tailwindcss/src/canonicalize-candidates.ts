@@ -97,6 +97,7 @@ interface DesignSystem extends BaseDesignSystem {
     [CONVERTER_KEY]: (input: string, options?: Convert) => [string, CandidateModifier | null]
     [SPACING_KEY]: DefaultMap<string, number | null> | null
     [UTILITY_SIGNATURE_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string | symbol>>
+    [UTILITY_THEME_VARIABLES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[] | null>>
     [STATIC_UTILITIES_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
@@ -125,6 +126,8 @@ export function prepareDesignSystemStorage(
   designSystem.storage[CONVERTER_KEY] ??= createConverterCache(designSystem)
   designSystem.storage[SPACING_KEY] ??= createSpacingCache(designSystem, options)
   designSystem.storage[UTILITY_SIGNATURE_KEY] ??= createUtilitySignatureCache(designSystem)
+  designSystem.storage[UTILITY_THEME_VARIABLES_KEY] ??=
+    createUtilityThemeVariablesCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
@@ -272,6 +275,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let computeUtilitiesPropertiesLookup =
       designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
     let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
+    let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
@@ -403,6 +407,66 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       return result ?? new Set<string>()
     })
 
+    // A replacement can only ever have the same signature as a combination of
+    // candidates if every property it sets is also set by one of the
+    // candidates in that combination. Each candidate in such a combination
+    // also lists that replacement in its `otherUtilities`, so a replacement
+    // whose properties are not covered by all the candidates that list it can
+    // never be used.
+    //
+    // Dropping those replacements up front is important for performance: some
+    // utilities set a lot of properties (e.g.: `sr-only`, or a project
+    // `@utility` used as a component class). Without this step they link
+    // almost every candidate to every other candidate, and since we try every
+    // combination of linked candidates, the work doubles with every candidate
+    // in such a group.
+    //
+    // E.g.: `relative` and `mt-1` are both covered by `sr-only` (it sets
+    // `position` and `margin-top`), but `sr-only` also sets properties like
+    // `clip-path` that none of the candidates set, so it can never be a valid
+    // replacement and should not link them.
+    //
+    // A replacement that is listed by a single candidate can't link candidates
+    // or replace a combination either, so we can drop those without computing
+    // their coverage. This keeps the common case of unrelated candidates fast.
+    let seen = new Set<string>()
+    let shared = new Set<string>()
+    for (let replacements of otherUtilities) {
+      for (let replacement of replacements) {
+        if (seen.has(replacement)) shared.add(replacement)
+        else seen.add(replacement)
+      }
+    }
+
+    let coveredProperties = new DefaultMap((_replacement: string) => new Set<string>())
+    for (let [idx, replacements] of otherUtilities.entries()) {
+      for (let replacement of replacements) {
+        if (!shared.has(replacement)) continue
+        let covered = coveredProperties.get(replacement)
+        for (let property of candidatePropertiesValues[idx].keys()) {
+          covered.add(property)
+        }
+      }
+    }
+
+    let isPossibleReplacement = new DefaultMap((replacement: string) => {
+      let covered = coveredProperties.get(replacement)
+      for (let property of computeUtilitiesPropertiesLookup.get(replacement).keys()) {
+        if (!covered.has(property)) return false
+      }
+      return true
+    })
+
+    otherUtilities = otherUtilities.map((replacements) => {
+      let result = new Set<string>()
+      for (let replacement of replacements) {
+        if (shared.has(replacement) && isPossibleReplacement.get(replacement)) {
+          result.add(replacement)
+        }
+      }
+      return result
+    })
+
     // Link each candidate that could be linked via another utility
     // (intersection). This way we can reduce the amount of required combinations.
     //
@@ -442,6 +506,25 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       uniqueCombinations.get(sorted.join(','))
     }
 
+    // The position of each candidate in the CSS, the last one wins. Skip the
+    // candidates that throw, e.g. when a plugin utility with the same name
+    // throws for this value. Positions are only comparable within one call, so
+    // compute them once for all the other candidates.
+    let orderable: string[] = []
+    for (let idx of linked.keys()) {
+      try {
+        designSystem.getClassOrder([candidates[idx]])
+        orderable.push(candidates[idx])
+      } catch {}
+    }
+    let classOrder = new Map(designSystem.getClassOrder(orderable))
+    function compareOrder(a: bigint | null, z: bigint | null) {
+      if (a === z) return 0
+      if (a === null) return 1
+      if (z === null) return -1
+      return a < z ? -1 : 1
+    }
+
     // Let's try to actually collapse them now.
     let result = new Set<string>(candidates)
     let drop = new Set<string>()
@@ -452,19 +535,42 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
         let potentialReplacements = combo.flatMap((idx) => otherUtilities[idx]).reduce(intersection)
 
-        let collapsedSignature = designSystem.storage[UTILITY_SIGNATURE_KEY].get(
-          signatureOptions,
-        ).get(
+        // Computing the signature of the combination is expensive, so skip it
+        // when there is nothing to compare it against.
+        if (potentialReplacements.size === 0) continue
+
+        let collapsed = combo
+          .map((idx) => candidates[idx])
+          .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
+          .join(' ')
+        let collapsedSignature =
+          designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(collapsed)
+
+        // Try the candidates in the combo first, the one that wins in the CSS
+        // first. Another utility can have the same signature only because its
+        // theme value matches by default, e.g. when one of the variables is
+        // overridden in `.dark`.
+        let replacements = new Set(
           combo
             .map((idx) => candidates[idx])
-            .sort((a, z) => a.localeCompare(z)) // Sort to increase cache hits
-            .join(' '),
+            .sort((a, z) => compareOrder(classOrder.get(z) ?? null, classOrder.get(a) ?? null)),
         )
+        for (let replacement of potentialReplacements) replacements.add(replacement)
 
-        for (let replacement of potentialReplacements) {
+        for (let replacement of replacements) {
           let signature =
             designSystem.storage[UTILITY_SIGNATURE_KEY].get(signatureOptions).get(replacement)
           if (signature !== collapsedSignature) continue // Not a safe replacement
+
+          // The signatures can also be equal because different theme variables
+          // have the same value by default. E.g.: `mt-card mb-card` and `my-4`
+          // are both `1rem`, but `my-4` uses `--spacing` instead of
+          // `--spacing-card`.
+          if (
+            !usesSameThemeVariables(themeVariables.get(collapsed), themeVariables.get(replacement))
+          ) {
+            continue // Not a safe replacement
+          }
 
           // Use the replacement
           result.add(replacement)
@@ -488,6 +594,17 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
 
     return Array.from(result)
   }
+}
+
+// Whether a replacement uses the same theme variables as the candidates it
+// replaces, for each declaration of their (equal) signatures. A declaration
+// without theme variables can be replaced by one with theme variables, the same
+// way `[width:16px] [height:16px]` becomes `size-4`.
+function usesSameThemeVariables(candidates: string[] | null, replacement: string[] | null) {
+  if (candidates === null || replacement === null) return false
+  if (candidates.length !== replacement.length) return false
+
+  return candidates.every((variables, idx) => variables === '' || variables === replacement[idx])
 }
 
 const CANONICALIZE_CANDIDATE_KEY = Symbol()
@@ -866,17 +983,13 @@ function createConverterCache(
 
           // 50% -> /50
           if (/^\d+%$/.test(modifierPart)) {
-            modifier = { kind: 'named', value: modifierPart.slice(0, -1) }
+            modifier = toOpacityModifier(Number(modifierPart.slice(0, -1)))
           }
 
           // .12 -> /12
-          // .12345 -> /[12.345]
+          // .12345 -> /[12.345%]
           else if (/^0?\.\d+$/.test(modifierPart)) {
-            let value = Number(modifierPart) * 100
-            modifier = {
-              kind: Number.isInteger(value) ? 'named' : 'arbitrary',
-              value: value.toString(),
-            }
+            modifier = toOpacityModifier(toPercentage(Number(modifierPart)))
           }
 
           // Anything else becomes arbitrary
@@ -892,6 +1005,33 @@ function createConverterCache(
       })
 
       return [result, modifier]
+    }
+
+    function toOpacityModifier(percentage: number): CandidateModifier {
+      // A named modifier reads from the `--opacity-*` theme values first, e.g.:
+      // `--opacity-50: 10%` makes `/50` a 10% opacity. Only use it when it
+      // results in the same opacity.
+      if (Number.isInteger(percentage)) {
+        let opacity = designSystem.theme.resolveValue(`${percentage}`, ['--opacity'])
+        if (opacity === null) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+
+        let themePercentage = opacity.endsWith('%')
+          ? Number(opacity.slice(0, -1))
+          : toPercentage(Number(opacity))
+        if (themePercentage === percentage) {
+          return { kind: 'named', value: `${percentage}` }
+        }
+      }
+
+      return { kind: 'arbitrary', value: `${percentage}%` }
+    }
+
+    function toPercentage(value: number) {
+      // Round to get rid of floating point noise, e.g.: `.29 * 100` is
+      // `28.999999999999996`.
+      return Number((value * 100).toFixed(10))
     }
 
     function pathToVariableName(path: string, shouldPrefix = true) {
@@ -2101,7 +2241,8 @@ function modernizeArbitraryValuesVariant(
           if (prefixedVariant) {
             replaceObject(variant, {
               kind: 'arbitrary',
-              selector: target.value,
+              // Pseudo-elements can't be used inside `&:is(…)`, so keep the `&`
+              selector: SelectorParser.isPseudoElement(target) ? `&${target.value}` : target.value,
               relative: false,
             } satisfies Variant)
 
@@ -2392,32 +2533,8 @@ function createUtilitySignatureCache(
   return new DefaultMap((options: SignatureOptions) => {
     return new DefaultMap<string, string | symbol>((utility) => {
       try {
-        // Ensure the prefix is added to the utility if it is not already present.
-        utility =
-          designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
-            ? `${designSystem.theme.prefix}:${utility}`
-            : utility
-
-        // Use `@apply` to normalize the selector to `.x`
-        let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
-
-        temporarilyDisableThemeInline(designSystem, () => {
-          // There's separate utility caches for respect important vs not
-          // so we want to compile them both with `@theme inline` disabled
-          for (let candidate of designSystem.parseCandidate(utility)) {
-            designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
-          }
-
-          substituteAtApply(ast, designSystem)
-        })
-
-        // Optimize the AST. This is needed such that any internal intermediate
-        // nodes are gone. This will also cleanup declaration nodes with undefined
-        // values or `--tw-sort` declarations.
-        canonicalizeAst(designSystem, ast, options)
-
         // Compute the final signature, by generating the CSS for the utility
-        let signature = toCss(ast)
+        let signature = toCss(compileUtilitySignatureAst(designSystem, utility, options))
         return signature
       } catch {
         // A unique symbol is returned to ensure that 2 signatures resulting in
@@ -2428,15 +2545,103 @@ function createUtilitySignatureCache(
   })
 }
 
+// For each declaration in the signature of a utility, the theme variables that
+// are inlined in its value. Two utilities can have the same signature only
+// because their theme variables have the same value by default.
+//
+// E.g.:
+//
+// | UTILITY   | GENERATED SIGNATURE         | THEME VARIABLES  |
+// | --------- | --------------------------- | ---------------- |
+// | `mt-card` | `.x { margin-top: 1rem; }`  | `--spacing-card` |
+// | `mt-4`    | `.x { margin-top: 1rem; }`  | `--spacing`      |
+//
+// The declarations are in the same order as in the signature, so utilities with
+// the same signature can be compared declaration by declaration.
+const UTILITY_THEME_VARIABLES_KEY = Symbol()
+function createUtilityThemeVariablesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof UTILITY_THEME_VARIABLES_KEY] {
+  return new DefaultMap((options: SignatureOptions) => {
+    return new DefaultMap<string, string[] | null>((utility) => {
+      try {
+        let themeVariables = new DefaultMap<AstNode, Set<string>>(() => new Set())
+        let ast = compileUtilitySignatureAst(designSystem, utility, options, themeVariables)
+
+        let result: string[] = []
+        walk(ast, (node) => {
+          if (node.kind !== 'declaration') return
+          result.push(Array.from(themeVariables.get(node)).sort().join(' '))
+        })
+        return result
+      } catch {
+        return null
+      }
+    })
+  })
+}
+
+// Compile a utility via `@apply` and optimize the AST for signature comparison.
+function compileUtilitySignatureAst(
+  designSystem: DesignSystem,
+  utility: string,
+  options: SignatureOptions,
+  themeVariables?: DefaultMap<AstNode, Set<string>>,
+) {
+  // Ensure the prefix is added to the utility if it is not already present.
+  utility =
+    designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
+      ? `${designSystem.theme.prefix}:${utility}`
+      : utility
+
+  // Use `@apply` to normalize the selector to `.x`
+  let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
+
+  temporarilyDisableThemeInline(designSystem, () => {
+    // There's separate utility caches for respect important vs not
+    // so we want to compile them both with `@theme inline` disabled
+    for (let candidate of designSystem.parseCandidate(utility)) {
+      designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
+    }
+
+    substituteAtApply(ast, designSystem)
+  })
+
+  // Optimize the AST. This is needed such that any internal intermediate
+  // nodes are gone. This will also cleanup declaration nodes with undefined
+  // values or `--tw-sort` declarations.
+  canonicalizeAst(designSystem, ast, options, themeVariables)
+
+  return ast
+}
+
 // #RGB
 // #RGBA
 // #RRGGBB
 // #RRGGBBAA
 const HEX_REGEX = /#(?:[a-f0-9]{8}|[a-f0-9]{6}|[a-f0-9]{4}|[a-f0-9]{3})/gi
 
+// The `--tw-{name}` variables that core utilities set next to a property with a
+// different name. All other `--tw-{name}` variables map to the `{name}`
+// property.
+const TW_VARIABLE_PROPERTIES: Record<string, string> = {
+  '--tw-duration': 'transition-duration',
+  '--tw-ease': 'transition-timing-function',
+  '--tw-leading': 'line-height',
+  '--tw-tracking': 'letter-spacing',
+}
+
 // Optimize the CSS AST to make it suitable for signature comparison. We want to
 // expand declarations, ignore comments, sort declarations etc...
-function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: SignatureOptions) {
+//
+// The theme variables that are inlined in each declaration are collected in
+// `themeVariables`, if provided.
+function canonicalizeAst(
+  designSystem: DesignSystem,
+  ast: AstNode[],
+  options: SignatureOptions,
+  themeVariables?: DefaultMap<AstNode, Set<string>>,
+) {
   let { rem } = options
 
   walk(ast, {
@@ -2449,13 +2654,14 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
 
         // Ignore `--tw-{property}` if `{property}` exists with the same value
         if (node.property.startsWith('--tw-')) {
+          let property = TW_VARIABLE_PROPERTIES[node.property] ?? node.property.slice(5)
           if (
             ctx.siblings.some(
               (sibling) =>
                 sibling.kind === 'declaration' &&
+                sibling.property === property &&
                 node.value === sibling.value &&
-                node.important === sibling.important &&
-                !sibling.property.startsWith('--tw-'),
+                node.important === sibling.important,
             )
           ) {
             return WalkAction.Replace([])
@@ -2469,7 +2675,7 @@ function canonicalizeAst(designSystem: DesignSystem, ast: AstNode[], options: Si
 
         // Resolve theme values to their inlined value.
         if (node.value.includes('var(')) {
-          node.value = resolveVariablesInValue(node.value, designSystem)
+          node.value = resolveVariablesInValue(node.value, designSystem, themeVariables?.get(node))
         }
 
         let valueAst = ValueParser.parse(node.value)
@@ -2621,7 +2827,13 @@ const CSS_WIDE_KEYWORDS = ['initial', 'inherit', 'revert', 'revert-layer', 'reve
 // to match a known variable _and_ its inlined value. Then we can replace it
 // with the inlined variable. This allows us to handle custom `@theme` and
 // `@theme inline` definitions.
-function resolveVariablesInValue(value: string, designSystem: DesignSystem): string {
+//
+// The inlined variables are added to `inlined`, if provided.
+function resolveVariablesInValue(
+  value: string,
+  designSystem: DesignSystem,
+  inlined?: Set<string>,
+): string {
   let changed = false
   let valueAst = ValueParser.parse(value)
 
@@ -2679,6 +2891,7 @@ function resolveVariablesInValue(value: string, designSystem: DesignSystem): str
         let constructedValue = `${valueNode.nodes[0].value},${variableValue}`
         if (nodeAsString === constructedValue) {
           changed = true
+          inlined?.add(variable)
           return WalkAction.Replace(ValueParser.parse(variableValue))
         }
       }
@@ -3044,17 +3257,17 @@ function* combinations<T>(arr: T[]): Generator<T[]> {
   }
 }
 
-function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+export function intersection<T>(a: Set<T>, b: Set<T>): Set<T> {
   // @ts-expect-error Set.prototype.intersection is only available in Node.js v22+
   if (typeof a.intersection === 'function') return a.intersection(b)
 
   // Polyfill for environments that do not support Set.prototype.intersection yet
   if (a.size === 0 || b.size === 0) return new Set<T>()
 
-  let result = new Set<T>(a)
-  for (let item of b) {
-    if (!result.has(item)) {
-      result.delete(item)
+  let result = new Set<T>()
+  for (let item of a) {
+    if (b.has(item)) {
+      result.add(item)
     }
   }
 

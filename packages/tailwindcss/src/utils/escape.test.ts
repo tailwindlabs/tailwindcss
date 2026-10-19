@@ -8,6 +8,32 @@ describe('escape', () => {
 })
 
 describe('unescape', () => {
+  test.each([
+    [String.raw`\0`, '\uFFFD'],
+    [String.raw`\1`, '\u0001'],
+    [String.raw`\9`, '\t'],
+    [String.raw`\a`, '\n'],
+    [String.raw`\A`, '\n'],
+    [String.raw`\c`, '\f'],
+    [String.raw`\C`, '\f'],
+    [String.raw`\f`, '\u000f'],
+    [String.raw`\F`, '\u000f'],
+  ])('decodes a single hexadecimal digit in %s', (input, expected) => {
+    expect(unescape(input)).toBe(expected)
+  })
+
+  test.each([
+    [String.raw`\a b`, '\nb'],
+    [String.raw`\00000a`, '\n'],
+    [String.raw`\41`, 'A'],
+    [String.raw`\0 `, '\uFFFD'],
+    [String.raw`\!`, '!'],
+    [String.raw`\g`, 'g'],
+    [String.raw`\\`, '\\'],
+  ])('preserves escape handling in %s', (input, expected) => {
+    expect(unescape(input)).toBe(expected)
+  })
+
   test('removes backslashes', () => {
     expect(unescape(String.raw`red-1\/2`)).toMatchInlineSnapshot(`"red-1/2"`)
   })

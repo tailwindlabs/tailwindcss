@@ -18,8 +18,7 @@ const SETUP = {
         "type": "module",
         "dependencies": {
           "@tailwindcss/vite": "workspace:^",
-          "nuxt": "3.16.0",
-          "nitropack": "2.11.0",
+          "nuxt": "3.21.11",
           "tailwindcss": "workspace:^",
           "vue": "latest"
         }

@@ -1612,6 +1612,340 @@ describe('optimization', () => {
       `)
     })
 
+    // A pseudo-element can only be followed by pseudo-classes, so these
+    // selectors can never match anything.
+    it('should drop nested rules that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              --x: 1;
+            }
+            & .b,
+            & + .c,
+            & ~ .d {
+              --x: 2;
+            }
+          }
+          .a ::marker {
+            & > * {
+              --x: 3;
+            }
+          }
+          .a:before {
+            & > * {
+              --x: 4;
+            }
+          }
+          .a::part(foo) {
+            & > * {
+              --x: 5;
+            }
+          }
+          .a::backdrop {
+            :where(& > :not(:last-child)) {
+              --x: 6;
+            }
+          }
+          .a::-webkit-details-marker {
+            & > * {
+              --x: 7;
+            }
+          }
+          .a::view-transition-old(root) {
+            & > * {
+              --x: 8;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should only drop the selectors in a list that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::before,
+          .b {
+            & > * {
+              --x: 1;
+            }
+          }
+          .c::after {
+            & > *,
+            &:hover {
+              --x: 2;
+            }
+          }
+          .d::backdrop {
+            :where(& > *, .e) {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a::before, .b) > * {
+          --x: 1;
+        }
+        .c::after:hover {
+          --x: 2;
+        }
+        :where(.d::backdrop > *, .e) {
+          --x: 3;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules that put a combinator before a pseudo-element or after a pseudo-class', async () => {
+      expect(
+        optimize(css`
+          .a::before {
+            &:hover {
+              --x: 1;
+            }
+          }
+          .b:first-child {
+            & > * {
+              --x: 2;
+            }
+          }
+          .c {
+            & > ::before {
+              --x: 3;
+            }
+          }
+          .d::selection > * {
+            --x: 4;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::before:hover {
+          --x: 1;
+        }
+        .b:first-child > * {
+          --x: 2;
+        }
+        .c > ::before {
+          --x: 3;
+        }
+        .d::selection > * {
+          --x: 4;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules inside a dropped rule that can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            :where(& > *) {
+              --x: 1;
+              :is(&, .b) {
+                --x: 2;
+              }
+              &:hover {
+                --x: 3;
+              }
+              @media (width >= 40rem) {
+                --x: 4;
+                :is(&, .c) {
+                  --x: 5;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(:is(:where(.a::selection > *)), .b) {
+          --x: 2;
+        }
+        @media (width >= 40rem) {
+          :is(:is(:where(.a::selection > *)), .c) {
+            --x: 5;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should drop at-rules inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @font-face {
+                font-family: 'A';
+              }
+              @property --x {
+                syntax: '*';
+                inherits: false;
+              }
+              @scope (.from) {
+                color: red;
+              }
+              @media (width >= 40rem) {
+                :is(&, .b) {
+                  --x: 1;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @media (width >= 40rem) {
+          :is(:is(.a::selection > *), .b) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    // An empty `@layer` can establish the layer order, so dropping it can change
+    // the cascade of other rules.
+    it('should keep `@layer` inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @layer base, utilities;
+              @layer components {
+                --x: 1;
+                :is(&, .b) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer base, utilities;
+        @layer components {
+          :is(:is(.a::selection > *), .b) {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should drop an `@scope` inside a dropped rule when its scope can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (.x) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @scope (.x) {
+                :is(&, .fallback) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should keep an `@scope` inside a dropped rule when its scope can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (:is(&, .fallback)) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @in-variant {
+                @scope (.x) {
+                  :is(&, .fallback) {
+                    --x: 2;
+                  }
+                  --x: 3;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(:is(.a::selection > *), .fallback)) {
+          .y {
+            --x: 1;
+          }
+        }
+        @scope (.x) {
+          :is(:is(.a::selection > *), .fallback) {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
+    // Only standard pseudo-elements are known to be invalid before a combinator.
+    // E.g.: framework specific deep combinators look like pseudo-elements, but
+    // they are rewritten by another compiler later on.
+    it('should keep nested rules that put a combinator after an unknown pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a {
+            ::ng-deep .b {
+              --x: 1;
+            }
+          }
+          :host {
+            & ::ng-deep > .c {
+              --x: 2;
+            }
+          }
+          .d {
+            & ::v-deep .e {
+              --x: 3;
+            }
+          }
+          .f {
+            ::deep .g {
+              --x: 4;
+            }
+          }
+          .h::unknown {
+            & > * {
+              --x: 5;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a ::ng-deep .b {
+          --x: 1;
+        }
+        :host ::ng-deep > .c {
+          --x: 2;
+        }
+        .d ::v-deep .e {
+          --x: 3;
+        }
+        .f ::deep .g {
+          --x: 4;
+        }
+        .h::unknown > * {
+          --x: 5;
+        }
+        "
+      `)
+    })
+
     it('should not dedupe adjacent at-rules with the same prelude but different bodies', async () => {
       expect(
         optimize(css`

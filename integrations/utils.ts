@@ -35,6 +35,17 @@ interface ChildProcessOptions {
 interface ExecOptions {
   ignoreStdErr?: boolean
   stdin?: string
+
+  // Return stdout, stderr and the exit code on their own, instead of one
+  // string. The promise also resolves when the command exits with a non-zero
+  // code.
+  streams?: boolean
+}
+
+interface ExecResult {
+  stdout: string
+  stderr: string
+  exitCode: number
 }
 
 interface TestConfig {
@@ -49,6 +60,11 @@ interface TestConfig {
 interface TestContext {
   root: string
   expect: ExpectStatic
+  exec(
+    command: string,
+    options: ChildProcessOptions | undefined,
+    execOptions: ExecOptions & { streams: true },
+  ): Promise<ExecResult>
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   parseSourceMap(opts: string | SourceMapOptions): SourceMap
@@ -139,7 +155,7 @@ export function test(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
           execOptions: ExecOptions = {},
-        ) {
+        ): Promise<any> {
           let cwd = childProcessOptions.cwd ?? root
           let originalCommand = command
 
@@ -180,7 +196,7 @@ export function test(
             console.log(`> cd ${relative}`)
           }
           if (debug) console.log(`> ${command}`)
-          return new Promise((resolve, reject) => {
+          return new Promise<string | ExecResult>((resolve, reject) => {
             let child = exec(
               command,
               {
@@ -192,7 +208,16 @@ export function test(
                 },
               },
               (error, stdout, stderr) => {
-                if (error) {
+                if (execOptions.streams && (!error || typeof error.code === 'number')) {
+                  if (only || debug) {
+                    console.log(stdout.toString() + '\n\n' + stderr.toString())
+                  }
+                  resolve({
+                    stdout: stdout.toString(),
+                    stderr: stderr.toString(),
+                    exitCode: error?.code ?? 0,
+                  })
+                } else if (error) {
                   if (command !== originalCommand) {
                     error.message = error.message.replace(command, originalCommand)
                     let mappedError = error as any
