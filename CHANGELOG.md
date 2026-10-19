@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+The [preview](https://github.com/tailwindlabs/tailwindcss/blob/changelog/CHANGELOG.md#unreleased) shows all changes that are not released yet, with the entries in [`.changelog/`](https://github.com/tailwindlabs/tailwindcss/tree/main/.changelog).
+
 ### Added
 
 - Add `@tailwindcss/turbopack` package to run Tailwind CSS with Next.js ([20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))

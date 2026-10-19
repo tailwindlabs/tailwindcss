@@ -43,6 +43,7 @@
     "tdd": "vitest --hideSkippedTests",
     "bench": "vitest bench",
     "version-packages": "node ./scripts/version-packages.mjs",
+    "changelog": "node ./scripts/changelog.mjs",
     "vite": "pnpm run --filter=vite-playground dev",
     "nextjs": "pnpm run --filter=nextjs-playground dev"
   },
