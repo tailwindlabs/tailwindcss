@@ -189,6 +189,14 @@ export function isSafeMigration(
     }
   }
 
+  // Heuristic: Disallow anything inside a shadcn/ui `variant` prop, because a
+  // conditional can sit between the prop and the string
+  //
+  // E.g.: `<Button variant={active ? "outline" : "ghost"} />`
+  if (isInsideVariantValue(currentLineBeforeCandidate)) {
+    return false
+  }
+
   // Heuristic: Disallow Next.js Image `placeholder` prop
   if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
     return false
@@ -200,6 +208,61 @@ export function isSafeMigration(
   }
 
   return true
+}
+
+const VARIANT_PROP = /variant\s*([:=])\s*/g
+const CALLEE = /[\w$.)\]]/
+
+// The candidate is the last thing on the line, so the `variant` value it sits in
+// is the one that has not ended yet. Each form ends somewhere different:
+// `variant={…}` at its matching brace, `variant="…"` at its own quote, and
+// `{ variant: … }` at a comma or at the brace around it.
+function isInsideVariantValue(line: string): boolean {
+  for (let match of line.matchAll(VARIANT_PROP)) {
+    // The prop itself is never inside a string, so a `variant:` that is only
+    // mentioned in some other attribute value does not count
+    if (isMiddleOfString(line.slice(0, match.index))) continue
+
+    let start = match.index + match[0].length
+    let char = line[start]
+
+    if (match[1] === ':') {
+      if (isOpenValue(line, start)) return true
+    } else if (char === '{') {
+      if (isOpenValue(line, start + 1)) return true
+    } else if (char === '"' || char === "'" || char === '`') {
+      if (!line.includes(char, start + 1)) return true
+    }
+  }
+
+  return false
+}
+
+function isOpenValue(line: string, start: number): boolean {
+  // Whether each open group is the argument list of a call, because an argument
+  // is passed to that call and is not the value itself
+  let groups: boolean[] = []
+  let quote: string | null = null
+
+  for (let i = start; i < line.length; i++) {
+    let char = line[i]
+
+    if (quote !== null) {
+      if (char === '\\') i++
+      else if (char === quote) quote = null
+    } else if (char === '"' || char === "'" || char === '`') {
+      quote = char
+    } else if (char === '(' || char === '[' || char === '{') {
+      groups.push(char === '(' && CALLEE.test(line[i - 1] ?? ''))
+    } else if (char === ')' || char === ']' || char === '}') {
+      if (groups.length === 0) return false
+      groups.pop()
+    } else if (char === ',' && groups.length === 0) {
+      return false
+    }
+  }
+
+  return !groups.includes(true)
 }
 
 // Assumptions:
