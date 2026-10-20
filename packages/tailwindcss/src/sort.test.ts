@@ -21,6 +21,11 @@ const table = [
   // Utilities with variants
   ['px-3 focus:hover:p-3 hover:p-1 py-3', 'px-3 py-3 hover:p-1 focus:hover:p-3'],
 
+  // Logical sizing utilities
+  ['opacity-50 inline-full mx-1', 'mx-1 inline-full opacity-50'],
+  ['hover:max-inline-4 hover:px-4 hover:mx-auto', 'hover:mx-auto hover:max-inline-4 hover:px-4'],
+  ['inline-1 h-1 w-1 block-1', 'block-1 inline-1 h-1 w-1'],
+
   // Utilities with important
   ['px-3 py-4! p-1', 'p-1 px-3 py-4!'],
   ['py-4! px-3 p-1', 'p-1 px-3 py-4!'],
