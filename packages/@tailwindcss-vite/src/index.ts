@@ -18,6 +18,7 @@ const DEBUG = env.DEBUG
 const SPECIAL_QUERY_RE = /[?&](?:worker|sharedworker|raw|url)\b/
 const COMMON_JS_PROXY_RE = /\?commonjs-proxy/
 const INLINE_STYLE_ID_RE = /[?&]index=\d+\.css$/
+const LANG_CSS_RE = /&lang\.(?:module\.)?css/
 
 export type PluginOptions = {
   /**
@@ -210,7 +211,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         filter: {
           id: {
             exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
-            include: [/\.css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+            include: [/\.css(?:\?.*)?$/, LANG_CSS_RE, INLINE_STYLE_ID_RE],
           },
         },
         async handler(src, id) {
@@ -247,7 +248,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         filter: {
           id: {
             exclude: [/\/\.vite\//, SPECIAL_QUERY_RE, COMMON_JS_PROXY_RE],
-            include: [/\.css(?:\?.*)?$/, /&lang\.css/, INLINE_STYLE_ID_RE],
+            include: [/\.css(?:\?.*)?$/, LANG_CSS_RE, INLINE_STYLE_ID_RE],
           },
         },
         async handler(src, id) {
@@ -299,7 +300,7 @@ function isPotentialCssRootFile(id: string) {
   if (COMMON_JS_PROXY_RE.test(id)) return false
 
   let extension = getExtension(id)
-  let isCssFile = extension === 'css' || id.includes('&lang.css') || id.match(INLINE_STYLE_ID_RE)
+  let isCssFile = extension === 'css' || LANG_CSS_RE.test(id) || id.match(INLINE_STYLE_ID_RE)
 
   return isCssFile
 }
