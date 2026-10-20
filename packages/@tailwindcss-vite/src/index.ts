@@ -443,6 +443,7 @@ class Root {
       !(
         this.compiler.features &
         (Features.AtApply |
+          Features.AtTheme |
           Features.JsPluginCompat |
           Features.ThemeFunction |
           Features.Utilities |
