@@ -73,6 +73,79 @@ test(
   },
 )
 
+test(
+  'production build with `<style module>` blocks',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "vue": "^3.4.37",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "@vitejs/plugin-vue": "^5.1.2",
+            "@tailwindcss/vite": "workspace:^",
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import vue from '@vitejs/plugin-vue'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [vue(), tailwindcss()],
+          build: { cssMinify: false },
+        })
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <body>
+            <div id="app"></div>
+            <script type="module" src="./src/main.ts"></script>
+          </body>
+        </html>
+      `,
+      'src/main.css': css`@import 'tailwindcss';`,
+      'src/main.ts': ts`
+        import { createApp } from 'vue'
+        import './main.css'
+        import App from './App.vue'
+
+        createApp(App).mount('#app')
+      `,
+      'src/App.vue': html`
+        <template>
+          <div :class="$style.foo">Hello Vue!</div>
+        </template>
+
+        <style module>
+          @reference './main.css';
+
+          .foo {
+            @apply text-red-500;
+          }
+        </style>
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [, content] = files[0]
+
+    expect(content).not.toContain('@apply')
+    expect(content).not.toContain('@reference')
+    expect(content).toMatch(/\._foo_[\w-]+ \{\s*color: var\(--color-red-500/)
+  },
+)
+
 {
   const VUE_COMPONENT_COUNT = 1_000
 
