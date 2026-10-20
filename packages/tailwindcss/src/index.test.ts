@@ -2216,6 +2216,47 @@ describe('Parsing theme values from CSS', () => {
     `)
   })
 
+  test('keyframes are generated when used in an `animation-name`', async () => {
+    expect(
+      await run(
+        [],
+        css`
+          @theme {
+            @keyframes used {
+              to {
+                opacity: 1;
+              }
+            }
+
+            @keyframes unused {
+              to {
+                opacity: 0;
+              }
+            }
+          }
+
+          .foo {
+            animation-name: used;
+            animation-duration: 1s;
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        animation-name: used;
+        animation-duration: 1s;
+      }
+
+      @keyframes used {
+        to {
+          opacity: 1;
+        }
+      }
+      "
+    `)
+  })
+
   test('keyframes are generated when used in an animation within a prefixed setup', async () => {
     expect(
       await run(
