@@ -822,6 +822,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     for parent in first_root?.ancestors() {
         if parent.join(".git").exists() {
             builder.require_git(true);
+            builder.current_dir(parent);
             break;
         }
     }
