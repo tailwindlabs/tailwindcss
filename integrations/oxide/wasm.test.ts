@@ -59,6 +59,68 @@ testFn(
 )
 
 testFn(
+  '@tailwindcss/oxide-wasm32-wasi discovers files across repeated scans',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/oxide-wasm32-wasi": "workspace:^"
+          }
+        }
+      `,
+      'src/index.html': 'flex',
+      'index.mjs': js`
+        import { Scanner } from '@tailwindcss/oxide-wasm32-wasi'
+        import { mkdirSync, realpathSync, utimesSync, writeFileSync } from 'node:fs'
+        import { join, relative } from 'node:path'
+
+        let base = realpathSync('src')
+        let file = join(base, 'index.html')
+        let initialTime = new Date('2026-01-01T00:00:00Z')
+        utimesSync(file, initialTime, initialTime)
+
+        let scanner = new Scanner({
+          sources: [{ base, pattern: '**/*', negated: false }],
+        })
+        let scan = () => ({
+          candidates: scanner.scan(),
+          files: scanner.files.map((file) => relative(base, file)).sort(),
+        })
+
+        let initial = scan()
+        let unchanged = scan()
+
+        writeFileSync(file, 'grid')
+        let updatedTime = new Date('2026-01-01T00:00:01Z')
+        utimesSync(file, updatedTime, updatedTime)
+        let updated = scan()
+
+        mkdirSync(join(base, 'nested'))
+        writeFileSync(join(base, 'nested', 'index.html'), 'block')
+        let added = scan()
+
+        console.log(JSON.stringify({ initial, unchanged, updated, added }))
+        process.exit()
+      `,
+    },
+  },
+  async ({ expect, exec }) => {
+    let { stdout, exitCode } = await exec('node index.mjs', undefined, { streams: true })
+    expect(exitCode).toBe(0)
+
+    let { initial, unchanged, updated, added } = JSON.parse(stdout)
+    expect(initial).toEqual({ candidates: ['flex'], files: ['index.html'] })
+    expect(unchanged).toEqual(initial)
+    expect(updated).toEqual({ candidates: ['flex', 'grid'], files: ['index.html'] })
+    expect(added).toEqual({
+      candidates: ['block', 'flex', 'grid'],
+      files: ['index.html', 'nested/index.html'],
+    })
+  },
+)
+
+testFn(
   '`@tailwindcss/oxide` falls back to the wasm build when no native binding is available',
   {
     fs: {
