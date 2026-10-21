@@ -384,7 +384,9 @@ impl Scanner {
 
         // Use synchronous walk for the initial build (lower overhead) and parallel
         // walk for subsequent calls (watch mode) where the overhead is amortised.
-        let all_entries = if self.has_scanned_once {
+        // Parallel walking only supports Unix and Windows, so other targets (e.g.
+        // WASI) must continue using synchronous walking.
+        let all_entries = if self.has_scanned_once && cfg!(any(unix, windows)) {
             walk_parallel(walker)
         } else {
             walk_synchronous(walker)
