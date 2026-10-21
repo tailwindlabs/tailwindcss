@@ -2938,7 +2938,7 @@ mod scanner {
         let dir = tempdir().unwrap().into_path();
 
         let global_ignore = dir.join("global ignore");
-        fs::write(&global_ignore, "ignored-by-global.html\n").unwrap();
+        fs::write(&global_ignore, "ignored-by-global.html\nsrc/ignored-relative.html\n").unwrap();
 
         let global_gitconfig = dir.join(".gitconfig");
         fs::write(
@@ -2961,6 +2961,10 @@ mod scanner {
                 (
                     "src/ignored-by-global.html",
                     "content-['ignored-by-global.html']",
+                ),
+                (
+                    "src/ignored-relative.html",
+                    "content-['ignored-relative.html']",
                 ),
             ],
         );
