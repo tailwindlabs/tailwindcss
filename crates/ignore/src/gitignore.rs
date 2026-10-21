@@ -702,14 +702,14 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
         Regex::builder()
             .configure(Regex::config().utf8_empty(false))
             .syntax(syntax::Config::new().utf8(false))
-            .build(r#"(?im-u)^\s*excludesfile\s*=\s*"?\s*(\S+?)\s*"?\s*$"#)
+            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"(\S(?:[^"\r\n]*\S)?)"|(\S+))\s*$"#)
             .unwrap()
     });
     // We don't care about amortizing allocs here I think. This should only
     // be called ~once per traversal or so? (Although it's not guaranteed...)
     let mut caps = re.create_captures();
     re.captures(data, &mut caps);
-    let span = caps.get_group(1)?;
+    let span = caps.get_group(1).or_else(|| caps.get_group(2))?;
     let candidate = &data[span];
     std::str::from_utf8(candidate).ok().map(|s| PathBuf::from(expand_tilde(s)))
 }
@@ -877,6 +877,13 @@ mod tests {
             path_string(got.unwrap()),
             super::expand_tilde("~/foo/bar")
         );
+    }
+
+    #[test]
+    fn parse_excludes_file_with_spaces() {
+        let data = bytes("[core]\nexcludesFile = \"~/foo bar/ignore\"");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo bar/ignore"));
     }
 
     #[test]
