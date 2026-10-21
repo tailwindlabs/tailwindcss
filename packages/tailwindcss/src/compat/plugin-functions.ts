@@ -19,12 +19,12 @@ export function createThemeFn(
     // - "foo/bar/baz/50%"      -> "50%"
     let lastSlash = path.lastIndexOf('/')
     let modifier: string | null = null
-    if (lastSlash !== -1 && resolve(path) == null) {
+    let resolvedValue = resolve(path)
+    if (lastSlash !== -1 && resolvedValue == null) {
       modifier = path.slice(lastSlash + 1).trim()
       path = path.slice(0, lastSlash).trim()
+      resolvedValue = resolve(path)
     }
-
-    let resolvedValue = resolve(path)
 
     function resolve(path: string) {
       let keypath = toKeyPath(path)
