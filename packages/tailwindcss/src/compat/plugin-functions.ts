@@ -19,12 +19,14 @@ export function createThemeFn(
     // - "foo/bar/baz/50%"      -> "50%"
     let lastSlash = path.lastIndexOf('/')
     let modifier: string | null = null
-    if (lastSlash !== -1) {
+    if (lastSlash !== -1 && resolve(path) == null) {
       modifier = path.slice(lastSlash + 1).trim()
       path = path.slice(0, lastSlash).trim()
     }
 
-    let resolvedValue = (() => {
+    let resolvedValue = resolve(path)
+
+    function resolve(path: string) {
       let keypath = toKeyPath(path)
       let [cssValue, options] = readFromCss(designSystem.theme, keypath)
 
@@ -124,7 +126,7 @@ export function createThemeFn(
 
       // Values from CSS take precedence over values from the config
       return cssValue ?? configValue
-    })()
+    }
 
     // Apply the opacity modifier if present
     if (modifier && typeof resolvedValue === 'string') {
