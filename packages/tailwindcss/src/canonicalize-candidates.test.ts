@@ -1265,6 +1265,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // Arbitrary properties to combined class with modifier
       ['[font-size:14px] [line-height:1.625]', 'text-sm/relaxed'],
+
+      // Font size with `leading-none` to the `/none` modifier
+      ['text-xs leading-none', 'text-xs/none'],
+      ['text-[13px] leading-none', 'text-[13px]/none'],
     ])(testName, { timeout }, async (candidates, expected) => {
       let input = css`
         @import 'tailwindcss';
