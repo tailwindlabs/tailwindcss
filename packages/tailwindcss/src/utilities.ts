@@ -228,7 +228,9 @@ export function asColor(
     return withAlpha(value, alpha)
   }
 
-  if (!isValidOpacityValue(modifier.value)) {
+  // opacity value above 100 would result in an incorrect value for color-mix()
+  // e.g. bg-red-500/150 -> color-mix(..., 150%, ...)
+  if (!isValidOpacityValue(modifier.value) || Number(modifier.value) > 100) {
     return null
   }
 
