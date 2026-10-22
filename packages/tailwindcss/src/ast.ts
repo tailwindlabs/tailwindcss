@@ -549,7 +549,18 @@ export function optimizeAst(
 
               requiresPolyfill = true
 
-              inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+              // The variable name in the AST includes the theme prefix (e.g. `--tw-color-red`),
+              // but theme values are stored without it. Variables that don't start with the prefix
+              // are not theme variables, so they must not be looked up.
+              let prefix = designSystem.theme.prefix
+              if (prefix && !variableName.startsWith(`--${prefix}-`)) {
+                containsUnresolvableVars = true
+                return
+              }
+
+              inlinedColor = designSystem.theme.resolveValue(null, [
+                designSystem.theme.unprefixKey(variableName) as any,
+              ])
               if (!inlinedColor) {
                 containsUnresolvableVars = true
                 return
