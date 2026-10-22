@@ -6552,6 +6552,36 @@ describe('@variant', () => {
 })
 
 describe('`color-mix(…)` polyfill', () => {
+  it('inlines the fallback color when the theme uses a prefix', async () => {
+    expect(
+      await run(
+        ['tw:text-red-500/50'],
+        css`
+          @theme prefix(tw) {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --tw-color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .tw\\:text-red-500\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .tw\\:text-red-500\\/50 {
+          color: color-mix(in oklab, var(--tw-color-red-500) 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
   it('creates an inlined variable version of the color-mix(…) usages', async () => {
     expect(
       await run(
