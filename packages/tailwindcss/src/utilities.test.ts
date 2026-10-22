@@ -26390,6 +26390,7 @@ test('opacity', async () => {
       'opacity-2.5',
       'opacity-3.25',
       'opacity-4.75',
+      'opacity-150',
       'opacity-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
@@ -26410,6 +26411,10 @@ test('opacity', async () => {
       opacity: .15;
     }
 
+    .opacity-150 {
+      opacity: 1.5;
+    }
+
     .opacity-\\[var\\(--value\\)\\] {
       opacity: var(--value);
     }
@@ -26426,6 +26431,31 @@ test('opacity', async () => {
       'opacity-15/foo',
       'opacity-[var(--value)]/foo',
     ]),
+  ).toEqual('')
+})
+
+test('invalid bare color opacity modifiers', async () => {
+  expect(
+    await run(
+      [
+        'bg-red-500/2.3',
+        'bg-red-500/101',
+        'bg-current/150',
+        'bg-[#0088cc]/101',
+        'text-red-500/500',
+        'border-red-500/100.25',
+        'shadow-red-500/101',
+        'inset-shadow-red-500/101',
+        'text-shadow-red-500/101',
+        'drop-shadow-red-500/101',
+      ],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 })
 
