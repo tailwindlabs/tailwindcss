@@ -6582,6 +6582,36 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('does not resolve custom variables that do not start with the theme prefix', async () => {
+    expect(
+      await run(
+        ['tw:text-(--my-color-red-500)/50'],
+        css`
+          @theme prefix(tw) {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --tw-color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .tw\\:text-\\(--my-color-red-500\\)\\/50 {
+        color: var(--my-color-red-500);
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .tw\\:text-\\(--my-color-red-500\\)\\/50 {
+          color: color-mix(in oklab, var(--my-color-red-500) 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
   it('creates an inlined variable version of the color-mix(…) usages', async () => {
     expect(
       await run(
