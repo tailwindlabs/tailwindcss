@@ -73,12 +73,12 @@ export function escape(value: string) {
 }
 
 export function unescape(escaped: string) {
-  return escaped.replace(/\\([\dA-Fa-f]{1,6}[\t\n\f\r ]?|[\S\s])/g, (match) => {
-    if (match.length <= 2) {
-      return match[1]
+  return escaped.replace(/\\(?:([\dA-Fa-f]{1,6})[\t\n\f\r ]?|([\S\s]))/g, (_, hex, char) => {
+    if (!hex) {
+      return char
     }
 
-    let codePoint = Number.parseInt(match.slice(1).trim(), 16)
+    let codePoint = Number.parseInt(hex, 16)
 
     if (
       // Invalid codepoint: https://infra.spec.whatwg.org/#code-point

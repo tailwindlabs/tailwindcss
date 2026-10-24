@@ -376,7 +376,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
             // Create a new compiler, given the new `input`
             ;[compiler, scanner] = await createCompiler(input, I)
 
-            // Succesfully created a new compiler, so the `fullRebuildPaths`
+            // Successfully created a new compiler, so the `fullRebuildPaths`
             // will be updated. If other errors occur, we should be able to
             // restore the paths unconditionally.
             backupRebuildPaths = fullRebuildPaths.slice()

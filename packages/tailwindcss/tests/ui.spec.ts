@@ -2387,6 +2387,120 @@ test('shadow DOM has access to variables', async ({ page }) => {
   }
 }
 
+for (let kind of ['group', 'peer']) {
+  test(`${kind}-* variants`, async ({ page }) => {
+    let targets = html`
+      <div id="target" class="${kind}-focus:z-10"></div>
+      <div id="applied" class="applied"></div>
+    `
+
+    let { getPropertyValue } = await render(
+      page,
+      kind === 'group'
+        ? html`<div id="trigger" tabindex="0" class="group owner">${targets}</div>`
+        : html`<div class="owner">
+            <div id="trigger" tabindex="0" class="peer"></div>
+            ${targets}
+          </div>`,
+      css`
+        .owner > .applied {
+          @apply ${kind}-focus:z-20;
+        }
+      `,
+    )
+
+    expect(await getPropertyValue('#target', 'z-index')).toEqual('auto')
+    expect(await getPropertyValue('#applied', 'z-index')).toEqual('auto')
+
+    await page.locator('#trigger').focus()
+
+    expect(await getPropertyValue('#target', 'z-index')).toEqual('10')
+    expect(await getPropertyValue('#applied', 'z-index')).toEqual('20')
+
+    await page.locator('#trigger').blur()
+
+    expect(await getPropertyValue('#target', 'z-index')).toEqual('auto')
+    expect(await getPropertyValue('#applied', 'z-index')).toEqual('auto')
+  })
+}
+
+test('group-* variants do not change specificity', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="trigger" tabindex="0" class="group">
+        <div id="target" class="target group-focus:z-10"></div>
+      </div>
+    `,
+    css`
+      @layer utilities {
+        .target {
+          z-index: 20;
+        }
+        .target.equal {
+          z-index: 30;
+        }
+      }
+    `,
+  )
+
+  await page.locator('#trigger').focus()
+
+  expect(await getPropertyValue('#target', 'z-index')).toEqual('10')
+
+  await page.locator('#target').evaluate((element) => element.classList.add('equal'))
+
+  expect(await getPropertyValue('#target', 'z-index')).toEqual('30')
+})
+
+test('stacked group-* variants match regardless of the order of the groups', async ({ page }) => {
+  for (let [outer, inner] of [
+    ['a', 'b'],
+    ['b', 'a'],
+  ]) {
+    let { getPropertyValue } = await render(
+      page,
+      html`
+        <div class="group/${outer}" data-active>
+          <div id="inner" class="group/${inner}" data-active>
+            <div id="target" class="group-data-active/a:group-data-active/b:z-10"></div>
+          </div>
+        </div>
+      `,
+    )
+
+    expect(await getPropertyValue('#target', 'z-index')).toEqual('10')
+
+    await page.locator('#inner').evaluate((element) => element.removeAttribute('data-active'))
+
+    expect(await getPropertyValue('#target', 'z-index')).toEqual('auto')
+  }
+})
+
+test('compound group-* and peer-* variants', async ({ page }) => {
+  let { getPropertyValue } = await render(
+    page,
+    html`
+      <div id="outer" tabindex="0" class="group">
+        <div id="peer" tabindex="0" class="peer"></div>
+        <div id="middle" class="group peer-group-focus:z-20">
+          <div id="target" class="group-peer-focus:z-10"></div>
+        </div>
+      </div>
+    `,
+  )
+
+  await page.locator('#peer').focus()
+
+  expect(await getPropertyValue('#target', 'z-index')).toEqual('10')
+  expect(await getPropertyValue('#middle', 'z-index')).toEqual('auto')
+
+  await page.locator('#outer').focus()
+
+  expect(await getPropertyValue('#target', 'z-index')).toEqual('auto')
+  expect(await getPropertyValue('#middle', 'z-index')).toEqual('20')
+})
+
 // ---
 
 const preflight = fs.readFileSync(path.resolve(__dirname, '..', 'preflight.css'), 'utf-8')

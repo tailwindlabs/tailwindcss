@@ -75,6 +75,8 @@ export function buildDesignSystem(
   let variants = createVariants(theme)
 
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
+  let cachedVariantOrder: Map<Variant, number> | null = null
+  let cachedVariantOrderSize = -1
   let parsedCandidates = new DefaultMap((candidate) =>
     Array.from(parseCandidate(candidate, designSystem)),
   )
@@ -188,6 +190,11 @@ export function buildDesignSystem(
     },
 
     getVariantOrder() {
+      // parsedVariants only grows, so the cache should be reset only when the size changes
+      if (cachedVariantOrder !== null && cachedVariantOrderSize === parsedVariants.size) {
+        return cachedVariantOrder
+      }
+
       let variants = Array.from(parsedVariants.values())
       variants.sort((a, z) => this.variants.compare(a, z))
 
@@ -208,6 +215,9 @@ export function buildDesignSystem(
         order.set(variant, index)
         prevVariant = variant
       }
+
+      cachedVariantOrder = order
+      cachedVariantOrderSize = parsedVariants.size
 
       return order
     },
