@@ -1,3 +1,5 @@
 {
   "extends": "../tsconfig.base.json",
+  // `include` in the base config is relative to `packages/`, so set it per package
+  "include": ["**/*.ts"],
 }
