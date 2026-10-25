@@ -132,7 +132,14 @@ export function addWhitespaceAroundMathOperators(input: string) {
       valuePos = null
     }
 
-    // Strings should be kept as-is until the end of the string
+    // The next character is escaped, so we skip it.
+    if (char === BACKSLASH) {
+      result += input.slice(i, i + 2)
+      i += 1
+      continue
+    }
+
+    // Strings should be handled as-is until the end of the string
     if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
       let start = i
 
