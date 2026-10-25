@@ -284,7 +284,12 @@ async function loadDesignSystem(cssFile: string | null, cwd: string) {
 // stdout, so send the console output to stderr instead.
 async function redirectConsoleToStderr<T>(fn: () => Promise<T>): Promise<T> {
   let console = globalThis.console
-  globalThis.console = new Console({ stdout: process.stderr, stderr: process.stderr })
+  // `bun-types` redeclares `Console` in the `console` module, so the type of
+  // `new Console()` is too narrow when the standalone CLI type-checks this file.
+  globalThis.console = new Console({
+    stdout: process.stderr,
+    stderr: process.stderr,
+  }) as typeof globalThis.console
 
   try {
     return await fn()
