@@ -451,7 +451,12 @@ export function buildPluginApi({
                 modifier = candidate.modifier.value
               } else if (modifiers && Object.hasOwn(modifiers, candidate.modifier.value)) {
                 modifier = modifiers[candidate.modifier.value]
-              } else if (isColor && !Number.isNaN(Number(candidate.modifier.value))) {
+              } else if (
+                isColor &&
+                !Number.isNaN(Number(candidate.modifier.value)) &&
+                // `color-mix(…)` doesn't accept percentages above `100%`
+                Number(candidate.modifier.value) <= 100
+              ) {
                 modifier = `${candidate.modifier.value}%`
               } else {
                 modifier = null
