@@ -24477,6 +24477,8 @@ test('filter', async () => {
         '-drop-shadow-red-500/foo',
         '-drop-shadow-red-500/50',
         'drop-shadow-red-500/101',
+        'drop-shadow/101',
+        'drop-shadow-[0_0_red]/101',
 
         '-saturate-0',
         'saturate--5',
@@ -27413,6 +27415,9 @@ test('text-shadow', async () => {
         'text-shadow/foo',
         'text-shadow-sm/foo',
         'text-shadow-red-500/101',
+        'text-shadow/101',
+        'text-shadow-sm/101',
+        'text-shadow-[10px_10px]/101',
       ],
       css`
         @theme {
@@ -27910,6 +27915,9 @@ test('shadow', async () => {
         'shadow-[10px_10px]/foo',
         'shadow-[#0088cc]/foo',
         'shadow-red-500/101',
+        'shadow/101',
+        'shadow-sm/101',
+        'shadow-[10px_10px]/101',
       ],
       css`
         @theme {
@@ -28415,6 +28423,9 @@ test('inset-shadow', async () => {
         'inset-shadow-sm/foo',
         'inset-shadow-[10px_10px]/foo',
         'inset-shadow-red-500/101',
+        'inset-shadow/101',
+        'inset-shadow-sm/101',
+        'inset-shadow-[10px_10px]/101',
       ],
       css`
         @theme {
