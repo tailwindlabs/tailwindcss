@@ -16,6 +16,9 @@ const COMMA = 0x2c
 const SPACE = 0x20
 const PERCENT = 0x25
 const UNDERSCORE = 0x5f
+const BACKSLASH = 0x5c
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
 
 const MATH_FUNCTIONS = [
   'abs',
@@ -127,6 +130,28 @@ export function addWhitespaceAroundMathOperators(input: string) {
     else {
       lastValuePos = valuePos
       valuePos = null
+    }
+
+    // Strings should be kept as-is until the end of the string
+    if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      let start = i
+
+      while (++i < input.length) {
+        let nextChar = input.charCodeAt(i)
+
+        // The next character is escaped, so we skip it.
+        if (nextChar === BACKSLASH) {
+          i += 1
+          continue
+        }
+
+        if (nextChar === char) {
+          break
+        }
+      }
+
+      result += input.slice(start, i + 1)
+      continue
     }
 
     // Determine if we're inside a math function
