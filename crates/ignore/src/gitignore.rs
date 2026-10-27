@@ -702,7 +702,7 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
         Regex::builder()
             .configure(Regex::config().utf8_empty(false))
             .syntax(syntax::Config::new().utf8(false))
-            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"(\S(?:[^"\r\n]*\S)?)"|(\S+))\s*$"#)
+            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"([^"\r\n]*)"|(\S+?))(?:\s*[#;].*|\s*)$"#)
             .unwrap()
     });
     // We don't care about amortizing allocs here I think. This should only
@@ -714,13 +714,21 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
     std::str::from_utf8(candidate).ok().map(|s| PathBuf::from(expand_tilde(s)))
 }
 
-/// Expands ~ in file paths to the value of $HOME.
+/// Expands ~ at the start of file paths to the value of $HOME.
 fn expand_tilde(path: &str) -> String {
-    let home = match home_dir() {
-        None => return path.to_string(),
-        Some(home) => home.to_string_lossy().into_owned(),
-    };
-    path.replace("~", &home)
+    if path == "~" {
+        return match home_dir() {
+            None => path.to_string(),
+            Some(home) => home.to_string_lossy().into_owned(),
+        };
+    }
+    if path.starts_with("~/") || path.starts_with("~\\") {
+        if let Some(home) = home_dir() {
+            let home = home.to_string_lossy();
+            return format!("{}{}", home, &path[1..]);
+        }
+    }
+    path.to_string()
 }
 
 /// Returns the location of the user's home directory.
@@ -890,6 +898,25 @@ mod tests {
     fn parse_excludes_file5() {
         let data = bytes("[core]\nexcludesFile = \" \"~/foo/bar \" \"");
         assert!(super::parse_excludes_file(&data).is_none());
+    }
+
+    #[test]
+    fn parse_excludes_file_with_inline_comment() {
+        let data = bytes("[core]\nexcludesFile = ~/foo/bar # ignore file comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo/bar"));
+    }
+
+    #[test]
+    fn parse_excludes_file_quoted_with_comment() {
+        let data = bytes("[core]\nexcludesFile = \"~/foo bar/ignore\" ; semicolon comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo bar/ignore"));
+    }
+
+    #[test]
+    fn expand_tilde_preserves_internal_tilde() {
+        assert_eq!(super::expand_tilde("/config/~backup/ignore"), "/config/~backup/ignore");
     }
 
     // See: https://github.com/BurntSushi/ripgrep/issues/106
