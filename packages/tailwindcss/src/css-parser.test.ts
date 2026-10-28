@@ -265,6 +265,35 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           },
         ])
       })
+
+      it('should not treat `!important` inside of a value as the important flag', () => {
+        expect(
+          parse(css`
+            content: 'a !important b';
+            background: url('x!important.png') !important;
+            --foo: '!important';
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: 'content',
+            value: "'a !important b'",
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: 'background',
+            value: "url('x!important.png')",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: "'!important'",
+            important: false,
+          },
+        ])
+      })
     })
 
     describe('Custom properties', () => {

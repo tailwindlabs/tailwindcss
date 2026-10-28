@@ -632,12 +632,18 @@ function parseDeclaration(
   colonIdx: number = buffer.indexOf(':'),
 ): Declaration | null {
   if (colonIdx === -1) return null
-  let importantIdx = buffer.indexOf('!important', colonIdx + 1)
-  return decl(
-    buffer.slice(0, colonIdx).trim(),
-    buffer.slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx).trim(),
-    importantIdx !== -1,
-  )
+
+  // `!important` is only a flag when it is at the end of the value. Anywhere
+  // else it is part of the value, e.g. inside of a string:
+  //
+  // ```css
+  // content: "a !important b";
+  // ```
+  let value = buffer.slice(colonIdx + 1).trim()
+  let important = value.endsWith('!important')
+  if (important) value = value.slice(0, -'!important'.length).trim()
+
+  return decl(buffer.slice(0, colonIdx).trim(), value, important)
 }
 
 function parseString(
