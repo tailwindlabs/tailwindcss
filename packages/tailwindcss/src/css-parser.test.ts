@@ -266,6 +266,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should parse custom properties with `!important` when there is a trailing comment', () => {
+        expect(
+          parse(css`
+            --foo: red !important /* Very important */;
+            --bar: red /* not important */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            value: 'red /* not important */',
+            important: false,
+          },
+        ])
+      })
+
       it('should not treat `!important` inside of a value as the important flag', () => {
         expect(
           parse(css`

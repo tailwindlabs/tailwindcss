@@ -640,8 +640,21 @@ function parseDeclaration(
   // content: "a !important b";
   // ```
   let value = buffer.slice(colonIdx + 1).trim()
-  let important = value.endsWith('!important')
-  if (important) value = value.slice(0, -'!important'.length).trim()
+
+  // Custom properties keep their comments, so the flag can be followed by one:
+  //
+  // ```css
+  // --foo: red !important /* comment */;
+  // ```
+  let end = value
+  while (end.endsWith('*/')) {
+    let commentStart = end.lastIndexOf('/*')
+    if (commentStart === -1) break
+    end = end.slice(0, commentStart).trimEnd()
+  }
+
+  let important = end.endsWith('!important')
+  if (important) value = end.slice(0, -'!important'.length).trim()
 
   return decl(buffer.slice(0, colonIdx).trim(), value, important)
 }
