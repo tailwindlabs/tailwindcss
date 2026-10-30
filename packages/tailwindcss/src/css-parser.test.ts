@@ -457,6 +457,31 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
       })
 
+      it('should parse a custom property with a missing ending `;` at the end of the input', () => {
+        expect(parse('--foo: bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+        ])
+        expect(parse('--foo: bar !important')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: true },
+        ])
+        expect(parse('--foo: var(--bar)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'var(--bar)', important: false },
+        ])
+        expect(parse("--foo: 'bar'")).toEqual([
+          { kind: 'declaration', property: '--foo', value: "'bar'", important: false },
+        ])
+        expect(parse('--foo: {}')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '{}', important: false },
+        ])
+        expect(parse('--foo: bar /* baz */')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar /* baz */', important: false },
+        ])
+        expect(parse('--foo: bar;\n--baz: rgb(0 0 0)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+          { kind: 'declaration', property: '--baz', value: 'rgb(0 0 0)', important: false },
+        ])
+      })
+
       it('should parse a custom property with an embedded programming language', () => {
         expect(
           parse(css`
