@@ -1,5 +1,7 @@
+import type { ChangedContent } from '@tailwindcss/oxide'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { pathsEqual } from '../../utils/paths-equal'
 
 export function drainStdin() {
   return new Promise<string>((resolve, reject) => {
@@ -32,4 +34,29 @@ export async function outputFile(file: string, contents: string) {
 
   // Write the file
   await fs.writeFile(file, contents, 'utf8')
+}
+
+export function getRebuildStrategy(
+  files: string[],
+  fullRebuildPaths: string[],
+  platform: NodeJS.Platform = process.platform,
+): { kind: 'incremental'; changedFiles: ChangedContent[] } | { kind: 'full' } {
+  let changedFiles: ChangedContent[] = []
+
+  for (let file of files) {
+    // If one of the changed files is related to the input CSS or JS
+    // config/plugin files, then we need to do a full rebuild because
+    // the theme might have changed.
+    if (fullRebuildPaths.some((p) => pathsEqual(p, file, platform))) {
+      return { kind: 'full' }
+    }
+
+    // Track new and updated files for incremental rebuilds.
+    changedFiles.push({
+      file,
+      extension: path.extname(file).slice(1),
+    } satisfies ChangedContent)
+  }
+
+  return { kind: 'incremental', changedFiles }
 }
