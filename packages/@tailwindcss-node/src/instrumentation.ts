@@ -13,6 +13,7 @@ export class Instrumentation implements Disposable {
   #timerStack: { id: string; label: string; namespace: string; value: bigint }[] = []
 
   constructor(
+    private shouldReport = env.DEBUG,
     private defaultFlush = (message: string) => void process.stderr.write(`${message}\n`),
   ) {}
 
@@ -46,6 +47,41 @@ export class Instrumentation implements Disposable {
     let parent = this.#timerStack.pop()!
     let elapsed = end - parent.value
     this.#timers.get(parent.id).value += elapsed
+  }
+
+  track(label: string) {
+    this.start(label)
+    let done = false
+
+    return {
+      [Symbol.dispose]: () => {
+        if (!done) {
+          this.end(label)
+          done = true
+        }
+      },
+      [Symbol.asyncDispose]: () => {
+        if (!done) {
+          this.end(label)
+          done = true
+        }
+      },
+    }
+  }
+
+  span<T>(label: string, fn: () => T): T {
+    this.start(label)
+    let isPromise = false
+    try {
+      let result = fn()
+
+      isPromise = result && typeof (result as any).then === 'function'
+
+      // @ts-expect-error — TS can't infer that result is a Promise here
+      return isPromise ? result.finally(() => this.end(label)) : result
+    } finally {
+      if (!isPromise) this.end(label)
+    }
   }
 
   reset() {
@@ -100,7 +136,7 @@ export class Instrumentation implements Disposable {
   }
 
   [Symbol.dispose]() {
-    env.DEBUG && this.report()
+    this.shouldReport && this.report()
   }
 }
 

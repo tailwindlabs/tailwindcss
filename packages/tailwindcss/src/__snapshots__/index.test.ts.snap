@@ -1,8 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using the default theme 1`] = `
-"@layer properties {
-  @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+"
+@layer properties {
+  @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
     *, :before, :after, ::backdrop {
       --tw-shadow: 0 0 #0000;
       --tw-shadow-color: initial;
@@ -123,14 +124,16 @@ exports[`compiling CSS > \`@tailwind utilities\` is replaced by utilities using 
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
-}"
+}
+"
 `;
 
 exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
-"@layer theme {
+"
+@layer theme {
   :root, :host {
-    --tw-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+    --tw-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --tw-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
     monospace;
     --tw-default-font-family: var(--tw-font-sans);
@@ -157,7 +160,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
     line-height: 1.5;
-    font-family: var(--tw-default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-family: var(--tw-default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
     font-feature-settings: var(--tw-default-font-feature-settings, normal);
     font-variation-settings: var(--tw-default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -223,7 +226,7 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
     border-collapse: collapse;
   }
 
-  :-moz-focusring {
+  :-moz-focusring:where(:not(iframe)) {
     outline: auto;
   }
 
@@ -385,5 +388,6 @@ exports[`compiling CSS > prefix all CSS variables inside preflight 1`] = `
   }
 }
 
-@layer components, utilities;"
+@layer components, utilities;
+"
 `;

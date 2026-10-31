@@ -92,6 +92,8 @@ export default [
   '--tw-skew-y',
   'transform',
 
+  'zoom',
+
   'animation',
 
   'cursor',
@@ -130,6 +132,10 @@ export default [
   'scroll-padding-right',
   'scroll-padding-bottom',
   'scroll-padding-left',
+
+  'scrollbar-width',
+  'scrollbar-color',
+  'scrollbar-gutter',
 
   'list-style-position',
   'list-style-type',
@@ -354,6 +360,7 @@ export default [
   'text-overflow',
   'hyphens',
   'white-space',
+  'tab-size',
 
   'color',
   'text-transform',

@@ -16,8 +16,8 @@ export function migrateArbitraryVariants(
   rawCandidate: string,
 ): string {
   let designSystem = prepareDesignSystemStorage(baseDesignSystem)
-  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY]
-  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY]
+  let signatures = designSystem.storage[VARIANT_SIGNATURE_KEY].get(null)
+  let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY].get(null)
 
   for (let readonlyCandidate of designSystem.parseCandidate(rawCandidate)) {
     // We are only interested in the variants
@@ -35,7 +35,11 @@ export function migrateArbitraryVariants(
       if (typeof targetSignature !== 'string') continue
 
       let foundVariants = variants.get(targetSignature)
-      if (foundVariants.length !== 1) continue
+      if (foundVariants.length === 0) continue
+
+      // The variant is already in a canonical form, e.g.: `min-lg` and `lg`
+      // produce the same CSS, but both are valid so we keep them as-is.
+      if (foundVariants.includes(targetString)) continue
 
       let foundVariant = foundVariants[0]
       let parsedVariant = designSystem.parseVariant(foundVariant)

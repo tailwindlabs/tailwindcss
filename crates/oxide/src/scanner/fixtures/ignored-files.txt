@@ -2,3 +2,5 @@ package-lock.json
 pnpm-lock.yaml
 bun.lockb
 .gitignore
+.env
+.env.*

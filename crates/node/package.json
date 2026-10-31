@@ -1,6 +1,6 @@
 {
   "name": "@tailwindcss/oxide",
-  "version": "4.2.1",
+  "version": "4.3.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
@@ -33,9 +33,11 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "3.4.1",
-    "@napi-rs/wasm-runtime": "^1.1.1",
-    "emnapi": "1.8.1"
+    "@emnapi/core": "1.11.3",
+    "@emnapi/runtime": "1.11.3",
+    "@napi-rs/cli": "3.7.4",
+    "@napi-rs/wasm-runtime": "^1.2.2",
+    "emnapi": "1.11.3"
   },
   "engines": {
     "node": ">= 20"

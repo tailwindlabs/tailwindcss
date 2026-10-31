@@ -1,5 +1,17 @@
 import { execSync } from 'node:child_process'
 
+export function gitRoot(cwd?: string): string | null {
+  try {
+    return execSync('git rev-parse --show-toplevel', {
+      encoding: 'utf-8',
+      cwd,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
+  } catch {
+    return null
+  }
+}
+
 export function isRepoDirty(cwd?: string) {
   try {
     let stdout = execSync('git status --porcelain', { encoding: 'utf-8', cwd })

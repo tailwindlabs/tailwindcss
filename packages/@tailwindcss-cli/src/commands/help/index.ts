@@ -3,30 +3,34 @@ import type { Arg } from '../../utils/args'
 import { UI, header, highlight, indent, println, wordWrap } from '../../utils/renderer'
 
 export function help({
+  render = true,
   invalid,
   usage,
   options,
 }: {
+  render?: boolean
   invalid?: string
   usage?: string[]
   options?: Arg
 }) {
   // Available terminal width
-  let width = process.stdout.columns
+  let width = process.stdout.columns ?? 80
+  let lines: string[] = []
+  let writeLine = render ? println : (value = '') => void lines.push(value)
 
   // Render header
-  println(header())
+  writeLine(header())
 
   // Render the invalid command
   if (invalid) {
-    println()
-    println(`${pc.dim('Invalid command:')} ${invalid}`)
+    writeLine()
+    writeLine(`${pc.dim('Invalid command:')} ${invalid}`)
   }
 
   // Render usage
   if (usage && usage.length > 0) {
-    println()
-    println(pc.dim('Usage:'))
+    writeLine()
+    writeLine(pc.dim('Usage:'))
     for (let [idx, example] of usage.entries()) {
       // Split the usage example into the command and its options. This allows
       // us to wrap the options based on the available width of the terminal.
@@ -65,7 +69,7 @@ export function help({
       //     tailwindcss other [--watch] [options...]
       // ```
       if (lines.length > 1 && idx !== 0) {
-        println()
+        writeLine()
       }
 
       // Print the usage examples based on available width of the terminal.
@@ -86,9 +90,9 @@ export function help({
       // ```
       //
       // > Note how the second line is indented to align with the first line.
-      println(indent(`${command}${lines.shift()}`))
+      writeLine(indent(`${command}${lines.shift()}`))
       for (let line of lines) {
-        println(indent(line, command.length))
+        writeLine(indent(line, command.length))
       }
     }
   }
@@ -131,8 +135,8 @@ export function help({
       maxOptionLength = Math.max(maxOptionLength, option.length)
     }
 
-    println()
-    println(pc.dim('Options:'))
+    writeLine()
+    writeLine(pc.dim('Options:'))
 
     // The minimum amount of dots between the option and the description.
     let minimumGap = 8
@@ -160,15 +164,19 @@ export function help({
       )
 
       // Print the option, the spacer dots and the start of the description.
-      println(
+      writeLine(
         indent(`${pc.blue(option)} ${pc.dim(pc.gray('\u00B7')).repeat(dotCount)} ${lines.shift()}`),
       )
 
       // Print the remaining lines of the description, indenting them to align
       // with the start of the description.
       for (let line of lines) {
-        println(indent(`${' '.repeat(option.length + dotCount + spaces)}${line}`))
+        writeLine(indent(`${' '.repeat(option.length + dotCount + spaces)}${line}`))
       }
     }
+  }
+
+  if (!render) {
+    return lines.join('\n')
   }
 }

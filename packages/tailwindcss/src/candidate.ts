@@ -3,6 +3,7 @@ import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
+import type { ValueFunctionNode } from './value-parser'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
@@ -371,6 +372,14 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     }
   }
 
+  // If there's more than one modifier, the utility is invalid.
+  //
+  // E.g.:
+  //
+  // - `bg-red-500/50/50`
+  let parts = segment(base, '/')
+  if (parts.length > 2) return
+
   // Figure out the new base and the modifier segment if present.
   //
   // E.g.:
@@ -380,14 +389,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // ^^^^^^^^^^    -> Base without modifier
   //            ^^ -> Modifier segment
   // ```
-  let [baseWithoutModifier, modifierSegment = null, additionalModifier] = segment(base, '/')
-
-  // If there's more than one modifier, the utility is invalid.
-  //
-  // E.g.:
-  //
-  // - `bg-red-500/50/50`
-  if (additionalModifier) return
+  let [baseWithoutModifier, modifierSegment = null] = parts
 
   let parsedModifier = modifierSegment === null ? null : parseModifier(modifierSegment)
 
@@ -425,10 +427,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     if (idx === -1 || idx === 0 || idx === baseWithoutModifier.length - 1) return
 
     let property = baseWithoutModifier.slice(0, idx)
-    let value = decodeArbitraryValue(baseWithoutModifier.slice(idx + 1))
+    let value = decodeValidArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(value)) return
+    if (value === null) return
 
     yield {
       kind: 'arbitrary',
@@ -549,10 +551,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
         // Arbitrary values must end with a `]`.
         if (value[value.length - 1] !== ']') return
 
-        let arbitraryValue = decodeArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
+        let arbitraryValue = decodeValidArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
 
         // Values can't contain `;` or `}` characters at the top-level.
-        if (!isValidArbitrary(arbitraryValue)) continue
+        if (arbitraryValue === null) continue
 
         // Extract an explicit typehint if present, e.g. `bg-[color:var(--my-var)])`
         let typehint: string | null = null
@@ -613,10 +615,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
 function parseModifier(modifier: string): CandidateModifier | null {
   if (modifier[0] === '[' && modifier[modifier.length - 1] === ']') {
-    let arbitraryValue = decodeArbitraryValue(modifier.slice(1, -1))
+    let arbitraryValue = decodeValidArbitraryValue(modifier.slice(1, -1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(arbitraryValue)) return null
+    if (arbitraryValue === null) return null
 
     // Empty arbitrary values are invalid. E.g.: `data-[]:`
     //                                                 ^^
@@ -676,10 +678,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
      */
     if (variant[1] === '@' && variant.includes('&')) return null
 
-    let selector = decodeArbitraryValue(variant.slice(1, -1))
+    let selector = decodeValidArbitraryValue(variant.slice(1, -1))
 
     // Values can't contain `;` or `}` characters at the top-level.
-    if (!isValidArbitrary(selector)) return null
+    if (selector === null) return null
 
     // Empty arbitrary values are invalid. E.g.: `[]:`
     //                                            ^^
@@ -706,17 +708,18 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
 
   // Static, functional and compound variants
   {
-    // group-hover/group-name
-    // ^^^^^^^^^^^            -> Variant without modifier
-    //             ^^^^^^^^^^ -> Modifier
-    let [variantWithoutModifier, modifier = null, additionalModifier] = segment(variant, '/')
-
     // If there's more than one modifier, the variant is invalid.
     //
     // E.g.:
     //
     // - `group-hover/foo/bar`
-    if (additionalModifier) return null
+    let parts = segment(variant, '/')
+    if (parts.length > 2) return null
+
+    // group-hover/group-name
+    // ^^^^^^^^^^^            -> Variant without modifier
+    //             ^^^^^^^^^^ -> Modifier
+    let [variantWithoutModifier, modifier = null] = parts
 
     let roots = findRoots(variantWithoutModifier, (root) => {
       return designSystem.variants.has(root)
@@ -756,10 +759,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             // Discard values like `foo-[#bar]`
             if (value[0] !== '[') continue
 
-            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+            let arbitraryValue = decodeValidArbitraryValue(value.slice(1, -1))
 
             // Values can't contain `;` or `}` characters at the top-level.
-            if (!isValidArbitrary(arbitraryValue)) return null
+            if (arbitraryValue === null) return null
 
             // Empty arbitrary values are invalid. E.g.: `data-[]:`
             //                                                 ^^
@@ -780,10 +783,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             // Discard values like `foo-(--bar)`
             if (value[0] !== '(') continue
 
-            let arbitraryValue = decodeArbitraryValue(value.slice(1, -1))
+            let arbitraryValue = decodeValidArbitraryValue(value.slice(1, -1))
 
             // Values can't contain `;` or `}` characters at the top-level.
-            if (!isValidArbitrary(arbitraryValue)) return null
+            if (arbitraryValue === null) return null
 
             // Empty arbitrary values are invalid. E.g.: `data-():`
             //                                                 ^^
@@ -1035,25 +1038,48 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
   let drop = new Set<ValueParser.ValueAstNode>()
 
-  walk(ast, (node, ctx) => {
-    let parentArray = ctx.parent === null ? ast : (ctx.parent.nodes ?? [])
+  let symbols = new Set([
+    // Selectors
+    '~', // Subsequent sibling combinator
+    '>', // Child combinator
 
+    // Math operators
+    '+', // or next sibling combinator
+    '-',
+    '*', // or universal selector
+    '/',
+  ])
+  walk(ast, (node, ctx) => {
     // Handle operators (e.g.: inside of `calc(…)`)
-    if (
-      node.kind === 'word' &&
-      // Operators
-      (node.value === '+' || node.value === '-' || node.value === '*' || node.value === '/')
-    ) {
-      let idx = parentArray.indexOf(node) ?? -1
+    if (node.kind === 'word' && symbols.has(node.value)) {
+      let idx = ctx.index
 
       // This should not be possible
       if (idx === -1) return
 
-      let previous = parentArray[idx - 1]
+      // a + b
+      //   ^ node
+      //  ^ previous (whitespace)
+      let previous = ctx.siblings[idx - 1]
       if (previous?.kind !== 'separator' || previous.value !== ' ') return
 
-      let next = parentArray[idx + 1]
+      // a + b
+      //   ^ node
+      //    ^ next (whitespace)
+      let next = ctx.siblings[idx + 1]
       if (next?.kind !== 'separator' || next.value !== ' ') return
+
+      // a + b
+      //   ^ node
+      // ^ previous (node)
+      let previousPrevious = ctx.siblings[idx - 2]
+      if (previousPrevious && symbols.has(previousPrevious.value)) return
+
+      // a + b
+      //   ^ node
+      //     ^ next (node)
+      let nextNext = ctx.siblings[idx + 2]
+      if (nextNext && symbols.has(nextNext.value)) return
 
       drop.add(previous)
       drop.add(next)
@@ -1061,7 +1087,7 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
 
     // Leading and trailing whitespace
     else if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
-      if (parentArray[0] === node || parentArray[parentArray.length - 1] === node) {
+      if (ctx.siblings[0] === node || ctx.siblings[ctx.siblings.length - 1] === node) {
         drop.add(node)
       }
     }
@@ -1070,6 +1096,41 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
     // E.g.: `min(1px , 2px)` -> `min(1px,2px)`
     else if (node.kind === 'separator' && node.value.trim() === ',') {
       node.value = ','
+    }
+
+    // Wrap custom functions starting with `--`, in parentheses if preceded by
+    // a symbol. E.g.: `calc(100%---spacing(2))` → `calc(100%-(--spacing(2)))`
+    else if (node.kind === 'function' && node.value.startsWith('--')) {
+      let idx = ctx.index
+
+      // When it's the first argument, then we don't have to wrap it in `(…)`
+      //
+      // E.g.: `--spacing(…)`, no need to wrap
+      //       `calc(100%---spacing(…))`, we want to wrap
+      //
+      if (idx <= 0) return
+
+      // When it's not the first argument, we likely want to wrap it. However,
+      // when it's separated by a `,` then it's readable enough.
+      //
+      // E.g.: `min(100%,--spacing(2))` is readable, in fact
+      //       `min(100%,(--spacing(2)))` would make it worse
+      let previous = ctx.siblings[idx - 1]
+      if (previous?.kind === 'separator' && previous.value === ',') return
+
+      // When it's part of a bigger list, aka no special symbols were used, then
+      // we don't have to wrap it either.
+      //
+      // E.g.: `shadow-[inset_0px_1px_--theme(--color-white/15%)]`, wrapping would look unnecessary:
+      //       `shadow-[inset_0px_1px_(--theme(--color-white/15%))]`
+      let previousPrevious = ctx.siblings[idx - 2]
+      if (previousPrevious && !symbols.has(previousPrevious.value)) return
+
+      return WalkAction.ReplaceSkip({
+        kind: 'function',
+        value: '', // Unnamed, so will result in `(…)`
+        nodes: [node],
+      } satisfies ValueFunctionNode)
     }
   })
 
@@ -1175,4 +1236,11 @@ function escapeUnderscore(value: string): string {
   return value
     .replaceAll('_', String.raw`\_`) // Escape underscores to keep them as-is
     .replaceAll(' ', '_') // Replace spaces with underscores
+}
+
+// validates the raw value first and only then decodes it
+// the order matters: decoding breaks unbalanced parens (`calc(1px` becomes
+// `calc()1px`) so validating the decoded value would hide them
+function decodeValidArbitraryValue(raw: string): string | null {
+  return isValidArbitrary(raw) ? decodeArbitraryValue(raw) : null
 }

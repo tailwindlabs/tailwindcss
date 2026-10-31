@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe } from 'vitest'
-import { css, html, json, test, ts } from '../utils'
+import { css, html, json, test, ts, txt } from '../utils'
 
 test(
   `upgrade JS config files with flat theme values, darkMode, and content fields`,
@@ -164,7 +164,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.{css,js,html}')).toMatchInlineSnapshot(`
       "
@@ -323,6 +323,105 @@ test(
 )
 
 test(
+  'skips gitignored template files even when they are explicitly referenced in `content`',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules
+        src/ignored
+      `,
+      'tailwind.config.ts': ts`
+        import { type Config } from 'tailwindcss'
+
+        module.exports = {
+          content: [
+            './src/migrate-me.html',
+            './src/ignored/do-not-migrate-me.html',
+            './node_modules/my-external-lib/template.html',
+          ],
+          theme: {},
+          plugins: [],
+        } satisfies Config
+      `,
+      'src/input.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+      'src/migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'src/ignored/do-not-migrate-me.html': html`
+        <div class="order-[0]"></div>
+      `,
+      'node_modules/my-external-lib/template.html': html`
+        <div
+          class="order-[0]"
+        ></div>
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('pnpm exec upgrade')
+
+    expect(
+      await fs.dumpFiles(
+        '{src/**/*.{css,html},node_modules/my-external-lib/template.html,.gitignore}',
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      --- .gitignore ---
+      node_modules
+      src/ignored
+
+      --- src/input.css ---
+      @import 'tailwindcss';
+
+      @source './ignored/do-not-migrate-me.html';
+      @source '../node_modules/my-external-lib/template.html';
+
+      /*
+        The default border color has changed to \`currentcolor\` in Tailwind CSS v4,
+        so we've added these compatibility styles to make sure everything still
+        looks the same as it did with Tailwind CSS v3.
+
+        If we ever want to remove these styles, we need to add an explicit border
+        color utility to any element that depends on these defaults.
+      */
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          border-color: var(--color-gray-200, currentcolor);
+        }
+      }
+
+      --- src/migrate-me.html ---
+      <div class="order-0"></div>
+
+      --- node_modules/my-external-lib/template.html ---
+      <div
+        class="order-[0]"
+      ></div>
+
+      --- src/ignored/do-not-migrate-me.html ---
+      <div class="order-[0]"></div>
+      "
+    `)
+  },
+)
+
+test(
   'upgrades JS config files with plugins',
   {
     fs: {
@@ -385,7 +484,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -487,7 +586,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.{css,ts}')).toMatchInlineSnapshot(`
       "
@@ -495,17 +594,17 @@ test(
       @import 'tailwindcss';
 
       @theme {
-        --color-gray-50: oklch(98.5% 0 0);
-        --color-gray-100: oklch(97% 0 0);
-        --color-gray-200: oklch(92.2% 0 0);
-        --color-gray-300: oklch(87% 0 0);
-        --color-gray-400: oklch(70.8% 0 0);
-        --color-gray-500: oklch(55.6% 0 0);
-        --color-gray-600: oklch(43.9% 0 0);
-        --color-gray-700: oklch(37.1% 0 0);
-        --color-gray-800: oklch(26.9% 0 0);
-        --color-gray-900: oklch(20.5% 0 0);
-        --color-gray-950: oklch(14.5% 0 0);
+        --color-gray-50: oklch(98.5% 0 none);
+        --color-gray-100: oklch(97% 0 none);
+        --color-gray-200: oklch(92.2% 0 none);
+        --color-gray-300: oklch(87% 0 none);
+        --color-gray-400: oklch(70.8% 0 none);
+        --color-gray-500: oklch(55.6% 0 none);
+        --color-gray-600: oklch(43.9% 0 none);
+        --color-gray-700: oklch(37.1% 0 none);
+        --color-gray-800: oklch(26.9% 0 none);
+        --color-gray-900: oklch(20.5% 0 none);
+        --color-gray-950: oklch(14.5% 0 none);
       }
 
       /*
@@ -573,7 +672,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -651,7 +750,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -725,7 +824,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -835,7 +934,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('project-{a,b}/**/*.{css,ts}')).toMatchInlineSnapshot(`
       "
@@ -933,7 +1032,7 @@ test(
     },
   },
   async ({ root, exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade', {
+    await exec('pnpm exec upgrade', {
       cwd: path.join(root, 'frontend'),
     })
 
@@ -1020,7 +1119,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/*.css')).toMatchInlineSnapshot(`
       "
@@ -1095,7 +1194,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/*.css')).toMatchInlineSnapshot(`
       "
@@ -1171,7 +1270,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/*.css')).toMatchInlineSnapshot(`
       "
@@ -1247,7 +1346,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
         "
@@ -1309,7 +1408,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
         "
@@ -1371,7 +1470,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
         "
@@ -1410,7 +1509,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
         "
@@ -1481,7 +1580,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
         "
@@ -1584,7 +1683,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
         "
@@ -1694,7 +1793,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
         "
@@ -1796,7 +1895,7 @@ describe('border compatibility', () => {
       },
     },
     async ({ exec, fs, expect }) => {
-      await exec('npx @tailwindcss/upgrade')
+      await exec('pnpm exec upgrade')
 
       expect(await fs.dumpFiles('src/**/*.{css,html}')).toMatchInlineSnapshot(`
         "
@@ -1894,7 +1993,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -1965,7 +2064,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "
@@ -2042,7 +2141,7 @@ test(
     },
   },
   async ({ exec, fs, expect }) => {
-    await exec('npx @tailwindcss/upgrade')
+    await exec('pnpm exec upgrade')
 
     expect(await fs.dumpFiles('src/**/*.css')).toMatchInlineSnapshot(`
       "

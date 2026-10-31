@@ -1,29 +1,29 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { relative, wordWrap } from './renderer'
-import { normalizeWindowsSeperators } from './test-helpers'
+import { normalizeWindowsSeparators } from './test-helpers'
 
 describe('relative', () => {
   it('should print an absolute path relative to the current working directory', () => {
-    expect(normalizeWindowsSeperators(relative(path.resolve('index.css')))).toMatchInlineSnapshot(
+    expect(normalizeWindowsSeparators(relative(path.resolve('index.css')))).toMatchInlineSnapshot(
       `"./index.css"`,
     )
   })
 
   it('should prefer the shortest value by default', () => {
     // Shortest between absolute and relative paths
-    expect(normalizeWindowsSeperators(relative('index.css'))).toMatchInlineSnapshot(`"index.css"`)
+    expect(normalizeWindowsSeparators(relative('index.css'))).toMatchInlineSnapshot(`"index.css"`)
   })
 
   it('should be possible to override the current working directory', () => {
-    expect(normalizeWindowsSeperators(relative('../utils/index.css', '..'))).toMatchInlineSnapshot(
+    expect(normalizeWindowsSeparators(relative('../utils/index.css', '..'))).toMatchInlineSnapshot(
       `"./utils/index.css"`,
     )
   })
 
   it('should be possible to always prefer the relative path', () => {
     expect(
-      normalizeWindowsSeperators(
+      normalizeWindowsSeparators(
         relative('index.css', process.cwd(), { preferAbsoluteIfShorter: false }),
       ),
     ).toMatchInlineSnapshot(`"./index.css"`)

@@ -31,6 +31,23 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([])
     })
 
+    it('should end a comment at `*/` even when it is preceded by a `\\`', () => {
+      expect(
+        parse(css`
+          /* C:\temp\*/
+          .foo {
+            color: red;
+          }
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: '.foo',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+      ])
+    })
+
     it('should parse a comment inside of a selector and ignore it', () => {
       expect(
         parse(css`
@@ -203,7 +220,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ])
     })
 
-    it('should parse declarations with with strings and escaped string endings', () => {
+    it('should parse declarations with strings and escaped string endings', () => {
       expect(
         parse(css`
           content: 'These are not the end "\' of the string';
@@ -212,7 +229,7 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         {
           kind: 'declaration',
           property: 'content',
-          value: `'These are not the end \"\\' of the string'`,
+          value: `'These are not the end "\\' of the string'`,
           important: false,
         },
       ])
@@ -443,6 +460,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             kind: 'declaration',
             property: '--foo',
             value: '/* This is not the end \\; this is also not the end ; */ but this is',
+            important: false,
+          },
+        ])
+      })
+
+      it('should end a comment in a custom property at `*/` even when it is preceded by a `\\`', () => {
+        expect(
+          parse(css`
+            --foo: /* C:\temp\*/ bar;
+            --bar: /* baz */ qux;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: '/* C:\\temp\\*/ bar',
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            value: '/* baz */ qux',
             important: false,
           },
         ])
@@ -1198,50 +1237,38 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should error when an unterminated string is used', () => {
-      expect(() =>
-        parse(css`
-          .foo {
-            content: "Hello world!
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: "Hello world!"]`)
+      let input = css`
+        .foo {
+          content: "Hello world!
+          /*                    ^ missing " */
+          font-weight: bold;
+        }
+      `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            content: "Hello world!
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!"]`,
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: "Hello world!"]`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: input.css:3:20: Unterminated string: "Hello world!"]`,
       )
     })
 
     it('should error when an unterminated string is used with a `;`', () => {
-      expect(() =>
-        parse(css`
-          .foo {
-            content: "Hello world!;
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: "Hello world!;"]`)
+      let input = css`
+        .foo {
+          content: "Hello world!;
+          /*                    ^ missing " */
+          font-weight: bold;
+        }
+      `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            content: "Hello world!;
-            /*                    ^ missing " */
-            font-weight: bold;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css:3:22: Unterminated string: "Hello world!;"]`,
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: "Hello world!;"]`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: input.css:3:20: Unterminated string: "Hello world!;"]`,
       )
     })
 
@@ -1266,24 +1293,20 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should error when an unterminated string is used in a custom property', () => {
-      expect(() =>
-        parse(css`
-          .foo {
-            --bar: 'Hello world!
-            /*                  ^ missing ' * /;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(`[CssSyntaxError: Unterminated string: 'Hello world!']`)
+      // prettier-ignore
+      let input = css`
+        .foo {
+          --bar: 'Hello world!
+          /*                  ^ missing ' * /;
+        }
+      `
 
-      expect(() =>
-        parseWithLoc(css`
-          .foo {
-            --bar: 'Hello world!
-            /*                  ^ missing ' * /;
-          }
-        `),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `[CssSyntaxError: input.css:3:20: Unterminated string: 'Hello world!']`,
+      expect(() => parse(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: Unterminated string: 'Hello world!']`,
+      )
+
+      expect(() => parseWithLoc(input)).toThrowErrorMatchingInlineSnapshot(
+        `[CssSyntaxError: input.css:3:18: Unterminated string: 'Hello world!']`,
       )
     })
 

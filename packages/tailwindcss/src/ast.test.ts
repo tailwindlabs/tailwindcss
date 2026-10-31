@@ -1,16 +1,18 @@
-import { expect, it } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import {
-  atRule,
   context,
   cssContext,
   decl,
+  handleNesting,
   optimizeAst,
+  rule,
   styleRule,
   toCss,
   type AstNode,
 } from './ast'
 import * as CSS from './css-parser'
 import { buildDesignSystem } from './design-system'
+import { pretty } from './test-utils/run'
 import { Theme } from './theme'
 import { walk, WalkAction } from './walk'
 
@@ -18,9 +20,9 @@ const css = String.raw
 const defaultDesignSystem = buildDesignSystem(new Theme())
 
 it('should pretty print an AST', () => {
-  expect(toCss(optimizeAst(CSS.parse('.foo{color:red;&:hover{color:blue;}}'), defaultDesignSystem)))
-    .toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(CSS.parse('.foo{color:red;&:hover{color:blue;}}')))).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
       &:hover {
         color: blue;
@@ -68,8 +70,9 @@ it('allows the placement of context nodes', () => {
   expect(blueContext).toEqual({ context: 'a' })
   expect(greenContext).toEqual({ context: 'b' })
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
     }
     .bar {
@@ -79,36 +82,6 @@ it('allows the placement of context nodes', () => {
       }
     }
     "
-  `)
-})
-
-it('should stop walking when returning `WalkAction.Stop`', () => {
-  let ast = [
-    styleRule('.foo', [styleRule('.nested', [styleRule('.bail', [decl('color', 'red')])])]),
-    styleRule('.bar'),
-    styleRule('.baz'),
-    styleRule('.qux'),
-  ]
-
-  let seen = new Set()
-
-  walk(ast, (node) => {
-    if (node.kind === 'rule') {
-      seen.add(node.selector)
-    }
-
-    if (node.kind === 'rule' && node.selector === '.bail') {
-      return WalkAction.Stop
-    }
-  })
-
-  // We do not want to see `.bar`, `.baz`, or `.qux` because we bailed early
-  expect(seen).toMatchInlineSnapshot(`
-    Set {
-      ".foo",
-      ".nested",
-      ".bail",
-    }
   `)
 })
 
@@ -154,13 +127,15 @@ it('should not emit empty rules once optimized', () => {
     /* Exceptions: */
     @charset "UTF-8";
     @layer foo, bar, baz;
+    @layer foo, bar, baz; /* Will be deduped */
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
   `)
 
-  expect(toCss(ast)).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(ast))).toMatchInlineSnapshot(`
+    "
+    .foo {
     }
     .foo {
       .bar {
@@ -187,14 +162,16 @@ it('should not emit empty rules once optimized', () => {
     }
     @charset "UTF-8";
     @layer foo, bar, baz;
+    @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     "
   `)
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    "@charset "UTF-8";
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    @charset "UTF-8";
     @layer foo, bar, baz;
     @custom-media --modern (color), (hover);
     @namespace 'http://www.w3.org/1999/xhtml';
@@ -235,8 +212,9 @@ it('should not emit exact duplicate declarations in the same rule', () => {
     }
   `)
 
-  expect(toCss(ast)).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(ast))).toMatchInlineSnapshot(`
+    "
+    .foo {
       color: red;
       .bar {
         color: green;
@@ -267,20 +245,27 @@ it('should not emit exact duplicate declarations in the same rule', () => {
     "
   `)
 
-  expect(toCss(optimizeAst(ast, defaultDesignSystem))).toMatchInlineSnapshot(`
-    ".foo {
+  expect(pretty(toCss(optimizeAst(ast, defaultDesignSystem)))).toMatchInlineSnapshot(`
+    "
+    .foo {
       .bar {
+        color: green;
         color: blue;
         color: green;
       }
       color: red;
-    }
-    .foo {
-      color: green;
-      color: blue;
-      color: red;
+      & {
+        color: green;
+        & {
+          color: red;
+          color: green;
+          color: blue;
+        }
+        color: red;
+      }
       background: blue;
       .bar {
+        color: green;
         color: blue;
         color: green;
       }
@@ -307,8 +292,9 @@ it('should not emit color-mix() fallbacks inside @keyframes', () => {
 
   let design = buildDesignSystem(theme)
 
-  expect(toCss(optimizeAst(ast, design))).toMatchInlineSnapshot(`
-    "@keyframes my-animation {
+  expect(pretty(toCss(optimizeAst(ast, design)))).toMatchInlineSnapshot(`
+    "
+    @keyframes my-animation {
       0% {
         color: color-mix(in oklab, var(--color-emerald-600) 0%, transparent);
       }
@@ -320,303 +306,1693 @@ it('should not emit color-mix() fallbacks inside @keyframes', () => {
   `)
 })
 
-it('should only visit children once when calling `replaceWith` with single element array', () => {
-  let visited = new Set()
+describe('optimization', () => {
+  function optimize(input: string) {
+    let ast = CSS.parse(input)
+    walk(ast, {
+      exit(node) {
+        // Depending on where we use `@scope`, it's handled slightly differently:
+        //
+        // 1. In user authored CSS, we perform the normal CSS nesting and
+        //    hoisting of `@scope` rules
+        // 2. In a `@custom-variant` definition, we need to swap the `@scope`
+        //    with the parent definition. Otherwise you'll never get the
+        //    expected "sandwich" effect.
+        //
+        // This little `@in-variant` hack is just a different way of
+        // differentiating between both cases for these tests.
+        if (node.kind === 'at-rule' && node.name === '@in-variant') {
+          return WalkAction.Replace(context({ source: 'variant' }, node.nodes))
+        }
+      },
+    })
+    return pretty(toCss(handleNesting(ast)))
+  }
 
-  let ast: AstNode[] = [
-    atRule('@media', '', [styleRule('.foo', [decl('color', 'blue')])]),
-    styleRule('.bar', [decl('color', 'blue')]),
-  ]
+  // See: https://drafts.csswg.org/css-nesting-1/
+  describe('CSS Nesting Module Level 1', () => {
+    it('uses the descendant combinator by default', async () => {
+      expect(
+        optimize(css`
+          .a {
+            element {
+              --x: 1;
+            }
+            .class {
+              --x: 2;
+            }
+            #id {
+              --x: 3;
+            }
+            :pseudo-class {
+              --x: 4;
+            }
+            ::pseudo-element {
+              --x: 5;
+            }
+            [attribute] {
+              --x: 6;
+            }
+            * {
+              --x: 7;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a element {
+          --x: 1;
+        }
+        .a .class {
+          --x: 2;
+        }
+        .a #id {
+          --x: 3;
+        }
+        .a :pseudo-class {
+          --x: 4;
+        }
+        .a ::pseudo-element {
+          --x: 5;
+        }
+        .a [attribute] {
+          --x: 6;
+        }
+        .a * {
+          --x: 7;
+        }
+        "
+      `)
+    })
 
-  walk(ast, (node) => {
-    if (visited.has(node)) {
-      throw new Error('Visited node twice')
-    }
-    visited.add(node)
+    it('should be possible to change the combinator', async () => {
+      expect(
+        optimize(css`
+          .a {
+            + .b {
+              --x: 1;
+            }
+            > .c {
+              --x: 2;
+            }
+            ~ .d {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a + .b {
+          --x: 1;
+        }
+        .a > .c {
+          --x: 2;
+        }
+        .a ~ .d {
+          --x: 3;
+        }
+        "
+      `)
+    })
 
-    if (node.kind === 'at-rule') return WalkAction.Replace(node.nodes)
+    it('should replace the first rule, that contains `&` with `:scope`', async () => {
+      expect(
+        optimize(css`
+          /* Standalone */
+          & {
+            --x: 1;
+          }
+
+          /* In an at-rule */
+          @supports (--y: 1) {
+            & {
+              --x: 2;
+            }
+          }
+
+          /* With :is(…) */
+          :is(&) {
+            --x: 3;
+          }
+
+          /* In an at-rule, with :is(…) */
+          @supports (--y: 2) {
+            :is(&) {
+              --x: 4;
+            }
+          }
+
+          /* With multiple selectors */
+          &,
+          .a {
+            --x: 5;
+          }
+
+          /* With multiple selectors + :is(…) */
+          :is(&),
+          .b {
+            --x: 6;
+          }
+
+          /* With multiple selectors in an at-rule */
+          @supports (--y: 3) {
+            &,
+            .c {
+              --x: 7;
+            }
+          }
+
+          /* With multiple selectors in an at-rule + :is(…) */
+          @supports (--y: 4) {
+            :is(&),
+            .d {
+              --x: 8;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :scope {
+          --x: 1;
+        }
+        @supports (--y: 1) {
+          :scope {
+            --x: 2;
+          }
+        }
+        :is(:scope) {
+          --x: 3;
+        }
+        @supports (--y: 2) {
+          :is(:scope) {
+            --x: 4;
+          }
+        }
+        :scope, .a {
+          --x: 5;
+        }
+        :is(:scope), .b {
+          --x: 6;
+        }
+        @supports (--y: 3) {
+          :scope, .c {
+            --x: 7;
+          }
+        }
+        @supports (--y: 4) {
+          :is(:scope), .d {
+            --x: 8;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` to explicitly match the parent', async () => {
+      expect(
+        optimize(css`
+          .a {
+            & + .b {
+              --x: 1;
+            }
+            & > .c {
+              --x: 2;
+            }
+            & ~ .d {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a + .b {
+          --x: 1;
+        }
+        .a > .c {
+          --x: 2;
+        }
+        .a ~ .d {
+          --x: 3;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` in a different location', async () => {
+      expect(
+        optimize(css`
+          .a {
+            .b & {
+              --x: 1;
+            }
+            .c + & {
+              --x: 2;
+            }
+            .d > & {
+              --x: 3;
+            }
+            .e ~ & {
+              --x: 4;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .b .a {
+          --x: 1;
+        }
+        .c + .a {
+          --x: 2;
+        }
+        .d > .a {
+          --x: 3;
+        }
+        .e ~ .a {
+          --x: 4;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` on its own', async () => {
+      expect(
+        optimize(css`
+          .a {
+            & {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` nested in `:is(…)`', async () => {
+      expect(
+        optimize(css`
+          .a {
+            :is(&) {
+              --x: 1;
+            }
+            :is(:is(:is(&))) {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a) {
+          --x: 1;
+        }
+        :is(:is(:is(.a))) {
+          --x: 2;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to handle nesting with a parent selector list', async () => {
+      expect(
+        optimize(css`
+          .a,
+          .b {
+            .c,
+            .d & {
+              --x: 1;
+              &:hover {
+                --x: 2;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a, .b) .c, .d :is(.a, .b) {
+          --x: 1;
+          &:hover {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should not replace `\&`', () => {
+      expect(
+        optimize(css`
+          .a {
+            .b-\& {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a .b-\\& {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('should not replace `&` as part of a string', () => {
+      expect(
+        optimize(css`
+          .a {
+            [data-b='c&d'] {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a [data-b='c&d'] {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it.each([
+      ['element', '&element', ':is(element)element'], // Invalid CSS
+      ['element', 'element&', 'element:is(element)'],
+      ['element', '&.class', 'element.class'],
+      ['element', '.class&', '.class:is(element)'], // Optimization: element.class
+      ['element', '&#id', 'element#id'],
+      ['element', '#id&', '#id:is(element)'], // Optimization: element#id
+      ['element', '&:hover', 'element:hover'],
+      ['element', ':hover&', ':hover:is(element)'],
+      ['element', '&::before', 'element::before'],
+      ['element', '::before&', '::before:is(element)'], // Invalid CSS
+      ['element', '&:not(.x)', 'element:not(.x)'],
+      ['element', ':not(.x)&', ':not(.x):is(element)'], // Optimization: element:not(.x)
+      ['element', '&[attribute]', 'element[attribute]'],
+      ['element', '[attribute]&', '[attribute]:is(element)'], // Optimization: element[attribute]
+      ['element', '&*', ':is(element)*'], // Invalid CSS
+      ['element', '*&', 'element'],
+
+      ['.class', '&element', ':is(.class)element'], // Invalid CSS
+      ['.class', 'element&', 'element.class'],
+      ['.class', '&.class', '.class.class'],
+      ['.class', '.class&', '.class.class'],
+      ['.class', '&#id', '.class#id'],
+      ['.class', '#id&', '#id.class'],
+      ['.class', '&:hover', '.class:hover'],
+      ['.class', ':hover&', ':hover.class'],
+      ['.class', '&::before', '.class::before'],
+      ['.class', '::before&', '::before.class'], // Invalid CSS
+      ['.class', '&:not(.x)', '.class:not(.x)'],
+      ['.class', ':not(.x)&', ':not(.x).class'],
+      ['.class', '&[attribute]', '.class[attribute]'],
+      ['.class', '[attribute]&', '[attribute].class'],
+      ['.class', '&*', ':is(.class)*'], // Invalid CSS
+      ['.class', '*&', '.class'],
+
+      ['#id', '&element', ':is(#id)element'], // Invalid CSS
+      ['#id', 'element&', 'element#id'],
+      ['#id', '&.class', '#id.class'],
+      ['#id', '.class&', '.class#id'],
+      ['#id', '&#id', '#id#id'],
+      ['#id', '#id&', '#id#id'],
+      ['#id', '&:hover', '#id:hover'],
+      ['#id', ':hover&', ':hover#id'],
+      ['#id', '&::before', '#id::before'],
+      ['#id', '::before&', '::before#id'], // Invalid CSS
+      ['#id', '&:not(.x)', '#id:not(.x)'],
+      ['#id', ':not(.x)&', ':not(.x)#id'],
+      ['#id', '&[attribute]', '#id[attribute]'],
+      ['#id', '[attribute]&', '[attribute]#id'],
+      ['#id', '&*', ':is(#id)*'], // Invalid CSS
+      ['#id', '*&', '#id'],
+
+      [':hover', '&element', ':is(:hover)element'], // Invalid CSS
+      [':hover', 'element&', 'element:hover'],
+      [':hover', '&.class', ':hover.class'],
+      [':hover', '.class&', '.class:hover'],
+      [':hover', '&#id', ':hover#id'],
+      [':hover', '#id&', '#id:hover'],
+      [':hover', '&:hover', ':hover:hover'],
+      [':hover', ':hover&', ':hover:hover'],
+      [':hover', '&::before', ':hover::before'],
+      [':hover', '::before&', '::before:hover'],
+      [':hover', '&:not(.x)', ':hover:not(.x)'],
+      [':hover', ':not(.x)&', ':not(.x):hover'],
+      [':hover', '&[attribute]', ':hover[attribute]'],
+      [':hover', '[attribute]&', '[attribute]:hover'],
+      [':hover', '&*', ':is(:hover)*'], // Invalid CSS
+      [':hover', '*&', ':hover'],
+
+      ['::before', '&element', ':is(::before)element'], // Invalid CSS
+      ['::before', 'element&', 'element::before'],
+      ['::before', '&.class', '::before.class'],
+      ['::before', '.class&', '.class::before'],
+      ['::before', '&#id', '::before#id'],
+      ['::before', '#id&', '#id::before'],
+      ['::before', '&:hover', '::before:hover'],
+      ['::before', ':hover&', ':hover::before'],
+      ['::before', '&::before', '::before::before'],
+      ['::before', '::before&', '::before::before'],
+      ['::before', '&:not(.x)', '::before:not(.x)'],
+      ['::before', ':not(.x)&', ':not(.x)::before'],
+      ['::before', '&[attribute]', '::before[attribute]'],
+      ['::before', '[attribute]&', '[attribute]::before'],
+      ['::before', '&*', ':is(::before)*'], // Invalid CSS
+      ['::before', '*&', '::before'],
+
+      [':not(.x)', '&element', ':is(:not(.x))element'], // Invalid CSS
+      [':not(.x)', 'element&', 'element:not(.x)'],
+      [':not(.x)', '&.class', ':not(.x).class'],
+      [':not(.x)', '.class&', '.class:not(.x)'],
+      [':not(.x)', '&#id', ':not(.x)#id'],
+      [':not(.x)', '#id&', '#id:not(.x)'],
+      [':not(.x)', '&:hover', ':not(.x):hover'],
+      [':not(.x)', ':hover&', ':hover:not(.x)'],
+      [':not(.x)', '&::before', ':not(.x)::before'],
+      [':not(.x)', '::before&', '::before:not(.x)'],
+      [':not(.x)', '&:not(.x)', ':not(.x):not(.x)'],
+      [':not(.x)', ':not(.x)&', ':not(.x):not(.x)'],
+      [':not(.x)', '&[attribute]', ':not(.x)[attribute]'],
+      [':not(.x)', '[attribute]&', '[attribute]:not(.x)'],
+      [':not(.x)', '&*', ':is(:not(.x))*'], // Invalid CSS
+      [':not(.x)', '*&', ':not(.x)'],
+
+      ['[attribute]', '&element', ':is([attribute])element'], // Invalid CSS
+      ['[attribute]', 'element&', 'element[attribute]'],
+      ['[attribute]', '&.class', '[attribute].class'],
+      ['[attribute]', '.class&', '.class[attribute]'],
+      ['[attribute]', '&#id', '[attribute]#id'],
+      ['[attribute]', '#id&', '#id[attribute]'],
+      ['[attribute]', '&:hover', '[attribute]:hover'],
+      ['[attribute]', ':hover&', ':hover[attribute]'],
+      ['[attribute]', '&::before', '[attribute]::before'],
+      ['[attribute]', '::before&', '::before[attribute]'],
+      ['[attribute]', '&:not(.x)', '[attribute]:not(.x)'],
+      ['[attribute]', ':not(.x)&', ':not(.x)[attribute]'],
+      ['[attribute]', '&[attribute]', '[attribute][attribute]'],
+      ['[attribute]', '[attribute]&', '[attribute][attribute]'],
+      ['[attribute]', '&*', ':is([attribute])*'], // Invalid CSS
+      ['[attribute]', '*&', '[attribute]'],
+
+      ['*', '&element', ':is(*)element'], // Invalid CSS
+      ['*', 'element&', 'element:is(*)'],
+      ['*', '&.class', '.class'],
+      ['*', '.class&', '.class:is(*)'], // Optimization: *.class → .class
+      ['*', '&#id', '#id'],
+      ['*', '#id&', '#id:is(*)'], // Optimization: *#id → #id
+      ['*', '&:hover', ':hover'],
+      ['*', ':hover&', ':hover:is(*)'],
+      ['*', '&::before', '::before'],
+      ['*', '::before&', '::before:is(*)'], // Invalid CSS
+      ['*', '&:not(.x)', ':not(.x)'],
+      ['*', ':not(.x)&', ':not(.x):is(*)'], // Optimization: *:not(.x) → :not(.x)
+      ['*', '&[attribute]', '[attribute]'],
+      ['*', '[attribute]&', '[attribute]:is(*)'], // Optimization: *[attribute] → [attribute]
+      ['*', '&*', ':is(*)*'], // Invalid CSS
+      ['*', '*&', '*'],
+
+      ['&', '&element', ':is(:scope)element'], // Invalid CSS
+      ['&', 'element&', 'element:scope'],
+      ['&', '&.class', ':scope.class'],
+      ['&', '.class&', '.class:scope'],
+      ['&', '&#id', ':scope#id'],
+      ['&', '#id&', '#id:scope'],
+      ['&', '&:hover', ':scope:hover'],
+      ['&', ':hover&', ':hover:scope'],
+      ['&', '&::before', ':scope::before'],
+      ['&', '::before&', '::before:scope'],
+      ['&', '&:not(.x)', ':scope:not(.x)'],
+      ['&', ':not(.x)&', ':not(.x):scope'],
+      ['&', '&[attribute]', ':scope[attribute]'],
+      ['&', '[attribute]&', '[attribute]:scope'],
+      ['&', '&*', ':is(:scope)*'], // Invalid CSS
+      ['&', '*&', ':scope'],
+    ])(`'%s { %s }' → '%s' (%#)`, async (root, nested, expected) => {
+      let optimized = optimize(toCss([rule(root, [rule(nested, [decl('--x', '0')])])]))
+      let ast = CSS.parse(optimized)
+
+      let count = 0
+      walk(ast, () => void count++)
+
+      // 1 rule, 1 declaration
+      expect(count).toBe(2)
+
+      if (ast[0].kind !== 'rule') throw new Error('expected a rule')
+      expect(ast[0].selector).toEqual(expected)
+    })
+
+    it('should not remove the `*` namespace from namespaced selectors', () => {
+      expect(
+        optimize(css`
+          .a {
+            & *|div {
+              color: red;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a *|div {
+          color: red;
+        }
+        "
+      `)
+    })
+
+    test('multiple selectors in the list are relative to the parent', async () => {
+      expect(
+        optimize(css`
+          .a,
+          .b {
+            --x: 1;
+            + .c {
+              --x: 2;
+            }
+            &.d {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a, .b {
+          --x: 1;
+          + .c {
+            --x: 2;
+          }
+          &.d {
+            --x: 3;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` multiple times', async () => {
+      expect(
+        optimize(css`
+          .a {
+            & .b & .c & .d {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a .b .a .c .a .d {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` multiple times in a row', async () => {
+      expect(
+        optimize(css`
+          .a {
+            &&& {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a.a.a {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use `&` inside a selector', async () => {
+      expect(
+        optimize(css`
+          .a {
+            :not(&) {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :not(.a) {
+          --x: 1;
+        }
+        "
+      `)
+    })
+
+    it('should be possible to use deeply nested CSS', async () => {
+      expect(
+        optimize(css`
+          .a,
+          .b {
+            --x: 1;
+
+            .c & {
+              --x: 2;
+
+              &:hover,
+              &:focus {
+                --x: 3;
+                .d {
+                  --x: 4;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a, .b {
+          --x: 1;
+          .c & {
+            --x: 2;
+            &:hover, &:focus {
+              --x: 3;
+              .d {
+                --x: 4;
+              }
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should properly split rules to guarantee specificity', async () => {
+      expect(
+        optimize(css`
+          .a {
+            --before: 1;
+            &:hover {
+              --inside: 1;
+            }
+            --after: 1;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a {
+          --before: 1;
+          &:hover {
+            --inside: 1;
+          }
+          --after: 1;
+        }
+        "
+      `)
+    })
+
+    it.each([
+      ['div', '&', 'div'],
+      ['div', '[before]&', '[before]:is(div)'],
+      ['div', '&[after]', 'div[after]'],
+      ['div', '[before]&[after]', '[before]:is(div)[after]'],
+      ['div', '[before] &', '[before] div'],
+      ['div', '& [after]', 'div [after]'],
+      ['div', '[before] & [after]', '[before] div [after]'],
+
+      ['.parent', '&', '.parent'],
+      ['.parent', '[before]&', '[before].parent'],
+      ['.parent', '&[after]', '.parent[after]'],
+      ['.parent', '[before]&[after]', '[before].parent[after]'],
+      ['.parent', '[before] &', '[before] .parent'],
+      ['.parent', '& [after]', '.parent [after]'],
+      ['.parent', '[before] & [after]', '[before] .parent [after]'],
+
+      ['.a > .b', '&', '.a > .b'],
+      ['.a > .b', '[before]&', '[before]:is(.a > .b)'],
+      ['.a > .b', '&[after]', '.a > .b[after]'],
+      ['.a > .b', '[before]&[after]', '[before]:is(.a > .b)[after]'],
+      ['.a > .b', '[before] &', '[before] :is(.a > .b)'],
+      ['.a > .b', '& [after]', '.a > .b [after]'],
+      ['.a > .b', '[before] & [after]', '[before] :is(.a > .b) [after]'],
+    ])(`should optimize '%s { %s }' → '%s' (%#)`, async (root, nested, expected) => {
+      let optimized = optimize(toCss([rule(root, [rule(nested, [decl('--x', '0')])])]))
+      let ast = CSS.parse(optimized)
+
+      let count = 0
+      walk(ast, () => void count++)
+
+      // 1 rule, 1 declaration
+      expect(count).toBe(2)
+
+      if (ast[0].kind !== 'rule') throw new Error('expected a rule')
+      expect(ast[0].selector).toEqual(expected)
+    })
+
+    it('should hoist at-rules', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .a,
+            .b {
+              @media (print) {
+                --x: 1;
+                .c {
+                  @media (min-width: 123px) {
+                    --x: 2;
+                  }
+                }
+              }
+            }
+            .d {
+              @media (print) {
+                @media (min-width: 123px) {
+                  --x: 3;
+                }
+              }
+            }
+          }
+          @property --foo {
+            syntax: '*';
+          }
+          @layer utilities {
+            .e {
+              @media (print) {
+                --x: 4;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @media (print) {
+            .a, .b {
+              --x: 1;
+            }
+            @media (min-width: 123px) {
+              :is(.a, .b) .c {
+                --x: 2;
+              }
+              .d {
+                --x: 3;
+              }
+            }
+          }
+        }
+        @property --foo {
+          syntax: '*';
+        }
+        @layer utilities {
+          @media (print) {
+            .e {
+              --x: 4;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should hoist `@scope` at-rules', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .parent {
+              @in-variant {
+                @scope (.from) to (.to) {
+                  --x: 1;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .parent {
+              --x: 1;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    // We have an optimization where the moment we see a declaration that we
+    // stop handling the nesting and emit everything as-is. This won't work when
+    // we're dealing with `@scope` and we still want to hoist that out.
+    it('should hoist `@scope` at-rules, even when sibling declarations are present', async () => {
+      expect(
+        optimize(css`
+          @layer utilities {
+            .parent {
+              --x: 1;
+              @in-variant {
+                @scope (.from) {
+                  .inside {
+                    --y: 2;
+                  }
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          .parent {
+            --x: 1;
+          }
+          @scope (.from) {
+            .parent .inside {
+              --y: 2;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should resolve `&` in the `@scope` prelude when hoisting', async () => {
+      // `&` in the `<scope-start>` selector refers to the elements matched by
+      // the nearest ancestor style rule, while `&` in the `<scope-end>`
+      // selector refers to the scoping root.
+      //
+      // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
+      expect(
+        optimize(css`
+          .parent {
+            @scope (& > .scope) to (& .limit) {
+              .content {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent > .scope) to (:where(:scope) .limit) {
+          .content {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Selector lists need `:is(…)` to keep their meaning
+      expect(
+        optimize(css`
+          .parent-a,
+          .parent-b {
+            @scope (& > .from) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent-a, .parent-b) > .from) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // The `<scope-start>` selector is optional, so the first group in the
+      // prelude is not necessarily the `<scope-start>` selector.
+      expect(
+        optimize(css`
+          .parent {
+            @scope to (& .to) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope to (:where(:scope) .to) {
+          .parent .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // The parent selector is substituted with the same logic as the nesting
+      // selector in regular style rules: `:is(…)` is used when substituting the
+      // parent as-is would change the meaning (e.g. a type selector cannot
+      // appear after a class selector in a compound selector), …
+      expect(
+        optimize(css`
+          main {
+            @scope (.card&) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.card:is(main)) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // … and dropped when the substitution is provably equivalent, even for
+      // complex parent selectors
+      expect(
+        optimize(css`
+          .a .b {
+            @scope (& > .from) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.a .b > .from) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should wrap bare declarations inside `@scope` in a `&` rule', async () => {
+      // A bug in Lightning CSS causes an error when there are declarations
+      // directly in the `@scope`. To fix this we will ensure a rule with
+      // `:where(:scope)` is available.
+      expect(
+        optimize(css`
+          @scope (.from) to (.to) {
+            --x: 1;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // When generated by a variant, the declarations resolve against the
+      // parent rule: the `@scope` rule scopes _where the utility applies_
+      // (like nesting `@media` does, and like variants do).
+      //
+      // Note: this deviates from native CSS nesting, where the `<scope-start>`
+      // selector would be relative to `.parent` and the declarations would
+      // apply to the scoping root. User-authored `@scope` rules (without the
+      // `@in-variant` marker) keep those native semantics.
+      expect(
+        optimize(css`
+          .parent {
+            @in-variant {
+              @scope (.from) {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          .parent {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should replace `&` with `:where(:scope)` for rules directly inside `@scope`', async () => {
+      // Inside an `@scope` rule, the nesting selector behaves like
+      // `:where(:scope)` and matches the scoping root with zero specificity.
+      expect(
+        optimize(css`
+          @scope (.from) {
+            & > p {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          :where(:scope) > p {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should handle `&` deeply nested in `@scope` as normal references to a parent', async () => {
+      expect(
+        optimize(css`
+          @scope (.from) {
+            &,
+            .inside {
+              --x: 1;
+
+              &:hover {
+                --x: 2;
+              }
+
+              &:focus {
+                --x: 3;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) {
+          :where(:scope), .inside {
+            --x: 1;
+            &:hover {
+              --x: 2;
+            }
+            &:focus {
+              --x: 3;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should compile user-authored `@scope` rules with their native CSS nesting semantics', async () => {
+      // The `<scope-start>` selector is relative to the parent rule (like
+      // nested style rule selectors are), the rules inside are relative to
+      // the scoping root, and `&` refers to the scoping root
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from) to (.to) {
+              .inside {
+                --x: 1;
+              }
+
+              & > .child {
+                --x: 2;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .from) to (.to) {
+          .inside {
+            --x: 1;
+          }
+          :where(:scope) > .child {
+            --x: 2;
+          }
+        }
+        "
+      `)
+
+      // A trailing `&` makes the parent rule the scoping root: the scoping
+      // roots are `.parent` elements inside `.from` elements
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from &) to (.to) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from .parent) to (.to) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Bare declarations apply to the scoping root. They are wrapped in a
+      // `:where(:scope)` rule, which is the spec's exact equivalent, because
+      // Lightning CSS drops bare declarations inside `@scope` entirely.
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.from) {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .from) {
+          :where(:scope) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Also at the top level
+      expect(
+        optimize(css`
+          @scope (.from) to (.to) {
+            --x: 1;
+
+            .inside {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.from) to (.to) {
+          :where(:scope) {
+            --x: 1;
+          }
+          .inside {
+            --x: 2;
+          }
+        }
+        "
+      `)
+
+      // Every selector in a `<scope-start>` selector list is relative to the
+      // parent rule, whether it uses `&` or not
+      expect(
+        optimize(css`
+          .parent {
+            @scope (.a, & > .b) {
+              .inside {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent .a, .parent > .b) {
+          .inside {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should leave `@property` and `@apply` alone', async () => {
+      expect(
+        optimize(css`
+          .foo {
+            .bar {
+              @apply text-red-500 hover:text-red-600;
+            }
+          }
+
+          .baz {
+            @property --tw-content {
+              syntax: '*';
+              initial-value: '';
+              inherits: false;
+            }
+
+            @property --tw-border-spacing-x {
+              syntax: '<length>';
+              inherits: false;
+              initial-value: 0;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .foo .bar {
+          @apply text-red-500 hover:text-red-600;
+        }
+        .baz {
+          @property --tw-content {
+            syntax: '*';
+            initial-value: '';
+            inherits: false;
+          }
+          @property --tw-border-spacing-x {
+            syntax: '<length>';
+            inherits: false;
+            initial-value: 0;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should merge a body-less @layer with an @layer with the same name that has a body', async () => {
+      expect(
+        optimize(css`
+          @layer a;
+
+          @layer a {
+            @layer b {
+              .x {
+                color: red;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer a {
+          @layer b {
+            .x {
+              color: red;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    it('should not get rid of `:is(…)` when the compound selector is part of a complex selector', async () => {
+      expect(
+        optimize(css`
+          .foo .bar {
+            .system &:focus {
+              --x: 1;
+            }
+          }
+          .foo:hover {
+            .system &:focus {
+              --x: 2;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .system :is(.foo .bar):focus {
+          --x: 1;
+        }
+        .system .foo:hover:focus {
+          --x: 2;
+        }
+        "
+      `)
+    })
+
+    // A pseudo-element can only be followed by pseudo-classes, so these
+    // selectors can never match anything.
+    it('should drop nested rules that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              --x: 1;
+            }
+            & .b,
+            & + .c,
+            & ~ .d {
+              --x: 2;
+            }
+          }
+          .a ::marker {
+            & > * {
+              --x: 3;
+            }
+          }
+          .a:before {
+            & > * {
+              --x: 4;
+            }
+          }
+          .a::part(foo) {
+            & > * {
+              --x: 5;
+            }
+          }
+          .a::backdrop {
+            :where(& > :not(:last-child)) {
+              --x: 6;
+            }
+          }
+          .a::-webkit-details-marker {
+            & > * {
+              --x: 7;
+            }
+          }
+          .a::view-transition-old(root) {
+            & > * {
+              --x: 8;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should only drop the selectors in a list that put a combinator after a pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a::before,
+          .b {
+            & > * {
+              --x: 1;
+            }
+          }
+          .c::after {
+            & > *,
+            &:hover {
+              --x: 2;
+            }
+          }
+          .d::backdrop {
+            :where(& > *, .e) {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a::before, .b) > * {
+          --x: 1;
+        }
+        .c::after:hover {
+          --x: 2;
+        }
+        :where(.d::backdrop > *, .e) {
+          --x: 3;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules that put a combinator before a pseudo-element or after a pseudo-class', async () => {
+      expect(
+        optimize(css`
+          .a::before {
+            &:hover {
+              --x: 1;
+            }
+          }
+          .b:first-child {
+            & > * {
+              --x: 2;
+            }
+          }
+          .c {
+            & > ::before {
+              --x: 3;
+            }
+          }
+          .d::selection > * {
+            --x: 4;
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a::before:hover {
+          --x: 1;
+        }
+        .b:first-child > * {
+          --x: 2;
+        }
+        .c > ::before {
+          --x: 3;
+        }
+        .d::selection > * {
+          --x: 4;
+        }
+        "
+      `)
+    })
+
+    it('should keep nested rules inside a dropped rule that can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            :where(& > *) {
+              --x: 1;
+              :is(&, .b) {
+                --x: 2;
+              }
+              &:hover {
+                --x: 3;
+              }
+              @media (width >= 40rem) {
+                --x: 4;
+                :is(&, .c) {
+                  --x: 5;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(:is(:where(.a::selection > *)), .b) {
+          --x: 2;
+        }
+        @media (width >= 40rem) {
+          :is(:is(:where(.a::selection > *)), .c) {
+            --x: 5;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should drop at-rules inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @font-face {
+                font-family: 'A';
+              }
+              @property --x {
+                syntax: '*';
+                inherits: false;
+              }
+              @scope (.from) {
+                color: red;
+              }
+              @media (width >= 40rem) {
+                :is(&, .b) {
+                  --x: 1;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @media (width >= 40rem) {
+          :is(:is(.a::selection > *), .b) {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    // An empty `@layer` can establish the layer order, so dropping it can change
+    // the cascade of other rules.
+    it('should keep `@layer` inside a dropped rule that can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @layer base, utilities;
+              @layer components {
+                --x: 1;
+                :is(&, .b) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer base, utilities;
+        @layer components {
+          :is(:is(.a::selection > *), .b) {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should drop an `@scope` inside a dropped rule when its scope can never match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (.x) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @scope (.x) {
+                :is(&, .fallback) {
+                  --x: 2;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`""`)
+    })
+
+    it('should keep an `@scope` inside a dropped rule when its scope can still match', async () => {
+      expect(
+        optimize(css`
+          .a::selection {
+            & > * {
+              @scope (:is(&, .fallback)) {
+                .y {
+                  --x: 1;
+                }
+              }
+              @in-variant {
+                @scope (.x) {
+                  :is(&, .fallback) {
+                    --x: 2;
+                  }
+                  --x: 3;
+                }
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(:is(.a::selection > *), .fallback)) {
+          .y {
+            --x: 1;
+          }
+        }
+        @scope (.x) {
+          :is(:is(.a::selection > *), .fallback) {
+            --x: 2;
+          }
+        }
+        "
+      `)
+    })
+
+    // Only standard pseudo-elements are known to be invalid before a combinator.
+    // E.g.: framework specific deep combinators look like pseudo-elements, but
+    // they are rewritten by another compiler later on.
+    it('should keep nested rules that put a combinator after an unknown pseudo-element', async () => {
+      expect(
+        optimize(css`
+          .a {
+            ::ng-deep .b {
+              --x: 1;
+            }
+          }
+          :host {
+            & ::ng-deep > .c {
+              --x: 2;
+            }
+          }
+          .d {
+            & ::v-deep .e {
+              --x: 3;
+            }
+          }
+          .f {
+            ::deep .g {
+              --x: 4;
+            }
+          }
+          .h::unknown {
+            & > * {
+              --x: 5;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        .a ::ng-deep .b {
+          --x: 1;
+        }
+        :host ::ng-deep > .c {
+          --x: 2;
+        }
+        .d ::v-deep .e {
+          --x: 3;
+        }
+        .f ::deep .g {
+          --x: 4;
+        }
+        .h::unknown > * {
+          --x: 5;
+        }
+        "
+      `)
+    })
+
+    it('should not dedupe adjacent at-rules with the same prelude but different bodies', async () => {
+      expect(
+        optimize(css`
+          @font-face {
+            font-family: 'A';
+            src: url('/fonts/a.woff2');
+          }
+
+          @font-face {
+            font-family: 'B';
+            src: url('/fonts/b.woff2');
+          }
+
+          @keyframes spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+
+          @keyframes spin {
+            to {
+              transform: rotate(-360deg);
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @font-face {
+          font-family: 'A';
+          src: url('/fonts/a.woff2');
+        }
+        @font-face {
+          font-family: 'B';
+          src: url('/fonts/b.woff2');
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(-360deg);
+          }
+        }
+        "
+      `)
+    })
   })
 })
-
-it('should only visit children once when calling `replaceWith` with multi-element array', () => {
-  let visited = new Set()
-
-  let ast: AstNode[] = [
-    atRule('@media', '', [
-      context({}, [
-        styleRule('.foo', [decl('color', 'red')]),
-        styleRule('.baz', [decl('color', 'blue')]),
-      ]),
-    ]),
-    styleRule('.bar', [decl('color', 'green')]),
-  ]
-
-  walk(ast, (node) => {
-    let key = id(node)
-    if (visited.has(key)) {
-      throw new Error('Visited node twice')
-    }
-    visited.add(key)
-
-    if (node.kind === 'at-rule') return WalkAction.Replace(node.nodes)
-  })
-
-  expect(visited).toMatchInlineSnapshot(`
-    Set {
-      "@media ",
-      "<context>",
-      ".foo",
-      "color: red",
-      ".baz",
-      "color: blue",
-      ".bar",
-      "color: green",
-    }
-  `)
-})
-
-it('should never visit children when calling `replaceWith` with `WalkAction.Skip`', () => {
-  let visited = new Set()
-
-  let inner = styleRule('.foo', [decl('color', 'blue')])
-
-  let ast: AstNode[] = [atRule('@media', '', [inner]), styleRule('.bar', [decl('color', 'blue')])]
-
-  walk(ast, (node) => {
-    visited.add(node)
-
-    if (node.kind === 'at-rule') {
-      return WalkAction.ReplaceSkip(node.nodes)
-    }
-  })
-
-  expect(visited).not.toContain(inner)
-  expect(visited).toMatchInlineSnapshot(`
-    Set {
-      {
-        "kind": "at-rule",
-        "name": "@media",
-        "nodes": [
-          {
-            "kind": "rule",
-            "nodes": [
-              {
-                "important": false,
-                "kind": "declaration",
-                "property": "color",
-                "value": "blue",
-              },
-            ],
-            "selector": ".foo",
-          },
-        ],
-        "params": "",
-      },
-      {
-        "kind": "rule",
-        "nodes": [
-          {
-            "important": false,
-            "kind": "declaration",
-            "property": "color",
-            "value": "blue",
-          },
-        ],
-        "selector": ".bar",
-      },
-      {
-        "important": false,
-        "kind": "declaration",
-        "property": "color",
-        "value": "blue",
-      },
-    }
-  `)
-})
-
-it('should skip the correct number of children based on the replaced children nodes', () => {
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.ReplaceSkip([])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.Replace([])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.ReplaceSkip([decl('--index', '2.1')])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.Replace([decl('--index', '2.1')])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 2.1",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.ReplaceSkip([decl('--index', '2.1'), decl('--index', '2.2')])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-
-  {
-    let ast = [
-      decl('--index', '0'),
-      decl('--index', '1'),
-      decl('--index', '2'),
-      decl('--index', '3'),
-      decl('--index', '4'),
-    ]
-    let visited: string[] = []
-    walk(ast, (node) => {
-      visited.push(id(node))
-      if (node.kind === 'declaration' && node.value === '2') {
-        return WalkAction.Replace([decl('--index', '2.1'), decl('--index', '2.2')])
-      }
-    })
-
-    expect(visited).toMatchInlineSnapshot(`
-      [
-        "--index: 0",
-        "--index: 1",
-        "--index: 2",
-        "--index: 2.1",
-        "--index: 2.2",
-        "--index: 3",
-        "--index: 4",
-      ]
-    `)
-  }
-})
-
-function id(node: AstNode) {
-  switch (node.kind) {
-    case 'at-rule':
-      return `${node.name} ${node.params}`
-    case 'rule':
-      return node.selector
-    case 'context':
-      return '<context>'
-    case 'at-root':
-      return '<at-root>'
-    case 'declaration':
-      return `${node.property}: ${node.value}`
-    case 'comment':
-      return `// ${node.value}`
-    default:
-      node satisfies never
-      throw new Error('Unknown node kind')
-  }
-}

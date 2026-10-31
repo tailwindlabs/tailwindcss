@@ -956,33 +956,35 @@ describe('AST Enter & Exit', () => {
     let visited: string[] = []
     walk(ast, {
       enter(node, ctx) {
-        visited.push(`${'  '.repeat(ctx.depth)} Enter(${node.kind})`)
+        expect(ctx.index).toEqual(ctx.siblings.indexOf(node))
+        visited.push(`${'  '.repeat(ctx.depth)} Enter(${node.kind} @ ${ctx.index})`)
       },
       exit(node, ctx) {
-        visited.push(`${'  '.repeat(ctx.depth)} Exit(${node.kind})`)
+        expect(ctx.index).toEqual(ctx.siblings.indexOf(node))
+        visited.push(`${'  '.repeat(ctx.depth)} Exit(${node.kind} @ ${ctx.index})`)
       },
     })
 
     expect(`\n${visited.join('\n')}\n`).toMatchInlineSnapshot(`
       "
-       Enter(a)
-         Enter(b)
-           Enter(c)
-           Exit(c)
-         Exit(b)
-         Enter(d)
-           Enter(e)
-             Enter(f)
-             Exit(f)
-           Exit(e)
-         Exit(d)
-         Enter(g)
-           Enter(h)
-           Exit(h)
-         Exit(g)
-       Exit(a)
-       Enter(i)
-       Exit(i)
+       Enter(a @ 0)
+         Enter(b @ 0)
+           Enter(c @ 0)
+           Exit(c @ 0)
+         Exit(b @ 0)
+         Enter(d @ 1)
+           Enter(e @ 0)
+             Enter(f @ 0)
+             Exit(f @ 0)
+           Exit(e @ 0)
+         Exit(d @ 1)
+         Enter(g @ 2)
+           Enter(h @ 0)
+           Exit(h @ 0)
+         Exit(g @ 2)
+       Exit(a @ 0)
+       Enter(i @ 1)
+       Exit(i @ 1)
       "
     `)
   })

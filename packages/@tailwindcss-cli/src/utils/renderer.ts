@@ -49,7 +49,9 @@ export function wordWrap(text: string, width: number) {
   for (let word of words) {
     let wordLength = stripVTControlCharacters(word).length
 
-    if (lineLength + wordLength + 1 > width) {
+    // A word longer than `width` is kept on its own line rather than
+    // introducing an empty line before it.
+    if (lineLength > 0 && lineLength + wordLength + 1 > width) {
       lines.push(line)
       line = ''
       lineLength = 0

@@ -1,22 +1,40 @@
-import { isBuiltin, type ResolveHook } from 'node:module'
+import {
+  isBuiltin,
+  type ResolveFnOutput,
+  type ResolveHook,
+  type ResolveHookContext,
+  type ResolveHookSync,
+} from 'node:module'
 
 export let resolve: ResolveHook = async (specifier, context, nextResolve) => {
   let result = await nextResolve(specifier, context)
+  return processResolve(context, result)
+}
 
-  if (result.url === import.meta.url) return result
-  if (isBuiltin(result.url)) return result
-  if (!context.parentURL) return result
+export let resolveSync: ResolveHookSync = (specifier, context, nextResolve) => {
+  let result = nextResolve(specifier, context)
+  return processResolve(context, result)
+}
 
-  let parent = new URL(context.parentURL)
+function processResolve(context: ResolveHookContext, result: ResolveFnOutput) {
+  try {
+    if (result.url === import.meta.url) return result
+    if (isBuiltin(result.url)) return result
+    if (!context.parentURL) return result
 
-  let id = parent.searchParams.get('id')
-  if (id === null) return result
+    let parent = new URL(context.parentURL)
 
-  let url = new URL(result.url)
-  url.searchParams.set('id', id)
+    let id = parent.searchParams.get('id')
+    if (id === null) return result
 
-  return {
-    ...result,
-    url: `${url}`,
+    let url = new URL(result.url)
+    url.searchParams.set('id', id)
+
+    return {
+      ...result,
+      url: `${url}`,
+    }
+  } catch {
+    return result
   }
 }

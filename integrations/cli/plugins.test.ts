@@ -1,4 +1,4 @@
-import { candidate, css, html, json, test } from '../utils'
+import { candidate, css, html, json, test, ts } from '../utils'
 
 test(
   'builds the `@tailwindcss/typography` plugin utilities',
@@ -42,9 +42,83 @@ test(
 
     await fs.expectFileToContain('dist/out.css', [
       candidate`prose`,
-      ':where(h1):not(:where([class~="not-prose"],[class~="not-prose"] *))',
-      ':where(tbody td, tfoot td):not(:where([class~="not-prose"],[class~="not-prose"] *))',
+      ':where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *))',
+      ':where(tbody td, tfoot td):not(:where([class~="not-prose"], [class~="not-prose"] *))',
     ])
+  },
+)
+
+test(
+  'builds the `@tailwindcss/typography` plugin utilities with `@variant` usages',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/typography": "^0.5.14",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.html': html`
+        <div className="prose prose-custom">
+          <h1>Headline</h1>
+          <p>
+            Until now, trying to style an article, document, or blog post with Tailwind has been a
+            tedious task that required a keen eye for typography and a lot of complex custom CSS.
+          </p>
+        </div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities';
+        @theme {
+          --breakpoint-sm: 640px;
+        }
+        @plugin '@tailwindcss/typography';
+        @config '../tailwind.config.js';
+        @custom-variant custom (&.custom);
+      `,
+      'tailwind.config.js': ts`
+        module.exports = {
+          theme: {
+            typography: ({ theme }) => ({
+              custom: {
+                css: {
+                  hr: {
+                    '--x': '1',
+                    '@variant sm:custom': {
+                      '--x': '2',
+                    },
+                  },
+                },
+              },
+            }),
+          },
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    // We don't want to see `@variant` in the output
+    let contents = await fs.read('dist/out.css')
+    expect(contents).not.toContain('@variant')
+
+    expect(await fs.dumpFiles('dist/out.css')).toMatchInlineSnapshot(`
+      "
+      --- dist/out.css ---
+      .prose-custom :where(hr):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+        --x: 1;
+        @media (width >= 640px) {
+          &.custom {
+            --x: 2;
+          }
+        }
+      }
+      "
+    `)
   },
 )
 
@@ -205,5 +279,90 @@ test(
       'animation-duration: 350ms',
       '@keyframes enter {',
     ])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/15844
+test(
+  'builds CSS with a custom plugin compiled from TypeScript',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          },
+          "devDependencies": {
+            "typescript": "^5.7.2"
+          }
+        }
+      `,
+      'tsconfig.json': json`
+        {
+          "compilerOptions": {
+            "target": "ES2022",
+            "module": "NodeNext",
+            "moduleResolution": "NodeNext",
+            "declaration": true,
+            "composite": true,
+            "rootDir": "./src",
+            "outDir": "./.build",
+            "skipLibCheck": true
+          },
+          "include": ["src/**/*.ts"]
+        }
+      `,
+      'index.html': html`
+        <div class="test-red"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin '../.build/plugin.js';
+      `,
+      'src/plugin.ts': ts`
+        import plugin from 'tailwindcss/plugin'
+
+        export const typedPlugin = plugin(() => {
+          return ({ matchComponents }) => {
+            matchComponents(
+              {
+                test: (content: string) => ({
+                  color: content,
+                }),
+              },
+              {
+                values: {
+                  red: 'red',
+                },
+              },
+            )
+          }
+        })
+
+        export default plugin(({ matchComponents }) => {
+          matchComponents(
+            {
+              test: (content: string) => ({
+                color: content,
+              }),
+            },
+            {
+              values: {
+                red: 'red',
+              },
+            },
+          )
+        })
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    // We expect that these commands don't crash:
+    await exec('pnpm tsc -b')
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [candidate`test-red`])
   },
 )

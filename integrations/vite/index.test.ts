@@ -294,6 +294,113 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20346
+  test(
+    'dev mode + symlinked `@source` files pick up changes to the real file',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+            - packages/*
+        `,
+        'project-a/package.json': txt`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "repro-package": "workspace:*",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+              "vite": "^7"
+            }
+          }
+        `,
+        'project-a/vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+          })
+        `,
+        'project-a/index.html': html`
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body>
+            <div class="underline">Hello, world!</div>
+          </body>
+        `,
+
+        // The `@source` points through the `node_modules` symlink that pnpm
+        // creates for the workspace package. Vite's file watcher ignores
+        // `node_modules` by default, so the symlinked path can not be watched.
+        // The real file (in `packages/repro-package`) has to be watched
+        // instead.
+        'project-a/src/index.css': css`
+          @reference 'tailwindcss/theme';
+          @import 'tailwindcss/utilities';
+          @source '../node_modules/repro-package/source.html';
+        `,
+        'packages/repro-package/package.json': json`
+          {
+            "name": "repro-package",
+            "private": true,
+            "version": "1.0.0"
+          }
+        `,
+        'packages/repro-package/source.html': html`
+          <div class="content-['v1']">
+            Hello, world!
+          </div>
+        `,
+      },
+    },
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev', {
+        cwd: path.join(root, 'project-a'),
+      })
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`content-['v1']`)
+      })
+
+      await retryAssertion(async () => {
+        // Changes to the real file (behind the symlink) should be picked up
+        await fs.write(
+          'packages/repro-package/source.html',
+          html`
+            <div class="content-['v1'] content-['v2']">
+              Hello, world!
+            </div>
+          `,
+        )
+
+        let styles = await fetchStyles(url)
+        expect(styles).toContain(candidate`underline`)
+        expect(styles).toContain(candidate`content-['v1']`)
+        expect(styles).toContain(candidate`content-['v2']`)
+      })
+    },
+  )
+
   test(
     'watch mode',
     {
@@ -473,11 +580,11 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 
-  describe.sequential.each([['^6'], ['7.0.8'], ['7.1.12'], ['7.3.1']])(
+  describe.each([['^6'], ['7.0.8'], ['7.1.12'], ['7.3.1'], ['8.0.0']])(
     'Using Vite %s',
     (version) => {
       test(
-        'external source file changes trigger a full reload',
+        'external source file changes update the CSS',
         {
           fs: {
             'package.json': json`{}`,
@@ -554,26 +661,33 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             expect(styles).toContain(candidate`content-['project-b/src/index.php']`)
           })
 
-          // Flush all messages so that we can be sure the next messages are from
-          // the file changes we're about to make
+          // Flush all messages so that we can be sure the next messages are
+          // from the file changes we're about to make
           process.flush()
 
-          // Changing an external .php file should trigger a full reload
+          // Changing an external .php file hot-updates the generated CSS
           {
             await fs.write(
               'project-b/src/index.php',
               txt`<div class="content-['updated:project-b/src/index.php']"></div>`,
             )
 
-            // Ensure the page reloaded
+            // On Vite < 7.1, Vite itself hard-invalidates watched files that
+            // aren't part of the module graph and reloads the page.
+            //
+            // On newer versions nothing reloads the page: the CSS hot-updates
+            // through the regular pipeline because the changed file is a
+            // watch dependency of the CSS root.
+            //
+            // Reloading the page for external template changes is the
+            // responsibility of the backend integration (e.g. `laravel-vite-plugin`'s `refresh` option, or `vite-plugin-full-reload`).
+            //
+            // https://github.com/tailwindlabs/tailwindcss/issues/20411
             if (version === '^6' || version === '7.0.8') {
               await process.onStdout((m) => m.includes('page reload') && m.includes('index.php'))
             } else {
-              await process.onStderr(
-                (m) => m.includes('vite:hmr (client)') && m.includes('index.php'),
-              )
+              await process.onStdout((m) => m.includes('hmr update') && m.includes('index.css'))
             }
-            await process.onStderr((m) => m.includes('vite:hmr (ssr)') && m.includes('index.php'))
 
             // Ensure the styles were regenerated with the new content
             let styles = await fetchStyles(url, '/index.html')
@@ -581,6 +695,234 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
           }
         },
       )
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20320
+  // https://github.com/tailwindlabs/tailwindcss/issues/19903
+  test(
+    'editing scanned files that Vite can process as modules does not trigger a full reload',
+    {
+      fs: {
+        'package.json': json`{}`,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - project-a
+        `,
+        'project-a/package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              ${transformer === 'lightningcss' ? `"lightningcss": "^1",` : ''}
+              "vite": "^8"
+            }
+          }
+        `,
+        'project-a/vite.config.ts': ts`
+          import fs from 'node:fs'
+          import path from 'node:path'
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            css: ${transformer === 'postcss' ? '{}' : "{ transformer: 'lightningcss' }"},
+            build: { cssMinify: false },
+            plugins: [
+              tailwindcss(),
+              {
+                // A plugin that processes a custom file type into a JS
+                // module, similar to e.g. \`.vue\` or \`.svelte\` files
+                name: 'custom-file-type',
+                transform(code, id) {
+                  if (id.endsWith('.custom')) {
+                    return { code: 'export default ' + JSON.stringify(code), map: null }
+                  }
+                },
+              },
+              {
+                // Log all HMR payloads to a file so the test can assert on
+                // them
+                name: 'hmr-wiretap',
+                configureServer(server) {
+                  let logFile = path.resolve('hmr.log')
+                  fs.writeFileSync(logFile, '')
+                  for (let environment of Object.values(server.environments)) {
+                    let send = environment.hot.send.bind(environment.hot)
+                    environment.hot.send = (payload) => {
+                      fs.appendFileSync(logFile, JSON.stringify(payload) + '\\n')
+                      return send(payload)
+                    }
+                  }
+                },
+              },
+            ],
+          })
+        `,
+        'project-a/index.html': html`
+          <html>
+            <head>
+              <link rel="stylesheet" href="./src/index.css" />
+            </head>
+            <body>
+              <div id="app"></div>
+              <script type="module" src="./src/main.ts"></script>
+            </body>
+          </html>
+        `,
+        'project-a/src/main.ts': ts`
+          import compA from './comp-a.custom'
+          import snippet from './snippet.php?raw'
+          console.log(compA, snippet)
+        `,
+        'project-a/src/snippet.php': html`
+          <div
+            class="content-['src/snippet.php']"
+          ></div>
+        `,
+        'project-a/src/comp-a.custom': html`
+          <div
+            class="content-['src/comp-a.custom']"
+          ></div>
+        `,
+        'project-a/src/comp-b.custom': html`
+          <div
+            class="content-['src/comp-b.custom']"
+          ></div>
+        `,
+        'project-a/src/lazy.tsx': jsx`
+          export default function Lazy() {
+            return <div className="content-['src/lazy.tsx']" />
+          }
+        `,
+        'project-a/src/unimported.css': css`
+          .unimported {
+            color: red;
+          }
+        `,
+        'project-a/src/index.css': css`
+          @import 'tailwindcss';
+          @source '../../project-b/**/*.php';
+        `,
+        'project-b/src/index.php': html`
+          <div
+            class="content-['project-b/src/index.php']"
+          ></div>
+        `,
+      },
+    },
+    async ({ root, spawn, fs, expect }) => {
+      let process = await spawn('pnpm vite dev', {
+        cwd: path.join(root, 'project-a'),
+      })
+      await process.onStdout((m) => m.includes('ready in'))
+
+      let url = ''
+      await process.onStdout((m) => {
+        let match = /Local:\s*(http.*)\//.exec(m)
+        if (match) url = match[1]
+        return Boolean(url)
+      })
+
+      await retryAssertion(async () => {
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`content-['src/lazy.tsx']`)
+        expect(styles).toContain(candidate`content-['src/comp-b.custom']`)
+        expect(styles).toContain(candidate`content-['project-b/src/index.php']`)
+      })
+
+      // Load `main.ts`, `comp-a.custom`, and `snippet.php?raw` as real
+      // modules, like a browser visiting the page would
+      await fetch(`${url}/src/main.ts`)
+      await fetch(`${url}/src/comp-a.custom?import`)
+      await fetch(`${url}/src/snippet.php?raw`)
+
+      // Changing a scanned `.tsx` file that is not part of the module graph
+      // (e.g. a lazily-loaded route that hasn't been visited yet) should not
+      // trigger a full reload, but new classes should still apply
+      //
+      // https://github.com/tailwindlabs/tailwindcss/issues/20320
+      {
+        await fs.write(
+          'project-a/src/lazy.tsx',
+          jsx`
+            export default function Lazy() {
+              return <div className="content-['updated:src/lazy.tsx']" />
+            }
+          `,
+        )
+
+        await retryAssertion(async () => {
+          let styles = await fetchStyles(url, '/index.html')
+          expect(styles).toContain(candidate`content-['updated:src/lazy.tsx']`)
+        })
+      }
+
+      // The same holds for a custom file type as long as some file of the
+      // same type was processed as a module before
+      {
+        await fs.write(
+          'project-a/src/comp-b.custom',
+          html`<div class="content-['updated:src/comp-b.custom']"></div>`,
+        )
+
+        await retryAssertion(async () => {
+          let styles = await fetchStyles(url, '/index.html')
+          expect(styles).toContain(candidate`content-['updated:src/comp-b.custom']`)
+        })
+      }
+
+      // Changing a scanned stylesheet that is not part of the module graph
+      // (e.g. a component stylesheet that a framework plugin compiles into
+      // the component) should not trigger a full reload either
+      //
+      // https://github.com/tailwindlabs/tailwindcss/issues/19903
+      {
+        let updates = (await fs.read('project-a/hmr.log')).split('"type":"update"').length
+
+        await fs.write(
+          'project-a/src/unimported.css',
+          css`
+            .unimported {
+              color: blue;
+            }
+          `,
+        )
+
+        // Wait until the change was handled and an update was pushed
+        await retryAssertion(async () => {
+          let log = await fs.read('project-a/hmr.log')
+          expect(log.split('"type":"update"').length).toBeGreaterThan(updates)
+        })
+      }
+
+      // Changing an external file (e.g. a PHP template) hot-updates the
+      // generated CSS but does not trigger a full reload either. Reloading the
+      // page for external template changes is the responsibility of the backend
+      // integration (e.g. `laravel-vite-plugin`'s `refresh` option, or
+      // `vite-plugin-full-reload`).
+      //
+      // https://github.com/tailwindlabs/tailwindcss/issues/20411
+      {
+        let updates = (await fs.read('project-a/hmr.log')).split('"type":"update"').length
+
+        await fs.write(
+          'project-b/src/index.php',
+          html`<div class="content-['updated:project-b/src/index.php']"></div>`,
+        )
+
+        await retryAssertion(async () => {
+          let log = await fs.read('project-a/hmr.log')
+          expect(log.split('"type":"update"').length).toBeGreaterThan(updates)
+        })
+
+        let styles = await fetchStyles(url, '/index.html')
+        expect(styles).toContain(candidate`content-['updated:project-b/src/index.php']`)
+      }
     },
   )
 
@@ -836,7 +1178,7 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     async ({ root, fs, exec, expect }) => {
       await expect(() =>
         exec('pnpm vite build', { cwd: path.join(root, 'project-a') }, { ignoreStdErr: true }),
-      ).rejects.toThrowError('The `source(../i-do-not-exist)` does not exist')
+      ).rejects.toThrow('The `source(../i-do-not-exist)` does not exist')
 
       let files = await fs.glob('project-a/dist/**/*.css')
       expect(files).toHaveLength(0)
@@ -1090,6 +1432,14 @@ test(
         </head>
       `,
       'src/index.js': js`import Plotly from 'plotly.js/lib/core'`,
+
+      // `plotly.js` pulls in `es5-ext`, which has a build script. As of pnpm
+      // v10, build scripts only run when explicitly allowed.
+      'pnpm-workspace.yaml': yaml`
+        #
+        allowBuilds:
+          es5-ext: true
+      `,
     },
   },
   async ({ exec, expect, fs }) => {
@@ -1137,7 +1487,7 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="hover:flex">Hello, world!</div>
+          <div class="focus:text-[black]">Hello, world!</div>
         </body>
       `,
       'src/index.css': css`
@@ -1149,16 +1499,16 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
-    expect(files).toHaveLength(1)
-    let [filename] = files[0]
-
     // Should not be minified when optimize is disabled
-    let content = await fs.read(filename)
-    expect(content).toContain('.hover\\:flex {')
-    expect(content).toContain('&:hover {')
-    expect(content).toContain('@media (hover: hover) {')
-    expect(content).toContain('display: flex;')
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+        "
+        --- dist/assets/index-<hash>.css ---
+        .focus\\:text-\\[black\\]:focus {
+          color: black;
+        }
+        "
+      `)
   },
 )
 
@@ -1192,7 +1542,7 @@ test(
           <link rel="stylesheet" href="./src/index.css" />
         </head>
         <body>
-          <div class="hover:flex">Hello, world!</div>
+          <div class="hover:text-[black]">Hello, world!</div>
         </body>
       `,
       'src/index.css': css`
@@ -1204,15 +1554,17 @@ test(
   async ({ exec, expect, fs }) => {
     await exec('pnpm vite build')
 
-    let files = await fs.glob('dist/**/*.css')
-    expect(files).toHaveLength(1)
-    let [filename] = files[0]
-
-    // Should be optimized but not minified
-    let content = await fs.read(filename)
-    expect(content).toContain('@media (hover: hover) {')
-    expect(content).toContain('.hover\\:flex:hover {')
-    expect(content).toContain('display: flex;')
+    expect((await fs.dumpFiles('dist/**/*.css')).replace(/-([-_a-zA-Z0-9]*?)\.css/g, '-<hash>.css'))
+      .toMatchInlineSnapshot(`
+      "
+      --- dist/assets/index-<hash>.css ---
+      @media (hover: hover) {
+        .hover\\:text-\\[black\\]:hover {
+          color: #000;
+        }
+      }
+      "
+    `)
   },
 )
 
@@ -1273,5 +1625,102 @@ test(
     let [filename] = files[0]
 
     await fs.expectFileToContain(filename, [candidate`content-['index.html']`])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/17532
+test(
+  'deleting a file should not crash Vite',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "6.2.5"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <body>
+          <div id="app" class="underline"></div>
+          <script type="module" src="./src/main.js"></script>
+        </body>
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+      'src/main.js': js`
+        import iconUrl from './assets/icon.svg?url'
+        import './index.css'
+
+        document.querySelector('#app').innerHTML = iconUrl
+      `,
+      'src/assets/icon.svg': html`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1">
+          <rect class="fill-red-500" width="1" height="1" />
+        </svg>
+       `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let [main, css] = await Promise.all([
+        fetch(`${url}/src/main.js`).then((r) => r.text()),
+        fetch(`${url}/src/index.css`).then((r) => r.text()),
+      ])
+
+      expect(main).toContain('/src/assets/icon.svg?import&url')
+      expect(main).toContain('/src/index.css')
+      expect(css).toContain('.fill-red-500')
+    })
+
+    process.flush()
+
+    let unexpectedError = process.onStderr((m) => {
+      return /error|crash|panic/i.test(m)
+    })
+
+    await fs.write(
+      'src/main.js',
+      js`
+        import './index.css'
+        document.querySelector('#app').innerHTML = 'Hello World'
+      `,
+    )
+
+    await fs.delete('src/assets/icon.svg')
+
+    let result = await Promise.race([
+      unexpectedError.then(() => 'stderr'),
+      new Promise((resolve) => setTimeout(() => resolve('timeout'), 500)),
+    ])
+
+    expect(result).toBe('timeout')
+
+    await retryAssertion(async () => {
+      let response = await fetch(`${url}/src/index.css?t=${Date.now()}`)
+      expect(response.status).toBe(200)
+    })
   },
 )

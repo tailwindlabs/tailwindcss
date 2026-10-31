@@ -1,4 +1,4 @@
-import { atRule, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
+import { atRule, context, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
@@ -187,7 +187,18 @@ export function applyVariant(
     // E.g. `[>img]:flex` is not valid, but `has-[>img]:flex` is
     if (variant.relative && depth === 0) return null
 
-    node.nodes = [rule(variant.selector, node.nodes)]
+    let child: AstNode = rule(variant.selector, node.nodes)
+
+    // Wrap variant-generated `@scope` rules in a `context` marker, so they are
+    // hoisted with the variant semantics instead of their native CSS nesting
+    // semantics. The slotted content is marked as `user` content, so `@scope`
+    // rules defined there keep their native CSS nesting semantics.
+    if (child.kind === 'at-rule' && child.name === '@scope') {
+      child.nodes = [context({ source: 'user' }, node.nodes)]
+      child = context({ source: 'variant' }, [child])
+    }
+
+    node.nodes = [child]
     return
   }
 
@@ -287,7 +298,19 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
-    if (compiledNodes === null) return asts
+    if (compiledNodes === null) {
+      // `null` means that the result is invalid and that this plugin should not
+      // result in any CSS, but that doesn't mean that subsequent plugins are
+      // invalid as well.
+      //
+      // However, for backwards compatibility with `matchUtilities` this means
+      // that we do need to bail entirely: plugins that handle a specific
+      // arbitrary value type prevent falling through to other plugins if the
+      // result is invalid for that plugin
+      if (utility.options?.types?.length) return asts
+
+      continue
+    }
     asts.push(compiledNodes)
   }
 
@@ -299,7 +322,19 @@ function compileBaseUtility(candidate: Candidate, designSystem: DesignSystem) {
 
     let compiledNodes = utility.compileFn(candidate)
     if (compiledNodes === undefined) continue
-    if (compiledNodes === null) return asts
+    if (compiledNodes === null) {
+      // `null` means that the result is invalid and that this plugin should not
+      // result in any CSS, but that doesn't mean that subsequent plugins are
+      // invalid as well.
+      //
+      // However, for backwards compatibility with `matchUtilities` this means
+      // that we do need to bail entirely: plugins that handle a specific
+      // arbitrary value type prevent falling through to other plugins if the
+      // result is invalid for that plugin
+      if (utility.options?.types?.length) return asts
+
+      continue
+    }
     asts.push(compiledNodes)
   }
 

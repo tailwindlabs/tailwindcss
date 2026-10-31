@@ -3,6 +3,7 @@ import {
   atRoot,
   atRule,
   cloneAstNode,
+  context,
   decl,
   rule,
   styleRule,
@@ -11,6 +12,7 @@ import {
   type Rule,
   type StyleRule,
 } from './ast'
+import * as AttributeSelectorParser from './attribute-selector-parser'
 import { type Variant } from './candidate'
 import { applyVariant } from './compile'
 import type { DesignSystem } from './design-system'
@@ -19,6 +21,7 @@ import { compareBreakpoints } from './utils/compare-breakpoints'
 import { DefaultMap } from './utils/default-map'
 import { isPositiveInteger } from './utils/infer-data-type'
 import { segment } from './utils/segment'
+import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
 export const IS_VALID_VARIANT_NAME = /^@?[a-z0-9][a-zA-Z0-9_-]*(?<![_-])$/
@@ -87,12 +90,14 @@ export class Variants {
     let selectors: string[] = []
 
     let usesAtVariant = false
+    let usesAtScope = false
     walk(ast, (node) => {
       if (node.kind === 'rule') {
         selectors.push(node.selector)
       } else if (node.kind === 'at-rule' && node.name === '@variant') {
         usesAtVariant = true
       } else if (node.kind === 'at-rule' && node.name !== '@slot') {
+        if (node.name === '@scope') usesAtScope = true
         selectors.push(`${node.name} ${node.params}`)
       }
     })
@@ -102,8 +107,14 @@ export class Variants {
       (r) => {
         let body = ast.map(cloneAstNode)
         if (usesAtVariant) substituteAtVariant(body, designSystem)
-        substituteAtSlot(body, r.nodes)
-        r.nodes = body
+
+        if (usesAtScope) {
+          substituteAtSlot(body, [context({ source: 'user' }, r.nodes)])
+          r.nodes = [context({ source: 'variant' }, body)]
+        } else {
+          substituteAtSlot(body, r.nodes)
+          r.nodes = body
+        }
       },
       { compounds: compoundsForSelectors(selectors) },
     )
@@ -375,35 +386,83 @@ export function createVariants(theme: Theme): Variants {
 
   function negateConditions(ruleName: string, conditions: string[]) {
     return conditions.map((condition) => {
-      condition = condition.trim()
+      switch (ruleName) {
+        case '@container': {
+          let ast = ValueParser.parse(condition.trim())
 
-      let parts = segment(condition, ' ')
+          // @container {query}
+          //            ^^^^^^^
+          // ast        0
+          if (ast.length >= 1 && ast[0].kind === 'function') {
+            return `not ${condition}`
+          }
 
-      // @media not {query}
-      // @supports not {query}
-      // @container not {query}
-      if (parts[0] === 'not') {
-        return parts.slice(1).join(' ')
-      }
+          // @container not   {query}
+          //            ^^^ ^ ^^^^^^^
+          // ast        0   1 2
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value === 'not' &&
+            ast[2].kind === 'function'
+          ) {
+            // Drop the leading `not` (ast[0]) and separator (ast[1])
+            ast.splice(0, 2)
 
-      if (ruleName === '@container') {
-        // @container {query}
-        if (parts[0][0] === '(') {
+            return ValueParser.toCss(ast)
+          }
+
+          // @container {name}   not   {query}
+          //            ^^^^^^ ^ ^^^ ^ ^^^^^^^
+          // ast        0      1 2   3 4
+          else if (
+            ast.length >= 5 &&
+            ast[0].kind === 'word' &&
+            ast[2].kind === 'word' &&
+            ast[2].value === 'not' &&
+            ast[4].kind === 'function'
+          ) {
+            // Drop the `not` (ast[2]) and separator (ast[3])
+            ast.splice(2, 2)
+
+            return ValueParser.toCss(ast)
+          }
+
+          // @container {name}   {query}
+          //            ^^^^^^ ^ ^^^^^^^
+          // ast        0      1 2
+          else if (
+            ast.length >= 3 &&
+            ast[0].kind === 'word' &&
+            ast[0].value !== 'not' &&
+            ast[2].kind === 'function'
+          ) {
+            // Inject a separator and a `not`, after the `name` (ast[0])
+            ast.splice(1, 0, { kind: 'separator', value: ' ' }, { kind: 'word', value: 'not' })
+
+            return ValueParser.toCss(ast)
+          }
+
+          // Fallback
+          else {
+            return `not ${condition}`
+          }
+        }
+
+        default: {
+          condition = condition.trim()
+
+          let parts = segment(condition, ' ')
+
+          // @media not {query}
+          // @supports not {query}
+          if (parts[0] === 'not') {
+            return parts.slice(1).join(' ')
+          }
+
           return `not ${condition}`
         }
-
-        // @container {name} not {query}
-        else if (parts[1] === 'not') {
-          return `${parts[0]} ${parts.slice(2).join(' ')}`
-        }
-
-        // @container {name} {query}
-        else {
-          return `${parts[0]} not ${parts.slice(1).join(' ')}`
-        }
       }
-
-      return `not ${condition}`
     })
   }
 
@@ -551,7 +610,13 @@ export function createVariants(theme: Theme): Variants {
         selector = `:is(${selector})`
       }
 
-      node.selector = `&:is(${selector} *)`
+      // Put the target inside `:is` so browsers can limit style invalidation to
+      // it when the group changes. Keep `&` instead of the candidate's class so
+      // this also works with `@apply` and variants that change the target.
+      //
+      // The `:is` wrapper also keeps `has-group-*` from anchoring the group
+      // itself to the element carrying the utility.
+      node.selector = `:is(${selector} &)`
 
       // Track that the variant was actually applied
       didApply = true
@@ -592,7 +657,7 @@ export function createVariants(theme: Theme): Variants {
 
       // For most variants we rely entirely on CSS nesting to build-up the final
       // selector, but there is no way to use CSS nesting to make `&` refer to
-      // just the `.group` class the way we'd need to for these variants, so we
+      // just the `.peer` class the way we'd need to for these variants, so we
       // need to replace it in the selector ourselves.
       let selector = node.selector.replaceAll('&', variantSelector)
 
@@ -603,7 +668,8 @@ export function createVariants(theme: Theme): Variants {
         selector = `:is(${selector})`
       }
 
-      node.selector = `&:is(${selector} ~ *)`
+      // As with `group`, constrain the target without repeating its selector.
+      node.selector = `:is(${selector} ~ &)`
 
       // Track that the variant was actually applied
       didApply = true
@@ -796,11 +862,15 @@ export function createVariants(theme: Theme): Variants {
     if (!variant.value || variant.modifier) return null
 
     if (variant.value.kind === 'arbitrary') {
-      ruleNode.nodes = [
-        styleRule(`&[aria-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
-      ]
+      let selector = `[aria-${quoteAttributeValue(variant.value.value)}]`
+      let parsed = AttributeSelectorParser.parse(selector)
+      if (parsed === null) return null
+      ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
     } else {
-      ruleNode.nodes = [styleRule(`&[aria-${variant.value.value}="true"]`, ruleNode.nodes)]
+      let selector = `[aria-${variant.value.value}="true"]`
+      let parsed = AttributeSelectorParser.parse(selector)
+      if (parsed === null) return null
+      ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
     }
   })
 
@@ -819,9 +889,11 @@ export function createVariants(theme: Theme): Variants {
   variants.functional('data', (ruleNode, variant) => {
     if (!variant.value || variant.modifier) return null
 
-    ruleNode.nodes = [
-      styleRule(`&[data-${quoteAttributeValue(variant.value.value)}]`, ruleNode.nodes),
-    ]
+    let selector = `[data-${quoteAttributeValue(variant.value.value)}]`
+    let parsed = AttributeSelectorParser.parse(selector)
+    if (parsed === null) return null
+
+    ruleNode.nodes = [styleRule(`&${selector}`, ruleNode.nodes)]
   })
 
   variants.functional('nth', (ruleNode, variant) => {
@@ -873,7 +945,22 @@ export function createVariants(theme: Theme): Variants {
       if (/^[\w-]*\s*\(/.test(value)) {
         // Chrome has a bug where `(condition1)or(condition2)` is not valid, but
         // `(condition1) or (condition2)` is supported.
-        let query = value.replace(/\b(and|or|not)\b/g, ' $1 ')
+        let changed = false
+        let ast = ValueParser.parse(value)
+        walk(ast, (node) => {
+          if (node.kind !== 'function') return
+
+          // Leave selectors as-is, they could contain `selector(a:not(b))`, and
+          // in this case we don't want the space around the `not`.
+          if (node.value === 'selector') return WalkAction.Skip
+
+          if (node.value === 'and' || node.value === 'or' || node.value === 'not') {
+            changed = true
+            node.value = ` ${node.value} `
+          }
+        })
+
+        let query = changed ? ValueParser.toCss(ast) : value
 
         ruleNode.nodes = [atRule('@supports', query, ruleNode.nodes)]
         return
@@ -1212,24 +1299,50 @@ export function substituteAtVariant(ast: AstNode[], designSystem: DesignSystem):
   walk(ast, (variantNode) => {
     if (variantNode.kind !== 'at-rule' || variantNode.name !== '@variant') return
 
-    // Starting with the `&` rule node
-    let node = styleRule('&', variantNode.nodes)
+    let nodes: AstNode[] = []
+    let compoundVariants = segment(variantNode.params, ',')
+    for (let [idx, compoundVariant] of compoundVariants.entries()) {
+      // Starting with the `&` rule node
+      //
+      // Only clone the nodes when we have multiple compound variants to deal
+      // with. The last one can use the original nodes. We do need unique AST
+      // nodes for sourcemap `dst` location information.
+      let node = styleRule(
+        '&',
+        idx === compoundVariants.length - 1
+          ? variantNode.nodes
+          : variantNode.nodes.map(cloneAstNode),
+      )
 
-    let variant = variantNode.params
+      let stackedVariants = segment(compoundVariant, ':')
+      for (let i = stackedVariants.length - 1; i >= 0; --i) {
+        let variant = stackedVariants[i].trim()
 
-    let variantAst = designSystem.parseVariant(variant)
-    if (variantAst === null) {
-      throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
-    }
+        if (!variant) {
+          throw new Error(`Cannot use \`@variant\` with empty variant`)
+        }
 
-    let result = applyVariant(node, variantAst, designSystem.variants)
-    if (result === null) {
-      throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+        let variantAst = designSystem.parseVariant(variant)
+        if (variantAst === null) {
+          throw new Error(`Cannot use \`@variant\` with unknown variant: ${variant}`)
+        }
+
+        let result = applyVariant(node, variantAst, designSystem.variants)
+        if (result === null) {
+          throw new Error(`Cannot use \`@variant\` with variant: ${variant}`)
+        }
+      }
+
+      if (node.selector === '&') {
+        nodes.push(...node.nodes)
+      } else {
+        nodes.push(node)
+      }
     }
 
     // Update the variant at-rule node, to be the `&` rule node
     features |= Features.Variants
-    return WalkAction.Replace(node)
+    return WalkAction.Replace(nodes)
   })
   return features
 }

@@ -1,3 +1,3 @@
 # `@tailwindcss/oxide-wasm32-wasi`
 
-This is the **wasm32-wasip1-threads** binary for `@tailwindcss/oxide`
+This is the **wasm32-wasip1-threads** build of `@tailwindcss/oxide`

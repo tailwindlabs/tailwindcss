@@ -1,4 +1,4 @@
-import { type AtRule, type Comment, type Plugin, type Rule } from 'postcss'
+import { type AtRule, type Comment, type Container, type Plugin, type Rule } from 'postcss'
 import SelectorParser from 'postcss-selector-parser'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { Stylesheet } from '../../stylesheet'
@@ -43,6 +43,7 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
 
     walk(atRule, (node) => {
       if (node.type !== 'rule') return
+      if (isEmpty(node)) return
 
       // Find all the classes in the selector
       SelectorParser((selectors) => {
@@ -184,6 +185,18 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
                 toRemove.push(node.parent?.nodes.at(i) as Comment)
               }
             }
+
+            let commentsAfter: Comment[] = []
+            for (let i = idx + 1; i < (node.parent?.nodes.length ?? 0); i++) {
+              if (node.parent?.nodes.at(i)?.type === 'rule') {
+                commentsAfter = []
+                break
+              }
+              if (node.parent?.nodes.at(i)?.type === 'comment') {
+                commentsAfter.push(node.parent?.nodes.at(i) as Comment)
+              }
+            }
+            toRemove.push(...commentsAfter)
           }
           for (let node of toRemove) {
             node.remove()
@@ -231,8 +244,12 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
           }
         }
 
-        // Remove empty rules
-        if ((node.type === 'rule' || node.type === 'atrule') && node.nodes?.length === 0) {
+        // Remove empty rules from `@utility` clones and empty wrapper at-rules
+        // from the default `@layer` clone.
+        if (
+          (node.type === 'atrule' && node.nodes?.length === 0) ||
+          (clone !== defaultsAtRule && node.type === 'rule' && node.nodes?.length === 0)
+        ) {
           node.remove()
         }
 
@@ -261,6 +278,11 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
       // Remove empty clones entirely
       if (clone.nodes?.length === 0) {
         clones.splice(idx, 1)
+      } else if (clone === defaultsAtRule) {
+        let first = clone.nodes?.[0]
+        if (first) {
+          first.raws.before = first.raws.before?.replace(/\n\s*\n/g, '\n')
+        }
       }
     }
 
@@ -315,4 +337,18 @@ export function migrateAtLayerUtilities(stylesheet: Stylesheet): Plugin {
       }
     },
   }
+}
+
+function isEmpty(node: Container): boolean {
+  // We have no body
+  if (node.nodes === undefined) return false
+
+  // We have a body, but no nodes
+  if (node.nodes.length === 0) return true
+
+  // We have nodes, but they are only comments which we consider empty
+  if (node.nodes.every((child) => child.type === 'comment')) return true
+
+  // Not empty
+  return false
 }

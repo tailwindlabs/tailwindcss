@@ -48,6 +48,10 @@ describe('is-safe-migration', async () => {
     [`<div v-show="shadow"></div>\n`, 'shadow'],
     [`<div x-if="shadow"></div>\n`, 'shadow'],
     [`<div style={{filter: 'drop-shadow(30px 10px 4px #4444dd)'}}/>\n`, 'shadow'],
+    [`<div style="flex-grow: 1"></div>\n`, 'flex-grow'],
+    [`<div style='flex-shrink: 0'></div>\n`, 'flex-shrink'],
+    [`<div style="  flex-shrink: 0"></div>\n`, 'flex-shrink'],
+    [`<div style="\nflex-shrink: 0\n"></div>\n`, 'flex-shrink'],
 
     // Next.js Image placeholder cases
     [`<Image placeholder="blur" src="/image.jpg" />`, 'blur'],

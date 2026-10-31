@@ -97,9 +97,9 @@ test('getVariants compound', async () => {
   ]
 
   expect(list).toEqual([
-    ['@media (hover: hover) { &:is(:where(.group):hover *) }'],
-    ['@media (hover: hover) { &:is(:where(.group\\/sidebar):hover *) }'],
-    ['@media (hover: hover) { &:is(:where(.group):is(:where(.group):hover *) *) }'],
+    ['@media (hover: hover) { :is(:where(.group):hover &) }'],
+    ['@media (hover: hover) { :is(:where(.group\\/sidebar):hover &) }'],
+    ['@media (hover: hover) { :is(:is(:where(.group):hover :where(.group)) &) }'],
     [],
     [],
   ])
@@ -213,11 +213,9 @@ test('Utilities do not show wrapping selector in intellisense', async () => {
       text-decoration-line: underline;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through;
       }
     }
     ",
@@ -244,11 +242,9 @@ test('Utilities, when marked as important, show as important in intellisense', a
       text-decoration-line: underline !important;
     }
     ",
-      ".hover\\:line-through {
-      &:hover {
-        @media (hover: hover) {
-          text-decoration-line: line-through !important;
-        }
+      "@media (hover: hover) {
+      .hover\\:line-through:hover {
+        text-decoration-line: line-through !important;
       }
     }
     ",
@@ -361,48 +357,48 @@ test('Functional utilities from plugins are listed in hovers and completions', a
 
   expect(design.candidatesToCss(['custom-1-red', 'custom-1-green', 'custom-1-unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-1-red {
-      color: #ff0000;
-    }
-    ",
-      ".custom-1-green {
-      color: #ff0000;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-1-red {
+        color: #ff0000;
+      }
+      ",
+        ".custom-1-green {
+        color: #ff0000;
+      }
+      ",
+        null,
+      ]
+    `)
 
   expect(design.candidatesToCss(['custom-2-red', 'custom-2-green', 'custom-2-unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-2-red {
-      color: #ff0000 / 0%;
-    }
-    ",
-      ".custom-2-green {
-      color: #ff0000 / 0%;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-2-red {
+        color: #ff0000 / 0%;
+      }
+      ",
+        ".custom-2-green {
+        color: #ff0000 / 0%;
+      }
+      ",
+        null,
+      ]
+    `)
 
   expect(design.candidatesToCss(['custom-2-red/50', 'custom-2-red/75', 'custom-2-red/unknown']))
     .toMatchInlineSnapshot(`
-    [
-      ".custom-2-red\\/50 {
-      color: #ff0000 / 50%;
-    }
-    ",
-      ".custom-2-red\\/75 {
-      color: #ff0000 / 75%;
-    }
-    ",
-      null,
-    ]
-  `)
+      [
+        ".custom-2-red\\/50 {
+        color: #ff0000 / 50%;
+      }
+      ",
+        ".custom-2-red\\/75 {
+        color: #ff0000 / 75%;
+      }
+      ",
+        null,
+      ]
+    `)
 
   let classMap = new Map(design.getClassList())
   let classNames = Array.from(classMap.keys())
@@ -497,11 +493,6 @@ test('Custom functional @utility', async () => {
     @import 'tailwindcss/utilities';
 
     @theme reference {
-      --tab-size-1: 1;
-      --tab-size-2: 2;
-      --tab-size-4: 4;
-      --tab-size-github: 8;
-
       --text-xs: 0.75rem;
       --text-xs--line-height: calc(1 / 0.75);
 
@@ -510,10 +501,11 @@ test('Custom functional @utility', async () => {
 
       --spacing: 0.25rem;
       --spacing-custom: 123px;
-    }
 
-    @utility tab-* {
-      tab-size: --value(--tab-size, 'revert', 'initial');
+      --negative-1: 1;
+      --negative-2: 2;
+      --negative-4: 4;
+      --negative-a: 8;
     }
 
     @utility example-* {
@@ -535,7 +527,7 @@ test('Custom functional @utility', async () => {
     }
 
     @utility -negative-* {
-      margin: --value(--tab-size-*);
+      margin: --value(--negative-*);
     }
   `
 
@@ -549,18 +541,6 @@ test('Custom functional @utility', async () => {
 
   let classMap = new Map(design.getClassList())
   let classNames = Array.from(classMap.keys())
-
-  expect(classNames).toContain('tab-1')
-  expect(classNames).toContain('tab-2')
-  expect(classNames).toContain('tab-4')
-  expect(classNames).toContain('tab-github')
-  expect(classNames).toContain('tab-revert')
-  expect(classNames).toContain('tab-initial')
-
-  expect(classNames).not.toContain('-tab-1')
-  expect(classNames).not.toContain('-tab-2')
-  expect(classNames).not.toContain('-tab-4')
-  expect(classNames).not.toContain('-tab-github')
 
   expect(classNames).toContain('with-custom-spacing-custom')
   expect(classNames).not.toContain('with-custom-spacing-0')
@@ -583,12 +563,12 @@ test('Custom functional @utility', async () => {
   expect(classNames).toContain('-negative-1')
   expect(classNames).toContain('-negative-2')
   expect(classNames).toContain('-negative-4')
-  expect(classNames).toContain('-negative-github')
+  expect(classNames).toContain('-negative-a')
 
   expect(classNames).not.toContain('--negative-1')
   expect(classNames).not.toContain('--negative-2')
   expect(classNames).not.toContain('--negative-4')
-  expect(classNames).not.toContain('--negative-github')
+  expect(classNames).not.toContain('--negative-a')
 
   expect(classNames).toContain('example-xs')
   expect(classMap.get('example-xs')?.modifiers).toEqual(['normal', 'foo', 'bar'])

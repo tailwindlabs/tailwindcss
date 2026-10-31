@@ -1,0 +1,80 @@
+diff --git a/dist/cli.js b/dist/cli.js
+index c4c2d568bc070c07dbf3a1f9f4a0c946466668cf..353bbca86e3261a2ba9a8fc56dc612c7c84dab6d 100755
+--- a/dist/cli.js
++++ b/dist/cli.js
+@@ -1,4 +1,13 @@
+ #!/usr/bin/env node
++// PATCHED (see patches/@napi-rs__cli@3.7.4.patch): the embedded wasi loader
++// and worker templates below retry `new WASI(...)` with narrower preopens,
++// because preopening `/` throws `UVWASI_EACCES` on sandboxed platforms (e.g.
++// OpenHarmony), which would make the generated wasm binding fail to load.
++//
++// The same templates also exist in `dist/index.js` and `dist/index.cjs` (the
++// programmatic API). Those are intentionally NOT patched because we only
++// build through the `napi` bin, which runs this file. If we ever start using
++// the programmatic API, update the patch to cover those bundles too.
+ import { createRequire } from "node:module";
+ import { Cli, Command, Option } from "clipanion";
+ import path, { basename, dirname, isAbsolute, join, parse, resolve } from "node:path";
+@@ -1021,13 +1030,25 @@ const {
+ 
+ const __rootDir = __nodePath.parse(process.cwd()).root
+ 
+-const __wasi = new __nodeWASI({
+-  version: 'preview1',
+-  env: process.env,
+-  preopens: {
+-    [__rootDir]: __rootDir,
++const __wasi = (() => {
++  // Preopening '/' fails with UVWASI_EACCES in sandboxed environments (e.g.
++  // OpenHarmony, Android), which would prevent the wasm binding from loading
++  // at all. Retry with narrower preopens instead. Without any preopens the
++  // binding still loads; only file system access is unavailable.
++  let lastError = null
++  for (const dir of [__rootDir, process.cwd(), null]) {
++    try {
++      return new __nodeWASI({
++        version: 'preview1',
++        env: process.env,
++        preopens: dir === null ? {} : { [dir]: dir },
++      })
++    } catch (error) {
++      lastError = error
++    }
+   }
+-})
++  throw lastError
++})()
+ 
+ const __emnapiContext = __emnapiGetDefaultContext()
+ 
+@@ -1151,13 +1172,22 @@ const __rootDir = parse(process.cwd()).root;
+ 
+ const handler = new MessageHandler({
+   onLoad({ wasmModule, wasmMemory }) {
+-    const wasi = new WASI({
+-      version: 'preview1',
+-      env: process.env,
+-      preopens: {
+-        [__rootDir]: __rootDir,
+-      },
+-    });
++    // Keep in sync with the preopen fallback in the main-thread loader.
++    const wasi = (() => {
++      let lastError = null;
++      for (const dir of [__rootDir, process.cwd(), null]) {
++        try {
++          return new WASI({
++            version: 'preview1',
++            env: process.env,
++            preopens: dir === null ? {} : { [dir]: dir },
++          });
++        } catch (error) {
++          lastError = error;
++        }
++      }
++      throw lastError;
++    })();
+ 
+     return instantiateNapiModuleSync(wasmModule, {
+       childThread: true,

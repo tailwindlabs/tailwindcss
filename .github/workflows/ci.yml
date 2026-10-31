@@ -27,8 +27,10 @@ jobs:
           - name: Linux
             os: namespace-profile-default
 
+          # Playwright 1.62+ dropped WebKit support for macOS 14, and hangs
+          # instead of failing when launching WebKit on a macos-14 runner.
           - name: macOS
-            os: macos-14
+            os: macos-15
 
         # Exclude windows and macos from being built on feature branches
         run-all:
@@ -47,21 +49,21 @@ jobs:
     name: ${{ matrix.runner.name }}
 
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
 
       # Cargo already skips downloading dependencies if they already exist
       - name: Cache cargo
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
-            ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
@@ -70,7 +72,7 @@ jobs:
 
       # Cache the `oxide` Rust build
       - name: Cache oxide build
-        uses: actions/cache@v5
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: |
             ./crates/node/*.node
@@ -88,7 +90,7 @@ jobs:
         run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm run build
@@ -116,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify Discord
-        uses: discord-actions/message@v2
+        uses: discord-actions/message@5c7149c81a83146e5d01f142be1bf87a61831c4d # v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
           message: 'The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) on the `main` branch has failed.'

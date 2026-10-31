@@ -1,4 +1,4 @@
-import { css, js, json, test } from '../utils'
+import { css, html, js, json, test, txt } from '../utils'
 
 test(
   'can rewrite urls in production builds',
@@ -145,5 +145,87 @@ test(
       }
       "
     `)
+  },
+)
+
+test(
+  'can rewrite urls of stylesheets that Vite inlines in production builds',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'postcss.config.js': js`
+        export default {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'vite.config.js': js`
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            assetsInlineLimit: 0,
+            cssMinify: false,
+          },
+        })
+      `,
+      'index.html': html`
+        <!doctype html>
+        <html>
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body></body>
+        </html>
+      `,
+      // Vite inlines these `@import`s before `@tailwindcss/postcss` runs
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @import '../vendor/example-font/fonts.css';
+        @import './fonts/local.css';
+      `,
+      'src/fonts/local.css': css`
+        @font-face {
+          font-family: 'Local Sans';
+          src: url('./local-sans.woff2') format('woff2');
+        }
+      `,
+      'src/fonts/local-sans.woff2': txt`local-sans`,
+      'vendor/example-font/fonts.css': css`
+        @font-face {
+          font-family: 'Example Sans';
+          src: url('./fonts/example-sans.woff2') format('woff2');
+        }
+      `,
+      'vendor/example-font/fonts/example-sans.woff2': txt`example-sans`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    // Vitest sets `NODE_ENV` to `test`, and `vite build` keeps a `NODE_ENV`
+    // that is already set
+    await exec('pnpm vite build', { env: { NODE_ENV: 'production' } })
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+
+    let fonts = await fs.glob('dist/**/*.woff2')
+    expect(fonts).toHaveLength(2)
+
+    await fs.expectFileToContain(files[0][0], [
+      /url\("?\/assets\/example-sans-[^)]*\.woff2"?\)/,
+      /url\("?\/assets\/local-sans-[^)]*\.woff2"?\)/,
+    ])
   },
 )

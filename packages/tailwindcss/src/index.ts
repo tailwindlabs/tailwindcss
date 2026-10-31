@@ -34,7 +34,8 @@ import { segment } from './utils/segment'
 import { topologicalSort } from './utils/topological-sort'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
 import { walk, WalkAction } from './walk'
-export type Config = UserConfig
+
+export interface Config extends UserConfig {}
 
 const IS_VALID_PREFIX = /^[a-z]+$/
 
@@ -391,21 +392,25 @@ async function parseCss(
           }
         }
 
+        let usesAtScope = atRuleParams.some((param) => param.startsWith('@scope'))
+
         customVariants.set(name, (designSystem) => {
           designSystem.variants.static(
             name,
             (r) => {
+              let slot = usesAtScope ? [contextNode({ source: 'user' }, r.nodes)] : r.nodes
+
               let nodes: AstNode[] = []
 
               if (styleRuleSelectors.length > 0) {
-                nodes.push(styleRule(styleRuleSelectors.join(', '), r.nodes))
+                nodes.push(styleRule(styleRuleSelectors.join(', '), slot))
               }
 
               for (let selector of atRuleParams) {
-                nodes.push(rule(selector, r.nodes))
+                nodes.push(rule(selector, slot))
               }
 
-              r.nodes = nodes
+              r.nodes = usesAtScope ? [contextNode({ source: 'variant' }, nodes)] : nodes
             },
             {
               compounds: compoundsForSelectors([...styleRuleSelectors, ...atRuleParams]),
@@ -742,6 +747,9 @@ export async function compileAst(
     }
   }
 
+  // Avoid retaining loader callbacks, which may keep build tool state alive.
+  let { from, polyfills } = opts
+
   return {
     sources,
     root,
@@ -752,7 +760,7 @@ export async function compileAst(
       }
 
       if (!utilitiesNode) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -778,7 +786,7 @@ export async function compileAst(
       // If no new candidates were added, we can return the original CSS. This
       // currently assumes that we only add new candidates and never remove any.
       if (!didChange) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -786,7 +794,7 @@ export async function compileAst(
         onInvalidCandidate,
       }).astNodes
 
-      if (opts.from) {
+      if (from) {
         walk(newNodes, (node) => {
           // We do this conditionally to preserve source locations from both
           // `@utility` and `@custom-variant`. Even though generated nodes are
@@ -800,7 +808,7 @@ export async function compileAst(
       // CSS. This currently assumes that we only add new ast nodes and never
       // remove any.
       if (!didAddExternalVariable && previousAstNodeCount === newNodes.length) {
-        compiled ??= optimizeAst(ast, designSystem, opts.polyfills)
+        compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
       }
 
@@ -808,7 +816,7 @@ export async function compileAst(
 
       utilitiesNode.nodes = newNodes
 
-      compiled = optimizeAst(ast, designSystem, opts.polyfills)
+      compiled = optimizeAst(ast, designSystem, polyfills)
       return compiled
     },
   }
@@ -830,6 +838,7 @@ export async function compile(
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
+  let from = opts.from
 
   return {
     ...api,
@@ -840,7 +849,7 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst, !!opts.from)
+      compiledCss = toCss(newAst, !!from)
       compiledAst = newAst
 
       return compiledCss

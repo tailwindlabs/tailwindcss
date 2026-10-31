@@ -1,22 +1,27 @@
 import dedent from 'dedent'
 import fastGlob from 'fast-glob'
-import { exec, spawn } from 'node:child_process'
+import { exec, execFile, spawn, type ChildProcess } from 'node:child_process'
 import fs from 'node:fs/promises'
+import { createServer } from 'node:net'
 import { platform, tmpdir } from 'node:os'
 import path from 'node:path'
-import { stripVTControlCharacters } from 'node:util'
+import { promisify, stripVTControlCharacters } from 'node:util'
 import { RawSourceMap, SourceMapConsumer } from 'source-map-js'
 import { test as defaultTest, type ExpectStatic } from 'vitest'
+import * as Yaml from 'yaml'
 import { createLineTable } from '../packages/tailwindcss/src/source-maps/line-table'
 import { escape } from '../packages/tailwindcss/src/utils/escape'
 
 const REPO_ROOT = path.join(__dirname, '..')
+const ROOT_PNPM_WORKSPACE = Yaml.parse(
+  await fs.readFile(path.join(REPO_ROOT, 'pnpm-workspace.yaml'), 'utf8'),
+)
 const PUBLIC_PACKAGES = (await fs.readdir(path.join(REPO_ROOT, 'dist'))).map((name) =>
   name.replace('tailwindcss-', '@tailwindcss/').replace('.tgz', ''),
 )
 
 interface SpawnedProcess {
-  dispose: () => void
+  dispose: () => Promise<void>
   flush: () => void
   onStdout: (predicate: (message: string) => boolean) => Promise<void>
   onStderr: (predicate: (message: string) => boolean) => Promise<void>
@@ -30,6 +35,17 @@ interface ChildProcessOptions {
 interface ExecOptions {
   ignoreStdErr?: boolean
   stdin?: string
+
+  // Return stdout, stderr and the exit code on their own, instead of one
+  // string. The promise also resolves when the command exits with a non-zero
+  // code.
+  streams?: boolean
+}
+
+interface ExecResult {
+  stdout: string
+  stderr: string
+  exitCode: number
 }
 
 interface TestConfig {
@@ -39,24 +55,32 @@ interface TestConfig {
 
   timeout?: number
   installDependencies?: boolean
+  retry?: number
 }
 interface TestContext {
   root: string
   expect: ExpectStatic
+  exec(
+    command: string,
+    options: ChildProcessOptions | undefined,
+    execOptions: ExecOptions & { streams: true },
+  ): Promise<ExecResult>
   exec(command: string, options?: ChildProcessOptions, execOptions?: ExecOptions): Promise<string>
   spawn(command: string, options?: ChildProcessOptions): Promise<SpawnedProcess>
   parseSourceMap(opts: string | SourceMapOptions): SourceMap
   fs: {
     write(filePath: string, content: string, encoding?: BufferEncoding): Promise<void>
+    symlink(dst: string, src: string): Promise<void>
     create(filePaths: string[]): Promise<void>
     read(filePath: string): Promise<string>
+    delete(filePath: string): Promise<void>
     glob(pattern: string): Promise<[string, string][]>
     dumpFiles(pattern: string): Promise<string>
     expectFileToContain(
       filePath: string,
       contents: string | RegExp | (string | RegExp)[],
     ): Promise<void>
-    expectFileNotToContain(filePath: string, contents: string | string[]): Promise<void>
+    expectFileNotToContain(filePath: string, contents: string[]): Promise<void>
   }
 }
 type TestCallback = (context: TestContext) => Promise<void> | void
@@ -64,11 +88,14 @@ interface TestFlags {
   only?: boolean
   skip?: boolean
   debug?: boolean
+  concurrent?: boolean
 }
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
 export const IS_WINDOWS = platform() === 'win32'
+
+const execFileAsync = promisify(execFile)
 
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
@@ -82,16 +109,16 @@ export function test(
   name: string,
   config: TestConfig,
   testCallback: TestCallback,
-  { only = false, skip = false, debug = false }: TestFlags = {},
+  { only = false, skip = false, debug = false, concurrent = false }: TestFlags = {},
 ) {
   return defaultTest(
     name,
     {
       timeout: config.timeout ?? TEST_TIMEOUT,
-      retry: process.env.CI ? 2 : 0,
+      retry: config.retry ?? (process.env.CI ? 2 : 0),
       only: only || (!process.env.CI && debug),
       skip,
-      concurrent: true,
+      concurrent,
     },
     async (options) => {
       let rootDir = debug ? path.join(REPO_ROOT, '.debug') : TMP_ROOT
@@ -113,15 +140,48 @@ export function test(
           command: string,
           childProcessOptions: ChildProcessOptions = {},
           execOptions: ExecOptions = {},
-        ) {
+        ): Promise<any> {
           let cwd = childProcessOptions.cwd ?? root
+          let originalCommand = command
+
+          // Avoid `pnpm exec upgrade` on Windows because the upgrader runs
+          // `pnpm add`, which rewrites Windows `.cmd` shims while the current
+          // shim is still executing.
+          //
+          // Pretty sure this is a pnpm v11 bug on Windows.
+          if (IS_WINDOWS && command.includes('pnpm exec upgrade')) {
+            for (let base = cwd; ; base = path.dirname(base)) {
+              let upgradeBin = path.join(
+                base,
+                'node_modules',
+                '@tailwindcss',
+                'upgrade',
+                'dist',
+                'index.mjs',
+              )
+
+              try {
+                await fs.access(upgradeBin)
+                command = command.replace('pnpm exec upgrade', `node "${upgradeBin}"`)
+                break
+              } catch (error: any) {
+                if (error?.code !== 'ENOENT') throw error
+              }
+
+              let parent = path.dirname(base)
+              if (parent === base) {
+                throw new Error(`Unable to resolve @tailwindcss/upgrade from ${cwd}`)
+              }
+            }
+          }
+
           if (debug && cwd !== root) {
             let relative = path.relative(root, cwd)
             if (relative[0] !== '.') relative = `./${relative}`
             console.log(`> cd ${relative}`)
           }
           if (debug) console.log(`> ${command}`)
-          return new Promise((resolve, reject) => {
+          return new Promise<string | ExecResult>((resolve, reject) => {
             let child = exec(
               command,
               {
@@ -133,7 +193,21 @@ export function test(
                 },
               },
               (error, stdout, stderr) => {
-                if (error) {
+                if (execOptions.streams && (!error || typeof error.code === 'number')) {
+                  if (only || debug) {
+                    console.log(stdout.toString() + '\n\n' + stderr.toString())
+                  }
+                  resolve({
+                    stdout: stdout.toString(),
+                    stderr: stderr.toString(),
+                    exitCode: error?.code ?? 0,
+                  })
+                } else if (error) {
+                  if (command !== originalCommand) {
+                    error.message = error.message.replace(command, originalCommand)
+                    let mappedError = error as any
+                    mappedError.cmd = originalCommand
+                  }
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   if (only || debug) {
                     console.error(stdout)
@@ -170,6 +244,7 @@ export function test(
           if (debug) console.log(`>& ${command}`)
           let child = spawn(command, {
             cwd,
+            detached: !IS_WINDOWS,
             shell: true,
             ...childProcessOptions,
             env: {
@@ -178,22 +253,26 @@ export function test(
             },
           })
 
-          function dispose() {
-            if (!child.kill()) {
-              child.kill('SIGKILL')
-            }
+          let disposed = false
 
-            let timer = setTimeout(
-              () =>
-                rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`)),
-              ASSERTION_TIMEOUT,
+          async function dispose() {
+            if (disposed) return disposePromise
+            disposed = true
+
+            await killProcessTree(child)
+
+            let timer = setTimeout(() => {
+              forceKillProcessTree(child)
+              rejectDisposal?.(new Error(`spawned process (${command}) did not exit in time`))
+            }, ASSERTION_TIMEOUT)
+            disposePromise.then(
+              () => clearTimeout(timer),
+              () => clearTimeout(timer),
             )
-            disposePromise.finally(() => {
-              clearTimeout(timer)
-            })
             return disposePromise
           }
           disposables.push(dispose)
+
           function onExit() {
             resolveDisposal?.()
           }
@@ -284,11 +363,7 @@ export function test(
           }
         },
         fs: {
-          async write(
-            filename: string,
-            content: string | Uint8Array,
-            encoding: BufferEncoding = 'utf8',
-          ): Promise<void> {
+          async write(filename, content, encoding = 'utf8') {
             let full = path.join(root, filename)
             let dir = path.dirname(full)
             await fs.mkdir(dir, { recursive: true })
@@ -299,6 +374,8 @@ export function test(
 
             if (filename.endsWith('package.json')) {
               content = await overwriteVersionsInPackageJson(content)
+            } else if (filename.endsWith('pnpm-workspace.yaml')) {
+              content = overwriteVersionsInPnpmWorkspace(content)
             }
 
             // Ensure that files written on Windows use \r\n line ending
@@ -309,7 +386,19 @@ export function test(
             await fs.writeFile(full, content, encoding)
           },
 
-          async create(filenames: string[]): Promise<void> {
+          async symlink(target, src) {
+            let targetAbsolute = path.join(root, target)
+            let targetParent = path.dirname(targetAbsolute)
+            await fs.mkdir(targetParent, { recursive: true })
+
+            let srcAbsolute = path.join(root, src)
+            let srcParent = path.dirname(srcAbsolute)
+            await fs.mkdir(srcParent, { recursive: true })
+
+            await fs.symlink(targetAbsolute, srcAbsolute)
+          },
+
+          async create(filenames) {
             for (let filename of filenames) {
               let full = path.join(root, filename)
 
@@ -319,7 +408,11 @@ export function test(
             }
           },
 
-          async read(filePath: string) {
+          async delete(filename) {
+            await fs.unlink(path.join(root, filename))
+          },
+
+          async read(filePath) {
             let content = await fs.readFile(path.resolve(root, filePath), 'utf8')
 
             // Ensure that files read on Windows have \r\n line endings removed
@@ -329,7 +422,7 @@ export function test(
 
             return content
           },
-          async glob(pattern: string) {
+          async glob(pattern) {
             let files = await fastGlob(pattern, { cwd: root })
             return Promise.all(
               files.map(async (file) => {
@@ -342,7 +435,7 @@ export function test(
               }),
             )
           },
-          async dumpFiles(pattern: string) {
+          async dumpFiles(pattern) {
             let files = await context.fs.glob(pattern)
             return `\n${files
               .slice()
@@ -401,21 +494,44 @@ export function test(
         node_modules/
       `
 
+      // Disable Git's automatic line ending conversion in these throwaway test
+      // repositories. Tools like pnpm write files (e.g. `pnpm-lock.yaml`) with
+      // LF endings, which on Windows (where `core.autocrlf=true` is common)
+      // makes Git emit noisy "LF will be replaced by CRLF" warnings when it
+      // touches those files.
+      config.fs['.gitattributes'] ??= txt`
+        * -text
+      `
+
+      // Ensure there is always a root `pnpm-workspace.yaml` so that transitive
+      // dependency overrides (and the build allow list) are injected into it.
+      // As of pnpm v10, these can no longer live in the `pnpm.overrides` field
+      // of `package.json`.
+      config.fs['pnpm-workspace.yaml'] ??= ''
+
       for (let [filename, content] of Object.entries(config.fs)) {
-        await context.fs.write(filename, content)
+        if (content.toString().startsWith('symlink:')) {
+          // The symlink path is relative to the target destination's path
+          let target = path.join(
+            filename,
+            content.toString().slice('symlink:'.length), // Relative path
+          )
+
+          await context.fs.symlink(target, filename)
+        } else {
+          await context.fs.write(filename, content)
+        }
       }
 
       let shouldInstallDependencies = config.installDependencies ?? true
 
       try {
-        // In debug mode, the directory is going to be inside the pnpm workspace
-        // of the tailwindcss package. This means that `pnpm install` will run
-        // pnpm install on the workspace instead (expect if the root dir defines
-        // a separate workspace). We work around this by using the
-        // `--ignore-workspace` flag.
+        // Every test project gets its own root `pnpm-workspace.yaml` (see
+        // above). This makes the test directory its own workspace root, so even
+        // in debug mode — where the directory lives inside this repository's
+        // pnpm workspace — `pnpm install` won't attach to the parent workspace.
         if (shouldInstallDependencies) {
-          let ignoreWorkspace = debug && !config.fs['pnpm-workspace.yaml']
-          await context.exec(`pnpm install${ignoreWorkspace ? ' --ignore-workspace' : ''}`)
+          await context.exec(`pnpm install`)
         }
       } catch (error: any) {
         console.error(error)
@@ -427,10 +543,17 @@ export function test(
       let disposables: (() => Promise<void>)[] = []
 
       async function dispose() {
-        await Promise.all(disposables.map((dispose) => dispose()))
+        let results = await Promise.allSettled(disposables.map((dispose) => dispose()))
 
         if (!debug) {
           await gracefullyRemove(root)
+        }
+
+        let errors = results.flatMap((result) =>
+          result.status === 'rejected' ? [result.reason] : [],
+        )
+        if (errors.length > 0) {
+          throw new AggregateError(errors, 'Failed to clean up spawned processes')
         }
       }
 
@@ -441,7 +564,7 @@ export function test(
         try {
           await context.exec('git init', { cwd: root })
           await context.exec('git add --all', { cwd: root })
-          await context.exec('git commit -m "before migration"', { cwd: root })
+          await context.exec('git commit -m "before migration" --allow-empty', { cwd: root })
         } catch (error: any) {
           console.error(error)
           console.error(error.stdout?.toString())
@@ -459,6 +582,9 @@ test.only = (name: string, config: TestConfig, testCallback: TestCallback) => {
 }
 test.skip = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { skip: true })
+}
+test.concurrent = (name: string, config: TestConfig, testCallback: TestCallback) => {
+  return test(name, config, testCallback, { concurrent: true })
 }
 test.debug = (name: string, config: TestConfig, testCallback: TestCallback) => {
   return test(name, config, testCallback, { debug: true })
@@ -483,28 +609,43 @@ async function overwriteVersionsInPackageJson(content: string): Promise<string> 
     }
   }
 
+  return JSON.stringify(json, null, 2)
+}
+
+function overwriteVersionsInPnpmWorkspace(content: string): string {
+  let workspace = content.trim() === '' ? {} : Yaml.parse(content)
+
+  // Inherit information from the root workspace
+  workspace.allowBuilds = {
+    ...ROOT_PNPM_WORKSPACE.allowBuilds,
+    ...workspace.allowBuilds,
+  }
+
   // Inject transitive dependency overwrite. This is necessary because
   // @tailwindcss/vite internally depends on a specific version of
   // @tailwindcss/oxide and we instead want to resolve it to the locally built
   // version.
-  json.pnpm ||= {}
-  json.pnpm.overrides ||= {}
+  //
+  // As of pnpm v10, the `pnpm.overrides` field in `package.json` is no longer
+  // read. Overrides have to be defined in `pnpm-workspace.yaml` instead.
+  workspace.overrides ||= {}
   for (let pkg of PUBLIC_PACKAGES) {
     if (pkg === 'tailwindcss') {
       // We want to be explicit about the `tailwindcss` package so our tests can
       // also import v3 without conflicting v4 tarballs.
-      json.pnpm.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
-      json.pnpm.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/node>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/upgrade>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/cli>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/postcss>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/turbopack>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/vite>tailwindcss'] = resolveVersion(pkg)
+      workspace.overrides['@tailwindcss/webpack>tailwindcss'] = resolveVersion(pkg)
     } else {
-      json.pnpm.overrides[pkg] = resolveVersion(pkg)
+      workspace.overrides[pkg] = resolveVersion(pkg)
     }
   }
 
-  return JSON.stringify(json, null, 2)
+  return Yaml.stringify(workspace)
 }
 
 function resolveVersion(dependency: string) {
@@ -554,6 +695,7 @@ export async function retryAssertion<T>(
     try {
       return await fn()
     } catch (err) {
+      Error.captureStackTrace(err, retryAssertion)
       error = err
       await new Promise((resolve) => setTimeout(resolve, delay))
     }
@@ -569,7 +711,7 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
   let index = await fetch(`${base}${path}`)
   let html = await index.text()
 
-  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9\/_\.\?=%-]+)"/gi
+  let linkRegex = /<link rel="stylesheet" href="([a-zA-Z0-9/_.?=%-]+)"/gi
   let styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi
 
   let stylesheets: string[] = []
@@ -604,6 +746,65 @@ export async function fetchStyles(base: string, path = '/'): Promise<string> {
     acc += css
     return acc
   }, '')
+}
+
+export async function getRandomPort() {
+  return new Promise<number>((resolve, reject) => {
+    let server = createServer()
+    server.unref()
+    server.on('error', reject)
+    server.listen(0, '127.0.0.1', () => {
+      let address = server.address()
+      server.close(() => {
+        if (address && typeof address === 'object') {
+          resolve(address.port)
+        } else {
+          reject(new Error('Unable to allocate random port'))
+        }
+      })
+    })
+  })
+}
+
+async function killProcessTree(child: ChildProcess) {
+  if (child.exitCode !== null || child.signalCode !== null || child.pid === undefined) {
+    return
+  }
+
+  if (IS_WINDOWS) {
+    await execFileAsync('taskkill', ['/pid', String(child.pid), '/T', '/F'], {
+      timeout: ASSERTION_TIMEOUT,
+      windowsHide: true,
+    }).catch(() => {})
+    return
+  }
+
+  try {
+    process.kill(-child.pid, 'SIGTERM')
+  } catch (error: any) {
+    if (error?.code !== 'ESRCH') {
+      child.kill()
+    }
+  }
+}
+
+function forceKillProcessTree(child: ChildProcess) {
+  if (child.exitCode !== null || child.signalCode !== null || child.pid === undefined) {
+    return
+  }
+
+  if (IS_WINDOWS) {
+    execFile('taskkill', ['/pid', String(child.pid), '/T', '/F'], { windowsHide: true }, () => {})
+    return
+  }
+
+  try {
+    process.kill(-child.pid, 'SIGKILL')
+  } catch (error: any) {
+    if (error?.code !== 'ESRCH') {
+      child.kill('SIGKILL')
+    }
+  }
 }
 
 async function gracefullyRemove(dir: string) {

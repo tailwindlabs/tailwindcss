@@ -1,4 +1,15 @@
-import { candidate, css, fetchStyles, html, json, retryAssertion, test, ts } from '../utils'
+import {
+  candidate,
+  css,
+  fetchStyles,
+  getRandomPort,
+  html,
+  json,
+  retryAssertion,
+  test,
+  ts,
+  yaml,
+} from '../utils'
 
 const SETUP = {
   fs: {
@@ -7,17 +18,16 @@ const SETUP = {
         "type": "module",
         "dependencies": {
           "@tailwindcss/vite": "workspace:^",
-          "nuxt": "3.16.0",
-          "nitropack": "2.11.0",
+          "nuxt": "3.21.11",
           "tailwindcss": "workspace:^",
           "vue": "latest"
-        },
-        "pnpm": {
-          "overrides": {
-            "nuxi": "3.28.0"
-          }
         }
       }
+    `,
+    'pnpm-workspace.yaml': yaml`
+      #
+      overrides:
+        nuxi: 3.28.0
     `,
     'nuxt.config.ts': ts`
       import tailwindcss from '@tailwindcss/vite'
@@ -84,7 +94,8 @@ test('build', SETUP, async ({ spawn, exec, expect }) => {
   await exec('pnpm nuxt build')
   // The Nuxt preview server does not automatically assign a free port if 3000
   // is taken, so we use a random port instead.
-  let process = await spawn(`pnpm nuxt preview --port 8724`, {
+  let port = await getRandomPort()
+  let process = await spawn(`pnpm nuxt preview --port ${port}`, {
     env: {
       TEST: 'false',
       NODE_ENV: 'development',

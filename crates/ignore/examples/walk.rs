@@ -18,9 +18,7 @@ fn main() {
     let stdout_thread = std::thread::spawn(move || {
         let mut stdout = std::io::BufWriter::new(std::io::stdout());
         for dent in rx {
-            stdout
-                .write_all(&Vec::from_path_lossy(dent.path()))
-                .unwrap();
+            stdout.write_all(&Vec::from_path_lossy(dent.path())).unwrap();
             stdout.write_all(b"\n").unwrap();
         }
     });

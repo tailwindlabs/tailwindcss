@@ -101,7 +101,7 @@ test(
     await fs.expectFileToContain(files[0][0], [
       candidate`underline`,
       '.global{color:var(--color-green-500,oklch(72.3% .219 149.579));animation:2s ease-in-out infinite globalKeyframes}',
-      /\.local.svelte-.*\{color:var\(--color-red-500\,oklch\(63\.7% \.237 25\.331\)\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
+      /\.local.svelte-.*\{color:var\(--color-red-500,oklch\(63\.7% \.237 25\.331\)\);animation:2s ease-in-out infinite svelte-.*-localKeyframes\}/,
       /@keyframes globalKeyframes\{/,
       /@keyframes svelte-.*-localKeyframes\{/,
     ])

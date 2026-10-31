@@ -29,6 +29,11 @@ describe('parse', () => {
       { attribute: 'data-foo', operator: null, quote: null, value: null, sensitivity: null },
     ],
     [
+      // Non-ASCII code points are valid in a CSS ident
+      '[data-état]',
+      { attribute: 'data-état', operator: null, quote: null, value: null, sensitivity: null },
+    ],
+    [
       '[data-state=expanded]',
       { attribute: 'data-state', operator: '=', quote: null, value: 'expanded', sensitivity: null },
     ],

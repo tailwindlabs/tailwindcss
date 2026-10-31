@@ -17,7 +17,6 @@ use fxhash::{FxHashMap, FxHashSet};
 use ignore::{gitignore::GitignoreBuilder, WalkBuilder};
 use init_tracing::{init_tracing, SHOULD_TRACE};
 use rayon::prelude::*;
-use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
@@ -79,10 +78,11 @@ pub struct Scanner {
     /// Track unique set of candidates
     candidates: FxHashSet<String>,
 
-    /// Track mtimes for files so re-scans can skip unchanged files.
-    /// Only populated after the first scan completes (to avoid unnecessary
-    /// metadata calls on initial build).
+    /// Track mtimes for files so incremental scans can skip unchanged files.
     mtimes: FxHashMap<PathBuf, SystemTime>,
+
+    /// Files that were scanned during the last `scan()` call.
+    scanned_files: Vec<String>,
 
     /// Whether we've completed at least one full scan. When false, we skip
     /// mtime tracking entirely so the initial build stays fast.
@@ -123,9 +123,10 @@ impl Scanner {
     pub fn scan(&mut self) -> Vec<String> {
         self.sources_scanned = false;
 
-        let (scanned_blobs, css_files) = self.discover_sources();
+        let (scanned_blobs, css_files, files) = self.discover_sources();
 
         self.extract_candidates(scanned_blobs, css_files);
+        self.scanned_files = files;
 
         // Return all candidates sorted
         let mut result = self.candidates.iter().cloned().collect::<Vec<_>>();
@@ -180,6 +181,11 @@ impl Scanner {
                         continue;
                     }
 
+                    // The walked path can contain symlinks, while the changed files have already
+                    // been canonicalized. Lazily canonicalize the walked path so we can compare
+                    // the real paths as well.
+                    let mut canonical_path: Option<PathBuf> = None;
+
                     let mut drop_file_indexes = vec![];
                     for (idx, changed_file) in new_unknown_files.iter().enumerate().rev() {
                         let ChangedContent::File(file, _) = changed_file else {
@@ -188,7 +194,15 @@ impl Scanner {
 
                         // When the file is found on disk it means that all the rules pass. We can
                         // extract the current file and remove it from the list of passed in files.
-                        if file == path {
+                        let matches = file == path
+                            || (file.file_name() == path.file_name() && {
+                                if canonical_path.is_none() {
+                                    canonical_path = dunce::canonicalize(path).ok();
+                                }
+                                canonical_path.as_deref() == Some(file.as_path())
+                            });
+
+                        if matches {
                             self.files.insert(path.to_path_buf()); // Track for future use
                             content_to_scan.push(changed_file.clone()); // Track for parsing
                             drop_file_indexes.push(idx);
@@ -255,6 +269,11 @@ impl Scanner {
             .par_iter()
             .filter_map(|x| x.clone().into_os_string().into_string().ok())
             .collect()
+    }
+
+    #[tracing::instrument(skip_all)]
+    pub fn get_scanned_files(&self) -> Vec<String> {
+        self.scanned_files.clone()
     }
 
     #[tracing::instrument(skip_all)]
@@ -337,15 +356,14 @@ impl Scanner {
                     let i = s.as_ptr() as usize - offset;
                     let original = &original_content[i..i + s.len()];
                     if original.contains_str("-[]") {
-                        return Some(unsafe {
-                            (String::from_utf8_unchecked(original.to_vec()), i)
-                        });
+                        return String::from_utf8(original.to_vec())
+                            .ok()
+                            .map(|candidate| (candidate, i));
                     }
 
-                    // SAFETY: When we parsed the candidates, we already guaranteed that the byte
-                    // slices are valid, therefore we don't have to re-check here when we want to
-                    // convert it back to a string.
-                    Some(unsafe { (String::from_utf8_unchecked(s.to_vec()), i) })
+                    String::from_utf8(s.to_vec())
+                        .ok()
+                        .map(|candidate| (candidate, i))
                 }
 
                 _ => None,
@@ -354,14 +372,14 @@ impl Scanner {
     }
 
     #[tracing::instrument(skip_all)]
-    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>) {
+    fn discover_sources(&mut self) -> (Vec<Vec<u8>>, Vec<PathBuf>, Vec<String>) {
         if self.sources_scanned {
-            return (vec![], vec![]);
+            return (vec![], vec![], vec![]);
         }
         self.sources_scanned = true;
 
         let Some(walker) = &mut self.walker else {
-            return (vec![], vec![]);
+            return (vec![], vec![], vec![]);
         };
 
         // Use synchronous walk for the initial build (lower overhead) and parallel
@@ -373,56 +391,108 @@ impl Scanner {
         };
 
         let mut css_files: Vec<PathBuf> = vec![];
-        let mut content_paths: Vec<(PathBuf, String)> = Vec::new();
-        let mut seen_files: FxHashSet<PathBuf> = FxHashSet::default();
+        let mut content_paths: Vec<(PathBuf, String)> = vec![];
+        let mut changed_files = vec![];
 
-        for (path, is_dir, extension) in all_entries {
-            if is_dir {
-                self.dirs.insert(path);
-            } else {
-                // Deduplicate: parallel walk can visit the same file from multiple threads
-                if !seen_files.insert(path.clone()) {
-                    continue;
+        // Fresh state
+        self.files.clear();
+        self.dirs.clear();
+        self.extensions.clear();
+        self.globs = None;
+
+        // Cache canonicalized folders in case a file itself is not symlinked, but any of the parent
+        // folders are symlinked.
+        let mut cached_canonical_dirs: FxHashMap<PathBuf, PathBuf> = FxHashMap::default();
+
+        for entry in all_entries {
+            match entry {
+                WalkEntry::Dir(path) => {
+                    self.dirs.insert(path);
                 }
-
-                // On re-scans, check mtime to skip unchanged files.
-                // On the first scan we skip this entirely to avoid extra
-                // metadata syscalls.
-                let changed = if self.has_scanned_once {
-                    let current_mtime = std::fs::metadata(&path)
-                        .ok()
-                        .and_then(|m| m.modified().ok());
-
-                    match current_mtime {
-                        Some(mtime) => {
-                            let prev = self.mtimes.insert(path.clone(), mtime);
-                            prev.is_none_or(|prev| prev != mtime)
-                        }
-                        None => true,
+                WalkEntry::File {
+                    path,
+                    mtime,
+                    is_symlink,
+                } => {
+                    // Deduplicate: parallel walk can visit the same file from multiple threads
+                    if !self.files.insert(path.clone()) {
+                        continue;
                     }
-                } else {
-                    true
-                };
 
-                match extension.as_str() {
-                    // Special handing for CSS files, we don't want to extract candidates from
-                    // these files, but we do want to extract used CSS variables.
-                    "css" => {
-                        if changed {
-                            css_files.push(path.clone());
+                    // Track canonicalized paths in addition to potentially symlinked file paths
+                    let canonical = if is_symlink {
+                        dunce::canonicalize(&path).ok()
+                    } else {
+                        path.parent().and_then(|parent| {
+                            // Perf: cache the canonicalized parent path such that sibling files don't
+                            // have to canonicalize over and over again.
+                            let canonical_parent = cached_canonical_dirs
+                                .entry(parent.to_path_buf())
+                                .or_insert_with(|| {
+                                    dunce::canonicalize(parent)
+                                        .unwrap_or_else(|_| parent.to_path_buf())
+                                });
+
+                            if canonical_parent.as_path() != parent {
+                                path.file_name()
+                                    .map(|file_name| canonical_parent.join(file_name))
+                            } else {
+                                None
+                            }
+                        })
+                    };
+
+                    if let Some(canonical) = canonical {
+                        if canonical != path {
+                            self.files.insert(canonical);
                         }
                     }
-                    _ => {
-                        if changed {
-                            content_paths.push((path.clone(), extension.clone()));
+                    let extension = path
+                        .extension()
+                        .and_then(|x| x.to_str())
+                        .unwrap_or_default()
+                        .to_owned();
+
+                    self.extensions.insert(extension.to_owned());
+
+                    // On incremental scans, check mtime to skip unchanged files.
+                    // On the first scan, track mtimes while still scanning every file.
+                    let changed = if self.has_scanned_once {
+                        match mtime {
+                            Some(mtime) => {
+                                let prev = self.mtimes.insert(path.clone(), mtime);
+                                prev.is_none_or(|prev| prev != mtime)
+                            }
+                            None => true,
                         }
+                    } else {
+                        if let Some(mtime) = mtime {
+                            self.mtimes.insert(path.clone(), mtime);
+                        }
+
+                        true
+                    };
+
+                    if !changed {
+                        continue;
+                    }
+
+                    if let Ok(file) = path.clone().into_os_string().into_string() {
+                        changed_files.push(file);
+                    }
+
+                    match extension.as_str() {
+                        // Special handing for CSS files, we don't want to extract candidates from
+                        // these files, but we do want to extract used CSS variables.
+                        "css" => css_files.push(path),
+                        _ => content_paths.push((path, extension)),
                     }
                 }
-
-                self.extensions.insert(extension);
-                self.files.insert(path);
             }
         }
+
+        // Ensure `mtimes` don't include stale files
+        self.mtimes.retain(|path, _| self.files.contains(path));
 
         // Read + preprocess all discovered files in parallel
         let scanned_blobs: Vec<Vec<u8>> = content_paths
@@ -443,7 +513,9 @@ impl Scanner {
             self.has_scanned_once = true;
         }
 
-        (scanned_blobs, css_files)
+        changed_files.par_sort_unstable();
+
+        (scanned_blobs, css_files, changed_files)
     }
 }
 
@@ -474,13 +546,15 @@ pub fn pre_process_input(content: Vec<u8>, extension: &str) -> Vec<u8> {
         "heex" | "eex" | "ex" | "exs" => Elixir.process(&content),
         "cshtml" | "razor" => Razor.process(&content),
         "haml" => Haml.process(&content),
-        "json" => Json.process(&content),
+        "json" | "jsonl" | "ndjson" => Json.process(&content),
         "md" | "mdx" => Markdown.process(&content),
         "pug" => Pug.process(&content),
         "rb" | "erb" => Ruby.process(&content),
         "slim" | "slang" => Slim.process(&content),
         "svelte" => Svelte.process(&content),
         "rs" => Rust.process(&content),
+        "tt" | "tt2" | "tx" => TemplateToolkit.process(&content),
+        "twig" => Twig.process(&content),
         "vue" => Vue.process(&content),
         _ => content,
     }
@@ -542,35 +616,50 @@ where
             a
         })
         .into_iter()
-        .map(|s| unsafe { String::from_utf8_unchecked(s.to_vec()) })
+        .filter_map(|s| String::from_utf8(s.to_vec()).ok())
         .collect()
 }
 
-type WalkEntry = (PathBuf, bool, String);
+#[derive(Debug)]
+enum WalkEntry {
+    Dir(PathBuf),
+    File {
+        path: PathBuf,
+        mtime: Option<SystemTime>,
+
+        /// Whether the path itself is a symlink
+        is_symlink: bool,
+    },
+}
+
+impl From<ignore::DirEntry> for WalkEntry {
+    fn from(entry: ignore::DirEntry) -> Self {
+        let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
+        let is_symlink = entry.path_is_symlink();
+        let path = entry.into_path();
+
+        if is_dir {
+            WalkEntry::Dir(path)
+        } else {
+            let mtime = path.metadata().ok().and_then(|m| m.modified().ok());
+            WalkEntry::File {
+                path,
+                mtime,
+                is_symlink,
+            }
+        }
+    }
+}
 
 /// Walk the file system synchronously. Used for the initial build where the overhead of spawning
 /// parallel walker threads is not worth it.
 #[tracing::instrument(skip_all)]
 fn walk_synchronous(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
-    let mut entries = Vec::new();
-
-    for entry in walker.build().filter_map(Result::ok) {
-        let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
-        let path = entry.into_path();
-
-        if is_dir {
-            entries.push((path, true, String::new()));
-        } else {
-            let ext = path
-                .extension()
-                .and_then(|x| x.to_str())
-                .unwrap_or_default()
-                .to_owned();
-            entries.push((path, false, ext));
-        }
-    }
-
-    entries
+    walker
+        .build()
+        .filter_map(Result::ok)
+        .map(WalkEntry::from)
+        .collect()
 }
 
 /// Walk the file system in parallel. Used in watch mode where the parallel walker overhead is
@@ -590,7 +679,7 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
         }
     }
 
-    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(Vec::new()));
+    let collected: Arc<Mutex<Vec<WalkEntry>>> = Arc::new(Mutex::new(vec![]));
 
     walker.build_parallel().run(|| {
         let mut buf = FlushOnDrop {
@@ -603,19 +692,7 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
                 return ignore::WalkState::Continue;
             };
 
-            let is_dir = entry.file_type().map(|ft| ft.is_dir()).unwrap_or(false);
-            let path = entry.into_path();
-
-            if is_dir {
-                buf.local.push((path, true, String::new()));
-            } else {
-                let ext = path
-                    .extension()
-                    .and_then(|x| x.to_str())
-                    .unwrap_or_default()
-                    .to_owned();
-                buf.local.push((path, false, ext));
-            }
+            buf.local.push(WalkEntry::from(entry));
 
             if buf.local.len() >= 256 {
                 buf.shared.lock().unwrap().append(&mut buf.local);
@@ -636,7 +713,16 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
 fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
-    let mut ignores: BTreeMap<&PathBuf, BTreeSet<String>> = Default::default();
+
+    let mut ignores: Vec<(&PathBuf, Vec<String>)> = Default::default();
+    let mut emit = |base, pattern| match ignores.last_mut() {
+        Some((prev_base, patterns)) if *prev_base == base => {
+            patterns.push(pattern);
+        }
+        _ => {
+            ignores.push((base, vec![pattern]));
+        }
+    };
 
     for source in sources.iter() {
         match source {
@@ -648,7 +734,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
             }
             SourceEntry::Pattern { base, pattern } => {
-                let mut pattern = pattern.to_string();
+                let pattern = pattern.to_owned();
 
                 if first_root.is_none() {
                     first_root = Some(base);
@@ -657,35 +743,19 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 if !pattern.contains("**") {
-                    // Ensure that the pattern is pinned to the base path.
-                    if !pattern.starts_with("/") {
-                        pattern = format!("/{pattern}");
-                    }
-
                     // Specific patterns should take precedence even over git-ignored files:
-                    ignores
-                        .entry(base)
-                        .or_default()
-                        .insert(format!("!{}", pattern));
+                    emit(base, format!("!{}", pattern));
                 } else {
                     // Assumption: the pattern we receive will already be brace expanded. So
                     // `*.{html,jsx}` will result in two separate patterns: `*.html` and `*.jsx`.
                     if let Some(extension) = Path::new(&pattern).extension() {
                         // Extend auto source detection to include the extension
-                        ignores
-                            .entry(base)
-                            .or_default()
-                            .insert(format!("!*.{}", extension.to_string_lossy()));
+                        emit(base, format!("!*.{}", extension.to_string_lossy()));
                     }
                 }
             }
             SourceEntry::Ignored { base, pattern } => {
-                let mut pattern = pattern.to_string();
-                // Ensure that the pattern is pinned to the base path.
-                if !pattern.starts_with("/") {
-                    pattern = format!("/{pattern}");
-                }
-                ignores.entry(base).or_default().insert(pattern);
+                emit(base, pattern.to_owned());
             }
             SourceEntry::External { base } => {
                 if first_root.is_none() {
@@ -695,16 +765,10 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 // External sources should take precedence even over git-ignored files:
-                ignores
-                    .entry(base)
-                    .or_default()
-                    .insert(format!("!{}", "/**/*"));
+                emit(base, "!/**/*".to_owned());
 
                 // External sources should still disallow binary extensions:
-                ignores
-                    .entry(base)
-                    .or_default()
-                    .insert(BINARY_EXTENSIONS_GLOB.clone());
+                emit(base, BINARY_EXTENSIONS_GLOB.clone());
             }
         }
     }
@@ -793,14 +857,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let pattern_sources: Vec<(PathBuf, String)> = sources
         .iter()
         .filter_map(|source| match source {
-            SourceEntry::Pattern { base, pattern } => {
-                let normalized = if pattern.starts_with("/") {
-                    pattern.to_string()
-                } else {
-                    format!("/{pattern}")
-                };
-                Some((base.clone(), normalized))
-            }
+            SourceEntry::Pattern { base, pattern } => Some((base.into(), pattern.into())),
             _ => None,
         })
         .collect();

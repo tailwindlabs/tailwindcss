@@ -32,6 +32,7 @@ export interface LoaderOptions {
 
 interface CacheEntry {
   mtimes: Map<string, number>
+  inputCss: string
   compiler: null | Awaited<ReturnType<typeof compile>>
   scanner: null | Scanner
   candidates: Set<string>
@@ -40,11 +41,16 @@ interface CacheEntry {
 
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
-function getContextFromCache(inputFile: string, opts: LoaderOptions): CacheEntry {
-  let key = `${inputFile}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+function getCacheKey(resourceId: string, opts: LoaderOptions): string {
+  return `${resourceId}:${opts.base ?? ''}:${JSON.stringify(opts.optimize)}`
+}
+
+function getContextFromCache(resourceId: string, opts: LoaderOptions): CacheEntry {
+  let key = getCacheKey(resourceId, opts)
   if (cache.has(key)) return cache.get(key)!
   let entry: CacheEntry = {
     mtimes: new Map<string, number>(),
+    inputCss: '',
     compiler: null,
     scanner: null,
     candidates: new Set<string>(),
@@ -61,6 +67,7 @@ export default async function tailwindLoader(
   let callback = this.async()
   let options = this.getOptions() ?? {}
   let inputFile = this.resourcePath
+  let resourceId = this.resource
   let base = options.base ?? process.cwd()
   let shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
   let isCSSModuleFile = inputFile.endsWith('.module.css')
@@ -83,7 +90,7 @@ export default async function tailwindLoader(
   }
 
   try {
-    let context = getContextFromCache(inputFile, options)
+    let context = getContextFromCache(resourceId, options)
     let inputBasePath = path.dirname(path.resolve(inputFile))
 
     // Whether this is the first build or not
@@ -156,6 +163,17 @@ export default async function tailwindLoader(
 
         rebuildStrategy = 'full'
         context.mtimes.set(file, changedTime)
+      }
+
+      // The mtimes above only track files on disk, but the source we receive can
+      // differ from what's on disk: Turbopack can run the loader with the
+      // previous version of the input file after its mtime already changed, and
+      // loaders that run before this one (e.g. Sass) can change the source
+      // without changing any tracked file. So also rebuild when the source
+      // differs from the last build.
+      if (context.inputCss !== source) {
+        rebuildStrategy = 'full'
+        context.inputCss = source
       }
     }
     DEBUG && I.end('Register full rebuild paths')
@@ -273,7 +291,7 @@ export default async function tailwindLoader(
     callback(null, result)
   } catch (error) {
     // Clear the cache entry on error to force a full rebuild next time
-    let key = `${inputFile}:${options.base ?? ''}:${JSON.stringify(options.optimize)}`
+    let key = getCacheKey(resourceId, options)
     cache.delete(key)
 
     DEBUG && I.end(`[@tailwindcss/webpack] ${path.relative(base, inputFile)}`)

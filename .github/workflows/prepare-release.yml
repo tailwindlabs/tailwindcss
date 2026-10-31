@@ -2,6 +2,12 @@ name: Prepare Release
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Skip creating the draft GitHub release
+        required: false
+        default: true
+        type: boolean
   push:
     tags:
       - 'v*'
@@ -9,6 +15,7 @@ on:
 env:
   APP_NAME: tailwindcss-oxide
   NODE_VERSION: 24
+  PNPM_VERSION: '11.9.0'
   OXIDE_LOCATION: ./crates/node
 
 permissions:
@@ -47,44 +54,40 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             strip: strip
-            container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            strip: llvm-strip
-            container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+            strip: aarch64-linux-gnu-strip
+            build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            strip: llvm-strip
-            container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-zig
+            strip: arm-linux-gnueabihf-strip
+            build-flags: --use-napi-cross
           - os: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            strip: aarch64-linux-musl-strip
-            download: true
-            container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            strip-zig: true
+            build-flags: -x
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             strip: strip
-            download: true
-            container:
-              image: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build-flags: -x
 
     name: Build ${{ matrix.target }} (oxide)
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          package-manager-cache: false
 
       - name: Install gcc-arm-linux-gnueabihf
         if: ${{ matrix.target == 'armv7-unknown-linux-gnueabihf' }}
@@ -92,62 +95,56 @@ jobs:
           sudo apt-get update
           sudo apt-get install gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf -y
 
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
-
-      - name: Install Node.JS
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install Rust (Stable)
-        if: ${{ matrix.download }}
+      - name: Install binutils-aarch64-linux-gnu
+        if: ${{ matrix.target == 'aarch64-unknown-linux-gnu' }}
         run: |
-          rustup default stable
+          sudo apt-get update
+          sudo apt-get install binutils-aarch64-linux-gnu -y
+
+      - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2
+        if: ${{ contains(matrix.target, 'musl') }}
+        with:
+          version: 0.14.1
+          use-cache: false
+
+      - name: Install cargo-zigbuild
+        uses: taiki-e/install-action@65851e10cd6c377f11a60e600abc07cb08643468 # v2
+        if: ${{ contains(matrix.target, 'musl') }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tool: cargo-zigbuild
 
       - name: Setup rust target
         run: rustup target add ${{ matrix.target }}
 
       - name: Install dependencies
-        run: pnpm install --ignore-scripts --filter=!./playgrounds/*
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/*
 
       - name: Build release
-        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=${{ matrix.target }}
+        run: pnpm run --filter ${{ env.OXIDE_LOCATION }} build:platform --target=${{ matrix.target }} ${{ matrix.build-flags }}
         env:
           RUST_TARGET: ${{ matrix.target }}
           JEMALLOC_SYS_WITH_LG_PAGE: ${{ matrix.page-size }}
 
       - name: Strip debug symbols # https://github.com/rust-lang/rust/issues/46034
-        if: ${{ matrix.strip }}
-        run: ${{ matrix.strip }} ${{ env.OXIDE_LOCATION }}/*.node
+        if: ${{ matrix.strip || matrix.strip-zig }}
+        env:
+          STRIP_COMMAND: ${{ matrix.strip }}
+          STRIP_ZIG: ${{ matrix.strip-zig }}
+        run: |
+          if [ "$STRIP_ZIG" = "true" ]; then
+            for file in ${{ env.OXIDE_LOCATION }}/*.node; do
+              zig objcopy --strip-all "$file" "$file.stripped"
+              mv "$file.stripped" "$file"
+            done
+            exit 0
+          fi
+
+          eval "$STRIP_COMMAND ${{ env.OXIDE_LOCATION }}/*.node"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: bindings-${{ matrix.target }}
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -157,9 +154,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          persist-credentials: false
       - name: Build FreeBSD
-        uses: cross-platform-actions/action@v0.25.0
+        uses: cross-platform-actions/action@cdc9ee69ef84a5f2e59c9058335d9c57bcb4ac86 # v0.25.0
         env:
           DEBUG: napi:*
           RUSTUP_HOME: /usr/local/rustup
@@ -175,12 +174,12 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm@9.6.0 --unsafe-perm=true
+            sudo npm install -g pnpm@${{ env.PNPM_VERSION }}
             curl -sSf https://static.rust-lang.org/rustup/archive/1.27.1/x86_64-unknown-freebsd/rustup-init --output rustup-init
             chmod +x rustup-init
             ./rustup-init -y --profile minimal
             source "$HOME/.cargo/env"
-            pnpm install --ignore-scripts --filter=!./playgrounds/* || true
+            pnpm install --ignore-scripts --frozen-lockfile --filter=!./playgrounds/* || true
             echo "~~~~ rustc --version ~~~~"
             rustc --version
             echo "~~~~ node -v ~~~~"
@@ -191,7 +190,7 @@ jobs:
             strip -x ${{ env.OXIDE_LOCATION }}/*.node
             ls -la ${{ env.OXIDE_LOCATION }}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: bindings-x86_64-unknown-freebsd
           path: ${{ env.OXIDE_LOCATION }}/*.node
@@ -202,18 +201,17 @@ jobs:
     name: Build and release Tailwind CSS
 
     permissions:
-      contents: write # for softprops/action-gh-release to create GitHub release
-      # https://docs.npmjs.com/generating-provenance-statements#publishing-packages-with-provenance-via-github-actions
-      id-token: write
+      contents: write # Required for creating releases
 
     needs:
       - build
       - build-freebsd
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 20
+          persist-credentials: false
 
       - run: git fetch --tags -f
 
@@ -222,51 +220,25 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
-
-      # Cargo already skips downloading dependencies if they already exist
-      - name: Cache cargo
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      # Cache the `oxide` Rust build
-      - name: Cache oxide build
-        uses: actions/cache@v5
-        with:
-          path: |
-            ./crates/node/*.node
-            ./crates/node/*.wasm
-            ./crates/node/index.d.ts
-            ./crates/node/index.js
-            ./crates/node/browser.js
-            ./crates/node/tailwindcss-oxide.wasi-browser.js
-            ./crates/node/tailwindcss-oxide.wasi.cjs
-            ./crates/node/wasi-worker-browser.mjs
-            ./crates/node/wasi-worker.mjs
-          key: ${{ runner.os }}-${{ matrix.target }}-oxide-${{ hashFiles('./crates/**/*') }}
+          package-manager-cache: false
 
       - name: Setup WASM target
         run: rustup target add wasm32-wasip1-threads
 
       - name: Install dependencies
-        run: pnpm --filter=!./playgrounds/* install
+        run: pnpm --filter=!./playgrounds/* install --frozen-lockfile
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           path: ${{ env.OXIDE_LOCATION }}
 
@@ -305,30 +277,31 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Upload standalone artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: tailwindcss-standalone
           path: packages/@tailwindcss-standalone/dist/
 
       - name: Upload npm package tarballs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: npm-package-tarballs
           path: dist/*.tgz
 
       - name: Prepare GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          tag_name: ${{ env.TAG_NAME }}
-          body: |
-            ${{ env.RELEASE_NOTES }}
-          files: |
-            packages/@tailwindcss-standalone/dist/sha256sums.txt
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64
-            packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64
-            packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${TAG_NAME}" \
+              --draft \
+              --title "${TAG_NAME}" \
+              --notes "${RELEASE_NOTES}" \
+              packages/@tailwindcss-standalone/dist/sha256sums.txt \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-arm64-musl \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-linux-x64-musl \
+              packages/@tailwindcss-standalone/dist/tailwindcss-macos-arm64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-macos-x64 \
+              packages/@tailwindcss-standalone/dist/tailwindcss-windows-x64.exe

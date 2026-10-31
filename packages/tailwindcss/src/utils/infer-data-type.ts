@@ -184,7 +184,7 @@ function isPercentage(value: string): boolean {
 
 /* -------------------------------------------------------------------------- */
 
-const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\s*/\s*${HAS_NUMBER.source}$`)
+const IS_FRACTION = new RegExp(`^${HAS_NUMBER.source}\\s*/\\s*${HAS_NUMBER.source}$`)
 
 function isFraction(value: string): boolean {
   return IS_FRACTION.test(value) || hasMathFn(value)
@@ -208,7 +208,13 @@ const LENGTH_UNITS = [
   'em',
   'ex',
   'ch',
+  'cap',
+  'ic',
   'rem',
+  'rex',
+  'rch',
+  'rcap',
+  'ric',
   'lh',
   'rlh',
   'vw',
@@ -219,10 +225,22 @@ const LENGTH_UNITS = [
   'vi',
   'svw',
   'svh',
+  'svi',
+  'svb',
+  'svmin',
+  'svmax',
   'lvw',
   'lvh',
+  'lvi',
+  'lvb',
+  'lvmin',
+  'lvmax',
   'dvw',
   'dvh',
+  'dvi',
+  'dvb',
+  'dvmin',
+  'dvmax',
   'cqw',
   'cqh',
   'cqi',
@@ -232,9 +250,10 @@ const LENGTH_UNITS = [
 ]
 
 const IS_LENGTH = new RegExp(`^${HAS_NUMBER.source}(${LENGTH_UNITS.join('|')})$`)
+const IS_LENGTH_FN = /^(--spacing)\(/i
 
 export function isLength(value: string): boolean {
-  return IS_LENGTH.test(value) || hasMathFn(value)
+  return IS_LENGTH.test(value) || IS_LENGTH_FN.test(value) || hasMathFn(value)
 }
 
 /* -------------------------------------------------------------------------- */

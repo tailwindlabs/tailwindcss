@@ -9,6 +9,7 @@ import type { Config } from '../../../../tailwindcss/src/compat/plugin-api'
 import type { DesignSystem } from '../../../../tailwindcss/src/design-system'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { spliceChangesIntoString, type StringChange } from '../../utils/splice-changes-into-string'
+import { writeFileSafely } from '../../utils/write-file-safely'
 import { extractRawCandidates } from './candidates'
 import { isSafeMigration } from './is-safe-migration'
 import { migrateAutomaticVarInjection } from './migrate-automatic-var-injection'
@@ -119,12 +120,18 @@ export default async function migrateContents(
   return spliceChangesIntoString(contents, changes)
 }
 
-export async function migrate(designSystem: DesignSystem, userConfig: Config | null, file: string) {
+export async function migrate(
+  designSystem: DesignSystem,
+  userConfig: Config | null,
+  file: string,
+): Promise<boolean> {
   let fullPath = path.isAbsolute(file) ? file : path.resolve(process.cwd(), file)
   let contents = await fs.readFile(fullPath, 'utf-8')
 
-  await fs.writeFile(
-    fullPath,
-    await migrateContents(designSystem, userConfig, contents, extname(file)),
-  )
+  let migrated = await migrateContents(designSystem, userConfig, contents, extname(file))
+  if (migrated === contents) return false // Nothing changed
+  if (migrated.trim() === '') return false // Emptied out, something went horribly wrong
+
+  await writeFileSafely(fullPath, migrated)
+  return true
 }

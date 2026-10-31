@@ -1,20 +1,22 @@
 diff --git a/index.js b/index.js
-index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..398af238a439912d150b3573367873d2a9a311e3 100644
+index 78ee744d74900c39a839cafa46b295258fc86307..f28fd092644ccfb8aff2618b966cb5219a181a02 100644
 --- a/index.js
 +++ b/index.js
-@@ -1,41 +1,34 @@
--const {createWrapper} = require('./wrapper');
-+const { createWrapper } = require('./wrapper')
+@@ -1,43 +1,32 @@
+ const {createWrapper} = require('./wrapper');
  
 -let name = `@parcel/watcher-${process.platform}-${process.arch}`;
 -if (process.platform === 'linux') {
--  const { MUSL, family } = require('detect-libc');
+-  const {MUSL, familySync} = require('detect-libc');
+-  const family = familySync();
 -  if (family === MUSL) {
 -    name += '-musl';
 -  } else {
 -    name += '-glibc';
 -  }
 -}
++// We need to take the `process.env.PLATFORM_LIBC` into account, and we also
++// need static analysis, so we can't make use of the `parts.push(…)` approach.
 +function loadPackage() {
 +  if (process.platform === 'linux') {
 +    if (process.env.PLATFORM_LIBC === "musl") {
@@ -22,7 +24,8 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..398af238a439912d150b3573367873d2
 +    } else if (process.env.PLATFORM_LIBC === "glibc") {
 +      return require(`@parcel/watcher-${process.platform}-${process.arch}-glibc`)
 +    } else {
-+      let { MUSL, GLIBC, family, familySync } = require('detect-libc')
++      let { MUSL, GLIBC, familySync } = require('detect-libc')
++      let family = familySync()
  
 -let binding;
 -try {
@@ -37,14 +40,12 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..398af238a439912d150b3573367873d2
 -      binding = require('./build/Debug/watcher.node');
 -    } catch (err) {
 -      handleError(err);
--      throw new Error(`No prebuild or local build of @parcel/watcher found. Tried ${name}. Please ensure it is installed (don't use --no-optional when installing with npm). Otherwise it is possible we don't support your platform yet. If this is the case, please report an issue to https://github.com/parcel-bundler/watcher.`);
+-      throw new Error(
+-        `No prebuild or local build of @parcel/watcher found. Tried ${name}. Please ensure it is installed (don't use --no-optional when installing with npm). Otherwise it is possible we don't support your platform yet. If this is the case, please report an issue to https://github.com/parcel-bundler/watcher.`,
+-      );
 -    }
 -  }
 -}
-+      // Bun polyfills `detect-libc` in compiled binaries. We rely on
-+      // detect-libc@1.0.3 but the polyfilled version is 2.x. In detect-libc@2x
-+      // there is a `familySync` function that we can use instead.
-+      if (typeof familySync === 'function') family = familySync()
  
 -function handleError(err) {
 -  if (err?.code !== 'MODULE_NOT_FOUND') {
@@ -63,12 +64,7 @@ index 8afb2b1126dcc687b7ff9b631589da252c1f9c22..398af238a439912d150b3573367873d2
  }
  
 -const wrapper = createWrapper(binding);
--exports.writeSnapshot = wrapper.writeSnapshot;
--exports.getEventsSince = wrapper.getEventsSince;
--exports.subscribe = wrapper.subscribe;
--exports.unsubscribe = wrapper.unsubscribe;
-+const wrapper = createWrapper(loadPackage())
-+exports.writeSnapshot = wrapper.writeSnapshot
-+exports.getEventsSince = wrapper.getEventsSince
-+exports.subscribe = wrapper.subscribe
-+exports.unsubscribe = wrapper.unsubscribe
++const wrapper = createWrapper(loadPackage());
+ exports.writeSnapshot = wrapper.writeSnapshot;
+ exports.getEventsSince = wrapper.getEventsSince;
+ exports.subscribe = wrapper.subscribe;

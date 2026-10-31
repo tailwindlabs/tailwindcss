@@ -20,6 +20,7 @@ ignore = { path = "../ignore" }
 regex = "1.11.1"
 
 [dev-dependencies]
+insta = "1.48.0"
 tempfile = "3.13.0"
 pretty_assertions = "1.4.1"
 unicode-width = "0.2.0"

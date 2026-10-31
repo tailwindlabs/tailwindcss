@@ -35,7 +35,32 @@ let VARIADIC_EXPANSION_MAP: Record<string, Record<number, [prop: string, index: 
   inset: createBareQuad(),
   margin: createPrefixedQuad('margin'),
   padding: createPrefixedQuad('padding'),
+  'scroll-margin': createPrefixedQuad('scroll-margin'),
+  'scroll-padding': createPrefixedQuad('scroll-padding'),
+  'border-width': createPrefixedQuad(
+    'border',
+    'top-width',
+    'right-width',
+    'bottom-width',
+    'left-width',
+  ),
+  'border-style': createPrefixedQuad(
+    'border',
+    'top-style',
+    'right-style',
+    'bottom-style',
+    'left-style',
+  ),
+  'border-color': createPrefixedQuad(
+    'border',
+    'top-color',
+    'right-color',
+    'bottom-color',
+    'left-color',
+  ),
   gap: createPair('row-gap', 'column-gap'),
+  overflow: createPair('overflow-x', 'overflow-y'),
+  'overscroll-behavior': createPair('overscroll-behavior-x', 'overscroll-behavior-y'),
 }
 
 // Depending on the length of the value, map to different properties
@@ -49,6 +74,10 @@ let VARIADIC_LOGICAL_EXPANSION_MAP: Record<
   'margin-inline': createPair('margin-left', 'margin-right'),
   'padding-block': createPair('padding-top', 'padding-bottom'),
   'padding-inline': createPair('padding-left', 'padding-right'),
+  'scroll-margin-block': createPair('scroll-margin-top', 'scroll-margin-bottom'),
+  'scroll-margin-inline': createPair('scroll-margin-left', 'scroll-margin-right'),
+  'scroll-padding-block': createPair('scroll-padding-top', 'scroll-padding-bottom'),
+  'scroll-padding-inline': createPair('scroll-padding-left', 'scroll-padding-right'),
 }
 
 // The entire value is mapped to each property

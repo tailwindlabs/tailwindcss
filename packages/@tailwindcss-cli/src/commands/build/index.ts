@@ -1,4 +1,3 @@
-import watcher from '@parcel/watcher'
 import {
   compile,
   env,
@@ -14,6 +13,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
+import { pathsEqual } from '../../utils/paths-equal'
 import {
   eprintln,
   formatDuration,
@@ -21,12 +21,13 @@ import {
   highlight,
   println,
   relative,
+  wordWrap,
 } from '../../utils/renderer'
-import { pathsEqual } from '../../utils/paths-equal'
 import { drainStdin, outputFile } from './utils'
 
 const css = String.raw
 const DEBUG = env.DEBUG
+const DEFAULT_POLL_INTERVAL_MS = 250
 
 export function options() {
   return {
@@ -48,6 +49,12 @@ export function options() {
       alias: '-w',
       values: ['always'],
     },
+    '--poll': {
+      type: 'boolean | number',
+      description: 'Use polling instead of filesystem events when watching',
+      default: false,
+      values: ['ms'],
+    },
     '--minify': {
       type: 'boolean',
       description: 'Optimize and minify the output',
@@ -67,23 +74,58 @@ export function options() {
       description: 'Generate a source map',
       default: false,
     },
+    '--silent': {
+      type: 'boolean',
+      description: 'Suppress non-error output',
+    },
   } satisfies Arg
+}
+
+function formatError(error: unknown): string {
+  let seen = new Set() // Track seen errors to prevent circular errors
+  function render(err: unknown, depth: number): string[] {
+    let indent = '  '.repeat(depth)
+    let width = (process.stderr.columns ?? Infinity) - 2 * (depth + 1)
+
+    let output = [
+      `${indent}${red(depth === 0 ? 'Error:' : 'Caused by:')}`,
+      `${indent}${dim('\u250C')}`,
+    ]
+
+    for (let line of `${err}`.split('\n')) {
+      let wrapped = wordWrap(line, width)
+      if (wrapped.length === 0) wrapped = ['']
+      for (let chunk of wrapped) {
+        output.push(`${indent}${dim('\u2502')} ${chunk}`)
+      }
+    }
+
+    output.push(`${indent}${dim('\u2514')}`)
+
+    if (typeof err === 'object' && err !== null && 'cause' in err && err.cause != null) {
+      if (!seen.add(err).has(err.cause)) {
+        output.push(...render(err.cause, depth + 1))
+      }
+    }
+
+    return output
+  }
+
+  return render(error, 0).join('\n')
 }
 
 async function handleError<T>(fn: () => T): Promise<T> {
   try {
     return await fn()
   } catch (err) {
-    if (err instanceof Error) {
-      eprintln(err.toString())
-    }
+    eprintln(formatError(err))
     process.exit(1)
   }
 }
 
 export async function handle(args: Result<ReturnType<typeof options>>) {
-  eprintln(header())
-  eprintln()
+  if (!args['--silent']) eprintln(header())
+  if (!args['--silent']) eprintln()
 
   using I = new Instrumentation()
   DEBUG && I.start('[@tailwindcss/cli] (initial build)')
@@ -112,7 +154,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Check if the input and output file paths are identical, otherwise return an
   // error to the user.
-  if (args['--input'] === args['--output'] && args['--input'] !== '-') {
+  if (
+    args['--input'] &&
+    args['--input'] !== '-' &&
+    args['--output'] &&
+    pathsEqual(args['--input'], args['--output'])
+  ) {
     eprintln(
       `Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`,
     )
@@ -122,7 +169,17 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   // If the user passes `{bin} build --map -` then this likely means they want to output the map inline
   // this is the default behavior of `{bin build} --map` to inform the user of that
   if (args['--map'] === '-') {
-    eprintln(`Use --map without a value to inline the source map`)
+    eprintln(`Use --map without a value to inline the source map.`)
+    process.exit(1)
+  }
+
+  if (args['--poll'] === undefined) {
+    eprintln(`Use --poll with a non-zero value in milliseconds.`)
+    process.exit(1)
+  }
+  let pollInterval = args['--poll'] === true ? DEFAULT_POLL_INTERVAL_MS : args['--poll']
+  if (pollInterval !== false && pollInterval <= 0) {
+    eprintln(`Specified polling interval must be a positive number.`)
     process.exit(1)
   }
 
@@ -145,6 +202,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let previous = {
     css: '',
     optimizedCss: '',
+    output: null as string | null,
   }
 
   async function write(
@@ -201,13 +259,18 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       }
     }
 
+    let didChange = output !== previous.output
+
     DEBUG && I.start('Write output')
     if (args['--output'] && args['--output'] !== '-') {
       await outputFile(args['--output'], output)
-    } else {
+    } else if (didChange) {
       println(output)
     }
     DEBUG && I.end('Write output')
+
+    previous.output = output
+    return didChange
   }
 
   let inputFilePath =
@@ -216,6 +279,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let inputBasePath = inputFilePath ? path.dirname(inputFilePath) : process.cwd()
 
   let fullRebuildPaths: string[] = inputFilePath ? [inputFilePath] : []
+  let backupRebuildPaths = fullRebuildPaths
 
   async function createCompiler(css: string, I: Instrumentation) {
     DEBUG && I.start('Setup compiler')
@@ -242,6 +306,24 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       return [{ ...compiler.root, negated: false }]
     })().concat(compiler.sources)
 
+    // Do not scan the current executable. Otherwise when using the standalone
+    // CLI, if the CLI lives in the current repo we would be scanning that file.
+    //
+    // This is also immune against renames of the executable file.
+    sources.push({
+      base: path.dirname(process.execPath),
+      pattern: path.basename(process.execPath),
+      negated: true,
+    })
+
+    if (inputFilePath !== null) {
+      sources.push({
+        base: path.dirname(inputFilePath),
+        pattern: path.basename(inputFilePath),
+        negated: false,
+      })
+    }
+
     let scanner = new Scanner({ sources })
     DEBUG && I.end('Setup compiler')
 
@@ -249,12 +331,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 
   let [compiler, scanner] = await handleError(() => createCompiler(input, I))
+  let cleanupWatchers: (() => Promise<void>)[] = []
 
   // Watch for changes
-  if (args['--watch']) {
-    let cleanupWatchers: (() => Promise<void>)[] = []
+  if (args['--watch'] && pollInterval === false) {
+    // Ensure the file watcher can be loaded before setting up any watchers,
+    // such that we can present a helpful error message if needed.
+    await handleError(() => loadWatcher())
+
     cleanupWatchers.push(
-      await createWatchers(watchDirectories(scanner), async function handle(files) {
+      await createWatchers(await watchDirectories(scanner), async function handle(files) {
         try {
           // If the only change happened to the output file, then we don't want to
           // trigger a rebuild because that will result in an infinite loop.
@@ -266,36 +352,15 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           // Re-compile the input
           let start = process.hrtime.bigint()
 
-          let changedFiles: ChangedContent[] = []
-          let rebuildStrategy: 'incremental' | 'full' = 'incremental'
-
           let resolvedFullRebuildPaths = fullRebuildPaths
-
-          for (let file of files) {
-            // If one of the changed files is related to the input CSS or JS
-            // config/plugin files, then we need to do a full rebuild because
-            // the theme might have changed.
-            if (resolvedFullRebuildPaths.some((p) => pathsEqual(p, file))) {
-              rebuildStrategy = 'full'
-
-              // No need to check the rest of the events, because we already know we
-              // need to do a full rebuild.
-              break
-            }
-
-            // Track new and updated files for incremental rebuilds.
-            changedFiles.push({
-              file,
-              extension: path.extname(file).slice(1),
-            } satisfies ChangedContent)
-          }
+          let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
 
           // Track the compiled CSS
           let compiledCss = ''
           let compiledMap: SourceMap | null = null
 
           // Scan the entire `base` directory for full rebuilds.
-          if (rebuildStrategy === 'full') {
+          if (rebuildStrategy.kind === 'full') {
             // Read the new `input`.
             let input = args['--input']
               ? args['--input'] === '-'
@@ -305,10 +370,22 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
                   @import 'tailwindcss';
                 `
             clearRequireCache(resolvedFullRebuildPaths)
+
+            // Track current rebuild paths in case something goes wrong when
+            // performing a full rebuild.
+            backupRebuildPaths = fullRebuildPaths.slice()
+
+            // The `inputFilePath`, if provided, will be the only known full
+            // rebuild path before the compiler is re-created.
             fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
             // Create a new compiler, given the new `input`
             ;[compiler, scanner] = await createCompiler(input, I)
+
+            // Successfully created a new compiler, so the `fullRebuildPaths`
+            // will be updated. If other errors occur, we should be able to
+            // restore the paths unconditionally.
+            backupRebuildPaths = fullRebuildPaths.slice()
 
             // Scan the directory for candidates
             DEBUG && I.start('Scan for candidates')
@@ -317,7 +394,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
             // Setup new watchers
             DEBUG && I.start('Setup new watchers')
-            let newCleanupFunction = await createWatchers(watchDirectories(scanner), handle)
+            let newCleanupFunction = await createWatchers(await watchDirectories(scanner), handle)
             DEBUG && I.end('Setup new watchers')
 
             // Clear old watchers
@@ -340,16 +417,16 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           }
 
           // Scan changed files only for incremental rebuilds.
-          else if (rebuildStrategy === 'incremental') {
+          else if (rebuildStrategy.kind === 'incremental') {
             DEBUG && I.start('Scan for candidates')
-            let newCandidates = scanner.scanFiles(changedFiles)
+            let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
             DEBUG && I.end('Scan for candidates')
 
             // No new candidates found which means we don't need to write to
             // disk, and can return early.
             if (newCandidates.length <= 0) {
               let end = process.hrtime.bigint()
-              eprintln(`Done in ${formatDuration(end - start)}`)
+              if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
               return
             }
 
@@ -367,13 +444,48 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
           await write(compiledCss, compiledMap, args, I)
 
           let end = process.hrtime.bigint()
-          eprintln(`Done in ${formatDuration(end - start)}`)
+          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         } catch (err) {
+          // It's important that we perform a full rebuild when any of the
+          // dependencies tracked in `fullRebuildPaths` has been changed.
+          //
+          // If we remove one of those files, then a subsequent build will be
+          // triggered, but it will fail because the dependency is gone. The
+          // compiler itself will be in a broken state and won't be able to
+          // register any dependencies therefore we want to restore all the
+          // dependencies from before. If we don't do that, then we won't be
+          // able to recover from a bug in a transitive dependency.
+          //
+          // E.g.:
+          // ```css
+          // /* input.css — known full rebuild path */
+          // @import 'tailwindcss';
+          // @config "./tailwind.config.js";
+          // ```
+          //
+          // ```js
+          // // tailwind.config.js
+          // const theme = require('./my-theme.js');
+          //
+          // module.exports = {
+          //   theme
+          // }
+          // ```
+          // In this case `my-theme.js` is a transitive dependency of
+          // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
+          // result in an error, restoring `my-theme.js` should trigger a
+          // fresh build even though the compiler didn't restore.
+          //
+          // Once the build error is fixed, a fresh full rebuild will happen
+          // which in turn will fixup the full rebuild paths.
+          fullRebuildPaths = backupRebuildPaths
+
           // Catch any errors and print them to stderr, but don't exit the process
           // and keep watching.
-          if (err instanceof Error) {
-            eprintln(err.toString())
-          }
+          eprintln(formatError(err))
+
+          let end = process.hrtime.bigint()
+          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         }
       }),
     )
@@ -411,10 +523,187 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   await write(output, map, args, I)
 
   let end = process.hrtime.bigint()
-  eprintln(`Done in ${formatDuration(end - start)}`)
+  if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+
+  // Watch for changes, using polling
+  if (args['--watch'] && pollInterval !== false) {
+    let cleanupPollingIndicator = () => {}
+
+    function logPollingMessage(message: string) {
+      if (!args['--silent']) {
+        process.stderr.write('\r\x1B[2K')
+      }
+
+      eprintln(message)
+
+      if (!args['--silent']) {
+        process.stderr.write(`\r\x1B[2K${dim(`Polling for changes…`)}`)
+      }
+    }
+
+    async function fullRebuild(I: Instrumentation) {
+      clearRequireCache(fullRebuildPaths)
+      backupRebuildPaths = fullRebuildPaths.slice()
+      fullRebuildPaths = inputFilePath ? [inputFilePath] : []
+
+      let input = args['--input']
+        ? args['--input'] === '-'
+          ? await drainStdin()
+          : await fs.readFile(args['--input'], 'utf-8')
+        : css`
+            @import 'tailwindcss';
+          `
+
+      ;[compiler, scanner] = await createCompiler(input, I)
+      backupRebuildPaths = fullRebuildPaths.slice()
+
+      DEBUG && I.start('Scan for candidates')
+      let candidates = scanner.scan()
+      DEBUG && I.end('Scan for candidates')
+
+      DEBUG && I.start('Build CSS')
+      let output = compiler.build(candidates)
+      DEBUG && I.end('Build CSS')
+
+      let map: SourceMap | null = null
+
+      if (args['--map']) {
+        DEBUG && I.start('Build Source Map')
+        map = toSourceMap(compiler.buildSourceMap())
+        DEBUG && I.end('Build Source Map')
+      }
+
+      await write(output, map, args, I)
+    }
+
+    if (!args['--silent']) {
+      let restored = false
+
+      function restoreCursor() {
+        if (restored) return
+        restored = true
+        process.stderr.write('\r\x1B[2K\x1B[?25h')
+        process.off('exit', restoreCursor)
+        process.off('SIGINT', onSigint)
+        process.off('SIGTERM', onSigterm)
+      }
+
+      function onSigint() {
+        restoreCursor()
+        process.exit(130)
+      }
+
+      function onSigterm() {
+        restoreCursor()
+        process.exit(143)
+      }
+
+      process.stderr.write('\x1B[?25l')
+      process.on('exit', restoreCursor)
+      process.on('SIGINT', onSigint)
+      process.on('SIGTERM', onSigterm)
+
+      cleanupPollingIndicator = restoreCursor
+      cleanupWatchers.push(async () => cleanupPollingIndicator())
+    }
+
+    cleanupWatchers.push(
+      createPollingWatcher(async () => {
+        using I = new Instrumentation()
+
+        DEBUG && I.start('Scan for candidates')
+        let candidates = scanner.scan()
+        DEBUG && I.end('Scan for candidates')
+
+        let files = scanner.scannedFiles.filter(
+          (file) =>
+            !pathsEqual(file, args['--output']!) &&
+            (typeof args['--map'] !== 'string' || !pathsEqual(file, args['--map'])),
+        )
+
+        if (files.length <= 0) return
+
+        let start = process.hrtime.bigint()
+
+        let strategy = getRebuildStrategy(files, fullRebuildPaths)
+
+        if (strategy.kind === 'full') {
+          try {
+            await fullRebuild(I)
+          } catch (err) {
+            fullRebuildPaths = backupRebuildPaths
+
+            logPollingMessage(formatError(err))
+          }
+
+          if (!args['--silent']) {
+            logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+          }
+          return
+        }
+
+        // No candidates found which means we don't need to write to disk, and
+        // can return early.
+        if (candidates.length <= 0) {
+          if (!args['--silent']) {
+            logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+          }
+          return
+        }
+
+        DEBUG && I.start('Build CSS')
+        let output = compiler.build(candidates)
+        DEBUG && I.end('Build CSS')
+
+        let map: SourceMap | null = null
+
+        if (args['--map']) {
+          DEBUG && I.start('Build Source Map')
+          map = toSourceMap(compiler.buildSourceMap())
+          DEBUG && I.end('Build Source Map')
+        }
+
+        await write(output, map, args, I)
+
+        if (!args['--silent']) {
+          logPollingMessage(`Done in ${formatDuration(process.hrtime.bigint() - start)}`)
+        }
+      }, pollInterval),
+    )
+
+    if (args['--watch'] !== 'always') {
+      process.stdin.on('end', () => {
+        Promise.all(cleanupWatchers.map((fn) => fn())).then(
+          () => process.exit(0),
+          () => process.exit(1),
+        )
+      })
+    }
+
+    process.stdin.resume()
+    if (!args['--silent']) {
+      process.stderr.write(`\r\x1B[2K${dim(`Polling for changes…`)}`)
+    }
+  }
+}
+
+// Load `@parcel/watcher` lazily so a missing or broken native binding only
+// affects `--watch` (without `--poll`), instead of crashing one-off builds and
+// polling mode as well.
+async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
+  try {
+    return (await import('@parcel/watcher')).default
+  } catch (err) {
+    throw new Error(
+      `Failed to load the file watcher. Your platform may not be supported by \`@parcel/watcher\`. As a workaround, you can use polling instead by passing the \`--watch --poll\` flags.`,
+      { cause: err },
+    )
+  }
 }
 
 async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
+  let watcher = await loadWatcher()
+
   // Remove any directories that are children of an already watched directory.
   // If we don't we may not get notified of certain filesystem events regardless
   // of whether or not they are for the directory that is duplicated.
@@ -476,10 +765,16 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
 
       await Promise.all(
         events.map(async (event) => {
-          // We currently don't handle deleted files because it doesn't influence
-          // the CSS output. This is because we currently keep all scanned
-          // candidates in a cache for performance reasons.
-          if (event.type === 'delete') return
+          // When a file is deleted, a rebuild should be triggered such that we
+          // can figure out whether this file must trigger a fresh build or not.
+          //
+          // If it must trigger a fresh build, then we will temporarily end up
+          // in a broken state, but an error will be shown to the user. Once the
+          // user resolves the issue, the CLI will recover.
+          if (event.type === 'delete') {
+            files.add(event.path)
+            return
+          }
 
           // Ignore directory changes. We only care about file changes
           let stats: Stats | null = null
@@ -510,6 +805,78 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
   }
 }
 
-function watchDirectories(scanner: Scanner) {
-  return [...new Set(scanner.normalizedSources.flatMap((globEntry) => globEntry.base))]
+function getRebuildStrategy(
+  files: string[],
+  fullRebuildPaths: string[],
+): { kind: 'incremental'; changedFiles: ChangedContent[] } | { kind: 'full' } {
+  let changedFiles: ChangedContent[] = []
+
+  for (let file of files) {
+    // If one of the changed files is related to the input CSS or JS
+    // config/plugin files, then we need to do a full rebuild because
+    // the theme might have changed.
+    if (fullRebuildPaths.some((p) => pathsEqual(p, file))) {
+      return { kind: 'full' }
+    }
+
+    // Track new and updated files for incremental rebuilds.
+    changedFiles.push({
+      file,
+      extension: path.extname(file).slice(1),
+    } satisfies ChangedContent)
+  }
+
+  return { kind: 'incremental', changedFiles }
+}
+
+function createPollingWatcher(cb: () => Promise<void>, pollInterval: number) {
+  let disposed = false
+  let timer: ReturnType<typeof setTimeout> | null = null
+
+  async function poll() {
+    if (disposed) return
+
+    try {
+      await cb()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      if (!disposed) {
+        timer = setTimeout(poll, pollInterval)
+      }
+    }
+  }
+
+  timer = setTimeout(poll, pollInterval)
+
+  return async () => {
+    disposed = true
+    if (timer) clearTimeout(timer)
+  }
+}
+
+async function watchDirectories(scanner: Scanner) {
+  let directories = (
+    await Promise.all(
+      scanner.normalizedSources.map(async (globEntry) => {
+        let resolvedPath = path.resolve(globEntry.base)
+        let realPath = await fs.realpath(resolvedPath).catch(() => resolvedPath)
+
+        return fs
+          .stat(realPath)
+          .then((stat) => (stat.isDirectory() ? [realPath] : []))
+          .catch(() => [])
+      }),
+    )
+  ).flat(1)
+
+  return Array.from(new Set(directories))
+}
+
+function dim(str: string) {
+  return `\x1B[2m${str}\x1B[22m`
+}
+
+function red(str: string) {
+  return `\x1B[31m${str}\x1B[39m`
 }

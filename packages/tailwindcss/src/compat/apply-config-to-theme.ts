@@ -172,7 +172,7 @@ const OLD_TO_NEW_NAMESPACE: Record<string, string> = {
   transitionTimingFunction: 'ease',
 }
 
-const IS_VALID_KEY = /^[a-zA-Z0-9-_%/\.]+$/
+const IS_VALID_KEY = /^[a-zA-Z0-9-_%/.]+$/
 
 export function keyPathToCssProperty(path: string[]) {
   // In some special cases the `DEFAULT` key did not map to a "default" utility

@@ -4,11 +4,14 @@ import postcss, { type Result } from 'postcss'
 import { DefaultMap } from '../../../../tailwindcss/src/utils/default-map'
 import { segment } from '../../../../tailwindcss/src/utils/segment'
 import { Stylesheet, type StylesheetConnection } from '../../stylesheet'
+import { gitRoot } from '../../utils/git'
 import { error, highlight, relative } from '../../utils/renderer'
 import { resolveCssId } from '../../utils/resolve'
 
-export async function analyze(stylesheets: Stylesheet[]) {
-  let isIgnored = await isGitIgnored()
+export async function analyze(stylesheets: Stylesheet[], { base }: { base: string }) {
+  // Use the project's git root, instead of the `base` to ensure all
+  // `.gitignore` rules are being used.
+  let isIgnored = await isGitIgnored({ cwd: gitRoot(base) ?? base })
   let processingQueue: (() => Promise<Result>)[] = []
   let stylesheetsByFile = new DefaultMap<string, Stylesheet | null>((file) => {
     // We don't want to process ignored files (like node_modules)

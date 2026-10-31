@@ -376,6 +376,120 @@ describe.each([
   )
 
   test(
+    'watch mode with polling',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'src/index.css': css`@import 'tailwindcss/utilities';`,
+        'src/index.html': html`
+          <div class="underline"></div>
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(
+        `${command} --input src/index.css --output dist/out.css --watch --poll=50`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      await fs.write('src/index.html', html`
+          <div class="underline flex"></div>
+        `)
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  test(
+    "watch mode with unknown @source paths shouldn't crash on Windows",
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss';
+          @source "unknown-folder/**/*";
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+    },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/17632
+  test(
+    'watch mode rebuilds when the input file is in an ignored folder',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'assets/tailwind.config.js': js`
+          module.exports = {
+            content: {
+              relative: true,
+              files: ['html/*.html'],
+            },
+          }
+        `,
+        'assets/html/index.html': html`
+          <div class="underline"></div>
+        `,
+        'assets/css/index.css': css`
+          @import 'tailwindcss' source(none);
+          @config '../tailwind.config.js';
+        `,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(
+        `${command} --input assets/css/index.css --output dist/out.css --watch`,
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      await fs.write(
+        'assets/css/index.css',
+        css`
+          @import 'tailwindcss' source(none);
+          @config '../tailwind.config.js';
+          @source inline("flex");
+        `,
+      )
+
+      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
+    },
+  )
+
+  test(
     'production build (stdin)',
     {
       fs: {
@@ -559,6 +673,15 @@ describe.each([
     'git ignore files outside of a repo are not considered',
     {
       fs: {
+        // Make the test root a pnpm workspace that includes `home/project` so
+        // the install below resolves the transitive dependency overrides that
+        // the test harness injects into this `pnpm-workspace.yaml`.
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - home/project
+        `,
+
         // Ignore everything in the "home" directory
         'home/.gitignore': '*',
 
@@ -596,7 +719,7 @@ describe.each([
       installDependencies: false,
     },
     async ({ fs, root, exec }) => {
-      await exec(`pnpm install --ignore-workspace`, {
+      await exec(`pnpm install`, {
         cwd: path.join(root, 'home/project'),
       })
 
@@ -644,7 +767,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -705,7 +828,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -771,7 +894,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -832,7 +955,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -1065,7 +1188,7 @@ describe.each([
             }
           }
         `,
-        'ssrc/index.html': html`
+        'src/index.html': html`
           <div class="flex"></div>
         `,
         'src/index.css': css`
@@ -1294,6 +1417,86 @@ describe.each([
       })
     },
   )
+
+  test(
+    'watch mode should trigger a full rebuild when a dependency is removed',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'src/index.html': html`
+          <div class="flex text-primary"></div>
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities';
+          @config '../tailwind.config.js';
+        `,
+        'tailwind.config.js': js`
+          const myColor = require('./my-color')
+
+          module.exports = {
+            theme: {
+              extend: {
+                colors: {
+                  primary: myColor,
+                },
+              },
+            },
+          }
+        `,
+        'my-color.js': js`
+          //
+          module.exports = 'blue'
+        `,
+      },
+    },
+    async ({ spawn, fs, expect }) => {
+      let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+        "
+        --- dist/out.css ---
+        .flex {
+          display: flex;
+        }
+        .text-primary {
+          color: blue;
+        }
+        "
+      `)
+
+      // Remove the dependency of the tailwind.config.js file
+      await fs.delete('my-color.js')
+
+      // We expect an error
+      await process.onStderr((m) => m.includes('Error'))
+      await process.onStderr((m) => m.includes('Done in'))
+
+      // Re-create the file to resolve the issue
+      await fs.write('my-color.js', js`module.exports = 'red'`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      // Expect a full rebuild
+      expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
+        "
+        --- dist/out.css ---
+        .flex {
+          display: flex;
+        }
+        .text-primary {
+          color: red;
+        }
+        "
+      `)
+    },
+  )
 })
 
 test(
@@ -1422,7 +1625,7 @@ test(
         initial-value: "";
       }
       @layer properties {
-        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           *, ::before, ::after, ::backdrop {
             --tw-content: "";
           }
@@ -1673,7 +1876,7 @@ test(
         initial-value: "";
       }
       @layer properties {
-        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           *, ::before, ::after, ::backdrop {
             --tw-content: "";
           }
@@ -1858,7 +2061,7 @@ test(
       `,
     },
   },
-  async ({ fs, exec, spawn, root, expect }) => {
+  async ({ fs, exec, root, expect }) => {
     await exec('pnpm tailwindcss --input ./index.css --output dist/out.css', { cwd: root })
 
     let content = await fs.dumpFiles('./dist/*.css')
@@ -1866,6 +2069,335 @@ test(
     expect(content).not.toContain(candidate`content-['project-a/src/index.html']`)
     expect(content).toContain(candidate`content-['project-b/src/index.html']`)
     expect(content).toContain(candidate`content-['project-c/src/index.html']`)
+  },
+)
+
+test(
+  '@source order is important (referencing sibling project)',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        @source '../../project-b';
+        @source not '../../project-b/ignored';
+        @source '../../project-b/ignored/except.html';
+      `,
+
+      'project-b/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'project-b/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'project-b/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+    },
+  },
+  async ({ fs, root, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  },
+)
+
+test(
+  '@source works with symlinks (referencing sibling project)',
+  {
+    fs: {
+      'package.json': json`{}`,
+      'pnpm-workspace.yaml': yaml`
+        #
+        packages:
+          - project-a
+      `,
+      'project-a/package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'project-a/src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        /* Same as the previous test, but using symlinks instead */
+        @source '../../project-b';
+        @source not '../../project-b/ignored';
+        @source '../../project-b/ignored/except.html';
+      `,
+
+      'project-b/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'project-c/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'project-c/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+
+      // Symlink the ignored folder to another project
+      'project-b/ignored': 'symlink:../../project-c/ignored/',
+    },
+  },
+  async ({ fs, root, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css', {
+      cwd: path.join(root, 'project-a'),
+    })
+
+    expect(await fs.dumpFiles('./project-a/dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./project-a/dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/19844
+test(
+  '@source scans directories ignored by allow-list .gitignore files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        *
+        !/app
+        !/app/design
+        !/app/design/**
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+        @source '../vendor/acme/theme';
+      `,
+      // 1. Ignored by the `*` in `.gitignore`
+      // 2. Included by the `!` pattern in `.gitignore`
+      // 3. Ignored by `source(none)`
+      //
+      // → Should be ignored
+      'app/design/frontend/theme/templates/component.phtml': html`
+        <div
+          class="content-['app/design/frontend/theme/templates/component.phtml']"
+        ></div>
+      `,
+      // 1. Ignored by the `*` in `.gitignore`
+      // 2. Included by the `!` pattern in `.gitignore`
+      // 3. Ignored by `source(none)`
+      // 4. Included by the `@source` directive
+      //
+      // → Should be included
+      'vendor/acme/theme/module/templates/component.phtml': html`
+        <div
+          class="content-['vendor/acme/theme/module/templates/component.phtml']"
+        ></div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    // 1. Ignored by the `*` in `.gitignore`
+    // 2. Included by the `!` pattern in `.gitignore`
+    // 3. Ignored by `source(none)`
+    //
+    // → Should be ignored
+    await fs.expectFileNotToContain('dist/out.css', [
+      candidate`content-['app/design/frontend/theme/templates/component.phtml']`,
+    ])
+
+    // 1. Ignored by the `*` in `.gitignore`
+    // 2. Included by the `!` pattern in `.gitignore`
+    // 3. Ignored by `source(none)`
+    // 4. Included by the `@source` directive
+    //
+    // → Should be included
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`content-['vendor/acme/theme/module/templates/component.phtml']`,
+    ])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/discussions/20382
+test(
+  'auto source detection respects allow-list .gitignore files',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        /*
+        !/.gitignore
+        !/app
+        !/public
+        !/package.json
+      `,
+      'app/root.css': css` @import 'tailwindcss/utilities'; `,
+      // Included by the `!/app` pattern in `.gitignore`
+      //
+      // → Should be included
+      'app/index.html': html`
+        <div class="content-['app/index.html']"></div>
+      `,
+      // Included by the `!/public` pattern in `.gitignore`
+      //
+      // → Should be included
+      'public/index.html': html`
+        <div class="content-['public/index.html']"></div>
+      `,
+      // Ignored by the `/*` in `.gitignore`
+      //
+      // → Should be ignored
+      'build/index.html': html`
+        <div class="content-['build/index.html']"></div>
+      `,
+      // Ignored by the `/*` in `.gitignore` and the default `node_modules` rules
+      //
+      // → Should be ignored
+      'node_modules/my-ui-lib/index.html': html`
+        <div
+          class="content-['node_modules/my-ui-lib/index.html']"
+        ></div>
+      `,
+    },
+  },
+  async ({ fs, exec }) => {
+    await exec('pnpm tailwindcss --input app/root.css --output dist/out.css')
+
+    await fs.expectFileToContain('dist/out.css', [
+      candidate`content-['app/index.html']`,
+      candidate`content-['public/index.html']`,
+    ])
+
+    await fs.expectFileNotToContain('dist/out.css', [
+      candidate`content-['build/index.html']`,
+      candidate`content-['node_modules/my-ui-lib/index.html']`,
+    ])
+  },
+)
+
+test(
+  '@source works with symlinks (referencing folder in current folder)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/utilities' source(none);
+
+        /* Same as the previous test, but using symlinks instead */
+        @source '../lib';
+        @source not '../lib/ignored';
+        @source '../lib/ignored/except.html';
+      `,
+
+      'lib/keep/keep.html': html`<div class="content-['GOOD-1']"></div>`,
+      'vendor/ignored/ignored.html': html`<div class="content-['BAD-1']"></div>`,
+      'vendor/ignored/except.html': html`<div class="content-['GOOD-2']"></div>`,
+
+      // Symlink the ignored folder to another folder
+      'lib/ignored': 'symlink:../../vendor/ignored/',
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm tailwindcss --input src/index.css --output dist/out.css')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/out.css ---
+      @layer properties;
+      .content-\\[\\'GOOD-1\\'\\] {
+        --tw-content: 'GOOD-1';
+        content: var(--tw-content);
+      }
+      .content-\\[\\'GOOD-2\\'\\] {
+        --tw-content: 'GOOD-2';
+        content: var(--tw-content);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
   },
 )
 
@@ -1941,7 +2473,7 @@ test(
         initial-value: "";
       }
       @layer properties {
-        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           *, ::before, ::after, ::backdrop {
             --tw-content: "";
           }
@@ -2218,6 +2750,49 @@ test(
 )
 
 test(
+  'suppress output by using the --silent flag',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'index.css': css` @import 'tailwindcss/utilities';`,
+      'index.html': html`<div class="flex"></div>`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    let output = await exec('pnpm tailwindcss --input index.css --output dist/loud.css')
+    expect(output).toContain('Done in')
+
+    let silentOutput = await exec(
+      'pnpm tailwindcss --input index.css --output dist/silent.css --silent',
+    )
+    expect(silentOutput).not.toContain('Done in')
+    expect(silentOutput).not.toContain('tailwindcss v')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/loud.css ---
+      .flex {
+        display: flex;
+      }
+
+
+      --- ./dist/silent.css ---
+      .flex {
+        display: flex;
+      }
+      "
+    `)
+  },
+)
+
+test(
   'changes to CSS files should pick up new CSS variables (if any)',
   {
     fs: {
@@ -2320,8 +2895,8 @@ test(
       @layer theme, base, components, utilities;
       @layer theme {
         :root, :host {
-          --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-          'Noto Color Emoji';
+          --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+          sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
           --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
           monospace;
           --color-red-500: oklch(63.7% 0.237 25.331);
@@ -2340,7 +2915,7 @@ test(
           line-height: 1.5;
           -webkit-text-size-adjust: 100%;
           tab-size: 4;
-          font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
+          font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
           font-feature-settings: var(--default-font-feature-settings, normal);
           font-variation-settings: var(--default-font-variation-settings, normal);
           -webkit-tap-highlight-color: transparent;
@@ -2392,7 +2967,7 @@ test(
           border-color: inherit;
           border-collapse: collapse;
         }
-        :-moz-focusring {
+        :-moz-focusring:where(:not(iframe)) {
           outline: auto;
         }
         progress {
@@ -2555,7 +3130,7 @@ test(
         initial-value: 0 0 #0000;
       }
       @layer properties {
-        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
           *, ::before, ::after, ::backdrop {
             --tw-shadow: 0 0 #0000;
             --tw-shadow-color: initial;
@@ -2609,3 +3184,39 @@ test(
 function withBOM(text: string): string {
   return '\uFEFF' + text
 }
+
+test(
+  'canonicalize writes plugin logs to stderr',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/cli": "workspace:^"
+          }
+        }
+      `,
+      'plugin.js': js`
+        module.exports = function () {
+          console.log('hello from a plugin')
+        }
+      `,
+      'index.css': css`
+        @import 'tailwindcss';
+        @plugin './plugin.js';
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    let { stdout, stderr, exitCode } = await exec(
+      'pnpm tailwindcss canonicalize --css index.css "p-4 px-2 py-2"',
+      {},
+      { streams: true },
+    )
+
+    expect(exitCode).toBe(0)
+    expect(stdout.trim()).toMatchInlineSnapshot(`"p-2"`)
+    expect(stderr.trim()).toMatchInlineSnapshot(`"hello from a plugin"`)
+  },
+)

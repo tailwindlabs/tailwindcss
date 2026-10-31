@@ -61,21 +61,6 @@ it('should append `!` to each utility, when using `!important`', async () => {
   `)
 })
 
-// TODO: Handle SCSS syntax
-it.skip('should append `!` to each utility, when using `#{!important}`', async () => {
-  expect(
-    await migrate(css`
-      .foo {
-        @apply flex flex-col #{!important};
-      }
-    `),
-  ).toMatchInlineSnapshot(`
-    ".foo {
-      @apply flex! flex-col!;
-    }"
-  `)
-})
-
 it('should move the legacy `!` prefix, to the new `!` postfix notation', async () => {
   expect(
     await migrate(css`

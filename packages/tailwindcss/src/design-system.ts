@@ -75,6 +75,8 @@ export function buildDesignSystem(
   let variants = createVariants(theme)
 
   let parsedVariants = new DefaultMap((variant) => parseVariant(variant, designSystem))
+  let cachedVariantOrder: Map<Variant, number> | null = null
+  let cachedVariantOrderSize = -1
   let parsedCandidates = new DefaultMap((candidate) =>
     Array.from(parseCandidate(candidate, designSystem)),
   )
@@ -84,20 +86,16 @@ export function buildDesignSystem(
       let ast = compileAstNodes(candidate, designSystem, flags)
 
       try {
+        let nodes = ast.map((value) => value.node)
+
         // Arbitrary values (`text-[theme(--color-red-500)]`) and arbitrary
         // properties (`[--my-var:theme(--color-red-500)]`) can contain function
         // calls so we need evaluate any functions we find there that weren't in
         // the source CSS.
-        substituteFunctions(
-          ast.map(({ node }) => node),
-          designSystem,
-        )
+        substituteFunctions(nodes, designSystem)
 
         // JS plugins might contain an `@variant` inside a generated utility
-        substituteAtVariant(
-          ast.map(({ node }) => node),
-          designSystem,
-        )
+        substituteAtVariant(nodes, designSystem)
       } catch (err) {
         // If substitution fails then the candidate likely contains a call to
         // `theme()` that is invalid which may be because of incorrect usage,
@@ -192,6 +190,11 @@ export function buildDesignSystem(
     },
 
     getVariantOrder() {
+      // parsedVariants only grows, so the cache should be reset only when the size changes
+      if (cachedVariantOrder !== null && cachedVariantOrderSize === parsedVariants.size) {
+        return cachedVariantOrder
+      }
+
       let variants = Array.from(parsedVariants.values())
       variants.sort((a, z) => this.variants.compare(a, z))
 
@@ -212,6 +215,9 @@ export function buildDesignSystem(
         order.set(variant, index)
         prevVariant = variant
       }
+
+      cachedVariantOrder = order
+      cachedVariantOrderSize = parsedVariants.size
 
       return order
     },
