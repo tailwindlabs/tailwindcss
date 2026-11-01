@@ -664,9 +664,16 @@ function parseDeclaration(
   // ```css
   // --foo: red !important /* comment */;
   // ```
+  //
+  // An escaped `!` is part of the value too:
+  //
+  // ```css
+  // content: \!important;
+  // ```
   let value = trimValue(buffer.slice(colonIdx + 1, valueEnd))
-  if (value.endsWith('!important')) {
-    return decl(property, trimValue(value.slice(0, -'!important'.length)), true)
+  let bangIdx = value.length - '!important'.length
+  if (value.endsWith('!important') && !isEscaped(value, bangIdx)) {
+    return decl(property, trimValue(value.slice(0, bangIdx)), true)
   }
 
   return decl(property, trimValue(buffer.slice(colonIdx + 1)), false)
@@ -682,16 +689,26 @@ function trimValue(value: string) {
   value = value.trimStart()
   let trimmed = value.trimEnd()
 
-  let backslashes = 0
-  while (trimmed.charCodeAt(trimmed.length - 1 - backslashes) === BACKSLASH) {
-    backslashes += 1
-  }
-
-  if (backslashes % 2 === 1 && trimmed.length < value.length) {
+  if (trimmed.length < value.length && isEscaped(value, trimmed.length)) {
     return value.slice(0, trimmed.length + 1)
   }
 
   return trimmed
+}
+
+// Whether the character at `idx` is escaped, i.e. an odd number of `\` is in
+// front of it. An even number of `\` escape each other:
+//
+// ```css
+// a\\!important
+// ```
+function isEscaped(value: string, idx: number) {
+  let backslashes = 0
+  while (value.charCodeAt(idx - 1 - backslashes) === BACKSLASH) {
+    backslashes += 1
+  }
+
+  return backslashes % 2 === 1
 }
 
 function parseString(

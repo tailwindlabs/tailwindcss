@@ -378,6 +378,24 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           { kind: 'declaration', property: '--baz', value: 'a\\\\', important: true },
         ])
       })
+
+      it('should not treat an escaped `!` as the important flag', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: \!important;
+            --foo: red\!important;
+            --bar: red\\!important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: '\\!important', important: false },
+          { kind: 'declaration', property: '--foo', value: 'red\\!important', important: false },
+          // An escaped backslash does not escape the `!` after it.
+          { kind: 'declaration', property: '--bar', value: 'red\\\\', important: true },
+        ])
+      })
     })
 
     describe('Custom properties', () => {
