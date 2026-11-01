@@ -212,6 +212,11 @@ export function parse(input: string, opts?: ParseOptions) {
       let start = i
       let colonIdx = -1
 
+      // The end of the value without trailing whitespace and comments. We need
+      // it to find the `!important` flag, because custom properties keep their
+      // comments.
+      let valueEnd = 0
+
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
@@ -236,6 +241,8 @@ export function parse(input: string, opts?: ParseOptions) {
               break
             }
           }
+
+          continue
         }
 
         // End of the "property" of the property-value pair.
@@ -292,9 +299,18 @@ export function parse(input: string, opts?: ParseOptions) {
             closingBracketStack = closingBracketStack.slice(0, -1)
           }
         }
+
+        if (
+          peekChar !== SPACE &&
+          peekChar !== TAB &&
+          peekChar !== LINE_BREAK &&
+          peekChar !== CARRIAGE_RETURN
+        ) {
+          valueEnd = j + 1 - start
+        }
       }
 
-      let declaration = parseDeclaration(buffer, colonIdx)
+      let declaration = parseDeclaration(buffer, colonIdx, valueEnd)
       if (!declaration) {
         throw new CssSyntaxError(
           `Invalid custom property, expected a value`,
@@ -630,14 +646,69 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
 function parseDeclaration(
   buffer: string,
   colonIdx: number = buffer.indexOf(':'),
+  valueEnd: number = buffer.length,
 ): Declaration | null {
   if (colonIdx === -1) return null
-  let importantIdx = buffer.indexOf('!important', colonIdx + 1)
-  return decl(
-    buffer.slice(0, colonIdx).trim(),
-    buffer.slice(colonIdx + 1, importantIdx === -1 ? buffer.length : importantIdx).trim(),
-    importantIdx !== -1,
-  )
+  let property = buffer.slice(0, colonIdx).trim()
+
+  // `!important` is only a flag when it is at the end of the value. Anywhere
+  // else it is part of the value, e.g. inside of a string:
+  //
+  // ```css
+  // content: "a !important b";
+  // ```
+  //
+  // Custom properties keep their comments, so the flag can be followed by one.
+  // `valueEnd` is the end of the value without those trailing comments:
+  //
+  // ```css
+  // --foo: red !important /* comment */;
+  // ```
+  //
+  // An escaped `!` is part of the value too:
+  //
+  // ```css
+  // content: \!important;
+  // ```
+  let value = trimValue(buffer.slice(colonIdx + 1, valueEnd))
+  let bangIdx = value.length - '!important'.length
+  if (value.endsWith('!important') && !isEscaped(value, bangIdx)) {
+    return decl(property, trimValue(value.slice(0, bangIdx)), true)
+  }
+
+  return decl(property, trimValue(buffer.slice(colonIdx + 1)), false)
+}
+
+// Trim the whitespace around a value, but keep an escaped whitespace at its
+// end, because it is part of the value:
+//
+// ```css
+// font-family: a\ !important;
+// ```
+function trimValue(value: string) {
+  value = value.trimStart()
+  let trimmed = value.trimEnd()
+
+  if (trimmed.length < value.length && isEscaped(value, trimmed.length)) {
+    return value.slice(0, trimmed.length + 1)
+  }
+
+  return trimmed
+}
+
+// Whether the character at `idx` is escaped, i.e. an odd number of `\` is in
+// front of it. An even number of `\` escape each other:
+//
+// ```css
+// a\\!important
+// ```
+function isEscaped(value: string, idx: number) {
+  let backslashes = 0
+  while (value.charCodeAt(idx - 1 - backslashes) === BACKSLASH) {
+    backslashes += 1
+  }
+
+  return backslashes % 2 === 1
 }
 
 function parseString(
