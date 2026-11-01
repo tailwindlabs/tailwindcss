@@ -279,7 +279,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             DEBUG && I.end('[@tailwindcss/vite] Optimize CSS')
           }
 
-          return result
+          return {
+            code: result.code,
+            map: result.map ?? { mappings: '' },
+          }
         },
       },
     },
