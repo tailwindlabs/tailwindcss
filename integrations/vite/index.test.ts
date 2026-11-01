@@ -1724,3 +1724,60 @@ test(
     })
   },
 )
+
+test(
+  'production build with a stylesheet that only uses `@theme`',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^7"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/theme.css" />
+        </head>
+        <body>
+          <div class="brand">Hello, world!</div>
+        </body>
+      `,
+      'src/theme.css': css`
+        @theme {
+          --color-brand: red;
+        }
+
+        .brand {
+          color: var(--color-brand);
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm vite build')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [, content] = files[0]
+
+    expect(content).not.toContain('@theme')
+    expect(content).toMatch(/:root, :host \{\s*--color-brand: red;\s*\}/)
+    expect(content).toMatch(/\.brand \{\s*color: var\(--color-brand\);\s*\}/)
+  },
+)
