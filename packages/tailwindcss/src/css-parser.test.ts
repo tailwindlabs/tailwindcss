@@ -1332,3 +1332,32 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     ])
   })
 })
+
+describe.each([
+  ['CR', '\r'],
+  ['CR CRLF', '\r\r\n'],
+  ['FF', '\f'],
+])('Line endings: %s', (_, newline) => {
+  it('should treat the line ending as whitespace', () => {
+    let input = css`
+      @import 'foo.css';
+      .foo,
+      .bar {
+        --foo: bar;
+        color: red;
+      }
+    `
+
+    expect(CSS.parse(input.replaceAll(/\r?\n/g, newline))).toEqual([
+      { kind: 'at-rule', name: '@import', params: "'foo.css'", nodes: [] },
+      {
+        kind: 'rule',
+        selector: '.foo, .bar',
+        nodes: [
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+          { kind: 'declaration', property: 'color', value: 'red', important: false },
+        ],
+      },
+    ])
+  })
+})

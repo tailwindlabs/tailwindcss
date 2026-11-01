@@ -21,6 +21,7 @@ const COLON = 0x3a
 const SEMICOLON = 0x3b
 const LINE_BREAK = 0x0a
 const CARRIAGE_RETURN = 0xd
+const FORM_FEED = 0xc
 const SPACE = 0x20
 const TAB = 0x09
 const OPEN_CURLY = 0x7b
@@ -94,6 +95,15 @@ export function parse(input: string, opts?: ParseOptions) {
     if (currentChar === CARRIAGE_RETURN) {
       peekChar = input.charCodeAt(i + 1)
       if (peekChar === LINE_BREAK) continue
+
+      // A CR on its own is a line break as well.
+      // See: https://www.w3.org/TR/css-syntax-3/#input-preprocessing
+      currentChar = LINE_BREAK
+    }
+
+    // A form feed is also treated as a line break.
+    else if (currentChar === FORM_FEED) {
+      currentChar = LINE_BREAK
     }
 
     // Current character is a `\` therefore the next character is escaped,
