@@ -356,6 +356,28 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           },
         ])
       })
+
+      it('should keep an escaped whitespace at the end of the value', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: a\ ;
+            font-family: a\ !important;
+            --foo: a\ ;
+            --bar: a\ !important;
+            --baz: a\\ !important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: 'font-family', value: 'a\\ ', important: true },
+          { kind: 'declaration', property: '--foo', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: '--bar', value: 'a\\ ', important: true },
+          // An escaped backslash does not escape the whitespace after it.
+          { kind: 'declaration', property: '--baz', value: 'a\\\\', important: true },
+        ])
+      })
     })
 
     describe('Custom properties', () => {

@@ -664,12 +664,34 @@ function parseDeclaration(
   // ```css
   // --foo: red !important /* comment */;
   // ```
-  let value = buffer.slice(colonIdx + 1, valueEnd).trim()
+  let value = trimValue(buffer.slice(colonIdx + 1, valueEnd))
   if (value.endsWith('!important')) {
-    return decl(property, value.slice(0, -'!important'.length).trim(), true)
+    return decl(property, trimValue(value.slice(0, -'!important'.length)), true)
   }
 
-  return decl(property, buffer.slice(colonIdx + 1).trim(), false)
+  return decl(property, trimValue(buffer.slice(colonIdx + 1)), false)
+}
+
+// Trim the whitespace around a value, but keep an escaped whitespace at its
+// end, because it is part of the value:
+//
+// ```css
+// font-family: a\ !important;
+// ```
+function trimValue(value: string) {
+  value = value.trimStart()
+  let trimmed = value.trimEnd()
+
+  let backslashes = 0
+  while (trimmed.charCodeAt(trimmed.length - 1 - backslashes) === BACKSLASH) {
+    backslashes += 1
+  }
+
+  if (backslashes % 2 === 1 && trimmed.length < value.length) {
+    return value.slice(0, trimmed.length + 1)
+  }
+
+  return trimmed
 }
 
 function parseString(
