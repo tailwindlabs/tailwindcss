@@ -96,7 +96,7 @@ If your change fixes a bug, adds a feature, or changes something that users can 
 - Prevent `@tailwindcss/vite` from doing a full page reload for external files (e.g. `.php` files)
 ```
 
-Use the sections `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`. Do not add a link to your pull request: the release adds it. See [.changelog/README.md](https://github.com/tailwindlabs/tailwindcss/blob/main/.changelog/README.md) for all details, and run `pnpm changelog check` to check your file.
+Use the sections `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`. Do not add a link to your pull request: a workflow adds it when it moves your entry into `CHANGELOG.md` after the merge. See [.changelog/README.md](https://github.com/tailwindlabs/tailwindcss/blob/main/.changelog/README.md) for all details, and run `pnpm changelog check` to check your file.
 
 Write the entry in the same style as the existing entries in [CHANGELOG.md](https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md). In short:
 

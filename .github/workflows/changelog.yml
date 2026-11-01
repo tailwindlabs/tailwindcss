@@ -1,16 +1,13 @@
-name: Changelog preview
+name: Compile changelog
 
-# Push the preview of `CHANGELOG.md`, with the entries of `.changelog/` in the `[Unreleased]`
-# section, to the `changelog` branch.
+# After a merge into `main` that adds a fragment to `.changelog/`, move the entries of the fragments
+# into the `[Unreleased]` section of `CHANGELOG.md`, and push the result to `main`.
 
 on:
   push:
     branches: [main]
     paths:
       - '.changelog/**'
-      - 'CHANGELOG.md'
-      - 'scripts/changelog.mjs'
-      - '.github/workflows/changelog.yml'
   workflow_dispatch:
 
 permissions:
@@ -19,26 +16,25 @@ permissions:
 env:
   NODE_VERSION: 24
 
+# Don't cancel a run that is about to push. The next run compiles all fragments that are left.
 concurrency:
   group: ${{ github.workflow }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  preview:
+  compile:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
-    name: Push preview
-
-    permissions:
-      contents: write # Required for pushing the `changelog` branch
+    name: Compile changelog
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           # The script finds the pull request of each fragment in the history. It only needs the
           # commits and the trees, not the file contents.
+          ref: main
           fetch-depth: 0
           filter: blob:none
           persist-credentials: false
@@ -49,20 +45,35 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           package-manager-cache: false
 
-      - name: Build preview
-        run: node ./scripts/changelog.mjs > "$RUNNER_TEMP/CHANGELOG.md"
-
-      # The branch has one commit with only `CHANGELOG.md`, so it keeps no history. A push with the
-      # `GITHUB_TOKEN` starts no other workflows.
-      - name: Push preview to the `changelog` branch
+      # `CHANGELOG_TOKEN` is a personal access token of an admin, because only admins can push to
+      # `main` without a pull request. `[skip ci]` keeps this push from starting the other workflows,
+      # like the insiders release, and this workflow again.
+      - name: Compile and push
         env:
-          GH_TOKEN: ${{ github.token }}
+          CHANGELOG_TOKEN: ${{ secrets.CHANGELOG_TOKEN }}
           GIT_AUTHOR_NAME: github-actions[bot]
           GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GIT_COMMITTER_NAME: github-actions[bot]
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
-          blob=$(git hash-object -w "$RUNNER_TEMP/CHANGELOG.md")
-          tree=$(printf '100644 blob %s\tCHANGELOG.md\n' "$blob" | git mktree)
-          commit=$(git commit-tree "$tree" -m "Preview \`CHANGELOG.md\` of ${GITHUB_SHA}")
-          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "${commit}:refs/heads/changelog"
+          remote="https://x-access-token:${CHANGELOG_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          # Try again when another pull request merged in the meantime
+          for attempt in 1 2 3; do
+            git fetch --quiet origin main
+            git reset --quiet --hard origin/main
+
+            node ./scripts/changelog.mjs compile
+            git add --all CHANGELOG.md .changelog
+            if git diff --cached --quiet; then
+              echo "There are no fragments to compile."
+              exit 0
+            fi
+
+            git commit --quiet -m "Compile changelog fragments [skip ci]"
+            if git push "$remote" HEAD:main; then
+              exit 0
+            fi
+          done
+
+          exit 1

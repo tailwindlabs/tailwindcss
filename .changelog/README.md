@@ -1,6 +1,6 @@
 # Changelog fragments
 
-Each pull request that needs a changelog entry adds a file to this folder. At each release, `scripts/changelog.mjs` moves the entries of these files into `CHANGELOG.md`. Thus pull requests do not conflict with each other in `CHANGELOG.md`.
+Each pull request that needs a changelog entry adds a file to this folder. After the merge, a workflow moves the entries of the file into `[Unreleased]` in `CHANGELOG.md`, and deletes the file. Thus pull requests do not conflict with each other in `CHANGELOG.md`.
 
 ## Add an entry
 
@@ -23,6 +23,9 @@ Add a Markdown file with a unique name, for example `.changelog/vite-full-reload
 # Print `CHANGELOG.md`, with the entries of the fragments in `[Unreleased]`
 pnpm --silent changelog
 
+# Move the entries into `[Unreleased]` in `CHANGELOG.md`, and delete the fragments
+pnpm changelog compile
+
 # Check the fragments
 pnpm changelog check
 
@@ -30,6 +33,6 @@ pnpm changelog check
 pnpm changelog release <version> [<date>]
 ```
 
-The entries that are already in `[Unreleased]` in `CHANGELOG.md` come first. The entries of the fragments follow, in the order in which their pull requests merged.
+The entries of the fragments go after the entries that are already in `[Unreleased]`, in the order in which their pull requests merged.
 
-After each merge into `main`, a workflow writes the preview to the [`changelog` branch](https://github.com/tailwindlabs/tailwindcss/blob/changelog/CHANGELOG.md#unreleased).
+After each merge into `main` that adds a fragment, `.github/workflows/changelog.yml` runs `compile` and pushes the result to `main`. It uses the `CHANGELOG_TOKEN` secret, a personal access token of an admin, because only admins can push to `main` without a pull request.
