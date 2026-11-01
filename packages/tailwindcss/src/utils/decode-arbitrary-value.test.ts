@@ -157,6 +157,12 @@ describe('adds spaces around math operators', () => {
 
     // `-infinity` is a keyword and should not have spaces around the `-`
     ['atan(1 + -infinity)', 'atan(1 + -infinity)'],
+
+    // Don't format the contents of strings
+    ["'(min(1,2))'", "'(min(1,2))'"],
+    ['"(calc(1px+2px))"', '"(calc(1px+2px))"'],
+    ["calc(1+2)_'min(1,2)'", "calc(1 + 2) 'min(1,2)'"],
+    ["calc(var(--a\\'b)+1px)", "calc(var(--a\\'b) + 1px)"],
   ]
 
   it.each(table)('%s', (input, output) => {
