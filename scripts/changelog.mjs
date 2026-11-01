@@ -99,26 +99,21 @@ export function loadFragments(root, { git = true } = {}) {
 // squash merges, so the subject of that commit ends with the number of the
 // pull request, e.g. `Fix the thing (#12345)`.
 function findCommits(root) {
-  let output
-  try {
-    output = execFileSync(
-      'git',
-      [
-        '-c',
-        'core.quotePath=false',
-        'log',
-        '--diff-filter=A',
-        '--no-renames',
-        '--format=%x00%ct %s',
-        '--name-only',
-        '--',
-        FRAGMENTS_DIR,
-      ],
-      { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
-    )
-  } catch {
-    return new Map()
-  }
+  let output = execFileSync(
+    'git',
+    [
+      '-c',
+      'core.quotePath=false',
+      'log',
+      '--diff-filter=A',
+      '--no-renames',
+      '--format=%x00%ct %s',
+      '--name-only',
+      '--',
+      FRAGMENTS_DIR,
+    ],
+    { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] },
+  )
 
   let commits = new Map()
   for (let [order, chunk] of output.split('\0').slice(1).entries()) {
