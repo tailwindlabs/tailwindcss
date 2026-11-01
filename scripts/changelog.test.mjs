@@ -12,8 +12,6 @@ const CHANGELOG = `# Changelog
 
 ## [Unreleased]
 
-See the [preview](https://github.com/tailwindlabs/tailwindcss/blob/changelog/CHANGELOG.md#unreleased).
-
 ### Fixed
 
 - Fix an existing bug ([#1](https://github.com/tailwindlabs/tailwindcss/pull/1))
@@ -91,8 +89,17 @@ describe('preview', () => {
     `)
   })
 
-  test('keeps `CHANGELOG.md` as it is without fragments, except for the intro of `[Unreleased]`', () => {
-    expect(preview(CHANGELOG, [])).toEqual(CHANGELOG.replace(/\nSee the \[preview\].*\n/, ''))
+  test('keeps `CHANGELOG.md` as it is without fragments', () => {
+    expect(preview(CHANGELOG, [])).toEqual(CHANGELOG)
+  })
+
+  test('replaces `- Nothing yet!` with the entries of the fragments', () => {
+    let changelog = CHANGELOG.replace(/### Fixed\n\n- Fix an existing bug.*\n/, '- Nothing yet!\n')
+    let fragments = [{ file: '.changelog/a.md', content: '### Fixed\n\n- Fix a bug\n', pr: 2 }]
+
+    expect(preview(changelog, fragments)).toContain(
+      '## [Unreleased]\n\n### Fixed\n\n- Fix a bug ([#2](https://github.com/tailwindlabs/tailwindcss/pull/2))\n\n## [1.0.0]',
+    )
   })
 
   test('shows `- Nothing yet!` without entries', () => {
@@ -131,7 +138,7 @@ describe('preview', () => {
 
     expect(() => preview(changelog, [])).toThrowErrorMatchingInlineSnapshot(`
       [Error: Found problems in the changelog:
-        CHANGELOG.md:7: Unknown section \`### Fixes\`. Use one of: \`### Added\`, \`### Fixed\`, \`### Changed\`, \`### Deprecated\`, \`### Removed\`, \`### Security\`.
+        CHANGELOG.md:5: Unknown section \`### Fixes\`. Use one of: \`### Added\`, \`### Fixed\`, \`### Changed\`, \`### Deprecated\`, \`### Removed\`, \`### Security\`.
       See \`.changelog/README.md\` for the format.]
     `)
   })
@@ -149,7 +156,7 @@ describe('release', () => {
 
         ## [Unreleased]
 
-        See the [preview](https://github.com/tailwindlabs/tailwindcss/blob/changelog/CHANGELOG.md#unreleased).
+        - Nothing yet!
 
         ## [1.1.0] - 2026-10-17
 
@@ -172,14 +179,6 @@ describe('release', () => {
         [1.0.0]: https://github.com/tailwindlabs/tailwindcss/releases/tag/v1.0.0
         "
       `)
-  })
-
-  test('starts `[Unreleased]` with `- Nothing yet!` without an intro', () => {
-    let changelog = CHANGELOG.replace(/\nSee the \[preview\].*\n/, '')
-
-    expect(release(changelog, [], { version: 'v1.1.0', date: '2026-10-17' })).toContain(
-      '## [Unreleased]\n\n- Nothing yet!\n\n## [1.1.0] - 2026-10-17\n\n### Fixed',
-    )
   })
 
   test('reports problems', () => {
@@ -228,6 +227,32 @@ describe('git', () => {
 
         "
       `)
+  })
+
+  test('`compile` moves the fragments into `CHANGELOG.md`, and deletes them', () => {
+    let dir = tmpdir()
+    git(dir, ['init', '--quiet'])
+
+    write(
+      dir,
+      'scripts/changelog.mjs',
+      fs.readFileSync(path.join(__dirname, 'changelog.mjs'), 'utf8'),
+    )
+    write(dir, 'CHANGELOG.md', CHANGELOG)
+    write(dir, '.changelog/README.md', '# Changelog fragments\n')
+    write(dir, '.changelog/fix.md', '### Fixed\n\n- Fix a new bug\n')
+    git(dir, ['add', '.'])
+    git(dir, ['commit', '--quiet', '-m', 'Fix a new bug (#30)'])
+
+    node(dir, ['scripts/changelog.mjs', 'compile'])
+
+    expect(fs.readdirSync(path.join(dir, '.changelog'))).toEqual(['README.md'])
+    expect(fs.readFileSync(path.join(dir, 'CHANGELOG.md'), 'utf8')).toEqual(
+      CHANGELOG.replace(
+        /(- Fix an existing bug.*\n)/,
+        '$1- Fix a new bug ([#30](https://github.com/tailwindlabs/tailwindcss/pull/30))\n',
+      ),
+    )
   })
 
   test('`release` writes `CHANGELOG.md` for `scripts/release-notes.mjs`, and deletes the fragments', () => {

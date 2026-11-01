@@ -7,6 +7,7 @@
 // Usage:
 //
 //   node ./scripts/changelog.mjs                           Print `CHANGELOG.md` with the fragments in `[Unreleased]`
+//   node ./scripts/changelog.mjs compile                   Move the fragments into `[Unreleased]` of `CHANGELOG.md`
 //   node ./scripts/changelog.mjs check                     Validate the fragments
 //   node ./scripts/changelog.mjs release <version> [date]  Move the fragments into a `## [<version>] - <date>` section
 
@@ -26,7 +27,7 @@ const NOTHING_YET = '- Nothing yet!'
 // existing releases use, which differs from the order of Keep a Changelog.
 export const SECTIONS = ['Added', 'Fixed', 'Changed', 'Deprecated', 'Removed', 'Security']
 
-// Print the full `CHANGELOG.md`, with the entries of the fragments in the
+// The full `CHANGELOG.md`, with the entries of the fragments in the
 // `[Unreleased]` section.
 export function preview(changelog, fragments) {
   let { head, body, tail } = compile(changelog, fragments)
@@ -45,7 +46,7 @@ export function release(changelog, fragments, { version, date }) {
     throw new Error(`Expected a date like \`2026-10-17\`, got \`${date}\`.`)
   }
 
-  let { head, intro, body, tail } = compile(changelog, fragments)
+  let { head, body, tail } = compile(changelog, fragments)
 
   if (!body) {
     throw new Error('There are no changes to release.')
@@ -66,16 +67,7 @@ export function release(changelog, fragments, { version, date }) {
       `[${version}]: ${base}/compare/${previous}...v${version}`,
   )
 
-  // The intro of `[Unreleased]` (e.g. the link to the preview) stays in the
-  // new `[Unreleased]` section.
-  return join([
-    head,
-    '## [Unreleased]',
-    intro || NOTHING_YET,
-    `## [${version}] - ${date}`,
-    body,
-    tail,
-  ])
+  return join([head, '## [Unreleased]', NOTHING_YET, `## [${version}] - ${date}`, body, tail])
 }
 
 // Read the fragments in `.changelog/`. With `git`, each fragment also gets the
@@ -147,7 +139,7 @@ function findCommits(root) {
 // fragments. The preview and the release both use this, so the preview shows
 // exactly what the release writes.
 function compile(changelog, fragments) {
-  let { head, intro, sections, tail, errors } = parseChangelog(changelog.replaceAll('\r\n', '\n'))
+  let { head, sections, tail, errors } = parseChangelog(changelog.replaceAll('\r\n', '\n'))
 
   for (let fragment of [...fragments].sort(compareFragments)) {
     if (fragment.content === null || !fragment.file.endsWith('.md')) {
@@ -183,7 +175,7 @@ function compile(changelog, fragments) {
     .map((name) => `### ${name}\n\n${sections.get(name).join('\n')}`)
     .join('\n\n')
 
-  return { head, intro, body, tail }
+  return { head, body, tail }
 }
 
 // The order in which the pull requests merged: by the date of the commit that
@@ -196,8 +188,7 @@ function compareFragments(a, b) {
   )
 }
 
-// Split `CHANGELOG.md` around the `[Unreleased]` section. The lines before its
-// first `###` heading are the intro, e.g. the link to the preview.
+// Split `CHANGELOG.md` around the `[Unreleased]` section.
 function parseChangelog(changelog) {
   let lines = changelog.split('\n')
 
@@ -211,22 +202,15 @@ function parseChangelog(changelog) {
   )
   if (end === -1) end = lines.length
 
-  let body = lines.slice(start + 1, end)
-  let first = body.findIndex((line) => line.startsWith('### '))
-  if (first === -1) first = body.length
-
-  let { sections, errors } = parseSections(
-    body.slice(first).join('\n'),
-    'CHANGELOG.md',
-    start + 1 + first,
-  )
+  // `- Nothing yet!` is the only line that can be outside of a section
+  let body = lines
+    .slice(start + 1, end)
+    .map((line) => (line.trim() === NOTHING_YET ? '' : line))
+    .join('\n')
+  let { sections, errors } = parseSections(body, 'CHANGELOG.md', start + 1)
 
   return {
     head: lines.slice(0, start).join('\n'),
-    intro: body
-      .slice(0, first)
-      .filter((line) => line.trim() !== NOTHING_YET)
-      .join('\n'),
     sections: new Map(SECTIONS.map((name) => [name, sections.get(name) ?? []])),
     tail: lines.slice(end).join('\n'),
     errors,
@@ -325,6 +309,19 @@ function main([command = 'preview', ...args]) {
       break
     }
 
+    case 'compile': {
+      let fragments = loadFragments(root)
+      fs.writeFileSync(changelogPath, preview(changelog, fragments))
+      for (let fragment of fragments) {
+        fs.rmSync(path.join(root, fragment.file))
+      }
+
+      console.log(
+        `Moved ${fragments.length} fragment(s) into \`[Unreleased]\` in \`CHANGELOG.md\`.`,
+      )
+      break
+    }
+
     case 'check': {
       let fragments = loadFragments(root, { git: false })
       preview(changelog, fragments)
@@ -353,7 +350,9 @@ function main([command = 'preview', ...args]) {
     }
 
     default: {
-      throw new Error(`Unknown command \`${command}\`. Use \`preview\`, \`check\` or \`release\`.`)
+      throw new Error(
+        `Unknown command \`${command}\`. Use \`preview\`, \`compile\`, \`check\` or \`release\`.`,
+      )
     }
   }
 }
