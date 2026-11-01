@@ -3322,6 +3322,100 @@ mod scanner {
         );
     }
 
+    #[test]
+    fn test_explicit_file_in_ignored_but_rewhitelisted_folder_keeps_its_siblings() {
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "/packages/app/generated/\n"),
+                ("packages/app/.gitignore", "!/generated/\n"),
+                (
+                    "packages/app/generated/button.html",
+                    "content-['generated/button.html']",
+                ),
+                (
+                    "packages/app/generated/card.html",
+                    "content-['generated/card.html']",
+                ),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source 'packages/app/generated/button.html'",
+            ],
+        );
+
+        // The nested `.gitignore` whitelists `generated` again, so automatic source detection
+        // scans all of it.
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       /packages/app/generated/
+        └── ✓ packages
+            └── ✓ app
+                ├── ✗ .gitignore
+                │       !/generated/
+                └── ✓ generated
+                    ├── ✓ button.html
+                    └── ✓ card.html
+        ");
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['generated/button.html']",
+                "content-['generated/card.html']"
+            ]
+        );
+    }
+
+    #[test]
+    fn test_explicit_file_in_dot_ignored_folder_does_not_scan_its_siblings() {
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
+            &[
+                (".ignore", "dist/\n"),
+                ("dist/button.js", "content-['dist/button.js']"),
+                ("dist/card.js", "content-['dist/card.js']"),
+            ],
+            vec!["@source '**/*'", "@source 'dist/button.js'"],
+        );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✓ .ignore
+        └── ✓ dist
+            ├── ✓ button.js
+            └── ✗ card.js
+        ");
+
+        assert_eq!(candidates, vec!["content-['dist/button.js']"]);
+    }
+
+    #[test]
+    fn test_explicit_file_in_git_excluded_folder_does_not_scan_its_siblings() {
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
+            &[
+                (".git/info/exclude", "dist/\n"),
+                ("dist/button.js", "content-['dist/button.js']"),
+                ("dist/card.js", "content-['dist/card.js']"),
+            ],
+            vec!["@source '**/*'", "@source 'dist/button.js'"],
+        );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        └── ✓ dist
+            ├── ✓ button.js
+            └── ✗ card.js
+        ");
+
+        assert_eq!(candidates, vec!["content-['dist/button.js']"]);
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/19844
     #[test]
     fn test_allow_explicit_sources_ignored_by_allow_list_gitignore() {

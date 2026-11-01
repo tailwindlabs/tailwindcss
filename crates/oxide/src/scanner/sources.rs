@@ -6,6 +6,7 @@ use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
+use super::new_walk_builder;
 
 #[derive(Debug, Clone)]
 pub struct PublicSourceEntry {
@@ -138,27 +139,32 @@ impl Sources {
 /// !/ba*/*.html          ← then ensure we scan the `*.html` files in it as well
 /// ```
 ///
-/// `ignored_bases` contains the bases of patterns that are ignored by default (e.g. inside
-/// `node_modules`, or gitignored). An auto source detection root does not walk into these, so
-/// patterns with such a base are restricted even when they are nested inside that root.
+/// A pattern nested inside an automatic source detection root is only left unrestricted when that
+/// root actually walks into the pattern's base. A base that the root skips (e.g. inside
+/// `node_modules`, or ignored by a `.gitignore` file) is walked on its own, so it has to be
+/// restricted to the pattern.
 ///
-fn expand_restricted_patterns(
-    sources: Vec<SourceEntry>,
-    ignored_bases: &FxHashSet<PathBuf>,
-) -> Vec<SourceEntry> {
-    // Roots that are walked recursively, and whether the root itself is ignored by default (in
-    // which case everything inside of it is walked, ignored or not).
+fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
+    // Roots that are walked recursively, and whether they walk into ignored folders as well.
     let unrestricted_roots = sources
         .iter()
         .filter_map(|source| match source {
             SourceEntry::Auto { base } => Some((base.clone(), false)),
             SourceEntry::External { base } => Some((base.clone(), true)),
             SourceEntry::Pattern { base, pattern } if pattern.contains("**") => {
-                Some((base.clone(), ignored_bases.contains(base)))
+                Some((base.clone(), false))
             }
             _ => None,
         })
         .collect::<Vec<_>>();
+
+    // Whether walking `root` reaches `base`, cached per `(root, base)` pair.
+    let mut reachable: FxHashMap<(PathBuf, PathBuf), bool> = FxHashMap::default();
+    let mut walks_into = |root: &PathBuf, base: &PathBuf| {
+        *reachable
+            .entry((root.clone(), base.clone()))
+            .or_insert_with(|| walker_reaches(root, base))
+    };
 
     // Bases of restricted patterns. Each of these becomes its own walk root with its own
     // `*` + `!<pattern>` rules, so an ancestor base must not ignore them recursively.
@@ -183,13 +189,8 @@ fn expand_restricted_patterns(
         // includes the case where `base` is _nested_ inside such a root, because everything under
         // an unrestricted root is walked already. Restricting it would incorrectly hide siblings
         // that the broader source is supposed to pick up.
-        //
-        // This does not hold when `base` is ignored by default (e.g. inside `node_modules`) but
-        // the root is not, because then the root never walks into `base`. In that case `base` is
-        // walked on its own, so it has to be restricted to the pattern.
-        let base_is_ignored = ignored_bases.contains(base);
-        if unrestricted_roots.iter().any(|(root, root_is_ignored)| {
-            base.starts_with(root) && (*root_is_ignored || !base_is_ignored)
+        if unrestricted_roots.iter().any(|(root, walks_ignored)| {
+            base.starts_with(root) && (*walks_ignored || walks_into(root, base))
         }) {
             expanded.push(source);
             continue;
@@ -254,6 +255,26 @@ fn expand_restricted_patterns(
     }
 
     expanded
+}
+
+/// Whether walking `root` with the automatic source detection rules reaches the `base` folder.
+///
+/// This uses the same walker setup as the scanner, so every ignore rule it respects is taken into
+/// account (`.gitignore`, `.ignore` and `.git/info/exclude` files, including whitelists in nested
+/// files). Only the folders between `root` and `base` are visited.
+fn walker_reaches(root: &Path, base: &Path) -> bool {
+    if root == base {
+        return true;
+    }
+
+    let mut builder = new_walk_builder(root);
+    let target = base.to_path_buf();
+    builder.filter_entry(move |entry| target.starts_with(entry.path()));
+
+    builder
+        .build()
+        .filter_map(Result::ok)
+        .any(|entry| entry.path() == base)
 }
 
 impl PublicSourceEntry {
@@ -793,10 +814,6 @@ pub fn public_source_entries_to_private_source_entries(
         .map(|cwd| dunce::canonicalize(&cwd).unwrap_or(cwd))
         .ok();
 
-    // Bases of explicit patterns that are ignored by default (e.g. inside `node_modules`, or
-    // gitignored).
-    let mut ignored_pattern_bases: FxHashSet<PathBuf> = FxHashSet::default();
-
     // Convert from public SourceEntry to private SourceEntry
     let sources = expanded_globs
         .into_iter()
@@ -805,18 +822,64 @@ pub fn public_source_entries_to_private_source_entries(
 
             // Promote auto-sources to external sources if they were gitignored
             if let SourceEntry::Auto { ref base } = source {
-                if is_gitignored(base, &mut gitignores, cwd.as_deref()) {
-                    source = SourceEntry::External { base: base.clone() };
-                }
-            }
+                let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
 
-            // Track the bases of explicit patterns that automatic source detection would not
-            // walk, so they are always restricted to the pattern itself.
-            if let SourceEntry::Pattern { ref base, .. } = source {
-                if inside_ignored_content_dir(&base.to_string_lossy())
-                    || is_gitignored(base, &mut gitignores, cwd.as_deref())
-                {
-                    ignored_pattern_bases.insert(base.clone());
+                // Walk up from the folder, applying each `.gitignore` relative to the directory
+                // that contains it (matching git), and stop at the git repository root so
+                // `.gitignore` files outside of the repo are not considered.
+                for dir in base.ancestors() {
+                    let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+                        let path = dir.join(".gitignore");
+
+                        // `Gitignore::new` roots the matcher at the directory containing the file,
+                        // so patterns match relative to it.
+                        path.is_file().then(|| Gitignore::new(&path).0)
+                    });
+
+                    // Only `.gitignore` files in ancestors of `base` can ignore `base` itself.
+                    // Patterns in `base`'s own `.gitignore` only match paths _inside_ `base`, never
+                    // `base` itself (the file walker still applies them to `base`'s contents).
+                    //
+                    // Skipping `base`'s own `.gitignore` also prevents a false positive for
+                    // whitelist style `.gitignore` files, because relativizing `base` against
+                    // itself yields the empty path, which incorrectly matches `/*`.
+                    //
+                    // E.g.:
+                    //
+                    // ```gitignore
+                    // /*
+                    // !/.gitignore
+                    // !/app
+                    // !/public
+                    // ```
+                    //
+                    // Everything inside `base` except `.gitignore`, `app` and `public` is ignored,
+                    // but `base` itself is not.
+                    if dir != base {
+                        if let Some(gitignore) = gitignore {
+                            if gitignore
+                                .matched_path_or_any_parents(&base, true)
+                                .is_ignore()
+                            {
+                                source = SourceEntry::External { base: base.into() };
+                                break;
+                            }
+                        }
+                    }
+
+                    // Stop at the git repository root.
+                    if dir.join(".git").exists() {
+                        break;
+                    }
+
+                    // Without a git repository there is no repository root to stop at. Stop once
+                    // the directory contains the current working directory instead, so `.gitignore`
+                    // files outside of the project (e.g. in the user's home directory) can never
+                    // promote a source to an external source. Note that the file walker still
+                    // applies those `.gitignore` files when deciding which files to scan.
+                    if !inside_git_repo && cwd.as_ref().is_some_and(|cwd| cwd.starts_with(dir)) {
+                        break;
+                    }
                 }
             }
 
@@ -824,88 +887,7 @@ pub fn public_source_entries_to_private_source_entries(
         })
         .collect::<Vec<SourceEntry>>();
 
-    expand_restricted_patterns(sources, &ignored_pattern_bases)
-}
-
-/// Whether `base` is ignored by a `.gitignore` file in one of its ancestors.
-fn is_gitignored(
-    base: &Path,
-    gitignores: &mut FxHashMap<PathBuf, Option<Gitignore>>,
-    cwd: Option<&Path>,
-) -> bool {
-    let inside_git_repo = base.ancestors().any(|dir| dir.join(".git").exists());
-
-    // Walk up from the folder, applying each `.gitignore` relative to the directory
-    // that contains it (matching git), and stop at the git repository root so
-    // `.gitignore` files outside of the repo are not considered.
-    for dir in base.ancestors() {
-        let gitignore = gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
-            let path = dir.join(".gitignore");
-
-            // `Gitignore::new` roots the matcher at the directory containing the file,
-            // so patterns match relative to it.
-            path.is_file().then(|| Gitignore::new(&path).0)
-        });
-
-        // Only `.gitignore` files in ancestors of `base` can ignore `base` itself.
-        // Patterns in `base`'s own `.gitignore` only match paths _inside_ `base`, never
-        // `base` itself (the file walker still applies them to `base`'s contents).
-        //
-        // Skipping `base`'s own `.gitignore` also prevents a false positive for
-        // whitelist style `.gitignore` files, because relativizing `base` against
-        // itself yields the empty path, which incorrectly matches `/*`.
-        //
-        // E.g.:
-        //
-        // ```gitignore
-        // /*
-        // !/.gitignore
-        // !/app
-        // !/public
-        // ```
-        //
-        // Everything inside `base` except `.gitignore`, `app` and `public` is ignored,
-        // but `base` itself is not.
-        if dir != base {
-            if let Some(gitignore) = gitignore {
-                if gitignore
-                    .matched_path_or_any_parents(base, true)
-                    .is_ignore()
-                {
-                    return true;
-                }
-            }
-        }
-
-        // Stop at the git repository root.
-        if dir.join(".git").exists() {
-            break;
-        }
-
-        // Without a git repository there is no repository root to stop at. Stop once
-        // the directory contains the current working directory instead, so `.gitignore`
-        // files outside of the project (e.g. in the user's home directory) can never
-        // mark a source as ignored. Note that the file walker still applies those
-        // `.gitignore` files when deciding which files to scan.
-        if !inside_git_repo && cwd.is_some_and(|cwd| cwd.starts_with(dir)) {
-            break;
-        }
-    }
-
-    false
-}
-
-/// Whether `base` is (inside) a folder that automatic source detection ignores, e.g.
-/// `node_modules`.
-fn inside_ignored_content_dir(base: &str) -> bool {
-    IGNORED_CONTENT_DIRS.iter().any(|dir| {
-        base.contains(&format!(
-            "{}{}{}",
-            std::path::MAIN_SEPARATOR,
-            dir,
-            std::path::MAIN_SEPARATOR
-        )) || base.ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir))
-    })
+    expand_restricted_patterns(sources)
 }
 
 /// Convert a public source entry to a source entry
@@ -928,7 +910,18 @@ impl From<PublicSourceEntry> for SourceEntry {
             };
         }
 
-        match inside_ignored_content_dir(&value.base) {
+        let inside_ignored_content_dir = IGNORED_CONTENT_DIRS.iter().any(|dir| {
+            value.base.contains(&format!(
+                "{}{}{}",
+                std::path::MAIN_SEPARATOR,
+                dir,
+                std::path::MAIN_SEPARATOR
+            )) || value
+                .base
+                .ends_with(&format!("{}{}", std::path::MAIN_SEPARATOR, dir))
+        });
+
+        match inside_ignored_content_dir {
             false => SourceEntry::Auto {
                 base: value.base.into(),
             },

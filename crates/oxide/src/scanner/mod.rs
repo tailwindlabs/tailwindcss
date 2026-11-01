@@ -710,6 +710,71 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
 ///
 /// This is the common setup shared between the full walker (with mtime tracking for re-scans)
 /// and the parallel walker (without mtime tracking for the initial scan).
+/// Create a walker for `root` that applies the same ignore rules as automatic source detection:
+/// `.gitignore`, `.ignore` and `.git/info/exclude` files, and the default auto source detection
+/// rules.
+pub(crate) fn new_walk_builder(root: &Path) -> WalkBuilder {
+    let mut builder = WalkBuilder::new(root);
+
+    // We have to follow symlinks
+    builder.follow_links(true);
+
+    // Scan hidden files / directories
+    builder.hidden(false);
+
+    // Don't respect global gitignore files
+    builder.git_global(false);
+
+    // By default, allow .gitignore files to be used regardless of whether or not
+    // a .git directory is present. This is an optimization for when projects
+    // are first created and may not be in a git repo yet.
+    builder.require_git(false);
+
+    // If we are in a git repo then require it to ensure that only rules within
+    // the repo are used. For example, we don't want to consider a .gitignore file
+    // in the user's home folder if we're in a git repo.
+    //
+    // The alternative is using a call like `.parents(false)` but that will
+    // prevent looking at parent directories for .gitignore files from within
+    // the repo and that's not what we want.
+    //
+    // For example, in a project with this structure:
+    //
+    // home
+    // .gitignore
+    //  my-project
+    //   .gitignore
+    //   apps
+    //     .gitignore
+    //     web
+    //       {root}
+    //
+    // We do want to consider all .gitignore files listed:
+    // - home/.gitignore
+    // - my-project/.gitignore
+    // - my-project/apps/.gitignore
+    //
+    // However, if a repo is initialized inside my-project then only the following
+    // make sense for consideration:
+    // - my-project/.gitignore
+    // - my-project/apps/.gitignore
+    //
+    // Setting the require_git(true) flag conditionally allows us to do this.
+    for parent in root.ancestors() {
+        if parent.join(".git").exists() {
+            builder.require_git(true);
+            break;
+        }
+    }
+
+    // Setup auto source detection rules
+    for ignore in auto_source_detection::RULES.iter() {
+        builder.add_gitignore(ignore.clone());
+    }
+
+    builder
+}
+
 fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
@@ -773,66 +838,10 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
         }
     }
 
-    let mut builder = WalkBuilder::new(first_root?);
-
-    // We have to follow symlinks
-    builder.follow_links(true);
-
-    // Scan hidden files / directories
-    builder.hidden(false);
-
-    // Don't respect global gitignore files
-    builder.git_global(false);
-
-    // By default, allow .gitignore files to be used regardless of whether or not
-    // a .git directory is present. This is an optimization for when projects
-    // are first created and may not be in a git repo yet.
-    builder.require_git(false);
-
-    // If we are in a git repo then require it to ensure that only rules within
-    // the repo are used. For example, we don't want to consider a .gitignore file
-    // in the user's home folder if we're in a git repo.
-    //
-    // The alternative is using a call like `.parents(false)` but that will
-    // prevent looking at parent directories for .gitignore files from within
-    // the repo and that's not what we want.
-    //
-    // For example, in a project with this structure:
-    //
-    // home
-    // .gitignore
-    //  my-project
-    //   .gitignore
-    //   apps
-    //     .gitignore
-    //     web
-    //       {root}
-    //
-    // We do want to consider all .gitignore files listed:
-    // - home/.gitignore
-    // - my-project/.gitignore
-    // - my-project/apps/.gitignore
-    //
-    // However, if a repo is initialized inside my-project then only the following
-    // make sense for consideration:
-    // - my-project/.gitignore
-    // - my-project/apps/.gitignore
-    //
-    // Setting the require_git(true) flag conditionally allows us to do this.
-    for parent in first_root?.ancestors() {
-        if parent.join(".git").exists() {
-            builder.require_git(true);
-            break;
-        }
-    }
+    let mut builder = new_walk_builder(first_root?);
 
     for root in other_roots {
         builder.add(root);
-    }
-
-    // Setup auto source detection rules
-    for ignore in auto_source_detection::RULES.iter() {
-        builder.add_gitignore(ignore.clone());
     }
 
     // Setup ignores based on `@source` definitions
