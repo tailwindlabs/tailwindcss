@@ -212,6 +212,11 @@ export function parse(input: string, opts?: ParseOptions) {
       let start = i
       let colonIdx = -1
 
+      // The end of the value without trailing whitespace and comments. We need
+      // it to find the `!important` flag, because custom properties keep their
+      // comments.
+      let valueEnd = 0
+
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
@@ -236,6 +241,8 @@ export function parse(input: string, opts?: ParseOptions) {
               break
             }
           }
+
+          continue
         }
 
         // End of the "property" of the property-value pair.
@@ -292,9 +299,18 @@ export function parse(input: string, opts?: ParseOptions) {
             closingBracketStack = closingBracketStack.slice(0, -1)
           }
         }
+
+        if (
+          peekChar !== SPACE &&
+          peekChar !== TAB &&
+          peekChar !== LINE_BREAK &&
+          peekChar !== CARRIAGE_RETURN
+        ) {
+          valueEnd = j + 1 - start
+        }
       }
 
-      let declaration = parseDeclaration(buffer, colonIdx)
+      let declaration = parseDeclaration(buffer, colonIdx, valueEnd)
       if (!declaration) {
         throw new CssSyntaxError(
           `Invalid custom property, expected a value`,
@@ -630,8 +646,10 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
 function parseDeclaration(
   buffer: string,
   colonIdx: number = buffer.indexOf(':'),
+  valueEnd: number = buffer.length,
 ): Declaration | null {
   if (colonIdx === -1) return null
+  let property = buffer.slice(0, colonIdx).trim()
 
   // `!important` is only a flag when it is at the end of the value. Anywhere
   // else it is part of the value, e.g. inside of a string:
@@ -639,24 +657,19 @@ function parseDeclaration(
   // ```css
   // content: "a !important b";
   // ```
-  let value = buffer.slice(colonIdx + 1).trim()
-
-  // Custom properties keep their comments, so the flag can be followed by one:
+  //
+  // Custom properties keep their comments, so the flag can be followed by one.
+  // `valueEnd` is the end of the value without those trailing comments:
   //
   // ```css
   // --foo: red !important /* comment */;
   // ```
-  let end = value
-  while (end.endsWith('*/')) {
-    let commentStart = end.lastIndexOf('/*')
-    if (commentStart === -1) break
-    end = end.slice(0, commentStart).trimEnd()
+  let value = buffer.slice(colonIdx + 1, valueEnd).trim()
+  if (value.endsWith('!important')) {
+    return decl(property, value.slice(0, -'!important'.length).trim(), true)
   }
 
-  let important = end.endsWith('!important')
-  if (important) value = end.slice(0, -'!important'.length).trim()
-
-  return decl(buffer.slice(0, colonIdx).trim(), value, important)
+  return decl(property, buffer.slice(colonIdx + 1).trim(), false)
 }
 
 function parseString(

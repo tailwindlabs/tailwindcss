@@ -288,6 +288,46 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should not treat `!important` inside of a comment as the important flag', () => {
+        expect(
+          parse(css`
+            --foo: red /* !important /* example */;
+            --bar: red /* example */ !important /* example */ /* example */;
+            --baz: '/* example' !important;
+            --quux: red !important
+              /* example */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red /* !important /* example */',
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            // The comments after `!important` are dropped, together with the
+            // flag. The value has no place to keep them, and they don't change
+            // its meaning.
+            value: 'red /* example */',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--baz',
+            value: "'/* example'",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--quux',
+            value: 'red',
+            important: true,
+          },
+        ])
+      })
+
       it('should not treat `!important` inside of a value as the important flag', () => {
         expect(
           parse(css`
