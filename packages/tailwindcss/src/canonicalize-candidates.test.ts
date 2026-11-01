@@ -2002,6 +2002,45 @@ describe('regressions', () => {
       ),
     ).toEqual(['link', 'mt-4'])
   })
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/20607
+  test('does not insert a `-` after a utility named `@`', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "./plugin.js";
+      `,
+      {
+        base: __dirname,
+        async loadModule() {
+          return {
+            base: '',
+            path: '',
+            module: plugin(({ matchUtilities }) => {
+              matchUtilities(
+                { '@px': (value) => ({ 'padding-inline': `${value}px` }) },
+                { values: { __BARE_VALUE__: (value) => value.value } },
+              )
+              matchUtilities(
+                { '@': (value) => ({ [value.replace(/-\d+$/, '')]: value.match(/\d+$/)![0] }) },
+                {
+                  values: {
+                    __BARE_VALUE__: (value) =>
+                      value.value.startsWith('--') ? value.value : undefined,
+                  },
+                },
+              )
+            }),
+          }
+        },
+      },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['@px-4', '@--foo-4'])).toEqual([
+      '@px-4',
+      '@--foo-4',
+    ])
+  })
 })
 
 describe('intersection', () => {

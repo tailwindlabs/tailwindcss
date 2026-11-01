@@ -944,7 +944,9 @@ export function printCandidate(designSystem: DesignSystem, candidate: Candidate)
           }
         }
       } else if (candidate.value.kind === 'named') {
-        base += `-${candidate.value.value}`
+        // `@` is a special case for functional utilities. We want to print:
+        // `@foo` instead of `@-foo`
+        base += `${candidate.root === '@' ? '' : '-'}${candidate.value.value}`
       }
     }
   }
