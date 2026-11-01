@@ -3248,6 +3248,80 @@ mod scanner {
         ");
     }
 
+    // https://github.com/tailwindlabs/tailwindcss/issues/20637
+    #[test]
+    fn test_explicit_file_in_node_modules_does_not_scan_its_siblings() {
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
+            &[
+                ("src/index.html", "content-['src/index.html']"),
+                (
+                    "node_modules/ui-lib/dist/button.js",
+                    "content-['node_modules/ui-lib/dist/button.js']",
+                ),
+                (
+                    "node_modules/ui-lib/dist/card.js",
+                    "content-['node_modules/ui-lib/dist/card.js']",
+                ),
+            ],
+            vec![
+                "@source '**/*'",
+                "@source 'node_modules/ui-lib/dist/button.js'",
+            ],
+        );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✓ node_modules
+        │   └── ✓ ui-lib
+        │       └── ✓ dist
+        │           ├── ✓ button.js
+        │           └── ✗ card.js
+        └── ✓ src
+            └── ✓ index.html
+        ");
+
+        assert_eq!(
+            candidates,
+            vec![
+                "content-['node_modules/ui-lib/dist/button.js']",
+                "content-['src/index.html']"
+            ]
+        );
+    }
+
+    #[test]
+    fn test_explicit_file_in_gitignored_folder_does_not_scan_its_siblings() {
+        let ScanResult {
+            candidates, tree, ..
+        } = scan_with_globs(
+            &[
+                (".gitignore", "dist/\n"),
+                ("src/index.html", "content-['src/index.html']"),
+                ("dist/button.js", "content-['dist/button.js']"),
+                ("dist/card.js", "content-['dist/card.js']"),
+            ],
+            vec!["@source '**/*'", "@source 'dist/button.js'"],
+        );
+
+        assert_snapshot!(tree, @"
+        . (git)
+        ├── ✗ .gitignore
+        │       dist/
+        ├── ✓ dist
+        │   ├── ✓ button.js
+        │   └── ✗ card.js
+        └── ✓ src
+            └── ✓ index.html
+        ");
+
+        assert_eq!(
+            candidates,
+            vec!["content-['dist/button.js']", "content-['src/index.html']"]
+        );
+    }
+
     // https://github.com/tailwindlabs/tailwindcss/issues/19844
     #[test]
     fn test_allow_explicit_sources_ignored_by_allow_list_gitignore() {
