@@ -6,6 +6,7 @@ use std::path::{Component, Path, PathBuf};
 use tracing::{event, Level};
 
 use super::auto_source_detection::IGNORED_CONTENT_DIRS;
+use super::new_walk_builder;
 
 #[derive(Debug, Clone)]
 pub struct PublicSourceEntry {
@@ -138,15 +139,32 @@ impl Sources {
 /// !/ba*/*.html          ← then ensure we scan the `*.html` files in it as well
 /// ```
 ///
+/// A pattern nested inside an automatic source detection root is only left unrestricted when that
+/// root actually walks into the pattern's base. A base that the root skips (e.g. inside
+/// `node_modules`, or ignored by a `.gitignore` file) is walked on its own, so it has to be
+/// restricted to the pattern.
+///
 fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
+    // Roots that are walked recursively, and whether they walk into ignored folders as well.
     let unrestricted_roots = sources
         .iter()
         .filter_map(|source| match source {
-            SourceEntry::Auto { base } | SourceEntry::External { base } => Some(base.clone()),
-            SourceEntry::Pattern { base, pattern } if pattern.contains("**") => Some(base.clone()),
+            SourceEntry::Auto { base } => Some((base.clone(), false)),
+            SourceEntry::External { base } => Some((base.clone(), true)),
+            SourceEntry::Pattern { base, pattern } if pattern.contains("**") => {
+                Some((base.clone(), false))
+            }
             _ => None,
         })
         .collect::<Vec<_>>();
+
+    // Whether walking `root` reaches `base`, cached per `(root, base)` pair.
+    let mut reachable: FxHashMap<(PathBuf, PathBuf), bool> = FxHashMap::default();
+    let mut walks_into = |root: &PathBuf, base: &PathBuf| {
+        *reachable
+            .entry((root.clone(), base.clone()))
+            .or_insert_with(|| walker_reaches(root, base))
+    };
 
     // Bases of restricted patterns. Each of these becomes its own walk root with its own
     // `*` + `!<pattern>` rules, so an ancestor base must not ignore them recursively.
@@ -171,7 +189,9 @@ fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
         // includes the case where `base` is _nested_ inside such a root, because everything under
         // an unrestricted root is walked already. Restricting it would incorrectly hide siblings
         // that the broader source is supposed to pick up.
-        if unrestricted_roots.iter().any(|root| base.starts_with(root)) {
+        if unrestricted_roots.iter().any(|(root, walks_ignored)| {
+            base.starts_with(root) && (*walks_ignored || walks_into(root, base))
+        }) {
             expanded.push(source);
             continue;
         }
@@ -182,7 +202,9 @@ fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
             // When another source root is nested inside this base — an unrestricted root, or the
             // base of another restricted pattern (which is walked from its own root with its own
             // rules) — only ignore direct children so the nested root can still be walked.
-            let has_nested_root = unrestricted_roots.iter().any(|root| root.starts_with(base))
+            let has_nested_root = unrestricted_roots
+                .iter()
+                .any(|(root, _)| root.starts_with(base))
                 || pattern_roots
                     .iter()
                     .any(|root| root != base && root.starts_with(base));
@@ -233,6 +255,26 @@ fn expand_restricted_patterns(sources: Vec<SourceEntry>) -> Vec<SourceEntry> {
     }
 
     expanded
+}
+
+/// Whether walking `root` with the automatic source detection rules reaches the `base` folder.
+///
+/// This uses the same walker setup as the scanner, so every ignore rule it respects is taken into
+/// account (`.gitignore`, `.ignore` and `.git/info/exclude` files, including whitelists in nested
+/// files). Only the folders between `root` and `base` are visited.
+fn walker_reaches(root: &Path, base: &Path) -> bool {
+    if root == base {
+        return true;
+    }
+
+    let mut builder = new_walk_builder(root);
+    let target = base.to_path_buf();
+    builder.filter_entry(move |entry| target.starts_with(entry.path()));
+
+    builder
+        .build()
+        .filter_map(Result::ok)
+        .any(|entry| entry.path() == base)
 }
 
 impl PublicSourceEntry {
