@@ -279,7 +279,7 @@ export function optimizeAst(
       }
 
       // Track used animation names
-      if (node.property === 'animation') {
+      if (node.property === 'animation' || node.property === 'animation-name') {
         for (let keyframeName of extractKeyframeNames(node.value)) {
           usedKeyframeNames.add(keyframeName)
         }
