@@ -172,3 +172,18 @@ test('empty URLs are left alone', async () => {
   expect(result).toContain('url( )')
   expect(result).toContain('url(./foo/bar/image.jpg)')
 })
+
+test('URLs next to an `image-set(…)` in the same declaration are rewritten', async () => {
+  let result = await rewriteUrls({
+    root: '/root',
+    base: '/root/foo/bar',
+    css: '.foo { background-image: url(./a.png), image-set(url(./b.png) 1x, "./c.png" 2x), url("./d.png"); }',
+  })
+
+  expect(result).toMatchInlineSnapshot(`
+    ".foo {
+      background-image: url(./foo/bar/a.png), image-set(url(./foo/bar/b.png) 1x, url("./foo/bar/c.png") 2x), url("./foo/bar/d.png");
+    }
+    "
+  `)
+})

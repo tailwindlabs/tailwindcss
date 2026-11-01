@@ -120,7 +120,7 @@ function rewriteCssUrls(css: string, replacer: CssUrlReplacer): Promise<string> 
 }
 
 async function rewriteCssImageSet(css: string, replacer: CssUrlReplacer): Promise<string> {
-  return await asyncReplace(css, cssImageSetRE, async (match) => {
+  const rewriteImageSet = async (match: RegExpExecArray) => {
     const [, rawUrl] = match
     const url = await processSrcSet(rawUrl, async ({ url }) => {
       // the url maybe url(...)
@@ -133,7 +133,15 @@ async function rewriteCssImageSet(css: string, replacer: CssUrlReplacer): Promis
       return url
     })
     return url
-  })
+  }
+
+  return await asyncReplace(
+    css,
+    cssImageSetRE,
+    rewriteImageSet,
+    // `url(…)`s next to the `image-set(…)`, e.g. `url(a.png), image-set(…)`
+    (rest) => rewriteCssUrls(rest, replacer),
+  )
 }
 
 async function doUrlReplace(
@@ -214,15 +222,16 @@ async function asyncReplace(
   input: string,
   re: RegExp,
   replacer: (match: RegExpExecArray) => string | Promise<string>,
+  unmatchedReplacer: (input: string) => string | Promise<string> = (input) => input,
 ): Promise<string> {
   let match: RegExpExecArray | null
   let remaining = input
   let rewritten = ''
   while ((match = re.exec(remaining))) {
-    rewritten += remaining.slice(0, match.index)
+    rewritten += await unmatchedReplacer(remaining.slice(0, match.index))
     rewritten += await replacer(match)
     remaining = remaining.slice(match.index + match[0].length)
   }
-  rewritten += remaining
+  rewritten += await unmatchedReplacer(remaining)
   return rewritten
 }
