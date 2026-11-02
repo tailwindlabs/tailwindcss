@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Use the latest file contents when an atomic save lands during a CLI `--watch` rebuild ([#20636](https://github.com/tailwindlabs/tailwindcss/pull/20636))
 - Ensure classes are extracted when a variant precedes an arbitrary variant containing a quoted attribute selector (e.g. `focus-visible:[&:not([aria-selected="true"])]:bg-red-500`) ([#20374](https://github.com/tailwindlabs/tailwindcss/pull/20374))
 - Fix negation of `theme()` in arbitrary values (e.g. `-m-[theme(margin.1)]`) ([#19928](https://github.com/tailwindlabs/tailwindcss/pull/19928))
 

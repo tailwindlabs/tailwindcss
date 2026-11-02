@@ -50,15 +50,12 @@ export function createWatcher(args, { state, rebuild }) {
       : false,
   })
 
-  // A queue of rebuilds, file reads, etc… to run
-  let chain = Promise.resolve()
-
   /**
-   * A list of files that have been changed since the last rebuild
+   * Latest pending change per file.
    *
-   * @type {{file: string, content: () => Promise<string>, extension: string}[]}
+   * @type {Map<string, {file: string, content: () => Promise<string>, extension: string}>}
    */
-  let changedContent = []
+  let changedFiles = new Map()
 
   /**
    * A list of files for which a rebuild has already been queued.
@@ -68,31 +65,48 @@ export function createWatcher(args, { state, rebuild }) {
    **/
   let pendingRebuilds = new Set()
 
-  let _timer
-  let _reject
+  /** @type {ReturnType<typeof setTimeout> | null} */
+  let timer = null
 
-  /**
-   * Rebuilds the changed files and resolves when the rebuild is
-   * complete regardless of whether it was successful or not
-   */
-  async function rebuildAndContinue() {
-    let changes = changedContent.splice(0)
+  let running = false
 
-    // There are no changes to rebuild so we can just do nothing
+  function arm() {
+    if (running) {
+      return
+    }
+
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(run, 10)
+  }
+
+  async function run() {
+    timer = null
+
+    let changes = [...changedFiles.values()]
+    changedFiles.clear()
+
     if (changes.length === 0) {
-      return Promise.resolve()
+      return
     }
 
     // Clear all pending rebuilds for the about-to-be-built files
     changes.forEach((change) => pendingRebuilds.delete(change.file))
 
-    // Resolve the promise even when the rebuild fails
-    return rebuild(changes).then(
-      () => {},
-      (e) => {
-        console.error(e.toString())
-      }
-    )
+    running = true
+    try {
+      await rebuild(changes)
+    } catch (e) {
+      console.error(e.toString())
+    } finally {
+      running = false
+    }
+
+    if (changedFiles.size > 0) {
+      arm()
+    }
   }
 
   /**
@@ -115,33 +129,15 @@ export function createWatcher(args, { state, rebuild }) {
     // It MUST happen synchronously before the rebuild is queued for this to be effective
     pendingRebuilds.add(file)
 
-    changedContent.push({
+    changedFiles.set(file, {
       file,
       content: content ?? (() => fs.promises.readFile(file, 'utf8')),
       extension: path.extname(file).slice(1),
     })
 
-    if (_timer) {
-      clearTimeout(_timer)
-      _reject()
-    }
+    arm()
 
-    // If a rebuild is already in progress we don't want to start another one until the 10ms timer has expired
-    chain = chain.then(
-      () =>
-        new Promise((resolve, reject) => {
-          _timer = setTimeout(resolve, 10)
-          _reject = reject
-        })
-    )
-
-    // Resolves once this file has been rebuilt (or the rebuild for this file has failed)
-    // This queues as many rebuilds as there are changed files
-    // But those rebuilds happen after some delay
-    // And will immediately resolve if there are no changes
-    chain = chain.then(rebuildAndContinue, rebuildAndContinue)
-
-    return chain
+    return Promise.resolve()
   }
 
   watcher.on('change', (file) => recordChangedFile(file))
@@ -184,23 +180,17 @@ export function createWatcher(args, { state, rebuild }) {
       return
     }
 
-    // We'll go ahead and add the file to the pending rebuilds list here
-    // It'll be removed when the rebuild starts unless the read fails
-    // which will be taken care of as well
     pendingRebuilds.add(filePath)
 
     async function enqueue() {
       try {
-        // We need to read the file as early as possible outside of the chain
-        // because it may be gone by the time we get to it. doing the read
-        // immediately increases the chance that the file is still there
+        // The file may be gone by the time the rebuild runs.
         let content = await readFileWithRetries(path.resolve(filePath))
 
         if (content === undefined) {
           return
         }
 
-        // This will push the rebuild onto the chain
         // We MUST skip the rebuild check here otherwise the rebuild will never happen on Linux
         // This is because the order of events and timing is different on Linux
         // @ts-ignore: TypeScript isn't picking up that content is a string here
