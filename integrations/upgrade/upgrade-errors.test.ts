@@ -111,6 +111,12 @@ test(
   async ({ exec, expect }) => {
     // Use `bun` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
+
+    // As of bun v1.4.4, `bun install` copies the `overrides` from
+    // `pnpm-workspace.yaml` into `package.json`. The pnpm specific syntax
+    // (e.g. `@tailwindcss/node>tailwindcss`) then makes `npx` fail.
+    await exec('rm ./pnpm-workspace.yaml')
+
     try {
       await exec('npx bun install', {}, { ignoreStdErr: true })
     } catch (e) {
