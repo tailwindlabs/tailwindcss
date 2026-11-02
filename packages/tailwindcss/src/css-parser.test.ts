@@ -518,6 +518,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should parse a custom property with an unclosed bracket at the end of the input', () => {
+        expect(parse('--foo: [bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '[bar', important: false },
+        ])
+        expect(parse('color: red; --foo: (bar')).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: false },
+          { kind: 'declaration', property: '--foo', value: '(bar', important: false },
+        ])
+      })
+
       it('should parse a custom property with an embedded programming language', () => {
         expect(
           parse(css`
