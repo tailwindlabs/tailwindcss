@@ -48,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure the `@property` fallback isn't applied in Safari versions that no longer support `margin-trim: inline` ([#20569](https://github.com/tailwindlabs/tailwindcss/pull/20569))
 - Treat viewport units like `dvmin` and `svi` and font-relative units like `cap` and `rex` as lengths in arbitrary values (e.g. `text-[10dvmin]` generates `font-size` instead of `color`) ([#20516](https://github.com/tailwindlabs/tailwindcss/pull/20516))
 - Write plugin logs to stderr in `tailwindcss canonicalize` so they don't end up in the results on stdout ([#20561](https://github.com/tailwindlabs/tailwindcss/pull/20561))
-- Extract class shorthands on later lines when Pug text, comments, or quoted attribute values contain unbalanced brackets ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547))
+- Extract class shorthands on later lines when Pug text, comments, or quoted attribute values contain unbalanced brackets, or a quote that doesn't start a string (e.g. `input(pattern=/"/.source)`) ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547), [#20572](https://github.com/tailwindlabs/tailwindcss/pull/20572))
 - Underline the correct occurrence of an unsupported data type in `--value(…)` warnings ([#20554](https://github.com/tailwindlabs/tailwindcss/pull/20554))
 - Canonicalization: prefer an existing candidate when collapsing utilities over another utility with the same default theme value (e.g. `text-foreground text-primary` → `text-primary`, not `text-card-checked-border`) ([#20540](https://github.com/tailwindlabs/tailwindcss/pull/20540))
 - Canonicalization: don't collapse utilities into a utility that uses another theme variable with the same default value (e.g. `mt-card mb-card` → `my-card`, not `my-4`) ([#20574](https://github.com/tailwindlabs/tailwindcss/pull/20574))
@@ -64,7 +64,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't treat `!important` inside strings, comments or `url()` in declaration values as the important flag (e.g. `content: "a !important b"`) ([#20627](https://github.com/tailwindlabs/tailwindcss/pull/20627))
 - Parse a custom property at the end of the input when it has no trailing `;` (e.g. `--foo: bar` as the last declaration) ([#20653](https://github.com/tailwindlabs/tailwindcss/pull/20653))
 - Keep a declaration without a `;` at the end of the CSS input (e.g. `color: red`) ([#20655](https://github.com/tailwindlabs/tailwindcss/pull/20655))
-- Extract class shorthands on later lines when a Pug attribute list contains a quote that doesn't start a string (e.g. `input(pattern=/"/.source)`) ([#20572](https://github.com/tailwindlabs/tailwindcss/pull/20572))
 
 ## [4.3.3] - 2026-07-16
 
