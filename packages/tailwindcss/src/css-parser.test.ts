@@ -180,6 +180,38 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([{ kind: 'declaration', property: 'color', value: 'red', important: false }])
     })
 
+    it('should parse a declaration with a missing ending `;`', () => {
+      expect(parse('color: red')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and a trailing newline', () => {
+      expect(parse('color: red\n')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and `!important`', () => {
+      expect(parse('color: red !important')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: true },
+      ])
+    })
+
+    it('should parse multiple declarations where the last one has a missing ending `;`', () => {
+      expect(parse('a: 1; b: 2')).toEqual([
+        { kind: 'declaration', property: 'a', value: '1', important: false },
+        { kind: 'declaration', property: 'b', value: '2', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` after a custom property', () => {
+      expect(parse('--a: 1;\ncolor: red')).toEqual([
+        { kind: 'declaration', property: '--a', value: '1', important: false },
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
     it('should parse declarations with strings', () => {
       expect(
         parse(css`
