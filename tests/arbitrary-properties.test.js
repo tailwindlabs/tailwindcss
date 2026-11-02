@@ -4,7 +4,7 @@ test('basic arbitrary properties', () => {
   let config = {
     content: [
       {
-        raw: html`<div class="[paint-order:markers]"></div>`,
+        raw: html`<div class="[paint-order:markers] [-webkit-line-clamp:2]"></div>`,
       },
     ],
     corePlugins: { preflight: false },
@@ -19,6 +19,9 @@ test('basic arbitrary properties', () => {
   return run(input, config).then((result) => {
     expect(result.css).toMatchFormattedCss(css`
       ${defaults}
+      .\[-webkit-line-clamp\:2\] {
+        -webkit-line-clamp: 2;
+      }
       .\[paint-order\:markers\] {
         paint-order: markers;
       }
@@ -294,11 +297,11 @@ test('invalid arbitrary property', () => {
   })
 })
 
-test('invalid arbitrary property 2', () => {
+test('invalid arbitrary property names', () => {
   let config = {
     content: [
       {
-        raw: html`[0:02]`,
+        raw: html`[0:02] /[-:T]/g [-1:foo]`,
       },
     ],
     corePlugins: { preflight: false },

@@ -443,7 +443,7 @@ function parseRules(rule, cache, options = {}) {
   return [cache.get(rule), options]
 }
 
-const IS_VALID_PROPERTY_NAME = /^[a-z_-]/
+const IS_VALID_PROPERTY_NAME = /^(?:[a-z_]|-[a-zA-Z_-])/
 
 function isValidPropName(name) {
   return IS_VALID_PROPERTY_NAME.test(name)
