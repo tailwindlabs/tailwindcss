@@ -180,6 +180,42 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([{ kind: 'declaration', property: 'color', value: 'red', important: false }])
     })
 
+    it('should parse a declaration with a missing ending `;`', () => {
+      expect(parse('color: red')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and a trailing newline', () => {
+      expect(parse('color: red\n')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and `!important`', () => {
+      expect(parse('color: red !important')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: true },
+      ])
+    })
+
+    it('should parse multiple declarations where the last one has a missing ending `;`', () => {
+      expect(parse('a: 1; b: 2')).toEqual([
+        { kind: 'declaration', property: 'a', value: '1', important: false },
+        { kind: 'declaration', property: 'b', value: '2', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` after a custom property', () => {
+      expect(parse('--a: 1;\ncolor: red')).toEqual([
+        { kind: 'declaration', property: '--a', value: '1', important: false },
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should not parse a declaration with unbalanced brackets and a missing ending `;`', () => {
+      expect(parse('color: rgb(1, 2')).toEqual([])
+    })
+
     it('should parse declarations with strings', () => {
       expect(
         parse(css`
@@ -479,6 +515,16 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         expect(parse('--foo: bar;\n--baz: rgb(0 0 0)')).toEqual([
           { kind: 'declaration', property: '--foo', value: 'bar', important: false },
           { kind: 'declaration', property: '--baz', value: 'rgb(0 0 0)', important: false },
+        ])
+      })
+
+      it('should parse a custom property with an unclosed bracket at the end of the input', () => {
+        expect(parse('--foo: [bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '[bar', important: false },
+        ])
+        expect(parse('color: red; --foo: (bar')).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: false },
+          { kind: 'declaration', property: '--foo', value: '(bar', important: false },
         ])
       })
 

@@ -597,6 +597,31 @@ export function parse(input: string, opts?: ParseOptions) {
     ast.push(node)
   }
 
+  // If we have any other leftover `buffer` then it can be a declaration that
+  // is not terminated with a semicolon at the end of the input. Unbalanced
+  // brackets (e.g. `color: rgb(1, 2`) mean that the declaration is incomplete.
+  //
+  // E.g.:
+  //
+  // ```css
+  // color: red
+  // ```
+  else if (buffer.length > 0 && closingBracketStack.length === 0) {
+    let declaration = parseDeclaration(buffer)
+    if (declaration) {
+      if (source) {
+        declaration.src = [source, bufferStart, input.length]
+        declaration.dst = [source, bufferStart, input.length]
+      }
+
+      if (parent) {
+        parent.nodes.push(declaration)
+      } else {
+        ast.push(declaration)
+      }
+    }
+  }
+
   // When we are done parsing then everything should be balanced. If we still
   // have a leftover `parent`, then it means that we have an unterminated block.
   if (closingBracketStack.length > 0 && parent) {
