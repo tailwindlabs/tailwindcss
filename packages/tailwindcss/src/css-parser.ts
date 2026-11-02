@@ -598,14 +598,15 @@ export function parse(input: string, opts?: ParseOptions) {
   }
 
   // If we have any other leftover `buffer` then it can be a declaration that
-  // is not terminated with a semicolon at the end of the input.
+  // is not terminated with a semicolon at the end of the input. Unbalanced
+  // brackets (e.g. `color: rgb(1, 2`) mean that the declaration is incomplete.
   //
   // E.g.:
   //
   // ```css
   // color: red
   // ```
-  else if (buffer.length > 0) {
+  else if (buffer.length > 0 && closingBracketStack.length === 0) {
     let declaration = parseDeclaration(buffer)
     if (declaration) {
       if (source) {

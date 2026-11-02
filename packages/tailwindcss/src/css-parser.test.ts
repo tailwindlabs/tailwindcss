@@ -212,6 +212,10 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ])
     })
 
+    it('should not parse a declaration with unbalanced brackets and a missing ending `;`', () => {
+      expect(parse('color: rgb(1, 2')).toEqual([])
+    })
+
     it('should parse declarations with strings', () => {
       expect(
         parse(css`
