@@ -333,6 +333,7 @@ impl Haml {
         //     :update => { :success => "cart", :failure => "error" }
         // ```
         let evaluation_type = cursor.curr();
+        let is_comment = evaluation_type == b'/' || cursor.next() == b'#';
 
         let block_indentation_level = cursor
             .pos
@@ -346,8 +347,12 @@ impl Haml {
             cursor.advance();
         }
 
+        // Whether the last line with content ends in a Ruby continuation. Tracked per line so blank
+        // lines carry it forward without rescanning the lines before them.
+        let mut continues = line_continues(cursor.input, last_newline_position, cursor.pos, false);
+
         // Block is already done, aka just a line
-        if evaluation_type == b'=' && cursor.prev() != b',' {
+        if evaluation_type == b'=' && !continues {
             return cursor.pos;
         }
 
@@ -361,10 +366,12 @@ impl Haml {
 
                 // Track the last newline position
                 b'\n' => {
+                    continues =
+                        line_continues(cursor.input, last_newline_position, cursor.pos, continues);
                     last_newline_position = cursor.pos;
 
                     // We are done with this block
-                    if evaluation_type == b'=' && cursor.prev() != b',' {
+                    if evaluation_type == b'=' && !continues {
                         break;
                     }
 
@@ -377,9 +384,15 @@ impl Haml {
                     // Find first non-whitespace character
                     while cursor.pos < len && cursor.curr().is_ascii_whitespace() {
                         if cursor.curr() == b'\n' {
+                            continues = line_continues(
+                                cursor.input,
+                                last_newline_position,
+                                cursor.pos,
+                                continues,
+                            );
                             last_newline_position = cursor.pos;
 
-                            if evaluation_type == b'=' && cursor.prev() != b',' {
+                            if evaluation_type == b'=' && !continues {
                                 // We are done with this block
                                 break 'outer;
                             }
@@ -392,11 +405,15 @@ impl Haml {
                         .pos
                         .saturating_sub(last_newline_position)
                         .saturating_sub(1); /* The newline itself */
-                    if indentation < block_indentation_level {
+                    // A Ruby continuation line belongs to the block at any indentation
+                    if indentation < block_indentation_level && !(continues && !is_comment) {
                         // We are done with this block
                         break;
                     }
                 }
+
+                // A line of Ruby code continues on the next line when it ends with a comma
+                _ if !is_comment && continues => {}
 
                 // Not whitespace, end of block
                 _ => break,
@@ -407,13 +424,44 @@ impl Haml {
 
         // We didn't find a newline, we reached the end of the input
         if last_known_newline_position == last_newline_position {
-            return cursor.pos;
+            return cursor.pos.min(len);
+        }
+
+        // A Ruby continuation ran to the end of the input, so the final line belongs to the block
+        if cursor.pos >= len && !is_comment && continues {
+            return cursor.pos.min(len);
         }
 
         // Move the cursor to the last newline position
         cursor.move_to(last_newline_position);
 
         last_newline_position
+    }
+}
+
+/// Whether Ruby code continues past the line between `line_start` and `line_end`, which Haml does
+/// when the line ends in a comma. A blank line keeps the `previous` line's answer. Mirrors Haml's
+/// `is_ruby_multiline?`: trailing whitespace is ignored, and the character literals `?,` and `?\,`
+/// are not continuations.
+fn line_continues(input: &[u8], line_start: usize, line_end: usize, previous: bool) -> bool {
+    let line = &input[line_start.min(input.len())..line_end.min(input.len())];
+    let Some(last) = line.iter().rposition(|byte| !byte.is_ascii_whitespace()) else {
+        return previous;
+    };
+
+    if line[last] != b',' {
+        return false;
+    }
+
+    let before = |offset: usize| last.checked_sub(offset).map(|i| line[i]);
+    let is_word = |byte: u8| byte.is_ascii_alphanumeric() || byte == b'_';
+
+    match (before(2), before(1)) {
+        // `?,` is a character literal, unless it ends a method name like `x?,`
+        (prev, Some(b'?')) => prev.is_some_and(is_word),
+        // `?\,` is a character literal
+        (Some(b'?'), Some(b'\\')) => false,
+        _ => true,
     }
 }
 
@@ -600,6 +648,142 @@ mod tests {
               .flex.items-center
         "#;
         Haml::test_extract_contains(input, vec!["flex", "items-center"]);
+    }
+
+    #[test]
+    fn test_multi_line_ruby() {
+        let input = r#"
+            = render("card",
+              title: "Hello",
+              class: "bg-[#f8f5ff] min-w-[140px]")
+            - links = link_to("Home", root_path,
+              class: "text-[#0b3fa8] w-[240px]")
+            - items.each do |item|
+              %p.flex= item
+            -# A comment that ends with a comma,
+            %p.px-2.5.text-center
+        "#;
+
+        Haml::test_extract_contains(
+            input,
+            vec![
+                "bg-[#f8f5ff]",
+                "min-w-[140px]",
+                "text-[#0b3fa8]",
+                "w-[240px]",
+                "flex",
+                "px-2.5",
+                "text-center",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_multi_line_ruby_with_crlf_line_endings() {
+        let input = "= render(\"card\",\r\n  class: \"bg-[#f8f5ff] min-w-[140px]\")\r\n- links = link_to(\"Home\", root_path,\r\n  class: \"text-[#0b3fa8] w-[240px]\")\r\n%p.px-2.5.text-center\r\n";
+
+        Haml::test_extract_contains(
+            input,
+            vec![
+                "bg-[#f8f5ff]",
+                "min-w-[140px]",
+                "text-[#0b3fa8]",
+                "w-[240px]",
+                "px-2.5",
+                "text-center",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_multi_line_ruby_with_trailing_whitespace() {
+        let input = "= render(\"card\",  \n  class: \"bg-[#f8f5ff] min-w-[140px]\")\n%p.px-2.5.text-center\n";
+
+        Haml::test_extract_contains(
+            input,
+            vec!["bg-[#f8f5ff]", "min-w-[140px]", "px-2.5", "text-center"],
+        );
+    }
+
+    #[test]
+    fn test_ruby_comma_character_literal_is_not_a_continuation() {
+        let input = r#"
+            - separator = ?,
+            %div.flex.items-center
+            - escaped = ?\,
+            %p.px-2.5.text-center
+        "#;
+
+        Haml::test_extract_contains(input, vec!["flex", "items-center", "px-2.5", "text-center"]);
+    }
+
+    #[test]
+    fn test_multi_line_ruby_at_end_of_input() {
+        let input = "= render(\"card\",\n  class: \"bg-[#f8f5ff] min-w-[140px]\")";
+
+        Haml::test_extract_contains(input, vec!["bg-[#f8f5ff]", "min-w-[140px]"]);
+    }
+
+    #[test]
+    fn test_multi_line_ruby_across_blank_lines() {
+        let input = "= render(\"card\",\n\n  class: \"bg-[#f8f5ff] min-w-[140px]\")\n- links = link_to(\"Home\", root_path,\n  \n  class: \"text-[#0b3fa8] w-[240px]\")\n%p.px-2.5.text-center\n";
+
+        Haml::test_extract_contains(
+            input,
+            vec![
+                "bg-[#f8f5ff]",
+                "min-w-[140px]",
+                "text-[#0b3fa8]",
+                "w-[240px]",
+                "px-2.5",
+                "text-center",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_unfinished_multi_line_ruby_ending_in_a_backslash() {
+        for input in [
+            "= render(\"card\",\n  class\\",
+            "- render(\"card\",\n  class\\",
+        ] {
+            Haml::test_extract_contains(input, vec![]);
+        }
+    }
+
+    #[test]
+    fn test_many_blank_lines_inside_multi_line_ruby() {
+        let input = format!(
+            "= render(\"card\",\n{}  class: \"bg-[#f8f5ff]\")\n%p.px-2.5.text-center\n",
+            "\n".repeat(100_000)
+        );
+
+        Haml::test_extract_contains(&input, vec!["bg-[#f8f5ff]", "px-2.5", "text-center"]);
+    }
+
+    #[test]
+    fn test_dedented_multi_line_ruby() {
+        let input = r#"
+            %div
+              %div
+                = render "card",
+              class: "bg-[#f8f5ff] min-w-[140px]"
+                - links = link_to("Home", root_path,
+              class: "text-[#0b3fa8] w-[240px]")
+            %p.px-2.5.text-center
+        "#;
+
+        Haml::test_extract_contains(
+            input,
+            vec![
+                "bg-[#f8f5ff]",
+                "min-w-[140px]",
+                "text-[#0b3fa8]",
+                "w-[240px]",
+                "px-2.5",
+                "text-center",
+            ],
+        );
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/17379#issuecomment-2910108646
