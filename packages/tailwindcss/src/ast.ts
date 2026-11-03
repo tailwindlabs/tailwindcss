@@ -584,7 +584,7 @@ export function optimizeAst(
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
             let colorspace = node.nodes[2]
             if (
-              colorspace.kind === 'word' &&
+              colorspace?.kind === 'word' &&
               (colorspace.value === 'oklab' ||
                 colorspace.value === 'oklch' ||
                 colorspace.value === 'lab' ||

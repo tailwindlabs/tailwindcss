@@ -7098,6 +7098,35 @@ describe('`color-mix(…)` polyfill', () => {
       "
     `)
   })
+
+  it('does not crash when the `color-mix(…)` function has no colorspace', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+        .broken {
+          color: color-mix(var(--color-red-500));
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .broken {
+        color: color-mix(oklch(63.7% .237 25.331));
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .broken {
+          color: color-mix(var(--color-red-500));
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('`@property` polyfill', async () => {
