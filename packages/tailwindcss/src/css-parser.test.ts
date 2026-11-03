@@ -180,6 +180,42 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       ).toEqual([{ kind: 'declaration', property: 'color', value: 'red', important: false }])
     })
 
+    it('should parse a declaration with a missing ending `;`', () => {
+      expect(parse('color: red')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and a trailing newline', () => {
+      expect(parse('color: red\n')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and `!important`', () => {
+      expect(parse('color: red !important')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: true },
+      ])
+    })
+
+    it('should parse multiple declarations where the last one has a missing ending `;`', () => {
+      expect(parse('a: 1; b: 2')).toEqual([
+        { kind: 'declaration', property: 'a', value: '1', important: false },
+        { kind: 'declaration', property: 'b', value: '2', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` after a custom property', () => {
+      expect(parse('--a: 1;\ncolor: red')).toEqual([
+        { kind: 'declaration', property: '--a', value: '1', important: false },
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should not parse a declaration with unbalanced brackets and a missing ending `;`', () => {
+      expect(parse('color: rgb(1, 2')).toEqual([])
+    })
+
     it('should parse declarations with strings', () => {
       expect(
         parse(css`
@@ -265,6 +301,137 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           },
         ])
       })
+
+      it('should parse custom properties with `!important` when there is a trailing comment', () => {
+        expect(
+          parse(css`
+            --foo: red !important /* Very important */;
+            --bar: red /* not important */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            value: 'red /* not important */',
+            important: false,
+          },
+        ])
+      })
+
+      it('should not treat `!important` inside of a comment as the important flag', () => {
+        expect(
+          parse(css`
+            --foo: red /* !important /* example */;
+            --bar: red /* example */ !important /* example */ /* example */;
+            --baz: '/* example' !important;
+            --quux: red !important
+              /* example */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red /* !important /* example */',
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            // The comments after `!important` are dropped, together with the
+            // flag. The value has no place to keep them, and they don't change
+            // its meaning.
+            value: 'red /* example */',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--baz',
+            value: "'/* example'",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--quux',
+            value: 'red',
+            important: true,
+          },
+        ])
+      })
+
+      it('should not treat `!important` inside of a value as the important flag', () => {
+        expect(
+          parse(css`
+            content: 'a !important b';
+            background: url('x!important.png') !important;
+            --foo: '!important';
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: 'content',
+            value: "'a !important b'",
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: 'background',
+            value: "url('x!important.png')",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: "'!important'",
+            important: false,
+          },
+        ])
+      })
+
+      it('should keep an escaped whitespace at the end of the value', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: a\ ;
+            font-family: a\ !important;
+            --foo: a\ ;
+            --bar: a\ !important;
+            --baz: a\\ !important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: 'font-family', value: 'a\\ ', important: true },
+          { kind: 'declaration', property: '--foo', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: '--bar', value: 'a\\ ', important: true },
+          // An escaped backslash does not escape the whitespace after it.
+          { kind: 'declaration', property: '--baz', value: 'a\\\\', important: true },
+        ])
+      })
+
+      it('should not treat an escaped `!` as the important flag', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: \!important;
+            --foo: red\!important;
+            --bar: red\\!important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: '\\!important', important: false },
+          { kind: 'declaration', property: '--foo', value: 'red\\!important', important: false },
+          // An escaped backslash does not escape the `!` after it.
+          { kind: 'declaration', property: '--bar', value: 'red\\\\', important: true },
+        ])
+      })
     })
 
     describe('Custom properties', () => {
@@ -324,6 +491,41 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             --foo: bar !important
           `),
         ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
+      })
+
+      it('should parse a custom property with a missing ending `;` at the end of the input', () => {
+        expect(parse('--foo: bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+        ])
+        expect(parse('--foo: bar !important')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: true },
+        ])
+        expect(parse('--foo: var(--bar)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'var(--bar)', important: false },
+        ])
+        expect(parse("--foo: 'bar'")).toEqual([
+          { kind: 'declaration', property: '--foo', value: "'bar'", important: false },
+        ])
+        expect(parse('--foo: {}')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '{}', important: false },
+        ])
+        expect(parse('--foo: bar /* baz */')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar /* baz */', important: false },
+        ])
+        expect(parse('--foo: bar;\n--baz: rgb(0 0 0)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+          { kind: 'declaration', property: '--baz', value: 'rgb(0 0 0)', important: false },
+        ])
+      })
+
+      it('should parse a custom property with an unclosed bracket at the end of the input', () => {
+        expect(parse('--foo: [bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '[bar', important: false },
+        ])
+        expect(parse('color: red; --foo: (bar')).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: false },
+          { kind: 'declaration', property: '--foo', value: '(bar', important: false },
+        ])
       })
 
       it('should parse a custom property with an embedded programming language', () => {
