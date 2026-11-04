@@ -391,6 +391,15 @@ export function createVariants(theme: Theme): Variants {
   staticVariant('*', [':is(& > *)'], { compounds: Compounds.Never })
   staticVariant('**', [':is(& *)'], { compounds: Compounds.Never })
 
+  // `not` only negates the condition right after it, so conditions that are
+  // combined with `and` or `or` have to be wrapped in parentheses. E.g.:
+  // `not (a) and (b)` is invalid, and has to be `not ((a) and (b))`.
+  function wrapCombinedConditions(query: string) {
+    query = query.trim()
+    if (segment(query, ' ').length > 1) return `(${query})`
+    return query
+  }
+
   function negateConditions(ruleName: string, conditions: string[]) {
     return conditions.map((condition) => {
       switch (ruleName) {
@@ -401,7 +410,7 @@ export function createVariants(theme: Theme): Variants {
           //            ^^^^^^^
           // ast        0
           if (ast.length >= 1 && ast[0].kind === 'function') {
-            return `not ${condition}`
+            return `not ${wrapCombinedConditions(condition)}`
           }
 
           // @container not   {query}
@@ -444,10 +453,11 @@ export function createVariants(theme: Theme): Variants {
             ast[0].value !== 'not' &&
             ast[2].kind === 'function'
           ) {
-            // Inject a separator and a `not`, after the `name` (ast[0])
-            ast.splice(1, 0, { kind: 'separator', value: ' ' }, { kind: 'word', value: 'not' })
+            // Inject a `not` after the `name` (ast[0]) and separator (ast[1])
+            let name = ValueParser.toCss(ast.slice(0, 2))
+            let query = ValueParser.toCss(ast.slice(2))
 
-            return ValueParser.toCss(ast)
+            return `${name}not ${wrapCombinedConditions(query)}`
           }
 
           // Fallback
@@ -467,7 +477,24 @@ export function createVariants(theme: Theme): Variants {
             return parts.slice(1).join(' ')
           }
 
-          return `not ${condition}`
+          if (ruleName === '@media') {
+            // @media only {media-type} …
+            //
+            // `only` can't be used together with `not`, which already negates
+            // the whole media query.
+            if (parts[0] === 'only') {
+              return `not ${parts.slice(1).join(' ')}`
+            }
+
+            // @media {media-type} …
+            //
+            // A `not` in front of a media type negates the whole media query.
+            if (/^[a-z-]+$/i.test(parts[0])) {
+              return `not ${condition}`
+            }
+          }
+
+          return `not ${wrapCombinedConditions(condition)}`
         }
       }
     })
