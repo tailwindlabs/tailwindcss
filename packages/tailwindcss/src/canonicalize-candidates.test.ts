@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { intersection } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
@@ -2027,17 +2027,12 @@ describe('regressions', () => {
       },
     )
 
-    let compare = designSystem.variants.compare
-    let comparisons = 0
-    designSystem.variants.compare = function (a, z) {
-      comparisons++
-      return compare.call(this, a, z)
-    }
+    using compare = vi.spyOn(designSystem.variants, 'compare')
 
     expect(designSystem.canonicalizeCandidates(['foo-[.value-42]:flex'])).toEqual([
       'foo-value-42:flex',
     ])
-    expect(comparisons).toBe(0)
+    expect(compare).not.toHaveBeenCalled()
   })
 })
 
