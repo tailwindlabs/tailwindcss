@@ -6668,7 +6668,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.5764% 89.7903 33.1932 / .25098);
+        color: #fb2c3640;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -6860,6 +6860,39 @@ describe('`color-mix(…)` polyfill', () => {
       @supports (color: color-mix(in lab, red, red)) {
         .foo {
           color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('converts the color space of the fallback when the color interpolation method has leading whitespace', async () => {
+    expect(
+      await compileCss(
+        // prettier-ignore
+        css`
+          @theme {
+            --color-red-500: oklch(0.637 0.237 25.331);
+          }
+          @tailwind utilities;
+          .foo {
+            color: color-mix( in oklab, var(--color-red-500), transparent);
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .foo {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          color: color-mix(in oklab, var(--color-red-500), transparent);
         }
       }
       "

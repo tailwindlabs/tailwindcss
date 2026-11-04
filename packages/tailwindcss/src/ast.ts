@@ -598,7 +598,9 @@ export function optimizeAst(
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
-            let colorspace = node.nodes[2]
+            // The color space follows `in`, which is not necessarily the first node when there is
+            // leading whitespace.
+            let colorspace = node.nodes[node.nodes.findIndex((n) => n.kind !== 'separator') + 2]
             if (
               colorspace?.kind === 'word' &&
               (colorspace.value === 'oklab' ||
