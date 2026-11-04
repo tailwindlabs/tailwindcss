@@ -1379,6 +1379,77 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
   })
 
+  describe('CDO and CDC tokens', () => {
+    let a = {
+      kind: 'rule',
+      selector: 'a',
+      nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+    }
+    let b = {
+      kind: 'rule',
+      selector: 'b',
+      nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+    }
+
+    it('should ignore `<!--` and `-->` on their own', () => {
+      expect(parse('<!--')).toEqual([])
+      expect(parse('-->')).toEqual([])
+      expect(parse('<!-- -->')).toEqual([])
+    })
+
+    it('should ignore `<!--` and `-->` around rules', () => {
+      expect(
+        parse(css`
+          <!--
+          a {
+            color: red;
+          }
+          -->
+          b {
+            color: blue;
+          }
+          -->
+        `),
+      ).toEqual([a, b])
+    })
+
+    it('should ignore `<!--` and `-->` without whitespace around them', () => {
+      expect(parse('<!--a{color:red}-->b{color:blue}')).toEqual([a, b])
+    })
+
+    it('should ignore `<!--` and `-->` next to at-rules and declarations', () => {
+      expect(parse('<!-- @charset "UTF-8"; --> @media print { a { color: red } }')).toEqual([
+        { kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] },
+        { kind: 'at-rule', name: '@media', params: 'print', nodes: [a] },
+      ])
+      expect(parse('--foo: bar; --> --baz: qux;')).toEqual([
+        { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+        { kind: 'declaration', property: '--baz', value: 'qux', important: false },
+      ])
+    })
+
+    it('should keep `<!--` and `-->` inside of a selector', () => {
+      expect(parse('a <!-- b{color:blue}')).toEqual([{ ...b, selector: 'a <!-- b' }])
+      expect(parse('a --> b{color:blue}')).toEqual([{ ...b, selector: 'a --> b' }])
+    })
+
+    it('should keep `<!--` and `-->` inside of a custom property', () => {
+      expect(parse('--foo: <!-- -->;')).toEqual([
+        { kind: 'declaration', property: '--foo', value: '<!-- -->', important: false },
+      ])
+    })
+
+    it('should not treat a name that starts with `---` as `-->`', () => {
+      expect(parse('---a: b;')).toEqual([
+        { kind: 'declaration', property: '---a', value: 'b', important: false },
+      ])
+    })
+
+    it('should only ignore `<!--` and `-->` at the top level', () => {
+      expect(() => parse('a { --> }')).toThrow('Invalid custom property, expected a value')
+    })
+  })
+
   describe('errors', () => {
     it('should error when curly brackets are unbalanced (opening)', () => {
       expect(() =>
