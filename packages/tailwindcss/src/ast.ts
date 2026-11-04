@@ -525,8 +525,13 @@ export function optimizeAst(
           // case the node after the first `,` is the second color, not the first one. Lightning CSS
           // also doesn't compute a `color-mix(…)` without a color interpolation method, so a
           // fallback with inlined colors would be dropped by browsers without `color-mix(…)`.
-          let firstNode = node.nodes.find((node) => node.kind !== 'separator')
-          if (firstNode?.kind !== 'word' || firstNode.value.toLowerCase() !== 'in') return
+          //
+          // Custom properties keep their comments, e.g.: `color-mix(/* … */ in oklab, …)`, and the
+          // value parser doesn't know about comments, so we drop them before we look for `in`.
+          let args = ValueParser.toCss(node.nodes)
+            .replace(/\/\*[\s\S]*?\*\//g, ' ')
+            .trimStart()
+          if (!/^in\s/i.test(args)) return
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
