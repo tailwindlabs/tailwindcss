@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Canonicalization: improve performance in projects with many functional variant values (e.g. a `matchVariant` plugin with thousands of values) ([#20663](https://github.com/tailwindlabs/tailwindcss/pull/20663))
+- Don't crash when a `color-mix(…)` with a single color and no color interpolation method uses a theme variable (e.g. `color-mix(var(--color-red-500))`) ([#20658](https://github.com/tailwindlabs/tailwindcss/pull/20658))
 
 ## [4.3.4] - 2026-11-02
 
