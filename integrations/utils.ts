@@ -30,6 +30,10 @@ interface SpawnedProcess {
 interface ChildProcessOptions {
   cwd?: string
   env?: Record<string, string>
+
+  // Kill the command after this many milliseconds, for example when it can
+  // hang forever.
+  timeout?: number
 }
 
 interface ExecOptions {
@@ -207,6 +211,9 @@ export function test(
                     error.message = error.message.replace(command, originalCommand)
                     let mappedError = error as any
                     mappedError.cmd = originalCommand
+                  }
+                  if (error.killed && childProcessOptions.timeout) {
+                    error.message += `\nKilled after ${childProcessOptions.timeout}ms`
                   }
                   if (execOptions.ignoreStdErr !== true) console.error(stderr)
                   if (only || debug) {
