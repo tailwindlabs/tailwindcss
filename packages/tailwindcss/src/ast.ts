@@ -521,6 +521,13 @@ export function optimizeAst(
         walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
+          // The color interpolation method is optional, e.g.: `color-mix(red 50%, blue)`. In that
+          // case the node after the first `,` is the second color, not the first one. Lightning CSS
+          // also doesn't compute a `color-mix(…)` without a color interpolation method, so a
+          // fallback with inlined colors would be dropped by browsers without `color-mix(…)`.
+          let firstNode = node.nodes.find((node) => node.kind !== 'separator')
+          if (firstNode?.kind !== 'word' || firstNode.value.toLowerCase() !== 'in') return
+
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
           walk(node.nodes, (node) => {
