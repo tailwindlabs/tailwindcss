@@ -109,6 +109,7 @@ export const IS_WINDOWS = platform() === 'win32'
 const execFileAsync = promisify(execFile)
 
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
+const INSTALL_TIMEOUT = IS_WINDOWS ? 240000 : 120000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
 // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
@@ -122,10 +123,14 @@ export function test(
   testCallback: TestCallback,
   { only = false, skip = false, debug = false, concurrent = false }: TestFlags = {},
 ) {
+  let testTimeout = config.timeout ?? TEST_TIMEOUT
+
   return defaultTest(
     name,
     {
-      timeout: config.timeout ?? TEST_TIMEOUT,
+      // The install of the dependencies and the test have a timeout of their
+      // own (see below). This one is a backstop, in case something else hangs.
+      timeout: INSTALL_TIMEOUT + testTimeout + ASSERTION_TIMEOUT,
       retry: config.retry ?? (process.env.CI ? 2 : 0),
       only: only || (!process.env.CI && debug),
       skip,
@@ -592,8 +597,16 @@ export function test(
         // above). This makes the test directory its own workspace root, so even
         // in debug mode — where the directory lives inside this repository's
         // pnpm workspace — `pnpm install` won't attach to the parent workspace.
+        //
+        // The time of the install depends on the network, so it doesn't count
+        // against the timeout of the test.
         if (shouldInstallDependencies) {
-          await context.exec(`pnpm install`)
+          await withTimeout(
+            context.exec(`pnpm install`),
+            INSTALL_TIMEOUT,
+            'The install of the dependencies',
+            runningCommands,
+          )
         }
       } catch (error: any) {
         console.error(error)
@@ -616,7 +629,7 @@ export function test(
         }
       }
 
-      return await testCallback(context)
+      return await withTimeout(testCallback(context), testTimeout, 'The test', runningCommands)
     },
   )
 }
@@ -848,6 +861,28 @@ function forceKillProcessTree(child: ChildProcess) {
       child.kill('SIGKILL')
     }
   }
+}
+
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  label: string,
+  runningCommands: Set<RunningCommand>,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  let timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      let message = `${label} timed out in ${ms}ms.`
+      if (runningCommands.size > 0) {
+        message += ` These commands still run:`
+        for (let { command } of runningCommands) message += `\n- \`${command}\``
+      }
+      reject(new Error(message))
+    }, ms)
+  })
+
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
 
 // A command of `exec` has no process group of its own, so find the processes
