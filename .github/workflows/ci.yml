@@ -98,6 +98,11 @@ jobs:
           CARGO_PROFILE_RELEASE_LTO: 'off'
           CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_LINKER: 'lld-link'
 
+      # Node's WASI support is incomplete on Windows
+      - name: Check wasm package
+        run: node ./scripts/check-wasm-package.mjs
+        if: runner.os != 'Windows'
+
       - name: Lint
         run: pnpm run lint
         # Only lint on linux to avoid \r\n line ending errors
