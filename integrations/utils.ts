@@ -629,7 +629,12 @@ export function test(
         }
       }
 
-      return await withTimeout(testCallback(context), testTimeout, 'The test', runningCommands)
+      return await withTimeout(
+        Promise.resolve(testCallback(context)),
+        testTimeout,
+        'The test',
+        runningCommands,
+      )
     },
   )
 }
