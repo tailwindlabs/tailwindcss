@@ -2002,6 +2002,43 @@ describe('regressions', () => {
       ),
     ).toEqual(['link', 'mt-4'])
   })
+
+  // Canonicalization compiles every known variant on its own, so sorting all the
+  // parsed variants each time made it quadratic in the number of known variants.
+  test('does not sort the parsed variants when compiling a single candidate', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ matchVariant }) => {
+              let values = Object.fromEntries(
+                Array.from({ length: 250 }, (_, i) => [`value-${i}`, `.value-${i}`]),
+              )
+              matchVariant('foo', (value) => `&:has(${value})`, { values })
+            }),
+          }
+        },
+      },
+    )
+
+    let compare = designSystem.variants.compare
+    let comparisons = 0
+    designSystem.variants.compare = function (a, z) {
+      comparisons++
+      return compare.call(this, a, z)
+    }
+
+    expect(designSystem.canonicalizeCandidates(['foo-[.value-42]:flex'])).toEqual([
+      'foo-value-42:flex',
+    ])
+    expect(comparisons).toBe(0)
+  })
 })
 
 describe('intersection', () => {
