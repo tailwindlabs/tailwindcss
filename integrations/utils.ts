@@ -916,10 +916,32 @@ async function killCommandProcessTree(child: ChildProcess) {
     }
   } catch {}
 
+  signalProcesses(pids, 'SIGTERM')
+
+  // Give the processes some time to stop, like the cleanup of `spawn` does,
+  // then force the ones that still run.
+  let deadline = Date.now() + ASSERTION_TIMEOUT
+  while (pids.some(isProcessRunning) && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  }
+
+  signalProcesses(pids.filter(isProcessRunning), 'SIGKILL')
+}
+
+function signalProcesses(pids: number[], signal: NodeJS.Signals) {
   for (let pid of pids) {
     try {
-      process.kill(pid, 'SIGTERM')
+      process.kill(pid, signal)
     } catch {}
+  }
+}
+
+function isProcessRunning(pid: number) {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch {
+    return false
   }
 }
 
