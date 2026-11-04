@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Nothing yet!
+### Fixed
+
+- Canonicalization: improve performance in projects with many functional variant values (e.g. a `matchVariant` plugin with thousands of values) ([#20663](https://github.com/tailwindlabs/tailwindcss/pull/20663))
 
 ## [4.3.4] - 2026-11-02
 
