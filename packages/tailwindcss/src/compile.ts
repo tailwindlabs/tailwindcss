@@ -45,7 +45,11 @@ export function compileCandidates(
     flags |= CompileAstFlags.RespectImportant
   }
 
-  let variantOrderMap = designSystem.getVariantOrder()
+  // The variant order is only used to sort the rules of different candidates, so
+  // a single candidate doesn't need it. Sorting all the parsed variants is
+  // expensive, and canonicalization compiles every known variant on its own, each
+  // of which adds a parsed variant that would invalidate the previous order.
+  let variantOrderMap = matches.size > 1 ? designSystem.getVariantOrder() : null
 
   // Create the AST
   for (let [rawCandidate, candidates] of matches) {
@@ -62,8 +66,10 @@ export function compileCandidates(
         // variant. This allows us to sort the rules based on the order of
         // variants used.
         let variantOrder = 0n
-        for (let variant of candidate.variants) {
-          variantOrder |= 1n << BigInt(variantOrderMap.get(variant)!)
+        if (variantOrderMap !== null) {
+          for (let variant of candidate.variants) {
+            variantOrder |= 1n << BigInt(variantOrderMap.get(variant)!)
+          }
         }
 
         nodeSorting.set(node, {
