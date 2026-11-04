@@ -1380,17 +1380,6 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
   })
 
   describe('CDO and CDC tokens', () => {
-    let a = {
-      kind: 'rule',
-      selector: 'a',
-      nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
-    }
-    let b = {
-      kind: 'rule',
-      selector: 'b',
-      nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
-    }
-
     it('should ignore `<!--` and `-->` on their own', () => {
       expect(parse('<!--')).toEqual([])
       expect(parse('-->')).toEqual([])
@@ -1410,17 +1399,50 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           }
           -->
         `),
-      ).toEqual([a, b])
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+        {
+          kind: 'rule',
+          selector: 'b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
     })
 
     it('should ignore `<!--` and `-->` without whitespace around them', () => {
-      expect(parse('<!--a{color:red}-->b{color:blue}')).toEqual([a, b])
+      expect(parse('<!--a{color:red}-->b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+        {
+          kind: 'rule',
+          selector: 'b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
     })
 
     it('should ignore `<!--` and `-->` next to at-rules and declarations', () => {
       expect(parse('<!-- @charset "UTF-8"; --> @media print { a { color: red } }')).toEqual([
         { kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] },
-        { kind: 'at-rule', name: '@media', params: 'print', nodes: [a] },
+        {
+          kind: 'at-rule',
+          name: '@media',
+          params: 'print',
+          nodes: [
+            {
+              kind: 'rule',
+              selector: 'a',
+              nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+            },
+          ],
+        },
       ])
       expect(parse('--foo: bar; --> --baz: qux;')).toEqual([
         { kind: 'declaration', property: '--foo', value: 'bar', important: false },
@@ -1429,8 +1451,20 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
     })
 
     it('should keep `<!--` and `-->` inside of a selector', () => {
-      expect(parse('a <!-- b{color:blue}')).toEqual([{ ...b, selector: 'a <!-- b' }])
-      expect(parse('a --> b{color:blue}')).toEqual([{ ...b, selector: 'a --> b' }])
+      expect(parse('a <!-- b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a <!-- b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
+      expect(parse('a --> b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a --> b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
     })
 
     it('should keep `<!--` and `-->` inside of a custom property', () => {
