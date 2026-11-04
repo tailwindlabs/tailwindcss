@@ -32,6 +32,8 @@ const CLOSE_BRACKET = 0x5d
 const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
+const LESS_THAN = 0x3c
+const GREATER_THAN = 0x3e
 
 export interface ParseOptions {
   from?: string
@@ -198,6 +200,34 @@ export function parse(input: string, opts?: ParseOptions) {
       if (peekChar !== SPACE && peekChar !== LINE_BREAK && peekChar !== TAB) {
         buffer += ' '
       }
+    }
+
+    // Skip `<!--` and `-->` between top-level nodes. They are not part of the
+    // next node, and `-->` is not the start of a custom property.
+    //
+    // E.g.:
+    //
+    // ```css
+    // <!--
+    // .foo {
+    //   color: red;
+    // }
+    // -->
+    // ```
+    //
+    // See: https://www.w3.org/TR/css-syntax-3/#consume-stylesheet-contents
+    else if (
+      parent === null &&
+      buffer.length === 0 &&
+      ((currentChar === DASH &&
+        input.charCodeAt(i + 1) === DASH &&
+        input.charCodeAt(i + 2) === GREATER_THAN) ||
+        (currentChar === LESS_THAN &&
+          input.charCodeAt(i + 1) === EXCLAMATION_MARK &&
+          input.charCodeAt(i + 2) === DASH &&
+          input.charCodeAt(i + 3) === DASH))
+    ) {
+      i += currentChar === DASH ? 2 : 3
     }
 
     // Start of a custom property.
