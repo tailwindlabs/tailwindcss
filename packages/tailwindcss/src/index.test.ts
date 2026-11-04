@@ -6768,13 +6768,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
-        background-color: color-mix(oklch(63.7% .237 25.331));
-      }
-
-      @supports (color: color-mix(in lab, red, red)) {
-        .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
-          background-color: color-mix(var(--color-red-500));
-        }
+        background-color: color-mix(var(--color-red-500));
       }
       "
     `)
@@ -6911,9 +6905,6 @@ describe('`color-mix(…)` polyfill', () => {
         .theme {
           color: color-mix(var(--color-red-500) 50%, transparent);
         }
-        .single {
-          color: color-mix(var(--color-red-500));
-        }
       `),
     ).toMatchInlineSnapshot(`
       "
@@ -6931,10 +6922,6 @@ describe('`color-mix(…)` polyfill', () => {
 
       .theme {
         color: color-mix(var(--color-red-500) 50%, transparent);
-      }
-
-      .single {
-        color: color-mix(var(--color-red-500));
       }
       "
     `)

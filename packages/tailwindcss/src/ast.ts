@@ -594,9 +594,6 @@ export function optimizeAst(
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
-            //
-            // The color interpolation method is optional, so there might not be a
-            // colorspace, e.g.: `color-mix(var(--color-red-500))`.
             let colorspace = node.nodes[2]
             if (
               colorspace?.kind === 'word' &&
