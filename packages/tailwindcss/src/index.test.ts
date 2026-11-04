@@ -6889,6 +6889,29 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('uses the first color value as the fallback when a comment with a comma comes before the color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @tailwind utilities;
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        --tint: currentcolor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
   it('does not create a fallback when the `color-mix(…)` function has no color interpolation method', async () => {
     expect(
       await compileCss(css`

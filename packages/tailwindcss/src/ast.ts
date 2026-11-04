@@ -527,11 +527,15 @@ export function optimizeAst(
           // fallback with inlined colors would be dropped by browsers without `color-mix(…)`.
           //
           // Custom properties keep their comments, e.g.: `color-mix(/* … */ in oklab, …)`, and the
-          // value parser doesn't know about comments, so we drop them before we look for `in`.
+          // value parser doesn't know about comments, so we drop them before we look for `in`. We
+          // also parse the arguments again without them, otherwise a `,` in a comment would be seen
+          // as the start of the first color.
           let args = ValueParser.toCss(node.nodes)
-            .replace(/\/\*[\s\S]*?\*\//g, ' ')
-            .trimStart()
-          if (!/^in\s/i.test(args)) return
+          if (args.includes('/*')) {
+            args = args.replace(/\/\*[\s\S]*?\*\//g, ' ')
+            node.nodes = ValueParser.parse(args)
+          }
+          if (!/^in\s/i.test(args.trimStart())) return
 
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
