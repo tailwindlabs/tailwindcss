@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `as: '*.css'` from the `@tailwindcss/turbopack` setup in its README, because it breaks CSS modules ([#20660](https://github.com/tailwindlabs/tailwindcss/pull/20660))
 - Ignore `<!--` and `-->` between top-level rules in CSS instead of throwing or swallowing the next rule (e.g. `a { color: red } --> b { color: blue }`) ([#20665](https://github.com/tailwindlabs/tailwindcss/pull/20665))
 - Ensure `@tailwindcss/oxide-wasm32-wasi` detects changed and new source files after the first scan (e.g. in WebContainers) ([#20487](https://github.com/tailwindlabs/tailwindcss/pull/20487))
-- Remove imports of unshipped modules from `@tailwindcss/node` type declarations, which caused type errors with `skipLibCheck: false` ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
+- Prevent type errors with `skipLibCheck: false` caused by imports of unshipped modules in the `@tailwindcss/node` type declarations ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
 
 ## [4.3.4] - 2026-11-02
 
