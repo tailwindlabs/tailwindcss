@@ -1289,6 +1289,49 @@ describe('optimization', () => {
       `)
     })
 
+    it('should prefix relative selectors with `:scope` when hoisting `@scope`', async () => {
+      expect(
+        optimize(css`
+          .parent {
+            @scope (&) {
+              > .item {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent)) {
+          :scope > .item {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      expect(
+        optimize(css`
+          .parent {
+            @scope (&) {
+              > .item,
+              + .sibling {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent)) {
+          :scope > .item, :scope + .sibling {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
     it('should wrap bare declarations inside `@scope` in a `&` rule', async () => {
       // A bug in Lightning CSS causes an error when there are declarations
       // directly in the `@scope`. To fix this we will ensure a rule with

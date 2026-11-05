@@ -692,6 +692,44 @@ export function optimizeAst(
   return handleNesting(newAst)
 }
 
+function hasLeadingCombinator(selector: string): boolean {
+  for (let part of segment(selector, ',')) {
+    let trimmed = part.trimStart()
+    if (
+      trimmed.startsWith('>') ||
+      trimmed.startsWith('+') ||
+      trimmed.startsWith('~') ||
+      trimmed.startsWith('|')
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
+function prefixRelativeSelectors(ast: SelectorParser.SelectorAstNode[]): boolean {
+  let changed = false
+
+  function handleSelector(node: SelectorParser.SelectorAstNode) {
+    if (node.kind === 'complex' && node.nodes[0]?.kind === 'combinator') {
+      node.nodes.unshift({ kind: 'selector', value: ':scope' })
+      changed = true
+    }
+  }
+
+  for (let node of ast) {
+    if (node.kind === 'list') {
+      for (let item of node.nodes) {
+        handleSelector(item)
+      }
+    } else {
+      handleSelector(node)
+    }
+  }
+
+  return changed
+}
+
 export function handleNesting(ast: AstNode[]): AstNode[] {
   let parseSelectorCache = new DefaultMap(SelectorParser.parse)
 
@@ -829,9 +867,8 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
               // ```
               //
               // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
-              let replacement = atRuleStack.some(([name]) => name === '@scope')
-                ? ':where(:scope)'
-                : ':scope'
+              let insideAtScope = atRuleStack.some(([name]) => name === '@scope')
+              let replacement = insideAtScope ? ':where(:scope)' : ':scope'
 
               let ast = SelectorParser.parse(node.selector)
               let changed = false
@@ -843,7 +880,21 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                 }
               })
 
+              if (insideAtScope && prefixRelativeSelectors(ast)) {
+                changed = true
+              }
+
               if (changed) {
+                selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
+              } else {
+                selectorStack.push([node.selector, node.src, node.dst])
+              }
+            } else if (
+              atRuleStack.some(([name]) => name === '@scope') &&
+              hasLeadingCombinator(node.selector)
+            ) {
+              let ast = SelectorParser.parse(node.selector)
+              if (prefixRelativeSelectors(ast)) {
                 selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
               } else {
                 selectorStack.push([node.selector, node.src, node.dst])

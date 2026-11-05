@@ -4761,6 +4761,42 @@ describe('@custom-variant', () => {
       `)
     })
 
+    test('@scope (&) in @utility with relative selectors', async () => {
+      expect(
+        await run(
+          ['join'],
+          css`
+            @utility join {
+              display: inline-flex;
+              @scope (&) {
+                > .item {
+                  z-index: 2;
+                }
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          .join {
+            display: inline-flex;
+          }
+
+          @scope (.join) {
+            :scope > .item {
+              z-index: 2;
+            }
+          }
+        }
+        "
+      `)
+    })
+
     test('@scope in a custom variant combined with user-authored `@scope` rules', async () => {
       expect(
         await run(
