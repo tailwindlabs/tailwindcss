@@ -241,3 +241,70 @@ testFn(
     `)
   },
 )
+
+// This test doesn't read files through WASI, so it also runs on macOS, where
+// the release workflow builds the wasm package. The release workflow runs it
+// before it publishes.
+let testFnWithoutFs = process.platform === 'win32' ? test.skip : test
+
+testFnWithoutFs(
+  '`@tailwindcss/oxide` loads the wasm build without hanging when `NAPI_RS_FORCE_WASI=error` is set',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/oxide": "workspace:^"
+          }
+        }
+      `,
+      'index.cjs': js`
+        let fs = require('node:fs')
+        let path = require('node:path')
+        let { Scanner } = require('@tailwindcss/oxide')
+
+        let wasi = Object.keys(require.cache).find((file) =>
+          file.endsWith('tailwindcss-oxide.wasi.cjs'),
+        )
+        let wasm = fs.readFileSync(
+          path.join(path.dirname(wasi), 'tailwindcss-oxide.wasm32-wasi.wasm'),
+        )
+        let scanner = new Scanner({ sources: [] })
+
+        console.log(
+          JSON.stringify({
+            exports: WebAssembly.Module.exports(new WebAssembly.Module(wasm)).map((e) => e.name),
+            candidates: scanner.scanFiles([
+              { content: '<div class="flex underline">', extension: 'html' },
+            ]),
+          }),
+        )
+        process.exit()
+      `,
+    },
+  },
+  async ({ expect, exec }) => {
+    // Without `_initialize`, the thread setup of wasi-libc never runs, and
+    // loading the wasm module hangs forever (this shipped in v4.3.4). See
+    // `crates/node/build.rs`.
+    //
+    // See the note about NODE_PATH in the tests above.
+    let output = await exec('node index.cjs', {
+      env: { NAPI_RS_FORCE_WASI: 'error', NODE_PATH: '' },
+      timeout: 10_000,
+    })
+
+    // Only parse the first line, because Node can print an
+    // `ExperimentalWarning` about WASI to stderr.
+    let { exports, candidates } = JSON.parse(output.trim().split('\n')[0])
+
+    expect(exports).toContain('_initialize')
+    expect(candidates).toMatchInlineSnapshot(`
+      [
+        "class",
+        "flex",
+        "underline",
+      ]
+    `)
+  },
+)

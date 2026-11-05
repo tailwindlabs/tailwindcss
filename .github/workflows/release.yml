@@ -292,6 +292,10 @@ jobs:
         env:
           FEATURES_ENV: ${{ env.FEATURES_ENV }}
 
+      # Load the packed wasm package before it is published
+      - name: Test wasm package
+        run: pnpm run test:integrations ./integrations/oxide/wasm.test.ts
+
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
 
