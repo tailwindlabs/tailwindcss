@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ignore `<!--` and `-->` between top-level rules in CSS instead of throwing or swallowing the next rule (e.g. `a { color: red } --> b { color: blue }`) ([#20665](https://github.com/tailwindlabs/tailwindcss/pull/20665))
 - Don't create a `color-mix(…)` fallback with the wrong color when the `color-mix(…)` has no color interpolation method (e.g. `color-mix(currentcolor 50%, transparent)`) ([#20666](https://github.com/tailwindlabs/tailwindcss/pull/20666))
 - Ensure `@tailwindcss/oxide-wasm32-wasi` detects changed and new source files after the first scan (e.g. in WebContainers) ([#20487](https://github.com/tailwindlabs/tailwindcss/pull/20487))
+- Remove imports of unshipped modules from `@tailwindcss/node` type declarations, which caused type errors with `skipLibCheck: false` ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
 
 ## [4.3.4] - 2026-11-02
 
