@@ -1289,7 +1289,7 @@ describe('optimization', () => {
       `)
     })
 
-    it('should prefix relative selectors with `:scope` when hoisting `@scope`', async () => {
+    it('should prefix relative selectors with `:where(:scope)` when hoisting `@scope`', async () => {
       expect(
         optimize(css`
           .parent {
@@ -1303,7 +1303,7 @@ describe('optimization', () => {
       ).toMatchInlineSnapshot(`
         "
         @scope (:is(.parent)) {
-          :scope > .item {
+          :where(:scope) > .item {
             --x: 1;
           }
         }
@@ -1324,7 +1324,7 @@ describe('optimization', () => {
       ).toMatchInlineSnapshot(`
         "
         @scope (:is(.parent)) {
-          :scope > .item, :scope + .sibling {
+          :where(:scope) > .item, :where(:scope) + .sibling {
             --x: 1;
           }
         }
