@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.3.5] - 2026-11-05
+
 ### Fixed
 
 - Canonicalization: improve performance in projects with many functional variant values (e.g. a `matchVariant` plugin with thousands of values) ([#20663](https://github.com/tailwindlabs/tailwindcss/pull/20663))
@@ -4160,7 +4164,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.5...HEAD
+[4.3.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.4...v4.3.5
 [4.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...v4.3.2
