@@ -64,6 +64,31 @@ function createCustomResolver(
   }
 }
 
+function getResolvedOutputDirectories(config: ResolvedConfig) {
+  let defaultOutputDirectory = path.resolve(config.root, config.build.outDir)
+  let outputOptions = config.build.rollupOptions.output
+
+  let outputDirectories = outputOptions
+    ? Array.from(
+        new Set(
+          (Array.isArray(outputOptions) ? outputOptions : [outputOptions]).map((output) =>
+            output.dir ? path.resolve(config.root, output.dir) : defaultOutputDirectory,
+          ),
+        ),
+      )
+    : [defaultOutputDirectory]
+
+  return outputDirectories.filter((directory) => {
+    let relative = path.relative(config.root, directory)
+    return (
+      relative !== '' &&
+      relative !== '..' &&
+      !relative.startsWith(`..${path.sep}`) &&
+      !path.isAbsolute(relative)
+    )
+  })
+}
+
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let config: ResolvedConfig | null = null
   let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
@@ -75,6 +100,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   function createRoot(env: Environment | null, id: string) {
     type ResolveFn = (id: string, base: string) => Promise<string | false | undefined>
 
+    let resolvedConfig = env?.config ?? config!
     let customCssResolver: ResolveFn
     let customJsResolver: ResolveFn
 
@@ -165,7 +191,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
     return new Root(
       id,
-      config!.root,
+      resolvedConfig.root,
+      resolvedConfig.command === 'build' && resolvedConfig.build.watch && resolvedConfig.build.write
+        ? getResolvedOutputDirectories(resolvedConfig)
+        : [],
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
       config?.css.devSourcemap ?? false,
@@ -350,6 +379,7 @@ class Root {
   constructor(
     private id: string,
     private base: string,
+    private excludedDirectories: string[],
 
     private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -430,6 +460,10 @@ class Root {
         // Use the specified root
         return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
+
+      for (let directory of this.excludedDirectories) {
+        sources.push({ base: directory, pattern: '**/*', negated: true })
+      }
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
