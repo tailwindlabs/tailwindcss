@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/oxide-wasm32-wasi` loads instead of hanging forever (e.g. with `NAPI_RS_FORCE_WASI=error` or in WebContainers) ([#20667](https://github.com/tailwindlabs/tailwindcss/pull/20667))
 - Remove `as: '*.css'` from the `@tailwindcss/turbopack` setup in its README, because it breaks CSS modules ([#20660](https://github.com/tailwindlabs/tailwindcss/pull/20660))
 - Ignore `<!--` and `-->` between top-level rules in CSS instead of throwing or swallowing the next rule (e.g. `a { color: red } --> b { color: blue }`) ([#20665](https://github.com/tailwindlabs/tailwindcss/pull/20665))
+- Don't create a `color-mix(…)` fallback with the wrong color when the `color-mix(…)` has no color interpolation method (e.g. `color-mix(currentcolor 50%, transparent)`) ([#20666](https://github.com/tailwindlabs/tailwindcss/pull/20666))
 
 ## [4.3.4] - 2026-11-02
 
