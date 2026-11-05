@@ -59,6 +59,96 @@ testFn(
 )
 
 testFn(
+  '@tailwindcss/oxide-wasm32-wasi discovers changes across incremental scans',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/oxide-wasm32-wasi": "workspace:^"
+          }
+        }
+      `,
+      'src/index.js': js`const className = 'flex'`,
+      'index.mjs': js`
+        import { Scanner } from '@tailwindcss/oxide-wasm32-wasi'
+        import { mkdirSync, readFileSync, statSync, utimesSync, writeFileSync } from 'node:fs'
+        import { join, relative } from 'node:path'
+
+        let source = join(process.cwd(), 'src/index.js')
+        let scanner = new Scanner({
+          sources: [
+            {
+              base: join(process.cwd(), 'src'),
+              pattern: '**/*',
+              negated: false,
+            },
+          ],
+        })
+
+        function scan() {
+          let candidates = scanner.scan()
+
+          // The scanner keeps files in a set, so sort them for a stable order.
+          return {
+            candidates: candidates
+              .filter((candidate) => ['flex', 'grid', 'underline'].includes(candidate))
+              .sort(),
+            files: scanner.files.map((file) => relative(process.cwd(), file)).sort(),
+            scannedFiles: scanner.scannedFiles.map((file) => relative(process.cwd(), file)).sort(),
+          }
+        }
+
+        let initial = scan()
+        let unchanged = scan()
+
+        writeFileSync(source, readFileSync(source, 'utf8').replace('flex', 'grid'))
+        let mtime = statSync(source).mtime
+        utimesSync(source, mtime, new Date(mtime.getTime() + 2000))
+
+        let changed = scan()
+
+        mkdirSync(join(process.cwd(), 'src/nested'))
+        writeFileSync(join(process.cwd(), 'src/nested/index.js'), "const className = 'underline'")
+
+        let added = scan()
+
+        console.log(JSON.stringify({ initial, unchanged, changed, added }))
+        process.exit()
+      `,
+    },
+  },
+  async ({ expect, exec }) => {
+    let output = await exec(`node index.mjs`)
+
+    // Only parse the first line, because Node can print an
+    // `ExperimentalWarning` about WASI to stderr.
+    expect(JSON.parse(output.trim().split('\n')[0])).toEqual({
+      initial: {
+        candidates: ['flex'],
+        files: ['src/index.js'],
+        scannedFiles: ['src/index.js'],
+      },
+      unchanged: {
+        candidates: ['flex'],
+        files: ['src/index.js'],
+        scannedFiles: [],
+      },
+      changed: {
+        candidates: ['flex', 'grid'],
+        files: ['src/index.js'],
+        scannedFiles: ['src/index.js'],
+      },
+      added: {
+        candidates: ['flex', 'grid', 'underline'],
+        files: ['src/index.js', 'src/nested/index.js'],
+        scannedFiles: ['src/nested/index.js'],
+      },
+    })
+  },
+)
+
+testFn(
   '`@tailwindcss/oxide` falls back to the wasm build when no native binding is available',
   {
     fs: {
