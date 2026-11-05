@@ -97,11 +97,19 @@ interface TestFlags {
 
 type SpawnActor = { predicate: (message: string) => boolean; resolve: () => void }
 
+interface RunningCommand {
+  command: string
+  child: ChildProcess
+  startedAt: number
+  output: string[]
+}
+
 export const IS_WINDOWS = platform() === 'win32'
 
 const execFileAsync = promisify(execFile)
 
 const TEST_TIMEOUT = IS_WINDOWS ? 120000 : 60000
+const INSTALL_TIMEOUT = IS_WINDOWS ? 240000 : 120000
 const ASSERTION_TIMEOUT = IS_WINDOWS ? 10000 : 5000
 
 // On Windows CI, tmpdir returns a path containing a weird RUNNER~1 folder that
@@ -115,10 +123,14 @@ export function test(
   testCallback: TestCallback,
   { only = false, skip = false, debug = false, concurrent = false }: TestFlags = {},
 ) {
+  let testTimeout = config.timeout ?? TEST_TIMEOUT
+
   return defaultTest(
     name,
     {
-      timeout: config.timeout ?? TEST_TIMEOUT,
+      // The install of the dependencies and the test have a timeout of their
+      // own (see below). This one is a backstop, in case something else hangs.
+      timeout: INSTALL_TIMEOUT + testTimeout + ASSERTION_TIMEOUT,
       retry: config.retry ?? (process.env.CI ? 2 : 0),
       only: only || (!process.env.CI && debug),
       skip,
@@ -135,6 +147,43 @@ export function test(
         console.log(root)
         console.log()
       }
+
+      // The commands of `exec` that did not exit yet
+      let runningCommands = new Set<RunningCommand>()
+      let disposables: (() => Promise<void>)[] = []
+
+      async function dispose() {
+        // A timeout of vitest doesn't say which command hangs, so show the
+        // commands that still run, and what they did so far.
+        if (options.task.result?.state === 'fail') {
+          for (let { command, startedAt, output } of runningCommands) {
+            let duration = ((Date.now() - startedAt) / 1000).toFixed(1)
+            console.error(
+              `\`${command}\` still runs after ${duration}s. Its output so far:\n\n${output.join('')}`,
+            )
+          }
+        }
+
+        let results = await Promise.allSettled([
+          ...Array.from(runningCommands, ({ child }) => killCommandProcessTree(child)),
+          ...disposables.map((dispose) => dispose()),
+        ])
+
+        if (!debug) {
+          await gracefullyRemove(root)
+        }
+
+        let errors = results.flatMap((result) =>
+          result.status === 'rejected' ? [result.reason] : [],
+        )
+        if (errors.length > 0) {
+          throw new AggregateError(errors, 'Failed to clean up spawned processes')
+        }
+      }
+
+      // Register this before the install of the dependencies, so that it also
+      // stops an install that hangs.
+      options.onTestFinished(dispose)
 
       let context = {
         root,
@@ -232,6 +281,17 @@ export function test(
               child.stdin?.write(execOptions.stdin)
               child.stdin?.end()
             }
+
+            let running: RunningCommand = {
+              command: originalCommand,
+              child,
+              startedAt: Date.now(),
+              output: [],
+            }
+            runningCommands.add(running)
+            child.stdout?.on('data', (chunk) => running.output.push(chunk.toString()))
+            child.stderr?.on('data', (chunk) => running.output.push(chunk.toString()))
+            child.once('close', () => runningCommands.delete(running))
           })
         },
         async spawn(command: string, childProcessOptions: ChildProcessOptions = {}) {
@@ -537,8 +597,16 @@ export function test(
         // above). This makes the test directory its own workspace root, so even
         // in debug mode — where the directory lives inside this repository's
         // pnpm workspace — `pnpm install` won't attach to the parent workspace.
+        //
+        // The time of the install depends on the network, so it doesn't count
+        // against the timeout of the test.
         if (shouldInstallDependencies) {
-          await context.exec(`pnpm install`)
+          await withTimeout(
+            context.exec(`pnpm install`),
+            INSTALL_TIMEOUT,
+            'The install of the dependencies',
+            runningCommands,
+          )
         }
       } catch (error: any) {
         console.error(error)
@@ -546,25 +614,6 @@ export function test(
         console.error(error.stderr?.toString())
         throw error
       }
-
-      let disposables: (() => Promise<void>)[] = []
-
-      async function dispose() {
-        let results = await Promise.allSettled(disposables.map((dispose) => dispose()))
-
-        if (!debug) {
-          await gracefullyRemove(root)
-        }
-
-        let errors = results.flatMap((result) =>
-          result.status === 'rejected' ? [result.reason] : [],
-        )
-        if (errors.length > 0) {
-          throw new AggregateError(errors, 'Failed to clean up spawned processes')
-        }
-      }
-
-      options.onTestFinished(dispose)
 
       // Make it a git repository, and commit all files
       if (only || debug) {
@@ -580,7 +629,12 @@ export function test(
         }
       }
 
-      return await testCallback(context)
+      return await withTimeout(
+        Promise.resolve(testCallback(context)),
+        testTimeout,
+        'The test',
+        runningCommands,
+      )
     },
   )
 }
@@ -811,6 +865,83 @@ function forceKillProcessTree(child: ChildProcess) {
     if (error?.code !== 'ESRCH') {
       child.kill('SIGKILL')
     }
+  }
+}
+
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  label: string,
+  runningCommands: Set<RunningCommand>,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  let timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => {
+      let message = `${label} timed out in ${ms}ms.`
+      if (runningCommands.size > 0) {
+        message += ` These commands still run:`
+        for (let { command } of runningCommands) message += `\n- \`${command}\``
+      }
+      reject(new Error(message))
+    }, ms)
+  })
+
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
+}
+
+// A command of `exec` has no process group of its own, so find the processes
+// that it started, and stop them too.
+async function killCommandProcessTree(child: ChildProcess) {
+  if (child.exitCode !== null || child.signalCode !== null || child.pid === undefined) {
+    return
+  }
+
+  if (IS_WINDOWS) {
+    return killProcessTree(child)
+  }
+
+  let pids = [child.pid]
+  try {
+    let { stdout } = await execFileAsync('ps', ['-A', '-o', 'pid=,ppid='])
+    let processes = stdout
+      .trim()
+      .split('\n')
+      .map((line) => line.trim().split(/\s+/).map(Number))
+
+    for (let i = 0; i < pids.length; i++) {
+      for (let [pid, ppid] of processes) {
+        if (ppid === pids[i]) pids.push(pid)
+      }
+    }
+  } catch {}
+
+  signalProcesses(pids, 'SIGTERM')
+
+  // Give the processes some time to stop, like the cleanup of `spawn` does,
+  // then force the ones that still run.
+  let deadline = Date.now() + ASSERTION_TIMEOUT
+  while (pids.some(isProcessRunning) && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 50))
+  }
+
+  signalProcesses(pids.filter(isProcessRunning), 'SIGKILL')
+}
+
+function signalProcesses(pids: number[], signal: NodeJS.Signals) {
+  for (let pid of pids) {
+    try {
+      process.kill(pid, signal)
+    } catch {}
+  }
+}
+
+function isProcessRunning(pid: number) {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch {
+    return false
   }
 }
 
