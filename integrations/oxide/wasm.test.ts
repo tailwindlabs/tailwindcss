@@ -72,7 +72,7 @@ testFn(
       'src/index.js': js`const className = 'flex'`,
       'index.mjs': js`
         import { Scanner } from '@tailwindcss/oxide-wasm32-wasi'
-        import { readFileSync, statSync, utimesSync, writeFileSync } from 'node:fs'
+        import { mkdirSync, readFileSync, statSync, utimesSync, writeFileSync } from 'node:fs'
         import { join, relative } from 'node:path'
 
         let source = join(process.cwd(), 'src/index.js')
@@ -89,12 +89,13 @@ testFn(
         function scan() {
           let candidates = scanner.scan()
 
+          // The scanner keeps files in a set, so sort them for a stable order.
           return {
-            candidates: candidates.filter(
-              (candidate) => candidate === 'flex' || candidate === 'grid',
-            ),
-            files: scanner.files.map((file) => relative(process.cwd(), file)),
-            scannedFiles: scanner.scannedFiles.map((file) => relative(process.cwd(), file)),
+            candidates: candidates
+              .filter((candidate) => ['flex', 'grid', 'underline'].includes(candidate))
+              .sort(),
+            files: scanner.files.map((file) => relative(process.cwd(), file)).sort(),
+            scannedFiles: scanner.scannedFiles.map((file) => relative(process.cwd(), file)).sort(),
           }
         }
 
@@ -107,7 +108,12 @@ testFn(
 
         let changed = scan()
 
-        console.log(JSON.stringify({ initial, unchanged, changed }))
+        mkdirSync(join(process.cwd(), 'src/nested'))
+        writeFileSync(join(process.cwd(), 'src/nested/index.js'), "const className = 'underline'")
+
+        let added = scan()
+
+        console.log(JSON.stringify({ initial, unchanged, changed, added }))
         process.exit()
       `,
     },
@@ -115,7 +121,9 @@ testFn(
   async ({ expect, exec }) => {
     let output = await exec(`node index.mjs`)
 
-    expect(JSON.parse(output)).toEqual({
+    // Only parse the first line, because Node can print an
+    // `ExperimentalWarning` about WASI to stderr.
+    expect(JSON.parse(output.trim().split('\n')[0])).toEqual({
       initial: {
         candidates: ['flex'],
         files: ['src/index.js'],
@@ -130,6 +138,11 @@ testFn(
         candidates: ['flex', 'grid'],
         files: ['src/index.js'],
         scannedFiles: ['src/index.js'],
+      },
+      added: {
+        candidates: ['flex', 'grid', 'underline'],
+        files: ['src/index.js', 'src/nested/index.js'],
+        scannedFiles: ['src/nested/index.js'],
       },
     })
   },
