@@ -723,6 +723,21 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Custom pixel based spacing scale
       ['w-[123px]', 'w-123', '1px'],
       ['w-[256px]', 'w-128', '2px'],
+
+      // floating point noise should not leak into the canonicalized output
+      ['w-[calc(0.1rem+0.2rem)]', 'w-[0.3rem]', '0.25rem'],
+      ['w-[calc(0.6rem/3)]', 'w-[0.2rem]', '0.25rem'],
+
+      // floating point noise should not prevent finding a bare value
+      ['w-[calc(0.3rem/0.1)]', 'w-12', '0.25rem'],
+      ['w-[25.4mm]', 'w-24', '0.25rem'],
+      ['w-[101.6q]', 'w-24', '0.25rem'],
+
+      // spacing scale that isnt exactly representable as a float
+      ['w-[0.6rem]', 'w-3', '0.2rem'],
+      ['w-[1.4rem]', 'w-7', '0.2rem'],
+      ['w-[1rem]', 'w-5', '0.2rem'],
+      ['w-[2.1rem]', 'w-7', '0.3rem'],
     ])(`${testName} (spacing = \`%s\`)`, { timeout }, async (candidate, expected, spacing) => {
       let input = css`
         @import 'tailwindcss';
@@ -949,6 +964,14 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // Not a length-unit, can't safely constant fold
       ['[margin:0%]', 'm-[0%]'],
+
+      // angles are compared after rounding to 12 significant digits
+      ['rotate-[0.785398163397rad]', 'rotate-45'], // π/4 truncated to 12 digits
+      ['rotate-[1rad]', 'rotate-[1rad]'], // 57.2957795131deg isn't a bare value
+
+      // small converted values must not be rounded before the multiplication
+      ['w-[calc(0.00000000001pt*1000000000000)]', 'w-[calc(0.00000000001pt*1000000000000)]'], // 13.33…px, not `w-0`
+      ['w-[calc(0.0000000001pt*1000000000000)]', 'w-[calc(0.0000000001pt*1000000000000)]'], // 133.33…px, not `w-25`
 
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
