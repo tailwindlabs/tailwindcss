@@ -38,6 +38,7 @@ jobs:
           - oxide
           - webpack
           - turbopack
+          - node
 
         # Exclude windows and macos from being built on feature branches
         run-all:

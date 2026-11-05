@@ -103,7 +103,10 @@ export async function compile(css: string, options: CompileOptions) {
   return compiler
 }
 
-export async function __unstable__loadDesignSystem(css: string, { base }: { base: string }) {
+export async function __unstable__loadDesignSystem(
+  css: string,
+  { base }: { base: string },
+): ReturnType<typeof ___unstable__loadDesignSystem> {
   return ___unstable__loadDesignSystem(css, {
     base,
     async loadModule(id, base) {
