@@ -46,7 +46,11 @@ test(
       `,
     },
   },
-  async ({ exec }) => {
-    await exec('pnpm tsc')
+  async ({ exec, expect }) => {
+    let { stdout, exitCode } = await exec('pnpm tsc --pretty false', {}, { streams: true })
+
+    // `tsc` prints its errors to stdout, so check it first to see them on failure
+    expect(stdout.trim()).toBe('')
+    expect(exitCode).toBe(0)
   },
 )
