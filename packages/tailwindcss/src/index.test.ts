@@ -4788,7 +4788,7 @@ describe('@custom-variant', () => {
           }
 
           @scope (.join) {
-            :scope > .item {
+            :where(:scope) > .item {
               z-index: 2;
             }
           }

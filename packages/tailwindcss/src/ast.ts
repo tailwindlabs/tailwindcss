@@ -712,7 +712,7 @@ function prefixRelativeSelectors(ast: SelectorParser.SelectorAstNode[]): boolean
 
   function handleSelector(node: SelectorParser.SelectorAstNode) {
     if (node.kind === 'complex' && node.nodes[0]?.kind === 'combinator') {
-      node.nodes.unshift({ kind: 'selector', value: ':scope' })
+      node.nodes.unshift({ kind: 'selector', value: ':where(:scope)' })
       changed = true
     }
   }
