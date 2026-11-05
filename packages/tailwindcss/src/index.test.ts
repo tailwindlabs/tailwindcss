@@ -6750,6 +6750,36 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('works without a color interpolation method and with a single color', async () => {
+    expect(
+      await run(
+        ['bg-[color-mix(var(--color-red-500))]'],
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
+        background-color: color-mix(oklch(63.7% .237 25.331));
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
+          background-color: color-mix(var(--color-red-500));
+        }
+      }
+      "
+    `)
+  })
+
   it('uses the first color value as the fallback when the `color-mix(…)` function contains non-theme variables', async () => {
     expect(
       await run(

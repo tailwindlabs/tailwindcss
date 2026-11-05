@@ -56,7 +56,6 @@ module.exports = {
     rules: {
       '*.css': {
         loaders: ['@tailwindcss/turbopack'],
-        as: '*.css',
       },
     },
   },
