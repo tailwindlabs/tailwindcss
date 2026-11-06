@@ -24,6 +24,10 @@ test('sr-only', async () => {
   expect(await run(['-sr-only', 'sr-only-[var(--value)]', 'sr-only/foo'])).toEqual('')
 })
 
+test('sr-only table caption (Firefox compatibility)', async () => {
+  expect(await run(['sr-only'])).toContain('clip-path: inset(50%);')
+})
+
 test('not-sr-only', async () => {
   expect(await run(['not-sr-only'])).toMatchInlineSnapshot(`
     "
@@ -40,6 +44,10 @@ test('not-sr-only', async () => {
     "
   `)
   expect(await run(['-not-sr-only', 'not-sr-only-[var(--value)]', 'not-sr-only/foo'])).toEqual('')
+})
+
+test('not-sr-only resets caption clipping', async () => {
+  expect(await run(['not-sr-only'])).toContain('clip-path: none;')
 })
 
 test('pointer-events', async () => {
