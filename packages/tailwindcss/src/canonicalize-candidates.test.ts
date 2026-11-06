@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { intersection } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
@@ -2005,6 +2005,38 @@ describe('regressions', () => {
         options,
       ),
     ).toEqual(['link', 'mt-4'])
+  })
+
+  // Canonicalization compiles every known variant on its own, so sorting all the
+  // parsed variants each time made it quadratic in the number of known variants.
+  test('does not sort the parsed variants when compiling a single candidate', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ matchVariant }) => {
+              let values = Object.fromEntries(
+                Array.from({ length: 250 }, (_, i) => [`value-${i}`, `.value-${i}`]),
+              )
+              matchVariant('foo', (value) => `&:has(${value})`, { values })
+            }),
+          }
+        },
+      },
+    )
+
+    using compare = vi.spyOn(designSystem.variants, 'compare')
+
+    expect(designSystem.canonicalizeCandidates(['foo-[.value-42]:flex'])).toEqual([
+      'foo-value-42:flex',
+    ])
+    expect(compare).not.toHaveBeenCalled()
   })
 })
 
