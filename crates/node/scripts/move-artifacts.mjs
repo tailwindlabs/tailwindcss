@@ -35,3 +35,15 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
   )
   console.log(`Moved ${file} to npm/wasm32-wasi`)
 }
+
+// Strip bundledDependencies from wasm32-wasi/package.json to prevent npm unmet dependency errors
+// (napi-rs adds this automatically but it breaks installations in pnpm workspaces/monorepos)
+let wasmPkgPath = path.join(tailwindcssOxideRoot, 'npm', 'wasm32-wasi', 'package.json')
+if (await fs.stat(wasmPkgPath).then(() => true).catch(() => false)) {
+  let wasmPkg = JSON.parse(await fs.readFile(wasmPkgPath, 'utf8'))
+  if (wasmPkg.bundledDependencies) {
+    delete wasmPkg.bundledDependencies
+    await fs.writeFile(wasmPkgPath, JSON.stringify(wasmPkg, null, 2) + '\n')
+    console.log(`Stripped bundledDependencies from npm/wasm32-wasi/package.json`)
+  }
+}
