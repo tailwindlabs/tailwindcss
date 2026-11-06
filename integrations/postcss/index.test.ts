@@ -693,12 +693,16 @@ test(
       `,
     )
 
-    // 2.5 Write to a content file
-    await fs.write('src/index.html', html`
-      <div class="flex underline"></div>
-    `)
-
     await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
+
+    // The recovered build above still needs to finish registering its dependencies
+    // (including logging "Waiting for file changes...") before it's safe to write
+    // again -- writing sooner races a second, concurrent build against the one still
+    // settling, which is a separate, pre-existing sharp edge of this plugin's caching
+    // model, unrelated to error recovery itself. Flush first so this wait can't match
+    // a stale occurrence of that same message from an earlier, already-settled build.
+    process.flush()
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -708,6 +712,16 @@ test(
       }
       "
     `)
+
+    // 2.5 Write to a content file
+    await fs.write('src/index.html', html`
+      <div class="flex underline"></div>
+    `)
+
+    await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
+
+    process.flush()
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     // 3. Fix the CSS file
     await fs.write(
