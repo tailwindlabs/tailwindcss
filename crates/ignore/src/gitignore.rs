@@ -613,20 +613,29 @@ pub fn gitconfig_excludes_path() -> Option<PathBuf> {
     // $XDG_CONFIG_HOME/git/config (per git 2.32+). Otherwise, git supports
     // $HOME/.gitconfig and $XDG_CONFIG_HOME/git/config simultaneously, where
     // $HOME/.gitconfig takes precedent.
-    gitconfig_global_env_contents()
+    let global_config_is_set = std::env::var_os("GIT_CONFIG_GLOBAL").is_some();
+    let mut path = gitconfig_global_env_contents()
         .and_then(|x| parse_excludes_file(&x))
-        .or_else(|| {
-            gitconfig_home_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        .or_else(|| {
-            gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        // System-level config has the lowest priority for core.excludesFile.
-        // GIT_CONFIG_SYSTEM overrides the default /etc/gitconfig path.
-        .or_else(|| {
-            gitconfig_system_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        .or_else(excludes_file_default)
+        ;
+
+    // GIT_CONFIG_GLOBAL replaces the user and XDG config files, even when
+    // the configured file is empty or does not define core.excludesFile.
+    if !global_config_is_set {
+        path = path
+            .or_else(|| {
+                gitconfig_home_contents().and_then(|x| parse_excludes_file(&x))
+            })
+            .or_else(|| {
+                gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x))
+            });
+    }
+
+    // System-level config has the lowest priority for core.excludesFile.
+    // GIT_CONFIG_SYSTEM overrides the default /etc/gitconfig path.
+    path.or_else(|| {
+        gitconfig_system_contents().and_then(|x| parse_excludes_file(&x))
+    })
+    .or_else(excludes_file_default)
 }
 
 /// Returns the file contents of git's global config file from the path
@@ -702,7 +711,7 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
         Regex::builder()
             .configure(Regex::config().utf8_empty(false))
             .syntax(syntax::Config::new().utf8(false))
-            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"([^"\r\n]*)"|(\S+?))(?:\s*[#;].*|\s*)$"#)
+            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"(\S(?:[^"\r\n]*\S)?)"|(\S+))(?:\s*[#;].*|\s*)$"#)
             .unwrap()
     });
     // We don't care about amortizing allocs here I think. This should only
