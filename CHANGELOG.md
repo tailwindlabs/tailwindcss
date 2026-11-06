@@ -7,16 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Nothing yet!
+
+## [4.3.5] - 2026-11-06
+
 ### Fixed
 
 - Canonicalization: improve performance in projects with many functional variant values (e.g. a `matchVariant` plugin with thousands of values) ([#20663](https://github.com/tailwindlabs/tailwindcss/pull/20663))
-- Don't crash when a `color-mix(…)` with a single color and no color interpolation method uses a theme variable (e.g. `color-mix(var(--color-red-500))`) ([#20658](https://github.com/tailwindlabs/tailwindcss/pull/20658))
+- Don't crash or create a fallback with the wrong color for a `color-mix(…)` without a color interpolation method (e.g. `color-mix(var(--color-red-500))` or `color-mix(currentcolor 50%, transparent)`) ([#20658](https://github.com/tailwindlabs/tailwindcss/pull/20658), [#20666](https://github.com/tailwindlabs/tailwindcss/pull/20666))
 - Ensure `@tailwindcss/oxide-wasm32-wasi` loads instead of hanging forever (e.g. with `NAPI_RS_FORCE_WASI=error` or in WebContainers) ([#20667](https://github.com/tailwindlabs/tailwindcss/pull/20667))
 - Remove `as: '*.css'` from the `@tailwindcss/turbopack` setup in its README, because it breaks CSS modules ([#20660](https://github.com/tailwindlabs/tailwindcss/pull/20660))
 - Ignore `<!--` and `-->` between top-level rules in CSS instead of throwing or swallowing the next rule (e.g. `a { color: red } --> b { color: blue }`) ([#20665](https://github.com/tailwindlabs/tailwindcss/pull/20665))
-- Don't create a `color-mix(…)` fallback with the wrong color when the `color-mix(…)` has no color interpolation method (e.g. `color-mix(currentcolor 50%, transparent)`) ([#20666](https://github.com/tailwindlabs/tailwindcss/pull/20666))
 - Ensure `@tailwindcss/oxide-wasm32-wasi` detects changed and new source files after the first scan (e.g. in WebContainers) ([#20487](https://github.com/tailwindlabs/tailwindcss/pull/20487))
-- Remove imports of unshipped modules from `@tailwindcss/node` type declarations, which caused type errors with `skipLibCheck: false` ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
+- Prevent type errors with `skipLibCheck: false` caused by imports of unshipped modules in the `@tailwindcss/node` type declarations ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
 
 ## [4.3.4] - 2026-11-02
 
@@ -4160,7 +4163,8 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.4...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.5...HEAD
+[4.3.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.4...v4.3.5
 [4.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...v4.3.2
