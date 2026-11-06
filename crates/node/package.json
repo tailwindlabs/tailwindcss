@@ -40,7 +40,7 @@
     "emnapi": "1.11.3"
   },
   "engines": {
-    "node": ">= 20"
+    "node": ">= 10"
   },
   "files": [
     "index.js",

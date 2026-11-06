@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">= 20"
+    "node": ">= 10"
   },
   "libc": [
     "musl"
