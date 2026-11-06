@@ -711,7 +711,7 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
         Regex::builder()
             .configure(Regex::config().utf8_empty(false))
             .syntax(syntax::Config::new().utf8(false))
-            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"(\S(?:[^"\r\n]*\S)?)"|(\S+))(?:\s*[#;].*|\s*)$"#)
+            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"([^"\r\n]*[^\s"\r\n][^"\r\n]*)"|([^#;"\s](?:[^#;"\r\n]*[^#;"\s])?))(?:\s*[#;].*|\s*)$"#)
             .unwrap()
     });
     // We don't care about amortizing allocs here I think. This should only
@@ -917,10 +917,24 @@ mod tests {
     }
 
     #[test]
+    fn parse_excludes_file_with_adjacent_inline_comment() {
+        let data = bytes("[core]\nexcludesFile = /tmp/ignore#comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), "/tmp/ignore");
+    }
+
+    #[test]
     fn parse_excludes_file_quoted_with_comment() {
         let data = bytes("[core]\nexcludesFile = \"~/foo bar/ignore\" ; semicolon comment");
         let got = super::parse_excludes_file(&data).unwrap();
         assert_eq!(path_string(got), super::expand_tilde("~/foo bar/ignore"));
+    }
+
+    #[test]
+    fn parse_excludes_file_quoted_with_trailing_space() {
+        let data = bytes("[core]\nexcludesFile = \"/tmp/ignore \"");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), "/tmp/ignore ");
     }
 
     #[test]
