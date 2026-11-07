@@ -24472,6 +24472,8 @@ test('filter', async () => {
         'drop-shadow-red-500/foo',
         '-drop-shadow-red-500/foo',
         '-drop-shadow-red-500/50',
+        'drop-shadow-inherit/50',
+        'drop-shadow-inherit/[0.5]',
 
         '-saturate-0',
         'saturate--5',
