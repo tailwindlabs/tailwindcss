@@ -166,6 +166,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
     return new Root(
       id,
       config!.root,
+      config!.command === 'build' ? path.resolve(config!.root, config!.build.outDir) : null,
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
       config?.css.devSourcemap ?? false,
@@ -338,6 +339,10 @@ class Root {
   // The lazily-initialized Tailwind scanner.
   private scanner?: Scanner
 
+  // A scanner for explicit `@source` paths that can opt back into paths which
+  // are excluded from automatic source detection.
+  private explicitScanner?: Scanner
+
   // List of all candidates that were being returned by the root scanner during
   // the lifetime of the root.
   private candidates: Set<string> = new Set<string>()
@@ -350,6 +355,7 @@ class Root {
   constructor(
     private id: string,
     private base: string,
+    private buildOutputDirectory: string | null,
 
     private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -431,7 +437,21 @@ class Root {
         return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
 
+      if (this.buildOutputDirectory !== null && this.compiler.root === null) {
+        // Watching files emitted by Vite would trigger another build every time
+        // the output is written.
+        sources.push({
+          base: this.buildOutputDirectory,
+          pattern: '**/*',
+          negated: true,
+        })
+      }
+
       this.scanner = new Scanner({ sources })
+      this.explicitScanner =
+        this.compiler.sources.length > 0
+          ? new Scanner({ sources: this.compiler.sources })
+          : undefined
       DEBUG && I.end('Setup scanner')
     } else {
       for (let buildDependency of this.buildDependencies.keys()) {
@@ -457,47 +477,55 @@ class Root {
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
       DEBUG && I.start('Scan for candidates')
-      for (let candidate of this.scanner.scan()) {
-        this.candidates.add(candidate)
+      for (let scanner of [this.scanner, this.explicitScanner]) {
+        if (!scanner) continue
+
+        for (let candidate of scanner.scan()) {
+          this.candidates.add(candidate)
+        }
       }
       DEBUG && I.end('Scan for candidates')
     }
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
-      // Watch individual files found via custom `@source` paths
-      for (let file of this.scanner.files) {
-        addWatchFile(file)
-      }
+      for (let scanner of [this.scanner, this.explicitScanner]) {
+        if (!scanner) continue
 
-      // Watch globs found via custom `@source` paths
-      for (let glob of this.scanner.globs) {
-        if (glob.pattern[0] === '!') continue
-
-        let relative = path.relative(this.base, glob.base)
-        if (relative[0] !== '.') {
-          relative = './' + relative
+        // Watch individual files found via custom `@source` paths
+        for (let file of scanner.files) {
+          addWatchFile(file)
         }
-        // Ensure relative is a posix style path since we will merge it with the
-        // glob.
-        relative = normalizePath(relative)
 
-        addWatchFile(path.posix.join(relative, glob.pattern))
+        // Watch globs found via custom `@source` paths
+        for (let glob of scanner.globs) {
+          if (glob.pattern[0] === '!') continue
 
-        let root = this.compiler.root
+          let relative = path.relative(this.base, glob.base)
+          if (relative[0] !== '.') {
+            relative = './' + relative
+          }
+          // Ensure relative is a posix style path since we will merge it with the
+          // glob.
+          relative = normalizePath(relative)
 
-        if (root !== 'none' && root !== null) {
-          let basePath = normalizePath(path.resolve(root.base, root.pattern))
+          addWatchFile(path.posix.join(relative, glob.pattern))
 
-          let isDir = await fs.stat(basePath).then(
-            (stats) => stats.isDirectory(),
-            () => false,
-          )
+          let root = this.compiler.root
 
-          if (!isDir) {
-            throw new Error(
-              `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
+          if (root !== 'none' && root !== null) {
+            let basePath = normalizePath(path.resolve(root.base, root.pattern))
+
+            let isDir = await fs.stat(basePath).then(
+              (stats) => stats.isDirectory(),
+              () => false,
             )
+
+            if (!isDir) {
+              throw new Error(
+                `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
+              )
+            }
           }
         }
       }
