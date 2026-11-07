@@ -695,11 +695,7 @@ export function optimizeAst(
 function hasLeadingCombinator(selector: string): boolean {
   for (let part of segment(selector, ',')) {
     let trimmed = part.trimStart()
-    if (
-      trimmed.startsWith('>') ||
-      trimmed.startsWith('+') ||
-      trimmed.startsWith('~')
-    ) {
+    if (trimmed.startsWith('>') || trimmed.startsWith('+') || trimmed.startsWith('~')) {
       return true
     }
   }
