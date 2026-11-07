@@ -1464,6 +1464,89 @@ describe('options', () => {
 })
 
 describe('regressions', () => {
+  // https://github.com/schoero/eslint-plugin-better-tailwindcss/issues/307
+  describe.each(['minimal', 'light/dark'])('theme alias compilation (%s)', (fixture) => {
+    describe.each(['@theme', '@theme inline'])('%s', (theme) => {
+      test.each(['cold', 'named-first', 'important'])(
+        'preserves canonical aliases and generated CSS (%s)',
+        { timeout },
+        async (order) => {
+          let designSystem = await __unstable__loadDesignSystem(
+            css`
+              ${fixture === 'minimal' ? '@tailwind utilities;' : "@import 'tailwindcss';"}
+
+              ${
+                fixture === 'light/dark'
+                  ? css`
+                      @layer theme {
+                        :root,
+                        .lightMode {
+                          --text-primary: var(--color-gray-950);
+                        }
+                        .darkMode {
+                          --text-primary: var(--color-white);
+                        }
+                      }
+                    `
+                  : ''
+              }
+
+              ${theme} {
+                --color-text-primary: var(--text-primary);
+              }
+            `,
+            {
+              base: __dirname,
+              async loadStylesheet(id, base) {
+                let file =
+                  id === 'tailwindcss'
+                    ? path.resolve(__dirname, '../index.css')
+                    : path.resolve(base, id)
+                return {
+                  path: file,
+                  base: path.dirname(file),
+                  content: fs.readFileSync(file, 'utf8'),
+                }
+              },
+            },
+          )
+          let suffix = order === 'important' ? '!' : ''
+          let candidate = `text-(--text-primary)${suffix}`
+          let named = `text-text-primary${suffix}`
+          let expected = theme === '@theme inline' ? named : candidate
+          let value = theme === '@theme inline' ? '--text-primary' : '--color-text-primary'
+          let declaration = `color: var(${value})${suffix ? ' !important' : ''};`
+
+          if (order === 'named-first') {
+            expect(designSystem.candidatesToCss([named])[0]).toContain(declaration)
+          }
+
+          expect(
+            designSystem.canonicalizeCandidates([candidate], {
+              collapse: true,
+              logicalToPhysical: true,
+            }),
+          ).toEqual([expected])
+          expect(designSystem.candidatesToCss([named])[0]).toContain(declaration)
+        },
+      )
+    })
+  })
+
+  test('does not combine variables from different theme views', async () => {
+    let designSystem = await __unstable__loadDesignSystem(css`
+      @tailwind utilities;
+      @theme inline {
+        --color-alias: var(--source);
+      }
+    `)
+
+    // Neither view of the named utility preserves both fallback variables.
+    expect(
+      designSystem.canonicalizeCandidates(['text-[var(--color-alias,var(--source))]']),
+    ).not.toContain('text-alias')
+  })
+
   // https://github.com/tailwindlabs/tailwindcss/issues/20539
   test(
     'collapsing keeps the winning candidate instead of a theme value that only matches by default',

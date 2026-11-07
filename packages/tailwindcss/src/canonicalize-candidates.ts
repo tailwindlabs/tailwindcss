@@ -1300,8 +1300,13 @@ function arbitraryUtilities(candidate: Candidate, options: InternalCanonicalizeO
       continue
     }
 
-    // Ensure that if CSS variables were used, that they are still used
-    if (!allVariablesAreUsed(designSystem, candidate, replacementCandidate)) {
+    // Keep all variables in one view: runtime aliases or their theme namespace.
+    if (
+      !allVariablesAreUsed(designSystem, candidate, replacementCandidate) &&
+      !temporarilyDisableThemeInline(designSystem, () =>
+        allVariablesAreUsed(designSystem, candidate, replacementCandidate),
+      )
+    ) {
       continue
     }
 
@@ -2598,12 +2603,6 @@ function compileUtilitySignatureAst(
   let ast: AstNode[] = [styleRule('.x', [atRule('@apply', utility)])]
 
   temporarilyDisableThemeInline(designSystem, () => {
-    // There's separate utility caches for respect important vs not
-    // so we want to compile them both with `@theme inline` disabled
-    for (let candidate of designSystem.parseCandidate(utility)) {
-      designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
-    }
-
     substituteAtApply(ast, designSystem)
   })
 
@@ -3190,6 +3189,14 @@ function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => 
   // Track all values with the inline option set, so we can restore them later.
   let restorableInlineOptions = new Set<{ options: ThemeOptions }>()
 
+  let originalCompileAstNodes = designSystem.compileAstNodes
+  designSystem.compileAstNodes = (candidate, flags = CompileAstFlags.RespectImportant) =>
+    originalCompileAstNodes.call(
+      designSystem,
+      candidate,
+      flags | CompileAstFlags.ThemeInlineDisabled,
+    )
+
   // @ts-expect-error We are monkey-patching a method that's considered private
   // in TypeScript
   designSystem.theme.values.get = (key: string) => {
@@ -3211,6 +3218,8 @@ function temporarilyDisableThemeInline<T>(designSystem: DesignSystem, cb: () => 
     // Run the callback with the `@theme inline` feature disabled
     return cb()
   } finally {
+    designSystem.compileAstNodes = originalCompileAstNodes
+
     // Restore the `@theme inline` to the original value
     // @ts-expect-error We are monkey-patching a method that's private
     designSystem.theme.values.get = originalGet
