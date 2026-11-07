@@ -31,7 +31,6 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
   },
   async ({ exec, expect }) => {
     // Ensure we are in a git repo
@@ -106,11 +105,18 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
+    // The test installs its dependencies again with `bun`, over the network
+    timeout: 120_000,
   },
   async ({ exec, expect }) => {
     // Use `bun` to install dependencies
     await exec('rm ./pnpm-lock.yaml')
+
+    // As of bun v1.4.4, `bun install` copies the `overrides` from
+    // `pnpm-workspace.yaml` into `package.json`. The pnpm specific syntax
+    // (e.g. `@tailwindcss/node>tailwindcss`) then makes `npx` fail.
+    await exec('rm ./pnpm-workspace.yaml')
+
     try {
       await exec('npx bun install', {}, { ignoreStdErr: true })
     } catch (e) {
@@ -194,7 +200,6 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
   },
   async ({ exec, expect }) => {
     // Use `npm` to install dependencies

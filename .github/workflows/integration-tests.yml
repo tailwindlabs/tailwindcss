@@ -31,7 +31,7 @@ jobs:
             os: namespace-profile-default
 
           - name: macOS
-            os: macos-14
+            os: macos-latest
 
         integration:
           - upgrade
@@ -41,6 +41,7 @@ jobs:
           - oxide
           - webpack
           - turbopack
+          - node
 
         # Feature branches opt into Windows/macOS (including ARM64) tests with [ci-all]
         run-all:

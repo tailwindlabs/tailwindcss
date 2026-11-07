@@ -521,6 +521,22 @@ export function optimizeAst(
         walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
+          // The color interpolation method is optional, e.g.: `color-mix(red 50%, blue)`. In that
+          // case the node after the first `,` is the second color, not the first one. Lightning CSS
+          // also doesn't compute a `color-mix(…)` without a color interpolation method, so a
+          // fallback with inlined colors would be dropped by browsers without `color-mix(…)`.
+          //
+          // Custom properties keep their comments, e.g.: `color-mix(/* … */ in oklab, …)`, and the
+          // value parser doesn't know about comments, so we drop them before we look for `in`. We
+          // also parse the arguments again without them, otherwise a `,` in a comment would be seen
+          // as the start of the first color.
+          let args = ValueParser.toCss(node.nodes)
+          if (args.includes('/*')) {
+            args = args.replace(/\/\*[\s\S]*?\*\//g, ' ')
+            node.nodes = ValueParser.parse(args)
+          }
+          if (!/^in\s/i.test(args.trimStart())) return
+
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
           walk(node.nodes, (node) => {
@@ -582,9 +598,11 @@ export function optimizeAst(
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
-            let colorspace = node.nodes[2]
+            // The color space follows `in`, which is not necessarily the first node when there is
+            // leading whitespace.
+            let colorspace = node.nodes[node.nodes.findIndex((n) => n.kind !== 'separator') + 2]
             if (
-              colorspace.kind === 'word' &&
+              colorspace?.kind === 'word' &&
               (colorspace.value === 'oklab' ||
                 colorspace.value === 'oklch' ||
                 colorspace.value === 'lab' ||

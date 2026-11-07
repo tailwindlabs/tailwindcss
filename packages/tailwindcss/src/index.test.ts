@@ -6668,7 +6668,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.5764% 89.7903 33.1932 / .25098);
+        color: #fb2c3640;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -6750,6 +6750,30 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('works without a color interpolation method and with a single color', async () => {
+    expect(
+      await run(
+        ['bg-[color-mix(var(--color-red-500))]'],
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
+        background-color: color-mix(var(--color-red-500));
+      }
+      "
+    `)
+  })
+
   it('uses the first color value as the fallback when the `color-mix(…)` function contains non-theme variables', async () => {
     expect(
       await run(
@@ -6811,6 +6835,149 @@ describe('`color-mix(…)` polyfill', () => {
         .text-current\\/50 {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when the color interpolation method has leading whitespace', async () => {
+    expect(
+      await compileCss(
+        // prettier-ignore
+        css`
+          @tailwind utilities;
+          .foo {
+            color: color-mix( in oklab, currentcolor 50%, transparent);
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        color: currentColor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('converts the color space of the fallback when the color interpolation method has leading whitespace', async () => {
+    expect(
+      await compileCss(
+        // prettier-ignore
+        css`
+          @theme {
+            --color-red-500: oklch(0.637 0.237 25.331);
+          }
+          @tailwind utilities;
+          .foo {
+            color: color-mix( in oklab, var(--color-red-500), transparent);
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .foo {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          color: color-mix(in oklab, var(--color-red-500), transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when a comment comes before the color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @tailwind utilities;
+        .foo {
+          --tint: color-mix(/* tint */ in oklab, currentcolor 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        --tint: currentcolor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          --tint: color-mix(/* tint */ in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when a comment with a comma comes before the color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @tailwind utilities;
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        --tint: currentcolor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('does not create a fallback when the `color-mix(…)` function has no color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+        @tailwind utilities;
+        .current {
+          color: color-mix(currentcolor 50%, transparent);
+        }
+        .unknown {
+          color: color-mix(var(--unknown), red);
+        }
+        .theme {
+          color: color-mix(var(--color-red-500) 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .current {
+        color: color-mix(currentcolor 50%, transparent);
+      }
+
+      .unknown {
+        color: color-mix(var(--unknown), red);
+      }
+
+      .theme {
+        color: color-mix(var(--color-red-500) 50%, transparent);
       }
       "
     `)

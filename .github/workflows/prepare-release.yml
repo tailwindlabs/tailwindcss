@@ -196,7 +196,7 @@ jobs:
           path: ${{ env.OXIDE_LOCATION }}/*.node
 
   prepare:
-    runs-on: macos-14
+    runs-on: macos-latest
     timeout-minutes: 15
     name: Build and release Tailwind CSS
 
@@ -262,6 +262,10 @@ jobs:
         run: pnpm run build
         env:
           FEATURES_ENV: stable
+
+      # Load the packed wasm package before it is published
+      - name: Test wasm package
+        run: pnpm run test:integrations ./integrations/oxide/wasm.test.ts
 
       - name: Run pre-publish optimizations scripts
         run: node ./scripts/pre-publish-optimizations.mjs
