@@ -888,6 +888,10 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
               atRuleStack.some(([name]) => name === '@scope') &&
               hasLeadingCombinator(node.selector)
             ) {
+              // Relative selectors inside `@scope`, e.g.: `> .item`, are relative
+              // to the scoping root. Lightning CSS can't parse them directly in a
+              // top-level `@scope` rule and drops them, so we make the scoping
+              // root explicit with `:where(:scope)`.
               let ast = SelectorParser.parse(node.selector)
               if (prefixRelativeSelectors(ast)) {
                 selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
