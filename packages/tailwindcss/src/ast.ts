@@ -698,8 +698,7 @@ function hasLeadingCombinator(selector: string): boolean {
     if (
       trimmed.startsWith('>') ||
       trimmed.startsWith('+') ||
-      trimmed.startsWith('~') ||
-      trimmed.startsWith('|')
+      trimmed.startsWith('~')
     ) {
       return true
     }
