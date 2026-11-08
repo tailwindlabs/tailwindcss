@@ -25,6 +25,7 @@ import { compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { createIncrementalBuild } from './incremental'
 import { createSourceMap, type DecodedSourceMap } from './source-maps/source-map'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
@@ -750,6 +751,17 @@ export async function compileAst(
   // Avoid retaining loader callbacks, which may keep build tool state alive.
   let { from, polyfills } = opts
 
+  // Only compile, optimize and print the new utilities on each build. Source
+  // maps need the positions of every node in the current build, so they use
+  // the non-incremental build.
+  let incremental =
+    utilitiesNode && !from
+      ? createIncrementalBuild(ast, utilitiesNode, designSystem, polyfills, onInvalidCandidate)
+      : null
+
+  // Candidates that the incremental build hasn't seen yet
+  let unseenCandidates: string[] = Array.from(allValidCandidates)
+
   return {
     sources,
     root,
@@ -778,7 +790,11 @@ export async function compileAst(
             didAddExternalVariable ||= didMarkVariableAsUsed
           } else {
             allValidCandidates.add(candidate)
-            didChange ||= allValidCandidates.size !== prevSize
+            if (allValidCandidates.size !== prevSize) {
+              didChange = true
+              prevSize = allValidCandidates.size
+              unseenCandidates.push(candidate)
+            }
           }
         }
       }
@@ -788,6 +804,20 @@ export async function compileAst(
       if (!didChange) {
         compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
+      }
+
+      if (incremental) {
+        let result = incremental(unseenCandidates, didAddExternalVariable)
+        unseenCandidates = []
+        if (result) {
+          compiled = result
+          return compiled
+        }
+
+        // The incremental build ran into something it can't handle, use the
+        // non-incremental build from now on.
+        incremental = null
+        utilitiesNode.nodes = []
       }
 
       let newNodes = compileCandidates(allValidCandidates, designSystem, {
