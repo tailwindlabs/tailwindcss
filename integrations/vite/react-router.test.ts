@@ -264,3 +264,72 @@ test(
     await fs.expectFileToContain(filename, [candidate`font-bold`])
   },
 )
+
+test(
+  'build mode using the Vite Environment API should only build one stylesheet, even when `build/` is not ignored',
+  {
+    fs: {
+      ...WORKSPACE,
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@react-router/dev": "^7",
+            "@react-router/node": "^7",
+            "@react-router/serve": "^7",
+            "@tailwindcss/vite": "workspace:^",
+            "@types/node": "^20",
+            "@types/react-dom": "^19",
+            "@types/react": "^19",
+            "isbot": "^5",
+            "react-dom": "^19",
+            "react-router": "^7",
+            "react": "^19",
+            "tailwindcss": "workspace:^",
+            "vite": "^7"
+          }
+        }
+      `,
+      'react-router.config.ts': ts`
+        import type { Config } from '@react-router/dev/config'
+        export default { ssr: true, future: { v8_viteEnvironmentApi: true } } satisfies Config
+      `,
+      'app/root.tsx': ts`
+        import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router'
+        import styles from './app.css?url'
+        export const links: Route.LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
+        export function Layout({ children }: { children: React.ReactNode }) {
+          return (
+            <html lang="en">
+              <head>
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <Meta />
+                <Links />
+              </head>
+              <body class="dark">
+                {children}
+                <ScrollRestoration />
+                <Scripts />
+              </body>
+            </html>
+          )
+        }
+
+        export default function App() {
+          return <Outlet />
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm react-router build')
+
+    let files = await fs.glob('build/client/assets/**/*.css')
+
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`font-bold`])
+  },
+)
