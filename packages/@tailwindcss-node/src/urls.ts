@@ -96,11 +96,33 @@ export async function rewriteUrlsInAst({
   }
 }
 
-function rebaseUrl(url: string, base: string, root: string) {
-  if (url[0] === '/') return url
+function getPathRoot(p: string): string {
+  let parsed = path.win32.parse(p)
+  return parsed.root.replace(/[/\\]+$/, '').toLowerCase()
+}
 
-  let absoluteUrl = path.posix.join(normalizePath(base), url)
-  let relativeUrl = path.posix.relative(normalizePath(root), absoluteUrl)
+function normalizeDriveLetter(p: string) {
+  if (/^[a-zA-Z]:/.test(p)) {
+    return p[0].toUpperCase() + p.slice(1)
+  }
+  return p
+}
+
+function rebaseUrl(url: string, base: string, root: string) {
+  if (url[0] === '/' || path.win32.isAbsolute(url)) return url
+
+  let normalizedBase = normalizeDriveLetter(normalizePath(base))
+  let normalizedRoot = normalizeDriveLetter(normalizePath(root))
+  let absoluteUrl = path.posix.join(normalizedBase, url)
+
+  // When root and base are on different Windows drives (e.g. C: and H:) or different UNC shares,
+  // relative path traversal between them is impossible and path.posix.relative would generate
+  // invalid drive-climbing paths (e.g. `../../../../H:/...`). In this case, preserve the absolute URL.
+  if (getPathRoot(normalizedRoot) !== getPathRoot(normalizedBase)) {
+    return absoluteUrl
+  }
+
+  let relativeUrl = path.posix.relative(normalizedRoot, absoluteUrl)
 
   // If the path points to a file in the same directory, `path.relative` will
   // remove the leading `./` and we need to add it back in order to still

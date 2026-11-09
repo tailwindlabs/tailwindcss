@@ -172,3 +172,43 @@ test('empty URLs are left alone', async () => {
   expect(result).toContain('url( )')
   expect(result).toContain('url(./foo/bar/image.jpg)')
 })
+
+test('cross-drive URLs preserve absolute path and avoid climbing across drives', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
+
+test('URLs on the same Windows drive are rebased relatively even with differing drive letter case', async () => {
+  let result = await rewriteUrls({
+    root: 'c:/Users/app/entry',
+    base: 'C:/Users/app/entry/styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("./styles/images/probe.svg")')
+})
+
+test('cross-drive URLs with parent directory references preserve resolved absolute path', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app/nested',
+    css: '.card { background-image: url("../images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
+
+test('already absolute Windows drive URLs are left alone', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app',
+    css: '.card { background-image: url("H:/tw-repro/app/images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
