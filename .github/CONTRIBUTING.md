@@ -16,7 +16,7 @@ pnpm install
 
 # Install Rust toolchain and WASM targets
 rustup default stable
-rustup target add wasm32-wasip1-threads
+rustup target add wasm32-wasip1 wasm32-wasip1-threads
 
 # Build the project
 pnpm build

@@ -4,10 +4,23 @@
   "tasks": {
     "@tailwindcss/oxide#build": {
       "dependsOn": ["^build"],
-      "outputs": ["./index.d.ts", "./index.js", "./*.node"],
+      "outputs": [
+        "./index.d.ts",
+        "./index.js",
+        "./*.node",
+        "./*.wasm",
+        "./tailwindcss-oxide.wasi*",
+        "./wasi-worker*",
+        "./npm/wasm32-wasi/*.wasm",
+        "./npm/wasm32-wasi/index.d.ts",
+        "./npm/wasm32-wasi/tailwindcss-oxide.wasi*",
+        "./npm/wasm32-wasi/wasi-worker*"
+      ],
       "inputs": [
         "./src/**/*",
         "./build.rs",
+        "./scripts/**/*",
+        "./npm/wasm32-wasi/browser.mjs",
         "./package.json",
         "./Cargo.toml",
         "./.cargo/config.toml",
