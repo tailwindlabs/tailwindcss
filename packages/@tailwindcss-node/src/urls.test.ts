@@ -231,8 +231,8 @@ test('network share UNC paths preserve double slash prefix and resolve cross-sha
 
 test('same-share UNC paths with differing casing rebase relatively without duplicate segments', async () => {
   let result = await rewriteUrls({
-    root: '//server/share/app',
-    base: '//SERVER/SHARE/app/styles',
+    root: '\\\\server\\share\\app',
+    base: '\\\\SERVER\\SHARE\\app\\styles',
     css: '.card { background-image: url("./images/probe.svg"); }',
   })
   expect(result).toContain('url("./styles/images/probe.svg")')
@@ -261,4 +261,13 @@ test('URLs navigating above the base directory preserve the drive root and compu
     css: '.card { background-image: url("../../asset.svg"); }',
   })
   expect(crossDriveResult).toContain('url("D:/asset.svg")')
+})
+
+test('POSIX paths that start with two slashes are not treated as network shares', async () => {
+  let result = await rewriteUrls({
+    root: '/root',
+    base: '//root/foo',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(result).toContain('url("./foo/images/probe.svg")')
 })
