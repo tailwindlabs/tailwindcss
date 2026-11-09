@@ -872,6 +872,7 @@ export async function compile(
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
+  let trackedAst = ast
   let from = opts.from
 
   return {
@@ -883,13 +884,21 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst, !!from)
+      compiledCss = toCss(newAst)
       compiledAst = newAst
 
       return compiledCss
     },
 
     buildSourceMap() {
+      // Only source maps need the positions in the output, so we track them
+      // here instead of in `build()`. This way `build()` can reuse the printed
+      // CSS of the cached utilities. The printed CSS is the same.
+      if (from && trackedAst !== compiledAst) {
+        toCss(compiledAst, true)
+        trackedAst = compiledAst
+      }
+
       return createSourceMap({
         ast: compiledAst,
       })
