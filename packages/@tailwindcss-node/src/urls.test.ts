@@ -246,3 +246,19 @@ test('CSS escape backslashes in URLs are preserved on Windows paths', async () =
   })
   expect(result).toContain('url("./styles/my\\ image.svg")')
 })
+
+test('URLs navigating above the base directory preserve the drive root and compute correct relative path', async () => {
+  let sameDriveResult = await rewriteUrls({
+    root: 'C:/entry',
+    base: 'C:/styles',
+    css: '.card { background-image: url("../../asset.svg"); }',
+  })
+  expect(sameDriveResult).toContain('url("../asset.svg")')
+
+  let crossDriveResult = await rewriteUrls({
+    root: 'C:/entry',
+    base: 'D:/styles',
+    css: '.card { background-image: url("../../asset.svg"); }',
+  })
+  expect(crossDriveResult).toContain('url("D:/asset.svg")')
+})

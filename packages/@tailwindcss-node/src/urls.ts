@@ -116,17 +116,32 @@ function normalizeRootVolume(p: string) {
   return p
 }
 
+function joinWithBase(base: string, url: string) {
+  let driveMatch = base.match(/^([a-zA-Z]:)(\/.*)?$/)
+  if (driveMatch) {
+    let drive = driveMatch[1]
+    let dir = driveMatch[2] || '/'
+    let joined = path.posix.join(dir, url)
+    return drive + (joined.startsWith('/') ? joined : '/' + joined)
+  }
+
+  let uncMatch = base.match(/^(\/\/[^/]+\/[^/]+)(\/.*)?$/)
+  if (uncMatch) {
+    let share = uncMatch[1]
+    let dir = uncMatch[2] || '/'
+    let joined = path.posix.join(dir, url)
+    return share + (joined.startsWith('/') ? joined : '/' + joined)
+  }
+
+  return path.posix.join(base, url)
+}
+
 function rebaseUrl(url: string, base: string, root: string) {
   if (url[0] === '/' || path.win32.isAbsolute(url)) return url
 
   let normalizedBase = normalizeRootVolume(normalizePath(base))
   let normalizedRoot = normalizeRootVolume(normalizePath(root))
-  let absoluteUrl = path.posix.join(normalizedBase, url)
-
-  // Preserve UNC leading double slash since path.posix.join collapses '//' to '/'
-  if (normalizedBase.startsWith('//') && !absoluteUrl.startsWith('//')) {
-    absoluteUrl = `/${absoluteUrl}`
-  }
+  let absoluteUrl = joinWithBase(normalizedBase, url)
 
   let rootRoot = getPathRoot(normalizedRoot)
   let baseRoot = getPathRoot(normalizedBase)
