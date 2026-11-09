@@ -26,6 +26,4 @@ fsScanner.scan() // ['class', 'grid']
 
 The bundler must support ESM, top-level `await`, and `new URL('…', import.meta.url)` asset references. With bundlers that don't (such as esbuild), copy `tailwindcss-oxide.browser.wasm` next to the bundled JavaScript.
 
-On cross-origin isolated pages (COOP/COEP headers), import `@tailwindcss/oxide-wasm32-wasi/tailwindcss-oxide.wasi-browser.js` instead to scan in parallel on the threaded build. It uses `SharedArrayBuffer` and Web Workers, and the bundler must also serve `wasi-worker-browser.mjs`.
-
 Scanning is synchronous. For larger inputs, run it in a module worker to keep the UI responsive.

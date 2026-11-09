@@ -38,7 +38,8 @@ fn setup_browser() {
     "--import-memory",
     "--import-undefined",
     "--max-memory=4294967296",
-    "-zstack-size=64000000",
+    // 8 MB, like a native main thread. The threaded build uses napi's 64 MB.
+    "-zstack-size=8388608",
     "--export=_initialize",
   ] {
     println!("cargo:rustc-link-arg={arg}");
