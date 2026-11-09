@@ -10,7 +10,9 @@
     "browser.d.mts",
     "index.d.ts",
     "tailwindcss-oxide.wasi.cjs",
-    "wasi-worker.mjs"
+    "tailwindcss-oxide.wasi-browser.js",
+    "wasi-worker.mjs",
+    "wasi-worker-browser.mjs"
   ],
   "license": "MIT",
   "engines": {
