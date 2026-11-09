@@ -228,3 +228,12 @@ test('network share UNC paths preserve double slash prefix and resolve cross-sha
   })
   expect(sameShareResult).toContain('url("./styles/images/probe.svg")')
 })
+
+test('same-share UNC paths with differing casing rebase relatively without duplicate segments', async () => {
+  let result = await rewriteUrls({
+    root: '//server/share/app',
+    base: '//SERVER/SHARE/app/styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(result).toContain('url("./styles/images/probe.svg")')
+})

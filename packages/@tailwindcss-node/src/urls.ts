@@ -120,14 +120,20 @@ function rebaseUrl(url: string, base: string, root: string) {
     absoluteUrl = `/${absoluteUrl}`
   }
 
+  let rootRoot = getPathRoot(normalizedRoot)
+  let baseRoot = getPathRoot(normalizedBase)
+
   // When root and base are on different Windows drives (e.g. C: and H:) or different UNC shares,
   // relative path traversal between them is impossible and path.posix.relative would generate
   // invalid drive-climbing paths (e.g. `../../../../H:/...`). In this case, preserve the absolute URL.
-  if (getPathRoot(normalizedRoot) !== getPathRoot(normalizedBase)) {
+  if (rootRoot !== baseRoot) {
     return absoluteUrl
   }
 
-  let relativeUrl = path.posix.relative(normalizedRoot, absoluteUrl)
+  // Use case-insensitive Windows relative path computation for same-drive and same-share UNC paths
+  let relativeUrl = rootRoot
+    ? path.win32.relative(normalizedRoot, absoluteUrl).replaceAll('\\', '/')
+    : path.posix.relative(normalizedRoot, absoluteUrl)
 
   // If the path points to a file in the same directory, `path.relative` will
   // remove the leading `./` and we need to add it back in order to still
