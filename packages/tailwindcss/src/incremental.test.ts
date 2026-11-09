@@ -259,3 +259,14 @@ test.each([
   used.push('flex')
   expect(incremental.build(used)).toEqual(reference.build(used))
 })
+
+test('builds with a very large number of utilities', async () => {
+  let { incremental } = await compilers(css`
+    @tailwind utilities;
+  `)
+
+  // Each utility is a separate node at the root. A list this large overflows
+  // the call stack when it's spread into the arguments of a function call.
+  let candidates = Array.from({ length: 150_000 }, (_, i) => `w-[${i}px]`)
+  expect(incremental.build(candidates)).toContain('.w-\\[149999px\\] {')
+})

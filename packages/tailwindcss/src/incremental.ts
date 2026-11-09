@@ -270,7 +270,11 @@ export function createIncrementalBuild(
     let nodes = parent.slice(0, idx)
     for (let node of utilities) mergeInto(nodes, node, merged, isRoot)
     for (let i = idx + 1; i < parent.length; i++) mergeInto(nodes, parent[i], merged, isRoot)
-    parent.splice(0, parent.length, ...nodes)
+
+    // Don't spread the nodes into `splice(…)`, a large list overflows the call
+    // stack.
+    parent.length = 0
+    for (let node of nodes) parent.push(node)
 
     for (let nodes of merged) dedupeDeclarations(nodes)
 
