@@ -237,3 +237,12 @@ test('same-share UNC paths with differing casing rebase relatively without dupli
   })
   expect(result).toContain('url("./styles/images/probe.svg")')
 })
+
+test('CSS escape backslashes in URLs are preserved on Windows paths', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/app',
+    base: 'C:/app/styles',
+    css: '.card { background-image: url("./my\\ image.svg"); }',
+  })
+  expect(result).toContain('url("./styles/my\\ image.svg")')
+})

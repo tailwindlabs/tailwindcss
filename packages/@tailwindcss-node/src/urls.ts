@@ -101,9 +101,17 @@ function getPathRoot(p: string): string {
   return parsed.root.replace(/[/\\]+$/, '').toLowerCase()
 }
 
-function normalizeDriveLetter(p: string) {
+function normalizeRootVolume(p: string) {
+  // Normalize Windows drive letter to uppercase, e.g. c:/ -> C:/
   if (/^[a-zA-Z]:/.test(p)) {
     return p[0].toUpperCase() + p.slice(1)
+  }
+  // Normalize UNC server and share prefix to lowercase, e.g. //SERVER/SHARE/ -> //server/share/
+  if (p.startsWith('//')) {
+    let match = p.match(/^(\/\/[^/]+\/[^/]+)(.*)$/)
+    if (match) {
+      return match[1].toLowerCase() + match[2]
+    }
   }
   return p
 }
@@ -111,8 +119,8 @@ function normalizeDriveLetter(p: string) {
 function rebaseUrl(url: string, base: string, root: string) {
   if (url[0] === '/' || path.win32.isAbsolute(url)) return url
 
-  let normalizedBase = normalizeDriveLetter(normalizePath(base))
-  let normalizedRoot = normalizeDriveLetter(normalizePath(root))
+  let normalizedBase = normalizeRootVolume(normalizePath(base))
+  let normalizedRoot = normalizeRootVolume(normalizePath(root))
   let absoluteUrl = path.posix.join(normalizedBase, url)
 
   // Preserve UNC leading double slash since path.posix.join collapses '//' to '/'
@@ -130,10 +138,7 @@ function rebaseUrl(url: string, base: string, root: string) {
     return absoluteUrl
   }
 
-  // Use case-insensitive Windows relative path computation for same-drive and same-share UNC paths
-  let relativeUrl = rootRoot
-    ? path.win32.relative(normalizedRoot, absoluteUrl).replaceAll('\\', '/')
-    : path.posix.relative(normalizedRoot, absoluteUrl)
+  let relativeUrl = path.posix.relative(normalizedRoot, absoluteUrl)
 
   // If the path points to a file in the same directory, `path.relative` will
   // remove the leading `./` and we need to add it back in order to still
