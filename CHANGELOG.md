@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure generated utilities include a space in empty `var()` fallbacks (e.g. `var(--tw-blur,)` → `var(--tw-blur, )`) ([#20373](https://github.com/tailwindlabs/tailwindcss/pull/20373))
 - Canonicalization: convert arbitrary breakpoint and container query variants to named equivalents (e.g. `max-[64rem]:flex` → `max-lg:flex`) ([#20380](https://github.com/tailwindlabs/tailwindcss/pull/20380))
 - Prevent `@tailwindcss/vite` from crashing on every edit under Vite's experimental `bundledDev` mode ([#20379](https://github.com/tailwindlabs/tailwindcss/pull/20379))
-- Ensure `@tailwindcss/oxide` falls back to WASM on platforms without native bindings ([#20383](https://github.com/tailwindlabs/tailwindcss/pull/20383))
+- Ensure `@tailwindcss/oxide` falls back to WASM on platforms without native bindings (`@tailwindcss/oxide-wasm32-wasi` now installs on all platforms, but only loads when no native binding is available) ([#20383](https://github.com/tailwindlabs/tailwindcss/pull/20383))
 - Extract class candidates from Ruby `%w` and `%W` literals using angle brackets or custom delimiters (e.g. `%w<flex>`, `%w|flex|`), including in Slim and Haml templates ([#20387](https://github.com/tailwindlabs/tailwindcss/pull/20387))
 - Preserve whitespace in `--default(…)` values in functional `@utility` definitions (e.g. `--default(box alphabetic)` no longer becomes `boxalphabetic`) ([#20392](https://github.com/tailwindlabs/tailwindcss/pull/20392))
 - Ensure automatic source detection respects negation-based `.gitignore` files (e.g. `/*` followed by `!/…` patterns) ([#20397](https://github.com/tailwindlabs/tailwindcss/pull/20397))
