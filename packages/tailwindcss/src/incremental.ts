@@ -242,6 +242,16 @@ export function createIncrementalBuild(
       for (let value of cached.animations) animations.add(value)
     }
 
+    // Without any utilities, the placeholder would keep the at-rules around
+    // the utilities alive, and they would print without a body (e.g. `@media
+    // print;`). Optimize the utility nodes with the rest of the stylesheet
+    // instead, the same way the non-incremental build does.
+    if (utilities.length === 0) {
+      utilitiesNode.nodes = sorted.map((info) => info.node)
+      previous = optimizeAst(ast, designSystem, polyfills)
+      return previous
+    }
+
     // Optimize the rest of the stylesheet with a placeholder for the
     // utilities. The placeholder carries the `animation` declarations of the
     // utilities, so that `optimizeAst` can still remove unused `@keyframes`.

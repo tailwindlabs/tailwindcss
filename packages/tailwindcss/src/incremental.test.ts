@@ -236,3 +236,26 @@ test('utilities added in later builds are merged into existing at-rules', async 
     "
   `)
 })
+
+test.each([
+  ['@media', 'print'],
+  ['@supports', '(display: grid)'],
+  ['@container', '(width > 10rem)'],
+])('at-rules around the utilities are removed without utilities (%s %s)', async (name, params) => {
+  let { incremental, reference } = await compilers(css`
+    @import 'tailwindcss/theme';
+    ${name} ${params} {
+      @tailwind utilities;
+    }
+    .after {
+      color: red;
+    }
+  `)
+
+  // None of the candidates are valid, so there are no utilities in the at-rule
+  let used = ['not-a-utility']
+  expect(incremental.build(used)).toEqual(reference.build(used))
+
+  used.push('flex')
+  expect(incremental.build(used)).toEqual(reference.build(used))
+})
