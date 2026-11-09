@@ -212,3 +212,19 @@ test('already absolute Windows drive URLs are left alone', async () => {
 
   expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
 })
+
+test('network share UNC paths preserve double slash prefix and resolve cross-share paths', async () => {
+  let crossShareResult = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: '\\\\server\\share\\styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(crossShareResult).toContain('url("//server/share/styles/images/probe.svg")')
+
+  let sameShareResult = await rewriteUrls({
+    root: '\\\\server\\share\\app',
+    base: '\\\\server\\share\\app\\styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(sameShareResult).toContain('url("./styles/images/probe.svg")')
+})

@@ -115,6 +115,11 @@ function rebaseUrl(url: string, base: string, root: string) {
   let normalizedRoot = normalizeDriveLetter(normalizePath(root))
   let absoluteUrl = path.posix.join(normalizedBase, url)
 
+  // Preserve UNC leading double slash since path.posix.join collapses '//' to '/'
+  if (normalizedBase.startsWith('//') && !absoluteUrl.startsWith('//')) {
+    absoluteUrl = `/${absoluteUrl}`
+  }
+
   // When root and base are on different Windows drives (e.g. C: and H:) or different UNC shares,
   // relative path traversal between them is impossible and path.posix.relative would generate
   // invalid drive-climbing paths (e.g. `../../../../H:/...`). In this case, preserve the absolute URL.

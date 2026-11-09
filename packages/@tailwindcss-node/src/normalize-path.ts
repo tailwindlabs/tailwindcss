@@ -36,7 +36,7 @@ export function normalizePath(originalPath: string) {
   // Make sure Windows network share paths are normalized properly
   // They have to begin with two slashes or they won't resolve correctly
   if (
-    originalPath.startsWith('\\\\') &&
+    (originalPath.startsWith('\\\\') || originalPath.startsWith('//')) &&
     normalized.startsWith('/') &&
     !normalized.startsWith('//')
   ) {
