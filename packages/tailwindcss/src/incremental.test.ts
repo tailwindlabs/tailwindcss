@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { compile } from './index'
 
 const css = String.raw
@@ -11,12 +11,40 @@ async function loadStylesheet(id: string, base: string) {
   return { path: file, base: path.dirname(file), content: fs.readFileSync(file, 'utf8') }
 }
 
-// The incremental build is used unless source maps are requested (`from`), so
-// a build with `from` is the non-incremental build that we compare against.
-async function compilers(input: string) {
-  let incremental = await compile(input, { base: __dirname, loadStylesheet })
-  let reference = await compile(input, { base: __dirname, loadStylesheet, from: 'input.css' })
+type Compiler = Awaited<ReturnType<typeof compile>>
+
+// The non-incremental build that we compare against. This is `compile(…)` from
+// a second copy of the modules, where the incremental build is turned off.
+let referenceCompile: Promise<typeof compile> | null = null
+async function loadReferenceCompile() {
+  vi.resetModules()
+  vi.doMock('./incremental', () => ({ createIncrementalBuild: () => null }))
+  try {
+    return (await import('./index')).compile
+  } finally {
+    vi.doUnmock('./incremental')
+    vi.resetModules()
+  }
+}
+
+// With `from`, the nodes have source locations, and the source maps are
+// compared as well.
+async function compilers(input: string, from?: string) {
+  referenceCompile ??= loadReferenceCompile()
+  let opts = { base: __dirname, loadStylesheet, from }
+  let incremental = await compile(input, opts)
+  let reference = await (await referenceCompile)(input, opts)
   return { incremental, reference }
+}
+
+function expectSameBuild(
+  { incremental, reference }: { incremental: Compiler; reference: Compiler },
+  candidates: string[],
+) {
+  let output = incremental.build(candidates)
+  expect(output).toEqual(reference.build(candidates))
+  expect(incremental.buildSourceMap()).toEqual(reference.buildSourceMap())
+  return output
 }
 
 const CANDIDATES = [
@@ -164,32 +192,34 @@ const INPUTS = {
   `,
 }
 
-test.each(Object.entries(INPUTS))(
-  'incremental builds match the non-incremental build (%s)',
-  async (_, input) => {
-    // Add the candidates in a few different orders and batch sizes
-    for (let order of [1, -1]) {
-      let { incremental, reference } = await compilers(input)
-      let candidates = CANDIDATES.slice().sort((a, z) => order * a.localeCompare(z))
-      let used: string[] = []
+test.each(
+  Object.entries(INPUTS).flatMap(([name, input]) => [
+    [name, input, undefined],
+    [`${name}, with \`from\``, input, 'input.css'],
+  ]),
+)('incremental builds match the non-incremental build (%s)', async (_, input, from) => {
+  // Add the candidates in a few different orders and batch sizes
+  for (let order of [1, -1]) {
+    let builds = await compilers(input, from)
+    let candidates = CANDIDATES.slice().sort((a, z) => order * a.localeCompare(z))
+    let used: string[] = []
 
-      for (let size of [5, 1, 1, 3, 10, 1, 20, 100]) {
-        used.push(...candidates.splice(0, size))
-        expect(incremental.build(used)).toEqual(reference.build(used))
-      }
-
-      // Nothing new
-      expect(incremental.build(used)).toEqual(reference.build(used))
-
-      // Variables used outside of the utilities, e.g. in a `style` attribute
-      used.push('--color-pink-500')
-      expect(incremental.build(used)).toEqual(reference.build(used))
+    for (let size of [5, 1, 1, 3, 10, 1, 20, 100]) {
+      used.push(...candidates.splice(0, size))
+      expectSameBuild(builds, used)
     }
-  },
-)
+
+    // Nothing new
+    expectSameBuild(builds, used)
+
+    // Variables used outside of the utilities, e.g. in a `style` attribute
+    used.push('--color-pink-500')
+    expectSameBuild(builds, used)
+  }
+})
 
 test('utilities added in later builds are merged into existing at-rules', async () => {
-  let { incremental, reference } = await compilers(css`
+  let builds = await compilers(css`
     @theme {
       --breakpoint-sm: 40rem;
       --breakpoint-md: 48rem;
@@ -206,8 +236,7 @@ test('utilities added in later builds are merged into existing at-rules', async 
   let output = ''
   for (let step of steps) {
     used.push(...step)
-    output = incremental.build(used)
-    expect(output).toEqual(reference.build(used))
+    output = expectSameBuild(builds, used)
   }
 
   expect(output).toMatchInlineSnapshot(`
@@ -242,22 +271,27 @@ test.each([
   ['@supports', '(display: grid)'],
   ['@container', '(width > 10rem)'],
 ])('at-rules around the utilities are removed without utilities (%s %s)', async (name, params) => {
-  let { incremental, reference } = await compilers(css`
-    @import 'tailwindcss/theme';
-    ${name} ${params} {
-      @tailwind utilities;
-    }
-    .after {
-      color: red;
-    }
-  `)
+  for (let from of [undefined, 'input.css']) {
+    let builds = await compilers(
+      css`
+        @import 'tailwindcss/theme';
+        ${name} ${params} {
+          @tailwind utilities;
+        }
+        .after {
+          color: red;
+        }
+      `,
+      from,
+    )
 
-  // None of the candidates are valid, so there are no utilities in the at-rule
-  let used = ['not-a-utility']
-  expect(incremental.build(used)).toEqual(reference.build(used))
+    // None of the candidates are valid, so there are no utilities in the at-rule
+    let used = ['not-a-utility']
+    expectSameBuild(builds, used)
 
-  used.push('flex')
-  expect(incremental.build(used)).toEqual(reference.build(used))
+    used.push('flex')
+    expectSameBuild(builds, used)
+  }
 })
 
 test('builds with a very large number of utilities', async () => {

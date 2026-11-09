@@ -3,6 +3,7 @@ import { atRule, CACHEABLE, decl, HOISTABLE_AT_RULES, optimizeAst, rule, type As
 import type { Candidate, Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import { compare } from './utils/compare'
+import { walk } from './walk'
 
 // An incremental version of the utilities part of `build()`.
 //
@@ -60,6 +61,7 @@ export function createIncrementalBuild(
   designSystem: DesignSystem,
   polyfills: Polyfills = Polyfills.All,
   onInvalidCandidate: (candidate: string) => void,
+  trackSources = false,
 ) {
   let found = findWrappingAtRules(ast, utilitiesNode)
   if (found === null) return null
@@ -190,6 +192,16 @@ export function createIncrementalBuild(
         let rules = designSystem.compileAstNodes(candidate, CompileAstFlags.RespectImportant)
         for (let { node, propertySort } of rules) {
           found = true
+
+          // Same as the non-incremental build, the nodes keep the source
+          // locations of `@utility` and `@custom-variant`. This happens before
+          // the node is flattened and cached.
+          if (trackSources) {
+            walk([node], (node) => {
+              node.src ??= utilitiesNode.src
+            })
+          }
+
           added.push({ node, candidate, raw, ...propertySort })
         }
       }

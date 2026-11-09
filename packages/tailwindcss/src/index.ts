@@ -751,13 +751,17 @@ export async function compileAst(
   // Avoid retaining loader callbacks, which may keep build tool state alive.
   let { from, polyfills } = opts
 
-  // Only compile, optimize and print the new utilities on each build. Source
-  // maps need the positions of every node in the current build, so they use
-  // the non-incremental build.
-  let incremental =
-    utilitiesNode && !from
-      ? createIncrementalBuild(ast, utilitiesNode, designSystem, polyfills, onInvalidCandidate)
-      : null
+  // Only compile, optimize and print the new utilities on each build.
+  let incremental = utilitiesNode
+    ? createIncrementalBuild(
+        ast,
+        utilitiesNode,
+        designSystem,
+        polyfills,
+        onInvalidCandidate,
+        !!from,
+      )
+    : null
 
   // Candidates that the incremental build hasn't seen yet
   let unseenCandidates: string[] = Array.from(allValidCandidates)
