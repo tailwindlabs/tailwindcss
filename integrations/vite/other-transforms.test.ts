@@ -246,6 +246,33 @@ describe('a plugin that changes the input CSS in memory', () => {
         await fs.rm('dist', { recursive: true, force: true })
         await builder.build(builder.environments.client)
       `,
+      'build-after-error.mjs': js`
+        import fs from 'node:fs/promises'
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+        import { inlinePartial } from './inline-partial.mjs'
+
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'silent',
+          build: { cssMinify: false },
+          plugins: [inlinePartial(), tailwindcss()],
+        })
+
+        await builder.build(builder.environments.client)
+        await fs.writeFile('src/partial.css', '.from-partial { @apply does-not-exist; }')
+
+        // Build the same invalid input two times
+        for (let i of [1, 2]) {
+          await fs.rm('dist', { recursive: true, force: true })
+          try {
+            await builder.build(builder.environments.client)
+            console.log('build ' + i + ': ok')
+          } catch {
+            console.log('build ' + i + ': failed')
+          }
+        }
+      `,
       'index.html': html`
         <head>
           <link rel="stylesheet" href="./src/index.css" />
@@ -339,5 +366,12 @@ describe('a plugin that changes the input CSS in memory', () => {
     // Tailwind optimizes the CSS in a build, so `blue` becomes `#00f`
     expect(styles).toContain('color: #00f')
     expect(styles).not.toContain('color: red')
+  })
+
+  test('a build again after an error fails again', setup, async ({ exec, expect }) => {
+    let output = await exec('node build-after-error.mjs')
+
+    expect(output).toContain('build 1: failed')
+    expect(output).toContain('build 2: failed')
   })
 })

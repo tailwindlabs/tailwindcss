@@ -402,7 +402,8 @@ class Root {
       this.content !== content ||
       (await requiresBuildPromise)
     ) {
-      this.content = content
+      // Set again once the setup succeeds, so a failed setup is retried
+      this.content = null
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
 
@@ -444,6 +445,8 @@ class Root {
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
+
+      this.content = content
     } else {
       for (let buildDependency of this.buildDependencies.keys()) {
         addWatchFile(buildDependency)
