@@ -3,6 +3,7 @@ use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::string_machine::StringMachine;
 use classification_macros::ClassifyBytes;
+use std::ops::ControlFlow;
 
 /// Extracts arbitrary values including the brackets.
 ///
@@ -53,7 +54,7 @@ impl ArbitraryValueMachine {
     fn parse(
         &mut self,
         cursor: &mut cursor::Cursor<'_>,
-        mut memo: Option<&mut ArbitraryValueMemo>,
+        memo: Option<&mut ArbitraryValueMemo>,
     ) -> MachineState {
         // An arbitrary value must start with an open bracket
         if Class::OpenBracket != cursor.curr().into() {
@@ -65,15 +66,26 @@ impl ArbitraryValueMachine {
 
         let len = cursor.input.len();
 
-        while cursor.pos < len {
-            // Without open brackets, the rest of the arbitrary value doesn't depend on where it
-            // started. So if an earlier arbitrary value was here without open brackets, this one
-            // stops at the same position.
-            //
-            // Near the start, the work is cheap to repeat, so we don't use the memo there. This
-            // way, most lines don't need one.
-            if let Some(memo) = memo.as_deref_mut() {
-                if cursor.pos > start_pos + MEMO_MIN_DISTANCE && self.bracket_stack.is_empty() {
+        // Near the start, the work is cheap to repeat, so we don't use the memo there. This way,
+        // most lines don't need one. A separate loop for the start also keeps the checks of the
+        // memo out of the loop for most arbitrary values.
+        let memo_from = match memo {
+            Some(_) => len.min(start_pos + MEMO_MIN_DISTANCE + 1),
+            None => len,
+        };
+
+        while cursor.pos < memo_from {
+            if let ControlFlow::Break(state) = self.step(start_pos, cursor) {
+                return state;
+            }
+        }
+
+        if let Some(memo) = memo {
+            while cursor.pos < len {
+                // Without open brackets, the rest of the arbitrary value doesn't depend on where
+                // it started. So if an earlier arbitrary value was here without open brackets,
+                // this one stops at the same position.
+                if self.bracket_stack.is_empty() {
                     if let Some((end, found)) = memo.visit(cursor.pos) {
                         cursor.pos = end;
                         return if found {
@@ -83,72 +95,85 @@ impl ArbitraryValueMachine {
                         };
                     }
                 }
+
+                if let ControlFlow::Break(state) = self.step(start_pos, cursor) {
+                    return state;
+                }
             }
-
-            match cursor.curr().into() {
-                Class::Escape => match cursor.next().into() {
-                    // An escaped whitespace character is not allowed
-                    //
-                    // E.g.: `[color:var(--my-\ color)]`
-                    //                         ^
-                    Class::Whitespace => {
-                        cursor.advance_twice();
-                        return self.restart();
-                    }
-
-                    // An escaped character, skip the next character, resume after
-                    //
-                    // E.g.: `[color:var(--my-\#color)]`
-                    //                        ^
-                    _ => cursor.advance_twice(),
-                },
-
-                Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
-                    if !self.bracket_stack.push(cursor.curr()) {
-                        return self.restart();
-                    }
-                    cursor.advance();
-                }
-
-                Class::CloseParen | Class::CloseBracket | Class::CloseCurly
-                    if !self.bracket_stack.is_empty() =>
-                {
-                    if !self.bracket_stack.pop(cursor.curr()) {
-                        return self.restart();
-                    }
-                    cursor.advance();
-                }
-
-                // End of an arbitrary value
-                //
-                // 1. All brackets must be balanced
-                // 2. There must be at least a single character inside the brackets
-                Class::CloseBracket
-                    if start_pos + 1 != cursor.pos && self.bracket_stack.is_empty() =>
-                {
-                    return self.done(start_pos, cursor);
-                }
-
-                // Start of a string
-                Class::Quote => match self.string_machine.next(cursor) {
-                    MachineState::Idle => return self.restart(),
-                    MachineState::Done(_) => cursor.advance(),
-                },
-
-                // Any kind of whitespace is not allowed
-                Class::Whitespace => return self.restart(),
-
-                // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
-                Class::Dollar if matches!(cursor.next().into(), Class::OpenCurly) => {
-                    return self.restart()
-                }
-
-                // Everything else is valid
-                _ => cursor.advance(),
-            };
         }
 
         self.restart()
+    }
+
+    /// Parses the character at the cursor, and breaks with the result when the arbitrary value
+    /// stops.
+    #[inline(always)]
+    fn step(
+        &mut self,
+        start_pos: usize,
+        cursor: &mut cursor::Cursor<'_>,
+    ) -> ControlFlow<MachineState> {
+        match cursor.curr().into() {
+            Class::Escape => match cursor.next().into() {
+                // An escaped whitespace character is not allowed
+                //
+                // E.g.: `[color:var(--my-\ color)]`
+                //                         ^
+                Class::Whitespace => {
+                    cursor.advance_twice();
+                    return ControlFlow::Break(self.restart());
+                }
+
+                // An escaped character, skip the next character, resume after
+                //
+                // E.g.: `[color:var(--my-\#color)]`
+                //                        ^
+                _ => cursor.advance_twice(),
+            },
+
+            Class::OpenParen | Class::OpenBracket | Class::OpenCurly => {
+                if !self.bracket_stack.push(cursor.curr()) {
+                    return ControlFlow::Break(self.restart());
+                }
+                cursor.advance();
+            }
+
+            Class::CloseParen | Class::CloseBracket | Class::CloseCurly
+                if !self.bracket_stack.is_empty() =>
+            {
+                if !self.bracket_stack.pop(cursor.curr()) {
+                    return ControlFlow::Break(self.restart());
+                }
+                cursor.advance();
+            }
+
+            // End of an arbitrary value
+            //
+            // 1. All brackets must be balanced
+            // 2. There must be at least a single character inside the brackets
+            Class::CloseBracket if start_pos + 1 != cursor.pos && self.bracket_stack.is_empty() => {
+                return ControlFlow::Break(self.done(start_pos, cursor));
+            }
+
+            // Start of a string
+            Class::Quote => match self.string_machine.next(cursor) {
+                MachineState::Idle => return ControlFlow::Break(self.restart()),
+                MachineState::Done(_) => cursor.advance(),
+            },
+
+            // Any kind of whitespace is not allowed
+            Class::Whitespace => return ControlFlow::Break(self.restart()),
+
+            // String interpolation-like syntax is not allowed. E.g.: `[${x}]`
+            Class::Dollar if matches!(cursor.next().into(), Class::OpenCurly) => {
+                return ControlFlow::Break(self.restart())
+            }
+
+            // Everything else is valid
+            _ => cursor.advance(),
+        };
+
+        ControlFlow::Continue(())
     }
 }
 
