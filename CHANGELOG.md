@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Improve the performance of rebuilds that add new utilities by only optimizing and printing the new utilities ([#20680](https://github.com/tailwindlabs/tailwindcss/pull/20680))
+- Improve the performance of rebuilds that add new utilities in the CLI with `--output`, `@tailwindcss/postcss`, `@tailwindcss/webpack`, `@tailwindcss/turbopack` and `@tailwindcss/vite` with CSS source maps ([#20688](https://github.com/tailwindlabs/tailwindcss/pull/20688))
 
 ## [4.3.5] - 2026-11-06
 
