@@ -22,6 +22,7 @@ const NINE = 0x39
 const DASH = 0x2d
 const SPACE = 0x20
 const TAB = 0x09
+const UNDERSCORE = 0x5f
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -165,14 +166,18 @@ export function isValidArbitrary(input: string) {
 function isUnquotedUrl(input: string, idx: number) {
   if (idx < 3) return false
 
+  let u = input.charCodeAt(idx - 3)
+  let r = input.charCodeAt(idx - 2)
+  let l = input.charCodeAt(idx - 1)
+
   // Function names are case-insensitive, so `URL(…)` is a `url(…)` too.
-  if (
-    (input.charCodeAt(idx - 3) | 0x20) !== 0x75 /* u */ ||
-    (input.charCodeAt(idx - 2) | 0x20) !== 0x72 /* r */ ||
-    (input.charCodeAt(idx - 1) | 0x20) !== 0x6c /* l */
-  ) {
+  if ((u | 0x20) !== 0x75 /* u */ || (r | 0x20) !== 0x72 /* r */ || (l | 0x20) !== 0x6c /* l */) {
     return false
   }
+
+  // `decodeArbitraryValue` keeps the `_` in a lowercase `url(…)` only. In
+  // other cases, like `URL(_'a.png')`, the `_` becomes a space.
+  let underscoreIsSpace = u !== 0x75 || r !== 0x72 || l !== 0x6c
 
   // The `url` must be the whole function name. An `_` becomes a space later,
   // so `no-repeat_url(…)` has a `url(…)` too.
@@ -200,7 +205,8 @@ function isUnquotedUrl(input: string, idx: number) {
       char !== TAB &&
       char !== LINE_FEED &&
       char !== CARRIAGE_RETURN &&
-      char !== FORM_FEED
+      char !== FORM_FEED &&
+      !(char === UNDERSCORE && underscoreIsSpace)
     )
       break
     next++

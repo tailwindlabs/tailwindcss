@@ -2174,7 +2174,7 @@ it.each([
   "bg-['/*]",
   "bg-[url(foo'bar)/*')]",
   '[x:url(foo"bar)/*")]',
-  "bg-[URL(a(b)/*)]",
+  'bg-[URL(a(b)/*)]',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2185,6 +2185,16 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should parse a quoted string after an `_` in an uppercase `URL(…)`', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // The `_` becomes a space, so this is a quoted `URL( 'image.png')`.
+  expect(run(`bg-[URL(_'image.png')]`, { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: "URL( 'image.png')" } },
+  ])
 })
 
 it('should parse a `/*` inside of a string in an arbitrary value', () => {
