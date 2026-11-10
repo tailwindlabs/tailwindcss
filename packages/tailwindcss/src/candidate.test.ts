@@ -2194,6 +2194,9 @@ it.each([
   'bg-[#url(/a/*.png)]',
   'bg-[@url(/a/*.png)]',
   'bg-[1url(/a/*.png)]',
+  // PostCSS reads `@image:url` as one at-word
+  'bg-[@image:url(/a/*.png)]',
+  'bg-[a@b:url(/a/*.png)]',
   // `decodeArbitraryValue` turns this into `a\_url(…)`
   'bg-[a\\\\_url(/a/*.png)]',
   // The outer `url(…)` keeps the `_`, so this calls the `b_url` function
@@ -2307,6 +2310,7 @@ it.each([
   ['bg-[url(a.png),_url(/b/*.png)]', 'url(a.png), url(/b/*.png)'],
   ['bg-[image-set(url(/a/*.png)_1x)]', 'image-set(url(/a/*.png) 1x)'],
   ['bg-[no-repeat_url(/a/*.png)]', 'no-repeat url(/a/*.png)'],
+  ['bg-[image:url(/a/*.png)]', 'url(/a/*.png)'],
 ])('should parse a `/*` inside of an unquoted `url(…)`: %s', (rawCandidate, value) => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])

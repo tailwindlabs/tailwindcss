@@ -25,6 +25,7 @@ const TAB = 0x09
 const UNDERSCORE = 0x5f
 const HASH = 0x23
 const AT_SIGN = 0x40
+const COLON = 0x3a
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -291,9 +292,10 @@ function isUrlFunctionAt(input: string, idx: number) {
 
 /**
  * Determine if PostCSS reads the `(` at `idx` as the start of a `url(…)` too.
- * It does for a lowercase `url` at the start of the value, after whitespace or
- * after a `(`, if no whitespace comes after the `(`. E.g.: `url(…)`,
- * `no-repeat_url(…)` and `image-set(url(…))`, but not `URL(…)` or `a,url(…)`.
+ * It does for a lowercase `url` at the start of the value, after whitespace,
+ * after a `(` or after a `:`, if no whitespace comes after the `(`. E.g.:
+ * `url(…)`, `no-repeat_url(…)`, `image-set(url(…))` and `image:url(…)`, but
+ * not `URL(…)` or `a,url(…)`.
  */
 function isPostCssUrlAt(input: string, idx: number, underscoreIsSpace: boolean) {
   if (
@@ -311,9 +313,44 @@ function isPostCssUrlAt(input: string, idx: number, underscoreIsSpace: boolean) 
   let char = input.charCodeAt(idx - 4)
   if (char === OPEN_PAREN || isWhitespace(char)) return true
 
+  // A type hint like `image:` is not in the CSS. Else CSS reads the `:` as a
+  // colon, and PostCSS ends the word before the `url` at it too. But not an
+  // at-word, so in `@a:url(…)` the `url` is part of the `@a:url` at-word.
+  if (char === COLON) return !isInAtWord(input, idx - 4)
+
   // `decodeArbitraryValue` turns `\\_` into `\_`, not into `\ `. So we only
   // count an `_` without a `\` in front of it.
   return char === UNDERSCORE && underscoreIsSpace && input.charCodeAt(idx - 5) !== BACKSLASH
+}
+
+/**
+ * Determine if PostCSS reads the character at `idx` as part of an at-word. An
+ * at-word starts at an `@`, and ends at whitespace or one of `"#'()/;[\]{}`.
+ */
+function isInAtWord(input: string, idx: number) {
+  for (let i = idx - 1; i >= 0; i--) {
+    let char = input.charCodeAt(i)
+    if (char === AT_SIGN) return true
+    if (
+      isWhitespace(char) ||
+      char === DOUBLE_QUOTE ||
+      char === HASH ||
+      char === SINGLE_QUOTE ||
+      char === OPEN_PAREN ||
+      char === CLOSE_PAREN ||
+      char === SLASH ||
+      char === SEMICOLON ||
+      char === OPEN_BRACKET ||
+      char === BACKSLASH ||
+      char === CLOSE_BRACKET ||
+      char === OPEN_CURLY ||
+      char === CLOSE_CURLY
+    ) {
+      return false
+    }
+  }
+
+  return false
 }
 
 function isWhitespace(char: number) {
