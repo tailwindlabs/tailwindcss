@@ -248,7 +248,13 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       apply: 'build',
       enforce: 'pre',
       buildStart() {
-        // Files may have changed when an environment builds again (e.g. a reused builder)
+        // The environments of a build share their scans, so the same sources are only
+        // scanned once. This also keeps their CSS the same when a later environment
+        // would otherwise scan the output of an earlier one.
+        //
+        // Files may have changed when an environment builds again (e.g. a reused
+        // builder), so we start over. A reused builder that builds an environment for
+        // the first time after files changed still uses the earlier scans.
         let env = this.environment?.name ?? 'default'
         if (builtEnvironments.has(env)) {
           builtEnvironments.clear()
