@@ -2342,6 +2342,11 @@ it.each([
   // CSS escapes
   "content-['\\3c /style>']",
   "content-['\\3c_/style>']",
+  "content-['\\3c\t/style>']",
+  "content-['\\3c\n/style>']",
+  "content-['\\3c\r/style>']",
+  "content-['\\3c\f/style>']",
+  "content-['\\3c\r\n/style>']",
   "content-['\\3C/STYLE>']",
   "content-['\\00003c/style>']",
   "content-['<\\/style>']",

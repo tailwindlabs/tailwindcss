@@ -1340,10 +1340,20 @@ function containsStyleEndTag(input: string) {
     if (hex.length > 0) {
       decoded += String.fromCodePoint(Math.min(parseInt(hex, 16), 0x10ffff))
 
-      // An `_` becomes a space in arbitrary values, so it can end the escape
-      // as well.
+      // A whitespace (`\r\n` counts as one) ends the escape. An `_` becomes a
+      // space in arbitrary values, so it can end the escape as well.
       let next = input[i + 1]
-      if (next === ' ' || next === '\t' || next === '\n' || next === '_') i += 1
+      if (next === '\r' && input[i + 2] === '\n') i += 2
+      else if (
+        next === ' ' ||
+        next === '\t' ||
+        next === '\n' ||
+        next === '\r' ||
+        next === '\f' ||
+        next === '_'
+      ) {
+        i += 1
+      }
     }
 
     // `\` followed by any other character is that character
