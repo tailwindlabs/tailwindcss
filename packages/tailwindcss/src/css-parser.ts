@@ -247,6 +247,8 @@ export function parse(input: string, opts?: ParseOptions) {
       // comments.
       let valueEnd = 0
 
+      let end = -1
+
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
 
@@ -285,6 +287,11 @@ export function parse(input: string, opts?: ParseOptions) {
           buffer += input.slice(start, j)
           i = j
           break
+        }
+
+        // Start of an unquoted `url(…)`, a `/*` inside of it is not a comment.
+        else if (peekChar === OPEN_PAREN && (end = findUnquotedUrlEnd(input, j)) !== -1) {
+          j = end
         }
 
         // Start of a block.
@@ -582,8 +589,25 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // `(`
     else if (currentChar === OPEN_PAREN) {
-      closingBracketStack += ')'
-      buffer += '('
+      // An unquoted `url(…)` is a single token that ends at the first `)`. A
+      // `/*` inside of it is not the start of a comment.
+      //
+      // E.g.:
+      //
+      // ```css
+      // .foo {
+      //   background-image: url(/images/*.png);
+      //                        ^^^^^^^^^^^^^^^
+      // }
+      // ```
+      let end = findUnquotedUrlEnd(input, i)
+      if (end !== -1) {
+        buffer += input.slice(i, end + 1)
+        i = end
+      } else {
+        closingBracketStack += ')'
+        buffer += '('
+      }
     }
 
     // `)`
@@ -776,6 +800,62 @@ function isEscaped(value: string, idx: number) {
   }
 
   return backslashes % 2 === 1
+}
+
+// When the `(` at `idx` starts an unquoted `url(…)`, return the index of the
+// `)` that ends it. Otherwise, return `-1`.
+//
+// See: https://www.w3.org/TR/css-syntax-3/#consume-ident-like-token
+// See: https://www.w3.org/TR/css-syntax-3/#consume-url-token
+function findUnquotedUrlEnd(input: string, idx: number): number {
+  // The `(` must follow the ident `url`, case-insensitive.
+  if (
+    idx < 3 ||
+    (input.charCodeAt(idx - 3) | 0x20) !== 0x75 /* u */ ||
+    (input.charCodeAt(idx - 2) | 0x20) !== 0x72 /* r */ ||
+    (input.charCodeAt(idx - 1) | 0x20) !== 0x6c /* l */
+  ) {
+    return -1
+  }
+
+  // The ident must start at `url`, e.g. `my-url(…)` is a function.
+  let prevChar = input.charCodeAt(idx - 4)
+  if (
+    (prevChar >= 0x61 && prevChar <= 0x7a) || // a-z
+    (prevChar >= 0x41 && prevChar <= 0x5a) || // A-Z
+    (prevChar >= 0x30 && prevChar <= 0x39) || // 0-9
+    prevChar === DASH ||
+    prevChar === 0x5f /* _ */ ||
+    prevChar >= 0x80 ||
+    prevChar === BACKSLASH ||
+    prevChar === 0x23 /* # */ ||
+    prevChar === AT_SIGN
+  ) {
+    return -1
+  }
+
+  // A quoted `url("…")` is a function with a string, not a url token.
+  let i = idx + 1
+  while (i < input.length) {
+    let char = input.charCodeAt(i)
+    if (char !== SPACE && char !== TAB && char !== LINE_BREAK && char !== CARRIAGE_RETURN) break
+    i += 1
+  }
+
+  let char = input.charCodeAt(i)
+  if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) return -1
+
+  // The url ends at the first `)` that is not escaped.
+  for (; i < input.length; i++) {
+    char = input.charCodeAt(i)
+    if (char === BACKSLASH) {
+      i += 1
+    } else if (char === CLOSE_PAREN) {
+      return i
+    }
+  }
+
+  return -1
 }
 
 function parseString(

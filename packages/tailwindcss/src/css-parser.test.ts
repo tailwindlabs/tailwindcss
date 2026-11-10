@@ -169,6 +169,79 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    describe('unquoted `url(…)`', () => {
+      function rule(selector: string, property: string, value: string) {
+        return {
+          kind: 'rule',
+          selector,
+          nodes: [{ kind: 'declaration', property, value, important: false }],
+        }
+      }
+
+      it('should not treat `/*` inside of an unquoted `url(…)` as a comment', () => {
+        expect(parse('.a{background-image:url(/b/*.png)}.b{color:red}')).toEqual([
+          rule('.a', 'background-image', 'url(/b/*.png)'),
+          rule('.b', 'color', 'red'),
+        ])
+      })
+
+      it('should not treat `/*` inside of an unquoted `url(…)` as a comment when a comment follows', () => {
+        expect(
+          parse('.a{background-image:url(/b/*.png)}.b{color:red}/* x */.c{color:blue}'),
+        ).toEqual([
+          rule('.a', 'background-image', 'url(/b/*.png)'),
+          rule('.b', 'color', 'red'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should treat `url(…)` case-insensitive', () => {
+        expect(parse('.a{background-image:URL(/b/*.png)}/* x */.c{color:blue}')).toEqual([
+          rule('.a', 'background-image', 'URL(/b/*.png)'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should allow whitespace around the url', () => {
+        expect(parse('.a{background-image:url( /b/*.png )}/* x */.c{color:blue}')).toEqual([
+          rule('.a', 'background-image', 'url( /b/*.png )'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should handle a list of unquoted `url(…)`', () => {
+        expect(parse('.a{background-image:url(a.png),url(/b/*.png)}/* x */.c{color:blue}')).toEqual(
+          [rule('.a', 'background-image', 'url(a.png),url(/b/*.png)'), rule('.c', 'color', 'blue')],
+        )
+      })
+
+      it('should handle an unquoted `url(…)` in a custom property when a comment follows', () => {
+        expect(parse('.a{--x:url(/b/*.png)}/* x */.c{color:blue}')).toEqual([
+          rule('.a', '--x', 'url(/b/*.png)'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should handle an unquoted `url(…)` in the params of an at-rule', () => {
+        expect(parse('@import url(/b/*.css);/* x */.c{color:blue}')).toEqual([
+          { kind: 'at-rule', name: '@import', params: 'url(/b/*.css)', nodes: [] },
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should remove a comment next to an unquoted `url(…)`', () => {
+        expect(parse('.a{background-image:/* x */url(/b.png)/* y */,url(/c.png)/* z */}')).toEqual([
+          rule('.a', 'background-image', 'url(/b.png),url(/c.png)'),
+        ])
+      })
+
+      it('should treat `/*` inside of a function that ends with `url` as a comment', () => {
+        expect(parse('.a{background-image:my-url(/b/* x */.png)}')).toEqual([
+          rule('.a', 'background-image', 'my-url(/b.png)'),
+        ])
+      })
+    })
   })
 
   describe('declarations', () => {
