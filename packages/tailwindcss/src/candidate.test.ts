@@ -2200,6 +2200,10 @@ it.each([
   'data-[url(/a/*.png)]:flex',
   'bg-red-500/[url(/a/*.png)]',
   '[&_url(/a/*.png)]:flex',
+
+  // PostCSS reads `\/*` as a `\` and the start of a comment
+  'bg-[\\/*]',
+  'bg-[URL(a\\/*b)]',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

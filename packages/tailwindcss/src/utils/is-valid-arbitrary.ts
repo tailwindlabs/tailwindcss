@@ -67,6 +67,10 @@ export function isValidArbitrary(input: string, isDeclarationValue = false) {
       case BACKSLASH: {
         let next = input.charCodeAt(idx + 1)
 
+        // CSS reads `\/` as an escaped `/`, but PostCSS does not. So `\/*`
+        // starts a comment there.
+        if (next === SLASH && input.charCodeAt(idx + 2) === ASTERISK) return false
+
         // `\_` is a literal `_` in a candidate, not a CSS escape. E.g.:
         // `w-[--my\_fn(1px)]` calls the `--my_fn` function.
         if (next !== UNDERSCORE) escapeInWord = true
@@ -150,8 +154,17 @@ export function isValidArbitrary(input: string, isDeclarationValue = false) {
           while (++idx < len) {
             let nextChar = input.charCodeAt(idx)
 
-            // The next character is escaped, so we skip it.
+            // The next character is escaped, so we skip it. But PostCSS reads
+            // `\/*` as a comment, if it does not read this as a `url(…)`.
             if (nextChar === BACKSLASH) {
+              if (
+                !allowComment &&
+                input.charCodeAt(idx + 1) === SLASH &&
+                input.charCodeAt(idx + 2) === ASTERISK
+              ) {
+                return false
+              }
+
               idx += 1
               continue
             }
