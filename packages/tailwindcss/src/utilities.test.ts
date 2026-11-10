@@ -14361,7 +14361,8 @@ test('bg gradients print a space before an arbitrary value', async () => {
 
   // PostCSS reads `,url` as one word, so it reads the `/*` in
   // `,url(/a/*.png)` as the start of a comment. The output is not optimized
-  // here, because the optimizer adds the space.
+  // here, because the formatter adds the space. A minifier removes it again,
+  // see https://github.com/postcss/postcss/issues/2194.
   let output = build([
     'bg-linear-[url(/a/*.png)]',
     'bg-conic-[url(/a/*.png)]',
