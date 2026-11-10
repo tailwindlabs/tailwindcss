@@ -2034,6 +2034,45 @@ describe('regressions', () => {
     ])
     expect(compare).not.toHaveBeenCalled()
   })
+
+  test('reuses dynamic utility lookups across candidate collapse groups', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    using keysSpy = vi.spyOn(designSystem.utilities, 'keys')
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    expect(
+      designSystem.canonicalizeCandidates(
+        ['mt-2', 'mb-2', 'hover:mt-2', 'hover:mb-2', 'focus:mt-2', 'focus:mb-2'],
+        options,
+      ),
+    ).toEqual(['my-2', 'hover:my-2', 'focus:my-2'])
+
+    let functionalKeysCalls = keysSpy.mock.calls.filter((args) => args[0] === 'functional').length
+    expect(functionalKeysCalls).toBeLessThanOrEqual(3)
+
+    // Re-running with repeated candidates across another variant group reuses the cached lookups
+    // without invoking `utilities.keys('functional')` again.
+    let countBefore = keysSpy.mock.calls.length
+    expect(designSystem.canonicalizeCandidates(['active:mt-2', 'active:mb-2'], options)).toEqual([
+      'active:my-2',
+    ])
+    let countAfter = keysSpy.mock.calls.length
+    expect(countAfter).toBe(countBefore)
+  })
 })
 
 describe('intersection', () => {
