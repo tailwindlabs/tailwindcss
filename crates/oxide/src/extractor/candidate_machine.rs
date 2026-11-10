@@ -14,6 +14,10 @@ pub struct CandidateMachine {
     /// End position of the last variant (if any)
     last_variant_end_pos: Option<usize>,
 
+    /// Position from which the input has no valid before boundary characters (if known). This
+    /// is not reset, because it only depends on the input.
+    no_boundary_from: Option<usize>,
+
     utility_machine: UtilityMachine,
     variant_machine: VariantMachine,
 }
@@ -27,9 +31,29 @@ impl Machine for CandidateMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        self.next_with_checkpoints(cursor, |_| true)
+    }
+}
+
+impl CandidateMachine {
+    /// Same as `next`, but calls `checkpoint` with the cursor position each time the machine
+    /// starts from a clean state. From such a position, the machine always finds the same
+    /// candidates, no matter where it started.
+    ///
+    /// If `checkpoint` returns `false`, the machine stops and returns `MachineState::Idle`.
+    #[inline]
+    pub fn next_with_checkpoints(
+        &mut self,
+        cursor: &mut cursor::Cursor<'_>,
+        mut checkpoint: impl FnMut(usize) -> bool,
+    ) -> MachineState {
         let len = cursor.input.len();
 
         while cursor.pos < len {
+            if self.last_variant_end_pos.is_none() && !checkpoint(cursor.pos) {
+                return MachineState::Idle;
+            }
+
             // Skip ahead for known characters that will never be part of a candidate. No need to
             // run any sub-machines.
             if cursor.curr().is_ascii_whitespace() {
@@ -56,18 +80,25 @@ impl Machine for CandidateMachine {
             // E.g.: `Some Class`
             //        ^    ^       Invalid, we can jump ahead to the next boundary
             //
+            // Once we know that the rest of the input has no boundary, we don't search it again.
+            // Otherwise, an input with many of these characters and no boundary takes quadratic
+            // time.
             if matches!(cursor.curr(), b'<' | b'A'..=b'Z') {
-                if let Some(offset) = cursor.input[cursor.pos..]
-                    .iter()
-                    .position(|&c| is_valid_before_boundary(&c))
-                {
-                    self.reset();
-                    cursor.advance_by(offset + 1);
-                } else {
-                    return self.restart();
+                let search_end = self.no_boundary_from.unwrap_or(len);
+                if cursor.pos < search_end {
+                    if let Some(offset) = cursor.input[cursor.pos..search_end]
+                        .iter()
+                        .position(|&c| is_valid_before_boundary(&c))
+                    {
+                        self.reset();
+                        cursor.advance_by(offset + 1);
+                        continue;
+                    }
+
+                    self.no_boundary_from = Some(cursor.pos);
                 }
 
-                continue;
+                return self.restart();
             }
 
             let mut variant_cursor = cursor.clone();
@@ -167,9 +198,7 @@ impl Machine for CandidateMachine {
 
         MachineState::Idle
     }
-}
 
-impl CandidateMachine {
     #[inline(always)]
     fn done_span(&mut self, span: Span) -> MachineState {
         self.reset();
