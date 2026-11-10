@@ -2332,6 +2332,8 @@ it.each([
 
   // Arbitrary properties
   '[--x:</style>]',
+  '[--x</style>:red]',
+  '[--x\\3c/style:red]',
 
   // Arbitrary variants
   '[&[data-x="</style>"]]:flex',

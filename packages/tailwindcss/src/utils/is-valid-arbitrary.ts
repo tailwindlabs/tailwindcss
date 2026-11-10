@@ -43,6 +43,9 @@ const closingBracketStack = new Uint8Array(256)
  * like `bg-[…]` or `[color:…]`. Then a `/*` is allowed in an unquoted `url(…)`
  * too, e.g. `bg-[url(/a/*.png)]`.
  *
+ * Values that contain `</style` are not allowed either. The generated CSS can
+ * be inlined in a `<style>` element, and `</style` would end that element.
+ *
  * This function is very similar to `segment` but `segment` cannot be used
  * because we'd need to split on a bracket stack character.
  */
@@ -240,7 +243,72 @@ export function isValidArbitrary(input: string, isDeclarationValue = false) {
     }
   }
 
-  return stackPos === 0
+  if (stackPos !== 0) return false
+
+  if (containsStyleEndTag(input)) return false
+
+  return true
+}
+
+const STYLE_END_TAG = /<\/style/i
+const HEX_DIGIT = /[0-9a-fA-F]/
+
+/**
+ * Determine if the input contains `</style` (case-insensitive) once CSS
+ * escapes are decoded, e.g.: `\3c /style` or `<\/style`.
+ */
+function containsStyleEndTag(input: string) {
+  // Fast path: without a `<` or a `\` there is no `</style` to decode.
+  if (input.indexOf('<') === -1 && input.indexOf('\\') === -1) return false
+
+  let decoded = ''
+  for (let i = 0; i < input.length; i++) {
+    let char = input[i]
+    if (char !== '\\') {
+      decoded += char
+      continue
+    }
+
+    // `\` followed by 1 to 6 hex digits, and an optional whitespace
+    let hex = ''
+    while (hex.length < 6 && HEX_DIGIT.test(input[i + 1] ?? '')) {
+      hex += input[++i]
+    }
+
+    if (hex.length > 0) {
+      decoded += String.fromCodePoint(Math.min(parseInt(hex, 16), 0x10ffff))
+
+      // A whitespace (`\r\n` counts as one) ends the escape. An `_` becomes a
+      // space in arbitrary values, so it can end the escape as well.
+      let next = input[i + 1]
+      if (next === '\r' && input[i + 2] === '\n') i += 2
+      else if (
+        next === ' ' ||
+        next === '\t' ||
+        next === '\n' ||
+        next === '\r' ||
+        next === '\f' ||
+        next === '_'
+      ) {
+        i += 1
+      }
+    }
+
+    // `\` followed by a newline (`\r\n` counts as one) is removed in a string,
+    // so `</s\<LF>tyle` becomes `</style` once it is minified.
+    else if (input[i + 1] === '\r' && input[i + 2] === '\n') {
+      i += 2
+    } else if (input[i + 1] === '\n' || input[i + 1] === '\r' || input[i + 1] === '\f') {
+      i += 1
+    }
+
+    // `\` followed by any other character is that character
+    else if (i + 1 < input.length) {
+      decoded += input[++i]
+    }
+  }
+
+  return STYLE_END_TAG.test(decoded)
 }
 
 function isHexDigit(char: number) {
