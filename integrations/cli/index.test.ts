@@ -3,7 +3,19 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe } from 'vitest'
-import { candidate, css, html, js, json, retryAssertion, test, ts, txt, yaml } from '../utils'
+import {
+  candidate,
+  css,
+  html,
+  IS_WINDOWS,
+  js,
+  json,
+  retryAssertion,
+  test,
+  ts,
+  txt,
+  yaml,
+} from '../utils'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -487,6 +499,49 @@ describe.each([
 
       await fs.expectFileToContain('dist/out.css', [candidate`flex`])
     },
+  )
+
+  // https://github.com/tailwindlabs/tailwindcss/issues/16784
+  test(
+    'watch mode rebuilds when the input path casing differs from the file on disk',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        'index.html': html`
+          <div class="underline text-primary"></div>
+        `,
+        'src/index.css': css`@import 'tailwindcss';`,
+      },
+    },
+    async ({ fs, spawn }) => {
+      let process = await spawn(`${command} --input Src/Index.css --output dist/out.css --watch`)
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+      await fs.expectFileNotToContain('dist/out.css', [candidate`text-primary`])
+
+      // Changing the theme is only picked up by a full rebuild, which only
+      // happens when the changed file is recognized as the input file.
+      await fs.write(
+        'src/index.css',
+        css`
+          @import 'tailwindcss';
+          @theme {
+            --color-primary: #c0ffee;
+          }
+        `,
+      )
+
+      await fs.expectFileToContain('dist/out.css', [candidate`text-primary`])
+    },
+    { skip: !IS_WINDOWS },
   )
 
   test(
