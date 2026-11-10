@@ -2175,6 +2175,7 @@ it.each([
   "bg-[url(foo'bar)/*')]",
   '[x:url(foo"bar)/*")]',
   'bg-[URL(a(b)/*)]',
+  "bg-[url('a',URL(_'b)/*'))]",
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

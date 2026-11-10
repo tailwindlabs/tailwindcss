@@ -45,6 +45,10 @@ export function isValidArbitrary(input: string) {
   let stackPos = 0
   let len = input.length
 
+  // The stack position of a lowercase `url(…)` that we are inside of, or -1.
+  // `decodeArbitraryValue` keeps each `_` in it, also in nested functions.
+  let keepUnderscoresUntil = -1
+
   for (let idx = 0; idx < len; idx++) {
     let char = input.charCodeAt(idx)
 
@@ -83,12 +87,19 @@ export function isValidArbitrary(input: string) {
         // `a': '/*';`, and the `/*` is not inside of a string anymore.
         if (idx >= len) return false
         break
-      case OPEN_PAREN:
+      case OPEN_PAREN: {
+        let url = urlFunctionAt(input, idx)
+
         // CSS reads an unquoted `url(…)` as a single token that ends at the
         // first `)`. A quote in it does not start a string, so we reject it,
         // and a `(` too. E.g.: `url(foo'bar)/*')` would start a comment after
         // the first `)`. We also reject a `/*`, like everywhere else.
-        if (isUnquotedUrl(input, idx)) {
+        //
+        // An `_` becomes a space, except in a lowercase `url(…)`. So
+        // `URL(_'a.png')` is a quoted `URL( 'a.png')`, but `url(_'a.png')` and
+        // `url('a',URL(_'b'))` keep the `_`.
+        let underscoreIsSpace = url === OTHER_URL && keepUnderscoresUntil === -1
+        if (url !== NO_URL && !startsWithQuote(input, idx, underscoreIsSpace)) {
           while (++idx < len) {
             let nextChar = input.charCodeAt(idx)
 
@@ -115,9 +126,14 @@ export function isValidArbitrary(input: string) {
           break
         }
 
+        if (url === LOWERCASE_URL && keepUnderscoresUntil === -1) {
+          keepUnderscoresUntil = stackPos
+        }
+
         closingBracketStack[stackPos] = CLOSE_PAREN
         stackPos++
         break
+      }
       case OPEN_BRACKET:
         closingBracketStack[stackPos] = CLOSE_BRACKET
         stackPos++
@@ -138,6 +154,7 @@ export function isValidArbitrary(input: string) {
           // the buffer can be dirty for the next use and still be correct since
           // reading/writing always starts at position `0`.
           stackPos--
+          if (stackPos === keepUnderscoresUntil) keepUnderscoresUntil = -1
         } else if (char !== CLOSE_CURLY) {
           return false
         }
@@ -159,25 +176,25 @@ export function isValidArbitrary(input: string) {
   return stackPos === 0
 }
 
+const NO_URL = 0
+const LOWERCASE_URL = 1
+const OTHER_URL = 2
+
 /**
- * Determine if the `(` at `idx` starts an unquoted `url(…)`, like
- * `url(foo.png)`, but not `url('foo.png')` or `my-url(foo.png)`.
+ * Determine if the `(` at `idx` starts a `url(…)`, like `url(…)` or
+ * `no-repeat_url(…)`, but not `my-url(…)`. Function names are case-insensitive,
+ * so `URL(…)` is a `url(…)` too.
  */
-function isUnquotedUrl(input: string, idx: number) {
-  if (idx < 3) return false
+function urlFunctionAt(input: string, idx: number) {
+  if (idx < 3) return NO_URL
 
   let u = input.charCodeAt(idx - 3)
   let r = input.charCodeAt(idx - 2)
   let l = input.charCodeAt(idx - 1)
 
-  // Function names are case-insensitive, so `URL(…)` is a `url(…)` too.
   if ((u | 0x20) !== 0x75 /* u */ || (r | 0x20) !== 0x72 /* r */ || (l | 0x20) !== 0x6c /* l */) {
-    return false
+    return NO_URL
   }
-
-  // `decodeArbitraryValue` keeps the `_` in a lowercase `url(…)` only. In
-  // other cases, like `URL(_'a.png')`, the `_` becomes a space.
-  let underscoreIsSpace = u !== 0x75 || r !== 0x72 || l !== 0x6c
 
   // The `url` must be the whole function name. An `_` becomes a space later,
   // so `no-repeat_url(…)` has a `url(…)` too.
@@ -191,12 +208,18 @@ function isUnquotedUrl(input: string, idx: number) {
       char === BACKSLASH ||
       char >= 0x80
     ) {
-      return false
+      return NO_URL
     }
   }
 
-  // CSS skips the whitespace after the `(`, then a quote makes it a normal
-  // function with a string in it.
+  return u === 0x75 && r === 0x72 && l === 0x6c ? LOWERCASE_URL : OTHER_URL
+}
+
+/**
+ * Determine if the argument of the function at `idx` starts with a quote.
+ * CSS skips the whitespace after the `(` first.
+ */
+function startsWithQuote(input: string, idx: number, underscoreIsSpace: boolean) {
   let next = idx + 1
   while (next < input.length) {
     let char = input.charCodeAt(next)
@@ -213,5 +236,5 @@ function isUnquotedUrl(input: string, idx: number) {
   }
 
   let char = input.charCodeAt(next)
-  return char !== SINGLE_QUOTE && char !== DOUBLE_QUOTE
+  return char === SINGLE_QUOTE || char === DOUBLE_QUOTE
 }
