@@ -2180,6 +2180,9 @@ it.each([
   "bg-[u\\72_l(foo'bar)/*')]",
   // `\\` is an escaped `\`, so the `_` becomes a space before the `url(…)`.
   "bg-[a\\\\_url(foo'bar)/*')]",
+  // `--my\_url(…)` is not a `url(…)`, but it keeps the `_`, so the inner
+  // `URL(…)` has no quoted string.
+  "[x:--my\\_url(URL(_'a)/*'))]",
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

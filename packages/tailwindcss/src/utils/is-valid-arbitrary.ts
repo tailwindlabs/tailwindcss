@@ -45,8 +45,8 @@ export function isValidArbitrary(input: string) {
   let stackPos = 0
   let len = input.length
 
-  // The stack position of a lowercase `url(…)` that we are inside of, or -1.
-  // `decodeArbitraryValue` keeps each `_` in it, also in nested functions.
+  // The stack position of a function that `decodeArbitraryValue` keeps each
+  // `_` in, also in nested functions, or -1. E.g.: a lowercase `url(…)`.
   let keepUnderscoresUntil = -1
 
   // If the current word has an escape in it. CSS decodes escapes in function
@@ -122,18 +122,19 @@ export function isValidArbitrary(input: string) {
       case OPEN_PAREN: {
         if (escapeInWord) return false
 
-        let url = urlFunctionAt(input, idx)
+        let keepsUnderscores = keepsUnderscoresAt(input, idx)
 
         // CSS reads an unquoted `url(…)` as a single token that ends at the
         // first `)`. A quote in it does not start a string, so we reject it,
         // and a `(` too. E.g.: `url(foo'bar)/*')` would start a comment after
         // the first `)`. We also reject a `/*`, like everywhere else.
         //
-        // An `_` becomes a space, except in a lowercase `url(…)`. So
-        // `URL(_'a.png')` is a quoted `URL( 'a.png')`, but `url(_'a.png')` and
-        // `url('a',URL(_'b'))` keep the `_`.
-        let underscoreIsSpace = url === OTHER_URL && keepUnderscoresUntil === -1
-        if (url !== NO_URL && !startsWithQuote(input, idx, underscoreIsSpace)) {
+        // An `_` becomes a space, except in a lowercase `url(…)` or a function
+        // name that ends in `_url`. So `URL(_'a.png')` is a quoted
+        // `URL( 'a.png')`, but `url(_'a.png')`, `url('a',URL(_'b'))` and
+        // `--my\_url(URL(_'b'))` keep the `_`.
+        let underscoreIsSpace = !keepsUnderscores && keepUnderscoresUntil === -1
+        if (isUrlFunctionAt(input, idx) && !startsWithQuote(input, idx, underscoreIsSpace)) {
           while (++idx < len) {
             let nextChar = input.charCodeAt(idx)
 
@@ -160,7 +161,7 @@ export function isValidArbitrary(input: string) {
           break
         }
 
-        if (url === LOWERCASE_URL && keepUnderscoresUntil === -1) {
+        if (keepsUnderscores && keepUnderscoresUntil === -1) {
           keepUnderscoresUntil = stackPos
         }
 
@@ -234,24 +235,20 @@ function isNameChar(char: number) {
   )
 }
 
-const NO_URL = 0
-const LOWERCASE_URL = 1
-const OTHER_URL = 2
-
 /**
- * Determine if the `(` at `idx` starts a `url(…)`, like `url(…)` or
- * `no-repeat_url(…)`, but not `my-url(…)`. Function names are case-insensitive,
- * so `URL(…)` is a `url(…)` too.
+ * Determine if CSS reads the `(` at `idx` as the start of a `url(…)`, like in
+ * `url(…)` or `no-repeat_url(…)`, but not in `my-url(…)`. Function names are
+ * case-insensitive, so `URL(…)` is a `url(…)` too.
  */
-function urlFunctionAt(input: string, idx: number) {
-  if (idx < 3) return NO_URL
+function isUrlFunctionAt(input: string, idx: number) {
+  if (idx < 3) return false
 
   let u = input.charCodeAt(idx - 3)
   let r = input.charCodeAt(idx - 2)
   let l = input.charCodeAt(idx - 1)
 
   if ((u | 0x20) !== 0x75 /* u */ || (r | 0x20) !== 0x72 /* r */ || (l | 0x20) !== 0x6c /* l */) {
-    return NO_URL
+    return false
   }
 
   // The `url` must be the whole function name. An `_` becomes a space later,
@@ -259,11 +256,30 @@ function urlFunctionAt(input: string, idx: number) {
   // `--my\_url(…)` calls the `--my_url` function.
   if (idx > 3) {
     let char = input.charCodeAt(idx - 4)
-    if (isNameChar(char) || char === BACKSLASH) return NO_URL
-    if (char === UNDERSCORE && isEscaped(input, idx - 4)) return NO_URL
+    if (isNameChar(char) || char === BACKSLASH) return false
+    if (char === UNDERSCORE && isEscaped(input, idx - 4)) return false
   }
 
-  return u === 0x75 && r === 0x72 && l === 0x6c ? LOWERCASE_URL : OTHER_URL
+  return true
+}
+
+/**
+ * Determine if `decodeArbitraryValue` keeps each `_` in the function at `idx`.
+ * It does for a function name that is `url` or that ends in `_url`, also in
+ * `\_url`. So `--my\_url(…)` keeps them, but it is not a `url(…)` in CSS.
+ */
+function keepsUnderscoresAt(input: string, idx: number) {
+  if (idx < 3) return false
+
+  if (
+    input.charCodeAt(idx - 3) !== 0x75 /* u */ ||
+    input.charCodeAt(idx - 2) !== 0x72 /* r */ ||
+    input.charCodeAt(idx - 1) !== 0x6c /* l */
+  ) {
+    return false
+  }
+
+  return idx === 3 || !isNameChar(input.charCodeAt(idx - 4))
 }
 
 /**
