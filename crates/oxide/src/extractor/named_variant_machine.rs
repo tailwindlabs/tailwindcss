@@ -55,6 +55,17 @@ pub struct NamedVariantMachine<State = IdleState> {
     /// Start position of the variant
     start_pos: usize,
 
+    /// The last variant went through each position from `scanned_from` to `scanned_to`, and
+    /// stopped at `scanned_to`. Each step only depends on the input, so a variant that starts at
+    /// one of these positions stops at `scanned_to` too, and we can skip ahead. These are not
+    /// reset, because they only depend on the input.
+    ///
+    /// E.g.: `p-4*p-4*p-4*`
+    ///         ^^^^^^^^^^^ The variant that starts at the first `p` goes through these positions
+    ///             ^       The variant that starts here can skip ahead to the end
+    scanned_from: usize,
+    scanned_to: usize,
+
     arbitrary_variable_machine: ArbitraryVariableMachine,
     arbitrary_value_machine: ArbitraryValueMachine,
     modifier_machine: ModifierMachine,
@@ -67,6 +78,8 @@ impl<State> NamedVariantMachine<State> {
     fn transition<NextState>(&self) -> NamedVariantMachine<NextState> {
         NamedVariantMachine {
             start_pos: self.start_pos,
+            scanned_from: self.scanned_from,
+            scanned_to: self.scanned_to,
             arbitrary_variable_machine: Default::default(),
             arbitrary_value_machine: Default::default(),
             modifier_machine: Default::default(),
@@ -104,7 +117,7 @@ impl Machine for NamedVariantMachine<IdleState> {
                 _ => {
                     self.start_pos = cursor.pos;
                     cursor.advance();
-                    self.transition::<ParsingState>().next(cursor)
+                    self.parse_variant(cursor)
                 }
             },
 
@@ -117,12 +130,26 @@ impl Machine for NamedVariantMachine<IdleState> {
             Class::Number | Class::At => {
                 self.start_pos = cursor.pos;
                 cursor.advance();
-                self.transition::<ParsingState>().next(cursor)
+                self.parse_variant(cursor)
             }
 
             // Everything else, is not a valid start of the variant.
             _ => MachineState::Idle,
         }
+    }
+}
+
+impl NamedVariantMachine<IdleState> {
+    #[inline(always)]
+    fn parse_variant(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        let mut machine = self.transition::<ParsingState>();
+        let state = machine.next(cursor);
+
+        // Keep what the variant learned about the input, for the next variant
+        self.scanned_from = machine.scanned_from;
+        self.scanned_to = machine.scanned_to;
+
+        state
     }
 }
 
@@ -134,7 +161,20 @@ impl Machine for NamedVariantMachine<ParsingState> {
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
         let len = cursor.input.len();
 
+        // The last variant went through this position, so this variant stops at the same
+        // position. Otherwise, a long line with many variants that never end takes quadratic
+        // time.
+        //
+        // E.g.: `p-4*p-4*p-4*`
+        if self.scanned_from <= cursor.pos && cursor.pos <= self.scanned_to {
+            cursor.move_to(self.scanned_to);
+        } else {
+            self.scanned_from = cursor.pos;
+        }
+
         while cursor.pos < len {
+            self.scanned_to = cursor.pos;
+
             match cursor.curr().into() {
                 Class::Dash => match cursor.next().into() {
                     // Start of an arbitrary value
@@ -420,6 +460,20 @@ mod tests {
                 dbg!(&input);
             }
             assert_eq!(actual, expected);
+        }
+    }
+
+    #[test]
+    fn test_named_variant_machine_reuse() {
+        for input in [
+            // Variants that don't end
+            "p-4*".repeat(50),
+            "a.5*".repeat(50),
+            // Variants that end at the end of the line
+            format!("{}:", "p-4*".repeat(50)),
+            format!("{}/foo:", "p-4*".repeat(50)),
+        ] {
+            NamedVariantMachine::<IdleState>::test_reuse(&input);
         }
     }
 }

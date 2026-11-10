@@ -158,4 +158,27 @@ pub trait Machine: Sized + Default {
             })
             .collect()
     }
+
+    /// Asserts that a machine that already ran on the input finds the same result from each
+    /// position of the input as a new machine.
+    #[cfg(test)]
+    fn test_reuse(input: &str) {
+        let mut machine = Self::default();
+
+        for start in 0..input.len() {
+            let mut cursor = cursor::Cursor::new(input.as_bytes());
+            cursor.move_to(start);
+            let mut expected_cursor = cursor.clone();
+
+            let actual = machine.next(&mut cursor);
+            let expected = Self::default().next(&mut expected_cursor);
+
+            assert_eq!(
+                (format!("{actual:?}"), cursor.pos),
+                (format!("{expected:?}"), expected_cursor.pos),
+                "{} from position {start} of {input:?}",
+                std::any::type_name::<Self>(),
+            );
+        }
+    }
 }
