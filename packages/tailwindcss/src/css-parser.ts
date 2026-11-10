@@ -853,6 +853,12 @@ function findUnquotedUrlEnd(input: string, idx: number): number {
     } else if (char === CLOSE_PAREN) {
       return i
     }
+
+    // A quote or a `(` makes it a bad url, e.g. `url(var(--foo))`. Keep the
+    // default behavior for those.
+    else if (char === OPEN_PAREN || char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      return -1
+    }
   }
 
   return -1

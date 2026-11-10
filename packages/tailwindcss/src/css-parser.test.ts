@@ -241,6 +241,34 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           rule('.a', 'background-image', 'my-url(/b.png)'),
         ])
       })
+
+      it('should keep the default behavior for a `(` or a quote inside of an unquoted `url(…)`', () => {
+        expect(
+          parse(
+            ".a{background-image:url(var(--foo));mask:url(var(--foo, './b.png'));--x:url(var(--y))}",
+          ),
+        ).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: 'background-image',
+                value: 'url(var(--foo))',
+                important: false,
+              },
+              {
+                kind: 'declaration',
+                property: 'mask',
+                value: "url(var(--foo, './b.png'))",
+                important: false,
+              },
+              { kind: 'declaration', property: '--x', value: 'url(var(--y))', important: false },
+            ],
+          },
+        ])
+      })
     })
   })
 
