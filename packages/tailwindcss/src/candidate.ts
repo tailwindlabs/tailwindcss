@@ -664,6 +664,21 @@ function parseModifier(modifier: string): CandidateModifier | null {
   }
 }
 
+// The maximum number of compound variants that can be nested in a variant.
+// Real variants only nest a few, e.g. `not-group-has-peer-hover` nests 4, but
+// each one is parsed recursively. Without a limit, a variant like
+// `in-in-in-…-hover` would exceed the call stack.
+const MAX_COMPOUND_DEPTH = 16
+
+// The number of compound variants that are parsing their sub-variant right now.
+let compoundDepth = 0
+
+// Thrown when a variant nests more than `MAX_COMPOUND_DEPTH` compound variants.
+// It unwinds to the outermost variant, so that none of the variants inside of
+// it are cached as invalid. They can still be valid on their own, e.g. the
+// `in-hover` in `in-in-in-…-in-hover`.
+const TOO_DEEP = Symbol()
+
 export function parseVariant(variant: string, designSystem: DesignSystem): Variant | null {
   // Arbitrary variants
   if (variant[0] === '[' && variant[variant.length - 1] === ']') {
@@ -834,8 +849,26 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             modifier = null
           }
 
-          let subVariant = designSystem.parseVariant(value)
+          if (compoundDepth === MAX_COMPOUND_DEPTH) throw TOO_DEEP
+
+          let subVariant: Variant | null
+          compoundDepth += 1
+          try {
+            subVariant = designSystem.parseVariant(value)
+          } catch (err) {
+            // Only the outermost compound variant is invalid for sure
+            if (err === TOO_DEEP && compoundDepth === 1) return null
+            throw err
+          } finally {
+            compoundDepth -= 1
+          }
           if (subVariant === null) return null
+
+          // The sub-variant can come from the cache, in which case the compound
+          // variants inside of it were not counted by `compoundDepth`.
+          let depth = 1
+          for (let v = subVariant; v.kind === 'compound'; v = v.variant) depth += 1
+          if (depth > MAX_COMPOUND_DEPTH) return null
 
           // These two variants must be compatible when compounded
           if (!designSystem.variants.compoundsWith(root, subVariant)) return null
