@@ -10,6 +10,9 @@ const SINGLE_QUOTE = 0x27
 const SEMICOLON = 0x3b
 const SLASH = 0x2f
 const ASTERISK = 0x2a
+const LINE_FEED = 0x0a
+const CARRIAGE_RETURN = 0x0d
+const FORM_FEED = 0x0c
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -56,6 +59,12 @@ export function isValidArbitrary(input: string) {
 
           if (nextChar === char) {
             break
+          }
+
+          // An unescaped newline ends a string in CSS, so the rest of the
+          // input is not inside of a string anymore. E.g.: `content-['a\n/*']`
+          if (nextChar === LINE_FEED || nextChar === CARRIAGE_RETURN || nextChar === FORM_FEED) {
+            return false
           }
         }
         break
