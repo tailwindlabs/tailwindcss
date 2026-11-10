@@ -13,6 +13,15 @@ const ASTERISK = 0x2a
 const LINE_FEED = 0x0a
 const CARRIAGE_RETURN = 0x0d
 const FORM_FEED = 0x0c
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
+const UPPER_A = 0x41
+const UPPER_Z = 0x5a
+const ZERO = 0x30
+const NINE = 0x39
+const DASH = 0x2d
+const SPACE = 0x20
+const TAB = 0x09
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -74,6 +83,37 @@ export function isValidArbitrary(input: string) {
         if (idx >= len) return false
         break
       case OPEN_PAREN:
+        // CSS reads an unquoted `url(…)` as a single token that ends at the
+        // first `)`. A quote in it does not start a string, so we reject it,
+        // and a `(` too. E.g.: `url(foo'bar)/*')` would start a comment after
+        // the first `)`. We also reject a `/*`, like everywhere else.
+        if (isUnquotedUrl(input, idx)) {
+          while (++idx < len) {
+            let nextChar = input.charCodeAt(idx)
+
+            // The next character is escaped, so we skip it.
+            if (nextChar === BACKSLASH) {
+              idx += 1
+              continue
+            }
+
+            if (nextChar === CLOSE_PAREN) break
+
+            if (
+              nextChar === SINGLE_QUOTE ||
+              nextChar === DOUBLE_QUOTE ||
+              nextChar === OPEN_PAREN ||
+              (nextChar === SLASH && input.charCodeAt(idx + 1) === ASTERISK)
+            ) {
+              return false
+            }
+          }
+
+          // The `url(…)` has no closing `)`.
+          if (idx >= len) return false
+          break
+        }
+
         closingBracketStack[stackPos] = CLOSE_PAREN
         stackPos++
         break
@@ -116,4 +156,56 @@ export function isValidArbitrary(input: string) {
   }
 
   return stackPos === 0
+}
+
+/**
+ * Determine if the `(` at `idx` starts an unquoted `url(…)`, like
+ * `url(foo.png)`, but not `url('foo.png')` or `my-url(foo.png)`.
+ */
+function isUnquotedUrl(input: string, idx: number) {
+  if (idx < 3) return false
+
+  // Function names are case-insensitive, so `URL(…)` is a `url(…)` too.
+  if (
+    (input.charCodeAt(idx - 3) | 0x20) !== 0x75 /* u */ ||
+    (input.charCodeAt(idx - 2) | 0x20) !== 0x72 /* r */ ||
+    (input.charCodeAt(idx - 1) | 0x20) !== 0x6c /* l */
+  ) {
+    return false
+  }
+
+  // The `url` must be the whole function name. An `_` becomes a space later,
+  // so `no-repeat_url(…)` has a `url(…)` too.
+  if (idx > 3) {
+    let char = input.charCodeAt(idx - 4)
+    if (
+      (char >= LOWER_A && char <= LOWER_Z) ||
+      (char >= UPPER_A && char <= UPPER_Z) ||
+      (char >= ZERO && char <= NINE) ||
+      char === DASH ||
+      char === BACKSLASH ||
+      char >= 0x80
+    ) {
+      return false
+    }
+  }
+
+  // CSS skips the whitespace after the `(`, then a quote makes it a normal
+  // function with a string in it.
+  let next = idx + 1
+  while (next < input.length) {
+    let char = input.charCodeAt(next)
+    if (
+      char !== SPACE &&
+      char !== TAB &&
+      char !== LINE_FEED &&
+      char !== CARRIAGE_RETURN &&
+      char !== FORM_FEED
+    )
+      break
+    next++
+  }
+
+  let char = input.charCodeAt(next)
+  return char !== SINGLE_QUOTE && char !== DOUBLE_QUOTE
 }
