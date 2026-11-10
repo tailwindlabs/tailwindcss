@@ -2178,11 +2178,28 @@ it.each([
   "bg-[url('a',URL(_'b)/*'))]",
   "bg-[u\\72l(foo'bar)/*')]",
   "bg-[u\\72_l(foo'bar)/*')]",
-  // `\\` is an escaped `\`, so the `_` becomes a space before the `url(…)`.
+  // `\\` is an escaped `\`, so the `_` before the `url(…)` is not escaped.
   "bg-[a\\\\_url(foo'bar)/*')]",
   // `--my\_url(…)` is not a `url(…)`, but it keeps the `_`, so the inner
   // `URL(…)` has no quoted string.
   "[x:--my\\_url(URL(_'a)/*'))]",
+
+  // A `/*` inside of an unquoted `url(…)` that PostCSS does not read as a
+  // `url(…)`, or that CSS does not read as a `url(…)` at all
+  'bg-[URL(/a/*.png)]',
+  'bg-[Url(/a/*.png)]',
+  'bg-[url(a.png),url(/b/*.png)]',
+  'bg-[#url(/a/*.png)]',
+  'bg-[@url(/a/*.png)]',
+  'bg-[1url(/a/*.png)]',
+  // `decodeArbitraryValue` turns this into `a\_url(…)`
+  'bg-[a\\\\_url(/a/*.png)]',
+  // The outer `url(…)` keeps the `_`, so this calls the `b_url` function
+  "bg-[url('a',b_url(/c/*.png))]",
+  // Only a value of a declaration can have one, e.g. not `[data-url(…)]`
+  'data-[url(/a/*.png)]:flex',
+  'bg-red-500/[url(/a/*.png)]',
+  '[&_url(/a/*.png)]:flex',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2241,6 +2258,24 @@ it('should parse a `/*` inside of a string in an arbitrary value', () => {
       },
     ]
   `)
+})
+
+it.each([
+  ['bg-[url(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[url(a.png),_url(/b/*.png)]', 'url(a.png), url(/b/*.png)'],
+  ['bg-[image-set(url(/a/*.png)_1x)]', 'image-set(url(/a/*.png) 1x)'],
+  ['bg-[no-repeat_url(/a/*.png)]', 'no-repeat url(/a/*.png)'],
+])('should parse a `/*` inside of an unquoted `url(…)`: %s', (rawCandidate, value) => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run(rawCandidate, { utilities })).toMatchObject([{ value: { kind: 'arbitrary', value } }])
+})
+
+it('should parse a `/*` inside of an unquoted `url(…)` in an arbitrary property', () => {
+  expect(run('[background-image:url(/a/*.png)]')).toMatchObject([
+    { kind: 'arbitrary', property: 'background-image', value: 'url(/a/*.png)' },
+  ])
 })
 
 const candidates = [

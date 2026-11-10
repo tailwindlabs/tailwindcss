@@ -23,6 +23,8 @@ const DASH = 0x2d
 const SPACE = 0x20
 const TAB = 0x09
 const UNDERSCORE = 0x5f
+const HASH = 0x23
+const AT_SIGN = 0x40
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -36,10 +38,14 @@ const closingBracketStack = new Uint8Array(256)
  * Unbalanced parens, brackets, and braces are not allowed. Additionally, a
  * top-level `;` is not allowed, and neither is `/*` outside of a string.
  *
+ * Set `isDeclarationValue` when the input becomes the value of a declaration,
+ * like `bg-[…]` or `[color:…]`. Then a `/*` is allowed in an unquoted `url(…)`
+ * too, e.g. `bg-[url(/a/*.png)]`.
+ *
  * This function is very similar to `segment` but `segment` cannot be used
  * because we'd need to split on a bracket stack character.
  */
-export function isValidArbitrary(input: string) {
+export function isValidArbitrary(input: string, isDeclarationValue = false) {
   // SAFETY: We can use an index into a shared buffer because this function is
   // synchronous, non-recursive, and runs in a single-threaded environment.
   let stackPos = 0
@@ -127,7 +133,7 @@ export function isValidArbitrary(input: string) {
         // CSS reads an unquoted `url(…)` as a single token that ends at the
         // first `)`. A quote in it does not start a string, so we reject it,
         // and a `(` too. E.g.: `url(foo'bar)/*')` would start a comment after
-        // the first `)`. We also reject a `/*`, like everywhere else.
+        // the first `)`.
         //
         // An `_` becomes a space, except in a lowercase `url(…)` or a function
         // name that ends in `_url`. So `URL(_'a.png')` is a quoted
@@ -135,6 +141,12 @@ export function isValidArbitrary(input: string) {
         // `--my\_url(URL(_'b'))` keep the `_`.
         let underscoreIsSpace = !keepsUnderscores && keepUnderscoresUntil === -1
         if (isUrlFunctionAt(input, idx) && !startsWithQuote(input, idx, underscoreIsSpace)) {
+          // A `/*` in the `url(…)` is not a comment in CSS. But PostCSS reads
+          // fewer forms as a `url(…)`, and a `/*` in the other forms starts a
+          // comment there. E.g.: `URL(/a/*.png)` or `a,url(/a/*.png)`.
+          let allowComment =
+            isDeclarationValue && isPostCssUrlAt(input, idx, keepUnderscoresUntil === -1)
+
           while (++idx < len) {
             let nextChar = input.charCodeAt(idx)
 
@@ -146,12 +158,11 @@ export function isValidArbitrary(input: string) {
 
             if (nextChar === CLOSE_PAREN) break
 
-            if (
-              nextChar === SINGLE_QUOTE ||
-              nextChar === DOUBLE_QUOTE ||
-              nextChar === OPEN_PAREN ||
-              (nextChar === SLASH && input.charCodeAt(idx + 1) === ASTERISK)
-            ) {
+            if (nextChar === SINGLE_QUOTE || nextChar === DOUBLE_QUOTE || nextChar === OPEN_PAREN) {
+              return false
+            }
+
+            if (nextChar === SLASH && input.charCodeAt(idx + 1) === ASTERISK && !allowComment) {
               return false
             }
           }
@@ -201,7 +212,8 @@ export function isValidArbitrary(input: string) {
       // A `/*` starts a CSS comment. An unterminated one would comment out the
       // CSS that comes after it. We reject every `/*`, not only unterminated
       // ones, because no candidate needs a comment. Use a string if you need
-      // a literal `/*`, e.g. `content-['/*']` or `bg-[url('/*.png')]`.
+      // a literal `/*`, e.g. `content-['/*']` or `bg-[url('/*.png')]`. An
+      // unquoted `url(…)` can have one too, e.g. `bg-[url(/*.png)]` (see above).
       case SLASH:
         if (input.charCodeAt(idx + 1) === ASTERISK) return false
         break
@@ -253,14 +265,52 @@ function isUrlFunctionAt(input: string, idx: number) {
 
   // The `url` must be the whole function name. An `_` becomes a space later,
   // so `no-repeat_url(…)` has a `url(…)` too. But `\_` stays an `_`, so
-  // `--my\_url(…)` calls the `--my_url` function.
+  // `--my\_url(…)` calls the `--my_url` function. CSS reads `#url` and `@url`
+  // as a hash and an at-keyword, so a normal `(` comes after them.
   if (idx > 3) {
     let char = input.charCodeAt(idx - 4)
-    if (isNameChar(char) || char === BACKSLASH) return false
+    if (isNameChar(char) || char === BACKSLASH || char === HASH || char === AT_SIGN) return false
     if (char === UNDERSCORE && isEscaped(input, idx - 4)) return false
   }
 
   return true
+}
+
+/**
+ * Determine if PostCSS reads the `(` at `idx` as the start of a `url(…)` too.
+ * It does for a lowercase `url` at the start of the value, after whitespace or
+ * after a `(`, if no whitespace comes after the `(`. E.g.: `url(…)`,
+ * `no-repeat_url(…)` and `image-set(url(…))`, but not `URL(…)` or `a,url(…)`.
+ */
+function isPostCssUrlAt(input: string, idx: number, underscoreIsSpace: boolean) {
+  if (
+    input.charCodeAt(idx - 3) !== 0x75 /* u */ ||
+    input.charCodeAt(idx - 2) !== 0x72 /* r */ ||
+    input.charCodeAt(idx - 1) !== 0x6c /* l */
+  ) {
+    return false
+  }
+
+  if (isWhitespace(input.charCodeAt(idx + 1))) return false
+
+  if (idx === 3) return true
+
+  let char = input.charCodeAt(idx - 4)
+  if (char === OPEN_PAREN || isWhitespace(char)) return true
+
+  // `decodeArbitraryValue` turns `\\_` into `\_`, not into `\ `. So we only
+  // count an `_` without a `\` in front of it.
+  return char === UNDERSCORE && underscoreIsSpace && input.charCodeAt(idx - 5) !== BACKSLASH
+}
+
+function isWhitespace(char: number) {
+  return (
+    char === SPACE ||
+    char === TAB ||
+    char === LINE_FEED ||
+    char === CARRIAGE_RETURN ||
+    char === FORM_FEED
+  )
 }
 
 /**

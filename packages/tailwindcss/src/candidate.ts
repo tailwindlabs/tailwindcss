@@ -440,7 +440,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // as the value. E.g.: `[a/*b:red]` would start a comment.
     if (!isValidArbitrary(property)) return
 
-    let value = decodeValidArbitraryValue(baseWithoutModifier.slice(idx + 1))
+    let value = decodeValidArbitraryValue(baseWithoutModifier.slice(idx + 1), true)
 
     // Values can't contain `;` or `}` characters at the top-level.
     if (value === null) return
@@ -568,7 +568,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
         // Arbitrary values must end with a `]`.
         if (value[value.length - 1] !== ']') return
 
-        let arbitraryValue = decodeValidArbitraryValue(value.slice(startArbitraryIdx + 1, -1))
+        // The value becomes the value of a declaration, e.g. `bg-[url(/a/*.png)]`.
+        let arbitraryValue = decodeValidArbitraryValue(value.slice(startArbitraryIdx + 1, -1), true)
 
         // Values can't contain `;` or `}` characters at the top-level.
         if (arbitraryValue === null) continue
@@ -1303,6 +1304,6 @@ function escapeUnderscore(value: string): string {
 // validates the raw value first and only then decodes it
 // the order matters: decoding breaks unbalanced parens (`calc(1px` becomes
 // `calc()1px`) so validating the decoded value would hide them
-function decodeValidArbitraryValue(raw: string): string | null {
-  return isValidArbitrary(raw) ? decodeArbitraryValue(raw) : null
+function decodeValidArbitraryValue(raw: string, isDeclarationValue = false): string | null {
+  return isValidArbitrary(raw, isDeclarationValue) ? decodeArbitraryValue(raw) : null
 }
