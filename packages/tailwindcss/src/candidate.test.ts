@@ -2176,6 +2176,8 @@ it.each([
   '[x:url(foo"bar)/*")]',
   'bg-[URL(a(b)/*)]',
   "bg-[url('a',URL(_'b)/*'))]",
+  "bg-[u\\72l(foo'bar)/*')]",
+  "bg-[u\\72_l(foo'bar)/*')]",
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2186,6 +2188,16 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should parse a function name with an escaped `_`', () => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
+
+  // `\_` is a literal `_`, so this calls the `--my_fn` function.
+  expect(run('w-[--my\\_fn(1px)]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_fn(1px)' } },
+  ])
 })
 
 it('should parse a quoted string after an `_` in an uppercase `URL(…)`', () => {

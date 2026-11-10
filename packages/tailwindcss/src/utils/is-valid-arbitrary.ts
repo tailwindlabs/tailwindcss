@@ -49,14 +49,46 @@ export function isValidArbitrary(input: string) {
   // `decodeArbitraryValue` keeps each `_` in it, also in nested functions.
   let keepUnderscoresUntil = -1
 
+  // If the current word has an escape in it. CSS decodes escapes in function
+  // names, so `u\72l(…)` is a `url(…)`. No candidate needs that, so we reject
+  // a function name with an escape in it.
+  let escapeInWord = false
+
   for (let idx = 0; idx < len; idx++) {
     let char = input.charCodeAt(idx)
 
     switch (char) {
-      case BACKSLASH:
+      case BACKSLASH: {
+        let next = input.charCodeAt(idx + 1)
+
+        // `\_` is a literal `_` in a candidate, not a CSS escape. E.g.:
+        // `w-[--my\_fn(1px)]` calls the `--my_fn` function.
+        if (next !== UNDERSCORE) escapeInWord = true
+
         // The next character is escaped, so we skip it.
         idx += 1
+
+        // A hex escape has up to 6 hex digits, and one whitespace after them
+        // is part of it. An `_` becomes that whitespace later. E.g.: `u\72_l`
+        // is `url`.
+        if (isHexDigit(next)) {
+          let end = idx + 6
+          while (idx + 1 < end && isHexDigit(input.charCodeAt(idx + 1))) idx++
+
+          let after = input.charCodeAt(idx + 1)
+          if (
+            after === UNDERSCORE ||
+            after === SPACE ||
+            after === TAB ||
+            after === LINE_FEED ||
+            after === CARRIAGE_RETURN ||
+            after === FORM_FEED
+          ) {
+            idx++
+          }
+        }
         break
+      }
       // Strings should be handled as-is until the end of the string. No need to
       // worry about balancing parens, brackets, or curlies inside a string.
       case SINGLE_QUOTE:
@@ -88,6 +120,8 @@ export function isValidArbitrary(input: string) {
         if (idx >= len) return false
         break
       case OPEN_PAREN: {
+        if (escapeInWord) return false
+
         let url = urlFunctionAt(input, idx)
 
         // CSS reads an unquoted `url(…)` as a single token that ends at the
@@ -171,9 +205,33 @@ export function isValidArbitrary(input: string) {
         if (input.charCodeAt(idx + 1) === ASTERISK) return false
         break
     }
+
+    // The word ends at a character that can't be part of a name. An `_`
+    // becomes a space later, so it ends the word too.
+    if (escapeInWord && char !== BACKSLASH && !isNameChar(char)) {
+      escapeInWord = false
+    }
   }
 
   return stackPos === 0
+}
+
+function isHexDigit(char: number) {
+  return (
+    (char >= ZERO && char <= NINE) ||
+    (char >= LOWER_A && char <= 0x66) /* f */ ||
+    (char >= UPPER_A && char <= 0x46) /* F */
+  )
+}
+
+function isNameChar(char: number) {
+  return (
+    (char >= LOWER_A && char <= LOWER_Z) ||
+    (char >= UPPER_A && char <= UPPER_Z) ||
+    (char >= ZERO && char <= NINE) ||
+    char === DASH ||
+    char >= 0x80
+  )
 }
 
 const NO_URL = 0
@@ -200,16 +258,7 @@ function urlFunctionAt(input: string, idx: number) {
   // so `no-repeat_url(…)` has a `url(…)` too.
   if (idx > 3) {
     let char = input.charCodeAt(idx - 4)
-    if (
-      (char >= LOWER_A && char <= LOWER_Z) ||
-      (char >= UPPER_A && char <= UPPER_Z) ||
-      (char >= ZERO && char <= NINE) ||
-      char === DASH ||
-      char === BACKSLASH ||
-      char >= 0x80
-    ) {
-      return NO_URL
-    }
+    if (isNameChar(char) || char === BACKSLASH) return NO_URL
   }
 
   return u === 0x75 && r === 0x72 && l === 0x6c ? LOWERCASE_URL : OTHER_URL
