@@ -90,6 +90,7 @@ impl Machine for NamedVariantMachine<IdleState> {
                 // E.g.: `*:`
                 //        ^^
                 Class::Colon => {
+                    self.start_pos = cursor.pos;
                     cursor.advance();
                     self.transition::<ParsingEndState>().next(cursor)
                 }
@@ -388,6 +389,8 @@ mod tests {
             // Simple single-character variant
             ("a:", vec!["a:"]),
             ("a/foo:", vec!["a/foo:"]),
+            // Single-character variant after another variant
+            ("hover: a:", vec!["hover:", "a:"]),
             //
             ("group-hover:flex", vec!["group-hover:"]),
             ("group-hover/name:flex", vec!["group-hover/name:"]),
