@@ -1,6 +1,6 @@
 import dedent from 'dedent'
 import { describe } from 'vitest'
-import { css, fetchStyles, html, retryAssertion, test, ts, txt } from '../utils'
+import { candidate, css, fetchStyles, html, js, retryAssertion, test, ts, txt } from '../utils'
 
 function createSetup(transformer: 'postcss' | 'lightningcss') {
   return {
@@ -174,5 +174,204 @@ describe.each(['postcss', 'lightningcss'] as const)('%s', (transformer) => {
         }
       `)
     })
+  })
+})
+
+// A plugin before Tailwind inlines `src/partial.css` into `src/index.css` in
+// memory. The file `src/index.css` on disk never changes, only the CSS that
+// Tailwind receives does.
+describe('a plugin that changes the input CSS in memory', () => {
+  let setup = {
+    fs: {
+      'package.json': txt`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules/
+        dist/
+      `,
+      'inline-partial.mjs': js`
+        import fs from 'node:fs'
+        import path from 'node:path'
+
+        export function inlinePartial() {
+          return {
+            name: 'inline-partial',
+            enforce: 'pre',
+            transform(code, id) {
+              if (!id.split('?')[0].endsWith('/src/index.css')) return
+              let file = path.resolve(process.cwd(), 'src/partial.css')
+              this.addWatchFile(file)
+              return code.replace('/* partial */', fs.readFileSync(file, 'utf8'))
+            },
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+        import { inlinePartial } from './inline-partial.mjs'
+
+        export default defineConfig({
+          build: { cssMinify: false },
+          plugins: [inlinePartial(), tailwindcss()],
+        })
+      `,
+      'build.mjs': js`
+        import fs from 'node:fs/promises'
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+        import { inlinePartial } from './inline-partial.mjs'
+
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'error',
+          build: { cssMinify: false },
+          plugins: [inlinePartial(), tailwindcss()],
+        })
+
+        await builder.build(builder.environments.client)
+        await fs.writeFile('src/partial.css', '.from-partial { color: blue; }')
+
+        // Vite empties the outDir only once for each environment
+        await fs.rm('dist', { recursive: true, force: true })
+        await builder.build(builder.environments.client)
+      `,
+      'build-after-error.mjs': js`
+        import fs from 'node:fs/promises'
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+        import { inlinePartial } from './inline-partial.mjs'
+
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'silent',
+          build: { cssMinify: false },
+          plugins: [inlinePartial(), tailwindcss()],
+        })
+
+        await builder.build(builder.environments.client)
+        await fs.writeFile('src/partial.css', '.from-partial { @apply does-not-exist; }')
+
+        // Build the same invalid input two times
+        for (let i of [1, 2]) {
+          await fs.rm('dist', { recursive: true, force: true })
+          try {
+            await builder.build(builder.environments.client)
+            console.log('build ' + i + ': ok')
+          } catch {
+            console.log('build ' + i + ': failed')
+          }
+        }
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        /* partial */
+      `,
+      'src/partial.css': css`
+        .from-partial {
+          color: red;
+        }
+      `,
+    },
+  }
+
+  test('dev mode', setup, async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite dev')
+    await process.onStdout((m) => m.includes('ready in'))
+
+    let url = ''
+    await process.onStdout((m) => {
+      let match = /Local:\s*(http.*)\//.exec(m)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain('color: red')
+    })
+
+    await fs.write(
+      'src/partial.css',
+      css`
+        .from-partial {
+          color: blue;
+        }
+      `,
+    )
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url, '/index.html')
+      expect(styles).toContain('color: blue')
+      expect(styles).not.toContain('color: red')
+    })
+  })
+
+  test('watch mode', setup, async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite build --watch')
+    await process.onStdout((m) => m.includes('built in'))
+
+    await retryAssertion(async () => {
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [, styles] = files[0]
+      expect(styles).toContain(candidate`underline`)
+      expect(styles).toContain('color: red')
+    })
+
+    await fs.write(
+      'src/partial.css',
+      css`
+        .from-partial {
+          color: blue;
+        }
+      `,
+    )
+
+    await retryAssertion(async () => {
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [, styles] = files[0]
+      // Tailwind optimizes the CSS in a build, so `blue` becomes `#00f`
+      expect(styles).toContain('color: #00f')
+      expect(styles).not.toContain('color: red')
+    })
+  })
+
+  test('a builder that builds again', setup, async ({ fs, exec, expect }) => {
+    await exec('node build.mjs')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [, styles] = files[0]
+    // Tailwind optimizes the CSS in a build, so `blue` becomes `#00f`
+    expect(styles).toContain('color: #00f')
+    expect(styles).not.toContain('color: red')
+  })
+
+  test('a build again after an error fails again', setup, async ({ exec, expect }) => {
+    let output = await exec('node build-after-error.mjs')
+
+    expect(output).toContain('build 1: failed')
+    expect(output).toContain('build 2: failed')
   })
 })

@@ -347,6 +347,11 @@ class Root {
   // assume the file has always changed.
   private buildDependencies = new Map<string, number | null>()
 
+  // The input CSS of the last compiler setup. A plugin that runs before
+  // Tailwind can change the CSS in memory without a change to a file on disk,
+  // so the mtimes of the build dependencies are not sufficient.
+  private content: string | null = null
+
   constructor(
     private id: string,
     private base: string,
@@ -391,7 +396,14 @@ class Root {
     let requiresBuildPromise = this.requiresBuild()
     let inputBase = path.dirname(path.resolve(inputPath))
 
-    if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
+    if (
+      !this.compiler ||
+      !this.scanner ||
+      this.content !== content ||
+      (await requiresBuildPromise)
+    ) {
+      // Set again once the setup succeeds, so a failed setup is retried
+      this.content = null
       clearRequireCache(Array.from(this.buildDependencies.keys()))
       this.buildDependencies.clear()
 
@@ -433,6 +445,8 @@ class Root {
 
       this.scanner = new Scanner({ sources })
       DEBUG && I.end('Setup scanner')
+
+      this.content = content
     } else {
       for (let buildDependency of this.buildDependencies.keys()) {
         addWatchFile(buildDependency)
