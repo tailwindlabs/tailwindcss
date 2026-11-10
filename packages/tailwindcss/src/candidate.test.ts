@@ -2351,6 +2351,13 @@ it.each([
   "content-['\\00003c/style>']",
   "content-['<\\/style>']",
   "content-['\\</\\s\\74 yle>']",
+
+  // Escaped newlines (removed in CSS strings)
+  "content-['</s\\\ntyle>']",
+  "content-['</s\\\rtyle>']",
+  "content-['</s\\\ftyle>']",
+  "content-['</s\\\r\ntyle>']",
+  "[content:'</s\\\ntyle>']",
 ])('should not parse candidates that contain `</style`: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

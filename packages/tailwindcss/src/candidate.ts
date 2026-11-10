@@ -1356,6 +1356,14 @@ function containsStyleEndTag(input: string) {
       }
     }
 
+    // `\` followed by a newline (`\r\n` counts as one) is removed in a string,
+    // so `</s\<LF>tyle` becomes `</style` once it is minified.
+    else if (input[i + 1] === '\r' && input[i + 2] === '\n') {
+      i += 2
+    } else if (input[i + 1] === '\n' || input[i + 1] === '\r' || input[i + 1] === '\f') {
+      i += 1
+    }
+
     // `\` followed by any other character is that character
     else if (i + 1 < input.length) {
       decoded += input[++i]
