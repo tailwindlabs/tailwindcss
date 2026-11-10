@@ -314,6 +314,12 @@ export function cloneVariant<T extends Variant>(variant: T): T {
   }
 }
 
+// The maximum number of variants that can be stacked in a candidate. Real
+// candidates only stack a few, but each variant nests the generated CSS one
+// level deeper. Without a limit, a candidate like `hover:hover:…:hover:flex`
+// generates (and optimizes) deeply nested CSS that can exceed the call stack.
+const MAX_STACKED_VARIANTS = 64
+
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
@@ -335,6 +341,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // empty string by `:` will always result in an array with at least one
   // element.
   let base = rawVariants.pop()!
+
+  if (rawVariants.length > MAX_STACKED_VARIANTS) return
 
   let parsedCandidateVariants: Variant[] = []
 

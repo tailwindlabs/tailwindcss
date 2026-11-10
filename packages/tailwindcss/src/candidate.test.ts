@@ -1965,6 +1965,22 @@ it('should parse candidates with a prefix', () => {
   `)
 })
 
+it('should not parse candidates with more than 64 stacked variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+
+  expect(run(`${'hover:'.repeat(64)}flex`, { utilities, variants })[0].variants).toHaveLength(64)
+  expect(run(`${'hover:'.repeat(65)}flex`, { utilities, variants })).toEqual([])
+
+  // The prefix is not a variant
+  expect(
+    run(`tw:${'hover:'.repeat(64)}flex`, { utilities, variants, prefix: 'tw' })[0].variants,
+  ).toHaveLength(64)
+})
+
 it('should parse variants and utilities with many dashes in linear time', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

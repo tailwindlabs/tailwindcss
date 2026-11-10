@@ -605,6 +605,11 @@ test('nesting more than 16 compound variants does not generate CSS', async () =>
   `)
 })
 
+test('stacking more than 64 variants does not generate CSS', async () => {
+  expect(await run([`${'hover:'.repeat(64)}flex`])).toContain('display: flex')
+  expect(await run([`${'hover:'.repeat(65)}flex`, `${'hover:'.repeat(10_000)}flex`])).toEqual('')
+})
+
 test('focus-visible', async () => {
   expect(await run(['focus-visible:flex', 'group-focus-visible:flex', 'peer-focus-visible:flex']))
     .toMatchInlineSnapshot(`
