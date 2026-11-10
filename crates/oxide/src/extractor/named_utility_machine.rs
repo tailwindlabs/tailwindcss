@@ -1,5 +1,5 @@
 use crate::cursor;
-use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
+use crate::extractor::arbitrary_value_machine::{ArbitraryValueMachine, ArbitraryValueMemo};
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
 use crate::extractor::boundary::is_valid_after_boundary;
 use crate::extractor::machine::{Machine, MachineState};
@@ -31,6 +31,10 @@ pub struct NamedUtilityMachine<State = IdleState> {
     arbitrary_variable_machine: ArbitraryVariableMachine,
     arbitrary_value_machine: ArbitraryValueMachine,
 
+    /// This machine starts a utility at many positions of the same input, so its arbitrary
+    /// values share the work.
+    arbitrary_value_memo: ArbitraryValueMemo,
+
     _state: PhantomData<State>,
 }
 
@@ -41,6 +45,7 @@ impl<State> NamedUtilityMachine<State> {
             start_pos: self.start_pos,
             arbitrary_variable_machine: Default::default(),
             arbitrary_value_machine: Default::default(),
+            arbitrary_value_memo: Default::default(),
             _state: PhantomData,
         }
     }
@@ -71,7 +76,7 @@ impl Machine for NamedUtilityMachine<IdleState> {
                 _ => {
                     self.start_pos = cursor.pos;
                     cursor.advance();
-                    self.transition::<ParsingState>().next(cursor)
+                    self.parse_utility(cursor)
                 }
             },
 
@@ -82,7 +87,7 @@ impl Machine for NamedUtilityMachine<IdleState> {
             Class::At => {
                 self.start_pos = cursor.pos;
                 cursor.advance();
-                self.transition::<ParsingState>().next(cursor)
+                self.parse_utility(cursor)
             }
 
             // Valid start of a negative utility, if followed by another set of valid
@@ -94,7 +99,7 @@ impl Machine for NamedUtilityMachine<IdleState> {
                 Class::AlphaLower => {
                     self.start_pos = cursor.pos;
                     cursor.advance();
-                    self.transition::<ParsingState>().next(cursor)
+                    self.parse_utility(cursor)
                 }
 
                 // A dash should not be followed by anything else
@@ -104,6 +109,20 @@ impl Machine for NamedUtilityMachine<IdleState> {
             // Everything else, is not a valid start of the utility.
             _ => MachineState::Idle,
         }
+    }
+}
+
+impl NamedUtilityMachine<IdleState> {
+    #[inline(always)]
+    fn parse_utility(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        let mut machine = self.transition::<ParsingState>();
+        machine.arbitrary_value_memo = std::mem::take(&mut self.arbitrary_value_memo);
+        let state = machine.next(cursor);
+
+        // Keep what the utility learned about the input, for the next utility
+        self.arbitrary_value_memo = machine.arbitrary_value_memo;
+
+        state
     }
 }
 
@@ -157,7 +176,10 @@ impl Machine for NamedUtilityMachine<ParsingState> {
                     //          ^^
                     Class::OpenBracket => {
                         cursor.advance();
-                        return match self.arbitrary_value_machine.next(cursor) {
+                        return match self
+                            .arbitrary_value_machine
+                            .next_with_memo(cursor, &mut self.arbitrary_value_memo)
+                        {
                             MachineState::Idle => self.restart(),
                             MachineState::Done(_) => self.done(self.start_pos, cursor),
                         };
@@ -530,6 +552,19 @@ mod tests {
                 }
                 assert_eq!(actual, expected);
             }
+        }
+    }
+
+    #[test]
+    fn test_named_utility_machine_reuse() {
+        for input in [
+            // Arbitrary values that don't end, because the first one is empty
+            r#"bg-[]"a""#.repeat(50),
+            "bg-[]a".repeat(50),
+            // Arbitrary values that end at the end of the line
+            format!("{}]", r#"bg-[]"a""#.repeat(50)),
+        ] {
+            NamedUtilityMachine::<IdleState>::test_reuse(&input);
         }
     }
 }
