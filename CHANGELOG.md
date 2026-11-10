@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Canonicalization: replace CSS escapes that are not needed in arbitrary values, properties, modifiers and variants (e.g. `bg-[u\72l('a.png')]` → `bg-[url('a.png')]`) ([#20697](https://github.com/tailwindlabs/tailwindcss/pull/20697))
+
 ### Fixed
 
 - Ignore candidates with more than 16 nested compound variants (e.g. `in-in-…-in-hover:flex`) or more than 64 stacked variants (e.g. `hover:hover:…:hover:flex`) instead of slowing down or crashing the build ([#20693](https://github.com/tailwindlabs/tailwindcss/pull/20693))
