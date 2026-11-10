@@ -220,12 +220,23 @@ export function cssContext(
   }
 }
 
+// Nodes that are reused across builds, i.e. the cached, flattened output of a
+// single utility (see `./incremental.ts`). `toCss` caches their printed CSS.
+//
+// These nodes must never be mutated once they are marked.
+export const CACHEABLE = new WeakSet<AstNode>()
+const PRINTED = new WeakMap<AstNode, { depth: number; css: string }>()
+
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
+//
+// When `skipAtRoots` is set, `@at-root` nodes are dropped instead of hoisted.
+// The incremental build hoists them itself.
 export function optimizeAst(
   ast: AstNode[],
   designSystem: DesignSystem,
   polyfills: Polyfills = Polyfills.All,
+  skipAtRoots = false,
 ) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
@@ -387,6 +398,7 @@ export function optimizeAst(
 
     // AtRoot
     else if (node.kind === 'at-root') {
+      if (skipAtRoots) return
       for (let child of node.nodes) {
         let newParent: AstNode[] = []
         transform(child, newParent, context, 0)
@@ -1709,7 +1721,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 // A set of at-rules that can be hoisted to the top without any repercussions.
 // Typically at-rules that rely on the environment, not parent information and
 // contain other rules/declarations.
-const HOISTABLE_AT_RULES = new Set([
+export const HOISTABLE_AT_RULES = new Set([
   '@container',
   '@layer',
   '@media',
@@ -1742,6 +1754,22 @@ export function toCss(ast: AstNode[], track?: boolean) {
   }
 
   function stringify(node: AstNode, depth = 0): string {
+    // Nodes that are reused across builds print to the same CSS every time.
+    // Source map tracking needs the positions of the current build, so we
+    // can't use the cache in that case.
+    if (!track && CACHEABLE.has(node)) {
+      let cached = PRINTED.get(node)
+      if (cached !== undefined && cached.depth === depth) return cached.css
+
+      let css = print(node, depth)
+      PRINTED.set(node, { depth, css })
+      return css
+    }
+
+    return print(node, depth)
+  }
+
+  function print(node: AstNode, depth: number): string {
     let css = ''
     let indent = '  '.repeat(depth)
 
