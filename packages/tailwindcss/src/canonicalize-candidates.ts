@@ -616,6 +616,14 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
     let utilityCache = ds.storage[CANONICALIZE_UTILITY_KEY].get(options)
 
     return new DefaultMap<string, string>((rawCandidate: string, self) => {
+      // Replace escapes that are not needed first. We do this before parsing,
+      // because a candidate with an escape in a function name, like
+      // `bg-[u\72l('a.png')]`, might not parse at all.
+      let normalized = normalizeEscapes(rawCandidate)
+      if (normalized !== rawCandidate && ds.parseCandidate(normalized).length > 0) {
+        return self.get(normalized)
+      }
+
       for (let candidate of ds.parseCandidate(rawCandidate)) {
         let variants = candidate.variants
           .slice()
@@ -669,6 +677,362 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
       return rawCandidate
     })
   })
+}
+
+const BACKSLASH = 0x5c
+const OPEN_BRACKET = 0x5b
+const CLOSE_BRACKET = 0x5d
+const OPEN_PAREN = 0x28
+const CLOSE_PAREN = 0x29
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
+const COLON = 0x3a
+const EXCLAMATION_MARK = 0x21
+const GREATER_THAN = 0x3e
+const UNDERSCORE = 0x5f
+const DASH = 0x2d
+
+/**
+ * Replace CSS escapes in arbitrary values that are not needed with the
+ * character that they stand for. E.g.: `bg-[u\72l('a.png')]` becomes
+ * `bg-[url('a.png')]`.
+ *
+ * We only replace escapes of ASCII letters, digits and `-` in a name, and only
+ * if the CSS stays the same. We keep:
+ *
+ * - `\_`, because it is a literal `_` in a candidate.
+ * - Escapes in strings, e.g. `content-['\61']`.
+ * - Escapes of other characters, e.g. `\,` or `\)`.
+ * - Escapes that make a name out of something else. E.g.: `\31 0px` is the
+ *   name `10px`, but `10px` is a dimension.
+ */
+export function normalizeEscapes(input: string): string {
+  // Only arbitrary values have escapes that we replace
+  if (input.indexOf('\\') === -1 || input.indexOf('[') === -1) return input
+
+  let output = ''
+
+  // The nesting level of `[…]`
+  let depth = 0
+
+  // For each function that we are inside of, if `decodeArbitraryValue` keeps
+  // an `_` in it as-is, instead of converting it to a space.
+  let functions: boolean[] = []
+
+  // If we are inside of the property name of an arbitrary property. It is not
+  // decoded, so an `_` in it is not a space either.
+  let inPropertyName = false
+
+  // The end of the last name, to find the name of a function.
+  let lastName = ''
+  let lastNameEnd = -1
+
+  let idx = 0
+  while (idx < input.length) {
+    let char = input.charCodeAt(idx)
+
+    // Outside of `[…]`, we keep everything as-is.
+    if (depth === 0) {
+      if (char === BACKSLASH) {
+        output += input.slice(idx, idx + 2)
+        idx += 2
+        continue
+      }
+
+      if (char === OPEN_BRACKET) {
+        depth = 1
+        functions = []
+
+        // An arbitrary property, like `[color:red]`, starts after the variants,
+        // and its property name starts with `a-z` or `-`. An escape might
+        // become one of them.
+        let previous = input.charCodeAt(idx - 1)
+        let next = input.charCodeAt(idx + 1)
+        inPropertyName =
+          (idx === 0 || previous === COLON || previous === EXCLAMATION_MARK) &&
+          ((next >= 0x61 && next <= 0x7a) || next === DASH || next === BACKSLASH)
+      }
+
+      output += input[idx]
+      idx++
+      continue
+    }
+
+    if (char === BACKSLASH || isNameChar(char)) {
+      // If we are not sure that an `_` is a space, then an `_` after a hex
+      // escape might not be part of the escape.
+      let underscoreIsSpace = !inPropertyName && !functions.includes(true)
+
+      let [name, end] = normalizeName(input, idx, underscoreIsSpace)
+      let raw = input.slice(idx, end)
+
+      if (name !== raw && keepName(input, output, raw, name, end)) {
+        name = raw
+      }
+
+      // A `\` at the end of the input is not an escape.
+      if (end === idx) {
+        name = input[idx]
+        end++
+      }
+
+      output += name
+      lastName = name
+      lastNameEnd = end
+      idx = end
+      continue
+    }
+
+    switch (char) {
+      // We keep strings as-is.
+      case SINGLE_QUOTE:
+      case DOUBLE_QUOTE: {
+        let end = idx + 1
+        while (end < input.length) {
+          let next = input.charCodeAt(end)
+          if (next === BACKSLASH) {
+            end += 2
+            continue
+          }
+
+          end++
+          if (next === char) break
+        }
+
+        output += input.slice(idx, end)
+        idx = end
+        continue
+      }
+
+      case OPEN_BRACKET:
+        depth++
+        break
+
+      case CLOSE_BRACKET:
+        depth--
+        break
+
+      // The property name of an arbitrary property ends at the first `:`.
+      case COLON:
+        inPropertyName = false
+        break
+
+      case OPEN_PAREN:
+        functions.push(lastNameEnd === idx && keepsUnderscores(lastName))
+        break
+
+      case CLOSE_PAREN:
+        functions.pop()
+        break
+    }
+
+    output += input[idx]
+    idx++
+  }
+
+  return output
+}
+
+/**
+ * Replace the escapes that are not needed in the name at `start`. Returns the
+ * new name, and the end of the name in the input.
+ */
+function normalizeName(input: string, start: number, underscoreIsSpace: boolean) {
+  let output = ''
+
+  // The first two characters of the new name, or a `\` for an escape. They
+  // tell us if the name is an identifier, or a number like `10px`.
+  let first = -1
+  let second = -1
+
+  // If the last escape that we kept is a hex escape without a whitespace after
+  // it. A hex digit after it would become part of the escape.
+  let openHexEscape = false
+
+  let idx = start
+  while (idx < input.length) {
+    let char = input.charCodeAt(idx)
+    let code = char
+
+    if (char === BACKSLASH) {
+      let escapeStart = idx
+      let next = input.charCodeAt(idx + 1)
+      if (Number.isNaN(next)) break
+
+      let decoded = next
+      let isHex = isHexDigit(next)
+      let terminated = true
+      let certain = true
+
+      if (isHex) {
+        // A hex escape has up to 6 hex digits, and one whitespace after them
+        // is part of it. An `_` becomes that whitespace later. E.g.: `u\72_l`
+        // is `url`.
+        let hexEnd = idx + 1
+        while (hexEnd < idx + 7 && isHexDigit(input.charCodeAt(hexEnd))) hexEnd++
+        decoded = parseInt(input.slice(idx + 1, hexEnd), 16)
+        terminated = hexEnd - idx - 1 === 6
+        idx = hexEnd
+
+        let after = input.charCodeAt(idx)
+        if (isWhitespace(after)) {
+          idx++
+          terminated = true
+        } else if (after === UNDERSCORE) {
+          idx++
+          terminated = true
+          certain = underscoreIsSpace
+        }
+      } else {
+        idx += 2
+      }
+
+      let replace = certain && isAsciiNameChar(decoded) && !(openHexEscape && isHexDigit(decoded))
+
+      if (replace) {
+        if (first === -1) {
+          // A name can't start with a digit, e.g.: `\31 0px` is not `10px`.
+          if (isDigit(decoded)) {
+            replace = false
+          }
+
+          // A name can start with a `-` only if a name character comes after
+          // it, e.g.: `\-1` is not `-1`.
+          else if (decoded === DASH) {
+            let after = input.charCodeAt(idx)
+            replace = isLetter(after) || after === DASH || after === BACKSLASH || after >= 0x80
+          }
+        } else if (!startsIdentifier(first, second === -1 ? decoded : second)) {
+          // We are inside of a number, like `1\65 3`. It is `1` with the unit
+          // `e3`, but `1e3` is `1000`.
+          replace = false
+        }
+      }
+
+      if (replace) {
+        output += String.fromCharCode(decoded)
+        code = decoded
+        openHexEscape = false
+      } else {
+        output += input.slice(escapeStart, idx)
+        code = BACKSLASH
+        openHexEscape = isHex && !terminated
+      }
+    } else if (isNameChar(char)) {
+      output += input[idx]
+      openHexEscape = false
+      idx++
+    } else {
+      break
+    }
+
+    if (first === -1) first = code
+    else if (second === -1) second = code
+  }
+
+  return [output, idx] as const
+}
+
+/**
+ * Determine if we have to keep a name as-is, even though it has escapes that
+ * we could replace.
+ */
+function keepName(input: string, output: string, raw: string, name: string, end: number) {
+  // A `-->` and a `<!--` are special tokens in CSS. E.g.: `-\->` is the name
+  // `--` and a `>`, but `-->` is a single token. And in `<!--\-`, the `\-` is a
+  // name, but in `<!---` the last `-` is not.
+  if (name === '--' && input.charCodeAt(end) === GREATER_THAN) return true
+  if (name.startsWith('--') && output.endsWith('<!')) return true
+
+  // `decodeArbitraryValue` keeps an `_` as-is in some functions, like
+  // `url(…)`, but not in `u\72l(…)`. If the function has an `_` in it, then
+  // replacing the escapes would change what it means.
+  if (
+    input.charCodeAt(end) === OPEN_PAREN &&
+    keepsUnderscores(name) &&
+    !keepsUnderscores(raw) &&
+    hasUnderscoreInFunction(input, end)
+  ) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Determine if `decodeArbitraryValue` might keep an `_` in a function with the
+ * given name as-is. E.g. in `url(…)`, `no-repeat_url(…)` or `var(…)`.
+ */
+function keepsUnderscores(name: string) {
+  return name.endsWith('url') || name.endsWith('var') || name.endsWith('theme')
+}
+
+/**
+ * Determine if the function that starts with the `(` at `idx` has an `_` in
+ * it. Also in strings, because `decodeArbitraryValue` converts an `_` in a
+ * string too, except in a `url(…)`. E.g.: `u\72l('a_b.png')` is `a b.png`.
+ */
+function hasUnderscoreInFunction(input: string, idx: number) {
+  let depth = 0
+  for (; idx < input.length; idx++) {
+    let char = input.charCodeAt(idx)
+
+    if (char === BACKSLASH) {
+      idx++
+    } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      // Skip the string, because a `)` in it does not end the function.
+      while (++idx < input.length) {
+        let next = input.charCodeAt(idx)
+        if (next === BACKSLASH) idx++
+        else if (next === UNDERSCORE) return true
+        else if (next === char) break
+      }
+    } else if (char === OPEN_PAREN) {
+      depth++
+    } else if (char === CLOSE_PAREN) {
+      if (--depth === 0) return false
+    } else if (char === UNDERSCORE) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * Determine if a name that starts with the given two characters is an
+ * identifier, and not a number like `10px` or `-1`. A `\` is an escape.
+ */
+function startsIdentifier(first: number, second: number) {
+  if (first === DASH) {
+    return isLetter(second) || second === DASH || second === BACKSLASH || second >= 0x80
+  }
+
+  return isLetter(first) || first === BACKSLASH || first >= 0x80
+}
+
+function isNameChar(char: number) {
+  return isAsciiNameChar(char) || char >= 0x80
+}
+
+function isAsciiNameChar(char: number) {
+  return isLetter(char) || isDigit(char) || char === DASH
+}
+
+function isLetter(char: number) {
+  return (char >= 0x61 && char <= 0x7a) || (char >= 0x41 && char <= 0x5a)
+}
+
+function isDigit(char: number) {
+  return char >= 0x30 && char <= 0x39
+}
+
+function isHexDigit(char: number) {
+  return isDigit(char) || (char >= 0x61 && char <= 0x66) || (char >= 0x41 && char <= 0x46)
+}
+
+function isWhitespace(char: number) {
+  return char === 0x20 || char === 0x09 || char === 0x0a || char === 0x0c || char === 0x0d
 }
 
 type VariantCanonicalizationFunction = (
