@@ -8,6 +8,8 @@ const CLOSE_BRACKET = 0x5d
 const DOUBLE_QUOTE = 0x22
 const SINGLE_QUOTE = 0x27
 const SEMICOLON = 0x3b
+const SLASH = 0x2f
+const ASTERISK = 0x2a
 
 // This is a shared buffer that is used to keep track of the current nesting level
 // of parens, brackets, and braces. It is used to determine if a character is at
@@ -19,7 +21,7 @@ const closingBracketStack = new Uint8Array(256)
  * Determine if a given string might be a valid arbitrary value.
  *
  * Unbalanced parens, brackets, and braces are not allowed. Additionally, a
- * top-level `;` is not allowed.
+ * top-level `;` is not allowed, and neither is `/*` outside of a string.
  *
  * This function is very similar to `segment` but `segment` cannot be used
  * because we'd need to split on a bracket stack character.
@@ -88,6 +90,13 @@ export function isValidArbitrary(input: string) {
         break
       case SEMICOLON:
         if (stackPos === 0) return false
+        break
+      // A `/*` starts a CSS comment. An unterminated one would comment out the
+      // CSS that comes after it. We reject every `/*`, not only unterminated
+      // ones, because no candidate needs a comment. Use a string if you need
+      // a literal `/*`, e.g. `content-['/*']` or `bg-[url('/*.png')]`.
+      case SLASH:
+        if (input.charCodeAt(idx + 1) === ASTERISK) return false
         break
     }
   }

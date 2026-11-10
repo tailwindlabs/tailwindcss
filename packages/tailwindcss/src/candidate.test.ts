@@ -2160,6 +2160,14 @@ it.each([
   'data-foo=bar:flex',
   'bg-foo=bar',
   'bg-red-500/foo=bar',
+
+  // Arbitrary values, properties, modifiers and variants that start a comment
+  'bg-[red/*]',
+  'bg-[red/*comment*/]',
+  '[color:red/*]',
+  'bg-red-500/[50%/*]',
+  '[&/*]:flex',
+  'data-[a/*]:flex',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2170,6 +2178,29 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should parse a `/*` inside of a string in an arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.functional('content', () => [])
+
+  expect(run(`content-['/*']`, { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "content-['/*']",
+        "root": "content",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "'/*'",
+        },
+        "variants": [],
+      },
+    ]
+  `)
 })
 
 const candidates = [
