@@ -321,6 +321,10 @@ export function cloneVariant<T extends Variant>(variant: T): T {
 const MAX_STACKED_VARIANTS = 64
 
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
+  // Candidates that contain `</style` are not allowed. The generated CSS can
+  // be inlined in a `<style>` element, and `</style` would end that element.
+  if (containsStyleEndTag(input)) return
+
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
   //             ^^^^^^^^^  -> Base
@@ -1306,4 +1310,47 @@ function escapeUnderscore(value: string): string {
 // `calc()1px`) so validating the decoded value would hide them
 function decodeValidArbitraryValue(raw: string, isDeclarationValue = false): string | null {
   return isValidArbitrary(raw, isDeclarationValue) ? decodeArbitraryValue(raw) : null
+}
+
+const STYLE_END_TAG = /<\/style/i
+const HEX_DIGIT = /[0-9a-fA-F]/
+
+/**
+ * Determine if the input contains `</style` (case-insensitive) once CSS
+ * escapes are decoded, e.g.: `\3c /style` or `<\/style`.
+ */
+function containsStyleEndTag(input: string) {
+  // Fast path: without a `<` or a `\` there is no `</style` to decode.
+  if (input.indexOf('<') === -1 && input.indexOf('\\') === -1) return false
+
+  let decoded = ''
+  for (let i = 0; i < input.length; i++) {
+    let char = input[i]
+    if (char !== '\\') {
+      decoded += char
+      continue
+    }
+
+    // `\` followed by 1 to 6 hex digits, and an optional whitespace
+    let hex = ''
+    while (hex.length < 6 && HEX_DIGIT.test(input[i + 1] ?? '')) {
+      hex += input[++i]
+    }
+
+    if (hex.length > 0) {
+      decoded += String.fromCodePoint(Math.min(parseInt(hex, 16), 0x10ffff))
+
+      // An `_` becomes a space in arbitrary values, so it can end the escape
+      // as well.
+      let next = input[i + 1]
+      if (next === ' ' || next === '\t' || next === '\n' || next === '_') i += 1
+    }
+
+    // `\` followed by any other character is that character
+    else if (i + 1 < input.length) {
+      decoded += input[++i]
+    }
+  }
+
+  return STYLE_END_TAG.test(decoded)
 }

@@ -2324,6 +2324,54 @@ it('should parse a `/*` inside of an unquoted `url(…)` in an arbitrary propert
   ])
 })
 
+it.each([
+  // Arbitrary values
+  "before:content-['</style>']",
+  "content-['</STYLE>']",
+  'font-[x</style>]',
+
+  // Arbitrary properties
+  '[--x:</style>]',
+
+  // Arbitrary variants
+  '[&[data-x="</style>"]]:flex',
+
+  // Modifiers
+  'bg-red-500/[</style>]',
+
+  // CSS escapes
+  "content-['\\3c /style>']",
+  "content-['\\3c_/style>']",
+  "content-['\\3C/STYLE>']",
+  "content-['\\00003c/style>']",
+  "content-['<\\/style>']",
+  "content-['\\</\\s\\74 yle>']",
+])('should not parse candidates that contain `</style`: %s', (rawCandidate) => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+  utilities.functional('content', () => [])
+  utilities.functional('font', () => [])
+
+  let variants = new Variants()
+  variants.static('before', () => {})
+
+  expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it.each([
+  "content-['</>']",
+  "content-['</styl']",
+  "content-['<_/style>']",
+  "content-['\\3c\\_/style>']",
+  '[--x:a<b]',
+])('should parse candidates that contain `<` but not `</style`: %s', (rawCandidate) => {
+  let utilities = new Utilities()
+  utilities.functional('content', () => [])
+
+  expect(run(rawCandidate, { utilities })).not.toEqual([])
+})
+
 const candidates = [
   // Arbitrary candidates
   ['[color:red]', '[color:red]'],
