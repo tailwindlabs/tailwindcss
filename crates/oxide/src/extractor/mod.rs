@@ -809,6 +809,60 @@ mod tests {
     }
 
     #[test]
+    fn test_long_lines_with_empty_arbitrary_values() {
+        for (input, expected) in [
+            (r#"[]"a""#.repeat(20_000), vec!["a"]),
+            (r#"bg-[]"a""#.repeat(12_500), vec!["a"]),
+            // E.g.: minified JSON
+            (
+                format!("[{}]", r#"{"id":1,"tags":[],"cls":"flex"},"#.repeat(3_000)),
+                vec!["cls", "flex", "id", "tags"],
+            ),
+        ] {
+            let start = std::time::Instant::now();
+            assert_extract_sorted_candidates(&input, expected);
+
+            // Each input takes milliseconds when the time grows linearly with the length of the
+            // line, but seconds or minutes when it grows quadratically.
+            let elapsed = start.elapsed();
+            assert!(
+                elapsed < std::time::Duration::from_secs(5),
+                "Extracting {:?}… took {elapsed:?}",
+                &input[..10],
+            );
+        }
+    }
+
+    #[test]
+    fn test_reuse_machines_on_random_lines() {
+        use super::machine::Machine;
+        use super::utility_machine::UtilityMachine;
+        use super::variant_machine::VariantMachine;
+
+        // Parts of variants, utilities and arbitrary values
+        let parts = [
+            "[", "]", "[]", "(", ")", "{", "}", r"\", "\"", "'", ":", "-", "/", ".", "*", "!", "@",
+            "_", "a", "B", "1", "p-4", "bg-[", "data-[",
+        ];
+
+        // A pseudo-random number generator, so that each run tests the same lines
+        let mut state: u64 = 1;
+        let mut random = |n: usize| {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state as usize % n
+        };
+
+        for _ in 0..500 {
+            let line: String = (0..100).map(|_| parts[random(parts.len())]).collect();
+
+            VariantMachine::test_reuse(&line);
+            UtilityMachine::test_reuse(&line);
+        }
+    }
+
+    #[test]
     fn test_long_lines_without_candidates() {
         for input in [
             "[".repeat(100_000),
@@ -819,6 +873,9 @@ mod tests {
             format!("[{}]", "[1,2],".repeat(20_000)),
             "A".repeat(100_000),
             "<".repeat(100_000),
+            "[]a".repeat(30_000),
+            r"[\".repeat(50_000),
+            "p-4*".repeat(25_000),
         ] {
             let start = std::time::Instant::now();
             assert_eq!(extract_sorted_candidates(&input), Vec::<&str>::new());
