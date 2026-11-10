@@ -232,7 +232,7 @@ jobs:
           package-manager-cache: false
 
       - name: Setup WASM target
-        run: rustup target add wasm32-wasip1-threads
+        run: rustup target add wasm32-wasip1 wasm32-wasip1-threads
 
       - name: Install dependencies
         run: pnpm --filter=!./playgrounds/* install --frozen-lockfile

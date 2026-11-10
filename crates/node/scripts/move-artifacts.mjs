@@ -22,6 +22,7 @@ for (let file of await fs.readdir(tailwindcssOxideRoot)) {
 let wasmArtifacts = {
   'tailwindcss-oxide.debug.wasm': 'tailwindcss-oxide.wasm32-wasi.debug.wasm',
   'tailwindcss-oxide.wasm': 'tailwindcss-oxide.wasm32-wasi.wasm',
+  'index.d.ts': 'index.d.ts',
   'tailwindcss-oxide.wasi-browser.js': 'tailwindcss-oxide.wasi-browser.js',
   'tailwindcss-oxide.wasi.cjs': 'tailwindcss-oxide.wasi.cjs',
   'wasi-worker-browser.mjs': 'wasi-worker-browser.mjs',
