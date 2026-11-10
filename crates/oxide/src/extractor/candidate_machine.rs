@@ -31,9 +31,29 @@ impl Machine for CandidateMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        self.next_with_checkpoints(cursor, |_| true)
+    }
+}
+
+impl CandidateMachine {
+    /// Same as `next`, but calls `checkpoint` with the cursor position each time the machine
+    /// starts from a clean state. From such a position, the machine always finds the same
+    /// candidates, no matter where it started.
+    ///
+    /// If `checkpoint` returns `false`, the machine stops and returns `MachineState::Idle`.
+    #[inline]
+    pub fn next_with_checkpoints(
+        &mut self,
+        cursor: &mut cursor::Cursor<'_>,
+        mut checkpoint: impl FnMut(usize) -> bool,
+    ) -> MachineState {
         let len = cursor.input.len();
 
         while cursor.pos < len {
+            if self.last_variant_end_pos.is_none() && !checkpoint(cursor.pos) {
+                return MachineState::Idle;
+            }
+
             // Skip ahead for known characters that will never be part of a candidate. No need to
             // run any sub-machines.
             if cursor.curr().is_ascii_whitespace() {
@@ -178,9 +198,7 @@ impl Machine for CandidateMachine {
 
         MachineState::Idle
     }
-}
 
-impl CandidateMachine {
     #[inline(always)]
     fn done_span(&mut self, span: Span) -> MachineState {
         self.reset();
