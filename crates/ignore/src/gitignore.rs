@@ -613,20 +613,29 @@ pub fn gitconfig_excludes_path() -> Option<PathBuf> {
     // $XDG_CONFIG_HOME/git/config (per git 2.32+). Otherwise, git supports
     // $HOME/.gitconfig and $XDG_CONFIG_HOME/git/config simultaneously, where
     // $HOME/.gitconfig takes precedent.
-    gitconfig_global_env_contents()
+    let global_config_is_set = std::env::var_os("GIT_CONFIG_GLOBAL").is_some();
+    let mut path = gitconfig_global_env_contents()
         .and_then(|x| parse_excludes_file(&x))
-        .or_else(|| {
-            gitconfig_home_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        .or_else(|| {
-            gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        // System-level config has the lowest priority for core.excludesFile.
-        // GIT_CONFIG_SYSTEM overrides the default /etc/gitconfig path.
-        .or_else(|| {
-            gitconfig_system_contents().and_then(|x| parse_excludes_file(&x))
-        })
-        .or_else(excludes_file_default)
+        ;
+
+    // GIT_CONFIG_GLOBAL replaces the user and XDG config files, even when
+    // the configured file is empty or does not define core.excludesFile.
+    if !global_config_is_set {
+        path = path
+            .or_else(|| {
+                gitconfig_home_contents().and_then(|x| parse_excludes_file(&x))
+            })
+            .or_else(|| {
+                gitconfig_xdg_contents().and_then(|x| parse_excludes_file(&x))
+            });
+    }
+
+    // System-level config has the lowest priority for core.excludesFile.
+    // GIT_CONFIG_SYSTEM overrides the default /etc/gitconfig path.
+    path.or_else(|| {
+        gitconfig_system_contents().and_then(|x| parse_excludes_file(&x))
+    })
+    .or_else(excludes_file_default)
 }
 
 /// Returns the file contents of git's global config file from the path
@@ -702,25 +711,33 @@ fn parse_excludes_file(data: &[u8]) -> Option<PathBuf> {
         Regex::builder()
             .configure(Regex::config().utf8_empty(false))
             .syntax(syntax::Config::new().utf8(false))
-            .build(r#"(?im-u)^\s*excludesfile\s*=\s*"?\s*(\S+?)\s*"?\s*$"#)
+            .build(r#"(?im-u)^\s*excludesfile\s*=\s*(?:"([^"\r\n]*[^\s"\r\n][^"\r\n]*)"|([^#;"\s](?:[^#;"\r\n]*[^#;"\s])?))(?:\s*[#;].*|\s*)$"#)
             .unwrap()
     });
     // We don't care about amortizing allocs here I think. This should only
     // be called ~once per traversal or so? (Although it's not guaranteed...)
     let mut caps = re.create_captures();
     re.captures(data, &mut caps);
-    let span = caps.get_group(1)?;
+    let span = caps.get_group(1).or_else(|| caps.get_group(2))?;
     let candidate = &data[span];
     std::str::from_utf8(candidate).ok().map(|s| PathBuf::from(expand_tilde(s)))
 }
 
-/// Expands ~ in file paths to the value of $HOME.
+/// Expands ~ at the start of file paths to the value of $HOME.
 fn expand_tilde(path: &str) -> String {
-    let home = match home_dir() {
-        None => return path.to_string(),
-        Some(home) => home.to_string_lossy().into_owned(),
-    };
-    path.replace("~", &home)
+    if path == "~" {
+        return match home_dir() {
+            None => path.to_string(),
+            Some(home) => home.to_string_lossy().into_owned(),
+        };
+    }
+    if path.starts_with("~/") || path.starts_with("~\\") {
+        if let Some(home) = home_dir() {
+            let home = home.to_string_lossy();
+            return format!("{}{}", home, &path[1..]);
+        }
+    }
+    path.to_string()
 }
 
 /// Returns the location of the user's home directory.
@@ -880,9 +897,49 @@ mod tests {
     }
 
     #[test]
+    fn parse_excludes_file_with_spaces() {
+        let data = bytes("[core]\nexcludesFile = \"~/foo bar/ignore\"");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo bar/ignore"));
+    }
+
+    #[test]
     fn parse_excludes_file5() {
         let data = bytes("[core]\nexcludesFile = \" \"~/foo/bar \" \"");
         assert!(super::parse_excludes_file(&data).is_none());
+    }
+
+    #[test]
+    fn parse_excludes_file_with_inline_comment() {
+        let data = bytes("[core]\nexcludesFile = ~/foo/bar # ignore file comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo/bar"));
+    }
+
+    #[test]
+    fn parse_excludes_file_with_adjacent_inline_comment() {
+        let data = bytes("[core]\nexcludesFile = /tmp/ignore#comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), "/tmp/ignore");
+    }
+
+    #[test]
+    fn parse_excludes_file_quoted_with_comment() {
+        let data = bytes("[core]\nexcludesFile = \"~/foo bar/ignore\" ; semicolon comment");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), super::expand_tilde("~/foo bar/ignore"));
+    }
+
+    #[test]
+    fn parse_excludes_file_quoted_with_trailing_space() {
+        let data = bytes("[core]\nexcludesFile = \"/tmp/ignore \"");
+        let got = super::parse_excludes_file(&data).unwrap();
+        assert_eq!(path_string(got), "/tmp/ignore ");
+    }
+
+    #[test]
+    fn expand_tilde_preserves_internal_tilde() {
+        assert_eq!(super::expand_tilde("/config/~backup/ignore"), "/config/~backup/ignore");
     }
 
     // See: https://github.com/BurntSushi/ripgrep/issues/106
