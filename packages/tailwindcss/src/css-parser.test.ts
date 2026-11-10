@@ -240,6 +240,25 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         expect(parse('.a{background-image:my-url(/b/* x */.png)}')).toEqual([
           rule('.a', 'background-image', 'my-url(/b.png)'),
         ])
+        expect(parse('.a{background-image:my\\+url(/b/* x */.png)}')).toEqual([
+          rule('.a', 'background-image', 'my\\+url(/b.png)'),
+        ])
+        expect(parse('.a{x:\\+url(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\+url(ab)')])
+        expect(parse('.a{--x:\\+url(a/* ; */b);color:red}')).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: '--x',
+                value: '\\+url(a/* ; */b)',
+                important: false,
+              },
+              { kind: 'declaration', property: 'color', value: 'red', important: false },
+            ],
+          },
+        ])
       })
 
       it('should handle whitespace before the quote of a quoted `url(…)`', () => {
