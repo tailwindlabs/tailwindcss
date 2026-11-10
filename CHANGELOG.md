@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve performance when scanning long lines with many `[` characters (e.g. minified JSON) ([#20694](https://github.com/tailwindlabs/tailwindcss/pull/20694))
 - Keep the absolute path of `url(…)`s in stylesheets imported from another drive on Windows, instead of a relative path that climbs out of the drive ([#20683](https://github.com/tailwindlabs/tailwindcss/pull/20683))
 
+### Changed
+
+- Improve the performance of rebuilds that add new utilities by only optimizing and printing the new utilities ([#20680](https://github.com/tailwindlabs/tailwindcss/pull/20680))
+
 ## [4.3.5] - 2026-11-06
 
 ### Fixed
