@@ -435,6 +435,11 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     if (idx === -1 || idx === 0 || idx === baseWithoutModifier.length - 1) return
 
     let property = baseWithoutModifier.slice(0, idx)
+
+    // The property ends up in the CSS as-is, so it has the same restrictions
+    // as the value. E.g.: `[a/*b:red]` would start a comment.
+    if (!isValidArbitrary(property)) return
+
     let value = decodeValidArbitraryValue(baseWithoutModifier.slice(idx + 1))
 
     // Values can't contain `;` or `}` characters at the top-level.
