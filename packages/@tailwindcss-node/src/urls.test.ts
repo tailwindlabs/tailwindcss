@@ -172,3 +172,102 @@ test('empty URLs are left alone', async () => {
   expect(result).toContain('url( )')
   expect(result).toContain('url(./foo/bar/image.jpg)')
 })
+
+test('cross-drive URLs preserve absolute path and avoid climbing across drives', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
+
+test('URLs on the same Windows drive are rebased relatively even with differing drive letter case', async () => {
+  let result = await rewriteUrls({
+    root: 'c:/Users/app/entry',
+    base: 'C:/Users/app/entry/styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("./styles/images/probe.svg")')
+})
+
+test('cross-drive URLs with parent directory references preserve resolved absolute path', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app/nested',
+    css: '.card { background-image: url("../images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
+
+test('already absolute Windows drive URLs are left alone', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: 'H:/tw-repro/app',
+    css: '.card { background-image: url("H:/tw-repro/app/images/probe.svg"); }',
+  })
+
+  expect(result).toContain('url("H:/tw-repro/app/images/probe.svg")')
+})
+
+test('network share UNC paths preserve double slash prefix and resolve cross-share paths', async () => {
+  let crossShareResult = await rewriteUrls({
+    root: 'C:/Users/app/entry',
+    base: '\\\\server\\share\\styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(crossShareResult).toContain('url("//server/share/styles/images/probe.svg")')
+
+  let sameShareResult = await rewriteUrls({
+    root: '\\\\server\\share\\app',
+    base: '\\\\server\\share\\app\\styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(sameShareResult).toContain('url("./styles/images/probe.svg")')
+})
+
+test('same-share UNC paths with differing casing rebase relatively without duplicate segments', async () => {
+  let result = await rewriteUrls({
+    root: '\\\\server\\share\\app',
+    base: '\\\\SERVER\\SHARE\\app\\styles',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(result).toContain('url("./styles/images/probe.svg")')
+})
+
+test('CSS escape backslashes in URLs are preserved on Windows paths', async () => {
+  let result = await rewriteUrls({
+    root: 'C:/app',
+    base: 'C:/app/styles',
+    css: '.card { background-image: url("./my\\ image.svg"); }',
+  })
+  expect(result).toContain('url("./styles/my\\ image.svg")')
+})
+
+test('URLs navigating above the base directory preserve the drive root and compute correct relative path', async () => {
+  let sameDriveResult = await rewriteUrls({
+    root: 'C:/entry',
+    base: 'C:/styles',
+    css: '.card { background-image: url("../../asset.svg"); }',
+  })
+  expect(sameDriveResult).toContain('url("../asset.svg")')
+
+  let crossDriveResult = await rewriteUrls({
+    root: 'C:/entry',
+    base: 'D:/styles',
+    css: '.card { background-image: url("../../asset.svg"); }',
+  })
+  expect(crossDriveResult).toContain('url("D:/asset.svg")')
+})
+
+test('POSIX paths that start with two slashes are not treated as network shares', async () => {
+  let result = await rewriteUrls({
+    root: '/root',
+    base: '//root/foo',
+    css: '.card { background-image: url("./images/probe.svg"); }',
+  })
+  expect(result).toContain('url("./foo/images/probe.svg")')
+})
