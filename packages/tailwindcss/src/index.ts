@@ -793,7 +793,7 @@ export async function compileAst(
             if (allValidCandidates.size !== prevSize) {
               didChange = true
               prevSize = allValidCandidates.size
-              unseenCandidates.push(candidate)
+              if (incremental) unseenCandidates.push(candidate)
             }
           }
         }
