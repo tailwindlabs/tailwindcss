@@ -2785,7 +2785,7 @@ export function createUtilities(theme: Theme) {
 
               return [
                 decl('--tw-gradient-position', value),
-                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops, ${value}))`),
               ]
             }
             default: {
@@ -2793,7 +2793,7 @@ export function createUtilities(theme: Theme) {
 
               return [
                 decl('--tw-gradient-position', value),
-                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops, ${value}))`),
               ]
             }
           }
@@ -2843,7 +2843,7 @@ export function createUtilities(theme: Theme) {
           let value = candidate.value.value
           return [
             decl('--tw-gradient-position', value),
-            decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops, ${value}))`),
           ]
         }
 
@@ -2898,7 +2898,7 @@ export function createUtilities(theme: Theme) {
         let value = candidate.value.value
         return [
           decl('--tw-gradient-position', value),
-          decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
+          decl('background-image', `radial-gradient(var(--tw-gradient-stops, ${value}))`),
         ]
       }
     })
