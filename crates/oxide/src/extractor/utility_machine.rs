@@ -1,5 +1,6 @@
 use crate::cursor;
 use crate::extractor::arbitrary_property_machine::ArbitraryPropertyMachine;
+use crate::extractor::arbitrary_value_machine::ArbitraryValueMemo;
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::modifier_machine::ModifierMachine;
 use crate::extractor::named_utility_machine::NamedUtilityMachine;
@@ -16,6 +17,12 @@ pub struct UtilityMachine {
     arbitrary_property_machine: ArbitraryPropertyMachine,
     named_utility_machine: NamedUtilityMachine,
     modifier_machine: ModifierMachine,
+
+    /// This machine starts a utility at many positions of the same input, so the arbitrary
+    /// values of its modifiers share the work.
+    ///
+    /// E.g.: `a/[]"a"a/[]"a"…`
+    arbitrary_value_memo: ArbitraryValueMemo,
 }
 
 impl Machine for UtilityMachine {
@@ -138,7 +145,10 @@ impl UtilityMachine {
     }
 
     fn parse_modifier(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match self.modifier_machine.next(cursor) {
+        match self
+            .modifier_machine
+            .next_with_memo(cursor, &mut self.arbitrary_value_memo)
+        {
             MachineState::Idle => self.restart(),
             MachineState::Done(_) => match cursor.next().into() {
                 // A modifier followed by a modifier is invalid
@@ -341,6 +351,20 @@ mod tests {
                 }
                 assert_eq!(actual, expected);
             }
+        }
+    }
+
+    #[test]
+    fn test_utility_machine_reuse() {
+        for input in [
+            // Arbitrary values of modifiers that don't end, because the first one is empty
+            r#"a/[]"a""#.repeat(50),
+            "a/[]a".repeat(50),
+            r#"[a:b]/[]"a""#.repeat(50),
+            // Arbitrary values of modifiers that end at the end of the line
+            format!("{}]", r#"a/[]"a""#.repeat(50)),
+        ] {
+            UtilityMachine::test_reuse(&input);
         }
     }
 }

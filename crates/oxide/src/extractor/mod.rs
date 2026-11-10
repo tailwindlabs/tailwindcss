@@ -813,6 +813,7 @@ mod tests {
         for (input, expected) in [
             (r#"[]"a""#.repeat(20_000), vec!["a"]),
             (r#"bg-[]"a""#.repeat(12_500), vec!["a"]),
+            (r#"a/[]"a""#.repeat(20_000), vec!["a"]),
             // E.g.: minified JSON
             (
                 format!("[{}]", r#"{"id":1,"tags":[],"cls":"flex"},"#.repeat(3_000)),
@@ -842,7 +843,7 @@ mod tests {
         // Parts of variants, utilities and arbitrary values
         let parts = [
             "[", "]", "[]", "(", ")", "{", "}", r"\", "\"", "'", ":", "-", "/", ".", "*", "!", "@",
-            "_", "a", "B", "1", "p-4", "bg-[", "data-[",
+            "_", "a", "B", "1", "p-4", "bg-[", "data-[", "a/[",
         ];
 
         // A pseudo-random number generator, so that each run tests the same lines
@@ -874,6 +875,7 @@ mod tests {
             "A".repeat(100_000),
             "<".repeat(100_000),
             "[]a".repeat(30_000),
+            "a/[]a".repeat(20_000),
             r"[\".repeat(50_000),
             "p-4*".repeat(25_000),
         ] {

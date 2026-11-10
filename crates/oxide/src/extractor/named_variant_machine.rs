@@ -281,7 +281,7 @@ impl Machine for NamedVariantMachine<ParsingState> {
                 // group-hover/name:
                 //            ^
                 // ```
-                Class::Slash => return self.transition::<ParsingModifierState>().next(cursor),
+                Class::Slash => return self.parse_modifier(cursor),
 
                 // A `:` means we are at the end of the variant
                 //
@@ -320,7 +320,7 @@ impl NamedVariantMachine<ParsingState> {
         match cursor.next().into() {
             Class::Slash => {
                 cursor.advance();
-                self.transition::<ParsingModifierState>().next(cursor)
+                self.parse_modifier(cursor)
             }
             Class::Colon => {
                 cursor.advance();
@@ -328,6 +328,18 @@ impl NamedVariantMachine<ParsingState> {
             }
             _ => self.restart(),
         }
+    }
+
+    #[inline(always)]
+    fn parse_modifier(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        let mut machine = self.transition::<ParsingModifierState>();
+        machine.arbitrary_value_memo = std::mem::take(&mut self.arbitrary_value_memo);
+        let state = machine.next(cursor);
+
+        // Keep what the modifier learned about the input, for the next variant
+        self.arbitrary_value_memo = machine.arbitrary_value_memo;
+
+        state
     }
 }
 
@@ -337,7 +349,10 @@ impl Machine for NamedVariantMachine<ParsingModifierState> {
 
     #[inline(always)]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
-        match self.modifier_machine.next(cursor) {
+        match self
+            .modifier_machine
+            .next_with_memo(cursor, &mut self.arbitrary_value_memo)
+        {
             MachineState::Idle => self.restart(),
             MachineState::Done(_) => match cursor.next().into() {
                 // Modifier must be followed by a `:`
@@ -490,6 +505,11 @@ mod tests {
             "a[]b".repeat(50),
             // Arbitrary values that end at the end of the line
             format!("{}]:", r#"data-[]"a""#.repeat(50)),
+            // Arbitrary values of modifiers that don't end
+            r#"a/[]"a""#.repeat(50),
+            r#"data-[a]/[]"a""#.repeat(50),
+            // Arbitrary values of modifiers that end at the end of the line
+            format!("{}]:", r#"a/[]"a""#.repeat(50)),
         ] {
             NamedVariantMachine::<IdleState>::test_reuse(&input);
         }

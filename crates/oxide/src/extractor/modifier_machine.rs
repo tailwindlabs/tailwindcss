@@ -1,5 +1,5 @@
 use crate::cursor;
-use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
+use crate::extractor::arbitrary_value_machine::{ArbitraryValueMachine, ArbitraryValueMemo};
 use crate::extractor::arbitrary_variable_machine::ArbitraryVariableMachine;
 use crate::extractor::machine::{Machine, MachineState};
 use classification_macros::ClassifyBytes;
@@ -30,6 +30,28 @@ impl Machine for ModifierMachine {
 
     #[inline]
     fn next(&mut self, cursor: &mut cursor::Cursor<'_>) -> MachineState {
+        self.parse(cursor, None)
+    }
+}
+
+impl ModifierMachine {
+    /// Same as `next`, but shares the work of the arbitrary value with the arbitrary values that
+    /// started at an earlier `[`. See [ArbitraryValueMemo].
+    #[inline]
+    pub fn next_with_memo(
+        &mut self,
+        cursor: &mut cursor::Cursor<'_>,
+        memo: &mut ArbitraryValueMemo,
+    ) -> MachineState {
+        self.parse(cursor, Some(memo))
+    }
+
+    #[inline(always)]
+    fn parse(
+        &mut self,
+        cursor: &mut cursor::Cursor<'_>,
+        memo: Option<&mut ArbitraryValueMemo>,
+    ) -> MachineState {
         // A modifier must start with a `/`, everything else is not a valid start of a modifier
         if Class::Slash != cursor.curr().into() {
             return MachineState::Idle;
@@ -45,10 +67,17 @@ impl Machine for ModifierMachine {
             // bg-red-500/[20%]
             //            ^^^^^
             // ```
-            Class::OpenBracket => match self.arbitrary_value_machine.next(cursor) {
-                MachineState::Idle => self.restart(),
-                MachineState::Done(_) => self.done(start_pos, cursor),
-            },
+            Class::OpenBracket => {
+                let state = match memo {
+                    Some(memo) => self.arbitrary_value_machine.next_with_memo(cursor, memo),
+                    None => self.arbitrary_value_machine.next(cursor),
+                };
+
+                match state {
+                    MachineState::Idle => self.restart(),
+                    MachineState::Done(_) => self.done(start_pos, cursor),
+                }
+            }
 
             // Start of an arbitrary variable:
             //
