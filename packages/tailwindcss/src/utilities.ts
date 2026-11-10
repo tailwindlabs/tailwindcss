@@ -105,12 +105,20 @@ export class Utilities {
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
+  /**
+   * The length of the longest utility name. Parsing a candidate can skip roots
+   * that are longer, because they can't exist.
+   */
+  public maxNameLength = 0
+
   static(name: string, compileFn: CompileFn<'static'>) {
     this.utilities.get(name).push({ kind: 'static', compileFn })
+    this.maxNameLength = Math.max(this.maxNameLength, name.length)
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {
     this.utilities.get(name).push({ kind: 'functional', compileFn, options })
+    this.maxNameLength = Math.max(this.maxNameLength, name.length)
   }
 
   has(name: string, kind: 'static' | 'functional') {

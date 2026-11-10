@@ -522,9 +522,13 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
   // Not an arbitrary value
   else {
-    roots = findRoots(baseWithoutModifier, (root: string) => {
-      return designSystem.utilities.has(root, 'functional')
-    })
+    roots = findRoots(
+      baseWithoutModifier,
+      (root: string) => {
+        return designSystem.utilities.has(root, 'functional')
+      },
+      designSystem.utilities.maxNameLength,
+    )
   }
 
   for (let [root, value] of roots) {
@@ -721,9 +725,13 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     //             ^^^^^^^^^^ -> Modifier
     let [variantWithoutModifier, modifier = null] = parts
 
-    let roots = findRoots(variantWithoutModifier, (root) => {
-      return designSystem.variants.has(root)
-    })
+    let roots = findRoots(
+      variantWithoutModifier,
+      (root) => {
+        return designSystem.variants.has(root)
+      },
+      designSystem.variants.maxNameLength,
+    )
 
     for (let [root, value] of roots) {
       switch (designSystem.variants.kind(root)) {
@@ -861,7 +869,11 @@ type Root = [
   value: string | null,
 ]
 
-function* findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
+function* findRoots(
+  input: string,
+  exists: (input: string) => boolean,
+  maxRootLength: number,
+): Iterable<Root> {
   // If there is an exact match, then that's the root.
   if (exists(input)) {
     yield [input, null]
@@ -869,7 +881,11 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
-  let idx = input.lastIndexOf('-')
+  //
+  // Roots that are longer than `maxRootLength` can't exist, so we can start at
+  // the last dash that can end a root. Otherwise an input like `a-a-a-…` would
+  // test a long prefix for every dash.
+  let idx = input.lastIndexOf('-', maxRootLength)
 
   // Determine the root and value by testing permutations of the incoming input.
   //

@@ -1919,6 +1919,37 @@ it('should parse candidates with a prefix', () => {
   `)
 })
 
+it('should parse variants and utilities with many dashes in linear time', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  let variants = new Variants()
+  variants.functional('data', () => {})
+
+  // E.g.: `a-a-a-…-a`
+  let value = 'a-'.repeat(8_000) + 'a'
+
+  expect(run(`data-${value}:flex`, { utilities, variants })[0].variants).toEqual([
+    { kind: 'functional', root: 'data', modifier: null, value: { kind: 'named', value } },
+  ])
+  expect(run(`bg-${value}`, { utilities, variants })).toMatchObject([
+    { kind: 'functional', root: 'bg', value: { kind: 'named', value } },
+  ])
+  expect(run(`${value}-flex`, { utilities, variants })).toEqual([])
+
+  let start = performance.now()
+  for (let i = 0; i < 10; i++) {
+    run(`data-${value}:flex`, { utilities, variants })
+    run(`bg-${value}`, { utilities, variants })
+    run(`${value}-flex`, { utilities, variants })
+  }
+  let duration = performance.now() - start
+
+  // Looking up the part before each dash as a root takes seconds
+  expect(duration).toBeLessThan(1_000)
+})
+
 it.each([
   // Empty arbitrary value
   'bg-[]',
