@@ -2170,6 +2170,8 @@ it.each([
   'data-[a/*]:flex',
   '[a/*b:red]',
   "bg-['a\n/*']",
+  "[a':'/*']",
+  "bg-['/*]",
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])

@@ -67,6 +67,11 @@ export function isValidArbitrary(input: string) {
             return false
           }
         }
+
+        // A string without a closing quote is invalid. Otherwise, a quote can
+        // pair up with a quote in the CSS around it. E.g.: `[a':'/*']` becomes
+        // `a': '/*';`, and the `/*` is not inside of a string anymore.
+        if (idx >= len) return false
         break
       case OPEN_PAREN:
         closingBracketStack[stackPos] = CLOSE_PAREN
