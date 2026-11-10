@@ -1,3 +1,4 @@
+import { transform } from 'lightningcss'
 import { describe, expect, it, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
@@ -2183,6 +2184,7 @@ it.each([
   // `--my\_url(…)` is not a `url(…)`, but it keeps the `_`, so the inner
   // `URL(…)` has no quoted string.
   "[x:--my\\_url(URL(_'a)/*'))]",
+  '[--x:a()<//*)*/]',
 
   // A `/*` inside of an unquoted `url(…)` that PostCSS does not read as a
   // `url(…)`, or that CSS does not read as a `url(…)` at all
@@ -2214,6 +2216,42 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should not let a random arbitrary value comment out the CSS after it', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@tailwind utilities', { base: __dirname })
+
+  // A seeded random number generator (mulberry32), so a failure can be reproduced.
+  let seed = 20690
+  function random() {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+
+  let parts = ['url(', 'URL(', 'a(', '(', ')', "'", '"', '/*', '*/', '/', '*', '_', '\\']
+  parts.push('\\_', '\\72', '#', '@', ',', ':', 'a', '1', '-', ' ')
+
+  for (let i = 0; i < 5000; i++) {
+    let value = ''
+    let count = 1 + Math.floor(random() * 10)
+    for (let j = 0; j < count; j++) value += parts[Math.floor(random() * parts.length)]
+
+    for (let candidate of [`[--x:${value}]`, `bg-[${value}]`]) {
+      let [css] = designSystem.candidatesToCss([candidate])
+      if (!css) continue
+
+      let { code } = transform({
+        filename: 'input.css',
+        code: Buffer.from(`${css}.b{color:red}`),
+        minify: true,
+        errorRecovery: true,
+      })
+
+      expect(code.toString(), candidate).toContain('.b{color:red}')
+    }
+  }
 })
 
 it('should parse a function name with an escaped `_`', () => {
