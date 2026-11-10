@@ -72,6 +72,12 @@ export class Variants {
    */
   private lastOrder = 0
 
+  /**
+   * The length of the longest variant name. Parsing a variant can skip roots
+   * that are longer, because they can't exist.
+   */
+  public maxNameLength = 0
+
   static(
     name: string,
     applyFn: VariantFn<'static'>,
@@ -319,6 +325,7 @@ export class Variants {
         compoundsWith,
         compounds,
       })
+      this.maxNameLength = Math.max(this.maxNameLength, name.length)
     }
   }
 

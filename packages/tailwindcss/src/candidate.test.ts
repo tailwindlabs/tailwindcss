@@ -346,6 +346,52 @@ it('should parse compound group with itself group-group-*', () => {
     `)
 })
 
+it('should not parse variants that nest more than 16 compound variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+  variants.compound('in', Compounds.StyleRules, () => {})
+
+  expect(run(`${'in-'.repeat(16)}hover:flex`, { utilities, variants })).toHaveLength(1)
+  expect(run(`${'in-'.repeat(17)}hover:flex`, { utilities, variants })).toEqual([])
+
+  // Long chains should bail early instead of parsing (and recursing) once for
+  // each compound variant
+  let start = performance.now()
+  expect(run(`${'in-'.repeat(10_000)}hover:flex`, { utilities, variants })).toEqual([])
+  expect(performance.now() - start).toBeLessThan(1_000)
+})
+
+it('should parse nested compound variants the same way, no matter what was parsed before', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+  variants.compound('in', Compounds.StyleRules, () => {})
+
+  // Parses the candidates in order with the same design system, so parsed
+  // variants are cached between them.
+  function parse(candidates: string[]) {
+    let designSystem = buildDesignSystem(new Theme())
+    designSystem.utilities = utilities
+    designSystem.variants = variants
+
+    return candidates.map((candidate) => designSystem.parseCandidate(candidate).length)
+  }
+
+  // A chain that nests too deep doesn't make the variants inside of it invalid
+  expect(
+    parse([`${'in-'.repeat(17)}hover:flex`, `${'in-'.repeat(16)}hover:flex`, 'in-hover:flex']),
+  ).toEqual([0, 1, 1])
+
+  // A cached variant inside of a chain doesn't make a chain that nests too
+  // deep valid
+  expect(parse([`${'in-'.repeat(16)}hover:flex`, `${'in-'.repeat(17)}hover:flex`])).toEqual([1, 0])
+})
+
 it('should parse a simple utility with an arbitrary media variant', () => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -1917,6 +1963,53 @@ it('should parse candidates with a prefix', () => {
       },
     ]
   `)
+})
+
+it('should not parse candidates with more than 64 stacked variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+
+  expect(run(`${'hover:'.repeat(64)}flex`, { utilities, variants })[0].variants).toHaveLength(64)
+  expect(run(`${'hover:'.repeat(65)}flex`, { utilities, variants })).toEqual([])
+
+  // The prefix is not a variant
+  expect(
+    run(`tw:${'hover:'.repeat(64)}flex`, { utilities, variants, prefix: 'tw' })[0].variants,
+  ).toHaveLength(64)
+})
+
+it('should parse variants and utilities with many dashes in linear time', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  let variants = new Variants()
+  variants.functional('data', () => {})
+
+  // E.g.: `a-a-a-…-a`
+  let value = 'a-'.repeat(8_000) + 'a'
+
+  expect(run(`data-${value}:flex`, { utilities, variants })[0].variants).toEqual([
+    { kind: 'functional', root: 'data', modifier: null, value: { kind: 'named', value } },
+  ])
+  expect(run(`bg-${value}`, { utilities, variants })).toMatchObject([
+    { kind: 'functional', root: 'bg', value: { kind: 'named', value } },
+  ])
+  expect(run(`${value}-flex`, { utilities, variants })).toEqual([])
+
+  let start = performance.now()
+  for (let i = 0; i < 10; i++) {
+    run(`data-${value}:flex`, { utilities, variants })
+    run(`bg-${value}`, { utilities, variants })
+    run(`${value}-flex`, { utilities, variants })
+  }
+  let duration = performance.now() - start
+
+  // Looking up the part before each dash as a root takes seconds
+  expect(duration).toBeLessThan(1_000)
 })
 
 it.each([

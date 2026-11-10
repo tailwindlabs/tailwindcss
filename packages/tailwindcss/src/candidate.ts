@@ -314,6 +314,12 @@ export function cloneVariant<T extends Variant>(variant: T): T {
   }
 }
 
+// The maximum number of variants that can be stacked in a candidate. Real
+// candidates only stack a few, but each variant nests the generated CSS one
+// level deeper. Without a limit, a candidate like `hover:hover:…:hover:flex`
+// generates (and optimizes) deeply nested CSS that can exceed the call stack.
+const MAX_STACKED_VARIANTS = 64
+
 export function* parseCandidate(input: string, designSystem: DesignSystem): Iterable<Candidate> {
   // hover:focus:underline
   // ^^^^^ ^^^^^^           -> Variants
@@ -335,6 +341,8 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
   // empty string by `:` will always result in an array with at least one
   // element.
   let base = rawVariants.pop()!
+
+  if (rawVariants.length > MAX_STACKED_VARIANTS) return
 
   let parsedCandidateVariants: Variant[] = []
 
@@ -522,9 +530,13 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
 
   // Not an arbitrary value
   else {
-    roots = findRoots(baseWithoutModifier, (root: string) => {
-      return designSystem.utilities.has(root, 'functional')
-    })
+    roots = findRoots(
+      baseWithoutModifier,
+      (root: string) => {
+        return designSystem.utilities.has(root, 'functional')
+      },
+      designSystem.utilities.maxNameLength,
+    )
   }
 
   for (let [root, value] of roots) {
@@ -660,6 +672,21 @@ function parseModifier(modifier: string): CandidateModifier | null {
   }
 }
 
+// The maximum number of compound variants that can be nested in a variant.
+// Real variants only nest a few, e.g. `not-group-has-peer-hover` nests 4, but
+// each one is parsed recursively. Without a limit, a variant like
+// `in-in-in-…-hover` would exceed the call stack.
+const MAX_COMPOUND_DEPTH = 16
+
+// The number of compound variants that are parsing their sub-variant right now.
+let compoundDepth = 0
+
+// Thrown when a variant nests more than `MAX_COMPOUND_DEPTH` compound variants.
+// It unwinds to the outermost variant, so that none of the variants inside of
+// it are cached as invalid. They can still be valid on their own, e.g. the
+// `in-hover` in `in-in-in-…-in-hover`.
+const TOO_DEEP = Symbol()
+
 export function parseVariant(variant: string, designSystem: DesignSystem): Variant | null {
   // Arbitrary variants
   if (variant[0] === '[' && variant[variant.length - 1] === ']') {
@@ -721,9 +748,13 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     //             ^^^^^^^^^^ -> Modifier
     let [variantWithoutModifier, modifier = null] = parts
 
-    let roots = findRoots(variantWithoutModifier, (root) => {
-      return designSystem.variants.has(root)
-    })
+    let roots = findRoots(
+      variantWithoutModifier,
+      (root) => {
+        return designSystem.variants.has(root)
+      },
+      designSystem.variants.maxNameLength,
+    )
 
     for (let [root, value] of roots) {
       switch (designSystem.variants.kind(root)) {
@@ -826,8 +857,26 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
             modifier = null
           }
 
-          let subVariant = designSystem.parseVariant(value)
+          if (compoundDepth === MAX_COMPOUND_DEPTH) throw TOO_DEEP
+
+          let subVariant: Variant | null
+          compoundDepth += 1
+          try {
+            subVariant = designSystem.parseVariant(value)
+          } catch (err) {
+            // Only the outermost compound variant is invalid for sure
+            if (err === TOO_DEEP && compoundDepth === 1) return null
+            throw err
+          } finally {
+            compoundDepth -= 1
+          }
           if (subVariant === null) return null
+
+          // The sub-variant can come from the cache, in which case the compound
+          // variants inside of it were not counted by `compoundDepth`.
+          let depth = 1
+          for (let v = subVariant; v.kind === 'compound'; v = v.variant) depth += 1
+          if (depth > MAX_COMPOUND_DEPTH) return null
 
           // These two variants must be compatible when compounded
           if (!designSystem.variants.compoundsWith(root, subVariant)) return null
@@ -861,7 +910,11 @@ type Root = [
   value: string | null,
 ]
 
-function* findRoots(input: string, exists: (input: string) => boolean): Iterable<Root> {
+function* findRoots(
+  input: string,
+  exists: (input: string) => boolean,
+  maxRootLength: number,
+): Iterable<Root> {
   // If there is an exact match, then that's the root.
   if (exists(input)) {
     yield [input, null]
@@ -869,7 +922,11 @@ function* findRoots(input: string, exists: (input: string) => boolean): Iterable
 
   // Otherwise test every permutation of the input by iteratively removing
   // everything after the last dash.
-  let idx = input.lastIndexOf('-')
+  //
+  // Roots that are longer than `maxRootLength` can't exist, so we can start at
+  // the last dash that can end a root. Otherwise an input like `a-a-a-…` would
+  // test a long prefix for every dash.
+  let idx = input.lastIndexOf('-', maxRootLength)
 
   // Determine the root and value by testing permutations of the incoming input.
   //
