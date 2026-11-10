@@ -752,6 +752,23 @@ mod tests {
     }
 
     #[test]
+    fn test_long_lines_without_candidates() {
+        for input in ["A".repeat(100_000), "<".repeat(100_000)] {
+            let start = std::time::Instant::now();
+            assert_eq!(extract_sorted_candidates(&input), Vec::<&str>::new());
+
+            // Each input takes milliseconds when the time grows linearly with the length of the
+            // line, but seconds or minutes when it grows quadratically.
+            let elapsed = start.elapsed();
+            assert!(
+                elapsed < std::time::Duration::from_secs(5),
+                "Extracting {:?}… took {elapsed:?}",
+                &input[..10],
+            );
+        }
+    }
+
+    #[test]
     fn test_js_syntax() {
         for (input, expected) in [
             // String

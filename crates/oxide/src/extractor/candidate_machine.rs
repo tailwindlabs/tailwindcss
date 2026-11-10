@@ -14,6 +14,10 @@ pub struct CandidateMachine {
     /// End position of the last variant (if any)
     last_variant_end_pos: Option<usize>,
 
+    /// Position from which the input has no valid before boundary characters (if known). This
+    /// is not reset, because it only depends on the input.
+    no_boundary_from: Option<usize>,
+
     utility_machine: UtilityMachine,
     variant_machine: VariantMachine,
 }
@@ -56,18 +60,25 @@ impl Machine for CandidateMachine {
             // E.g.: `Some Class`
             //        ^    ^       Invalid, we can jump ahead to the next boundary
             //
+            // Once we know that the rest of the input has no boundary, we don't search it again.
+            // Otherwise, an input with many of these characters and no boundary takes quadratic
+            // time.
             if matches!(cursor.curr(), b'<' | b'A'..=b'Z') {
-                if let Some(offset) = cursor.input[cursor.pos..]
-                    .iter()
-                    .position(|&c| is_valid_before_boundary(&c))
-                {
-                    self.reset();
-                    cursor.advance_by(offset + 1);
-                } else {
-                    return self.restart();
+                let search_end = self.no_boundary_from.unwrap_or(len);
+                if cursor.pos < search_end {
+                    if let Some(offset) = cursor.input[cursor.pos..search_end]
+                        .iter()
+                        .position(|&c| is_valid_before_boundary(&c))
+                    {
+                        self.reset();
+                        cursor.advance_by(offset + 1);
+                        continue;
+                    }
+
+                    self.no_boundary_from = Some(cursor.pos);
                 }
 
-                continue;
+                return self.restart();
             }
 
             let mut variant_cursor = cursor.clone();
