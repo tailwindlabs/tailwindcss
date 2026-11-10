@@ -751,13 +751,17 @@ export async function compileAst(
   // Avoid retaining loader callbacks, which may keep build tool state alive.
   let { from, polyfills } = opts
 
-  // Only compile, optimize and print the new utilities on each build. Source
-  // maps need the positions of every node in the current build, so they use
-  // the non-incremental build.
-  let incremental =
-    utilitiesNode && !from
-      ? createIncrementalBuild(ast, utilitiesNode, designSystem, polyfills, onInvalidCandidate)
-      : null
+  // Only compile, optimize and print the new utilities on each build.
+  let incremental = utilitiesNode
+    ? createIncrementalBuild(
+        ast,
+        utilitiesNode,
+        designSystem,
+        polyfills,
+        onInvalidCandidate,
+        !!from,
+      )
+    : null
 
   // Candidates that the incremental build hasn't seen yet
   let unseenCandidates: string[] = Array.from(allValidCandidates)
@@ -868,6 +872,7 @@ export async function compile(
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
+  let trackedAst = ast
   let from = opts.from
 
   return {
@@ -879,13 +884,21 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst, !!from)
+      compiledCss = toCss(newAst)
       compiledAst = newAst
 
       return compiledCss
     },
 
     buildSourceMap() {
+      // Only source maps need the positions in the output, so we track them
+      // here instead of in `build()`. This way `build()` can reuse the printed
+      // CSS of the cached utilities. The printed CSS is the same.
+      if (from && trackedAst !== compiledAst) {
+        toCss(compiledAst, true)
+        trackedAst = compiledAst
+      }
+
       return createSourceMap({
         ast: compiledAst,
       })
