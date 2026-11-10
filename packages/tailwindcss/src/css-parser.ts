@@ -832,8 +832,8 @@ function findUnquotedUrlEnd(input: string, idx: number): number {
     return -1
   }
 
-  // The ident must start at `url`, e.g. `my-url(…)` and `#url(…)` are not a
-  // url.
+  // The ident must start at `url`, e.g. `my-url(…)`, `my\+url(…)` and
+  // `#url(…)` are not a url.
   let prevChar = input.charCodeAt(idx - 4)
   if (
     (prevChar >= LOWER_A && prevChar <= LOWER_Z) ||
@@ -844,7 +844,8 @@ function findUnquotedUrlEnd(input: string, idx: number): number {
     prevChar >= NON_ASCII ||
     prevChar === BACKSLASH ||
     prevChar === HASH ||
-    prevChar === AT_SIGN
+    prevChar === AT_SIGN ||
+    isEscaped(input, idx - 4)
   ) {
     return -1
   }
