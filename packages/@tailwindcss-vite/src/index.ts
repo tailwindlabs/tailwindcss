@@ -67,6 +67,8 @@ function createCustomResolver(
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let config: ResolvedConfig | null = null
   let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
+  let scannedCandidates = new Map<string, string[]>()
+  let builtEnvironments = new Set<string>()
 
   let isSSR = false
   let shouldOptimize = true
@@ -182,6 +184,8 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
       async configResolved(_config) {
         config = _config
+        scannedCandidates = new Map()
+        builtEnvironments = new Set()
         isSSR = config.build.ssr !== false && config.build.ssr !== undefined
 
         // By default we optimize CSS during the build phase but if the user
@@ -243,6 +247,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
       name: '@tailwindcss/vite:generate:build',
       apply: 'build',
       enforce: 'pre',
+      buildStart() {
+        // The environments of a build share their scans, so the same sources are only
+        // scanned once. This also keeps their CSS the same when a later environment
+        // would otherwise scan the output of an earlier one.
+        //
+        // Files may have changed when an environment builds again (e.g. a reused
+        // builder), so we start over. A reused builder that builds an environment for
+        // the first time after files changed still uses the earlier scans.
+        let env = this.environment?.name ?? 'default'
+        if (builtEnvironments.has(env)) {
+          builtEnvironments.clear()
+          scannedCandidates.clear()
+        }
+        builtEnvironments.add(env)
+      },
       transform: {
         filter: {
           id: {
@@ -263,7 +282,14 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
             roots.set(id, root)
           }
 
-          let result = await root.generate(src, (file) => this.addWatchFile(file), I)
+          // Workers built during a watched build aren't in watch mode themselves
+          let watching = this.meta.watchMode || !!config!.build.watch
+          let result = await root.generate(
+            src,
+            watching ? (file) => this.addWatchFile(file) : null,
+            I,
+            watching ? null : scannedCandidates,
+          )
           if (!result) {
             roots.delete(id)
             return
@@ -360,8 +386,9 @@ class Root {
   // not considered a Tailwind root. When this happened, the root can be GCed.
   public async generate(
     content: string,
-    _addWatchFile: (file: string) => void,
+    _addWatchFile: ((file: string) => void) | null,
     I: Instrumentation,
+    scannedCandidates: Map<string, string[]> | null = null,
   ): Promise<
     | {
         code: string
@@ -372,6 +399,10 @@ class Root {
     let inputPath = idToPath(this.id)
 
     function addWatchFile(file: string) {
+      if (!_addWatchFile) {
+        return
+      }
+
       // Don't watch the input file since it's already a dependency and causes
       // issues with some setups (e.g. Qwik).
       if (file === inputPath) {
@@ -390,6 +421,7 @@ class Root {
 
     let requiresBuildPromise = this.requiresBuild()
     let inputBase = path.dirname(path.resolve(inputPath))
+    let sourcesKey: string | null = null
 
     if (!this.compiler || !this.scanner || (await requiresBuildPromise)) {
       clearRequireCache(Array.from(this.buildDependencies.keys()))
@@ -414,6 +446,10 @@ class Root {
       await Promise.all(addBuildDependenciesPromises)
       DEBUG && I.end('Setup compiler')
 
+      if (!this.isTailwindRoot()) {
+        return false
+      }
+
       DEBUG && I.start('Setup scanner')
 
       let sources = (() => {
@@ -432,6 +468,7 @@ class Root {
       })().concat(this.compiler.sources)
 
       this.scanner = new Scanner({ sources })
+      if (scannedCandidates) sourcesKey = JSON.stringify(sources)
       DEBUG && I.end('Setup scanner')
     } else {
       for (let buildDependency of this.buildDependencies.keys()) {
@@ -439,16 +476,7 @@ class Root {
       }
     }
 
-    if (
-      !(
-        this.compiler.features &
-        (Features.AtApply |
-          Features.JsPluginCompat |
-          Features.ThemeFunction |
-          Features.Utilities |
-          Features.Variants)
-      )
-    ) {
+    if (!this.isTailwindRoot()) {
       return false
     }
 
@@ -457,7 +485,12 @@ class Root {
       // setup a new scanner and compiler every time we request the CSS file
       // (regardless whether it actually changed or not).
       DEBUG && I.start('Scan for candidates')
-      for (let candidate of this.scanner.scan()) {
+      let candidates = sourcesKey ? scannedCandidates?.get(sourcesKey) : undefined
+      if (!candidates) {
+        candidates = this.scanner.scan()
+        if (sourcesKey) scannedCandidates?.set(sourcesKey, candidates)
+      }
+      for (let candidate of candidates) {
         this.candidates.add(candidate)
       }
       DEBUG && I.end('Scan for candidates')
@@ -465,40 +498,43 @@ class Root {
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
-      // Watch individual files found via custom `@source` paths
-      for (let file of this.scanner.files) {
-        addWatchFile(file)
+      if (_addWatchFile) {
+        // Watch individual files found via custom `@source` paths
+        for (let file of this.scanner.files) {
+          addWatchFile(file)
+        }
+
+        // Watch globs found via custom `@source` paths
+        for (let glob of this.scanner.globs) {
+          if (glob.pattern[0] === '!') continue
+
+          let relative = path.relative(this.base, glob.base)
+          if (relative[0] !== '.') {
+            relative = './' + relative
+          }
+          // Ensure relative is a posix style path since we will merge it with the
+          // glob.
+          relative = normalizePath(relative)
+
+          addWatchFile(path.posix.join(relative, glob.pattern))
+        }
       }
 
-      // Watch globs found via custom `@source` paths
-      for (let glob of this.scanner.globs) {
-        if (glob.pattern[0] === '!') continue
+      let root = this.compiler.root
 
-        let relative = path.relative(this.base, glob.base)
-        if (relative[0] !== '.') {
-          relative = './' + relative
-        }
-        // Ensure relative is a posix style path since we will merge it with the
-        // glob.
-        relative = normalizePath(relative)
+      if (root !== 'none' && root !== null) {
+        let basePath = normalizePath(path.resolve(root.base, root.pattern))
 
-        addWatchFile(path.posix.join(relative, glob.pattern))
+        let isDir = await fs.stat(basePath).then(
+          (stats) => stats.isDirectory(),
+          () => false,
+        )
 
-        let root = this.compiler.root
-
-        if (root !== 'none' && root !== null) {
-          let basePath = normalizePath(path.resolve(root.base, root.pattern))
-
-          let isDir = await fs.stat(basePath).then(
-            (stats) => stats.isDirectory(),
-            () => false,
+        // A `source(…)` with only files (e.g. `{a.html,b.html}`) has no globs, so it's not checked
+        if (!isDir && this.scanner.globs.some((glob) => glob.pattern[0] !== '!')) {
+          throw new Error(
+            `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
           )
-
-          if (!isDir) {
-            throw new Error(
-              `The path given to \`source(…)\` must be a directory but got \`source(${basePath})\` instead.`,
-            )
-          }
         }
       }
       DEBUG && I.end('Register dependency messages')
@@ -516,6 +552,17 @@ class Root {
       code,
       map,
     }
+  }
+
+  private isTailwindRoot() {
+    return Boolean(
+      this.compiler!.features &
+      (Features.AtApply |
+        Features.JsPluginCompat |
+        Features.ThemeFunction |
+        Features.Utilities |
+        Features.Variants),
+    )
   }
 
   private async addBuildDependency(path: string) {
