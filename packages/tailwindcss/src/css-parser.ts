@@ -34,6 +34,19 @@ const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
 const LESS_THAN = 0x3c
 const GREATER_THAN = 0x3e
+const HASH = 0x23
+const UNDERSCORE = 0x5f
+const ZERO = 0x30
+const NINE = 0x39
+const UPPER_A = 0x41
+const UPPER_Z = 0x5a
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
+const LOWER_L = 0x6c
+const LOWER_R = 0x72
+const LOWER_U = 0x75
+const NON_ASCII = 0x80
+const LOWERCASE_BIT = 0x20
 
 export interface ParseOptions {
   from?: string
@@ -808,54 +821,46 @@ function isEscaped(value: string, idx: number) {
 // See: https://www.w3.org/TR/css-syntax-3/#consume-ident-like-token
 // See: https://www.w3.org/TR/css-syntax-3/#consume-url-token
 function findUnquotedUrlEnd(input: string, idx: number): number {
-  // The `(` must follow the ident `url`, case-insensitive.
+  // The `(` must follow the ident `url`, case-insensitive. Setting the
+  // `LOWERCASE_BIT` turns an ASCII uppercase letter into its lowercase form.
   if (
     idx < 3 ||
-    (input.charCodeAt(idx - 3) | 0x20) !== 0x75 /* u */ ||
-    (input.charCodeAt(idx - 2) | 0x20) !== 0x72 /* r */ ||
-    (input.charCodeAt(idx - 1) | 0x20) !== 0x6c /* l */
+    (input.charCodeAt(idx - 3) | LOWERCASE_BIT) !== LOWER_U ||
+    (input.charCodeAt(idx - 2) | LOWERCASE_BIT) !== LOWER_R ||
+    (input.charCodeAt(idx - 1) | LOWERCASE_BIT) !== LOWER_L
   ) {
     return -1
   }
 
-  // The ident must start at `url`, e.g. `my-url(…)` is a function.
+  // The ident must start at `url`, e.g. `my-url(…)` and `#url(…)` are not a
+  // url.
   let prevChar = input.charCodeAt(idx - 4)
   if (
-    (prevChar >= 0x61 && prevChar <= 0x7a) || // a-z
-    (prevChar >= 0x41 && prevChar <= 0x5a) || // A-Z
-    (prevChar >= 0x30 && prevChar <= 0x39) || // 0-9
+    (prevChar >= LOWER_A && prevChar <= LOWER_Z) ||
+    (prevChar >= UPPER_A && prevChar <= UPPER_Z) ||
+    (prevChar >= ZERO && prevChar <= NINE) ||
     prevChar === DASH ||
-    prevChar === 0x5f /* _ */ ||
-    prevChar >= 0x80 ||
+    prevChar === UNDERSCORE ||
+    prevChar >= NON_ASCII ||
     prevChar === BACKSLASH ||
-    prevChar === 0x23 /* # */ ||
+    prevChar === HASH ||
     prevChar === AT_SIGN
   ) {
     return -1
   }
 
-  // A quoted `url("…")` is a function with a string, not a url token.
-  let i = idx + 1
-  while (i < input.length) {
-    let char = input.charCodeAt(i)
-    if (char !== SPACE && char !== TAB && char !== LINE_BREAK && char !== CARRIAGE_RETURN) break
-    i += 1
-  }
-
-  let char = input.charCodeAt(i)
-  if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) return -1
-
   // The url ends at the first `)` that is not escaped.
-  for (; i < input.length; i++) {
-    char = input.charCodeAt(i)
+  for (let i = idx + 1; i < input.length; i++) {
+    let char = input.charCodeAt(i)
     if (char === BACKSLASH) {
       i += 1
     } else if (char === CLOSE_PAREN) {
       return i
     }
 
-    // A quote or a `(` makes it a bad url, e.g. `url(var(--foo))`. Keep the
-    // default behavior for those.
+    // A quoted `url("…")` is a function with a string, not a url token. And a
+    // quote or a `(` later on makes it a bad url, e.g. `url(var(--foo))`. Keep
+    // the default behavior for those.
     else if (char === OPEN_PAREN || char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
       return -1
     }

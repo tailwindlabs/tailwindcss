@@ -242,6 +242,12 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should handle whitespace before the quote of a quoted `url(…)`', () => {
+        expect(parse('.a{background-image:url(\f"a)b")}')).toEqual([
+          rule('.a', 'background-image', 'url(\f"a)b")'),
+        ])
+      })
+
       it('should keep the default behavior for a `(` or a quote inside of an unquoted `url(…)`', () => {
         expect(
           parse(
