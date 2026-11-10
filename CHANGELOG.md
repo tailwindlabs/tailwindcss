@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve performance of parsing long candidates with many dashes (e.g. `data-a-a-…-a:flex`) ([#20693](https://github.com/tailwindlabs/tailwindcss/pull/20693))
 - Discard candidates whose selectors grow exponentially when variants are stacked, instead of running out of memory (e.g. `[&_&]:[&_&]:[&_&]:…:flex`) ([#20692](https://github.com/tailwindlabs/tailwindcss/pull/20692))
 - Improve performance when scanning long lines with many `[` characters (e.g. minified JSON) ([#20694](https://github.com/tailwindlabs/tailwindcss/pull/20694))
+- Keep the absolute path of `url(…)`s in stylesheets imported from another drive on Windows, instead of a relative path that climbs out of the drive ([#20683](https://github.com/tailwindlabs/tailwindcss/pull/20683))
 
 ## [4.3.5] - 2026-11-06
 
