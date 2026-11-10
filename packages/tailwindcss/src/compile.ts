@@ -1,10 +1,21 @@
-import { atRule, context, decl, rule, type AstNode, type Rule, type StyleRule } from './ast'
+import {
+  atRule,
+  context,
+  decl,
+  rule,
+  type AstNode,
+  type Comment,
+  type Declaration,
+  type Rule,
+  type StyleRule,
+} from './ast'
 import { type Candidate, type Variant } from './candidate'
 import { CompileAstFlags, type DesignSystem } from './design-system'
 import GLOBAL_PROPERTY_ORDER from './property-order'
 import { asColor, type Utility } from './utilities'
 import { compare } from './utils/compare'
 import { escape } from './utils/escape'
+import { segment } from './utils/segment'
 import type { Variants } from './variants'
 import { walk, WalkAction } from './walk'
 
@@ -171,6 +182,11 @@ export function compileAstNodes(
       if (result === null) return []
     }
 
+    // Stacked variants can make the selectors grow exponentially once the
+    // nesting is flattened. Discard the candidate instead of generating (and
+    // flattening) megabytes of CSS for it.
+    if (flattenedSelectorLength(node) > MAX_FLATTENED_SELECTOR_LENGTH) return []
+
     rules.push({
       node,
       propertySort,
@@ -272,6 +288,95 @@ export function applyVariant(
   // All other variants
   let result = applyFn(node, variant)
   if (result === null) return null
+}
+
+// The maximum length of the selectors of a single candidate, once the nesting
+// is flattened.
+//
+// Flattening replaces each `&` with the parent selector, and prefixes each
+// selector without `&` in a selector list with the parent selector. This means
+// that stacked variants can multiply the length of the selectors. E.g.: each
+// `[&_&]:` in `[&_&]:[&_&]:…:flex` doubles it, so the CSS grows exponentially
+// with the number of variants. Variants with a selector list (`[&,.a]:`) or
+// with multiple `@slot`s grow in the same way.
+//
+// Real candidates stay far below this limit. Most of them result in less than
+// 2 KB of selectors, and even utilities with many nested rules (like `prose`
+// from `@tailwindcss/typography`) with 10+ variants result in less than 50 KB.
+// The limit still keeps a single candidate from generating megabytes of CSS.
+const MAX_FLATTENED_SELECTOR_LENGTH = 1_000_000
+
+// Estimates the length of the selectors in the output of `root`, once the
+// nesting is flattened, without generating them. The estimate can be a bit too
+// high, e.g. when a `&` is escaped.
+function flattenedSelectorLength(root: StyleRule): number {
+  // The rule of the candidate itself has no parent
+  return selectorLength(root, new Map())[1]
+}
+
+// The selectors of `node` have a length of `a * P + b`, where `P` is the length
+// of the parent selector. Variants with multiple `@slot`s re-use the same nodes
+// for each `@slot`, so the result is cached to visit each node only once.
+function selectorLength(
+  node: Exclude<AstNode, Declaration | Comment>,
+  cache: Map<AstNode, [a: number, b: number]>,
+): [a: number, b: number] {
+  let cached = cache.get(node)
+  if (cached !== undefined) return cached
+
+  let a = 0
+  let b = 0
+  let hasDeclarations = false
+  for (let child of node.nodes) {
+    if (child.kind === 'declaration') {
+      hasDeclarations = true
+    } else if (child.kind !== 'comment') {
+      let length = selectorLength(child, cache)
+      a += length[0]
+      b += length[1]
+    }
+  }
+
+  // The declarations of this node are emitted in a rule with the parent
+  // selector
+  if (hasDeclarations) a += 1
+
+  let result: [a: number, b: number]
+  if (node.kind === 'rule') {
+    // Each `&` becomes `:is(<parent>)`, and a selector without `&` becomes
+    // `<parent> <selector>`.
+    let selectorA = 0
+    let selectorB = 0
+    let selectors = node.selector.includes(',') ? segment(node.selector, ',') : [node.selector]
+    for (let selector of selectors) {
+      let copies = Math.max(1, countNestingSelectors(selector))
+      selectorA += copies
+      selectorB += selector.length + copies * 5
+    }
+
+    // This rule is the parent of its children and declarations
+    result = [selectorA * a, selectorB * a + b]
+  } else if (node.kind === 'at-rule') {
+    // A `&` in the params of `@scope (…)` becomes the parent selector too
+    let copies = countNestingSelectors(node.params)
+    result = [a + copies, b + node.params.length + copies * 5]
+  } else if (node.kind === 'at-root') {
+    // The children are hoisted to the root, without the parent selector
+    result = [0, b]
+  } else {
+    result = [a, b]
+  }
+
+  cache.set(node, result)
+  return result
+}
+
+function countNestingSelectors(input: string) {
+  let count = 0
+  for (let i = input.indexOf('&'); i !== -1; i = input.indexOf('&', i + 1)) {
+    count += 1
+  }
+  return count
 }
 
 function isFallbackUtility(utility: Utility) {

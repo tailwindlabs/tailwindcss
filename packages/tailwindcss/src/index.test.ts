@@ -1022,6 +1022,57 @@ describe('variant stacking', () => {
     `)
   })
 
+  it('should stack arbitrary variants that use `&` multiple times', async () => {
+    expect(await run(['[&_&]:[&_&]:flex'])).toMatchInlineSnapshot(`
+      "
+      .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex :is(.\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex) {
+        display: flex;
+      }
+      "
+    `)
+  })
+
+  it('should discard stacked variants when the selectors grow exponentially', async () => {
+    let input = css`
+      @custom-variant hocus (&:hover, &:focus);
+      @custom-variant both {
+        &:hover {
+          @slot;
+        }
+        &:focus {
+          @slot;
+        }
+      }
+      @tailwind utilities;
+    `
+
+    expect(
+      await run(
+        [
+          // Each `&` copies the parent selector
+          '[&_&]:'.repeat(20) + 'flex',
+
+          // Each selector in a selector list copies the parent selector
+          '[&,.a]:'.repeat(20) + 'flex',
+          'hocus:'.repeat(20) + 'flex',
+
+          // Each `@slot` copies the utility
+          'both:'.repeat(20) + 'flex',
+        ],
+        input,
+      ),
+    ).toBe('')
+
+    // A few of them are fine
+    expect(await run(['hocus:hocus:flex', 'both:both:flex'], input)).toMatchInlineSnapshot(`
+      "
+      :is(.hocus\\:hocus\\:flex:hover, .hocus\\:hocus\\:flex:focus):hover, :is(.hocus\\:hocus\\:flex:hover, .hocus\\:hocus\\:flex:focus):focus, .both\\:both\\:flex:hover:hover, .both\\:both\\:flex:hover:focus, .both\\:both\\:flex:focus:hover, .both\\:both\\:flex:focus:focus {
+        display: flex;
+      }
+      "
+    `)
+  })
+
   it('pseudo element variants are re-ordered', async () => {
     expect(await run(['before:hover:flex', 'hover:before:flex'])).toMatchInlineSnapshot(`
       "
