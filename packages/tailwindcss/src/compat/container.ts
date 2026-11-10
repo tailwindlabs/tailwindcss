@@ -89,8 +89,13 @@ export function buildCustomContainerUtilityRules(
       .map(([key, value]) => {
         return [key, designSystem.theme.resolveValue(key, ['--breakpoint']), value]
       })
-      .filter(Boolean) as [string, string, string][]
-    breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
+      .filter(([key, breakpoint]) => {
+        // Skip keys that are neither a breakpoint nor a custom `container` screen
+        return breakpoint !== null || breakpointOverwrites?.has(key)
+      }) as [string, string, string][]
+
+    // Padding for custom `container` screens is added to their own rule, so no sorting is needed
+    if (!breakpointOverwrites) breakpoints.sort((a, z) => compareBreakpoints(a[1], z[1], 'asc'))
 
     for (let [key, , value] of breakpoints) {
       if (breakpointOverwrites && breakpointOverwrites.has(key)) {
