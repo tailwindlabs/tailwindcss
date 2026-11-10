@@ -1,5 +1,5 @@
 use crate::cursor;
-use crate::extractor::arbitrary_value_machine::ArbitraryValueMachine;
+use crate::extractor::arbitrary_value_machine::{ArbitraryValueMachine, ArbitraryValueMemo};
 use crate::extractor::machine::{Machine, MachineState};
 use crate::extractor::named_variant_machine::NamedVariantMachine;
 use classification_macros::ClassifyBytes;
@@ -8,6 +8,10 @@ use classification_macros::ClassifyBytes;
 pub struct VariantMachine {
     arbitrary_value_machine: ArbitraryValueMachine,
     named_variant_machine: NamedVariantMachine,
+
+    /// This machine starts an arbitrary variant at many `[` of the same input, so it shares the
+    /// work between them.
+    arbitrary_value_memo: ArbitraryValueMemo,
 }
 
 impl Machine for VariantMachine {
@@ -23,7 +27,10 @@ impl Machine for VariantMachine {
             //        ^
             Class::OpenBracket => {
                 let start_pos = cursor.pos;
-                match self.arbitrary_value_machine.next(cursor) {
+                match self
+                    .arbitrary_value_machine
+                    .next_with_memo(cursor, &mut self.arbitrary_value_memo)
+                {
                     MachineState::Idle => self.restart(),
                     MachineState::Done(_) => self.parse_arbitrary_end(start_pos, cursor),
                 }
@@ -141,6 +148,23 @@ mod tests {
             ("group-hover/foo/bar:flex", vec!["bar:"]),
         ] {
             assert_eq!(VariantMachine::test_extract_all(input), expected);
+        }
+    }
+
+    #[test]
+    fn test_variant_machine_reuse() {
+        for input in [
+            // Arbitrary variants that don't end, because the first one is empty
+            r#"[]"a""#.repeat(50),
+            "[]a".repeat(50),
+            // Arbitrary variants that don't end, because of escaped characters
+            r"[\".repeat(50),
+            // Arbitrary variants that end at the end of the line
+            format!("{}]:", r#"[]"a""#.repeat(50)),
+            // An escaped `[` right before a `]`
+            format!(r"[{}\[]a]:", "a".repeat(70)),
+        ] {
+            VariantMachine::test_reuse(&input);
         }
     }
 }
