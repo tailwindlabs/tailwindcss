@@ -1361,6 +1361,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Keep an escape if an `_` after it is not a space, or might not be
       ['bg-[url(\\61_b.png)]', 'bg-[url(\\61_b.png)]'],
       ['bg-[u\\72l(a_b.png)]', 'bg-[u\\72l(a_b.png)]'],
+      // `decodeArbitraryValue` converts an `_` in a string too, except in a `url(…)`
+      ["bg-[u\\72l('a_b.png')]", "bg-[u\\72l('a_b.png')]"],
       ['[co\\6c_or:red]', '[co\\6c_or:red]'],
     ])(testName, { timeout }, async (candidate, expected) => {
       let input = css`
@@ -2104,7 +2106,7 @@ describe('normalizeEscapes', () => {
   // escapes that we keep.
   const PIECES = [
     ...['a', 'e', 'f', 'g', 'r', 'u', 'l', 'c', '0', '1', '5', '-', '-', '_', '_'],
-    ...['.', '(', ')', ',', '%', '>', '<!', "'q'", '#'],
+    ...['.', '(', ')', ',', '%', '>', '<!', "'q'", "'_'", '#'],
     ...['\\61', '\\72', '\\31', '\\2d', '\\-', '\\65', '\\66', '\\67', '\\_', '\\,', '\\5f'],
     ...['\\000072', '\\0000311', '\\61_', '\\31_', '\\2d_', '\\65_', '\\72_', '\\g', '\\\\'],
     ...['url(', 'u\\72l(', 'var(', 'calc(', 'v\\61r('],

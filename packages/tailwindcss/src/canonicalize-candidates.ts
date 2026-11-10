@@ -969,7 +969,8 @@ function keepsUnderscores(name: string) {
 
 /**
  * Determine if the function that starts with the `(` at `idx` has an `_` in
- * it, outside of strings.
+ * it. Also in strings, because `decodeArbitraryValue` converts an `_` in a
+ * string too, except in a `url(…)`. E.g.: `u\72l('a_b.png')` is `a b.png`.
  */
 function hasUnderscoreInFunction(input: string, idx: number) {
   let depth = 0
@@ -979,9 +980,11 @@ function hasUnderscoreInFunction(input: string, idx: number) {
     if (char === BACKSLASH) {
       idx++
     } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      // Skip the string, because a `)` in it does not end the function.
       while (++idx < input.length) {
         let next = input.charCodeAt(idx)
         if (next === BACKSLASH) idx++
+        else if (next === UNDERSCORE) return true
         else if (next === char) break
       }
     } else if (char === OPEN_PAREN) {
