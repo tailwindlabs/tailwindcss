@@ -255,13 +255,25 @@ function urlFunctionAt(input: string, idx: number) {
   }
 
   // The `url` must be the whole function name. An `_` becomes a space later,
-  // so `no-repeat_url(…)` has a `url(…)` too.
+  // so `no-repeat_url(…)` has a `url(…)` too. But `\_` stays an `_`, so
+  // `--my\_url(…)` calls the `--my_url` function.
   if (idx > 3) {
     let char = input.charCodeAt(idx - 4)
     if (isNameChar(char) || char === BACKSLASH) return NO_URL
+    if (char === UNDERSCORE && isEscaped(input, idx - 4)) return NO_URL
   }
 
   return u === 0x75 && r === 0x72 && l === 0x6c ? LOWERCASE_URL : OTHER_URL
+}
+
+/**
+ * Determine if the character at `idx` is escaped. It is, if an odd number of
+ * backslashes comes before it. E.g.: `\_` is, but `\\_` is not.
+ */
+function isEscaped(input: string, idx: number) {
+  let count = 0
+  while (idx - count - 1 >= 0 && input.charCodeAt(idx - count - 1) === BACKSLASH) count++
+  return count % 2 === 1
 }
 
 /**

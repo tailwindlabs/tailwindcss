@@ -2178,6 +2178,8 @@ it.each([
   "bg-[url('a',URL(_'b)/*'))]",
   "bg-[u\\72l(foo'bar)/*')]",
   "bg-[u\\72_l(foo'bar)/*')]",
+  // `\\` is an escaped `\`, so the `_` becomes a space before the `url(…)`.
+  "bg-[a\\\\_url(foo'bar)/*')]",
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2197,6 +2199,11 @@ it('should parse a function name with an escaped `_`', () => {
   // `\_` is a literal `_`, so this calls the `--my_fn` function.
   expect(run('w-[--my\\_fn(1px)]', { utilities })).toMatchObject([
     { value: { kind: 'arbitrary', value: '--my_fn(1px)' } },
+  ])
+
+  // The function is `--my_url`, not a `url(…)`, so its argument can have a `(`.
+  expect(run('w-[--my\\_url(var(--size))]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_url(var(--size))' } },
   ])
 })
 
