@@ -53,6 +53,12 @@ export default [
 
   'field-sizing',
   'aspect-ratio',
+  'block-size',
+  'max-block-size',
+  'min-block-size',
+  'inline-size',
+  'max-inline-size',
+  'min-inline-size',
   'height',
   'max-height',
   'min-height',
