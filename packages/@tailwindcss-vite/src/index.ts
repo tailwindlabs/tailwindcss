@@ -87,7 +87,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         ...config!.resolve,
         extensions: ['.css'],
         mainFields: ['style'],
-        conditions: ['style', 'development|production'],
+        conditions: ['style', 'development|production', ...(config!.resolve.conditions ?? [])],
         tryIndex: false,
         preferRelative: true,
       })
@@ -142,7 +142,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
         ...env.config.resolve,
         extensions: ['.css'],
         mainFields: ['style'],
-        conditions: ['style', 'development|production'],
+        conditions: ['style', 'development|production', ...(env.config.resolve.conditions ?? [])],
         tryIndex: false,
         preferRelative: true,
       })
