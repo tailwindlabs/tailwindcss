@@ -2360,6 +2360,10 @@ it.each([
   "content-['</s\\\ftyle>']",
   "content-['</s\\\r\ntyle>']",
   "[content:'</s\\\ntyle>']",
+
+  // Comments are removed when the CSS is minified. With `[--y:*/style>]`, this
+  // would become `--x:a()</style>`.
+  '[--x:a()<//*)*/]',
 ])('should not parse candidates that contain `</style`: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
