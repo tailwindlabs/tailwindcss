@@ -4188,6 +4188,44 @@ describe('matchUtilities()', () => {
       }
       "
     `)
+
+    // Bare opacity modifiers above `100` are invalid, because `color-mix(…)`
+    // doesn't accept percentages above `100%`
+    expect(
+      await run(
+        [
+          'scrollbar-black/100',
+          'scrollbar-black/101',
+          'scrollbar-current/150',
+          'scrollbar-[var(--my-color)]/150',
+        ],
+        css`
+          @plugin "my-plugin";
+
+          @tailwind utilities;
+        `,
+        {
+          async loadModule(_id, base) {
+            return {
+              path: '',
+              base,
+              module: ({ matchUtilities }: PluginAPI) => {
+                matchUtilities(
+                  { scrollbar: (value) => ({ 'scrollbar-color': value }) },
+                  { type: ['color', 'any'], values: { black: 'black' } },
+                )
+              },
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .scrollbar-black\\/100 {
+        scrollbar-color: black;
+      }
+      "
+    `)
   })
 
   test('functional utilities with explicit modifiers', async () => {

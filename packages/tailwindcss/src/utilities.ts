@@ -236,12 +236,23 @@ export function asColor(
     return withAlpha(value, alpha)
   }
 
-  if (!isValidOpacityValue(modifier.value)) {
-    return null
-  }
-
   // The modifier is a bare value like `50`, so convert that to `50%`.
-  return withAlpha(value, `${modifier.value}%`)
+  alpha = bareAlpha(modifier.value)
+  if (alpha === null) return null
+
+  return withAlpha(value, alpha)
+}
+
+/**
+ * Convert a bare opacity modifier like `50` to a percentage like `50%`.
+ *
+ * Values above `100` are invalid, because `color-mix(…)` doesn't accept
+ * percentages above `100%`. The declaration would be dropped by the browser.
+ */
+function bareAlpha(value: string): string | null {
+  if (!isValidOpacityValue(value)) return null
+  if (Number(value) > 100) return null
+  return `${value}%`
 }
 
 /**
@@ -4637,9 +4648,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isValidOpacityValue(candidate.modifier.value)) {
-            alpha = `${candidate.modifier.value}%`
-          }
+          alpha = bareAlpha(candidate.modifier.value) ?? undefined
         }
       }
 
@@ -5447,9 +5456,7 @@ export function createUtilities(theme: Theme) {
       if (candidate.modifier.kind === 'arbitrary') {
         alpha = candidate.modifier.value
       } else {
-        if (isValidOpacityValue(candidate.modifier.value)) {
-          alpha = `${candidate.modifier.value}%`
-        }
+        alpha = bareAlpha(candidate.modifier.value) ?? undefined
       }
     }
 
@@ -5598,9 +5605,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isValidOpacityValue(candidate.modifier.value)) {
-            alpha = `${candidate.modifier.value}%`
-          }
+          alpha = bareAlpha(candidate.modifier.value) ?? undefined
         }
       }
 
@@ -5729,9 +5734,7 @@ export function createUtilities(theme: Theme) {
         if (candidate.modifier.kind === 'arbitrary') {
           alpha = candidate.modifier.value
         } else {
-          if (isValidOpacityValue(candidate.modifier.value)) {
-            alpha = `${candidate.modifier.value}%`
-          }
+          alpha = bareAlpha(candidate.modifier.value) ?? undefined
         }
       }
 
