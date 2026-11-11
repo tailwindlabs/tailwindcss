@@ -2006,6 +2006,67 @@ test('not', async () => {
     "
   `)
 
+  // Conditions that are combined with `and` or `or` are negated as a whole
+  expect(
+    await run(
+      [
+        'not-tablet:flex',
+        'not-hover-or-wide:flex',
+        'not-only-screen:flex',
+        'not-supports-[(display:grid)_and_(gap:1rem)]:flex',
+        'not-wide-and-tall:flex',
+        'not-sidebar-wide-and-tall:flex',
+      ],
+      css`
+        @custom-variant tablet (@media (min-width: 768px) and (max-width: 1023px));
+        @custom-variant hover-or-wide (@media (hover: hover) or (min-width: 1024px));
+        @custom-variant only-screen (@media only screen and (min-width: 768px));
+        @custom-variant wide-and-tall (@container (min-width: 300px) and (min-height: 300px));
+        @custom-variant sidebar-wide-and-tall (@container sidebar (min-width: 300px) and (min-height: 300px));
+
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @supports not ((display: grid) and (gap: 1rem)) {
+      .not-supports-\\[\\(display\\:grid\\)_and_\\(gap\\:1rem\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not all and ((min-width: 768px) and (max-width: 1023px)) {
+      .not-tablet\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not all and ((hover: hover) or (min-width: 1024px)) {
+      .not-hover-or-wide\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not screen and (min-width: 768px) {
+      .not-only-screen\\:flex {
+        display: flex;
+      }
+    }
+
+    @container not ((min-width: 300px) and (min-height: 300px)) {
+      .not-wide-and-tall\\:flex {
+        display: flex;
+      }
+    }
+
+    @container sidebar not ((min-width: 300px) and (min-height: 300px)) {
+      .not-sidebar-wide-and-tall\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+
   expect(
     await run(
       [
