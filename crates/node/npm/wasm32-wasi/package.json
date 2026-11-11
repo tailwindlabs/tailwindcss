@@ -30,13 +30,5 @@
     "@tybys/wasm-util": "^0.10.3",
     "@emnapi/wasi-threads": "^1.2.3",
     "tslib": "^2.8.1"
-  },
-  "bundledDependencies": [
-    "@napi-rs/wasm-runtime",
-    "@emnapi/core",
-    "@emnapi/runtime",
-    "@tybys/wasm-util",
-    "@emnapi/wasi-threads",
-    "tslib"
-  ]
+  }
 }
