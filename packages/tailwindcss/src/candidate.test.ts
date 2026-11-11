@@ -1,3 +1,4 @@
+import { transform } from 'lightningcss'
 import { describe, expect, it, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
@@ -2160,6 +2161,54 @@ it.each([
   'data-foo=bar:flex',
   'bg-foo=bar',
   'bg-red-500/foo=bar',
+
+  // Arbitrary values, properties, modifiers and variants that start a comment
+  'bg-[red/*]',
+  'bg-[red/*comment*/]',
+  '[color:red/*]',
+  'bg-red-500/[50%/*]',
+  '[&/*]:flex',
+  'data-[a/*]:flex',
+  '[a/*b:red]',
+  "bg-['a\n/*']",
+  "[a':'/*']",
+  "bg-['/*]",
+  "bg-[url(foo'bar)/*')]",
+  '[x:url(foo"bar)/*")]',
+  'bg-[URL(a(b)/*)]',
+  "bg-[url('a',URL(_'b)/*'))]",
+  "bg-[u\\72l(foo'bar)/*')]",
+  "bg-[u\\72_l(foo'bar)/*')]",
+  // `\\` is an escaped `\`, so the `_` before the `url(…)` is not escaped.
+  "bg-[a\\\\_url(foo'bar)/*')]",
+  // `--my\_url(…)` is not a `url(…)`, but it keeps the `_`, so the inner
+  // `URL(…)` has no quoted string.
+  "[x:--my\\_url(URL(_'a)/*'))]",
+  '[--x:a()<//*)*/]',
+
+  // A `/*` inside of an unquoted `url(…)` that PostCSS does not read as a
+  // `url(…)`, or that CSS does not read as a `url(…)` at all
+  'bg-[URL(/a/*.png)]',
+  'bg-[Url(/a/*.png)]',
+  'bg-[url(a.png),url(/b/*.png)]',
+  'bg-[#url(/a/*.png)]',
+  'bg-[@url(/a/*.png)]',
+  'bg-[1url(/a/*.png)]',
+  // PostCSS reads `@image:url` as one at-word
+  'bg-[@image:url(/a/*.png)]',
+  'bg-[a@b:url(/a/*.png)]',
+  // `decodeArbitraryValue` turns this into `a\_url(…)`
+  'bg-[a\\\\_url(/a/*.png)]',
+  // The outer `url(…)` keeps the `_`, so this calls the `b_url` function
+  "bg-[url('a',b_url(/c/*.png))]",
+  // Only a value of a declaration can have one, e.g. not `[data-url(…)]`
+  'data-[url(/a/*.png)]:flex',
+  'bg-red-500/[url(/a/*.png)]',
+  '[&_url(/a/*.png)]:flex',
+
+  // PostCSS reads `\/*` as a `\` and the start of a comment
+  'bg-[\\/*]',
+  'bg-[URL(a\\/*b)]',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2170,6 +2219,109 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should not let a random arbitrary value comment out the CSS after it', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@tailwind utilities', { base: __dirname })
+
+  // A seeded random number generator (mulberry32), so a failure can be reproduced.
+  let seed = 20690
+  function random() {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+
+  let parts = ['url(', 'URL(', 'a(', '(', ')', "'", '"', '/*', '*/', '/', '*', '_', '\\']
+  parts.push('\\_', '\\72', '#', '@', ',', ':', 'a', '1', '-', ' ')
+
+  for (let i = 0; i < 5000; i++) {
+    let value = ''
+    let count = 1 + Math.floor(random() * 10)
+    for (let j = 0; j < count; j++) value += parts[Math.floor(random() * parts.length)]
+
+    for (let candidate of [`[--x:${value}]`, `bg-[${value}]`]) {
+      let [css] = designSystem.candidatesToCss([candidate])
+      if (!css) continue
+
+      let { code } = transform({
+        filename: 'input.css',
+        code: Buffer.from(`${css}.b{color:red}`),
+        minify: true,
+        errorRecovery: true,
+      })
+
+      expect(code.toString(), candidate).toContain('.b{color:red}')
+    }
+  }
+})
+
+it('should parse a function name with an escaped `_`', () => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
+
+  // `\_` is a literal `_`, so this calls the `--my_fn` function.
+  expect(run('w-[--my\\_fn(1px)]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_fn(1px)' } },
+  ])
+
+  // The function is `--my_url`, not a `url(…)`, so its argument can have a `(`.
+  expect(run('w-[--my\\_url(var(--size))]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_url(var(--size))' } },
+  ])
+})
+
+it('should parse a quoted string after an `_` in an uppercase `URL(…)`', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // The `_` becomes a space, so this is a quoted `URL( 'image.png')`.
+  expect(run(`bg-[URL(_'image.png')]`, { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: "URL( 'image.png')" } },
+  ])
+})
+
+it('should parse a `/*` inside of a string in an arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.functional('content', () => [])
+
+  expect(run(`content-['/*']`, { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "content-['/*']",
+        "root": "content",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "'/*'",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it.each([
+  ['bg-[url(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[url(a.png),_url(/b/*.png)]', 'url(a.png), url(/b/*.png)'],
+  ['bg-[image-set(url(/a/*.png)_1x)]', 'image-set(url(/a/*.png) 1x)'],
+  ['bg-[no-repeat_url(/a/*.png)]', 'no-repeat url(/a/*.png)'],
+  ['bg-[image:url(/a/*.png)]', 'url(/a/*.png)'],
+])('should parse a `/*` inside of an unquoted `url(…)`: %s', (rawCandidate, value) => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run(rawCandidate, { utilities })).toMatchObject([{ value: { kind: 'arbitrary', value } }])
+})
+
+it('should parse a `/*` inside of an unquoted `url(…)` in an arbitrary property', () => {
+  expect(run('[background-image:url(/a/*.png)]')).toMatchObject([
+    { kind: 'arbitrary', property: 'background-image', value: 'url(/a/*.png)' },
+  ])
 })
 
 const candidates = [

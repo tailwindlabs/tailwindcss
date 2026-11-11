@@ -14354,6 +14354,26 @@ test('bg', async () => {
   `)
 })
 
+test('bg gradients print a space before an arbitrary value', async () => {
+  let { build } = await compile(css`
+    @tailwind utilities;
+  `)
+
+  // PostCSS reads `,url` as one word, so it reads the `/*` in
+  // `,url(/a/*.png)` as the start of a comment. The output is not optimized
+  // here, because the formatter adds the space. A minifier removes it again,
+  // see https://github.com/postcss/postcss/issues/2194.
+  let output = build([
+    'bg-linear-[url(/a/*.png)]',
+    'bg-conic-[url(/a/*.png)]',
+    'bg-radial-[url(/a/*.png)]',
+  ])
+
+  expect(output).toContain('linear-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
+  expect(output).toContain('conic-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
+  expect(output).toContain('radial-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
+})
+
 test('bg-position', async () => {
   expect(
     await run(
