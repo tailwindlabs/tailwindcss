@@ -33,6 +33,30 @@ let lastCss = ''
 let sheet = document.createElement('style')
 
 /**
+ * The CSS that is currently in the stylesheet. Replacing it makes the browser
+ * parse all of the CSS and restyle the page again, so we only do that when the
+ * CSS actually changed.
+ */
+let currentCss = ''
+
+/**
+ * The parts of the document that changed since the last build. This lets an
+ * incremental build look at just these elements instead of the whole document.
+ */
+type Changes = {
+  /**
+   * Elements that were added to the document. Everything inside of these
+   * elements is new as well.
+   */
+  added: Set<Element>
+
+  /**
+   * Elements with a `class` attribute that changed.
+   */
+  changed: Set<Element>
+}
+
+/**
  * The queue of build tasks that need to be run. This is used to ensure that we
  * don't run multiple builds concurrently.
  */
@@ -96,7 +120,6 @@ async function createCompiler() {
     compiler = await tailwindcss.compile(css, {
       base: '/',
       loadStylesheet,
-      loadModule,
     })
   } finally {
     I.end('Compile CSS')
@@ -170,19 +193,16 @@ async function loadStylesheet(id: string, base: string) {
   }
 }
 
-async function loadModule(): Promise<never> {
-  throw new Error(`The browser build does not support plugins or config files.`)
-}
-
-async function build(kind: 'full' | 'incremental') {
-  if (!compiler) return
-
-  // 1. Refresh the known list of classes
+/**
+ * Collect the classes that we haven't seen before.
+ *
+ * A full build looks at every element in the document. An incremental build
+ * only looks at the elements that changed.
+ */
+function collectNewClasses(changes: Changes | null) {
   let newClasses = new Set<string>()
 
-  I.start(`Collect classes`)
-
-  for (let element of document.querySelectorAll('[class]')) {
+  function collect(element: Element) {
     for (let c of element.classList) {
       if (classes.has(c)) continue
 
@@ -190,6 +210,56 @@ async function build(kind: 'full' | 'incremental') {
       newClasses.add(c)
     }
   }
+
+  if (changes === null) {
+    for (let element of document.querySelectorAll('[class]')) {
+      collect(element)
+    }
+
+    return newClasses
+  }
+
+  for (let element of changes.changed) {
+    if (!element.isConnected) continue
+
+    collect(element)
+  }
+
+  for (let element of changes.added) {
+    // The element was removed again before we got to it
+    if (!element.isConnected) continue
+
+    // The element is inside of another element that was added, so it is
+    // handled when we get to that element. Without this check an element is
+    // visited once for every ancestor that was added in the same batch, which
+    // is what happens to every element while the page is still loading.
+    if (isInside(element, changes.added)) continue
+
+    collect(element)
+
+    for (let child of element.querySelectorAll('[class]')) {
+      collect(child)
+    }
+  }
+
+  return newClasses
+}
+
+function isInside(element: Element, ancestors: Set<Element>) {
+  for (let parent = element.parentElement; parent !== null; parent = parent.parentElement) {
+    if (ancestors.has(parent)) return true
+  }
+
+  return false
+}
+
+async function build(kind: 'full' | 'incremental', changes: Changes | null) {
+  if (!compiler) return
+
+  // 1. Refresh the known list of classes
+  I.start(`Collect classes`)
+
+  let newClasses = collectNewClasses(kind === 'full' ? null : changes)
 
   I.end(`Collect classes`, {
     count: newClasses.size,
@@ -200,12 +270,20 @@ async function build(kind: 'full' | 'incremental') {
   // 2. Compile the CSS
   I.start(`Build utilities`)
 
-  sheet.textContent = compiler.build(Array.from(newClasses))
+  let css = compiler.build(Array.from(newClasses))
+
+  // New classes that are not utilities result in the exact same CSS
+  if (css !== currentCss) {
+    sheet.textContent = css
+    currentCss = css
+  }
 
   I.end(`Build utilities`)
 }
 
-function rebuild(kind: 'full' | 'incremental') {
+function rebuild(kind: 'full'): void
+function rebuild(kind: 'incremental', changes: Changes): void
+function rebuild(kind: 'full' | 'incremental', changes: Changes | null = null) {
   async function run() {
     if (!compiler && kind !== 'full') {
       return
@@ -220,13 +298,20 @@ function rebuild(kind: 'full' | 'incremental') {
     }
 
     I.start(`Build`)
-    await build(kind)
+    await build(kind, changes)
     I.end(`Build`)
 
     I.end(`Build #${buildId} (${kind})`)
   }
 
-  buildQueue = buildQueue.then(run).catch((err) => I.error(err))
+  let result = buildQueue.then(run)
+
+  // A failed build must not prevent future builds from running. For example
+  // when a stylesheet is invalid while it is being edited, it should build
+  // again once it is fixed.
+  buildQueue = result.catch(() => {})
+
+  result.catch((err) => I.error(err))
 }
 
 // Handle changes to known stylesheets
@@ -248,7 +333,7 @@ function observeSheet(sheet: HTMLStyleElement) {
 // - New elements (with classes) being added to the page
 new MutationObserver((records) => {
   let full = 0
-  let incremental = 0
+  let changes: Changes = { added: new Set(), changed: new Set() }
 
   for (let record of records) {
     // New stylesheets == tracking + full rebuild
@@ -268,19 +353,19 @@ new MutationObserver((records) => {
       // Skip the output stylesheet itself to prevent loops
       if (node === sheet) continue
 
-      incremental++
+      changes.added.add(node as Element)
     }
 
     // Changes to class attributes require an incremental rebuild
     if (record.type === 'attributes') {
-      incremental++
+      changes.changed.add(record.target as Element)
     }
   }
 
   if (full > 0) {
     return rebuild('full')
-  } else if (incremental > 0) {
-    return rebuild('incremental')
+  } else if (changes.added.size > 0 || changes.changed.size > 0) {
+    return rebuild('incremental', changes)
   }
 }).observe(document.documentElement, {
   attributes: true,
