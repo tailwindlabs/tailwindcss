@@ -300,6 +300,16 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             if (seenLineHeights.has(lineHeight)) continue
             seenLineHeights.add(lineHeight)
 
+            // `text-{x}/none` is a shorthand for `line-height: 1`, but it's not
+            // part of the suggestions so it isn't pre-computed.
+            if (lineHeight === '1') {
+              interestingLineHeights.add('none')
+
+              for (let name of fontSizeNames) {
+                computeUtilitiesPropertiesLookup.get(`text-${name}/none`)
+              }
+            }
+
             let bareValue = designSystem.storage[SPACING_KEY]?.get(lineHeight) ?? null
             if (bareValue !== null) {
               if (isValidSpacingMultiplier(bareValue)) {
@@ -328,7 +338,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
             seenFontSizes.add(fontSize)
 
             for (let lineHeight of interestingLineHeights) {
-              if (isValidSpacingMultiplier(lineHeight)) {
+              if (lineHeight === 'none' || isValidSpacingMultiplier(lineHeight)) {
                 computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/${lineHeight}`)
               } else {
                 computeUtilitiesPropertiesLookup.get(`text-[${fontSize}]/[${lineHeight}]`)
