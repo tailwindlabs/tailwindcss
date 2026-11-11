@@ -16,12 +16,238 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
 
   // Alpine
   /wire:[^\s]*?$/,
-
-  // shadcn/ui variants
-  /variant\s*[:=]\s*\{?['"`]$/,
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
+
+// Whether the position `index` in `text` sits inside a string literal.
+// Single and double quoted strings end at a newline, so an apostrophe in
+// text (e.g. `Don't`) does not open a string that runs to a quote on a
+// later line. Attribute values (`srcset="…"`) and template literals may
+// span lines.
+function isInsideStringLiteral(text: string, index: number): boolean {
+  let quote: string | null = null
+  let spansLines = false
+
+  for (let i = 0; i < index; i++) {
+    let char = text[i]
+
+    if (quote !== null) {
+      if (char === '\\') {
+        i++
+      } else if (char === quote) {
+        quote = null
+      } else if (char === '\n' && !spansLines) {
+        quote = null
+      }
+      continue
+    }
+
+    // Skip an escaped character outside a string, e.g. the quote in
+    // `/\"/`, so it does not open a string.
+    if (char === '\\') {
+      i++
+      continue
+    }
+
+    // Skip comments: quotes in comment prose do not open strings, e.g.
+    // the backtick in `// Template literals use the \` character.`
+    // would otherwise swallow the rest of the file as a string. A `//`
+    // right after a `:` is a URL in text, not a comment.
+    if (char === '/' && text[i + 1] === '/' && text[i - 1] !== ':') {
+      while (i < index && text[i] !== '\n') i++
+      continue
+    }
+    if (char === '/' && text[i + 1] === '*') {
+      i += 2
+      while (i < index && !(text[i] === '*' && text[i + 1] === '/')) i++
+      // Land on the closing slash; the loop increment moves past it, so
+      // the character after the comment is read normally.
+      i += 1
+      continue
+    }
+
+    if (char === '"' || char === "'" || char === '`') {
+      quote = char
+      spansLines = char === '`'
+      if (!spansLines) {
+        let j = i - 1
+        while (j >= 0 && (text[j] === ' ' || text[j] === '\t')) j--
+        spansLines = text[j] === '='
+      }
+    }
+  }
+
+  return quote !== null
+}
+
+// shadcn/ui style `variant` props can hold arbitrary expressions, e.g.
+// `variant={isActive ? "outline" : "ghost"}` or
+// `Button({ variant: isActive ? "outline" : "ghost" })`.
+// The strings inside are variant names, not class names, so candidates
+// found there must not be migrated.
+function isInsideVariantValue(prefix: string): boolean {
+  // A comparison against `variant` is not an assignment, but the compared
+  // string is still a variant name, not a class name:
+  // `variant === "outline"`.
+  if (/\bvariant\s*(?:===|!==|==|!=)\s*['"`]$/.test(prefix)) {
+    return true
+  }
+
+  // Find the last `variant` prop assignment before the candidate. The
+  // prefix may span multiple lines when the value expression does. The
+  // `=` must be a real assignment: `==`, `===` and `=>` are comparisons,
+  // not assignments, e.g. `cn(variant === "primary" && "outline")` holds
+  // a class name. A `{` right after the colon opens a cva variants
+  // object (`variant: { default: "…" }`), whose values are class names,
+  // so that is not a variant value either.
+  let pattern = /variant\s*(?::(?!\s*\{)|=(?![=>]))\s*\{?/g
+  let match: RegExpExecArray | null = null
+  let current: RegExpExecArray | null
+  while ((current = pattern.exec(prefix)) !== null) {
+    // Ignore `variant` inside a string literal, e.g. the query string in
+    // `href="/?variant=primary"` is not a prop assignment.
+    if (isInsideStringLiteral(prefix, current.index)) continue
+    match = current
+  }
+  if (match === null) return false
+
+  // Scan the value expression up to the candidate. String literals, parens,
+  // and expression characters may appear, but a top-level comma, closing
+  // brace, semicolon, or a new assignment means the variant value ended
+  // before the candidate.
+  let tail = prefix.slice(match.index + match[0].length)
+
+  // Blank comments out first (keeping newlines, so the line structure
+  // survives): comment text is not part of the expression, and a `/` from
+  // a comment must not be read as a division operator that continues the
+  // value onto the next line. Each branch leaves `i` on its last consumed
+  // character, so the loop increment moves to the next one.
+  let cleaned = ''
+  for (let i = 0; i < tail.length; i++) {
+    let char = tail[i]
+
+    if (char === '"' || char === "'" || char === '`') {
+      let start = i
+      i++
+      while (i < tail.length && tail[i] !== char) {
+        if (tail[i] === '\\') i++
+        i++
+      }
+      cleaned += tail.slice(start, i + 1)
+      continue
+    }
+
+    if (char === '/' && tail[i + 1] === '*') {
+      i += 2
+      while (i < tail.length && !(tail[i] === '*' && tail[i + 1] === '/')) {
+        if (tail[i] === '\n') cleaned += '\n'
+        i++
+      }
+      i += 1
+      cleaned += ' '
+      continue
+    }
+
+    if (char === '/' && tail[i + 1] === '/' && tail[i - 1] !== ':') {
+      while (i < tail.length && tail[i] !== '\n') i++
+      cleaned += ' '
+      if (tail[i] === '\n') cleaned += '\n'
+      continue
+    }
+
+    cleaned += char
+  }
+  tail = cleaned
+  let depth = 0
+  let i = 0
+  while (i < tail.length) {
+    let char = tail[i]
+
+    // Skip string literals (the candidate's own opening quote is the last char)
+    if (char === '"' || char === "'" || char === '`') {
+      i++
+      while (i < tail.length && tail[i] !== char) {
+        if (tail[i] === '\\') i++
+        i++
+      }
+      i++
+      continue
+    }
+
+    if (char === '(' || char === '[' || char === '{') {
+      depth++
+      i++
+      continue
+    }
+
+    if (char === ')' || char === ']' || char === '}') {
+      if (depth === 0) return false
+      depth--
+      i++
+      continue
+    }
+
+    if (char === ',' || char === ';') {
+      if (depth === 0) return false
+      i++
+      continue
+    }
+
+    // A newline at the top level ends the value, unless the expression
+    // continues on the next line: a trailing operator (`?`, `:`, `&&`, …)
+    // or a leading operator (`.`, `?`, `:`, `>`, …) on the next line
+    // means it continues. Blank lines left behind by a blanked multiline
+    // comment do not end it either: the operator can sit past them.
+    // Without this, a semicolon-free assignment would protect strings in
+    // later statements: `const variant = props.variant ?? "primary"`
+    // followed by `return cn("outline")` on the next line.
+    if (char === '\n' && depth === 0) {
+      let prev = i - 1
+      while (
+        prev >= 0 &&
+        (tail[prev] === ' ' || tail[prev] === '\t' || tail[prev] === '\r' || tail[prev] === '\n')
+      ) {
+        prev--
+      }
+      let next = i + 1
+      while (
+        next < tail.length &&
+        (tail[next] === ' ' || tail[next] === '\t' || tail[next] === '\r' || tail[next] === '\n')
+      ) {
+        next++
+      }
+      let continues =
+        prev < 0 ||
+        '?.,:+&|!<>=%~^*/-'.includes(tail[prev]) ||
+        (next < tail.length && '.?:&|+-*/%<>='.includes(tail[next]))
+      if (!continues) return false
+      i++
+      continue
+    }
+
+    // A bare `=` starts a new assignment (e.g. the next prop). `==`, `===`,
+    // `=>`, `!=`, `<=` and `>=` are comparisons, not assignments.
+    if (char === '=' && depth === 0) {
+      let prev = tail[i - 1] ?? ''
+      let next = tail[i + 1] ?? ''
+      if (
+        next !== '=' &&
+        next !== '>' &&
+        prev !== '=' &&
+        prev !== '!' &&
+        prev !== '<' &&
+        prev !== '>'
+      ) {
+        return false
+      }
+    }
+
+    i++
+  }
+
+  return true
+}
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -98,6 +324,25 @@ export function isSafeMigration(
     }
   }
 
+  // Heuristic: Disallow candidates inside comments (`//` and `/* */`).
+  // Comment prose is not a class name, e.g.:
+  // `// this comment mentions `outline: none` as CSS prose`
+  // This check has to run before the parsed-candidate early returns below:
+  // a dashed candidate like `shadow-sm` in a comment would otherwise look
+  // safe and return early.
+  {
+    let ranges = commentRanges.get(location.contents)
+
+    for (let i = 0; i < ranges.length; i += 2) {
+      let start = ranges[i]
+      let end = ranges[i + 1]
+
+      if (location.start >= start && location.end <= end) {
+        return false
+      }
+    }
+  }
+
   let [candidate] = parseCandidate(rawCandidate, designSystem)
 
   // If we can't parse the candidate, then it's not a candidate at all. However,
@@ -155,8 +400,10 @@ export function isSafeMigration(
     }
   }
 
-  // Heuristic: Require the candidate to be inside quotes
-  let isQuoteBeforeCandidate = isMiddleOfString(currentLineBeforeCandidate)
+  // Heuristic: Require the candidate to be inside quotes. The opening
+  // quote can sit on an earlier line when a string or attribute value
+  // spans lines, so the before state is computed over the whole prefix.
+  let isQuoteBeforeCandidate = isInsideStringLiteral(location.contents, location.start)
   let isQuoteAfterCandidate = isMiddleOfString(currentLineAfterCandidate)
   if (!isQuoteBeforeCandidate || !isQuoteAfterCandidate) {
     return false
@@ -189,6 +436,15 @@ export function isSafeMigration(
     }
   }
 
+  // Heuristic: Disallow candidates inside a `variant` prop value, e.g.
+  // `variant={isActive ? "outline" : "ghost"}`. The strings there are variant
+  // names, not class names, no matter what expression they sit inside. The
+  // value expression can span multiple lines, so scan the whole prefix
+  // before the candidate, not just its line.
+  if (isInsideVariantValue(location.contents.slice(0, location.start))) {
+    return false
+  }
+
   // Heuristic: Disallow Next.js Image `placeholder` prop
   if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
     return false
@@ -201,6 +457,114 @@ export function isSafeMigration(
 
   return true
 }
+
+// Ranges of `//` line comments and `/* */` block comments in a source file,
+// computed once per file. String literals are skipped so comment markers
+// inside strings (e.g. URLs) are not treated as comments.
+const commentRanges = new DefaultMap((source: string) => {
+  let ranges: number[] = []
+  let i = 0
+
+  while (i < source.length) {
+    let char = source[i]
+
+    // Skip string literals. Single and double quoted strings cannot span
+    // lines, so they end at a newline; only template literals and
+    // attribute values may span lines. Otherwise an apostrophe in JSX
+    // text (e.g. `Don't`) would open a string that runs to a quote on a
+    // later line, and comment markers after it would be misread.
+    if (char === '"' || char === "'" || char === '`') {
+      let spansLines = char === '`'
+      if (!spansLines) {
+        let j = i - 1
+        while (j >= 0 && (source[j] === ' ' || source[j] === '\t')) j--
+        spansLines = source[j] === '='
+      }
+      i++
+      while (i < source.length && source[i] !== char && (spansLines || source[i] !== '\n')) {
+        if (source[i] === '\\') i++
+        i++
+      }
+      i++
+      continue
+    }
+
+    // Line comment: runs until the end of the line. A `//` right after a
+    // `:` is a URL in text (e.g. `https://example.com`), not a comment.
+    if (char === '/' && source[i + 1] === '/' && source[i - 1] !== ':') {
+      let start = i
+      while (i < source.length && source[i] !== '\n') i++
+      ranges.push(start, i)
+      continue
+    }
+
+    // Block comment: runs until the closing `*/`
+    if (char === '/' && source[i + 1] === '*') {
+      let start = i
+      i += 2
+      while (i < source.length && !(source[i] === '*' && source[i + 1] === '/')) i++
+      i += 2
+      ranges.push(start, Math.min(i, source.length))
+      continue
+    }
+
+    // Skip regular expression literals (block comments are handled
+    // above, and `</` followed by a tag name is a JSX closing tag, not a
+    // regex; a component name may also start with `_` or `$`). The
+    // escaped slash and the closing slash in `/\\//` are not a comment
+    // start. A `/` only opens
+    // a regex in expression position; after an operand (identifier,
+    // number, `)`, `]`, a string) it is division instead. Keywords such
+    // as `return` still take a regex after them.
+    if (char === '/') {
+      let j = i - 1
+      while (j >= 0 && (source[j] === ' ' || source[j] === '\t')) j--
+      let prev = source[j] ?? ''
+      let isClosingTag = source[i - 1] === '<' && /[A-Za-z_$>]/.test(source[i + 1] ?? '')
+      let isRegex = !isClosingTag && !/[A-Za-z0-9_$)\]}'"`]/.test(prev)
+      if (!isRegex && /[A-Za-z_$]/.test(prev)) {
+        let k = j
+        while (k >= 0 && /[A-Za-z0-9_$]/.test(source[k])) k--
+        let word = source.slice(k + 1, j + 1)
+        isRegex = [
+          'return',
+          'typeof',
+          'case',
+          'in',
+          'of',
+          'new',
+          'delete',
+          'void',
+          'instanceof',
+          'yield',
+          'await',
+        ].includes(word)
+      }
+      if (isRegex) {
+        i++
+        let inClass = false
+        while (i < source.length && source[i] !== '\n') {
+          if (source[i] === '\\') {
+            i += 2
+            continue
+          }
+          if (source[i] === '[') inClass = true
+          else if (source[i] === ']') inClass = false
+          else if (source[i] === '/' && !inClass) {
+            i++
+            break
+          }
+          i++
+        }
+        continue
+      }
+    }
+
+    i++
+  }
+
+  return ranges
+})
 
 // Assumptions:
 // - All `<style` tags appear before the next `</style>` tag
