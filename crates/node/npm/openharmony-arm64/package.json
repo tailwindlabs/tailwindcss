@@ -1,0 +1,27 @@
+{
+  "name": "@tailwindcss/oxide-openharmony-arm64",
+  "version": "4.3.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/openharmony-arm64"
+  },
+  "os": [
+    "openharmony"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "tailwindcss-oxide.openharmony-arm64.node",
+  "files": [
+    "tailwindcss-oxide.openharmony-arm64.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 20"
+  }
+}
