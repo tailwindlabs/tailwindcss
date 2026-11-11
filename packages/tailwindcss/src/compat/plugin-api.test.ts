@@ -1438,6 +1438,68 @@ describe('theme', async () => {
       "
     `)
   })
+
+  test('theme keys containing a `/` are not treated as an opacity modifier', async () => {
+    expect(
+      await run(
+        ['css-width', 'js-width', 'default-inset', 'color'],
+        css`
+          @tailwind utilities;
+          @plugin "my-plugin";
+
+          @theme {
+            --width-1\/2: 60%;
+            --color-red-500: #ef4444;
+          }
+        `,
+        {
+          loadModule: async (_id, base) => {
+            return {
+              path: '',
+              base,
+              module: plugin(
+                function ({ addUtilities, theme }) {
+                  addUtilities({
+                    '.css-width': { width: theme('width.1/2') },
+                    '.js-width': { width: theme('width.1/3') },
+                    '.default-inset': { inset: theme('inset.1/4') },
+                    '.color': { color: theme('colors.red.500/50%') },
+                  })
+                },
+                {
+                  theme: {
+                    extend: {
+                      width: {
+                        '1/3': '40%',
+                      },
+                    },
+                  },
+                },
+              ),
+            }
+          },
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .default-inset {
+        inset: 25%;
+      }
+
+      .css-width {
+        width: 60%;
+      }
+
+      .js-width {
+        width: 40%;
+      }
+
+      .color {
+        color: oklab(63.6834% .187 .088 / .5);
+      }
+      "
+    `)
+  })
 })
 
 describe('addBase', () => {
