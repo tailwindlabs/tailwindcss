@@ -18,3 +18,9 @@ export const dimensions = new DefaultMap((input) => {
 
   return [valueAsNumber, unit] as const
 })
+
+//the number part of a dimension, as it's writen
+// 0.25rem -> 0.25
+export function numberPart(input: string, unit: string | null) {
+  return unit === null ? input : input.slice(0, -unit.length)
+}
