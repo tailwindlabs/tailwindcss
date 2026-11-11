@@ -140,11 +140,13 @@ export class Utilities {
   }
 
   suggest(name: string, groups: () => SuggestionGroup[]) {
-    let existingGroups = this.completions.get(name)
-    if (existingGroups) {
-      this.completions.set(name, () => [...existingGroups?.(), ...groups?.()])
-    } else {
-      this.completions.set(name, groups)
+    if (process.env.TAILWIND_INTELLISENSE !== 'false') {
+      let existingGroups = this.completions.get(name)
+      if (existingGroups) {
+        this.completions.set(name, () => [...existingGroups?.(), ...groups?.()])
+      } else {
+        this.completions.set(name, groups)
+      }
     }
   }
 
@@ -299,79 +301,85 @@ function resolveThemeColor<T extends ThemeKey>(
  */
 const LEGACY_NUMERIC_KEY = /(\d+)_(\d+)/g
 
+const SUGGESTED_FRACTIONS = [
+  '1/2',
+  '1/3',
+  '2/3',
+  '1/4',
+  '2/4',
+  '3/4',
+  '1/5',
+  '2/5',
+  '3/5',
+  '4/5',
+  '1/6',
+  '2/6',
+  '3/6',
+  '4/6',
+  '5/6',
+  '1/12',
+  '2/12',
+  '3/12',
+  '4/12',
+  '5/12',
+  '6/12',
+  '7/12',
+  '8/12',
+  '9/12',
+  '10/12',
+  '11/12',
+]
+
+function resolveSuggestions(theme: Theme, defns: SuggestionDefinition[]) {
+  function* resolve(themeKeys: ThemeKey[]) {
+    for (let value of theme.keysInNamespaces(themeKeys)) {
+      yield value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
+        return `${a}.${b}`
+      })
+    }
+  }
+
+  let groups: SuggestionGroup[] = []
+
+  for (let defn of defns) {
+    if (typeof defn === 'string') {
+      groups.push({ values: [defn], modifiers: [] })
+      continue
+    }
+
+    let values: (string | null)[] = [...(defn.values ?? []), ...resolve(defn.valueThemeKeys ?? [])]
+
+    let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
+
+    if (defn.supportsFractions) {
+      values.push(...SUGGESTED_FRACTIONS)
+    }
+
+    if (defn.hasDefaultValue) {
+      values.unshift(null)
+    }
+
+    groups.push({ supportsNegative: defn.supportsNegative, values, modifiers })
+  }
+
+  return groups
+}
+
 export function createUtilities(theme: Theme) {
   let utilities = new Utilities()
 
   /**
    * Register list of suggestions for a class
+   *
+   * Suggestions are only used by IntelliSense. In a build without IntelliSense
+   * this function is empty, which lets the minifier remove every call to it
+   * together with the suggestions that are passed in. For that to work there
+   * must be nothing outside of the `if`, and no declarations inside of it.
    */
   function suggest(classRoot: string, defns: () => SuggestionDefinition[]) {
-    function* resolve(themeKeys: ThemeKey[]) {
-      for (let value of theme.keysInNamespaces(themeKeys)) {
-        yield value.replace(LEGACY_NUMERIC_KEY, (_, a, b) => {
-          return `${a}.${b}`
-        })
-      }
+    if (process.env.TAILWIND_INTELLISENSE !== 'false') {
+      utilities.suggest(classRoot, () => resolveSuggestions(theme, defns()))
     }
-
-    let suggestedFractions = [
-      '1/2',
-      '1/3',
-      '2/3',
-      '1/4',
-      '2/4',
-      '3/4',
-      '1/5',
-      '2/5',
-      '3/5',
-      '4/5',
-      '1/6',
-      '2/6',
-      '3/6',
-      '4/6',
-      '5/6',
-      '1/12',
-      '2/12',
-      '3/12',
-      '4/12',
-      '5/12',
-      '6/12',
-      '7/12',
-      '8/12',
-      '9/12',
-      '10/12',
-      '11/12',
-    ]
-
-    utilities.suggest(classRoot, () => {
-      let groups: SuggestionGroup[] = []
-
-      for (let defn of defns()) {
-        if (typeof defn === 'string') {
-          groups.push({ values: [defn], modifiers: [] })
-          continue
-        }
-
-        let values: (string | null)[] = [
-          ...(defn.values ?? []),
-          ...resolve(defn.valueThemeKeys ?? []),
-        ]
-
-        let modifiers = [...(defn.modifiers ?? []), ...resolve(defn.modifierThemeKeys ?? [])]
-
-        if (defn.supportsFractions) {
-          values.push(...suggestedFractions)
-        }
-
-        if (defn.hasDefaultValue) {
-          values.unshift(null)
-        }
-
-        groups.push({ supportsNegative: defn.supportsNegative, values, modifiers })
-      }
-
-      return groups
-    })
   }
 
   /**

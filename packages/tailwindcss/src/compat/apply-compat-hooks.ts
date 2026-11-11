@@ -3,8 +3,9 @@ import { cssContext, styleRule, toCss, type AstNode } from '../ast'
 import type { DesignSystem } from '../design-system'
 import type { SourceLocation } from '../source-maps/source'
 import { segment } from '../utils/segment'
+import { toKeyPath } from '../utils/to-key-path'
 import { walk, WalkAction } from '../walk'
-import { applyConfigToTheme } from './apply-config-to-theme'
+import { applyConfigToTheme, keyPathToCssProperty } from './apply-config-to-theme'
 import { applyKeyframesToTheme } from './apply-keyframes-to-theme'
 import { createCompatConfig } from './config/create-compat-config'
 import { resolveConfig } from './config/resolve-config'
@@ -160,36 +161,69 @@ export async function applyCompatibilityHooks({
       return resolveThemeVariableValue(path, forceInline)
     }
 
-    // If the theme value is not found in the simple resolver, we upgrade to the full backward
-    // compatibility support implementation of the `resolveThemeValue` function.
-    features |= upgradeToFullPluginSupport({
-      designSystem,
-      base,
-      ast,
-      sources,
-      configs: [],
-      pluginDetails: [],
-    })
-    return designSystem.resolveThemeValue(path, forceInline)
+    if (process.env.TAILWIND_JS_PLUGINS !== 'false') {
+      // If the theme value is not found in the simple resolver, we upgrade to the full backward
+      // compatibility support implementation of the `resolveThemeValue` function.
+      features |= upgradeToFullPluginSupport({
+        designSystem,
+        base,
+        ast,
+        sources,
+        configs: [],
+        pluginDetails: [],
+      })
+      return designSystem.resolveThemeValue(path, forceInline)
+    }
+
+    // Without JS plugin support there is no JS theme to resolve the path
+    // against, but paths that map to a theme variable still work, e.g.
+    // `colors.red.500` resolves to the value of `--color-red-500`.
+    let variable = legacyPathToThemeVariable(path)
+    return variable ? resolveThemeVariableValue(variable, forceInline) : undefined
   }
 
   // If there are no plugins or configs registered, we don't need to register
   // any additional backwards compatibility hooks.
   if (!pluginPaths.length && !configPaths.length) return Features.None
 
-  // Keep loader callbacks out of the scope retained by the theme resolver.
-  let [configs, pluginDetails] = await loadConfigsAndPlugins(loadModule, configPaths, pluginPaths)
+  // Everything that plugins and configs need lives behind this check, so that a
+  // build without JS plugin support doesn't have to include any of it.
+  if (process.env.TAILWIND_JS_PLUGINS !== 'false') {
+    // Keep loader callbacks out of the scope retained by the theme resolver.
+    let [configs, pluginDetails] = await loadConfigsAndPlugins(loadModule, configPaths, pluginPaths)
 
-  features |= upgradeToFullPluginSupport({
-    designSystem,
-    base,
-    ast,
-    sources,
-    configs,
-    pluginDetails,
-  })
+    features |= upgradeToFullPluginSupport({
+      designSystem,
+      base,
+      ast,
+      sources,
+      configs,
+      pluginDetails,
+    })
 
-  return features
+    return features
+  }
+
+  throw new Error('This build of Tailwind CSS does not support `@plugin` or `@config`.')
+}
+
+/**
+ * Convert a legacy `theme()` path to the theme variable it maps to, keeping
+ * the opacity modifier if there is one:
+ *
+ * - `colors.red.500` → `--color-red-500`
+ * - `colors.red.500 / 50%` → `--color-red-500 / 50%`
+ */
+function legacyPathToThemeVariable(path: string) {
+  let modifier = ''
+  let lastSlash = path.lastIndexOf('/')
+  if (lastSlash !== -1) {
+    modifier = ` ${path.slice(lastSlash)}`
+    path = path.slice(0, lastSlash).trim()
+  }
+
+  let property = keyPathToCssProperty(toKeyPath(path))
+  return property ? `--${property}${modifier}` : null
 }
 
 function loadConfigsAndPlugins(
