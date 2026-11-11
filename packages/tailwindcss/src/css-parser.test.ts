@@ -261,6 +261,39 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         ])
       })
 
+      it('should treat `/*` inside of a function after the whitespace that ends a hex escape as a comment', () => {
+        // The whitespace is part of the hex escape `\31 `, so the ident is
+        // `1url` and not `url`.
+        expect(parse('.a{x:\\31 url(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\31 url(ab)')])
+        expect(parse('.a{x:\\31\turl(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\31\turl(ab)')])
+        expect(parse('.a{x:\\000031\furl(a/* ) */b)}')).toEqual([
+          rule('.a', 'x', '\\000031\furl(ab)'),
+        ])
+        expect(parse('.a{--x:\\31\nurl(a/* ; */b);color:red}')).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: '--x',
+                value: `\\31${lineEndings === 'Windows' ? '\r\n' : '\n'}url(a/* ; */b)`,
+                important: false,
+              },
+              { kind: 'declaration', property: 'color', value: 'red', important: false },
+            ],
+          },
+        ])
+
+        // An escaped `\` does not start a hex escape, so the whitespace ends
+        // the ident.
+        expect(parse('.a{x:\\\\31 url(a/*b)}')).toEqual([rule('.a', 'x', '\\\\31 url(a/*b)')])
+
+        // A hex escape has at most 6 hex digits, so the whitespace ends the
+        // ident.
+        expect(parse('.a{x:\\0000031 url(a/*b)}')).toEqual([rule('.a', 'x', '\\0000031 url(a/*b)')])
+      })
+
       it('should handle whitespace before the quote of a quoted `url(…)`', () => {
         expect(parse('.a{background-image:url(\f"a)b")}')).toEqual([
           rule('.a', 'background-image', 'url(\f"a)b")'),

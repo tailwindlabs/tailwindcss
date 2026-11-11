@@ -23,6 +23,7 @@ const LINE_BREAK = 0x0a
 const CARRIAGE_RETURN = 0xd
 const SPACE = 0x20
 const TAB = 0x09
+const FORM_FEED = 0x0c
 const OPEN_CURLY = 0x7b
 const CLOSE_CURLY = 0x7d
 const OPEN_PAREN = 0x28
@@ -40,7 +41,9 @@ const ZERO = 0x30
 const NINE = 0x39
 const UPPER_A = 0x41
 const UPPER_Z = 0x5a
+const UPPER_F = 0x46
 const LOWER_A = 0x61
+const LOWER_F = 0x66
 const LOWER_Z = 0x7a
 const LOWER_L = 0x6c
 const LOWER_R = 0x72
@@ -845,7 +848,8 @@ function findUnquotedUrlEnd(input: string, idx: number): number {
     prevChar === BACKSLASH ||
     prevChar === HASH ||
     prevChar === AT_SIGN ||
-    isEscaped(input, idx - 4)
+    isEscaped(input, idx - 4) ||
+    endsHexEscape(input, idx - 4)
   ) {
     return -1
   }
@@ -868,6 +872,34 @@ function findUnquotedUrlEnd(input: string, idx: number): number {
   }
 
   return -1
+}
+
+// Whether the whitespace at `idx` ends a hex escape, e.g. the space in `\31 `.
+// That whitespace is part of the escape, so the ident goes on after it.
+//
+// See: https://www.w3.org/TR/css-syntax-3/#consume-escaped-code-point
+function endsHexEscape(input: string, idx: number): boolean {
+  let char = input.charCodeAt(idx)
+  if (char === LINE_BREAK) {
+    // A `\r\n` is a single whitespace.
+    if (input.charCodeAt(idx - 1) === CARRIAGE_RETURN) idx -= 1
+  } else if (char !== SPACE && char !== TAB && char !== FORM_FEED && char !== CARRIAGE_RETURN) {
+    return false
+  }
+
+  // A hex escape is a `\` that is not escaped, followed by 1 to 6 hex digits.
+  for (let i = idx - 1; i >= 0 && i >= idx - 7; i--) {
+    char = input.charCodeAt(i)
+    if (char === BACKSLASH) return i < idx - 1 && !isEscaped(input, i)
+
+    let isHexDigit =
+      (char >= ZERO && char <= NINE) ||
+      (char >= LOWER_A && char <= LOWER_F) ||
+      (char >= UPPER_A && char <= UPPER_F)
+    if (!isHexDigit) return false
+  }
+
+  return false
 }
 
 function parseString(
