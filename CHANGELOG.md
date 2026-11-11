@@ -94,6 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't treat `!important` inside strings, comments or `url()` in declaration values as the important flag (e.g. `content: "a !important b"`) ([#20627](https://github.com/tailwindlabs/tailwindcss/pull/20627))
 - Parse a custom property at the end of the input when it has no trailing `;` (e.g. `--foo: bar` as the last declaration) ([#20653](https://github.com/tailwindlabs/tailwindcss/pull/20653))
 - Keep a declaration without a `;` at the end of the CSS input (e.g. `color: red`) ([#20655](https://github.com/tailwindlabs/tailwindcss/pull/20655))
+- Only load Lightning CSS when `optimize(…)` is called, so `optimize: false` works on platforms without a native Lightning CSS binding (e.g. OpenHarmony) ([#20628](https://github.com/tailwindlabs/tailwindcss/issues/20628))
 
 ## [4.3.3] - 2026-07-16
 
