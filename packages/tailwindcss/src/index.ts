@@ -719,7 +719,7 @@ export async function compileAst(
   sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
-  build(candidates: string[]): AstNode[]
+  build(candidates: readonly string[]): AstNode[]
 }> {
   let { designSystem, ast, sources, root, utilitiesNode, features, inlineCandidates } =
     await parseCss(input, opts)
@@ -770,7 +770,7 @@ export async function compileAst(
     sources,
     root,
     features,
-    build(newRawCandidates: string[]) {
+    build(newRawCandidates: readonly string[]) {
       if (features === Features.None) {
         return input
       }
@@ -865,7 +865,7 @@ export async function compile(
   sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
-  build(candidates: string[]): string
+  build(candidates: readonly string[]): string
   buildSourceMap(): DecodedSourceMap
 }> {
   let ast = CSS.parse(css, { from: opts.from })
