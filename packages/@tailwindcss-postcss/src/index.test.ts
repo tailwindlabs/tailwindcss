@@ -320,6 +320,68 @@ test('keyframes from JavaScript configs retain their PostCSS source', async ({
   ])
 })
 
+test('merged keyframe declarations retain their individual source files', async ({
+  onTestFinished,
+}) => {
+  let dir = await realpath(await mkdtemp(path.join(tmpdir(), 'tw-postcss')))
+  onTestFinished(() => rm(dir, { recursive: true, force: true }))
+  await mkdir(path.join(dir, 'nested'))
+
+  await writeFile(
+    path.join(dir, 'base.cjs'),
+    `module.exports = {
+    theme: {
+      animation: { fade: 'fade 1s' },
+      keyframes: {
+        fade: { from: { backgroundImage: 'url(./image.svg)', opacity: '0', display: ['block', 'flex'] } },
+      },
+    },
+  }`,
+  )
+  await writeFile(
+    path.join(dir, 'nested/extension.cjs'),
+    `module.exports = {
+    theme: {
+      extend: {
+        keyframes: () => ({
+          fade: { from: { opacity: '1' }, to: { backgroundImage: 'url(./other.svg)' } },
+        }),
+      },
+    },
+  }`,
+  )
+  await writeFile(path.join(dir, 'nested/extra.css'), '@config "./extension.cjs";')
+
+  let from = path.join(dir, 'input.css')
+  let extension = path.join(dir, 'nested/extra.css')
+  let result = await postcss([tailwindcss({ base: dir, optimize: false })]).process(
+    css`
+      @import './nested/extra.css';
+      @config './base.cjs';
+      @theme {
+        --color-example: red;
+      }
+      @tailwind utilities source(none);
+      @source inline('animate-fade');
+    `,
+    { from },
+  )
+
+  let declarations: [string, string, string | undefined][] = []
+  result.root.walkAtRules('keyframes', (rule) => {
+    rule.walkDecls((decl) => {
+      declarations.push([decl.prop, decl.value, decl.source?.input.file])
+    })
+  })
+  expect(declarations).toEqual([
+    ['background-image', 'url(./image.svg)', from],
+    ['opacity', '1', extension],
+    ['display', 'block', from],
+    ['display', 'flex', from],
+    ['background-image', 'url(./other.svg)', extension],
+  ])
+})
+
 test('bail early when Tailwind is not used', async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),

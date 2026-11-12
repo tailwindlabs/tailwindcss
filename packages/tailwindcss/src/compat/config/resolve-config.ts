@@ -1,7 +1,7 @@
 import type { DesignSystem } from '../../design-system'
 import type { SourceLocation } from '../../source-maps/source'
 import colors from '../colors'
-import type { PluginWithConfig } from '../plugin-api'
+import type { CssInJsSources, PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
@@ -50,7 +50,7 @@ export function resolveConfig(
 ): {
   resolvedConfig: ResolvedConfig
   replacedThemeKeys: Set<string>
-  keyframeSources: Map<string, SourceLocation | undefined>
+  keyframeSources: CssInJsSources
 } {
   let ctx: ResolutionContext = {
     design,
@@ -202,7 +202,7 @@ function extractConfigs(
 
 function mergeTheme(ctx: ResolutionContext) {
   let replacedThemeKeys: Set<string> = new Set()
-  let keyframeSources = new Map<string, SourceLocation | undefined>()
+  let keyframeSources: CssInJsSources = new WeakMap()
   let baseKeyframesSource: SourceLocation | undefined
 
   let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
@@ -219,10 +219,31 @@ function mergeTheme(ctx: ResolutionContext) {
     return value ?? null
   }
 
-  function recordKeyframeSources(keyframes: ResolvedThemeValue, src: SourceLocation | undefined) {
-    for (let name of Object.keys(keyframes ?? {})) {
-      keyframeSources.set(name, src)
+  // Configs can share objects, so clone before associating them with a source.
+  function recordKeyframeSources(value: any, src: SourceLocation | undefined): any {
+    if (Array.isArray(value)) {
+      return value.map((item) => recordKeyframeSources(item, src))
     }
+    if (!isPlainObject(value)) return value
+
+    let copy = Object.fromEntries(
+      Object.entries(value).map(([key, value]) => [key, recordKeyframeSources(value, src)]),
+    )
+    keyframeSources.set(copy, new Map(Object.keys(copy).map((key) => [key, src])))
+    return copy
+  }
+
+  function mergeKeyframes(a: any, b: any): any {
+    let merged = mergeThemeExtension(a, b)
+    if (merged !== undefined) return merged
+    if (!isPlainObject(a) || !isPlainObject(b)) return b
+
+    let result = deepMerge({}, [a, b], mergeKeyframes)
+    keyframeSources.set(
+      result,
+      new Map([...(keyframeSources.get(a) ?? []), ...(keyframeSources.get(b) ?? [])]),
+    )
+    return result
   }
 
   for (let { config, src } of ctx.configs) {
@@ -262,13 +283,12 @@ function mergeTheme(ctx: ResolutionContext) {
     ]
 
     ctx.theme[key] = () => {
-      let v = values.map(({ value }) => resolveValue(value))
+      let v = values.map(({ value, src }) => {
+        let resolved = resolveValue(value)
+        return key === 'keyframes' ? recordKeyframeSources(resolved, src) : resolved
+      })
       if (key === 'keyframes') {
-        // Attribute each rule to the last config that contributed to it.
-        keyframeSources.clear()
-        for (let i = 0; i < v.length; i++) {
-          recordKeyframeSources(v[i], values[i].src)
-        }
+        return v.reduce((a, b) => mergeKeyframes(a, b ?? {}), {})
       }
 
       let result = deepMerge({}, v, mergeThemeExtension)
@@ -280,7 +300,7 @@ function mergeTheme(ctx: ResolutionContext) {
     let value = resolveValue(ctx.theme[key])
     ctx.theme[key] = value
     if (key === 'keyframes' && !ctx.extend.keyframes) {
-      recordKeyframeSources(value, baseKeyframesSource)
+      ctx.theme[key] = recordKeyframeSources(value, baseKeyframesSource)
     }
   }
 
