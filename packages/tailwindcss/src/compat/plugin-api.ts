@@ -562,14 +562,20 @@ export function buildPluginApi({
 
 export type CssInJs = { [key: string]: string | string[] | CssInJs | CssInJs[] }
 
-export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
+export type CssInJsSources = WeakMap<object, Map<string, SourceLocation | undefined>>
+
+export function objectToAst(rules: CssInJs | CssInJs[], sources?: CssInJsSources): AstNode[] {
   let ast: AstNode[] = []
 
   rules = Array.isArray(rules) ? rules : [rules]
 
-  let entries = rules.flatMap((rule) => Object.entries(rule))
+  let entries = rules.flatMap((rule) =>
+    Object.entries(rule).map(
+      ([name, value]) => [name, value, sources?.get(rule)?.get(name)] as const,
+    ),
+  )
 
-  for (let [name, value] of entries) {
+  for (let [name, value, src] of entries) {
     if (value === null || value === undefined) continue
 
     // @ts-expect-error
@@ -580,7 +586,7 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
     if (typeof value !== 'object') {
       if (!name.startsWith('--')) {
         if (value === '@slot') {
-          ast.push(rule(name, [atRule('@slot')]))
+          ast.push({ ...rule(name, [atRule('@slot')]), src })
           continue
         }
 
@@ -589,17 +595,17 @@ export function objectToAst(rules: CssInJs | CssInJs[]): AstNode[] {
         name = name.replace(/([A-Z])/g, '-$1').toLowerCase()
       }
 
-      ast.push(decl(name, String(value)))
+      ast.push({ ...decl(name, String(value)), src })
     } else if (Array.isArray(value)) {
       for (let item of value) {
         if (typeof item === 'string') {
-          ast.push(decl(name, item))
+          ast.push({ ...decl(name, item), src })
         } else {
-          ast.push(rule(name, objectToAst(item)))
+          ast.push({ ...rule(name, objectToAst(item, sources)), src })
         }
       }
     } else {
-      ast.push(rule(name, objectToAst(value)))
+      ast.push({ ...rule(name, objectToAst(value, sources)), src })
     }
   }
 
