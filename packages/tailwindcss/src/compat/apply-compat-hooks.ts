@@ -284,10 +284,11 @@ function upgradeToFullPluginSupport({
     ...userConfig,
     { config: { plugins: [darkModePlugin] }, base, reference: true, src: undefined },
   ])
-  let { resolvedConfig: resolvedUserConfig, replacedThemeKeys } = resolveConfig(
-    designSystem,
-    userConfig,
-  )
+  let {
+    resolvedConfig: resolvedUserConfig,
+    replacedThemeKeys,
+    keyframeSources,
+  } = resolveConfig(designSystem, userConfig)
 
   let pluginApiConfig = {
     designSystem,
@@ -368,7 +369,7 @@ function upgradeToFullPluginSupport({
   // config would otherwise expand into namespaces like `background-color` which
   // core utilities already read from.
   applyConfigToTheme(designSystem, resolvedUserConfig, replacedThemeKeys)
-  applyKeyframesToTheme(designSystem, resolvedUserConfig)
+  applyKeyframesToTheme(designSystem, resolvedUserConfig, keyframeSources)
 
   registerThemeVariantOverrides(resolvedUserConfig, designSystem)
   registerScreensConfig(resolvedUserConfig, designSystem)
