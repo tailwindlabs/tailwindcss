@@ -266,6 +266,60 @@ describe('plugins', () => {
   })
 })
 
+test('keyframes from JavaScript configs retain their PostCSS source', async ({
+  onTestFinished,
+}) => {
+  let dir = await realpath(await mkdtemp(path.join(tmpdir(), 'tw-postcss')))
+  onTestFinished(() => rm(dir, { recursive: true, force: true }))
+
+  await writeFile(
+    path.join(dir, 'base.cjs'),
+    `module.exports = {
+      theme: {
+        animation: { 'fade-in': 'fade-in 1s' },
+        keyframes: { 'fade-in': { from: { opacity: '0' } } },
+      },
+    }`,
+  )
+  await writeFile(
+    path.join(dir, 'extension.cjs'),
+    `module.exports = {
+      theme: {
+        extend: {
+          animation: { 'fade-out': 'fade-out 1s' },
+          keyframes: () => ({ 'fade-out': { to: { opacity: '0' } } }),
+        },
+      },
+    }`,
+  )
+
+  let from = path.join(dir, 'input.css')
+  let result = await postcss([tailwindcss({ base: dir, optimize: false })]).process(
+    css`
+      @config './base.cjs';
+      @config './extension.cjs';
+      @theme {
+        --color-example: red;
+      }
+      @tailwind utilities source(none);
+      @source inline('animate-fade-in animate-fade-out');
+    `,
+    { from },
+  )
+
+  let sources: [string, string | undefined, number | undefined][] = []
+  result.root.walkAtRules('keyframes', (rule) => {
+    rule.walkDecls((decl) => {
+      sources.push([rule.params, decl.source?.input.file, decl.source?.start?.line])
+    })
+  })
+
+  expect(sources).toEqual([
+    ['fade-in', from, 1],
+    ['fade-out', from, 2],
+  ])
+})
+
 test('bail early when Tailwind is not used', async () => {
   let processor = postcss([
     tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
