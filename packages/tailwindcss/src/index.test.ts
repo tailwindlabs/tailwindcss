@@ -1,3 +1,4 @@
+import type { ScannerOptions, SourceEntry } from '@tailwindcss/oxide'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
@@ -7580,5 +7581,28 @@ describe('feature detection', () => {
 
     // And this produces no output because no other CSS is present
     expect(compiler.build([])).toEqual('')
+  })
+})
+
+describe('public types', () => {
+  test('`build()` accepts a readonly array of candidates', async () => {
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    let candidates: readonly string[] = ['flex', 'items-center']
+    let output = compiler.build(candidates)
+
+    expect(output).toContain('.flex')
+    expect(output).toContain('.items-center')
+  })
+
+  test('`ScannerOptions.sources` accepts a readonly array', () => {
+    let sources: readonly SourceEntry[] = [
+      { base: process.cwd(), pattern: '**/*.html', negated: false },
+    ]
+    let options: ScannerOptions = { sources }
+
+    expect(options.sources).toBe(sources)
   })
 })

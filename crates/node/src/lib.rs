@@ -89,6 +89,7 @@ impl From<SourceEntry> for tailwindcss_oxide::PublicSourceEntry {
 #[napi(object)]
 pub struct ScannerOptions {
   /// Glob sources
+  #[napi(ts_type = "ReadonlyArray<SourceEntry>")]
   pub sources: Option<Vec<SourceEntry>>,
 }
 
