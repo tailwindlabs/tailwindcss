@@ -26595,6 +26595,7 @@ test('text', async () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
+        'text-[abs(var(--size))]',
         'text-[--spacing(2)]',
         'text-[1cap]',
         'text-[1ic]',
@@ -26785,6 +26786,10 @@ test('text', async () => {
 
     .text-\\[50\\%\\] {
       font-size: 50%;
+    }
+
+    .text-\\[abs\\(var\\(--size\\)\\)\\] {
+      font-size: abs(var(--size));
     }
 
     .text-\\[absolute-size\\:var\\(--my-size\\)\\] {
