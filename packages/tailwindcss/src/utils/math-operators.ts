@@ -36,6 +36,8 @@ const MATH_FUNCTIONS = [
   'log',
   'exp',
   'round',
+  'abs',
+  'sign',
 ]
 
 export function hasMathFn(input: string) {

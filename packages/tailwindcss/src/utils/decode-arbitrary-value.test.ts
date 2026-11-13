@@ -152,6 +152,12 @@ describe('adds spaces around math operators', () => {
     ['round(1+2,1+3)', 'round(1 + 2, 1 + 3)'],
     ['round(to-zero,1+2,1+3)', 'round(to-zero, 1 + 2, 1 + 3)'],
 
+    // abs(…) and sign(…) functions
+    ['abs(20%-100px)', 'abs(20% - 100px)'],
+    ['sign(10px-20px)', 'sign(10px - 20px)'],
+    ['calc(abs(1rem-2rem)*2)', 'calc(abs(1rem - 2rem) * 2)'],
+    ['calc(1px*sign(var(--x)-50%))', 'calc(1px * sign(var(--x) - 50%))'],
+
     // Nested parens in non-math functions don't format their contents
     ['env((safe-area-inset-bottom))', 'env((safe-area-inset-bottom))'],
 
