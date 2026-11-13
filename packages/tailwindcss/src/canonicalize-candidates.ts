@@ -3402,8 +3402,15 @@ function createVariantSignatureCache(
 
         // Canonicalize selectors to their minimal form
         walk(ast, (node) => {
+          // Variants that generate `@scope` rules wrap them in `context` nodes,
+          // which `toCss` doesn't print. Unwrap them so the signature includes
+          // the `@scope` rule.
+          if (node.kind === 'context') {
+            return WalkAction.Replace(node.nodes)
+          }
+
           // At-rules
-          if (node.kind === 'at-rule') {
+          else if (node.kind === 'at-rule') {
             // Normalize dimensions such that equivalent values in different
             // units are considered the same. E.g.: with a root font size of
             // `16px`, `@media (width >= 64rem)` and `@media (width >= 1024px)`
