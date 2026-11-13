@@ -2099,6 +2099,29 @@ describe('regressions', () => {
     ])
     expect(compare).not.toHaveBeenCalled()
   })
+
+  test('does not treat different `@scope` variants as the same', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-blue {
+          @scope ([data-theme='blue']) to ([data-theme]) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.card)]:flex'])).toEqual([
+      '[@scope_(.card)]:flex',
+    ])
+    expect(
+      designSystem.canonicalizeCandidates([
+        "[@scope_([data-theme='blue'])_to_([data-theme])]:flex",
+      ]),
+    ).toEqual(['in-blue:flex'])
+  })
 })
 
 describe('normalizeEscapes', () => {
