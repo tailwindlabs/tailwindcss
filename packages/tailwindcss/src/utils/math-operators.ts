@@ -37,6 +37,8 @@ const MATH_FUNCTIONS = [
   'log',
   'exp',
   'round',
+  'abs',
+  'sign',
 ]
 
 const MATH_FUNCTIONS_SET = new Set(MATH_FUNCTIONS)
