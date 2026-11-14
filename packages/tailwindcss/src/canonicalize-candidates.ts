@@ -2017,7 +2017,7 @@ function arbitraryVariants(
   let variants = designSystem.storage[PRE_COMPUTED_VARIANTS_KEY].get(options.signatureOptions.rem)
 
   let iterator = walkVariants(variant)
-  for (let [variant] of iterator) {
+  for (let [variant, parent] of iterator) {
     if (variant.kind === 'compound') continue
 
     let targetString = designSystem.printVariant(variant)
@@ -2034,6 +2034,7 @@ function arbitraryVariants(
     let foundVariant = foundVariants[0]
     let parsedVariant = designSystem.parseVariant(foundVariant)
     if (parsedVariant === null) continue
+    if (parent && !designSystem.variants.compoundsWith(parent.root, parsedVariant)) continue
 
     replaceObject(variant, parsedVariant)
   }
