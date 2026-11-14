@@ -5863,7 +5863,6 @@ exports[`getClassList 1`] = `
   "items-start",
   "items-stretch",
   "justify-around",
-  "justify-baseline",
   "justify-between",
   "justify-center",
   "justify-center-safe",
