@@ -1085,6 +1085,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       ['[&_[data-visible]]:flex', '**:data-visible:flex'],
       ['[&_*]:flex', '**:flex'],
+      ['not-[&>*]:flex', 'not-[&>*]:flex'],
+      ['not-[&_*]:flex', 'not-[&_*]:flex'],
 
       ['[&:first-child]:flex', 'first:flex'],
       ['[&:not(:first-child)]:flex', 'not-first:flex'],
