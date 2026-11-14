@@ -1149,7 +1149,12 @@ const printArbitraryValueCache = new DefaultMap<string, string>((input) => {
     }
 
     // Leading and trailing whitespace
-    else if (node.kind === 'separator' && node.value.length > 0 && node.value.trim() === '') {
+    else if (
+      node.kind === 'separator' &&
+      node.value.length > 0 &&
+      node.value.trim() === '' &&
+      ctx.siblings.length > 1
+    ) {
       if (ctx.siblings[0] === node || ctx.siblings[ctx.siblings.length - 1] === node) {
         drop.add(node)
       }
