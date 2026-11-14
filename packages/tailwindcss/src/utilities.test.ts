@@ -14228,6 +14228,8 @@ test('bg', async () => {
       '-bg-current/[0.5]',
       '-bg-current/[50%]',
       '-bg-inherit',
+      'bg-inherit/50',
+      'bg-inherit/[0.5]',
       '-bg-transparent',
       '-bg-[#0088cc]',
       '-bg-[#0088cc]/50',
