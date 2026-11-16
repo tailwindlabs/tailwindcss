@@ -270,6 +270,8 @@ function resolveThemeColor<T extends ThemeKey>(
 
   switch (candidate.value!.value) {
     case 'inherit': {
+      // `inherit` can't go inside `color-mix()`, so it can't take an opacity
+      // modifier.
       if (candidate.modifier) return null
       value = 'inherit'
       break
@@ -4745,11 +4747,6 @@ export function createUtilities(theme: Theme) {
 
       // Shadow color
       {
-        // `inherit` can't go inside `color-mix()`, same as `shadow-inherit`.
-        // `resolveThemeColor` has already applied the modifier by now, so the
-        // `value === 'inherit'` check below would never see it.
-        if (candidate.value.value === 'inherit' && candidate.modifier) return
-
         let value = resolveThemeColor(candidate, theme, ['--drop-shadow-color', '--color'])
         if (value) {
           if (value === 'inherit') {
