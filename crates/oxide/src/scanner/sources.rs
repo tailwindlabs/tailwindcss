@@ -315,16 +315,21 @@ fn is_ignored_by_gitignore(
     // Everything inside `base` except `.gitignore`, `app` and `public` is ignored, but `base`
     // itself is not.
     let mut dirs = vec![];
-    for dir in base.ancestors().skip(1) {
-        gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
-            let path = dir.join(".gitignore");
+    for dir in base.ancestors() {
+        if dir != base {
+            gitignores.entry(dir.to_path_buf()).or_insert_with(|| {
+                let path = dir.join(".gitignore");
 
-            // `Gitignore::new` roots the matcher at the directory containing the file, so
-            // patterns match relative to it.
-            path.is_file().then(|| Gitignore::new(&path).0)
-        });
-        dirs.push(dir);
+                // `Gitignore::new` roots the matcher at the directory containing the file, so
+                // patterns match relative to it.
+                path.is_file().then(|| Gitignore::new(&path).0)
+            });
+            dirs.push(dir);
+        }
 
+        // Check the boundaries for `base` itself too: when `base` is the repository root, or
+        // contains the current working directory, no `.gitignore` of its ancestors applies.
+        //
         // Stop at the git repository root.
         if dir.join(".git").exists() {
             break;
@@ -964,6 +969,47 @@ mod tests {
         let base = dunce::canonicalize(&base).unwrap();
 
         assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
+
+    #[test]
+    fn repository_roots_ignored_by_an_outer_gitignore_stay_auto_sources() {
+        let dir = tempdir().unwrap();
+        // An outer repository that ignores everything, like a dotfiles repository in the home
+        // folder with a `*` in its `.gitignore`.
+        fs::create_dir_all(dir.path().join(".git")).unwrap();
+        fs::write(dir.path().join(".gitignore"), "*\n").unwrap();
+
+        // The project is a repository of its own, so the outer `.gitignore` doesn't apply to it.
+        let base = dir.path().join("code").join("project");
+        fs::create_dir_all(base.join(".git")).unwrap();
+        let base = dunce::canonicalize(&base).unwrap();
+
+        assert_eq!(auto_source_entry(&base), SourceEntry::Auto { base });
+    }
+
+    #[test]
+    fn the_working_directory_is_not_ignored_by_a_gitignore_above_it_outside_of_a_repo() {
+        let dir = tempdir().unwrap();
+        // No git repository, but the home folder has a `.gitignore` that ignores everything.
+        fs::write(dir.path().join(".gitignore"), "*\n").unwrap();
+
+        let project = dir.path().join("project");
+        fs::create_dir_all(project.join("src")).unwrap();
+        let project = dunce::canonicalize(&project).unwrap();
+
+        // The project is the working directory, so `.gitignore` files above it don't apply to
+        // the project itself, nor to the folders in it.
+        let mut gitignores = FxHashMap::default();
+        assert!(!is_ignored_by_gitignore(
+            &project,
+            &mut gitignores,
+            Some(&project)
+        ));
+        assert!(!is_ignored_by_gitignore(
+            &project.join("src"),
+            &mut gitignores,
+            Some(&project)
+        ));
     }
 }
 
