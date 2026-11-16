@@ -102,8 +102,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         walk(node.nodes, (child) => {
           if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-          let candidates = segment(child.params.replace(/\s/g, ' '), ' ')
-          for (let candidate of candidates) {
+          for (let [candidate] of splitApplyParams(child.params)) {
             for (let candidateAstNode of designSystem.parseCandidate(candidate)) {
               switch (candidateAstNode.kind) {
                 case 'arbitrary':
@@ -161,24 +160,18 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
     walk(parent.nodes, (child) => {
       if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-      let parts = segment(child.params.replace(/\s/g, ' '), ' ')
       let candidateOffsets: Record<string, number> = {}
       let normalIdents: string[] = []
       let dashedIdents: string[] = []
 
-      let offset = 0
-      for (let part of parts) {
-        if (part !== '') {
-          if (part[0] === '-' && part[1] === '-') {
-            dashedIdents.push(part)
-          } else {
-            normalIdents.push(part)
-          }
-
-          candidateOffsets[part] = offset
+      for (let [part, offset] of splitApplyParams(child.params)) {
+        if (isDashedIdent(part)) {
+          dashedIdents.push(part)
+        } else {
+          normalIdents.push(part)
         }
 
-        offset += part.length + 1
+        candidateOffsets[part] = offset
       }
 
       if (dashedIdents.length) {
@@ -342,7 +335,7 @@ function* resolveApplyDependencies(
   node: Extract<AstNode, { kind: 'at-rule' }>,
   designSystem: DesignSystem,
 ) {
-  for (let candidate of segment(node.params.replace(/\s/g, ' '), ' ')) {
+  for (let [candidate] of splitApplyParams(node.params)) {
     for (let node of designSystem.parseCandidate(candidate)) {
       switch (node.kind) {
         case 'arbitrary':
@@ -360,4 +353,33 @@ function* resolveApplyDependencies(
       }
     }
   }
+}
+
+// Split the params of an `@apply` into its parts, each with its offset in the
+// params.
+//
+// The parts are split at each whitespace, like the classes in a template. Only
+// a CSS mixin keeps the whitespace in its arguments, like `--card(red, 2rem)`:
+// https://drafts.csswg.org/css-mixins-1/#apply-rule
+function* splitApplyParams(params: string): Generator<[part: string, offset: number]> {
+  let offset = 0
+
+  // Every whitespace character becomes one space, so the offsets stay the same.
+  for (let part of segment(params.replace(/\s/g, ' '), ' ')) {
+    if (isDashedIdent(part)) {
+      yield [part, offset]
+    } else {
+      let wordOffset = offset
+      for (let word of part.split(' ')) {
+        if (word !== '') yield [word, wordOffset]
+        wordOffset += word.length + 1
+      }
+    }
+
+    offset += part.length + 1
+  }
+}
+
+function isDashedIdent(part: string) {
+  return part[0] === '-' && part[1] === '-'
 }
