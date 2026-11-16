@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve rules with relative selectors (e.g. `> .item`) inside `@scope` when optimizing the CSS ([#20671](https://github.com/tailwindlabs/tailwindcss/pull/20671))
 - Don't treat `/*` inside an unquoted `url(…)` as the start of a comment in the CSS parser ([#20699](https://github.com/tailwindlabs/tailwindcss/pull/20699))
 - Optimize the CSS from `@tailwindcss/webpack` when webpack runs in production mode without `NODE_ENV=production` ([#20723](https://github.com/tailwindlabs/tailwindcss/pull/20723))
+- Detect classes in Ruby code that continues over multiple lines in Haml templates (e.g. `class: "w-[240px]"` on the next line of `= link_to "Home", root_path,`) ([#20635](https://github.com/tailwindlabs/tailwindcss/pull/20635))
+- Ensure `@tailwindcss/vite` rebuilds when a plugin that runs before it changes the input CSS without changing the input file on disk ([#20700](https://github.com/tailwindlabs/tailwindcss/pull/20700))
 
 ### Changed
 
