@@ -1149,6 +1149,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Media queries
       ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+      ['[@media_(pointer_:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
       ['[@media_print]:flex', 'print:flex'],
       ['[@media_not_print]:flex', 'not-print:flex'],

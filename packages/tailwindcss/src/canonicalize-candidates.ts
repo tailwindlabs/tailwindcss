@@ -3418,7 +3418,10 @@ function createVariantSignatureCache(
             node.params = constantFoldDeclaration(node.params, rem)
 
             if (node.params.includes(' ')) {
-              node.params = normalizeAtRuleParamsWhitespace(node.params)
+              node.params = normalizeAtRuleParamsWhitespace(
+                node.params,
+                node.name !== '@media' && node.name !== '@container',
+              )
             }
           }
 
@@ -3508,8 +3511,9 @@ function createVariantSignatureCache(
 // it can be a descendant combinator. E.g.: `@scope (.foo .bar)` and
 // `@scope (.foo.bar)` match different elements. The same goes for whitespace
 // before a `:` (`.foo :hover`), unless whitespace follows the `:` as well
-// (`(pointer : fine)`). Strings and escaped characters are kept as-is.
-function normalizeAtRuleParamsWhitespace(params: string) {
+// (`(pointer : fine)`), or the params can't contain selectors (`@media` and
+// `@container`). Strings and escaped characters are kept as-is.
+function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: boolean) {
   let result = ''
   let pendingSpace = false
   let quote = 0
@@ -3546,7 +3550,7 @@ function normalizeAtRuleParamsWhitespace(params: string) {
       if (
         (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
         !dropsWhitespaceBefore(char) &&
-        !(char === COLON && isWhitespace(params.charCodeAt(i + 1)))
+        !(char === COLON && (!canContainSelectors || isWhitespace(params.charCodeAt(i + 1))))
       ) {
         result += ' '
       }
