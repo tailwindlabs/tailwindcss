@@ -898,6 +898,8 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }
@@ -912,9 +914,32 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }
+      }
+      "
+    `)
+  })
+
+  it('should not treat CSS mixin arguments as utilities in `@utility`', async () => {
+    expect(
+      await run(
+        ['card'],
+        css`
+          @utility card {
+            @apply --card({ red, card }, 2rem);
+          }
+
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .card {
+        @apply --card({ red, card }, 2rem);
       }
       "
     `)
@@ -940,6 +965,39 @@ describe('@apply', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1\` into a separate rule.]`,
     )
+
+    await expect(
+      compile(css`
+        .foo {
+          @apply underline --my-mixin-1(red, 2rem);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1(red, 2rem)\` into a separate rule.]`,
+    )
+  })
+
+  it('should split utilities at each space, also inside brackets, parens and strings', async () => {
+    // Only the arguments of a CSS mixin can contain spaces. A class in a
+    // template can never contain a space, so `@apply` does not allow it either.
+    for (let [candidate, unknown] of [
+      ['bg-[rgb(1, 2, 3)]', 'bg-[rgb(1,'],
+      ['[margin:1px 2px]', '[margin:1px'],
+      ["content-['a b']", "content-['a"],
+    ]) {
+      await expect(
+        compile(css`
+          @theme {
+            --color-red: red;
+          }
+          @tailwind utilities;
+
+          .foo {
+            @apply ${candidate};
+          }
+        `),
+      ).rejects.toThrow(`Cannot apply unknown utility class \`${unknown}\``)
+    }
   })
 
   it('should error when used with a body', async () => {
