@@ -25770,22 +25770,22 @@ test('leading', async () => {
     }
     "
   `)
-})
 
-test('leading-none is not shadowed by --spacing-none', async () => {
+  // `--spacing-none` should not shadow the `leading-none` static value
   expect(
-    await compileCss(
+    await run(
+      ['leading-none'],
       css`
         @theme {
           --spacing-none: 0;
         }
         @tailwind utilities;
       `,
-      ['leading-none'],
     ),
   ).toMatchInlineSnapshot(`
-    "@layer properties {
-      @supports (((-webkit-hyphens: none)) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
         *, :before, :after, ::backdrop {
           --tw-leading: initial;
         }
@@ -25800,7 +25800,8 @@ test('leading-none is not shadowed by --spacing-none', async () => {
     @property --tw-leading {
       syntax: "*";
       inherits: false
-    }"
+    }
+    "
   `)
 })
 
