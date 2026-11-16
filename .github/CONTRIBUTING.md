@@ -100,8 +100,8 @@ Use the sections `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `###
 
 Pick the section from what a user has to know:
 
-- `### Added`: a new feature, like a utility, a variant, a directive, an option, a canonicalization rule or an integration.
-- `### Fixed`: a bug fix, also when it changes the generated CSS. A performance improvement goes here too.
+- `### Added`: a new feature, like a utility, a variant, a directive, an option or an integration.
+- `### Fixed`: a bug fix, also when it changes the generated CSS. A performance improvement goes here too, and so does a canonicalization improvement (e.g. `max-[64rem]:flex` → `max-lg:flex`).
 - `### Changed`: a change to behavior that worked as intended, and that users can rely on. Users may have to update their project, or they see a different result. For example:
   - The CSS of an existing utility, variant or Preflight (e.g. `m-0` generates `0` instead of `calc(var(--spacing) * 0)`), or the order in which utilities and variants are sorted.
   - A renamed or replaced utility, variant, theme variable or directive, also when the upgrade tool migrates it (e.g. `outline-none` → `outline-hidden`).
