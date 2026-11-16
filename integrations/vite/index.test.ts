@@ -1277,7 +1277,7 @@ describe.each([
           chunkFileNames: 'chunk.js',
           assetFileNames: 'style.css',
         },
-      },
+      }
     `,
   ],
   [
@@ -1290,7 +1290,7 @@ describe.each([
           chunkFileNames: 'chunk.js',
           assetFileNames: 'style.css',
         },
-      },
+      }
     `,
   ],
   [
@@ -1303,7 +1303,7 @@ describe.each([
           chunkFileNames: 'chunk.js',
           assetFileNames: 'style.css',
         },
-      },
+      }
     `,
   ],
   [
@@ -1324,7 +1324,7 @@ describe.each([
             assetFileNames: 'style.css',
           },
         ],
-      },
+      }
     `,
   ],
 ])('watch mode with %s', (_, outputOptions) => {
@@ -1353,7 +1353,7 @@ describe.each([
             build: {
               cssMinify: false,
               emptyOutDir: false,
-              ${outputOptions}
+              ${outputOptions},
             },
             plugins: [tailwindcss()],
           })
