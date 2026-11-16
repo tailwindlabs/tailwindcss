@@ -211,7 +211,6 @@ export function isSafeMigration(
 }
 
 const VARIANT_PROP = /variant\s*([:=])\s*/g
-const CALLEE = /[\w$.)\]]/
 
 // The candidate is the last thing on the line, so the `variant` value it sits in
 // is the one that has not ended yet. Each form ends somewhere different:
@@ -238,10 +237,10 @@ function isInsideVariantValue(line: string): boolean {
   return false
 }
 
+// Every string inside the value is part of it, also an argument of a call:
+// `variant={getVariant(active ? "outline" : "ghost")}` computes a variant name.
 function isOpenValue(line: string, start: number): boolean {
-  // Whether each open group is the argument list of a call, because an argument
-  // is passed to that call and is not the value itself
-  let groups: boolean[] = []
+  let depth = 0
   let quote: string | null = null
 
   for (let i = start; i < line.length; i++) {
@@ -253,16 +252,16 @@ function isOpenValue(line: string, start: number): boolean {
     } else if (char === '"' || char === "'" || char === '`') {
       quote = char
     } else if (char === '(' || char === '[' || char === '{') {
-      groups.push(char === '(' && CALLEE.test(line[i - 1] ?? ''))
+      depth++
     } else if (char === ')' || char === ']' || char === '}') {
-      if (groups.length === 0) return false
-      groups.pop()
-    } else if (char === ',' && groups.length === 0) {
+      if (depth === 0) return false
+      depth--
+    } else if (char === ',' && depth === 0) {
       return false
     }
   }
 
-  return !groups.includes(true)
+  return true
 }
 
 // Assumptions:
