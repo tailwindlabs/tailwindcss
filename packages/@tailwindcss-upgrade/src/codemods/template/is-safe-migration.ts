@@ -226,6 +226,9 @@ function isInsideVariantValue(line: string): boolean {
     let char = line[start]
 
     if (match[1] === ':') {
+      // A cva `variant: { … }` map holds class names, so a candidate that still
+      // sits inside that object is a class, not a variant name
+      if (char === '{' && isOpenValue(line, start + 1, false)) continue
       if (isOpenValue(line, start)) return true
     } else if (char === '{') {
       if (isOpenValue(line, start + 1)) return true
@@ -239,7 +242,10 @@ function isInsideVariantValue(line: string): boolean {
 
 // Every string inside the value is part of it, also an argument of a call:
 // `variant={getVariant(active ? "outline" : "ghost")}` computes a variant name.
-function isOpenValue(line: string, start: number): boolean {
+//
+// With `separators` off, only a closing bracket ends the value, so it tells
+// whether the group that opens right before `start` is still open.
+function isOpenValue(line: string, start: number, separators = true): boolean {
   let depth = 0
   let quote: string | null = null
 
@@ -256,7 +262,7 @@ function isOpenValue(line: string, start: number): boolean {
     } else if (char === ')' || char === ']' || char === '}') {
       if (depth === 0) return false
       depth--
-    } else if (char === ',' && depth === 0) {
+    } else if (separators && char === ',' && depth === 0) {
       return false
     }
   }

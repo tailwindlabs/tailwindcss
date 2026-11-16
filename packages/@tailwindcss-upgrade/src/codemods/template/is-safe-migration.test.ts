@@ -178,6 +178,15 @@ describe('is-safe-migration', async () => {
       'shadow',
       'shadow-sm',
     ],
+
+    // A cva `variant: { … }` map holds class names
+    [`  variant: { outline: "border shadow" },`, 'shadow', 'shadow-sm'],
+    [`  variant: { default: "border", outline: "border shadow" },`, 'shadow', 'shadow-sm'],
+    [
+      `const buttonVariants = cva("", { variants: { variant: { default: "bg-primary shadow" } } })`,
+      'shadow',
+      'shadow-sm',
+    ],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
