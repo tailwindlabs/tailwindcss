@@ -149,7 +149,7 @@ impl PreProcessor for Haml {
                         .all(u8::is_ascii_whitespace) =>
                 {
                     let mut start = cursor.pos;
-                    let end = self.skip_indented_block(&mut cursor, last_newline_position);
+                    let end = self.skip_ruby_code(&mut cursor);
 
                     // Increment start with 1 character to skip the `=` or `-` character
                     start += 1;
@@ -312,6 +312,49 @@ impl PreProcessor for Haml {
 }
 
 impl Haml {
+    /// Skips a line of Ruby code, and the lines that it continues on: a line of Ruby code can be
+    /// stretched over multiple lines as long as each line but the last ends with a comma.
+    fn skip_ruby_code(&self, cursor: &mut cursor::Cursor) -> usize {
+        let input = cursor.input;
+        let len = input.len();
+        let block_indentation_level = cursor.pos
+            - input[..cursor.pos]
+                .iter()
+                .rposition(|&byte| byte == b'\n')
+                .map_or(0, |i| i + 1);
+        let mut continues = false;
+
+        loop {
+            let line_start = cursor.pos;
+            while cursor.pos < len && cursor.curr() != b'\n' {
+                cursor.advance();
+            }
+
+            continues = line_continues(&input[line_start..cursor.pos], continues);
+            if !continues || cursor.pos >= len {
+                return cursor.pos;
+            }
+
+            // A dedented line that starts like a line of Haml is not part of the Ruby code. E.g.: a
+            // tag after a filter whose content ends in a comma, like `- Apples,` in `:markdown`.
+            let next_line = cursor.pos + 1;
+            let indentation = input[next_line..]
+                .iter()
+                .take_while(|&&byte| byte == b' ' || byte == b'\t')
+                .count();
+            if indentation < block_indentation_level
+                && matches!(
+                    input.get(next_line + indentation),
+                    Some(b'%' | b'.' | b'#' | b'-' | b'=' | b'~' | b'/' | b':')
+                )
+            {
+                return cursor.pos;
+            }
+
+            cursor.advance();
+        }
+    }
+
     fn skip_indented_block(
         &self,
         cursor: &mut cursor::Cursor,
@@ -333,7 +376,6 @@ impl Haml {
         //     :update => { :success => "cart", :failure => "error" }
         // ```
         let evaluation_type = cursor.curr();
-        let is_comment = evaluation_type == b'/' || cursor.next() == b'#';
 
         let block_indentation_level = cursor
             .pos
@@ -347,12 +389,8 @@ impl Haml {
             cursor.advance();
         }
 
-        // Whether the last line with content ends in a Ruby continuation. Tracked per line so blank
-        // lines carry it forward without rescanning the lines before them.
-        let mut continues = line_continues(cursor.input, last_newline_position, cursor.pos, false);
-
         // Block is already done, aka just a line
-        if evaluation_type == b'=' && !continues {
+        if evaluation_type == b'=' && cursor.prev() != b',' {
             return cursor.pos;
         }
 
@@ -366,12 +404,10 @@ impl Haml {
 
                 // Track the last newline position
                 b'\n' => {
-                    continues =
-                        line_continues(cursor.input, last_newline_position, cursor.pos, continues);
                     last_newline_position = cursor.pos;
 
                     // We are done with this block
-                    if evaluation_type == b'=' && !continues {
+                    if evaluation_type == b'=' && cursor.prev() != b',' {
                         break;
                     }
 
@@ -384,15 +420,9 @@ impl Haml {
                     // Find first non-whitespace character
                     while cursor.pos < len && cursor.curr().is_ascii_whitespace() {
                         if cursor.curr() == b'\n' {
-                            continues = line_continues(
-                                cursor.input,
-                                last_newline_position,
-                                cursor.pos,
-                                continues,
-                            );
                             last_newline_position = cursor.pos;
 
-                            if evaluation_type == b'=' && !continues {
+                            if evaluation_type == b'=' && cursor.prev() != b',' {
                                 // We are done with this block
                                 break 'outer;
                             }
@@ -405,15 +435,11 @@ impl Haml {
                         .pos
                         .saturating_sub(last_newline_position)
                         .saturating_sub(1); /* The newline itself */
-                    // A Ruby continuation line belongs to the block at any indentation
-                    if indentation < block_indentation_level && !(continues && !is_comment) {
+                    if indentation < block_indentation_level {
                         // We are done with this block
                         break;
                     }
                 }
-
-                // A line of Ruby code continues on the next line when it ends with a comma
-                _ if !is_comment && continues => {}
 
                 // Not whitespace, end of block
                 _ => break,
@@ -424,12 +450,7 @@ impl Haml {
 
         // We didn't find a newline, we reached the end of the input
         if last_known_newline_position == last_newline_position {
-            return cursor.pos.min(len);
-        }
-
-        // A Ruby continuation ran to the end of the input, so the final line belongs to the block
-        if cursor.pos >= len && !is_comment && continues {
-            return cursor.pos.min(len);
+            return cursor.pos;
         }
 
         // Move the cursor to the last newline position
@@ -439,12 +460,10 @@ impl Haml {
     }
 }
 
-/// Whether Ruby code continues past the line between `line_start` and `line_end`, which Haml does
-/// when the line ends in a comma. A blank line keeps the `previous` line's answer. Mirrors Haml's
-/// `is_ruby_multiline?`: trailing whitespace is ignored, and the character literals `?,` and `?\,`
-/// are not continuations.
-fn line_continues(input: &[u8], line_start: usize, line_end: usize, previous: bool) -> bool {
-    let line = &input[line_start.min(input.len())..line_end.min(input.len())];
+/// Whether a line of Ruby code continues on the next line, which Haml does when it ends with a
+/// comma. A blank line keeps the `previous` line's answer. Mirrors Haml's `is_ruby_multiline?`:
+/// trailing whitespace is ignored, and the character literals `?,` and `?\,` are not continuations.
+fn line_continues(line: &[u8], previous: bool) -> bool {
     let Some(last) = line.iter().rposition(|byte| !byte.is_ascii_whitespace()) else {
         return previous;
     };
@@ -784,6 +803,18 @@ mod tests {
                 "text-center",
             ],
         );
+    }
+
+    #[test]
+    fn test_dedented_haml_after_a_filter_line_ending_in_a_comma() {
+        let input = r#"
+            :markdown
+              - Apples,
+              - Oranges,
+            %p.px-2.5.text-center
+        "#;
+
+        Haml::test_extract_contains(input, vec!["px-2.5", "text-center"]);
     }
 
     // https://github.com/tailwindlabs/tailwindcss/issues/17379#issuecomment-2910108646
