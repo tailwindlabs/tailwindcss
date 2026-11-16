@@ -3560,7 +3560,21 @@ function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: bo
     escaped = false
 
     if (char === BACKSLASH && i + 1 < params.length) {
-      result += params[++i]
+      if (isHexDigit(params.charCodeAt(i + 1))) {
+        // A hex escape has up to 6 hex digits, and consumes one whitespace
+        // character after it. E.g.: `.foo\2b .bar` is `.foo\+.bar`, so a
+        // second space would be a descendant combinator.
+        let end = i + 1
+        while (end < i + 7 && end < params.length && isHexDigit(params.charCodeAt(end))) end++
+        result += params.slice(i + 1, end)
+        i = end - 1
+        if (isWhitespace(params.charCodeAt(i + 1))) {
+          result += ' '
+          i++
+        }
+      } else {
+        result += params[++i]
+      }
       escaped = true
     } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
       quote = char

@@ -2144,6 +2144,11 @@ describe('regressions', () => {
             @slot;
           }
         }
+        @custom-variant in-foo-hex-plus-bar {
+          @scope (.foo\2b .bar) {
+            @slot;
+          }
+        }
       `,
       { base: __dirname },
     )
@@ -2170,6 +2175,15 @@ describe('regressions', () => {
     ])
     expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+.bar)]:flex'])).toEqual([
       'in-foo-plus-bar:flex',
+    ])
+
+    // A hex escape consumes one whitespace character after it, so only the
+    // second space is a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\2b__.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)]:flex'])).toEqual([
+      'in-foo-hex-plus-bar:flex',
     ])
   })
 })
