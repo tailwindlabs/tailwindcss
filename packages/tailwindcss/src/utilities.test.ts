@@ -25771,12 +25771,57 @@ test('leading', async () => {
     "
   `)
 
-  // `--spacing-none` should not shadow the `leading-none` static value
+  // `--spacing-none` should not shadow the `leading-none` static value, but
+  // other named `--spacing-*` values should still resolve
+  expect(
+    await run(
+      ['leading-none', 'leading-big'],
+      css`
+        @theme {
+          --spacing-none: 0;
+          --spacing-big: 3rem;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-leading: initial;
+        }
+      }
+    }
+
+    :root, :host {
+      --spacing-big: 3rem;
+    }
+
+    .leading-big {
+      --tw-leading: var(--spacing-big);
+      line-height: var(--spacing-big);
+    }
+
+    .leading-none {
+      --tw-leading: 1;
+      line-height: 1;
+    }
+
+    @property --tw-leading {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
+
+  // `--leading-none` should win over both `--spacing-none` and the static value
   expect(
     await run(
       ['leading-none'],
       css`
         @theme {
+          --leading-none: 1.5;
           --spacing-none: 0;
         }
         @tailwind utilities;
@@ -25792,9 +25837,13 @@ test('leading', async () => {
       }
     }
 
+    :root, :host {
+      --leading-none: 1.5;
+    }
+
     .leading-none {
-      --tw-leading: 1;
-      line-height: 1;
+      --tw-leading: var(--leading-none);
+      line-height: var(--leading-none);
     }
 
     @property --tw-leading {
