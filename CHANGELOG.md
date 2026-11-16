@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Discard candidates that contain `</style`, so that the generated CSS is always safe to inline in a `<style>` element ([#20691](https://github.com/tailwindlabs/tailwindcss/pull/20691))
 - Preserve rules with relative selectors (e.g. `> .item`) inside `@scope` when optimizing the CSS ([#20671](https://github.com/tailwindlabs/tailwindcss/pull/20671))
 - Don't treat `/*` inside an unquoted `url(…)` as the start of a comment in the CSS parser ([#20699](https://github.com/tailwindlabs/tailwindcss/pull/20699))
+- Optimize the CSS from `@tailwindcss/webpack` when webpack runs in production mode without `NODE_ENV=production` ([#20723](https://github.com/tailwindlabs/tailwindcss/pull/20723))
 
 ### Changed
 
