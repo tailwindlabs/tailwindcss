@@ -924,6 +924,27 @@ describe('@apply', () => {
     `)
   })
 
+  it('should not treat CSS mixin arguments as utilities in `@utility`', async () => {
+    expect(
+      await run(
+        ['card'],
+        css`
+          @utility card {
+            @apply --card({ red, card }, 2rem);
+          }
+
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .card {
+        @apply --card({ red, card }, 2rem);
+      }
+      "
+    `)
+  })
+
   it('should error when trying to use mixins and utilities together', async () => {
     await expect(
       compile(css`

@@ -102,7 +102,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
         walk(node.nodes, (child) => {
           if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-          let candidates = child.params.split(/\s+/g)
+          let candidates = segment(child.params.replace(/\s/g, ' '), ' ')
           for (let candidate of candidates) {
             for (let candidateAstNode of designSystem.parseCandidate(candidate)) {
               switch (candidateAstNode.kind) {
@@ -342,7 +342,7 @@ function* resolveApplyDependencies(
   node: Extract<AstNode, { kind: 'at-rule' }>,
   designSystem: DesignSystem,
 ) {
-  for (let candidate of node.params.split(/\s+/g)) {
+  for (let candidate of segment(node.params.replace(/\s/g, ' '), ' ')) {
     for (let node of designSystem.parseCandidate(candidate)) {
       switch (node.kind) {
         case 'arbitrary':
