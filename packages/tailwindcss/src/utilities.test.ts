@@ -8826,6 +8826,25 @@ test('columns', async () => {
     }
     "
   `)
+
+  // `--container-auto` should not shadow the `columns-auto` static value
+  expect(
+    await run(
+      ['columns-auto'],
+      css`
+        @theme {
+          --container-auto: 500px;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .columns-auto {
+      columns: auto;
+    }
+    "
+  `)
 })
 
 test('break-before', async () => {
@@ -25044,6 +25063,88 @@ test('backdrop-filter', async () => {
 
     .backdrop-blur-none {
       --tw-backdrop-blur: blur(var(--backdrop-blur-none));
+      -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+      backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    @property --tw-backdrop-blur {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-brightness {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-contrast {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-grayscale {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-hue-rotate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-invert {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-opacity {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-saturate {
+      syntax: "*";
+      inherits: false
+    }
+
+    @property --tw-backdrop-sepia {
+      syntax: "*";
+      inherits: false
+    }
+    "
+  `)
+
+  // `--blur-none` should not shadow the `backdrop-blur-none` static value
+  expect(
+    await run(
+      ['backdrop-blur-none'],
+      css`
+        @theme {
+          --blur-none: 2px;
+        }
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @layer properties {
+      @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+        *, :before, :after, ::backdrop {
+          --tw-backdrop-blur: initial;
+          --tw-backdrop-brightness: initial;
+          --tw-backdrop-contrast: initial;
+          --tw-backdrop-grayscale: initial;
+          --tw-backdrop-hue-rotate: initial;
+          --tw-backdrop-invert: initial;
+          --tw-backdrop-opacity: initial;
+          --tw-backdrop-saturate: initial;
+          --tw-backdrop-sepia: initial;
+        }
+      }
+    }
+
+    .backdrop-blur-none {
+      --tw-backdrop-blur:  ;
       -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
       backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
     }
