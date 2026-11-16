@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ignore arbitrary values, properties, modifiers and variants with a `/*` outside of a string or an unquoted `url(…)` (e.g. `bg-[red/*]`) instead of commenting out the CSS that comes after them ([#20690](https://github.com/tailwindlabs/tailwindcss/pull/20690))
 - Discard candidates that contain `</style`, so that the generated CSS is always safe to inline in a `<style>` element ([#20691](https://github.com/tailwindlabs/tailwindcss/pull/20691))
 - Preserve rules with relative selectors (e.g. `> .item`) inside `@scope` when optimizing the CSS ([#20671](https://github.com/tailwindlabs/tailwindcss/pull/20671))
+- Don't treat `/*` inside an unquoted `url(…)` as the start of a comment in the CSS parser ([#20699](https://github.com/tailwindlabs/tailwindcss/pull/20699))
 
 ### Changed
 
