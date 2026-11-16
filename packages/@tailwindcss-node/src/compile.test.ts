@@ -6,8 +6,19 @@ import { toCss } from '../../tailwindcss/src/ast'
 import { parse } from '../../tailwindcss/src/css-parser'
 import { compile, compileAst } from './compile'
 
-test('resolves an `@import` that failed to resolve in a previous compile once the file exists', async () => {
+// Creates a temporary folder that is removed once the variable goes out of
+// scope, whether the test passes or fails.
+async function createTempFolder() {
   let base = await mkdtemp(path.join(tmpdir(), 'tw-node'))
+  return {
+    base,
+    [Symbol.asyncDispose]: () => rm(base, { recursive: true, force: true }),
+  }
+}
+
+test('resolves an `@import` that failed to resolve in a previous compile once the file exists', async () => {
+  await using folder = await createTempFolder()
+  let { base } = folder
   let css = `@import './accent.css';`
 
   await expect(compile(css, { base, onDependency: () => {} })).rejects.toThrow(
@@ -18,12 +29,11 @@ test('resolves an `@import` that failed to resolve in a previous compile once th
 
   let compiler = await compile(css, { base, onDependency: () => {} })
   expect(compiler.build([])).toContain('.accent')
-
-  await rm(base, { recursive: true, force: true })
 })
 
 test('resolves an `@import` that failed to resolve in a previous `compileAst` once the file exists', async () => {
-  let base = await mkdtemp(path.join(tmpdir(), 'tw-node'))
+  await using folder = await createTempFolder()
+  let { base } = folder
   let css = `@import './accent.css';`
 
   await expect(compileAst(parse(css), { base, onDependency: () => {} })).rejects.toThrow(
@@ -34,6 +44,4 @@ test('resolves an `@import` that failed to resolve in a previous `compileAst` on
 
   let compiler = await compileAst(parse(css), { base, onDependency: () => {} })
   expect(toCss(compiler.build([]))).toContain('.accent')
-
-  await rm(base, { recursive: true, force: true })
 })
