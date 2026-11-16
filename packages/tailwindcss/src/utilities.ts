@@ -270,6 +270,7 @@ function resolveThemeColor<T extends ThemeKey>(
 
   switch (candidate.value!.value) {
     case 'inherit': {
+      if (candidate.modifier) return null
       value = 'inherit'
       break
     }
