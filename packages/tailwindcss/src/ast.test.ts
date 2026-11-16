@@ -1289,6 +1289,132 @@ describe('optimization', () => {
       `)
     })
 
+    it('should prefix relative selectors with `:where(:scope)` when hoisting `@scope`', async () => {
+      expect(
+        optimize(css`
+          .parent {
+            @scope (&) {
+              > .item {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent)) {
+          :where(:scope) > .item {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      expect(
+        optimize(css`
+          .parent {
+            @scope (&) {
+              > .item,
+              + .sibling {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (:is(.parent)) {
+          :where(:scope) > .item, :where(:scope) + .sibling {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
+    it('should prefix relative selectors with `:where(:scope)` in top-level `@scope` rules', async () => {
+      // Top-level `@scope` rules
+      expect(
+        optimize(css`
+          @scope (.parent) {
+            > .item {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent) {
+          :where(:scope) > .item {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Rules nested in other at-rules inside the `@scope`
+      expect(
+        optimize(css`
+          @scope (.parent) {
+            @media (hover: hover) {
+              > .item:hover {
+                --x: 1;
+              }
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent) {
+          @media (hover: hover) {
+            :where(:scope) > .item:hover {
+              --x: 1;
+            }
+          }
+        }
+        "
+      `)
+
+      // Only the relative selectors in a selector list are prefixed
+      expect(
+        optimize(css`
+          @scope (.parent) {
+            > .item,
+            .other {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent) {
+          :where(:scope) > .item, .other {
+            --x: 1;
+          }
+        }
+        "
+      `)
+
+      // Relative selectors that contain `&` are prefixed as well
+      expect(
+        optimize(css`
+          @scope (.parent) {
+            > &.item {
+              --x: 1;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        @scope (.parent) {
+          :where(:scope) > :where(:scope).item {
+            --x: 1;
+          }
+        }
+        "
+      `)
+    })
+
     it('should wrap bare declarations inside `@scope` in a `&` rule', async () => {
       // A bug in Lightning CSS causes an error when there are declarations
       // directly in the `@scope`. To fix this we will ensure a rule with
