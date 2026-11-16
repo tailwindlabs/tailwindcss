@@ -2201,6 +2201,35 @@ describe('regressions', () => {
       ]),
     ).toEqual(['in-foo-hex-plus-child-bar:flex'])
   })
+
+  // CSS treats CRLF as one newline. The stylesheet parser already normalizes
+  // it, but a plugin variant keeps it in the at-rule params.
+  test('treats CRLF after a hex escape in an at-rule as one whitespace character', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ addVariant }) => {
+              addVariant('in-foo-hex-plus-bar', '@scope (.foo\\2b\r\n.bar) to (.limit)')
+            }),
+          }
+        },
+      },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex']),
+    ).toEqual(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex'])
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)_to_(.limit)]:flex']),
+    ).toEqual(['in-foo-hex-plus-bar:flex'])
+  })
 })
 
 describe('normalizeEscapes', () => {

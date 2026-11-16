@@ -3575,7 +3575,12 @@ function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: bo
         while (end < i + 7 && end < params.length && isHexDigit(params.charCodeAt(end))) end++
         result += params.slice(i + 1, end)
         i = end - 1
-        if (isWhitespace(params.charCodeAt(i + 1))) i++
+        if (isWhitespace(params.charCodeAt(i + 1))) {
+          i++
+
+          // CSS treats CRLF as one newline
+          if (params.charCodeAt(i) === 0x0d && params.charCodeAt(i + 1) === 0x0a) i++
+        }
         openHexEscape = true
       } else {
         result += params[++i]
