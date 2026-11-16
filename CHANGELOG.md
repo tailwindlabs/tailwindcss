@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Discard candidates whose selectors grow exponentially when variants are stacked, instead of running out of memory (e.g. `[&_&]:[&_&]:[&_&]:…:flex`) ([#20692](https://github.com/tailwindlabs/tailwindcss/pull/20692))
 - Improve performance when scanning long lines with many `[` characters (e.g. minified JSON) ([#20694](https://github.com/tailwindlabs/tailwindcss/pull/20694))
 - Keep the absolute path of `url(…)`s in stylesheets imported from another drive on Windows, instead of a relative path that climbs out of the drive ([#20683](https://github.com/tailwindlabs/tailwindcss/pull/20683))
+- Improve the performance of rebuilds that add new utilities by only optimizing and printing the new utilities ([#20680](https://github.com/tailwindlabs/tailwindcss/pull/20680), [#20688](https://github.com/tailwindlabs/tailwindcss/pull/20688))
 - Improve `@tailwindcss/vite` build performance by scanning the same sources only once per build, and by not looking for files to watch outside of watch mode ([#20678](https://github.com/tailwindlabs/tailwindcss/pull/20678))
 - Ensure `@tailwindcss/vite` generates the same CSS for the client and SSR environments when they share the plugin, even when the build output is not ignored (e.g. React Router with the Vite Environment API) ([#20678](https://github.com/tailwindlabs/tailwindcss/pull/20678))
 - Ignore arbitrary values, properties, modifiers and variants with a `/*` outside of a string or an unquoted `url(…)` (e.g. `bg-[red/*]`) instead of commenting out the CSS that comes after them ([#20690](https://github.com/tailwindlabs/tailwindcss/pull/20690))
@@ -29,11 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/vite` rebuilds when a plugin that runs before it changes the input CSS without changing the input file on disk ([#20700](https://github.com/tailwindlabs/tailwindcss/pull/20700))
 - Allow `@apply` with a CSS mixin that has spaces in its arguments (e.g. `@apply --card(red, 2rem)`) instead of throwing an error about mixins and utilities ([#20725](https://github.com/tailwindlabs/tailwindcss/pull/20725))
 - Prevent a crash on Windows when a worker thread that used `@tailwindcss/oxide` exits ([#20471](https://github.com/tailwindlabs/tailwindcss/pull/20471))
-
-### Changed
-
-- Improve the performance of rebuilds that add new utilities by only optimizing and printing the new utilities ([#20680](https://github.com/tailwindlabs/tailwindcss/pull/20680))
-- Improve the performance of rebuilds that add new utilities in the CLI with `--output`, `@tailwindcss/postcss`, `@tailwindcss/webpack`, `@tailwindcss/turbopack` and `@tailwindcss/vite` with CSS source maps ([#20688](https://github.com/tailwindlabs/tailwindcss/pull/20688))
 
 ## [4.3.5] - 2026-11-06
 
