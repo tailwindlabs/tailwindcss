@@ -211,12 +211,18 @@ export function isSafeMigration(
 }
 
 const VARIANT_PROP = /variant\s*([:=])\s*/g
+const VARIANT_COMPARISON = /\bvariant\s*[!=]==?\s*['"`]$/
 
 // The candidate is the last thing on the line, so the `variant` value it sits in
 // is the one that has not ended yet. Each form ends somewhere different:
 // `variant={…}` at its matching brace, `variant="…"` at its own quote, and
 // `{ variant: … }` at a comma or at the brace around it.
 function isInsideVariantValue(line: string): boolean {
+  // A string compared against `variant` is a variant name too
+  //
+  // E.g.: `if (variant === "outline") {}`
+  if (VARIANT_COMPARISON.test(line)) return true
+
   for (let match of line.matchAll(VARIANT_PROP)) {
     // The prop itself is never inside a string, so a `variant:` that is only
     // mentioned in some other attribute value does not count

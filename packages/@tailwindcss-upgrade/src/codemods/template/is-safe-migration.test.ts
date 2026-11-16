@@ -139,6 +139,10 @@ describe('is-safe-migration', async () => {
     [`<Button variant={getVariant(cond ? "outline" : "ghost")} />`, 'outline'],
     [`<Button variant={getVariant (cond ? "outline" : "ghost")} />`, 'outline'],
     [`<Button variant={cn("ghost", active ? "shadow" : "none")} />`, 'shadow'],
+    [`<Button variant={variant === "outline" ? "ghost" : "default"} />`, 'outline'],
+    [`const isOutline = variant === "outline"`, 'outline'],
+    [`if (props.variant == 'outline') {}`, 'outline'],
+    [`if (variant !== "outline") {}`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -178,6 +182,11 @@ describe('is-safe-migration', async () => {
       'shadow',
       'shadow-sm',
     ],
+
+    // A comparison against `variant` is not the value of a `variant` prop
+    [`cn(variant === "primary" && "outline")`, 'outline', 'outline-solid'],
+    [`cn(variant == "primary" && "outline")`, 'outline', 'outline-solid'],
+    [`cn(variant === "primary" ? "shadow" : "none")`, 'shadow', 'shadow-sm'],
 
     // A cva `variant: { … }` map holds class names
     [`  variant: { outline: "border shadow" },`, 'shadow', 'shadow-sm'],
