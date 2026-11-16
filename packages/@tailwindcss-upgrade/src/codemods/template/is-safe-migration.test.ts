@@ -123,6 +123,7 @@ describe('is-safe-migration', async () => {
     [`<Button variant={first ? "default" : "outline"} />`, 'outline'],
     [`<Button variant={variant ?? "outline"} />`, 'outline'],
     [`<Button variant={required ? 'secondary' : 'outline'} />`, 'outline'],
+    [`<div data-variant={variant ?? "outline"} />`, 'outline'],
     [`<Button variant={isActive(foo, bar) ? "outline" : "ghost"} />`, 'outline'],
     [`<Button variant={isActive(getState(foo, bar), x) ? "outline" : "ghost"} />`, 'outline'],
     [`<div :variant="active ? 'ghost' : 'outline'"></div>`, 'outline'],
@@ -186,6 +187,11 @@ describe('is-safe-migration', async () => {
       'shadow',
       'shadow-sm',
     ],
+
+    // A class after the `variant` value is still a class
+    [`<Button variant="primary" className="outline" />`, 'outline', 'outline-solid'],
+    [`Button({ variant: "primary", className: "outline" })`, 'outline', 'outline-solid'],
+    [`<a href="/?variant=primary" class="outline">`, 'outline', 'outline-solid'],
 
     // A comparison against `variant` is not the value of a `variant` prop
     [`cn(variant === "primary" && "outline")`, 'outline', 'outline-solid'],
