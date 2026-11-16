@@ -72,7 +72,9 @@ function getResolvedOutputDirectories(config: ResolvedConfig) {
     ? Array.from(
         new Set(
           (Array.isArray(outputOptions) ? outputOptions : [outputOptions]).map((output) =>
-            output.dir ? path.resolve(config.root, output.dir) : defaultOutputDirectory,
+            // Vite passes `output.dir` to Rollup (or Rolldown) as-is, which
+            // resolves it against the working directory, not the root
+            output.dir ? path.resolve(output.dir) : defaultOutputDirectory,
           ),
         ),
       )
