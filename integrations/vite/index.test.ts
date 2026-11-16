@@ -1375,7 +1375,6 @@ describe.each([
     async ({ spawn, expect }) => {
       let process = await spawn('pnpm vite build --watch')
       await process.onStdout((message) => message.includes('built in'))
-      process.flush()
 
       let result = await Promise.race([
         process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
@@ -1450,14 +1449,14 @@ test(
       candidate`italic`,
     ])
 
-    process.flush()
     let result = await Promise.race([
       process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
       new Promise((resolve) => setTimeout(() => resolve('idle'), 2_000)),
     ])
     expect(result).toBe('idle')
 
-    // A change to a real source file still rebuilds
+    // A change to a real source file still rebuilds. Flush to drop the waiter
+    // of the race above, which would otherwise take the next build.
     process.flush()
     await fs.write(
       'index.html',
