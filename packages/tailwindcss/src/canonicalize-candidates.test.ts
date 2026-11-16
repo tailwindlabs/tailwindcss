@@ -2138,6 +2138,11 @@ describe('regressions', () => {
             @slot;
           }
         }
+        @custom-variant in-foo-plus-bar {
+          @scope (.foo\+.bar) {
+            @slot;
+          }
+        }
       `,
       { base: __dirname },
     )
@@ -2156,6 +2161,15 @@ describe('regressions', () => {
         '[@supports_selector(.foo.bar)]:flex',
       ]),
     ).toEqual(['in-foo-bar:flex', 'supports-foo-bar:flex'])
+
+    // An escaped `+` is part of the class name, so the space after it is
+    // still a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+_.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\+_.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+.bar)]:flex'])).toEqual([
+      'in-foo-plus-bar:flex',
+    ])
   })
 })
 

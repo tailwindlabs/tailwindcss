@@ -3508,11 +3508,15 @@ function createVariantSignatureCache(
 // it can be a descendant combinator. E.g.: `@scope (.foo .bar)` and
 // `@scope (.foo.bar)` match different elements. The same goes for whitespace
 // before a `:` (`.foo :hover`), unless whitespace follows the `:` as well
-// (`(pointer : fine)`). Strings and escapes are kept as-is.
+// (`(pointer : fine)`). Strings and escaped characters are kept as-is.
 function normalizeAtRuleParamsWhitespace(params: string) {
   let result = ''
   let pendingSpace = false
   let quote = 0
+
+  // Whether the last character in `result` is escaped. E.g.: the `+` in
+  // `.foo\+ .bar` is part of the class name, not a delimiter.
+  let escaped = false
 
   for (let i = 0; i < params.length; i++) {
     let char = params.charCodeAt(i)
@@ -3520,6 +3524,7 @@ function normalizeAtRuleParamsWhitespace(params: string) {
     // Copy strings verbatim, including escapes
     if (quote !== 0) {
       result += params[i]
+      escaped = false
       if (char === BACKSLASH && i + 1 < params.length) {
         result += params[++i]
       } else if (char === quote) {
@@ -3539,7 +3544,7 @@ function normalizeAtRuleParamsWhitespace(params: string) {
     if (pendingSpace) {
       pendingSpace = false
       if (
-        !dropsWhitespaceAfter(result.charCodeAt(result.length - 1)) &&
+        (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
         !dropsWhitespaceBefore(char) &&
         !(char === COLON && isWhitespace(params.charCodeAt(i + 1)))
       ) {
@@ -3548,9 +3553,11 @@ function normalizeAtRuleParamsWhitespace(params: string) {
     }
 
     result += params[i]
+    escaped = false
 
     if (char === BACKSLASH && i + 1 < params.length) {
       result += params[++i]
+      escaped = true
     } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
       quote = char
     }
