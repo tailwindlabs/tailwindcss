@@ -3418,7 +3418,7 @@ function createVariantSignatureCache(
             node.params = constantFoldDeclaration(node.params, rem)
 
             if (node.params.includes(' ')) {
-              node.params = node.params.replaceAll(' ', '')
+              node.params = normalizeAtRuleParamsWhitespace(node.params)
             }
           }
 
@@ -3499,6 +3499,94 @@ function createVariantSignatureCache(
       }
     })
   })
+}
+
+// Remove whitespace in at-rule params that doesn't change their meaning, in a
+// single pass. E.g.: `(width >= 64rem)` → `(width>=64rem)`.
+//
+// Whitespace between other characters is collapsed to a single space, because
+// it can be a descendant combinator. E.g.: `@scope (.foo .bar)` and
+// `@scope (.foo.bar)` match different elements. The same goes for whitespace
+// before a `:` (`.foo :hover`), unless whitespace follows the `:` as well
+// (`(pointer : fine)`). Strings and escapes are kept as-is.
+function normalizeAtRuleParamsWhitespace(params: string) {
+  let result = ''
+  let pendingSpace = false
+  let quote = 0
+
+  for (let i = 0; i < params.length; i++) {
+    let char = params.charCodeAt(i)
+
+    // Copy strings verbatim, including escapes
+    if (quote !== 0) {
+      result += params[i]
+      if (char === BACKSLASH && i + 1 < params.length) {
+        result += params[++i]
+      } else if (char === quote) {
+        quote = 0
+      }
+      continue
+    }
+
+    if (isWhitespace(char)) {
+      // Leading whitespace is dropped
+      pendingSpace = result.length > 0
+      continue
+    }
+
+    // Only keep whitespace between two characters that need it. Trailing
+    // whitespace is dropped, because no character follows it.
+    if (pendingSpace) {
+      pendingSpace = false
+      if (
+        !dropsWhitespaceAfter(result.charCodeAt(result.length - 1)) &&
+        !dropsWhitespaceBefore(char) &&
+        !(char === COLON && isWhitespace(params.charCodeAt(i + 1)))
+      ) {
+        result += ' '
+      }
+    }
+
+    result += params[i]
+
+    if (char === BACKSLASH && i + 1 < params.length) {
+      result += params[++i]
+    } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      quote = char
+    }
+  }
+
+  return result
+}
+
+// `(`, `,`, `:`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceAfter(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === 0x2c ||
+    char === COLON ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
+}
+
+// `(`, `)`, `,`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceBefore(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === CLOSE_PAREN ||
+    char === 0x2c ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
 }
 
 export const PRE_COMPUTED_VARIANTS_KEY = Symbol()

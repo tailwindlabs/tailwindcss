@@ -2123,6 +2123,40 @@ describe('regressions', () => {
       ]),
     ).toEqual(['in-blue:flex'])
   })
+
+  test('does not treat a descendant combinator in an at-rule as a compound selector', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-foo-bar {
+          @scope (.foo.bar) {
+            @slot;
+          }
+        }
+        @custom-variant supports-foo-bar {
+          @supports selector(.foo.bar) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    // `.foo .bar` and `.foo.bar` match different elements
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo_.bar)]:flex',
+        '[@supports_selector(.foo_.bar)]:flex',
+      ]),
+    ).toEqual(['[@scope_(.foo_.bar)]:flex', '[@supports_selector(.foo_.bar)]:flex'])
+
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo.bar)]:flex',
+        '[@supports_selector(.foo.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-bar:flex', 'supports-foo-bar:flex'])
+  })
 })
 
 describe('normalizeEscapes', () => {
