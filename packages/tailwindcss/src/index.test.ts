@@ -898,6 +898,8 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }
@@ -912,6 +914,8 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }

@@ -161,14 +161,14 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
     walk(parent.nodes, (child) => {
       if (child.kind !== 'at-rule' || child.name !== '@apply') return
 
-      let parts = child.params.split(/(\s+)/g)
+      let parts = segment(child.params.replace(/\s/g, ' '), ' ')
       let candidateOffsets: Record<string, number> = {}
       let normalIdents: string[] = []
       let dashedIdents: string[] = []
 
       let offset = 0
-      for (let [idx, part] of parts.entries()) {
-        if (idx % 2 === 0) {
+      for (let part of parts) {
+        if (part !== '') {
           if (part[0] === '-' && part[1] === '-') {
             dashedIdents.push(part)
           } else {
@@ -178,7 +178,7 @@ export function substituteAtApply(ast: AstNode[], designSystem: DesignSystem) {
           candidateOffsets[part] = offset
         }
 
-        offset += part.length
+        offset += part.length + 1
       }
 
       if (dashedIdents.length) {
