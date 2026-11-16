@@ -27029,6 +27029,54 @@ test('text', async () => {
   ).toEqual('')
 })
 
+test('text with math functions and custom functions', async () => {
+  expect(
+    await run(
+      [
+        // Math functions are inferred as a font-size
+        'text-[calc(1rem+var(--x))]',
+        'text-[min(1rem,var(--x))]',
+        'text-[calc(min(1rem,var(--x))+2px)]',
+
+        // Custom functions are inferred as a color, even when their name ends
+        // in the name of a math function
+        'text-[--foo(1px)]',
+        'text-[--my-calc(1px)]',
+        'text-[--item-rem(1px)]',
+      ],
+      css`
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .text-\\[calc\\(1rem\\+var\\(--x\\)\\)\\] {
+      font-size: calc(1rem + var(--x));
+    }
+
+    .text-\\[calc\\(min\\(1rem\\,var\\(--x\\)\\)\\+2px\\)\\] {
+      font-size: calc(min(1rem, var(--x)) + 2px);
+    }
+
+    .text-\\[min\\(1rem\\,var\\(--x\\)\\)\\] {
+      font-size: min(1rem, var(--x));
+    }
+
+    .text-\\[--foo\\(1px\\)\\] {
+      color: --foo(1px);
+    }
+
+    .text-\\[--item-rem\\(1px\\)\\] {
+      color: --item-rem(1px);
+    }
+
+    .text-\\[--my-calc\\(1px\\)\\] {
+      color: --my-calc(1px);
+    }
+    "
+  `)
+})
+
 test('text-shadow', async () => {
   expect(
     await run(

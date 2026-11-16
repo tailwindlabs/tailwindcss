@@ -15,6 +15,7 @@ const CLOSE_PAREN = 0x29
 const COMMA = 0x2c
 const SPACE = 0x20
 const PERCENT = 0x25
+const UNDERSCORE = 0x5f
 
 const MATH_FUNCTIONS = [
   'calc',
@@ -38,8 +39,53 @@ const MATH_FUNCTIONS = [
   'round',
 ]
 
+const MATH_FUNCTIONS_SET = new Set(MATH_FUNCTIONS)
+
+// Characters that can be part of a CSS identifier: `a-z`, `A-Z`, `0-9`, `-`,
+// `_` and non-ASCII characters.
+function isIdentChar(char: number) {
+  return (
+    (char >= LOWER_A && char <= LOWER_Z) ||
+    (char >= UPPER_A && char <= UPPER_Z) ||
+    (char >= ZERO && char <= NINE) ||
+    char === SUB ||
+    char === UNDERSCORE ||
+    char >= 0x80
+  )
+}
+
 export function hasMathFn(input: string) {
-  return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
+  let paren = input.indexOf('(')
+
+  while (paren !== -1) {
+    // Scan backwards to the start of the function name. A math function name
+    // only counts when it's the whole name, so `--my-calc(…)` is not `calc(…)`.
+    let start = paren
+    while (start > 0 && isIdentChar(input.charCodeAt(start - 1))) start--
+
+    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren))) {
+      return true
+    }
+
+    paren = input.indexOf('(', paren + 1)
+  }
+
+  return false
+}
+
+// Whether the math function name that starts at `start` is the start of a
+// function call. A `-` before it can be an operator (`1px-min(…)`) or a sign
+// (`-min(…)`), but not part of a custom function name like `--my-calc(…)`.
+function isMathFnStart(input: string, start: number) {
+  if (start === 0) return true
+
+  let prev = input.charCodeAt(start - 1)
+  if (prev !== SUB) return !isIdentChar(prev)
+
+  let identStart = start - 1
+  while (identStart > 0 && isIdentChar(input.charCodeAt(identStart - 1))) identStart--
+
+  return !(input.charCodeAt(identStart) === SUB && input.charCodeAt(identStart + 1) === SUB)
 }
 
 export function addWhitespaceAroundMathOperators(input: string) {
@@ -103,7 +149,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
       let fn = input.slice(start, i)
 
       // This is a known math function so start formatting
-      if (MATH_FUNCTIONS.includes(fn)) {
+      if (MATH_FUNCTIONS.includes(fn) && isMathFnStart(input, start)) {
         formattable.unshift(true)
         continue
       }
