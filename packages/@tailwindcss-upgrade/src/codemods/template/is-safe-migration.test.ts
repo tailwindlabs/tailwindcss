@@ -143,6 +143,10 @@ describe('is-safe-migration', async () => {
     [`const isOutline = variant === "outline"`, 'outline'],
     [`if (props.variant == 'outline') {}`, 'outline'],
     [`if (variant !== "outline") {}`, 'outline'],
+    [`const variant = active ? "outline" : "ghost"`, 'outline'],
+    [`let variant = props.variant ?? "outline";`, 'outline'],
+    [`function Button({ variant = active ? "outline" : "ghost" }) {}`, 'outline'],
+    [`Button(variant=active ? "outline" : "ghost")`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -187,6 +191,13 @@ describe('is-safe-migration', async () => {
     [`cn(variant === "primary" && "outline")`, 'outline', 'outline-solid'],
     [`cn(variant == "primary" && "outline")`, 'outline', 'outline-solid'],
     [`cn(variant === "primary" ? "shadow" : "none")`, 'shadow', 'shadow-sm'],
+
+    // A `variant` assignment ends at a separator or at the next assignment
+    [`let variant = x ?? "ghost"; cn("shadow")`, 'shadow', 'shadow-sm'],
+    [`let variant = x, classes = cn("shadow")`, 'shadow', 'shadow-sm'],
+    [`items.map((variant) => cn("shadow"))`, 'shadow', 'shadow-sm'],
+    [`items.map(variant => cn("shadow"))`, 'shadow', 'shadow-sm'],
+    [`<div data-variant=outline class="shadow"></div>`, 'shadow', 'shadow-sm'],
 
     // A cva `variant: { … }` map holds class names
     [`  variant: { outline: "border shadow" },`, 'shadow', 'shadow-sm'],

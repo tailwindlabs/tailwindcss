@@ -210,13 +210,14 @@ export function isSafeMigration(
   return true
 }
 
-const VARIANT_PROP = /variant\s*([:=])\s*/g
+const VARIANT_PROP = /variant\s*(:|=(?![=>]))\s*/g
 const VARIANT_COMPARISON = /\bvariant\s*[!=]==?\s*['"`]$/
 
 // The candidate is the last thing on the line, so the `variant` value it sits in
 // is the one that has not ended yet. Each form ends somewhere different:
 // `variant={…}` at its matching brace, `variant="…"` at its own quote, and
-// `{ variant: … }` at a comma or at the brace around it.
+// `{ variant: … }` or `const variant = …` at a separator or at the brace around
+// it.
 function isInsideVariantValue(line: string): boolean {
   // A string compared against `variant` is a variant name too
   //
@@ -240,6 +241,9 @@ function isInsideVariantValue(line: string): boolean {
       if (isOpenValue(line, start + 1)) return true
     } else if (char === '"' || char === "'" || char === '`') {
       if (!line.includes(char, start + 1)) return true
+    } else {
+      // E.g.: `const variant = active ? "outline" : "ghost"`
+      if (isOpenValue(line, start)) return true
     }
   }
 
@@ -268,12 +272,22 @@ function isOpenValue(line: string, start: number, separators = true): boolean {
     } else if (char === ')' || char === ']' || char === '}') {
       if (depth === 0) return false
       depth--
-    } else if (separators && char === ',' && depth === 0) {
+    } else if (separators && depth === 0 && (char === ',' || char === ';')) {
+      return false
+    } else if (separators && depth === 0 && char === '=' && isAssignment(line, i)) {
+      // The next attribute or assignment starts, e.g. `class=` in
+      // `<div data-variant=outline class="…">`
       return false
     }
   }
 
   return true
+}
+
+// Whether the `=` at `index` is an assignment, not a part of `==`, `!=`, `<=`,
+// `>=` or `=>`
+function isAssignment(line: string, index: number): boolean {
+  return !'=>'.includes(line[index + 1] ?? '') && !'=!<>'.includes(line[index - 1] ?? '')
 }
 
 // Assumptions:
