@@ -12,7 +12,7 @@ Add a Markdown file with a unique name, for example `.changelog/vite-full-reload
 - Prevent `@tailwindcss/vite` from doing a full page reload for external files (e.g. `.php` files)
 ```
 
-- Use one or more of these sections: `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`.
+- Use one or more of these sections: `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`. The "Changelog" section of [`.github/CONTRIBUTING.md`](../.github/CONTRIBUTING.md#changelog) says which section fits your change.
 - Start each entry with `- `, and write it on one line.
 - Do not add a link to the pull request. The script adds the link of the pull request that added the file.
 - To link to an issue, or to more than one pull request, add the links at the end of the entry, for example `([#12345](https://github.com/tailwindlabs/tailwindcss/issues/12345))`. The script then adds no link.

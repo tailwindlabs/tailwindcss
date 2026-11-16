@@ -98,6 +98,24 @@ If your change fixes a bug, adds a feature, or changes something that users can 
 
 Use the sections `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`. Do not add a link to your pull request: a workflow adds it when it moves your entry into `CHANGELOG.md` after the merge. See [.changelog/README.md](https://github.com/tailwindlabs/tailwindcss/blob/main/.changelog/README.md) for all details, and run `pnpm changelog check` to check your file.
 
+Pick the section from what a user has to know:
+
+- `### Added`: a new feature, like a utility, a variant, a directive, an option, a canonicalization rule or an integration.
+- `### Fixed`: a bug fix, also when it changes the generated CSS. A performance improvement goes here too.
+- `### Changed`: a change to behavior that worked as intended, and that users can rely on. Users may have to update their project, or they see a different result. For example:
+  - The CSS of an existing utility, variant or Preflight (e.g. `m-0` generates `0` instead of `calc(var(--spacing) * 0)`), or the order in which utilities and variants are sorted.
+  - A renamed or replaced utility, variant, theme variable or directive, also when the upgrade tool migrates it (e.g. `outline-none` → `outline-hidden`).
+  - The values of the default theme.
+  - The API of a package, a function or a directive (e.g. `--theme(…)` returns a CSS variable instead of a value).
+  - Input that was valid and now throws an error or generates no CSS.
+  - The defaults of automatic source detection (e.g. folders that are ignored by default).
+  - The supported versions of Node.js, browsers or dependencies, and how a package installs or loads (e.g. no `postinstall` script).
+- `### Deprecated`: a feature that still works, but will be removed later. Name its replacement.
+- `### Removed`: a feature that is gone without a replacement. A feature with a replacement goes in `### Changed`.
+- `### Security`: a fix for a security problem.
+
+Do not use `### Changed` for a performance improvement, a refactor or another internal change.
+
 Write the entry in the same style as the existing entries in [CHANGELOG.md](https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md). In short:
 
 - Write one line that describes the change for a user, not how you fixed it.
