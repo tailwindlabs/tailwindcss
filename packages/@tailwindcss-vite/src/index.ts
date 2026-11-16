@@ -393,6 +393,10 @@ class Root {
   // The lazily-initialized Tailwind scanner.
   private scanner?: Scanner
 
+  // A scanner for the explicit `@source` entries, which the excluded output
+  // directories would otherwise override.
+  private explicitScanner?: Scanner
+
   // List of all candidates that were being returned by the root scanner during
   // the lifetime of the root.
   private candidates: Set<string> = new Set<string>()
@@ -514,6 +518,11 @@ class Root {
       }
 
       this.scanner = new Scanner({ sources })
+      this.explicitScanner =
+        this.excludedDirectories.length > 0 &&
+        this.compiler.sources.some((source) => !source.negated)
+          ? new Scanner({ sources: this.compiler.sources })
+          : undefined
       if (scannedCandidates) sourcesKey = JSON.stringify(sources)
       DEBUG && I.end('Setup scanner')
 
@@ -541,30 +550,37 @@ class Root {
       for (let candidate of candidates) {
         this.candidates.add(candidate)
       }
+      for (let candidate of this.explicitScanner?.scan() ?? []) {
+        this.candidates.add(candidate)
+      }
       DEBUG && I.end('Scan for candidates')
     }
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
       if (_addWatchFile) {
-        // Watch individual files found via custom `@source` paths
-        for (let file of this.scanner.files) {
-          addWatchFile(file)
-        }
+        for (let scanner of [this.scanner, this.explicitScanner]) {
+          if (!scanner) continue
 
-        // Watch globs found via custom `@source` paths
-        for (let glob of this.scanner.globs) {
-          if (glob.pattern[0] === '!') continue
-
-          let relative = path.relative(this.base, glob.base)
-          if (relative[0] !== '.') {
-            relative = './' + relative
+          // Watch individual files found via custom `@source` paths
+          for (let file of scanner.files) {
+            addWatchFile(file)
           }
-          // Ensure relative is a posix style path since we will merge it with the
-          // glob.
-          relative = normalizePath(relative)
 
-          addWatchFile(path.posix.join(relative, glob.pattern))
+          // Watch globs found via custom `@source` paths
+          for (let glob of scanner.globs) {
+            if (glob.pattern[0] === '!') continue
+
+            let relative = path.relative(this.base, glob.base)
+            if (relative[0] !== '.') {
+              relative = './' + relative
+            }
+            // Ensure relative is a posix style path since we will merge it with the
+            // glob.
+            relative = normalizePath(relative)
+
+            addWatchFile(path.posix.join(relative, glob.pattern))
+          }
         }
       }
 
