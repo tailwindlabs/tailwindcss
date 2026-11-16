@@ -2149,6 +2149,11 @@ describe('regressions', () => {
             @slot;
           }
         }
+        @custom-variant in-foo-hex-plus-child-bar {
+          @scope (.foo\2b>.bar) {
+            @slot;
+          }
+        }
       `,
       { base: __dirname },
     )
@@ -2185,6 +2190,16 @@ describe('regressions', () => {
     expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)]:flex'])).toEqual([
       'in-foo-hex-plus-bar:flex',
     ])
+
+    // The whitespace that ends a hex escape is optional when the next character
+    // can't be part of the escape
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo\\2b>.bar)]:flex',
+        '[@scope_(.foo\\2b_>.bar)]:flex',
+        '[@scope_(.foo\\2b__>_.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-hex-plus-child-bar:flex'])
   })
 })
 

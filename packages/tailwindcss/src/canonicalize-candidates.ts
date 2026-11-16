@@ -3522,6 +3522,10 @@ function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: bo
   // `.foo\+ .bar` is part of the class name, not a delimiter.
   let escaped = false
 
+  // Whether `result` ends with a hex escape that has no whitespace after it
+  // yet. E.g.: `\2b` in `.foo\2b .bar`.
+  let openHexEscape = false
+
   for (let i = 0; i < params.length; i++) {
     let char = params.charCodeAt(i)
 
@@ -3545,33 +3549,34 @@ function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: bo
 
     // Only keep whitespace between two characters that need it. Trailing
     // whitespace is dropped, because no character follows it.
-    if (pendingSpace) {
-      pendingSpace = false
-      if (
-        (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
-        !dropsWhitespaceBefore(char) &&
-        !(char === COLON && (!canContainSelectors || isWhitespace(params.charCodeAt(i + 1))))
-      ) {
-        result += ' '
-      }
-    }
+    let space =
+      pendingSpace &&
+      (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
+      !dropsWhitespaceBefore(char) &&
+      !(char === COLON && (!canContainSelectors || isWhitespace(params.charCodeAt(i + 1))))
+    pendingSpace = false
+
+    // A hex escape needs whitespace to end it when a hex digit or another
+    // space follows. E.g.: `.foo\2b  .bar` is `.foo\+ .bar`, but `.foo\2b>.bar`
+    // and `.foo\2b >.bar` are the same.
+    if (openHexEscape && (space || isHexDigit(char))) result += ' '
+    if (space) result += ' '
 
     result += params[i]
     escaped = false
+    openHexEscape = false
 
     if (char === BACKSLASH && i + 1 < params.length) {
       if (isHexDigit(params.charCodeAt(i + 1))) {
         // A hex escape has up to 6 hex digits, and consumes one whitespace
-        // character after it. E.g.: `.foo\2b .bar` is `.foo\+.bar`, so a
-        // second space would be a descendant combinator.
+        // character after it. E.g.: `.foo\2b .bar` is `.foo\+.bar`, so only
+        // a second space would be a descendant combinator.
         let end = i + 1
         while (end < i + 7 && end < params.length && isHexDigit(params.charCodeAt(end))) end++
         result += params.slice(i + 1, end)
         i = end - 1
-        if (isWhitespace(params.charCodeAt(i + 1))) {
-          result += ' '
-          i++
-        }
+        if (isWhitespace(params.charCodeAt(i + 1))) i++
+        openHexEscape = true
       } else {
         result += params[++i]
       }
