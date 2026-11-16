@@ -29,6 +29,13 @@ test('resolves an `@import` that failed to resolve in a previous compile once th
 
   let compiler = await compile(css, { base, onDependency: () => {} })
   expect(compiler.build([])).toContain('.accent')
+
+  // Once the file is removed again, the import fails again
+  await rm(path.join(base, 'accent.css'))
+
+  await expect(compile(css, { base, onDependency: () => {} })).rejects.toThrow(
+    "Can't resolve './accent.css'",
+  )
 })
 
 test('resolves an `@import` that failed to resolve in a previous `compileAst` once the file exists', async () => {
@@ -44,4 +51,11 @@ test('resolves an `@import` that failed to resolve in a previous `compileAst` on
 
   let compiler = await compileAst(parse(css), { base, onDependency: () => {} })
   expect(toCss(compiler.build([]))).toContain('.accent')
+
+  // Once the file is removed again, the import fails again
+  await rm(path.join(base, 'accent.css'))
+
+  await expect(compileAst(parse(css), { base, onDependency: () => {} })).rejects.toThrow(
+    "Can't resolve './accent.css'",
+  )
 })
