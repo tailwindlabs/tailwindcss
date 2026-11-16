@@ -9790,6 +9790,8 @@ test('justify', async () => {
   expect(
     await run([
       'justify',
+      // `justify-content: baseline` is invalid CSS
+      'justify-baseline',
       '-justify-normal',
       '-justify-start',
       '-justify-end',
