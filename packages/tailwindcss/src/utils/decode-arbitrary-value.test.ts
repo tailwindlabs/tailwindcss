@@ -170,6 +170,11 @@ describe('adds spaces around math operators', () => {
     ['--calc(1px-2px)', '--calc(1px-2px)'],
     ['--my-calc(calc(1px-2px))', '--my-calc(calc(1px - 2px))'],
     ['calc(--my-min(1px-2px)+3px)', 'calc(--my-min(1px-2px) + 3px)'],
+    ['--my-Calc(1px-2px)', '--my-Calc(1px-2px)'],
+
+    // Function names are case-insensitive
+    ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
+    ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
   ]
 
   it.each(table)('%s', (input, output) => {

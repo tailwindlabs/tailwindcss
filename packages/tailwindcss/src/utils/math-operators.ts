@@ -60,10 +60,11 @@ export function hasMathFn(input: string) {
   while (paren !== -1) {
     // Scan backwards to the start of the function name. A math function name
     // only counts when it's the whole name, so `--my-calc(…)` is not `calc(…)`.
+    // Function names are case-insensitive, so `CALC(…)` is `calc(…)`.
     let start = paren
     while (start > 0 && isIdentChar(input.charCodeAt(start - 1))) start--
 
-    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren))) {
+    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren).toLowerCase())) {
       return true
     }
 
@@ -131,7 +132,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
       result += input[i]
 
       // Scan backwards to determine the function name. This assumes math
-      // functions are named with lowercase alphanumeric characters.
+      // functions are named with alphanumeric characters.
       let start = i
 
       for (let j = i - 1; j >= 0; j--) {
@@ -141,6 +142,8 @@ export function addWhitespaceAroundMathOperators(input: string) {
           start = j // 0-9
         } else if (inner >= LOWER_A && inner <= LOWER_Z) {
           start = j // a-z
+        } else if (inner >= UPPER_A && inner <= UPPER_Z) {
+          start = j // A-Z
         } else {
           break
         }
@@ -148,8 +151,9 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
       let fn = input.slice(start, i)
 
-      // This is a known math function so start formatting
-      if (MATH_FUNCTIONS.includes(fn) && isMathFnStart(input, start)) {
+      // This is a known math function so start formatting. Function names are
+      // case-insensitive, so `Calc(…)` is `calc(…)`.
+      if (MATH_FUNCTIONS_SET.has(fn.toLowerCase()) && isMathFnStart(input, start)) {
         formattable.unshift(true)
         continue
       }

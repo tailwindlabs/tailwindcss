@@ -27037,12 +27037,14 @@ test('text with math functions and custom functions', async () => {
         'text-[calc(1rem+var(--x))]',
         'text-[min(1rem,var(--x))]',
         'text-[calc(min(1rem,var(--x))+2px)]',
+        'text-[Calc(1rem+min(1rem,var(--x)))]',
 
         // Custom functions are inferred as a color, even when their name ends
         // in the name of a math function
         'text-[--foo(1px)]',
         'text-[--my-calc(1px)]',
         'text-[--item-rem(1px)]',
+        'text-[--my-Calc(1px)]',
       ],
       css`
         @tailwind utilities;
@@ -27050,6 +27052,10 @@ test('text with math functions and custom functions', async () => {
     ),
   ).toMatchInlineSnapshot(`
     "
+    .text-\\[Calc\\(1rem\\+min\\(1rem\\,var\\(--x\\)\\)\\)\\] {
+      font-size: Calc(1rem + min(1rem, var(--x)));
+    }
+
     .text-\\[calc\\(1rem\\+var\\(--x\\)\\)\\] {
       font-size: calc(1rem + var(--x));
     }
@@ -27068,6 +27074,10 @@ test('text with math functions and custom functions', async () => {
 
     .text-\\[--item-rem\\(1px\\)\\] {
       color: --item-rem(1px);
+    }
+
+    .text-\\[--my-Calc\\(1px\\)\\] {
+      color: --my-Calc(1px);
     }
 
     .text-\\[--my-calc\\(1px\\)\\] {
