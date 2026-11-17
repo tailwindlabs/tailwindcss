@@ -2129,7 +2129,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-between', [['justify-content', 'space-between']])
   staticUtility('justify-around', [['justify-content', 'space-around']])
   staticUtility('justify-evenly', [['justify-content', 'space-evenly']])
-  staticUtility('justify-baseline', [['justify-content', 'baseline']])
   staticUtility('justify-stretch', [['justify-content', 'stretch']])
 
   staticUtility('justify-items-normal', [['justify-items', 'normal']])
