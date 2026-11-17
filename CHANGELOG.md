@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow `readonly` arrays for `build()` candidates and `Scanner` sources, so callers no longer need to copy them into mutable arrays ([#20708](https://github.com/tailwindlabs/tailwindcss/pull/20708))
 - Canonicalization: don't replace `@scope` variants with unrelated `@scope` variants (e.g. `[@scope_(.card)]:flex` no longer becomes `in-blue:flex`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
 - Canonicalization: don't treat `.foo .bar` and `.foo.bar` as the same in at-rule variants (e.g. `@scope (…)` or `@supports selector(…)`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
+- Upgrade: Do not migrate a `variant` value that sits inside an expression, like `variant={active ? "outline" : "ghost"}` ([#20436](https://github.com/tailwindlabs/tailwindcss/pull/20436))
 
 ## [4.3.5] - 2026-11-06
 
