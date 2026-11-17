@@ -1413,6 +1413,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
       'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
     ],
+    ['[--foo:_]', '[--foo:_]'],
 
     // Improve readability when whitespace was used for readability
     ['w-[calc(100%_-_calc(var(--spacing)*60))]', 'w-[calc(100%-(--spacing(60)))]'],
