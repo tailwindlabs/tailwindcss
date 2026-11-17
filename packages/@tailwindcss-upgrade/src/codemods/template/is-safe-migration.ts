@@ -189,6 +189,14 @@ export function isSafeMigration(
     }
   }
 
+  // Heuristic: Disallow anything inside a shadcn/ui `variant` prop, because a
+  // conditional can sit between the prop and the string
+  //
+  // E.g.: `<Button variant={active ? "outline" : "ghost"} />`
+  if (isInsideVariantValue(currentLineBeforeCandidate)) {
+    return false
+  }
+
   // Heuristic: Disallow Next.js Image `placeholder` prop
   if (NEXT_PLACEHOLDER_PROP.test(currentLineBeforeCandidate)) {
     return false
@@ -200,6 +208,90 @@ export function isSafeMigration(
   }
 
   return true
+}
+
+// A name that only ends in `variant`, like `invariant`, is another variable, but
+// `data-variant`, `props.variant` and the PHP variable `$variant` still count
+const VARIANT_PROP = /(?<!\w)variant\s*(:|=(?![=>]))\s*/g
+const VARIANT_COMPARISON = /\bvariant\s*[!=]==?\s*['"`]$/
+
+// The candidate is the last thing on the line, so the `variant` value it sits in
+// is the one that has not ended yet. Each form ends somewhere different:
+// `variant={…}` at its matching brace, `variant="…"` at its own quote, and
+// `{ variant: … }` or `const variant = …` at a separator or at the brace around
+// it.
+function isInsideVariantValue(line: string): boolean {
+  // A string compared against `variant` is a variant name too
+  //
+  // E.g.: `if (variant === "outline") {}`
+  if (VARIANT_COMPARISON.test(line)) return true
+
+  for (let match of line.matchAll(VARIANT_PROP)) {
+    // The prop itself is never inside a string, so a `variant:` that is only
+    // mentioned in some other attribute value does not count
+    if (isMiddleOfString(line.slice(0, match.index))) continue
+
+    let start = match.index + match[0].length
+    let char = line[start]
+
+    if (match[1] === ':') {
+      // A cva `variant: { … }` map holds class names, so a candidate that still
+      // sits inside that object is a class, not a variant name
+      if (char === '{' && isOpenValue(line, start + 1, false)) continue
+      if (isOpenValue(line, start)) return true
+    } else if (char === '{') {
+      // A JSX value ends only at its matching brace, also when it holds an
+      // assignment or a comma
+      if (isOpenValue(line, start + 1, false)) return true
+    } else if (char === '"' || char === "'" || char === '`') {
+      if (!line.includes(char, start + 1)) return true
+    } else {
+      // E.g.: `const variant = active ? "outline" : "ghost"`
+      if (isOpenValue(line, start)) return true
+    }
+  }
+
+  return false
+}
+
+// Every string inside the value is part of it, also an argument of a call:
+// `variant={getVariant(active ? "outline" : "ghost")}` computes a variant name.
+//
+// With `separators` off, only a closing bracket ends the value, so it tells
+// whether the group that opens right before `start` is still open.
+function isOpenValue(line: string, start: number, separators = true): boolean {
+  let depth = 0
+  let quote: string | null = null
+
+  for (let i = start; i < line.length; i++) {
+    let char = line[i]
+
+    if (quote !== null) {
+      if (char === '\\') i++
+      else if (char === quote) quote = null
+    } else if (char === '"' || char === "'" || char === '`') {
+      quote = char
+    } else if (char === '(' || char === '[' || char === '{') {
+      depth++
+    } else if (char === ')' || char === ']' || char === '}') {
+      if (depth === 0) return false
+      depth--
+    } else if (separators && depth === 0 && (char === ',' || char === ';')) {
+      return false
+    } else if (separators && depth === 0 && char === '=' && isAssignment(line, i)) {
+      // The next attribute or assignment starts, e.g. `class=` in
+      // `<div data-variant=outline class="…">`
+      return false
+    }
+  }
+
+  return true
+}
+
+// Whether the `=` at `index` is an assignment, not a part of `==`, `!=`, `<=`,
+// `>=` or `=>`
+function isAssignment(line: string, index: number): boolean {
+  return !'=>'.includes(line[index + 1] ?? '') && !'=!<>'.includes(line[index - 1] ?? '')
 }
 
 // Assumptions:
