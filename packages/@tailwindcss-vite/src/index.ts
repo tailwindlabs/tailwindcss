@@ -68,27 +68,32 @@ function getResolvedOutputDirectories(config: ResolvedConfig) {
   let defaultOutputDirectory = path.resolve(config.root, config.build.outDir)
   let outputOptions = config.build.rollupOptions.output
 
-  let outputDirectories = outputOptions
-    ? Array.from(
-        new Set(
-          (Array.isArray(outputOptions) ? outputOptions : [outputOptions]).map((output) =>
-            // Vite passes `output.dir` to Rollup (or Rolldown) as-is, which
-            // resolves it against the working directory, not the root
-            output.dir ? path.resolve(output.dir) : defaultOutputDirectory,
-          ),
-        ),
-      )
-    : [defaultOutputDirectory]
+  let candidates = new Set<string>()
+  if (outputOptions) {
+    for (let output of Array.isArray(outputOptions) ? outputOptions : [outputOptions]) {
+      // Vite passes `output.dir` to Rollup (or Rolldown) as-is, which resolves
+      // it against the working directory, not the root
+      candidates.add(output.dir ? path.resolve(output.dir) : defaultOutputDirectory)
+    }
+  } else {
+    candidates.add(defaultOutputDirectory)
+  }
 
-  return outputDirectories.filter((directory) => {
+  // Only keep directories that are inside of the root
+  let directories: string[] = []
+  for (let directory of candidates) {
     let relative = path.relative(config.root, directory)
-    return (
+    if (
       relative !== '' &&
       relative !== '..' &&
       !relative.startsWith(`..${path.sep}`) &&
       !path.isAbsolute(relative)
-    )
-  })
+    ) {
+      directories.push(directory)
+    }
+  }
+
+  return directories
 }
 
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
