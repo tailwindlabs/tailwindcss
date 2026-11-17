@@ -3402,8 +3402,15 @@ function createVariantSignatureCache(
 
         // Canonicalize selectors to their minimal form
         walk(ast, (node) => {
+          // Variants that generate `@scope` rules wrap them in `context` nodes,
+          // which `toCss` doesn't print. Unwrap them so the signature includes
+          // the `@scope` rule.
+          if (node.kind === 'context') {
+            return WalkAction.Replace(node.nodes)
+          }
+
           // At-rules
-          if (node.kind === 'at-rule') {
+          else if (node.kind === 'at-rule') {
             // Normalize dimensions such that equivalent values in different
             // units are considered the same. E.g.: with a root font size of
             // `16px`, `@media (width >= 64rem)` and `@media (width >= 1024px)`
@@ -3411,7 +3418,10 @@ function createVariantSignatureCache(
             node.params = constantFoldDeclaration(node.params, rem)
 
             if (node.params.includes(' ')) {
-              node.params = node.params.replaceAll(' ', '')
+              node.params = normalizeAtRuleParamsWhitespace(
+                node.params,
+                node.name !== '@media' && node.name !== '@container',
+              )
             }
           }
 
@@ -3492,6 +3502,126 @@ function createVariantSignatureCache(
       }
     })
   })
+}
+
+// Remove whitespace in at-rule params that doesn't change their meaning, in a
+// single pass. E.g.: `(width >= 64rem)` → `(width>=64rem)`.
+//
+// Whitespace between other characters is collapsed to a single space, because
+// it can be a descendant combinator. E.g.: `@scope (.foo .bar)` and
+// `@scope (.foo.bar)` match different elements. The same goes for whitespace
+// before a `:` (`.foo :hover`), unless whitespace follows the `:` as well
+// (`(pointer : fine)`), or the params can't contain selectors (`@media` and
+// `@container`). Strings and escaped characters are kept as-is.
+function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: boolean) {
+  let result = ''
+  let pendingSpace = false
+  let quote = 0
+
+  // Whether the last character in `result` is escaped. E.g.: the `+` in
+  // `.foo\+ .bar` is part of the class name, not a delimiter.
+  let escaped = false
+
+  // Whether `result` ends with a hex escape that has no whitespace after it
+  // yet. E.g.: `\2b` in `.foo\2b .bar`.
+  let openHexEscape = false
+
+  for (let i = 0; i < params.length; i++) {
+    let char = params.charCodeAt(i)
+
+    // Copy strings verbatim, including escapes
+    if (quote !== 0) {
+      result += params[i]
+      escaped = false
+      if (char === BACKSLASH && i + 1 < params.length) {
+        result += params[++i]
+      } else if (char === quote) {
+        quote = 0
+      }
+      continue
+    }
+
+    if (isWhitespace(char)) {
+      // Leading whitespace is dropped
+      pendingSpace = result.length > 0
+      continue
+    }
+
+    // Only keep whitespace between two characters that need it. Trailing
+    // whitespace is dropped, because no character follows it.
+    let space =
+      pendingSpace &&
+      (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
+      !dropsWhitespaceBefore(char) &&
+      !(char === COLON && (!canContainSelectors || isWhitespace(params.charCodeAt(i + 1))))
+    pendingSpace = false
+
+    // A hex escape needs whitespace to end it when a hex digit or another
+    // space follows. E.g.: `.foo\2b  .bar` is `.foo\+ .bar`, but `.foo\2b>.bar`
+    // and `.foo\2b >.bar` are the same.
+    if (openHexEscape && (space || isHexDigit(char))) result += ' '
+    if (space) result += ' '
+
+    result += params[i]
+    escaped = false
+    openHexEscape = false
+
+    if (char === BACKSLASH && i + 1 < params.length) {
+      if (isHexDigit(params.charCodeAt(i + 1))) {
+        // A hex escape has up to 6 hex digits, and consumes one whitespace
+        // character after it. E.g.: `.foo\2b .bar` is `.foo\+.bar`, so only
+        // a second space would be a descendant combinator.
+        let end = i + 1
+        while (end < i + 7 && end < params.length && isHexDigit(params.charCodeAt(end))) end++
+        result += params.slice(i + 1, end)
+        i = end - 1
+        if (isWhitespace(params.charCodeAt(i + 1))) {
+          i++
+
+          // CSS treats CRLF as one newline
+          if (params.charCodeAt(i) === 0x0d && params.charCodeAt(i + 1) === 0x0a) i++
+        }
+        openHexEscape = true
+      } else {
+        result += params[++i]
+      }
+      escaped = true
+    } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      quote = char
+    }
+  }
+
+  return result
+}
+
+// `(`, `,`, `:`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceAfter(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === 0x2c ||
+    char === COLON ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
+}
+
+// `(`, `)`, `,`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceBefore(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === CLOSE_PAREN ||
+    char === 0x2c ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
 }
 
 export const PRE_COMPUTED_VARIANTS_KEY = Symbol()

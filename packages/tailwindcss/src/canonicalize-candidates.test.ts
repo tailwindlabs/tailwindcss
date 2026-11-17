@@ -1149,6 +1149,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Media queries
       ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+      ['[@media_(pointer_:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
       ['[@media_print]:flex', 'print:flex'],
       ['[@media_not_print]:flex', 'not-print:flex'],
@@ -2099,6 +2100,135 @@ describe('regressions', () => {
       'foo-value-42:flex',
     ])
     expect(compare).not.toHaveBeenCalled()
+  })
+
+  test('does not treat different `@scope` variants as the same', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-blue {
+          @scope ([data-theme='blue']) to ([data-theme]) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.card)]:flex'])).toEqual([
+      '[@scope_(.card)]:flex',
+    ])
+    expect(
+      designSystem.canonicalizeCandidates([
+        "[@scope_([data-theme='blue'])_to_([data-theme])]:flex",
+      ]),
+    ).toEqual(['in-blue:flex'])
+  })
+
+  test('does not treat a descendant combinator in an at-rule as a compound selector', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-foo-bar {
+          @scope (.foo.bar) {
+            @slot;
+          }
+        }
+        @custom-variant supports-foo-bar {
+          @supports selector(.foo.bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-plus-bar {
+          @scope (.foo\+.bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-hex-plus-bar {
+          @scope (.foo\2b .bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-hex-plus-child-bar {
+          @scope (.foo\2b>.bar) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    // `.foo .bar` and `.foo.bar` match different elements
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo_.bar)]:flex',
+        '[@supports_selector(.foo_.bar)]:flex',
+      ]),
+    ).toEqual(['[@scope_(.foo_.bar)]:flex', '[@supports_selector(.foo_.bar)]:flex'])
+
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo.bar)]:flex',
+        '[@supports_selector(.foo.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-bar:flex', 'supports-foo-bar:flex'])
+
+    // An escaped `+` is part of the class name, so the space after it is
+    // still a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+_.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\+_.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+.bar)]:flex'])).toEqual([
+      'in-foo-plus-bar:flex',
+    ])
+
+    // A hex escape consumes one whitespace character after it, so only the
+    // second space is a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\2b__.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)]:flex'])).toEqual([
+      'in-foo-hex-plus-bar:flex',
+    ])
+
+    // The whitespace that ends a hex escape is optional when the next character
+    // can't be part of the escape
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo\\2b>.bar)]:flex',
+        '[@scope_(.foo\\2b_>.bar)]:flex',
+        '[@scope_(.foo\\2b__>_.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-hex-plus-child-bar:flex'])
+  })
+
+  // CSS treats CRLF as one newline. The stylesheet parser already normalizes
+  // it, but a plugin variant keeps it in the at-rule params.
+  test('treats CRLF after a hex escape in an at-rule as one whitespace character', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ addVariant }) => {
+              addVariant('in-foo-hex-plus-bar', '@scope (.foo\\2b\r\n.bar) to (.limit)')
+            }),
+          }
+        },
+      },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex']),
+    ).toEqual(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex'])
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)_to_(.limit)]:flex']),
+    ).toEqual(['in-foo-hex-plus-bar:flex'])
   })
 })
 
