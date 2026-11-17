@@ -205,6 +205,10 @@ describe('is-safe-migration', async () => {
     [`items.map(variant => cn("shadow"))`, 'shadow', 'shadow-sm'],
     [`<div data-variant=outline class="shadow"></div>`, 'shadow', 'shadow-sm'],
 
+    // A name that only ends in `variant` is another variable
+    [`const invariant = cn("shadow")`, 'shadow', 'shadow-sm'],
+    [`Foo({ invariant: cn("shadow") })`, 'shadow', 'shadow-sm'],
+
     // A cva `variant: { … }` map holds class names
     [`  variant: { outline: "border shadow" },`, 'shadow', 'shadow-sm'],
     [`  variant: { default: "border", outline: "border shadow" },`, 'shadow', 'shadow-sm'],
