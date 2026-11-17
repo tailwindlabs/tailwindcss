@@ -211,8 +211,8 @@ export function isSafeMigration(
 }
 
 // A name that only ends in `variant`, like `invariant`, is another variable, but
-// `data-variant` and `props.variant` still count
-const VARIANT_PROP = /(?<![\w$])variant\s*(:|=(?![=>]))\s*/g
+// `data-variant`, `props.variant` and the PHP variable `$variant` still count
+const VARIANT_PROP = /(?<!\w)variant\s*(:|=(?![=>]))\s*/g
 const VARIANT_COMPARISON = /\bvariant\s*[!=]==?\s*['"`]$/
 
 // The candidate is the last thing on the line, so the `variant` value it sits in

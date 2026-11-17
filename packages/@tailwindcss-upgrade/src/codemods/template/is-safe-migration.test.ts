@@ -149,6 +149,9 @@ describe('is-safe-migration', async () => {
     [`function Button({ variant = active ? "outline" : "ghost" }) {}`, 'outline'],
     [`Button(variant=active ? "outline" : "ghost")`, 'outline'],
     [`<Button variant={value = active ? "outline" : "ghost"} />`, 'outline'],
+    [`<?php $variant = $active ? 'outline' : 'ghost'; ?>`, 'outline'],
+    [`@php($variant = $active ? 'outline' : 'ghost')`, 'outline'],
+    [`$variant = $attributes->get('variant') ?? 'outline';`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
