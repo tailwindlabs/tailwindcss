@@ -240,7 +240,9 @@ function isInsideVariantValue(line: string): boolean {
       if (char === '{' && isOpenValue(line, start + 1, false)) continue
       if (isOpenValue(line, start)) return true
     } else if (char === '{') {
-      if (isOpenValue(line, start + 1)) return true
+      // A JSX value ends only at its matching brace, also when it holds an
+      // assignment or a comma
+      if (isOpenValue(line, start + 1, false)) return true
     } else if (char === '"' || char === "'" || char === '`') {
       if (!line.includes(char, start + 1)) return true
     } else {

@@ -148,6 +148,7 @@ describe('is-safe-migration', async () => {
     [`let variant = props.variant ?? "outline";`, 'outline'],
     [`function Button({ variant = active ? "outline" : "ghost" }) {}`, 'outline'],
     [`Button(variant=active ? "outline" : "ghost")`, 'outline'],
+    [`<Button variant={value = active ? "outline" : "ghost"} />`, 'outline'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
