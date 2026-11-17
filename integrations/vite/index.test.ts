@@ -1470,6 +1470,71 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/17412
+test(
+  'watch mode does not rebuild when a broad `@source` glob matches the build output',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "6.2.3"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            cssMinify: false,
+            emptyOutDir: false,
+            outDir: 'assets',
+            rollupOptions: {
+              output: {
+                entryFileNames: 'entry.js',
+                chunkFileNames: 'chunk.js',
+                assetFileNames: 'style.css',
+              },
+            },
+          },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <main class="underline">Hello, world!</main>
+        <script type="module" src="./src/app.js"></script>
+      `,
+      'src/app.js': js`import './app.css'`,
+      'src/app.css': css`
+        @import 'tailwindcss';
+        @source '../**/*.html';
+      `,
+      'assets/entry.js': js`console.log('previous build')`,
+      'assets/style.css': css`/* Previous build */`,
+      'assets/index.html': html`<div class="previous-build"></div>`,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite build --watch')
+    await process.onStdout((message) => message.includes('built in'))
+
+    await fs.expectFileToContain('assets/style.css', [candidate`underline`])
+
+    let result = await Promise.race([
+      process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
+      new Promise((resolve) => setTimeout(() => resolve('idle'), 2_000)),
+    ])
+    expect(result).toBe('idle')
+  },
+)
+
 test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots`,
   {

@@ -96,6 +96,23 @@ function getResolvedOutputDirectories(config: ResolvedConfig) {
   return directories
 }
 
+function isInsideDirectory(file: string, directory: string) {
+  let relative = path.relative(directory, file)
+  return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative)
+}
+
+// The path of a source up to its first glob segment, e.g. `/project/assets`
+// for `../assets/**/*.html`
+function getStaticSourcePath(source: { base: string; pattern: string }) {
+  let segments: string[] = []
+  for (let segment of source.pattern.split('/')) {
+    if (/[*?[{]/.test(segment)) break
+    segments.push(segment)
+  }
+
+  return path.resolve(source.base, segments.join('/'))
+}
+
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let config: ResolvedConfig | null = null
   let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
@@ -400,8 +417,8 @@ class Root {
   // The lazily-initialized Tailwind scanner.
   private scanner?: Scanner
 
-  // A scanner for the explicit `@source` entries, which the excluded output
-  // directories would otherwise override.
+  // A scanner for the explicit `@source` entries that point inside of an
+  // excluded output directory, which the exclusion would otherwise override.
   private explicitScanner?: Scanner
 
   // List of all candidates that were being returned by the root scanner during
@@ -525,11 +542,29 @@ class Root {
       }
 
       this.scanner = new Scanner({ sources })
-      this.explicitScanner =
-        this.excludedDirectories.length > 0 &&
-        this.compiler.sources.some((source) => !source.negated)
-          ? new Scanner({ sources: this.compiler.sources })
-          : undefined
+      // Keep an explicit `@source` that points inside of an excluded output
+      // directory. A broader glob, like `../**/*.html`, still skips the output
+      // directories, because matching the build output would loop the watcher.
+      let explicitSources: typeof sources = []
+      let hasExplicitSources = false
+      for (let source of this.compiler.sources) {
+        if (source.negated) {
+          explicitSources.push(source)
+          continue
+        }
+
+        let staticPath = getStaticSourcePath(source)
+        for (let directory of this.excludedDirectories) {
+          if (isInsideDirectory(staticPath, directory)) {
+            explicitSources.push(source)
+            hasExplicitSources = true
+            break
+          }
+        }
+      }
+      this.explicitScanner = hasExplicitSources
+        ? new Scanner({ sources: explicitSources })
+        : undefined
       if (scannedCandidates) sourcesKey = JSON.stringify(sources)
       DEBUG && I.end('Setup scanner')
 
