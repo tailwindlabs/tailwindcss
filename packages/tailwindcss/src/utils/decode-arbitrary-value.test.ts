@@ -157,6 +157,24 @@ describe('adds spaces around math operators', () => {
 
     // `-infinity` is a keyword and should not have spaces around the `-`
     ['atan(1 + -infinity)', 'atan(1 + -infinity)'],
+
+    // A `-` before a math function can be an operator or a sign
+    ['calc(1px-min(2px,3px))', 'calc(1px - min(2px, 3px))'],
+    ['calc(100%-min(2px,3px))', 'calc(100% - min(2px, 3px))'],
+    ['calc(1px*-min(2px,3px))', 'calc(1px * -min(2px, 3px))'],
+
+    // Custom functions whose name ends in a math function name are not math
+    // functions
+    ['--my-calc(1px-2px)', '--my-calc(1px-2px)'],
+    ['--item-rem(1px-2px,3px)', '--item-rem(1px-2px,3px)'],
+    ['--calc(1px-2px)', '--calc(1px-2px)'],
+    ['--my-calc(calc(1px-2px))', '--my-calc(calc(1px - 2px))'],
+    ['calc(--my-min(1px-2px)+3px)', 'calc(--my-min(1px-2px) + 3px)'],
+    ['--my-Calc(1px-2px)', '--my-Calc(1px-2px)'],
+
+    // Function names are case-insensitive
+    ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
+    ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
   ]
 
   it.each(table)('%s', (input, output) => {
