@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: don't replace `@scope` variants with unrelated `@scope` variants (e.g. `[@scope_(.card)]:flex` no longer becomes `in-blue:flex`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
 - Canonicalization: don't treat `.foo .bar` and `.foo.bar` as the same in at-rule variants (e.g. `@scope (…)` or `@supports selector(…)`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
 - Upgrade: Do not migrate a `variant` value that sits inside an expression, like `variant={active ? "outline" : "ghost"}` ([#20436](https://github.com/tailwindlabs/tailwindcss/pull/20436))
+- Don't treat CSS custom functions whose name ends in a math function name as math functions (e.g. `text-[--my-calc(1px)]` is now a `color` instead of a `font-size`, and `w-[--my-calc(1px-2px)]` doesn't get spaces around the `-`) ([#20727](https://github.com/tailwindlabs/tailwindcss/pull/20727))
+- Match math function names case-insensitively when inferring the type of an arbitrary value and adding spaces around math operators (e.g. `text-[Calc(1rem+min(1rem,2rem))]`) ([#20727](https://github.com/tailwindlabs/tailwindcss/pull/20727))
 
 ## [4.3.5] - 2026-11-06
 
