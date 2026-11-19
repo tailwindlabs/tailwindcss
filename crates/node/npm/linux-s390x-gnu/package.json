@@ -1,0 +1,30 @@
+{
+  "name": "@tailwindcss/oxide-linux-s390x-gnu",
+  "version": "4.3.2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
+    "directory": "crates/node/npm/linux-s390x-gnu"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "s390x"
+  ],
+  "main": "tailwindcss-oxide.linux-s390x-gnu.node",
+  "files": [
+    "tailwindcss-oxide.linux-s390x-gnu.node"
+  ],
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 20"
+  },
+  "libc": [
+    "glibc"
+  ]
+}
