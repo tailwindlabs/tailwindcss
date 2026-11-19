@@ -36,8 +36,7 @@ export async function substituteAtImports(
       let { uri, layer, media, supports } = parsed
 
       // Skip importing data or remote URIs
-      if (uri.startsWith('data:')) return
-      if (uri.startsWith('http://') || uri.startsWith('https://')) return
+      if (/^(?:data:|https?:\/\/)/i.test(uri)) return
 
       let contextNode = context({}, [])
 
