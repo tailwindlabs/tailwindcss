@@ -130,3 +130,28 @@ it('should lowercase CSS-wide keywords when converting a PostCSS AST', () => {
     "
   `)
 })
+
+it('should keep CSS-wide keywords in `@plugin` options when converting a PostCSS AST', () => {
+  // prettier-ignore
+  let input = css`
+    @plugin "my-plugin" {
+      is-upper: INHERIT;
+    }
+    @PLUGIN "my-plugin" {
+      is-mixed: Initial;
+    }
+  `
+
+  let ast = postcss.parse(input)
+  let transformedAst = postCssAstToCssAst(ast)
+
+  expect(toCss(transformedAst)).toMatchInlineSnapshot(`
+    "@plugin "my-plugin" {
+      is-upper: INHERIT;
+    }
+    @plugin "my-plugin" {
+      is-mixed: Initial;
+    }
+    "
+  `)
+})

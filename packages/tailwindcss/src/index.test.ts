@@ -3938,6 +3938,38 @@ describe('plugins', () => {
     )
   })
 
+  test('@plugin options keep CSS-wide keywords as written', async () => {
+    expect.hasAssertions()
+
+    // The options are not CSS, so we don't lowercase CSS-wide keywords in them
+    // prettier-ignore
+    await compile(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin" {
+          --is-custom: UNSET;
+          is-upper: INHERIT;
+          is-mixed: Initial
+        }
+      `,
+      {
+        loadModule: async () => ({
+          path: '',
+          base: '/root',
+          module: plugin.withOptions((options) => {
+            expect(options).toEqual({
+              '--is-custom': 'UNSET',
+              'is-upper': 'INHERIT',
+              'is-mixed': 'Initial',
+            })
+
+            return () => {}
+          }),
+        }),
+      },
+    )
+  })
+
   test('@plugin options can only be simple key/value pairs', () => {
     return expect(
       compile(

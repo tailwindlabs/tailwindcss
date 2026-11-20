@@ -380,7 +380,7 @@ export function parse(input: string, opts?: ParseOptions) {
         i = input.length
       }
 
-      let declaration = parseDeclaration(buffer, colonIdx, valueEnd)
+      let declaration = parseDeclaration(buffer, parent, colonIdx, valueEnd)
       if (!declaration) {
         throw new CssSyntaxError(
           `Invalid custom property, expected a value`,
@@ -448,7 +448,7 @@ export function parse(input: string, opts?: ParseOptions) {
       currentChar === SEMICOLON &&
       closingBracketStack[closingBracketStack.length - 1] !== ')'
     ) {
-      let declaration = parseDeclaration(buffer)
+      let declaration = parseDeclaration(buffer, parent)
       if (!declaration) {
         if (buffer.length === 0) continue
         throw new CssSyntaxError(
@@ -572,7 +572,7 @@ export function parse(input: string, opts?: ParseOptions) {
 
           // Attach the declaration to the parent.
           if (parent) {
-            let node = parseDeclaration(buffer, colonIdx)
+            let node = parseDeclaration(buffer, parent, colonIdx)
             if (!node) {
               throw new CssSyntaxError(
                 `Invalid declaration: \`${buffer.trim()}\``,
@@ -682,7 +682,7 @@ export function parse(input: string, opts?: ParseOptions) {
   // color: red
   // ```
   else if (buffer.length > 0 && closingBracketStack.length === 0) {
-    let declaration = parseDeclaration(buffer)
+    let declaration = parseDeclaration(buffer, parent)
     if (declaration) {
       if (source) {
         declaration.src = [source, bufferStart, input.length]
@@ -759,6 +759,7 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
 
 function parseDeclaration(
   buffer: string,
+  parent: Rule | null,
   colonIdx: number = buffer.indexOf(':'),
   valueEnd: number = buffer.length,
 ): Declaration | null {
@@ -791,13 +792,23 @@ function parseDeclaration(
   let bangIdx =
     (value.charCodeAt(value.length - 1) | LOWERCASE_BIT) === LOWER_T ? findImportantFlag(value) : -1
 
-  // CSS-wide keywords are ASCII case-insensitive, so we lowercase them in both
-  // cases below, e.g. `INHERIT` becomes `inherit`.
-  if (bangIdx !== -1 && !isEscaped(value, bangIdx)) {
-    return decl(property, normalizeCssWideKeyword(trimValue(value.slice(0, bangIdx))), true)
+  let important = bangIdx !== -1 && !isEscaped(value, bangIdx)
+  value = important ? trimValue(value.slice(0, bangIdx)) : trimValue(buffer.slice(colonIdx + 1))
+
+  // CSS-wide keywords are ASCII case-insensitive, so we lowercase them, e.g.
+  // `INHERIT` becomes `inherit`. But the options of a `@plugin` are not CSS, so
+  // we pass them to the plugin as written:
+  //
+  // ```css
+  // @plugin "my-plugin" {
+  //   className: INHERIT;
+  // }
+  // ```
+  if (parent?.kind !== 'at-rule' || parent.name !== '@plugin') {
+    value = normalizeCssWideKeyword(value)
   }
 
-  return decl(property, normalizeCssWideKeyword(trimValue(buffer.slice(colonIdx + 1))), false)
+  return decl(property, value, important)
 }
 
 // Return the index of the `!` of an `!important` flag at the end of the value,

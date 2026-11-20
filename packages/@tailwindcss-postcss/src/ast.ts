@@ -151,8 +151,10 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
     if (node.type === 'decl') {
       // CSS-wide keywords are ASCII case-insensitive. The CSS parser of
       // Tailwind CSS lowercases them, and so do we, because this AST skips that
-      // parser.
-      let astNode = decl(node.prop, normalizeCssWideKeyword(node.value), node.important)
+      // parser. Like that parser, we keep the options of a `@plugin` as
+      // written, because they are not CSS.
+      let value = isPluginOption(node) ? node.value : normalizeCssWideKeyword(node.value)
+      let astNode = decl(node.prop, value, node.important)
       astNode.src = toSource(node)
       parent.push(astNode)
     }
@@ -193,4 +195,9 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
   root.each((node) => transform(node, ast))
 
   return ast
+}
+
+function isPluginOption(node: postcss.Declaration): boolean {
+  let parent = node.parent as postcss.AnyNode | undefined
+  return parent?.type === 'atrule' && toAsciiLowerCase(parent.name) === 'plugin'
 }
