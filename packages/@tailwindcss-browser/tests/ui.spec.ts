@@ -105,6 +105,79 @@ test('html classes', async ({ page }) => {
   await expect(page.locator('html')).toHaveCSS('height', '16px')
 })
 
+test('elements inside of new elements', async ({ page }) => {
+  await server.render({
+    page,
+    body: html`<div data-root></div>`,
+  })
+
+  await page.evaluate(() => {
+    let root = document.querySelector('[data-root]')!
+
+    // Multiple levels of elements that are added at once
+    root.innerHTML = `<div class="p-4"><div data-nested class="w-32 h-32 bg-red"></div></div>`
+
+    // An element that is added to an element that was only just added itself
+    let appended = document.createElement('div')
+    appended.setAttribute('data-appended', '')
+    appended.className = 'w-32 h-32 bg-blue'
+    root.firstElementChild!.append(appended)
+  })
+
+  await expect(page.locator('[data-nested]')).toHaveCSS('background-color', 'rgb(255, 0, 0)')
+  await expect(page.locator('[data-appended]')).toHaveCSS('background-color', 'rgb(0, 0, 255)')
+})
+
+test('recovers from invalid CSS', async ({ page }) => {
+  await server.render({
+    page,
+    head: html`
+      <style data-css type="text/tailwindcss">
+        .foo {
+          @apply bg-red;
+        }
+      </style>
+    `,
+    body: html`<div data-test class="w-32 h-32 foo"></div>`,
+  })
+
+  await expect(page.locator('[data-test]')).toHaveCSS('background-color', 'rgb(255, 0, 0)')
+
+  await page.evaluate(() => {
+    document.querySelector('[data-css]')!.textContent = `
+      .foo {
+        @apply does-not-exist;
+      }
+    `
+  })
+
+  await page.evaluate(() => {
+    document.querySelector('[data-css]')!.textContent = `
+      .foo {
+        @apply bg-blue;
+      }
+    `
+  })
+
+  await expect(page.locator('[data-test]')).toHaveCSS('background-color', 'rgb(0, 0, 255)')
+})
+
+test('legacy `theme()` paths', async ({ page }) => {
+  await server.render({
+    page,
+    head: html`
+      <style type="text/tailwindcss">
+        .foo {
+          background-color: theme(colors.red);
+        }
+      </style>
+    `,
+    body: html`<div data-test class="w-32 h-32 foo"></div>`,
+  })
+
+  await expect(page.locator('[data-test]')).toHaveCSS('background-color', 'rgb(255, 0, 0)')
+})
+
 async function createServer() {
   const { createApp, createRouter, defineEventHandler, toNodeListener } = await import('h3')
   const { listen } = await import('listhen')
