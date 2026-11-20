@@ -1,5 +1,5 @@
 import type { DesignSystem } from './design-system'
-import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
+import { decodeArbitraryValue, normalizeFunctionNames } from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
@@ -528,6 +528,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     if (value[0] !== '-' || value[1] !== '-') return
 
     // Values can't contain `;` or `}` characters at the top-level.
+    value = normalizeFunctionNames(value)
     if (!isValidArbitrary(value)) return
 
     roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
@@ -657,6 +658,7 @@ function parseModifier(modifier: string): CandidateModifier | null {
     if (modifier[0] !== '-' || modifier[1] !== '-') return null
 
     // Values can't contain `;` or `}` characters at the top-level.
+    modifier = normalizeFunctionNames(modifier)
     if (!isValidArbitrary(modifier)) return null
 
     // Wrap the value in `var(…)` to ensure that it is a valid CSS variable.
@@ -1310,5 +1312,9 @@ function escapeUnderscore(value: string): string {
 // the order matters: decoding breaks unbalanced parens (`calc(1px` becomes
 // `calc()1px`) so validating the decoded value would hide them
 function decodeValidArbitraryValue(raw: string, isDeclarationValue = false): string | null {
+  // We validate the value with the function names that we print, because we
+  // treat a `url(…)` differently than other functions, e.g. `URL(…)`.
+  raw = normalizeFunctionNames(raw)
+
   return isValidArbitrary(raw, isDeclarationValue) ? decodeArbitraryValue(raw) : null
 }

@@ -250,7 +250,7 @@ const LENGTH_UNITS = [
 ]
 
 const IS_LENGTH = new RegExp(`^${HAS_NUMBER.source}(${LENGTH_UNITS.join('|')})$`)
-const IS_LENGTH_FN = /^(--spacing)\(/i
+const IS_LENGTH_FN = /^(--spacing)\(/
 
 export function isLength(value: string): boolean {
   return IS_LENGTH.test(value) || IS_LENGTH_FN.test(value) || hasMathFn(value)

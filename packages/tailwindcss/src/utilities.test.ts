@@ -27058,7 +27058,7 @@ test('text with math functions and custom functions', async () => {
   ).toMatchInlineSnapshot(`
     "
     .text-\\[Calc\\(1rem\\+min\\(1rem\\,var\\(--x\\)\\)\\)\\] {
-      font-size: Calc(1rem + min(1rem, var(--x)));
+      font-size: calc(1rem + min(1rem, var(--x)));
     }
 
     .text-\\[calc\\(1rem\\+var\\(--x\\)\\)\\] {

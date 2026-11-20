@@ -103,7 +103,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       continue
     }
 
-    if (node.kind === 'function' && node.value.toLowerCase() === 'url') {
+    if (node.kind === 'function' && node.value === 'url') {
       // `@import` with `url(…)` functions are not inlined but skipped and kept
       // in the final CSS instead.
       // E.g.: `@import url("https://fonts.google.com")`
@@ -132,7 +132,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       continue
     }
 
-    if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
+    if (node.kind === 'function' && node.value === 'supports') {
       if (supports) return null
       supports = ValueParser.toCss(node.nodes)
       continue

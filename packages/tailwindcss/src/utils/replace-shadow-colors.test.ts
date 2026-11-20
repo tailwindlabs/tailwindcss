@@ -103,6 +103,13 @@ describe('without replacer', () => {
       `"var(--my-shadow), 1px 1px var(--tw-shadow-color, var(--my-color)), 0 0 1px var(--tw-shadow-color, var(--my-color))"`,
     )
   })
+
+  it('should handle function names in any case', () => {
+    let parsed = replaceShadowColors('CALC(1px * 2) 1px RGB(0 0 0 / 0.05)', replacer)
+    expect(parsed).toMatchInlineSnapshot(
+      `"calc(1px * 2) 1px var(--tw-shadow-color, rgb(0 0 0 / 0.05))"`,
+    )
+  })
 })
 
 describe('with replacer', () => {

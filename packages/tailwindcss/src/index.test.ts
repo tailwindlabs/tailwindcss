@@ -333,6 +333,44 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('function names are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // known functions in the output.
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        'bg-[URL(my_image.png)]',
+        'w-[CALC(100%-1rem)]',
+        'text-[RGB(0_0_0)]',
+
+        // Dashed functions are case-sensitive, so `--SPACING(…)` is not
+        // `--spacing(…)`, and it is not a length.
+        'text-[--SPACING(1)]',
+        'w-[--MY-FN(1px)]',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ".w-\\[--MY-FN\\(1px\\)\\] {
+        width: --MY-FN(1px);
+      }
+      .w-\\[CALC\\(100\\%-1rem\\)\\] {
+        width: calc(100% - 1rem);
+      }
+      .bg-\\[URL\\(my_image\\.png\\)\\] {
+        background-image: url(my_image.png);
+      }
+      .text-\\[--SPACING\\(1\\)\\] {
+        color: --SPACING(1);
+      }
+      .text-\\[RGB\\(0_0_0\\)\\] {
+        color: rgb(0 0 0);
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

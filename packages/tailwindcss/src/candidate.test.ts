@@ -2188,8 +2188,6 @@ it.each([
 
   // A `/*` inside of an unquoted `url(…)` that PostCSS does not read as a
   // `url(…)`, or that CSS does not read as a `url(…)` at all
-  'bg-[URL(/a/*.png)]',
-  'bg-[Url(/a/*.png)]',
   'bg-[url(a.png),url(/b/*.png)]',
   'bg-[#url(/a/*.png)]',
   'bg-[@url(/a/*.png)]',
@@ -2208,7 +2206,6 @@ it.each([
 
   // PostCSS reads `\/*` as a `\` and the start of a comment
   'bg-[\\/*]',
-  'bg-[URL(a\\/*b)]',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2272,14 +2269,18 @@ it('should parse a function name with an escaped `_`', () => {
   ])
 })
 
-it('should parse a quoted string after an `_` in an uppercase `URL(…)`', () => {
+it('should treat a `URL(…)` as a `url(…)`', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  // The `_` becomes a space, so this is a quoted `URL( 'image.png')`.
-  expect(run(`bg-[URL(_'image.png')]`, { utilities })).toMatchObject([
-    { value: { kind: 'arbitrary', value: "URL( 'image.png')" } },
+  // A `url(…)` keeps each `_`, so the file name has an `_` in it.
+  expect(run(`bg-[URL('my_image.png')]`, { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: "url('my_image.png')" } },
   ])
+
+  // A `url(…)` keeps each `_`, so this is not a quoted string.
+  expect(run(`bg-[url(_'image.png')]`, { utilities })).toEqual([])
+  expect(run(`bg-[URL(_'image.png')]`, { utilities })).toEqual([])
 })
 
 it('should parse a `/*` inside of a string in an arbitrary value', () => {
@@ -2307,6 +2308,9 @@ it('should parse a `/*` inside of a string in an arbitrary value', () => {
 
 it.each([
   ['bg-[url(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[URL(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[Url(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[URL(a\\/*b)]', 'url(a\\/*b)'],
   ['bg-[url(a.png),_url(/b/*.png)]', 'url(a.png), url(/b/*.png)'],
   ['bg-[image-set(url(/a/*.png)_1x)]', 'image-set(url(/a/*.png) 1x)'],
   ['bg-[no-repeat_url(/a/*.png)]', 'no-repeat url(/a/*.png)'],

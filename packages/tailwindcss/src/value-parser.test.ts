@@ -182,6 +182,48 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('should lowercase the name of a function', () => {
+    expect(parse('CALC(1px + 2px)')).toEqual([
+      {
+        kind: 'function',
+        value: 'calc',
+        nodes: [
+          { kind: 'word', value: '1px' },
+          { kind: 'separator', value: ' ' },
+          { kind: 'word', value: '+' },
+          { kind: 'separator', value: ' ' },
+          { kind: 'word', value: '2px' },
+        ],
+      },
+    ])
+
+    // Only the name, not the arguments
+    expect(toCss(parse('VAR(--MY-VAR, FOO)'))).toBe('var(--MY-VAR, FOO)')
+    expect(toCss(parse('1+CALC(1px)'))).toBe('1+calc(1px)')
+    expect(toCss(parse('-WEBKIT-CALC(1px)'))).toBe('-webkit-calc(1px)')
+
+    // The functions that CSS spells in camelCase
+    expect(toCss(parse('ROTATEX(1deg) rotateY(1deg) scalez(2)'))).toBe(
+      'rotateX(1deg) rotateY(1deg) scalez(2)',
+    )
+  })
+
+  it('should not lowercase the name of a dashed function', () => {
+    expect(toCss(parse('--MY-FN(1px)'))).toBe('--MY-FN(1px)')
+    expect(toCss(parse('--my_FN(1px)'))).toBe('--my_FN(1px)')
+    expect(toCss(parse('--my\\_FN(1px)'))).toBe('--my\\_FN(1px)')
+  })
+
+  it('should only lowercase the function name at the end of a word', () => {
+    // A `-` after a number is a math operator, so the name is `theme`
+    expect(toCss(parse('calc(100PX-theme(spacing.1))'))).toBe('calc(100PX-theme(spacing.1))')
+    expect(toCss(parse('calc(1E-3-CALC(1px))'))).toBe('calc(1E-3-calc(1px))')
+
+    // An `_` in an arbitrary value becomes a space, so the name is `CALC`
+    expect(toCss(parse('Spin_CALC(1s*2)'))).toBe('Spin_calc(1s*2)')
+    expect(toCss(parse('a_--MY-FN(1px)'))).toBe('a_--MY-FN(1px)')
+  })
 })
 
 describe('toCss', () => {

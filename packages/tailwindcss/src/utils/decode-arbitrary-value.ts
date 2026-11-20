@@ -1,5 +1,21 @@
 import * as ValueParser from '../value-parser'
 import { addWhitespaceAroundMathOperators } from './math-operators'
+import { findFunctionNameStart, isDashed, normalizeFunctionName } from './normalize-function-name'
+
+const BACKSLASH = 0x5c
+const DASH = 0x2d
+const DOUBLE_QUOTE = 0x22
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
+const NINE = 0x39
+const NON_ASCII = 0x80
+const OPEN_PAREN = 0x28
+const SINGLE_QUOTE = 0x27
+const UPPER_A = 0x41
+const UPPER_Z = 0x5a
+const ZERO = 0x30
+
+const HAS_UPPER_CASE = /[A-Z]/
 
 export function decodeArbitraryValue(input: string): string {
   // There are definitely no functions in the input, so bail early
@@ -14,6 +30,104 @@ export function decodeArbitraryValue(input: string): string {
   input = addWhitespaceAroundMathOperators(input)
 
   return input
+}
+
+/**
+ * Lowercase the names of the functions in a raw arbitrary value, e.g. the `URL`
+ * in `bg-[URL(…)]`. Function names are ASCII case-insensitive, except for
+ * dashed functions, like `--my-fn(…)`. See `normalizeFunctionName`.
+ *
+ * This has to happen before we validate the value, because we treat a `url(…)`
+ * differently than other functions. E.g. we keep each `_` in a `url(…)`, so
+ * `URL(my_image.png)` has to be a `url(…)` too.
+ *
+ * An `_` becomes a space later, so the name in `Spin_CALC(…)` is `CALC`. But a
+ * `\_` is a literal `_`, so `--my\_FN(…)` is the dashed function `--my_FN`.
+ */
+export function normalizeFunctionNames(input: string): string {
+  // There are definitely no functions in the input, or no uppercase letters in
+  // their names, so bail early
+  if (input.indexOf('(') === -1 || !HAS_UPPER_CASE.test(input)) return input
+
+  let result = ''
+  let lastIdx = 0
+
+  // The start of the current name, or -1
+  let nameStart = -1
+  let hasUpperCase = false
+
+  for (let i = 0; i < input.length; i++) {
+    let char = input.charCodeAt(i)
+
+    // Uppercase letters are part of a name
+    if (char >= UPPER_A && char <= UPPER_Z) {
+      if (nameStart === -1) nameStart = i
+      hasUpperCase = true
+    }
+
+    // The end of a function name
+    else if (char === OPEN_PAREN) {
+      if (hasUpperCase) {
+        // The name can start after a number, e.g. the `theme` in `100PX-theme(…)`
+        let start = findFunctionNameStart(input, nameStart, i)
+
+        // Dashed functions are case-sensitive, e.g. `--MY-FN(…)`
+        if (!isDashed(input, start)) {
+          let name = input.slice(start, i)
+          let normalizedName = normalizeFunctionName(name)
+          if (normalizedName !== name) {
+            result += input.slice(lastIdx, start) + normalizedName
+            lastIdx = i
+          }
+        }
+      }
+
+      nameStart = -1
+      hasUpperCase = false
+    }
+
+    // An escaped character is part of a name, e.g. the `\_` in `--my\_fn`
+    else if (char === BACKSLASH) {
+      if (nameStart === -1) nameStart = i
+      char = input.charCodeAt(++i)
+      if (char >= UPPER_A && char <= UPPER_Z) hasUpperCase = true
+    }
+
+    // Skip over strings, e.g. the `FN(` in `'FN('` is not a function
+    else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      let end = i + 1
+      while (end < input.length && input.charCodeAt(end) !== char) {
+        // Skip over the escaped character, e.g. the `\'` in `'a\'b'`
+        if (input.charCodeAt(end) === BACKSLASH) end += 1
+        end += 1
+      }
+      i = end
+
+      nameStart = -1
+      hasUpperCase = false
+    }
+
+    // Other characters that are part of a name
+    else if (
+      (char >= LOWER_A && char <= LOWER_Z) ||
+      (char >= ZERO && char <= NINE) ||
+      char === DASH ||
+      char >= NON_ASCII
+    ) {
+      if (nameStart === -1) nameStart = i
+    }
+
+    // Any other character ends the name, including `_`
+    else {
+      nameStart = -1
+      hasUpperCase = false
+    }
+  }
+
+  // Nothing changed
+  if (lastIdx === 0) return input
+
+  return result + input.slice(lastIdx)
 }
 
 /**

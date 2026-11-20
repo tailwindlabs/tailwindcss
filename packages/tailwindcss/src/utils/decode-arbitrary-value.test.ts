@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { decodeArbitraryValue } from './decode-arbitrary-value'
+import { decodeArbitraryValue, normalizeFunctionNames } from './decode-arbitrary-value'
 
 describe('decoding arbitrary values', () => {
   it('should replace an underscore with a space', () => {
@@ -40,6 +40,45 @@ describe('decoding arbitrary values', () => {
   it('should leave var(…) as is', () => {
     expect(decodeArbitraryValue('var(--foo)')).toBe('var(--foo)')
     expect(decodeArbitraryValue('var(--headings-h1-size)')).toBe('var(--headings-h1-size)')
+  })
+
+  it('should lowercase function names', () => {
+    expect(decodeArbitraryValue('URL(./my_file.jpg)')).toBe('url(./my_file.jpg)')
+    expect(decodeArbitraryValue('VAR(--spacing-1_5,_1rem)')).toBe('var(--spacing-1_5, 1rem)')
+    expect(decodeArbitraryValue('ROTATEX(45deg)_SCALEZ(2)')).toBe('rotateX(45deg) scaleZ(2)')
+    expect(decodeArbitraryValue('Spin_CALC(1s*2)_linear')).toBe('Spin calc(1s * 2) linear')
+    expect(decodeArbitraryValue('--MY-FN(1px)')).toBe('--MY-FN(1px)')
+  })
+})
+
+describe('normalizeFunctionNames', () => {
+  it.each([
+    ['URL(./my_file.jpg)', 'url(./my_file.jpg)'],
+    ['no-repeat_URL(./my_file.jpg)', 'no-repeat_url(./my_file.jpg)'],
+    ['Spin_CALC(1s*2)_linear', 'Spin_calc(1s*2)_linear'],
+    ['ROTATEX(45deg)_SCALEZ(2)', 'rotateX(45deg)_scaleZ(2)'],
+    ['-WEBKIT-CALC(1px)', '-webkit-calc(1px)'],
+    ['C\\ALC(1px)', 'c\\alc(1px)'],
+
+    // A `-` after a number is a math operator, so the name starts after it
+    ['calc(100PX-theme(spacing.1))', 'calc(100PX-theme(spacing.1))'],
+    ['calc(1E-3-CALC(1px))', 'calc(1E-3-calc(1px))'],
+    ['calc(-1PX-CALC(1px))', 'calc(-1PX-calc(1px))'],
+
+    // Dashed functions are case-sensitive
+    ['--MY-FN(1px)', '--MY-FN(1px)'],
+    ['a_--MY-FN(1px)', 'a_--MY-FN(1px)'],
+    ['--my\\_FN(1px)', '--my\\_FN(1px)'],
+
+    // An `_` becomes a space, so `FN` is a function of its own
+    ['--my_FN(1px)', '--my_fn(1px)'],
+
+    // Strings and words without a `(` are not function names
+    ["'FN('_X(1)", "'FN('_x(1)"],
+    ['"A\\"B(1)"', '"A\\"B(1)"'],
+    ['FOO_BAR', 'FOO_BAR'],
+  ])('%s', (input, output) => {
+    expect(normalizeFunctionNames(input)).toBe(output)
   })
 })
 
@@ -178,9 +217,10 @@ describe('adds spaces around math operators', () => {
     ['calc(--my-min(1px-2px)+3px)', 'calc(--my-min(1px-2px) + 3px)'],
     ['--my-Calc(1px-2px)', '--my-Calc(1px-2px)'],
 
-    // Function names are case-insensitive
-    ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
-    ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
+    // Function names are case-insensitive, so we print them in lowercase
+    ['Asin(0.5+0.2)', 'asin(0.5 + 0.2)'],
+    ['Calc(1px+min(2px,3px))', 'calc(1px + min(2px, 3px))'],
+    ['CALC(1px+2px)', 'calc(1px + 2px)'],
   ]
 
   it.each(table)('%s', (input, output) => {

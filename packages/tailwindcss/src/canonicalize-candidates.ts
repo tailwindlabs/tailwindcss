@@ -25,6 +25,7 @@ import { dimensions } from './utils/dimensions'
 import { isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
+import { toAsciiLowerCase } from './utils/to-ascii-lower-case'
 import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
@@ -933,6 +934,8 @@ function keepName(input: string, output: string, raw: string, name: string, end:
  * given name as-is. E.g. in `url(…)`, `no-repeat_url(…)` or `var(…)`.
  */
 function keepsUnderscores(name: string) {
+  // Function names are case-insensitive, so `URL(…)` is a `url(…)` too.
+  name = toAsciiLowerCase(name)
   return name.endsWith('url') || name.endsWith('var') || name.endsWith('theme')
 }
 

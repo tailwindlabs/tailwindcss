@@ -217,6 +217,19 @@ test('url() imports are passed-through', async () => {
     @import "/example.css";
     "
   `)
+
+  expect(
+    await compileCss(
+      css`
+        @import URL('example.css');
+      `,
+      { base: '/root', loadStylesheet: () => Promise.reject(new Error('Unexpected stylesheet')) },
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @import "example.css";
+    "
+  `)
 })
 
 test('handles case-insensitive @import directive', async () => {
@@ -312,6 +325,23 @@ test('@supports', async () => {
     await compileCss(
       css`
         @import 'example.css' supports(display: grid);
+      `,
+      { base: '/root', loadStylesheet },
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @supports (display: grid) {
+      a {
+        color: red;
+      }
+    }
+    "
+  `)
+
+  expect(
+    await compileCss(
+      css`
+        @import 'example.css' SUPPORTS(display: grid);
       `,
       { base: '/root', loadStylesheet },
     ),
