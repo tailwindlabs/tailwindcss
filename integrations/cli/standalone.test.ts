@@ -1,20 +1,18 @@
 import nodeFs from 'node:fs/promises'
-import os from 'node:os'
 import path from 'node:path'
-import { candidate, css, html, IS_WINDOWS, js, json, test, ts } from '../utils'
+import {
+  candidate,
+  css,
+  html,
+  IS_WINDOWS,
+  js,
+  json,
+  standaloneBinaryName,
+  test,
+  ts,
+} from '../utils'
 
-const STANDALONE_BINARY = (() => {
-  switch (os.platform()) {
-    case 'win32':
-      return 'tailwindcss-windows-x64.exe'
-    case 'darwin':
-      return os.arch() === 'x64' ? 'tailwindcss-macos-x64' : 'tailwindcss-macos-arm64'
-    case 'linux':
-      return os.arch() === 'x64' ? 'tailwindcss-linux-x64' : 'tailwindcss-linux-arm64'
-    default:
-      throw new Error(`Unsupported platform: ${os.platform()} ${os.arch()}`)
-  }
-})()
+const STANDALONE_BINARY = standaloneBinaryName()
 
 test(
   'does not scan itself for candidates',
