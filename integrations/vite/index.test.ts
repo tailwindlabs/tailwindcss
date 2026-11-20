@@ -1857,6 +1857,36 @@ test(
         // Keep the plugin alive until here
         console.log(plugins.length + ' plugins')
       `,
+      // An environment can turn off the watch mode of the config
+      'no-watch.mjs': js`
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+        import { report } from './compilers.mjs'
+
+        let plugins = tailwindcss()
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'error',
+          plugins: [
+            plugins,
+            {
+              name: 'no-watch',
+              configEnvironment(name, options) {
+                options.build ??= {}
+                options.build.watch = null
+              },
+            },
+          ],
+          builder: { sharedConfigBuild: true },
+          build: { watch: {} },
+          environments: { client: { build: { outDir: 'dist' } } },
+        })
+        await builder.build(builder.environments.client)
+        await report('built without a watcher')
+
+        // Keep the plugin alive until here
+        console.log(plugins.length + ' plugins')
+      `,
       'watch.mjs': js`
         import tailwindcss from '@tailwindcss/vite'
         import { build } from 'vite'
@@ -1900,6 +1930,9 @@ test(
   },
   async ({ exec, expect }) => {
     expect(await exec('node --expose-gc build.mjs')).toContain('built: 1 compiler(s), 0 alive')
+    expect(await exec('node --expose-gc no-watch.mjs')).toContain(
+      'built without a watcher: 1 compiler(s), 0 alive',
+    )
 
     let output = await exec('node --expose-gc watch.mjs')
 
