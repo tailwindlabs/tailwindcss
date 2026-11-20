@@ -1,7 +1,7 @@
 import type { DesignSystem } from '../../design-system'
 import type { SourceLocation } from '../../source-maps/source'
 import colors from '../colors'
-import type { PluginWithConfig } from '../plugin-api'
+import type { CssInJsSources, PluginWithConfig } from '../plugin-api'
 import { createThemeFn } from '../plugin-functions'
 import { deepMerge, isPlainObject } from './deep-merge'
 import {
@@ -22,11 +22,11 @@ export interface ConfigFile {
 
 interface ResolutionContext {
   design: DesignSystem
-  configs: UserConfig[]
+  configs: Pick<ConfigFile, 'config' | 'src'>[]
   plugins: PluginWithConfig[]
   content: ResolvedContentConfig
   theme: Record<string, ThemeValue>
-  extend: Record<string, ThemeValue[]>
+  extend: Record<string, { value: ThemeValue; src: SourceLocation | undefined }[]>
   result: ResolvedConfig
 }
 
@@ -47,7 +47,11 @@ let minimal: ResolvedConfig = {
 export function resolveConfig(
   design: DesignSystem,
   files: ConfigFile[],
-): { resolvedConfig: ResolvedConfig; replacedThemeKeys: Set<string> } {
+): {
+  resolvedConfig: ResolvedConfig
+  replacedThemeKeys: Set<string>
+  keyframeSources: CssInJsSources
+} {
   let ctx: ResolutionContext = {
     design,
     configs: [],
@@ -67,7 +71,7 @@ export function resolveConfig(
   }
 
   // Merge top level keys
-  for (let config of ctx.configs) {
+  for (let { config } of ctx.configs) {
     if ('darkMode' in config && config.darkMode !== undefined) {
       ctx.result.darkMode = config.darkMode ?? null
     }
@@ -86,7 +90,7 @@ export function resolveConfig(
   }
 
   // Merge themes
-  let replacedThemeKeys = mergeTheme(ctx)
+  let { replacedThemeKeys, keyframeSources } = mergeTheme(ctx)
 
   return {
     resolvedConfig: {
@@ -96,6 +100,7 @@ export function resolveConfig(
       plugins: ctx.plugins,
     },
     replacedThemeKeys,
+    keyframeSources,
   }
 }
 
@@ -192,11 +197,13 @@ function extractConfigs(
   }
 
   // Then apply the "user" config
-  ctx.configs.push(config)
+  ctx.configs.push({ config, src })
 }
 
-function mergeTheme(ctx: ResolutionContext): Set<string> {
+function mergeTheme(ctx: ResolutionContext) {
   let replacedThemeKeys: Set<string> = new Set()
+  let keyframeSources: CssInJsSources = new WeakMap()
+  let baseKeyframesSource: SourceLocation | undefined
 
   let themeFn = createThemeFn(ctx.design, () => ctx.theme, resolveValue)
   let theme = Object.assign(themeFn, {
@@ -212,7 +219,34 @@ function mergeTheme(ctx: ResolutionContext): Set<string> {
     return value ?? null
   }
 
-  for (let config of ctx.configs) {
+  // Configs can share objects, so clone before associating them with a source.
+  function recordKeyframeSources(value: any, src: SourceLocation | undefined): any {
+    if (Array.isArray(value)) {
+      return value.map((item) => recordKeyframeSources(item, src))
+    }
+    if (!isPlainObject(value)) return value
+
+    let copy = Object.fromEntries(
+      Object.entries(value).map(([key, value]) => [key, recordKeyframeSources(value, src)]),
+    )
+    keyframeSources.set(copy, new Map(Object.keys(copy).map((key) => [key, src])))
+    return copy
+  }
+
+  function mergeKeyframes(a: any, b: any): any {
+    let merged = mergeThemeExtension(a, b)
+    if (merged !== undefined) return merged
+    if (!isPlainObject(a) || !isPlainObject(b)) return b
+
+    let result = deepMerge({}, [a, b], mergeKeyframes)
+    keyframeSources.set(
+      result,
+      new Map([...(keyframeSources.get(a) ?? []), ...(keyframeSources.get(b) ?? [])]),
+    )
+    return result
+  }
+
+  for (let { config, src } of ctx.configs) {
     let theme = config.theme ?? {}
     let extend = theme.extend ?? {}
 
@@ -226,11 +260,14 @@ function mergeTheme(ctx: ResolutionContext): Set<string> {
 
     // Shallow merge themes so latest "group" wins
     Object.assign(ctx.theme, theme)
+    if (Object.hasOwn(theme, 'keyframes')) {
+      baseKeyframesSource = src
+    }
 
     // Collect extensions by key so each group can be lazily deep merged
     for (let key in extend) {
       ctx.extend[key] ??= []
-      ctx.extend[key].push(extend[key])
+      ctx.extend[key].push({ value: extend[key], src })
     }
   }
 
@@ -240,10 +277,19 @@ function mergeTheme(ctx: ResolutionContext): Set<string> {
 
   // Deep merge every `extend` key into the theme
   for (let key in ctx.extend) {
-    let values = [ctx.theme[key], ...ctx.extend[key]]
+    let values = [
+      { value: ctx.theme[key], src: key === 'keyframes' ? baseKeyframesSource : undefined },
+      ...ctx.extend[key],
+    ]
 
     ctx.theme[key] = () => {
-      let v = values.map(resolveValue)
+      let v = values.map(({ value, src }) => {
+        let resolved = resolveValue(value)
+        return key === 'keyframes' ? recordKeyframeSources(resolved, src) : resolved
+      })
+      if (key === 'keyframes') {
+        return v.reduce((a, b) => mergeKeyframes(a, b ?? {}), {})
+      }
 
       let result = deepMerge({}, v, mergeThemeExtension)
       return result
@@ -251,7 +297,11 @@ function mergeTheme(ctx: ResolutionContext): Set<string> {
   }
 
   for (let key in ctx.theme) {
-    ctx.theme[key] = resolveValue(ctx.theme[key])
+    let value = resolveValue(ctx.theme[key])
+    ctx.theme[key] = value
+    if (key === 'keyframes' && !ctx.extend.keyframes) {
+      ctx.theme[key] = recordKeyframeSources(value, baseKeyframesSource)
+    }
   }
 
   // Turn {min: '123px'} into '123px' in screens
@@ -269,5 +319,5 @@ function mergeTheme(ctx: ResolutionContext): Set<string> {
     }
   }
 
-  return replacedThemeKeys
+  return { replacedThemeKeys, keyframeSources }
 }
