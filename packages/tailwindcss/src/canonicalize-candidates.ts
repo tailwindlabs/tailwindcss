@@ -3465,7 +3465,10 @@ function createVariantSignatureCache(
                 // selector itself.
                 //
                 // E.g.: `:is(.foo)` → `.foo`
-                if (node.nodes.length === 1) {
+                //
+                // But not a selector list: `&:is(.foo,.bar)` → `&.foo,.bar`
+                // would mean `&.foo, & .bar` in nesting.
+                if (node.nodes.length === 1 && node.nodes[0].kind !== 'list') {
                   changed = true
                   return WalkAction.Replace(node.nodes)
                 }
