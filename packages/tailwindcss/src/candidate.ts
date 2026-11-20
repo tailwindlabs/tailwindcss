@@ -1,5 +1,9 @@
 import type { DesignSystem } from './design-system'
-import { decodeArbitraryValue, normalizeFunctionNames } from './utils/decode-arbitrary-value'
+import {
+  decodeArbitraryValue,
+  normalizeFunctionNames,
+  normalizeUnits,
+} from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
 import { segment } from './utils/segment'
@@ -445,6 +449,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // Values can't contain `;` or `}` characters at the top-level.
     if (value === null) return
 
+    // Units are case-insensitive, e.g. `[width:10PX]` is `[width:10px]`. But a
+    // custom property keeps its value as written, e.g. in `[--my-var:10PX]`.
+    if (property[0] !== '-' || property[1] !== '-') value = normalizeUnits(value)
+
     yield {
       kind: 'arbitrary',
       property,
@@ -595,6 +603,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           // If we see any other character, there's no typehint so break early.
           break
         }
+
+        // Units are case-insensitive, e.g. `border-[2PX]` is `border-[2px]`. We
+        // infer the type of the value with lowercase units.
+        arbitraryValue = normalizeUnits(arbitraryValue)
 
         // Empty arbitrary values are invalid. E.g.: `p-[]`
         //                                              ^^

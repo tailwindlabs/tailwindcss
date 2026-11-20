@@ -951,6 +951,18 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Not a length-unit, can't safely constant fold
       ['[margin:0%]', 'm-[0%]'],
 
+      // Units are case-insensitive
+      ['rotate-[45DEG]', 'rotate-45'],
+      ['border-[2PX]', 'border-2'],
+      ['[width:10PX]', 'w-2.5'],
+      ['space-x-[0PX]', 'space-x-0'],
+      ['delay-[1S]', 'delay-1000'],
+      ['text-[1EM]', 'text-[1em]'],
+      ['bg-[10PX_20PX]', 'bg-position-[10px_20px]'],
+
+      // A custom property keeps its value as written
+      ['[--my-var:10PX]', '[--my-var:10PX]'],
+
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       ['font-stretch-[50%]', 'font-stretch-50%'],

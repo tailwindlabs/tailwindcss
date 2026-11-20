@@ -371,6 +371,91 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('units are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // units in the output.
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        // We infer the type of a value with lowercase units
+        'border-[2PX]',
+        'text-[1EM]',
+        'text-[1Q]',
+        'bg-[10PX_20PX]',
+        'w-[CALC(100%-1E1PX)]',
+        '[width:-.5EM]',
+
+        // A custom property keeps its value as written
+        '[--my-var:10PX]',
+
+        // Strings, URLs, hashes and attribute values stay as written
+        "content-['10PX']",
+        'bg-[url(/10PX.png)]',
+        'bg-[#1E3A8A]',
+        'data-[size=10PX]:flex',
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer properties;
+      .\\[width\\:-\\.5EM\\] {
+        width: -.5em;
+      }
+      .w-\\[CALC\\(100\\%-1E1PX\\)\\] {
+        width: calc(100% - 1e1px);
+      }
+      .border-\\[2PX\\] {
+        border-style: var(--tw-border-style);
+        border-width: 2px;
+      }
+      .bg-\\[\\#1E3A8A\\] {
+        background-color: #1E3A8A;
+      }
+      .bg-\\[url\\(\\/10PX\\.png\\)\\] {
+        background-image: url(/10PX.png);
+      }
+      .bg-\\[10PX_20PX\\] {
+        background-position: 10px 20px;
+      }
+      .text-\\[1EM\\] {
+        font-size: 1em;
+      }
+      .text-\\[1Q\\] {
+        font-size: 1q;
+      }
+      .content-\\[\\'10PX\\'\\] {
+        --tw-content: '10PX';
+        content: var(--tw-content);
+      }
+      .\\[--my-var\\:10PX\\] {
+        --my-var: 10PX;
+      }
+      .data-\\[size\\=10PX\\]\\:flex[data-size="10PX"] {
+        display: flex;
+      }
+      @property --tw-border-style {
+        syntax: "*";
+        inherits: false;
+        initial-value: solid;
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-border-style: solid;
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

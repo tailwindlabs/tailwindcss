@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { decodeArbitraryValue, normalizeFunctionNames } from './decode-arbitrary-value'
+import {
+  decodeArbitraryValue,
+  normalizeFunctionNames,
+  normalizeUnits,
+} from './decode-arbitrary-value'
 
 describe('decoding arbitrary values', () => {
   it('should replace an underscore with a space', () => {
@@ -79,6 +83,34 @@ describe('normalizeFunctionNames', () => {
     ['FOO_BAR', 'FOO_BAR'],
   ])('%s', (input, output) => {
     expect(normalizeFunctionNames(input)).toBe(output)
+  })
+})
+
+describe('normalizeUnits', () => {
+  it.each([
+    // Units and exponents are case-insensitive
+    ['10PX', '10px'],
+    ['10Px 20pX', '10px 20px'],
+    ['-.5EM', '-.5em'],
+    ['+1.5REM', '+1.5rem'],
+    ['1E3', '1e3'],
+    ['1E-3PX', '1e-3px'],
+    ['calc(100% - 1REM)', 'calc(100% - 1rem)'],
+    ['var(--my-var, 10PX)', 'var(--my-var, 10px)'],
+    ['image-set(url(a.png) 2X)', 'image-set(url(a.png) 2x)'],
+
+    // Strings, URLs, hashes and identifiers stay as written
+    ["'10PX'", "'10PX'"],
+    ['url(/A10PX.png)', 'url(/A10PX.png)'],
+    ['#1E3A8A', '#1E3A8A'],
+    ['theme(spacing.10PX)', 'theme(spacing.10PX)'],
+    ['--My-Var-1A', '--My-Var-1A'],
+    ['U+1F600', 'U+1F600'],
+
+    // Dashed units are case-sensitive
+    ['10--Foo', '10--Foo'],
+  ])('%s', (input, output) => {
+    expect(normalizeUnits(input)).toBe(output)
   })
 })
 

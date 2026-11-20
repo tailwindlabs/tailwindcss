@@ -200,7 +200,7 @@ function isFraction(value: string): boolean {
 const LENGTH_UNITS = [
   'cm',
   'mm',
-  'Q',
+  'q',
   'in',
   'pc',
   'pt',

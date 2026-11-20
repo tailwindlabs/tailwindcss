@@ -1,6 +1,8 @@
 import * as ValueParser from '../value-parser'
+import { walk, WalkAction } from '../walk'
 import { addWhitespaceAroundMathOperators } from './math-operators'
 import { findFunctionNameStart, isDashed, normalizeFunctionName } from './normalize-function-name'
+import { toAsciiLowerCase } from './to-ascii-lower-case'
 
 const BACKSLASH = 0x5c
 const DASH = 0x2d
@@ -16,6 +18,11 @@ const UPPER_Z = 0x5a
 const ZERO = 0x30
 
 const HAS_UPPER_CASE = /[A-Z]/
+
+// A number with an optional exponent and unit, e.g. `10PX`, `-.5EM` or `1E3`.
+// The unit has to start with a letter, so a dashed unit, like the `--Foo` in
+// `10--Foo`, is not part of it.
+const NUMBER_WITH_UNIT = /^[+-]?(?:\d*\.\d+|\d+)(?:e[+-]?\d+)?(?:[a-z][a-z\d-]*)?$/i
 
 export function decodeArbitraryValue(input: string): string {
   // There are definitely no functions in the input, so bail early
@@ -128,6 +135,67 @@ export function normalizeFunctionNames(input: string): string {
   if (lastIdx === 0) return input
 
   return result + input.slice(lastIdx)
+}
+
+/**
+ * Lowercase the exponents and units of the numbers in a decoded value, e.g.
+ * `10PX` becomes `10px`, and `1E3` becomes `1e3`. They are ASCII
+ * case-insensitive, but we infer the type of a value with lowercase units.
+ *
+ * Strings, `url(…)`s and identifiers stay as written, e.g. `'10PX'`,
+ * `url(/10PX.png)` and `spacing.10PX`. So do dashed units, like `10--Foo`.
+ *
+ * Only use this for the value of a declaration. E.g. in `data-[size=10PX]`,
+ * the `10PX` is an attribute value, which is case-sensitive.
+ */
+export function normalizeUnits(input: string): string {
+  // There are definitely no uppercase letters in numbers, so bail early. Most
+  // values have no uppercase letters at all, and a regex sees that sooner.
+  if (!HAS_UPPER_CASE.test(input) || !hasUpperCaseInNumber(input)) return input
+
+  let ast = ValueParser.parse(input)
+  let changed = false
+
+  walk(ast, (node) => {
+    // The contents of a `url(…)` are a URL, e.g. `url(/10PX.png)`
+    if (node.kind === 'function' && node.value === 'url') return WalkAction.Skip
+
+    if (node.kind === 'word' && NUMBER_WITH_UNIT.test(node.value)) {
+      let value = toAsciiLowerCase(node.value)
+      if (value !== node.value) {
+        node.value = value
+        changed = true
+      }
+    }
+  })
+
+  return changed ? ValueParser.toCss(ast) : input
+}
+
+/**
+ * Whether an uppercase letter comes after a digit, with only lowercase letters,
+ * digits and `-` between them. E.g. the `P` in `10PX`, the `E` in `1E3` or the
+ * `X` in `10pX`. Each number with an uppercase letter in it has one.
+ *
+ * This is a loop instead of a regex like `/\d[a-z\d-]*[A-Z]/`, because that
+ * regex takes quadratic time on a long run of digits.
+ */
+function hasUpperCaseInNumber(input: string): boolean {
+  let afterDigit = false
+
+  for (let i = 0; i < input.length; i++) {
+    let char = input.charCodeAt(i)
+
+    if (char >= UPPER_A && char <= UPPER_Z) {
+      if (afterDigit) return true
+    } else if (char >= ZERO && char <= NINE) {
+      afterDigit = true
+    } else if ((char < LOWER_A || char > LOWER_Z) && char !== DASH) {
+      afterDigit = false
+    }
+  }
+
+  return false
 }
 
 /**
