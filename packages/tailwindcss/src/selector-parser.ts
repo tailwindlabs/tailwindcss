@@ -250,6 +250,10 @@ const UPPER_A = 0x41
 const UPPER_Z = 0x5a
 const ZERO = 0x30
 
+function isWhitespace(char: number) {
+  return char === SPACE || char === TAB || char === NEWLINE
+}
+
 function isNameChar(char: number) {
   return (
     (char >= LOWER_A && char <= LOWER_Z) ||
@@ -450,6 +454,15 @@ export function parse(input: string) {
           if (node.value.startsWith(':nth-')) {
             let lowerCaseContents = toAsciiLowerCase(contents)
 
+            // The `An+B` part can't contain an `of`, so the first `of` is the
+            // keyword when it has whitespace on both sides. E.g. not the `of`
+            // in `.Proof`.
+            let ofIdx = lowerCaseContents.indexOf('of')
+            let isOfKeyword =
+              ofIdx !== -1 &&
+              isWhitespace(contents.charCodeAt(ofIdx - 1)) &&
+              isWhitespace(contents.charCodeAt(ofIdx + 2))
+
             // `:nth-child(…)` and `:nth-last-child(…)` can contain an
             // `of <complex-selector-list>` clause. The selector list must be
             // parsed (e.g. to be able to substitute `&`), but the `An+B` part
@@ -460,30 +473,27 @@ export function parse(input: string) {
             //            ^^^^^^^^^^ value
             //                       ^^^^^^^^^^ selector list
             // ```
-            if (node.value === ':nth-child' || node.value === ':nth-last-child') {
-              let idx = lowerCaseContents.indexOf('of ')
-              if (idx !== -1) {
-                node.nodes.push(
-                  value(
-                    lowerCaseContents.slice(0, idx + 3), // value `2n + 1 of `
-                  ),
-                  ...parse(
-                    contents.slice(idx + 3), // `.foo, .bar`
-                  ),
-                )
-                buffer = ''
-                i = end
+            if (isOfKeyword && (node.value === ':nth-child' || node.value === ':nth-last-child')) {
+              node.nodes.push(
+                value(
+                  lowerCaseContents.slice(0, ofIdx + 3), // value `2n + 1 of `
+                ),
+                ...parse(
+                  contents.slice(ofIdx + 3), // `.foo, .bar`
+                ),
+              )
+              buffer = ''
+              i = end
 
-                append(node)
+              append(node)
 
-                break
-              }
+              break
             }
 
-            // Without an `of` clause, it's all `An+B`. But an `of` without a
-            // space after it is not a clause that we parse, so we can't tell
-            // where the selector list starts. E.g. a `.Foo` in it stays as-is.
-            if (!lowerCaseContents.includes('of')) contents = lowerCaseContents
+            // Without an `of`, it's all `An+B`. But when the `of` is not the
+            // keyword that we look for, e.g. in `2n of.Foo`, we can't tell
+            // where the selector list starts. So we keep it as written.
+            if (ofIdx === -1) contents = lowerCaseContents
           }
 
           node.nodes.push(value(contents))

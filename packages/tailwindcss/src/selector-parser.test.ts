@@ -627,9 +627,32 @@ describe('parse', () => {
 
     expect(toCss(parse(':NTH-OF-TYPE(EVEN)'))).toBe(':nth-of-type(even)')
 
-    // We only parse an `of` with a space after it, so we can't tell where the
-    // selector list starts here
-    expect(toCss(parse(':nth-child(2N of\t.Foo)'))).toBe(':nth-child(2N of\t.Foo)')
+    // Any whitespace can be around the `of`
+    expect(toCss(parse(':nth-child(2N of\t.Foo)'))).toBe(':nth-child(2n of\t.Foo)')
+    expect(toCss(parse(':nth-child(2N OF\n.Foo)'))).toBe(':nth-child(2n of\n.Foo)')
+
+    // The `of` in `.Proof` is part of the selector list
+    expect(parse(':nth-child(2N of\t.Proof .Bar)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          { kind: 'value', value: '2n of\t' },
+          {
+            kind: 'complex',
+            nodes: [
+              { kind: 'selector', value: '.Proof' },
+              { kind: 'combinator', value: ' ' },
+              { kind: 'selector', value: '.Bar' },
+            ],
+          },
+        ],
+      },
+    ])
+
+    // Without whitespace after the `of`, we can't tell where the selector list
+    // starts, so we keep it as written
+    expect(toCss(parse(':nth-child(2N of.Foo)'))).toBe(':nth-child(2N of.Foo)')
   })
 })
 
