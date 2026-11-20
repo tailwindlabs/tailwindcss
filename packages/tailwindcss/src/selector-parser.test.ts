@@ -634,6 +634,8 @@ describe('parse', () => {
     // Any whitespace can be around the `of`
     expect(toCss(parse(':nth-child(2N of\t.Foo)'))).toBe(':nth-child(2n of\t.Foo)')
     expect(toCss(parse(':nth-child(2N OF\n.Foo)'))).toBe(':nth-child(2n of\n.Foo)')
+    expect(toCss(parse(':nth-child(2N\rof\f.Foo)'))).toBe(':nth-child(2n\rof\f.Foo)')
+    expect(toCss(parse(':nth-child(2N\fof\r.Foo)'))).toBe(':nth-child(2n\fof\r.Foo)')
 
     // The `of` in `.Proof` is part of the selector list
     expect(parse(':nth-child(2N of\t.Proof .Bar)')).toEqual([

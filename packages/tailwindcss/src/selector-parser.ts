@@ -222,6 +222,7 @@ export function toCss(ast: SelectorAstNode[], minify = false) {
 }
 
 const BACKSLASH = 0x5c
+const CARRIAGE_RETURN = 0x0d
 const CLOSE_BRACKET = 0x5d
 const CLOSE_PAREN = 0x29
 const COLON = 0x3a
@@ -229,6 +230,7 @@ const COMMA = 0x2c
 const DASH = 0x2d
 const DOUBLE_QUOTE = 0x22
 const DOT = 0x2e
+const FORM_FEED = 0x0c
 const GREATER_THAN = 0x3e
 const NEWLINE = 0x0a
 const HASH = 0x23
@@ -250,8 +252,16 @@ const UPPER_A = 0x41
 const UPPER_Z = 0x5a
 const ZERO = 0x30
 
+// The whitespace of CSS. A `\r` or a `\f` is a newline too, e.g. in the
+// `2n\rof .foo` of `:nth-child(…)`.
 function isWhitespace(char: number) {
-  return char === SPACE || char === TAB || char === NEWLINE
+  return (
+    char === SPACE ||
+    char === TAB ||
+    char === NEWLINE ||
+    char === CARRIAGE_RETURN ||
+    char === FORM_FEED
+  )
 }
 
 function isNameChar(char: number) {
