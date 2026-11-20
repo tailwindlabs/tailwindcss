@@ -789,6 +789,30 @@ describe('theme(…)', () => {
         `)
       })
 
+      test('theme(width.1/2)', async () => {
+        expect(
+          await compileCss(css`
+            @theme {
+              --width-1\/2: 60%;
+              --color-red-500: #f00;
+            }
+            .half {
+              width: theme(width.1/2);
+              inset: theme(inset.1/3);
+              color: theme(colors.red.500/50%);
+            }
+          `),
+        ).toMatchInlineSnapshot(`
+          "
+          .half {
+            color: oklab(62.7955% .224 .125 / .5);
+            width: 60%;
+            inset: 33.3333%;
+          }
+          "
+        `)
+      })
+
       test('theme(spacing.12)', async () => {
         expect(
           await compileCss(css`
