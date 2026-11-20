@@ -7,6 +7,7 @@
     "directory": "crates/node"
   },
   "main": "index.js",
+  "browser": "./browser.mjs",
   "types": "index.d.ts",
   "napi": {
     "binaryName": "tailwindcss-oxide",
@@ -44,6 +45,8 @@
   },
   "files": [
     "index.js",
+    "browser.mjs",
+    "browser.d.mts",
     "index.d.ts"
   ],
   "publishConfig": {
@@ -51,12 +54,14 @@
     "access": "public"
   },
   "scripts": {
-    "build": "pnpm run build:platform && pnpm run build:wasm",
+    "build": "pnpm run build:platform && pnpm run build:wasm && pnpm run build:browser",
     "build:platform": "napi build --platform --release",
     "postbuild:platform": "node ./scripts/move-artifacts.mjs",
     "build:wasm": "napi build --release --target wasm32-wasip1-threads",
     "postbuild:wasm": "node ./scripts/move-artifacts.mjs",
-    "dev": "cargo watch --quiet --shell 'npm run build'",
+    "build:browser": "node ./scripts/build-browser.mjs",
+    "test:ui": "playwright test",
+    "dev": "cargo watch --quiet --shell 'npm run build:platform'",
     "build:debug": "napi build --platform",
     "version": "napi version"
   },
