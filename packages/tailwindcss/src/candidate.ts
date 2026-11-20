@@ -7,6 +7,7 @@ import {
 } from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
+import { normalizeAtRuleName } from './utils/normalize-at-rule-name'
 import { segment } from './utils/segment'
 import type { ValueFunctionNode } from './value-parser'
 import * as ValueParser from './value-parser'
@@ -739,6 +740,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // Empty arbitrary values are invalid. E.g.: `[]:`
     //                                            ^^
     if (selector.length === 0 || selector.trim().length === 0) return null
+
+    // At-rule names are case-insensitive, e.g. `[@MEDIA_print]` is
+    // `[@media_print]`. The rest of the selector stays as written.
+    selector = normalizeAtRuleName(selector)
 
     let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
 

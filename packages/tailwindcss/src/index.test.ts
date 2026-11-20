@@ -5149,6 +5149,32 @@ describe('@custom-variant', () => {
       `)
     })
 
+    test('shorthand syntax with an uppercase at-rule name', async () => {
+      expect(
+        await run(
+          ['scoped:underline'],
+          // prettier-ignore
+          css`
+            @custom-variant scoped (@SCOPE (.from) to (.to));
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .scoped\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
+
     test('with @slot syntax', async () => {
       expect(
         await run(

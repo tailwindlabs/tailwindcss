@@ -1178,6 +1178,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[@media_print]:flex', 'print:flex'],
       ['[@media_not_print]:flex', 'not-print:flex'],
 
+      // At-rule names are case-insensitive
+      ['[@MEDIA_print]:flex', 'print:flex'],
+      ['[@MEDIA_not_print]:flex', 'not-print:flex'],
+      ['not-[@MEDIA_print]:flex', 'not-print:flex'],
+      ['[@Container_(width>=28rem)]:flex', '@md:flex'],
+      ['[@SUPPORTS_(display:grid)]:flex', '[@supports_(display:grid)]:flex'],
+
       // Hoist the `:not` part to a compound variant
       ['[@media_not_(prefers-color-scheme:dark)]:flex', 'not-dark:flex'],
       [
