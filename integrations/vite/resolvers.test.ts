@@ -802,3 +802,104 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
     },
   )
 })
+
+describe.each([
+  // Exercises the newer Environment API resolver branch.
+  ['^8', 'environment API'],
+  // Exercises the older, pre-Environment API resolver branch.
+  ['^5.3.5', 'legacy'],
+])('%s (%s)', (viteVersion) => {
+  test(
+    'merges user-provided `resolve.conditions` with the built-in CSS resolver conditions',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "conditional-export-pkg": "workspace:*",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              "vite": "${viteVersion}"
+            }
+          }
+        `,
+        'pnpm-workspace.yaml': yaml`
+          #
+          packages:
+            - packages/*
+        `,
+        'packages/conditional-export-pkg/package.json': json`
+          {
+            "name": "conditional-export-pkg",
+            "version": "1.0.0",
+            "type": "module",
+            "exports": {
+              ".": {
+                "my-custom-condition": "./custom.css",
+                "style": "./default.css",
+                "default": "./default.css"
+              }
+            }
+          }
+        `,
+        // Only picked up if `my-custom-condition` survives being merged into
+        // the resolver's built-in conditions (`style`, `development|production`).
+        'packages/conditional-export-pkg/custom.css': css`
+          .custom-condition-applied {
+            color: green;
+          }
+        `,
+        // Picked up if the user's `resolve.conditions` gets silently discarded.
+        'packages/conditional-export-pkg/default.css': css`
+          .custom-condition-applied {
+            color: red;
+          }
+        `,
+        'vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            build: { cssMinify: false },
+            plugins: [tailwindcss()],
+            resolve: {
+              conditions: ['my-custom-condition'],
+            },
+          })
+        `,
+        'index.html': html`
+          <head>
+            <link rel="stylesheet" href="./src/index.css" />
+          </head>
+          <body></body>
+        `,
+        // `@import "tailwindcss"` makes this a Tailwind root file, so the
+        // plugin (and its fixed CSS resolver) handles the second import.
+        // Without it the plugin bails out and Vite resolves the `@import`
+        // itself with its default conditions.
+        'src/index.css': css`
+          @import 'tailwindcss';
+          @import 'conditional-export-pkg';
+        `,
+      },
+    },
+    async ({ fs, exec, expect }) => {
+      await exec('pnpm vite build')
+
+      let files = await fs.glob('dist/**/*.css')
+      expect(files).toHaveLength(1)
+      let [filename] = files[0]
+
+      await fs.expectFileToContain(filename, [
+        css`
+          .custom-condition-applied {
+            color: green;
+          }
+        `,
+      ])
+    },
+  )
+})
