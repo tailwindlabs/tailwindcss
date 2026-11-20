@@ -64,6 +64,55 @@ function createCustomResolver(
   }
 }
 
+function getResolvedOutputDirectories(config: ResolvedConfig) {
+  let defaultOutputDirectory = path.resolve(config.root, config.build.outDir)
+  let outputOptions = config.build.rollupOptions.output
+
+  let candidates = new Set<string>()
+  if (outputOptions) {
+    for (let output of Array.isArray(outputOptions) ? outputOptions : [outputOptions]) {
+      // Vite passes `output.dir` to Rollup (or Rolldown) as-is, which resolves
+      // it against the working directory, not the root
+      candidates.add(output.dir ? path.resolve(output.dir) : defaultOutputDirectory)
+    }
+  } else {
+    candidates.add(defaultOutputDirectory)
+  }
+
+  // Only keep directories that are inside of the root
+  let directories: string[] = []
+  for (let directory of candidates) {
+    let relative = path.relative(config.root, directory)
+    if (
+      relative !== '' &&
+      relative !== '..' &&
+      !relative.startsWith(`..${path.sep}`) &&
+      !path.isAbsolute(relative)
+    ) {
+      directories.push(directory)
+    }
+  }
+
+  return directories
+}
+
+function isInsideDirectory(file: string, directory: string) {
+  let relative = path.relative(directory, file)
+  return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative)
+}
+
+// The path of a source up to its first glob segment, e.g. `/project/assets`
+// for `../assets/**/*.html`
+function getStaticSourcePath(source: { base: string; pattern: string }) {
+  let segments: string[] = []
+  for (let segment of source.pattern.split('/')) {
+    if (/[*?[{]/.test(segment)) break
+    segments.push(segment)
+  }
+
+  return path.resolve(source.base, segments.join('/'))
+}
+
 export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   let config: ResolvedConfig | null = null
   let rootsByEnv = new DefaultMap<string, Map<string, Root>>((env: string) => new Map())
@@ -77,6 +126,7 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
   function createRoot(env: Environment | null, id: string) {
     type ResolveFn = (id: string, base: string) => Promise<string | false | undefined>
 
+    let resolvedConfig = env?.config ?? config!
     let customCssResolver: ResolveFn
     let customJsResolver: ResolveFn
 
@@ -167,7 +217,10 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
 
     return new Root(
       id,
-      config!.root,
+      resolvedConfig.root,
+      resolvedConfig.command === 'build' && resolvedConfig.build.watch && resolvedConfig.build.write
+        ? getResolvedOutputDirectories(resolvedConfig)
+        : [],
       // Currently, Vite only supports CSS source maps in development and they
       // are off by default. Check to see if we need them or not.
       config?.css.devSourcemap ?? false,
@@ -364,6 +417,10 @@ class Root {
   // The lazily-initialized Tailwind scanner.
   private scanner?: Scanner
 
+  // A scanner for the explicit `@source` entries that point inside of an
+  // excluded output directory, which the exclusion would otherwise override.
+  private explicitScanner?: Scanner
+
   // List of all candidates that were being returned by the root scanner during
   // the lifetime of the root.
   private candidates: Set<string> = new Set<string>()
@@ -381,6 +438,7 @@ class Root {
   constructor(
     private id: string,
     private base: string,
+    private excludedDirectories: string[],
 
     private enableSourceMaps: boolean,
     private customCssResolver: (id: string, base: string) => Promise<string | false | undefined>,
@@ -479,7 +537,34 @@ class Root {
         return [{ ...this.compiler.root, negated: false }]
       })().concat(this.compiler.sources)
 
+      for (let directory of this.excludedDirectories) {
+        sources.push({ base: directory, pattern: '**/*', negated: true })
+      }
+
       this.scanner = new Scanner({ sources })
+      // Keep an explicit `@source` that points inside of an excluded output
+      // directory. A broader glob, like `../**/*.html`, still skips the output
+      // directories, because matching the build output would loop the watcher.
+      let explicitSources: typeof sources = []
+      let hasExplicitSources = false
+      for (let source of this.compiler.sources) {
+        if (source.negated) {
+          explicitSources.push(source)
+          continue
+        }
+
+        let staticPath = getStaticSourcePath(source)
+        for (let directory of this.excludedDirectories) {
+          if (isInsideDirectory(staticPath, directory)) {
+            explicitSources.push(source)
+            hasExplicitSources = true
+            break
+          }
+        }
+      }
+      this.explicitScanner = hasExplicitSources
+        ? new Scanner({ sources: explicitSources })
+        : undefined
       if (scannedCandidates) sourcesKey = JSON.stringify(sources)
       DEBUG && I.end('Setup scanner')
 
@@ -507,30 +592,37 @@ class Root {
       for (let candidate of candidates) {
         this.candidates.add(candidate)
       }
+      for (let candidate of this.explicitScanner?.scan() ?? []) {
+        this.candidates.add(candidate)
+      }
       DEBUG && I.end('Scan for candidates')
     }
 
     if (this.compiler.features & Features.Utilities) {
       DEBUG && I.start('Register dependency messages')
       if (_addWatchFile) {
-        // Watch individual files found via custom `@source` paths
-        for (let file of this.scanner.files) {
-          addWatchFile(file)
-        }
+        for (let scanner of [this.scanner, this.explicitScanner]) {
+          if (!scanner) continue
 
-        // Watch globs found via custom `@source` paths
-        for (let glob of this.scanner.globs) {
-          if (glob.pattern[0] === '!') continue
-
-          let relative = path.relative(this.base, glob.base)
-          if (relative[0] !== '.') {
-            relative = './' + relative
+          // Watch individual files found via custom `@source` paths
+          for (let file of scanner.files) {
+            addWatchFile(file)
           }
-          // Ensure relative is a posix style path since we will merge it with the
-          // glob.
-          relative = normalizePath(relative)
 
-          addWatchFile(path.posix.join(relative, glob.pattern))
+          // Watch globs found via custom `@source` paths
+          for (let glob of scanner.globs) {
+            if (glob.pattern[0] === '!') continue
+
+            let relative = path.relative(this.base, glob.base)
+            if (relative[0] !== '.') {
+              relative = './' + relative
+            }
+            // Ensure relative is a posix style path since we will merge it with the
+            // glob.
+            relative = normalizePath(relative)
+
+            addWatchFile(path.posix.join(relative, glob.pattern))
+          }
         }
       }
 

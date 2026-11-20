@@ -1266,6 +1266,275 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
   )
 })
 
+describe.each([
+  [
+    'build.outDir',
+    `
+      outDir: 'assets',
+      rollupOptions: {
+        output: {
+          entryFileNames: 'entry.js',
+          chunkFileNames: 'chunk.js',
+          assetFileNames: 'style.css',
+        },
+      }
+    `,
+  ],
+  [
+    'a nested build.outDir',
+    `
+      outDir: 'build/assets',
+      rollupOptions: {
+        output: {
+          entryFileNames: 'entry.js',
+          chunkFileNames: 'chunk.js',
+          assetFileNames: 'style.css',
+        },
+      }
+    `,
+  ],
+  [
+    'rollupOptions.output.dir',
+    `
+      rollupOptions: {
+        output: {
+          dir: 'assets',
+          entryFileNames: 'entry.js',
+          chunkFileNames: 'chunk.js',
+          assetFileNames: 'style.css',
+        },
+      }
+    `,
+  ],
+  [
+    'an array of rollupOptions.output.dir values',
+    `
+      rollupOptions: {
+        output: [
+          {
+            dir: 'assets',
+            entryFileNames: 'entry.js',
+            chunkFileNames: 'chunk.js',
+            assetFileNames: 'style.css',
+          },
+          {
+            dir: 'assets-secondary',
+            entryFileNames: 'entry.js',
+            chunkFileNames: 'chunk.js',
+            assetFileNames: 'style.css',
+          },
+        ],
+      }
+    `,
+  ],
+])('watch mode with %s', (_, outputOptions) => {
+  // https://github.com/tailwindlabs/tailwindcss/issues/17412
+  test(
+    'does not rebuild when writing build output',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "type": "module",
+            "dependencies": {
+              "@tailwindcss/vite": "workspace:^",
+              "tailwindcss": "workspace:^"
+            },
+            "devDependencies": {
+              "vite": "6.2.3"
+            }
+          }
+        `,
+        'vite.config.ts': ts`
+          import tailwindcss from '@tailwindcss/vite'
+          import { defineConfig } from 'vite'
+
+          export default defineConfig({
+            build: {
+              cssMinify: false,
+              emptyOutDir: false,
+              ${outputOptions},
+            },
+            plugins: [tailwindcss()],
+          })
+        `,
+        'index.html': html`
+          <main class="underline">Hello, world!</main>
+          <script type="module" src="./src/app.js"></script>
+        `,
+        'src/app.js': js`import './app.css'`,
+        'src/app.css': css`@import 'tailwindcss';`,
+        'assets/entry.js': js`console.log('previous build')`,
+        'assets/style.css': css`/* Previous build */`,
+        'assets-secondary/entry.js': js`console.log('previous build')`,
+        'assets-secondary/style.css': css`/* Previous build */`,
+        'build/assets/entry.js': js`console.log('previous build')`,
+        'build/assets/style.css': css`/* Previous build */`,
+      },
+    },
+    async ({ spawn, expect }) => {
+      let process = await spawn('pnpm vite build --watch')
+      await process.onStdout((message) => message.includes('built in'))
+
+      let result = await Promise.race([
+        process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
+        new Promise((resolve) => setTimeout(() => resolve('idle'), 2_000)),
+      ])
+
+      expect(result).toBe('idle')
+    },
+  )
+})
+
+// https://github.com/tailwindlabs/tailwindcss/issues/17412
+test(
+  'watch mode keeps explicit `@source` paths inside the build output directory',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "6.2.3"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            cssMinify: false,
+            emptyOutDir: false,
+            outDir: 'assets',
+            rollupOptions: {
+              output: {
+                entryFileNames: 'entry.js',
+                chunkFileNames: 'chunk.js',
+                assetFileNames: 'style.css',
+              },
+            },
+          },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <main class="underline">Hello, world!</main>
+        <script type="module" src="./src/app.js"></script>
+      `,
+      'src/app.js': js`import './app.css'`,
+      'src/app.css': css`
+        @import 'tailwindcss';
+        @source '../assets/source.html';
+        @source '../assets/theme';
+      `,
+      'assets/entry.js': js`console.log('previous build')`,
+      'assets/style.css': css`/* Previous build */`,
+      'assets/source.html': html`<div class="font-black"></div>`,
+      'assets/theme/snippet.html': html`<div class="italic"></div>`,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite build --watch')
+    await process.onStdout((message) => message.includes('built in'))
+
+    await fs.expectFileToContain('assets/style.css', [
+      candidate`underline`,
+      candidate`font-black`,
+      candidate`italic`,
+    ])
+
+    let result = await Promise.race([
+      process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
+      new Promise((resolve) => setTimeout(() => resolve('idle'), 2_000)),
+    ])
+    expect(result).toBe('idle')
+
+    // A change to a real source file still rebuilds. Flush to drop the waiter
+    // of the race above, which would otherwise take the next build.
+    process.flush()
+    await fs.write(
+      'index.html',
+      html`
+        <main class="font-bold underline">Hello, world!</main>
+        <script type="module" src="./src/app.js"></script>
+      `,
+    )
+    await process.onStdout((message) => message.includes('built in'))
+    await fs.expectFileToContain('assets/style.css', [candidate`font-bold`])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/17412
+test(
+  'watch mode does not rebuild when a broad `@source` glob matches the build output',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "6.2.3"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import tailwindcss from '@tailwindcss/vite'
+        import { defineConfig } from 'vite'
+
+        export default defineConfig({
+          build: {
+            cssMinify: false,
+            emptyOutDir: false,
+            outDir: 'assets',
+            rollupOptions: {
+              output: {
+                entryFileNames: 'entry.js',
+                chunkFileNames: 'chunk.js',
+                assetFileNames: 'style.css',
+              },
+            },
+          },
+          plugins: [tailwindcss()],
+        })
+      `,
+      'index.html': html`
+        <main class="underline">Hello, world!</main>
+        <script type="module" src="./src/app.js"></script>
+      `,
+      'src/app.js': js`import './app.css'`,
+      'src/app.css': css`
+        @import 'tailwindcss';
+        @source '../**/*.html';
+      `,
+      'assets/entry.js': js`console.log('previous build')`,
+      'assets/style.css': css`/* Previous build */`,
+      'assets/index.html': html`<div class="previous-build"></div>`,
+    },
+  },
+  async ({ spawn, fs, expect }) => {
+    let process = await spawn('pnpm vite build --watch')
+    await process.onStdout((message) => message.includes('built in'))
+
+    await fs.expectFileToContain('assets/style.css', [candidate`underline`])
+
+    let result = await Promise.race([
+      process.onStdout((message) => message.includes('built in')).then(() => 'rebuilt'),
+      new Promise((resolve) => setTimeout(() => resolve('idle'), 2_000)),
+    ])
+    expect(result).toBe('idle')
+  },
+)
+
 test(
   `demote Tailwind roots to regular CSS files and back to Tailwind roots`,
   {
