@@ -308,6 +308,21 @@ export default function tailwindcss(opts: PluginOptions = {}): Plugin[] {
           return result
         },
       },
+      closeBundle() {
+        // Rebuilds in watch mode reuse the roots of the previous build. An
+        // environment can turn off the watch mode of the config, and workers
+        // built during a watched build aren't in watch mode themselves.
+        let watch = (this.environment?.config ?? config!).build.watch
+        if (this.meta.watchMode || watch) return
+
+        // A finished build doesn't use its roots again, but a long-running
+        // process (e.g. Nuxt or Astro) can keep the plugin, and the roots keep
+        // their compilers, scanners and the environment of the build alive.
+        rootsByEnv.delete(this.environment?.name ?? 'default')
+      },
+      closeWatcher() {
+        rootsByEnv.delete(this.environment?.name ?? 'default')
+      },
     },
   ] satisfies Plugin[]
 }
