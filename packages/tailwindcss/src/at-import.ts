@@ -1,6 +1,7 @@
 import { Features } from '.'
 import { atRule, context, type AstNode } from './ast'
 import * as CSS from './css-parser'
+import { normalizeUrlScheme } from './utils/normalize-url-scheme'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
@@ -33,7 +34,10 @@ export async function substituteAtImports(
 
       features |= Features.AtImport
 
-      let { uri, layer, media, supports } = parsed
+      let { layer, media, supports } = parsed
+
+      // URL schemes are case-insensitive, e.g. `HTTPS://` is `https://`
+      let uri = normalizeUrlScheme(parsed.uri)
 
       // Skip importing data or remote URIs
       if (uri.startsWith('data:')) return

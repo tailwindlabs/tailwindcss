@@ -970,6 +970,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['bg-[INITIAL]', 'bg-[initial]'],
       ['[--my-var:UNSET]', '[--my-var:unset]'],
 
+      // URL schemes are case-insensitive, but a custom property keeps its value
+      // as written
+      ['bg-[url(HTTPS://a.com/A.png)]', 'bg-[url(https://a.com/A.png)]'],
+      ["bg-[URL('HTTPS://a.com/A.png')]", "bg-[url('https://a.com/A.png')]"],
+      ['[--my-image:url(HTTPS://a.com/A.png)]', '[--my-image:url(HTTPS://a.com/A.png)]'],
+
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       ['font-stretch-[50%]', 'font-stretch-50%'],

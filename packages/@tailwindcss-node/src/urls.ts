@@ -7,6 +7,7 @@
 import * as path from 'node:path'
 import { toCss, type AstNode, type Declaration } from '../../tailwindcss/src/ast'
 import { parse } from '../../tailwindcss/src/css-parser'
+import { normalizeUrlScheme } from '../../tailwindcss/src/utils/normalize-url-scheme'
 import { walk } from '../../tailwindcss/src/walk'
 import { normalizePath } from './normalize-path'
 
@@ -202,7 +203,10 @@ async function doUrlReplace(
     rawUrl = rawUrl.slice(1, -1)
   }
 
-  if (skipUrlReplacer(rawUrl)) {
+  // URL schemes are case-insensitive, e.g. `HTTPS://` is `https://`. We only
+  // use the normalized URL to check whether to skip it, so we rebase a URL as
+  // written.
+  if (skipUrlReplacer(normalizeUrlScheme(rawUrl))) {
     return matched
   }
 

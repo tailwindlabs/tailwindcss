@@ -3,6 +3,7 @@ import {
   decodeArbitraryValue,
   normalizeFunctionNames,
   normalizeUnits,
+  normalizeUrlSchemes,
 } from './decode-arbitrary-value'
 
 describe('decoding arbitrary values', () => {
@@ -111,6 +112,39 @@ describe('normalizeUnits', () => {
     ['10--Foo', '10--Foo'],
   ])('%s', (input, output) => {
     expect(normalizeUnits(input)).toBe(output)
+  })
+})
+
+describe('normalizeUrlSchemes', () => {
+  it.each([
+    // URL schemes are case-insensitive
+    ['url(HTTPS://example.com/A.png)', 'url(https://example.com/A.png)'],
+    ["url('HTTP://example.com/A.png')", "url('http://example.com/A.png')"],
+    ['url("DATA:image/png;base64,AA==")', 'url("data:image/png;base64,AA==")'],
+    [
+      'url(HTTPS://example.com/A.png),url(HTTP://example.com/B.png)',
+      'url(https://example.com/A.png),url(http://example.com/B.png)',
+    ],
+    [
+      'image-set(url(HTTPS://example.com/A.png) 1x)',
+      'image-set(url(https://example.com/A.png) 1x)',
+    ],
+    [
+      'var(--my-image,url(HTTPS://example.com/A.png))',
+      'var(--my-image,url(https://example.com/A.png))',
+    ],
+
+    // The rest of a URL stays as written
+    ['url(https://Example.com/A.png)', 'url(https://Example.com/A.png)'],
+    ['url(./HTTP-Image.png)', 'url(./HTTP-Image.png)'],
+    ['url(C:/Images/A.png)', 'url(C:/Images/A.png)'],
+    ['url(var(--MY-URL))', 'url(var(--MY-URL))'],
+
+    // Strings and other functions stay as written
+    ["'url(HTTPS://example.com/A.png)'", "'url(HTTPS://example.com/A.png)'"],
+    ['--my-url(HTTPS://example.com/A.png)', '--my-url(HTTPS://example.com/A.png)'],
+  ])('%s', (input, output) => {
+    expect(normalizeUrlSchemes(input)).toBe(output)
   })
 })
 

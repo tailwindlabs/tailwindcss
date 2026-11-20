@@ -545,6 +545,60 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('URL schemes are case-insensitive', async () => {
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        // The rest of a URL stays as written
+        'bg-[url(HTTPS://example.com/A.png)]',
+        'bg-[URL("HTTP://example.com/A.png")]',
+        "[background-image:url('DATA:image/png;base64,AA==')]",
+        'bg-[url(./HTTP-Image.png)]',
+
+        // A custom property and a string keep their value as written
+        '[--my-image:url(HTTPS://example.com/A.png)]',
+        "content-['url(HTTPS://example.com/A.png)']",
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer properties;
+      .\\[background-image\\:url\\(\\'DATA\\:image\\/png\\;base64\\,AA\\=\\=\\'\\)\\] {
+        background-image: url('data:image/png;base64,AA==');
+      }
+      .bg-\\[URL\\(\\"HTTP\\:\\/\\/example\\.com\\/A\\.png\\"\\)\\] {
+        background-image: url("http://example.com/A.png");
+      }
+      .bg-\\[url\\(\\.\\/HTTP-Image\\.png\\)\\] {
+        background-image: url(./HTTP-Image.png);
+      }
+      .bg-\\[url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\] {
+        background-image: url(https://example.com/A.png);
+      }
+      .content-\\[\\'url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\'\\] {
+        --tw-content: 'url(HTTPS://example.com/A.png)';
+        content: var(--tw-content);
+      }
+      .\\[--my-image\\:url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\] {
+        --my-image: url(HTTPS://example.com/A.png);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

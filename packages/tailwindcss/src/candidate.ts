@@ -4,6 +4,7 @@ import {
   decodeArbitraryValue,
   normalizeFunctionNames,
   normalizeUnits,
+  normalizeUrlSchemes,
 } from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
@@ -451,9 +452,12 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // Values can't contain `;` or `}` characters at the top-level.
     if (value === null) return
 
-    // Units are case-insensitive, e.g. `[width:10PX]` is `[width:10px]`. But a
-    // custom property keeps its value as written, e.g. in `[--my-var:10PX]`.
-    if (property[0] !== '-' || property[1] !== '-') value = normalizeUnits(value)
+    // Units and URL schemes are case-insensitive, e.g. `[width:10PX]` is
+    // `[width:10px]`. But a custom property keeps its value as written, e.g. in
+    // `[--my-var:10PX]`.
+    if (property[0] !== '-' || property[1] !== '-') {
+      value = normalizeUrlSchemes(normalizeUnits(value))
+    }
 
     // CSS-wide keywords are case-insensitive, also in a custom property. E.g.
     // `[--my-var:INITIAL]` is `[--my-var:initial]`.
@@ -610,10 +614,13 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           break
         }
 
-        // Units and CSS-wide keywords are case-insensitive, e.g. `border-[2PX]`
-        // is `border-[2px]`, and `text-[INHERIT]` is `text-[inherit]`. We infer
-        // the type of the value with lowercase units.
-        arbitraryValue = normalizeCssWideKeyword(normalizeUnits(arbitraryValue))
+        // Units, URL schemes and CSS-wide keywords are case-insensitive, e.g.
+        // `border-[2PX]` is `border-[2px]`, `bg-[url(HTTPS://…)]` is
+        // `bg-[url(https://…)]`, and `text-[INHERIT]` is `text-[inherit]`. We
+        // infer the type of the value with lowercase units.
+        arbitraryValue = normalizeCssWideKeyword(
+          normalizeUrlSchemes(normalizeUnits(arbitraryValue)),
+        )
 
         // Empty arbitrary values are invalid. E.g.: `p-[]`
         //                                              ^^

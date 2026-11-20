@@ -2,6 +2,7 @@ import * as ValueParser from '../value-parser'
 import { walk, WalkAction } from '../walk'
 import { addWhitespaceAroundMathOperators } from './math-operators'
 import { findFunctionNameStart, isDashed, normalizeFunctionName } from './normalize-function-name'
+import { normalizeUrlScheme } from './normalize-url-scheme'
 import { toAsciiLowerCase } from './to-ascii-lower-case'
 
 const BACKSLASH = 0x5c
@@ -167,6 +168,40 @@ export function normalizeUnits(input: string): string {
         changed = true
       }
     }
+  })
+
+  return changed ? ValueParser.toCss(ast) : input
+}
+
+/**
+ * Lowercase the scheme of each `url(…)` in a decoded value, e.g.
+ * `url(HTTPS://example.com/A.png)` becomes `url(https://example.com/A.png)`.
+ * The rest of a URL stays as written. See `normalizeUrlScheme`.
+ *
+ * Only use this for the value of a declaration, like `normalizeUnits`.
+ */
+export function normalizeUrlSchemes(input: string): string {
+  // There are definitely no URLs in the input, or no uppercase letters in their
+  // schemes, so bail early
+  if (input.indexOf('url(') === -1 || !HAS_UPPER_CASE.test(input)) return input
+
+  let ast = ValueParser.parse(input)
+  let changed = false
+
+  walk(ast, (node) => {
+    if (node.kind !== 'function' || node.value !== 'url') return
+
+    // The URL can be a string, e.g. `url('HTTPS://example.com/A.png')`
+    let url = ValueParser.toCss(node.nodes)
+    let quote = url[0] === '"' || url[0] === "'" ? url[0] : ''
+    let normalizedUrl = quote + normalizeUrlScheme(url.slice(quote.length))
+
+    if (normalizedUrl !== url) {
+      node.nodes = [ValueParser.word(normalizedUrl)]
+      changed = true
+    }
+
+    return WalkAction.Skip
   })
 
   return changed ? ValueParser.toCss(ast) : input
