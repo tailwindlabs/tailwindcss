@@ -1,5 +1,6 @@
 import { toAsciiLowerCase } from './to-ascii-lower-case'
 
+const BACKSLASH = 0x5c
 const DASH = 0x2d
 const NINE = 0x39
 const ZERO = 0x30
@@ -36,9 +37,18 @@ export function normalizeFunctionName(name: string): string {
 
 /**
  * Whether the identifier at `idx` is dashed, e.g. `--my-fn`.
+ *
+ * An escape can spell a `-`, e.g. `\--my-fn` and `-\-my-fn` are `--my-fn`
+ * too. We don't decode escapes, so an escape in the place of either `-` counts
+ * as one. That keeps such names as written.
  */
 export function isDashed(value: string, idx: number): boolean {
-  return value.charCodeAt(idx) === DASH && value.charCodeAt(idx + 1) === DASH
+  let char = value.charCodeAt(idx)
+  if (char === BACKSLASH) return true
+  if (char !== DASH) return false
+
+  char = value.charCodeAt(idx + 1)
+  return char === DASH || char === BACKSLASH
 }
 
 /**

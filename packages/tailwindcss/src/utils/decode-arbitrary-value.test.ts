@@ -75,6 +75,11 @@ describe('normalizeFunctionNames', () => {
     ['a_--MY-FN(1px)', 'a_--MY-FN(1px)'],
     ['--my\\_FN(1px)', '--my\\_FN(1px)'],
 
+    // An escape can spell a `-`, e.g. `\--MY-FN` is `--MY-FN`
+    ['\\--MY-FN(1px)', '\\--MY-FN(1px)'],
+    ['-\\-MY-FN(1px)', '-\\-MY-FN(1px)'],
+    ['a_\\--MY-FN(1px)', 'a_\\--MY-FN(1px)'],
+
     // An `_` becomes a space, so `FN` is a function of its own
     ['--my_FN(1px)', '--my_fn(1px)'],
 

@@ -611,6 +611,10 @@ describe('parse', () => {
 
   it('should not lowercase dashed pseudo-class names', () => {
     expect(toCss(parse(':--My-State'))).toBe(':--My-State')
+
+    // An escape can spell a `-`, e.g. `\--My-State` is `--My-State`
+    expect(toCss(parse(':\\--My-State'))).toBe(':\\--My-State')
+    expect(toCss(parse(':-\\-My-State'))).toBe(':-\\-My-State')
   })
 
   it('should lowercase the `An+B` part of `:nth-child(…)`', () => {

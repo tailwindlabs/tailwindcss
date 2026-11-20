@@ -213,6 +213,10 @@ describe('parse', () => {
     expect(toCss(parse('--MY-FN(1px)'))).toBe('--MY-FN(1px)')
     expect(toCss(parse('--my_FN(1px)'))).toBe('--my_FN(1px)')
     expect(toCss(parse('--my\\_FN(1px)'))).toBe('--my\\_FN(1px)')
+
+    // An escape can spell a `-`, e.g. `\--MY-FN` is `--MY-FN`
+    expect(toCss(parse('\\--MY-FN(1px)'))).toBe('\\--MY-FN(1px)')
+    expect(toCss(parse('-\\-MY-FN(1px)'))).toBe('-\\-MY-FN(1px)')
   })
 
   it('should only lowercase the function name at the end of a word', () => {
