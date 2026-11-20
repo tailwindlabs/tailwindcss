@@ -14,6 +14,7 @@ import fs from 'node:fs'
 import path, { relative } from 'node:path'
 import type { AcceptedPlugin, PluginCreator, Postcss, Root } from 'postcss'
 import { toCss, type AstNode } from '../../tailwindcss/src/ast'
+import { toAsciiLowerCase } from '../../tailwindcss/src/utils/to-ascii-lower-case'
 import { cssAstToPostCssAst, postCssAstToCssAst } from './ast'
 import fixRelativePathsPlugin from './postcss-fix-relative-paths'
 
@@ -99,15 +100,17 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('Quick bail check')
             let canBail = true
             root.walkAtRules((node) => {
+              // At-rule names are ASCII case-insensitive, e.g. `@IMPORT`.
+              let name = toAsciiLowerCase(node.name)
               if (
-                node.name === 'import' ||
-                node.name === 'reference' ||
-                node.name === 'theme' ||
-                node.name === 'variant' ||
-                node.name === 'config' ||
-                node.name === 'plugin' ||
-                node.name === 'apply' ||
-                node.name === 'tailwind'
+                name === 'import' ||
+                name === 'reference' ||
+                name === 'theme' ||
+                name === 'variant' ||
+                name === 'config' ||
+                name === 'plugin' ||
+                name === 'apply' ||
+                name === 'tailwind'
               ) {
                 canBail = false
                 return false

@@ -238,6 +238,367 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('at-rule names are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // known at-rules in the output.
+    let compiler = await compile(
+      // prettier-ignore
+      css`
+      @LAYER theme, utilities;
+
+      @THEME {
+        --color-primary: red;
+        --animate-spin: spin 1s linear infinite;
+
+        @KEYFRAMES spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+
+      @CUSTOM-VARIANT hocus (&:hover, &:focus);
+
+      @UTILITY important-color {
+        color: blue !IMPORTANT;
+      }
+
+      @UTILITY applied {
+        @APPLY flex;
+      }
+
+      .btn {
+        @VARIANT hocus {
+          color: green;
+        }
+      }
+
+      @MEDIA PRINT {
+        .print-only {
+          display: block;
+        }
+      }
+
+      @TAILWIND utilities;
+    `,
+    )
+
+    expect(
+      compiler.build([
+        'bg-primary',
+        'animate-spin',
+        'hocus:underline',
+        'important-color',
+        'important-color!',
+        'applied',
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer theme, utilities;
+      :root, :host {
+        --color-primary: red;
+        --animate-spin: spin 1s linear infinite;
+      }
+      .btn:hover, .btn:focus {
+        color: green;
+      }
+      @media PRINT {
+        .print-only {
+          display: block;
+        }
+      }
+      .applied {
+        display: flex;
+      }
+      .animate-spin {
+        animation: var(--animate-spin);
+      }
+      .bg-primary {
+        background-color: var(--color-primary);
+      }
+      .important-color {
+        color: blue !important;
+      }
+      .important-color\\! {
+        color: blue !important;
+      }
+      .hocus\\:underline:hover, .hocus\\:underline:focus {
+        text-decoration-line: underline;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      "
+    `)
+  })
+
+  test('function names are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // known functions in the output.
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        'bg-[URL(my_image.png)]',
+        'w-[CALC(100%-1rem)]',
+        'text-[RGB(0_0_0)]',
+
+        // Dashed functions are case-sensitive, so `--SPACING(…)` is not
+        // `--spacing(…)`, and it is not a length.
+        'text-[--SPACING(1)]',
+        'w-[--MY-FN(1px)]',
+      ]),
+    ).toMatchInlineSnapshot(`
+      ".w-\\[--MY-FN\\(1px\\)\\] {
+        width: --MY-FN(1px);
+      }
+      .w-\\[CALC\\(100\\%-1rem\\)\\] {
+        width: calc(100% - 1rem);
+      }
+      .bg-\\[URL\\(my_image\\.png\\)\\] {
+        background-image: url(my_image.png);
+      }
+      .text-\\[--SPACING\\(1\\)\\] {
+        color: --SPACING(1);
+      }
+      .text-\\[RGB\\(0_0_0\\)\\] {
+        color: rgb(0 0 0);
+      }
+      "
+    `)
+  })
+
+  test('units are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // units in the output.
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        // We infer the type of a value with lowercase units
+        'border-[2PX]',
+        'text-[1EM]',
+        'text-[1Q]',
+        'bg-[10PX_20PX]',
+        'w-[CALC(100%-1E1PX)]',
+        '[width:-.5EM]',
+
+        // A custom property keeps its value as written
+        '[--my-var:10PX]',
+
+        // Strings, URLs, hashes and attribute values stay as written
+        "content-['10PX']",
+        'bg-[url(/10PX.png)]',
+        'bg-[#1E3A8A]',
+        'data-[size=10PX]:flex',
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer properties;
+      .\\[width\\:-\\.5EM\\] {
+        width: -.5em;
+      }
+      .w-\\[CALC\\(100\\%-1E1PX\\)\\] {
+        width: calc(100% - 1e1px);
+      }
+      .border-\\[2PX\\] {
+        border-style: var(--tw-border-style);
+        border-width: 2px;
+      }
+      .bg-\\[\\#1E3A8A\\] {
+        background-color: #1E3A8A;
+      }
+      .bg-\\[url\\(\\/10PX\\.png\\)\\] {
+        background-image: url(/10PX.png);
+      }
+      .bg-\\[10PX_20PX\\] {
+        background-position: 10px 20px;
+      }
+      .text-\\[1EM\\] {
+        font-size: 1em;
+      }
+      .text-\\[1Q\\] {
+        font-size: 1q;
+      }
+      .content-\\[\\'10PX\\'\\] {
+        --tw-content: '10PX';
+        content: var(--tw-content);
+      }
+      .\\[--my-var\\:10PX\\] {
+        --my-var: 10PX;
+      }
+      .data-\\[size\\=10PX\\]\\:flex[data-size="10PX"] {
+        display: flex;
+      }
+      @property --tw-border-style {
+        syntax: "*";
+        inherits: false;
+        initial-value: solid;
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-border-style: solid;
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  })
+
+  test('CSS-wide keywords are case-insensitive', async () => {
+    expect(
+      await run(
+        [
+          'bg-red-500',
+          'bg-blue-500',
+          'text-foreground',
+          'text-[INHERIT]',
+          'bg-[color:REVERT]',
+          '[color:Inherit]',
+          '[--my-var:INITIAL]',
+          "content-['INHERIT']",
+        ],
+        // prettier-ignore
+        css`
+        @theme {
+          --color-*: INITIAL;
+          --color-red-500: red;
+          --color-blue-500: blue;
+          --color-red-500: Initial;
+          --color-foreground: UNSET;
+        }
+
+        @tailwind utilities;
+
+        .foo {
+          color: INHERIT;
+          width: Unset !important;
+          --my-var: REVERT-LAYER;
+          content: 'INHERIT';
+        }
+      `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+
+      :root, :host {
+        --color-blue-500: blue;
+        --color-foreground: unset;
+      }
+
+      .bg-\\[color\\:REVERT\\] {
+        background-color: revert;
+      }
+
+      .bg-blue-500 {
+        background-color: var(--color-blue-500);
+      }
+
+      .\\[color\\:Inherit\\], .text-\\[INHERIT\\] {
+        color: inherit;
+      }
+
+      .text-foreground {
+        color: var(--color-foreground);
+      }
+
+      .content-\\[\\'INHERIT\\'\\] {
+        --tw-content: "INHERIT";
+        content: var(--tw-content);
+      }
+
+      .\\[--my-var\\:INITIAL\\] {
+        --my-var: initial;
+      }
+
+      .foo {
+        color: inherit;
+        --my-var: revert-layer;
+        content: "INHERIT";
+        width: unset !important;
+      }
+
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      "
+    `)
+  })
+
+  test('URL schemes are case-insensitive', async () => {
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    expect(
+      compiler.build([
+        // The rest of a URL stays as written
+        'bg-[url(HTTPS://example.com/A.png)]',
+        'bg-[URL("HTTP://example.com/A.png")]',
+        "[background-image:url('DATA:image/png;base64,AA==')]",
+        'bg-[url(./HTTP-Image.png)]',
+
+        // A custom property and a string keep their value as written
+        '[--my-image:url(HTTPS://example.com/A.png)]',
+        "content-['url(HTTPS://example.com/A.png)']",
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer properties;
+      .\\[background-image\\:url\\(\\'DATA\\:image\\/png\\;base64\\,AA\\=\\=\\'\\)\\] {
+        background-image: url('data:image/png;base64,AA==');
+      }
+      .bg-\\[URL\\(\\"HTTP\\:\\/\\/example\\.com\\/A\\.png\\"\\)\\] {
+        background-image: url("http://example.com/A.png");
+      }
+      .bg-\\[url\\(\\.\\/HTTP-Image\\.png\\)\\] {
+        background-image: url(./HTTP-Image.png);
+      }
+      .bg-\\[url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\] {
+        background-image: url(https://example.com/A.png);
+      }
+      .content-\\[\\'url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\'\\] {
+        --tw-content: 'url(HTTPS://example.com/A.png)';
+        content: var(--tw-content);
+      }
+      .\\[--my-image\\:url\\(HTTPS\\:\\/\\/example\\.com\\/A\\.png\\)\\] {
+        --my-image: url(HTTPS://example.com/A.png);
+      }
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+          *, ::before, ::after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {
@@ -3577,6 +3938,38 @@ describe('plugins', () => {
     )
   })
 
+  test('@plugin options keep CSS-wide keywords as written', async () => {
+    expect.hasAssertions()
+
+    // The options are not CSS, so we don't lowercase CSS-wide keywords in them
+    // prettier-ignore
+    await compile(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin" {
+          --is-custom: UNSET;
+          is-upper: INHERIT;
+          is-mixed: Initial
+        }
+      `,
+      {
+        loadModule: async () => ({
+          path: '',
+          base: '/root',
+          module: plugin.withOptions((options) => {
+            expect(options).toEqual({
+              '--is-custom': 'UNSET',
+              'is-upper': 'INHERIT',
+              'is-mixed': 'Initial',
+            })
+
+            return () => {}
+          }),
+        }),
+      },
+    )
+  })
+
   test('@plugin options can only be simple key/value pairs', () => {
     return expect(
       compile(
@@ -4823,6 +5216,32 @@ describe('@custom-variant', () => {
           ['scoped:underline'],
           css`
             @custom-variant scoped (@scope (.from) to (.to));
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          @scope (.from) to (.to) {
+            .scoped\\:underline {
+              text-decoration-line: underline;
+            }
+          }
+        }
+        "
+      `)
+    })
+
+    test('shorthand syntax with an uppercase at-rule name', async () => {
+      expect(
+        await run(
+          ['scoped:underline'],
+          // prettier-ignore
+          css`
+            @custom-variant scoped (@SCOPE (.from) to (.to));
 
             @layer utilities {
               @tailwind utilities;

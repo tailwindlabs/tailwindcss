@@ -951,6 +951,31 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Not a length-unit, can't safely constant fold
       ['[margin:0%]', 'm-[0%]'],
 
+      // Units are case-insensitive
+      ['rotate-[45DEG]', 'rotate-45'],
+      ['border-[2PX]', 'border-2'],
+      ['[width:10PX]', 'w-2.5'],
+      ['space-x-[0PX]', 'space-x-0'],
+      ['delay-[1S]', 'delay-1000'],
+      ['text-[1EM]', 'text-[1em]'],
+      ['bg-[10PX_20PX]', 'bg-position-[10px_20px]'],
+
+      // A custom property keeps its value as written
+      ['[--my-var:10PX]', '[--my-var:10PX]'],
+
+      // CSS-wide keywords are case-insensitive, also in a custom property
+      ['text-[INHERIT]', 'text-inherit'],
+      ['[color:Inherit]', 'text-inherit'],
+      ['bg-[color:INHERIT]', 'bg-inherit'],
+      ['bg-[INITIAL]', 'bg-[initial]'],
+      ['[--my-var:UNSET]', '[--my-var:unset]'],
+
+      // URL schemes are case-insensitive, but a custom property keeps its value
+      // as written
+      ['bg-[url(HTTPS://a.com/A.png)]', 'bg-[url(https://a.com/A.png)]'],
+      ["bg-[URL('HTTPS://a.com/A.png')]", "bg-[url('https://a.com/A.png')]"],
+      ['[--my-image:url(HTTPS://a.com/A.png)]', '[--my-image:url(HTTPS://a.com/A.png)]'],
+
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       ['font-stretch-[50%]', 'font-stretch-50%'],
@@ -1088,6 +1113,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       ['[&:first-child]:flex', 'first:flex'],
       ['[&:not(:first-child)]:flex', 'not-first:flex'],
+      ['[&:NOT(:FIRST-CHILD)]:flex', 'not-first:flex'],
+
+      // Pseudo-class and pseudo-element names are case-insensitive
+      ['[&:FIRST-CHILD]:flex', 'first:flex'],
+      ['[&:Focus]:flex', 'focus:flex'],
+      ['[&:FOCUS-VISIBLE]:flex', 'focus-visible:flex'],
+      ['[&::PLACEHOLDER]:flex', 'placeholder:flex'],
 
       ['[&_:first-child]:flex', '**:first:flex'],
       ['[&_>_:first-child]:flex', '*:first:flex'],
@@ -1097,7 +1129,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&_>_::before]:flex', '*:[&::before]:flex'],
       ['[&_:before]:flex', '**:[&:before]:flex'],
       ['[&_>_:before]:flex', '*:[&:before]:flex'],
-      ['[&_:BEFORE]:flex', '**:[&:BEFORE]:flex'],
+      ['[&_:BEFORE]:flex', '**:[&:before]:flex'],
+      ['[&_>_:BEFORE]:flex', '*:[&:before]:flex'],
 
       // in-* variants
       ['[p_&]:flex', 'in-[p]:flex'],
@@ -1114,6 +1147,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       ['[&:nth-child(-n+3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:not(:nth-child(-n+3))]:flex', 'not-nth-[-n+3]:flex'],
+      ['[&:NTH-CHILD(-N+3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:nth-child(-n_+_3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:not(:nth-child(-n_+_3))]:flex', 'not-nth-[-n+3]:flex'],
 
@@ -1131,6 +1165,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&:not(:nth-child(odd))]:flex', 'even:flex'],
       ['[&:nth-child(even)]:flex', 'even:flex'],
       ['[&:not(:nth-child(even))]:flex', 'odd:flex'],
+      ['[&:NTH-CHILD(ODD)]:flex', 'odd:flex'],
+      ['[&:NOT(:NTH-CHILD(ODD))]:flex', 'even:flex'],
 
       // Keep multiple attribute selectors as-is
       ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],
@@ -1153,6 +1189,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
       ['[@media_print]:flex', 'print:flex'],
       ['[@media_not_print]:flex', 'not-print:flex'],
+
+      // At-rule names are case-insensitive
+      ['[@MEDIA_print]:flex', 'print:flex'],
+      ['[@MEDIA_not_print]:flex', 'not-print:flex'],
+      ['not-[@MEDIA_print]:flex', 'not-print:flex'],
+      ['[@Container_(width>=28rem)]:flex', '@md:flex'],
+      ['[@SUPPORTS_(display:grid)]:flex', '[@supports_(display:grid)]:flex'],
 
       // Hoist the `:not` part to a compound variant
       ['[@media_not_(prefers-color-scheme:dark)]:flex', 'not-dark:flex'],
@@ -1361,6 +1404,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       // Keep an escape if an `_` after it is not a space, or might not be
       ['bg-[url(\\61_b.png)]', 'bg-[url(\\61_b.png)]'],
+      ['bg-[URL(\\61_b.png)]', 'bg-[url(\\61_b.png)]'],
       ['bg-[u\\72l(a_b.png)]', 'bg-[u\\72l(a_b.png)]'],
       // `decodeArbitraryValue` converts an `_` in a string too, except in a `url(…)`
       ["bg-[u\\72l('a_b.png')]", "bg-[u\\72l('a_b.png')]"],
@@ -2042,6 +2086,28 @@ describe('regressions', () => {
     ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
   })
 
+  test('does not merge utilities whose theme variables resolve to CSS-wide keywords in any case', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      // prettier-ignore
+      css`
+        @tailwind utilities;
+        @theme {
+          --foreground: UNSET;
+          --default: UNSET;
+        }
+        @theme inline {
+          --color-foreground: var(--foreground);
+          --color-default-soft-hover: color-mix(in oklab, var(--default) 60%, transparent);
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
+    ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
+  })
+
   test('keeps `--tw-*` declarations that are not related to a sibling with the same value', async () => {
     let designSystem = await __unstable__loadDesignSystem(
       css`
@@ -2287,6 +2353,7 @@ describe('normalizeEscapes', () => {
     ...['\\61', '\\72', '\\31', '\\2d', '\\-', '\\65', '\\66', '\\67', '\\_', '\\,', '\\5f'],
     ...['\\000072', '\\0000311', '\\61_', '\\31_', '\\2d_', '\\65_', '\\72_', '\\g', '\\\\'],
     ...['url(', 'u\\72l(', 'var(', 'calc(', 'v\\61r('],
+    ...['URL(', 'U\\52L(', '\\55RL(', 'VAR(', 'V\\41R('],
   ]
 
   // Lightning CSS decodes escapes, and only keeps those that are needed. So

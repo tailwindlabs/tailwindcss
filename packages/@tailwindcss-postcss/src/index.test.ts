@@ -347,6 +347,36 @@ test('handle CSS when using a `@variant` using variants that do not rely on the 
   `)
 })
 
+test('handle at-rules in any case (we should not bail early)', async () => {
+  let processor = postcss([
+    tailwindcss({ base: `${__dirname}/fixtures/example-project`, optimize: { minify: false } }),
+  ])
+
+  let result = await processor.process(
+    // prettier-ignore
+    css`
+      @REFERENCE "tailwindcss/theme.css";
+
+      .foo {
+        @VARIANT md {
+          bar: baz;
+        }
+      }
+    `,
+    { from: inputCssFilePath() },
+  )
+
+  expect(pretty(result.css)).toMatchInlineSnapshot(`
+    "
+    @media (min-width: 48rem) {
+      .foo {
+        bar: baz;
+      }
+    }
+    "
+  `)
+})
+
 test('runs `Once` plugins in the right order', async () => {
   let before = ''
   let after = ''

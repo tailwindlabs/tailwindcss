@@ -11,6 +11,7 @@ import { withAlpha } from '../utilities'
 import { DefaultMap } from '../utils/default-map'
 import { escape } from '../utils/escape'
 import { inferDataType } from '../utils/infer-data-type'
+import { normalizeAtRuleName } from '../utils/normalize-at-rule-name'
 import { segment } from '../utils/segment'
 import { toKeyPath } from '../utils/to-key-path'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtSlot } from '../variants'
@@ -142,14 +143,16 @@ export function buildPluginApi({
 
       // Single selector or multiple parallel selectors
       if (typeof variant === 'string' || Array.isArray(variant)) {
+        // At-rule names are case-insensitive, e.g. `@MEDIA print` is
+        // `@media print`.
+        let selectors = (typeof variant === 'string' ? [variant] : variant).map(normalizeAtRuleName)
+
         designSystem.variants.static(
           name,
           (r) => {
-            r.nodes = parseVariantValue(variant, r.nodes)
+            r.nodes = parseVariantValue(selectors, r.nodes)
           },
-          {
-            compounds: compoundsForSelectors(typeof variant === 'string' ? [variant] : variant),
-          },
+          { compounds: compoundsForSelectors(selectors) },
         )
       }
 

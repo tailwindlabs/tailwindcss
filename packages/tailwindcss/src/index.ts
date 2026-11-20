@@ -31,6 +31,7 @@ import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
 import { expand } from './utils/brace-expansion'
 import { escape, unescape } from './utils/escape'
+import { normalizeAtRuleName } from './utils/normalize-at-rule-name'
 import { segment } from './utils/segment'
 import { topologicalSort } from './utils/topological-sort'
 import { compoundsForSelectors, IS_VALID_VARIANT_NAME, substituteAtVariant } from './variants'
@@ -387,7 +388,9 @@ async function parseCss(
           selector = selector.trim()
 
           if (selector[0] === '@') {
-            atRuleParams.push(selector)
+            // At-rule names are case-insensitive, e.g. `@MEDIA print` is
+            // `@media print`.
+            atRuleParams.push(normalizeAtRuleName(selector))
           } else {
             styleRuleSelectors.push(selector)
           }

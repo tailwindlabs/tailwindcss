@@ -1,7 +1,14 @@
 import type { DesignSystem } from './design-system'
-import { decodeArbitraryValue } from './utils/decode-arbitrary-value'
+import { normalizeCssWideKeyword } from './utils/css-wide-keywords'
+import {
+  decodeArbitraryValue,
+  normalizeFunctionNames,
+  normalizeUnits,
+  normalizeUrlSchemes,
+} from './utils/decode-arbitrary-value'
 import { DefaultMap } from './utils/default-map'
 import { isValidArbitrary } from './utils/is-valid-arbitrary'
+import { normalizeAtRuleName } from './utils/normalize-at-rule-name'
 import { segment } from './utils/segment'
 import type { ValueFunctionNode } from './value-parser'
 import * as ValueParser from './value-parser'
@@ -445,6 +452,17 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // Values can't contain `;` or `}` characters at the top-level.
     if (value === null) return
 
+    // Units and URL schemes are case-insensitive, e.g. `[width:10PX]` is
+    // `[width:10px]`. But a custom property keeps its value as written, e.g. in
+    // `[--my-var:10PX]`.
+    if (property[0] !== '-' || property[1] !== '-') {
+      value = normalizeUrlSchemes(normalizeUnits(value))
+    }
+
+    // CSS-wide keywords are case-insensitive, also in a custom property. E.g.
+    // `[--my-var:INITIAL]` is `[--my-var:initial]`.
+    value = normalizeCssWideKeyword(value)
+
     yield {
       kind: 'arbitrary',
       property,
@@ -528,6 +546,7 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     if (value[0] !== '-' || value[1] !== '-') return
 
     // Values can't contain `;` or `}` characters at the top-level.
+    value = normalizeFunctionNames(value)
     if (!isValidArbitrary(value)) return
 
     roots = [[root, dataType === null ? `[var(${value})]` : `[${dataType}:var(${value})]`]]
@@ -595,6 +614,14 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           break
         }
 
+        // Units, URL schemes and CSS-wide keywords are case-insensitive, e.g.
+        // `border-[2PX]` is `border-[2px]`, `bg-[url(HTTPS://…)]` is
+        // `bg-[url(https://…)]`, and `text-[INHERIT]` is `text-[inherit]`. We
+        // infer the type of the value with lowercase units.
+        arbitraryValue = normalizeCssWideKeyword(
+          normalizeUrlSchemes(normalizeUnits(arbitraryValue)),
+        )
+
         // Empty arbitrary values are invalid. E.g.: `p-[]`
         //                                              ^^
         if (arbitraryValue.length === 0 || arbitraryValue.trim().length === 0) {
@@ -657,6 +684,7 @@ function parseModifier(modifier: string): CandidateModifier | null {
     if (modifier[0] !== '-' || modifier[1] !== '-') return null
 
     // Values can't contain `;` or `}` characters at the top-level.
+    modifier = normalizeFunctionNames(modifier)
     if (!isValidArbitrary(modifier)) return null
 
     // Wrap the value in `var(…)` to ensure that it is a valid CSS variable.
@@ -719,6 +747,10 @@ export function parseVariant(variant: string, designSystem: DesignSystem): Varia
     // Empty arbitrary values are invalid. E.g.: `[]:`
     //                                            ^^
     if (selector.length === 0 || selector.trim().length === 0) return null
+
+    // At-rule names are case-insensitive, e.g. `[@MEDIA_print]` is
+    // `[@media_print]`. The rest of the selector stays as written.
+    selector = normalizeAtRuleName(selector)
 
     let relative = selector[0] === '>' || selector[0] === '+' || selector[0] === '~'
 
@@ -1310,5 +1342,9 @@ function escapeUnderscore(value: string): string {
 // the order matters: decoding breaks unbalanced parens (`calc(1px` becomes
 // `calc()1px`) so validating the decoded value would hide them
 function decodeValidArbitraryValue(raw: string, isDeclarationValue = false): string | null {
+  // We validate the value with the function names that we print, because we
+  // treat a `url(…)` differently than other functions, e.g. `URL(…)`.
+  raw = normalizeFunctionNames(raw)
+
   return isValidArbitrary(raw, isDeclarationValue) ? decodeArbitraryValue(raw) : null
 }

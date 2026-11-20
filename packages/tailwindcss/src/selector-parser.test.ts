@@ -570,6 +570,96 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('should lowercase pseudo-class and pseudo-element names', () => {
+    expect(parse('.Foo:HOVER::BEFORE')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '.Foo' },
+          { kind: 'selector', value: ':hover' },
+          { kind: 'selector', value: '::before' },
+        ],
+      },
+    ])
+
+    expect(toCss(parse('A:FIRST-CHILD:BEFORE'))).toBe('A:first-child:before')
+    expect(toCss(parse('::-WEBKIT-SCROLLBAR'))).toBe('::-webkit-scrollbar')
+  })
+
+  it('should lowercase the names of pseudo-class functions', () => {
+    // A `:not(…)` has a selector list in it, so we parse it as one
+    expect(parse(':NOT(.Foo:HOVER)')).toEqual([
+      {
+        kind: 'function',
+        value: ':not',
+        nodes: [
+          {
+            kind: 'compound',
+            nodes: [
+              { kind: 'selector', value: '.Foo' },
+              { kind: 'selector', value: ':hover' },
+            ],
+          },
+        ],
+      },
+    ])
+
+    // Other functions keep their contents as-is
+    expect(toCss(parse(':LANG(EN)::PART(Foo):STATE(Foo)'))).toBe(':lang(EN)::part(Foo):state(Foo)')
+  })
+
+  it('should not lowercase dashed pseudo-class names', () => {
+    expect(toCss(parse(':--My-State'))).toBe(':--My-State')
+
+    // An escape can spell a `-`, e.g. `\--My-State` is `--My-State`
+    expect(toCss(parse(':\\--My-State'))).toBe(':\\--My-State')
+    expect(toCss(parse(':-\\-My-State'))).toBe(':-\\-My-State')
+  })
+
+  it('should lowercase the `An+B` part of `:nth-child(…)`', () => {
+    expect(parse(':NTH-CHILD(2N+1 OF .Foo)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          { kind: 'value', value: '2n+1 of ' },
+          { kind: 'selector', value: '.Foo' },
+        ],
+      },
+    ])
+
+    expect(toCss(parse(':NTH-OF-TYPE(EVEN)'))).toBe(':nth-of-type(even)')
+
+    // Any whitespace can be around the `of`
+    expect(toCss(parse(':nth-child(2N of\t.Foo)'))).toBe(':nth-child(2n of\t.Foo)')
+    expect(toCss(parse(':nth-child(2N OF\n.Foo)'))).toBe(':nth-child(2n of\n.Foo)')
+    expect(toCss(parse(':nth-child(2N\rof\f.Foo)'))).toBe(':nth-child(2n\rof\f.Foo)')
+    expect(toCss(parse(':nth-child(2N\fof\r.Foo)'))).toBe(':nth-child(2n\fof\r.Foo)')
+
+    // The `of` in `.Proof` is part of the selector list
+    expect(parse(':nth-child(2N of\t.Proof .Bar)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          { kind: 'value', value: '2n of\t' },
+          {
+            kind: 'complex',
+            nodes: [
+              { kind: 'selector', value: '.Proof' },
+              { kind: 'combinator', value: ' ' },
+              { kind: 'selector', value: '.Bar' },
+            ],
+          },
+        ],
+      },
+    ])
+
+    // Without whitespace after the `of`, we can't tell where the selector list
+    // starts, so we keep it as written
+    expect(toCss(parse(':nth-child(2N of.Foo)'))).toBe(':nth-child(2N of.Foo)')
+  })
 })
 
 describe('toCss', () => {

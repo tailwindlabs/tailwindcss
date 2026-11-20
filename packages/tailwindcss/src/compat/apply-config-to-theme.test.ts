@@ -239,6 +239,74 @@ test('invalid keys are not merged into the theme', () => {
   expect(entries.length).toEqual(0)
 })
 
+test('CSS-wide keywords are lowercased', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: {
+            foreground: 'UNSET',
+            background: 'Inherit',
+            primary: 'INHERITED',
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.namespace('--color')).toMatchInlineSnapshot(`
+    Map {
+      "foreground" => "unset",
+      "background" => "inherit",
+      "primary" => "INHERITED",
+    }
+  `)
+})
+
+test('CSS-wide keywords are lowercased in the default font settings', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          fontFamily: {
+            sans: [
+              'UNSET',
+              { fontFeatureSettings: 'INHERIT', fontVariationSettings: 'Revert-Layer' },
+            ],
+            mono: [
+              'Potato Mono',
+              { fontFeatureSettings: 'REVERT', fontVariationSettings: '"XHGT" 0.7' },
+            ],
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.get(['--default-font-family'])).toEqual('unset')
+  expect(theme.get(['--default-font-feature-settings'])).toEqual('inherit')
+  expect(theme.get(['--default-font-variation-settings'])).toEqual('revert-layer')
+  expect(theme.get(['--default-mono-font-family'])).toEqual('Potato Mono')
+  expect(theme.get(['--default-mono-font-feature-settings'])).toEqual('revert')
+  expect(theme.get(['--default-mono-font-variation-settings'])).toEqual('"XHGT" 0.7')
+})
+
 describe('keyPathToCssProperty', () => {
   test.each([
     [['width', '40', '2/5'], '--width-40-2/5'],

@@ -2097,6 +2097,63 @@ test('not', async () => {
   ).toEqual('')
 })
 
+test('not-* compounds with at-rules in any case', async () => {
+  expect(
+    await run(
+      [
+        'not-[@MEDIA_print]:flex',
+        'not-[@CONTAINER_(width>=24rem)]:flex',
+        'not-[@Supports_(display:grid)]:flex',
+        'not-custom-print:flex',
+        'not-plugin-print:flex',
+      ],
+      // prettier-ignore
+      css`
+        @custom-variant custom-print (@MEDIA print);
+        @plugin "./plugin.js";
+        @tailwind utilities;
+      `,
+      {
+        async loadModule(_id: string) {
+          return {
+            path: '',
+            base: '/',
+            module: createPlugin(({ addVariant }) => {
+              addVariant('plugin-print', '@MEDIA print')
+            }),
+          }
+        },
+      },
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    @media not print {
+      .not-plugin-print\\:flex, .not-custom-print\\:flex {
+        display: flex;
+      }
+    }
+
+    @container not (min-width: 24rem) {
+      .not-\\[\\@CONTAINER_\\(width\\>\\=24rem\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @media not print {
+      .not-\\[\\@MEDIA_print\\]\\:flex {
+        display: flex;
+      }
+    }
+
+    @supports not (display: grid) {
+      .not-\\[\\@Supports_\\(display\\:grid\\)\\]\\:flex {
+        display: flex;
+      }
+    }
+    "
+  `)
+})
+
 test('in', async () => {
   expect(
     await run([
