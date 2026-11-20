@@ -570,6 +570,67 @@ describe('parse', () => {
       },
     ])
   })
+
+  it('should lowercase pseudo-class and pseudo-element names', () => {
+    expect(parse('.Foo:HOVER::BEFORE')).toEqual([
+      {
+        kind: 'compound',
+        nodes: [
+          { kind: 'selector', value: '.Foo' },
+          { kind: 'selector', value: ':hover' },
+          { kind: 'selector', value: '::before' },
+        ],
+      },
+    ])
+
+    expect(toCss(parse('A:FIRST-CHILD:BEFORE'))).toBe('A:first-child:before')
+    expect(toCss(parse('::-WEBKIT-SCROLLBAR'))).toBe('::-webkit-scrollbar')
+  })
+
+  it('should lowercase the names of pseudo-class functions', () => {
+    // A `:not(…)` has a selector list in it, so we parse it as one
+    expect(parse(':NOT(.Foo:HOVER)')).toEqual([
+      {
+        kind: 'function',
+        value: ':not',
+        nodes: [
+          {
+            kind: 'compound',
+            nodes: [
+              { kind: 'selector', value: '.Foo' },
+              { kind: 'selector', value: ':hover' },
+            ],
+          },
+        ],
+      },
+    ])
+
+    // Other functions keep their contents as-is
+    expect(toCss(parse(':LANG(EN)::PART(Foo):STATE(Foo)'))).toBe(':lang(EN)::part(Foo):state(Foo)')
+  })
+
+  it('should not lowercase dashed pseudo-class names', () => {
+    expect(toCss(parse(':--My-State'))).toBe(':--My-State')
+  })
+
+  it('should lowercase the `An+B` part of `:nth-child(…)`', () => {
+    expect(parse(':NTH-CHILD(2N+1 OF .Foo)')).toEqual([
+      {
+        kind: 'function',
+        value: ':nth-child',
+        nodes: [
+          { kind: 'value', value: '2n+1 of ' },
+          { kind: 'selector', value: '.Foo' },
+        ],
+      },
+    ])
+
+    expect(toCss(parse(':NTH-OF-TYPE(EVEN)'))).toBe(':nth-of-type(even)')
+
+    // We only parse an `of` with a space after it, so we can't tell where the
+    // selector list starts here
+    expect(toCss(parse(':nth-child(2N of\t.Foo)'))).toBe(':nth-child(2N of\t.Foo)')
+  })
 })
 
 describe('toCss', () => {

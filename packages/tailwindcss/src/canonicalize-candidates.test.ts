@@ -1088,6 +1088,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       ['[&:first-child]:flex', 'first:flex'],
       ['[&:not(:first-child)]:flex', 'not-first:flex'],
+      ['[&:NOT(:FIRST-CHILD)]:flex', 'not-first:flex'],
 
       ['[&_:first-child]:flex', '**:first:flex'],
       ['[&_>_:first-child]:flex', '*:first:flex'],
@@ -1097,7 +1098,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&_>_::before]:flex', '*:[&::before]:flex'],
       ['[&_:before]:flex', '**:[&:before]:flex'],
       ['[&_>_:before]:flex', '*:[&:before]:flex'],
-      ['[&_:BEFORE]:flex', '**:[&:BEFORE]:flex'],
+      ['[&_:BEFORE]:flex', '**:[&:before]:flex'],
+      ['[&_>_:BEFORE]:flex', '*:[&:before]:flex'],
 
       // in-* variants
       ['[p_&]:flex', 'in-[p]:flex'],
@@ -1114,6 +1116,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
 
       ['[&:nth-child(-n+3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:not(:nth-child(-n+3))]:flex', 'not-nth-[-n+3]:flex'],
+      ['[&:NTH-CHILD(-N+3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:nth-child(-n_+_3)]:flex', 'nth-[-n+3]:flex'],
       ['[&:not(:nth-child(-n_+_3))]:flex', 'not-nth-[-n+3]:flex'],
 
@@ -1131,6 +1134,8 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&:not(:nth-child(odd))]:flex', 'even:flex'],
       ['[&:nth-child(even)]:flex', 'even:flex'],
       ['[&:not(:nth-child(even))]:flex', 'odd:flex'],
+      ['[&:NTH-CHILD(ODD)]:flex', 'odd:flex'],
+      ['[&:NOT(:NTH-CHILD(ODD))]:flex', 'even:flex'],
 
       // Keep multiple attribute selectors as-is
       ['[[data-visible][data-dark]]:flex', '[[data-visible][data-dark]]:flex'],

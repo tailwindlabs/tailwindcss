@@ -1,3 +1,6 @@
+import { isDashed } from './utils/normalize-function-name'
+import { toAsciiLowerCase } from './utils/to-ascii-lower-case'
+
 type Combinator =
   | ' ' // Descendant combinator
   | '>' // Child combinator
@@ -125,7 +128,7 @@ const LEGACY_PSEUDO_ELEMENTS = new Set([':before', ':after', ':first-line', ':fi
 
 export function isPseudoElement(node: SelectorAstNode): boolean {
   if (node.kind !== 'selector' && node.kind !== 'function') return false
-  return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value.toLowerCase())
+  return node.value.startsWith('::') || LEGACY_PSEUDO_ELEMENTS.has(node.value)
 }
 
 export function isAttributeSelector(node: SelectorAstNode): boolean {
@@ -223,6 +226,7 @@ const CLOSE_BRACKET = 0x5d
 const CLOSE_PAREN = 0x29
 const COLON = 0x3a
 const COMMA = 0x2c
+const DASH = 0x2d
 const DOUBLE_QUOTE = 0x22
 const DOT = 0x2e
 const GREATER_THAN = 0x3e
@@ -237,6 +241,25 @@ const TAB = 0x09
 const TILDE = 0x7e
 const AMPERSAND = 0x26
 const ASTERISK = 0x2a
+const LOWER_A = 0x61
+const LOWER_Z = 0x7a
+const NINE = 0x39
+const NON_ASCII = 0x80
+const UNDERSCORE = 0x5f
+const UPPER_A = 0x41
+const UPPER_Z = 0x5a
+const ZERO = 0x30
+
+function isNameChar(char: number) {
+  return (
+    (char >= LOWER_A && char <= LOWER_Z) ||
+    (char >= UPPER_A && char <= UPPER_Z) ||
+    (char >= ZERO && char <= NINE) ||
+    char === DASH ||
+    char === UNDERSCORE ||
+    char >= NON_ASCII
+  )
+}
 
 export function parse(input: string) {
   input = input.replaceAll('\r\n', '\n')
@@ -421,34 +444,46 @@ export function parse(input: string) {
 
           let contents = input.slice(start, end)
 
-          // `:nth-child(…)` and `:nth-last-child(…)` can contain an
-          // `of <complex-selector-list>` clause. The selector list must be
-          // parsed (e.g. to be able to substitute `&`), but the `An+B` part
-          // is not a selector so it stays an opaque value node. E.g.:
-          //
-          // ```css
-          // :nth-child(2n + 1 of .foo, .bar)
-          //            ^^^^^^^^^^ value
-          //                       ^^^^^^^^^^ selector list
-          // ```
-          if (node.value === ':nth-child' || node.value === ':nth-last-child') {
-            let idx = contents.indexOf('of ')
-            if (idx !== -1) {
-              node.nodes.push(
-                value(
-                  contents.slice(0, idx + 3), // value `2n + 1 of `
-                ),
-                ...parse(
-                  contents.slice(idx + 3), // `.foo, .bar`
-                ),
-              )
-              buffer = ''
-              i = end
+          // The `An+B` part of `:nth-child(…)` and the like is ASCII
+          // case-insensitive, and so is the `of` keyword. E.g. `2N+1 OF .foo`
+          // is `2n+1 of .foo`.
+          if (node.value.startsWith(':nth-')) {
+            let lowerCaseContents = toAsciiLowerCase(contents)
 
-              append(node)
+            // `:nth-child(…)` and `:nth-last-child(…)` can contain an
+            // `of <complex-selector-list>` clause. The selector list must be
+            // parsed (e.g. to be able to substitute `&`), but the `An+B` part
+            // is not a selector so it stays an opaque value node. E.g.:
+            //
+            // ```css
+            // :nth-child(2n + 1 of .foo, .bar)
+            //            ^^^^^^^^^^ value
+            //                       ^^^^^^^^^^ selector list
+            // ```
+            if (node.value === ':nth-child' || node.value === ':nth-last-child') {
+              let idx = lowerCaseContents.indexOf('of ')
+              if (idx !== -1) {
+                node.nodes.push(
+                  value(
+                    lowerCaseContents.slice(0, idx + 3), // value `2n + 1 of `
+                  ),
+                  ...parse(
+                    contents.slice(idx + 3), // `.foo, .bar`
+                  ),
+                )
+                buffer = ''
+                i = end
 
-              break
+                append(node)
+
+                break
+              }
             }
+
+            // Without an `of` clause, it's all `An+B`. But an `of` without a
+            // space after it is not a clause that we parse, so we can't tell
+            // where the selector list starts. E.g. a `.Foo` in it stays as-is.
+            if (!lowerCaseContents.includes('of')) contents = lowerCaseContents
           }
 
           node.nodes.push(value(contents))
@@ -511,15 +546,34 @@ export function parse(input: string) {
       case HASH: {
         if (currentChar === COLON && buffer === ':') {
           buffer += input[i]
-          break
+        } else {
+          // Handle everything before the combinator as a selector and start a
+          // new selector
+          if (buffer.length > 0) {
+            append(selector(buffer))
+          }
+          buffer = input[i]
         }
 
-        // Handle everything before the combinator as a selector and start a new
-        // selector
-        if (buffer.length > 0) {
-          append(selector(buffer))
+        // Pseudo-class and pseudo-element names are ASCII case-insensitive,
+        // e.g. `:HOVER` is `:hover`, and `::BEFORE` is `::before`. We lowercase
+        // them, so the rest of the code can compare them as-is.
+        if (currentChar === COLON && input.charCodeAt(i + 1) !== COLON) {
+          let end = i + 1
+          while (end < input.length) {
+            peekChar = input.charCodeAt(end)
+            if (peekChar === BACKSLASH) end += 2
+            else if (isNameChar(peekChar)) end++
+            else break
+          }
+
+          let name = input.slice(i + 1, end)
+
+          // Dashed names are case-sensitive, e.g. `:--my-state`
+          buffer += isDashed(input, i + 1) ? name : toAsciiLowerCase(name)
+          i = end - 1
         }
-        buffer = input[i]
+
         break
       }
 
