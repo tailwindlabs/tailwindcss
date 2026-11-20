@@ -105,3 +105,28 @@ it('should convert a Tailwind CSS AST into a PostCSS AST', () => {
     }"
   `)
 })
+
+it('should lowercase CSS-wide keywords when converting a PostCSS AST', () => {
+  // prettier-ignore
+  let input = css`
+    .foo {
+      color: INHERIT;
+      width: Unset !important;
+      --my-var: REVERT-LAYER;
+      content: 'INHERIT';
+    }
+  `
+
+  let ast = postcss.parse(input)
+  let transformedAst = postCssAstToCssAst(ast)
+
+  expect(toCss(transformedAst)).toMatchInlineSnapshot(`
+    ".foo {
+      color: inherit;
+      width: unset !important;
+      --my-var: revert-layer;
+      content: 'INHERIT';
+    }
+    "
+  `)
+})

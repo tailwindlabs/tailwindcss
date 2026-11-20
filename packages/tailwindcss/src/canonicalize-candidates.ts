@@ -20,6 +20,7 @@ import { expandDeclaration } from './expand-declaration'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import type { Writable } from './types'
+import { CSS_WIDE_KEYWORDS } from './utils/css-wide-keywords'
 import { DefaultMap } from './utils/default-map'
 import { dimensions } from './utils/dimensions'
 import { isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
@@ -3120,9 +3121,6 @@ function canonicalizeAst(
 //
 // Inlining would make `text-(--foreground)` and `text-(--background)` produce
 // the same signature `color: unset`, even though they are different at runtime.
-//
-// https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/Data_types#css-wide_keywords
-const CSS_WIDE_KEYWORDS = ['initial', 'inherit', 'revert', 'revert-layer', 'revert-rule', 'unset']
 
 // Resolve theme values to their inlined value.
 //
@@ -3198,7 +3196,7 @@ function resolveVariablesInValue(
     if (variableValue === undefined) return // Couldn't resolve the variable
 
     // CSS-wide keywords are never inlined
-    if (CSS_WIDE_KEYWORDS.includes(variableValue.toLowerCase())) return
+    if (CSS_WIDE_KEYWORDS.has(variableValue)) return
 
     // Inject variable fallbacks when no fallback is present yet.
     //

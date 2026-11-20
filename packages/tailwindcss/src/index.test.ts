@@ -456,6 +456,95 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('CSS-wide keywords are case-insensitive', async () => {
+    expect(
+      await run(
+        [
+          'bg-red-500',
+          'bg-blue-500',
+          'text-foreground',
+          'text-[INHERIT]',
+          'bg-[color:REVERT]',
+          '[color:Inherit]',
+          '[--my-var:INITIAL]',
+          "content-['INHERIT']",
+        ],
+        // prettier-ignore
+        css`
+        @theme {
+          --color-*: INITIAL;
+          --color-red-500: red;
+          --color-blue-500: blue;
+          --color-red-500: Initial;
+          --color-foreground: UNSET;
+        }
+
+        @tailwind utilities;
+
+        .foo {
+          color: INHERIT;
+          width: Unset !important;
+          --my-var: REVERT-LAYER;
+          content: 'INHERIT';
+        }
+      `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      @layer properties {
+        @supports (((-webkit-hyphens: none)) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *, :before, :after, ::backdrop {
+            --tw-content: "";
+          }
+        }
+      }
+
+      :root, :host {
+        --color-blue-500: blue;
+        --color-foreground: unset;
+      }
+
+      .bg-\\[color\\:REVERT\\] {
+        background-color: revert;
+      }
+
+      .bg-blue-500 {
+        background-color: var(--color-blue-500);
+      }
+
+      .\\[color\\:Inherit\\], .text-\\[INHERIT\\] {
+        color: inherit;
+      }
+
+      .text-foreground {
+        color: var(--color-foreground);
+      }
+
+      .content-\\[\\'INHERIT\\'\\] {
+        --tw-content: "INHERIT";
+        content: var(--tw-content);
+      }
+
+      .\\[--my-var\\:INITIAL\\] {
+        --my-var: initial;
+      }
+
+      .foo {
+        color: inherit;
+        --my-var: revert-layer;
+        content: "INHERIT";
+        width: unset !important;
+      }
+
+      @property --tw-content {
+        syntax: "*";
+        inherits: false;
+        initial-value: "";
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

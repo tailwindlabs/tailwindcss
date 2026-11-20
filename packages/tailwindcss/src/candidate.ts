@@ -1,4 +1,5 @@
 import type { DesignSystem } from './design-system'
+import { normalizeCssWideKeyword } from './utils/css-wide-keywords'
 import {
   decodeArbitraryValue,
   normalizeFunctionNames,
@@ -453,6 +454,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
     // custom property keeps its value as written, e.g. in `[--my-var:10PX]`.
     if (property[0] !== '-' || property[1] !== '-') value = normalizeUnits(value)
 
+    // CSS-wide keywords are case-insensitive, also in a custom property. E.g.
+    // `[--my-var:INITIAL]` is `[--my-var:initial]`.
+    value = normalizeCssWideKeyword(value)
+
     yield {
       kind: 'arbitrary',
       property,
@@ -604,9 +609,10 @@ export function* parseCandidate(input: string, designSystem: DesignSystem): Iter
           break
         }
 
-        // Units are case-insensitive, e.g. `border-[2PX]` is `border-[2px]`. We
-        // infer the type of the value with lowercase units.
-        arbitraryValue = normalizeUnits(arbitraryValue)
+        // Units and CSS-wide keywords are case-insensitive, e.g. `border-[2PX]`
+        // is `border-[2px]`, and `text-[INHERIT]` is `text-[inherit]`. We infer
+        // the type of the value with lowercase units.
+        arbitraryValue = normalizeCssWideKeyword(normalizeUnits(arbitraryValue))
 
         // Empty arbitrary values are invalid. E.g.: `p-[]`
         //                                              ^^

@@ -2,6 +2,7 @@ import type * as postcss from 'postcss'
 import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src/ast'
 import { createLineTable, type LineTable } from '../../tailwindcss/src/source-maps/line-table'
 import type { Source, SourceLocation } from '../../tailwindcss/src/source-maps/source'
+import { normalizeCssWideKeyword } from '../../tailwindcss/src/utils/css-wide-keywords'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
 import { toAsciiLowerCase } from '../../tailwindcss/src/utils/to-ascii-lower-case'
 
@@ -148,7 +149,10 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
   ) {
     // Declaration
     if (node.type === 'decl') {
-      let astNode = decl(node.prop, node.value, node.important)
+      // CSS-wide keywords are ASCII case-insensitive. The CSS parser of
+      // Tailwind CSS lowercases them, and so do we, because this AST skips that
+      // parser.
+      let astNode = decl(node.prop, normalizeCssWideKeyword(node.value), node.important)
       astNode.src = toSource(node)
       parent.push(astNode)
     }

@@ -963,6 +963,13 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // A custom property keeps its value as written
       ['[--my-var:10PX]', '[--my-var:10PX]'],
 
+      // CSS-wide keywords are case-insensitive, also in a custom property
+      ['text-[INHERIT]', 'text-inherit'],
+      ['[color:Inherit]', 'text-inherit'],
+      ['bg-[color:INHERIT]', 'bg-inherit'],
+      ['bg-[INITIAL]', 'bg-[initial]'],
+      ['[--my-var:UNSET]', '[--my-var:unset]'],
+
       // Only 50-200% (inclusive) are valid:
       // https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch#percentage
       ['font-stretch-[50%]', 'font-stretch-50%'],
@@ -2046,6 +2053,28 @@ describe('regressions', () => {
         @theme {
           --foreground: unset;
           --default: unset;
+        }
+        @theme inline {
+          --color-foreground: var(--foreground);
+          --color-default-soft-hover: color-mix(in oklab, var(--default) 60%, transparent);
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['text-foreground/60', 'text-default-soft-hover']),
+    ).toEqual(['text-foreground/60', 'text-default-soft-hover'])
+  })
+
+  test('does not merge utilities whose theme variables resolve to CSS-wide keywords in any case', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      // prettier-ignore
+      css`
+        @tailwind utilities;
+        @theme {
+          --foreground: UNSET;
+          --default: UNSET;
         }
         @theme inline {
           --color-foreground: var(--foreground);

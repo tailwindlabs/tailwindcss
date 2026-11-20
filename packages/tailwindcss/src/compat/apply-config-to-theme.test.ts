@@ -239,6 +239,38 @@ test('invalid keys are not merged into the theme', () => {
   expect(entries.length).toEqual(0)
 })
 
+test('CSS-wide keywords are lowercased', () => {
+  let theme = new Theme()
+  let design = buildDesignSystem(theme)
+
+  let { resolvedConfig, replacedThemeKeys } = resolveConfig(design, [
+    {
+      config: {
+        theme: {
+          colors: {
+            foreground: 'UNSET',
+            background: 'Inherit',
+            primary: 'INHERITED',
+          },
+        },
+      },
+      base: '/root',
+      reference: false,
+      src: undefined,
+    },
+  ])
+
+  applyConfigToTheme(design, resolvedConfig, replacedThemeKeys)
+
+  expect(theme.namespace('--color')).toMatchInlineSnapshot(`
+    Map {
+      "foreground" => "unset",
+      "background" => "inherit",
+      "primary" => "INHERITED",
+    }
+  `)
+})
+
 describe('keyPathToCssProperty', () => {
   test.each([
     [['width', '40', '2/5'], '--width-40-2/5'],

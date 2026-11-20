@@ -1,5 +1,6 @@
 import type { DesignSystem } from '../design-system'
 import { ThemeOptions } from '../theme'
+import { normalizeCssWideKeyword } from '../utils/css-wide-keywords'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
@@ -53,9 +54,11 @@ export function applyConfigToTheme(
     let name = keyPathToCssProperty(path)
     if (!name) continue
 
+    // CSS-wide keywords are ASCII case-insensitive. The CSS parser lowercases
+    // them, and so do we, because a config skips that parser.
     designSystem.theme.add(
       `--${name}`,
-      '' + value,
+      normalizeCssWideKeyword('' + value),
       ThemeOptions.INLINE | ThemeOptions.REFERENCE | ThemeOptions.DEFAULT,
     )
   }

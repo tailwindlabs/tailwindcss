@@ -11,6 +11,7 @@ import {
 } from './ast'
 import { createLineTable } from './source-maps/line-table'
 import type { Source, SourceLocation } from './source-maps/source'
+import { normalizeCssWideKeyword } from './utils/css-wide-keywords'
 import { toAsciiLowerCase } from './utils/to-ascii-lower-case'
 
 const BACKSLASH = 0x5c
@@ -789,11 +790,14 @@ function parseDeclaration(
   // last character is a `t` or `T`.
   let bangIdx =
     (value.charCodeAt(value.length - 1) | LOWERCASE_BIT) === LOWER_T ? findImportantFlag(value) : -1
+
+  // CSS-wide keywords are ASCII case-insensitive, so we lowercase them in both
+  // cases below, e.g. `INHERIT` becomes `inherit`.
   if (bangIdx !== -1 && !isEscaped(value, bangIdx)) {
-    return decl(property, trimValue(value.slice(0, bangIdx)), true)
+    return decl(property, normalizeCssWideKeyword(trimValue(value.slice(0, bangIdx))), true)
   }
 
-  return decl(property, trimValue(buffer.slice(colonIdx + 1)), false)
+  return decl(property, normalizeCssWideKeyword(trimValue(buffer.slice(colonIdx + 1))), false)
 }
 
 // Return the index of the `!` of an `!important` flag at the end of the value,

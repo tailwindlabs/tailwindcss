@@ -651,6 +651,52 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
       })
     })
 
+    describe('CSS-wide keywords', () => {
+      it('should lowercase a CSS-wide keyword', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            color: INHERIT;
+            width: Initial !IMPORTANT;
+            margin: Revert;
+            padding: revert-RULE /* comment */;
+            --foo: UNSET;
+            --bar:  REVERT-LAYER  ;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'color', value: 'inherit', important: false },
+          { kind: 'declaration', property: 'width', value: 'initial', important: true },
+          { kind: 'declaration', property: 'margin', value: 'revert', important: false },
+          { kind: 'declaration', property: 'padding', value: 'revert-rule', important: false },
+          { kind: 'declaration', property: '--foo', value: 'unset', important: false },
+          { kind: 'declaration', property: '--bar', value: 'revert-layer', important: false },
+        ])
+      })
+
+      it('should keep other values as written', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: 'INHERIT';
+            font-family: Unset Sans;
+            --foo: INHERITED;
+            --bar: INHERIT INHERIT;
+            --baz: İNHERIT;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: "'INHERIT'", important: false },
+          { kind: 'declaration', property: 'font-family', value: 'Unset Sans', important: false },
+          { kind: 'declaration', property: '--foo', value: 'INHERITED', important: false },
+          { kind: 'declaration', property: '--bar', value: 'INHERIT INHERIT', important: false },
+          { kind: 'declaration', property: '--baz', value: 'İNHERIT', important: false },
+        ])
+      })
+    })
+
     describe('Custom properties', () => {
       it('should parse a custom property', () => {
         expect(
