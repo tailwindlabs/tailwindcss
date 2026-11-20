@@ -270,6 +270,9 @@ function resolveThemeColor<T extends ThemeKey>(
 
   switch (candidate.value!.value) {
     case 'inherit': {
+      // `inherit` can't go inside `color-mix()`, so it can't take an opacity
+      // modifier.
+      if (candidate.modifier) return null
       value = 'inherit'
       break
     }
