@@ -2307,6 +2307,33 @@ describe('regressions', () => {
     ).toEqual(['in-foo-hex-plus-bar:flex'])
   })
 
+  test('does not unwrap `:is(…)` with a selector list in a variant', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant foo-or-bar (&.foo, .bar);
+        @custom-variant foo-or-descendant-bar (&.foo, & .bar);
+        @custom-variant foo (&.foo);
+      `,
+      { base: __dirname },
+    )
+
+    // `&:is(.foo,.bar)` must not become `&.foo,.bar`, which in nesting means
+    // `&.foo, & .bar`. `[.foo,.bar]` emits the same `&:is(.foo, .bar)`.
+    expect(designSystem.canonicalizeCandidates(['[&:is(.foo,.bar)]:flex'])).toEqual([
+      '[.foo,.bar]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[&:is(.foo,_.bar)]:flex'])).toEqual([
+      '[.foo,.bar]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[&_:is(.foo,.bar)]:flex'])).toEqual([
+      '[&_:is(.foo,.bar)]:flex',
+    ])
+
+    // A single selector inside of `:is(…)` can still be unwrapped.
+    expect(designSystem.canonicalizeCandidates(['[&:is(.foo)]:flex'])).toEqual(['foo:flex'])
+  })
+
   test('reuses dynamic utility lookups across candidate collapse groups', async () => {
     let designSystem = await __unstable__loadDesignSystem(
       css`
