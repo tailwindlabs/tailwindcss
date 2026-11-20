@@ -3445,29 +3445,14 @@ function createVariantSignatureCache(
           // Style rules
           else if (node.kind === 'rule') {
             let selectorAst = SelectorParser.parse(node.selector)
-            let changed = false
             walk(selectorAst, (node) => {
-              // Assumption: when we have a list of selectors: `.foo, .bar` we
-              // want to mark this as changed because this will be re-printed as
-              // `.foo,.bar`.
-              //
-              // Similarly, when we receive a combinator like `.foo + .bar`, this
-              // will be printed as `.foo+.bar`.
-              //
-              // It could be that this was already optimal, but then this would be
-              // a no-op situation.
-              if (node.kind === 'list' || node.kind === 'combinator') {
-                changed = true
-              }
-
               // Remove unnecessary `:is(…)` selectors
-              else if (node.kind === 'function' && node.value === ':is') {
+              if (node.kind === 'function' && node.value === ':is') {
                 // A single selector inside of `:is(…)` can be replaced with the
                 // selector itself.
                 //
                 // E.g.: `:is(.foo)` → `.foo`
                 if (node.nodes.length === 1) {
-                  changed = true
                   return WalkAction.Replace(node.nodes)
                 }
 
@@ -3480,7 +3465,6 @@ function createVariantSignatureCache(
                   node.nodes[1].kind === 'selector' &&
                   node.nodes[1].value[0] === ':'
                 ) {
-                  changed = true
                   return WalkAction.Replace(node.nodes[1])
                 }
               }
@@ -3498,14 +3482,15 @@ function createVariantSignatureCache(
                 node.nodes[0]?.kind === 'selector' &&
                 node.nodes[0]?.value[0] === ':'
               ) {
-                changed = true
                 node.nodes.unshift({ kind: 'selector', value: '*' })
               }
             })
 
-            if (changed) {
-              node.selector = SelectorParser.toCss(selectorAst, true)
-            }
+            // Print the selector in its minimal form, e.g. `.foo, .bar` becomes
+            // `.foo,.bar`, and `.foo + .bar` becomes `.foo+.bar`. The selector
+            // parser lowercases pseudo-class and pseudo-element names, so
+            // `&:FOCUS` becomes `&:focus`.
+            node.selector = SelectorParser.toCss(selectorAst, true)
           }
         })
 

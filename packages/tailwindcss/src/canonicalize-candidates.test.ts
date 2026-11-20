@@ -1109,6 +1109,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ['[&:not(:first-child)]:flex', 'not-first:flex'],
       ['[&:NOT(:FIRST-CHILD)]:flex', 'not-first:flex'],
 
+      // Pseudo-class and pseudo-element names are case-insensitive
+      ['[&:FIRST-CHILD]:flex', 'first:flex'],
+      ['[&:Focus]:flex', 'focus:flex'],
+      ['[&:FOCUS-VISIBLE]:flex', 'focus-visible:flex'],
+      ['[&::PLACEHOLDER]:flex', 'placeholder:flex'],
+
       ['[&_:first-child]:flex', '**:first:flex'],
       ['[&_>_:first-child]:flex', '*:first:flex'],
       ['[&_:--custom]:flex', '**:[:--custom]:flex'],
