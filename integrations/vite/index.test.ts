@@ -1725,6 +1725,190 @@ test(
   },
 )
 
+test(
+  `environments that build again with the same plugin instance don't keep removed candidates`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules/
+        dist/
+        # The build script contains the candidate that it removes later
+        build.mjs
+      `,
+      // A build that runs again generates the CSS of the current sources, like a
+      // build in a new process does
+      'build.mjs': js`
+        import fs from 'node:fs/promises'
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'error',
+          plugins: [tailwindcss()],
+        })
+
+        await builder.build(builder.environments.client)
+
+        let html = await fs.readFile('index.html', 'utf8')
+        await fs.writeFile('index.html', html.replace('underline font-bold', 'underline'))
+
+        // Vite empties the output directory of an environment only once
+        await fs.rm('dist', { recursive: true, force: true })
+
+        await builder.build(builder.environments.client)
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline font-bold">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('node build.mjs')
+
+    let files = await fs.glob('dist/**/*.css')
+    expect(files).toHaveLength(1)
+    let [filename] = files[0]
+
+    await fs.expectFileToContain(filename, [candidate`underline`])
+    await fs.expectFileNotToContain(filename, [candidate`font-bold`])
+  },
+)
+
+// https://github.com/tailwindlabs/tailwindcss/issues/20501
+test(
+  `finished builds don't keep their compilers in memory`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules/
+        dist/
+      `,
+      'plugin.mjs': js`
+        export default function ({ matchUtilities }) {
+          // Lives as long as the compiler, which keeps the utilities of its plugins
+          let utility = { property: '--tracked' }
+          globalThis.compilers.push(new WeakRef(utility))
+
+          matchUtilities(
+            { tracked: (value) => ({ [utility.property]: value }) },
+            { values: { DEFAULT: '1' } },
+          )
+        }
+      `,
+      'compilers.mjs': js`
+        import { setTimeout } from 'node:timers/promises'
+
+        globalThis.compilers = []
+
+        export async function report(label) {
+          for (let i = 0; i < 5; i++) {
+            await setTimeout(10)
+            gc()
+          }
+
+          let alive = globalThis.compilers.filter((compiler) => compiler.deref() !== undefined)
+          console.log(
+            label + ': ' + globalThis.compilers.length + ' compiler(s), ' + alive.length + ' alive',
+          )
+        }
+      `,
+      // A long-running process (e.g. Astro, which renders its pages after the
+      // build) can keep the plugin after a build is done
+      'build.mjs': js`
+        import tailwindcss from '@tailwindcss/vite'
+        import { build } from 'vite'
+        import { report } from './compilers.mjs'
+
+        let plugins = tailwindcss()
+        await build({ configFile: false, logLevel: 'error', plugins: [plugins] })
+        await report('built')
+
+        // Keep the plugin alive until here
+        console.log(plugins.length + ' plugins')
+      `,
+      'watch.mjs': js`
+        import tailwindcss from '@tailwindcss/vite'
+        import { build } from 'vite'
+        import { report } from './compilers.mjs'
+
+        let plugins = tailwindcss()
+        let watcher = await build({
+          configFile: false,
+          logLevel: 'error',
+          plugins: [plugins],
+          build: { watch: {} },
+        })
+
+        await new Promise((resolve, reject) => {
+          watcher.on('event', (event) => {
+            if (event.code === 'END') resolve()
+            if (event.code === 'ERROR') reject(event.error)
+          })
+        })
+        await report('watching')
+
+        await watcher.close()
+        await report('closed')
+
+        // Keep the plugin alive until here
+        console.log(plugins.length + ' plugins')
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss';
+        @plugin '../plugin.mjs';
+      `,
+    },
+  },
+  async ({ exec, expect }) => {
+    expect(await exec('node --expose-gc build.mjs')).toContain('built: 1 compiler(s), 0 alive')
+
+    let output = await exec('node --expose-gc watch.mjs')
+
+    // Rebuilds use the compiler again, until the watcher closes
+    expect(output).toContain('watching: 1 compiler(s), 1 alive')
+    expect(output).toContain('closed: 1 compiler(s), 0 alive')
+  },
+)
+
 // https://github.com/tailwindlabs/tailwindcss/issues/17532
 test(
   'deleting a file should not crash Vite',
