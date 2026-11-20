@@ -4,6 +4,14 @@ import { normalizeCssWideKeyword } from '../utils/css-wide-keywords'
 import type { ResolvedConfig } from './config/types'
 
 function resolveThemeValue(value: unknown, subValue: string | null = null): string | null {
+  let resolved = resolveRawThemeValue(value, subValue)
+
+  // CSS-wide keywords are ASCII case-insensitive. The CSS parser lowercases
+  // them, and so do we, because a config skips that parser.
+  return typeof resolved === 'string' ? normalizeCssWideKeyword(resolved) : resolved
+}
+
+function resolveRawThemeValue(value: unknown, subValue: string | null): string | null {
   if (
     Array.isArray(value) &&
     value.length === 2 &&
