@@ -11,6 +11,7 @@ import {
 } from './ast'
 import { createLineTable } from './source-maps/line-table'
 import type { Source, SourceLocation } from './source-maps/source'
+import { toAsciiLowerCase } from './utils/to-ascii-lower-case'
 
 const BACKSLASH = 0x5c
 const SLASH = 0x2f
@@ -47,9 +48,12 @@ const LOWER_F = 0x66
 const LOWER_Z = 0x7a
 const LOWER_L = 0x6c
 const LOWER_R = 0x72
+const LOWER_T = 0x74
 const LOWER_U = 0x75
 const NON_ASCII = 0x80
 const LOWERCASE_BIT = 0x20
+
+const IMPORTANT = 'important'
 
 export interface ParseOptions {
   from?: string
@@ -747,7 +751,9 @@ export function parseAtRule(buffer: string, nodes: AstNode[] = []): AtRule {
     }
   }
 
-  return atRule(name.trim(), params.trim(), nodes)
+  // At-rule names are ASCII case-insensitive, e.g. `@MEDIA` is `@media`. We
+  // lowercase them here, so the rest of the code can compare them as-is.
+  return atRule(toAsciiLowerCase(name.trim()), params.trim(), nodes)
 }
 
 function parseDeclaration(
@@ -778,12 +784,54 @@ function parseDeclaration(
   // content: \!important;
   // ```
   let value = trimValue(buffer.slice(colonIdx + 1, valueEnd))
-  let bangIdx = value.length - '!important'.length
-  if (value.endsWith('!important') && !isEscaped(value, bangIdx)) {
+
+  // Most values don't end in `important`, so we only look for the flag when the
+  // last character is a `t` or `T`.
+  let bangIdx =
+    (value.charCodeAt(value.length - 1) | LOWERCASE_BIT) === LOWER_T ? findImportantFlag(value) : -1
+  if (bangIdx !== -1 && !isEscaped(value, bangIdx)) {
     return decl(property, trimValue(value.slice(0, bangIdx)), true)
   }
 
   return decl(property, trimValue(buffer.slice(colonIdx + 1)), false)
+}
+
+// Return the index of the `!` of an `!important` flag at the end of the value,
+// or `-1`. The `important` keyword is ASCII case-insensitive, and whitespace
+// can be between it and the `!`:
+//
+// ```css
+// color: red !IMPORTANT;
+// color: red ! important;
+// ```
+//
+// See: https://www.w3.org/TR/css-syntax-3/#consume-declaration
+function findImportantFlag(value: string): number {
+  let idx = value.length - IMPORTANT.length
+  if (idx < 1) return -1
+
+  // Setting the `LOWERCASE_BIT` turns an ASCII uppercase letter into its
+  // lowercase form.
+  for (let i = 0; i < IMPORTANT.length; i++) {
+    if ((value.charCodeAt(idx + i) | LOWERCASE_BIT) !== IMPORTANT.charCodeAt(i)) return -1
+  }
+
+  idx -= 1
+  while (idx >= 0) {
+    let char = value.charCodeAt(idx)
+    if (
+      char !== SPACE &&
+      char !== TAB &&
+      char !== LINE_BREAK &&
+      char !== CARRIAGE_RETURN &&
+      char !== FORM_FEED
+    ) {
+      break
+    }
+    idx -= 1
+  }
+
+  return value.charCodeAt(idx) === EXCLAMATION_MARK ? idx : -1
 }
 
 // Trim the whitespace around a value, but keep an escaped whitespace at its

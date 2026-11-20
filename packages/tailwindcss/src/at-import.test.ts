@@ -222,8 +222,9 @@ test('url() imports are passed-through', async () => {
 test('handles case-insensitive @import directive', async () => {
   expect(
     await compileCss(
+      // prettier-ignore
       css`
-        @import 'example.css';
+        @IMPORT 'example.css';
       `,
       { base: '/root', loadStylesheet },
     ),

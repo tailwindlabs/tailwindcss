@@ -238,6 +238,101 @@ describe('compiling CSS', () => {
       "
     `)
   })
+
+  test('at-rule names are case-insensitive', async () => {
+    // We don't use `run(…)` here, because Lightning CSS would lowercase the
+    // known at-rules in the output.
+    let compiler = await compile(
+      // prettier-ignore
+      css`
+      @LAYER theme, utilities;
+
+      @THEME {
+        --color-primary: red;
+        --animate-spin: spin 1s linear infinite;
+
+        @KEYFRAMES spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      }
+
+      @CUSTOM-VARIANT hocus (&:hover, &:focus);
+
+      @UTILITY important-color {
+        color: blue !IMPORTANT;
+      }
+
+      @UTILITY applied {
+        @APPLY flex;
+      }
+
+      .btn {
+        @VARIANT hocus {
+          color: green;
+        }
+      }
+
+      @MEDIA PRINT {
+        .print-only {
+          display: block;
+        }
+      }
+
+      @TAILWIND utilities;
+    `,
+    )
+
+    expect(
+      compiler.build([
+        'bg-primary',
+        'animate-spin',
+        'hocus:underline',
+        'important-color',
+        'important-color!',
+        'applied',
+      ]),
+    ).toMatchInlineSnapshot(`
+      "@layer theme, utilities;
+      :root, :host {
+        --color-primary: red;
+        --animate-spin: spin 1s linear infinite;
+      }
+      .btn:hover, .btn:focus {
+        color: green;
+      }
+      @media PRINT {
+        .print-only {
+          display: block;
+        }
+      }
+      .applied {
+        display: flex;
+      }
+      .animate-spin {
+        animation: var(--animate-spin);
+      }
+      .bg-primary {
+        background-color: var(--color-primary);
+      }
+      .important-color {
+        color: blue !important;
+      }
+      .important-color\\! {
+        color: blue !important;
+      }
+      .hocus\\:underline:hover, .hocus\\:underline:focus {
+        text-decoration-line: underline;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      "
+    `)
+  })
 })
 
 describe('arbitrary properties', () => {

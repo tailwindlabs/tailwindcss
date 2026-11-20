@@ -3,6 +3,7 @@ import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src
 import { createLineTable, type LineTable } from '../../tailwindcss/src/source-maps/line-table'
 import type { Source, SourceLocation } from '../../tailwindcss/src/source-maps/source'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
+import { toAsciiLowerCase } from '../../tailwindcss/src/utils/to-ascii-lower-case'
 
 const EXCLAMATION_MARK = 0x21
 
@@ -162,7 +163,9 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
 
     // AtRule
     else if (node.type === 'atrule') {
-      let astNode = atRule(`@${node.name}`, node.params)
+      // At-rule names are ASCII case-insensitive. The CSS parser of Tailwind
+      // CSS lowercases them, and so do we, because this AST skips that parser.
+      let astNode = atRule(`@${toAsciiLowerCase(node.name)}`, node.params)
       astNode.src = toSource(node)
       node.each((child) => transform(child, astNode.nodes))
       parent.push(astNode)

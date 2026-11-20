@@ -591,6 +591,64 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           { kind: 'declaration', property: '--bar', value: 'red\\\\', important: true },
         ])
       })
+
+      it('should parse `!important` case-insensitively', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            color: red !IMPORTANT;
+            width: 123px !Important;
+            --foo: red !IMPORTANT;
+            --bar: red !IMPORTANT /* Very important */;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: true },
+          { kind: 'declaration', property: 'width', value: '123px', important: true },
+          { kind: 'declaration', property: '--foo', value: 'red', important: true },
+          { kind: 'declaration', property: '--bar', value: 'red', important: true },
+        ])
+      })
+
+      it('should parse `!important` with whitespace after the `!`', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            color: red ! important;
+            width: 123px !	IMPORTANT;
+            --foo: red !  important;
+            height: 1px ! /* comment */ important;
+            margin: 0 !
+              important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: true },
+          { kind: 'declaration', property: 'width', value: '123px', important: true },
+          { kind: 'declaration', property: '--foo', value: 'red', important: true },
+          { kind: 'declaration', property: 'height', value: '1px', important: true },
+          { kind: 'declaration', property: 'margin', value: '0', important: true },
+        ])
+      })
+
+      it('should not treat a word that ends in `important` as the important flag', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            --foo: red !notimportant;
+            --bar: important;
+            --baz: red \! important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'red !notimportant', important: false },
+          { kind: 'declaration', property: '--bar', value: 'important', important: false },
+          { kind: 'declaration', property: '--baz', value: 'red \\! important', important: false },
+        ])
+      })
     })
 
     describe('Custom properties', () => {
@@ -1212,6 +1270,45 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         { kind: 'at-rule', name: '@tailwind', params: '', nodes: [] },
         { kind: 'at-rule', name: '@tailwind', params: 'base', nodes: [] },
       ])
+    })
+
+    it('should lowercase the name of an at-rule, but not its params', () => {
+      expect(
+        parse(
+          // prettier-ignore
+          css`
+          @LAYER Theme, Base;
+          @Import "./Foo.css" LAYER(Foo);
+          @MEDIA (MIN-WIDTH: 100PX) {
+            .Foo {
+              @APPLY Flex;
+            }
+          }
+          @KeyFrames Spin {
+          }
+        `,
+        ),
+      ).toEqual([
+        { kind: 'at-rule', name: '@layer', params: 'Theme, Base', nodes: [] },
+        { kind: 'at-rule', name: '@import', params: '"./Foo.css" LAYER(Foo)', nodes: [] },
+        {
+          kind: 'at-rule',
+          name: '@media',
+          params: '(MIN-WIDTH: 100PX)',
+          nodes: [
+            {
+              kind: 'rule',
+              selector: '.Foo',
+              nodes: [{ kind: 'at-rule', name: '@apply', params: 'Flex', nodes: [] }],
+            },
+          ],
+        },
+        { kind: 'at-rule', name: '@keyframes', params: 'Spin', nodes: [] },
+      ])
+    })
+
+    it('should only lowercase the ASCII letters in the name of an at-rule', () => {
+      expect(parse('@FOO-İ;')).toEqual([{ kind: 'at-rule', name: '@foo-İ', params: '', nodes: [] }])
     })
 
     it('should parse (nested) media queries', () => {
