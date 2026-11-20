@@ -13204,6 +13204,19 @@ for (let prefix of prefixes) {
         `${prefix}-[line-width:var(--my-width)]/foo`,
       ]),
     ).toEqual('')
+
+    // Invalid bare opacity modifiers, e.g. above `100`
+    expect(
+      await run(
+        [`${prefix}-red-500/100.25`, `${prefix}-red-500/101`],
+        css`
+          @theme {
+            --color-red-500: #ef4444;
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toEqual('')
   })
 }
 
@@ -14308,6 +14321,19 @@ test('bg', async () => {
       'bg-round/foo',
       'bg-space/foo',
     ]),
+  ).toEqual('')
+
+  // Invalid bare opacity modifiers, e.g. above `100`
+  expect(
+    await run(
+      ['bg-red-500/2.3', 'bg-red-500/101', 'bg-current/150', 'bg-[#0088cc]/101'],
+      css`
+        @theme {
+          --color-red-500: #ef4444;
+        }
+        @tailwind utilities;
+      `,
+    ),
   ).toEqual('')
 
   expect(
@@ -24472,6 +24498,9 @@ test('filter', async () => {
         'drop-shadow-red-500/foo',
         '-drop-shadow-red-500/foo',
         '-drop-shadow-red-500/50',
+        'drop-shadow-red-500/101',
+        'drop-shadow/101',
+        'drop-shadow-[0_0_red]/101',
 
         '-saturate-0',
         'saturate--5',
@@ -24514,6 +24543,7 @@ test('filter', async () => {
       ],
       css`
         @theme {
+          --color-red-500: #ef4444;
           --drop-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
         }
         @tailwind utilities;
@@ -26412,6 +26442,7 @@ test('opacity', async () => {
       'opacity-2.5',
       'opacity-3.25',
       'opacity-4.75',
+      'opacity-150',
       'opacity-[var(--value)]',
     ]),
   ).toMatchInlineSnapshot(`
@@ -26430,6 +26461,10 @@ test('opacity', async () => {
 
     .opacity-15 {
       opacity: .15;
+    }
+
+    .opacity-150 {
+      opacity: 1.5;
     }
 
     .opacity-\\[var\\(--value\\)\\] {
@@ -27016,6 +27051,7 @@ test('text', async () => {
         '-text-[#0088cc]/50',
         '-text-[#0088cc]/[0.5]',
         '-text-[#0088cc]/[50%]',
+        'text-red-500/500',
 
         // font-size / line-height / letter-spacing / font-weight
         '-text-sm',
@@ -27026,6 +27062,7 @@ test('text', async () => {
       ],
       css`
         @theme inline reference {
+          --color-red-500: #ef4444;
           --text-sm: 0.875rem;
         }
         @tailwind utilities;
@@ -27462,9 +27499,14 @@ test('text-shadow', async () => {
         '-text-shadow-[var(--value)]',
         'text-shadow/foo',
         'text-shadow-sm/foo',
+        'text-shadow-red-500/101',
+        'text-shadow/101',
+        'text-shadow-sm/101',
+        'text-shadow-[10px_10px]/101',
       ],
       css`
         @theme {
+          --color-red-500: #ef4444;
           --text-shadow: 0 1px 1px rgb(0 0 0 / 0.05);
           --text-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
         }
@@ -27957,9 +27999,14 @@ test('shadow', async () => {
         'shadow-sm/foo',
         'shadow-[10px_10px]/foo',
         'shadow-[#0088cc]/foo',
+        'shadow-red-500/101',
+        'shadow/101',
+        'shadow-sm/101',
+        'shadow-[10px_10px]/101',
       ],
       css`
         @theme {
+          --color-red-500: #ef4444;
           --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
           --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
         }
@@ -28460,9 +28507,14 @@ test('inset-shadow', async () => {
         'inset-shadow/foo',
         'inset-shadow-sm/foo',
         'inset-shadow-[10px_10px]/foo',
+        'inset-shadow-red-500/101',
+        'inset-shadow/101',
+        'inset-shadow-sm/101',
+        'inset-shadow-[10px_10px]/101',
       ],
       css`
         @theme {
+          --color-red-500: #ef4444;
           --inset-shadow: inset 0 1px 3px 0 rgb(0 0 0 / 0.1);
           --inset-shadow-sm: inset 0 1px 1px rgb(0 0 0 / 0.05);
         }
