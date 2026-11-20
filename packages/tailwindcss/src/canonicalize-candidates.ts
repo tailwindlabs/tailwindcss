@@ -106,6 +106,10 @@ interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [DYNAMIC_UTILITIES_KEY]: DefaultMap<
+      SignatureOptions,
+      DefaultMap<string, DefaultMap<string, DefaultMap<string, Set<string>>>>
+    >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
     [VARIANT_SIGNATURE_KEY]: DefaultMap<RemValue, DefaultMap<string, string | symbol>>
     [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<RemValue, DefaultMap<string, string[]>>
@@ -130,6 +134,7 @@ export function prepareDesignSystemStorage(
     createUtilityThemeVariablesCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
+  designSystem.storage[DYNAMIC_UTILITIES_KEY] ??= createDynamicUtilitiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
   designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
@@ -276,6 +281,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
     let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
     let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
+    let dynamicUtilities = designSystem.storage[DYNAMIC_UTILITIES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
@@ -338,43 +344,6 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         }
       }
     }
-
-    let dynamicUtilities = new DefaultMap((candidate: string) => {
-      let result = new DefaultMap(
-        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
-      )
-
-      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
-      if (relevantProperties.size === 0) return result
-
-      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
-        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
-          continue
-        }
-
-        for (let root of designSystem.utilities.keys('functional')) {
-          if (root === parsedCandidate.root) continue // Skip self
-
-          let replacement = printUnprefixedCandidate(designSystem, {
-            ...cloneCandidate(parsedCandidate),
-            root,
-          })
-
-          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
-          for (let [property, values] of propertyValues) {
-            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
-
-            for (let value of values) {
-              result.get(property).get(value).add(replacement)
-            }
-          }
-        }
-
-        return result
-      }
-
-      return result
-    })
 
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
@@ -3311,6 +3280,53 @@ function createUtilityPropertiesCache(
       }
 
       return localPropertyValueLookup
+    })
+  })
+}
+
+const DYNAMIC_UTILITIES_KEY = Symbol()
+function createDynamicUtilitiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof DYNAMIC_UTILITIES_KEY] {
+  return new DefaultMap((signatureOptions: SignatureOptions) => {
+    let computeUtilitiesPropertiesLookup =
+      designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
+
+    return new DefaultMap((candidate: string) => {
+      let result = new DefaultMap(
+        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
+      )
+
+      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
+      if (relevantProperties.size === 0) return result
+
+      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
+        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
+          continue
+        }
+
+        for (let root of designSystem.utilities.keys('functional')) {
+          if (root === parsedCandidate.root) continue // Skip self
+
+          let replacement = printUnprefixedCandidate(designSystem, {
+            ...cloneCandidate(parsedCandidate),
+            root,
+          })
+
+          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          for (let [property, values] of propertyValues) {
+            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
+
+            for (let value of values) {
+              result.get(property).get(value).add(replacement)
+            }
+          }
+        }
+
+        return result
+      }
+
+      return result
     })
   })
 }

@@ -2230,6 +2230,52 @@ describe('regressions', () => {
       designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)_to_(.limit)]:flex']),
     ).toEqual(['in-foo-hex-plus-bar:flex'])
   })
+
+  test('reuses dynamic utility lookups across candidate collapse groups', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    // Warm the pre-computed utilities, which walk the functional utilities
+    // once. A single candidate doesn't collapse, so this doesn't compute any
+    // dynamic utility lookups yet.
+    designSystem.canonicalizeCandidates(['mt-2'], options)
+
+    using keysSpy = vi.spyOn(designSystem.utilities, 'keys')
+
+    expect(
+      designSystem.canonicalizeCandidates(
+        ['mt-2', 'mb-2', 'hover:mt-2', 'hover:mb-2', 'focus:mt-2', 'focus:mb-2'],
+        options,
+      ),
+    ).toEqual(['my-2', 'hover:my-2', 'focus:my-2'])
+
+    // One walk for each distinct candidate (`mt-2` and `mb-2`), not one for each
+    // variant group.
+    let functionalKeysCalls = keysSpy.mock.calls.filter((args) => args[0] === 'functional').length
+    expect(functionalKeysCalls).toBe(2)
+
+    // Re-running with repeated candidates across another variant group reuses the cached lookups
+    // without invoking `utilities.keys('functional')` again.
+    let countBefore = keysSpy.mock.calls.length
+    expect(designSystem.canonicalizeCandidates(['active:mt-2', 'active:mb-2'], options)).toEqual([
+      'active:my-2',
+    ])
+    let countAfter = keysSpy.mock.calls.length
+    expect(countAfter).toBe(countBefore)
+  })
 })
 
 describe('normalizeEscapes', () => {
