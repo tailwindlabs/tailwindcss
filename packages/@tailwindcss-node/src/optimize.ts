@@ -1,6 +1,6 @@
 import remapping from '@jridgewell/remapping'
-import { Features, transform } from 'lightningcss'
 import MagicString from 'magic-string'
+import * as Module from 'node:module'
 
 export interface OptimizeOptions {
   /**
@@ -30,6 +30,8 @@ export function optimize(
   input: string,
   { file = 'input.css', minify = false, map }: OptimizeOptions = {},
 ): TransformResult {
+  let { Features, transform } = loadLightningcss()
+
   function optimize(code: Buffer | Uint8Array, map: string | undefined) {
     return transform({
       filename: file,
@@ -144,6 +146,30 @@ export function optimize(
     code,
     map,
   }
+}
+
+/**
+ * Load Lightning CSS on demand instead of at module scope. The native binding is not
+ * available on every platform (e.g. OpenHarmony), so importing `@tailwindcss/node`
+ * must not require it — otherwise `optimize: false` can't be used at all on those
+ * platforms.
+ */
+function loadLightningcss(): typeof import('lightningcss') {
+  // Bun's bundler only includes a dependency when it can see a literal
+  // `require('lightningcss')` call. A `createRequire()` result is opaque to it, so the
+  // standalone builds would ship without the native binding and `--minify` would fail
+  // at runtime. Bun exposes `require` in ESM, so use it there.
+  if (typeof process !== 'undefined' && (process.versions as any)?.bun) {
+    return require('lightningcss')
+  }
+
+  // This module is bundled for both ESM and CJS: `import.meta.url` only exists in the
+  // ESM build and `__filename` only exists in the CJS build.
+  let localRequire = Module.createRequire(
+    typeof __filename === 'string' ? __filename : import.meta.url,
+  )
+
+  return localRequire('lightningcss')
 }
 
 function dim(str: string) {
