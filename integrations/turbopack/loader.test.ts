@@ -22,7 +22,6 @@ test(
             rules: {
               '*.css': {
                 loaders: ['@tailwindcss/turbopack'],
-                as: '*.css',
               },
             },
           },
@@ -82,6 +81,88 @@ test(
   },
 )
 
+// https://github.com/tailwindlabs/tailwindcss/issues/20659
+test(
+  '@tailwindcss/turbopack loader works with CSS modules (dev)',
+  {
+    timeout: 120_000,
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "next": "^16.2.7",
+            "react": "^19.2.7",
+            "react-dom": "^19.2.7",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/turbopack": "workspace:^"
+          }
+        }
+      `,
+      'next.config.mjs': js`
+        export default {
+          turbopack: {
+            rules: {
+              '*.css': {
+                loaders: ['@tailwindcss/turbopack'],
+              },
+            },
+          },
+        }
+      `,
+      'app/layout.js': jsx`
+        import './globals.css'
+
+        export default function RootLayout({ children }) {
+          return (
+            <html>
+              <body>{children}</body>
+            </html>
+          )
+        }
+      `,
+      'app/page.js': jsx`
+        import styles from './page.module.css'
+
+        export default function Page() {
+          return <div className={styles.box + ' flex'}>Hello, Next.js!</div>
+        }
+      `,
+      'app/page.module.css': css`
+        @reference 'tailwindcss';
+
+        .box {
+          @apply underline;
+        }
+      `,
+      'app/globals.css': css` @import 'tailwindcss'; `,
+    },
+  },
+  async ({ spawn, expect }) => {
+    let process = await spawn('pnpm next dev')
+
+    let url = ''
+    await process.onStdout((message) => {
+      let match = /Local:\s*(http.*)/.exec(message)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((message) => message.includes('Ready in'))
+
+    await retryAssertion(async () => {
+      let html = await fetch(url).then((response) => response.text())
+      let className = /class="(\S*box\S*) flex"/.exec(html)?.[1]
+      expect(className).toBeDefined()
+      expect(className).not.toBe('box')
+
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`flex`)
+      expect(styles).toContain(`.${className}`)
+      expect(styles).toContain('text-decoration-line: underline')
+    })
+  },
+)
+
 // https://github.com/tailwindlabs/tailwindcss/issues/20581
 test(
   '@tailwindcss/turbopack loader picks up changes to the CSS file (dev)',
@@ -105,7 +186,6 @@ test(
             rules: {
               '*.css': {
                 loaders: ['@tailwindcss/turbopack'],
-                as: '*.css',
               },
             },
           },

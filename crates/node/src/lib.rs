@@ -5,6 +5,13 @@ extern crate napi_derive;
 
 mod utf16;
 
+// Rayon threads may outlive a Node worker. Keep their code mapped until process exit.
+#[cfg(not(target_family = "wasm"))]
+#[napi(module_exports)]
+fn retain_native_library() {
+  napi::bindgen_prelude::retain_current_module_for_unload_safety();
+}
+
 #[derive(Debug, Clone)]
 #[napi(object)]
 pub struct ChangedContent {
@@ -89,6 +96,7 @@ impl From<SourceEntry> for tailwindcss_oxide::PublicSourceEntry {
 #[napi(object)]
 pub struct ScannerOptions {
   /// Glob sources
+  #[napi(ts_type = "ReadonlyArray<SourceEntry>")]
   pub sources: Option<Vec<SourceEntry>>,
 }
 

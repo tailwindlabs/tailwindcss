@@ -152,11 +152,35 @@ describe('adds spaces around math operators', () => {
     ['round(1+2,1+3)', 'round(1 + 2, 1 + 3)'],
     ['round(to-zero,1+2,1+3)', 'round(to-zero, 1 + 2, 1 + 3)'],
 
+    // abs(…) and sign(…) functions
+    ['abs(20%-100px)', 'abs(20% - 100px)'],
+    ['sign(10px-20px)', 'sign(10px - 20px)'],
+    ['calc(abs(1rem-2rem)*2)', 'calc(abs(1rem - 2rem) * 2)'],
+    ['calc(1px*sign(var(--x)-50%))', 'calc(1px * sign(var(--x) - 50%))'],
+
     // Nested parens in non-math functions don't format their contents
     ['env((safe-area-inset-bottom))', 'env((safe-area-inset-bottom))'],
 
     // `-infinity` is a keyword and should not have spaces around the `-`
     ['atan(1 + -infinity)', 'atan(1 + -infinity)'],
+
+    // A `-` before a math function can be an operator or a sign
+    ['calc(1px-min(2px,3px))', 'calc(1px - min(2px, 3px))'],
+    ['calc(100%-min(2px,3px))', 'calc(100% - min(2px, 3px))'],
+    ['calc(1px*-min(2px,3px))', 'calc(1px * -min(2px, 3px))'],
+
+    // Custom functions whose name ends in a math function name are not math
+    // functions
+    ['--my-calc(1px-2px)', '--my-calc(1px-2px)'],
+    ['--item-rem(1px-2px,3px)', '--item-rem(1px-2px,3px)'],
+    ['--calc(1px-2px)', '--calc(1px-2px)'],
+    ['--my-calc(calc(1px-2px))', '--my-calc(calc(1px - 2px))'],
+    ['calc(--my-min(1px-2px)+3px)', 'calc(--my-min(1px-2px) + 3px)'],
+    ['--my-Calc(1px-2px)', '--my-Calc(1px-2px)'],
+
+    // Function names are case-insensitive
+    ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
+    ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
   ]
 
   it.each(table)('%s', (input, output) => {

@@ -1,3 +1,4 @@
+import { transform } from 'lightningcss'
 import { describe, expect, it, test } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
 import { buildDesignSystem } from './design-system'
@@ -344,6 +345,52 @@ it('should parse compound group with itself group-group-*', () => {
         },
       ]
     `)
+})
+
+it('should not parse variants that nest more than 16 compound variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+  variants.compound('in', Compounds.StyleRules, () => {})
+
+  expect(run(`${'in-'.repeat(16)}hover:flex`, { utilities, variants })).toHaveLength(1)
+  expect(run(`${'in-'.repeat(17)}hover:flex`, { utilities, variants })).toEqual([])
+
+  // Long chains should bail early instead of parsing (and recursing) once for
+  // each compound variant
+  let start = performance.now()
+  expect(run(`${'in-'.repeat(10_000)}hover:flex`, { utilities, variants })).toEqual([])
+  expect(performance.now() - start).toBeLessThan(1_000)
+})
+
+it('should parse nested compound variants the same way, no matter what was parsed before', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+  variants.compound('in', Compounds.StyleRules, () => {})
+
+  // Parses the candidates in order with the same design system, so parsed
+  // variants are cached between them.
+  function parse(candidates: string[]) {
+    let designSystem = buildDesignSystem(new Theme())
+    designSystem.utilities = utilities
+    designSystem.variants = variants
+
+    return candidates.map((candidate) => designSystem.parseCandidate(candidate).length)
+  }
+
+  // A chain that nests too deep doesn't make the variants inside of it invalid
+  expect(
+    parse([`${'in-'.repeat(17)}hover:flex`, `${'in-'.repeat(16)}hover:flex`, 'in-hover:flex']),
+  ).toEqual([0, 1, 1])
+
+  // A cached variant inside of a chain doesn't make a chain that nests too
+  // deep valid
+  expect(parse([`${'in-'.repeat(16)}hover:flex`, `${'in-'.repeat(17)}hover:flex`])).toEqual([1, 0])
 })
 
 it('should parse a simple utility with an arbitrary media variant', () => {
@@ -1919,6 +1966,53 @@ it('should parse candidates with a prefix', () => {
   `)
 })
 
+it('should not parse candidates with more than 64 stacked variants', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+
+  let variants = new Variants()
+  variants.static('hover', () => {})
+
+  expect(run(`${'hover:'.repeat(64)}flex`, { utilities, variants })[0].variants).toHaveLength(64)
+  expect(run(`${'hover:'.repeat(65)}flex`, { utilities, variants })).toEqual([])
+
+  // The prefix is not a variant
+  expect(
+    run(`tw:${'hover:'.repeat(64)}flex`, { utilities, variants, prefix: 'tw' })[0].variants,
+  ).toHaveLength(64)
+})
+
+it('should parse variants and utilities with many dashes in linear time', () => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+
+  let variants = new Variants()
+  variants.functional('data', () => {})
+
+  // E.g.: `a-a-a-…-a`
+  let value = 'a-'.repeat(8_000) + 'a'
+
+  expect(run(`data-${value}:flex`, { utilities, variants })[0].variants).toEqual([
+    { kind: 'functional', root: 'data', modifier: null, value: { kind: 'named', value } },
+  ])
+  expect(run(`bg-${value}`, { utilities, variants })).toMatchObject([
+    { kind: 'functional', root: 'bg', value: { kind: 'named', value } },
+  ])
+  expect(run(`${value}-flex`, { utilities, variants })).toEqual([])
+
+  let start = performance.now()
+  for (let i = 0; i < 10; i++) {
+    run(`data-${value}:flex`, { utilities, variants })
+    run(`bg-${value}`, { utilities, variants })
+    run(`${value}-flex`, { utilities, variants })
+  }
+  let duration = performance.now() - start
+
+  // Looking up the part before each dash as a root takes seconds
+  expect(duration).toBeLessThan(1_000)
+})
+
 it.each([
   // Empty arbitrary value
   'bg-[]',
@@ -2067,6 +2161,54 @@ it.each([
   'data-foo=bar:flex',
   'bg-foo=bar',
   'bg-red-500/foo=bar',
+
+  // Arbitrary values, properties, modifiers and variants that start a comment
+  'bg-[red/*]',
+  'bg-[red/*comment*/]',
+  '[color:red/*]',
+  'bg-red-500/[50%/*]',
+  '[&/*]:flex',
+  'data-[a/*]:flex',
+  '[a/*b:red]',
+  "bg-['a\n/*']",
+  "[a':'/*']",
+  "bg-['/*]",
+  "bg-[url(foo'bar)/*')]",
+  '[x:url(foo"bar)/*")]',
+  'bg-[URL(a(b)/*)]',
+  "bg-[url('a',URL(_'b)/*'))]",
+  "bg-[u\\72l(foo'bar)/*')]",
+  "bg-[u\\72_l(foo'bar)/*')]",
+  // `\\` is an escaped `\`, so the `_` before the `url(…)` is not escaped.
+  "bg-[a\\\\_url(foo'bar)/*')]",
+  // `--my\_url(…)` is not a `url(…)`, but it keeps the `_`, so the inner
+  // `URL(…)` has no quoted string.
+  "[x:--my\\_url(URL(_'a)/*'))]",
+  '[--x:a()<//*)*/]',
+
+  // A `/*` inside of an unquoted `url(…)` that PostCSS does not read as a
+  // `url(…)`, or that CSS does not read as a `url(…)` at all
+  'bg-[URL(/a/*.png)]',
+  'bg-[Url(/a/*.png)]',
+  'bg-[url(a.png),url(/b/*.png)]',
+  'bg-[#url(/a/*.png)]',
+  'bg-[@url(/a/*.png)]',
+  'bg-[1url(/a/*.png)]',
+  // PostCSS reads `@image:url` as one at-word
+  'bg-[@image:url(/a/*.png)]',
+  'bg-[a@b:url(/a/*.png)]',
+  // `decodeArbitraryValue` turns this into `a\_url(…)`
+  'bg-[a\\\\_url(/a/*.png)]',
+  // The outer `url(…)` keeps the `_`, so this calls the `b_url` function
+  "bg-[url('a',b_url(/c/*.png))]",
+  // Only a value of a declaration can have one, e.g. not `[data-url(…)]`
+  'data-[url(/a/*.png)]:flex',
+  'bg-red-500/[url(/a/*.png)]',
+  '[&_url(/a/*.png)]:flex',
+
+  // PostCSS reads `\/*` as a `\` and the start of a comment
+  'bg-[\\/*]',
+  'bg-[URL(a\\/*b)]',
 ])('should not parse invalid values: %s', (rawCandidate) => {
   let utilities = new Utilities()
   utilities.static('flex', () => [])
@@ -2077,6 +2219,175 @@ it.each([
   variants.compound('group', Compounds.StyleRules, () => {})
 
   expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it('should not let a random arbitrary value comment out the CSS after it', async () => {
+  let designSystem = await __unstable__loadDesignSystem('@tailwind utilities', { base: __dirname })
+
+  // A seeded random number generator (mulberry32), so a failure can be reproduced.
+  let seed = 20690
+  function random() {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+
+  let parts = ['url(', 'URL(', 'a(', '(', ')', "'", '"', '/*', '*/', '/', '*', '_', '\\']
+  parts.push('\\_', '\\72', '#', '@', ',', ':', 'a', '1', '-', ' ')
+
+  for (let i = 0; i < 5000; i++) {
+    let value = ''
+    let count = 1 + Math.floor(random() * 10)
+    for (let j = 0; j < count; j++) value += parts[Math.floor(random() * parts.length)]
+
+    for (let candidate of [`[--x:${value}]`, `bg-[${value}]`]) {
+      let [css] = designSystem.candidatesToCss([candidate])
+      if (!css) continue
+
+      let { code } = transform({
+        filename: 'input.css',
+        code: Buffer.from(`${css}.b{color:red}`),
+        minify: true,
+        errorRecovery: true,
+      })
+
+      expect(code.toString(), candidate).toContain('.b{color:red}')
+    }
+  }
+})
+
+it('should parse a function name with an escaped `_`', () => {
+  let utilities = new Utilities()
+  utilities.functional('w', () => [])
+
+  // `\_` is a literal `_`, so this calls the `--my_fn` function.
+  expect(run('w-[--my\\_fn(1px)]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_fn(1px)' } },
+  ])
+
+  // The function is `--my_url`, not a `url(…)`, so its argument can have a `(`.
+  expect(run('w-[--my\\_url(var(--size))]', { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: '--my_url(var(--size))' } },
+  ])
+})
+
+it('should parse a quoted string after an `_` in an uppercase `URL(…)`', () => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  // The `_` becomes a space, so this is a quoted `URL( 'image.png')`.
+  expect(run(`bg-[URL(_'image.png')]`, { utilities })).toMatchObject([
+    { value: { kind: 'arbitrary', value: "URL( 'image.png')" } },
+  ])
+})
+
+it('should parse a `/*` inside of a string in an arbitrary value', () => {
+  let utilities = new Utilities()
+  utilities.functional('content', () => [])
+
+  expect(run(`content-['/*']`, { utilities })).toMatchInlineSnapshot(`
+    [
+      {
+        "important": false,
+        "kind": "functional",
+        "modifier": null,
+        "raw": "content-['/*']",
+        "root": "content",
+        "value": {
+          "dataType": null,
+          "kind": "arbitrary",
+          "value": "'/*'",
+        },
+        "variants": [],
+      },
+    ]
+  `)
+})
+
+it.each([
+  ['bg-[url(/a/*.png)]', 'url(/a/*.png)'],
+  ['bg-[url(a.png),_url(/b/*.png)]', 'url(a.png), url(/b/*.png)'],
+  ['bg-[image-set(url(/a/*.png)_1x)]', 'image-set(url(/a/*.png) 1x)'],
+  ['bg-[no-repeat_url(/a/*.png)]', 'no-repeat url(/a/*.png)'],
+  ['bg-[image:url(/a/*.png)]', 'url(/a/*.png)'],
+])('should parse a `/*` inside of an unquoted `url(…)`: %s', (rawCandidate, value) => {
+  let utilities = new Utilities()
+  utilities.functional('bg', () => [])
+
+  expect(run(rawCandidate, { utilities })).toMatchObject([{ value: { kind: 'arbitrary', value } }])
+})
+
+it('should parse a `/*` inside of an unquoted `url(…)` in an arbitrary property', () => {
+  expect(run('[background-image:url(/a/*.png)]')).toMatchObject([
+    { kind: 'arbitrary', property: 'background-image', value: 'url(/a/*.png)' },
+  ])
+})
+
+it.each([
+  // Arbitrary values
+  "before:content-['</style>']",
+  "content-['</STYLE>']",
+  'font-[x</style>]',
+
+  // Arbitrary properties
+  '[--x:</style>]',
+  '[--x</style>:red]',
+  '[--x\\3c/style:red]',
+
+  // Arbitrary variants
+  '[&[data-x="</style>"]]:flex',
+
+  // Modifiers
+  'bg-red-500/[</style>]',
+
+  // CSS escapes
+  "content-['\\3c /style>']",
+  "content-['\\3c_/style>']",
+  "content-['\\3c\t/style>']",
+  "content-['\\3c\n/style>']",
+  "content-['\\3c\r/style>']",
+  "content-['\\3c\f/style>']",
+  "content-['\\3c\r\n/style>']",
+  "content-['\\3C/STYLE>']",
+  "content-['\\00003c/style>']",
+  "content-['<\\/style>']",
+  "content-['\\</\\s\\74 yle>']",
+
+  // Escaped newlines (removed in CSS strings)
+  "content-['</s\\\ntyle>']",
+  "content-['</s\\\rtyle>']",
+  "content-['</s\\\ftyle>']",
+  "content-['</s\\\r\ntyle>']",
+  "[content:'</s\\\ntyle>']",
+
+  // Comments are removed when the CSS is minified. With `[--y:*/style>]`, this
+  // would become `--x:a()</style>`.
+  '[--x:a()<//*)*/]',
+])('should not parse candidates that contain `</style`: %s', (rawCandidate) => {
+  let utilities = new Utilities()
+  utilities.static('flex', () => [])
+  utilities.functional('bg', () => [])
+  utilities.functional('content', () => [])
+  utilities.functional('font', () => [])
+
+  let variants = new Variants()
+  variants.static('before', () => {})
+
+  expect(run(rawCandidate, { utilities, variants })).toEqual([])
+})
+
+it.each([
+  "content-['</>']",
+  "content-['</styl']",
+  "content-['<_/style>']",
+  "content-['\\3c\\_/style>']",
+  '[--x:a<b]',
+])('should parse candidates that contain `<` but not `</style`: %s', (rawCandidate) => {
+  let utilities = new Utilities()
+  utilities.functional('content', () => [])
+
+  expect(run(rawCandidate, { utilities })).not.toEqual([])
 })
 
 const candidates = [

@@ -1,9 +1,10 @@
+import { transform } from 'lightningcss'
 import { randomUUID } from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import { __unstable__loadDesignSystem } from '.'
-import { intersection } from './canonicalize-candidates'
+import { intersection, normalizeEscapes } from './canonicalize-candidates'
 import { cartesian } from './cartesian'
 import type { CanonicalizeOptions } from './intellisense'
 import plugin from './plugin'
@@ -1148,6 +1149,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Media queries
       ['[@media(pointer:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_(pointer_:_fine)]:flex', 'pointer-fine:flex'],
+      ['[@media_(pointer_:fine)]:flex', 'pointer-fine:flex'],
       ['[@media_not_(pointer_:_fine)]:flex', 'not-pointer-fine:flex'],
       ['[@media_print]:flex', 'print:flex'],
       ['[@media_not_print]:flex', 'not-print:flex'],
@@ -1307,6 +1309,70 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
     })
   })
 
+  describe('escapes', () => {
+    test.each([
+      // Hex escapes in a function name
+      ["bg-[u\\72l('a.png')]", "bg-[url('a.png')]"],
+      ["bg-[\\75rl('a.png')]", "bg-[url('a.png')]"],
+      ["bg-[\\000075rl('a.png')]", "bg-[url('a.png')]"],
+
+      // An `_` after a hex escape is part of the escape
+      ["bg-[u\\72_l('a.png')]", "bg-[url('a.png')]"],
+      ["bg-[\\75_rl('a.png')]", "bg-[url('a.png')]"],
+
+      // Simple escapes
+      ["bg-[u\\rl('a.png')]", "bg-[url('a.png')]"],
+
+      // Escapes in arbitrary properties, variants and modifiers
+      ['[\\63olor:red]', 'text-[red]'],
+      ['[color:\\72_ed]', 'text-[red]'],
+      ['[&_.f\\6f_o]:flex', '[&_.foo]:flex'],
+      ['[&_.a\\31]:flex', '[&_.a1]:flex'],
+      ['[&_.a\\-b]:flex', '[&_.a-b]:flex'],
+      ['[&_.\\-a]:flex', '[&_.-a]:flex'],
+      ['bg-red-500/[m\\69n(50%,60%)]', 'bg-red-500/[min(50%,60%)]'],
+
+      // Keep `\_`, it is a literal `_`
+      ['[&_.a\\_b]:flex', '[&_.a\\_b]:flex'],
+
+      // Keep escapes in strings
+      ["content-['\\61']", "content-['\\61']"],
+      ['content-["\\61"]', 'content-["\\61"]'],
+
+      // Keep escapes of characters that are not name characters
+      ['[&_.a\\,b]:flex', '[&_.a\\,b]:flex'],
+      ['[&_.a\\2c_b]:flex', '[&_.a\\2c_b]:flex'],
+
+      // Keep escapes that make a name out of something else, e.g. `\31 0px` is
+      // the name `10px`, but `10px` is a dimension.
+      ['[&_.\\31_0]:flex', '[&_.\\31_0]:flex'],
+      ['[&_.\\-1]:flex', '[&_.\\-1]:flex'],
+      ['[&_.-\\31]:flex', '[&_.-\\31]:flex'],
+      ['content-[1\\65_3]', 'content-[1\\65_3]'],
+
+      // Keep an escape if a hex digit comes after the escape before it,
+      // e.g. `\31\61` is not `\31a`, which is a single escape.
+      ['[&_.\\31\\61]:flex', '[&_.\\31\\61]:flex'],
+      ['[&_.\\31\\67]:flex', '[&_.\\31g]:flex'],
+
+      // Keep an escape if `-->` or `<!--` would take part of the name
+      ['content-[-\\->]', 'content-[-\\->]'],
+      ['content-[<!--\\2d]', 'content-[<!--\\2d]'],
+
+      // Keep an escape if an `_` after it is not a space, or might not be
+      ['bg-[url(\\61_b.png)]', 'bg-[url(\\61_b.png)]'],
+      ['bg-[u\\72l(a_b.png)]', 'bg-[u\\72l(a_b.png)]'],
+      // `decodeArbitraryValue` converts an `_` in a string too, except in a `url(…)`
+      ["bg-[u\\72l('a_b.png')]", "bg-[u\\72l('a_b.png')]"],
+      ['[co\\6c_or:red]', '[co\\6c_or:red]'],
+    ])(testName, { timeout }, async (candidate, expected) => {
+      let input = css`
+        @import 'tailwindcss';
+      `
+      await expectCanonicalization(input, candidate, expected)
+    })
+  })
+
   // https://github.com/tailwindlabs/tailwindcss-intellisense/issues/1558
   test.each([
     ['tracking-[-0.05em]', 'tracking-tighter'],
@@ -1348,6 +1414,7 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
       'shadow-[inset_0px_1px_--theme(--color-white/15%)]',
     ],
+    ['[--foo:_]', '[--foo:_]'],
 
     // Improve readability when whitespace was used for readability
     ['w-[calc(100%_-_calc(var(--spacing)*60))]', 'w-[calc(100%-(--spacing(60)))]'],
@@ -2001,6 +2068,291 @@ describe('regressions', () => {
         options,
       ),
     ).toEqual(['link', 'mt-4'])
+  })
+
+  // Canonicalization compiles every known variant on its own, so sorting all the
+  // parsed variants each time made it quadratic in the number of known variants.
+  test('does not sort the parsed variants when compiling a single candidate', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ matchVariant }) => {
+              let values = Object.fromEntries(
+                Array.from({ length: 250 }, (_, i) => [`value-${i}`, `.value-${i}`]),
+              )
+              matchVariant('foo', (value) => `&:has(${value})`, { values })
+            }),
+          }
+        },
+      },
+    )
+
+    using compare = vi.spyOn(designSystem.variants, 'compare')
+
+    expect(designSystem.canonicalizeCandidates(['foo-[.value-42]:flex'])).toEqual([
+      'foo-value-42:flex',
+    ])
+    expect(compare).not.toHaveBeenCalled()
+  })
+
+  test('does not treat different `@scope` variants as the same', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-blue {
+          @scope ([data-theme='blue']) to ([data-theme]) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.card)]:flex'])).toEqual([
+      '[@scope_(.card)]:flex',
+    ])
+    expect(
+      designSystem.canonicalizeCandidates([
+        "[@scope_([data-theme='blue'])_to_([data-theme])]:flex",
+      ]),
+    ).toEqual(['in-blue:flex'])
+  })
+
+  test('does not treat a descendant combinator in an at-rule as a compound selector', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @custom-variant in-foo-bar {
+          @scope (.foo.bar) {
+            @slot;
+          }
+        }
+        @custom-variant supports-foo-bar {
+          @supports selector(.foo.bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-plus-bar {
+          @scope (.foo\+.bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-hex-plus-bar {
+          @scope (.foo\2b .bar) {
+            @slot;
+          }
+        }
+        @custom-variant in-foo-hex-plus-child-bar {
+          @scope (.foo\2b>.bar) {
+            @slot;
+          }
+        }
+      `,
+      { base: __dirname },
+    )
+
+    // `.foo .bar` and `.foo.bar` match different elements
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo_.bar)]:flex',
+        '[@supports_selector(.foo_.bar)]:flex',
+      ]),
+    ).toEqual(['[@scope_(.foo_.bar)]:flex', '[@supports_selector(.foo_.bar)]:flex'])
+
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo.bar)]:flex',
+        '[@supports_selector(.foo.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-bar:flex', 'supports-foo-bar:flex'])
+
+    // An escaped `+` is part of the class name, so the space after it is
+    // still a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+_.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\+_.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\+.bar)]:flex'])).toEqual([
+      'in-foo-plus-bar:flex',
+    ])
+
+    // A hex escape consumes one whitespace character after it, so only the
+    // second space is a descendant combinator
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)]:flex'])).toEqual([
+      '[@scope_(.foo\\2b__.bar)]:flex',
+    ])
+    expect(designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)]:flex'])).toEqual([
+      'in-foo-hex-plus-bar:flex',
+    ])
+
+    // The whitespace that ends a hex escape is optional when the next character
+    // can't be part of the escape
+    expect(
+      designSystem.canonicalizeCandidates([
+        '[@scope_(.foo\\2b>.bar)]:flex',
+        '[@scope_(.foo\\2b_>.bar)]:flex',
+        '[@scope_(.foo\\2b__>_.bar)]:flex',
+      ]),
+    ).toEqual(['in-foo-hex-plus-child-bar:flex'])
+  })
+
+  // CSS treats CRLF as one newline. The stylesheet parser already normalizes
+  // it, but a plugin variant keeps it in the at-rule params.
+  test('treats CRLF after a hex escape in an at-rule as one whitespace character', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @plugin "my-plugin";
+      `,
+      {
+        async loadModule() {
+          return {
+            path: '',
+            base: '',
+            module: plugin(({ addVariant }) => {
+              addVariant('in-foo-hex-plus-bar', '@scope (.foo\\2b\r\n.bar) to (.limit)')
+            }),
+          }
+        },
+      },
+    )
+
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex']),
+    ).toEqual(['[@scope_(.foo\\2b__.bar)_to_(.limit)]:flex'])
+    expect(
+      designSystem.canonicalizeCandidates(['[@scope_(.foo\\2b_.bar)_to_(.limit)]:flex']),
+    ).toEqual(['in-foo-hex-plus-bar:flex'])
+  })
+
+  test('reuses dynamic utility lookups across candidate collapse groups', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme {
+          --spacing: 0.25rem;
+        }
+      `,
+      { base: __dirname },
+    )
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    // Warm the pre-computed utilities, which walk the functional utilities
+    // once. A single candidate doesn't collapse, so this doesn't compute any
+    // dynamic utility lookups yet.
+    designSystem.canonicalizeCandidates(['mt-2'], options)
+
+    using keysSpy = vi.spyOn(designSystem.utilities, 'keys')
+
+    expect(
+      designSystem.canonicalizeCandidates(
+        ['mt-2', 'mb-2', 'hover:mt-2', 'hover:mb-2', 'focus:mt-2', 'focus:mb-2'],
+        options,
+      ),
+    ).toEqual(['my-2', 'hover:my-2', 'focus:my-2'])
+
+    // One walk for each distinct candidate (`mt-2` and `mb-2`), not one for each
+    // variant group.
+    let functionalKeysCalls = keysSpy.mock.calls.filter((args) => args[0] === 'functional').length
+    expect(functionalKeysCalls).toBe(2)
+
+    // Re-running with repeated candidates across another variant group reuses the cached lookups
+    // without invoking `utilities.keys('functional')` again.
+    let countBefore = keysSpy.mock.calls.length
+    expect(designSystem.canonicalizeCandidates(['active:mt-2', 'active:mb-2'], options)).toEqual([
+      'active:my-2',
+    ])
+    let countAfter = keysSpy.mock.calls.length
+    expect(countAfter).toBe(countBefore)
+  })
+})
+
+describe('normalizeEscapes', () => {
+  // Pieces to build arbitrary values from, with escapes that we replace, and
+  // escapes that we keep.
+  const PIECES = [
+    ...['a', 'e', 'f', 'g', 'r', 'u', 'l', 'c', '0', '1', '5', '-', '-', '_', '_'],
+    ...['.', '(', ')', ',', '%', '>', '<!', "'q'", "'_'", '#'],
+    ...['\\61', '\\72', '\\31', '\\2d', '\\-', '\\65', '\\66', '\\67', '\\_', '\\,', '\\5f'],
+    ...['\\000072', '\\0000311', '\\61_', '\\31_', '\\2d_', '\\65_', '\\72_', '\\g', '\\\\'],
+    ...['url(', 'u\\72l(', 'var(', 'calc(', 'v\\61r('],
+  ]
+
+  // Lightning CSS decodes escapes, and only keeps those that are needed. So
+  // the CSS of two values is the same, if they mean the same.
+  function minify(css: string) {
+    try {
+      return transform({
+        filename: 'input.css',
+        code: Buffer.from(css),
+        minify: true,
+      }).code.toString()
+    } catch {
+      return null
+    }
+  }
+
+  test('keeps the CSS the same', { timeout }, async () => {
+    let designSystem = await __unstable__loadDesignSystem('@tailwind utilities;')
+
+    // A small seeded random number generator, so that failures are reproducible
+    let seed = 1
+    function random(max: number) {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff
+      return seed % max
+    }
+
+    let forms: [(value: string) => string, (candidate: any) => string][] = [
+      [(value) => `content-[${value}]`, (candidate) => `.x{foo:${candidate.value.value}}`],
+      [(value) => `[${value}:red]`, (candidate) => `.x{${candidate.property}:red}`],
+      [
+        (value) => `[&_.${value}]:flex`,
+        (candidate) => `.x{${candidate.variants[0].selector.replace('&', '.y')}{a:b}}`,
+      ],
+    ]
+
+    let replaced = 0
+    let failures: string[] = []
+    for (let i = 0; i < 20_000; i++) {
+      let value = ''
+      for (let j = 0, length = 1 + random(7); j < length; j++) {
+        value += PIECES[random(PIECES.length)]
+      }
+
+      for (let [toCandidate, toCss] of forms) {
+        let before = toCandidate(value)
+        let after = normalizeEscapes(before)
+        if (before === after) continue
+
+        let [beforeCandidate] = designSystem.parseCandidate(before)
+        let [afterCandidate] = designSystem.parseCandidate(after)
+        if (!beforeCandidate || !afterCandidate) continue
+
+        let beforeCss = minify(toCss(beforeCandidate))
+        let afterCss = minify(toCss(afterCandidate))
+        if (beforeCss !== afterCss) {
+          failures.push(`${before} → ${after}: ${beforeCss} → ${afterCss}`)
+        } else if (beforeCss !== null) {
+          replaced++
+        }
+      }
+    }
+
+    expect(failures).toEqual([])
+
+    // Make sure that we test enough values that change
+    expect(replaced).toBeGreaterThan(5_000)
   })
 })
 

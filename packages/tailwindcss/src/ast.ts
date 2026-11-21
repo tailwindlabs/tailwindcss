@@ -220,12 +220,23 @@ export function cssContext(
   }
 }
 
+// Nodes that are reused across builds, i.e. the cached, flattened output of a
+// single utility (see `./incremental.ts`). `toCss` caches their printed CSS.
+//
+// These nodes must never be mutated once they are marked.
+export const CACHEABLE = new WeakSet<AstNode>()
+const PRINTED = new WeakMap<AstNode, { depth: number; css: string }>()
+
 // Optimize the AST for printing where all the special nodes that require custom
 // handling are handled such that the printing is a 1-to-1 transformation.
+//
+// When `skipAtRoots` is set, `@at-root` nodes are dropped instead of hoisted.
+// The incremental build hoists them itself.
 export function optimizeAst(
   ast: AstNode[],
   designSystem: DesignSystem,
   polyfills: Polyfills = Polyfills.All,
+  skipAtRoots = false,
 ) {
   let atRoots: AstNode[] = []
   let seenAtProperties = new Set<string>()
@@ -387,6 +398,7 @@ export function optimizeAst(
 
     // AtRoot
     else if (node.kind === 'at-root') {
+      if (skipAtRoots) return
       for (let child of node.nodes) {
         let newParent: AstNode[] = []
         transform(child, newParent, context, 0)
@@ -521,6 +533,22 @@ export function optimizeAst(
         walk(ast, (node) => {
           if (node.kind !== 'function' || node.value !== 'color-mix') return
 
+          // The color interpolation method is optional, e.g.: `color-mix(red 50%, blue)`. In that
+          // case the node after the first `,` is the second color, not the first one. Lightning CSS
+          // also doesn't compute a `color-mix(…)` without a color interpolation method, so a
+          // fallback with inlined colors would be dropped by browsers without `color-mix(…)`.
+          //
+          // Custom properties keep their comments, e.g.: `color-mix(/* … */ in oklab, …)`, and the
+          // value parser doesn't know about comments, so we drop them before we look for `in`. We
+          // also parse the arguments again without them, otherwise a `,` in a comment would be seen
+          // as the start of the first color.
+          let args = ValueParser.toCss(node.nodes)
+          if (args.includes('/*')) {
+            args = args.replace(/\/\*[\s\S]*?\*\//g, ' ')
+            node.nodes = ValueParser.parse(args)
+          }
+          if (!/^in\s/i.test(args.trimStart())) return
+
           let containsUnresolvableVars = false
           let containsCurrentcolor = false
           walk(node.nodes, (node) => {
@@ -582,9 +610,11 @@ export function optimizeAst(
           } else if (requiresPolyfill) {
             // Change the colorspace to `srgb` since the fallback values should not be represented as
             // `oklab(…)` functions again as their support in Safari <16 is very limited.
-            let colorspace = node.nodes[2]
+            // The color space follows `in`, which is not necessarily the first node when there is
+            // leading whitespace.
+            let colorspace = node.nodes[node.nodes.findIndex((n) => n.kind !== 'separator') + 2]
             if (
-              colorspace.kind === 'word' &&
+              colorspace?.kind === 'word' &&
               (colorspace.value === 'oklab' ||
                 colorspace.value === 'oklch' ||
                 colorspace.value === 'lab' ||
@@ -672,6 +702,39 @@ export function optimizeAst(
   }
 
   return handleNesting(newAst)
+}
+
+function hasLeadingCombinator(selector: string): boolean {
+  for (let part of segment(selector, ',')) {
+    let trimmed = part.trimStart()
+    if (trimmed.startsWith('>') || trimmed.startsWith('+') || trimmed.startsWith('~')) {
+      return true
+    }
+  }
+  return false
+}
+
+function prefixRelativeSelectors(ast: SelectorParser.SelectorAstNode[]): boolean {
+  let changed = false
+
+  function handleSelector(node: SelectorParser.SelectorAstNode) {
+    if (node.kind === 'complex' && node.nodes[0]?.kind === 'combinator') {
+      node.nodes.unshift({ kind: 'selector', value: ':where(:scope)' })
+      changed = true
+    }
+  }
+
+  for (let node of ast) {
+    if (node.kind === 'list') {
+      for (let item of node.nodes) {
+        handleSelector(item)
+      }
+    } else {
+      handleSelector(node)
+    }
+  }
+
+  return changed
 }
 
 export function handleNesting(ast: AstNode[]): AstNode[] {
@@ -811,9 +874,8 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
               // ```
               //
               // See: https://drafts.csswg.org/css-nesting-1/#nesting-at-scope
-              let replacement = atRuleStack.some(([name]) => name === '@scope')
-                ? ':where(:scope)'
-                : ':scope'
+              let insideAtScope = atRuleStack.some(([name]) => name === '@scope')
+              let replacement = insideAtScope ? ':where(:scope)' : ':scope'
 
               let ast = SelectorParser.parse(node.selector)
               let changed = false
@@ -825,7 +887,25 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
                 }
               })
 
+              if (insideAtScope && prefixRelativeSelectors(ast)) {
+                changed = true
+              }
+
               if (changed) {
+                selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
+              } else {
+                selectorStack.push([node.selector, node.src, node.dst])
+              }
+            } else if (
+              atRuleStack.some(([name]) => name === '@scope') &&
+              hasLeadingCombinator(node.selector)
+            ) {
+              // Relative selectors inside `@scope`, e.g.: `> .item`, are relative
+              // to the scoping root. Lightning CSS can't parse them directly in a
+              // top-level `@scope` rule and drops them, so we make the scoping
+              // root explicit with `:where(:scope)`.
+              let ast = SelectorParser.parse(node.selector)
+              if (prefixRelativeSelectors(ast)) {
                 selectorStack.push([SelectorParser.toCss(ast), node.src, node.dst])
               } else {
                 selectorStack.push([node.selector, node.src, node.dst])
@@ -1691,7 +1771,7 @@ export function handleNesting(ast: AstNode[]): AstNode[] {
 // A set of at-rules that can be hoisted to the top without any repercussions.
 // Typically at-rules that rely on the environment, not parent information and
 // contain other rules/declarations.
-const HOISTABLE_AT_RULES = new Set([
+export const HOISTABLE_AT_RULES = new Set([
   '@container',
   '@layer',
   '@media',
@@ -1724,6 +1804,22 @@ export function toCss(ast: AstNode[], track?: boolean) {
   }
 
   function stringify(node: AstNode, depth = 0): string {
+    // Nodes that are reused across builds print to the same CSS every time.
+    // Source map tracking needs the positions of the current build, so we
+    // can't use the cache in that case.
+    if (!track && CACHEABLE.has(node)) {
+      let cached = PRINTED.get(node)
+      if (cached !== undefined && cached.depth === depth) return cached.css
+
+      let css = print(node, depth)
+      PRINTED.set(node, { depth, css })
+      return css
+    }
+
+    return print(node, depth)
+  }
+
+  function print(node: AstNode, depth: number): string {
     let css = ''
     let indent = '  '.repeat(depth)
 

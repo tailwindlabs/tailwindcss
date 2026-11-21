@@ -105,12 +105,20 @@ export class Utilities {
 
   private completions = new Map<string, () => SuggestionGroup[]>()
 
+  /**
+   * The length of the longest utility name. Parsing a candidate can skip roots
+   * that are longer, because they can't exist.
+   */
+  public maxNameLength = 0
+
   static(name: string, compileFn: CompileFn<'static'>) {
     this.utilities.get(name).push({ kind: 'static', compileFn })
+    this.maxNameLength = Math.max(this.maxNameLength, name.length)
   }
 
   functional(name: string, compileFn: CompileFn<'functional'>, options?: UtilityOptions) {
     this.utilities.get(name).push({ kind: 'functional', compileFn, options })
+    this.maxNameLength = Math.max(this.maxNameLength, name.length)
   }
 
   has(name: string, kind: 'static' | 'functional') {
@@ -2121,7 +2129,6 @@ export function createUtilities(theme: Theme) {
   staticUtility('justify-between', [['justify-content', 'space-between']])
   staticUtility('justify-around', [['justify-content', 'space-around']])
   staticUtility('justify-evenly', [['justify-content', 'space-evenly']])
-  staticUtility('justify-baseline', [['justify-content', 'baseline']])
   staticUtility('justify-stretch', [['justify-content', 'stretch']])
 
   staticUtility('justify-items-normal', [['justify-items', 'normal']])
@@ -2777,7 +2784,7 @@ export function createUtilities(theme: Theme) {
 
               return [
                 decl('--tw-gradient-position', value),
-                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops, ${value}))`),
               ]
             }
             default: {
@@ -2785,7 +2792,7 @@ export function createUtilities(theme: Theme) {
 
               return [
                 decl('--tw-gradient-position', value),
-                decl('background-image', `linear-gradient(var(--tw-gradient-stops,${value}))`),
+                decl('background-image', `linear-gradient(var(--tw-gradient-stops, ${value}))`),
               ]
             }
           }
@@ -2835,7 +2842,7 @@ export function createUtilities(theme: Theme) {
           let value = candidate.value.value
           return [
             decl('--tw-gradient-position', value),
-            decl('background-image', `conic-gradient(var(--tw-gradient-stops,${value}))`),
+            decl('background-image', `conic-gradient(var(--tw-gradient-stops, ${value}))`),
           ]
         }
 
@@ -2890,7 +2897,7 @@ export function createUtilities(theme: Theme) {
         let value = candidate.value.value
         return [
           decl('--tw-gradient-position', value),
-          decl('background-image', `radial-gradient(var(--tw-gradient-stops,${value}))`),
+          decl('background-image', `radial-gradient(var(--tw-gradient-stops, ${value}))`),
         ]
       }
     })

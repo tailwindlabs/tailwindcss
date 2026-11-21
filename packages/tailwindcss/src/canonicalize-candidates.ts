@@ -106,6 +106,10 @@ interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [DYNAMIC_UTILITIES_KEY]: DefaultMap<
+      SignatureOptions,
+      DefaultMap<string, DefaultMap<string, DefaultMap<string, Set<string>>>>
+    >
     [PRE_COMPUTED_UTILITIES_KEY]: DefaultMap<SignatureOptions, DefaultMap<string, string[]>>
     [VARIANT_SIGNATURE_KEY]: DefaultMap<RemValue, DefaultMap<string, string | symbol>>
     [PRE_COMPUTED_VARIANTS_KEY]: DefaultMap<RemValue, DefaultMap<string, string[]>>
@@ -130,6 +134,7 @@ export function prepareDesignSystemStorage(
     createUtilityThemeVariablesCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
+  designSystem.storage[DYNAMIC_UTILITIES_KEY] ??= createDynamicUtilitiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
   designSystem.storage[VARIANT_SIGNATURE_KEY] ??= createVariantSignatureCache(designSystem)
   designSystem.storage[PRE_COMPUTED_VARIANTS_KEY] ??= createPreComputedVariantsCache(designSystem)
@@ -276,6 +281,7 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
       designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
     let staticUtilities = designSystem.storage[STATIC_UTILITIES_KEY].get(signatureOptions)
     let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
+    let dynamicUtilities = designSystem.storage[DYNAMIC_UTILITIES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
@@ -338,43 +344,6 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
         }
       }
     }
-
-    let dynamicUtilities = new DefaultMap((candidate: string) => {
-      let result = new DefaultMap(
-        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
-      )
-
-      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
-      if (relevantProperties.size === 0) return result
-
-      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
-        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
-          continue
-        }
-
-        for (let root of designSystem.utilities.keys('functional')) {
-          if (root === parsedCandidate.root) continue // Skip self
-
-          let replacement = printUnprefixedCandidate(designSystem, {
-            ...cloneCandidate(parsedCandidate),
-            root,
-          })
-
-          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
-          for (let [property, values] of propertyValues) {
-            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
-
-            for (let value of values) {
-              result.get(property).get(value).add(replacement)
-            }
-          }
-        }
-
-        return result
-      }
-
-      return result
-    })
 
     // For each property, lookup other utilities that also set this property and
     // this exact value. If multiple properties are used, use the intersection of
@@ -616,6 +585,14 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
     let utilityCache = ds.storage[CANONICALIZE_UTILITY_KEY].get(options)
 
     return new DefaultMap<string, string>((rawCandidate: string, self) => {
+      // Replace escapes that are not needed first. We do this before parsing,
+      // because a candidate with an escape in a function name, like
+      // `bg-[u\72l('a.png')]`, might not parse at all.
+      let normalized = normalizeEscapes(rawCandidate)
+      if (normalized !== rawCandidate && ds.parseCandidate(normalized).length > 0) {
+        return self.get(normalized)
+      }
+
       for (let candidate of ds.parseCandidate(rawCandidate)) {
         let variants = candidate.variants
           .slice()
@@ -669,6 +646,362 @@ function createCanonicalizeCandidateCache(): DesignSystem['storage'][typeof CANO
       return rawCandidate
     })
   })
+}
+
+const BACKSLASH = 0x5c
+const OPEN_BRACKET = 0x5b
+const CLOSE_BRACKET = 0x5d
+const OPEN_PAREN = 0x28
+const CLOSE_PAREN = 0x29
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
+const COLON = 0x3a
+const EXCLAMATION_MARK = 0x21
+const GREATER_THAN = 0x3e
+const UNDERSCORE = 0x5f
+const DASH = 0x2d
+
+/**
+ * Replace CSS escapes in arbitrary values that are not needed with the
+ * character that they stand for. E.g.: `bg-[u\72l('a.png')]` becomes
+ * `bg-[url('a.png')]`.
+ *
+ * We only replace escapes of ASCII letters, digits and `-` in a name, and only
+ * if the CSS stays the same. We keep:
+ *
+ * - `\_`, because it is a literal `_` in a candidate.
+ * - Escapes in strings, e.g. `content-['\61']`.
+ * - Escapes of other characters, e.g. `\,` or `\)`.
+ * - Escapes that make a name out of something else. E.g.: `\31 0px` is the
+ *   name `10px`, but `10px` is a dimension.
+ */
+export function normalizeEscapes(input: string): string {
+  // Only arbitrary values have escapes that we replace
+  if (input.indexOf('\\') === -1 || input.indexOf('[') === -1) return input
+
+  let output = ''
+
+  // The nesting level of `[…]`
+  let depth = 0
+
+  // For each function that we are inside of, if `decodeArbitraryValue` keeps
+  // an `_` in it as-is, instead of converting it to a space.
+  let functions: boolean[] = []
+
+  // If we are inside of the property name of an arbitrary property. It is not
+  // decoded, so an `_` in it is not a space either.
+  let inPropertyName = false
+
+  // The end of the last name, to find the name of a function.
+  let lastName = ''
+  let lastNameEnd = -1
+
+  let idx = 0
+  while (idx < input.length) {
+    let char = input.charCodeAt(idx)
+
+    // Outside of `[…]`, we keep everything as-is.
+    if (depth === 0) {
+      if (char === BACKSLASH) {
+        output += input.slice(idx, idx + 2)
+        idx += 2
+        continue
+      }
+
+      if (char === OPEN_BRACKET) {
+        depth = 1
+        functions = []
+
+        // An arbitrary property, like `[color:red]`, starts after the variants,
+        // and its property name starts with `a-z` or `-`. An escape might
+        // become one of them.
+        let previous = input.charCodeAt(idx - 1)
+        let next = input.charCodeAt(idx + 1)
+        inPropertyName =
+          (idx === 0 || previous === COLON || previous === EXCLAMATION_MARK) &&
+          ((next >= 0x61 && next <= 0x7a) || next === DASH || next === BACKSLASH)
+      }
+
+      output += input[idx]
+      idx++
+      continue
+    }
+
+    if (char === BACKSLASH || isNameChar(char)) {
+      // If we are not sure that an `_` is a space, then an `_` after a hex
+      // escape might not be part of the escape.
+      let underscoreIsSpace = !inPropertyName && !functions.includes(true)
+
+      let [name, end] = normalizeName(input, idx, underscoreIsSpace)
+      let raw = input.slice(idx, end)
+
+      if (name !== raw && keepName(input, output, raw, name, end)) {
+        name = raw
+      }
+
+      // A `\` at the end of the input is not an escape.
+      if (end === idx) {
+        name = input[idx]
+        end++
+      }
+
+      output += name
+      lastName = name
+      lastNameEnd = end
+      idx = end
+      continue
+    }
+
+    switch (char) {
+      // We keep strings as-is.
+      case SINGLE_QUOTE:
+      case DOUBLE_QUOTE: {
+        let end = idx + 1
+        while (end < input.length) {
+          let next = input.charCodeAt(end)
+          if (next === BACKSLASH) {
+            end += 2
+            continue
+          }
+
+          end++
+          if (next === char) break
+        }
+
+        output += input.slice(idx, end)
+        idx = end
+        continue
+      }
+
+      case OPEN_BRACKET:
+        depth++
+        break
+
+      case CLOSE_BRACKET:
+        depth--
+        break
+
+      // The property name of an arbitrary property ends at the first `:`.
+      case COLON:
+        inPropertyName = false
+        break
+
+      case OPEN_PAREN:
+        functions.push(lastNameEnd === idx && keepsUnderscores(lastName))
+        break
+
+      case CLOSE_PAREN:
+        functions.pop()
+        break
+    }
+
+    output += input[idx]
+    idx++
+  }
+
+  return output
+}
+
+/**
+ * Replace the escapes that are not needed in the name at `start`. Returns the
+ * new name, and the end of the name in the input.
+ */
+function normalizeName(input: string, start: number, underscoreIsSpace: boolean) {
+  let output = ''
+
+  // The first two characters of the new name, or a `\` for an escape. They
+  // tell us if the name is an identifier, or a number like `10px`.
+  let first = -1
+  let second = -1
+
+  // If the last escape that we kept is a hex escape without a whitespace after
+  // it. A hex digit after it would become part of the escape.
+  let openHexEscape = false
+
+  let idx = start
+  while (idx < input.length) {
+    let char = input.charCodeAt(idx)
+    let code = char
+
+    if (char === BACKSLASH) {
+      let escapeStart = idx
+      let next = input.charCodeAt(idx + 1)
+      if (Number.isNaN(next)) break
+
+      let decoded = next
+      let isHex = isHexDigit(next)
+      let terminated = true
+      let certain = true
+
+      if (isHex) {
+        // A hex escape has up to 6 hex digits, and one whitespace after them
+        // is part of it. An `_` becomes that whitespace later. E.g.: `u\72_l`
+        // is `url`.
+        let hexEnd = idx + 1
+        while (hexEnd < idx + 7 && isHexDigit(input.charCodeAt(hexEnd))) hexEnd++
+        decoded = parseInt(input.slice(idx + 1, hexEnd), 16)
+        terminated = hexEnd - idx - 1 === 6
+        idx = hexEnd
+
+        let after = input.charCodeAt(idx)
+        if (isWhitespace(after)) {
+          idx++
+          terminated = true
+        } else if (after === UNDERSCORE) {
+          idx++
+          terminated = true
+          certain = underscoreIsSpace
+        }
+      } else {
+        idx += 2
+      }
+
+      let replace = certain && isAsciiNameChar(decoded) && !(openHexEscape && isHexDigit(decoded))
+
+      if (replace) {
+        if (first === -1) {
+          // A name can't start with a digit, e.g.: `\31 0px` is not `10px`.
+          if (isDigit(decoded)) {
+            replace = false
+          }
+
+          // A name can start with a `-` only if a name character comes after
+          // it, e.g.: `\-1` is not `-1`.
+          else if (decoded === DASH) {
+            let after = input.charCodeAt(idx)
+            replace = isLetter(after) || after === DASH || after === BACKSLASH || after >= 0x80
+          }
+        } else if (!startsIdentifier(first, second === -1 ? decoded : second)) {
+          // We are inside of a number, like `1\65 3`. It is `1` with the unit
+          // `e3`, but `1e3` is `1000`.
+          replace = false
+        }
+      }
+
+      if (replace) {
+        output += String.fromCharCode(decoded)
+        code = decoded
+        openHexEscape = false
+      } else {
+        output += input.slice(escapeStart, idx)
+        code = BACKSLASH
+        openHexEscape = isHex && !terminated
+      }
+    } else if (isNameChar(char)) {
+      output += input[idx]
+      openHexEscape = false
+      idx++
+    } else {
+      break
+    }
+
+    if (first === -1) first = code
+    else if (second === -1) second = code
+  }
+
+  return [output, idx] as const
+}
+
+/**
+ * Determine if we have to keep a name as-is, even though it has escapes that
+ * we could replace.
+ */
+function keepName(input: string, output: string, raw: string, name: string, end: number) {
+  // A `-->` and a `<!--` are special tokens in CSS. E.g.: `-\->` is the name
+  // `--` and a `>`, but `-->` is a single token. And in `<!--\-`, the `\-` is a
+  // name, but in `<!---` the last `-` is not.
+  if (name === '--' && input.charCodeAt(end) === GREATER_THAN) return true
+  if (name.startsWith('--') && output.endsWith('<!')) return true
+
+  // `decodeArbitraryValue` keeps an `_` as-is in some functions, like
+  // `url(…)`, but not in `u\72l(…)`. If the function has an `_` in it, then
+  // replacing the escapes would change what it means.
+  if (
+    input.charCodeAt(end) === OPEN_PAREN &&
+    keepsUnderscores(name) &&
+    !keepsUnderscores(raw) &&
+    hasUnderscoreInFunction(input, end)
+  ) {
+    return true
+  }
+
+  return false
+}
+
+/**
+ * Determine if `decodeArbitraryValue` might keep an `_` in a function with the
+ * given name as-is. E.g. in `url(…)`, `no-repeat_url(…)` or `var(…)`.
+ */
+function keepsUnderscores(name: string) {
+  return name.endsWith('url') || name.endsWith('var') || name.endsWith('theme')
+}
+
+/**
+ * Determine if the function that starts with the `(` at `idx` has an `_` in
+ * it. Also in strings, because `decodeArbitraryValue` converts an `_` in a
+ * string too, except in a `url(…)`. E.g.: `u\72l('a_b.png')` is `a b.png`.
+ */
+function hasUnderscoreInFunction(input: string, idx: number) {
+  let depth = 0
+  for (; idx < input.length; idx++) {
+    let char = input.charCodeAt(idx)
+
+    if (char === BACKSLASH) {
+      idx++
+    } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      // Skip the string, because a `)` in it does not end the function.
+      while (++idx < input.length) {
+        let next = input.charCodeAt(idx)
+        if (next === BACKSLASH) idx++
+        else if (next === UNDERSCORE) return true
+        else if (next === char) break
+      }
+    } else if (char === OPEN_PAREN) {
+      depth++
+    } else if (char === CLOSE_PAREN) {
+      if (--depth === 0) return false
+    } else if (char === UNDERSCORE) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * Determine if a name that starts with the given two characters is an
+ * identifier, and not a number like `10px` or `-1`. A `\` is an escape.
+ */
+function startsIdentifier(first: number, second: number) {
+  if (first === DASH) {
+    return isLetter(second) || second === DASH || second === BACKSLASH || second >= 0x80
+  }
+
+  return isLetter(first) || first === BACKSLASH || first >= 0x80
+}
+
+function isNameChar(char: number) {
+  return isAsciiNameChar(char) || char >= 0x80
+}
+
+function isAsciiNameChar(char: number) {
+  return isLetter(char) || isDigit(char) || char === DASH
+}
+
+function isLetter(char: number) {
+  return (char >= 0x61 && char <= 0x7a) || (char >= 0x41 && char <= 0x5a)
+}
+
+function isDigit(char: number) {
+  return char >= 0x30 && char <= 0x39
+}
+
+function isHexDigit(char: number) {
+  return isDigit(char) || (char >= 0x61 && char <= 0x66) || (char >= 0x41 && char <= 0x46)
+}
+
+function isWhitespace(char: number) {
+  return char === 0x20 || char === 0x09 || char === 0x0a || char === 0x0c || char === 0x0d
 }
 
 type VariantCanonicalizationFunction = (
@@ -2951,6 +3284,53 @@ function createUtilityPropertiesCache(
   })
 }
 
+const DYNAMIC_UTILITIES_KEY = Symbol()
+function createDynamicUtilitiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof DYNAMIC_UTILITIES_KEY] {
+  return new DefaultMap((signatureOptions: SignatureOptions) => {
+    let computeUtilitiesPropertiesLookup =
+      designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
+
+    return new DefaultMap((candidate: string) => {
+      let result = new DefaultMap(
+        (_property: string) => new DefaultMap((_value: string) => new Set<string>()),
+      )
+
+      let relevantProperties = new Set(computeUtilitiesPropertiesLookup.get(candidate).keys())
+      if (relevantProperties.size === 0) return result
+
+      for (let parsedCandidate of parseCandidate(designSystem, candidate)) {
+        if (parsedCandidate.kind !== 'functional' || parsedCandidate.value === null) {
+          continue
+        }
+
+        for (let root of designSystem.utilities.keys('functional')) {
+          if (root === parsedCandidate.root) continue // Skip self
+
+          let replacement = printUnprefixedCandidate(designSystem, {
+            ...cloneCandidate(parsedCandidate),
+            root,
+          })
+
+          let propertyValues = computeUtilitiesPropertiesLookup.get(replacement)
+          for (let [property, values] of propertyValues) {
+            if (!relevantProperties.has(property)) continue // Skip properties that are not relevant for the current candidate
+
+            for (let value of values) {
+              result.get(property).get(value).add(replacement)
+            }
+          }
+        }
+
+        return result
+      }
+
+      return result
+    })
+  })
+}
+
 // For all static utilities in the system, compute a lookup table that maps the
 // utility signature to the utility name. This is used to find the utility name
 // for a given utility signature.
@@ -3038,8 +3418,15 @@ function createVariantSignatureCache(
 
         // Canonicalize selectors to their minimal form
         walk(ast, (node) => {
+          // Variants that generate `@scope` rules wrap them in `context` nodes,
+          // which `toCss` doesn't print. Unwrap them so the signature includes
+          // the `@scope` rule.
+          if (node.kind === 'context') {
+            return WalkAction.Replace(node.nodes)
+          }
+
           // At-rules
-          if (node.kind === 'at-rule') {
+          else if (node.kind === 'at-rule') {
             // Normalize dimensions such that equivalent values in different
             // units are considered the same. E.g.: with a root font size of
             // `16px`, `@media (width >= 64rem)` and `@media (width >= 1024px)`
@@ -3047,7 +3434,10 @@ function createVariantSignatureCache(
             node.params = constantFoldDeclaration(node.params, rem)
 
             if (node.params.includes(' ')) {
-              node.params = node.params.replaceAll(' ', '')
+              node.params = normalizeAtRuleParamsWhitespace(
+                node.params,
+                node.name !== '@media' && node.name !== '@container',
+              )
             }
           }
 
@@ -3128,6 +3518,126 @@ function createVariantSignatureCache(
       }
     })
   })
+}
+
+// Remove whitespace in at-rule params that doesn't change their meaning, in a
+// single pass. E.g.: `(width >= 64rem)` → `(width>=64rem)`.
+//
+// Whitespace between other characters is collapsed to a single space, because
+// it can be a descendant combinator. E.g.: `@scope (.foo .bar)` and
+// `@scope (.foo.bar)` match different elements. The same goes for whitespace
+// before a `:` (`.foo :hover`), unless whitespace follows the `:` as well
+// (`(pointer : fine)`), or the params can't contain selectors (`@media` and
+// `@container`). Strings and escaped characters are kept as-is.
+function normalizeAtRuleParamsWhitespace(params: string, canContainSelectors: boolean) {
+  let result = ''
+  let pendingSpace = false
+  let quote = 0
+
+  // Whether the last character in `result` is escaped. E.g.: the `+` in
+  // `.foo\+ .bar` is part of the class name, not a delimiter.
+  let escaped = false
+
+  // Whether `result` ends with a hex escape that has no whitespace after it
+  // yet. E.g.: `\2b` in `.foo\2b .bar`.
+  let openHexEscape = false
+
+  for (let i = 0; i < params.length; i++) {
+    let char = params.charCodeAt(i)
+
+    // Copy strings verbatim, including escapes
+    if (quote !== 0) {
+      result += params[i]
+      escaped = false
+      if (char === BACKSLASH && i + 1 < params.length) {
+        result += params[++i]
+      } else if (char === quote) {
+        quote = 0
+      }
+      continue
+    }
+
+    if (isWhitespace(char)) {
+      // Leading whitespace is dropped
+      pendingSpace = result.length > 0
+      continue
+    }
+
+    // Only keep whitespace between two characters that need it. Trailing
+    // whitespace is dropped, because no character follows it.
+    let space =
+      pendingSpace &&
+      (escaped || !dropsWhitespaceAfter(result.charCodeAt(result.length - 1))) &&
+      !dropsWhitespaceBefore(char) &&
+      !(char === COLON && (!canContainSelectors || isWhitespace(params.charCodeAt(i + 1))))
+    pendingSpace = false
+
+    // A hex escape needs whitespace to end it when a hex digit or another
+    // space follows. E.g.: `.foo\2b  .bar` is `.foo\+ .bar`, but `.foo\2b>.bar`
+    // and `.foo\2b >.bar` are the same.
+    if (openHexEscape && (space || isHexDigit(char))) result += ' '
+    if (space) result += ' '
+
+    result += params[i]
+    escaped = false
+    openHexEscape = false
+
+    if (char === BACKSLASH && i + 1 < params.length) {
+      if (isHexDigit(params.charCodeAt(i + 1))) {
+        // A hex escape has up to 6 hex digits, and consumes one whitespace
+        // character after it. E.g.: `.foo\2b .bar` is `.foo\+.bar`, so only
+        // a second space would be a descendant combinator.
+        let end = i + 1
+        while (end < i + 7 && end < params.length && isHexDigit(params.charCodeAt(end))) end++
+        result += params.slice(i + 1, end)
+        i = end - 1
+        if (isWhitespace(params.charCodeAt(i + 1))) {
+          i++
+
+          // CSS treats CRLF as one newline
+          if (params.charCodeAt(i) === 0x0d && params.charCodeAt(i + 1) === 0x0a) i++
+        }
+        openHexEscape = true
+      } else {
+        result += params[++i]
+      }
+      escaped = true
+    } else if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      quote = char
+    }
+  }
+
+  return result
+}
+
+// `(`, `,`, `:`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceAfter(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === 0x2c ||
+    char === COLON ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
+}
+
+// `(`, `)`, `,`, `<`, `>`, `=`, `+`, `~` and `/`
+function dropsWhitespaceBefore(char: number) {
+  return (
+    char === OPEN_PAREN ||
+    char === CLOSE_PAREN ||
+    char === 0x2c ||
+    char === 0x3c ||
+    char === GREATER_THAN ||
+    char === 0x3d ||
+    char === 0x2b ||
+    char === 0x7e ||
+    char === 0x2f
+  )
 }
 
 export const PRE_COMPUTED_VARIANTS_KEY = Symbol()

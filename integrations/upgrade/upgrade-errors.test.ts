@@ -31,7 +31,6 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
   },
   async ({ exec, expect }) => {
     // Ensure we are in a git repo
@@ -106,7 +105,8 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
+    // The test installs its dependencies again with `bun`, over the network
+    timeout: 120_000,
   },
   async ({ exec, expect }) => {
     // Use `bun` to install dependencies
@@ -200,7 +200,6 @@ test(
         @tailwind utilities;
       `,
     },
-    retry: 0,
   },
   async ({ exec, expect }) => {
     // Use `npm` to install dependencies

@@ -382,9 +382,10 @@ impl Scanner {
             return (vec![], vec![], vec![]);
         };
 
-        // Use synchronous walk for the initial build (lower overhead) and parallel
-        // walk for subsequent calls (watch mode) where the overhead is amortised.
-        let all_entries = if self.has_scanned_once {
+        // Use synchronous walk for the initial build (lower overhead). On supported
+        // platforms, use the parallel walk for subsequent calls where the overhead
+        // is amortised.
+        let all_entries = if self.has_scanned_once && cfg!(any(unix, windows)) {
             walk_parallel(walker)
         } else {
             walk_synchronous(walker)

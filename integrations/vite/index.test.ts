@@ -1628,6 +1628,103 @@ test(
   },
 )
 
+test(
+  `environments that build again with the same plugin instance use the latest sources`,
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      '.gitignore': txt`
+        node_modules/
+        dist/
+        # The build script contains the candidate that it adds later
+        build.mjs
+      `,
+      // A long-lived process (e.g. a framework that builds again after a change)
+      // can build the same environments more than once. The environments share
+      // one plugin instance, so the second round must not use the candidates
+      // that were scanned in the first round.
+      'build.mjs': js`
+        import fs from 'node:fs/promises'
+        import tailwindcss from '@tailwindcss/vite'
+        import { createBuilder } from 'vite'
+
+        let builder = await createBuilder({
+          configFile: false,
+          logLevel: 'error',
+          plugins: [tailwindcss()],
+          builder: { sharedPlugins: true },
+          environments: {
+            client: {
+              build: { outDir: 'dist/client' },
+            },
+            server: {
+              build: {
+                emitAssets: true,
+                outDir: 'dist/server',
+                rolldownOptions: { input: './src/server.js' },
+              },
+            },
+          },
+        })
+
+        await builder.build(builder.environments.client)
+        await builder.build(builder.environments.server)
+
+        // Add a candidate, and change the stylesheet so that its compiler and
+        // its scanner are set up again.
+        let html = await fs.readFile('index.html', 'utf8')
+        await fs.writeFile('index.html', html.replace('underline', 'underline font-bold'))
+        await fs.appendFile('src/index.css', ' .changed { color: red; }')
+
+        // Vite empties the output directory of an environment only once
+        await fs.rm('dist', { recursive: true, force: true })
+
+        await builder.build(builder.environments.client)
+        await builder.build(builder.environments.server)
+      `,
+      'index.html': html`
+        <head>
+          <link rel="stylesheet" href="./src/index.css" />
+        </head>
+        <body>
+          <div class="underline">Hello, world!</div>
+        </body>
+      `,
+      'src/server.js': js`
+        import styles from './index.css?url'
+        console.log(styles)
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('node build.mjs')
+
+    for (let pattern of ['dist/client/**/*.css', 'dist/server/**/*.css']) {
+      let files = await fs.glob(pattern)
+      expect(files).toHaveLength(1)
+      let [filename] = files[0]
+
+      await fs.expectFileToContain(filename, [
+        candidate`underline`,
+        candidate`font-bold`,
+        '.changed',
+      ])
+    }
+  },
+)
+
 // https://github.com/tailwindlabs/tailwindcss/issues/17532
 test(
   'deleting a file should not crash Vite',

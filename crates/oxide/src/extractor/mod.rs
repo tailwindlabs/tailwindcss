@@ -102,6 +102,7 @@ impl<'a> Extractor<'a> {
         // Candidate extractor
         {
             let cursor = &mut self.cursor.clone();
+            let mut sub_candidate_extractor = SubCandidateExtractor::default();
 
             while cursor.pos < len {
                 if cursor.curr().is_ascii_whitespace() {
@@ -113,10 +114,14 @@ impl<'a> Extractor<'a> {
                 match self.candidate_machine.next(cursor) {
                     MachineState::Done(span) => {
                         in_flight_spans.push(span);
-                        extract_sub_candidates(before..span.start, cursor, &mut in_flight_spans);
+                        sub_candidate_extractor.extract(
+                            before..span.start,
+                            cursor,
+                            &mut in_flight_spans,
+                        );
                     }
                     MachineState::Idle => {
-                        extract_sub_candidates(
+                        sub_candidate_extractor.extract(
                             before..cursor.pos.min(cursor.input.len()),
                             cursor,
                             &mut in_flight_spans,
@@ -185,22 +190,62 @@ impl<'a> Extractor<'a> {
 // [ClassPrefix('gap-y-4')]
 //  ^ Try again here
 // ```
-#[inline(always)]
-fn extract_sub_candidates(
-    range: std::ops::Range<usize>,
-    cursor: &cursor::Cursor<'_>,
-    in_flight_spans: &mut Vec<Span>,
-) {
-    let end = range.end;
-    for i in range {
-        if cursor.input[i] == b'[' {
+//
+// A machine starts after each `[` in the range, and runs until the end of the range. Machines
+// that start at different positions often reach the same position in a clean state. From there
+// on, they find the same candidates, so only the first machine has to continue. Otherwise, a long
+// line with many `[` (e.g. minified JSON) takes quadratic time.
+#[derive(Default)]
+struct SubCandidateExtractor {
+    /// A single machine for the whole line, because it remembers where the line has no more
+    /// boundary characters.
+    machine: CandidateMachine,
+
+    /// Positions in the current range where a machine was in a clean state, relative to the
+    /// start of the range.
+    checkpoints: Vec<bool>,
+}
+
+impl SubCandidateExtractor {
+    #[inline(always)]
+    fn extract(
+        &mut self,
+        range: std::ops::Range<usize>,
+        cursor: &cursor::Cursor<'_>,
+        in_flight_spans: &mut Vec<Span>,
+    ) {
+        let start = range.start;
+        let end = range.end;
+        let mut is_first_machine = true;
+
+        for i in range {
+            if cursor.input[i] != b'[' {
+                continue;
+            }
+
+            if is_first_machine {
+                self.checkpoints.clear();
+                is_first_machine = false;
+            }
+
             let mut cursor = cursor.clone();
             cursor.move_to(i + 1);
+            self.machine.reset();
 
-            let mut machine = CandidateMachine::default();
+            let mut seen = false;
+            while !seen && cursor.pos < end {
+                let checkpoints = &mut self.checkpoints;
+                let state = self.machine.next_with_checkpoints(&mut cursor, |pos| {
+                    let offset = pos - start;
+                    if offset >= checkpoints.len() {
+                        checkpoints.resize(offset + 1, false);
+                    }
 
-            while cursor.pos < end {
-                if let MachineState::Done(span) = machine.next(&mut cursor) {
+                    seen = std::mem::replace(&mut checkpoints[offset], true);
+                    !seen
+                });
+
+                if let MachineState::Done(span) = state {
                     in_flight_spans.push(span);
                 }
 
@@ -748,6 +793,44 @@ mod tests {
             ),
         ] {
             assert_extract_sorted_candidates(input, expected);
+        }
+    }
+
+    #[test]
+    fn test_overlapping_candidates_in_long_lines() {
+        // E.g.: minified JSON
+        let input = format!(
+            "[{}]",
+            r#"["flex",["italic",["underline"]]],"#.repeat(1_000)
+        );
+
+        assert_eq!(extract_sorted_candidates(&input).len(), 3_000);
+        assert_extract_sorted_candidates(&input, vec!["flex", "italic", "underline"]);
+    }
+
+    #[test]
+    fn test_long_lines_without_candidates() {
+        for input in [
+            "[".repeat(100_000),
+            "a-[".repeat(30_000),
+            r#""a-['"#.repeat(20_000),
+            format!("a{}", "-[a]".repeat(25_000)),
+            "<%= a-[".repeat(15_000),
+            format!("[{}]", "[1,2],".repeat(20_000)),
+            "A".repeat(100_000),
+            "<".repeat(100_000),
+        ] {
+            let start = std::time::Instant::now();
+            assert_eq!(extract_sorted_candidates(&input), Vec::<&str>::new());
+
+            // Each input takes milliseconds when the time grows linearly with the length of the
+            // line, but seconds or minutes when it grows quadratically.
+            let elapsed = start.elapsed();
+            assert!(
+                elapsed < std::time::Duration::from_secs(5),
+                "Extracting {:?}… took {elapsed:?}",
+                &input[..10],
+            );
         }
     }
 

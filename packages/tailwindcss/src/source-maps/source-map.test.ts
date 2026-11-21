@@ -680,6 +680,40 @@ test('utilities have source maps pointing to the utilities node', async ({ expec
   `)
 })
 
+test('source maps match the latest build', async ({ expect }) => {
+  let input = css`
+    @tailwind utilities;
+    @utility custom {
+      color: orange;
+    }
+  `
+
+  // Not every build asks for a source map, e.g. the CLI without `--map`
+  let steps = [
+    { candidates: ['underline'], map: true },
+    { candidates: ['flex', 'hover:flex'], map: false },
+    { candidates: ['custom', 'hover:custom'], map: true },
+    { candidates: [], map: true },
+  ]
+
+  let compiler = await compile(input, { from: 'input.css' })
+  let used: string[] = []
+
+  for (let { candidates, map } of steps) {
+    used.push(...candidates)
+    let output = compiler.build(used)
+    if (!map) continue
+
+    // A new compiler that builds all candidates at once
+    let reference = await compile(input, { from: 'input.css' })
+    expect(output).toEqual(reference.build(used))
+
+    let decoded = compiler.buildSourceMap()
+    expect(decoded.mappings).not.toHaveLength(0)
+    expect(decoded).toEqual(reference.buildSourceMap())
+  }
+})
+
 test('@apply generates source maps', async ({ expect }) => {
   let { sources, annotations } = await run({
     input: css`

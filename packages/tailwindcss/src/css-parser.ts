@@ -23,6 +23,7 @@ const LINE_BREAK = 0x0a
 const CARRIAGE_RETURN = 0xd
 const SPACE = 0x20
 const TAB = 0x09
+const FORM_FEED = 0x0c
 const OPEN_CURLY = 0x7b
 const CLOSE_CURLY = 0x7d
 const OPEN_PAREN = 0x28
@@ -32,6 +33,23 @@ const CLOSE_BRACKET = 0x5d
 const DASH = 0x2d
 const AT_SIGN = 0x40
 const EXCLAMATION_MARK = 0x21
+const LESS_THAN = 0x3c
+const GREATER_THAN = 0x3e
+const HASH = 0x23
+const UNDERSCORE = 0x5f
+const ZERO = 0x30
+const NINE = 0x39
+const UPPER_A = 0x41
+const UPPER_Z = 0x5a
+const UPPER_F = 0x46
+const LOWER_A = 0x61
+const LOWER_F = 0x66
+const LOWER_Z = 0x7a
+const LOWER_L = 0x6c
+const LOWER_R = 0x72
+const LOWER_U = 0x75
+const NON_ASCII = 0x80
+const LOWERCASE_BIT = 0x20
 
 export interface ParseOptions {
   from?: string
@@ -200,6 +218,34 @@ export function parse(input: string, opts?: ParseOptions) {
       }
     }
 
+    // Skip `<!--` and `-->` between top-level nodes. They are not part of the
+    // next node, and `-->` is not the start of a custom property.
+    //
+    // E.g.:
+    //
+    // ```css
+    // <!--
+    // .foo {
+    //   color: red;
+    // }
+    // -->
+    // ```
+    //
+    // See: https://www.w3.org/TR/css-syntax-3/#consume-stylesheet-contents
+    else if (
+      parent === null &&
+      buffer.length === 0 &&
+      ((currentChar === DASH &&
+        input.charCodeAt(i + 1) === DASH &&
+        input.charCodeAt(i + 2) === GREATER_THAN) ||
+        (currentChar === LESS_THAN &&
+          input.charCodeAt(i + 1) === EXCLAMATION_MARK &&
+          input.charCodeAt(i + 2) === DASH &&
+          input.charCodeAt(i + 3) === DASH))
+    ) {
+      i += currentChar === DASH ? 2 : 3
+    }
+
     // Start of a custom property.
     //
     // Custom properties are very permissive and can contain almost any
@@ -216,6 +262,8 @@ export function parse(input: string, opts?: ParseOptions) {
       // it to find the `!important` flag, because custom properties keep their
       // comments.
       let valueEnd = 0
+
+      let end = -1
 
       for (let j = i + 2; j < input.length; j++) {
         peekChar = input.charCodeAt(j)
@@ -255,6 +303,11 @@ export function parse(input: string, opts?: ParseOptions) {
           buffer += input.slice(start, j)
           i = j
           break
+        }
+
+        // Start of an unquoted `url(…)`, a `/*` inside of it is not a comment.
+        else if (peekChar === OPEN_PAREN && (end = findUnquotedUrlEnd(input, j)) !== -1) {
+          j = end
         }
 
         // Start of a block.
@@ -552,8 +605,25 @@ export function parse(input: string, opts?: ParseOptions) {
 
     // `(`
     else if (currentChar === OPEN_PAREN) {
-      closingBracketStack += ')'
-      buffer += '('
+      // An unquoted `url(…)` is a single token that ends at the first `)`. A
+      // `/*` inside of it is not the start of a comment.
+      //
+      // E.g.:
+      //
+      // ```css
+      // .foo {
+      //   background-image: url(/images/*.png);
+      //                        ^^^^^^^^^^^^^^^
+      // }
+      // ```
+      let end = findUnquotedUrlEnd(input, i)
+      if (end !== -1) {
+        buffer += input.slice(i, end + 1)
+        i = end
+      } else {
+        closingBracketStack += ')'
+        buffer += '('
+      }
     }
 
     // `)`
@@ -746,6 +816,90 @@ function isEscaped(value: string, idx: number) {
   }
 
   return backslashes % 2 === 1
+}
+
+// When the `(` at `idx` starts an unquoted `url(…)`, return the index of the
+// `)` that ends it. Otherwise, return `-1`.
+//
+// See: https://www.w3.org/TR/css-syntax-3/#consume-ident-like-token
+// See: https://www.w3.org/TR/css-syntax-3/#consume-url-token
+function findUnquotedUrlEnd(input: string, idx: number): number {
+  // The `(` must follow the ident `url`, case-insensitive. Setting the
+  // `LOWERCASE_BIT` turns an ASCII uppercase letter into its lowercase form.
+  if (
+    idx < 3 ||
+    (input.charCodeAt(idx - 3) | LOWERCASE_BIT) !== LOWER_U ||
+    (input.charCodeAt(idx - 2) | LOWERCASE_BIT) !== LOWER_R ||
+    (input.charCodeAt(idx - 1) | LOWERCASE_BIT) !== LOWER_L
+  ) {
+    return -1
+  }
+
+  // The ident must start at `url`, e.g. `my-url(…)`, `my\+url(…)` and
+  // `#url(…)` are not a url.
+  let prevChar = input.charCodeAt(idx - 4)
+  if (
+    (prevChar >= LOWER_A && prevChar <= LOWER_Z) ||
+    (prevChar >= UPPER_A && prevChar <= UPPER_Z) ||
+    (prevChar >= ZERO && prevChar <= NINE) ||
+    prevChar === DASH ||
+    prevChar === UNDERSCORE ||
+    prevChar >= NON_ASCII ||
+    prevChar === BACKSLASH ||
+    prevChar === HASH ||
+    prevChar === AT_SIGN ||
+    isEscaped(input, idx - 4) ||
+    endsHexEscape(input, idx - 4)
+  ) {
+    return -1
+  }
+
+  // The url ends at the first `)` that is not escaped.
+  for (let i = idx + 1; i < input.length; i++) {
+    let char = input.charCodeAt(i)
+    if (char === BACKSLASH) {
+      i += 1
+    } else if (char === CLOSE_PAREN) {
+      return i
+    }
+
+    // A quoted `url("…")` is a function with a string, not a url token. And a
+    // quote or a `(` later on makes it a bad url, e.g. `url(var(--foo))`. Keep
+    // the default behavior for those.
+    else if (char === OPEN_PAREN || char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      return -1
+    }
+  }
+
+  return -1
+}
+
+// Whether the whitespace at `idx` ends a hex escape, e.g. the space in `\31 `.
+// That whitespace is part of the escape, so the ident goes on after it.
+//
+// See: https://www.w3.org/TR/css-syntax-3/#consume-escaped-code-point
+function endsHexEscape(input: string, idx: number): boolean {
+  let char = input.charCodeAt(idx)
+  if (char === LINE_BREAK) {
+    // A `\r\n` is a single whitespace.
+    if (input.charCodeAt(idx - 1) === CARRIAGE_RETURN) idx -= 1
+  } else if (char !== SPACE && char !== TAB && char !== FORM_FEED && char !== CARRIAGE_RETURN) {
+    return false
+  }
+
+  // A hex escape is a `\` that is not escaped, followed by 1 to 6 hex digits.
+  for (let i = idx - 1; i >= 0 && i >= idx - 7; i--) {
+    char = input.charCodeAt(i)
+    if (char === BACKSLASH) return i < idx - 1 && !isEscaped(input, i)
+
+    let isHexDigit =
+      (char >= ZERO && char <= NINE) ||
+      (char >= LOWER_A && char <= LOWER_F) ||
+      (char >= UPPER_A && char <= UPPER_F)
+    if (!isHexDigit) return false
+  }
+
+  return false
 }
 
 function parseString(

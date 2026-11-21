@@ -69,7 +69,8 @@ export default async function tailwindLoader(
   let inputFile = this.resourcePath
   let resourceId = this.resource
   let base = options.base ?? process.cwd()
-  let shouldOptimize = options.optimize ?? process.env.NODE_ENV === 'production'
+  let shouldOptimize =
+    options.optimize ?? (this.mode === 'production' || process.env.NODE_ENV === 'production')
   let isCSSModuleFile = inputFile.endsWith('.module.css')
 
   using I = new Instrumentation()

@@ -7,46 +7,92 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Ignore candidates with more than 16 nested compound variants (e.g. `in-in-…-in-hover:flex`) or more than 64 stacked variants (e.g. `hover:hover:…:hover:flex`) instead of slowing down or crashing the build ([#20693](https://github.com/tailwindlabs/tailwindcss/pull/20693))
+- Improve performance of parsing long candidates with many dashes (e.g. `data-a-a-…-a:flex`) ([#20693](https://github.com/tailwindlabs/tailwindcss/pull/20693))
+- Discard candidates whose selectors grow exponentially when variants are stacked, instead of running out of memory (e.g. `[&_&]:[&_&]:[&_&]:…:flex`) ([#20692](https://github.com/tailwindlabs/tailwindcss/pull/20692))
+- Improve performance when scanning long lines with many `[` characters (e.g. minified JSON) ([#20694](https://github.com/tailwindlabs/tailwindcss/pull/20694))
+- Keep the absolute path of `url(…)`s in stylesheets imported from another drive on Windows, instead of a relative path that climbs out of the drive ([#20683](https://github.com/tailwindlabs/tailwindcss/pull/20683))
+- Improve the performance of rebuilds that add new utilities by only optimizing and printing the new utilities ([#20680](https://github.com/tailwindlabs/tailwindcss/pull/20680), [#20688](https://github.com/tailwindlabs/tailwindcss/pull/20688))
+- Canonicalization: replace CSS escapes that are not needed in arbitrary values, properties, modifiers and variants (e.g. `bg-[u\72l('a.png')]` → `bg-[url('a.png')]`) ([#20697](https://github.com/tailwindlabs/tailwindcss/pull/20697))
+- Improve `@tailwindcss/vite` build performance by scanning the same sources only once per build, and by not looking for files to watch outside of watch mode ([#20678](https://github.com/tailwindlabs/tailwindcss/pull/20678))
+- Ensure `@tailwindcss/vite` generates the same CSS for the client and SSR environments when they share the plugin, even when the build output is not ignored (e.g. React Router with the Vite Environment API) ([#20678](https://github.com/tailwindlabs/tailwindcss/pull/20678))
+- Ignore arbitrary values, properties, modifiers and variants with a `/*` outside of a string or an unquoted `url(…)` (e.g. `bg-[red/*]`) instead of commenting out the CSS that comes after them ([#20690](https://github.com/tailwindlabs/tailwindcss/pull/20690))
+- Discard candidates that contain `</style`, so that the generated CSS is always safe to inline in a `<style>` element ([#20691](https://github.com/tailwindlabs/tailwindcss/pull/20691))
+- Preserve rules with relative selectors (e.g. `> .item`) inside `@scope` when optimizing the CSS ([#20671](https://github.com/tailwindlabs/tailwindcss/pull/20671))
+- Don't treat `/*` inside an unquoted `url(…)` as the start of a comment in the CSS parser ([#20699](https://github.com/tailwindlabs/tailwindcss/pull/20699))
+- Optimize the CSS from `@tailwindcss/webpack` when webpack runs in production mode without `NODE_ENV=production` ([#20723](https://github.com/tailwindlabs/tailwindcss/pull/20723))
+- Detect classes in Ruby code that continues over multiple lines in Haml templates (e.g. `class: "w-[240px]"` on the next line of `= link_to "Home", root_path,`) ([#20635](https://github.com/tailwindlabs/tailwindcss/pull/20635))
+- Ensure `@tailwindcss/vite` rebuilds when a plugin that runs before it changes the input CSS without changing the input file on disk ([#20700](https://github.com/tailwindlabs/tailwindcss/pull/20700))
+- Allow `@apply` with a CSS mixin that has spaces in its arguments (e.g. `@apply --card(red, 2rem)`) instead of throwing an error about mixins and utilities ([#20725](https://github.com/tailwindlabs/tailwindcss/pull/20725))
+- Prevent a crash on Windows when a worker thread that used `@tailwindcss/oxide` exits ([#20471](https://github.com/tailwindlabs/tailwindcss/pull/20471))
+- Canonicalization: keep the value of arbitrary properties that only contain whitespace (e.g. `[--foo:_]` no longer becomes `[--foo:]`) ([#20719](https://github.com/tailwindlabs/tailwindcss/pull/20719))
+- Remove invalid `justify-baseline` utility ([#20717](https://github.com/tailwindlabs/tailwindcss/issues/20717))
+- Allow `readonly` arrays for `build()` candidates and `Scanner` sources, so callers no longer need to copy them into mutable arrays ([#20708](https://github.com/tailwindlabs/tailwindcss/pull/20708))
+- Canonicalization: don't replace `@scope` variants with unrelated `@scope` variants (e.g. `[@scope_(.card)]:flex` no longer becomes `in-blue:flex`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
+- Canonicalization: don't treat `.foo .bar` and `.foo.bar` as the same in at-rule variants (e.g. `@scope (…)` or `@supports selector(…)`) ([#20715](https://github.com/tailwindlabs/tailwindcss/pull/20715))
+- Upgrade: Do not migrate a `variant` value that sits inside an expression, like `variant={active ? "outline" : "ghost"}` ([#20436](https://github.com/tailwindlabs/tailwindcss/pull/20436))
+- Don't treat CSS custom functions whose name ends in a math function name as math functions (e.g. `text-[--my-calc(1px)]` is now a `color` instead of a `font-size`, and `w-[--my-calc(1px-2px)]` doesn't get spaces around the `-`) ([#20727](https://github.com/tailwindlabs/tailwindcss/pull/20727))
+- Match math function names case-insensitively when inferring the type of an arbitrary value and adding spaces around math operators (e.g. `text-[Calc(1rem+min(1rem,2rem))]`) ([#20727](https://github.com/tailwindlabs/tailwindcss/pull/20727))
+- Add whitespace around math operators in `abs(…)` and `sign(…)`, and infer them as a length (e.g. `text-[abs(var(--size))]` generates `font-size` instead of `color`) ([#20716](https://github.com/tailwindlabs/tailwindcss/pull/20716))
+- Canonicalization: improve performance of collapsing utilities (e.g. `mt-2 mb-2` → `my-2`) when the same utilities appear in many class lists or variants ([#20698](https://github.com/tailwindlabs/tailwindcss/pull/20698))
+- Don't crash when the legacy `container` config has `padding` for a screen that isn't a breakpoint (e.g. a custom `container.screens` entry) ([#20523](https://github.com/tailwindlabs/tailwindcss/pull/20523))
+
+## [4.3.5] - 2026-11-06
+
+### Fixed
+
+- Canonicalization: improve performance in projects with many functional variant values (e.g. a `matchVariant` plugin with thousands of values) ([#20663](https://github.com/tailwindlabs/tailwindcss/pull/20663))
+- Don't crash or create a fallback with the wrong color for a `color-mix(…)` without a color interpolation method (e.g. `color-mix(var(--color-red-500))` or `color-mix(currentcolor 50%, transparent)`) ([#20658](https://github.com/tailwindlabs/tailwindcss/pull/20658), [#20666](https://github.com/tailwindlabs/tailwindcss/pull/20666))
+- Ensure `@tailwindcss/oxide-wasm32-wasi` loads instead of hanging forever (e.g. with `NAPI_RS_FORCE_WASI=error` or in WebContainers) ([#20667](https://github.com/tailwindlabs/tailwindcss/pull/20667))
+- Remove `as: '*.css'` from the `@tailwindcss/turbopack` setup in its README, because it breaks CSS modules ([#20660](https://github.com/tailwindlabs/tailwindcss/pull/20660))
+- Ignore `<!--` and `-->` between top-level rules in CSS instead of throwing or swallowing the next rule (e.g. `a { color: red } --> b { color: blue }`) ([#20665](https://github.com/tailwindlabs/tailwindcss/pull/20665))
+- Ensure `@tailwindcss/oxide-wasm32-wasi` detects changed and new source files after the first scan (e.g. in WebContainers) ([#20487](https://github.com/tailwindlabs/tailwindcss/pull/20487))
+- Prevent type errors with `skipLibCheck: false` caused by imports of unshipped modules in the `@tailwindcss/node` type declarations ([#20632](https://github.com/tailwindlabs/tailwindcss/pull/20632))
+
+## [4.3.4] - 2026-11-02
+
 ### Added
 
-- Add `@tailwindcss/turbopack` package to run Tailwind CSS with Next.js ([20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))
+- Add `@tailwindcss/turbopack`, a Turbopack loader for using Tailwind CSS with Next.js ([#20367](https://github.com/tailwindlabs/tailwindcss/pull/20367))
 
 ### Fixed
 
 - Ensure watch mode detects changes to symlinked `@source` files whose real paths aren't otherwise scanned ([#20356](https://github.com/tailwindlabs/tailwindcss/pull/20356))
-- Ensure custom variants using `@scope` wrap the generated utilities instead of nesting inside them ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
-- Fix flattening of `@scope` at-rules ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
-- Fix standalone declarations in `@scope`, wrap them in `:where(:scope)` ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
-- Always emit a space for empty fallback values in CSS variables (e.g. `var(--tw-blur,)` → `var(--tw-blur, )`) ([#20373](https://github.com/tailwindlabs/tailwindcss/pull/20373))
-- Canonicalization: convert arbitrary breakpoint and container query variants to named equivalents (e.g. `max-[64rem]` → `max-lg`) ([#20380](https://github.com/tailwindlabs/tailwindcss/pull/20380))
+- Ensure variants using `@scope` wrap generated utilities instead of nesting inside them ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
+- Ensure nested `@scope` rules preserve their scoping semantics when flattened ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
+- Preserve declarations directly inside `@scope` by wrapping them in `:where(:scope)` ([#20369](https://github.com/tailwindlabs/tailwindcss/pull/20369))
+- Ensure generated utilities include a space in empty `var()` fallbacks (e.g. `var(--tw-blur,)` → `var(--tw-blur, )`) ([#20373](https://github.com/tailwindlabs/tailwindcss/pull/20373))
+- Canonicalization: convert arbitrary breakpoint and container query variants to named equivalents (e.g. `max-[64rem]:flex` → `max-lg:flex`) ([#20380](https://github.com/tailwindlabs/tailwindcss/pull/20380))
 - Prevent `@tailwindcss/vite` from crashing on every edit under Vite's experimental `bundledDev` mode ([#20379](https://github.com/tailwindlabs/tailwindcss/pull/20379))
-- Ensure `@tailwindcss/oxide` falls back to WASM on platforms without native bindings ([#20383](https://github.com/tailwindlabs/tailwindcss/pull/20383))
-- Detect classes in Ruby percent literals using angle brackets or custom delimiters (e.g. `%w<flex>`, `%w|flex|`), including in Slim and Haml templates ([#20387](https://github.com/tailwindlabs/tailwindcss/pull/20387))
-- Preserve whitespace in `--default(…)` values in custom functional utilities (e.g. `--default(box alphabetic)` no longer becomes `boxalphabetic`) ([#20392](https://github.com/tailwindlabs/tailwindcss/pull/20392))
-- Don't scan gitignored directories (e.g. `node_modules` and `.git`) when the project uses a safelist-style `.gitignore` (e.g. `/*` followed by `!/…` negations) ([#20397](https://github.com/tailwindlabs/tailwindcss/pull/20397))
+- Ensure `@tailwindcss/oxide` falls back to WASM on platforms without native bindings (`@tailwindcss/oxide-wasm32-wasi` now installs on all platforms, but only loads when no native binding is available) ([#20383](https://github.com/tailwindlabs/tailwindcss/pull/20383))
+- Extract class candidates from Ruby `%w` and `%W` literals using angle brackets or custom delimiters (e.g. `%w<flex>`, `%w|flex|`), including in Slim and Haml templates ([#20387](https://github.com/tailwindlabs/tailwindcss/pull/20387))
+- Preserve whitespace in `--default(…)` values in functional `@utility` definitions (e.g. `--default(box alphabetic)` no longer becomes `boxalphabetic`) ([#20392](https://github.com/tailwindlabs/tailwindcss/pull/20392))
+- Ensure automatic source detection respects negation-based `.gitignore` files (e.g. `/*` followed by `!/…` patterns) ([#20397](https://github.com/tailwindlabs/tailwindcss/pull/20397))
 - Ensure root `theme('…')` namespace lookups in JavaScript plugins and config files return the full namespace object instead of the value of its `DEFAULT` key ([#20399](https://github.com/tailwindlabs/tailwindcss/pull/20399))
-- Skip ignored directories entirely when computing watch globs (`scanner.globs`), instead of walking their full contents on every rebuild ([#20408](https://github.com/tailwindlabs/tailwindcss/pull/20408))
-- Oxide: drop invalid UTF-8 candidates ([#20389](https://github.com/tailwindlabs/tailwindcss/pull/20389))
-- `@tailwindcss/vite` no longer forces a full page reload for external files (e.g.: `.php` files) ([#20414](https://github.com/tailwindlabs/tailwindcss/issues/20414))
+- Skip ignored directories when generating watch globs instead of walking their contents on every rebuild ([#20408](https://github.com/tailwindlabs/tailwindcss/pull/20408))
+- Drop invalid UTF-8 candidates during class detection ([#20389](https://github.com/tailwindlabs/tailwindcss/pull/20389))
+- Prevent `@tailwindcss/vite` from forcing full-page reloads for scanned files that Vite does not handle as modules (e.g. `.php` files) ([#20414](https://github.com/tailwindlabs/tailwindcss/pull/20414))
 - Canonicalization: don't merge utilities that reference different theme variables set to CSS-wide keywords like `unset` ([#20417](https://github.com/tailwindlabs/tailwindcss/pull/20417))
 - Don't generate utilities when a modifier is used that would otherwise be silently ignored (e.g. `rounded-sm/[5]`, `shadow-sm/foo`, `stroke-2/50`) ([#20419](https://github.com/tailwindlabs/tailwindcss/pull/20419))
-- Only normalize top-level `and`, `or`, and `not` keywords in `supports-[…]` variants (e.g. `selector(a: not (.foo))` → `selector(a:not(.foo))`) ([#20420](https://github.com/tailwindlabs/tailwindcss/pull/20420))
+- Preserve `and`, `or`, and `not` inside selectors in `supports-[…]` variants (e.g. `supports-[selector(a:not(.foo))]:flex`) ([#20420](https://github.com/tailwindlabs/tailwindcss/pull/20420))
 - Don't warn about Angular's `::ng-deep` and `:host-context()` when optimizing CSS ([#20434](https://github.com/tailwindlabs/tailwindcss/pull/20434))
 - Don't generate CSS for candidates containing an empty additional modifier (e.g. `bg-red-500/50/` and `group-hover/foo//bar:flex`) ([#20466](https://github.com/tailwindlabs/tailwindcss/pull/20466))
-- Sort `min-*`, `max-*`, and container query variants with decimal values numerically (e.g. `min-[40.25rem]` before `min-[40.5rem]`) ([#20512](https://github.com/tailwindlabs/tailwindcss/pull/20512))
+- Ensure `min-*`, `max-*`, and container query variants with decimal values are sorted numerically (e.g. `min-[40.25rem]` before `min-[40.5rem]`) ([#20512](https://github.com/tailwindlabs/tailwindcss/pull/20512))
 - Ensure CSS comments ending with `\*/` are closed correctly instead of swallowing the CSS that follows (e.g. `/* C:\temp\*/`) ([#20508](https://github.com/tailwindlabs/tailwindcss/pull/20508))
 - Improve style invalidation performance of `group-*` and `peer-*` variants ([#20513](https://github.com/tailwindlabs/tailwindcss/pull/20513))
-- Ensure cached compilers don't keep `loadModule` and `loadStylesheet` callbacks alive after compilation ([#20531](https://github.com/tailwindlabs/tailwindcss/pull/20531))
-- Canonicalization: keep the `&` when moving a pseudo-element into `*` or `**` (e.g. `[&_::before]:flex` → `**:[&::before]:flex`) ([#20550](https://github.com/tailwindlabs/tailwindcss/pull/20550))
-- Fix `Set.prototype.intersection` polyfill in `canonicalizeCandidates(…)` on Node.js < 22, which returned the first set instead of the intersection ([#20562](https://github.com/tailwindlabs/tailwindcss/pull/20562))
-- Canonicalization: fix inline `theme(…)` alphas with more than 2 decimals being migrated to a modifier that changes the opacity by a factor of 100 (e.g. `theme(colors.red.500/.12345)` → `text-red-500/[12.345%]`, not `text-red-500/[12.345]`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
-- Canonicalization: keep inline `theme(…)` alphas as an arbitrary percentage when a custom `--opacity-*` theme value would change the opacity (e.g. `theme(colors.red.500/50%)` → `text-red-500/[50%]` with `--opacity-50: 10%`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
+- Ensure cached compilers release their `loadModule` and `loadStylesheet` callbacks after compilation ([#20531](https://github.com/tailwindlabs/tailwindcss/pull/20531))
+- Canonicalization: preserve `&` when moving a pseudo-element into `*` or `**` (e.g. `[&_::before]:flex` → `**:[&::before]:flex`) ([#20550](https://github.com/tailwindlabs/tailwindcss/pull/20550))
+- Ensure the `Set.prototype.intersection` polyfill in `canonicalizeCandidates(…)` returns the intersection instead of the first set on Node.js < 22 ([#20562](https://github.com/tailwindlabs/tailwindcss/pull/20562))
+- Canonicalization: ensure inline `theme(…)` alphas with more than 2 decimals migrate to a percentage modifier with the same opacity (e.g. `theme(colors.red.500/.12345)` → `text-red-500/[12.345%]`, not `text-red-500/[12.345]`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
+- Canonicalization: preserve inline `theme(…)` alphas as an arbitrary percentage when a custom `--opacity-*` theme value would change the opacity (e.g. `theme(colors.red.500/50%)` → `text-red-500/[50%]` with `--opacity-50: 10%`) ([#20563](https://github.com/tailwindlabs/tailwindcss/pull/20563))
 - Ensure the `@property` fallback isn't applied in Safari versions that no longer support `margin-trim: inline` ([#20569](https://github.com/tailwindlabs/tailwindcss/pull/20569))
 - Treat viewport units like `dvmin` and `svi` and font-relative units like `cap` and `rex` as lengths in arbitrary values (e.g. `text-[10dvmin]` generates `font-size` instead of `color`) ([#20516](https://github.com/tailwindlabs/tailwindcss/pull/20516))
 - Write plugin logs to stderr in `tailwindcss canonicalize` so they don't end up in the results on stdout ([#20561](https://github.com/tailwindlabs/tailwindcss/pull/20561))
-- Ensure unbalanced brackets in Pug text, comments, and quoted attribute values don't prevent class shorthands on later lines from being extracted ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547))
+- Extract class shorthands on later lines when Pug text, comments, or quoted attribute values contain unbalanced brackets, or a quote that doesn't start a string (e.g. `input(pattern=/"/.source)`) ([#20547](https://github.com/tailwindlabs/tailwindcss/pull/20547), [#20572](https://github.com/tailwindlabs/tailwindcss/pull/20572))
 - Underline the correct occurrence of an unsupported data type in `--value(…)` warnings ([#20554](https://github.com/tailwindlabs/tailwindcss/pull/20554))
-- Keep the winning utility when collapsing candidates instead of a theme value that only matches by default ([#20540](https://github.com/tailwindlabs/tailwindcss/pull/20540))
+- Canonicalization: prefer an existing candidate when collapsing utilities over another utility with the same default theme value (e.g. `text-foreground text-primary` → `text-primary`, not `text-card-checked-border`) ([#20540](https://github.com/tailwindlabs/tailwindcss/pull/20540))
 - Canonicalization: don't collapse utilities into a utility that uses another theme variable with the same default value (e.g. `mt-card mb-card` → `my-card`, not `my-4`) ([#20574](https://github.com/tailwindlabs/tailwindcss/pull/20574))
 - Ensure `@tailwindcss/postcss` rewrites relative `url(…)`s of stylesheets that are inlined before it runs (e.g. `@import`s in Vite) in optimized builds ([#20576](https://github.com/tailwindlabs/tailwindcss/pull/20576))
 - Drop nested rules that put a combinator after a pseudo-element when using pseudo-element variants (e.g. `selection:*` on a utility with a nested `& > *` rule) ([#20575](https://github.com/tailwindlabs/tailwindcss/pull/20575))
@@ -55,7 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `&` is substituted inside `:-moz-any(…)` and `:-webkit-any(…)` in custom variants (e.g. `@custom-variant firefox (:-moz-any(&));`) ([#20486](https://github.com/tailwindlabs/tailwindcss/pull/20486))
 - Ensure the standalone macOS binaries have a valid code signature, so macOS 27 no longer kills them at launch ([#20578](https://github.com/tailwindlabs/tailwindcss/pull/20578))
 - Ensure `@tailwindcss/turbopack` and `@tailwindcss/webpack` rebuild when the input CSS changes (e.g. `next dev` with Turbopack no longer serves the CSS of the previous edit) ([#20582](https://github.com/tailwindlabs/tailwindcss/pull/20582))
-- Canonicalization: don't ignore a `--tw-*` variable in a utility's signature when only an unrelated property has the same value (e.g. `--tw-translate-x: 16px` next to `margin-top: 16px`) ([#20593](https://github.com/tailwindlabs/tailwindcss/pull/20593))
+- Canonicalization: don't drop a utility that sets a `--tw-*` variable when an unrelated property has the same value (e.g. `link mt-4` no longer becomes `mt-4` when `link` sets `margin-top: 16px` and `--tw-translate-x: 16px`) ([#20593](https://github.com/tailwindlabs/tailwindcss/pull/20593))
 - Decode single-digit hexadecimal escapes in theme variable and `@utility` names as the CSS spec does (e.g. `@theme { --color-\0: red; }` no longer registers `--color-0`) ([#20591](https://github.com/tailwindlabs/tailwindcss/pull/20591))
 - Don't treat `!important` inside strings, comments or `url()` in declaration values as the important flag (e.g. `content: "a !important b"`) ([#20627](https://github.com/tailwindlabs/tailwindcss/pull/20627))
 - Parse a custom property at the end of the input when it has no trailing `;` (e.g. `--foo: bar` as the last declaration) ([#20653](https://github.com/tailwindlabs/tailwindcss/pull/20653))
@@ -4148,7 +4194,9 @@ No release notes
 
 - Everything!
 
-[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.3...HEAD
+[unreleased]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.5...HEAD
+[4.3.5]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.4...v4.3.5
+[4.3.4]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.3...v4.3.4
 [4.3.3]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.2...v4.3.3
 [4.3.2]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.1...v4.3.2
 [4.3.1]: https://github.com/tailwindlabs/tailwindcss/compare/v4.3.0...v4.3.1
