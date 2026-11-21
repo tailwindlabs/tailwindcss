@@ -71,6 +71,9 @@ describe('expand(…)', () => {
     expect(() => expand('a{b,c{d,e},{f,g}h}x{y,z')).toThrowErrorMatchingInlineSnapshot(
       `[Error: The pattern \`x{y,z\` is not balanced.]`,
     )
+    expect(() => expand('a{b,{c}')).toThrowErrorMatchingInlineSnapshot(
+      `[Error: The pattern \`a{b,{c}\` is not balanced.]`,
+    )
   })
 
   test('throws when step is set to zero', () => {
