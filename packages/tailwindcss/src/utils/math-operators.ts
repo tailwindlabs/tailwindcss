@@ -62,11 +62,10 @@ export function hasMathFn(input: string) {
   while (paren !== -1) {
     // Scan backwards to the start of the function name. A math function name
     // only counts when it's the whole name, so `--my-calc(…)` is not `calc(…)`.
-    // Function names are case-insensitive, so `CALC(…)` is `calc(…)`.
     let start = paren
     while (start > 0 && isIdentChar(input.charCodeAt(start - 1))) start--
 
-    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren).toLowerCase())) {
+    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren))) {
       return true
     }
 
@@ -153,9 +152,8 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
       let fn = input.slice(start, i)
 
-      // This is a known math function so start formatting. Function names are
-      // case-insensitive, so `Calc(…)` is `calc(…)`.
-      if (MATH_FUNCTIONS_SET.has(fn.toLowerCase()) && isMathFnStart(input, start)) {
+      // This is a known math function so start formatting
+      if (MATH_FUNCTIONS_SET.has(fn) && isMathFnStart(input, start)) {
         formattable.unshift(true)
         continue
       }

@@ -2,7 +2,9 @@ import type * as postcss from 'postcss'
 import { atRule, comment, decl, rule, type AstNode } from '../../tailwindcss/src/ast'
 import { createLineTable, type LineTable } from '../../tailwindcss/src/source-maps/line-table'
 import type { Source, SourceLocation } from '../../tailwindcss/src/source-maps/source'
+import { normalizeCssWideKeyword } from '../../tailwindcss/src/utils/css-wide-keywords'
 import { DefaultMap } from '../../tailwindcss/src/utils/default-map'
+import { toAsciiLowerCase } from '../../tailwindcss/src/utils/to-ascii-lower-case'
 
 const EXCLAMATION_MARK = 0x21
 
@@ -147,7 +149,12 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
   ) {
     // Declaration
     if (node.type === 'decl') {
-      let astNode = decl(node.prop, node.value, node.important)
+      // CSS-wide keywords are ASCII case-insensitive. The CSS parser of
+      // Tailwind CSS lowercases them, and so do we, because this AST skips that
+      // parser. Like that parser, we keep the options of a `@plugin` as
+      // written, because they are not CSS.
+      let value = isPluginOption(node) ? node.value : normalizeCssWideKeyword(node.value)
+      let astNode = decl(node.prop, value, node.important)
       astNode.src = toSource(node)
       parent.push(astNode)
     }
@@ -162,7 +169,9 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
 
     // AtRule
     else if (node.type === 'atrule') {
-      let astNode = atRule(`@${node.name}`, node.params)
+      // At-rule names are ASCII case-insensitive. The CSS parser of Tailwind
+      // CSS lowercases them, and so do we, because this AST skips that parser.
+      let astNode = atRule(`@${toAsciiLowerCase(node.name)}`, node.params)
       astNode.src = toSource(node)
       node.each((child) => transform(child, astNode.nodes))
       parent.push(astNode)
@@ -186,4 +195,9 @@ export function postCssAstToCssAst(root: postcss.Root): AstNode[] {
   root.each((node) => transform(node, ast))
 
   return ast
+}
+
+function isPluginOption(node: postcss.Declaration): boolean {
+  let parent = node.parent as postcss.AnyNode | undefined
+  return parent?.type === 'atrule' && toAsciiLowerCase(parent.name) === 'plugin'
 }

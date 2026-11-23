@@ -2128,15 +2128,13 @@ function isStandardPseudoElement(node: SelectorParser.SelectorAstNode): boolean 
   if (node.kind !== 'selector' && node.kind !== 'function') return false
   if (!SelectorParser.isPseudoElement(node)) return false
 
-  let value = node.value.toLowerCase()
-
   // Legacy pseudo-elements with a single colon, e.g.: `:before`
-  if (!value.startsWith('::')) return true
+  if (!node.value.startsWith('::')) return true
 
   // Vendor-prefixed pseudo-elements, e.g.: `::-webkit-details-marker`
-  if (value.startsWith('::-')) return true
+  if (node.value.startsWith('::-')) return true
 
-  return STANDARD_PSEUDO_ELEMENTS.has(value)
+  return STANDARD_PSEUDO_ELEMENTS.has(node.value)
 }
 
 function isDeadSelector(node: SelectorParser.SelectorAstNode): boolean {

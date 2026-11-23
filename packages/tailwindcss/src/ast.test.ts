@@ -616,6 +616,37 @@ describe('optimization', () => {
       `)
     })
 
+    it('should be possible to use `&` in pseudo-class functions in any case', async () => {
+      // prettier-ignore
+      expect(
+        optimize(css`
+          .a {
+            :IS(&) .b {
+              --x: 1;
+            }
+            &:HOVER {
+              --x: 2;
+            }
+            :NTH-CHILD(2N+1 OF &) {
+              --x: 3;
+            }
+          }
+        `),
+      ).toMatchInlineSnapshot(`
+        "
+        :is(.a) .b {
+          --x: 1;
+        }
+        .a:hover {
+          --x: 2;
+        }
+        :nth-child(2n+1 of .a) {
+          --x: 3;
+        }
+        "
+      `)
+    })
+
     it('should be possible to handle nesting with a parent selector list', async () => {
       expect(
         optimize(css`

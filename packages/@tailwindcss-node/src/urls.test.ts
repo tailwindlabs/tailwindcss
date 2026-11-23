@@ -173,6 +173,39 @@ test('empty URLs are left alone', async () => {
   expect(result).toContain('url(./foo/bar/image.jpg)')
 })
 
+test('URL schemes are case-insensitive', async () => {
+  let result = await rewriteUrls({
+    root: '/root',
+    base: '/root/foo/bar',
+    // prettier-ignore
+    css: css`
+      .foo {
+        /* External URLs: ignored */
+        background: url(HTTPS://example.com/image.jpg);
+        background: url('HTTP://example.com/image.jpg');
+        background: url("HtTpS://example.com/image.jpg");
+        background: image-set("HTTPS://example.com/image.jpg" 1x);
+
+        /* Relative URLs: replaced as written */
+        background: url(./HTTP-Image.jpg);
+        background: image-set('./HTTP-Image.jpg' 1x);
+      }
+    `,
+  })
+
+  expect(result).toMatchInlineSnapshot(`
+    ".foo {
+      background: url(HTTPS://example.com/image.jpg);
+      background: url('HTTP://example.com/image.jpg');
+      background: url("HtTpS://example.com/image.jpg");
+      background: image-set("HTTPS://example.com/image.jpg" 1x);
+      background: url(./foo/bar/HTTP-Image.jpg);
+      background: image-set(url('./foo/bar/HTTP-Image.jpg') 1x);
+    }
+    "
+  `)
+})
+
 test('cross-drive URLs preserve absolute path and avoid climbing across drives', async () => {
   let result = await rewriteUrls({
     root: 'C:/Users/app/entry',

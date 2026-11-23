@@ -69,13 +69,13 @@ export function replaceShadowColors(input: string, replacement: (color: string) 
 
         case 'function': {
           // Must be a color
-          if (COLOR_FUNCTIONS.has(node.value.toLowerCase())) {
+          if (COLOR_FUNCTIONS.has(node.value)) {
             replaced = true
             return WalkAction.ReplaceStop(replaceAst(node))
           }
 
           // Must be a length
-          if (LENGTH_FUNCTIONS.has(node.value.toLowerCase())) {
+          if (LENGTH_FUNCTIONS.has(node.value)) {
             lengths++
             return WalkAction.Skip
           }

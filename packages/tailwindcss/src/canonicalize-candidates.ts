@@ -20,11 +20,13 @@ import { expandDeclaration } from './expand-declaration'
 import * as SelectorParser from './selector-parser'
 import { ThemeOptions } from './theme'
 import type { Writable } from './types'
+import { CSS_WIDE_KEYWORDS } from './utils/css-wide-keywords'
 import { DefaultMap } from './utils/default-map'
 import { dimensions } from './utils/dimensions'
 import { isPositiveInteger, isValidSpacingMultiplier } from './utils/infer-data-type'
 import { replaceObject } from './utils/replace-object'
 import { segment } from './utils/segment'
+import { toAsciiLowerCase } from './utils/to-ascii-lower-case'
 import { toKeyPath } from './utils/to-key-path'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
@@ -933,6 +935,8 @@ function keepName(input: string, output: string, raw: string, name: string, end:
  * given name as-is. E.g. in `url(…)`, `no-repeat_url(…)` or `var(…)`.
  */
 function keepsUnderscores(name: string) {
+  // Function names are case-insensitive, so `URL(…)` is a `url(…)` too.
+  name = toAsciiLowerCase(name)
   return name.endsWith('url') || name.endsWith('var') || name.endsWith('theme')
 }
 
@@ -3117,9 +3121,6 @@ function canonicalizeAst(
 //
 // Inlining would make `text-(--foreground)` and `text-(--background)` produce
 // the same signature `color: unset`, even though they are different at runtime.
-//
-// https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/Data_types#css-wide_keywords
-const CSS_WIDE_KEYWORDS = ['initial', 'inherit', 'revert', 'revert-layer', 'revert-rule', 'unset']
 
 // Resolve theme values to their inlined value.
 //
@@ -3195,7 +3196,7 @@ function resolveVariablesInValue(
     if (variableValue === undefined) return // Couldn't resolve the variable
 
     // CSS-wide keywords are never inlined
-    if (CSS_WIDE_KEYWORDS.includes(variableValue.toLowerCase())) return
+    if (CSS_WIDE_KEYWORDS.has(variableValue)) return
 
     // Inject variable fallbacks when no fallback is present yet.
     //
@@ -3444,29 +3445,14 @@ function createVariantSignatureCache(
           // Style rules
           else if (node.kind === 'rule') {
             let selectorAst = SelectorParser.parse(node.selector)
-            let changed = false
             walk(selectorAst, (node) => {
-              // Assumption: when we have a list of selectors: `.foo, .bar` we
-              // want to mark this as changed because this will be re-printed as
-              // `.foo,.bar`.
-              //
-              // Similarly, when we receive a combinator like `.foo + .bar`, this
-              // will be printed as `.foo+.bar`.
-              //
-              // It could be that this was already optimal, but then this would be
-              // a no-op situation.
-              if (node.kind === 'list' || node.kind === 'combinator') {
-                changed = true
-              }
-
               // Remove unnecessary `:is(…)` selectors
-              else if (node.kind === 'function' && node.value === ':is') {
+              if (node.kind === 'function' && node.value === ':is') {
                 // A single selector inside of `:is(…)` can be replaced with the
                 // selector itself.
                 //
                 // E.g.: `:is(.foo)` → `.foo`
                 if (node.nodes.length === 1) {
-                  changed = true
                   return WalkAction.Replace(node.nodes)
                 }
 
@@ -3479,7 +3465,6 @@ function createVariantSignatureCache(
                   node.nodes[1].kind === 'selector' &&
                   node.nodes[1].value[0] === ':'
                 ) {
-                  changed = true
                   return WalkAction.Replace(node.nodes[1])
                 }
               }
@@ -3497,14 +3482,15 @@ function createVariantSignatureCache(
                 node.nodes[0]?.kind === 'selector' &&
                 node.nodes[0]?.value[0] === ':'
               ) {
-                changed = true
                 node.nodes.unshift({ kind: 'selector', value: '*' })
               }
             })
 
-            if (changed) {
-              node.selector = SelectorParser.toCss(selectorAst, true)
-            }
+            // Print the selector in its minimal form, e.g. `.foo, .bar` becomes
+            // `.foo,.bar`, and `.foo + .bar` becomes `.foo+.bar`. The selector
+            // parser lowercases pseudo-class and pseudo-element names, so
+            // `&:FOCUS` becomes `&:focus`.
+            node.selector = SelectorParser.toCss(selectorAst, true)
           }
         })
 

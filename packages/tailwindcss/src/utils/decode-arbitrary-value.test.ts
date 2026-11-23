@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { decodeArbitraryValue } from './decode-arbitrary-value'
+import {
+  decodeArbitraryValue,
+  normalizeFunctionNames,
+  normalizeUnits,
+  normalizeUrlSchemes,
+} from './decode-arbitrary-value'
 
 describe('decoding arbitrary values', () => {
   it('should replace an underscore with a space', () => {
@@ -40,6 +45,111 @@ describe('decoding arbitrary values', () => {
   it('should leave var(…) as is', () => {
     expect(decodeArbitraryValue('var(--foo)')).toBe('var(--foo)')
     expect(decodeArbitraryValue('var(--headings-h1-size)')).toBe('var(--headings-h1-size)')
+  })
+
+  it('should lowercase function names', () => {
+    expect(decodeArbitraryValue('URL(./my_file.jpg)')).toBe('url(./my_file.jpg)')
+    expect(decodeArbitraryValue('VAR(--spacing-1_5,_1rem)')).toBe('var(--spacing-1_5, 1rem)')
+    expect(decodeArbitraryValue('ROTATEX(45deg)_SCALEZ(2)')).toBe('rotateX(45deg) scaleZ(2)')
+    expect(decodeArbitraryValue('Spin_CALC(1s*2)_linear')).toBe('Spin calc(1s * 2) linear')
+    expect(decodeArbitraryValue('--MY-FN(1px)')).toBe('--MY-FN(1px)')
+  })
+})
+
+describe('normalizeFunctionNames', () => {
+  it.each([
+    ['URL(./my_file.jpg)', 'url(./my_file.jpg)'],
+    ['no-repeat_URL(./my_file.jpg)', 'no-repeat_url(./my_file.jpg)'],
+    ['Spin_CALC(1s*2)_linear', 'Spin_calc(1s*2)_linear'],
+    ['ROTATEX(45deg)_SCALEZ(2)', 'rotateX(45deg)_scaleZ(2)'],
+    ['-WEBKIT-CALC(1px)', '-webkit-calc(1px)'],
+    ['C\\ALC(1px)', 'c\\alc(1px)'],
+
+    // A `-` after a number is a math operator, so the name starts after it
+    ['calc(100PX-theme(spacing.1))', 'calc(100PX-theme(spacing.1))'],
+    ['calc(1E-3-CALC(1px))', 'calc(1E-3-calc(1px))'],
+    ['calc(-1PX-CALC(1px))', 'calc(-1PX-calc(1px))'],
+
+    // Dashed functions are case-sensitive
+    ['--MY-FN(1px)', '--MY-FN(1px)'],
+    ['a_--MY-FN(1px)', 'a_--MY-FN(1px)'],
+    ['--my\\_FN(1px)', '--my\\_FN(1px)'],
+
+    // An escape can spell a `-`, e.g. `\--MY-FN` is `--MY-FN`
+    ['\\--MY-FN(1px)', '\\--MY-FN(1px)'],
+    ['-\\-MY-FN(1px)', '-\\-MY-FN(1px)'],
+    ['a_\\--MY-FN(1px)', 'a_\\--MY-FN(1px)'],
+
+    // An `_` becomes a space, so `FN` is a function of its own
+    ['--my_FN(1px)', '--my_fn(1px)'],
+
+    // Strings and words without a `(` are not function names
+    ["'FN('_X(1)", "'FN('_x(1)"],
+    ['"A\\"B(1)"', '"A\\"B(1)"'],
+    ['FOO_BAR', 'FOO_BAR'],
+  ])('%s', (input, output) => {
+    expect(normalizeFunctionNames(input)).toBe(output)
+  })
+})
+
+describe('normalizeUnits', () => {
+  it.each([
+    // Units and exponents are case-insensitive
+    ['10PX', '10px'],
+    ['10Px 20pX', '10px 20px'],
+    ['-.5EM', '-.5em'],
+    ['+1.5REM', '+1.5rem'],
+    ['1E3', '1e3'],
+    ['1E-3PX', '1e-3px'],
+    ['calc(100% - 1REM)', 'calc(100% - 1rem)'],
+    ['var(--my-var, 10PX)', 'var(--my-var, 10px)'],
+    ['image-set(url(a.png) 2X)', 'image-set(url(a.png) 2x)'],
+
+    // Strings, URLs, hashes and identifiers stay as written
+    ["'10PX'", "'10PX'"],
+    ['url(/A10PX.png)', 'url(/A10PX.png)'],
+    ['#1E3A8A', '#1E3A8A'],
+    ['theme(spacing.10PX)', 'theme(spacing.10PX)'],
+    ['--My-Var-1A', '--My-Var-1A'],
+    ['U+1F600', 'U+1F600'],
+
+    // Dashed units are case-sensitive
+    ['10--Foo', '10--Foo'],
+  ])('%s', (input, output) => {
+    expect(normalizeUnits(input)).toBe(output)
+  })
+})
+
+describe('normalizeUrlSchemes', () => {
+  it.each([
+    // URL schemes are case-insensitive
+    ['url(HTTPS://example.com/A.png)', 'url(https://example.com/A.png)'],
+    ["url('HTTP://example.com/A.png')", "url('http://example.com/A.png')"],
+    ['url("DATA:image/png;base64,AA==")', 'url("data:image/png;base64,AA==")'],
+    [
+      'url(HTTPS://example.com/A.png),url(HTTP://example.com/B.png)',
+      'url(https://example.com/A.png),url(http://example.com/B.png)',
+    ],
+    [
+      'image-set(url(HTTPS://example.com/A.png) 1x)',
+      'image-set(url(https://example.com/A.png) 1x)',
+    ],
+    [
+      'var(--my-image,url(HTTPS://example.com/A.png))',
+      'var(--my-image,url(https://example.com/A.png))',
+    ],
+
+    // The rest of a URL stays as written
+    ['url(https://Example.com/A.png)', 'url(https://Example.com/A.png)'],
+    ['url(./HTTP-Image.png)', 'url(./HTTP-Image.png)'],
+    ['url(C:/Images/A.png)', 'url(C:/Images/A.png)'],
+    ['url(var(--MY-URL))', 'url(var(--MY-URL))'],
+
+    // Strings and other functions stay as written
+    ["'url(HTTPS://example.com/A.png)'", "'url(HTTPS://example.com/A.png)'"],
+    ['--my-url(HTTPS://example.com/A.png)', '--my-url(HTTPS://example.com/A.png)'],
+  ])('%s', (input, output) => {
+    expect(normalizeUrlSchemes(input)).toBe(output)
   })
 })
 
@@ -178,9 +288,10 @@ describe('adds spaces around math operators', () => {
     ['calc(--my-min(1px-2px)+3px)', 'calc(--my-min(1px-2px) + 3px)'],
     ['--my-Calc(1px-2px)', '--my-Calc(1px-2px)'],
 
-    // Function names are case-insensitive
-    ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
-    ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
+    // Function names are case-insensitive, so we print them in lowercase
+    ['Asin(0.5+0.2)', 'asin(0.5 + 0.2)'],
+    ['Calc(1px+min(2px,3px))', 'calc(1px + min(2px, 3px))'],
+    ['CALC(1px+2px)', 'calc(1px + 2px)'],
   ]
 
   it.each(table)('%s', (input, output) => {

@@ -1,6 +1,7 @@
 import { Features } from '.'
 import { atRule, context, type AstNode } from './ast'
 import * as CSS from './css-parser'
+import { normalizeUrlScheme } from './utils/normalize-url-scheme'
 import * as ValueParser from './value-parser'
 import { walk, WalkAction } from './walk'
 
@@ -33,7 +34,10 @@ export async function substituteAtImports(
 
       features |= Features.AtImport
 
-      let { uri, layer, media, supports } = parsed
+      let { layer, media, supports } = parsed
+
+      // URL schemes are case-insensitive, e.g. `HTTPS://` is `https://`
+      let uri = normalizeUrlScheme(parsed.uri)
 
       // Skip importing data or remote URIs
       if (uri.startsWith('data:')) return
@@ -103,7 +107,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       continue
     }
 
-    if (node.kind === 'function' && node.value.toLowerCase() === 'url') {
+    if (node.kind === 'function' && node.value === 'url') {
       // `@import` with `url(…)` functions are not inlined but skipped and kept
       // in the final CSS instead.
       // E.g.: `@import url("https://fonts.google.com")`
@@ -132,7 +136,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       continue
     }
 
-    if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
+    if (node.kind === 'function' && node.value === 'supports') {
       if (supports) return null
       supports = ValueParser.toCss(node.nodes)
       continue
