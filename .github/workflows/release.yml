@@ -316,9 +316,10 @@ jobs:
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
           pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks --config.node-linker=hoisted; popd;
 
-  # This lives in its own job so a failed trigger can be re-run on its own.
-  # Re-running the `release` job would publish the same version again, which
-  # npm rejects.
+  # A failed Tailwind Play update shouldn't fail the release, so the trigger
+  # step continues on error and posts the error to Discord instead. It runs in
+  # its own job so that, if posting to Discord fails, re-running the failed job
+  # doesn't re-run "Publish", which npm rejects for an existing version.
   trigger-play:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -332,24 +333,37 @@ jobs:
 
     steps:
       - name: Trigger Tailwind Play update
+        id: trigger-play
+        continue-on-error: true
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           github-token: ${{ secrets.TAILWIND_PLAY_TOKEN }}
           script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: 'tailwindlabs',
-              repo: 'upgrades',
-              ref: 'main',
-              workflow_id: 'upgrade-tailwindcss.yml'
-            })
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: 'tailwindlabs',
+                repo: 'upgrades',
+                ref: 'main',
+                workflow_id: 'upgrade-tailwindcss.yml'
+              })
+            } catch (error) {
+              core.setOutput('error', error.message)
+              throw error
+            }
+
+      - name: Notify Discord
+        if: steps.trigger-play.outcome == 'failure'
+        uses: discord-actions/message@5c7149c81a83146e5d01f142be1bf87a61831c4d # v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: 'The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) published, but could not trigger the Tailwind Play update: ${{ steps.trigger-play.outputs.error || ''see the run for the error'' }}'
 
   notify:
-    if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure' || needs.trigger-play.result == 'failure') }}
+    if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure') }}
     needs:
       - build
       - build-freebsd
       - release
-      - trigger-play
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
