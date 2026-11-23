@@ -1,9 +1,15 @@
 import { describe } from 'vitest'
 import { candidate, css, fetchStyles, js, json, jsx, retryAssertion, test, txt } from '../utils'
 
+// These tests install Next.js and its plugins from the npm registry on each
+// attempt. Slow or stuck installs time them out now and then, so retry them on
+// CI. Don't copy this to other tests: a flaky test needs a fix of its cause.
+const NETWORK_RETRY = process.env.CI ? 2 : 0
+
 test(
   'production build',
   {
+    retry: NETWORK_RETRY,
     fs: {
       'package.json': json`
         {
@@ -360,6 +366,7 @@ test(
 test(
   'changes to `public/` should not trigger an infinite loop',
   {
+    retry: NETWORK_RETRY,
     fs: {
       'package.json': json`
         {

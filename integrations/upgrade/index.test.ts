@@ -202,7 +202,6 @@ test(
       `,
       'notes/unrelated.txt': `order-[0] bg-[--my-red]`,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade')
@@ -1279,7 +1278,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')
@@ -1391,7 +1389,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')
@@ -2366,7 +2363,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')

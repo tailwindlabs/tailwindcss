@@ -131,7 +131,7 @@ export function test(
       // The install of the dependencies and the test have a timeout of their
       // own (see below). This one is a backstop, in case something else hangs.
       timeout: INSTALL_TIMEOUT + testTimeout + ASSERTION_TIMEOUT,
-      retry: config.retry ?? (process.env.CI ? 2 : 0),
+      retry: config.retry ?? 0,
       only: only || (!process.env.CI && debug),
       skip,
       concurrent,
