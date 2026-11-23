@@ -1,6 +1,9 @@
 {
   "extends": "../tsconfig.base.json",
+  // `include` in the base config is relative to `packages/`, so set it per package
+  "include": ["**/*.ts"],
   "compilerOptions": {
+    "lib": ["es2023", "esnext.disposable", "dom"],
     "allowSyntheticDefaultImports": true,
   },
 }

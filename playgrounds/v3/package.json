@@ -5,7 +5,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "upgrade": "node scripts/upgrade.mjs"
   },
   "dependencies": {

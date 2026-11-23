@@ -19,6 +19,8 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
+  // Packages set their own `include`, as it is relative to this file
+  "files": ["./globals.d.ts"],
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }

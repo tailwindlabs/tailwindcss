@@ -18,10 +18,6 @@ function rootHelp({ invalid }: { invalid?: string } = {}) {
   help({
     invalid,
     usage: [buildUsage('tailwindcss'), buildUsage('tailwindcss build'), canonicalize.usage()],
-    commands: {
-      build: 'Build your CSS',
-      canonicalize: 'Canonicalize candidate lists',
-    },
     options: { ...build.options(), ...sharedOptions },
   })
 }
