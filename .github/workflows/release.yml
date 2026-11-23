@@ -316,6 +316,21 @@ jobs:
           # The wasm package needs a special npm config that isn't read when pnpm --recursive is used
           pushd crates/node/npm/wasm32-wasi; pnpm publish --tag ${RELEASE_CHANNEL} --no-git-checks --config.node-linker=hoisted; popd;
 
+  # This lives in its own job so a failed trigger can be re-run on its own.
+  # Re-running the `release` job would publish the same version again, which
+  # npm rejects.
+  trigger-play:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: Trigger Tailwind Play update
+
+    # The dispatch uses `secrets.TAILWIND_PLAY_TOKEN`, not the `GITHUB_TOKEN`.
+    permissions: {}
+
+    needs:
+      - release
+
+    steps:
       - name: Trigger Tailwind Play update
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
@@ -329,11 +344,12 @@ jobs:
             })
 
   notify:
-    if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure') }}
+    if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure' || needs.trigger-play.result == 'failure') }}
     needs:
       - build
       - build-freebsd
       - release
+      - trigger-play
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
