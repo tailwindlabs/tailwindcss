@@ -181,6 +181,18 @@ describe('adds spaces around math operators', () => {
     // Function names are case-insensitive
     ['Asin(0.5+0.2)', 'Asin(0.5 + 0.2)'],
     ['Calc(1px+min(2px,3px))', 'Calc(1px + min(2px, 3px))'],
+
+    // Do not format the contents of quoted strings, even when they look like
+    // math function calls
+    ["'(min(1,2))'", "'(min(1,2))'"],
+    ["'(calc(1px+2px))'", "'(calc(1px+2px))'"],
+    ['"(min(1,2))"', '"(min(1,2))"'],
+    ["'(1+2)'", "'(1+2)'"],
+    ["'calc(1+2)'", "'calc(1+2)'"],
+    // A real math call next to a quoted string still formats the real call
+    ["calc(1+2)_'(min(1,2))'", "calc(1 + 2) '(min(1,2))'"],
+    // Escaped quote inside the string does not end it early
+    ["'it\\'s(min(1,2))'", "'it\\'s(min(1,2))'"],
   ]
 
   it.each(table)('%s', (input, output) => {

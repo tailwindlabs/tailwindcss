@@ -16,6 +16,9 @@ const COMMA = 0x2c
 const SPACE = 0x20
 const PERCENT = 0x25
 const UNDERSCORE = 0x5f
+const BACKSLASH = 0x5c
+const SINGLE_QUOTE = 0x27
+const DOUBLE_QUOTE = 0x22
 
 const MATH_FUNCTIONS = [
   'abs',
@@ -105,6 +108,30 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
   for (let i = 0; i < input.length; i++) {
     let char = input.charCodeAt(i)
+
+    // Skip over quoted strings verbatim. Any `(`, `)`, `,` or math operator
+    // that appears inside a string literal is part of the string's value and
+    // must not be treated as a real math call (e.g. `content-['(min(1,2))']`).
+    if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      result += input[i]
+      for (let j = i + 1; j < input.length; j++) {
+        let inner = input.charCodeAt(j)
+        result += input[j]
+
+        // The character is escaped, so skip the next one too.
+        if (inner === BACKSLASH && j + 1 < input.length) {
+          result += input[++j]
+          continue
+        }
+
+        // End of the string.
+        if (inner === char) {
+          i = j
+          break
+        }
+      }
+      continue
+    }
 
     // Track if we see a number followed by a unit, then we know for sure that
     // this is not a function call.
