@@ -193,6 +193,8 @@ describe('adds spaces around math operators', () => {
     ["calc(1+2)_'(min(1,2))'", "calc(1 + 2) '(min(1,2))'"],
     // Escaped quote inside the string does not end it early
     ["'it\\'s(min(1,2))'", "'it\\'s(min(1,2))'"],
+    // An unterminated string is left untouched and not duplicated
+    ["'(min(1,2))'", "'(min(1,2))'"],
   ]
 
   it.each(table)('%s', (input, output) => {

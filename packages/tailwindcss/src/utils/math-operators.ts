@@ -114,6 +114,7 @@ export function addWhitespaceAroundMathOperators(input: string) {
     // must not be treated as a real math call (e.g. `content-['(min(1,2))']`).
     if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
       result += input[i]
+      let closed = false
       for (let j = i + 1; j < input.length; j++) {
         let inner = input.charCodeAt(j)
         result += input[j]
@@ -127,9 +128,17 @@ export function addWhitespaceAroundMathOperators(input: string) {
         // End of the string.
         if (inner === char) {
           i = j
+          closed = true
           break
         }
       }
+
+      // The string was never closed, so we consumed the rest of the input.
+      // Advance the index to avoid reprocessing (and duplicating) it.
+      if (!closed) {
+        i = input.length
+      }
+
       continue
     }
 
