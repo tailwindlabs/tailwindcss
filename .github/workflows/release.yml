@@ -356,7 +356,7 @@ jobs:
         uses: discord-actions/message@5c7149c81a83146e5d01f142be1bf87a61831c4d # v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: 'The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) published, but could not trigger the Tailwind Play update: ${{ steps.trigger-play.outputs.error || ''see the run for the error'' }}'
+          message: "The [most recent ${{ github.workflow }} workflow](<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}>) published, but could not trigger the Tailwind Play update: ${{ steps.trigger-play.outputs.error || 'see the run for the error' }}"
 
   notify:
     if: ${{ always() && (needs.build.result == 'failure' || needs.build-freebsd.result == 'failure' || needs.release.result == 'failure') }}
