@@ -188,7 +188,11 @@ export default async function tailwindLoader(
     if (
       !(
         compiler.features &
-        (Features.AtApply | Features.JsPluginCompat | Features.ThemeFunction | Features.Utilities)
+        (Features.AtApply |
+          Features.JsPluginCompat |
+          Features.ThemeFunction |
+          Features.Utilities |
+          Features.Variants)
       )
     ) {
       DEBUG && I.end(`[@tailwindcss/turbopack] ${path.relative(base, inputFile)}`)
