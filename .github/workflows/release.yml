@@ -243,11 +243,13 @@ jobs:
             echo "RELEASE_CHANNEL=$release_channel" >> $GITHUB_ENV
             echo "FEATURES_ENV=stable" >> $GITHUB_ENV
           else
-            sha_short=$(git rev-parse --short HEAD)
+            # A short SHA like `0607226` is a numeric identifier with a leading
+            # zero, which semver doesn't allow. A `g` prefix, like `git describe`
+            # uses, makes each SHA an alphanumeric identifier.
+            sha_short="g$(git rev-parse --short HEAD)"
 
             echo "RELEASE_KIND=insiders" >> $GITHUB_ENV
             echo "RELEASE_CHANNEL=insiders" >> $GITHUB_ENV
-            echo "SHA_SHORT=$sha_short" >> $GITHUB_ENV
             echo "INSIDERS_VERSION=0.0.0-insiders.$sha_short" >> $GITHUB_ENV
           fi
 
@@ -351,7 +353,8 @@ jobs:
             version=$(node -p "require('./packages/tailwindcss/package.json').version")
             echo "label=release v${version}" >> $GITHUB_OUTPUT
           else
-            sha_short=$(git rev-parse --short HEAD)
+            # Same `g` prefix as in the release job
+            sha_short="g$(git rev-parse --short HEAD)"
             echo "label=insiders release 0.0.0-insiders.${sha_short}" >> $GITHUB_OUTPUT
           fi
 
