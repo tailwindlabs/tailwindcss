@@ -270,8 +270,8 @@ async function migratePostCSSJsonConfig(json: any): Promise<{
       }
     } else if (isTailwindCSSNestingPlugin(plugin, options)) {
       // Check if the following rule is the tailwindcss plugin
-      let [nextPlugin, nextOptions] = plugins[i + 1]
-      if (isTailwindCSSPlugin(nextPlugin, nextOptions)) {
+      let next = plugins[i + 1]
+      if (next && isTailwindCSSPlugin(next[0], next[1])) {
         // Since this plugin is bundled with `tailwindcss`, we don't need to
         // clean up a package when deleting this line.
       } else {

@@ -976,6 +976,60 @@ test(
 )
 
 test(
+  'migrates a json based postcss config with `tailwindcss/nesting` as the last plugin',
+  {
+    timeout: 120_000,
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      '.postcssrc.json': json`
+        {
+          "plugins": {
+            "tailwindcss": {},
+            "tailwindcss/nesting": {}
+          }
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs, expect }) => {
+    await exec('pnpm exec upgrade')
+
+    let jsonConfig = JSON.parse(await fs.read('.postcssrc.json'))
+    expect(jsonConfig).toMatchInlineSnapshot(`
+      {
+        "plugins": {
+          "@tailwindcss/postcss": {},
+          "tailwindcss/nesting": {},
+        },
+      }
+    `)
+  },
+)
+
+test(
   `migrates prefixes even if other files have unprefixed versions of the candidate`,
   {
     fs: {
