@@ -3268,15 +3268,22 @@ test(
       `,
       'hook.cjs': js`
         let fs = require('node:fs/promises')
-        let path = require('node:path')
         let originalWriteFile = fs.writeFile.bind(fs)
 
         fs.writeFile = async (file, contents, ...rest) => {
-          // Mimic a bad write
-          await originalWriteFile(file, '') // As-if we truncated first
+          // Only interrupt the writes of the templates. The stylesheet and the
+          // package manager (which gets this hook through NODE_OPTIONS as
+          // well) have to finish, or the template migration never starts.
+          if (!String(file).includes('template-')) {
+            return originalWriteFile(file, contents, ...rest)
+          }
+
+          // Mimic a bad write: truncate first, then never finish. The test
+          // kills the process in the middle of the write, however long the
+          // kill takes. The interval keeps the process alive until then.
+          await originalWriteFile(file, '')
           console.error('__TRUNCATED_TARGET__')
-          await new Promise((r) => setTimeout(r, 50)) // Wait 50ms to allow us to kill the process
-          await originalWriteFile(file, contents, ...rest) // Write the actual contents
+          await new Promise(() => setInterval(() => {}, 1_000))
         }
       `,
       'src/keep.php': `
