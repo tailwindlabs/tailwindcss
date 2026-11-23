@@ -1022,10 +1022,66 @@ test(
       {
         "plugins": {
           "@tailwindcss/postcss": {},
-          "tailwindcss/nesting": {},
         },
       }
     `)
+  },
+)
+
+test(
+  'migrates a simple postcss setup with a plugin between `tailwindcss/nesting` and `tailwindcss`',
+  {
+    timeout: 120_000,
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "postcss": "^8",
+            "postcss-cli": "^10",
+            "tailwindcss": "^3",
+            "@tailwindcss/upgrade": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.js': js`
+        module.exports = {
+          plugins: {
+            'tailwindcss/nesting': {},
+            'postcss-flexbugs-fixes': {},
+            tailwindcss: {},
+          },
+        }
+      `,
+      'tailwind.config.js': js`
+        /** @type {import('tailwindcss').Config} */
+        module.exports = {
+          content: ['./src/**/*.{html,js}'],
+        }
+      `,
+      'src/index.html': html`
+        <div class="bg-[--my-red]"></div>
+      `,
+      'src/index.css': css`
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+      `,
+    },
+  },
+  async ({ exec, fs }) => {
+    await exec('pnpm exec upgrade')
+
+    await fs.expectFileToContain(
+      'postcss.config.js',
+      js`
+        module.exports = {
+          plugins: {
+            'postcss-flexbugs-fixes': {},
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+    )
   },
 )
 
