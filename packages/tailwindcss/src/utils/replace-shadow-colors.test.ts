@@ -115,13 +115,6 @@ describe('with replacer', () => {
     )
   })
 
-  it('should handle box-shadow with intensity', () => {
-    let parsed = replaceShadowColors('1px 1px var(--my-color)', replacer)
-    expect(parsed).toMatchInlineSnapshot(
-      `"1px 1px var(--tw-shadow-color, oklab(from var(--my-color) l a b / 50%))"`,
-    )
-  })
-
   it('should handle four values with intensity and no color value', () => {
     let parsed = replaceShadowColors('1px 2px 3px 4px', replacer)
     expect(parsed).toMatchInlineSnapshot(

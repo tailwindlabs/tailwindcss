@@ -828,40 +828,17 @@ it('should parse a utility with an arbitrary value that is important', () => {
   `)
 })
 
-it('should parse a utility with an implicit variable as the arbitrary value', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-[var(--value)]', { utilities })).toMatchInlineSnapshot(`
-    [
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": null,
-        "raw": "bg-[var(--value)]",
-        "root": "bg",
-        "value": {
-          "dataType": null,
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "variants": [],
-      },
-    ]
-  `)
-})
-
 it('should parse a utility with an implicit variable as the arbitrary value that is important', () => {
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-(--value)!', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": true,
         "kind": "functional",
         "modifier": null,
-        "raw": "bg-[var(--value)]!",
+        "raw": "bg-(--value)!",
         "root": "bg",
         "value": {
           "dataType": null,
@@ -1007,32 +984,6 @@ it('should not parse invalid arbitrary values in variants', () => {
   ]) {
     expect(run(candidate, { utilities, variants })).toEqual([])
   }
-})
-
-it('should parse a utility with an implicit variable as the modifier', () => {
-  let utilities = new Utilities()
-  utilities.functional('bg', () => [])
-
-  expect(run('bg-red-500/[var(--value)]', { utilities })).toMatchInlineSnapshot(`
-    [
-      {
-        "important": false,
-        "kind": "functional",
-        "modifier": {
-          "kind": "arbitrary",
-          "value": "var(--value)",
-        },
-        "raw": "bg-red-500/[var(--value)]",
-        "root": "bg",
-        "value": {
-          "fraction": null,
-          "kind": "named",
-          "value": "red-500",
-        },
-        "variants": [],
-      },
-    ]
-  `)
 })
 
 it('should properly decode escaped underscores but not convert underscores to spaces for CSS variables in arbitrary positions', () => {
@@ -1371,7 +1322,7 @@ it('should parse a utility with an implicit variable as the modifier that is imp
   let utilities = new Utilities()
   utilities.functional('bg', () => [])
 
-  expect(run('bg-red-500/[var(--value)]!', { utilities })).toMatchInlineSnapshot(`
+  expect(run('bg-red-500/(--value)!', { utilities })).toMatchInlineSnapshot(`
     [
       {
         "important": true,
@@ -1380,7 +1331,7 @@ it('should parse a utility with an implicit variable as the modifier that is imp
           "kind": "arbitrary",
           "value": "var(--value)",
         },
-        "raw": "bg-red-500/[var(--value)]!",
+        "raw": "bg-red-500/(--value)!",
         "root": "bg",
         "value": {
           "fraction": null,

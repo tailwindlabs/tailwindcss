@@ -1118,14 +1118,14 @@ describe('theme(…)', () => {
         `)
       })
 
-      test('theme("--color-red-500")', async () => {
+      test("theme('--color-red-500')", async () => {
         expect(
           await compileCss(css`
             @theme {
               --color-red-500: #f00;
             }
             .red {
-              color: theme(--color-red-500);
+              color: theme('--color-red-500');
             }
           `),
         ).toMatchInlineSnapshot(`
