@@ -3274,12 +3274,10 @@ test(
             return originalWriteFile(file, contents, ...rest)
           }
 
-          // Mimic a bad write: truncate first, then never finish. The test
-          // kills the process in the middle of the write, however long the
-          // kill takes. The interval keeps the process alive until then.
+          // Mimic an interruption in the middle of a write: truncate the file,
+          // then end the process before the contents are written.
           await originalWriteFile(file, '')
-          console.error('__TRUNCATED_TARGET__')
-          await new Promise(() => setInterval(() => {}, 1_000))
+          process.exit(42)
         }
       `,
       'src/keep.php': `
@@ -3291,7 +3289,7 @@ test(
       `,
     },
   },
-  async ({ spawn, fs, expect }) => {
+  async ({ exec, fs, expect }) => {
     let repeatedCandidates = Array.from(
       { length: 250 },
       () => '<div class="order-[0]"></div>',
@@ -3311,20 +3309,14 @@ test(
     // a `NODE_OPTIONS` hook that overrides `fs.writeFile` to simulate a bad
     // write, and `pnpm exec` may write a bin shim on startup which would trip
     // that hook before template migration begins.
-    let process = await spawn('npx @tailwindcss/upgrade --force', {
-      env: {
-        NODE_OPTIONS: '--require=./hook.cjs',
-      },
-    })
+    let { exitCode } = await exec(
+      'npx @tailwindcss/upgrade --force',
+      { env: { NODE_OPTIONS: '--require=./hook.cjs' } },
+      { streams: true },
+    )
 
-    // We're only interested once we start migrating the templates
-    await process.onStderr((message) => message.includes('Migrating templates'))
-
-    // Wait for the trigger that we are mid-write
-    await process.onStderr((message) => message === '__TRUNCATED_TARGET__')
-
-    // Kill the process
-    await process.dispose()
+    // The hook ended the process in the middle of a template write
+    expect(exitCode).toBe(42)
 
     expect(await fs.read('src/keep.php')).toBe(originalKeepFile)
     expect(await fs.read('src/templates/template-0.php')).toBe(originalTemplate)
