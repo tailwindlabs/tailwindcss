@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Canonicalization: improve performance of collapsing utilities (e.g. `mt-2 mb-2` → `my-2`) when the same utilities appear in many class lists or variants ([#20698](https://github.com/tailwindlabs/tailwindcss/pull/20698))
 - Don't crash when the legacy `container` config has `padding` for a screen that isn't a breakpoint (e.g. a custom `container.screens` entry) ([#20523](https://github.com/tailwindlabs/tailwindcss/pull/20523))
 - Upgrade: always remove `tailwindcss/nesting` from the PostCSS config, which also fixes a crash when it's the last plugin in a JSON config ([#20745](https://github.com/tailwindlabs/tailwindcss/pull/20745))
+- Ensure `@tailwindcss/vite` releases the compilers and scanners of a build when it finishes, instead of keeping them in memory while the process keeps running (e.g. while Astro renders pages) ([#20736](https://github.com/tailwindlabs/tailwindcss/pull/20736))
+- Ensure `@tailwindcss/vite` doesn't generate CSS for removed classes when the same Vite builder builds an environment again ([#20736](https://github.com/tailwindlabs/tailwindcss/pull/20736))
 
 ## [4.3.5] - 2026-11-06
 
