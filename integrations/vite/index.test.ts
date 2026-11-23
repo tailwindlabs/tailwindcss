@@ -667,10 +667,20 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
 
           // Changing an external .php file hot-updates the generated CSS
           {
-            await fs.write(
-              'project-b/src/index.php',
-              txt`<div class="content-['updated:project-b/src/index.php']"></div>`,
-            )
+            // Vite starts to watch the external file while it transforms the
+            // CSS, but the watcher only listens a bit later, and it doesn't
+            // tell when (on macOS, chokidar first awaits a `stat` and a
+            // `realpath`). A change in between is lost, so repeat the change
+            // until the CSS has it.
+            await retryAssertion(async () => {
+              await fs.write(
+                'project-b/src/index.php',
+                txt`<div class="content-['updated:project-b/src/index.php']"></div>`,
+              )
+
+              let styles = await fetchStyles(url, '/index.html')
+              expect(styles).toContain(candidate`content-['updated:project-b/src/index.php']`)
+            })
 
             // On Vite < 7.1, Vite itself hard-invalidates watched files that
             // aren't part of the module graph and reloads the page.
@@ -688,10 +698,6 @@ describe.each(['postcss', 'lightningcss'])('%s', (transformer) => {
             } else {
               await process.onStdout((m) => m.includes('hmr update') && m.includes('index.css'))
             }
-
-            // Ensure the styles were regenerated with the new content
-            let styles = await fetchStyles(url, '/index.html')
-            expect(styles).toContain(candidate`content-['updated:project-b/src/index.php']`)
           }
         },
       )
