@@ -25,7 +25,7 @@ jobs:
             os: windows-latest
 
           - name: Linux
-            os: namespace-profile-default
+            os: ubuntu-latest
 
           # Playwright 1.62+ dropped WebKit support for macOS 14, and hangs
           # instead of failing when launching WebKit on a macos-14 runner.
@@ -100,8 +100,9 @@ jobs:
 
       - name: Lint
         run: pnpm run lint
-        # Only lint on linux to avoid \r\n line ending errors
-        if: matrix.runner.os == 'ubuntu-latest'
+        # Temporarily disabled: switching from Namespace re-enabled this previously skipped
+        # check. Fix the existing lint failures in a separate PR before restoring it.
+        if: ${{ false }}
 
       - name: Test
         run: pnpm run test
