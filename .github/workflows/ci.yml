@@ -25,7 +25,7 @@ jobs:
             os: windows-latest
 
           - name: Linux
-            os: namespace-profile-default
+            os: ubuntu-latest
 
           # Playwright 1.62+ dropped WebKit support for macOS 14, and hangs
           # instead of failing when launching WebKit on a macos-14 runner.

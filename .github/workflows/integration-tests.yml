@@ -25,7 +25,7 @@ jobs:
             os: windows-latest
 
           - name: Linux
-            os: namespace-profile-default
+            os: ubuntu-latest
 
           - name: macOS
             os: macos-latest
