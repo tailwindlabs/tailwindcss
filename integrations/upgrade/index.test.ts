@@ -202,7 +202,6 @@ test(
       `,
       'notes/unrelated.txt': `order-[0] bg-[--my-red]`,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade')
@@ -1279,7 +1278,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')
@@ -1391,7 +1389,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')
@@ -2366,7 +2363,6 @@ test(
         }
       `,
     },
-    retry: 0,
   },
   async ({ exec, fs, expect }) => {
     await exec('pnpm exec upgrade --force')
@@ -3268,15 +3264,20 @@ test(
       `,
       'hook.cjs': js`
         let fs = require('node:fs/promises')
-        let path = require('node:path')
         let originalWriteFile = fs.writeFile.bind(fs)
 
         fs.writeFile = async (file, contents, ...rest) => {
-          // Mimic a bad write
-          await originalWriteFile(file, '') // As-if we truncated first
-          console.error('__TRUNCATED_TARGET__')
-          await new Promise((r) => setTimeout(r, 50)) // Wait 50ms to allow us to kill the process
-          await originalWriteFile(file, contents, ...rest) // Write the actual contents
+          // Only interrupt the writes of the templates. The stylesheet and the
+          // package manager (which gets this hook through NODE_OPTIONS as
+          // well) have to finish, or the template migration never starts.
+          if (!String(file).includes('template-')) {
+            return originalWriteFile(file, contents, ...rest)
+          }
+
+          // Mimic an interruption in the middle of a write: truncate the file,
+          // then end the process before the contents are written.
+          await originalWriteFile(file, '')
+          process.exit(42)
         }
       `,
       'src/keep.php': `
@@ -3288,7 +3289,7 @@ test(
       `,
     },
   },
-  async ({ spawn, fs, expect }) => {
+  async ({ exec, fs, expect }) => {
     let repeatedCandidates = Array.from(
       { length: 250 },
       () => '<div class="order-[0]"></div>',
@@ -3308,20 +3309,14 @@ test(
     // a `NODE_OPTIONS` hook that overrides `fs.writeFile` to simulate a bad
     // write, and `pnpm exec` may write a bin shim on startup which would trip
     // that hook before template migration begins.
-    let process = await spawn('npx @tailwindcss/upgrade --force', {
-      env: {
-        NODE_OPTIONS: '--require=./hook.cjs',
-      },
-    })
+    let { exitCode } = await exec(
+      'npx @tailwindcss/upgrade --force',
+      { env: { NODE_OPTIONS: '--require=./hook.cjs' } },
+      { streams: true },
+    )
 
-    // We're only interested once we start migrating the templates
-    await process.onStderr((message) => message.includes('Migrating templates'))
-
-    // Wait for the trigger that we are mid-write
-    await process.onStderr((message) => message === '__TRUNCATED_TARGET__')
-
-    // Kill the process
-    await process.dispose()
+    // The hook ended the process in the middle of a template write
+    expect(exitCode).toBe(42)
 
     expect(await fs.read('src/keep.php')).toBe(originalKeepFile)
     expect(await fs.read('src/templates/template-0.php')).toBe(originalTemplate)
