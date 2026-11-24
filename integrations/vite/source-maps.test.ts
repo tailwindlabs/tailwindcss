@@ -155,3 +155,51 @@ test(
     expect(output).not.toContain('Sourcemap is likely to be incorrect')
   },
 )
+
+// https://github.com/tailwindlabs/tailwindcss/issues/20622
+test(
+  'production build with Tailwind roots should not result in source map warnings',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "type": "module",
+          "dependencies": {
+            "@tailwindcss/vite": "workspace:^",
+            "tailwindcss": "workspace:^"
+          },
+          "devDependencies": {
+            "vite": "^8"
+          }
+        }
+      `,
+      'vite.config.ts': ts`
+        import { defineConfig } from 'vite'
+        import tailwindcss from '@tailwindcss/vite'
+
+        export default defineConfig({
+          plugins: [tailwindcss()],
+          build: {
+            sourcemap: true,
+          },
+        })
+      `,
+      'index.html': html`
+        <body>
+          <script type="module" src="./src/index.js"></script>
+          <div class="flex">Hello, world!</div>
+        </body>
+      `,
+      'src/index.js': ts`
+        import styles from './index.css?inline'
+        console.log(styles)
+      `,
+      'src/index.css': css`@import 'tailwindcss';`,
+    },
+  },
+  async ({ exec, expect }) => {
+    let output = await exec('pnpm vite build')
+
+    expect(output).not.toContain('SOURCEMAP_BROKEN')
+  },
+)
