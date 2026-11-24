@@ -276,6 +276,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
   return Array.from(result)
 
   function collapseGroup(candidates: string[]) {
+    // A single candidate can't be collapsed with anything. Bail early, so we
+    // don't pre-compute all utilities for nothing. E.g.: `flex hover:underline`
+    if (candidates.length < 2) return candidates
+
     let signatureOptions = options.signatureOptions
     let computeUtilitiesPropertiesLookup =
       designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
