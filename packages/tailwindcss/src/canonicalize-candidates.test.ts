@@ -1804,6 +1804,32 @@ describe('regressions', () => {
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20602
+  test.each([
+    [['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    [['overflow-x-clip', 'overflow-y-clip'], ['overflow-clip']],
+    [['overscroll-x-none', 'overscroll-y-none'], ['overscroll-none']],
+  ])(
+    'collapsing static utilities does not depend on previously canonicalized candidates',
+    async (candidates, expected) => {
+      // A new design system, so that no other candidates were canonicalized before
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @tailwind utilities;
+        `,
+        { base: __dirname },
+      )
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss/issues/20051
   test(
     'does not crash when plugin matchComponents rejects speculative values during collapse',

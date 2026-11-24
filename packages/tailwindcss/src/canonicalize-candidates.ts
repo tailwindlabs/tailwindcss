@@ -283,6 +283,12 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
     let dynamicUtilities = designSystem.storage[DYNAMIC_UTILITIES_KEY].get(signatureOptions)
 
+    // The static utilities are indexed while pre-computing the utilities. Make
+    // sure that happened, otherwise the result depends on whether a previous
+    // candidate needed them. E.g.: `overflow-x-hidden overflow-y-hidden` →
+    // `overflow-hidden`
+    designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(signatureOptions)
+
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
     // NOTE: Currently assuming we are dealing with static utilities only. This
