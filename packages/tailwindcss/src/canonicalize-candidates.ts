@@ -102,6 +102,7 @@ interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [PRE_COMPUTED_STATIC_UTILITIES_KEY]: DefaultMap<SignatureOptions, Set<string>>
     [UTILITY_PROPERTIES_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
@@ -133,6 +134,8 @@ export function prepareDesignSystemStorage(
   designSystem.storage[UTILITY_THEME_VARIABLES_KEY] ??=
     createUtilityThemeVariablesCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
+  designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY] ??=
+    createPreComputedStaticUtilitiesCache(designSystem)
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
   designSystem.storage[DYNAMIC_UTILITIES_KEY] ??= createDynamicUtilitiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
@@ -276,8 +279,8 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
   return Array.from(result)
 
   function collapseGroup(candidates: string[]) {
-    // A single candidate can't be collapsed with anything. Bail early, so we
-    // don't pre-compute all utilities for nothing. E.g.: `flex hover:underline`
+    // A single candidate can't be collapsed with anything, so there is nothing
+    // to do. E.g.: `flex hover:underline`
     if (candidates.length < 2) return candidates
 
     let signatureOptions = options.signatureOptions
@@ -287,11 +290,13 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
     let dynamicUtilities = designSystem.storage[DYNAMIC_UTILITIES_KEY].get(signatureOptions)
 
-    // The static utilities are indexed while pre-computing the utilities. Make
-    // sure that happened, otherwise the result depends on whether a previous
-    // candidate needed them. E.g.: `overflow-x-hidden overflow-y-hidden` →
-    // `overflow-hidden`
-    designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].get(signatureOptions)
+    // A utility is only added to the index of static utilities once its
+    // properties are computed, e.g. while pre-computing all utilities. That
+    // only happens for candidates with a value like `p-4`, so make sure that
+    // the static utilities are in there. Otherwise the result depends on the
+    // candidates that were canonicalized before. E.g.: `overflow-x-hidden
+    // overflow-y-hidden` → `overflow-hidden`
+    designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY].get(signatureOptions)
 
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
@@ -3255,6 +3260,31 @@ function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTI
         return new Set<string>()
       })
     })
+  })
+}
+
+// Compute the properties of all static utilities, which adds them to the index
+// of static utilities. This takes a few milliseconds, while pre-computing all
+// utilities takes almost a second with the default theme.
+const PRE_COMPUTED_STATIC_UTILITIES_KEY = Symbol()
+function createPreComputedStaticUtilitiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof PRE_COMPUTED_STATIC_UTILITIES_KEY] {
+  return new DefaultMap((options: SignatureOptions) => {
+    let computeUtilitiesPropertiesLookup = designSystem.storage[UTILITY_PROPERTIES_KEY].get(options)
+    let prefix = designSystem.theme.prefix ? `${designSystem.theme.prefix}:` : ''
+
+    let utilities = new Set<string>()
+    for (let utility of designSystem.utilities.keys('static')) {
+      // Use the same name as the candidates that we collapse, which have the
+      // prefix. E.g.: `tw:flex`
+      utility = `${prefix}${utility}`
+      if (computeUtilitiesPropertiesLookup.get(utility).size > 0) {
+        utilities.add(utility)
+      }
+    }
+
+    return utilities
   })
 }
 

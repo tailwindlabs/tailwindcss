@@ -1809,6 +1809,8 @@ describe('regressions', () => {
     [['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
     [['overflow-x-clip', 'overflow-y-clip'], ['overflow-clip']],
     [['overscroll-x-none', 'overscroll-y-none'], ['overscroll-none']],
+    [['overflow-x-auto', 'overflow-y-auto'], ['overflow-auto']],
+    [['hover:overflow-x-hidden', 'hover:overflow-y-hidden'], ['hover:overflow-hidden']],
   ])(
     'collapsing static utilities does not depend on previously canonicalized candidates',
     async (candidates, expected) => {
@@ -1827,6 +1829,45 @@ describe('regressions', () => {
       }
 
       expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+
+      // A candidate with a value pre-computes all utilities, which must not
+      // change the result
+      designSystem.canonicalizeCandidates(['p-4'], options)
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
+
+  test.each([
+    ['', ['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    ['tw', ['tw:overflow-x-hidden', 'tw:overflow-y-hidden'], ['tw:overflow-hidden']],
+  ])(
+    'collapsing static utilities does not pre-compute all utilities (prefix: "%s")',
+    async (prefix, candidates, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        prefix
+          ? css`
+              @theme prefix(${prefix}) {
+              }
+              @tailwind utilities;
+            `
+          : css`
+              @tailwind utilities;
+            `,
+        { base: __dirname },
+      )
+
+      // Pre-computing all utilities starts from the class list, and takes
+      // ~800ms with the default theme
+      let getClassList = vi.spyOn(designSystem, 'getClassList')
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+      expect(getClassList).not.toHaveBeenCalled()
     },
   )
 
