@@ -195,14 +195,10 @@ async function migratePostCSSJSConfig(configPath: string): Promise<{
         newLines.push(line)
       }
     } else if (isTailwindCSSNestingPlugin(line)) {
-      // Check if the following rule is the tailwindcss plugin
-      let nextLine = lines[i + 1]
-      if (isTailwindCSSPlugin(nextLine)) {
-        // Since this plugin is bundled with `tailwindcss`, we don't need to
-        // clean up a package when deleting this line.
-      } else {
-        newLines.push(line)
-      }
+      // Tailwind CSS v4 handles nesting itself and no longer ships
+      // `tailwindcss/nesting`, so keeping this line would break the config.
+      // Since this plugin is part of `tailwindcss`, there is no package to
+      // clean up.
     } else {
       newLines.push(line)
     }
@@ -269,14 +265,10 @@ async function migratePostCSSJsonConfig(json: any): Promise<{
         newPlugins.push([plugin, options])
       }
     } else if (isTailwindCSSNestingPlugin(plugin, options)) {
-      // Check if the following rule is the tailwindcss plugin
-      let [nextPlugin, nextOptions] = plugins[i + 1]
-      if (isTailwindCSSPlugin(nextPlugin, nextOptions)) {
-        // Since this plugin is bundled with `tailwindcss`, we don't need to
-        // clean up a package when deleting this line.
-      } else {
-        newPlugins.push([plugin, options])
-      }
+      // Tailwind CSS v4 handles nesting itself and no longer ships
+      // `tailwindcss/nesting`, so keeping this plugin would break the config.
+      // Since this plugin is part of `tailwindcss`, there is no package to
+      // clean up.
     } else {
       newPlugins.push([plugin, options])
     }

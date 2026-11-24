@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add whitespace around math operators in `abs(…)` and `sign(…)`, and infer them as a length (e.g. `text-[abs(var(--size))]` generates `font-size` instead of `color`) ([#20716](https://github.com/tailwindlabs/tailwindcss/pull/20716))
 - Canonicalization: improve performance of collapsing utilities (e.g. `mt-2 mb-2` → `my-2`) when the same utilities appear in many class lists or variants ([#20698](https://github.com/tailwindlabs/tailwindcss/pull/20698))
 - Don't crash when the legacy `container` config has `padding` for a screen that isn't a breakpoint (e.g. a custom `container.screens` entry) ([#20523](https://github.com/tailwindlabs/tailwindcss/pull/20523))
+- Upgrade: always remove `tailwindcss/nesting` from the PostCSS config, which also fixes a crash when it's the last plugin in a JSON config ([#20745](https://github.com/tailwindlabs/tailwindcss/pull/20745))
+- Ensure `@tailwindcss/vite` releases the compilers and scanners of a build when it finishes, instead of keeping them in memory while the process keeps running (e.g. while Astro renders pages) ([#20736](https://github.com/tailwindlabs/tailwindcss/pull/20736))
+- Ensure `@tailwindcss/vite` doesn't generate CSS for removed classes when the same Vite builder builds an environment again ([#20736](https://github.com/tailwindlabs/tailwindcss/pull/20736))
+- Don't add whitespace around math operators inside quoted strings in arbitrary values (e.g. `content-['(min(1,2))']` no longer outputs `content-['(min(1, 2))']`) ([#20615](https://github.com/tailwindlabs/tailwindcss/pull/20615))
+- Process `@variant` in `@tailwindcss/webpack` and `@tailwindcss/turbopack` when it is the only Tailwind CSS feature in a stylesheet ([#20746](https://github.com/tailwindlabs/tailwindcss/pull/20746))
 
 ## [4.3.5] - 2026-11-06
 
