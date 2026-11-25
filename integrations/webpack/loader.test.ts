@@ -143,6 +143,177 @@ test(
 )
 
 test(
+  '@tailwindcss/webpack loader watches files that a full rebuild adds (watch)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import '../styles/index.css'`,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      // The styles are outside of `source(…)`, so only the loader can make
+      // webpack watch them
+      'styles/index.css': css` @import 'tailwindcss/utilities' source('../src'); `,
+      'styles/buttons.css': css`
+        .btn-1 {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, exec }) => {
+    // Generate the initial build so output CSS files exist on disk
+    await exec('pnpm webpack --mode=development')
+
+    let process = await spawn('pnpm webpack --mode=development --watch')
+    await process.onStdout((m) => m.includes('compiled successfully in'))
+
+    await fs.expectFileToContain('dist/main.css', ['.flex'])
+    await fs.expectFileNotToContain('dist/main.css', ['.btn-1'])
+
+    // Import a file that the previous build didn't know about
+    await fs.write(
+      'styles/index.css',
+      css`
+        @import 'tailwindcss/utilities' source('../src');
+        @import './buttons.css';
+      `,
+    )
+    await process.onStdout((m) => m.includes('compiled successfully in'))
+
+    await fs.expectFileToContain('dist/main.css', ['.flex', '.btn-1'])
+
+    // A change to the new file must cause a rebuild
+    await fs.write(
+      'styles/buttons.css',
+      css`
+        .btn-2 {
+          color: red;
+        }
+      `,
+    )
+
+    await fs.expectFileToContain('dist/main.css', ['.flex', '.btn-2'])
+    await fs.expectFileNotToContain('dist/main.css', ['.btn-1'])
+  },
+)
+
+test(
+  '@tailwindcss/webpack loader watches files that a failed full rebuild adds (watch)',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import '../styles/index.css'`,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      // The styles are outside of `source(…)`, so only the loader can make
+      // webpack watch them
+      'styles/index.css': css` @import 'tailwindcss/utilities' source('../src'); `,
+      'styles/buttons.css': css`
+        .btn {
+          @apply btn-unknown;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, exec }) => {
+    // Generate the initial build so output CSS files exist on disk
+    await exec('pnpm webpack --mode=development')
+
+    let process = await spawn('pnpm webpack --mode=development --watch')
+    await process.onStdout((m) => m.includes('compiled successfully in'))
+
+    await fs.expectFileToContain('dist/main.css', ['.flex'])
+
+    // Import a file that the previous build didn't know about, and that fails
+    // to compile
+    await fs.write(
+      'styles/index.css',
+      css`
+        @import 'tailwindcss/utilities' source('../src');
+        @import './buttons.css';
+      `,
+    )
+    await process.onStdout((m) => /compiled with \d+ errors? in/.test(m))
+
+    // Fixing the new file must cause a rebuild
+    await fs.write(
+      'styles/buttons.css',
+      css`
+        .btn-2 {
+          color: red;
+        }
+      `,
+    )
+
+    await fs.expectFileToContain('dist/main.css', ['.flex', '.btn-2'])
+  },
+)
+
+test(
   '@tailwindcss/webpack loader with @apply',
   {
     fs: {

@@ -259,6 +259,111 @@ test(
 )
 
 test(
+  '@tailwindcss/turbopack loader watches files that a full rebuild adds (dev)',
+  {
+    timeout: 120_000,
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "next": "^16.2.7",
+            "react": "^19.2.7",
+            "react-dom": "^19.2.7",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/turbopack": "workspace:^"
+          }
+        }
+      `,
+      'next.config.mjs': js`
+        export default {
+          turbopack: {
+            rules: {
+              '*.css': {
+                loaders: ['@tailwindcss/turbopack'],
+              },
+            },
+          },
+        }
+      `,
+      'app/layout.js': jsx`
+        import '../styles/globals.css'
+
+        export default function RootLayout({ children }) {
+          return (
+            <html>
+              <body>{children}</body>
+            </html>
+          )
+        }
+      `,
+      'app/page.js': jsx`
+        export default function Page() {
+          return <div className="flex">Hello, Next.js!</div>
+        }
+      `,
+      // The styles are outside of `source(…)`, so only the loader can make
+      // Turbopack watch them
+      'styles/globals.css': css` @import 'tailwindcss' source('../app'); `,
+      'styles/buttons.css': css`
+        .btn-1 {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm next dev')
+
+    let url = ''
+    await process.onStdout((message) => {
+      let match = /Local:\s*(http.*)/.exec(message)
+      if (match) url = match[1]
+      return Boolean(url)
+    })
+
+    await process.onStdout((message) => message.includes('Ready in'))
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`flex`)
+      expect(styles).not.toContain(candidate`btn-1`)
+    })
+
+    // Import a file that the previous build didn't know about
+    await fs.write(
+      'styles/globals.css',
+      css`
+        @import 'tailwindcss' source('../app');
+        @import './buttons.css';
+      `,
+    )
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`flex`)
+      expect(styles).toContain(candidate`btn-1`)
+    })
+
+    // A change to the new file must cause a rebuild
+    await fs.write(
+      'styles/buttons.css',
+      css`
+        .btn-2 {
+          color: red;
+        }
+      `,
+    )
+
+    await retryAssertion(async () => {
+      let styles = await fetchStyles(url)
+      expect(styles).toContain(candidate`flex`)
+      expect(styles).toContain(candidate`btn-2`)
+      expect(styles).not.toContain(candidate`btn-1`)
+    })
+  },
+)
+
+test(
   '@tailwindcss/turbopack loader with only @variant (dev)',
   {
     timeout: 120_000,

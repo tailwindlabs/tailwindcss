@@ -96,6 +96,15 @@ export default async function tailwindLoader(
     // Whether this is the first build or not
     let isInitialBuild = context.compiler === null
 
+    // Report each config file, plugin, etc. to Turbopack only once per build
+    let reportedDependencies = new Set<string>()
+    let addDependency = (file: string) => {
+      let absolutePath = path.resolve(file)
+      if (reportedDependencies.has(absolutePath)) return
+      reportedDependencies.add(absolutePath)
+      this.addDependency(absolutePath)
+    }
+
     async function createCompiler() {
       DEBUG && I.start('Setup compiler')
       if (context.fullRebuildPaths.length > 0 && !isInitialBuild) {
@@ -109,7 +118,14 @@ export default async function tailwindLoader(
         from: inputFile,
         base: inputBasePath,
         shouldRewriteUrls: true,
-        onDependency: (depPath) => context.fullRebuildPaths.push(depPath),
+        onDependency: (depPath) => {
+          context.fullRebuildPaths.push(depPath)
+
+          // A full rebuild can find files that the previous compiler didn't
+          // know about, like a new `@import`. Watch them right away, so a change
+          // to them causes a rebuild, also when this compile fails.
+          addDependency(depPath)
+        },
         // In CSS Module files, we have to disable the `@property` polyfill since these will
         // emit global `*` rules which are considered to be non-pure and will cause builds
         // to fail.
@@ -138,7 +154,7 @@ export default async function tailwindLoader(
     {
       // Report dependencies for config files, plugins, etc.
       for (let file of context.fullRebuildPaths) {
-        this.addDependency(path.resolve(file))
+        addDependency(file)
       }
 
       let files = [...context.fullRebuildPaths, inputFile]
