@@ -3461,7 +3461,7 @@ function createVariantSignatureCache(
       try {
         // Ensure the prefix is added to the utility if it is not already present.
         variant =
-          designSystem.theme.prefix && !variant.startsWith(designSystem.theme.prefix)
+          designSystem.theme.prefix && !variant.startsWith(`${designSystem.theme.prefix}:`)
             ? `${designSystem.theme.prefix}:${variant}`
             : variant
 

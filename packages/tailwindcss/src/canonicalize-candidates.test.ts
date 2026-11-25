@@ -1933,6 +1933,26 @@ describe('regressions', () => {
     },
   )
 
+  test.each([
+    ['tw', 'tw:[&:focus]:flex', 'tw:focus:flex'],
+    // A prefix that is also the start of a variant name, like `f` in `focus`
+    ['f', 'f:[&:focus]:flex', 'f:focus:flex'],
+  ])(
+    'canonicalizing variants with a prefix (prefix: "%s")',
+    async (prefix, candidate, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @theme prefix(${prefix}) {
+          }
+          @tailwind utilities;
+        `,
+        { base: __dirname },
+      )
+
+      expect(designSystem.canonicalizeCandidates([candidate], { rem: 16 })).toEqual([expected])
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss/issues/20051
   test(
     'does not crash when plugin matchComponents rejects speculative values during collapse',
