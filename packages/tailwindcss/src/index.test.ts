@@ -6760,6 +6760,48 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('creates an inlined variable version of the color-mix(…) usages for theme keys with escaped characters', async () => {
+    expect(
+      await run(
+        ['text-brand.light/50', 'text-1.5/50'],
+        css`
+          @theme {
+            --color-brand\.light: oklch(63.7% 0.237 25.331);
+            --color-1\.5: var(--color-brand\.light);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-brand\\.light: oklch(63.7% .237 25.331);
+        --color-1\\.5: var(--color-brand\\.light);
+      }
+
+      .text-1\\.5\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-1\\.5\\/50 {
+          color: color-mix(in oklab, var(--color-1\\.5) 50%, transparent);
+        }
+      }
+
+      .text-brand\\.light\\/50 {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .text-brand\\.light\\/50 {
+          color: color-mix(in oklab, var(--color-brand\\.light) 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
   it('works for color values in the first and second position', async () => {
     expect(
       await compileCss(css`

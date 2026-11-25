@@ -5,6 +5,7 @@ import type { DesignSystem } from './design-system'
 import type { Source, SourceLocation } from './source-maps/source'
 import { Theme, ThemeOptions } from './theme'
 import { DefaultMap } from './utils/default-map'
+import { unescape } from './utils/escape'
 import { segment } from './utils/segment'
 import { extractUsedVariables } from './utils/variables'
 import * as ValueParser from './value-parser'
@@ -577,7 +578,9 @@ export function optimizeAst(
 
               requiresPolyfill = true
 
-              inlinedColor = designSystem.theme.resolveValue(null, [firstChild.value as any])
+              // The value parser keeps CSS escapes, e.g. `--color-brand\.light`, but the theme
+              // stores its keys unescaped.
+              inlinedColor = designSystem.theme.resolveValue(null, [unescape(variableName) as any])
               if (!inlinedColor) {
                 containsUnresolvableVars = true
                 return
