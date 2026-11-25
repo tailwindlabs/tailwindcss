@@ -14230,6 +14230,8 @@ test('bg', async () => {
       '-bg-current/[0.5]',
       '-bg-current/[50%]',
       '-bg-inherit',
+      'bg-inherit/50',
+      'bg-inherit/[0.5]',
       '-bg-transparent',
       '-bg-[#0088cc]',
       '-bg-[#0088cc]/50',
@@ -24472,6 +24474,8 @@ test('filter', async () => {
         'drop-shadow-red-500/foo',
         '-drop-shadow-red-500/foo',
         '-drop-shadow-red-500/50',
+        'drop-shadow-inherit/50',
+        'drop-shadow-inherit/[0.5]',
 
         '-saturate-0',
         'saturate--5',
