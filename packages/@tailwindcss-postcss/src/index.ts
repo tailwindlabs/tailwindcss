@@ -28,6 +28,9 @@ interface CacheEntry {
   cachedPostCssAst: Root
   optimizedPostCssAst: Root
   fullRebuildPaths: string[]
+  // Whether a build of this stylesheet succeeded in this process, so there is
+  // a last known-good output to serve when a rebuild fails.
+  hasBuilt: boolean
 }
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
@@ -45,6 +48,7 @@ function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOp
     optimizedPostCssAst: postcss.root(),
 
     fullRebuildPaths: [] as string[],
+    hasBuilt: false,
   }
   cache.set(key, entry)
   return entry
@@ -365,6 +369,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
             // as the default instead of 4.
             root.raws.indent = '  '
+            context.hasBuilt = true
             DEBUG && I.end('Update PostCSS AST')
 
             DEBUG && I.end(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
@@ -431,28 +436,31 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
                 ? `${error.message}`
                 : `${error}`
 
-            // In optimized (typically production) builds we want compilation errors to fail
-            // the build outright so broken CSS never ships.
+            // When this stylesheet never built successfully, fail the build, so
+            // broken CSS never ships. This covers every one-shot build, whatever
+            // `NODE_ENV` is: tools like Angular or `webpack --mode production`
+            // don't set it, so `optimize` can't tell us.
             //
-            // Otherwise, we avoid throwing here. Throwing causes PostCSS's `process()` promise
-            // to reject instead of resolve. Tools that rely on `result.messages` to register
-            // file dependencies (e.g. `postcss-loader`/webpack) only ever read `result.messages`
-            // from a *resolved* result, so on rejection none of the dependency messages above —
-            // or from any previously successful build — are seen. That drops every file in the
-            // CSS import graph from the watcher, not just the one that failed, and nothing
-            // recompiles again until some other, still-watched file happens to change.
-            //
-            // We instead report the error as a warning so `result` still resolves and dependency
-            // tracking keeps working. We keep serving the last known-good output (if any) rather
-            // than clearing the stylesheet, so a broken edit doesn't strip all styling while it's
-            // being fixed.
-            if (optimize) {
+            // On a rebuild after a successful build, which is what watch mode does,
+            // we avoid throwing. Throwing makes PostCSS's `process()` promise reject,
+            // and tools that rely on `result.messages` to register file dependencies
+            // (e.g. `postcss-loader`/webpack) only read them from a *resolved* result.
+            // On a rejection they drop every file in the CSS import graph from the
+            // watcher, so nothing recompiles until another, still-watched file
+            // changes. We instead report the error as a warning and keep serving the
+            // last known-good output, so a broken edit doesn't strip all styling
+            // while it's being fixed.
+            if (!context.hasBuilt) {
               throw root.error(message)
             }
 
             result.warn(message, { plugin: '@tailwindcss/postcss' })
             root.removeAll()
-            root.append(context.cachedPostCssAst.clone().nodes)
+            root.append(
+              optimize
+                ? context.optimizedPostCssAst.clone().nodes
+                : context.cachedPostCssAst.clone().nodes,
+            )
             root.raws.indent = '  '
           }
         },

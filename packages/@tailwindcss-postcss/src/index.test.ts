@@ -584,13 +584,11 @@ describe('error recovery', () => {
     })
   })
 
-  test('still fails the build when `optimize` is enabled, so broken CSS is never shipped', async () => {
+  test('fails the build when the first build has an error, even when `optimize` is disabled, so broken CSS is never shipped', async () => {
+    // One-shot builds (e.g. `ng build` or `webpack --mode production`) don't
+    // always set `NODE_ENV`, so `optimize` can be off in a production build.
     let from = path.join(dir, 'index.css')
-    let processor = postcss([tailwindcss({ base: dir, optimize: true })])
-
-    await processor.process(await readFile(from, 'utf8'), { from })
-
-    await new Promise((resolve) => setTimeout(resolve, 10))
+    let processor = postcss([tailwindcss({ base: dir, optimize: false })])
 
     await writeFile(
       path.join(dir, 'dependency.css'),
@@ -605,6 +603,32 @@ describe('error recovery', () => {
     await expect(processor.process(await readFile(from, 'utf8'), { from })).rejects.toThrow(
       /this-class-does-not-exist/,
     )
+  })
+
+  test('keeps serving the last optimized output when a rebuild fails with `optimize` enabled', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: true })])
+
+    let ok = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(ok.css).toContain('.underline')
+
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+        .broken {
+          @apply this-class-does-not-exist;
+        }
+      `,
+    )
+
+    let failed = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(failed.warnings().map((w) => w.text)).toEqual([
+      expect.stringContaining('this-class-does-not-exist'),
+    ])
+    expect(failed.css).toEqual(ok.css)
   })
 })
 
