@@ -684,7 +684,9 @@ test(
       "
     `)
 
-    // 2. Cause an error
+    // 2. Cause an error. Flush the messages first, so the messages we wait for
+    // come from this change.
+    process.flush()
     await fs.write(
       'src/tailwind.css',
       css`
@@ -699,9 +701,7 @@ test(
     // (including logging "Waiting for file changes...") before it's safe to write
     // again -- writing sooner races a second, concurrent build against the one still
     // settling, which is a separate, pre-existing sharp edge of this plugin's caching
-    // model, unrelated to error recovery itself. Flush first so this wait can't match
-    // a stale occurrence of that same message from an earlier, already-settled build.
-    process.flush()
+    // model, unrelated to error recovery itself.
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
@@ -714,13 +714,12 @@ test(
     `)
 
     // 2.5 Write to a content file
+    process.flush()
     await fs.write('src/index.html', html`
       <div class="flex underline"></div>
     `)
 
     await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
-
-    process.flush()
     await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     // 3. Fix the CSS file
