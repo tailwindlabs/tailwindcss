@@ -123,7 +123,7 @@ export class Theme {
   }
 
   getOptions(key: string) {
-    key = unescape(this.#unprefixKey(key))
+    key = unescape(this.unprefixKey(key))
     return this.values.get(key)?.options ?? ThemeOptions.NONE
   }
 
@@ -141,7 +141,7 @@ export class Theme {
     return `--${this.prefix}-${key.slice(2)}`
   }
 
-  #unprefixKey(key: string) {
+  unprefixKey(key: string) {
     if (!this.prefix) return key
     return `--${key.slice(3 + this.prefix.length)}`
   }
@@ -208,7 +208,7 @@ export class Theme {
   }
 
   markUsedVariable(themeKey: string): boolean {
-    let key = unescape(this.#unprefixKey(themeKey))
+    let key = unescape(this.unprefixKey(themeKey))
     let value = this.values.get(key)
     if (!value) return false
     let isUsed = value.options & ThemeOptions.USED
