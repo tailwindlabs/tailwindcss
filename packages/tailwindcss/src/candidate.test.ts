@@ -639,12 +639,18 @@ describe('arbitrary values with unbalanced parens or brackets', () => {
     'w-[var(--a,[1px)]',
     'w-[var(--a,[1px]',
 
-    // A `}` at the top-level is invalid. `{` is not tracked on the stack,
-    // otherwise `[&{color:red}]:flex` would become valid.
+    // A `{` or `}` at the top-level is invalid, e.g. `[&{color:red}]:flex`
     'w-[{}]',
+    'w-[{]',
+
+    // Nested curlies must be balanced
+    'w-[calc({)]',
+    'w-[calc(})]',
+    'bg-(--a,{)',
 
     // Arbitrary properties
     '[width:calc(1px]',
+    '[--a:{]',
 
     // Arbitrary modifiers
     'bg-red-500/[calc(1]',
