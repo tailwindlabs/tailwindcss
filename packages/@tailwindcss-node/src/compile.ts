@@ -92,12 +92,14 @@ async function ensureSourceDetectionRootExists(compiler: {
 }
 
 export async function compileAst(ast: AstNode[], options: CompileOptions) {
+  fileSystem.purge()
   let compiler = await _compileAst(ast, createCompileOptions(options))
   await ensureSourceDetectionRootExists(compiler)
   return compiler
 }
 
 export async function compile(css: string, options: CompileOptions) {
+  fileSystem.purge()
   let compiler = await _compile(css, createCompileOptions(options))
   await ensureSourceDetectionRootExists(compiler)
   return compiler
@@ -202,8 +204,10 @@ const modules = [
   ...(process.env.NODE_PATH ? [...process.env.NODE_PATH.split(path.delimiter)] : []),
 ]
 
+const fileSystem = new EnhancedResolve.CachedInputFileSystem(fs, 4000)
+
 const cssResolver = EnhancedResolve.ResolverFactory.createResolver({
-  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  fileSystem,
   useSyncFileSystemCalls: true,
   extensions: ['.css'],
   mainFields: ['style'],
@@ -233,7 +237,7 @@ async function resolveCssId(
 }
 
 const esmResolver = EnhancedResolve.ResolverFactory.createResolver({
-  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  fileSystem,
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
   conditionNames: ['node', 'import'],
@@ -241,7 +245,7 @@ const esmResolver = EnhancedResolve.ResolverFactory.createResolver({
 })
 
 const cjsResolver = EnhancedResolve.ResolverFactory.createResolver({
-  fileSystem: new EnhancedResolve.CachedInputFileSystem(fs, 4000),
+  fileSystem,
   useSyncFileSystemCalls: true,
   extensions: ['.js', '.json', '.node', '.ts'],
   conditionNames: ['node', 'require'],
