@@ -297,8 +297,11 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // This means that we should be able to upgrade the one _without_ to the one
       // _with_ the variable
       ['[font-weight:400]', 'font-normal'],
-      ['[line-height:0]', 'leading-0'],
       ['[border-style:solid]', 'border-solid'],
+
+      // Except for `--tw-leading`, because `text-*` utilities read it. Adding
+      // it changes the line-height of a `text-*` utility on the same element.
+      ['[line-height:0]', '[line-height:0]'],
 
       // Do not constant fold `0<unit>` to `0` when the type is unknown (which
       // is often the case with CSS variables)
@@ -1280,27 +1283,53 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       ...Array.from(
         cartesian(
           ['[font-size:14px]', 'text-[14px]', 'text-[14px]/6', 'text-sm', 'text-sm/6'],
-          ['[line-height:28px]', 'leading-[28px]', 'leading-7'],
+          ['[line-height:28px]'],
         ),
       ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-sm/7']),
       ...Array.from(
-        cartesian(
-          ['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'],
-          ['[line-height:28px]', 'leading-[28px]', 'leading-7'],
-        ),
+        cartesian(['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'], ['[line-height:28px]']),
       ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-[15px]/7']),
       ...Array.from(
         cartesian(
           ['[font-size:14px]', 'text-[14px]', 'text-[14px]/6', 'text-sm', 'text-sm/6'],
-          ['[line-height:28.5px]', 'leading-[28.5px]'],
+          ['[line-height:28.5px]'],
         ),
       ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-sm/[28.5px]']),
       ...Array.from(
-        cartesian(
-          ['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'],
-          ['[line-height:28.5px]', 'leading-[28.5px]'],
-        ),
+        cartesian(['[font-size:15px]', 'text-[15px]', 'text-[15px]/6'], ['[line-height:28.5px]']),
       ).map((classes) => [classes.join(' ').padEnd(40, ' '), 'text-[15px]/[28.5px]']),
+
+      // `leading-*` also sets `--tw-leading`, which `text-*` utilities read. A
+      // `text-*` utility in a variant on the same element, like `md:text-base`,
+      // uses that line-height too. `text-*/*` doesn't set `--tw-leading`, so
+      // collapsing them would change the line-height of those utilities.
+      ...Array.from(
+        cartesian(
+          [
+            ['[font-size:14px]', 'text-[14px]'],
+            ['text-[14px]', 'text-[14px]'],
+            ['text-[14px]/6', 'text-[14px]/6'],
+            ['text-sm', 'text-sm'],
+            ['text-sm/6', 'text-sm/6'],
+            ['[font-size:15px]', 'text-[15px]'],
+            ['text-[15px]', 'text-[15px]'],
+            ['text-[15px]/6', 'text-[15px]/6'],
+          ],
+          [
+            ['leading-[28px]', 'leading-7'],
+            ['leading-7', 'leading-7'],
+            ['leading-[28.5px]', 'leading-[28.5px]'],
+          ],
+        ),
+      ).map(([[fontSize, fontSizeExpected], [lineHeight, lineHeightExpected]]) => [
+        `${fontSize} ${lineHeight}`.padEnd(40, ' '),
+        `${fontSizeExpected} ${lineHeightExpected}`,
+      ]),
+      ['text-xs leading-none', 'text-xs leading-none'],
+      ['text-xs leading-[1]', 'text-xs leading-none'],
+      ['text-xs leading-[1.1]', 'text-xs leading-[1.1]'],
+      ['text-xs leading-7 md:text-sm', 'text-xs leading-7 md:text-sm'],
+      ['text-xs leading-none hover:text-sm', 'text-xs leading-none hover:text-sm'],
     ])(testName, { timeout }, async (candidates, expected) => {
       let input = css`
         @import 'tailwindcss';
@@ -1661,6 +1690,46 @@ describe('regressions', () => {
         'size-4',
       ])
     })
+
+    // https://github.com/tailwindlabs/tailwindcss/issues/20602
+    test(
+      'collapsing `text-*` and `leading-*` is not affected by previous calls',
+      { timeout },
+      async () => {
+        let options: CanonicalizeOptions = {
+          collapse: true,
+          logicalToPhysical: true,
+          rem: 16,
+        }
+
+        let targets = [
+          ['text-xs', 'leading-none'],
+          ['text-xs', 'leading-[1.1]'],
+          ['text-sm', 'leading-7'],
+          ['text-sm', 'leading-7', 'md:text-xs'],
+        ]
+
+        // A fresh design system, which never saw `text-xs/none`
+        let fresh = await designSystems.get(__dirname).get(css`
+          @import 'tailwindcss';
+          /* ${randomUUID()} */
+        `)
+
+        // A design system that already saw `text-xs/none` and others
+        let warm = await designSystems.get(__dirname).get(css`
+          @import 'tailwindcss';
+          /* ${randomUUID()} */
+        `)
+        warm.canonicalizeCandidates(['text-xs/none', 'flex'], options)
+        warm.canonicalizeCandidates(['text-xs/[1.1]', 'flex'], options)
+        warm.canonicalizeCandidates(['text-sm/7', 'flex'], options)
+
+        for (let target of targets) {
+          expect(fresh.canonicalizeCandidates(target, options)).toEqual(target)
+          expect(warm.canonicalizeCandidates(target, options)).toEqual(target)
+        }
+      },
+    )
   }
 
   // https://github.com/tailwindlabs/tailwindcss/issues/20557
@@ -1705,7 +1774,7 @@ describe('regressions', () => {
         'pr-2',
         'pb-3',
         'pl-4',
-        'w-64',
+        'w-10',
         'h-10',
         'overflow-x-auto',
         'overflow-y-hidden',
@@ -1725,9 +1794,11 @@ describe('regressions', () => {
       let result = designSystem.canonicalizeCandidates(candidates, DEFAULT_CANONICALIZATION_OPTIONS)
       let duration = performance.now() - start
 
+      // `text-sm leading-5` is linked through `pill` too, but it stays as-is
+      // because `leading-5` also sets `--tw-leading`.
       expect(result).toEqual([
-        ...candidates.filter((candidate) => candidate !== 'text-sm' && candidate !== 'leading-5'),
-        'text-sm/5',
+        ...candidates.filter((candidate) => candidate !== 'w-10' && candidate !== 'h-10'),
+        'size-10',
       ])
       expect(duration).toBeLessThan(5_000)
     },

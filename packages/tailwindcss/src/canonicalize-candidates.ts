@@ -294,6 +294,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     // Hard-coded optimization: if any candidate sets `line-height` and another
     // candidate sets `font-size`, we pre-compute the `text-*` utilities with
     // this line-height to try and collapse to those combined values.
+    //
+    // E.g.: `text-sm [line-height:28px]` → `text-sm/7`. This doesn't apply to
+    // `leading-*`, because it also sets `--tw-leading`. See
+    // `TW_VARIABLE_PROPERTIES`.
     if (candidatePropertiesValues.some((x) => x.has('line-height'))) {
       let fontSizeNames = designSystem.theme.keysInNamespaces(['--text'])
       if (fontSizeNames.length > 0) {
@@ -2957,10 +2961,15 @@ const HEX_REGEX = /#(?:[a-f0-9]{8}|[a-f0-9]{6}|[a-f0-9]{4}|[a-f0-9]{3})/gi
 // The `--tw-{name}` variables that core utilities set next to a property with a
 // different name. All other `--tw-{name}` variables map to the `{name}`
 // property.
+//
+// `--tw-leading` is not in this list on purpose. `text-*` utilities read it, as
+// in `line-height: var(--tw-leading, var(--text-sm--line-height))`, so a
+// `leading-*` utility also changes the line-height of a `text-*` utility in a
+// variant on the same element, like `md:text-base`. Ignoring it would collapse
+// `text-sm leading-7` into `text-sm/7`, which doesn't set `--tw-leading`.
 const TW_VARIABLE_PROPERTIES: Record<string, string> = {
   '--tw-duration': 'transition-duration',
   '--tw-ease': 'transition-timing-function',
-  '--tw-leading': 'line-height',
   '--tw-tracking': 'letter-spacing',
 }
 
