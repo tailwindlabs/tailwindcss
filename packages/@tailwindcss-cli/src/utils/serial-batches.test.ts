@@ -177,6 +177,31 @@ it('drains in-flight work but stays open for more', async () => {
   expect(calls).toEqual([['first'], ['after-drain']])
 })
 
+it('drain waits for the initial build when nothing was pushed', async () => {
+  let finishInitialBuild!: () => void
+  let initialBuild = new Promise<void>((resolve) => (finishInitialBuild = resolve))
+  let queue = serializeBatches<string>(async () => {}, initialBuild)
+
+  let drained = false
+  let draining = queue.drain().then(() => (drained = true))
+  await new Promise((resolve) => setImmediate(resolve))
+  expect(drained).toBe(false)
+
+  finishInitialBuild()
+  await draining
+  expect(drained).toBe(true)
+})
+
+it('drain settles when the initial build fails', async () => {
+  let queue = serializeBatches<string>(
+    async () => {},
+    Promise.reject(new Error('initial build failed')),
+    () => {},
+  )
+
+  await expect(queue.drain()).resolves.toBeUndefined()
+})
+
 it('drain returns immediately when nothing is in flight', async () => {
   let calls: string[][] = []
   let queue = serializeBatches<string>(async (batch) => {
