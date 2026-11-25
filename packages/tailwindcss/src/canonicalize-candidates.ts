@@ -2946,7 +2946,7 @@ function compileUtilitySignatureAst(
 ) {
   // Ensure the prefix is added to the utility if it is not already present.
   utility =
-    designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
+    designSystem.theme.prefix && !utility.startsWith(`${designSystem.theme.prefix}:`)
       ? `${designSystem.theme.prefix}:${utility}`
       : utility
 
@@ -3309,7 +3309,7 @@ function createUtilityPropertiesCache(
     return new DefaultMap((className) => {
       let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
 
-      if (designSystem.theme.prefix && !className.startsWith(designSystem.theme.prefix)) {
+      if (designSystem.theme.prefix && !className.startsWith(`${designSystem.theme.prefix}:`)) {
         className = `${designSystem.theme.prefix}:${className}`
       }
       let parsed = designSystem.parseCandidate(className)

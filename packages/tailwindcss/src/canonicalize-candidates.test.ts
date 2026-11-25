@@ -1898,6 +1898,8 @@ describe('regressions', () => {
   test.each([
     ['', ['p-4'], ['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
     ['tw', ['tw:p-4'], ['tw:overflow-x-hidden', 'tw:overflow-y-hidden'], ['tw:overflow-hidden']],
+    // A prefix that is also the start of a utility name, like `o` in `overflow-hidden`
+    ['o', ['o:p-4'], ['o:overflow-x-hidden', 'o:overflow-y-hidden'], ['o:overflow-hidden']],
   ])(
     'collapsing static utilities after pre-computing all utilities does not compute the static utilities again (prefix: "%s")',
     async (prefix, before, candidates, expected) => {
