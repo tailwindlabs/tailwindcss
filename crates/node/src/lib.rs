@@ -144,10 +144,17 @@ impl Scanner {
   pub fn get_candidates_with_positions(
     &mut self,
     input: ChangedContent,
-  ) -> Vec<CandidateWithPosition> {
-    let content = input.content.unwrap_or_else(|| {
-      std::fs::read_to_string(input.file.unwrap()).expect("Failed to read file")
-    });
+  ) -> napi::Result<Vec<CandidateWithPosition>> {
+    let content = match (input.content, input.file) {
+      (Some(content), _) => content,
+      (None, Some(file)) => std::fs::read_to_string(&file)
+        .map_err(|err| napi::Error::from_reason(format!("Failed to read file `{file}`: {err}")))?,
+      (None, None) => {
+        return Err(napi::Error::from_reason(
+          "Either `content` or `file` must be provided",
+        ))
+      }
+    };
 
     let input = ChangedContent {
       file: None,
@@ -157,15 +164,17 @@ impl Scanner {
 
     let mut utf16_idx = IndexConverter::new(&content[..]);
 
-    self
-      .scanner
-      .get_candidates_with_positions(input.into())
-      .into_iter()
-      .map(|(candidate, position)| CandidateWithPosition {
-        candidate,
-        position: utf16_idx.get(position),
-      })
-      .collect()
+    Ok(
+      self
+        .scanner
+        .get_candidates_with_positions(input.into())
+        .into_iter()
+        .map(|(candidate, position)| CandidateWithPosition {
+          candidate,
+          position: utf16_idx.get(position),
+        })
+        .collect(),
+    )
   }
 
   #[napi(getter)]
