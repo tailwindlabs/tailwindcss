@@ -128,6 +128,20 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
           // optimize the build by not creating the compiler until we need it.
           let isInitialBuild = context.compiler === null
 
+          // Report each config file, plugin, etc. only once per build
+          let reportedDependencies = new Set<string>()
+          function addDependency(file: string) {
+            let absolutePath = path.resolve(file)
+            if (reportedDependencies.has(absolutePath)) return
+            reportedDependencies.add(absolutePath)
+            result.messages.push({
+              type: 'dependency',
+              plugin: '@tailwindcss/postcss',
+              file: absolutePath,
+              parent: result.opts.from,
+            })
+          }
+
           async function createCompiler() {
             DEBUG && I.start('Setup compiler')
             if (context.fullRebuildPaths.length > 0 && !isInitialBuild) {
@@ -169,7 +183,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               from: result.opts.from,
               base: inputBasePath,
               shouldRewriteUrls,
-              onDependency: (path) => context.fullRebuildPaths.push(path),
+              onDependency: (depPath) => {
+                context.fullRebuildPaths.push(depPath)
+
+                // A full rebuild can find files that the previous compiler didn't
+                // know about, like a new `@import`. Watch them right away, so a
+                // change to them causes a rebuild, also when this compile fails.
+                addDependency(depPath)
+              },
               // In CSS Module files, we have to disable the `@property` polyfill since these will
               // emit global `*` rules which are considered to be non-pure and will cause builds
               // to fail.
@@ -196,12 +217,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             DEBUG && I.start('Register full rebuild paths')
             {
               for (let file of context.fullRebuildPaths) {
-                result.messages.push({
-                  type: 'dependency',
-                  plugin: '@tailwindcss/postcss',
-                  file: path.resolve(file),
-                  parent: result.opts.from,
-                })
+                addDependency(file)
               }
 
               let files = result.messages.flatMap((message) => {
@@ -387,12 +403,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             let resolvedInputFile = path.resolve(base, inputFile)
 
             for (let file of context.fullRebuildPaths) {
-              result.messages.push({
-                type: 'dependency',
-                plugin: '@tailwindcss/postcss',
-                file: path.resolve(file),
-                parent: result.opts.from,
-              })
+              addDependency(file)
             }
 
             if (context.scanner) {
