@@ -102,6 +102,7 @@ interface DesignSystem extends BaseDesignSystem {
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
     >
+    [PRE_COMPUTED_STATIC_UTILITIES_KEY]: DefaultMap<SignatureOptions, Set<string>>
     [UTILITY_PROPERTIES_KEY]: DefaultMap<
       SignatureOptions,
       DefaultMap<string, DefaultMap<string, Set<string>>>
@@ -133,6 +134,8 @@ export function prepareDesignSystemStorage(
   designSystem.storage[UTILITY_THEME_VARIABLES_KEY] ??=
     createUtilityThemeVariablesCache(designSystem)
   designSystem.storage[STATIC_UTILITIES_KEY] ??= createStaticUtilitiesCache()
+  designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY] ??=
+    createPreComputedStaticUtilitiesCache(designSystem)
   designSystem.storage[UTILITY_PROPERTIES_KEY] ??= createUtilityPropertiesCache(designSystem)
   designSystem.storage[DYNAMIC_UTILITIES_KEY] ??= createDynamicUtilitiesCache(designSystem)
   designSystem.storage[PRE_COMPUTED_UTILITIES_KEY] ??= createPreComputedUtilitiesCache(designSystem)
@@ -276,6 +279,10 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
   return Array.from(result)
 
   function collapseGroup(candidates: string[]) {
+    // A single candidate can't be collapsed with anything, so there is nothing
+    // to do. E.g.: `flex hover:underline`
+    if (candidates.length < 2) return candidates
+
     let signatureOptions = options.signatureOptions
     let computeUtilitiesPropertiesLookup =
       designSystem.storage[UTILITY_PROPERTIES_KEY].get(signatureOptions)
@@ -290,6 +297,22 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let candidatePropertiesValues = candidates.map((candidate) =>
       computeUtilitiesPropertiesLookup.get(candidate),
     )
+
+    // A candidate without properties, like a class that isn't a utility, can't
+    // be collapsed with anything. E.g.: `group flex`
+    if (candidatePropertiesValues.filter((propertyValues) => propertyValues.size > 0).length < 2) {
+      return candidates
+    }
+
+    // A utility is only added to the index of static utilities once its
+    // properties are computed. Pre-computing all utilities does that, but it
+    // only happens for candidates with a value like `p-4`. So make sure that
+    // the static utilities are in there, otherwise the result depends on the
+    // candidates that were canonicalized before. E.g.: `overflow-x-hidden
+    // overflow-y-hidden` → `overflow-hidden`
+    if (!designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].has(signatureOptions)) {
+      designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY].get(signatureOptions)
+    }
 
     // Hard-coded optimization: if any candidate sets `line-height` and another
     // candidate sets `font-size`, we pre-compute the `text-*` utilities with
@@ -2928,7 +2951,7 @@ function compileUtilitySignatureAst(
 ) {
   // Ensure the prefix is added to the utility if it is not already present.
   utility =
-    designSystem.theme.prefix && !utility.startsWith(designSystem.theme.prefix)
+    designSystem.theme.prefix && !utility.startsWith(`${designSystem.theme.prefix}:`)
       ? `${designSystem.theme.prefix}:${utility}`
       : utility
 
@@ -3258,6 +3281,36 @@ function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTI
   })
 }
 
+// Compute the properties of the static utilities, which adds them to the index
+// of static utilities. These are the static utilities that pre-computing all
+// utilities computes as well, but this takes a few milliseconds, while
+// pre-computing all utilities takes almost a second with the default theme.
+const PRE_COMPUTED_STATIC_UTILITIES_KEY = Symbol()
+function createPreComputedStaticUtilitiesCache(
+  designSystem: DesignSystem,
+): DesignSystem['storage'][typeof PRE_COMPUTED_STATIC_UTILITIES_KEY] {
+  return new DefaultMap((options: SignatureOptions) => {
+    let computeUtilitiesPropertiesLookup = designSystem.storage[UTILITY_PROPERTIES_KEY].get(options)
+    let prefix = designSystem.theme.prefix ? `${designSystem.theme.prefix}:` : ''
+
+    let utilities = new Set<string>()
+    for (let utility of designSystem.utilities.keys('static')) {
+      // Skip the utilities that the class list skips, like deprecated ones.
+      // E.g.: `bg-gradient-to-r`
+      if (designSystem.utilities.getCompletions(utility).length === 0) continue
+
+      // Use the same name as the candidates that we collapse, which have the
+      // prefix. E.g.: `tw:flex`
+      utility = `${prefix}${utility}`
+      if (computeUtilitiesPropertiesLookup.get(utility).size > 0) {
+        utilities.add(utility)
+      }
+    }
+
+    return utilities
+  })
+}
+
 const UTILITY_PROPERTIES_KEY = Symbol()
 function createUtilityPropertiesCache(
   designSystem: DesignSystem,
@@ -3266,7 +3319,7 @@ function createUtilityPropertiesCache(
     return new DefaultMap((className) => {
       let localPropertyValueLookup = new DefaultMap((_property) => new Set<string>())
 
-      if (designSystem.theme.prefix && !className.startsWith(designSystem.theme.prefix)) {
+      if (designSystem.theme.prefix && !className.startsWith(`${designSystem.theme.prefix}:`)) {
         className = `${designSystem.theme.prefix}:${className}`
       }
       let parsed = designSystem.parseCandidate(className)
@@ -3418,7 +3471,7 @@ function createVariantSignatureCache(
       try {
         // Ensure the prefix is added to the utility if it is not already present.
         variant =
-          designSystem.theme.prefix && !variant.startsWith(designSystem.theme.prefix)
+          designSystem.theme.prefix && !variant.startsWith(`${designSystem.theme.prefix}:`)
             ? `${designSystem.theme.prefix}:${variant}`
             : variant
 

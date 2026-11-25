@@ -1880,6 +1880,155 @@ describe('regressions', () => {
     },
   )
 
+  // https://github.com/tailwindlabs/tailwindcss/issues/20602
+  test.each([
+    [['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    [['overflow-x-clip', 'overflow-y-clip'], ['overflow-clip']],
+    [['overscroll-x-none', 'overscroll-y-none'], ['overscroll-none']],
+    [['overflow-x-auto', 'overflow-y-auto'], ['overflow-auto']],
+    [['hover:overflow-x-hidden', 'hover:overflow-y-hidden'], ['hover:overflow-hidden']],
+  ])(
+    'collapsing static utilities does not depend on previously canonicalized candidates',
+    async (candidates, expected) => {
+      // A new design system, so that no other candidates were canonicalized before
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @tailwind utilities;
+        `,
+        { base: __dirname },
+      )
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+
+      // A candidate with a value pre-computes all utilities, which must not
+      // change the result
+      designSystem.canonicalizeCandidates(['p-4'], options)
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+    },
+  )
+
+  test.each([
+    ['', ['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    ['tw', ['tw:overflow-x-hidden', 'tw:overflow-y-hidden'], ['tw:overflow-hidden']],
+  ])(
+    'collapsing static utilities does not pre-compute all utilities (prefix: "%s")',
+    async (prefix, candidates, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        prefix
+          ? css`
+              @theme prefix(${prefix}) {
+              }
+              @tailwind utilities;
+            `
+          : css`
+              @tailwind utilities;
+            `,
+        { base: __dirname },
+      )
+
+      // Pre-computing all utilities starts from the class list, and takes
+      // ~800ms with the default theme
+      let getClassList = vi.spyOn(designSystem, 'getClassList')
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+      expect(getClassList).not.toHaveBeenCalled()
+    },
+  )
+
+  test('collapsing a group with a single utility does not compute the static utilities', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+      `,
+      { base: __dirname },
+    )
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    using keys = vi.spyOn(designSystem.utilities, 'keys')
+
+    // `group` is not a utility, so `flex` can't be collapsed with anything
+    expect(designSystem.canonicalizeCandidates(['group', 'flex'], options)).toEqual([
+      'group',
+      'flex',
+    ])
+    expect(keys).not.toHaveBeenCalledWith('static')
+  })
+
+  test.each([
+    ['', ['p-4'], ['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    ['tw', ['tw:p-4'], ['tw:overflow-x-hidden', 'tw:overflow-y-hidden'], ['tw:overflow-hidden']],
+    // A prefix that is also the start of a utility name, like `o` in `overflow-hidden`
+    ['o', ['o:p-4'], ['o:overflow-x-hidden', 'o:overflow-y-hidden'], ['o:overflow-hidden']],
+  ])(
+    'collapsing static utilities after pre-computing all utilities does not compute the static utilities again (prefix: "%s")',
+    async (prefix, before, candidates, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        prefix
+          ? css`
+              @theme prefix(${prefix}) {
+              }
+              @tailwind utilities;
+            `
+          : css`
+              @tailwind utilities;
+            `,
+        { base: __dirname },
+      )
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // A candidate with a value pre-computes all utilities, which includes the
+      // static utilities
+      designSystem.canonicalizeCandidates(before, options)
+
+      using keys = vi.spyOn(designSystem.utilities, 'keys')
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+      expect(keys).not.toHaveBeenCalledWith('static')
+    },
+  )
+
+  test.each([
+    ['tw', 'tw:[&:focus]:flex', 'tw:focus:flex'],
+    // A prefix that is also the start of a variant name, like `f` in `focus`
+    ['f', 'f:[&:focus]:flex', 'f:focus:flex'],
+  ])(
+    'canonicalizing variants with a prefix (prefix: "%s")',
+    async (prefix, candidate, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        css`
+          @theme prefix(${prefix}) {
+          }
+          @tailwind utilities;
+        `,
+        { base: __dirname },
+      )
+
+      expect(designSystem.canonicalizeCandidates([candidate], { rem: 16 })).toEqual([expected])
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss/issues/20051
   test(
     'does not crash when plugin matchComponents rejects speculative values during collapse',
