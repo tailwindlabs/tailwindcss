@@ -202,15 +202,18 @@ export function isValidArbitrary(input: string, isDeclarationValue = false) {
         stackPos++
         break
       case OPEN_CURLY:
-        // NOTE: We intentionally do not consider `{` to move the stack pointer
-        // because a candidate like `[&{color:red}]:flex` should not be valid.
+        // A top-level `{` would start a block in the generated CSS, e.g.:
+        // `[&{color:red}]:flex`. Nested ones must be closed, e.g. `var(--a,{})`.
+        if (stackPos === 0) return false
+        closingBracketStack[stackPos] = CLOSE_CURLY
+        stackPos++
         break
       case CLOSE_BRACKET:
       case CLOSE_CURLY:
       case CLOSE_PAREN:
         if (stackPos === 0) return false
 
-        if (stackPos > 0 && char === closingBracketStack[stackPos - 1]) {
+        if (char === closingBracketStack[stackPos - 1]) {
           // SAFETY: The buffer does not need to be mutated because the stack is
           // only ever read from or written to its current position. Its current
           // position is only ever incremented after writing to it. Meaning that
@@ -218,7 +221,7 @@ export function isValidArbitrary(input: string, isDeclarationValue = false) {
           // reading/writing always starts at position `0`.
           stackPos--
           if (stackPos === keepUnderscoresUntil) keepUnderscoresUntil = -1
-        } else if (char !== CLOSE_CURLY) {
+        } else {
           return false
         }
 
