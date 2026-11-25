@@ -702,9 +702,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   }
 }
 
-// Load `@parcel/watcher` lazily so a missing or broken native binding only
-// affects `--watch` (without `--poll`), instead of crashing one-off builds and
-// polling mode as well.
 /// Shut watch mode down in an order that cannot drop collected files.
 ///
 /// A full rebuild runs inside the queue and swaps the watcher generation while it
@@ -721,6 +718,9 @@ export async function shutdownWatchMode(
   await batches?.close()
 }
 
+// Load `@parcel/watcher` lazily so a missing or broken native binding only
+// affects `--watch` (without `--poll`), instead of crashing one-off builds and
+// polling mode as well.
 async function loadWatcher(): Promise<typeof import('@parcel/watcher')> {
   try {
     return (await import('@parcel/watcher')).default
