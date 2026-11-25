@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep watching all dependencies in `@tailwindcss/postcss` when a rebuild fails, so watch mode recovers once the error is fixed ([#20395](https://github.com/tailwindlabs/tailwindcss/pull/20395))
 - Canonicalization: don't replace arbitrary variants inside compound variants with variants they can't compound with (e.g. `not-[&>*]:flex` no longer becomes `not-*:flex`) ([#20720](https://github.com/tailwindlabs/tailwindcss/pull/20720))
 - Don't generate invalid CSS for `inherit` colors with an opacity modifier (e.g. `bg-inherit/50` or `drop-shadow-inherit/50`) ([#20679](https://github.com/tailwindlabs/tailwindcss/pull/20679))
+- Canonicalization: don't replace an arbitrary variant that has a selector list in `:is(…)` with a custom variant that emits different CSS (e.g. `[&:is(.foo,.bar)]:flex` → `[.foo,.bar]:flex`, not `foo:flex` with `@custom-variant foo (&.foo, .bar)`) ([#20737](https://github.com/tailwindlabs/tailwindcss/pull/20737))
 
 ## [4.3.5] - 2026-11-06
 
