@@ -333,6 +333,33 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // such that we can present a helpful error message if needed.
     await handleError(() => loadWatcher())
 
+    // Handle one batch of changed files at a time. A full rebuild replaces the
+    // compiler, the scanner and the watchers, so two batches that run at the
+    // same time can mix up that state, and an outdated build can overwrite a
+    // newer one. Files that change while a batch runs are collected, and are
+    // handled together in the next batch.
+    let pendingFiles: Set<string> | null = null
+    let handling = false
+
+    async function enqueue(files: string[]) {
+      pendingFiles ??= new Set()
+      for (let file of files) pendingFiles.add(file)
+
+      // The running batch handles these files when it's done.
+      if (handling) return
+
+      handling = true
+      try {
+        while (pendingFiles !== null) {
+          let batch = Array.from(pendingFiles)
+          pendingFiles = null
+          await handle(batch)
+        }
+      } finally {
+        handling = false
+      }
+    }
+
     async function handle(files: string[]) {
       try {
         // If the only change happened to the output file, then we don't want to
@@ -387,7 +414,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           // Setup new watchers
           DEBUG && I.start('Setup new watchers')
-          let newCleanupFunction = await createWatchers(await watchDirectories(scanner), handle)
+          let newCleanupFunction = await createWatchers(await watchDirectories(scanner), enqueue)
           DEBUG && I.end('Setup new watchers')
 
           // Clear old watchers
@@ -482,7 +509,7 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       }
     }
 
-    cleanupWatchers.push(await createWatchers(await watchDirectories(scanner), handle))
+    cleanupWatchers.push(await createWatchers(await watchDirectories(scanner), enqueue))
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
     // disable this behavior with `--watch=always`.
