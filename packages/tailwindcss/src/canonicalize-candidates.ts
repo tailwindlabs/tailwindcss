@@ -1848,11 +1848,13 @@ function allVariablesAreUsed(
   let isSafeMigration = true
   walk(ValueParser.parse(value), (node) => {
     if (node.kind === 'function' && node.value === 'var') {
-      let variable = node.nodes[0].value
-      let r = new RegExp(`var\\(${variable}[,)]\\s*`, 'g')
+      let variable = node.nodes[0]?.value
       if (
+        // An empty `var()` can't be used in the replacement
+        variable === undefined ||
         // We need to check if the variable is used in the replacement
-        !r.test(replacementAsCss) ||
+        (!replacementAsCss.includes(`var(${variable})`) &&
+          !replacementAsCss.includes(`var(${variable},`)) ||
         // The value cannot be set to a different value in the
         // replacement because that would make it an unsafe migration
         replacementAsCss.includes(`${variable}:`)

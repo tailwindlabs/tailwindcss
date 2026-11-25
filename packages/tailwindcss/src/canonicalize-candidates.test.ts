@@ -93,7 +93,9 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
             //
             // It also has to end in a `,` or `)` to prevent replacing functions
             // that look like variables, e.g.: `--spacing(…)`
-            /([(:])--([\w-]+)([,)])/g,
+            //
+            // The variable can contain escaped characters, e.g.: `--spacing-1\.5`
+            /([(:])--((?:[\w-]|\\.)+)([,)])/g,
             (_, start, variable, end) => `${start}--tw-${variable}${end}`,
           )
           .replaceAll('--theme(--tw-', '--theme(--')
@@ -635,6 +637,32 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
               --*: initial;
               --breakpoint-md: 48rem;
               --container-3xl: 48rem;
+            }
+          `
+
+          await expectCanonicalization(input, candidate, expected)
+        },
+      )
+
+      // The variables in the arbitrary value must be used by the replacement as
+      // well, also when their name contains escaped characters.
+      test.each([
+        ['p-[var(--spacing-1\\.5)]', 'p-1.5'],
+        ['[padding:var(--spacing-1\\.5)]', 'p-1.5'],
+
+        // An empty `var()` is never used by the replacement
+        ['p-[var(--spacing-2,var())]', 'p-(--spacing-2,var())'],
+        ['[padding:var(--spacing-2,var())]', '[padding:var(--spacing-2,var())]'],
+      ])(
+        `migrate arbitrary value with variables to theme value ${testName}`,
+        { timeout },
+        async (candidate, expected) => {
+          let input = css`
+            @import 'tailwindcss';
+            ${theme} {
+              --*: initial;
+              --spacing-1\.5: 6px;
+              --spacing-2: 8px;
             }
           `
 
