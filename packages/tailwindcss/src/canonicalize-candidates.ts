@@ -3193,9 +3193,14 @@ function resolveVariablesInValue(
     let variable = valueNode.nodes[0].value
 
     // Drop the prefix from the variable name if it is present. The
-    // internal variable doesn't have the prefix.
+    // internal variable doesn't have the prefix, e.g.: `--tw-spacing` becomes
+    // `--spacing`.
+    //
+    // Keep the leading `--`. Without it, `resolveThemeValue` sees a legacy
+    // path like `spacing`, and switches the design system to full plugin
+    // support, which makes each later lookup a lot slower.
     if (designSystem.theme.prefix && variable.startsWith(`--${designSystem.theme.prefix}-`)) {
-      variable = variable.slice(`--${designSystem.theme.prefix}-`.length)
+      variable = `--${variable.slice(`--${designSystem.theme.prefix}-`.length)}`
     }
     let variableValue = designSystem.resolveThemeValue(variable)
     // Prevent infinite recursion when the variable value contains the

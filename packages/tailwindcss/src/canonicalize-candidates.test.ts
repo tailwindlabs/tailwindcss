@@ -2379,6 +2379,40 @@ describe('regressions', () => {
     let countAfter = keysSpy.mock.calls.length
     expect(countAfter).toBe(countBefore)
   })
+
+  // Dropping the theme prefix from `--tw-spacing` has to give `--spacing`, not
+  // `spacing`. A bare key makes the compat layer switch the design system to
+  // full plugin support, which replaces `resolveThemeValue` and makes each
+  // later lookup a lot slower.
+  test('does not switch to full plugin support when canonicalizing prefixed candidates', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+        @theme prefix(tw) {
+          --spacing: 0.25rem;
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+      `,
+      { base: __dirname },
+    )
+
+    let resolveThemeValue = designSystem.resolveThemeValue
+
+    expect(
+      designSystem.canonicalizeCandidates(
+        [
+          'tw:p-4',
+          'tw:[margin-top:0.25rem]',
+          'tw:w-[1rem]',
+          'tw:h-[1rem]',
+          'tw:bg-[var(--tw-color-red-500)]',
+        ],
+        { rem: 16, collapse: true },
+      ),
+    ).toEqual(['tw:p-4', 'tw:mt-1', 'tw:bg-red-500', 'tw:size-4'])
+
+    expect(designSystem.resolveThemeValue).toBe(resolveThemeValue)
+  })
 })
 
 describe('normalizeEscapes', () => {
