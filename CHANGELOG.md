@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Don't add whitespace around math operators inside quoted strings in arbitrary values (e.g. `content-['(min(1,2))']` no longer outputs `content-['(min(1, 2))']`) ([#20615](https://github.com/tailwindlabs/tailwindcss/pull/20615))
 - Process `@variant` in `@tailwindcss/webpack` and `@tailwindcss/turbopack` when it is the only Tailwind CSS feature in a stylesheet ([#20746](https://github.com/tailwindlabs/tailwindcss/pull/20746))
 - Prevent `SOURCEMAP_BROKEN` warnings in `@tailwindcss/vite` builds with `build.sourcemap` enabled (e.g. when a Tailwind CSS root is imported with `?inline`) ([#20623](https://github.com/tailwindlabs/tailwindcss/pull/20623))
+- Canonicalization: don't collapse `leading-*` into the `text-*/*` modifier, because it drops the `--tw-leading` variable that `text-*` utilities in variants on the same element rely on (e.g. `text-sm leading-7 md:text-base`) ([#20756](https://github.com/tailwindlabs/tailwindcss/pull/20756))
 
 ## [4.3.5] - 2026-11-06
 
