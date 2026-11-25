@@ -523,8 +523,18 @@ describe('error recovery', () => {
   beforeEach(async () => {
     dir = await mkdtemp(path.join(tmpdir(), 'tw-postcss'))
     await writeFile(path.join(dir, 'index.html'), `<div class="underline"></div>`)
-    await writeFile(path.join(dir, 'index.css'), css` @import './dependency.css'; `)
-    await writeFile(path.join(dir, 'dependency.css'), css` @tailwind utilities; `)
+    await writeFile(
+      path.join(dir, 'index.css'),
+      css`
+        @import './dependency.css';
+      `,
+    )
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @tailwind utilities;
+      `,
+    )
   })
   afterEach(() => rm(dir, { recursive: true, force: true }))
 

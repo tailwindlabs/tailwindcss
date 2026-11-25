@@ -427,7 +427,9 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             console.error(error)
 
             let message =
-              error && typeof error === 'object' && 'message' in error ? `${error.message}` : `${error}`
+              error && typeof error === 'object' && 'message' in error
+                ? `${error.message}`
+                : `${error}`
 
             // In optimized (typically production) builds we want compilation errors to fail
             // the build outright so broken CSS never ships.
