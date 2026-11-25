@@ -29,6 +29,7 @@ let builds: { target: Bun.Build.CompileTarget; name: string }[] = [
   { name: 'tailwindcss-macos-arm64', target: 'bun-darwin-arm64' },
   { name: 'tailwindcss-macos-x64', target: 'bun-darwin-x64-baseline' },
   { name: 'tailwindcss-windows-x64.exe', target: 'bun-windows-x64-baseline' },
+  { name: 'tailwindcss-windows-arm64.exe', target: 'bun-windows-arm64' },
 ]
 
 let summary: { target: Bun.Build.CompileTarget; name: string; sum: string }[] = []
