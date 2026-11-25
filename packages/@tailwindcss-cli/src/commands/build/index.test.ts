@@ -38,10 +38,10 @@ it('flushes a collected event when shutdown cancels its debounce timer', async (
     calls.push(files)
   })
   let fake = fakeWatcher()
-  let generation = await createWatchers(['/watch'], async () => {}, queue, fake.watcher)
+  let cleanup = await createWatchers(['/watch'], queue, fake.watcher)
 
   await fake.callbacks[0](null, [{ type: 'delete', path: 'last-change' }])
-  await generation.cleanup()
+  await cleanup()
   await queue.close()
 
   expect(calls).toEqual([['last-change']])
@@ -55,19 +55,13 @@ it('waits for an entered watcher callback before shutdown flushes changes', asyn
     calls.push(files)
   })
   let fake = fakeWatcher()
-  let generation = await createWatchers(
-    ['/watch'],
-    async () => {},
-    queue,
-    fake.watcher,
-    async () => {
-      await lstatCanFinish
-      return { isFile: () => true, isSymbolicLink: () => false }
-    },
-  )
+  let cleanupWatchers = await createWatchers(['/watch'], queue, fake.watcher, async () => {
+    await lstatCanFinish
+    return { isFile: () => true, isSymbolicLink: () => false }
+  })
 
   let callback = fake.callbacks[0](null, [{ type: 'update', path: 'delayed-change' }])
-  let cleanup = generation.cleanup()
+  let cleanup = cleanupWatchers()
   await nextTask()
   expect(calls).toEqual([])
 
@@ -100,16 +94,10 @@ it('writes the newest change last when an earlier rebuild is slower', async () =
     written.push(files.at(-1)!)
   })
   let fake = fakeWatcher()
-  await createWatchers(
-    ['/watch'],
-    async () => {},
-    queue,
-    fake.watcher,
-    async () => ({
-      isFile: () => true,
-      isSymbolicLink: () => false,
-    }),
-  )
+  await createWatchers(['/watch'], queue, fake.watcher, async () => ({
+    isFile: () => true,
+    isSymbolicLink: () => false,
+  }))
 
   await fake.callbacks[0](null, [{ type: 'update', path: 'older-change' }])
   await firstRebuildStarted

@@ -329,11 +329,6 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
   let cleanupWatchers: (() => Promise<void>)[] = []
   let finishInitialBuild!: () => void
   let initialBuildFinished = new Promise<void>((resolve) => (finishInitialBuild = resolve))
-  let eventBatches: SerialBatches<string> | null = null
-  let setEventHandler!: (handler: (files: string[]) => Promise<void>) => void
-  let eventHandler = new Promise<(files: string[]) => Promise<void>>(
-    (resolve) => (setEventHandler = resolve),
-  )
 
   // Watch for changes
   if (args['--watch'] && pollInterval === false) {
@@ -341,170 +336,164 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
     // such that we can present a helpful error message if needed.
     await handleError(() => loadWatcher())
 
-    eventBatches = serializeBatches(
-      async (files) => (await eventHandler)(files),
-      initialBuildFinished,
-      (error) => eprintln(formatError(error)),
+    let eventBatches = serializeBatches(handleChanges, initialBuildFinished, (error) =>
+      eprintln(formatError(error)),
     )
-    let initialWatchers = await createWatchers(
-      await watchDirectories(scanner),
-      async function handle(files) {
-        try {
-          // Ignore our own writes so they don't trigger another rebuild.
-          files = filterChangedFiles(files, args['--output'], args['--map'])
-          if (files.length === 0) return
 
-          using I = new Instrumentation()
-          DEBUG && I.start('[@tailwindcss/cli] (watcher)')
+    async function handleChanges(files: string[]) {
+      try {
+        // Ignore our own writes so they don't trigger another rebuild.
+        files = filterChangedFiles(files, args['--output'], args['--map'])
+        if (files.length === 0) return
 
-          // Re-compile the input
-          let start = process.hrtime.bigint()
+        using I = new Instrumentation()
+        DEBUG && I.start('[@tailwindcss/cli] (watcher)')
 
-          let resolvedFullRebuildPaths = fullRebuildPaths
-          let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
+        // Re-compile the input
+        let start = process.hrtime.bigint()
 
-          // Track the compiled CSS
-          let compiledCss = ''
-          let compiledMap: SourceMap | null = null
+        let resolvedFullRebuildPaths = fullRebuildPaths
+        let rebuildStrategy = getRebuildStrategy(files, resolvedFullRebuildPaths)
 
-          // Scan the entire `base` directory for full rebuilds.
-          if (rebuildStrategy.kind === 'full') {
-            // Read the new `input`.
-            let input = args['--input']
-              ? args['--input'] === '-'
-                ? await drainStdin()
-                : await fs.readFile(args['--input'], 'utf-8')
-              : css`
-                  @import 'tailwindcss';
-                `
-            clearRequireCache(resolvedFullRebuildPaths)
+        // Track the compiled CSS
+        let compiledCss = ''
+        let compiledMap: SourceMap | null = null
 
-            // Track current rebuild paths in case something goes wrong when
-            // performing a full rebuild.
-            backupRebuildPaths = fullRebuildPaths.slice()
+        // Scan the entire `base` directory for full rebuilds.
+        if (rebuildStrategy.kind === 'full') {
+          // Read the new `input`.
+          let input = args['--input']
+            ? args['--input'] === '-'
+              ? await drainStdin()
+              : await fs.readFile(args['--input'], 'utf-8')
+            : css`
+                @import 'tailwindcss';
+              `
+          clearRequireCache(resolvedFullRebuildPaths)
 
-            // The `inputFilePath`, if provided, will be the only known full
-            // rebuild path before the compiler is re-created.
-            fullRebuildPaths = inputFilePath ? [inputFilePath] : []
+          // Track current rebuild paths in case something goes wrong when
+          // performing a full rebuild.
+          backupRebuildPaths = fullRebuildPaths.slice()
 
-            // Create a new compiler, given the new `input`
-            ;[compiler, scanner] = await createCompiler(input, I)
+          // The `inputFilePath`, if provided, will be the only known full
+          // rebuild path before the compiler is re-created.
+          fullRebuildPaths = inputFilePath ? [inputFilePath] : []
 
-            // Successfully created a new compiler, so the `fullRebuildPaths`
-            // will be updated. If other errors occur, we should be able to
-            // restore the paths unconditionally.
-            backupRebuildPaths = fullRebuildPaths.slice()
+          // Create a new compiler, given the new `input`
+          ;[compiler, scanner] = await createCompiler(input, I)
 
-            // Scan the directory for candidates
-            DEBUG && I.start('Scan for candidates')
-            let candidates = scanner.scan()
-            DEBUG && I.end('Scan for candidates')
+          // Successfully created a new compiler, so the `fullRebuildPaths`
+          // will be updated. If other errors occur, we should be able to
+          // restore the paths unconditionally.
+          backupRebuildPaths = fullRebuildPaths.slice()
 
-            // Setup new watchers
-            DEBUG && I.start('Setup new watchers')
-            let newWatchers = await createWatchers(
-              await watchDirectories(scanner),
-              handle,
-              eventBatches!,
-            )
-            DEBUG && I.end('Setup new watchers')
+          // Scan the directory for candidates
+          DEBUG && I.start('Scan for candidates')
+          let candidates = scanner.scan()
+          DEBUG && I.end('Scan for candidates')
 
-            // Clear old watchers. Register the new generation *before* awaiting
-            // the old one, so shutdown never observes an empty cleanup list.
-            DEBUG && I.start('Cleanup old watchers')
-            let previousCleanups = cleanupWatchers.splice(0)
-            cleanupWatchers.push(newWatchers.cleanup)
-            await Promise.all(previousCleanups.map((cleanup) => cleanup()))
-            DEBUG && I.end('Cleanup old watchers')
+          // Setup new watchers
+          DEBUG && I.start('Setup new watchers')
+          let newCleanupFunction = await createWatchers(
+            await watchDirectories(scanner),
+            eventBatches,
+          )
+          DEBUG && I.end('Setup new watchers')
 
-            // Re-compile the CSS
-            DEBUG && I.start('Build CSS')
-            compiledCss = compiler.build(candidates)
-            DEBUG && I.end('Build CSS')
+          // Clear old watchers. Register the new generation *before* awaiting
+          // the old one, so shutdown never observes an empty cleanup list.
+          DEBUG && I.start('Cleanup old watchers')
+          let previousCleanups = cleanupWatchers.splice(0)
+          cleanupWatchers.push(newCleanupFunction)
+          await Promise.all(previousCleanups.map((cleanup) => cleanup()))
+          DEBUG && I.end('Cleanup old watchers')
 
-            if (args['--map']) {
-              DEBUG && I.start('Build Source Map')
-              compiledMap = toSourceMap(compiler.buildSourceMap())
-              DEBUG && I.end('Build Source Map')
-            }
+          // Re-compile the CSS
+          DEBUG && I.start('Build CSS')
+          compiledCss = compiler.build(candidates)
+          DEBUG && I.end('Build CSS')
+
+          if (args['--map']) {
+            DEBUG && I.start('Build Source Map')
+            compiledMap = toSourceMap(compiler.buildSourceMap())
+            DEBUG && I.end('Build Source Map')
           }
-
-          // Scan changed files only for incremental rebuilds.
-          else if (rebuildStrategy.kind === 'incremental') {
-            DEBUG && I.start('Scan for candidates')
-            let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
-            DEBUG && I.end('Scan for candidates')
-
-            // No new candidates found which means we don't need to write to
-            // disk, and can return early.
-            if (newCandidates.length <= 0) {
-              let end = process.hrtime.bigint()
-              if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
-              return
-            }
-
-            DEBUG && I.start('Build CSS')
-            compiledCss = compiler.build(newCandidates)
-            DEBUG && I.end('Build CSS')
-
-            if (args['--map']) {
-              DEBUG && I.start('Build Source Map')
-              compiledMap = toSourceMap(compiler.buildSourceMap())
-              DEBUG && I.end('Build Source Map')
-            }
-          }
-
-          await write(compiledCss, compiledMap, args, I)
-
-          let end = process.hrtime.bigint()
-          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
-        } catch (err) {
-          // It's important that we perform a full rebuild when any of the
-          // dependencies tracked in `fullRebuildPaths` has been changed.
-          //
-          // If we remove one of those files, then a subsequent build will be
-          // triggered, but it will fail because the dependency is gone. The
-          // compiler itself will be in a broken state and won't be able to
-          // register any dependencies therefore we want to restore all the
-          // dependencies from before. If we don't do that, then we won't be
-          // able to recover from a bug in a transitive dependency.
-          //
-          // E.g.:
-          // ```css
-          // /* input.css — known full rebuild path */
-          // @import 'tailwindcss';
-          // @config "./tailwind.config.js";
-          // ```
-          //
-          // ```js
-          // // tailwind.config.js
-          // const theme = require('./my-theme.js');
-          //
-          // module.exports = {
-          //   theme
-          // }
-          // ```
-          // In this case `my-theme.js` is a transitive dependency of
-          // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
-          // result in an error, restoring `my-theme.js` should trigger a
-          // fresh build even though the compiler didn't restore.
-          //
-          // Once the build error is fixed, a fresh full rebuild will happen
-          // which in turn will fixup the full rebuild paths.
-          fullRebuildPaths = backupRebuildPaths
-
-          // Catch any errors and print them to stderr, but don't exit the process
-          // and keep watching.
-          eprintln(formatError(err))
-
-          let end = process.hrtime.bigint()
-          if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
         }
-      },
-      eventBatches,
-    )
-    setEventHandler(initialWatchers.callback)
-    cleanupWatchers.push(initialWatchers.cleanup)
+
+        // Scan changed files only for incremental rebuilds.
+        else if (rebuildStrategy.kind === 'incremental') {
+          DEBUG && I.start('Scan for candidates')
+          let newCandidates = scanner.scanFiles(rebuildStrategy.changedFiles)
+          DEBUG && I.end('Scan for candidates')
+
+          // No new candidates found which means we don't need to write to
+          // disk, and can return early.
+          if (newCandidates.length <= 0) {
+            let end = process.hrtime.bigint()
+            if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+            return
+          }
+
+          DEBUG && I.start('Build CSS')
+          compiledCss = compiler.build(newCandidates)
+          DEBUG && I.end('Build CSS')
+
+          if (args['--map']) {
+            DEBUG && I.start('Build Source Map')
+            compiledMap = toSourceMap(compiler.buildSourceMap())
+            DEBUG && I.end('Build Source Map')
+          }
+        }
+
+        await write(compiledCss, compiledMap, args, I)
+
+        let end = process.hrtime.bigint()
+        if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+      } catch (err) {
+        // It's important that we perform a full rebuild when any of the
+        // dependencies tracked in `fullRebuildPaths` has been changed.
+        //
+        // If we remove one of those files, then a subsequent build will be
+        // triggered, but it will fail because the dependency is gone. The
+        // compiler itself will be in a broken state and won't be able to
+        // register any dependencies therefore we want to restore all the
+        // dependencies from before. If we don't do that, then we won't be
+        // able to recover from a bug in a transitive dependency.
+        //
+        // E.g.:
+        // ```css
+        // /* input.css — known full rebuild path */
+        // @import 'tailwindcss';
+        // @config "./tailwind.config.js";
+        // ```
+        //
+        // ```js
+        // // tailwind.config.js
+        // const theme = require('./my-theme.js');
+        //
+        // module.exports = {
+        //   theme
+        // }
+        // ```
+        // In this case `my-theme.js` is a transitive dependency of
+        // `input.css` via `tailwind.config.js`. Removing `my-theme.js` will
+        // result in an error, restoring `my-theme.js` should trigger a
+        // fresh build even though the compiler didn't restore.
+        //
+        // Once the build error is fixed, a fresh full rebuild will happen
+        // which in turn will fixup the full rebuild paths.
+        fullRebuildPaths = backupRebuildPaths
+
+        // Catch any errors and print them to stderr, but don't exit the process
+        // and keep watching.
+        eprintln(formatError(err))
+
+        let end = process.hrtime.bigint()
+        if (!args['--silent']) eprintln(`Done in ${formatDuration(end - start)}`)
+      }
+    }
+
+    cleanupWatchers.push(await createWatchers(await watchDirectories(scanner), eventBatches))
 
     // Abort the watcher if `stdin` is closed to avoid zombie processes. You can
     // disable this behavior with `--watch=always`.
@@ -711,11 +700,11 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 /// queue that is still open. Closing first drops them and exits with stale CSS.
 export async function shutdownWatchMode(
   cleanups: (() => Promise<void>)[],
-  batches: { drain(): Promise<void>; close(): Promise<void> } | null,
+  batches: { drain(): Promise<void>; close(): Promise<void> },
 ) {
-  await batches?.drain()
+  await batches.drain()
   await Promise.all(cleanups.map((cleanup) => cleanup()))
-  await batches?.close()
+  await batches.close()
 }
 
 // Load `@parcel/watcher` lazily so a missing or broken native binding only
@@ -742,7 +731,6 @@ type WatcherBackend = {
 
 export async function createWatchers(
   dirs: string[],
-  cb: (files: string[]) => Promise<void>,
   batches: SerialBatches<string>,
   watcher?: WatcherBackend,
   lstat: (path: string) => Promise<Pick<Stats, 'isFile' | 'isSymbolicLink'>> = fs.lstat,
@@ -861,18 +849,15 @@ export async function createWatchers(
   }
 
   // Cleanup
-  return {
-    callback: cb,
-    cleanup: async () => {
-      await watchers.dispose()
-      await Promise.all(activeCallbacks)
-      await debounceQueue.dispose()
-      if (files.size > 0) {
-        let batch = Array.from(files)
-        files.clear()
-        void batches.push(batch)
-      }
-    },
+  return async () => {
+    await watchers.dispose()
+    await Promise.all(activeCallbacks)
+    await debounceQueue.dispose()
+    if (files.size > 0) {
+      let batch = Array.from(files)
+      files.clear()
+      void batches.push(batch)
+    }
   }
 }
 
