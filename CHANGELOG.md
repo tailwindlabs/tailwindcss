@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent `@tailwindcss/cli` in `--watch` mode from overwriting newer CSS with the output of an older rebuild ([#20446](https://github.com/tailwindlabs/tailwindcss/pull/20446))
 - Ensure `@tailwindcss/cli` in `--watch` mode finishes the current rebuild before it exits when stdin closes ([#20446](https://github.com/tailwindlabs/tailwindcss/pull/20446))
 - Ensure `@tailwindcss/cli` in `--watch` mode writes the initial build before it exits when stdin is already closed ([#20446](https://github.com/tailwindlabs/tailwindcss/pull/20446))
+- Keep watching all dependencies in `@tailwindcss/postcss` when a rebuild fails, so watch mode recovers once the error is fixed ([#20395](https://github.com/tailwindlabs/tailwindcss/pull/20395))
 
 ## [4.3.5] - 2026-11-06
 
