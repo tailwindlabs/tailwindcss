@@ -1,3 +1,3 @@
 ### Fixed
 
-- Upgrade: Do not migrate a string that names a union member, like `{ kind: 'ring' }`, `case 'ring':` or `type Shape = 'ring' | 'circle'`
+- Upgrade: Do not migrate a string that names a union member or sits in a sentence, like `{ kind: 'ring' }`, `case 'ring':`, `type Shape = 'ring' | 'circle'` or `title="Add a shadow to the card."`

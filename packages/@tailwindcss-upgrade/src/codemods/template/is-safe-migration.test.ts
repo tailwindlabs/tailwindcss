@@ -163,6 +163,14 @@ describe('is-safe-migration', async () => {
     [`switch (effect.kind) { case "ring": break }`, 'ring'],
     [`type Shape = 'ring' | 'circle'`, 'ring'],
     [`type Shape = 'circle' | 'ring'`, 'ring'],
+
+    // A word in a sentence
+    [
+      'const help = `A badge with only an outline: you have enough ki, but not the range.`',
+      'outline',
+    ],
+    [`<p title="Add a shadow to the card.">`, 'shadow'],
+    [`alert('No ring! Try again')`, 'ring'],
   ])('does not replace classes in invalid positions #%#', async (example, candidate) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
@@ -238,6 +246,10 @@ describe('is-safe-migration', async () => {
     [`cva("", { variants: { kind: { primary: "shadow" } } })`, 'shadow', 'shadow-sm'],
     [`const kinds = cn("shadow")`, 'shadow', 'shadow-sm'],
     [`cn(isOpen || "shadow")`, 'shadow', 'shadow-sm'],
+
+    // Punctuation outside of the class string does not make it a sentence
+    [`<div class="flex shadow">Hello. World!</div>`, 'shadow', 'shadow-sm'],
+    [`<div :class="{ shadow: isOpen, ring: isFocused }"></div>`, 'shadow', 'shadow-sm'],
   ])('replaces classes in valid positions #%#', async (example, candidate, expected) => {
     expect(
       await migrateCandidate(designSystem, {}, candidate, {
