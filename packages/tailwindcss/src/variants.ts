@@ -210,7 +210,9 @@ export class Variants {
   }
 
   suggest(name: string, suggestions: () => string[]) {
-    this.completions.set(name, suggestions)
+    if (process.env.TAILWIND_INTELLISENSE !== 'false') {
+      this.completions.set(name, suggestions)
+    }
   }
 
   getCompletions(name: string) {

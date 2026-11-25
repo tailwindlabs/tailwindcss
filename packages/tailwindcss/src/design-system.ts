@@ -166,10 +166,10 @@ export function buildDesignSystem(
       return getClassOrder(this, classes)
     },
     getClassList() {
-      return getClassList(this)
+      return process.env.TAILWIND_INTELLISENSE !== 'false' ? getClassList(this) : []
     },
     getVariants() {
-      return getVariants(this)
+      return process.env.TAILWIND_INTELLISENSE !== 'false' ? getVariants(this) : []
     },
 
     parseCandidate(candidate: string) {
@@ -249,7 +249,9 @@ export function buildDesignSystem(
     },
 
     canonicalizeCandidates(candidates: string[], options?: CanonicalizeOptions) {
-      return canonicalizeCandidates(this, candidates, options)
+      return process.env.TAILWIND_INTELLISENSE !== 'false'
+        ? canonicalizeCandidates(this, candidates, options)
+        : candidates
     },
 
     // General purpose storage, each key has to be a unique symbol to avoid

@@ -1,5 +1,13 @@
 import { defineConfig } from 'tsup'
 
+const define = {
+  'process.env.FEATURES_ENV': JSON.stringify(process.env.FEATURES_ENV ?? 'insiders'),
+
+  // Build-time switches, see `src/node.d.ts`
+  'process.env.TAILWIND_INTELLISENSE': '"true"',
+  'process.env.TAILWIND_JS_PLUGINS': '"true"',
+}
+
 export default defineConfig([
   {
     format: ['esm'],
@@ -12,9 +20,7 @@ export default defineConfig([
       'default-theme': 'src/compat/default-theme.ts',
       'flatten-color-palette': 'src/compat/flatten-color-palette.ts',
     },
-    define: {
-      'process.env.FEATURES_ENV': JSON.stringify(process.env.FEATURES_ENV ?? 'insiders'),
-    },
+    define,
   },
   {
     format: ['cjs'],
@@ -27,8 +33,6 @@ export default defineConfig([
       'default-theme': 'src/compat/default-theme.cts',
       'flatten-color-palette': 'src/compat/flatten-color-palette.cts',
     },
-    define: {
-      'process.env.FEATURES_ENV': JSON.stringify(process.env.FEATURES_ENV ?? 'insiders'),
-    },
+    define,
   },
 ])
