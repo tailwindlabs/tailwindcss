@@ -12,7 +12,7 @@ export function expand(pattern: string): string[] {
 
   // Find the matching closing brace
   let depth = 0
-  let endIndex = rest.lastIndexOf('}')
+  let endIndex = -1
   for (let i = 0; i < rest.length; i++) {
     let char = rest[i]
     if (char === '{') {
