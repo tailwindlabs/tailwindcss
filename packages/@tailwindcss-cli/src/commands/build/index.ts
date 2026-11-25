@@ -7,12 +7,13 @@ import {
   type SourceMap,
 } from '@tailwindcss/node'
 import { clearRequireCache } from '@tailwindcss/node/require-cache'
-import { Scanner, type ChangedContent } from '@tailwindcss/oxide'
+import { Scanner } from '@tailwindcss/oxide'
 import { existsSync, type Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { Arg, Result } from '../../utils/args'
 import { Disposables } from '../../utils/disposables'
+import { pathsEqual } from '../../utils/paths-equal'
 import {
   eprintln,
   formatDuration,
@@ -23,7 +24,7 @@ import {
   wordWrap,
 } from '../../utils/renderer'
 import { serializeBatches, type SerialBatches } from '../../utils/serial-batches'
-import { drainStdin, outputFile } from './utils'
+import { drainStdin, getRebuildStrategy, outputFile } from './utils'
 
 const css = String.raw
 const DEBUG = env.DEBUG
@@ -154,7 +155,12 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
   // Check if the input and output file paths are identical, otherwise return an
   // error to the user.
-  if (args['--input'] === args['--output'] && args['--input'] !== '-') {
+  if (
+    args['--input'] &&
+    args['--input'] !== '-' &&
+    args['--output'] &&
+    pathsEqual(args['--input'], args['--output'])
+  ) {
     eprintln(
       `Specified input file ${highlight(relative(args['--input']))} and output file ${highlight(relative(args['--output']))} are identical.`,
     )
@@ -622,7 +628,9 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
         DEBUG && I.end('Scan for candidates')
 
         let files = scanner.scannedFiles.filter(
-          (file) => file !== args['--output'] && file !== args['--map'],
+          (file) =>
+            !pathsEqual(file, args['--output']!) &&
+            (typeof args['--map'] !== 'string' || !pathsEqual(file, args['--map'])),
         )
 
         if (files.length <= 0) return
@@ -866,31 +874,11 @@ export function filterChangedFiles(
   output: string | null,
   map: boolean | string,
 ): string[] {
-  return files.filter((file) => file !== output && file !== map)
-}
-
-function getRebuildStrategy(
-  files: string[],
-  fullRebuildPaths: string[],
-): { kind: 'incremental'; changedFiles: ChangedContent[] } | { kind: 'full' } {
-  let changedFiles: ChangedContent[] = []
-
-  for (let file of files) {
-    // If one of the changed files is related to the input CSS or JS
-    // config/plugin files, then we need to do a full rebuild because
-    // the theme might have changed.
-    if (fullRebuildPaths.includes(file)) {
-      return { kind: 'full' }
-    }
-
-    // Track new and updated files for incremental rebuilds.
-    changedFiles.push({
-      file,
-      extension: path.extname(file).slice(1),
-    } satisfies ChangedContent)
-  }
-
-  return { kind: 'incremental', changedFiles }
+  return files.filter(
+    (file) =>
+      !(output !== null && pathsEqual(file, output)) &&
+      !(typeof map === 'string' && pathsEqual(file, map)),
+  )
 }
 
 function createPollingWatcher(cb: () => Promise<void>, pollInterval: number) {
