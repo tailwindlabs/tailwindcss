@@ -14,6 +14,13 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // JavaScript / TypeScript
   /addEventListener\(['"`]$/,
 
+  // A `kind` or `type` value names a member of a union, e.g. `{ kind: 'ring' }`
+  // or `effect.kind === 'ring'`
+  /\b(?:kind|type)\s*(?::|[!=]==?)\s*['"`]$/,
+
+  // A `switch` case, e.g. `case 'ring':`
+  /\bcase\s+['"`]$/,
+
   // Alpine
   /wire:[^\s]*?$/,
 
@@ -22,6 +29,8 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
+const STRING_UNION_BEFORE = /(?<!\|)\|\s*['"`]$/
+const STRING_UNION_AFTER = /^['"`]\s*\|(?![|>])/
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -169,6 +178,16 @@ export function isSafeMigration(
 
   // Heuristic: Disallow function call expressions immediately following the candidate
   if (currentLineAfterCandidate.trim().startsWith('(')) {
+    return false
+  }
+
+  // Heuristic: Disallow a member of a string literal union type
+  //
+  // E.g.: `type Shape = 'ring' | 'circle'`
+  if (
+    STRING_UNION_BEFORE.test(currentLineBeforeCandidate) ||
+    STRING_UNION_AFTER.test(currentLineAfterCandidate)
+  ) {
     return false
   }
 
