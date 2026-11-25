@@ -970,13 +970,14 @@ describe.each([
       )
       await process.onStderr((m) => m.includes('Done in'))
 
-      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
-
-      let originalCss = await fs.read('dist/out.css')
-      let currentCss = originalCss
-
-      // Make sure we can find a source map
-      let map = parseSourceMap(currentCss)
+      // Make sure we can find a source map. The CLI writes the CSS in place, so
+      // a read can see an empty file: wait for the utility and the source map
+      // comment, which comes last.
+      let map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`flex`)
+        return parseSourceMap(css)
+      })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1013,15 +1014,12 @@ describe.each([
         <div class="flex underline"></div>
       `)
 
-      // Wait for the CSS to be rebuilt
-      await retryAssertion(async () => {
-        currentCss = await fs.read('dist/out.css')
-        expect(currentCss).not.toEqual(originalCss)
-        originalCss = currentCss
+      // Wait for the CSS to be rebuilt, with an updated source map
+      map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`underline`)
+        return parseSourceMap(css)
       })
-
-      // Make sure the source map was updated
-      map = parseSourceMap(currentCss)
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1086,15 +1084,12 @@ describe.each([
         `,
       )
 
-      // Wait for the CSS to be rebuilt
-      await retryAssertion(async () => {
-        currentCss = await fs.read('dist/out.css')
-        expect(currentCss).not.toEqual(originalCss)
-        originalCss = currentCss
+      // Wait for the CSS to be rebuilt, with an updated source map
+      map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`w-auto`)
+        return parseSourceMap(css)
       })
-
-      // Make sure the source map was updated
-      map = parseSourceMap(currentCss)
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1203,16 +1198,15 @@ describe.each([
       )
       await process.onStderr((m) => m.includes('Done in'))
 
-      await fs.expectFileToContain('dist/out.css', [candidate`flex`])
-
-      // Make sure we can find a source map
-      let originalCss = await fs.read('dist/out.css')
-      let originalMap = await fs.read('dist/out.css.map')
-      let currentCss = originalCss
-      let currentMap = originalMap
-
-      // Make sure we can find a source map
-      let map = parseSourceMap({ map: currentMap, content: currentCss })
+      // Make sure we can find a source map. The CLI writes the map and then the
+      // CSS, in place, so a read can see an empty file: wait for the utility,
+      // the source map comment at the end of the CSS, and a complete map.
+      let map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`flex`)
+        expect(css).toContain('/*# sourceMappingURL=')
+        return parseSourceMap({ map: await fs.read('dist/out.css.map'), content: css })
+      })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1249,18 +1243,13 @@ describe.each([
         <div class="flex underline"></div>
       `)
 
-      // Wait for the CSS to be rebuilt
-      await retryAssertion(async () => {
-        currentCss = await fs.read('dist/out.css')
-        currentMap = await fs.read('dist/out.css.map')
-        expect(currentCss).not.toEqual(originalCss)
-        expect(currentMap).not.toEqual(originalMap)
-        originalCss = currentCss
-        originalMap = currentMap
+      // Wait for the CSS to be rebuilt, with an updated source map
+      map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`underline`)
+        expect(css).toContain('/*# sourceMappingURL=')
+        return parseSourceMap({ map: await fs.read('dist/out.css.map'), content: css })
       })
-
-      // Make sure the source map was updated
-      map = parseSourceMap({ map: currentMap, content: currentCss })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1325,18 +1314,13 @@ describe.each([
         `,
       )
 
-      // Wait for the CSS to be rebuilt
-      await retryAssertion(async () => {
-        currentCss = await fs.read('dist/out.css')
-        currentMap = await fs.read('dist/out.css.map')
-        expect(currentCss).not.toEqual(originalCss)
-        expect(currentMap).not.toEqual(originalMap)
-        originalCss = currentCss
-        originalMap = currentMap
+      // Wait for the CSS to be rebuilt, with an updated source map
+      map = await retryAssertion(async () => {
+        let css = await fs.read('dist/out.css')
+        expect(css).toContain(candidate`w-auto`)
+        expect(css).toContain('/*# sourceMappingURL=')
+        return parseSourceMap({ map: await fs.read('dist/out.css.map'), content: css })
       })
-
-      // Make sure the source map was updated
-      map = parseSourceMap({ map: currentMap, content: currentCss })
 
       expect(map.at(1, 0)).toMatchObject({
         source: null,
@@ -1460,6 +1444,10 @@ describe.each([
       let process = await spawn(`${command} --input src/index.css --output dist/out.css --watch`)
       await process.onStderr((m) => m.includes('Done in'))
 
+      // The watchers start before the first build, so a file event can log a
+      // `Done in` before the CSS is written: wait for the CSS itself.
+      await fs.expectFileToContain('dist/out.css', ['color: blue'])
+
       expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
         "
         --- dist/out.css ---
@@ -1484,6 +1472,7 @@ describe.each([
       await process.onStderr((m) => m.includes('Done in'))
 
       // Expect a full rebuild
+      await fs.expectFileToContain('dist/out.css', ['color: red'])
       expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
         "
         --- dist/out.css ---

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://v2-10-8.turborepo.dev/schema.json",
+  "$schema": "https://v2-11-11.turborepo.dev/schema.json",
   "ui": "tui",
   "tasks": {
     "@tailwindcss/oxide#build": {

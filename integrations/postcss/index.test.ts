@@ -718,7 +718,10 @@ test(
       `,
     )
 
-    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+    // Step 2 changed two files, so a second build can still run. It can read
+    // the CSS file while we write it, and print `Waiting for file changes...`
+    // for an empty stylesheet: wait for the CSS itself.
+    await fs.expectFileToContain('dist/out.css', [candidate`flex`, candidate`underline`])
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -732,7 +735,9 @@ test(
       "
     `)
 
-    // Now break the CSS file again
+    // Now break the CSS file again. Flush the messages first, so the error we
+    // wait for comes from this change.
+    process.flush()
     await fs.write(
       'src/tailwind.css',
       css`
