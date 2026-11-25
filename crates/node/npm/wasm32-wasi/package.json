@@ -2,8 +2,13 @@
   "name": "@tailwindcss/oxide-wasm32-wasi",
   "version": "4.3.5",
   "main": "tailwindcss-oxide.wasi.cjs",
+  "types": "index.d.ts",
   "files": [
     "tailwindcss-oxide.wasm32-wasi.wasm",
+    "tailwindcss-oxide.browser.wasm",
+    "browser.mjs",
+    "browser.d.mts",
+    "index.d.ts",
     "tailwindcss-oxide.wasi.cjs",
     "tailwindcss-oxide.wasi-browser.js",
     "wasi-worker.mjs",
@@ -22,7 +27,7 @@
     "url": "git+https://github.com/tailwindlabs/tailwindcss.git",
     "directory": "crates/node"
   },
-  "browser": "tailwindcss-oxide.wasi-browser.js",
+  "browser": "browser.mjs",
   "dependencies": {
     "@napi-rs/wasm-runtime": "^1.2.2",
     "@emnapi/core": "^1.11.3",

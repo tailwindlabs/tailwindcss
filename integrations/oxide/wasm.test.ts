@@ -11,6 +11,55 @@ import { css, js, json, test, yaml } from '../utils'
 
 let testFn = process.platform === 'linux' ? test : test.skip
 
+test(
+  'the packed browser build scans memfs without SharedArrayBuffer',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "dependencies": {
+            "@tailwindcss/oxide-wasm32-wasi": "workspace:^"
+          }
+        }
+      `,
+      'index.mjs': js`
+        import { readFile } from 'node:fs/promises'
+        import { fileURLToPath } from 'node:url'
+
+        // Serve the browser loader's relative WASM URL without a browser server.
+        globalThis.fetch = async (url) => new Response(await readFile(fileURLToPath(url)))
+        globalThis.SharedArrayBuffer = undefined
+
+        let { Scanner, __fs } = await import('@tailwindcss/oxide-wasm32-wasi/browser.mjs')
+
+        __fs.mkdirSync('/src')
+        __fs.writeFileSync('/src/index.html', '<div class="flex underline">')
+
+        let scanner = new Scanner({
+          sources: [{ base: '/src', pattern: '**/*', negated: false }],
+        })
+        let initial = scanner.scan()
+        scanner.scan()
+
+        console.log(
+          JSON.stringify({
+            initial,
+            unchanged: scanner.scannedFiles,
+            incremental: scanner.scanFiles([{ content: 'flex grid', extension: 'html' }]),
+          }),
+        )
+      `,
+    },
+  },
+  async ({ expect, exec }) => {
+    expect(JSON.parse(await exec('node index.mjs', { timeout: 10_000 }))).toEqual({
+      initial: ['class', 'flex', 'underline'],
+      unchanged: [],
+      incremental: ['grid'],
+    })
+  },
+)
+
 testFn(
   '@tailwindcss/oxide-wasm32-wasi can be loaded into a Node.js process',
   {

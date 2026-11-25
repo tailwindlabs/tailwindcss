@@ -96,10 +96,12 @@ jobs:
             ./crates/node/tailwindcss-oxide.wasi.cjs
             ./crates/node/wasi-worker-browser.mjs
             ./crates/node/wasi-worker.mjs
+            ./crates/node/npm/wasm32-wasi/*.wasm
+            ./crates/node/npm/wasm32-wasi/index.d.ts
           key: ${{ runner.os }}-oxide-${{ hashFiles('./crates/**/*') }}
 
       - name: Setup WASM target
-        run: rustup target add wasm32-wasip1-threads
+        run: rustup target add wasm32-wasip1 wasm32-wasip1-threads
 
       - name: Install dependencies
         run: pnpm install
