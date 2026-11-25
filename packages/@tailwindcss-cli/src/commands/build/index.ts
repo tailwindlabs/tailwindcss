@@ -424,6 +424,17 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
 
           cleanupWatchers.push(newCleanupFunction)
 
+          // The input file can change while we read it, e.g. when an editor
+          // saves it in two steps: it first empties the file, and then writes
+          // the new contents. If we read the empty file, then the old watchers
+          // may still hold the event for the second step, and we just removed
+          // them. The new watchers only report changes from now on, so read the
+          // input file again, and start over when it changed.
+          if (inputFilePath !== null && (await fileChanged(inputFilePath, input))) {
+            enqueue([inputFilePath])
+            return
+          }
+
           // Re-compile the CSS
           DEBUG && I.start('Build CSS')
           compiledCss = compiler.build(candidates)
@@ -581,6 +592,14 @@ export async function handle(args: Result<ReturnType<typeof options>>) {
       DEBUG && I.start('Scan for candidates')
       let candidates = scanner.scan()
       DEBUG && I.end('Scan for candidates')
+
+      // The new scanner only reports files that change after this first scan.
+      // If the input file changed after we read it, e.g. because an editor
+      // saves it in two steps (first empty, then the new contents), then we
+      // would never see that change, so start over.
+      if (inputFilePath !== null && (await fileChanged(inputFilePath, input))) {
+        return fullRebuild(I)
+      }
 
       DEBUG && I.start('Build CSS')
       let output = compiler.build(candidates)
@@ -822,6 +841,13 @@ async function createWatchers(dirs: string[], cb: (files: string[]) => void) {
     await watchers.dispose()
     await debounceQueue.dispose()
   }
+}
+
+// Whether `file` has other contents than `contents`, which were read from it
+// before. A file that can't be read anymore has changed as well.
+async function fileChanged(file: string, contents: string) {
+  let current = await fs.readFile(file, 'utf-8').catch(() => null)
+  return current !== contents
 }
 
 function getRebuildStrategy(

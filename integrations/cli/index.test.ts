@@ -1,4 +1,5 @@
 import dedent from 'dedent'
+import { rename } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -1484,6 +1485,82 @@ describe.each([
         }
         "
       `)
+    },
+  )
+})
+
+// The standalone CLI doesn't load the `NODE_OPTIONS` hook of these tests.
+describe.each([
+  ['watch mode', '--watch'],
+  ['watch mode with polling', '--watch --poll=50'],
+])('%s', (_, flags) => {
+  test(
+    'rebuilds when it reads the input file in the middle of a save',
+    {
+      fs: {
+        'package.json': json`
+          {
+            "dependencies": {
+              "tailwindcss": "workspace:^",
+              "@tailwindcss/cli": "workspace:^"
+            }
+          }
+        `,
+        // Mimic a read in the middle of a save. An editor that saves a file in
+        // place first empties it, and then writes the new contents. The first
+        // time the CLI reads new contents from the input file, it gets an
+        // empty file instead.
+        'hook.cjs': js`
+          let fs = require('node:fs/promises')
+          let path = require('node:path')
+
+          let input = path.resolve('src/index.css')
+          let originalReadFile = fs.readFile.bind(fs)
+          let initial = null
+          let emptied = false
+
+          fs.readFile = async (file, ...rest) => {
+            let contents = await originalReadFile(file, ...rest)
+            if (typeof file !== 'string' || path.resolve(file) !== input) {
+              return contents
+            }
+
+            initial ??= String(contents)
+            if (!emptied && String(contents) !== initial) {
+              emptied = true
+              return ''
+            }
+
+            return contents
+          }
+        `,
+        'src/index.css': css`
+          @import 'tailwindcss/utilities' source(none);
+          @source inline("underline");
+        `,
+      },
+    },
+    async ({ fs, root, spawn }) => {
+      let process = await spawn(
+        `pnpm tailwindcss --input src/index.css --output dist/out.css ${flags}`,
+        { env: { NODE_OPTIONS: '--require=./hook.cjs' } },
+      )
+      await process.onStderr((m) => m.includes('Done in'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`])
+
+      // Save the new contents in one step, so the CLI sees a single change. In
+      // a save in two steps, the CLI can miss the second step as well.
+      await fs.write(
+        'next.css',
+        css`
+          @import 'tailwindcss/utilities' source(none);
+          @source inline("underline flex");
+        `,
+      )
+      await rename(path.join(root, 'next.css'), path.join(root, 'src/index.css'))
+
+      await fs.expectFileToContain('dist/out.css', [candidate`underline`, candidate`flex`])
     },
   )
 })
