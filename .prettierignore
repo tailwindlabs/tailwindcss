@@ -4,6 +4,8 @@ pnpm-lock.yaml
 target/
 crates/node/index.d.ts
 crates/node/index.js
+crates/node/**/tailwindcss-oxide.wasi*
+crates/node/**/wasi-worker*.mjs
 crates/ignore/
 .next
 .fingerprint

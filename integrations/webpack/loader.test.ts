@@ -278,6 +278,64 @@ test(
 )
 
 test(
+  '@tailwindcss/webpack loader optimizes in production mode',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import './index.css'`,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      'src/index.css': css`
+        @import 'tailwindcss/theme';
+        @import 'tailwindcss/utilities';
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm webpack --mode=production')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/main.css ---
+      .flex{display:flex}
+      "
+    `)
+  },
+)
+
+test(
   '@tailwindcss/webpack loader with CSS @import',
   {
     fs: {
@@ -584,5 +642,71 @@ test(
 
     await fs.expectFileToContain('dist/main.css', ['.flex', '.partial-2'])
     await fs.expectFileNotToContain('dist/main.css', ['.partial-1'])
+  },
+)
+
+test(
+  '@tailwindcss/webpack loader with only @variant',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/webpack": "workspace:^"
+          }
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', '@tailwindcss/webpack'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import './index.css'`,
+      'src/index.css': css`
+        .btn {
+          color: black;
+          @variant hover {
+            color: red;
+          }
+        }
+      `,
+    },
+  },
+  async ({ fs, exec, expect }) => {
+    await exec('pnpm webpack --mode=development')
+
+    expect(await fs.dumpFiles('./dist/*.css')).toMatchInlineSnapshot(`
+      "
+      --- ./dist/main.css ---
+      .btn {
+        color: black;
+        &:hover {
+          @media (hover: hover) {
+            color: red;
+          }
+        }
+      }
+      "
+    `)
   },
 )

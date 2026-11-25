@@ -86,6 +86,43 @@ Please ensure that all tests are passing when submitting a pull request. If you'
 
 After a successful build, you can also use the npm package tarballs created inside the `dist/` folder to install your build in other local projects.
 
+## Changelog
+
+If your change fixes a bug, adds a feature, or changes something that users can see, add a changelog entry. Do not edit `CHANGELOG.md`. Add a new file in `.changelog/` instead, for example `.changelog/vite-full-reload.md`:
+
+```md
+### Fixed
+
+- Prevent `@tailwindcss/vite` from doing a full page reload for external files (e.g. `.php` files)
+```
+
+Use the sections `### Added`, `### Fixed`, `### Changed`, `### Deprecated`, `### Removed` and `### Security`. Do not add a link to your pull request: a workflow adds it when it moves your entry into `CHANGELOG.md` after the merge. See [.changelog/README.md](https://github.com/tailwindlabs/tailwindcss/blob/main/.changelog/README.md) for all details, and run `pnpm changelog check` to check your file.
+
+Pick the section from what a user has to know:
+
+- `### Added`: a new feature, like a utility, a variant, a directive, an option or an integration.
+- `### Fixed`: a bug fix, also when it changes the generated CSS. A performance improvement goes here too, and so does a canonicalization improvement (e.g. `max-[64rem]:flex` → `max-lg:flex`).
+- `### Changed`: a change to behavior that worked as intended, and that users can rely on. Users may have to update their project, or they see a different result. For example:
+  - The CSS of an existing utility, variant or Preflight (e.g. `m-0` generates `0` instead of `calc(var(--spacing) * 0)`), or the order in which utilities and variants are sorted.
+  - A renamed or replaced utility, variant, theme variable or directive, also when the upgrade tool migrates it (e.g. `outline-none` → `outline-hidden`).
+  - The values of the default theme.
+  - The API of a package, a function or a directive (e.g. `--theme(…)` returns a CSS variable instead of a value).
+  - Input that was valid and now throws an error or generates no CSS.
+  - The defaults of automatic source detection (e.g. folders that are ignored by default).
+  - The supported versions of Node.js, browsers or dependencies, and how a package installs or loads (e.g. no `postinstall` script).
+- `### Deprecated`: a feature that still works, but will be removed later. Name its replacement.
+- `### Removed`: a feature that is gone without a replacement. A feature with a replacement goes in `### Changed`.
+- `### Security`: a fix for a security problem.
+
+Do not use `### Changed` for a performance improvement, a refactor or another internal change.
+
+Write the entry in the same style as the existing entries in [CHANGELOG.md](https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md). In short:
+
+- Write one line that describes the change for a user, not how you fixed it.
+- Show what changes with an example when it helps, for example ``(e.g. `var(--tw-blur,)` → `var(--tw-blur, )`)``.
+- Start an entry about canonicalization with `Canonicalization:`.
+- Only add an entry when users can see the change. A bug fix needs an entry. A refactor, a test, a CI change or a bump of an internal dependency does not. A bump that fixes a real problem does.
+
 ## Pull request process
 
 When submitting a pull request:

@@ -170,7 +170,7 @@ test(
       "
       --- src/index.html ---
       <div
-        class="tracking-superWide leading-superLoose"
+        class="tracking-superWide [line-height:var(--leading-superLoose)]"
       ></div>
       <div class="text-superRed/superOpaque leading-superLoose"></div>
 

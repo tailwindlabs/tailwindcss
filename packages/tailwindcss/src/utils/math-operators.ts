@@ -15,31 +15,83 @@ const CLOSE_PAREN = 0x29
 const COMMA = 0x2c
 const SPACE = 0x20
 const PERCENT = 0x25
+const UNDERSCORE = 0x5f
+const BACKSLASH = 0x5c
+const DOUBLE_QUOTE = 0x22
+const SINGLE_QUOTE = 0x27
 
 const MATH_FUNCTIONS = [
-  'calc',
-  'min',
-  'max',
-  'clamp',
-  'mod',
-  'rem',
-  'sin',
-  'cos',
-  'tan',
-  'asin',
+  'abs',
   'acos',
+  'asin',
   'atan',
   'atan2',
-  'pow',
-  'sqrt',
+  'calc',
+  'clamp',
+  'cos',
+  'exp',
   'hypot',
   'log',
-  'exp',
+  'max',
+  'min',
+  'mod',
+  'pow',
+  'rem',
   'round',
+  'sign',
+  'sin',
+  'sqrt',
+  'tan',
 ]
 
+const MATH_FUNCTIONS_SET = new Set(MATH_FUNCTIONS)
+
+// Characters that can be part of a CSS identifier: `a-z`, `A-Z`, `0-9`, `-`,
+// `_` and non-ASCII characters.
+function isIdentChar(char: number) {
+  return (
+    (char >= LOWER_A && char <= LOWER_Z) ||
+    (char >= UPPER_A && char <= UPPER_Z) ||
+    (char >= ZERO && char <= NINE) ||
+    char === SUB ||
+    char === UNDERSCORE ||
+    char >= 0x80
+  )
+}
+
 export function hasMathFn(input: string) {
-  return input.indexOf('(') !== -1 && MATH_FUNCTIONS.some((fn) => input.includes(`${fn}(`))
+  let paren = input.indexOf('(')
+
+  while (paren !== -1) {
+    // Scan backwards to the start of the function name. A math function name
+    // only counts when it's the whole name, so `--my-calc(…)` is not `calc(…)`.
+    // Function names are case-insensitive, so `CALC(…)` is `calc(…)`.
+    let start = paren
+    while (start > 0 && isIdentChar(input.charCodeAt(start - 1))) start--
+
+    if (start < paren && MATH_FUNCTIONS_SET.has(input.slice(start, paren).toLowerCase())) {
+      return true
+    }
+
+    paren = input.indexOf('(', paren + 1)
+  }
+
+  return false
+}
+
+// Whether the math function name that starts at `start` is the start of a
+// function call. A `-` before it can be an operator (`1px-min(…)`) or a sign
+// (`-min(…)`), but not part of a custom function name like `--my-calc(…)`.
+function isMathFnStart(input: string, start: number) {
+  if (start === 0) return true
+
+  let prev = input.charCodeAt(start - 1)
+  if (prev !== SUB) return !isIdentChar(prev)
+
+  let identStart = start - 1
+  while (identStart > 0 && isIdentChar(input.charCodeAt(identStart - 1))) identStart--
+
+  return !(input.charCodeAt(identStart) === SUB && input.charCodeAt(identStart + 1) === SUB)
 }
 
 export function addWhitespaceAroundMathOperators(input: string) {
@@ -80,12 +132,41 @@ export function addWhitespaceAroundMathOperators(input: string) {
       valuePos = null
     }
 
+    // The next character is escaped, so we skip it.
+    if (char === BACKSLASH) {
+      result += input.slice(i, i + 2)
+      i += 1
+      continue
+    }
+
+    // Strings should be handled as-is until the end of the string
+    if (char === SINGLE_QUOTE || char === DOUBLE_QUOTE) {
+      let start = i
+
+      while (++i < input.length) {
+        let nextChar = input.charCodeAt(i)
+
+        // The next character is escaped, so we skip it.
+        if (nextChar === BACKSLASH) {
+          i += 1
+          continue
+        }
+
+        if (nextChar === char) {
+          break
+        }
+      }
+
+      result += input.slice(start, i + 1)
+      continue
+    }
+
     // Determine if we're inside a math function
     if (char === OPEN_PAREN) {
       result += input[i]
 
       // Scan backwards to determine the function name. This assumes math
-      // functions are named with lowercase alphanumeric characters.
+      // functions are named with alphanumeric characters.
       let start = i
 
       for (let j = i - 1; j >= 0; j--) {
@@ -95,6 +176,8 @@ export function addWhitespaceAroundMathOperators(input: string) {
           start = j // 0-9
         } else if (inner >= LOWER_A && inner <= LOWER_Z) {
           start = j // a-z
+        } else if (inner >= UPPER_A && inner <= UPPER_Z) {
+          start = j // A-Z
         } else {
           break
         }
@@ -102,8 +185,9 @@ export function addWhitespaceAroundMathOperators(input: string) {
 
       let fn = input.slice(start, i)
 
-      // This is a known math function so start formatting
-      if (MATH_FUNCTIONS.includes(fn)) {
+      // This is a known math function so start formatting. Function names are
+      // case-insensitive, so `Calc(…)` is `calc(…)`.
+      if (MATH_FUNCTIONS_SET.has(fn.toLowerCase()) && isMathFnStart(input, start)) {
         formattable.unshift(true)
         continue
       }

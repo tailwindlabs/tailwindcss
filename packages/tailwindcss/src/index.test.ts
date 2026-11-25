@@ -1,3 +1,4 @@
+import type { ScannerOptions, SourceEntry } from '@tailwindcss/oxide'
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, test } from 'vitest'
@@ -898,6 +899,8 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }
@@ -912,9 +915,32 @@ describe('@apply', () => {
         @apply --my-mixin-1();
         @apply --my-mixin-1 --my-mixin-2;
         @apply --my-mixin-1() --my-mixin-2();
+        @apply --my-mixin-1(red, 2rem);
+        @apply --my-mixin-1({ 1px, 2px }, 3px);
         @apply --my-mixin-3 {
           color: red;
         }
+      }
+      "
+    `)
+  })
+
+  it('should not treat CSS mixin arguments as utilities in `@utility`', async () => {
+    expect(
+      await run(
+        ['card'],
+        css`
+          @utility card {
+            @apply --card({ red, card }, 2rem);
+          }
+
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .card {
+        @apply --card({ red, card }, 2rem);
       }
       "
     `)
@@ -940,6 +966,39 @@ describe('@apply', () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1\` into a separate rule.]`,
     )
+
+    await expect(
+      compile(css`
+        .foo {
+          @apply underline --my-mixin-1(red, 2rem);
+        }
+      `),
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: You cannot use \`@apply\` with both mixins and utilities. Please move \`@apply --my-mixin-1(red, 2rem)\` into a separate rule.]`,
+    )
+  })
+
+  it('should split utilities at each space, also inside brackets, parens and strings', async () => {
+    // Only the arguments of a CSS mixin can contain spaces. A class in a
+    // template can never contain a space, so `@apply` does not allow it either.
+    for (let [candidate, unknown] of [
+      ['bg-[rgb(1, 2, 3)]', 'bg-[rgb(1,'],
+      ['[margin:1px 2px]', '[margin:1px'],
+      ["content-['a b']", "content-['a"],
+    ]) {
+      await expect(
+        compile(css`
+          @theme {
+            --color-red: red;
+          }
+          @tailwind utilities;
+
+          .foo {
+            @apply ${candidate};
+          }
+        `),
+      ).rejects.toThrow(`Cannot apply unknown utility class \`${unknown}\``)
+    }
   })
 
   it('should error when used with a body', async () => {
@@ -1017,6 +1076,57 @@ describe('variant stacking', () => {
         .\\[\\&_p\\]\\:\\[\\@media\\(width\\>\\=123px\\)\\]\\:flex p {
           display: flex;
         }
+      }
+      "
+    `)
+  })
+
+  it('should stack arbitrary variants that use `&` multiple times', async () => {
+    expect(await run(['[&_&]:[&_&]:flex'])).toMatchInlineSnapshot(`
+      "
+      .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex :is(.\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex .\\[\\&_\\&\\]\\:\\[\\&_\\&\\]\\:flex) {
+        display: flex;
+      }
+      "
+    `)
+  })
+
+  it('should discard stacked variants when the selectors grow exponentially', async () => {
+    let input = css`
+      @custom-variant hocus (&:hover, &:focus);
+      @custom-variant both {
+        &:hover {
+          @slot;
+        }
+        &:focus {
+          @slot;
+        }
+      }
+      @tailwind utilities;
+    `
+
+    expect(
+      await run(
+        [
+          // Each `&` copies the parent selector
+          '[&_&]:'.repeat(20) + 'flex',
+
+          // Each selector in a selector list copies the parent selector
+          '[&,.a]:'.repeat(20) + 'flex',
+          'hocus:'.repeat(20) + 'flex',
+
+          // Each `@slot` copies the utility
+          'both:'.repeat(20) + 'flex',
+        ],
+        input,
+      ),
+    ).toBe('')
+
+    // A few of them are fine
+    expect(await run(['hocus:hocus:flex', 'both:both:flex'], input)).toMatchInlineSnapshot(`
+      "
+      :is(.hocus\\:hocus\\:flex:hover, .hocus\\:hocus\\:flex:focus):hover, :is(.hocus\\:hocus\\:flex:hover, .hocus\\:hocus\\:flex:focus):focus, .both\\:both\\:flex:hover:hover, .both\\:both\\:flex:hover:focus, .both\\:both\\:flex:focus:hover, .both\\:both\\:flex:focus:focus {
+        display: flex;
       }
       "
     `)
@@ -4761,6 +4871,42 @@ describe('@custom-variant', () => {
       `)
     })
 
+    test('@scope (&) in @utility with relative selectors', async () => {
+      expect(
+        await run(
+          ['join'],
+          css`
+            @utility join {
+              display: inline-flex;
+              @scope (&) {
+                > .item {
+                  z-index: 2;
+                }
+              }
+            }
+
+            @layer utilities {
+              @tailwind utilities;
+            }
+          `,
+        ),
+      ).toMatchInlineSnapshot(`
+        "
+        @layer utilities {
+          .join {
+            display: inline-flex;
+          }
+
+          @scope (.join) {
+            :where(:scope) > .item {
+              z-index: 2;
+            }
+          }
+        }
+        "
+      `)
+    })
+
     test('@scope in a custom variant combined with user-authored `@scope` rules', async () => {
       expect(
         await run(
@@ -6668,7 +6814,7 @@ describe('`color-mix(…)` polyfill', () => {
       }
 
       .stacked {
-        color: lch(55.5764% 89.7903 33.1932 / .25098);
+        color: #fb2c3640;
       }
 
       @supports (color: color-mix(in lab, red, red)) {
@@ -6750,6 +6896,30 @@ describe('`color-mix(…)` polyfill', () => {
     `)
   })
 
+  it('works without a color interpolation method and with a single color', async () => {
+    expect(
+      await run(
+        ['bg-[color-mix(var(--color-red-500))]'],
+        css`
+          @theme {
+            --color-red-500: oklch(63.7% 0.237 25.331);
+          }
+          @tailwind utilities;
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .bg-\\[color-mix\\(var\\(--color-red-500\\)\\)\\] {
+        background-color: color-mix(var(--color-red-500));
+      }
+      "
+    `)
+  })
+
   it('uses the first color value as the fallback when the `color-mix(…)` function contains non-theme variables', async () => {
     expect(
       await run(
@@ -6811,6 +6981,149 @@ describe('`color-mix(…)` polyfill', () => {
         .text-current\\/50 {
           color: color-mix(in oklab, currentcolor 50%, transparent);
         }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when the color interpolation method has leading whitespace', async () => {
+    expect(
+      await compileCss(
+        // prettier-ignore
+        css`
+          @tailwind utilities;
+          .foo {
+            color: color-mix( in oklab, currentcolor 50%, transparent);
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        color: currentColor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          color: color-mix(in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('converts the color space of the fallback when the color interpolation method has leading whitespace', async () => {
+    expect(
+      await compileCss(
+        // prettier-ignore
+        css`
+          @theme {
+            --color-red-500: oklch(0.637 0.237 25.331);
+          }
+          @tailwind utilities;
+          .foo {
+            color: color-mix( in oklab, var(--color-red-500), transparent);
+          }
+        `,
+      ),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .foo {
+        color: #fb2c3680;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          color: color-mix(in oklab, var(--color-red-500), transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when a comment comes before the color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @tailwind utilities;
+        .foo {
+          --tint: color-mix(/* tint */ in oklab, currentcolor 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        --tint: currentcolor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          --tint: color-mix(/* tint */ in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('uses the first color value as the fallback when a comment with a comma comes before the color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @tailwind utilities;
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      .foo {
+        --tint: currentcolor;
+      }
+
+      @supports (color: color-mix(in lab, red, red)) {
+        .foo {
+          --tint: color-mix(/* tint, blue */ in oklab, currentcolor 50%, transparent);
+        }
+      }
+      "
+    `)
+  })
+
+  it('does not create a fallback when the `color-mix(…)` function has no color interpolation method', async () => {
+    expect(
+      await compileCss(css`
+        @theme {
+          --color-red-500: oklch(63.7% 0.237 25.331);
+        }
+        @tailwind utilities;
+        .current {
+          color: color-mix(currentcolor 50%, transparent);
+        }
+        .unknown {
+          color: color-mix(var(--unknown), red);
+        }
+        .theme {
+          color: color-mix(var(--color-red-500) 50%, transparent);
+        }
+      `),
+    ).toMatchInlineSnapshot(`
+      "
+      :root, :host {
+        --color-red-500: oklch(63.7% .237 25.331);
+      }
+
+      .current {
+        color: color-mix(currentcolor 50%, transparent);
+      }
+
+      .unknown {
+        color: color-mix(var(--unknown), red);
+      }
+
+      .theme {
+        color: color-mix(var(--color-red-500) 50%, transparent);
       }
       "
     `)
@@ -7362,5 +7675,28 @@ describe('feature detection', () => {
 
     // And this produces no output because no other CSS is present
     expect(compiler.build([])).toEqual('')
+  })
+})
+
+describe('public types', () => {
+  test('`build()` accepts a readonly array of candidates', async () => {
+    let compiler = await compile(css`
+      @tailwind utilities;
+    `)
+
+    let candidates: readonly string[] = ['flex', 'items-center']
+    let output = compiler.build(candidates)
+
+    expect(output).toContain('.flex')
+    expect(output).toContain('.items-center')
+  })
+
+  test('`ScannerOptions.sources` accepts a readonly array', () => {
+    let sources: readonly SourceEntry[] = [
+      { base: process.cwd(), pattern: '**/*.html', negated: false },
+    ]
+    let options: ScannerOptions = { sources }
+
+    expect(options.sources).toBe(sources)
   })
 })

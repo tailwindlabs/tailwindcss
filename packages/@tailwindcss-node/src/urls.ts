@@ -96,11 +96,64 @@ export async function rewriteUrlsInAst({
   }
 }
 
-function rebaseUrl(url: string, base: string, root: string) {
-  if (url[0] === '/') return url
+function getPathRoot(p: string): string {
+  let parsed = path.win32.parse(p)
+  return parsed.root.replace(/[/\\]+$/, '').toLowerCase()
+}
 
-  let absoluteUrl = path.posix.join(normalizePath(base), url)
-  let relativeUrl = path.posix.relative(normalizePath(root), absoluteUrl)
+function normalizeRootVolume(p: string) {
+  // Normalize Windows drive letter to uppercase, e.g. c:/ -> C:/
+  if (/^[a-zA-Z]:/.test(p)) {
+    return p[0].toUpperCase() + p.slice(1)
+  }
+  // Normalize UNC server and share prefix to lowercase, e.g. //SERVER/SHARE/ -> //server/share/
+  if (p.startsWith('//')) {
+    let match = p.match(/^(\/\/[^/]+\/[^/]+)(.*)$/)
+    if (match) {
+      return match[1].toLowerCase() + match[2]
+    }
+  }
+  return p
+}
+
+function joinWithBase(base: string, url: string) {
+  let driveMatch = base.match(/^([a-zA-Z]:)(\/.*)?$/)
+  if (driveMatch) {
+    let drive = driveMatch[1]
+    let dir = driveMatch[2] || '/'
+    let joined = path.posix.join(dir, url)
+    return drive + (joined.startsWith('/') ? joined : '/' + joined)
+  }
+
+  let uncMatch = base.match(/^(\/\/[^/]+\/[^/]+)(\/.*)?$/)
+  if (uncMatch) {
+    let share = uncMatch[1]
+    let dir = uncMatch[2] || '/'
+    let joined = path.posix.join(dir, url)
+    return share + (joined.startsWith('/') ? joined : '/' + joined)
+  }
+
+  return path.posix.join(base, url)
+}
+
+function rebaseUrl(url: string, base: string, root: string) {
+  if (url[0] === '/' || path.win32.isAbsolute(url)) return url
+
+  let normalizedBase = normalizeRootVolume(normalizePath(base))
+  let normalizedRoot = normalizeRootVolume(normalizePath(root))
+  let absoluteUrl = joinWithBase(normalizedBase, url)
+
+  let rootRoot = getPathRoot(normalizedRoot)
+  let baseRoot = getPathRoot(normalizedBase)
+
+  // When root and base are on different Windows drives (e.g. C: and H:) or different UNC shares,
+  // relative path traversal between them is impossible and path.posix.relative would generate
+  // invalid drive-climbing paths (e.g. `../../../../H:/...`). In this case, preserve the absolute URL.
+  if (rootRoot !== baseRoot) {
+    return absoluteUrl
+  }
+
+  let relativeUrl = path.posix.relative(normalizedRoot, absoluteUrl)
 
   // If the path points to a file in the same directory, `path.relative` will
   // remove the leading `./` and we need to add it back in order to still

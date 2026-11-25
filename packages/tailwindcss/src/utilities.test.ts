@@ -9790,6 +9790,8 @@ test('justify', async () => {
   expect(
     await run([
       'justify',
+      // `justify-content: baseline` is invalid CSS
+      'justify-baseline',
       '-justify-normal',
       '-justify-start',
       '-justify-end',
@@ -14228,6 +14230,8 @@ test('bg', async () => {
       '-bg-current/[0.5]',
       '-bg-current/[50%]',
       '-bg-inherit',
+      'bg-inherit/50',
+      'bg-inherit/[0.5]',
       '-bg-transparent',
       '-bg-[#0088cc]',
       '-bg-[#0088cc]/50',
@@ -14352,6 +14356,26 @@ test('bg', async () => {
     }
     "
   `)
+})
+
+test('bg gradients print a space before an arbitrary value', async () => {
+  let { build } = await compile(css`
+    @tailwind utilities;
+  `)
+
+  // PostCSS reads `,url` as one word, so it reads the `/*` in
+  // `,url(/a/*.png)` as the start of a comment. The output is not optimized
+  // here, because the formatter adds the space. A minifier removes it again,
+  // see https://github.com/postcss/postcss/issues/2194.
+  let output = build([
+    'bg-linear-[url(/a/*.png)]',
+    'bg-conic-[url(/a/*.png)]',
+    'bg-radial-[url(/a/*.png)]',
+  ])
+
+  expect(output).toContain('linear-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
+  expect(output).toContain('conic-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
+  expect(output).toContain('radial-gradient(var(--tw-gradient-stops, url(/a/*.png)))')
 })
 
 test('bg-position', async () => {
@@ -24450,6 +24474,8 @@ test('filter', async () => {
         'drop-shadow-red-500/foo',
         '-drop-shadow-red-500/foo',
         '-drop-shadow-red-500/50',
+        'drop-shadow-inherit/50',
+        'drop-shadow-inherit/[0.5]',
 
         '-saturate-0',
         'saturate--5',
@@ -26575,6 +26601,7 @@ test('text', async () => {
         'text-[clamp(1rem,2rem,3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]',
         'text-[clamp(1rem,var(--size),3rem)]/9',
+        'text-[abs(var(--size))]',
         'text-[--spacing(2)]',
         'text-[1cap]',
         'text-[1ic]',
@@ -26765,6 +26792,10 @@ test('text', async () => {
 
     .text-\\[50\\%\\] {
       font-size: 50%;
+    }
+
+    .text-\\[abs\\(var\\(--size\\)\\)\\] {
+      font-size: abs(var(--size));
     }
 
     .text-\\[absolute-size\\:var\\(--my-size\\)\\] {
@@ -27005,6 +27036,64 @@ test('text', async () => {
       `,
     ),
   ).toEqual('')
+})
+
+test('text with math functions and custom functions', async () => {
+  expect(
+    await run(
+      [
+        // Math functions are inferred as a font-size
+        'text-[calc(1rem+var(--x))]',
+        'text-[min(1rem,var(--x))]',
+        'text-[calc(min(1rem,var(--x))+2px)]',
+        'text-[Calc(1rem+min(1rem,var(--x)))]',
+
+        // Custom functions are inferred as a color, even when their name ends
+        // in the name of a math function
+        'text-[--foo(1px)]',
+        'text-[--my-calc(1px)]',
+        'text-[--item-rem(1px)]',
+        'text-[--my-Calc(1px)]',
+      ],
+      css`
+        @tailwind utilities;
+      `,
+    ),
+  ).toMatchInlineSnapshot(`
+    "
+    .text-\\[Calc\\(1rem\\+min\\(1rem\\,var\\(--x\\)\\)\\)\\] {
+      font-size: Calc(1rem + min(1rem, var(--x)));
+    }
+
+    .text-\\[calc\\(1rem\\+var\\(--x\\)\\)\\] {
+      font-size: calc(1rem + var(--x));
+    }
+
+    .text-\\[calc\\(min\\(1rem\\,var\\(--x\\)\\)\\+2px\\)\\] {
+      font-size: calc(min(1rem, var(--x)) + 2px);
+    }
+
+    .text-\\[min\\(1rem\\,var\\(--x\\)\\)\\] {
+      font-size: min(1rem, var(--x));
+    }
+
+    .text-\\[--foo\\(1px\\)\\] {
+      color: --foo(1px);
+    }
+
+    .text-\\[--item-rem\\(1px\\)\\] {
+      color: --item-rem(1px);
+    }
+
+    .text-\\[--my-Calc\\(1px\\)\\] {
+      color: --my-Calc(1px);
+    }
+
+    .text-\\[--my-calc\\(1px\\)\\] {
+      color: --my-calc(1px);
+    }
+    "
+  `)
 })
 
 test('text-shadow', async () => {

@@ -28,6 +28,9 @@ interface CacheEntry {
   cachedPostCssAst: Root
   optimizedPostCssAst: Root
   fullRebuildPaths: string[]
+  // Whether a build of this stylesheet succeeded in this process, so there is
+  // a last known-good output to serve when a rebuild fails.
+  hasBuilt: boolean
 }
 const cache = new QuickLRU<string, CacheEntry>({ maxSize: 50 })
 
@@ -45,6 +48,7 @@ function getContextFromCache(postcss: Postcss, inputFile: string, opts: PluginOp
     optimizedPostCssAst: postcss.root(),
 
     fullRebuildPaths: [] as string[],
+    hasBuilt: false,
   }
   cache.set(key, entry)
   return entry
@@ -365,6 +369,7 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             // Trick PostCSS into thinking the indent is 2 spaces, so it uses that
             // as the default instead of 4.
             root.raws.indent = '  '
+            context.hasBuilt = true
             DEBUG && I.end('Update PostCSS AST')
 
             DEBUG && I.end(`[@tailwindcss/postcss] ${relative(base, inputFile)}`)
@@ -373,7 +378,14 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
             context.compiler = null
 
             // Ensure all dependencies we have collected thus far are included so that the rebuild
-            // is correctly triggered
+            // is correctly triggered. This may run before we ever got to register the CSS import
+            // graph (`context.fullRebuildPaths`) and/or the candidate-scanning dependencies
+            // (`context.scanner`) for *this* build, e.g. when the failure happens while resolving
+            // `@import`/`@reference` targets, before scanning even starts. Re-report whatever we
+            // still know from the last successful build so watchers don't lose track of files that
+            // haven't changed.
+            let resolvedInputFile = path.resolve(base, inputFile)
+
             for (let file of context.fullRebuildPaths) {
               result.messages.push({
                 type: 'dependency',
@@ -383,15 +395,73 @@ function tailwindcss(opts: PluginOptions = {}): AcceptedPlugin {
               })
             }
 
-            // We found that throwing the error will cause PostCSS to no longer watch for changes
-            // in some situations so we instead log the error and continue with an empty stylesheet.
-            console.error(error)
+            if (context.scanner) {
+              for (let file of context.scanner.files) {
+                let absolutePath = path.resolve(file)
+                if (absolutePath === resolvedInputFile) continue
+                result.messages.push({
+                  type: 'dependency',
+                  plugin: '@tailwindcss/postcss',
+                  file: absolutePath,
+                  parent: result.opts.from,
+                })
+              }
 
-            if (error && typeof error === 'object' && 'message' in error) {
-              throw root.error(`${error.message}`)
+              for (let { base: globBase, pattern } of context.scanner.globs) {
+                if (pattern === '*' && base === globBase) continue
+
+                if (pattern === '') {
+                  result.messages.push({
+                    type: 'dependency',
+                    plugin: '@tailwindcss/postcss',
+                    file: path.resolve(globBase),
+                    parent: result.opts.from,
+                  })
+                } else {
+                  result.messages.push({
+                    type: 'dir-dependency',
+                    plugin: '@tailwindcss/postcss',
+                    dir: path.resolve(globBase),
+                    glob: pattern,
+                    parent: result.opts.from,
+                  })
+                }
+              }
             }
 
-            throw root.error(`${error}`)
+            console.error(error)
+
+            let message =
+              error && typeof error === 'object' && 'message' in error
+                ? `${error.message}`
+                : `${error}`
+
+            // When this stylesheet never built successfully, fail the build, so
+            // broken CSS never ships. This covers every one-shot build, whatever
+            // `NODE_ENV` is: tools like Angular or `webpack --mode production`
+            // don't set it, so `optimize` can't tell us.
+            //
+            // On a rebuild after a successful build, which is what watch mode does,
+            // we avoid throwing. Throwing makes PostCSS's `process()` promise reject,
+            // and tools that rely on `result.messages` to register file dependencies
+            // (e.g. `postcss-loader`/webpack) only read them from a *resolved* result.
+            // On a rejection they drop every file in the CSS import graph from the
+            // watcher, so nothing recompiles until another, still-watched file
+            // changes. We instead report the error as a warning and keep serving the
+            // last known-good output, so a broken edit doesn't strip all styling
+            // while it's being fixed.
+            if (!context.hasBuilt) {
+              throw root.error(message)
+            }
+
+            result.warn(message, { plugin: '@tailwindcss/postcss' })
+            root.removeAll()
+            root.append(
+              optimize
+                ? context.optimizedPostCssAst.clone().nodes
+                : context.cachedPostCssAst.clone().nodes,
+            )
+            root.raws.indent = '  '
           }
         },
       },

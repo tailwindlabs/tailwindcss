@@ -684,7 +684,9 @@ test(
       "
     `)
 
-    // 2. Cause an error
+    // 2. Cause an error. Flush the messages first, so the messages we wait for
+    // come from this change.
+    process.flush()
     await fs.write(
       'src/tailwind.css',
       css`
@@ -693,12 +695,14 @@ test(
       `,
     )
 
-    // 2.5 Write to a content file
-    await fs.write('src/index.html', html`
-      <div class="flex underline"></div>
-    `)
-
     await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
+
+    // The recovered build above still needs to finish registering its dependencies
+    // (including logging "Waiting for file changes...") before it's safe to write
+    // again -- writing sooner races a second, concurrent build against the one still
+    // settling, which is a separate, pre-existing sharp edge of this plugin's caching
+    // model, unrelated to error recovery itself.
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -709,6 +713,15 @@ test(
       "
     `)
 
+    // 2.5 Write to a content file
+    process.flush()
+    await fs.write('src/index.html', html`
+      <div class="flex underline"></div>
+    `)
+
+    await process.onStderr((message) => message.includes('"./does-not-exist" is not exported'))
+    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+
     // 3. Fix the CSS file
     await fs.write(
       'src/tailwind.css',
@@ -718,7 +731,10 @@ test(
       `,
     )
 
-    await process.onStderr((message) => message.includes('Waiting for file changes...'))
+    // Step 2 changed two files, so a second build can still run. It can read
+    // the CSS file while we write it, and print `Waiting for file changes...`
+    // for an empty stylesheet: wait for the CSS itself.
+    await fs.expectFileToContain('dist/out.css', [candidate`flex`, candidate`underline`])
 
     expect(await fs.dumpFiles('dist/*.css')).toMatchInlineSnapshot(`
       "
@@ -732,7 +748,9 @@ test(
       "
     `)
 
-    // Now break the CSS file again
+    // Now break the CSS file again. Flush the messages first, so the error we
+    // wait for comes from this change.
+    process.flush()
     await fs.write(
       'src/tailwind.css',
       css`

@@ -25,6 +25,7 @@ import { compileCandidates } from './compile'
 import { substituteFunctions } from './css-functions'
 import * as CSS from './css-parser'
 import { buildDesignSystem, type DesignSystem } from './design-system'
+import { createIncrementalBuild } from './incremental'
 import { createSourceMap, type DecodedSourceMap } from './source-maps/source-map'
 import { Theme, ThemeOptions } from './theme'
 import { createCssUtility } from './utilities'
@@ -718,7 +719,7 @@ export async function compileAst(
   sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
-  build(candidates: string[]): AstNode[]
+  build(candidates: readonly string[]): AstNode[]
 }> {
   let { designSystem, ast, sources, root, utilitiesNode, features, inlineCandidates } =
     await parseCss(input, opts)
@@ -750,11 +751,26 @@ export async function compileAst(
   // Avoid retaining loader callbacks, which may keep build tool state alive.
   let { from, polyfills } = opts
 
+  // Only compile, optimize and print the new utilities on each build.
+  let incremental = utilitiesNode
+    ? createIncrementalBuild(
+        ast,
+        utilitiesNode,
+        designSystem,
+        polyfills,
+        onInvalidCandidate,
+        !!from,
+      )
+    : null
+
+  // Candidates that the incremental build hasn't seen yet
+  let unseenCandidates: string[] = Array.from(allValidCandidates)
+
   return {
     sources,
     root,
     features,
-    build(newRawCandidates: string[]) {
+    build(newRawCandidates: readonly string[]) {
       if (features === Features.None) {
         return input
       }
@@ -778,7 +794,11 @@ export async function compileAst(
             didAddExternalVariable ||= didMarkVariableAsUsed
           } else {
             allValidCandidates.add(candidate)
-            didChange ||= allValidCandidates.size !== prevSize
+            if (allValidCandidates.size !== prevSize) {
+              didChange = true
+              prevSize = allValidCandidates.size
+              if (incremental) unseenCandidates.push(candidate)
+            }
           }
         }
       }
@@ -788,6 +808,20 @@ export async function compileAst(
       if (!didChange) {
         compiled ??= optimizeAst(ast, designSystem, polyfills)
         return compiled
+      }
+
+      if (incremental) {
+        let result = incremental(unseenCandidates, didAddExternalVariable)
+        unseenCandidates = []
+        if (result) {
+          compiled = result
+          return compiled
+        }
+
+        // The incremental build ran into something it can't handle, use the
+        // non-incremental build from now on.
+        incremental = null
+        utilitiesNode.nodes = []
       }
 
       let newNodes = compileCandidates(allValidCandidates, designSystem, {
@@ -831,13 +865,14 @@ export async function compile(
   sources: { base: string; pattern: string; negated: boolean }[]
   root: Root
   features: Features
-  build(candidates: string[]): string
+  build(candidates: readonly string[]): string
   buildSourceMap(): DecodedSourceMap
 }> {
   let ast = CSS.parse(css, { from: opts.from })
   let api = await compileAst(ast, opts)
   let compiledAst = ast
   let compiledCss = css
+  let trackedAst = ast
   let from = opts.from
 
   return {
@@ -849,13 +884,21 @@ export async function compile(
         return compiledCss
       }
 
-      compiledCss = toCss(newAst, !!from)
+      compiledCss = toCss(newAst)
       compiledAst = newAst
 
       return compiledCss
     },
 
     buildSourceMap() {
+      // Only source maps need the positions in the output, so we track them
+      // here instead of in `build()`. This way `build()` can reuse the printed
+      // CSS of the cached utilities. The printed CSS is the same.
+      if (from && trackedAst !== compiledAst) {
+        toCss(compiledAst, true)
+        trackedAst = compiledAst
+      }
+
       return createSourceMap({
         ast: compiledAst,
       })

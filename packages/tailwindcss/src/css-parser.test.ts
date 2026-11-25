@@ -169,6 +169,165 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
         },
       ])
     })
+
+    describe('unquoted `url(…)`', () => {
+      function rule(selector: string, property: string, value: string) {
+        return {
+          kind: 'rule',
+          selector,
+          nodes: [{ kind: 'declaration', property, value, important: false }],
+        }
+      }
+
+      it('should not treat `/*` inside of an unquoted `url(…)` as a comment', () => {
+        expect(parse('.a{background-image:url(/b/*.png)}.b{color:red}')).toEqual([
+          rule('.a', 'background-image', 'url(/b/*.png)'),
+          rule('.b', 'color', 'red'),
+        ])
+      })
+
+      it('should not treat `/*` inside of an unquoted `url(…)` as a comment when a comment follows', () => {
+        expect(
+          parse('.a{background-image:url(/b/*.png)}.b{color:red}/* x */.c{color:blue}'),
+        ).toEqual([
+          rule('.a', 'background-image', 'url(/b/*.png)'),
+          rule('.b', 'color', 'red'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should treat `url(…)` case-insensitive', () => {
+        expect(parse('.a{background-image:URL(/b/*.png)}/* x */.c{color:blue}')).toEqual([
+          rule('.a', 'background-image', 'URL(/b/*.png)'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should allow whitespace around the url', () => {
+        expect(parse('.a{background-image:url( /b/*.png )}/* x */.c{color:blue}')).toEqual([
+          rule('.a', 'background-image', 'url( /b/*.png )'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should handle a list of unquoted `url(…)`', () => {
+        expect(parse('.a{background-image:url(a.png),url(/b/*.png)}/* x */.c{color:blue}')).toEqual(
+          [rule('.a', 'background-image', 'url(a.png),url(/b/*.png)'), rule('.c', 'color', 'blue')],
+        )
+      })
+
+      it('should handle an unquoted `url(…)` in a custom property when a comment follows', () => {
+        expect(parse('.a{--x:url(/b/*.png)}/* x */.c{color:blue}')).toEqual([
+          rule('.a', '--x', 'url(/b/*.png)'),
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should handle an unquoted `url(…)` in the params of an at-rule', () => {
+        expect(parse('@import url(/b/*.css);/* x */.c{color:blue}')).toEqual([
+          { kind: 'at-rule', name: '@import', params: 'url(/b/*.css)', nodes: [] },
+          rule('.c', 'color', 'blue'),
+        ])
+      })
+
+      it('should remove a comment next to an unquoted `url(…)`', () => {
+        expect(parse('.a{background-image:/* x */url(/b.png)/* y */,url(/c.png)/* z */}')).toEqual([
+          rule('.a', 'background-image', 'url(/b.png),url(/c.png)'),
+        ])
+      })
+
+      it('should treat `/*` inside of a function that ends with `url` as a comment', () => {
+        expect(parse('.a{background-image:my-url(/b/* x */.png)}')).toEqual([
+          rule('.a', 'background-image', 'my-url(/b.png)'),
+        ])
+        expect(parse('.a{background-image:my\\+url(/b/* x */.png)}')).toEqual([
+          rule('.a', 'background-image', 'my\\+url(/b.png)'),
+        ])
+        expect(parse('.a{x:\\+url(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\+url(ab)')])
+        expect(parse('.a{--x:\\+url(a/* ; */b);color:red}')).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: '--x',
+                value: '\\+url(a/* ; */b)',
+                important: false,
+              },
+              { kind: 'declaration', property: 'color', value: 'red', important: false },
+            ],
+          },
+        ])
+      })
+
+      it('should treat `/*` inside of a function after the whitespace that ends a hex escape as a comment', () => {
+        // The whitespace is part of the hex escape `\31 `, so the ident is
+        // `1url` and not `url`.
+        expect(parse('.a{x:\\31 url(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\31 url(ab)')])
+        expect(parse('.a{x:\\31\turl(a/* ) */b)}')).toEqual([rule('.a', 'x', '\\31\turl(ab)')])
+        expect(parse('.a{x:\\000031\furl(a/* ) */b)}')).toEqual([
+          rule('.a', 'x', '\\000031\furl(ab)'),
+        ])
+        expect(parse('.a{--x:\\31\nurl(a/* ; */b);color:red}')).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: '--x',
+                value: `\\31${lineEndings === 'Windows' ? '\r\n' : '\n'}url(a/* ; */b)`,
+                important: false,
+              },
+              { kind: 'declaration', property: 'color', value: 'red', important: false },
+            ],
+          },
+        ])
+
+        // An escaped `\` does not start a hex escape, so the whitespace ends
+        // the ident.
+        expect(parse('.a{x:\\\\31 url(a/*b)}')).toEqual([rule('.a', 'x', '\\\\31 url(a/*b)')])
+
+        // A hex escape has at most 6 hex digits, so the whitespace ends the
+        // ident.
+        expect(parse('.a{x:\\0000031 url(a/*b)}')).toEqual([rule('.a', 'x', '\\0000031 url(a/*b)')])
+      })
+
+      it('should handle whitespace before the quote of a quoted `url(…)`', () => {
+        expect(parse('.a{background-image:url(\f"a)b")}')).toEqual([
+          rule('.a', 'background-image', 'url(\f"a)b")'),
+        ])
+      })
+
+      it('should keep the default behavior for a `(` or a quote inside of an unquoted `url(…)`', () => {
+        expect(
+          parse(
+            ".a{background-image:url(var(--foo));mask:url(var(--foo, './b.png'));--x:url(var(--y))}",
+          ),
+        ).toEqual([
+          {
+            kind: 'rule',
+            selector: '.a',
+            nodes: [
+              {
+                kind: 'declaration',
+                property: 'background-image',
+                value: 'url(var(--foo))',
+                important: false,
+              },
+              {
+                kind: 'declaration',
+                property: 'mask',
+                value: "url(var(--foo, './b.png'))",
+                important: false,
+              },
+              { kind: 'declaration', property: '--x', value: 'url(var(--y))', important: false },
+            ],
+          },
+        ])
+      })
+    })
   })
 
   describe('declarations', () => {
@@ -178,6 +337,42 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           color: red;
         `),
       ).toEqual([{ kind: 'declaration', property: 'color', value: 'red', important: false }])
+    })
+
+    it('should parse a declaration with a missing ending `;`', () => {
+      expect(parse('color: red')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and a trailing newline', () => {
+      expect(parse('color: red\n')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` and `!important`', () => {
+      expect(parse('color: red !important')).toEqual([
+        { kind: 'declaration', property: 'color', value: 'red', important: true },
+      ])
+    })
+
+    it('should parse multiple declarations where the last one has a missing ending `;`', () => {
+      expect(parse('a: 1; b: 2')).toEqual([
+        { kind: 'declaration', property: 'a', value: '1', important: false },
+        { kind: 'declaration', property: 'b', value: '2', important: false },
+      ])
+    })
+
+    it('should parse a declaration with a missing ending `;` after a custom property', () => {
+      expect(parse('--a: 1;\ncolor: red')).toEqual([
+        { kind: 'declaration', property: '--a', value: '1', important: false },
+        { kind: 'declaration', property: 'color', value: 'red', important: false },
+      ])
+    })
+
+    it('should not parse a declaration with unbalanced brackets and a missing ending `;`', () => {
+      expect(parse('color: rgb(1, 2')).toEqual([])
     })
 
     it('should parse declarations with strings', () => {
@@ -265,6 +460,137 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           },
         ])
       })
+
+      it('should parse custom properties with `!important` when there is a trailing comment', () => {
+        expect(
+          parse(css`
+            --foo: red !important /* Very important */;
+            --bar: red /* not important */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            value: 'red /* not important */',
+            important: false,
+          },
+        ])
+      })
+
+      it('should not treat `!important` inside of a comment as the important flag', () => {
+        expect(
+          parse(css`
+            --foo: red /* !important /* example */;
+            --bar: red /* example */ !important /* example */ /* example */;
+            --baz: '/* example' !important;
+            --quux: red !important
+              /* example */;
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: 'red /* !important /* example */',
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: '--bar',
+            // The comments after `!important` are dropped, together with the
+            // flag. The value has no place to keep them, and they don't change
+            // its meaning.
+            value: 'red /* example */',
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--baz',
+            value: "'/* example'",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--quux',
+            value: 'red',
+            important: true,
+          },
+        ])
+      })
+
+      it('should not treat `!important` inside of a value as the important flag', () => {
+        expect(
+          parse(css`
+            content: 'a !important b';
+            background: url('x!important.png') !important;
+            --foo: '!important';
+          `),
+        ).toEqual([
+          {
+            kind: 'declaration',
+            property: 'content',
+            value: "'a !important b'",
+            important: false,
+          },
+          {
+            kind: 'declaration',
+            property: 'background',
+            value: "url('x!important.png')",
+            important: true,
+          },
+          {
+            kind: 'declaration',
+            property: '--foo',
+            value: "'!important'",
+            important: false,
+          },
+        ])
+      })
+
+      it('should keep an escaped whitespace at the end of the value', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: a\ ;
+            font-family: a\ !important;
+            --foo: a\ ;
+            --bar: a\ !important;
+            --baz: a\\ !important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: 'font-family', value: 'a\\ ', important: true },
+          { kind: 'declaration', property: '--foo', value: 'a\\ ', important: false },
+          { kind: 'declaration', property: '--bar', value: 'a\\ ', important: true },
+          // An escaped backslash does not escape the whitespace after it.
+          { kind: 'declaration', property: '--baz', value: 'a\\\\', important: true },
+        ])
+      })
+
+      it('should not treat an escaped `!` as the important flag', () => {
+        expect(
+          parse(
+            // prettier-ignore
+            css`
+            content: \!important;
+            --foo: red\!important;
+            --bar: red\\!important;
+          `,
+          ),
+        ).toEqual([
+          { kind: 'declaration', property: 'content', value: '\\!important', important: false },
+          { kind: 'declaration', property: '--foo', value: 'red\\!important', important: false },
+          // An escaped backslash does not escape the `!` after it.
+          { kind: 'declaration', property: '--bar', value: 'red\\\\', important: true },
+        ])
+      })
     })
 
     describe('Custom properties', () => {
@@ -324,6 +650,41 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
             --foo: bar !important
           `),
         ).toEqual([{ kind: 'declaration', property: '--foo', value: 'bar', important: true }])
+      })
+
+      it('should parse a custom property with a missing ending `;` at the end of the input', () => {
+        expect(parse('--foo: bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+        ])
+        expect(parse('--foo: bar !important')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: true },
+        ])
+        expect(parse('--foo: var(--bar)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'var(--bar)', important: false },
+        ])
+        expect(parse("--foo: 'bar'")).toEqual([
+          { kind: 'declaration', property: '--foo', value: "'bar'", important: false },
+        ])
+        expect(parse('--foo: {}')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '{}', important: false },
+        ])
+        expect(parse('--foo: bar /* baz */')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar /* baz */', important: false },
+        ])
+        expect(parse('--foo: bar;\n--baz: rgb(0 0 0)')).toEqual([
+          { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+          { kind: 'declaration', property: '--baz', value: 'rgb(0 0 0)', important: false },
+        ])
+      })
+
+      it('should parse a custom property with an unclosed bracket at the end of the input', () => {
+        expect(parse('--foo: [bar')).toEqual([
+          { kind: 'declaration', property: '--foo', value: '[bar', important: false },
+        ])
+        expect(parse('color: red; --foo: (bar')).toEqual([
+          { kind: 'declaration', property: 'color', value: 'red', important: false },
+          { kind: 'declaration', property: '--foo', value: '(bar', important: false },
+        ])
       })
 
       it('should parse a custom property with an embedded programming language', () => {
@@ -1174,6 +1535,111 @@ describe.each(['Unix', 'Windows'])('Line endings: %s', (lineEndings) => {
           ],
         },
       ])
+    })
+  })
+
+  describe('CDO and CDC tokens', () => {
+    it('should ignore `<!--` and `-->` on their own', () => {
+      expect(parse('<!--')).toEqual([])
+      expect(parse('-->')).toEqual([])
+      expect(parse('<!-- -->')).toEqual([])
+    })
+
+    it('should ignore `<!--` and `-->` around rules', () => {
+      expect(
+        parse(css`
+          <!--
+          a {
+            color: red;
+          }
+          -->
+          b {
+            color: blue;
+          }
+          -->
+        `),
+      ).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+        {
+          kind: 'rule',
+          selector: 'b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
+    })
+
+    it('should ignore `<!--` and `-->` without whitespace around them', () => {
+      expect(parse('<!--a{color:red}-->b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+        },
+        {
+          kind: 'rule',
+          selector: 'b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
+    })
+
+    it('should ignore `<!--` and `-->` next to at-rules and declarations', () => {
+      expect(parse('<!-- @charset "UTF-8"; --> @media print { a { color: red } }')).toEqual([
+        { kind: 'at-rule', name: '@charset', params: '"UTF-8"', nodes: [] },
+        {
+          kind: 'at-rule',
+          name: '@media',
+          params: 'print',
+          nodes: [
+            {
+              kind: 'rule',
+              selector: 'a',
+              nodes: [{ kind: 'declaration', property: 'color', value: 'red', important: false }],
+            },
+          ],
+        },
+      ])
+      expect(parse('--foo: bar; --> --baz: qux;')).toEqual([
+        { kind: 'declaration', property: '--foo', value: 'bar', important: false },
+        { kind: 'declaration', property: '--baz', value: 'qux', important: false },
+      ])
+    })
+
+    it('should keep `<!--` and `-->` inside of a selector', () => {
+      expect(parse('a <!-- b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a <!-- b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
+      expect(parse('a --> b{color:blue}')).toEqual([
+        {
+          kind: 'rule',
+          selector: 'a --> b',
+          nodes: [{ kind: 'declaration', property: 'color', value: 'blue', important: false }],
+        },
+      ])
+    })
+
+    it('should keep `<!--` and `-->` inside of a custom property', () => {
+      expect(parse('--foo: <!-- -->;')).toEqual([
+        { kind: 'declaration', property: '--foo', value: '<!-- -->', important: false },
+      ])
+    })
+
+    it('should not treat a name that starts with `---` as `-->`', () => {
+      expect(parse('---a: b;')).toEqual([
+        { kind: 'declaration', property: '---a', value: 'b', important: false },
+      ])
+    })
+
+    it('should only ignore `<!--` and `-->` at the top level', () => {
+      expect(() => parse('a { --> }')).toThrow('Invalid custom property, expected a value')
     })
   })
 

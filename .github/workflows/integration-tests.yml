@@ -25,10 +25,10 @@ jobs:
             os: windows-latest
 
           - name: Linux
-            os: namespace-profile-default
+            os: ubuntu-latest
 
           - name: macOS
-            os: macos-14
+            os: macos-latest
 
         integration:
           - upgrade
@@ -38,6 +38,7 @@ jobs:
           - oxide
           - webpack
           - turbopack
+          - node
 
         # Exclude windows and macos from being built on feature branches
         run-all:
