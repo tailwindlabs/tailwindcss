@@ -121,3 +121,14 @@ test('throws when neither `content` nor `file` is given', () => {
     'Either `content` or `file` must be provided',
   )
 })
+
+test('`scanFiles` throws when an entry has neither `content` nor `file`', () => {
+  let scanner = new Scanner({})
+
+  expect(() =>
+    scanner.scanFiles([
+      { content: '<div class="flex">', extension: 'html' },
+      { extension: 'html' },
+    ]),
+  ).toThrow('Either `content` or `file` must be provided')
+})

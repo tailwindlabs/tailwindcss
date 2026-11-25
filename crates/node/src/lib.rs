@@ -48,17 +48,27 @@ pub struct SourceEntry {
   pub negated: bool,
 }
 
-impl From<ChangedContent> for tailwindcss_oxide::ChangedContent {
-  fn from(changed_content: ChangedContent) -> Self {
+const MISSING_CONTENT_AND_FILE: &str = "Either `content` or `file` must be provided";
+
+impl TryFrom<ChangedContent> for tailwindcss_oxide::ChangedContent {
+  type Error = napi::Error;
+
+  fn try_from(changed_content: ChangedContent) -> napi::Result<Self> {
     if let Some(file) = changed_content.file {
-      return tailwindcss_oxide::ChangedContent::File(file.into(), changed_content.extension);
+      return Ok(tailwindcss_oxide::ChangedContent::File(
+        file.into(),
+        changed_content.extension,
+      ));
     }
 
     if let Some(contents) = changed_content.content {
-      return tailwindcss_oxide::ChangedContent::Content(contents, changed_content.extension);
+      return Ok(tailwindcss_oxide::ChangedContent::Content(
+        contents,
+        changed_content.extension,
+      ));
     }
 
-    unreachable!()
+    Err(napi::Error::from_reason(MISSING_CONTENT_AND_FILE))
   }
 }
 
@@ -134,10 +144,13 @@ impl Scanner {
   }
 
   #[napi]
-  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> Vec<String> {
-    self
-      .scanner
-      .scan_content(input.into_iter().map(Into::into).collect())
+  pub fn scan_files(&mut self, input: Vec<ChangedContent>) -> napi::Result<Vec<String>> {
+    let input = input
+      .into_iter()
+      .map(TryInto::try_into)
+      .collect::<napi::Result<Vec<_>>>()?;
+
+    Ok(self.scanner.scan_content(input))
   }
 
   #[napi]
@@ -149,25 +162,17 @@ impl Scanner {
       (Some(content), _) => content,
       (None, Some(file)) => std::fs::read_to_string(&file)
         .map_err(|err| napi::Error::from_reason(format!("Failed to read file `{file}`: {err}")))?,
-      (None, None) => {
-        return Err(napi::Error::from_reason(
-          "Either `content` or `file` must be provided",
-        ))
-      }
+      (None, None) => return Err(napi::Error::from_reason(MISSING_CONTENT_AND_FILE)),
     };
 
-    let input = ChangedContent {
-      file: None,
-      content: Some(content.clone()),
-      extension: input.extension,
-    };
+    let input = tailwindcss_oxide::ChangedContent::Content(content.clone(), input.extension);
 
     let mut utf16_idx = IndexConverter::new(&content[..]);
 
     Ok(
       self
         .scanner
-        .get_candidates_with_positions(input.into())
+        .get_candidates_with_positions(input)
         .into_iter()
         .map(|(candidate, position)| CandidateWithPosition {
           candidate,

@@ -1,3 +1,3 @@
 ### Fixed
 
-- Throw an error instead of crashing the process when `Scanner#getCandidatesWithPositions` from `@tailwindcss/oxide` gets neither `content` nor `file`, or cannot read `file`
+- Throw an error instead of crashing the process when `Scanner#scanFiles` or `Scanner#getCandidatesWithPositions` from `@tailwindcss/oxide` gets invalid input
