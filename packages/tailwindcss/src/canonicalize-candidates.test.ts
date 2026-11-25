@@ -226,6 +226,12 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Should not convert invalid spacing values to calc
       ['[--value:theme(spacing[1.1])]', '[--value:theme(spacing[1.1])]'],
 
+      // Should not drop keys of a nested spacing path. `spacing.1.5` is the
+      // path `spacing → 1 → 5`, not the `1.5` key, so it can't become
+      // `--spacing(1)`.
+      ['[--value:theme(spacing.1.5)]', '[--value:theme(spacing.1.5)]'],
+      ['[padding:theme(spacing.1.5)]', '[padding:theme(spacing.1.5)]'],
+
       // Convert to `var(…)` if we can resolve the path
       ['[color:theme(colors.red.500)]', 'text-red-500'], // Arbitrary property
       ['[color:theme(colors.red.500)]/50', 'text-red-500/50'], // Arbitrary property + modifier
@@ -388,6 +394,10 @@ describe.each([['default'], ['with-variant'], ['important'], ['prefix']])('%s', 
       // Convert to `var(…)` if we can resolve the path
       ['bg-[theme(colors.red.500)]', 'bg-red-500'], // Arbitrary value
       ['bg-[size:theme(spacing.4)]', 'bg-size-[--spacing(4)]'], // Arbitrary value + data type hint
+
+      // Keep nested spacing paths, e.g.: `spacing.1.5` is not `spacing[1.5]`
+      ['p-[theme(spacing.1.5)]', 'p-[theme(spacing.1.5)]'],
+      ['px-[calc(theme(spacing.3.5)-1px)]', 'px-[calc(theme(spacing.3.5)-1px)]'],
 
       // Pretty print CSS functions preceded by an operator to prevent consecutive
       // operator characters.

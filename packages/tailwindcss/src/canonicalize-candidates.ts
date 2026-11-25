@@ -1388,6 +1388,10 @@ function createConverterCache(
 
       let keyPath = toKeyPath(path)
       if (keyPath[0] === 'spacing' && designSystem.theme.get(['--spacing'])) {
+        // Only a single key can be a multiplier. E.g.: `spacing.1.5` is the path
+        // `spacing → 1 → 5`, not the `1.5` key, which is `spacing[1.5]`.
+        if (keyPath.length !== 2) return null
+
         let multiplier = keyPath[1]
         if (!isValidSpacingMultiplier(multiplier)) return null
 
