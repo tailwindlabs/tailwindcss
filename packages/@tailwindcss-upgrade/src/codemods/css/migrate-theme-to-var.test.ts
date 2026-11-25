@@ -44,3 +44,19 @@ it('should migrate `theme(…)` to `var(…)`', async () => {
     }"
   `)
 })
+
+it('should keep nested spacing paths', async () => {
+  expect(
+    await migrate(css`
+      .foo {
+        padding: theme(spacing[1.5]);
+        margin: theme(spacing.1.5) theme(spacing.2.5);
+      }
+    `),
+  ).toMatchInlineSnapshot(`
+    ".foo {
+      padding: --spacing(1.5);
+      margin: theme(spacing.1.5) theme(spacing.2.5);
+    }"
+  `)
+})
