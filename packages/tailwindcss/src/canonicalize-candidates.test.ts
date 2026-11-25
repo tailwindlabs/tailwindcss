@@ -1871,6 +1871,66 @@ describe('regressions', () => {
     },
   )
 
+  test('collapsing a group with a single utility does not compute the static utilities', async () => {
+    let designSystem = await __unstable__loadDesignSystem(
+      css`
+        @tailwind utilities;
+      `,
+      { base: __dirname },
+    )
+
+    let options: CanonicalizeOptions = {
+      collapse: true,
+      logicalToPhysical: true,
+      rem: 16,
+    }
+
+    using keys = vi.spyOn(designSystem.utilities, 'keys')
+
+    // `group` is not a utility, so `flex` can't be collapsed with anything
+    expect(designSystem.canonicalizeCandidates(['group', 'flex'], options)).toEqual([
+      'group',
+      'flex',
+    ])
+    expect(keys).not.toHaveBeenCalledWith('static')
+  })
+
+  test.each([
+    ['', ['p-4'], ['overflow-x-hidden', 'overflow-y-hidden'], ['overflow-hidden']],
+    ['tw', ['tw:p-4'], ['tw:overflow-x-hidden', 'tw:overflow-y-hidden'], ['tw:overflow-hidden']],
+  ])(
+    'collapsing static utilities after pre-computing all utilities does not compute the static utilities again (prefix: "%s")',
+    async (prefix, before, candidates, expected) => {
+      let designSystem = await __unstable__loadDesignSystem(
+        prefix
+          ? css`
+              @theme prefix(${prefix}) {
+              }
+              @tailwind utilities;
+            `
+          : css`
+              @tailwind utilities;
+            `,
+        { base: __dirname },
+      )
+
+      let options: CanonicalizeOptions = {
+        collapse: true,
+        logicalToPhysical: true,
+        rem: 16,
+      }
+
+      // A candidate with a value pre-computes all utilities, which includes the
+      // static utilities
+      designSystem.canonicalizeCandidates(before, options)
+
+      using keys = vi.spyOn(designSystem.utilities, 'keys')
+
+      expect(designSystem.canonicalizeCandidates(candidates, options)).toEqual(expected)
+      expect(keys).not.toHaveBeenCalledWith('static')
+    },
+  )
+
   // https://github.com/tailwindlabs/tailwindcss/issues/20051
   test(
     'does not crash when plugin matchComponents rejects speculative values during collapse',

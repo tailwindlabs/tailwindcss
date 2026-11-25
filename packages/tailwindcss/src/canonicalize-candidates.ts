@@ -290,14 +290,6 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let themeVariables = designSystem.storage[UTILITY_THEME_VARIABLES_KEY].get(signatureOptions)
     let dynamicUtilities = designSystem.storage[DYNAMIC_UTILITIES_KEY].get(signatureOptions)
 
-    // A utility is only added to the index of static utilities once its
-    // properties are computed, e.g. while pre-computing all utilities. That
-    // only happens for candidates with a value like `p-4`, so make sure that
-    // the static utilities are in there. Otherwise the result depends on the
-    // candidates that were canonicalized before. E.g.: `overflow-x-hidden
-    // overflow-y-hidden` → `overflow-hidden`
-    designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY].get(signatureOptions)
-
     // For each candidate, compute the used properties and values. E.g.: `mt-1` → `margin-top` → `0.25rem`
     //
     // NOTE: Currently assuming we are dealing with static utilities only. This
@@ -305,6 +297,22 @@ function collapseCandidates(options: InternalCanonicalizeOptions, candidates: st
     let candidatePropertiesValues = candidates.map((candidate) =>
       computeUtilitiesPropertiesLookup.get(candidate),
     )
+
+    // A candidate without properties, like a class that isn't a utility, can't
+    // be collapsed with anything. E.g.: `group flex`
+    if (candidatePropertiesValues.filter((propertyValues) => propertyValues.size > 0).length < 2) {
+      return candidates
+    }
+
+    // A utility is only added to the index of static utilities once its
+    // properties are computed. Pre-computing all utilities does that, but it
+    // only happens for candidates with a value like `p-4`. So make sure that
+    // the static utilities are in there, otherwise the result depends on the
+    // candidates that were canonicalized before. E.g.: `overflow-x-hidden
+    // overflow-y-hidden` → `overflow-hidden`
+    if (!designSystem.storage[PRE_COMPUTED_UTILITIES_KEY].has(signatureOptions)) {
+      designSystem.storage[PRE_COMPUTED_STATIC_UTILITIES_KEY].get(signatureOptions)
+    }
 
     // Hard-coded optimization: if any candidate sets `line-height` and another
     // candidate sets `font-size`, we pre-compute the `text-*` utilities with
@@ -3263,9 +3271,10 @@ function createStaticUtilitiesCache(): DesignSystem['storage'][typeof STATIC_UTI
   })
 }
 
-// Compute the properties of all static utilities, which adds them to the index
-// of static utilities. This takes a few milliseconds, while pre-computing all
-// utilities takes almost a second with the default theme.
+// Compute the properties of the static utilities, which adds them to the index
+// of static utilities. These are the static utilities that pre-computing all
+// utilities computes as well, but this takes a few milliseconds, while
+// pre-computing all utilities takes almost a second with the default theme.
 const PRE_COMPUTED_STATIC_UTILITIES_KEY = Symbol()
 function createPreComputedStaticUtilitiesCache(
   designSystem: DesignSystem,
@@ -3276,6 +3285,10 @@ function createPreComputedStaticUtilitiesCache(
 
     let utilities = new Set<string>()
     for (let utility of designSystem.utilities.keys('static')) {
+      // Skip the utilities that the class list skips, like deprecated ones.
+      // E.g.: `bg-gradient-to-r`
+      if (designSystem.utilities.getCompletions(utility).length === 0) continue
+
       // Use the same name as the candidates that we collapse, which have the
       // prefix. E.g.: `tw:flex`
       utility = `${prefix}${utility}`
