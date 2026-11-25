@@ -125,7 +125,8 @@ impl Scanner {
 
         let (scanned_blobs, css_files, files) = self.discover_sources();
 
-        self.extract_candidates(scanned_blobs, css_files);
+        let new_candidates = extract_candidates(scanned_blobs, css_files);
+        self.candidates.extend(new_candidates);
         self.scanned_files = files;
 
         // Return all candidates sorted
@@ -227,34 +228,15 @@ impl Scanner {
 
         // Read all content into blobs for extraction
         let blobs = read_all_files(content_to_scan);
-        self.extract_candidates(blobs, vec![])
-    }
-
-    #[tracing::instrument(skip_all)]
-    fn extract_candidates(&mut self, blobs: Vec<Vec<u8>>, css_files: Vec<PathBuf>) -> Vec<String> {
-        // Extract all candidates from the pre-read blobs
         let mut new_candidates = parse_all_blobs(blobs);
 
-        // Extract all CSS variables from the CSS files
-        if !css_files.is_empty() {
-            let css_variables = extract_css_variables(read_all_files(
-                css_files
-                    .into_iter()
-                    .map(|file| ChangedContent::File(file, "css".into()))
-                    .collect(),
-            ));
-
-            new_candidates.extend(css_variables);
-        }
-
         // Only keep candidates we haven't seen before
-        for existing in self.candidates.iter() {
-            new_candidates.remove(existing);
-        }
+        new_candidates.retain(|candidate| !self.candidates.contains(candidate));
 
         // Track new candidates for subsequent calls
         self.candidates.extend(new_candidates.iter().cloned());
 
+        // Return only the new candidates, sorted
         let mut result: Vec<String> = new_candidates.into_iter().collect();
         result.par_sort_unstable();
 
@@ -573,6 +555,26 @@ fn read_all_files(changed_content: Vec<ChangedContent>) -> Vec<Vec<u8>> {
         .into_par_iter()
         .filter_map(read_changed_content)
         .collect()
+}
+
+#[tracing::instrument(skip_all)]
+fn extract_candidates(blobs: Vec<Vec<u8>>, css_files: Vec<PathBuf>) -> FxHashSet<String> {
+    // Extract all candidates from the pre-read blobs
+    let mut candidates = parse_all_blobs(blobs);
+
+    // Extract all CSS variables from the CSS files
+    if !css_files.is_empty() {
+        let css_variables = extract_css_variables(read_all_files(
+            css_files
+                .into_iter()
+                .map(|file| ChangedContent::File(file, "css".into()))
+                .collect(),
+        ));
+
+        candidates.extend(css_variables);
+    }
+
+    candidates
 }
 
 #[tracing::instrument(skip_all)]

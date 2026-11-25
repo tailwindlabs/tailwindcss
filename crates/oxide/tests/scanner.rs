@@ -1096,6 +1096,36 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_only_return_new_candidates_during_incremental_scans() {
+        let dir = tempdir().unwrap();
+        fs::write(dir.path().join("index.html"), "underline flex").unwrap();
+
+        let mut scanner = Scanner::new(vec![public_source_entry_from_pattern(
+            dir.path().to_path_buf(),
+            "@source '*.html'",
+        )]);
+
+        assert_eq!(scanner.scan(), vec!["flex", "underline"]);
+
+        // Only the candidates that the scanner didn't see before are returned, sorted
+        let candidates = scanner.scan_content(vec![ChangedContent::Content(
+            "zeta flex alpha underline".into(),
+            "html".into(),
+        )]);
+        assert_eq!(candidates, vec!["alpha", "zeta"]);
+
+        // Known candidates are not returned again
+        let candidates = scanner.scan_content(vec![ChangedContent::Content(
+            "alpha flex".into(),
+            "html".into(),
+        )]);
+        assert!(candidates.is_empty());
+
+        // A full scan still returns all candidates, sorted
+        assert_eq!(scanner.scan(), vec!["alpha", "flex", "underline", "zeta"]);
+    }
+
+    #[test]
     fn it_should_not_store_invalid_utf8_candidates_during_incremental_scans() {
         let dir = tempdir().unwrap();
         let file = dir.path().join("index.html");
