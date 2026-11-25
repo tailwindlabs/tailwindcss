@@ -49,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure `@tailwindcss/cli` in `--watch` mode finishes the current rebuild before it exits when stdin closes ([#20446](https://github.com/tailwindlabs/tailwindcss/pull/20446))
 - Ensure `@tailwindcss/cli` in `--watch` mode writes the initial build before it exits when stdin is already closed ([#20446](https://github.com/tailwindlabs/tailwindcss/pull/20446))
 - Keep watching all dependencies in `@tailwindcss/postcss` when a rebuild fails, so watch mode recovers once the error is fixed ([#20395](https://github.com/tailwindlabs/tailwindcss/pull/20395))
+- Canonicalization: don't replace arbitrary variants inside compound variants with variants they can't compound with (e.g. `not-[&>*]:flex` no longer becomes `not-*:flex`) ([#20720](https://github.com/tailwindlabs/tailwindcss/pull/20720))
 
 ## [4.3.5] - 2026-11-06
 
