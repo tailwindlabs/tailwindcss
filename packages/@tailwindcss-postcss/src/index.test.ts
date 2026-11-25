@@ -518,6 +518,64 @@ test('does not register the input file as a dependency, even if it is passed in 
   })
 })
 
+describe('files that a full rebuild finds for the first time', () => {
+  let dir: string
+  beforeEach(async () => {
+    dir = await realpath(await mkdtemp(path.join(tmpdir(), 'tw-postcss')))
+    // The stylesheets are outside of `source(…)`, so the scanner doesn't report
+    // them as dependencies.
+    await mkdir(path.join(dir, 'src'))
+    await writeFile(path.join(dir, 'src/index.html'), `<div class="underline"></div>`)
+    await writeFile(path.join(dir, 'index.css'), `@tailwind utilities source('./src');`)
+  })
+  afterEach(() => rm(dir, { recursive: true, force: true }))
+
+  function dependencies(result: postcss.Result) {
+    return result.messages
+      .filter((message) => message.type === 'dependency')
+      .map((message) => path.relative(dir, message.file))
+      .filter((file) => file.endsWith('.css'))
+  }
+
+  test('are reported as dependencies of that build, once', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: false })])
+
+    let first = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(dependencies(first)).toEqual([])
+
+    // Ensure the mtime below is actually observed as a change.
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    await writeFile(path.join(dir, 'buttons.css'), `.btn { color: red; }`)
+    await writeFile(from, `@import './buttons.css';\n@tailwind utilities source('./src');`)
+
+    let second = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(second.css).toContain('.btn')
+    expect(dependencies(second)).toEqual(['buttons.css'])
+
+    let third = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(dependencies(third)).toEqual(['buttons.css'])
+  })
+
+  test('are reported as dependencies of that build when it fails', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: false })])
+
+    await processor.process(await readFile(from, 'utf8'), { from })
+
+    // Ensure the mtime below is actually observed as a change.
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    await writeFile(path.join(dir, 'buttons.css'), `.btn { @apply this-class-does-not-exist; }`)
+    await writeFile(from, `@import './buttons.css';\n@tailwind utilities source('./src');`)
+
+    let failed = await processor.process(await readFile(from, 'utf8'), { from })
+    expect(failed.warnings().length).toBeGreaterThan(0)
+    expect(dependencies(failed)).toEqual(['buttons.css'])
+  })
+})
+
 describe('error recovery', () => {
   let dir: string
   beforeEach(async () => {

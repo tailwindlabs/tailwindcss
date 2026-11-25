@@ -108,3 +108,93 @@ test(
     `)
   },
 )
+
+test(
+  'webpack + PostCSS (watch): rebuilds when a newly imported file changes',
+  {
+    fs: {
+      'package.json': json`
+        {
+          "main": "./src/index.js",
+          "browser": "./src/index.js",
+          "dependencies": {
+            "css-loader": "^6",
+            "postcss": "^8",
+            "postcss-loader": "^7",
+            "webpack": "^5",
+            "webpack-cli": "^5",
+            "mini-css-extract-plugin": "^2",
+            "tailwindcss": "workspace:^",
+            "@tailwindcss/postcss": "workspace:^"
+          }
+        }
+      `,
+      'postcss.config.js': js`
+        /** @type {import('postcss-load-config').Config} */
+        module.exports = {
+          plugins: {
+            '@tailwindcss/postcss': {},
+          },
+        }
+      `,
+      'webpack.config.js': js`
+        let MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+        module.exports = {
+          output: {
+            clean: true,
+          },
+          plugins: [new MiniCssExtractPlugin()],
+          module: {
+            rules: [
+              {
+                test: /.css$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+              },
+            ],
+          },
+        }
+      `,
+      'src/index.js': js`import '../styles/index.css'`,
+      'src/index.html': html`
+        <div class="flex"></div>
+      `,
+      // The stylesheets are outside of `source(…)`, so the scanner doesn't
+      // report them as dependencies.
+      'styles/index.css': css` @import 'tailwindcss/utilities' source('../src'); `,
+      'styles/buttons.css': css`
+        .btn-1 {
+          color: red;
+        }
+      `,
+    },
+  },
+  async ({ fs, spawn, expect }) => {
+    let process = await spawn('pnpm webpack --mode=development --watch')
+    await process.onStdout((m) => m.includes('compiled successfully in'))
+
+    await fs.expectFileNotToContain('dist/main.css', ['.btn-1'])
+
+    // Import a new file, which needs a full rebuild
+    await fs.write(
+      'styles/index.css',
+      css`
+        @import 'tailwindcss/utilities' source('../src');
+        @import './buttons.css';
+      `,
+    )
+    await process.onStdout((m) => m.includes('compiled successfully in'))
+    await fs.expectFileToContain('dist/main.css', ['.btn-1'])
+
+    // A change to the new file should cause a rebuild
+    await fs.write(
+      'styles/buttons.css',
+      css`
+        .btn-2 {
+          color: blue;
+        }
+      `,
+    )
+    await fs.expectFileToContain('dist/main.css', ['.btn-2'])
+  },
+)
