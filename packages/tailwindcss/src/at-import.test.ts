@@ -6,6 +6,40 @@ import { compileCss, run } from './test-utils/run'
 
 const css = dedent
 
+test.each([
+  'HTTP://example.com/style.css',
+  'HtTp://example.com/style.css',
+  'HTTPS://example.com/style.css',
+  'hTtPs://example.com/style.css',
+  'DATA:text/css,body%7Bcolor:red%7D',
+  'DaTa:text/css,body%7Bcolor:red%7D',
+])('preserves external @imports with a case-insensitive scheme: %s', async (uri) => {
+  let loadStylesheet = vi.fn(async () => {
+    throw new Error('External stylesheets should not be loaded')
+  })
+  let input = `@import "${uri}";`
+
+  let compiler = await compile(input, { loadStylesheet })
+
+  expect(compiler.build([])).toContain(input)
+  expect(loadStylesheet).not.toHaveBeenCalled()
+})
+
+test('preserves local stylesheet path casing during resolution', async () => {
+  let loadStylesheet = vi.fn(async () => ({
+    content: '.local { color: red; }',
+    base: '/root',
+    path: '/root/HTTP-Styles.css',
+  }))
+  let compiler = await compile('@import "./HTTP-Styles.css";', {
+    base: '/root',
+    loadStylesheet,
+  })
+
+  expect(loadStylesheet).toHaveBeenCalledWith('./HTTP-Styles.css', '/root')
+  expect(compiler.build([])).toContain('.local')
+})
+
 test('can resolve relative @imports', async () => {
   async function loadStylesheet(id: string, base: string) {
     expect(base).toBe('/root')
