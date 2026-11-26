@@ -116,8 +116,8 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
       (node.kind === 'word' || node.kind === 'function') &&
       node.value.toLowerCase() === 'layer'
     ) {
-      if (layer) return null
-      if (supports) {
+      if (layer !== null) return null
+      if (supports !== null) {
         throw new Error(
           '`layer(…)` in an `@import` should come before any other functions or conditions',
         )
@@ -133,7 +133,7 @@ export function parseImportParams(params: ValueParser.ValueAstNode[]) {
     }
 
     if (node.kind === 'function' && node.value.toLowerCase() === 'supports') {
-      if (supports) return null
+      if (supports !== null) return null
       supports = ValueParser.toCss(node.nodes)
       continue
     }

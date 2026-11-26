@@ -1,8 +1,10 @@
 import dedent from 'dedent'
 import { expect, test, vi } from 'vitest'
+import { parseImportParams } from './at-import'
 import { compile, type Config } from './index'
 import plugin from './plugin'
 import { compileCss, run } from './test-utils/run'
+import * as ValueParser from './value-parser'
 
 const css = dedent
 
@@ -650,4 +652,15 @@ test('resolves `@variant` used as `@custom-variant` inside `@reference`', async 
     }
     "
   `)
+})
+
+test('rejects duplicate or misordered empty layer and supports clauses in @import', () => {
+  expect(parseImportParams(ValueParser.parse("'a.css' layer layer(utilities)"))).toBeNull()
+  expect(parseImportParams(ValueParser.parse("'a.css' layer() layer(utilities)"))).toBeNull()
+  expect(
+    parseImportParams(ValueParser.parse("'a.css' supports() supports(display: grid)")),
+  ).toBeNull()
+  expect(() => parseImportParams(ValueParser.parse("'a.css' supports() layer"))).toThrow(
+    '`layer(…)` in an `@import` should come before any other functions or conditions',
+  )
 })
