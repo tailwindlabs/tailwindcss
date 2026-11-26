@@ -12,7 +12,10 @@ export function topologicalSort<Key>(
     if (seen.has(node)) return
 
     // Circular dependency detected
-    if (wip.has(node)) options.onCircularDependency?.(path, node)
+    if (wip.has(node)) {
+      options.onCircularDependency?.(path, node)
+      return
+    }
 
     wip.add(node)
 
