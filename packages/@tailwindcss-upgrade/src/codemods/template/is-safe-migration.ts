@@ -14,6 +14,13 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
   // JavaScript / TypeScript
   /addEventListener\(['"`]$/,
 
+  // A `kind` or `type` value names a member of a union, e.g. `{ kind: 'ring' }`
+  // or `effect.kind === 'ring'`
+  /\b(?:kind|type)\s*(?::|[!=]==?)\s*['"`]$/,
+
+  // A `switch` case, e.g. `case 'ring':`
+  /\bcase\s+['"`]$/,
+
   // Alpine
   /wire:[^\s]*?$/,
 
@@ -22,6 +29,9 @@ const CONDITIONAL_TEMPLATE_SYNTAX = [
 ]
 const NEXT_PLACEHOLDER_PROP = /placeholder=\{?['"`]$/
 const VUE_3_EMIT = /\b\$?emit\(['"`]$/
+const STRING_UNION_BEFORE = /(?<!\|)\|\s*['"`]$/
+const STRING_UNION_AFTER = /^['"`]\s*\|(?![|>])/
+const SENTENCE_END = /[.!](?:\s|$)/
 
 export function isSafeMigration(
   rawCandidate: string,
@@ -169,6 +179,26 @@ export function isSafeMigration(
 
   // Heuristic: Disallow function call expressions immediately following the candidate
   if (currentLineAfterCandidate.trim().startsWith('(')) {
+    return false
+  }
+
+  // Heuristic: Disallow a member of a string literal union type
+  //
+  // E.g.: `type Shape = 'ring' | 'circle'`
+  if (
+    STRING_UNION_BEFORE.test(currentLineBeforeCandidate) ||
+    STRING_UNION_AFTER.test(currentLineAfterCandidate)
+  ) {
+    return false
+  }
+
+  // Heuristic: Disallow a word in a sentence. A list of classes never contains
+  // a `.` or `!` followed by a space or at its end.
+  //
+  // E.g.: `title="Add a shadow to the card."`
+  if (
+    SENTENCE_END.test(stringAroundCandidate(currentLineBeforeCandidate, currentLineAfterCandidate))
+  ) {
     return false
   }
 
@@ -335,7 +365,14 @@ const EQUALS = 0x3d
 const GREATER_THAN = 0x3e
 
 function isMiddleOfString(line: string): boolean {
+  return openQuoteIndex(line) !== -1
+}
+
+// The index of the quote that opens the string the end of the line is in, or
+// -1 when the line ends outside of a string
+function openQuoteIndex(line: string): number {
   let currentQuote: number | null = null
+  let index = -1
 
   for (let i = 0; i < line.length; i++) {
     let char = line.charCodeAt(i)
@@ -351,17 +388,29 @@ function isMiddleOfString(line: string): boolean {
         // Found matching quote, we are outside of a string
         if (currentQuote === char) {
           currentQuote = null
+          index = -1
         }
 
         // Found a quote, we are inside a string
         else if (currentQuote === null) {
           currentQuote = char
+          index = i
         }
         break
     }
   }
 
-  return currentQuote !== null
+  return index
+}
+
+// The contents of the string around the candidate, without the candidate
+//
+// shortcut: an escaped quote after the candidate ends the string early, which
+// only makes the sentence heuristic miss a sentence.
+function stringAroundCandidate(before: string, after: string): string {
+  let start = openQuoteIndex(before)
+  let end = after.indexOf(before[start])
+  return before.slice(start + 1) + (end === -1 ? after : after.slice(0, end))
 }
 
 const inlineStyleAttributeValueRanges = new DefaultMap((source: string) => {
