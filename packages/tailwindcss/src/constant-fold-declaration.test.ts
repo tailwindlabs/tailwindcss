@@ -135,3 +135,158 @@ it('should not constant fold when a computation has a high-precision result', ()
 it('should constant fold division results with floating-point error after scaling', () => {
   expect(constantFoldDeclaration('calc(29% / 100)')).toBe('0.29%')
 })
+
+it.each([
+  // addition
+  ['calc(0.1 + 0.2)', '0.3'],
+  ['calc(0.1rem + 0.2rem)', '0.3rem'],
+  ['calc(0.7 + 0.1)', '0.8'],
+  ['calc(0.57 + 1)', '1.57'],
+
+  // subtraction
+  ['calc(0.3 - 0.1)', '0.2'],
+  ['calc(4.35 - 4)', '0.35'],
+  ['calc(1.1rem - 1rem)', '0.1rem'],
+
+  // subtraction with catastrophic cancellation
+  ['calc(100.1 - 100)', '0.1'],
+
+  // multiplication
+  ['calc(0.1 * 3)', '0.3'],
+  ['calc(0.1 * 0.1)', '0.01'],
+  ['calc(1.1 * 1.1)', '1.21'],
+  ['calc(0.07 * 100)', '7'],
+  ['calc(1.15 * 100)', '115'],
+  ['calc(4.35 * 100)', '435'],
+  ['calc(0.1rem * 0.2)', '0.02rem'],
+
+  // division
+  ['calc(0.3 / 0.1)', '3'],
+  ['calc(0.7 / 0.1)', '7'],
+  ['calc(0.6 / 3)', '0.2'],
+  ['calc(0.69 / 3)', '0.23'],
+  ['calc(3.3 / 1.1)', '3'],
+  ['calc(4.8px / 1.6)', '3px'],
+  ['calc(-1 / 4)', '-0.25'],
+
+  // nested re-association
+  ['calc(0.1 * calc(3 * var(--foo)))', 'calc(0.3 * var(--foo))'],
+  ['calc(0.1rem + calc(0.2rem + var(--foo)))', 'calc(0.3rem + var(--foo))'],
+])('should constant fold `%s` into `%s` without floating-point noise', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // more than 2 decimals
+  ['calc(10 / 3)', 'calc(10 / 3)'],
+  ['calc(1 / 8)', 'calc(1 / 8)'],
+  ['calc(1rem / 3)', 'calc(1rem / 3)'],
+
+  // dividing by (negative) zero
+  ['calc(1 / 0.0)', 'calc(1 / 0)'],
+  ['calc(1 / -0.0)', 'calc(1 / 0)'],
+])(
+  'should not constant fold division `%s` that exceeds 2 decimals or divides by zero',
+  (input, expected) => {
+    expect(constantFoldDeclaration(input)).toBe(expected)
+  },
+)
+
+it.each([
+  // rem with a root font-size that isn't a power of 2
+  ['0.1rem', 14, '1.4px'],
+  ['0.7rem', 14, '9.8px'],
+  ['1.1rem', 14, '15.4px'],
+  ['0.35rem', 14, '4.9px'],
+  ['0.3rem', 18, '5.4px'],
+  ['calc(0.1rem + 0.2rem)', 16, '4.8px'],
+  ['calc(3 * 0.1rem)', 16, '4.8px'],
+])(
+  'should canonicalize `%s` with rem `%s` into `%s` without floating-point noise',
+  (input, rem, expected) => {
+    expect(constantFoldDeclaration(input, rem)).toBe(expected)
+  },
+)
+
+it.each([
+  // terminating conversions are exact
+  ['0.1in', '9.6px'],
+  ['25.4mm', '96px'],
+  ['101.6q', '96px'],
+  ['0.3pt', '0.4px'],
+  ['0.0001ms', '0.0000001s'],
+])('should convert `%s` into `%s` without floating-point noise', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it('should convert equivalent lengths into the same canonical value', () => {
+  expect(constantFoldDeclaration('10mm')).toBe(constantFoldDeclaration('1cm'))
+  expect(constantFoldDeclaration('40q')).toBe(constantFoldDeclaration('1cm'))
+  expect(constantFoldDeclaration('5mm')).toBe(constantFoldDeclaration('0.5cm'))
+})
+
+it.each([
+  ['1rad', '57.2957795131deg'],
+  ['3.141592653589793rad', '180deg'],
+
+  // rounding to 12 significant digits treats values that differ by less than
+  // that as equal, like π/4 truncated to 12 digits is 44.999999999974314deg
+  ['0.785398163397rad', '45deg'],
+])('should convert angle `%s` into `%s` rounded to 12 significant digits', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // significant digits don't depend on the magnitude, so large values convert too
+  ['1000000pt', '1333333.33333px'],
+  ['100000cm', '3779527.55906px'],
+])('should convert large value `%s` into `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // rounding a tiny converted value before the multiplication would erase it,
+  // e.g. `0.00000000001pt` is `0.0000000000133…px`, which would become `0px`
+  ['calc(0.00000000001pt * 1000000000000)', '10pt'],
+
+  // or change it, e.g. `0.0000000001pt` would become `0.0000000001px`, so the
+  // result would be `100px` instead of `133.33…px`
+  ['calc(0.0000000001pt * 1000000000000)', '100pt'],
+  ['calc(0.00000000004pt * 1000000000000)', '40pt'],
+  ['calc(0.00000000001cm * 1000000000000)', '10cm'],
+  ['calc(0.00000000001rad * 1000000000000)', '10rad'],
+])('should not round tiny converted values before folding `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // not a safe integer once scaled
+  [0.30000000000000004],
+
+  // stringifies to 1e+21
+  [1e21],
+])('should not convert `rem` when the root font-size is `%s`', (rem) => {
+  expect(constantFoldDeclaration('1rem', rem)).toBe('1rem')
+})
+
+it.each([
+  ['calc(0.000001 * 0.1)', '0.0000001'],
+  ['calc(0.0000001 + 0)', '0.0000001'],
+  ['calc(calc(0.000001 * 0.1) * 10)', '0.000001'],
+])('should not use exponent notation when folding `%s`', (input, expected) => {
+  expect(constantFoldDeclaration(input)).toBe(expected)
+})
+
+it.each([
+  // beyond Number.MAX_SAFE_INTEGER`
+  ['9007199254740993', '9007199254740993'],
+  ['calc(9007199254740993 + 0)', 'calc(9007199254740993 + 0)'],
+
+  //beyond Number.MAX_VALUE
+  ['a 400 digit number', '9'.repeat(400)],
+  ['a product of two 200 digit numbers', `calc(${'9'.repeat(200)}px * ${'9'.repeat(200)})`],
+])('should not lose precision or overflow when folding %s', (_, input) => {
+  let output = constantFoldDeclaration(input)
+  expect(output).not.toMatch(/Infinity|NaN|e[+-]?\d/)
+  expect(output).not.toContain('9007199254740992')
+})
