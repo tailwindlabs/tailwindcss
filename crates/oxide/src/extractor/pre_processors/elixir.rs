@@ -1,6 +1,7 @@
 use crate::cursor;
 use crate::extractor::bracket_stack::BracketStack;
 use crate::extractor::pre_processors::pre_processor::PreProcessor;
+use bstr::ByteSlice;
 
 #[derive(Debug, Default)]
 pub struct Elixir;
@@ -14,7 +15,10 @@ impl PreProcessor for Elixir {
         while cursor.pos < content.len() {
             // Look for a sigil marker
             if cursor.curr() != b'~' {
-                cursor.advance();
+                match content[cursor.pos..].find_byte(b'~') {
+                    Some(offset) => cursor.pos += offset,
+                    None => break,
+                }
                 continue;
             }
 
