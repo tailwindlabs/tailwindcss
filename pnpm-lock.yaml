@@ -146,6 +146,9 @@ importers:
       '@tailwindcss/oxide-darwin-x64':
         specifier: workspace:*
         version: link:npm/darwin-x64
+      '@tailwindcss/oxide-freebsd-arm64':
+        specifier: workspace:*
+        version: link:npm/freebsd-arm64
       '@tailwindcss/oxide-freebsd-x64':
         specifier: workspace:*
         version: link:npm/freebsd-x64
@@ -181,6 +184,8 @@ importers:
   crates/node/npm/darwin-arm64: {}
 
   crates/node/npm/darwin-x64: {}
+
+  crates/node/npm/freebsd-arm64: {}
 
   crates/node/npm/freebsd-x64: {}
 
