@@ -30,6 +30,8 @@ import { WalkAction, walk } from './walk'
 export const enum CompileAstFlags {
   None = 0,
   RespectImportant = 1 << 0,
+  // Separate cached ASTs compiled while theme inlining is temporarily disabled.
+  ThemeInlineDisabled = 1 << 1,
 }
 
 export type DesignSystem = {
