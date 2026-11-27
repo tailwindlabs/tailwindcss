@@ -92,8 +92,41 @@ pub struct Scanner {
     sources_scanned: bool,
 }
 
+/// An `@source` pattern that can't be compiled into a glob, e.g. `src/**/*.{js` with an unclosed
+/// `{`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InvalidSourceError(String);
+
+impl std::fmt::Display for InvalidSourceError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.0)
+    }
+}
+
+impl std::error::Error for InvalidSourceError {}
+
+/// The reason of a glob error, without the `error parsing glob '…'` prefix of `ignore`.
+fn glob_error_reason(error: ignore::Error) -> String {
+    match error {
+        ignore::Error::Glob { err, .. } => err,
+        error => error.to_string(),
+    }
+}
+
 impl Scanner {
+    /// Creates a scanner for the given sources.
+    ///
+    /// # Panics
+    ///
+    /// Panics when a source pattern is not a valid glob. Use [`Scanner::try_new`] to handle that
+    /// error instead.
     pub fn new(sources: Vec<PublicSourceEntry>) -> Self {
+        Self::try_new(sources).unwrap_or_else(|error| panic!("{error}"))
+    }
+
+    /// Creates a scanner for the given sources, or returns an error when a source pattern is not
+    /// a valid glob.
+    pub fn try_new(sources: Vec<PublicSourceEntry>) -> Result<Self, InvalidSourceError> {
         init_tracing();
 
         if *SHOULD_TRACE {
@@ -111,13 +144,13 @@ impl Scanner {
             }
         }
 
-        let walker = create_walker(&sources);
+        let walker = create_walker(&sources)?;
 
-        Self {
+        Ok(Self {
             sources,
             walker,
             ..Default::default()
-        }
+        })
     }
 
     pub fn scan(&mut self) -> Vec<String> {
@@ -711,17 +744,22 @@ fn walk_parallel(walker: &mut WalkBuilder) -> Vec<WalkEntry> {
 ///
 /// This is the common setup shared between the full walker (with mtime tracking for re-scans)
 /// and the parallel walker (without mtime tracking for the initial scan).
-fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
+///
+/// Returns an error when a source pattern can't be compiled into a gitignore rule.
+fn create_walker(sources: &Sources) -> Result<Option<WalkBuilder>, InvalidSourceError> {
     let mut other_roots: FxHashSet<&PathBuf> = FxHashSet::default();
     let mut first_root: Option<&PathBuf> = None;
 
-    let mut ignores: Vec<(&PathBuf, Vec<String>)> = Default::default();
-    let mut emit = |base, pattern| match ignores.last_mut() {
-        Some((prev_base, patterns)) if *prev_base == base => {
-            patterns.push(pattern);
+    // Gitignore rules per base. Each rule keeps the pattern of the source it comes from, so an
+    // invalid rule can be reported with the pattern of the `@source` instead of the rule itself.
+    // E.g.: `@source "src/**/*.{js"` results in the `!*.{js` rule.
+    let mut ignores: Vec<(&PathBuf, Vec<(String, &str)>)> = Default::default();
+    let mut emit = |base, rule, source_pattern| match ignores.last_mut() {
+        Some((prev_base, rules)) if *prev_base == base => {
+            rules.push((rule, source_pattern));
         }
         _ => {
-            ignores.push((base, vec![pattern]));
+            ignores.push((base, vec![(rule, source_pattern)]));
         }
     };
 
@@ -734,8 +772,11 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                     other_roots.insert(base);
                 }
             }
-            SourceEntry::Pattern { base, pattern } => {
-                let pattern = pattern.to_owned();
+            SourceEntry::Pattern {
+                base,
+                pattern: source_pattern,
+            } => {
+                let pattern = source_pattern.to_owned();
 
                 if first_root.is_none() {
                     first_root = Some(base);
@@ -745,18 +786,22 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
 
                 if !pattern.contains("**") {
                     // Specific patterns should take precedence even over git-ignored files:
-                    emit(base, format!("!{}", pattern));
+                    emit(base, format!("!{}", pattern), source_pattern);
                 } else {
                     // Assumption: the pattern we receive will already be brace expanded. So
                     // `*.{html,jsx}` will result in two separate patterns: `*.html` and `*.jsx`.
                     if let Some(extension) = Path::new(&pattern).extension() {
                         // Extend auto source detection to include the extension
-                        emit(base, format!("!*.{}", extension.to_string_lossy()));
+                        emit(
+                            base,
+                            format!("!*.{}", extension.to_string_lossy()),
+                            source_pattern,
+                        );
                     }
                 }
             }
             SourceEntry::Ignored { base, pattern } => {
-                emit(base, pattern.to_owned());
+                emit(base, pattern.to_owned(), pattern);
             }
             SourceEntry::External { base } => {
                 if first_root.is_none() {
@@ -766,15 +811,19 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
                 }
 
                 // External sources should take precedence even over git-ignored files:
-                emit(base, "!/**/*".to_owned());
+                emit(base, "!/**/*".to_owned(), "/**/*");
 
                 // External sources should still disallow binary extensions:
-                emit(base, BINARY_EXTENSIONS_GLOB.clone());
+                emit(base, BINARY_EXTENSIONS_GLOB.clone(), "/**/*");
             }
         }
     }
 
-    let mut builder = WalkBuilder::new(first_root?);
+    let Some(first_root) = first_root else {
+        return Ok(None);
+    };
+
+    let mut builder = WalkBuilder::new(first_root);
 
     // We have to follow symlinks
     builder.follow_links(true);
@@ -820,7 +869,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     // - my-project/apps/.gitignore
     //
     // Setting the require_git(true) flag conditionally allows us to do this.
-    for parent in first_root?.ancestors() {
+    for parent in first_root.ancestors() {
         if parent.join(".git").exists() {
             builder.require_git(true);
             break;
@@ -837,12 +886,27 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
     }
 
     // Setup ignores based on `@source` definitions
-    for (base, patterns) in ignores {
+    for (base, rules) in ignores {
         let mut ignore_builder = GitignoreBuilder::new(base);
-        for pattern in patterns {
-            ignore_builder.add_line(None, &pattern).unwrap();
+        for (rule, source_pattern) in rules {
+            ignore_builder.add_line(None, &rule).map_err(|error| {
+                // Rules like `!/src/` start with `!` and `/`, but they are relative to the `base`.
+                let pattern = base.join(source_pattern.trim_start_matches(['!', '/']));
+
+                InvalidSourceError(format!(
+                    "The `@source` pattern `{}` is not a valid glob: {}",
+                    pattern.display(),
+                    glob_error_reason(error)
+                ))
+            })?;
         }
-        let ignore = ignore_builder.build().unwrap();
+        let ignore = ignore_builder.build().map_err(|error| {
+            InvalidSourceError(format!(
+                "The `@source` patterns in `{}` can't be compiled: {}",
+                base.display(),
+                glob_error_reason(error)
+            ))
+        })?;
         builder.add_gitignore(ignore);
     }
 
@@ -903,7 +967,7 @@ fn create_walker(sources: &Sources) -> Option<WalkBuilder> {
         true
     });
 
-    Some(builder)
+    Ok(Some(builder))
 }
 
 #[cfg(test)]

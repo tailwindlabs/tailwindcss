@@ -1801,6 +1801,50 @@ mod scanner {
     }
 
     #[test]
+    fn it_should_error_on_invalid_source_globs() {
+        let dir = tempdir().unwrap().into_path();
+        create_files_in(&dir, &[("src/index.html", "")]);
+        let base = dunce::canonicalize(&dir).unwrap();
+
+        let unclosed = "unclosed alternate group; missing '}' (maybe escape '{' with '[{]'?)";
+        let unopened = "unopened alternate group; missing '{' (maybe escape '}' with '[}]'?)";
+
+        let mut cases = vec![
+            ("@source not 'src/**/*.{js'", "src/**/*.{js", unclosed),
+            ("@source 'src/**/*.{js'", "src/**/*.{js", unclosed),
+            ("@source 'src/*.{js'", "src/*.{js", unclosed),
+            ("@source not 'src/a}'", "src/a}", unopened),
+            (
+                "@source not 'src/[z-a].html'",
+                "src/[z-a].html",
+                "invalid range; 'z' > 'a'",
+            ),
+        ];
+
+        // A `\` is a path separator on Windows
+        #[cfg(not(windows))]
+        cases.push(("@source not 'src/a\\'", "src/a\\", "dangling '\\'"));
+
+        for (directive, pattern, reason) in cases {
+            let error = Scanner::try_new(vec![
+                public_source_entry_from_pattern(dir.clone(), "@source '**/*'"),
+                public_source_entry_from_pattern(dir.clone(), directive),
+            ])
+            .expect_err(directive);
+
+            assert_eq!(
+                error.to_string().replace('\\', "/"),
+                format!(
+                    "The `@source` pattern `{}` is not a valid glob: {reason}",
+                    base.join(pattern).display()
+                )
+                .replace('\\', "/"),
+                "{directive}"
+            );
+        }
+    }
+
+    #[test]
     fn it_should_include_defined_extensions_that_are_ignored_by_default() {
         let ScanResult {
             candidates,
