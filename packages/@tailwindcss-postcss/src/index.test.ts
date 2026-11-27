@@ -605,6 +605,23 @@ describe('error recovery', () => {
     )
   })
 
+  test('fails the build when an `@source` pattern is not a valid glob, instead of crashing the process', async () => {
+    let from = path.join(dir, 'index.css')
+    let processor = postcss([tailwindcss({ base: dir, optimize: false })])
+
+    await writeFile(
+      path.join(dir, 'dependency.css'),
+      css`
+        @source not "./src/**/*.{js";
+        @tailwind utilities;
+      `,
+    )
+
+    await expect(processor.process(await readFile(from, 'utf8'), { from })).rejects.toThrow(
+      /The `@source` pattern `.*src[/\\]\*\*\/\*\.\{js` is not a valid glob: unclosed alternate group/,
+    )
+  })
+
   test('keeps serving the last optimized output when a rebuild fails with `optimize` enabled', async () => {
     let from = path.join(dir, 'index.css')
     let processor = postcss([tailwindcss({ base: dir, optimize: true })])
