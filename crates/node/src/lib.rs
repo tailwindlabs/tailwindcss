@@ -119,13 +119,14 @@ pub struct CandidateWithPosition {
 #[napi]
 impl Scanner {
   #[napi(constructor)]
-  pub fn new(opts: ScannerOptions) -> Self {
-    Self {
-      scanner: tailwindcss_oxide::Scanner::new(match opts.sources {
-        Some(sources) => sources.into_iter().map(Into::into).collect(),
-        None => vec![],
-      }),
-    }
+  pub fn new(opts: ScannerOptions) -> napi::Result<Self> {
+    let scanner = tailwindcss_oxide::Scanner::try_new(match opts.sources {
+      Some(sources) => sources.into_iter().map(Into::into).collect(),
+      None => vec![],
+    })
+    .map_err(|error| napi::Error::from_reason(error.to_string()))?;
+
+    Ok(Self { scanner })
   }
 
   #[napi]
